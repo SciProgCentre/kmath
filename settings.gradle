@@ -1,0 +1,4 @@
+rootProject.name = 'kmath'
+include 'common'
+include 'jvm'
+

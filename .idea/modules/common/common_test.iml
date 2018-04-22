@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="Common (experimental) " useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/../../../common/build/classes/kotlin/test" />
+          <option name="classpath" value="$MODULE_DIR$/../../../common/build/classes/java/main;D:/Work/Projects/kmath/common/build/classes/kotlin/main;D:/Work/Projects/kmath/common/build/resources/main;C:/Users/darksnake/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-annotations-common/1.2.40/2d4a60c84c93f625f5bffe4cc76b21b243688f5a/kotlin-test-annotations-common-1.2.40.jar;C:/Users/darksnake/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-common/1.2.40/2364922e3ca01d51cad8f585a2c8c8d731bb375a/kotlin-test-common-1.2.40.jar;C:/Users/darksnake/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.2.40/37abadf1cca4450f39672a80d24a379d2fd06356/kotlin-stdlib-common-1.2.40.jar;D:/Work/Projects/kmath/common/build/classes/kotlin/main" />
+          <option name="languageVersion" value="1.2" />
+          <option name="apiVersion" value="1.2" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+          <option name="multiPlatform" value="true" />
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+</module>
