@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="kmath" externalSystemModuleType="sourceSet" externalSystemModuleVersion="unspecified" linkedProjectId=":common:main" linkedProjectPath="$MODULE_DIR$/../../../common" rootProjectPath="$MODULE_DIR$/../../.." />
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="3" platform="Common (experimental) " useProjectSettings="false">
