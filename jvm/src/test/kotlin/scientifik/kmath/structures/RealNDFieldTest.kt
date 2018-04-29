@@ -10,6 +10,12 @@ class RealNDFieldTest {
     @Test
     fun testSum() {
         val sum = array1 + array2
-        assertEquals(4.0, sum[2, 2].value, 0.1)
+        assertEquals(4.0, sum[2, 2].toDouble(), 0.1)
+    }
+
+    @Test
+    fun testProduct(){
+        val product = array1*array2
+        assertEquals(0.0, product[2, 2].toDouble(), 0.1)
     }
 }
