@@ -105,7 +105,7 @@ interface NDArray<T : FieldElement<T>> : FieldElement<NDArray<T>>, Iterable<Pair
             return if (shape.size == 1) {
                 (0 until shape[0]).asSequence().map { listOf(it) }
             } else {
-                val tailShape = ArrayList(shape).apply { remove(0) }
+                val tailShape = ArrayList(shape).apply { removeAt(0) }
                 val tailSequence: List<List<Int>> = iterateIndexes(tailShape).toList()
                 (0 until shape[0]).asSequence().map { firstIndex ->
                     //adding first element to each of provided index lists
@@ -116,5 +116,15 @@ interface NDArray<T : FieldElement<T>> : FieldElement<NDArray<T>>, Iterable<Pair
     }
 }
 
+/**
+ * Create a platform-specific NDArray of doubles
+ */
+expect fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double = { 0.0 }): NDArray<Real>
 
-expect fun RealNDArray(shape: List<Int>, initializer: (List<Int>) -> Double): NDArray<Real>
+fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDArray<Real> {
+    return realNDArray(listOf(dim1, dim2)) { initializer(it[0], it[1]) }
+}
+
+fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Real> {
+    return realNDArray(listOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
+}

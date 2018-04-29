@@ -50,10 +50,10 @@ interface SpaceElement<S : SpaceElement<S>> {
      */
     val self: S
 
-    operator fun plus(b: S): S = with(context) { self + b }
-    operator fun minus(b: S): S = with(context) { self - b }
-    operator fun times(k: Number): S = with(context) { self * k }
-    operator fun div(k: Number): S = with(context) { self / k }
+    operator fun plus(b: S): S = context.add(self, b)
+    operator fun minus(b: S): S = context.add(self, context.multiply(b, -1.0))
+    operator fun times(k: Number): S = context.multiply(self, k.toDouble())
+    operator fun div(k: Number): S = context.multiply(self, 1.0 / k.toDouble())
 }
 
 /**
@@ -80,7 +80,7 @@ interface Ring<T> : Space<T> {
 interface RingElement<S : RingElement<S>> : SpaceElement<S> {
     override val context: Ring<S>
 
-    operator fun times(b: S): S = with(context) { self * b }
+    operator fun times(b: S): S = context.multiply(self, b)
 }
 
 /**
@@ -99,5 +99,5 @@ interface Field<T> : Ring<T> {
 interface FieldElement<S : FieldElement<S>> : RingElement<S> {
     override val context: Field<S>
 
-    operator fun div(b: S): S = with(context) { self / b }
+    operator fun div(b: S): S = context.divide(self, b)
 }

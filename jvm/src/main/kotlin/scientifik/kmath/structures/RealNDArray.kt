@@ -1,6 +1,5 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Real
 import scientifik.kmath.operations.RealField
 import java.nio.DoubleBuffer
@@ -13,8 +12,9 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
     private val strides: List<Int> by lazy {
         ArrayList<Int>(shape.size).apply {
             var current = 1
-            shape.forEach{
-                current *=it
+            add(0)
+            shape.forEach {
+                current *= it
                 add(current)
             }
         }
@@ -30,7 +30,7 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
     }
 
     val capacity: Int
-        get() = strides[shape.size - 1]
+        get() = strides[shape.size]
 
 
     override fun produce(initializer: (List<Int>) -> Real): NDArray<Real> {
@@ -39,26 +39,42 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
         NDArray.iterateIndexes(shape).forEach {
             buffer.put(offset(it), initializer(it).value)
         }
-        return RealNDArray(buffer)
+        return RealNDArray(this, buffer)
     }
 
-    inner class RealNDArray(val data: DoubleBuffer) : NDArray<Real> {
-
-        override val context: Field<NDArray<Real>>
-            get() = this@RealNDField
+    class RealNDArray(override val context: RealNDField, val data: DoubleBuffer) : NDArray<Real> {
 
         override fun get(vararg index: Int): Real {
-            return Real(data.get(offset(index.asList())))
+            return Real(data.get(context.offset(index.asList())))
         }
 
-        override val self: NDArray<Real>
-            get() = this
-    }
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
 
+            other as RealNDArray
+
+            if (context.shape != other.context.shape) return false
+            if (data != other.data) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = context.shape.hashCode()
+            result = 31 * result + data.hashCode()
+            return result
+        }
+
+        //TODO generate fixed hash code for quick comparison?
+
+
+        override val self: NDArray<Real> = this
+    }
 }
 
 
-actual fun RealNDArray(shape: List<Int>, initializer: (List<Int>) -> Double): NDArray<Real> {
+actual fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double): NDArray<Real> {
     //TODO cache fields?
     return RealNDField(shape).produce { Real(initializer(it)) }
 }
