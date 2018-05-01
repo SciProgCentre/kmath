@@ -12,7 +12,7 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
     private val strides: List<Int> by lazy {
         ArrayList<Int>(shape.size).apply {
             var current = 1
-            add(0)
+            add(1)
             shape.forEach {
                 current *= it
                 add(current)
