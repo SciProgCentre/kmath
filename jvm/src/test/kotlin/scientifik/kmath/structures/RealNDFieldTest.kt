@@ -18,4 +18,17 @@ class RealNDFieldTest {
         val product = array1*array2
         assertEquals(0.0, product[2, 2].toDouble(), 0.1)
     }
+
+    @Test
+    fun testGeneration() {
+
+        val array = real2DArray(3, 3) { i, j -> (i * 10 + j).toDouble() }
+
+        for(i in 0..2){
+            for(j in 0..2){
+                val expected= (i * 10 + j).toDouble()
+                assertEquals("Error at index [$i, $j]", expected, array[i,j].value)
+            }
+        }
+    }
 }
