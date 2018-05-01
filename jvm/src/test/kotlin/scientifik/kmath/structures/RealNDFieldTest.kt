@@ -27,7 +27,7 @@ class RealNDFieldTest {
         for(i in 0..2){
             for(j in 0..2){
                 val expected= (i * 10 + j).toDouble()
-                assertEquals("Error at index [$i, $j]", expected, array[i,j].value)
+                assertEquals("Error at index [$i, $j]", expected, array[i,j].value, 0.1)
             }
         }
     }
