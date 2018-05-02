@@ -90,7 +90,7 @@ interface Field<T> : Ring<T> {
     fun divide(a: T, b: T): T
 
     operator fun T.div(b: T): T = divide(this, b)
-    operator fun Double.div(b: T) = this * divide(one, b)
+    operator fun Number.div(b: T) = this * divide(one, b)
 }
 
 /**

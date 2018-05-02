@@ -2,23 +2,22 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
-import scientifik.kmath.operations.Real
 
 class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : RuntimeException()
 
 /**
  * Field for n-dimensional arrays.
  * @param shape - the list of dimensions of the array
- * @param elementField - operations field defined on individual array element
+ * @param field - operations field defined on individual array element
  */
-abstract class NDField<T : FieldElement<T>>(val shape: List<Int>, val elementField: Field<T>) : Field<NDArray<T>> {
+abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDArray<T>> {
     /**
      * Create new instance of NDArray using field shape and given initializer
      */
     abstract fun produce(initializer: (List<Int>) -> T): NDArray<T>
 
     override val zero: NDArray<T>
-        get() = produce { elementField.zero }
+        get() = produce { this.field.zero }
 
     private fun checkShape(vararg arrays: NDArray<T>) {
         arrays.forEach {
@@ -33,7 +32,7 @@ abstract class NDField<T : FieldElement<T>>(val shape: List<Int>, val elementFie
      */
     override fun add(a: NDArray<T>, b: NDArray<T>): NDArray<T> {
         checkShape(a, b)
-        return produce { a[it] + b[it] }
+        return produce { with(field) { a[it] + b[it] } }
     }
 
     /**
@@ -41,18 +40,18 @@ abstract class NDField<T : FieldElement<T>>(val shape: List<Int>, val elementFie
      */
     override fun multiply(a: NDArray<T>, k: Double): NDArray<T> {
         checkShape(a)
-        return produce { a[it] * k }
+        return produce { with(field) {a[it] * k} }
     }
 
     override val one: NDArray<T>
-        get() = produce { elementField.one }
+        get() = produce { this.field.one }
 
     /**
      * Element-by-element multiplication
      */
     override fun multiply(a: NDArray<T>, b: NDArray<T>): NDArray<T> {
         checkShape(a)
-        return produce { a[it] * b[it] }
+        return produce { with(field) {a[it] * b[it]} }
     }
 
     /**
@@ -60,12 +59,12 @@ abstract class NDField<T : FieldElement<T>>(val shape: List<Int>, val elementFie
      */
     override fun divide(a: NDArray<T>, b: NDArray<T>): NDArray<T> {
         checkShape(a)
-        return produce { a[it] / b[it] }
+        return produce { with(field) {a[it] / b[it]} }
     }
 }
 
 
-interface NDArray<T : FieldElement<T>> : FieldElement<NDArray<T>>, Iterable<Pair<List<Int>, T>> {
+interface NDArray<T> : FieldElement<NDArray<T>>, Iterable<Pair<List<Int>, T>> {
 
     /**
      * The list of dimensions of this NDArray
@@ -119,12 +118,12 @@ interface NDArray<T : FieldElement<T>> : FieldElement<NDArray<T>>, Iterable<Pair
 /**
  * Create a platform-specific NDArray of doubles
  */
-expect fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double = { 0.0 }): NDArray<Real>
+expect fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double = { 0.0 }): NDArray<Double>
 
-fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDArray<Real> {
+fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDArray<Double> {
     return realNDArray(listOf(dim1, dim2)) { initializer(it[0], it[1]) }
 }
 
-fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Real> {
+fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Double> {
     return realNDArray(listOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
 }

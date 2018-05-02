@@ -76,3 +76,11 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex> {
     //TODO is it convenient?
     operator fun not() = conjugate
 }
+
+object DoubleField : Field<Double> {
+    override val zero: Double = 0.0
+    override fun add(a: Double, b: Double): Double = a + b
+    override fun multiply(a: Double, b: Double): Double = a * b
+    override val one: Double = 1.0
+    override fun divide(a: Double, b: Double): Double = a / b
+}

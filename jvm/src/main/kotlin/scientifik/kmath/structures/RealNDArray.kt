@@ -1,10 +1,9 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.Real
-import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.DoubleField
 import java.nio.DoubleBuffer
 
-private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
+private class RealNDField(shape: List<Int>) : NDField<Double>(shape, DoubleField) {
 
     /**
      * Strides for memory access
@@ -33,19 +32,19 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
         get() = strides[shape.size]
 
 
-    override fun produce(initializer: (List<Int>) -> Real): NDArray<Real> {
+    override fun produce(initializer: (List<Int>) -> Double): NDArray<Double> {
         //TODO use sparse arrays for large capacities
         val buffer = DoubleBuffer.allocate(capacity)
         NDArray.iterateIndexes(shape).forEach {
-            buffer.put(offset(it), initializer(it).value)
+            buffer.put(offset(it), initializer(it))
         }
         return RealNDArray(this, buffer)
     }
 
-    class RealNDArray(override val context: RealNDField, val data: DoubleBuffer) : NDArray<Real> {
+    class RealNDArray(override val context: RealNDField, val data: DoubleBuffer) : NDArray<Double> {
 
-        override fun get(vararg index: Int): Real {
-            return Real(data.get(context.offset(index.asList())))
+        override fun get(vararg index: Int): Double {
+            return data.get(context.offset(index.asList()))
         }
 
         override fun equals(other: Any?): Boolean {
@@ -69,12 +68,12 @@ private class RealNDField(shape: List<Int>) : NDField<Real>(shape, RealField) {
         //TODO generate fixed hash code for quick comparison?
 
 
-        override val self: NDArray<Real> = this
+        override val self: NDArray<Double> = this
     }
 }
 
 
-actual fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double): NDArray<Real> {
+actual fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double): NDArray<Double> {
     //TODO cache fields?
-    return RealNDField(shape).produce { Real(initializer(it)) }
+    return RealNDField(shape).produce { initializer(it) }
 }

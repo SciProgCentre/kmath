@@ -10,13 +10,13 @@ class RealNDFieldTest {
     @Test
     fun testSum() {
         val sum = array1 + array2
-        assertEquals(4.0, sum[2, 2].toDouble(), 0.1)
+        assertEquals(4.0, sum[2, 2], 0.1)
     }
 
     @Test
     fun testProduct(){
         val product = array1*array2
-        assertEquals(0.0, product[2, 2].toDouble(), 0.1)
+        assertEquals(0.0, product[2, 2], 0.1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class RealNDFieldTest {
         for(i in 0..2){
             for(j in 0..2){
                 val expected= (i * 10 + j).toDouble()
-                assertEquals("Error at index [$i, $j]", expected, array[i,j].value, 0.1)
+                assertEquals("Error at index [$i, $j]", expected, array[i,j], 0.1)
             }
         }
     }
