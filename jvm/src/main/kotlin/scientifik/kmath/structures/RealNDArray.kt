@@ -35,6 +35,7 @@ private class RealNDField(shape: List<Int>) : NDField<Double>(shape, DoubleField
     override fun produce(initializer: (List<Int>) -> Double): NDArray<Double> {
         //TODO use sparse arrays for large capacities
         val buffer = DoubleBuffer.allocate(capacity)
+        //FIXME there could be performance degradation due to iteration procedure. Replace by straight iteration
         NDArray.iterateIndexes(shape).forEach {
             buffer.put(offset(it), initializer(it))
         }

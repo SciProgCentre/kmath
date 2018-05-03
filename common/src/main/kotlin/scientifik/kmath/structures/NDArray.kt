@@ -16,8 +16,9 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
      */
     abstract fun produce(initializer: (List<Int>) -> T): NDArray<T>
 
-    override val zero: NDArray<T>
-        get() = produce { this.field.zero }
+    override val zero: NDArray<T> by lazy {
+        produce { this.field.zero }
+    }
 
     private fun checkShape(vararg arrays: NDArray<T>) {
         arrays.forEach {
@@ -40,7 +41,7 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
      */
     override fun multiply(a: NDArray<T>, k: Double): NDArray<T> {
         checkShape(a)
-        return produce { with(field) {a[it] * k} }
+        return produce { with(field) { a[it] * k } }
     }
 
     override val one: NDArray<T>
@@ -51,7 +52,7 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
      */
     override fun multiply(a: NDArray<T>, b: NDArray<T>): NDArray<T> {
         checkShape(a)
-        return produce { with(field) {a[it] * b[it]} }
+        return produce { with(field) { a[it] * b[it] } }
     }
 
     /**
@@ -59,7 +60,7 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
      */
     override fun divide(a: NDArray<T>, b: NDArray<T>): NDArray<T> {
         checkShape(a)
-        return produce { with(field) {a[it] / b[it]} }
+        return produce { with(field) { a[it] / b[it] } }
     }
 }
 
