@@ -9,6 +9,7 @@ class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : R
  * Field for n-dimensional arrays.
  * @param shape - the list of dimensions of the array
  * @param field - operations field defined on individual array element
+ * @param T the type of the element contained in NDArray
  */
 abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDArray<T>> {
     /**
