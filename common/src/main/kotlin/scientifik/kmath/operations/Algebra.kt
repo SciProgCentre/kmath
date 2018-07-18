@@ -1,5 +1,16 @@
 package scientifik.kmath.operations
 
+
+/**
+ * The generic mathematics elements which is able to store its context
+ */
+interface MathElement<T, S>{
+    /**
+     * The context this element belongs to
+     */
+    val context: S
+}
+
 /**
  * A general interface representing linear context of some kind.
  * The context defines sum operation for its elements and multiplication by real value.
@@ -37,23 +48,20 @@ interface Space<T> {
 
 /**
  * The element of linear context
- * @param S self type of the element. Needed for static type checking
+ * @param T  self type of the element. Needed for static type checking
+ * @param S the type of space
  */
-interface SpaceElement<S : SpaceElement<S>> {
-    /**
-     * The context this element belongs to
-     */
-    val context: Space<S>
+interface SpaceElement<T, S : Space<T>>: MathElement<T,S> {
 
     /**
      * Self value. Needed for static type checking. Needed to avoid type erasure on JVM.
      */
-    val self: S
+    val self: T
 
-    operator fun plus(b: S): S = context.add(self, b)
-    operator fun minus(b: S): S = context.add(self, context.multiply(b, -1.0))
-    operator fun times(k: Number): S = context.multiply(self, k.toDouble())
-    operator fun div(k: Number): S = context.multiply(self, 1.0 / k.toDouble())
+    operator fun plus(b: T): T = context.add(self, b)
+    operator fun minus(b: T): T = context.add(self, context.multiply(b, -1.0))
+    operator fun times(k: Number): T = context.multiply(self, k.toDouble())
+    operator fun div(k: Number): T = context.multiply(self, 1.0 / k.toDouble())
 }
 
 /**
@@ -77,10 +85,10 @@ interface Ring<T> : Space<T> {
 /**
  * Ring element
  */
-interface RingElement<S : RingElement<S>> : SpaceElement<S> {
-    override val context: Ring<S>
+interface RingElement<T, S : Ring<T>> : SpaceElement<T, S> {
+    override val context: S
 
-    operator fun times(b: S): S = context.multiply(self, b)
+    operator fun times(b: T): T = context.multiply(self, b)
 }
 
 /**
@@ -96,8 +104,8 @@ interface Field<T> : Ring<T> {
 /**
  * Field element
  */
-interface FieldElement<S : FieldElement<S>> : RingElement<S> {
-    override val context: Field<S>
+interface FieldElement<T, S : Field<T>> : RingElement<T, S> {
+    override val context: S
 
-    operator fun div(b: S): S = context.divide(self, b)
+    operator fun div(b: T): T = context.divide(self, b)
 }
