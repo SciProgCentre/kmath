@@ -69,7 +69,7 @@ private class RealNDField(shape: List<Int>) : NDField<Double>(shape, DoubleField
         //TODO generate fixed hash code for quick comparison?
 
 
-        override val self: NDArray<Double> = this
+        override val self: NDArray<Double> get() = this
     }
 }
 

@@ -3,6 +3,9 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
+/**
+ * An exception is thrown when the expected ans actual shape of NDArray differs
+ */
 class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : RuntimeException()
 
 /**
@@ -11,9 +14,11 @@ class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : R
  * @param field - operations field defined on individual array element
  * @param T the type of the element contained in NDArray
  */
-abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDArray<T>> {
+abstract class NDField<T>(val shape: List<Int>, private val field: Field<T>) : Field<NDArray<T>> {
+
     /**
      * Create new instance of NDArray using field shape and given initializer
+     * The producer takes list of indices as argument and returns contained value
      */
     abstract fun produce(initializer: (List<Int>) -> T): NDArray<T>
 
@@ -21,6 +26,9 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
         produce { this.field.zero }
     }
 
+    /**
+     * Check the shape of given NDArray and throw exception if it does not coincide with shape of the field
+     */
     private fun checkShape(vararg arrays: NDArray<T>) {
         arrays.forEach {
             if (shape != it.shape) {
@@ -66,13 +74,13 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
 }
 
 
-interface NDArray<T> : FieldElement<NDArray<T>>, Iterable<Pair<List<Int>, T>> {
+interface NDArray<T> : FieldElement<NDArray<T>, NDField<T>>, Iterable<Pair<List<Int>, T>> {
 
     /**
      * The list of dimensions of this NDArray
      */
     val shape: List<Int>
-        get() = (context as NDField<T>).shape
+        get() = context.shape
 
     /**
      * The number of dimentsions for this array
