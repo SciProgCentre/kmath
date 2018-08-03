@@ -5,7 +5,7 @@ repositories {
 }
 
 dependencies {
-    expectedBy project(":common")
+    expectedBy project(":kmath-common")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     testCompile "junit:junit:4.12"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
