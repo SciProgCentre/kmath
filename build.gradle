@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+subprojects{
+    apply plugin: 'maven'
+}
+
 group = 'scientifik'
 version = '0.1 - SNAPSHOT'
 
