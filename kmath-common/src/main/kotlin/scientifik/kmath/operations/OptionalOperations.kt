@@ -10,7 +10,7 @@ package scientifik.kmath.operations
  * It also allows to override behavior for optional operations
  *
  */
-interface TrigonometricOperations<T>: Field<T> {
+interface TrigonometricOperations<T> : Field<T> {
     fun sin(arg: T): T
     fun cos(arg: T): T
 
@@ -39,10 +39,10 @@ fun <T : MathElement<T, out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
-interface ExponentialOperations<T>{
+interface ExponentialOperations<T> {
     fun exp(arg: T): T
     fun ln(arg: T): T
 }
 
-fun <T: MathElement<T, out ExponentialOperations<T>>> exp(arg:T): T = arg.context.exp(arg)
-fun <T: MathElement<T, out ExponentialOperations<T>>> ln(arg:T): T = arg.context.ln(arg)
+fun <T : MathElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
+fun <T : MathElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
