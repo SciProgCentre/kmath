@@ -3,6 +3,8 @@ package scientifik.kmath.operations
 
 /**
  * The generic mathematics elements which is able to store its context
+ * @param T the self type of the element
+ * @param S the type of mathematical context for this element
  */
 interface MathElement<T, S>{
     /**
