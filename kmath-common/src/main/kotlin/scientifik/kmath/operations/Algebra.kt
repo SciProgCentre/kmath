@@ -104,6 +104,9 @@ interface Field<T> : Ring<T> {
 
     operator fun T.plus(b: Number) = this.plus(b * one)
     operator fun Number.plus(b: T) = b + this
+
+    operator fun T.minus(b: Number) = this.minus(b * one)
+    operator fun Number.minus(b: T) = -b + this
 }
 
 /**
