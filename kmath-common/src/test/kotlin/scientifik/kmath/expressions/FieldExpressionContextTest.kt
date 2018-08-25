@@ -28,4 +28,15 @@ class FieldExpressionContextTest {
         assertEquals(expression("x" to Complex(1.0, 0.0)), Complex(4.0, 0.0))
         assertEquals(expression(), Complex(9.0, 0.0))
     }
+
+    @Test
+    fun separateContext() {
+        fun <T> FieldExpressionContext<T>.expression(): Expression<T>{
+            val x = variable("x")
+            return x * x + 2 * x + 1.0
+        }
+
+        val expression = FieldExpressionContext(DoubleField).expression()
+        assertEquals(expression("x" to 1.0), 4.0)
+    }
 }
