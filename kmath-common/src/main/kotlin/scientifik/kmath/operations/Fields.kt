@@ -29,7 +29,7 @@ object RealField : Field<Real>, TrigonometricOperations<Real>, PowerOperations<R
  *
  * TODO could be replaced by inline class in kotlin 1.3 if it would allow to avoid boxing
  */
-class Real(val value: Double) : Number(), FieldElement<Real, RealField> {
+data class Real(val value: Double) : Number(), FieldElement<Real, RealField> {
     /*
      * The class uses composition instead of inheritance since Double is final
      */
@@ -94,10 +94,19 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object DoubleField : Field<Double> {
+object DoubleField : Field<Double>, TrigonometricOperations<Double>, PowerOperations<Double>, ExponentialOperations<Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
     override fun multiply(a: Double, @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE") b: Double): Double = a * b
     override val one: Double = 1.0
     override fun divide(a: Double, b: Double): Double = a / b
+
+    override fun sin(arg: Double): Double  = kotlin.math.sin(arg)
+    override fun cos(arg: Double): Double = kotlin.math.cos(arg)
+
+    override fun power(arg: Double, pow: Double): Double  = arg.pow(pow)
+
+    override fun exp(arg: Double): Double  =kotlin.math.exp(arg)
+
+    override fun ln(arg: Double): Double  = kotlin.math.ln(arg)
 }

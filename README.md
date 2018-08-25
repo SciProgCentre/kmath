@@ -11,15 +11,15 @@ and `scipy` it is modular and has a lightweight core.
 * **Array-like structures** Full support of numpy-like ndarray including mixed arithmetic operations and function operations
 on arrays and numbers just like it works in python (with benefit of static type checking).
 
+* **Expressions** Expressions are one of the ultimate goals of kmath. It is planned to be able to write some mathematical
+expression once an then apply it to different types of objects by providing different context. Exception could be used
+for a wide variety of purposes from high performance calculations to code generation.
+
 ## Planned features
 
 * **Common mathematics** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/) 
 library in kotlin code and maybe rewrite some parts to better suite kotlin programming paradigm. There is no fixed priority list for that. Feel free
 to submit a future request if you want something to be done first.
-
-* **Expressions** Expressions are one of the ultimate goals of kmath. It is planned to be able to write some mathematical
-expression once an then apply it to different types of objects by providing different context. Exception could be used
-for a wide variety of purposes from high performance calculations to code generation.
 
 * **Messaging** A mathematical notation to support multilanguage and multinod communication for mathematical tasks.
 
