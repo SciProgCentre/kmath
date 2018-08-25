@@ -6,7 +6,7 @@ package scientifik.kmath.operations
  * @param T the self type of the element
  * @param S the type of mathematical context for this element
  */
-interface MathElement<T, S>{
+interface MathElement<T, S> {
     /**
      * The context this element belongs to
      */
@@ -53,7 +53,7 @@ interface Space<T> {
  * @param T  self type of the element. Needed for static type checking
  * @param S the type of space
  */
-interface SpaceElement<T, S : Space<T>>: MathElement<T,S> {
+interface SpaceElement<T, S : Space<T>> : MathElement<T, S> {
 
     /**
      * Self value. Needed for static type checking. Needed to avoid type erasure on JVM.
@@ -101,6 +101,9 @@ interface Field<T> : Ring<T> {
 
     operator fun T.div(b: T): T = divide(this, b)
     operator fun Number.div(b: T) = this * divide(one, b)
+
+    operator fun T.plus(b: Number) = this.plus(b * one)
+    operator fun Number.plus(b: T) = b + this
 }
 
 /**
