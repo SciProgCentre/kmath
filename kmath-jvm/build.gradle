@@ -1,4 +1,7 @@
-apply plugin: 'kotlin-platform-jvm'
+plugins{
+    id "kotlin-platform-jvm"
+    id "me.champeau.gradle.jmh" version "0.4.5"
+}
 
 repositories {
     mavenCentral()

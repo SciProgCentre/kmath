@@ -1,6 +1,8 @@
-description = "Platform-independent interfaces for kotlin maths"
+plugins{
+    id "kotlin-platform-common"
+}
 
-apply plugin: 'kotlin-platform-common'
+description = "Platform-independent interfaces for kotlin maths"
 
 repositories {
     mavenCentral()
@@ -10,5 +12,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-common:$kotlin_version"
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
 

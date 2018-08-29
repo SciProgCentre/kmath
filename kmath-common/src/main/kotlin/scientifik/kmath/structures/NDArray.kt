@@ -198,15 +198,3 @@ operator fun <T> T.div(arg: NDArray<T>): NDArray<T> = arg.transform { _, value -
     }
 }
 
-/**
- * Create a platform-specific NDArray of doubles
- */
-expect fun realNDArray(shape: List<Int>, initializer: (List<Int>) -> Double = { 0.0 }): NDArray<Double>
-
-fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDArray<Double> {
-    return realNDArray(listOf(dim1, dim2)) { initializer(it[0], it[1]) }
-}
-
-fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Double> {
-    return realNDArray(listOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
-}
