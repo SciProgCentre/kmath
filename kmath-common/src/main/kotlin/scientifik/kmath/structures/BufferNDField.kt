@@ -40,11 +40,12 @@ abstract class BufferNDField<T>(shape: List<Int>, field: Field<T>) : NDField<T>(
         }.sum()
     }
 
-    protected fun index(offset: Int): List<Int>{
+    //TODO introduce a fast way to calculate index of the next element?
+    protected fun index(offset: Int): List<Int> {
         return buildSequence {
             var current = offset
-            var strideIndex = strides.size-2
-            while (strideIndex>=0){
+            var strideIndex = strides.size - 2
+            while (strideIndex >= 0) {
                 yield(current / strides[strideIndex])
                 current %= strides[strideIndex]
                 strideIndex--
@@ -59,7 +60,7 @@ abstract class BufferNDField<T>(shape: List<Int>, field: Field<T>) : NDField<T>(
     protected abstract fun createBuffer(capacity: Int, initializer: (Int) -> T): Buffer<T>
 
     override fun produce(initializer: (List<Int>) -> T): NDArray<T> {
-        val buffer = createBuffer(capacity){initializer(index(it))}
+        val buffer = createBuffer(capacity) { initializer(index(it)) }
         return BufferNDArray(this, buffer)
     }
 
