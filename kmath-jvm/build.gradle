@@ -28,3 +28,11 @@ kotlin {
         coroutines "enable"
     }
 }
+
+publishing {
+    publications {
+        defaultPublication(MavenPublication) {
+            from components.java
+        }
+    }
+}

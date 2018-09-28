@@ -30,6 +30,8 @@ platform even if they could be done in common module because of platform perform
 Currently the main focus of development is the JVM platform, contribution of implementations for Kotlin - Native and
 Kotlin - JS is welcome. 
 
+It is planned to move project structure to [kotlin gradle mpp structure](https://github.com/h0tk3y/k-new-mpp-samples) after release of kotlin 1.3. 
+
 ## Performance
 The calculation performance is one of major goals of KMath in the future, but in some cases it is not possible to achieve 
 both performance and flexibility. We expect to firstly focus on creating convenient universal API and then work on 
