@@ -32,7 +32,7 @@ artifactory {
         }
 
         defaults {
-            publications('jvm', 'kotlinMultiplatform', 'metadata')
+            publications('jvm', 'js', 'kotlinMultiplatform', 'metadata')
             publishBuildInfo = false
             publishArtifacts = true
             publishPom = true

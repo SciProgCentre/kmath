@@ -21,7 +21,7 @@ for a wide variety of purposes from high performance calculations to code genera
 library in kotlin code and maybe rewrite some parts to better suite kotlin programming paradigm. There is no fixed priority list for that. Feel free
 to submit a future request if you want something to be done first.
 
-* **Messaging** A mathematical notation to support multilanguage and multinod communication for mathematical tasks.
+* **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
 
 ## Multi-platform support
 KMath is developed as a multi-platform library, which means that most of interfaces are declared in common module.
@@ -29,8 +29,6 @@ Implementation is also done in common module wherever it is possible. In some ca
 platform even if they could be done in common module because of platform performance optimization. 
 Currently the main focus of development is the JVM platform, contribution of implementations for Kotlin - Native and
 Kotlin - JS is welcome. 
-
-It is planned to move project structure to [kotlin gradle mpp structure](https://github.com/h0tk3y/k-new-mpp-samples) after release of kotlin 1.3. 
 
 ## Performance
 The calculation performance is one of major goals of KMath in the future, but in some cases it is not possible to achieve 
