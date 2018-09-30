@@ -40,8 +40,33 @@ but worse than optimized native/scipy (mostly due to boxing operations on primit
 of optimized parts should be better than scipy.
 
 ## Releases
-The project is currently in pre-release stage. Work builds could be obtained with 
-[![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath). 
+
+The project is currently in pre-release stage. Nightly builds could be used by adding additional repository to (groovy) gradle config:
+```groovy
+repositories {
+    maven { url = "http://npm.mipt.ru:8081/artifactory/gradle-dev" }
+    mavenCentral()
+} 
+```
+or for kotlin gradle dsl:
+
+```kotlin
+repositories {
+    maven { setUrl("http://npm.mipt.ru:8081/artifactory/gradle-dev") }
+    mavenCentral()
+} 
+```
+
+Then use regular dependency like
+```groovy
+compile(group: 'scientifik', name: 'kmath-core-jvm', version: '0.0.1-SNAPSHOT')
+```
+or in kotlin
+```kotlin
+compile(group = "scientifik", name = "kmath-core-jvm", version = "0.0.1-SNAPSHOT")
+```
+
+Work builds could be obtained with [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath). 
 
 ## Contributing
 The project requires a lot of additional work. Please fill free to contribute in any way and propose new features.
