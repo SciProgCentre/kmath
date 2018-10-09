@@ -73,7 +73,9 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
     }
 }
 
-
+/**
+ * Many-dimensional array
+ */
 interface NDArray<T> : FieldElement<NDArray<T>, NDField<T>> {
 
     /**
@@ -122,6 +124,22 @@ interface NDArray<T> : FieldElement<NDArray<T>, NDField<T>> {
                 }.flatten()
             }
         }
+    }
+}
+
+/**
+ * In-place mutable [NDArray]
+ */
+interface MutableNDArray<T> : NDArray<T> {
+    operator fun set(index: List<Int>, value: T)
+}
+
+/**
+ * In-place transformation for [MutableNDArray], using given transformation for each element
+ */
+fun <T> MutableNDArray<T>.transformInPlace(action: (List<Int>, T) -> T) {
+    for ((index, oldValue) in this) {
+        this[index] = action(index, oldValue)
     }
 }
 

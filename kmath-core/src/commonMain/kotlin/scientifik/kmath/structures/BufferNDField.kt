@@ -9,6 +9,11 @@ import scientifik.kmath.operations.Field
 interface Buffer<T> {
     operator fun get(index: Int): T
     operator fun set(index: Int, value: T)
+
+    /**
+     * A shallow copy of the buffer
+     */
+    fun copy(): Buffer<T>
 }
 
 /**
@@ -63,8 +68,16 @@ abstract class BufferNDField<T>(shape: List<Int>, field: Field<T>) : NDField<T>(
         return BufferNDArray(this, buffer)
     }
 
+    /**
+     * Produce mutable NDArray instance
+     */
+    fun produceMutable(initializer: (List<Int>) -> T): MutableNDArray<T> {
+        val buffer = createBuffer(capacity) { initializer(index(it)) }
+        return MutableBufferedNDArray(this, buffer)
+    }
 
-    class BufferNDArray<T>(override val context: BufferNDField<T>, val data: Buffer<T>) : NDArray<T> {
+
+    private open class BufferNDArray<T>(override val context: BufferNDField<T>, val data: Buffer<T>) : NDArray<T> {
 
         override fun get(vararg index: Int): T {
             return data[context.offset(index.asList())]
@@ -87,6 +100,12 @@ abstract class BufferNDField<T>(shape: List<Int>, field: Field<T>) : NDField<T>(
         }
 
         override val self: NDArray<T> get() = this
+    }
+
+    private class MutableBufferedNDArray<T>(context: BufferNDField<T>, data: Buffer<T>): BufferNDArray<T>(context,data), MutableNDArray<T>{
+        override operator fun set(index: List<Int>, value: T){
+            data[context.offset(index)] = value
+        }
     }
 }
 

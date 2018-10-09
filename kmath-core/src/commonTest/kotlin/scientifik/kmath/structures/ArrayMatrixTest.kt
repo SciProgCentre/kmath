@@ -1,5 +1,6 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.linear.realVector
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

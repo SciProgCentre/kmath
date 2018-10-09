@@ -9,6 +9,28 @@ typealias NDFieldFactory<T> = (shape: List<Int>) -> NDField<T>
  */
 expect val realNDFieldFactory: NDFieldFactory<Double>
 
+
+class SimpleNDField<T : Any>(field: Field<T>, shape: List<Int>) : BufferNDField<T>(shape, field) {
+    override fun createBuffer(capacity: Int, initializer: (Int) -> T): Buffer<T> {
+        val array = ArrayList<T>(capacity)
+        (0 until capacity).forEach {
+            array.add(initializer(it))
+        }
+
+        return BufferOfObjects(array)
+    }
+
+    private class BufferOfObjects<T>(val array: ArrayList<T>) : Buffer<T> {
+        override fun get(index: Int): T = array[index]
+
+        override fun set(index: Int, value: T) {
+            array[index] = value
+        }
+
+        override fun copy(): Buffer<T> = BufferOfObjects(ArrayList(array))
+    }
+}
+
 object NDArrays {
     /**
      * Create a platform-optimized NDArray of doubles
@@ -29,26 +51,22 @@ object NDArrays {
         return realNDArray(listOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
     }
 
-    class SimpleNDField<T : Any>(field: Field<T>, shape: List<Int>) : BufferNDField<T>(shape, field) {
-        override fun createBuffer(capacity: Int, initializer: (Int) -> T): Buffer<T> {
-            val array = ArrayList<T>(capacity)
-            (0 until capacity).forEach {
-                array.add(initializer(it))
-            }
+    /**
+     * Simple boxing NDField
+     */
+    fun <T : Any> createFactory(field: Field<T>): NDFieldFactory<T> = { shape -> SimpleNDField(field, shape) }
 
-            return object : Buffer<T> {
-                override fun get(index: Int): T = array[index]
-
-                override fun set(index: Int, value: T) {
-                    array[index] = initializer(index)
-                }
-            }
-        }
+    /**
+     * Simple boxing NDArray
+     */
+    fun <T : Any> create(field: Field<T>, shape: List<Int>, initializer: (List<Int>) -> T): NDArray<T> {
+        return SimpleNDField(field, shape).produce { initializer(it) }
     }
 
-    fun <T : Any> createSimpleNDFieldFactory(field: Field<T>): NDFieldFactory<T> = { list -> SimpleNDField(field, list) }
-
-    fun <T : Any> simpleNDArray(field: Field<T>, shape: List<Int>, initializer: (List<Int>) -> T): NDArray<T> {
-        return SimpleNDField(field, shape).produce { initializer(it) }
+    /**
+     * Mutable boxing NDArray
+     */
+    fun <T : Any> createMutable(field: Field<T>, shape: List<Int>, initializer: (List<Int>) -> T): MutableNDArray<T> {
+        return SimpleNDField(field, shape).produceMutable { initializer(it) }
     }
 }

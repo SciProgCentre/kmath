@@ -7,12 +7,18 @@ private class RealNDField(shape: List<Int>) : BufferNDField<Double>(shape, Doubl
     override fun createBuffer(capacity: Int, initializer: (Int) -> Double): Buffer<Double> {
         val array = DoubleArray(capacity, initializer)
         val buffer = DoubleBuffer.wrap(array)
-        return object : Buffer<Double> {
-            override fun get(index: Int): Double = buffer.get(index)
+        return BufferOfDoubles(buffer)
+    }
 
-            override fun set(index: Int, value: Double) {
-                buffer.put(index, value)
-            }
+    private class BufferOfDoubles(val buffer: DoubleBuffer): Buffer<Double>{
+        override fun get(index: Int): Double = buffer.get(index)
+
+        override fun set(index: Int, value: Double) {
+            buffer.put(index, value)
+        }
+
+        override fun copy(): Buffer<Double> {
+            return BufferOfDoubles(buffer)
         }
     }
 }
