@@ -1,6 +1,5 @@
-package scientifik.kmath.structures
+package scientifik.kmath.linear
 
-import scientifik.kmath.linear.realVector
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,17 +10,25 @@ class ArrayMatrixTest {
         val vector1 = realVector(5) { it.toDouble() }
         val vector2 = realVector(5) { 5 - it.toDouble() }
         val sum = vector1 + vector2
-        assertEquals(5.0, sum[2, 0])
+        assertEquals(5.0, sum[2])
     }
+
+    @Test
+    fun testVectorToMatrix() {
+        val vector = realVector(5) { it.toDouble() }
+        val matrix = vector.toMatrix()
+        assertEquals(4.0, matrix[4, 0])
+    }
+
 
     @Test
     fun testDot() {
         val vector1 = realVector(5) { it.toDouble() }
         val vector2 = realVector(5) { 5 - it.toDouble() }
-        val product = with(vector1.context) {
-            vector1 dot (vector2.transpose())
-        }
+        val product = vector1.toMatrix() dot (vector2.toMatrix().transpose())
 
-        assertEquals(10.0, product[1, 0])
+
+        assertEquals(5.0, product[1, 0])
+        assertEquals(6.0, product[2, 2])
     }
 }

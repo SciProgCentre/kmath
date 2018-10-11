@@ -8,6 +8,11 @@ package scientifik.kmath.operations
  */
 interface MathElement<T, S> {
     /**
+     * Self value. Needed for static type checking.
+     */
+    val self: T
+
+    /**
      * The context this element belongs to
      */
     val context: S
@@ -54,12 +59,6 @@ interface Space<T> {
  * @param S the type of space
  */
 interface SpaceElement<T, S : Space<T>> : MathElement<T, S> {
-
-    /**
-     * Self value. Needed for static type checking. Needed to avoid type erasure on JVM.
-     */
-    val self: T
-
     operator fun plus(b: T): T = context.add(self, b)
     operator fun minus(b: T): T = context.add(self, context.multiply(b, -1.0))
     operator fun times(k: Number): T = context.multiply(self, k.toDouble())

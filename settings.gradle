@@ -10,5 +10,4 @@ enableFeaturePreview('GRADLE_METADATA')
 
 rootProject.name = 'kmath'
 include ':kmath-core'
-include ':kmath-commons'
 

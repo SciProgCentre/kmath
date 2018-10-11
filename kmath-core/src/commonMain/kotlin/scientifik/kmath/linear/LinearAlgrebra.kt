@@ -14,31 +14,31 @@ import scientifik.kmath.structures.realNDFieldFactory
  * @param T type of individual element of the vector or matrix
  * @param V the type of vector space element
  */
-abstract class LinearSpace<T : Any, V : Matrix<T>>(val rows: Int, val columns: Int, val field: Field<T>) : Space<V> {
+abstract class MatrixSpace<T : Any>(val rows: Int, val columns: Int, val field: Field<T>) : Space<Matrix<T>> {
 
     /**
      * Produce the element of this space
      */
-    abstract fun produce(initializer: (Int, Int) -> T): V
+    abstract fun produce(initializer: (Int, Int) -> T): Matrix<T>
 
     /**
-     * Produce new linear space with given dimensions. The space produced could be raised from cache since [LinearSpace] does not have mutable elements
+     * Produce new matrix space with given dimensions. The space produced could be raised from cache since [MatrixSpace] does not have mutable elements
      */
-    abstract fun produceSpace(rows: Int, columns: Int): LinearSpace<T, V>
+    abstract fun produceSpace(rows: Int, columns: Int): MatrixSpace<T>
 
-    override val zero: V by lazy {
+    override val zero: Matrix<T> by lazy {
         produce { _, _ -> field.zero }
     }
 
-    val one: V by lazy {
-        produce { i, j -> if (i == j) field.one else field.zero }
-    }
+//    val one: Matrix<T> by lazy {
+//        produce { i, j -> if (i == j) field.one else field.zero }
+//    }
 
-    override fun add(a: V, b: V): V {
+    override fun add(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
         return produce { i, j -> with(field) { a[i, j] + b[i, j] } }
     }
 
-    override fun multiply(a: V, k: Double): V {
+    override fun multiply(a: Matrix<T>, k: Double): Matrix<T> {
         //TODO it is possible to implement scalable linear elements which normed values and adjustable scale to save memory and processing poser
         return produce { i, j -> with(field) { a[i, j] * k } }
     }
@@ -46,29 +46,23 @@ abstract class LinearSpace<T : Any, V : Matrix<T>>(val rows: Int, val columns: I
     /**
      * Dot product. Throws exception on dimension mismatch
      */
-    fun multiply(a: V, b: V): V {
+    fun multiply(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
         if (a.rows != b.columns) {
             //TODO replace by specific exception
             error("Dimension mismatch in linear structure dot product: [${a.rows},${a.columns}]*[${b.rows},${b.columns}]")
         }
         return produceSpace(a.rows, b.columns).produce { i, j ->
-            (0..a.columns).asSequence().map { k -> field.multiply(a[i, k], b[k, j]) }.reduce { first, second -> field.add(first, second) }
+            (0 until a.columns).asSequence().map { k -> field.multiply(a[i, k], b[k, j]) }.reduce { first, second -> field.add(first, second) }
         }
     }
-
-    infix fun V.dot(b: V): V = multiply(this, b)
 }
 
-/**
- * A specialized [LinearSpace] which works with vectors
- */
-abstract class VectorSpace<T : Any, V : Vector<T>>(size: Int, field: Field<T>) : LinearSpace<T, V>(size, 1, field)
+infix fun <T : Any> Matrix<T>.dot(b: Matrix<T>): Matrix<T> = this.context.multiply(this, b)
 
 /**
  * A matrix-like structure
  */
-interface Matrix<T : Any> {
-    val context: LinearSpace<T, out Matrix<T>>
+interface Matrix<T : Any> : SpaceElement<Matrix<T>, MatrixSpace<T>> {
     /**
      * Number of rows
      */
@@ -83,34 +77,58 @@ interface Matrix<T : Any> {
      */
     operator fun get(i: Int, j: Int): T
 
+    override val self: Matrix<T>
+        get() = this
+
     fun transpose(): Matrix<T> {
         return object : Matrix<T> {
-            override val context: LinearSpace<T, out Matrix<T>> = this@Matrix.context
+            override val context: MatrixSpace<T> = this@Matrix.context
             override val rows: Int = this@Matrix.columns
             override val columns: Int = this@Matrix.rows
             override fun get(i: Int, j: Int): T = this@Matrix[j, i]
         }
     }
+
+    companion object {
+        fun <T : Any> one(rows: Int, columns: Int, field: Field<T>): Matrix<T> {
+            return matrix(rows, columns, field) { i, j -> if (i == j) field.one else field.zero }
+        }
+    }
 }
 
-interface Vector<T : Any> : Matrix<T> {
-    override val context: VectorSpace<T, Vector<T>>
-    override val columns: Int
-        get() = 1
 
-    operator fun get(i: Int) = get(i, 0)
+/**
+ * A linear space for vectors
+ */
+abstract class VectorSpace<T : Any>(val size: Int, val field: Field<T>) : Space<Vector<T>> {
+
+    abstract fun produce(initializer: (Int) -> T): Vector<T>
+
+    override val zero: Vector<T> by lazy { produce { field.zero } }
+
+    override fun add(a: Vector<T>, b: Vector<T>): Vector<T> = produce { with(field) { a[it] + b[it] } }
+
+    override fun multiply(a: Vector<T>, k: Double): Vector<T> = produce { with(field) { a[it] * k } }
+}
+
+
+interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
+    val size: Int
+        get() = context.size
+
+    operator fun get(i: Int): T
 }
 
 
 /**
  * NDArray-based implementation of vector space. By default uses slow [SimpleNDField], but could be overridden with custom [NDField] factory.
  */
-class ArraySpace<T : Any>(
+class ArrayMatrixSpace<T : Any>(
         rows: Int,
         columns: Int,
         field: Field<T>,
         val ndFactory: NDFieldFactory<T> = createFactory(field)
-) : LinearSpace<T, Matrix<T>>(rows, columns, field) {
+) : MatrixSpace<T>(rows, columns, field) {
 
     val ndField by lazy {
         ndFactory(listOf(rows, columns))
@@ -118,8 +136,8 @@ class ArraySpace<T : Any>(
 
     override fun produce(initializer: (Int, Int) -> T): Matrix<T> = ArrayMatrix(this, initializer)
 
-    override fun produceSpace(rows: Int, columns: Int): ArraySpace<T> {
-        return ArraySpace(rows, columns, field, ndFactory)
+    override fun produceSpace(rows: Int, columns: Int): ArrayMatrixSpace<T> {
+        return ArrayMatrixSpace(rows, columns, field, ndFactory)
     }
 }
 
@@ -127,26 +145,20 @@ class ArrayVectorSpace<T : Any>(
         size: Int,
         field: Field<T>,
         val ndFactory: NDFieldFactory<T> = createFactory(field)
-) : VectorSpace<T, Vector<T>>(size, field) {
+) : VectorSpace<T>(size, field) {
     val ndField by lazy {
         ndFactory(listOf(size))
     }
 
-    override fun produce(initializer: (Int, Int) -> T): Vector<T> = produceVector { i -> initializer(i, 0) }
-
-    fun produceVector(initializer: (Int) -> T): Vector<T> = ArrayVector(this, initializer)
-
-    override fun produceSpace(rows: Int, columns: Int): LinearSpace<T, Vector<T>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun produce(initializer: (Int) -> T): Vector<T> = ArrayVector(this, initializer)
 }
 
 /**
- * Member of [ArraySpace] which wraps 2-D array
+ * Member of [ArrayMatrixSpace] which wraps 2-D array
  */
-class ArrayMatrix<T : Any> internal constructor(override val context: ArraySpace<T>, val array: NDArray<T>) : Matrix<T>, SpaceElement<Matrix<T>, ArraySpace<T>> {
+class ArrayMatrix<T : Any> internal constructor(override val context: ArrayMatrixSpace<T>, val array: NDArray<T>) : Matrix<T> {
 
-    constructor(context: ArraySpace<T>, initializer: (Int, Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0], list[1]) })
+    constructor(context: ArrayMatrixSpace<T>, initializer: (Int, Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0], list[1]) })
 
     override val rows: Int get() = context.rows
 
@@ -160,32 +172,21 @@ class ArrayMatrix<T : Any> internal constructor(override val context: ArraySpace
 }
 
 
-class ArrayVector<T : Any> internal constructor(override val context: ArrayVectorSpace<T>, val array: NDArray<T>) : Vector<T>, SpaceElement<Vector<T>, ArrayVectorSpace<T>> {
+class ArrayVector<T : Any> internal constructor(override val context: ArrayVectorSpace<T>, val array: NDArray<T>) : Vector<T> {
 
     constructor(context: ArrayVectorSpace<T>, initializer: (Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0]) })
 
     init {
-        if (context.columns != 1) {
-            error("Vector must have single column")
-        }
-        if (context.rows != array.shape[0]) {
+        if (context.size != array.shape[0]) {
             error("Array dimension mismatch")
         }
     }
 
-    //private val array = context.ndField.produce { list -> initializer(list[0]) }
-
-
-    override val rows: Int get() = context.rows
-
-    override val columns: Int = 1
-
-    override fun get(i: Int, j: Int): T {
+    override fun get(i: Int): T {
         return array[i]
     }
 
     override val self: ArrayVector<T> get() = this
-
 }
 
 /**
@@ -193,8 +194,8 @@ class ArrayVector<T : Any> internal constructor(override val context: ArrayVecto
  */
 interface LinearSolver<T : Any> {
     fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>
-    fun solve(a: Matrix<T>, b: Vector<T>): Vector<T> = solve(a, b as Matrix<T>).toVector()
-    fun inverse(a: Matrix<T>): Matrix<T> = solve(a, a.context.one)
+    fun solve(a: Matrix<T>, b: Vector<T>): Vector<T> = solve(a, b.toMatrix()).toVector()
+    fun inverse(a: Matrix<T>): Matrix<T> = solve(a, Matrix.one(a.rows, a.columns, a.context.field))
 }
 
 /**
@@ -220,13 +221,13 @@ fun DoubleArray.asVector() = realVector(this.size) { this[it] }
  * Create [ArrayMatrix] with custom field
  */
 fun <T : Any> matrix(rows: Int, columns: Int, field: Field<T>, initializer: (Int, Int) -> T) =
-        ArrayMatrix(ArraySpace(rows, columns, field), initializer)
+        ArrayMatrix(ArrayMatrixSpace(rows, columns, field), initializer)
 
 /**
  * Create [ArrayMatrix] of doubles.
  */
 fun realMatrix(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
-        ArrayMatrix(ArraySpace(rows, columns, DoubleField, realNDFieldFactory), initializer)
+        ArrayMatrix(ArrayMatrixSpace(rows, columns, DoubleField, realNDFieldFactory), initializer)
 
 
 /**
@@ -234,17 +235,28 @@ fun realMatrix(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
  */
 fun <T : Any> Matrix<T>.toVector(): Vector<T> {
     return when {
-        this is Vector -> return this
         this.columns == 1 -> {
-            if (this is ArrayMatrix) {
-                //Reuse existing underlying array
-                ArrayVector(ArrayVectorSpace(rows, context.field, context.ndFactory), array)
-            } else {
-                //Generic vector
-                vector(rows, context.field) { get(it, 0) }
-            }
+//            if (this is ArrayMatrix) {
+//                //Reuse existing underlying array
+//                ArrayVector(ArrayVectorSpace(rows, context.field, context.ndFactory), array)
+//            } else {
+//                //Generic vector
+//                vector(rows, context.field) { get(it, 0) }
+//            }
+            vector(rows, context.field) { get(it, 0) }
         }
         else -> error("Can't convert matrix with more than one column to vector")
     }
+}
+
+fun <T : Any> Vector<T>.toMatrix(): Matrix<T> {
+//    return if (this is ArrayVector) {
+//        //Reuse existing underlying array
+//        ArrayMatrix(ArrayMatrixSpace(size, 1, context.field, context.ndFactory), array)
+//    } else {
+//        //Generic vector
+//        matrix(size, 1, context.field) { i, j -> get(i) }
+//    }
+    return matrix(size, 1, context.field) { i, j -> get(i) }
 }
 
