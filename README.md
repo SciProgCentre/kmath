@@ -6,7 +6,8 @@ and `scipy` it is modular and has a lightweight core.
 
 * **Algebra**
     * Mathematical operation entities like rings, spaces and fields with (**TODO** add example to wiki) 
-    * Basic linear algebra operations (sums products, etc) backed by `Space` API.
+    * Basic linear algebra operations (summs products, etc) backed by `Space` API.
+    * Complex numbers backed by `Field` API (meaning that they will be useable in any structures like vectors and NDArrays).
     * [In progress] advanced linear algebra operations like matrix inversions.
 * **Array-like structures** Full support of numpy-like ndarray including mixed arithmetic operations and function operations
 on arrays and numbers just like it works in python (with benefit of static type checking).
