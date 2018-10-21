@@ -1,12 +1,11 @@
 package scietifik.kmath.structures
 
-import org.openjdk.jmh.annotations.*
 import java.nio.IntBuffer
 
 
 @Fork(1)
 @Warmup(iterations = 2)
-@Measurement(iterations = 50)
+@Measurement(iterations = 5)
 @State(Scope.Benchmark)
 open class ArrayBenchmark {
 

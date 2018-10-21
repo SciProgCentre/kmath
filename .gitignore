@@ -1,5 +1,5 @@
 .gradle
-/build/
+**/build/
 /.idea/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)

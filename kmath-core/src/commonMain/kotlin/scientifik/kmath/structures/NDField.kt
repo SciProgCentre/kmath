@@ -1,12 +1,13 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs
  */
-class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : RuntimeException()
+class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : RuntimeException()
 
 /**
  * Field for n-dimensional arrays.
@@ -14,13 +15,15 @@ class ShapeMismatchException(val expected: List<Int>, val actual: List<Int>) : R
  * @param field - operations field defined on individual array element
  * @param T the type of the element contained in NDArray
  */
-abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDArray<T>> {
+abstract class NDField<T>(val shape: IntArray, val field: Field<T>) : Field<NDArray<T>> {
+
+    abstract fun produceStructure(initializer: (IntArray) -> T): NDStructure<T>
 
     /**
      * Create new instance of NDArray using field shape and given initializer
      * The producer takes list of indices as argument and returns contained value
      */
-    abstract fun produce(initializer: (List<Int>) -> T): NDArray<T>
+    fun produce(initializer: (IntArray) -> T): NDArray<T> = NDArray(this, produceStructure(initializer))
 
     override val zero: NDArray<T> by lazy {
         produce { this.field.zero }
@@ -31,7 +34,7 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
      */
     private fun checkShape(vararg arrays: NDArray<T>) {
         arrays.forEach {
-            if (shape != it.shape) {
+            if (!shape.contentEquals(it.shape)) {
                 throw ShapeMismatchException(shape, it.shape)
             }
         }
@@ -71,76 +74,44 @@ abstract class NDField<T>(val shape: List<Int>, val field: Field<T>) : Field<NDA
         checkShape(a)
         return produce { with(field) { a[it] / b[it] } }
     }
-}
-
-/**
- * Many-dimensional array
- */
-interface NDArray<T> : FieldElement<NDArray<T>, NDField<T>> {
 
     /**
-     * The list of dimensions of this NDArray
+     * Reverse sum operation
      */
-    val shape: List<Int>
-        get() = context.shape
+    operator fun <T> T.plus(arg: NDArray<T>): NDArray<T> = arg + this
 
     /**
-     * The number of dimentsions for this array
+     * Reverse minus operation
      */
-    val dimension: Int
-        get() = shape.size
-
-    /**
-     * Get the element with given indexes. If number of indexes is different from {@link dimension}, throws exception.
-     */
-    operator fun get(vararg index: Int): T
-
-    operator fun get(index: List<Int>): T {
-        return get(*index.toIntArray())
-    }
-
-    operator fun iterator(): Iterator<Pair<List<Int>, T>> {
-        return iterateIndexes(shape).map { Pair(it, this[it]) }.iterator()
+    operator fun <T> T.minus(arg: NDArray<T>): NDArray<T> = arg.transform { _, value ->
+        with(arg.context.field) {
+            this@minus - value
+        }
     }
 
     /**
-     * Generate new NDArray, using given transformation for each element
+     * Reverse product operation
      */
-    fun transform(action: (List<Int>, T) -> T): NDArray<T> = context.produce { action(it, this[it]) }
+    operator fun <T> T.times(arg: NDArray<T>): NDArray<T> = arg * this
 
-    companion object {
-        /**
-         * Iterate over all indexes in the nd-shape
-         */
-        fun iterateIndexes(shape: List<Int>): Sequence<List<Int>> {
-            return if (shape.size == 1) {
-                (0 until shape[0]).asSequence().map { listOf(it) }
-            } else {
-                val tailShape = ArrayList(shape).apply { removeAt(0) }
-                val tailSequence: List<List<Int>> = iterateIndexes(tailShape).toList()
-                (0 until shape[0]).asSequence().map { firstIndex ->
-                    //adding first element to each of provided index lists
-                    tailSequence.map { listOf(firstIndex) + it }.asSequence()
-                }.flatten()
-            }
+    /**
+     * Reverse division operation
+     */
+    operator fun <T> T.div(arg: NDArray<T>): NDArray<T> = arg.transform { _, value ->
+        with(arg.context.field) {
+            this@div / value
         }
     }
 }
 
 /**
- * In-place mutable [NDArray]
+ * NDStructure coupled to the context. Emulates Python ndarray
  */
-interface MutableNDArray<T> : NDArray<T> {
-    operator fun set(index: List<Int>, value: T)
-}
+data class NDArray<T>(override val context: NDField<T>, private val structure: NDStructure<T>) : FieldElement<NDArray<T>, NDField<T>>, NDStructure<T> by structure {
+    override val self: NDArray<T>
+        get() = this
 
-/**
- * In-place transformation for [MutableNDArray], using given transformation for each element
- */
-fun <T> MutableNDArray<T>.transformInPlace(action: (List<Int>, T) -> T) {
-    for ((index, oldValue) in this) {
-        this[index] = action(index, oldValue)
-    }
+    fun transform(action: (IntArray, T) -> T): NDArray<T> = context.produce { action(it, get(*it)) }
 }
 
 /**
@@ -160,25 +131,11 @@ operator fun <T> NDArray<T>.plus(arg: T): NDArray<T> = transform { _, value ->
 }
 
 /**
- * Reverse sum operation
- */
-operator fun <T> T.plus(arg: NDArray<T>): NDArray<T> = arg + this
-
-/**
  * Subtraction operation between [NDArray] and single element
  */
 operator fun <T> NDArray<T>.minus(arg: T): NDArray<T> = transform { _, value ->
     with(context.field) {
         arg - value
-    }
-}
-
-/**
- * Reverse minus operation
- */
-operator fun <T> T.minus(arg: NDArray<T>): NDArray<T> = arg.transform { _, value ->
-    with(arg.context.field) {
-        this@minus - value
     }
 }
 
@@ -194,11 +151,6 @@ operator fun <T> NDArray<T>.times(arg: T): NDArray<T> = transform { _, value ->
 }
 
 /**
- * Reverse product operation
- */
-operator fun <T> T.times(arg: NDArray<T>): NDArray<T> = arg * this
-
-/**
  * Division operation between [NDArray] and single element
  */
 operator fun <T> NDArray<T>.div(arg: T): NDArray<T> = transform { _, value ->
@@ -207,12 +159,41 @@ operator fun <T> NDArray<T>.div(arg: T): NDArray<T> = transform { _, value ->
     }
 }
 
-/**
- * Reverse division operation
- */
-operator fun <T> T.div(arg: NDArray<T>): NDArray<T> = arg.transform { _, value ->
-    with(arg.context.field) {
-        this@div / value
-    }
+class GenericNDField<T : Any>(shape: IntArray, field: Field<T>) : NDField<T>(shape, field) {
+    override fun produceStructure(initializer: (IntArray) -> T): NDStructure<T> = genericNdStructure(shape, initializer)
 }
 
+//typealias NDFieldFactory<T> = (IntArray)->NDField<T>
+
+object NDArrays {
+    /**
+     * Create a platform-optimized NDArray of doubles
+     */
+    fun realNDArray(shape: IntArray, initializer: (IntArray) -> Double = { 0.0 }): NDArray<Double> {
+        return GenericNDField(shape, DoubleField).produce(initializer)
+    }
+
+    fun real1DArray(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDArray<Double> {
+        return realNDArray(intArrayOf(dim)) { initializer(it[0]) }
+    }
+
+    fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDArray<Double> {
+        return realNDArray(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
+    }
+
+    fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Double> {
+        return realNDArray(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
+    }
+
+//    /**
+//     * Simple boxing NDField
+//     */
+//    fun <T : Any> fieldFactory(field: Field<T>): NDFieldFactory<T> = { shape -> GenericNDField(shape, field) }
+
+    /**
+     * Simple boxing NDArray
+     */
+    fun <T : Any> create(field: Field<T>, shape: IntArray, initializer: (IntArray) -> T): NDArray<T> {
+        return GenericNDField(shape, field).produce { initializer(it) }
+    }
+}

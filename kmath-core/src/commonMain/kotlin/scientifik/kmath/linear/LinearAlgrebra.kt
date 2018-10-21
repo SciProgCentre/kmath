@@ -4,10 +4,10 @@ import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
+import scientifik.kmath.structures.GenericNDField
 import scientifik.kmath.structures.NDArray
-import scientifik.kmath.structures.NDArrays.createFactory
-import scientifik.kmath.structures.NDFieldFactory
-import scientifik.kmath.structures.realNDFieldFactory
+import scientifik.kmath.structures.NDField
+import scientifik.kmath.structures.get
 
 /**
  * The space for linear elements. Supports scalar product alongside with standard linear operations.
@@ -193,6 +193,11 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
     }
 }
 
+typealias NDFieldFactory<T> = (IntArray) -> NDField<T>
+
+internal fun <T : Any> genericNDFieldFactory(field: Field<T>): NDFieldFactory<T> = { index -> GenericNDField(index, field) }
+internal val realNDFieldFactory: NDFieldFactory<Double> = { index -> GenericNDField(index, DoubleField) }
+
 
 /**
  * NDArray-based implementation of vector space. By default uses slow [SimpleNDField], but could be overridden with custom [NDField] factory.
@@ -201,11 +206,11 @@ class ArrayMatrixSpace<T : Any>(
         rows: Int,
         columns: Int,
         field: Field<T>,
-        val ndFactory: NDFieldFactory<T> = createFactory(field)
+        val ndFactory: NDFieldFactory<T> = genericNDFieldFactory(field)
 ) : MatrixSpace<T>(rows, columns, field) {
 
     val ndField by lazy {
-        ndFactory(listOf(rows, columns))
+        ndFactory(intArrayOf(rows, columns))
     }
 
     override fun produce(initializer: (Int, Int) -> T): Matrix<T> = ArrayMatrix(this, initializer)
@@ -218,10 +223,10 @@ class ArrayMatrixSpace<T : Any>(
 class ArrayVectorSpace<T : Any>(
         size: Int,
         field: Field<T>,
-        val ndFactory: NDFieldFactory<T> = createFactory(field)
+        val ndFactory: NDFieldFactory<T> = genericNDFieldFactory(field)
 ) : VectorSpace<T>(size, field) {
     val ndField by lazy {
-        ndFactory(listOf(size))
+        ndFactory(intArrayOf(size))
     }
 
     override fun produce(initializer: (Int) -> T): Vector<T> = ArrayVector(this, initializer)
@@ -306,6 +311,6 @@ fun <T : Any> Vector<T>.toMatrix(): Matrix<T> {
 //        //Generic vector
 //        matrix(size, 1, context.field) { i, j -> get(i) }
 //    }
-    return Matrix.of(size, 1, context.field) { i, j -> get(i) }
+    return Matrix.of(size, 1, context.field) { i, _ -> get(i) }
 }
 
