@@ -1,6 +1,5 @@
 plugins {
-    id 'kotlin-multiplatform'// version '1.3.0-rc-116'
-    id "me.champeau.gradle.jmh" version "0.4.7"
+    id 'kotlin-multiplatform'
 }
 
 repositories {
@@ -8,14 +7,9 @@ repositories {
     mavenCentral()
 }
 
-dependencies{
-    jmh 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-}
-
 kotlin {
     targets {
-        fromPreset(presets.jvmWithJava, 'jvm')
-        //fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.jvm, 'jvm')
         fromPreset(presets.js, 'js')
         // For ARM, preset should be changed to presets.iosArm32 or presets.iosArm64
         // For Linux, preset should be changed to e.g. presets.linuxX64
