@@ -181,7 +181,6 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
         fun ofReal(size: Int, initializer: (Int) -> Double) =
                 ArrayVector(ArrayVectorSpace(size, DoubleField, realNDFieldFactory), initializer)
 
-
         fun equals(v1: Vector<*>, v2: Vector<*>): Boolean {
             if (v1 === v2) return true
             if (v1.context != v2.context) return false
@@ -267,6 +266,8 @@ class ArrayVector<T : Any> internal constructor(override val context: ArrayVecto
 
     override val self: ArrayVector<T> get() = this
 }
+
+typealias RealVector = Vector<Double>
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
