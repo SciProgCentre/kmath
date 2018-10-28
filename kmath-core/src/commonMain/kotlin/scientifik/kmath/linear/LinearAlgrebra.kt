@@ -162,9 +162,8 @@ abstract class VectorSpace<T : Any>(val size: Int, val field: Field<T>) : Space<
 }
 
 
-interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
-    val size: Int
-        get() = context.size
+interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Iterable<T> {
+    val size: Int get() = context.size
 
     operator fun get(i: Int): T
 
@@ -180,6 +179,8 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
          */
         fun ofReal(size: Int, initializer: (Int) -> Double) =
                 ArrayVector(ArrayVectorSpace(size, DoubleField, realNDFieldFactory), initializer)
+
+        fun ofReal(vararg point: Double) = point.toVector()
 
         fun equals(v1: Vector<*>, v2: Vector<*>): Boolean {
             if (v1 === v2) return true
@@ -265,6 +266,10 @@ class ArrayVector<T : Any> internal constructor(override val context: ArrayVecto
     }
 
     override val self: ArrayVector<T> get() = this
+
+    override fun iterator(): Iterator<T> = (0 until size).map { array[it] }.iterator()
+
+    override fun toString(): String = this.joinToString(prefix = "[",postfix = "]", separator = ", "){it.toString()}
 }
 
 typealias RealVector = Vector<Double>
@@ -284,6 +289,7 @@ interface LinearSolver<T : Any> {
 fun <T : Any> Array<T>.toVector(field: Field<T>) = Vector.of(size, field) { this[it] }
 
 fun DoubleArray.toVector() = Vector.ofReal(this.size) { this[it] }
+fun List<Double>.toVector() = Vector.ofReal(this.size) { this[it] }
 
 /**
  * Convert matrix to vector if it is possible

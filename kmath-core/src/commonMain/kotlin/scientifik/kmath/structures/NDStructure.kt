@@ -76,7 +76,7 @@ class DefaultStrides(override val shape: IntArray) : Strides {
     override fun offset(index: IntArray): Int {
         return index.mapIndexed { i, value ->
             if (value < 0 || value >= shape[i]) {
-                throw RuntimeException("Index out of shape bounds: ($i,$value)")
+                throw RuntimeException("Index $value out of shape bounds: (0,${shape[i]})")
             }
             value * strides[i]
         }.sum()

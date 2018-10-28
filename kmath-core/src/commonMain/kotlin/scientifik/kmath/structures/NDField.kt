@@ -105,9 +105,12 @@ abstract class NDField<T>(val shape: IntArray, val field: Field<T>) : Field<NDAr
 }
 
 /**
- * NDStructure coupled to the context. Emulates Python ndarray
+ *  Immutable [NDStructure] coupled to the context. Emulates Python ndarray
  */
 data class NDArray<T>(override val context: NDField<T>, private val structure: NDStructure<T>) : FieldElement<NDArray<T>, NDField<T>>, NDStructure<T> by structure {
+
+    //TODO ensure structure is immutable
+
     override val self: NDArray<T>
         get() = this
 
