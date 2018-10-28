@@ -2,6 +2,7 @@ package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.RealVector
 import scientifik.kmath.linear.toVector
+import scientifik.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.floor
 
@@ -15,7 +16,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 
     operator fun contains(value: Double): Boolean = value in (position - size / 2)..(position + size / 2)
 
-    override fun contains(vector: RealVector): Boolean = contains(vector[0])
+    override fun contains(vector: Buffer<out Double>): Boolean = contains(vector[0])
 
     internal operator fun inc() = this.also { counter.increment()}
 
@@ -44,7 +45,7 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         synchronized(this) { bins.put(it.position, it) }
     }
 
-    override fun get(point: RealVector): UnivariateBin? = get(point[0])
+    override fun get(point: Buffer<out Double>): UnivariateBin? = get(point[0])
 
     override val dimension: Int get() = 1
 
@@ -57,7 +58,7 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         (get(value) ?: createBin(value)).inc()
     }
 
-    override fun put(point: RealVector) = put(point[0])
+    override fun put(point: Buffer<out Double>) = put(point[0])
 
     companion object {
         fun uniform(binSize: Double, start: Double = 0.0): UnivariateHistogram {

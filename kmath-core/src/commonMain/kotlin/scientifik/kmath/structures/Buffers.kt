@@ -4,7 +4,7 @@ package scientifik.kmath.structures
 /**
  * A generic linear buffer for both primitives and objects
  */
-interface Buffer<T> {
+interface Buffer<T> : Iterable<T> {
 
     val size: Int
 
@@ -36,6 +36,8 @@ inline class ListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> 
         list[index] = value
     }
 
+    override fun iterator(): Iterator<T>  = list.iterator()
+
     override fun copy(): MutableBuffer<T> = ListBuffer(ArrayList(list))
 }
 
@@ -49,6 +51,8 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
         array[index] = value
     }
 
+    override fun iterator(): Iterator<T>  = array.iterator()
+
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 }
 
@@ -61,6 +65,8 @@ class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
     override fun set(index: Int, value: Double) {
         array[index] = value
     }
+
+    override fun iterator(): Iterator<Double>  = array.iterator()
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
 }

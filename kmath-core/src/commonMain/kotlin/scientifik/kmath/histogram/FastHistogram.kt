@@ -2,6 +2,7 @@ package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.RealVector
 import scientifik.kmath.linear.toVector
+import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.NDStructure
 import scientifik.kmath.structures.ndStructure
 import kotlin.math.floor
@@ -11,7 +12,7 @@ class MultivariateBin(override val center: RealVector, val sizes: RealVector, va
         if (center.size != sizes.size) error("Dimension mismatch in bin creation. Expected ${center.size}, but found ${sizes.size}")
     }
 
-    override fun contains(vector: RealVector): Boolean {
+    override fun contains(vector: Buffer<out Double>): Boolean {
         if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
         return vector.asSequence().mapIndexed { i, value -> value in (center[i] - sizes[i] / 2)..(center[i] + sizes[i] / 2) }.all { it }
     }
@@ -70,12 +71,12 @@ class FastHistogram(
     }
 
 
-    override fun get(point: RealVector): MultivariateBin? {
+    override fun get(point: Buffer<out Double>): MultivariateBin? {
         val index = IntArray(dimension) { getIndex(it, point[it]) }
         return bins[index]
     }
 
-    override fun put(point: RealVector) {
+    override fun put(point: Buffer<out Double>) {
         this[point]?.inc() ?: error("Could not find appropriate bin (should not be possible)")
     }
 

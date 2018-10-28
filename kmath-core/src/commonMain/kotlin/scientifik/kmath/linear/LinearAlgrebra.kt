@@ -4,10 +4,7 @@ import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
-import scientifik.kmath.structures.GenericNDField
-import scientifik.kmath.structures.NDArray
-import scientifik.kmath.structures.NDField
-import scientifik.kmath.structures.get
+import scientifik.kmath.structures.*
 
 /**
  * The space for linear elements. Supports scalar product alongside with standard linear operations.
@@ -162,10 +159,8 @@ abstract class VectorSpace<T : Any>(val size: Int, val field: Field<T>) : Space<
 }
 
 
-interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Iterable<T> {
-    val size: Int get() = context.size
-
-    operator fun get(i: Int): T
+interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Buffer<T>, Iterable<T> {
+    override val size: Int get() = context.size
 
     companion object {
         /**
@@ -261,15 +256,17 @@ class ArrayVector<T : Any> internal constructor(override val context: ArrayVecto
         }
     }
 
-    override fun get(i: Int): T {
-        return array[i]
+    override fun get(index: Int): T {
+        return array[index]
     }
 
     override val self: ArrayVector<T> get() = this
 
     override fun iterator(): Iterator<T> = (0 until size).map { array[it] }.iterator()
 
-    override fun toString(): String = this.joinToString(prefix = "[",postfix = "]", separator = ", "){it.toString()}
+    override fun copy(): ArrayVector<T> = ArrayVector(context, array)
+
+    override fun toString(): String = this.joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
 }
 
 typealias RealVector = Vector<Double>
