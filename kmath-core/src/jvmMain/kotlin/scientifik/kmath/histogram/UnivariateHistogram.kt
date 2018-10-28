@@ -7,7 +7,7 @@ import kotlin.math.floor
 
 //TODO move to common
 
-class UnivariateBin(val position: Double, val size: Double, val counter: LongCounter = LongCounter()) : Bin {
+class UnivariateBin(val position: Double, val size: Double, val counter: LongCounter = LongCounter()) : Bin<Double> {
     //TODO add weighting
     override val value: Number get() = counter.sum()
 
@@ -25,7 +25,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 /**
  * Univariate histogram with log(n) bin search speed
  */
-class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) : Histogram<UnivariateBin> {
+class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) : Histogram<Double,UnivariateBin> {
 
     private val bins: TreeMap<Double, UnivariateBin> = TreeMap()
 

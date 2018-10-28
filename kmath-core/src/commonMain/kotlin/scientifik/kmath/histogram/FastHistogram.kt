@@ -6,13 +6,13 @@ import scientifik.kmath.structures.NDStructure
 import scientifik.kmath.structures.ndStructure
 import kotlin.math.floor
 
-class MultivariateBin(override val center: RealVector, val sizes: RealVector, val counter: LongCounter = LongCounter()) : Bin {
+class MultivariateBin(override val center: RealVector, val sizes: RealVector, val counter: LongCounter = LongCounter()) : Bin<Double> {
     init {
         if (center.size != sizes.size) error("Dimension mismatch in bin creation. Expected ${center.size}, but found ${sizes.size}")
     }
 
     override fun contains(vector: RealVector): Boolean {
-        if(vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
+        if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
         return vector.asSequence().mapIndexed { i, value -> value in (center[i] - sizes[i] / 2)..(center[i] + sizes[i] / 2) }.all { it }
     }
 
@@ -28,8 +28,8 @@ class MultivariateBin(override val center: RealVector, val sizes: RealVector, va
 class FastHistogram(
         private val lower: RealVector,
         private val upper: RealVector,
-        private val binNums: IntArray = IntArray(lower.size) { 100 }
-) : Histogram<MultivariateBin> {
+        private val binNums: IntArray = IntArray(lower.size) { 20 }
+) : Histogram<Double, MultivariateBin> {
 
     init {
         // argument checks
@@ -105,7 +105,7 @@ class FastHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>,Int>): FastHistogram {
+        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram {
             return FastHistogram(
                     ranges.map { it.first.start }.toVector(),
                     ranges.map { it.first.endInclusive }.toVector(),
