@@ -1,8 +1,8 @@
 package scientifik.kmath.histogram
 
-import org.junit.Test
 import scientifik.kmath.linear.Vector
 import kotlin.random.Random
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

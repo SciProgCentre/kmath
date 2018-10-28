@@ -70,15 +70,15 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         fun custom(borders: DoubleArray): UnivariateHistogram {
             val sorted = borders.sortedArray()
             return UnivariateHistogram { value ->
-                if (value < sorted.first()) {
-                    UnivariateBin(Double.NEGATIVE_INFINITY, Double.MAX_VALUE)
-                } else if (value > sorted.last()) {
-                    UnivariateBin(Double.POSITIVE_INFINITY, Double.MAX_VALUE)
-                } else {
-                    val index = (0 until sorted.size).first { value > sorted[it] }
-                    val left = sorted[index]
-                    val right = sorted[index + 1]
-                    UnivariateBin((left + right) / 2, (right - left))
+                when {
+                    value < sorted.first() -> UnivariateBin(Double.NEGATIVE_INFINITY, Double.MAX_VALUE)
+                    value > sorted.last() -> UnivariateBin(Double.POSITIVE_INFINITY, Double.MAX_VALUE)
+                    else -> {
+                        val index = (0 until sorted.size).first { value > sorted[it] }
+                        val left = sorted[index]
+                        val right = sorted[index + 1]
+                        UnivariateBin((left + right) / 2, (right - left))
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@ class MultivariateBin(override val center: RealVector, val sizes: RealVector, va
     }
 
     override fun contains(vector: RealVector): Boolean {
-        assert(vector.size == center.size)
+        if(vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
         return vector.asSequence().mapIndexed { i, value -> value in (center[i] - sizes[i] / 2)..(center[i] + sizes[i] / 2) }.all { it }
     }
 
