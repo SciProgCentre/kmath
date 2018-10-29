@@ -1,0 +1,15 @@
+plugins {
+    id "java"
+    id "kotlin"
+    id "me.champeau.gradle.jmh" version "0.4.7"
+}
+
+repositories {
+    maven { url = 'http://dl.bintray.com/kotlin/kotlin-eap' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':kmath-core')
+    jmh 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+}

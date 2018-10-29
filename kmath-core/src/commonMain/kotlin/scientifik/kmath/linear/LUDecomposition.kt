@@ -1,18 +1,19 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.structures.MutableNDArray
-import scientifik.kmath.structures.NDArray
-import scientifik.kmath.structures.NDArrays
+import scientifik.kmath.structures.MutableNDStructure
+import scientifik.kmath.structures.NDStructure
+import scientifik.kmath.structures.genericNdStructure
+import scientifik.kmath.structures.get
 import kotlin.math.absoluteValue
 
 /**
- * Implementation copier from Apache common-maths
+ * Implementation based on Apache common-maths LU-decomposition
  */
 abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
 
     private val field get() = matrix.context.field
     /** Entries of LU decomposition.  */
-    internal val lu: NDArray<T>
+    internal val lu: NDStructure<T>
     /** Pivot permutation associated with LU decomposition.  */
     internal val pivot: IntArray
     /** Parity of the permutation associated with the LU decomposition.  */
@@ -85,26 +86,18 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
             }
         }
 
-//    /**
-//     * Get a solver for finding the A  X = B solution in exact linear
-//     * sense.
-//     * @return a solver
-//     */
-//    val solver: DecompositionSolver
-//        get() = Solver(lu, pivot, singular)
-
     /**
      * In-place transformation for [MutableNDArray], using given transformation for each element
      */
-    operator fun <T> MutableNDArray<T>.set(i: Int, j: Int, value: T) {
-        this[listOf(i, j)] = value
+    operator fun <T> MutableNDStructure<T>.set(i: Int, j: Int, value: T) {
+        this[intArrayOf(i, j)] = value
     }
 
     abstract fun isSingular(value: T): Boolean
 
     private fun abs(value: T) = if (value > matrix.context.field.zero) value else with(matrix.context.field) { -value }
 
-    private fun calculateLU(): Pair<NDArray<T>, IntArray> {
+    private fun calculateLU(): Pair<NDStructure<T>, IntArray> {
         if (matrix.rows != matrix.columns) {
             error("LU decomposition supports only square matrices")
         }
@@ -112,7 +105,7 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
         val m = matrix.columns
         val pivot = IntArray(matrix.rows)
         //TODO fix performance
-        val lu: MutableNDArray<T> = NDArrays.createMutable(matrix.context.field, listOf(matrix.rows, matrix.columns)) { index -> matrix[index[0], index[1]] }
+        val lu: MutableNDStructure<T> = genericNdStructure(intArrayOf(matrix.rows, matrix.columns)) { index -> matrix[index[0], index[1]] }
 
 
         with(matrix.context.field) {
@@ -202,44 +195,6 @@ class RealLUDecomposition(matrix: Matrix<Double>, private val singularityThresho
 
 /** Specialized solver.  */
 object RealLUSolver : LinearSolver<Double> {
-
-//
-//    /** {@inheritDoc}  */
-//    override fun solve(b: RealVector): RealVector {
-//        val m = pivot.size
-//        if (b.getDimension() != m) {
-//            throw DimensionMismatchException(b.getDimension(), m)
-//        }
-//        if (singular) {
-//            throw SingularMatrixException()
-//        }
-//
-//        val bp = DoubleArray(m)
-//
-//        // Apply permutations to b
-//        for (row in 0 until m) {
-//            bp[row] = b.getEntry(pivot[row])
-//        }
-//
-//        // Solve LY = b
-//        for (col in 0 until m) {
-//            val bpCol = bp[col]
-//            for (i in col + 1 until m) {
-//                bp[i] -= bpCol * lu[i][col]
-//            }
-//        }
-//
-//        // Solve UX = Y
-//        for (col in m - 1 downTo 0) {
-//            bp[col] /= lu[col][col]
-//            val bpCol = bp[col]
-//            for (i in 0 until col) {
-//                bp[i] -= bpCol * lu[i][col]
-//            }
-//        }
-//
-//        return ArrayRealVector(bp, false)
-//    }
 
 
     fun decompose(mat: Matrix<Double>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)

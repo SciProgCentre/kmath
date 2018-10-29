@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        maven { url = 'http://dl.bintray.com/kotlin/kotlin-eap' }
         mavenCentral()
         maven { url = 'https://plugins.gradle.org/m2/' }
     }
@@ -10,4 +9,5 @@ enableFeaturePreview('GRADLE_METADATA')
 
 rootProject.name = 'kmath'
 include ':kmath-core'
+include ':kmath-jmh'
 

@@ -4,10 +4,7 @@ import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
-import scientifik.kmath.structures.NDArray
-import scientifik.kmath.structures.NDArrays.createFactory
-import scientifik.kmath.structures.NDFieldFactory
-import scientifik.kmath.structures.realNDFieldFactory
+import scientifik.kmath.structures.*
 
 /**
  * The space for linear elements. Supports scalar product alongside with standard linear operations.
@@ -162,11 +159,8 @@ abstract class VectorSpace<T : Any>(val size: Int, val field: Field<T>) : Space<
 }
 
 
-interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
-    val size: Int
-        get() = context.size
-
-    operator fun get(i: Int): T
+interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Buffer<T>, Iterable<T> {
+    override val size: Int get() = context.size
 
     companion object {
         /**
@@ -181,6 +175,7 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
         fun ofReal(size: Int, initializer: (Int) -> Double) =
                 ArrayVector(ArrayVectorSpace(size, DoubleField, realNDFieldFactory), initializer)
 
+        fun ofReal(vararg point: Double) = point.toVector()
 
         fun equals(v1: Vector<*>, v2: Vector<*>): Boolean {
             if (v1 === v2) return true
@@ -193,6 +188,11 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>> {
     }
 }
 
+typealias NDFieldFactory<T> = (IntArray) -> NDField<T>
+
+internal fun <T : Any> genericNDFieldFactory(field: Field<T>): NDFieldFactory<T> = { index -> GenericNDField(index, field) }
+internal val realNDFieldFactory: NDFieldFactory<Double> = { index -> GenericNDField(index, DoubleField) }
+
 
 /**
  * NDArray-based implementation of vector space. By default uses slow [SimpleNDField], but could be overridden with custom [NDField] factory.
@@ -201,11 +201,11 @@ class ArrayMatrixSpace<T : Any>(
         rows: Int,
         columns: Int,
         field: Field<T>,
-        val ndFactory: NDFieldFactory<T> = createFactory(field)
+        val ndFactory: NDFieldFactory<T> = genericNDFieldFactory(field)
 ) : MatrixSpace<T>(rows, columns, field) {
 
     val ndField by lazy {
-        ndFactory(listOf(rows, columns))
+        ndFactory(intArrayOf(rows, columns))
     }
 
     override fun produce(initializer: (Int, Int) -> T): Matrix<T> = ArrayMatrix(this, initializer)
@@ -218,10 +218,10 @@ class ArrayMatrixSpace<T : Any>(
 class ArrayVectorSpace<T : Any>(
         size: Int,
         field: Field<T>,
-        val ndFactory: NDFieldFactory<T> = createFactory(field)
+        val ndFactory: NDFieldFactory<T> = genericNDFieldFactory(field)
 ) : VectorSpace<T>(size, field) {
     val ndField by lazy {
-        ndFactory(listOf(size))
+        ndFactory(intArrayOf(size))
     }
 
     override fun produce(initializer: (Int) -> T): Vector<T> = ArrayVector(this, initializer)
@@ -256,12 +256,20 @@ class ArrayVector<T : Any> internal constructor(override val context: ArrayVecto
         }
     }
 
-    override fun get(i: Int): T {
-        return array[i]
+    override fun get(index: Int): T {
+        return array[index]
     }
 
     override val self: ArrayVector<T> get() = this
+
+    override fun iterator(): Iterator<T> = (0 until size).map { array[it] }.iterator()
+
+    override fun copy(): ArrayVector<T> = ArrayVector(context, array)
+
+    override fun toString(): String = this.joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
 }
+
+typealias RealVector = Vector<Double>
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
@@ -278,6 +286,7 @@ interface LinearSolver<T : Any> {
 fun <T : Any> Array<T>.toVector(field: Field<T>) = Vector.of(size, field) { this[it] }
 
 fun DoubleArray.toVector() = Vector.ofReal(this.size) { this[it] }
+fun List<Double>.toVector() = Vector.ofReal(this.size) { this[it] }
 
 /**
  * Convert matrix to vector if it is possible
@@ -306,6 +315,6 @@ fun <T : Any> Vector<T>.toMatrix(): Matrix<T> {
 //        //Generic vector
 //        matrix(size, 1, context.field) { i, j -> get(i) }
 //    }
-    return Matrix.of(size, 1, context.field) { i, j -> get(i) }
+    return Matrix.of(size, 1, context.field) { i, _ -> get(i) }
 }
 
