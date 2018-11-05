@@ -17,7 +17,7 @@ class MultivariateBin(override val center: RealVector, val sizes: RealVector, va
         return vector.asSequence().mapIndexed { i, value -> value in (center[i] - sizes[i] / 2)..(center[i] + sizes[i] / 2) }.all { it }
     }
 
-    override val value: Number get() = counter.sum()
+    override val value get() = counter.sum()
     internal operator fun inc() = this.also { counter.increment() }
 
     override val dimension: Int get() = center.size
@@ -51,8 +51,8 @@ class FastHistogram(
             val center = indexArray.mapIndexed { axis, index ->
                 when (index) {
                     0 -> Double.NEGATIVE_INFINITY
-                    actualSizes[axis] -> Double.POSITIVE_INFINITY
-                    else -> lower[axis] + (index - 1) * binSize[axis]
+                    actualSizes[axis] - 1 -> Double.POSITIVE_INFINITY
+                    else -> lower[axis] + (index.toDouble() - 0.5) * binSize[axis]
                 }
             }.toVector()
             MultivariateBin(center, binSize)
