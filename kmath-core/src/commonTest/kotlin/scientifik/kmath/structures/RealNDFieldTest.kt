@@ -1,6 +1,8 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.structures.NDArrays.produceReal
 import scientifik.kmath.structures.NDArrays.real2DArray
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,5 +41,19 @@ class RealNDFieldTest {
         val function: (Double) -> Double = { x -> x.pow(2) + 2 * x + 1 }
         val result = function(array1) + 1.0
         assertEquals(10.0, result[1,1])
+    }
+
+    @Test
+    fun testLibraryFunction() {
+        val abs: (Double) -> Double = ::abs
+        val result = abs(array1)
+        assertEquals(10.0, result[1,1])
+    }
+
+    @Test
+    fun testAbs(){
+        val res = produceReal(array1.shape){
+           1 + abs(array1) + exp(array2)
+        }
     }
 }

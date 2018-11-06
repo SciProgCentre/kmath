@@ -39,4 +39,15 @@ class FieldExpressionContextTest {
         val expression = FieldExpressionContext(DoubleField).expression()
         assertEquals(expression("x" to 1.0), 4.0)
     }
+
+    @Test
+    fun valueExpression() {
+        val expressionBuilder: FieldExpressionContext<Double>.()->Expression<Double> = {
+            val x = variable("x")
+            x * x + 2 * x + 1.0
+        }
+
+        val expression = FieldExpressionContext(DoubleField).expressionBuilder()
+        assertEquals(expression("x" to 1.0), 4.0)
+    }
 }

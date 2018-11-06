@@ -1,6 +1,5 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
@@ -107,14 +106,15 @@ abstract class NDField<T>(val shape: IntArray, val field: Field<T>) : Field<NDAr
 /**
  *  Immutable [NDStructure] coupled to the context. Emulates Python ndarray
  */
-data class NDArray<T>(override val context: NDField<T>, private val structure: NDStructure<T>) : FieldElement<NDArray<T>, NDField<T>>, NDStructure<T> by structure {
+class NDArray<T>(override val context: NDField<T>, private val structure: NDStructure<T>) : FieldElement<NDArray<T>, NDField<T>>, NDStructure<T> by structure {
 
     //TODO ensure structure is immutable
 
     override val self: NDArray<T>
         get() = this
 
-    fun transform(action: (IntArray, T) -> T): NDArray<T> = context.produce { action(it, get(*it)) }
+    inline fun transform(crossinline action: (IntArray, T) -> T): NDArray<T> = context.produce { action(it, get(*it)) }
+    inline fun transform(crossinline action: (T) -> T): NDArray<T> = context.produce { action(get(*it)) }
 }
 
 /**
@@ -173,7 +173,7 @@ object NDArrays {
      * Create a platform-optimized NDArray of doubles
      */
     fun realNDArray(shape: IntArray, initializer: (IntArray) -> Double = { 0.0 }): NDArray<Double> {
-        return GenericNDField(shape, DoubleField).produce(initializer)
+        return RealNDField(shape).produce(initializer)
     }
 
     fun real1DArray(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDArray<Double> {
@@ -187,6 +187,8 @@ object NDArrays {
     fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDArray<Double> {
         return realNDArray(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
     }
+
+    inline fun produceReal(shape: IntArray, block: RealNDField.() -> RealNDArray) = RealNDField(shape).run(block)
 
 //    /**
 //     * Simple boxing NDField
