@@ -1,5 +1,8 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.linear.Vector
+import scientifik.kmath.linear.VectorL2Norm
+import scientifik.kmath.operations.Norm
 import scientifik.kmath.structures.NDArrays.produceReal
 import scientifik.kmath.structures.NDArrays.real2DArray
 import kotlin.math.abs
@@ -7,7 +10,7 @@ import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RealNDFieldTest {
+class NumberNDFieldTest {
     val array1 = real2DArray(3, 3) { i, j -> (i + j).toDouble() }
     val array2 = real2DArray(3, 3) { i, j -> (i - j).toDouble() }
 
@@ -46,14 +49,22 @@ class RealNDFieldTest {
     @Test
     fun testLibraryFunction() {
         val abs: (Double) -> Double = ::abs
-        val result = abs(array1)
-        assertEquals(10.0, result[1,1])
+        val result = abs(array2)
+        assertEquals(2.0, result[0,2])
+    }
+
+    object L2Norm: Norm<NDArray<out Number>, Double> {
+        override fun norm(arg: NDArray<out Number>): Double {
+            return kotlin.math.sqrt(arg.sumByDouble { it.second.toDouble() })
+        }
     }
 
     @Test
-    fun testAbs(){
-        val res = produceReal(array1.shape){
-           1 + abs(array1) + exp(array2)
+    fun testInternalContext(){
+        produceReal(array1.shape){
+            with(L2Norm) {
+                1 + norm(array1) + exp(array2)
+            }
         }
     }
 }

@@ -7,8 +7,8 @@ class RealFieldTest {
     @Test
     fun testSqrt() {
         val sqrt = with(RealField) {
-            sqrt(25 * one)
+            sqrt(  25 * one)
         }
-        assertEquals(5.0, sqrt.toDouble())
+        assertEquals(5.0, sqrt.value)
     }
 }
