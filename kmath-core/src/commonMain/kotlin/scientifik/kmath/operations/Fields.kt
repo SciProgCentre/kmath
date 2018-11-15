@@ -38,9 +38,9 @@ object RealField : ExtendedField<Real>, Norm<Real, Real> {
 /**
  * Real field element wrapping double.
  *
- * TODO inline does not work due to compiler bug. Waiting for fix
+ * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
  */
-class Real(val value: Double) : FieldElement<Real, RealField> {
+inline class Real(val value: Double) : FieldElement<Real, RealField> {
 
     //values are dynamically calculated to save memory
     override val self
