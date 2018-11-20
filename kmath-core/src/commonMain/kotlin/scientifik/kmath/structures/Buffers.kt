@@ -56,7 +56,7 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 }
 
-class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
+inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int
         get() = array.size
 
@@ -69,6 +69,21 @@ class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
     override fun iterator(): Iterator<Double>  = array.iterator()
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
+}
+
+inline class IntBuffer(private val array: IntArray): MutableBuffer<Int>{
+    override val size: Int
+        get() = array.size
+
+    override fun get(index: Int): Int = array[index]
+
+    override fun set(index: Int, value: Int) {
+        array[index] = value
+    }
+
+    override fun iterator(): Iterator<Int>  = array.iterator()
+
+    override fun copy(): MutableBuffer<Int> = IntBuffer(array.copyOf())
 }
 
 inline fun <reified T : Any> buffer(size: Int, noinline initializer: (Int) -> T): Buffer<T> {

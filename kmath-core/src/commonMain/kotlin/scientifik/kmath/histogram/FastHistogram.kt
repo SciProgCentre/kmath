@@ -24,13 +24,14 @@ class MultivariateBin(override val center: RealVector, val sizes: RealVector, va
 }
 
 /**
- * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions
+ * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions.
+ * The histogram is optimized for speed, but have large size in memory
  */
 class FastHistogram(
         private val lower: RealVector,
         private val upper: RealVector,
         private val binNums: IntArray = IntArray(lower.size) { 20 }
-) : Histogram<Double, MultivariateBin> {
+) : MutableHistogram<Double, MultivariateBin> {
 
     init {
         // argument checks
@@ -76,7 +77,8 @@ class FastHistogram(
         return bins[index]
     }
 
-    override fun put(point: Buffer<out Double>) {
+    override fun put(point: Buffer<out Double>, weight: Double) {
+        if (weight != 1.0) TODO("Implement weighting")
         this[point]?.inc() ?: error("Could not find appropriate bin (should not be possible)")
     }
 

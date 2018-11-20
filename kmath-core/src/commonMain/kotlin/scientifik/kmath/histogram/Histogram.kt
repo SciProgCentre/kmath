@@ -4,12 +4,14 @@ import scientifik.kmath.operations.Space
 import scientifik.kmath.structures.ArrayBuffer
 import scientifik.kmath.structures.Buffer
 
+typealias Point<T> = Buffer<T>
+
 /**
  * A simple geometric domain
  * TODO move to geometry module
  */
 interface Domain<T: Any> {
-    operator fun contains(vector: Buffer<out T>): Boolean
+    operator fun contains(vector: Point<out T>): Boolean
     val dimension: Int
 }
 
@@ -21,7 +23,7 @@ interface Bin<T: Any> : Domain<T> {
      * The value of this bin
      */
     val value: Number
-    val center: Buffer<T>
+    val center: Point<T>
 }
 
 interface Histogram<T: Any, out B : Bin<T>> : Iterable<B> {
@@ -29,27 +31,31 @@ interface Histogram<T: Any, out B : Bin<T>> : Iterable<B> {
     /**
      * Find existing bin, corresponding to given coordinates
      */
-    operator fun get(point: Buffer<out T>): B?
+    operator fun get(point: Point<out T>): B?
 
     /**
      * Dimension of the histogram
      */
     val dimension: Int
 
+}
+
+interface MutableHistogram<T: Any, out B : Bin<T>>: Histogram<T,B>{
+
     /**
      * Increment appropriate bin
      */
-    fun put(point: Buffer<out T>)
+    fun put(point: Point<out T>, weight: Double = 1.0)
 }
 
-fun <T: Any> Histogram<T,*>.put(vararg point: T) = put(ArrayBuffer(point))
+fun <T: Any> MutableHistogram<T,*>.put(vararg point: T) = put(ArrayBuffer(point))
 
-fun <T: Any> Histogram<T,*>.fill(sequence: Iterable<Buffer<T>>) = sequence.forEach { put(it) }
+fun <T: Any> MutableHistogram<T,*>.fill(sequence: Iterable<Point<T>>) = sequence.forEach { put(it) }
 
 /**
  * Pass a sequence builder into histogram
  */
-fun <T: Any> Histogram<T, *>.fill(buider: suspend SequenceScope<Buffer<T>>.() -> Unit) = fill(sequence(buider).asIterable())
+fun <T: Any> MutableHistogram<T, *>.fill(buider: suspend SequenceScope<Point<T>>.() -> Unit) = fill(sequence(buider).asIterable())
 
 /**
  * A space to perform arithmetic operations on histograms

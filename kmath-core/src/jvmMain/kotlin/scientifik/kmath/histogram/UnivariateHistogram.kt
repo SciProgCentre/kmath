@@ -26,7 +26,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 /**
  * Univariate histogram with log(n) bin search speed
  */
-class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) : Histogram<Double,UnivariateBin> {
+class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) : MutableHistogram<Double,UnivariateBin> {
 
     private val bins: TreeMap<Double, UnivariateBin> = TreeMap()
 
@@ -58,7 +58,10 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         (get(value) ?: createBin(value)).inc()
     }
 
-    override fun put(point: Buffer<out Double>) = put(point[0])
+    override fun put(point: Buffer<out Double>, weight: Double) {
+        if (weight != 1.0) TODO("Implement weighting")
+        put(point[0])
+    }
 
     companion object {
         fun uniform(binSize: Double, start: Double = 0.0): UnivariateHistogram {
