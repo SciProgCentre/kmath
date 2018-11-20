@@ -42,6 +42,7 @@ inline class ListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> 
 }
 
 class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
+    //Can't inline because array invariant
     override val size: Int
         get() = array.size
 

@@ -1,9 +1,6 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
-import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.Space
-import scientifik.kmath.operations.SpaceElement
+import scientifik.kmath.operations.*
 import scientifik.kmath.structures.*
 
 /**
@@ -70,8 +67,6 @@ abstract class MatrixSpace<T : Any>(val rows: Int, val columns: Int, val field: 
         result = 31 * result + field.hashCode()
         return result
     }
-
-
 }
 
 infix fun <T : Any> Matrix<T>.dot(b: Matrix<T>): Matrix<T> = this.context.multiply(this, b)
@@ -191,11 +186,11 @@ interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Buffer<T>, 
 typealias NDFieldFactory<T> = (IntArray) -> NDField<T>
 
 internal fun <T : Any> genericNDFieldFactory(field: Field<T>): NDFieldFactory<T> = { index -> GenericNDField(index, field) }
-internal val realNDFieldFactory: NDFieldFactory<Double> = { index -> GenericNDField(index, DoubleField) }
+internal val realNDFieldFactory: NDFieldFactory<Double> = { index -> ExtendedNDField(index, DoubleField) }
 
 
 /**
- * NDArray-based implementation of vector space. By default uses slow [SimpleNDField], but could be overridden with custom [NDField] factory.
+ * NDArray-based implementation of vector space. By default uses slow [GenericNDField], but could be overridden with custom [NDField] factory.
  */
 class ArrayMatrixSpace<T : Any>(
         rows: Int,
@@ -318,3 +313,8 @@ fun <T : Any> Vector<T>.toMatrix(): Matrix<T> {
     return Matrix.of(size, 1, context.field) { i, _ -> get(i) }
 }
 
+object VectorL2Norm: Norm<Vector<out Number>, Double> {
+    override fun norm(arg: Vector<out Number>): Double {
+        return kotlin.math.sqrt(arg.sumByDouble { it.toDouble() })
+    }
+}

@@ -1,5 +1,6 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
@@ -14,7 +15,7 @@ class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : Run
  * @param field - operations field defined on individual array element
  * @param T the type of the element contained in NDArray
  */
-abstract class NDField<T>(val shape: IntArray, val field: Field<T>) : Field<NDArray<T>> {
+abstract class NDField<T>(val shape: IntArray, open val field: Field<T>) : Field<NDArray<T>> {
 
     abstract fun produceStructure(initializer: (IntArray) -> T): NDStructure<T>
 
@@ -173,7 +174,7 @@ object NDArrays {
      * Create a platform-optimized NDArray of doubles
      */
     fun realNDArray(shape: IntArray, initializer: (IntArray) -> Double = { 0.0 }): NDArray<Double> {
-        return RealNDField(shape).produce(initializer)
+        return ExtendedNDField(shape, DoubleField).produce(initializer)
     }
 
     fun real1DArray(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDArray<Double> {
@@ -188,7 +189,7 @@ object NDArrays {
         return realNDArray(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
     }
 
-    inline fun produceReal(shape: IntArray, block: RealNDField.() -> RealNDArray) = RealNDField(shape).run(block)
+    inline fun produceReal(shape: IntArray, block: ExtendedNDField<Double>.() -> NDArray<Double>) = ExtendedNDField(shape, DoubleField).run(block)
 
 //    /**
 //     * Simple boxing NDField

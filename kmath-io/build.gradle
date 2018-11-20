@@ -14,6 +14,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api project(":kmath-core")
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
             }
         }
