@@ -1,12 +1,14 @@
 buildscript {
-    val kotlin_version = "1.3.10"
+    extra["kotlinVersion"] = "1.3.10"
+
+    val kotlinVersion: String by extra
 
     repositories {
         jcenter()
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:4+")
     }
 }

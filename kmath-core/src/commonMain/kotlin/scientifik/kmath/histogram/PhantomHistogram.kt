@@ -22,6 +22,10 @@ class PhantomBin(val template: BinTemplate, override val value: Number) : Bin<Do
 
 }
 
+/**
+ * Immutable histogram with explicit structure for content and additional external bin description.
+ * Bin search is slow, but full histogram algebra is supported.
+ */
 class PhantomHistogram(
         val bins: Map<BinTemplate, IntArray>,
         val data: NDStructure<Double>

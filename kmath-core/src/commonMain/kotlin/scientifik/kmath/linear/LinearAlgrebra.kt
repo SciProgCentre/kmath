@@ -225,7 +225,7 @@ class ArrayVectorSpace<T : Any>(
 /**
  * Member of [ArrayMatrixSpace] which wraps 2-D array
  */
-class ArrayMatrix<T : Any> internal constructor(override val context: ArrayMatrixSpace<T>, val array: NDArray<T>) : Matrix<T> {
+class ArrayMatrix<T : Any> internal constructor(override val context: ArrayMatrixSpace<T>, val element: NDElement<T>) : Matrix<T> {
 
     constructor(context: ArrayMatrixSpace<T>, initializer: (Int, Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0], list[1]) })
 
@@ -234,32 +234,32 @@ class ArrayMatrix<T : Any> internal constructor(override val context: ArrayMatri
     override val columns: Int get() = context.columns
 
     override fun get(i: Int, j: Int): T {
-        return array[i, j]
+        return element[i, j]
     }
 
     override val self: ArrayMatrix<T> get() = this
 }
 
 
-class ArrayVector<T : Any> internal constructor(override val context: ArrayVectorSpace<T>, val array: NDArray<T>) : Vector<T> {
+class ArrayVector<T : Any> internal constructor(override val context: ArrayVectorSpace<T>, val element: NDElement<T>) : Vector<T> {
 
     constructor(context: ArrayVectorSpace<T>, initializer: (Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0]) })
 
     init {
-        if (context.size != array.shape[0]) {
+        if (context.size != element.shape[0]) {
             error("Array dimension mismatch")
         }
     }
 
     override fun get(index: Int): T {
-        return array[index]
+        return element[index]
     }
 
     override val self: ArrayVector<T> get() = this
 
-    override fun iterator(): Iterator<T> = (0 until size).map { array[it] }.iterator()
+    override fun iterator(): Iterator<T> = (0 until size).map { element[it] }.iterator()
 
-    override fun copy(): ArrayVector<T> = ArrayVector(context, array)
+    override fun copy(): ArrayVector<T> = ArrayVector(context, element)
 
     override fun toString(): String = this.joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
 }

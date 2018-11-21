@@ -1,7 +1,5 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.linear.Vector
-import scientifik.kmath.linear.VectorL2Norm
 import scientifik.kmath.operations.Norm
 import scientifik.kmath.structures.NDArrays.produceReal
 import scientifik.kmath.structures.NDArrays.real2DArray
@@ -53,8 +51,8 @@ class NumberNDFieldTest {
         assertEquals(2.0, result[0,2])
     }
 
-    object L2Norm: Norm<NDArray<out Number>, Double> {
-        override fun norm(arg: NDArray<out Number>): Double {
+    object L2Norm: Norm<NDElement<out Number>, Double> {
+        override fun norm(arg: NDElement<out Number>): Double {
             return kotlin.math.sqrt(arg.sumByDouble { it.second.toDouble() })
         }
     }
