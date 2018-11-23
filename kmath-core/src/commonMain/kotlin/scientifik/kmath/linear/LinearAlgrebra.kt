@@ -1,7 +1,9 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.operations.*
-import scientifik.kmath.structures.*
+import scientifik.kmath.structures.ExtendedNDField
+import scientifik.kmath.structures.GenericNDField
+import scientifik.kmath.structures.NDField
 
 /**
  * The space for linear elements. Supports scalar product alongside with standard linear operations.
@@ -139,49 +141,7 @@ interface Matrix<T : Any> : SpaceElement<Matrix<T>, MatrixSpace<T>> {
 }
 
 
-/**
- * A linear space for vectors
- */
-abstract class VectorSpace<T : Any>(val size: Int, val field: Field<T>) : Space<Vector<T>> {
 
-    abstract fun produce(initializer: (Int) -> T): Vector<T>
-
-    override val zero: Vector<T> by lazy { produce { field.zero } }
-
-    override fun add(a: Vector<T>, b: Vector<T>): Vector<T> = produce { with(field) { a[it] + b[it] } }
-
-    override fun multiply(a: Vector<T>, k: Double): Vector<T> = produce { with(field) { a[it] * k } }
-}
-
-
-interface Vector<T : Any> : SpaceElement<Vector<T>, VectorSpace<T>>, Buffer<T>, Iterable<T> {
-    override val size: Int get() = context.size
-
-    companion object {
-        /**
-         * Create vector with custom field
-         */
-        fun <T : Any> of(size: Int, field: Field<T>, initializer: (Int) -> T) =
-                ArrayVector(ArrayVectorSpace(size, field), initializer)
-
-        /**
-         * Create vector of [Double]
-         */
-        fun ofReal(size: Int, initializer: (Int) -> Double) =
-                ArrayVector(ArrayVectorSpace(size, DoubleField, realNDFieldFactory), initializer)
-
-        fun ofReal(vararg point: Double) = point.toVector()
-
-        fun equals(v1: Vector<*>, v2: Vector<*>): Boolean {
-            if (v1 === v2) return true
-            if (v1.context != v2.context) return false
-            for (i in 0 until v2.size) {
-                if (v1[i] != v2[i]) return false
-            }
-            return true
-        }
-    }
-}
 
 typealias NDFieldFactory<T> = (IntArray) -> NDField<T>
 
@@ -210,61 +170,7 @@ class ArrayMatrixSpace<T : Any>(
     }
 }
 
-class ArrayVectorSpace<T : Any>(
-        size: Int,
-        field: Field<T>,
-        val ndFactory: NDFieldFactory<T> = genericNDFieldFactory(field)
-) : VectorSpace<T>(size, field) {
-    val ndField by lazy {
-        ndFactory(intArrayOf(size))
-    }
 
-    override fun produce(initializer: (Int) -> T): Vector<T> = ArrayVector(this, initializer)
-}
-
-/**
- * Member of [ArrayMatrixSpace] which wraps 2-D array
- */
-class ArrayMatrix<T : Any> internal constructor(override val context: ArrayMatrixSpace<T>, val element: NDElement<T>) : Matrix<T> {
-
-    constructor(context: ArrayMatrixSpace<T>, initializer: (Int, Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0], list[1]) })
-
-    override val rows: Int get() = context.rows
-
-    override val columns: Int get() = context.columns
-
-    override fun get(i: Int, j: Int): T {
-        return element[i, j]
-    }
-
-    override val self: ArrayMatrix<T> get() = this
-}
-
-
-class ArrayVector<T : Any> internal constructor(override val context: ArrayVectorSpace<T>, val element: NDElement<T>) : Vector<T> {
-
-    constructor(context: ArrayVectorSpace<T>, initializer: (Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0]) })
-
-    init {
-        if (context.size != element.shape[0]) {
-            error("Array dimension mismatch")
-        }
-    }
-
-    override fun get(index: Int): T {
-        return element[index]
-    }
-
-    override val self: ArrayVector<T> get() = this
-
-    override fun iterator(): Iterator<T> = (0 until size).map { element[it] }.iterator()
-
-    override fun copy(): ArrayVector<T> = ArrayVector(context, element)
-
-    override fun toString(): String = this.joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
-}
-
-typealias RealVector = Vector<Double>
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors

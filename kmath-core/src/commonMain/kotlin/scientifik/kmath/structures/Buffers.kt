@@ -2,7 +2,7 @@ package scientifik.kmath.structures
 
 
 /**
- * A generic linear buffer for both primitives and objects
+ * A generic random access structure for both primitives and objects
  */
 interface Buffer<T> : Iterable<T> {
 

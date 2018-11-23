@@ -1,6 +1,5 @@
 package scientifik.kmath.histogram
 
-import scientifik.kmath.operations.Space
 import scientifik.kmath.structures.ArrayBuffer
 import scientifik.kmath.structures.Buffer
 
@@ -56,13 +55,3 @@ fun <T: Any> MutableHistogram<T,*>.fill(sequence: Iterable<Point<T>>) = sequence
  * Pass a sequence builder into histogram
  */
 fun <T: Any> MutableHistogram<T, *>.fill(buider: suspend SequenceScope<Point<T>>.() -> Unit) = fill(sequence(buider).asIterable())
-
-/**
- * A space to perform arithmetic operations on histograms
- */
-interface HistogramSpace<T: Any, B : Bin<T>, H : Histogram<T,B>> : Space<H> {
-    /**
-     * Rules for performing operations on bins
-     */
-    val binSpace: Space<Bin<T>>
-}
