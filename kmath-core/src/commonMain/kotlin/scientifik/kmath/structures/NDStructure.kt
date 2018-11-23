@@ -76,7 +76,7 @@ class DefaultStrides(override val shape: IntArray) : Strides {
     override fun offset(index: IntArray): Int {
         return index.mapIndexed { i, value ->
             if (value < 0 || value >= shape[i]) {
-                throw RuntimeException("Index $value out of shape bounds: (0,${shape[i]})")
+                throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
             }
             value * strides[i]
         }.sum()
@@ -169,6 +169,6 @@ fun <T> genericNdStructure(shape: IntArray, initializer: (IntArray) -> T): Mutab
             yield(initializer(it))
         }
     }
-    val buffer = ListBuffer<T>(sequence.toMutableList())
+    val buffer = MutableListBuffer<T>(sequence.toMutableList())
     return MutableBufferNDStructure(strides, buffer)
 }

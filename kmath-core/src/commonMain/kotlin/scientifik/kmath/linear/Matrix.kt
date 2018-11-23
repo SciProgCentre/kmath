@@ -1,9 +1,7 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.operations.*
-import scientifik.kmath.structures.ExtendedNDField
-import scientifik.kmath.structures.GenericNDField
-import scientifik.kmath.structures.NDField
+import scientifik.kmath.structures.*
 
 /**
  * The space for linear elements. Supports scalar product alongside with standard linear operations.
@@ -168,4 +166,22 @@ class ArrayMatrixSpace<T : Any, F : Field<T>>(
     override fun produceSpace(rows: Int, columns: Int): ArrayMatrixSpace<T, F> {
         return ArrayMatrixSpace(rows, columns, field, ndFactory)
     }
+}
+
+/**
+ * Member of [ArrayMatrixSpace] which wraps 2-D array
+ */
+class ArrayMatrix<T : Any, F : Field<T>> internal constructor(override val context: ArrayMatrixSpace<T, F>, val element: NDElement<T, F>) : Matrix<T, F> {
+
+    constructor(context: ArrayMatrixSpace<T, F>, initializer: (Int, Int) -> T) : this(context, context.ndField.produce { list -> initializer(list[0], list[1]) })
+
+    override val rows: Int get() = context.rows
+
+    override val columns: Int get() = context.columns
+
+    override fun get(i: Int, j: Int): T {
+        return element[i, j]
+    }
+
+    override val self: ArrayMatrix<T, F> get() = this
 }

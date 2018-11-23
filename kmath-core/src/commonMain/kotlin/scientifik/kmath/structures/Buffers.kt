@@ -4,11 +4,15 @@ package scientifik.kmath.structures
 /**
  * A generic random access structure for both primitives and objects
  */
-interface Buffer<T> : Iterable<T> {
+interface Buffer<T> {
 
     val size: Int
 
     operator fun get(index: Int): T
+
+    operator fun iterator(): Iterator<T>
+
+    fun asSequence(): Sequence<T> = iterator().asSequence()
 
     /**
      * A shallow copy of the buffer
@@ -25,7 +29,20 @@ interface MutableBuffer<T> : Buffer<T> {
     override fun copy(): MutableBuffer<T>
 }
 
-inline class ListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> {
+
+inline class ListBuffer<T>(private val list: List<T>) : Buffer<T> {
+
+    override val size: Int
+        get() = list.size
+
+    override fun get(index: Int): T = list[index]
+
+    override fun iterator(): Iterator<T>  = list.iterator()
+
+    override fun copy(): ListBuffer<T> = ListBuffer(ArrayList(list))
+}
+
+inline class MutableListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int
         get() = list.size
@@ -38,7 +55,7 @@ inline class ListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> 
 
     override fun iterator(): Iterator<T>  = list.iterator()
 
-    override fun copy(): MutableBuffer<T> = ListBuffer(ArrayList(list))
+    override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
 }
 
 class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
