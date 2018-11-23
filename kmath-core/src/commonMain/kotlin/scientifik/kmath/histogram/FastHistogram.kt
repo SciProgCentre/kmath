@@ -84,6 +84,21 @@ class FastHistogram(
 
     override fun iterator(): Iterator<MultivariateBin> = bins.asSequence().map { it.second }.iterator()
 
+    /**
+     * Convert this histogram into NDStructure containing bin values but not bin descriptions
+     */
+    fun asND(): NDStructure<Number> {
+        return ndStructure(this.bins.shape) { bins[it].value }
+    }
+
+    /**
+     * Create a phantom lightweight immutable copy of this histogram
+     */
+    fun asPhantom(): PhantomHistogram<Double> {
+        val binTemplates = bins.associate { (index, bin) -> BinTemplate<Double>(bin.center, bin.sizes) to index }
+        return PhantomHistogram(binTemplates, asND())
+    }
+
     companion object {
 
         /**

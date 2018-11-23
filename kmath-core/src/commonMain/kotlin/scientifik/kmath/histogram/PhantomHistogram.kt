@@ -4,7 +4,7 @@ import scientifik.kmath.linear.Vector
 import scientifik.kmath.operations.Space
 import scientifik.kmath.structures.NDStructure
 
-class BinTemplate<T : Comparable<T>>(val center: Vector<T>, val sizes: Vector<T>) {
+data class BinTemplate<T : Comparable<T>>(val center: Vector<T>, val sizes: Vector<T>) {
     fun contains(vector: Point<out T>): Boolean {
         if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
         val upper = center + sizes/2.0
@@ -40,10 +40,11 @@ class PhantomBin<T : Comparable<T>>(val template: BinTemplate<T>, override val v
 /**
  * Immutable histogram with explicit structure for content and additional external bin description.
  * Bin search is slow, but full histogram algebra is supported.
+ * @param bins map a template into structure index
  */
 class PhantomHistogram<T : Comparable<T>>(
         val bins: Map<BinTemplate<T>, IntArray>,
-        val data: NDStructure<Double>
+        val data: NDStructure<Number>
 ) : Histogram<T, PhantomBin<T>> {
 
     override val dimension: Int
