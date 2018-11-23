@@ -32,7 +32,7 @@ class NumberNDFieldTest {
         for (i in 0..2) {
             for (j in 0..2) {
                 val expected = (i * 10 + j).toDouble()
-                assertEquals(expected, array[i, j],"Error at index [$i, $j]")
+                assertEquals(expected, array[i, j], "Error at index [$i, $j]")
             }
         }
     }
@@ -41,25 +41,25 @@ class NumberNDFieldTest {
     fun testExternalFunction() {
         val function: (Double) -> Double = { x -> x.pow(2) + 2 * x + 1 }
         val result = function(array1) + 1.0
-        assertEquals(10.0, result[1,1])
+        assertEquals(10.0, result[1, 1])
     }
 
     @Test
     fun testLibraryFunction() {
         val abs: (Double) -> Double = ::abs
         val result = abs(array2)
-        assertEquals(2.0, result[0,2])
+        assertEquals(2.0, result[0, 2])
     }
 
-    object L2Norm: Norm<NDElement<out Number>, Double> {
-        override fun norm(arg: NDElement<out Number>): Double {
+    object L2Norm : Norm<NDElement<out Number, *>, Double> {
+        override fun norm(arg: NDElement<out Number, *>): Double {
             return kotlin.math.sqrt(arg.sumByDouble { it.second.toDouble() })
         }
     }
 
     @Test
-    fun testInternalContext(){
-        produceReal(array1.shape){
+    fun testInternalContext() {
+        produceReal(array1.shape) {
             with(L2Norm) {
                 1 + norm(array1) + exp(array2)
             }
