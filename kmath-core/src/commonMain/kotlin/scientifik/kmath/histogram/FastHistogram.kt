@@ -8,23 +8,6 @@ private operator fun RealPoint.minus(other: RealPoint) = ListBuffer((0 until siz
 
 private inline fun <T> Buffer<out Double>.mapIndexed(crossinline mapper: (Int, Double) -> T): Sequence<T> = (0 until size).asSequence().map { mapper(it, get(it)) }
 
-
-//class MultivariateBin(override val center: RealPoint, val sizes: RealPoint, var counter: Long = 0) : Bin<Double> {
-//    init {
-//        if (center.size != sizes.size) error("Dimension mismatch in bin creation. Expected ${center.size}, but found ${sizes.size}")
-//    }
-//
-//    override fun contains(vector: Buffer<out Double>): Boolean {
-//        if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
-//        return vector.mapIndexed { i, value -> value in (center[i] - sizes[i] / 2)..(center[i] + sizes[i] / 2) }.all { it }
-//    }
-//
-//    override val value get() = counter
-//    internal operator fun inc() = this.also { counter++ }
-//
-//    override val dimension: Int get() = center.size
-//}
-
 /**
  * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions.
  */
@@ -109,18 +92,17 @@ class FastHistogram(
     /**
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
-    fun asND(): NDStructure<Number> {
+    fun asNDStructure(): NDStructure<Number> {
         return ndStructure(this.values.shape) { values[it].sum() }
     }
 
-//    /**
-//     * Create a phantom lightweight immutable copy of this histogram
-//     */
-//    fun asPhantom(): PhantomHistogram<Double> {
-//        val center =
-//        val binTemplates = bins.associate { (index, bin) -> BinTemplate<Double>(bin.center, bin.sizes) to index }
-//        return PhantomHistogram(binTemplates, asND())
-//    }
+    /**
+     * Create a phantom lightweight immutable copy of this histogram
+     */
+    fun asPhantomHistogram(): PhantomHistogram<Double> {
+        val binTemplates = values.associate { (index, _) -> getTemplate(index) to index }
+        return PhantomHistogram(binTemplates, asNDStructure())
+    }
 
     companion object {
 
@@ -148,8 +130,8 @@ class FastHistogram(
          */
         fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram {
             return FastHistogram(
-                    ranges.map { it.first.start }.toVector(),
-                    ranges.map { it.first.endInclusive }.toVector(),
+                    ListBuffer(ranges.map { it.first.start }),
+                    ListBuffer(ranges.map { it.first.endInclusive }),
                     ranges.map { it.second }.toIntArray()
             )
         }

@@ -53,6 +53,7 @@ interface MutableHistogram<T: Any, out B : Bin<T>>: Histogram<T,B>{
 fun <T: Any> MutableHistogram<T,*>.put(vararg point: T) = put(ArrayBuffer(point))
 
 fun MutableHistogram<Double,*>.put(vararg point: Number) = put(DoubleBuffer(point.map { it.toDouble() }.toDoubleArray()))
+fun MutableHistogram<Double,*>.put(vararg point: Double) = put(DoubleBuffer(point))
 
 fun <T: Any> MutableHistogram<T,*>.fill(sequence: Iterable<Point<T>>) = sequence.forEach { put(it) }
 

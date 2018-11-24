@@ -83,15 +83,15 @@ class DefaultStrides(override val shape: IntArray) : Strides {
     }
 
     override fun index(offset: Int): IntArray {
-        return sequence {
-            var current = offset
-            var strideIndex = strides.size - 2
-            while (strideIndex >= 0) {
-                yield(current / strides[strideIndex])
-                current %= strides[strideIndex]
-                strideIndex--
-            }
-        }.toList().reversed().toIntArray()
+        val res = IntArray(shape.size)
+        var current = offset
+        var strideIndex = strides.size - 2
+        while (strideIndex >= 0) {
+            res[ strideIndex] = (current / strides[strideIndex])
+            current %= strides[strideIndex]
+            strideIndex--
+        }
+        return res
     }
 
     override val linearSize: Int
