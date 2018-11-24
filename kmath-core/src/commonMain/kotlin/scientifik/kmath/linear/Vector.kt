@@ -39,18 +39,24 @@ interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, VectorSpace<T, 
         /**
          * Create vector with custom field
          */
-        fun <T : Any, F: Field<T>> of(size: Int, field: F, initializer: (Int) -> T) =
+        fun <T : Any, F : Field<T>> of(size: Int, field: F, initializer: (Int) -> T) =
                 ArrayVector(ArrayVectorSpace(size, field), initializer)
+
+        private val realSpaceCache = HashMap<Int, ArrayVectorSpace<Double, DoubleField>>()
+
+        private fun getRealSpace(size: Int): ArrayVectorSpace<Double, DoubleField> {
+            return realSpaceCache.getOrPut(size){ArrayVectorSpace(size, DoubleField, realNDFieldFactory)}
+        }
 
         /**
          * Create vector of [Double]
          */
         fun ofReal(size: Int, initializer: (Int) -> Double) =
-                ArrayVector(ArrayVectorSpace(size, DoubleField, realNDFieldFactory), initializer)
+                ArrayVector(getRealSpace(size), initializer)
 
         fun ofReal(vararg point: Double) = point.toVector()
 
-        fun equals(v1: Vector<*,*>, v2: Vector<*,*>): Boolean {
+        fun equals(v1: Vector<*, *>, v2: Vector<*, *>): Boolean {
             if (v1 === v2) return true
             if (v1.context != v2.context) return false
             for (i in 0 until v2.size) {
@@ -72,8 +78,6 @@ class ArrayVectorSpace<T : Any, F : Field<T>>(
 
     override fun produce(initializer: (Int) -> T): Vector<T, F> = ArrayVector(this, initializer)
 }
-
-
 
 
 class ArrayVector<T : Any, F : Field<T>> internal constructor(override val context: VectorSpace<T, F>, val element: NDElement<T, F>) : Vector<T, F> {

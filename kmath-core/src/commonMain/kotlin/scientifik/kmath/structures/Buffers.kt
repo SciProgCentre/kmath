@@ -12,13 +12,13 @@ interface Buffer<T> {
 
     operator fun iterator(): Iterator<T>
 
-    fun asSequence(): Sequence<T> = iterator().asSequence()
-
     /**
      * A shallow copy of the buffer
      */
     fun copy(): Buffer<T>
 }
+
+fun <T> Buffer<T>.asSequence(): Sequence<T> = iterator().asSequence()
 
 interface MutableBuffer<T> : Buffer<T> {
     operator fun set(index: Int, value: T)

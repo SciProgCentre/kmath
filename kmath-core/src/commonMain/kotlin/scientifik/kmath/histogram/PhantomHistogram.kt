@@ -3,12 +3,13 @@ package scientifik.kmath.histogram
 import scientifik.kmath.linear.Vector
 import scientifik.kmath.operations.Space
 import scientifik.kmath.structures.NDStructure
+import scientifik.kmath.structures.asSequence
 
-data class BinTemplate<T : Comparable<T>>(val center: Vector<T, *>, val sizes: Vector<T, *>) {
+data class BinTemplate<T : Comparable<T>>(val center: Vector<T, *>, val sizes: Point<T>) {
     fun contains(vector: Point<out T>): Boolean {
         if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
-        val upper = center + sizes / 2.0
-        val lower = center - sizes / 2.0
+        val upper = center.context.run { center + sizes / 2.0}
+        val lower =  center.context.run {center - sizes / 2.0}
         return vector.asSequence().mapIndexed { i, value ->
             value in lower[i]..upper[i]
         }.all { it }

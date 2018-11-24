@@ -6,6 +6,8 @@ import scientifik.kmath.structures.DoubleBuffer
 
 typealias Point<T> = Buffer<T>
 
+typealias RealPoint = Buffer<Double>
+
 /**
  * A simple geometric domain
  * TODO move to geometry module
