@@ -13,7 +13,7 @@ and `scipy` it is modular and has a lightweight core.
 on arrays and numbers just like it works in python (with benefit of static type checking).
 
 * **Expressions** Expressions are one of the ultimate goals of kmath. It is planned to be able to write some mathematical
-expression once an then apply it to different types of objects by providing different context. Exception could be used
+expression once an then apply it to different types of objects by providing different context. Expressions could be used
 for a wide variety of purposes from high performance calculations to code generation.
 
 ## Planned features
