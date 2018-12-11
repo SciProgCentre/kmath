@@ -14,7 +14,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                api project(":kmath-core")
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                api "org.jetbrains.kotlinx:kotlinx-io:$ioVersion"
             }
         }
         commonTest {
@@ -25,7 +27,8 @@ kotlin {
         }
         jvmMain {
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                api "org.jetbrains.kotlinx:kotlinx-io-jvm:$ioVersion"
             }
         }
         jvmTest {
@@ -36,7 +39,7 @@ kotlin {
         }
         jsMain {
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
             }
         }
         jsTest {

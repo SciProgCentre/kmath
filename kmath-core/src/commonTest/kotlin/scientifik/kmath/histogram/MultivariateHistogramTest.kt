@@ -14,10 +14,11 @@ class MultivariateHistogramTest {
                 (-1.0..1.0),
                 (-1.0..1.0)
         )
-        histogram.put(0.6, 0.6)
+        histogram.put(0.55, 0.55)
         val bin = histogram.find { it.value.toInt() > 0 }!!
-        assertTrue { bin.contains(Vector.ofReal(0.6, 0.6)) }
-        assertFalse { bin.contains(Vector.ofReal(-0.6, 0.6)) }
+        assertTrue { bin.contains(Vector.ofReal(0.55, 0.55)) }
+        assertTrue { bin.contains(Vector.ofReal(0.6, 0.5)) }
+        assertFalse { bin.contains(Vector.ofReal(-0.55, 0.55)) }
     }
 
     @Test

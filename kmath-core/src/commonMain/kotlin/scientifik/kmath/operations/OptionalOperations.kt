@@ -46,3 +46,9 @@ interface ExponentialOperations<T> {
 
 fun <T : MathElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
 fun <T : MathElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
+
+interface Norm<in T, out R> {
+    fun norm(arg: T): R
+}
+
+fun <T : MathElement<T, out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)

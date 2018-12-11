@@ -38,4 +38,8 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
     val abs: Double
         get() = kotlin.math.sqrt(square)
 
+    companion object {
+
+    }
+
 }

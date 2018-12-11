@@ -4,8 +4,7 @@ import org.openjdk.jmh.annotations.*
 import java.nio.IntBuffer
 
 
-@Fork(1)
-@Warmup(iterations = 2)
+@Warmup(iterations = 1)
 @Measurement(iterations = 5)
 @State(Scope.Benchmark)
 open class ArrayBenchmark {
@@ -30,7 +29,6 @@ open class ArrayBenchmark {
         for (i in 1..10000) {
             res += array[10000 - i]
         }
-        print(res)
     }
 
     @Benchmark
@@ -39,7 +37,6 @@ open class ArrayBenchmark {
         for (i in 1..10000) {
             res += arrayBuffer.get(10000 - i)
         }
-        print(res)
     }
 
     @Benchmark
@@ -48,6 +45,5 @@ open class ArrayBenchmark {
         for (i in 1..10000) {
             res += nativeBuffer.get(10000 - i)
         }
-        print(res)
     }
 }

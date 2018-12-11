@@ -1,5 +1,7 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.Field
 import scientifik.kmath.structures.MutableNDStructure
 import scientifik.kmath.structures.NDStructure
 import scientifik.kmath.structures.genericNdStructure
@@ -9,7 +11,7 @@ import kotlin.math.absoluteValue
 /**
  * Implementation based on Apache common-maths LU-decomposition
  */
-abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
+abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matrix<T, F>) {
 
     private val field get() = matrix.context.field
     /** Entries of LU decomposition.  */
@@ -31,7 +33,7 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
      * L is a lower-triangular matrix
      * @return the L matrix (or null if decomposed matrix is singular)
      */
-    val l: Matrix<out T> by lazy {
+    val l: Matrix<out T, F> by lazy {
         matrix.context.produce { i, j ->
             when {
                 j < i -> lu[i, j]
@@ -48,7 +50,7 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
      * U is an upper-triangular matrix
      * @return the U matrix (or null if decomposed matrix is singular)
      */
-    val u: Matrix<out T> by lazy {
+    val u: Matrix<out T, F> by lazy {
         matrix.context.produce { i, j ->
             if (j >= i) lu[i, j] else field.zero
         }
@@ -64,7 +66,7 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
      * @return the P rows permutation matrix (or null if decomposed matrix is singular)
      * @see .getPivot
      */
-    val p: Matrix<out T> by lazy {
+    val p: Matrix<out T, F> by lazy {
         matrix.context.produce { i, j ->
             //TODO ineffective. Need sparse matrix for that
             if (j == pivot[i]) field.one else field.zero
@@ -181,7 +183,7 @@ abstract class LUDecomposition<T : Comparable<T>>(val matrix: Matrix<T>) {
 
 }
 
-class RealLUDecomposition(matrix: Matrix<Double>, private val singularityThreshold: Double = DEFAULT_TOO_SMALL) : LUDecomposition<Double>(matrix) {
+class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: Double = DEFAULT_TOO_SMALL) : LUDecomposition<Double, DoubleField>(matrix) {
     override fun isSingular(value: Double): Boolean {
         return value.absoluteValue < singularityThreshold
     }
@@ -194,12 +196,12 @@ class RealLUDecomposition(matrix: Matrix<Double>, private val singularityThresho
 
 
 /** Specialized solver.  */
-object RealLUSolver : LinearSolver<Double> {
+object RealLUSolver : LinearSolver<Double, DoubleField> {
 
 
-    fun decompose(mat: Matrix<Double>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)
+    fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)
 
-    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
+    override fun solve(a: RealMatrix, b: RealMatrix): RealMatrix {
         val decomposition = decompose(a, a.context.field.zero)
 
         if (b.rows != a.rows) {

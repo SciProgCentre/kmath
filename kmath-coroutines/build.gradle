@@ -5,7 +5,6 @@ plugins {
 kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm')
-        fromPreset(presets.js, 'js')
         // For ARM, preset should be changed to presets.iosArm32 or presets.iosArm64
         // For Linux, preset should be changed to e.g. presets.linuxX64
         // For MacOS, preset should be changed to e.g. presets.macosX64
@@ -14,34 +13,25 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                api project(":kmath-core")
+                api "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
             }
         }
         commonTest {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test-common'
-                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                api 'org.jetbrains.kotlin:kotlin-test-common'
+                api 'org.jetbrains.kotlin:kotlin-test-annotations-common'
             }
         }
         jvmMain {
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
             }
         }
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
-            }
-        }
-        jsMain {
-            dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-js'
-            }
-        }
-        jsTest {
-            dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test-js'
             }
         }
 //        mingwMain {

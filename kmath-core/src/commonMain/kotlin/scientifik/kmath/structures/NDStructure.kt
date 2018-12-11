@@ -1,7 +1,7 @@
 package scientifik.kmath.structures
 
 
-interface NDStructure<T> : Iterable<Pair<IntArray, T>> {
+interface NDStructure<T> {
 
     val shape: IntArray
 
@@ -9,6 +9,8 @@ interface NDStructure<T> : Iterable<Pair<IntArray, T>> {
         get() = shape.size
 
     operator fun get(index: IntArray): T
+
+    fun elements(): Sequence<Pair<IntArray, T>>
 }
 
 operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
@@ -18,7 +20,7 @@ interface MutableNDStructure<T> : NDStructure<T> {
 }
 
 fun <T> MutableNDStructure<T>.transformInPlace(action: (IntArray, T) -> T) {
-    for ((index, oldValue) in this) {
+    elements().forEach { (index, oldValue) ->
         this[index] = action(index, oldValue)
     }
 }
@@ -76,22 +78,22 @@ class DefaultStrides(override val shape: IntArray) : Strides {
     override fun offset(index: IntArray): Int {
         return index.mapIndexed { i, value ->
             if (value < 0 || value >= shape[i]) {
-                throw RuntimeException("Index $value out of shape bounds: (0,${shape[i]})")
+                throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
             }
             value * strides[i]
         }.sum()
     }
 
     override fun index(offset: Int): IntArray {
-        return sequence {
-            var current = offset
-            var strideIndex = strides.size - 2
-            while (strideIndex >= 0) {
-                yield(current / strides[strideIndex])
-                current %= strides[strideIndex]
-                strideIndex--
-            }
-        }.toList().reversed().toIntArray()
+        val res = IntArray(shape.size)
+        var current = offset
+        var strideIndex = strides.size - 2
+        while (strideIndex >= 0) {
+            res[strideIndex] = (current / strides[strideIndex])
+            current %= strides[strideIndex]
+            strideIndex--
+        }
+        return res
     }
 
     override val linearSize: Int
@@ -107,8 +109,8 @@ abstract class GenericNDStructure<T, B : Buffer<T>> : NDStructure<T> {
     override val shape: IntArray
         get() = strides.shape
 
-    override fun iterator(): Iterator<Pair<IntArray, T>> =
-            strides.indices().map { it to this[it] }.iterator()
+    override fun elements()=
+            strides.indices().map { it to this[it] }
 }
 
 /**
@@ -126,10 +128,10 @@ class BufferNDStructure<T>(
     }
 }
 
-inline fun <reified T: Any> ndStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-        BufferNDStructure<T>(strides, buffer(strides.linearSize){ i-> initializer(strides.index(i))})
+inline fun <reified T : Any> ndStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
+        BufferNDStructure<T>(strides, buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-inline fun <reified T: Any> ndStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
+inline fun <reified T : Any> ndStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
         ndStructure(DefaultStrides(shape), initializer)
 
 
@@ -153,22 +155,22 @@ class MutableBufferNDStructure<T>(
 /**
  * Create optimized mutable structure for given type
  */
-inline fun <reified T: Any> mutableNdStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-            MutableBufferNDStructure(strides, mutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+inline fun <reified T : Any> mutableNdStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
+        MutableBufferNDStructure(strides, mutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-inline fun <reified T: Any> mutableNdStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
+inline fun <reified T : Any> mutableNdStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
         mutableNdStructure(DefaultStrides(shape), initializer)
 
 /**
  * Create universal mutable structure
  */
-fun <T> genericNdStructure(shape: IntArray, initializer: (IntArray) -> T): MutableBufferNDStructure<T>{
+fun <T> genericNdStructure(shape: IntArray, initializer: (IntArray) -> T): MutableBufferNDStructure<T> {
     val strides = DefaultStrides(shape)
-    val sequence = sequence{
-        strides.indices().forEach{
+    val sequence = sequence {
+        strides.indices().forEach {
             yield(initializer(it))
         }
     }
-    val buffer = ListBuffer<T>(sequence.toMutableList())
+    val buffer = MutableListBuffer(sequence.toMutableList())
     return MutableBufferNDStructure(strides, buffer)
 }
