@@ -58,11 +58,11 @@ repositories {
 
 Then use regular dependency like
 ```groovy
-compile(group: 'scientifik', name: 'kmath-core-jvm', version: '0.0.1-SNAPSHOT')
+compile(group: 'scientifik', name: 'kmath-core', version: '0.0.1-SNAPSHOT')
 ```
 or in kotlin
 ```kotlin
-compile(group = "scientifik", name = "kmath-core-jvm", version = "0.0.1-SNAPSHOT")
+compile(group = "scientifik", name = "kmath-core", version = "0.0.1-SNAPSHOT")
 ```
 
 Work builds could be obtained with [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath). 

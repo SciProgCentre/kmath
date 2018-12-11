@@ -85,7 +85,7 @@ class FastHistogram(
         values[index].increment()
     }
 
-    override fun iterator(): Iterator<PhantomBin<Double>> = values.asSequence().map { (index, value) ->
+    override fun iterator(): Iterator<PhantomBin<Double>> = values.elements().map { (index, value) ->
         PhantomBin(getTemplate(index), value.sum())
     }.iterator()
 
@@ -100,7 +100,7 @@ class FastHistogram(
      * Create a phantom lightweight immutable copy of this histogram
      */
     fun asPhantomHistogram(): PhantomHistogram<Double> {
-        val binTemplates = values.associate { (index, _) -> getTemplate(index) to index }
+        val binTemplates = values.elements().associate { (index, _) -> getTemplate(index) to index }
         return PhantomHistogram(binTemplates, asNDStructure())
     }
 

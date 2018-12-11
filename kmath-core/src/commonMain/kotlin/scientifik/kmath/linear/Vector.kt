@@ -98,8 +98,6 @@ class ArrayVector<T : Any, F : Field<T>> internal constructor(override val conte
 
     override fun iterator(): Iterator<T> = (0 until size).map { element[it] }.iterator()
 
-    override fun copy(): ArrayVector<T, F> = ArrayVector(context, element)
-
     override fun toString(): String = this.joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
 }
 

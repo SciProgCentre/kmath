@@ -23,7 +23,7 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
      * Create new instance of NDArray using field shape and given initializer
      * The producer takes list of indices as argument and returns contained value
      */
-    fun produce(initializer: F.(IntArray) -> T): NDElement<T, F> = NDElement(this, produceStructure(initializer))
+    fun produce(initializer: F.(IntArray) -> T): NDElement<T, F> = NDStructureElement(this, produceStructure(initializer))
 
     override val zero: NDElement<T, F> by lazy {
         produce { zero }
@@ -83,7 +83,7 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
 //    /**
 //     * Reverse minus operation
 //     */
-//    operator fun T.minus(arg: NDElement<T, F>): NDElement<T, F> = arg.transform { _, value ->
+//    operator fun T.minus(arg: NDElement<T, F>): NDElement<T, F> = arg.transformIndexed { _, value ->
 //        with(arg.context.field) {
 //            this@minus - value
 //        }
@@ -97,38 +97,41 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
 //    /**
 //     * Reverse division operation
 //     */
-//    operator fun T.div(arg: NDElement<T, F>): NDElement<T, F> = arg.transform { _, value ->
+//    operator fun T.div(arg: NDElement<T, F>): NDElement<T, F> = arg.transformIndexed { _, value ->
 //        with(arg.context.field) {
 //            this@div / value
 //        }
 //    }
 }
 
+
+interface NDElement<T, F : Field<T>>: FieldElement<NDElement<T, F>, NDField<T, F>>, NDStructure<T>
+
+inline fun <T, F : Field<T>> NDElement<T, F>.transformIndexed(crossinline action: F.(IntArray, T) -> T): NDElement<T, F> = context.produce { action(it, get(*it)) }
+inline fun <T, F : Field<T>> NDElement<T, F>.transform(crossinline action: F.(T) -> T): NDElement<T, F> = context.produce { action(get(*it)) }
+
+
 /**
- *  Immutable [NDStructure] coupled to the context. Emulates Python ndarray
+ *  Read-only [NDStructure] coupled to the context.
  */
-class NDElement<T, F : Field<T>>(override val context: NDField<T, F>, private val structure: NDStructure<T>) : FieldElement<NDElement<T, F>, NDField<T, F>>, NDStructure<T> by structure {
+class NDStructureElement<T, F : Field<T>>(override val context: NDField<T, F>, private val structure: NDStructure<T>) : NDElement<T,F>, NDStructure<T> by structure {
 
     //TODO ensure structure is immutable
 
-    override val self: NDElement<T, F>
-        get() = this
-
-    inline fun transform(crossinline action: (IntArray, T) -> T): NDElement<T, F> = context.produce { action(it, get(*it)) }
-    inline fun transform(crossinline action: (T) -> T): NDElement<T, F> = context.produce { action(get(*it)) }
+    override val self: NDElement<T, F>  get() = this
 }
 
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy
  */
-operator fun <T, F : Field<T>> Function1<T, T>.invoke(ndElement: NDElement<T, F>): NDElement<T, F> = ndElement.transform { _, value -> this(value) }
+operator fun <T, F : Field<T>> Function1<T, T>.invoke(ndElement: NDElement<T, F>): NDElement<T, F> = ndElement.transform {value -> this@invoke(value) }
 
 /* plus and minus */
 
 /**
  * Summation operation for [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = transform { _, value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = transform {value ->
     with(context.field) {
         arg + value
     }
@@ -137,7 +140,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = t
 /**
  * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> = transform { _, value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> = transform {value ->
     with(context.field) {
         arg - value
     }
@@ -148,7 +151,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> = 
 /**
  * Product operation for [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.times(arg: T): NDElement<T, F> = transform { _, value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.times(arg: T): NDElement<T, F> = transform { value ->
     with(context.field) {
         arg * value
     }
@@ -157,7 +160,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.times(arg: T): NDElement<T, F> = 
 /**
  * Division operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> = transform { _, value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> = transform { value ->
     with(context.field) {
         arg / value
     }

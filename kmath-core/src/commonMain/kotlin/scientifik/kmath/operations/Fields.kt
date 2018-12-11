@@ -49,6 +49,9 @@ inline class Real(val value: Double) : FieldElement<Real, RealField> {
     override val context
         get() = RealField
 
+    companion object {
+
+    }
 }
 
 /**
@@ -71,4 +74,16 @@ object DoubleField : ExtendedField<Double>, Norm<Double, Double> {
     override fun ln(arg: Double): Double = kotlin.math.ln(arg)
 
     override fun norm(arg: Double): Double = kotlin.math.abs(arg)
+}
+
+/**
+ * A field for double without boxing. Does not produce appropriate field element
+ */
+object IntField : Field<Int>{
+    override val zero: Int = 0
+    override fun add(a: Int, b: Int): Int = a + b
+    override fun multiply(a: Int, b: Int): Int = a * b
+    override fun multiply(a: Int, k: Double): Int = (k*a).toInt()
+    override val one: Int = 1
+    override fun divide(a: Int, b: Int): Int = a / b
 }

@@ -5,10 +5,12 @@ pluginManagement {
     }
 }
 
-enableFeaturePreview("GRADLE_METADATA")
+//enableFeaturePreview("GRADLE_METADATA")
 
 rootProject.name = "kmath"
 include(
         ":kmath-core",
+        ":kmath-io",
+        ":kmath-coroutines",
         ":kmath-jmh"
 )

@@ -1,5 +1,5 @@
 plugins {
-    id 'kotlin-multiplatform'
+    id "org.jetbrains.kotlin.multiplatform"
 }
 
 kotlin {
@@ -14,7 +14,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                api 'org.jetbrains.kotlin:kotlin-stdlib-common'
             }
         }
         commonTest {
@@ -25,7 +25,7 @@ kotlin {
         }
         jvmMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
             }
         }
         jvmTest {
@@ -36,7 +36,7 @@ kotlin {
         }
         jsMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                api 'org.jetbrains.kotlin:kotlin-stdlib-js'
             }
         }
         jsTest {

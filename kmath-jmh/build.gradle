@@ -5,6 +5,6 @@ plugins {
 }
 
 dependencies {
-    implementation project(':kmath-core')
-    jmh 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile project(':kmath-core')
+    //jmh project(':kmath-core')
 }
