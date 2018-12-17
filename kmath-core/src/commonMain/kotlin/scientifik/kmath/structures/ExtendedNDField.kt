@@ -15,7 +15,7 @@ class ExtendedNDField<N : Any, F : ExtendedField<N>>(shape: IntArray, field: F) 
         ExponentialOperations<NDElement<N, F>> {
 
     override fun produceStructure(initializer: F.(IntArray) -> N): NDStructure<N> {
-        return genericNdStructure(shape) { field.initializer(it) }
+        return ndStructure(shape) { field.initializer(it) }
     }
 
     override fun power(arg: NDElement<N, F>, pow: Double): NDElement<N, F> {

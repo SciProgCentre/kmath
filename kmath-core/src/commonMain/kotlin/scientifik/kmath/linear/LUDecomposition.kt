@@ -4,8 +4,8 @@ import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.structures.MutableNDStructure
 import scientifik.kmath.structures.NDStructure
-import scientifik.kmath.structures.genericNdStructure
 import scientifik.kmath.structures.get
+import scientifik.kmath.structures.mutableNdStructure
 import kotlin.math.absoluteValue
 
 /**
@@ -107,7 +107,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
         val m = matrix.columns
         val pivot = IntArray(matrix.rows)
         //TODO fix performance
-        val lu: MutableNDStructure<T> = genericNdStructure(intArrayOf(matrix.rows, matrix.columns)) { index -> matrix[index[0], index[1]] }
+        val lu: MutableNDStructure<T> = mutableNdStructure(intArrayOf(matrix.rows, matrix.columns)) { index -> matrix[index[0], index[1]] }
 
 
         with(matrix.context.field) {

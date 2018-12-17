@@ -167,7 +167,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> = tr
 }
 
 class GenericNDField<T : Any, F : Field<T>>(shape: IntArray, field: F) : NDField<T, F>(shape, field) {
-    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> = genericNdStructure(shape) { field.initializer(it) }
+    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> = ndStructure(shape) { field.initializer(it) }
 }
 
 //typealias NDFieldFactory<T> = (IntArray)->NDField<T>
@@ -194,11 +194,6 @@ object NDArrays {
 
     inline fun produceReal(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDElement<Double, DoubleField>) =
             ExtendedNDField(shape, DoubleField).run(block)
-
-//    /**
-//     * Simple boxing NDField
-//     */
-//    fun <T : Any> fieldFactory(field: Field<T>): NDFieldFactory<T> = { shape -> GenericNDField(shape, field) }
 
     /**
      * Simple boxing NDArray
