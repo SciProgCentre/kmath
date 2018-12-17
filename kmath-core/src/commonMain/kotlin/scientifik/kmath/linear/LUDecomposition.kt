@@ -198,7 +198,6 @@ class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: 
 /** Specialized solver.  */
 object RealLUSolver : LinearSolver<Double, DoubleField> {
 
-
     fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)
 
     override fun solve(a: RealMatrix, b: RealMatrix): RealMatrix {

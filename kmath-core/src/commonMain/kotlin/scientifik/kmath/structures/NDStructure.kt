@@ -49,6 +49,9 @@ interface Strides {
      */
     fun index(offset: Int): IntArray
 
+    /**
+     * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
+     */
     val linearSize: Int
 
     /**

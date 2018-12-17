@@ -68,8 +68,7 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
 }
 
 inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
-    override val size: Int
-        get() = array.size
+    override val size: Int get() = array.size
 
     override fun get(index: Int): Double = array[index]
 
@@ -83,8 +82,7 @@ inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double
 }
 
 inline class IntBuffer(private val array: IntArray) : MutableBuffer<Int> {
-    override val size: Int
-        get() = array.size
+    override val size: Int get() = array.size
 
     override fun get(index: Int): Int = array[index]
 
