@@ -15,7 +15,7 @@ class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : Run
  * @param field - operations field defined on individual array element
  * @param T the type of the element contained in NDArray
  */
-abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Field<NDElement<T, F>> {
+abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Field<NDStructure<T>> {
 
     abstract fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T>
 
@@ -29,10 +29,14 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
         produce { zero }
     }
 
+    override val one: NDElement<T, F> by lazy {
+        produce { one }
+    }
+
     /**
      * Check the shape of given NDArray and throw exception if it does not coincide with shape of the field
      */
-    private fun checkShape(vararg elements: NDElement<T, F>) {
+    private fun checkShape(vararg elements: NDStructure<T>) {
         elements.forEach {
             if (!shape.contentEquals(it.shape)) {
                 throw ShapeMismatchException(shape, it.shape)
@@ -43,7 +47,7 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
     /**
      * Element-by-element addition
      */
-    override fun add(a: NDElement<T, F>, b: NDElement<T, F>): NDElement<T, F> {
+    override fun add(a: NDStructure<T>, b: NDStructure<T>): NDElement<T, F> {
         checkShape(a, b)
         return produce { with(field) { a[it] + b[it] } }
     }
@@ -51,18 +55,15 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
     /**
      * Multiply all elements by cinstant
      */
-    override fun multiply(a: NDElement<T, F>, k: Double): NDElement<T, F> {
+    override fun multiply(a: NDStructure<T>, k: Double): NDElement<T, F> {
         checkShape(a)
         return produce { with(field) { a[it] * k } }
     }
 
-    override val one: NDElement<T, F>
-        get() = produce { one }
-
     /**
      * Element-by-element multiplication
      */
-    override fun multiply(a: NDElement<T, F>, b: NDElement<T, F>): NDElement<T, F> {
+    override fun multiply(a: NDStructure<T>, b: NDStructure<T>): NDElement<T, F> {
         checkShape(a)
         return produce { with(field) { a[it] * b[it] } }
     }
@@ -70,7 +71,7 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
     /**
      * Element-by-element division
      */
-    override fun divide(a: NDElement<T, F>, b: NDElement<T, F>): NDElement<T, F> {
+    override fun divide(a: NDStructure<T>, b: NDStructure<T>): NDElement<T, F> {
         checkShape(a)
         return produce { with(field) { a[it] / b[it] } }
     }
@@ -105,7 +106,7 @@ abstract class NDField<T, F : Field<T>>(val shape: IntArray, val field: F) : Fie
 }
 
 
-interface NDElement<T, F : Field<T>>: FieldElement<NDElement<T, F>, NDField<T, F>>, NDStructure<T>
+interface NDElement<T, F : Field<T>> : FieldElement<NDStructure<T>, NDField<T, F>>, NDStructure<T>
 
 inline fun <T, F : Field<T>> NDElement<T, F>.transformIndexed(crossinline action: F.(IntArray, T) -> T): NDElement<T, F> = context.produce { action(it, get(*it)) }
 inline fun <T, F : Field<T>> NDElement<T, F>.transform(crossinline action: F.(T) -> T): NDElement<T, F> = context.produce { action(get(*it)) }
@@ -114,24 +115,24 @@ inline fun <T, F : Field<T>> NDElement<T, F>.transform(crossinline action: F.(T)
 /**
  *  Read-only [NDStructure] coupled to the context.
  */
-class NDStructureElement<T, F : Field<T>>(override val context: NDField<T, F>, private val structure: NDStructure<T>) : NDElement<T,F>, NDStructure<T> by structure {
+class NDStructureElement<T, F : Field<T>>(override val context: NDField<T, F>, private val structure: NDStructure<T>) : NDElement<T, F>, NDStructure<T> by structure {
 
     //TODO ensure structure is immutable
 
-    override val self: NDElement<T, F>  get() = this
+    override val self: NDElement<T, F> get() = this
 }
 
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy
  */
-operator fun <T, F : Field<T>> Function1<T, T>.invoke(ndElement: NDElement<T, F>): NDElement<T, F> = ndElement.transform {value -> this@invoke(value) }
+operator fun <T, F : Field<T>> Function1<T, T>.invoke(ndElement: NDElement<T, F>): NDElement<T, F> = ndElement.transform { value -> this@invoke(value) }
 
 /* plus and minus */
 
 /**
  * Summation operation for [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = transform {value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = transform { value ->
     with(context.field) {
         arg + value
     }
@@ -140,7 +141,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> = t
 /**
  * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> = transform {value ->
+operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> = transform { value ->
     with(context.field) {
         arg - value
     }
@@ -167,7 +168,7 @@ operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> = tr
 }
 
 class GenericNDField<T : Any, F : Field<T>>(shape: IntArray, field: F) : NDField<T, F>(shape, field) {
-    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> = ndStructure(shape) { field.initializer(it) }
+    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> = NdStructure(shape, ::boxingBuffer) { field.initializer(it) }
 }
 
 //typealias NDFieldFactory<T> = (IntArray)->NDField<T>
@@ -192,8 +193,10 @@ object NDArrays {
         return realNDArray(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
     }
 
-    inline fun produceReal(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDElement<Double, DoubleField>) =
-            ExtendedNDField(shape, DoubleField).run(block)
+    inline fun produceReal(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDStructure<Double>): NDElement<Double, DoubleField> {
+        val field = ExtendedNDField(shape, DoubleField)
+        return NDStructureElement(field, field.run(block))
+    }
 
     /**
      * Simple boxing NDArray

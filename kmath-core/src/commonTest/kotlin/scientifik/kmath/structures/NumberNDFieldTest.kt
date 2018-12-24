@@ -51,9 +51,14 @@ class NumberNDFieldTest {
         assertEquals(2.0, result[0, 2])
     }
 
-    object L2Norm : Norm<NDElement<out Number, *>, Double> {
-        override fun norm(arg: NDElement<out Number, *>): Double {
-            return kotlin.math.sqrt(arg.sumByDouble { it.second.toDouble() })
+    @Test
+    fun combineTest(){
+        val division = array1.combine(array2, Double::div)
+    }
+
+    object L2Norm : Norm<NDStructure<out Number>, Double> {
+        override fun norm(arg: NDStructure<out Number>): Double {
+            return kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
         }
     }
 

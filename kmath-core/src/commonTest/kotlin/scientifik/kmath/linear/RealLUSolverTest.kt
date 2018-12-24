@@ -1,15 +1,14 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 
 class RealLUSolverTest {
     @Test
     fun testInvertOne() {
-        val matrix = Matrix.diagonal(2, 2, DoubleField)
+        val matrix = MatrixSpace.real(2,2).one
         val inverted = RealLUSolver.inverse(matrix)
-        assertTrue { Matrix.equals(matrix,inverted) }
+        assertEquals(matrix,inverted)
     }
 
 //    @Test

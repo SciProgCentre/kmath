@@ -80,7 +80,7 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
 
     override fun offset(index: IntArray): Int {
         return index.mapIndexed { i, value ->
-            if (value < 0 || value >= shape[i]) {
+            if (value < 0 || value >= this.shape[i]) {
                 throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
             }
             value * strides[i]
@@ -138,24 +138,48 @@ class BufferNDStructure<T>(
             error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other is BufferNDStructure<*> -> this.strides == other.strides && this.buffer.contentEquals(other.buffer)
+            other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = strides.hashCode()
+        result = 31 * result + buffer.hashCode()
+        return result
+    }
+
 }
 
 /**
- * Create a most suitable nd-structure avoiding boxing if possible using given strides.
+ * Create a NDStructure with explicit buffer factory
  *
  * Strides should be reused if possible
  */
-inline fun <reified T : Any> ndStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-        BufferNDStructure<T>(strides, buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+@Suppress("FunctionName")
+fun <T : Any> NdStructure(strides: Strides, bufferFactory: BufferFactory<T>, initializer: (IntArray) -> T) =
+        BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 /**
- * Create a most suitable nd-structure avoiding boxing if possible using default strides with given shape
+ * Inline create NDStructure with non-boxing buffer implementation if it is possible
  */
-inline fun <reified T : Any> ndStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
-        ndStructure(DefaultStrides(shape), initializer)
+inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
+        BufferNDStructure(strides, inlineBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+@Suppress("FunctionName")
+fun <T : Any> NdStructure(shape: IntArray, bufferFactory: BufferFactory<T>, initializer: (IntArray) -> T) =
+        NdStructure(DefaultStrides(shape), bufferFactory, initializer)
+
+inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
+        inlineNDStructure(DefaultStrides(shape), initializer)
 
 /**
- * Mutable ND buffer based on linear [Buffer]
+ * Mutable ND buffer based on linear [inlineBuffer]
  */
 class MutableBufferNDStructure<T>(
         override val strides: Strides,
@@ -172,13 +196,27 @@ class MutableBufferNDStructure<T>(
 }
 
 /**
- * The same as [ndStructure], but mutable
+ * The same as [inlineNDStructure], but mutable
  */
-inline fun <reified T : Any> mutableNdStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-        MutableBufferNDStructure(strides, mutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+@Suppress("FunctionName")
+fun <T : Any> MutableNdStructure(strides: Strides, bufferFactory: MutableBufferFactory<T>, initializer: (IntArray) -> T) =
+        MutableBufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-inline fun <reified T : Any> mutableNdStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
-        mutableNdStructure(DefaultStrides(shape), initializer)
+inline fun <reified T : Any> inlineMutableNdStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
+        MutableBufferNDStructure(strides, inlineMutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+@Suppress("FunctionName")
+fun <T : Any> MutableNdStructure(shape: IntArray, bufferFactory: MutableBufferFactory<T>, initializer: (IntArray) -> T) =
+        MutableNdStructure(DefaultStrides(shape), bufferFactory, initializer)
+
+inline fun <reified T : Any> inlineMutableNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
+        inlineMutableNdStructure(DefaultStrides(shape), initializer)
+
+inline fun <reified T : Any> NDStructure<T>.combine(struct: NDStructure<T>, crossinline block: (T, T) -> T): NDStructure<T> {
+    if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
+    return inlineNdStructure(shape) { block(this[it], struct[it]) }
+}
+
 
 ///**
 // * Create universal mutable structure

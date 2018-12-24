@@ -2,10 +2,7 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
-import scientifik.kmath.structures.MutableNDStructure
-import scientifik.kmath.structures.NDStructure
-import scientifik.kmath.structures.get
-import scientifik.kmath.structures.mutableNdStructure
+import scientifik.kmath.structures.*
 import kotlin.math.absoluteValue
 
 /**
@@ -13,7 +10,7 @@ import kotlin.math.absoluteValue
  */
 abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matrix<T, F>) {
 
-    private val field get() = matrix.context.field
+    private val field get() = matrix.context.ring
     /** Entries of LU decomposition.  */
     internal val lu: NDStructure<T>
     /** Pivot permutation associated with LU decomposition.  */
@@ -34,11 +31,11 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
      * @return the L matrix (or null if decomposed matrix is singular)
      */
     val l: Matrix<out T, F> by lazy {
-        matrix.context.produce { i, j ->
+        matrix.context.produce(matrix.numRows, matrix.numCols) { i, j ->
             when {
                 j < i -> lu[i, j]
-                j == i -> matrix.context.field.one
-                else -> matrix.context.field.zero
+                j == i -> matrix.context.ring.one
+                else -> matrix.context.ring.zero
             }
         }
     }
@@ -51,7 +48,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
      * @return the U matrix (or null if decomposed matrix is singular)
      */
     val u: Matrix<out T, F> by lazy {
-        matrix.context.produce { i, j ->
+        matrix.context.produce(matrix.numRows, matrix.numCols) { i, j ->
             if (j >= i) lu[i, j] else field.zero
         }
     }
@@ -67,7 +64,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
      * @see .getPivot
      */
     val p: Matrix<out T, F> by lazy {
-        matrix.context.produce { i, j ->
+        matrix.context.produce(matrix.numRows, matrix.numCols) { i, j ->
             //TODO ineffective. Need sparse matrix for that
             if (j == pivot[i]) field.one else field.zero
         }
@@ -79,9 +76,9 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
      */
     val determinant: T
         get() {
-            with(matrix.context.field) {
+            with(matrix.context.ring) {
                 var determinant = if (even) one else -one
-                for (i in 0 until matrix.rows) {
+                for (i in 0 until matrix.numRows) {
                     determinant *= lu[i, i]
                 }
                 return determinant
@@ -97,20 +94,20 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
 
     abstract fun isSingular(value: T): Boolean
 
-    private fun abs(value: T) = if (value > matrix.context.field.zero) value else with(matrix.context.field) { -value }
+    private fun abs(value: T) = if (value > matrix.context.ring.zero) value else with(matrix.context.ring) { -value }
 
     private fun calculateLU(): Pair<NDStructure<T>, IntArray> {
-        if (matrix.rows != matrix.columns) {
+        if (matrix.numRows != matrix.numCols) {
             error("LU decomposition supports only square matrices")
         }
 
-        val m = matrix.columns
-        val pivot = IntArray(matrix.rows)
+        val m = matrix.numCols
+        val pivot = IntArray(matrix.numRows)
         //TODO fix performance
-        val lu: MutableNDStructure<T> = mutableNdStructure(intArrayOf(matrix.rows, matrix.columns)) { index -> matrix[index[0], index[1]] }
+        val lu: MutableNDStructure<T> = MutableNdStructure(intArrayOf(matrix.numRows, matrix.numCols), ::boxingMutableBuffer) { index: IntArray -> matrix[index[0], index[1]] }
 
 
-        with(matrix.context.field) {
+        with(matrix.context.ring) {
             // Initialize permutation array and parity
             for (row in 0 until m) {
                 pivot[row] = row
@@ -201,50 +198,50 @@ object RealLUSolver : LinearSolver<Double, DoubleField> {
     fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)
 
     override fun solve(a: RealMatrix, b: RealMatrix): RealMatrix {
-        val decomposition = decompose(a, a.context.field.zero)
+        val decomposition = decompose(a, a.context.ring.zero)
 
-        if (b.rows != a.rows) {
-            error("Matrix dimension mismatch expected ${a.rows}, but got ${b.rows}")
+        if (b.numRows != a.numCols) {
+            error("Matrix dimension mismatch expected ${a.numRows}, but got ${b.numCols}")
         }
 
         // Apply permutations to b
-        val bp = Array(a.rows) { DoubleArray(b.columns) }
-        for (row in 0 until a.rows) {
+        val bp = Array(a.numRows) { DoubleArray(b.numCols) }
+        for (row in 0 until a.numRows) {
             val bpRow = bp[row]
             val pRow = decomposition.pivot[row]
-            for (col in 0 until b.columns) {
+            for (col in 0 until b.numCols) {
                 bpRow[col] = b[pRow, col]
             }
         }
 
         // Solve LY = b
-        for (col in 0 until a.rows) {
+        for (col in 0 until a.numRows) {
             val bpCol = bp[col]
-            for (i in col + 1 until a.rows) {
+            for (i in col + 1 until a.numRows) {
                 val bpI = bp[i]
                 val luICol = decomposition.lu[i, col]
-                for (j in 0 until b.columns) {
+                for (j in 0 until b.numCols) {
                     bpI[j] -= bpCol[j] * luICol
                 }
             }
         }
 
         // Solve UX = Y
-        for (col in a.rows - 1 downTo 0) {
+        for (col in a.numRows - 1 downTo 0) {
             val bpCol = bp[col]
             val luDiag = decomposition.lu[col, col]
-            for (j in 0 until b.columns) {
+            for (j in 0 until b.numCols) {
                 bpCol[j] /= luDiag
             }
             for (i in 0 until col) {
                 val bpI = bp[i]
                 val luICol = decomposition.lu[i, col]
-                for (j in 0 until b.columns) {
+                for (j in 0 until b.numCols) {
                     bpI[j] -= bpCol[j] * luICol
                 }
             }
         }
 
-        return a.context.produce { i, j -> bp[i][j] }
+        return a.context.produce(a.numRows, a.numCols) { i, j -> bp[i][j] }
     }
 }

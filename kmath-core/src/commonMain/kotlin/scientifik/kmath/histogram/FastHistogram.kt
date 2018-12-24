@@ -20,7 +20,7 @@ class FastHistogram(
 
     private val strides = DefaultStrides(IntArray(binNums.size) { binNums[it] + 2 })
 
-    private val values: NDStructure<LongCounter> = ndStructure(strides) { LongCounter() }
+    private val values: NDStructure<LongCounter> = inlineNDStructure(strides) { LongCounter() }
 
     //private val weight: NDStructure<DoubleCounter?> = ndStructure(strides){null}
 
@@ -93,7 +93,7 @@ class FastHistogram(
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
     fun asNDStructure(): NDStructure<Number> {
-        return ndStructure(this.values.shape) { values[it].sum() }
+        return inlineNdStructure(this.values.shape) { values[it].sum() }
     }
 
     /**

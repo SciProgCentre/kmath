@@ -51,6 +51,9 @@ interface Space<T> {
     operator fun T.div(k: Number) = multiply(this, 1.0 / k.toDouble())
     operator fun Number.times(b: T) = b * this
 
+    //TODO move to external extensions when they are available
+    fun Iterable<T>.sum(): T = fold(zero) { left, right -> left + right }
+    fun Sequence<T>.sum(): T = fold(zero) { left, right -> left + right }
 }
 
 /**
@@ -111,8 +114,8 @@ interface Field<T> : Ring<T> {
 /**
  * Field element
  */
-interface FieldElement<T, S : Field<T>> : RingElement<T, S> {
-    override val context: S
+interface FieldElement<T, F : Field<T>> : RingElement<T, F> {
+    override val context: F
 
     operator fun div(b: T): T = context.divide(self, b)
 }

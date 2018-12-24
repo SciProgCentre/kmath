@@ -9,33 +9,33 @@ import scientifik.kmath.operations.TrigonometricOperations
 /**
  * NDField that supports [ExtendedField] operations on its elements
  */
-class ExtendedNDField<N : Any, F : ExtendedField<N>>(shape: IntArray, field: F) : NDField<N, F>(shape, field),
-        TrigonometricOperations<NDElement<N, F>>,
-        PowerOperations<NDElement<N, F>>,
-        ExponentialOperations<NDElement<N, F>> {
+class ExtendedNDField<T : Any, F : ExtendedField<T>>(shape: IntArray, field: F) : NDField<T, F>(shape, field),
+        TrigonometricOperations<NDStructure<T>>,
+        PowerOperations<NDStructure<T>>,
+        ExponentialOperations<NDStructure<T>> {
 
-    override fun produceStructure(initializer: F.(IntArray) -> N): NDStructure<N> {
-        return ndStructure(shape) { field.initializer(it) }
+    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> {
+        return NdStructure(shape, ::boxingBuffer) { field.initializer(it) }
     }
 
-    override fun power(arg: NDElement<N, F>, pow: Double): NDElement<N, F> {
-        return arg.transform { d -> with(field) { power(d, pow) } }
+    override fun power(arg: NDStructure<T>, pow: Double): NDElement<T, F> {
+        return produce { with(field) { power(arg[it], pow) } }
     }
 
-    override fun exp(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { exp(d) } }
+    override fun exp(arg: NDStructure<T>): NDElement<T, F> {
+        return produce { with(field) { exp(arg[it]) } }
     }
 
-    override fun ln(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { ln(d) } }
+    override fun ln(arg: NDStructure<T>): NDElement<T, F> {
+        return produce { with(field) { ln(arg[it]) } }
     }
 
-    override fun sin(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { sin(d) } }
+    override fun sin(arg: NDStructure<T>): NDElement<T, F> {
+        return produce { with(field) { sin(arg[it]) } }
     }
 
-    override fun cos(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { cos(d) } }
+    override fun cos(arg: NDStructure<T>): NDElement<T, F> {
+        return produce { with(field) { cos(arg[it]) } }
     }
 }
 

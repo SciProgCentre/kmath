@@ -1,13 +1,14 @@
 buildscript {
-    extra["kotlinVersion"] = "1.3.11"
+    extra["kotlinVersion"] = "1.3.20-eap-52"
     extra["ioVersion"] = "0.1.2-dev-2"
-    extra["coroutinesVersion"] = "1.0.1"
+    extra["coroutinesVersion"] = "1.1.0"
 
     val kotlinVersion: String by extra
     val ioVersion: String by extra
     val coroutinesVersion: String by extra
 
     repositories {
+        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
         jcenter()
     }
 
@@ -28,6 +29,11 @@ allprojects {
 
     group = "scientifik"
     version = "0.0.2-dev-1"
+
+    repositories{
+        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+        jcenter()
+    }
 }
 
 if(file("artifactory.gradle").exists()){

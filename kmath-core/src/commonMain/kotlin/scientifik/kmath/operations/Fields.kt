@@ -5,11 +5,11 @@ import kotlin.math.pow
 /**
  * Advanced Number-like field that implements basic operations
  */
-interface ExtendedField<N : Any> :
-        Field<N>,
-        TrigonometricOperations<N>,
-        PowerOperations<N>,
-        ExponentialOperations<N>
+interface ExtendedField<T : Any> :
+        Field<T>,
+        TrigonometricOperations<T>,
+        PowerOperations<T>,
+        ExponentialOperations<T>
 
 
 /**
