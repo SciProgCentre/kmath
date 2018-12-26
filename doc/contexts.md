@@ -36,7 +36,7 @@ fun ComplexOperations.doSomethingWithComplex(c1: Complex, c2: Complex, c3: Compl
 ComplexOperations.doComethingWithComplex(c1,c2,c3)
 ```
 
-In fact, whole parts of proram could run in a mathematical context or even multiple nested contexts. 
+In fact, whole parts of program could run in a mathematical context or even multiple nested contexts. 
 
 In `kmath` contexts are responsible not only for operations, but also for raw object creation and advanced features.
 

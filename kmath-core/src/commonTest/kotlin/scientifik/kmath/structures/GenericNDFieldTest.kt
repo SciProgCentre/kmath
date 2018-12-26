@@ -1,7 +1,7 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.DoubleField
-import scientifik.kmath.structures.NDArrays.create
+import scientifik.kmath.structures.NDElements.create
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

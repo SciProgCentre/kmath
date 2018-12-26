@@ -173,27 +173,27 @@ class GenericNDField<T : Any, F : Field<T>>(shape: IntArray, field: F) : NDField
 
 //typealias NDFieldFactory<T> = (IntArray)->NDField<T>
 
-object NDArrays {
+object NDElements {
     /**
      * Create a platform-optimized NDArray of doubles
      */
-    fun realNDArray(shape: IntArray, initializer: DoubleField.(IntArray) -> Double = { 0.0 }): NDElement<Double, DoubleField> {
+    fun realNDElement(shape: IntArray, initializer: DoubleField.(IntArray) -> Double = { 0.0 }): NDElement<Double, DoubleField> {
         return ExtendedNDField(shape, DoubleField).produce(initializer)
     }
 
-    fun real1DArray(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDElement<Double, DoubleField> {
-        return realNDArray(intArrayOf(dim)) { initializer(it[0]) }
+    fun real1DElement(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDElement<Double, DoubleField> {
+        return realNDElement(intArrayOf(dim)) { initializer(it[0]) }
     }
 
-    fun real2DArray(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDElement<Double, DoubleField> {
-        return realNDArray(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
+    fun real2DElement(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDElement<Double, DoubleField> {
+        return realNDElement(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
     }
 
-    fun real3DArray(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDElement<Double, DoubleField> {
-        return realNDArray(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
+    fun real3DElement(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDElement<Double, DoubleField> {
+        return realNDElement(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
     }
 
-    inline fun produceReal(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDStructure<Double>): NDElement<Double, DoubleField> {
+    inline fun real(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDStructure<Double>): NDElement<Double, DoubleField> {
         val field = ExtendedNDField(shape, DoubleField)
         return NDStructureElement(field, field.run(block))
     }
