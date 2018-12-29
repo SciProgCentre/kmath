@@ -50,9 +50,24 @@ In KMath, contexts are not only responsible for operations, but also for raw obj
 
 ## Other possibilities
 
+### Type classes
+
 An obvious candidate to get more or less the same functionality is the type class, which allows one to bind a behavior to
 a specific type without modifying the type itself. On the plus side, type classes do not require explicit context
 declaration, so the code looks cleaner. On the minus side, if there are different sets of behaviors for the same types,
 it is impossible to combine them into one module. Also, unlike type classes, context can have parameters or even
 state. For example in KMath, sizes and strides for `NDElement` or `Matrix` could be moved to context to optimize
 performance in case of a large amount of structures.
+
+### Wildcard imports and importing-on-demand
+
+Sometimes, one may wish to use a single context throughout a file. In this case, is possible to import all members
+from a package or file, via `import context.complex.*`. Effectively, this is the same as enclosing an entire file
+with a single context. However when using multiple contexts, this technique can introduce operator ambiguity, due to
+namespace pollution. If there are multiple scoped contexts which define the same operation, it is still possible to
+to import specific operations as needed, without using an explicit context with extension functions, for example:
+
+```
+import context.complex.op1
+import context.quaternion.op2
+```
