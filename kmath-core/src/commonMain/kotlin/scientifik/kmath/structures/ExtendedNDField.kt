@@ -9,14 +9,15 @@ import scientifik.kmath.operations.TrigonometricOperations
 /**
  * NDField that supports [ExtendedField] operations on its elements
  */
-class ExtendedNDField<T : Any, F : ExtendedField<T>>(shape: IntArray, field: F) : NDField<T, F>(shape, field),
+inline class ExtendedNDField<T : Any, F : ExtendedField<T>>(private val ndField: NDField<T, F>) : NDField<T, F>,
         TrigonometricOperations<NDStructure<T>>,
         PowerOperations<NDStructure<T>>,
         ExponentialOperations<NDStructure<T>> {
 
-    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> {
-        return NdStructure(shape, ::boxingBuffer) { field.initializer(it) }
-    }
+    override val shape: IntArray get() = ndField.shape
+    override val field: F get() = ndField.field
+
+    override fun produce(initializer: F.(IntArray) -> T): NDElement<T, F> = ndField.produce(initializer)
 
     override fun power(arg: NDStructure<T>, pow: Double): NDElement<T, F> {
         return produce { with(field) { power(arg[it], pow) } }

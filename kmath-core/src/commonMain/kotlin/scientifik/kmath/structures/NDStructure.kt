@@ -19,7 +19,7 @@ interface MutableNDStructure<T> : NDStructure<T> {
     operator fun set(index: IntArray, value: T)
 }
 
-fun <T> MutableNDStructure<T>.transformInPlace(action: (IntArray, T) -> T) {
+fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
     elements().forEach { (index, oldValue) ->
         this[index] = action(index, oldValue)
     }
@@ -113,8 +113,8 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
 }
 
 abstract class GenericNDStructure<T, B : Buffer<T>> : NDStructure<T> {
-    protected abstract val buffer: B
-    protected abstract val strides: Strides
+    abstract val buffer: B
+    abstract val strides: Strides
 
     override fun get(index: IntArray): T = buffer[strides.offset(index)]
 
@@ -153,7 +153,18 @@ class BufferNDStructure<T>(
         result = 31 * result + buffer.hashCode()
         return result
     }
+}
 
+/**
+ * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferNDStructure]
+ */
+inline fun <T, reified R : Any> NDStructure<T>.map(factory: BufferFactory<R> = ::inlineBuffer, crossinline transform: (T) -> R): BufferNDStructure<R> {
+    return if (this is BufferNDStructure<T>) {
+        BufferNDStructure(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
+    } else {
+        val strides = DefaultStrides(shape)
+        BufferNDStructure(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
+    }
 }
 
 /**

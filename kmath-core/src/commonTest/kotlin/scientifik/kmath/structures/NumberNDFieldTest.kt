@@ -1,16 +1,15 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Norm
-import scientifik.kmath.structures.NDElements.real
-import scientifik.kmath.structures.NDElements.real2DElement
+import scientifik.kmath.structures.NDElement.Companion.real2D
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NumberNDFieldTest {
-    val array1 = real2DElement(3, 3) { i, j -> (i + j).toDouble() }
-    val array2 = real2DElement(3, 3) { i, j -> (i - j).toDouble() }
+    val array1 = real2D(3, 3) { i, j -> (i + j).toDouble() }
+    val array2 = real2D(3, 3) { i, j -> (i - j).toDouble() }
 
     @Test
     fun testSum() {
@@ -27,7 +26,7 @@ class NumberNDFieldTest {
     @Test
     fun testGeneration() {
 
-        val array = real2DElement(3, 3) { i, j -> (i * 10 + j).toDouble() }
+        val array = real2D(3, 3) { i, j -> (i * 10 + j).toDouble() }
 
         for (i in 0..2) {
             for (j in 0..2) {
@@ -52,7 +51,7 @@ class NumberNDFieldTest {
     }
 
     @Test
-    fun combineTest(){
+    fun combineTest() {
         val division = array1.combine(array2, Double::div)
     }
 
@@ -64,7 +63,7 @@ class NumberNDFieldTest {
 
     @Test
     fun testInternalContext() {
-        real(array1.shape) {
+        NDField.real(array1.shape).run {
             with(L2Norm) {
                 1 + norm(array1) + exp(array2)
             }
