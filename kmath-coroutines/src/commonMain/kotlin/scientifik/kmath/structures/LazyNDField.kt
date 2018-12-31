@@ -67,10 +67,10 @@ fun <T, F : Field<T>> NDElement<T, F>.lazy(scope: CoroutineScope = GlobalScope):
     }
 }
 
-inline fun <T, F : Field<T>> LazyNDStructure<T, F>.transformIndexed(crossinline action: suspend F.(IntArray, T) -> T) = LazyNDStructure(context) { index ->
+inline fun <T, F : Field<T>> LazyNDStructure<T, F>.mapIndexed(crossinline action: suspend F.(IntArray, T) -> T) = LazyNDStructure(context) { index ->
     action.invoke(this, index, await(index))
 }
 
-inline fun <T, F : Field<T>> LazyNDStructure<T, F>.transform(crossinline action: suspend F.(T) -> T) = LazyNDStructure(context) { index ->
+inline fun <T, F : Field<T>> LazyNDStructure<T, F>.map(crossinline action: suspend F.(T) -> T) = LazyNDStructure(context) { index ->
     action.invoke(this, await(index))
 }
