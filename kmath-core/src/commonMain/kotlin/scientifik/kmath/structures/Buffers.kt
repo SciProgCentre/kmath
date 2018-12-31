@@ -133,13 +133,13 @@ fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
 /**
  * Create a boxing buffer of given type
  */
-fun <T : Any> boxingBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
+inline fun <T> boxingBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
 
 /**
  * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineBuffer(size: Int, noinline initializer: (Int) -> T): Buffer<T> {
+inline fun <reified T : Any> inlineBuffer(size: Int, initializer: (Int) -> T): Buffer<T> {
     return when (T::class) {
         Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
         Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
@@ -151,13 +151,13 @@ inline fun <reified T : Any> inlineBuffer(size: Int, noinline initializer: (Int)
 /**
  * Create a boxing mutable buffer of given type
  */
-fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> = MutableListBuffer(MutableList(size, initializer))
+inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> = MutableListBuffer(MutableList(size, initializer))
 
 /**
  * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineMutableBuffer(size: Int, noinline initializer: (Int) -> T): MutableBuffer<T> {
+inline fun <reified T : Any> inlineMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
     return when (T::class) {
         Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
         Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>

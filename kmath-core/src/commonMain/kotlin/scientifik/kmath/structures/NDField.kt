@@ -73,12 +73,11 @@ interface NDField<T, F : Field<T>> : Field<NDStructure<T>> {
         return produce { field.run { a[it] / b[it] } }
     }
 
-
     companion object {
         /**
          * Create a nd-field for [Double] values
          */
-        fun real(shape: IntArray) = ExtendedNDField(BufferNDField(shape, DoubleField, DoubleBufferFactory))
+        fun real(shape: IntArray) = RealNDField(shape)
 
         /**
          * Create a nd-field with boxing generic buffer
@@ -123,11 +122,11 @@ interface NDElement<T, F : Field<T>> : FieldElement<NDStructure<T>, NDField<T, F
          * Simple boxing NDArray
          */
         fun <T : Any, F : Field<T>> generic(shape: IntArray, field: F, initializer: F.(IntArray) -> T): NDElement<T, F> {
-            return NDField.generic(shape,field).produce(initializer)
+            return NDField.generic(shape, field).produce(initializer)
         }
 
-        inline fun <reified T : Any, F : Field<T>> inline(shape: IntArray, field: F, crossinline initializer: F.(IntArray) -> T): NDElement<T, F> {
-            return NDField.inline(shape,field).produce(initializer)
+        inline fun <reified T : Any, F : Field<T>> inline(shape: IntArray, field: F, noinline initializer: F.(IntArray) -> T): NDElement<T, F> {
+            return NDField.inline(shape, field).produce(initializer)
         }
     }
 }

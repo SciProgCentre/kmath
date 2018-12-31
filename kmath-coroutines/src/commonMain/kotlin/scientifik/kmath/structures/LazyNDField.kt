@@ -3,10 +3,7 @@ package scientifik.kmath.structures
 import kotlinx.coroutines.*
 import scientifik.kmath.operations.Field
 
-class LazyNDField<T, F : Field<T>>(shape: IntArray, field: F, val scope: CoroutineScope = GlobalScope) : NDField<T, F>(shape, field) {
-
-    override fun produceStructure(initializer: F.(IntArray) -> T): NDStructure<T> = LazyNDStructure(this) { initializer(field, it) }
-
+class LazyNDField<T, F : Field<T>>(shape: IntArray, field: F, val scope: CoroutineScope = GlobalScope) : BufferNDField<T, F>(shape,field, ::boxingBuffer) {
 
     override fun add(a: NDStructure<T>, b: NDStructure<T>): NDElement<T, F> {
         return LazyNDStructure(this) { index ->
