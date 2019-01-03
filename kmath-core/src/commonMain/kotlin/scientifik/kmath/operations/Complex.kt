@@ -16,15 +16,18 @@ object ComplexField : Field<Complex> {
 
     override fun multiply(a: Complex, b: Complex): Complex = Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
 
-    override fun divide(a: Complex, b: Complex): Complex = Complex(a.re * b.re + a.im * b.im, a.re * b.im - a.im * b.re) / b.square
+    override fun divide(a: Complex, b: Complex): Complex {
+        val norm = b.square
+        return Complex((a.re * b.re + a.im * b.im) / norm, (a.re * b.im - a.im * b.re) / norm)
+    }
 
-    operator fun Double.plus(c: Complex) = this.toComplex() + c
+    operator fun Double.plus(c: Complex) = add(this.toComplex(), c)
 
-    operator fun Double.minus(c: Complex) = this.toComplex() - c
+    operator fun Double.minus(c: Complex) = add(this.toComplex(), -c)
 
     operator fun Complex.plus(d: Double) = d + this
 
-    operator fun Complex.minus(d: Double) = this - d.toComplex()
+    operator fun Complex.minus(d: Double) = add(this, -d.toComplex())
 
     operator fun Double.times(c: Complex) = Complex(c.re * this, c.im * this)
 }
@@ -34,6 +37,7 @@ object ComplexField : Field<Complex> {
  */
 data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
     override val self: Complex get() = this
+
     override val context: ComplexField
         get() = ComplexField
 

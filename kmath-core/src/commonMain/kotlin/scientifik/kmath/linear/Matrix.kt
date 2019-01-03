@@ -122,11 +122,11 @@ data class StructureMatrixSpace<T : Any, R : Ring<T>>(
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T, R> {
         return if (rows == rowNum && columns == colNum) {
-            val structure = NdStructure(strides, bufferFactory) { initializer(it[0], it[1]) }
+            val structure = ndStructure(strides, bufferFactory) { initializer(it[0], it[1]) }
             StructureMatrix(this, structure)
         } else {
             val context = StructureMatrixSpace(rows, columns, ring, bufferFactory)
-            val structure = NdStructure(context.strides, bufferFactory) { initializer(it[0], it[1]) }
+            val structure = ndStructure(context.strides, bufferFactory) { initializer(it[0], it[1]) }
             StructureMatrix(context, structure)
         }
     }

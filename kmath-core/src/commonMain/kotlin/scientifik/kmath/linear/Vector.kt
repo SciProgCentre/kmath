@@ -16,13 +16,18 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 
     val space: S
 
-    fun produce(initializer: (Int) -> T): Vector<T, S>
+    fun produce(initializer: (Int) -> T): Point<T>
 
-    override val zero: Vector<T, S> get() = produce { space.zero }
+    /**
+     * Produce a space-element of this vector space for expressions
+     */
+    fun produceElement(initializer: (Int) -> T): Vector<T, S>
 
-    override fun add(a: Point<T>, b: Point<T>): Vector<T, S> = produce { with(space) { a[it] + b[it] } }
+    override val zero: Point<T> get() = produce { space.zero }
 
-    override fun multiply(a: Point<T>, k: Double): Vector<T, S> = produce { with(space) { a[it] * k } }
+    override fun add(a: Point<T>, b: Point<T>): Point<T> = produce { with(space) { a[it] + b[it] } }
+
+    override fun multiply(a: Point<T>, k: Double): Point<T> = produce { with(space) { a[it] * k } }
 
     //TODO add basis
 
@@ -53,7 +58,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 /**
  * A point coupled to the linear space
  */
-interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, VectorSpace<T, S>>, Point<T> {
+interface Vector<T : Any, S : Space<T>> : SpaceElement<Vector<T,S>, VectorSpace<T, S>>, Point<T> {
     override val size: Int get() = context.size
 
     override operator fun plus(b: Point<T>): Vector<T, S> = context.add(self, b)
@@ -65,11 +70,11 @@ interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, VectorSpace<T, 
         /**
          * Create vector with custom field
          */
-        fun <T : Any, F : Space<T>> generic(size: Int, field: F, initializer: (Int) -> T) =
-                VectorSpace.buffered(size, field).produce(initializer)
+        fun <T : Any, S : Space<T>> generic(size: Int, field: S, initializer: (Int) -> T): Vector<T, S> =
+                VectorSpace.buffered(size, field).produceElement(initializer)
 
-        fun real(size: Int, initializer: (Int) -> Double) = VectorSpace.real(size).produce(initializer)
-        fun ofReal(vararg elements: Double) = VectorSpace.real(elements.size).produce{elements[it]}
+        fun real(size: Int, initializer: (Int) -> Double): Vector<Double,DoubleField> = VectorSpace.real(size).produceElement(initializer)
+        fun ofReal(vararg elements: Double): Vector<Double,DoubleField> = VectorSpace.real(elements.size).produceElement { elements[it] }
 
     }
 }
@@ -79,7 +84,8 @@ data class BufferVectorSpace<T : Any, S : Space<T>>(
         override val space: S,
         val bufferFactory: BufferFactory<T>
 ) : VectorSpace<T, S> {
-    override fun produce(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, bufferFactory(size, initializer))
+    override fun produce(initializer: (Int) -> T) = bufferFactory(size, initializer)
+    override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))
 }
 
 
@@ -95,7 +101,7 @@ data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace
         return buffer[index]
     }
 
-    override val self: BufferVector<T, S> get() = this
+    override fun getSelf(): BufferVector<T, S
 
     override fun iterator(): Iterator<T> = (0 until size).map { buffer[it] }.iterator()
 

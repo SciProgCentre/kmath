@@ -12,42 +12,18 @@ interface ExtendedField<T : Any> :
         ExponentialOperations<T>
 
 
-/**
- * Field for real values
- */
-object RealField : ExtendedField<Real>, Norm<Real, Real> {
-    override val zero: Real = Real(0.0)
-    override fun add(a: Real, b: Real): Real = Real(a.value + b.value)
-    override val one: Real = Real(1.0)
-    override fun multiply(a: Real, b: Real): Real = Real(a.value * b.value)
-    override fun multiply(a: Real, k: Double): Real = Real(a.value * k)
-    override fun divide(a: Real, b: Real): Real = Real(a.value / b.value)
-
-    override fun sin(arg: Real): Real = Real(kotlin.math.sin(arg.value))
-    override fun cos(arg: Real): Real = Real(kotlin.math.cos(arg.value))
-
-    override fun power(arg: Real, pow: Double): Real = Real(arg.value.pow(pow))
-
-    override fun exp(arg: Real): Real = Real(kotlin.math.exp(arg.value))
-
-    override fun ln(arg: Real): Real = Real(kotlin.math.ln(arg.value))
-
-    override fun norm(arg: Real): Real = Real(kotlin.math.abs(arg.value))
-}
 
 /**
  * Real field element wrapping double.
  *
  * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
  */
-inline class Real(val value: Double) : FieldElement<Real, RealField> {
+inline class Real(val value: Double) : FieldElement<Double, Real, DoubleField> {
+    override fun unwrap(): Double = value
 
-    //values are dynamically calculated to save memory
-    override val self
-        get() = this
+    override fun Double.wrap(): Real = Real(value)
 
-    override val context
-        get() = RealField
+    override val context get() = DoubleField
 
     companion object {
 
@@ -79,11 +55,31 @@ object DoubleField : ExtendedField<Double>, Norm<Double, Double> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object IntField : Field<Int>{
+object IntField : Field<Int> {
     override val zero: Int = 0
     override fun add(a: Int, b: Int): Int = a + b
     override fun multiply(a: Int, b: Int): Int = a * b
-    override fun multiply(a: Int, k: Double): Int = (k*a).toInt()
+    override fun multiply(a: Int, k: Double): Int = (k * a).toInt()
     override val one: Int = 1
     override fun divide(a: Int, b: Int): Int = a / b
 }
+
+//interface FieldAdapter<T, R> : Field<R> {
+//
+//    val field: Field<T>
+//
+//    abstract fun T.evolve(): R
+//    abstract fun R.devolve(): T
+//
+//    override val zero get() = field.zero.evolve()
+//    override val one get() = field.zero.evolve()
+//
+//    override fun add(a: R, b: R): R = field.add(a.devolve(), b.devolve()).evolve()
+//
+//    override fun multiply(a: R, k: Double): R = field.multiply(a.devolve(), k).evolve()
+//
+//
+//    override fun multiply(a: R, b: R): R = field.multiply(a.devolve(), b.devolve()).evolve()
+//
+//    override fun divide(a: R, b: R): R = field.divide(a.devolve(), b.devolve()).evolve()
+//}

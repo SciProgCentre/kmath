@@ -4,20 +4,17 @@ import scientifik.kmath.operations.DoubleField
 
 typealias RealNDElement = BufferNDElement<Double, DoubleField>
 
-class RealNDField(shape: IntArray) : BufferNDField<Double, DoubleField>(shape, DoubleField, DoubleBufferFactory), ExtendedNDField<Double, DoubleField> {
+class RealNDField(shape: IntArray) :
+        BufferNDField<Double, DoubleField>(shape, DoubleField, DoubleBufferFactory),
+        ExtendedNDField<Double, DoubleField, NDBuffer<Double>> {
 
     /**
      * Inline map an NDStructure to
      */
-    private inline fun NDStructure<Double>.mapInline(crossinline operation: DoubleField.(Double) -> Double): RealNDElement {
-        return if (this is BufferNDElement<Double, *>) {
-            val array = DoubleArray(strides.linearSize) { offset -> DoubleField.operation(buffer[offset]) }
-            BufferNDElement(this@RealNDField, DoubleBuffer(array))
-        } else {
-            produce { index -> DoubleField.operation(get(index)) }
-        }
+    private inline fun NDBuffer<Double>.mapInline(crossinline operation: DoubleField.(Double) -> Double): RealNDElement {
+        val array = DoubleArray(strides.linearSize) { offset -> DoubleField.operation(buffer[offset]) }
+        return BufferNDElement(this@RealNDField, DoubleBuffer(array))
     }
-
 
     @Suppress("OVERRIDE_BY_INLINE")
     override inline fun produce(initializer: DoubleField.(IntArray) -> Double): RealNDElement {
@@ -25,23 +22,23 @@ class RealNDField(shape: IntArray) : BufferNDField<Double, DoubleField>(shape, D
         return BufferNDElement(this, DoubleBuffer(array))
     }
 
-    override fun power(arg: NDStructure<Double>, pow: Double) = arg.mapInline { power(it, pow) }
+    override fun power(arg: NDBuffer<Double>, pow: Double) = arg.mapInline { power(it, pow) }
 
-    override fun exp(arg: NDStructure<Double>) = arg.mapInline { exp(it) }
+    override fun exp(arg: NDBuffer<Double>) = arg.mapInline { exp(it) }
 
-    override fun ln(arg: NDStructure<Double>) = arg.mapInline { ln(it) }
+    override fun ln(arg: NDBuffer<Double>) = arg.mapInline { ln(it) }
 
-    override fun sin(arg: NDStructure<Double>) = arg.mapInline { sin(it) }
+    override fun sin(arg: NDBuffer<Double>) = arg.mapInline { sin(it) }
 
-    override fun cos(arg: NDStructure<Double>) = arg.mapInline { cos(it) }
+    override fun cos(arg: NDBuffer<Double>) = arg.mapInline { cos(it) }
 
-    override fun NDStructure<Double>.times(k: Number) = mapInline { value -> value * k.toDouble() }
+    override fun NDBuffer<Double>.times(k: Number) = mapInline { value -> value * k.toDouble() }
 
-    override fun NDStructure<Double>.div(k: Number) = mapInline { value -> value / k.toDouble() }
+    override fun NDBuffer<Double>.div(k: Number) = mapInline { value -> value / k.toDouble() }
 
-    override fun Number.times(b: NDStructure<Double>) = b * this
+    override fun Number.times(b: NDBuffer<Double>) = b * this
 
-    override fun Number.div(b: NDStructure<Double>) = b * (1.0 / this.toDouble())
+    override fun Number.div(b: NDBuffer<Double>) = b * (1.0 / this.toDouble())
 }
 
 /**

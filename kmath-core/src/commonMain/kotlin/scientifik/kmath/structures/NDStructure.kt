@@ -112,26 +112,24 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     }
 }
 
-abstract class GenericNDStructure<T, B : Buffer<T>> : NDStructure<T> {
-    abstract val buffer: B
-    abstract val strides: Strides
+interface NDBuffer<T> : NDStructure<T> {
+    val buffer: Buffer<T>
+    val strides: Strides
 
     override fun get(index: IntArray): T = buffer[strides.offset(index)]
 
-    override val shape: IntArray
-        get() = strides.shape
+    override val shape: IntArray get() = strides.shape
 
-    override fun elements() =
-            strides.indices().map { it to this[it] }
+    override fun elements() = strides.indices().map { it to this[it] }
 }
 
 /**
  * Boxing generic [NDStructure]
  */
-class BufferNDStructure<T>(
+data class BufferNDStructure<T>(
         override val strides: Strides,
         override val buffer: Buffer<T>
-) : GenericNDStructure<T, Buffer<T>>() {
+) : NDBuffer<T> {
 
     init {
         if (strides.linearSize != buffer.size) {
@@ -158,7 +156,7 @@ class BufferNDStructure<T>(
 /**
  * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferNDStructure]
  */
-inline fun <T, reified R : Any> NDStructure<T>.map(factory: BufferFactory<R> = ::inlineBuffer, crossinline transform: (T) -> R): BufferNDStructure<R> {
+inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(factory: BufferFactory<R> = ::inlineBuffer, crossinline transform: (T) -> R): BufferNDStructure<R> {
     return if (this is BufferNDStructure<T>) {
         BufferNDStructure(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
     } else {
@@ -172,8 +170,7 @@ inline fun <T, reified R : Any> NDStructure<T>.map(factory: BufferFactory<R> = :
  *
  * Strides should be reused if possible
  */
-@Suppress("FunctionName")
-fun <T : Any> NdStructure(strides: Strides, bufferFactory: BufferFactory<T>, initializer: (IntArray) -> T) =
+fun <T> ndStructure(strides: Strides, bufferFactory: BufferFactory<T> = ::boxingBuffer, initializer: (IntArray) -> T) =
         BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 /**
@@ -182,9 +179,8 @@ fun <T : Any> NdStructure(strides: Strides, bufferFactory: BufferFactory<T>, ini
 inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
         BufferNDStructure(strides, inlineBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-@Suppress("FunctionName")
-fun <T : Any> NdStructure(shape: IntArray, bufferFactory: BufferFactory<T>, initializer: (IntArray) -> T) =
-        NdStructure(DefaultStrides(shape), bufferFactory, initializer)
+fun <T> ndStructure(shape: IntArray, bufferFactory: BufferFactory<T> = ::boxingBuffer, initializer: (IntArray) -> T) =
+        ndStructure(DefaultStrides(shape), bufferFactory, initializer)
 
 inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
         inlineNDStructure(DefaultStrides(shape), initializer)
@@ -195,7 +191,7 @@ inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline init
 class MutableBufferNDStructure<T>(
         override val strides: Strides,
         override val buffer: MutableBuffer<T>
-) : GenericNDStructure<T, MutableBuffer<T>>(), MutableNDStructure<T> {
+) : NDBuffer<T>, MutableNDStructure<T> {
 
     init {
         if (strides.linearSize != buffer.size) {
@@ -209,16 +205,14 @@ class MutableBufferNDStructure<T>(
 /**
  * The same as [inlineNDStructure], but mutable
  */
-@Suppress("FunctionName")
-fun <T : Any> MutableNdStructure(strides: Strides, bufferFactory: MutableBufferFactory<T>, initializer: (IntArray) -> T) =
+fun <T : Any> mutableNdStructure(strides: Strides, bufferFactory: MutableBufferFactory<T> = ::boxingMutableBuffer, initializer: (IntArray) -> T) =
         MutableBufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 inline fun <reified T : Any> inlineMutableNdStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
         MutableBufferNDStructure(strides, inlineMutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-@Suppress("FunctionName")
-fun <T : Any> MutableNdStructure(shape: IntArray, bufferFactory: MutableBufferFactory<T>, initializer: (IntArray) -> T) =
-        MutableNdStructure(DefaultStrides(shape), bufferFactory, initializer)
+fun <T : Any> mutableNdStructure(shape: IntArray, bufferFactory: MutableBufferFactory<T> = ::boxingMutableBuffer, initializer: (IntArray) -> T) =
+        mutableNdStructure(DefaultStrides(shape), bufferFactory, initializer)
 
 inline fun <reified T : Any> inlineMutableNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
         inlineMutableNdStructure(DefaultStrides(shape), initializer)

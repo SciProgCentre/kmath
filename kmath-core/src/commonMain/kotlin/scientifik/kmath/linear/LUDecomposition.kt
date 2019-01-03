@@ -104,7 +104,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
         val m = matrix.numCols
         val pivot = IntArray(matrix.numRows)
         //TODO fix performance
-        val lu: MutableNDStructure<T> = MutableNdStructure(intArrayOf(matrix.numRows, matrix.numCols), ::boxingMutableBuffer) { index: IntArray -> matrix[index[0], index[1]] }
+        val lu: MutableNDStructure<T> = mutableNdStructure(intArrayOf(matrix.numRows, matrix.numCols), ::boxingMutableBuffer) { index: IntArray -> matrix[index[0], index[1]] }
 
 
         with(matrix.context.ring) {
