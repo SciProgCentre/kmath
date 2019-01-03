@@ -33,9 +33,8 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         /**
          * Non-boxing double vector space
          */
-        fun real(size: Int): BufferVectorSpace<Double, DoubleField> {
-            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, DoubleField, DoubleBufferFactory) }
-        }
+        fun real(size: Int): BufferVectorSpace<Double, DoubleField> =
+                realSpaceCache.getOrPut(size) { BufferVectorSpace(size, DoubleField, DoubleBufferFactory) }
 
         /**
          * A structured vector space with custom buffer
@@ -69,16 +68,12 @@ interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, VectorSpace<T, 
                 VectorSpace.buffered(size, field).produce(initializer)
 
         fun real(size: Int, initializer: (Int) -> Double) = VectorSpace.real(size).produce(initializer)
-        fun ofReal(vararg elements: Double) = VectorSpace.real(elements.size).produce{elements[it]}
+        fun ofReal(vararg elements: Double) = VectorSpace.real(elements.size).produce { elements[it] }
 
     }
 }
 
-data class BufferVectorSpace<T : Any, S : Space<T>>(
-        override val size: Int,
-        override val space: S,
-        val bufferFactory: BufferFactory<T>
-) : VectorSpace<T, S> {
+data class BufferVectorSpace<T : Any, S : Space<T>>(override val size: Int, override val space: S, val bufferFactory: BufferFactory<T>) : VectorSpace<T, S> {
     override fun produce(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, bufferFactory(size, initializer))
 }
 
@@ -91,9 +86,7 @@ data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace
         }
     }
 
-    override fun get(index: Int): T {
-        return buffer[index]
-    }
+    override fun get(index: Int): T = buffer[index]
 
     override val self: BufferVector<T, S> get() = this
 

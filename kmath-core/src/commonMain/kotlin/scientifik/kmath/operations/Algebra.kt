@@ -53,6 +53,7 @@ interface Space<T> {
 
     //TODO move to external extensions when they are available
     fun Iterable<T>.sum(): T = fold(zero) { left, right -> left + right }
+
     fun Sequence<T>.sum(): T = fold(zero) { left, right -> left + right }
 }
 

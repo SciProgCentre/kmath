@@ -31,7 +31,7 @@ class FastHistogram(
         // argument checks
         if (lower.size != upper.size) error("Dimension mismatch in histogram lower and upper limits.")
         if (lower.size != binNums.size) error("Dimension mismatch in bin count.")
-        if ((upper - lower).asSequence().any { it <= 0 }) error("Range for one of axis is not strictly positive")
+        if ((upper - lower).asSequence().any { it <= 0 }) error("Range for one axis is not strictly positive")
     }
 
 
@@ -41,23 +41,19 @@ class FastHistogram(
     /**
      * Get internal [NDStructure] bin index for given axis
      */
-    private fun getIndex(axis: Int, value: Double): Int {
-        return when {
-            value >= upper[axis] -> binNums[axis] + 1 // overflow
-            value < lower[axis] -> 0 // underflow
-            else -> floor((value - lower[axis]) / binSize[axis]).toInt() + 1
-        }
-    }
+    private fun getIndex(axis: Int, value: Double): Int =
+            when {
+                value >= upper[axis] -> binNums[axis] + 1 // overflow
+                value < lower[axis] -> 0 // underflow
+                else -> floor((value - lower[axis]) / binSize[axis]).toInt() + 1
+            }
 
-    private fun getIndex(point: Buffer<out Double>): IntArray = IntArray(dimension) { getIndex(it, point[it]) }
+    private fun getIndex(point: Buffer<out Double>): IntArray =
+            IntArray(dimension) { getIndex(it, point[it]) }
 
-    private fun getValue(index: IntArray): Long {
-        return values[index].sum()
-    }
+    private fun getValue(index: IntArray): Long = values[index].sum()
 
-    fun getValue(point: Buffer<out Double>): Long {
-        return getValue(getIndex(point))
-    }
+    fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
 
     private fun getTemplate(index: IntArray): BinTemplate<Double> {
         val center = index.mapIndexed { axis, i ->
@@ -70,9 +66,7 @@ class FastHistogram(
         return BinTemplate(center, binSize)
     }
 
-    fun getTemplate(point: Buffer<out Double>): BinTemplate<Double> {
-        return getTemplate(getIndex(point))
-    }
+    fun getTemplate(point: Buffer<out Double>): BinTemplate<Double> = getTemplate(getIndex(point))
 
     override fun get(point: Buffer<out Double>): PhantomBin<Double>? {
         val index = getIndex(point)
@@ -85,16 +79,16 @@ class FastHistogram(
         values[index].increment()
     }
 
-    override fun iterator(): Iterator<PhantomBin<Double>> = values.elements().map { (index, value) ->
-        PhantomBin(getTemplate(index), value.sum())
-    }.iterator()
+    override fun iterator(): Iterator<PhantomBin<Double>> =
+            values.elements().map { (index, value) ->
+                PhantomBin(getTemplate(index), value.sum())
+            }.iterator()
 
     /**
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
-    fun asNDStructure(): NDStructure<Number> {
-        return inlineNdStructure(this.values.shape) { values[it].sum() }
-    }
+    fun asNDStructure(): NDStructure<Number> =
+            inlineNdStructure(this.values.shape) { values[it].sum() }
 
     /**
      * Create a phantom lightweight immutable copy of this histogram
@@ -115,9 +109,8 @@ class FastHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): FastHistogram {
-            return FastHistogram(ranges.map { it.start }.toVector(), ranges.map { it.endInclusive }.toVector())
-        }
+        fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): FastHistogram =
+                FastHistogram(ranges.map { it.start }.toVector(), ranges.map { it.endInclusive }.toVector())
 
         /**
          * Use it like
@@ -128,13 +121,12 @@ class FastHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram {
-            return FastHistogram(
-                    ListBuffer(ranges.map { it.first.start }),
-                    ListBuffer(ranges.map { it.first.endInclusive }),
-                    ranges.map { it.second }.toIntArray()
-            )
-        }
+        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram =
+                FastHistogram(
+                        ListBuffer(ranges.map { it.first.start }),
+                        ListBuffer(ranges.map { it.first.endInclusive }),
+                        ranges.map { it.second }.toIntArray()
+                )
     }
 
 }

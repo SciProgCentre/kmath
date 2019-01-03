@@ -2,12 +2,15 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Field
 
-open class BufferNDField<T, F : Field<T>>(final override val shape: IntArray, final override val field: F, val bufferFactory: BufferFactory<T>) : NDField<T, F> {
+open class BufferNDField<T, F : Field<T>>(
+        final override val shape: IntArray,
+        final override val field: F,
+        val bufferFactory: BufferFactory<T>
+) : NDField<T, F> {
     val strides = DefaultStrides(shape)
 
-    override fun produce(initializer: F.(IntArray) -> T): BufferNDElement<T, F> {
-        return BufferNDElement(this, bufferFactory(strides.linearSize) { offset -> field.initializer(strides.index(offset)) })
-    }
+    override fun produce(initializer: F.(IntArray) -> T): BufferNDElement<T, F> =
+            BufferNDElement(this, bufferFactory(strides.linearSize) { offset -> field.initializer(strides.index(offset)) })
 
     open fun produceBuffered(initializer: F.(Int) -> T) =
             BufferNDElement(this, bufferFactory(strides.linearSize) { offset -> field.initializer(offset) })
@@ -31,7 +34,10 @@ open class BufferNDField<T, F : Field<T>>(final override val shape: IntArray, fi
 //    }
 }
 
-class BufferNDElement<T, F : Field<T>>(override val context: BufferNDField<T, F>, val buffer: Buffer<T>) : NDElement<T, F> {
+class BufferNDElement<T, F : Field<T>>(
+        override val context: BufferNDField<T, F>,
+        val buffer: Buffer<T>
+) : NDElement<T, F> {
 
     override val self: NDStructure<T> get() = this
     override val shape: IntArray get() = context.shape
@@ -60,7 +66,7 @@ operator fun <T : Any, F : Field<T>> BufferNDElement<T, F>.plus(arg: T) =
 /**
  * Subtraction operation between [BufferNDElement] and single element
  */
-operator fun <T: Any, F : Field<T>> BufferNDElement<T, F>.minus(arg: T) =
+operator fun <T : Any, F : Field<T>> BufferNDElement<T, F>.minus(arg: T) =
         context.produceBuffered { i -> buffer[i] - arg }
 
 /* prod and div */
@@ -68,11 +74,11 @@ operator fun <T: Any, F : Field<T>> BufferNDElement<T, F>.minus(arg: T) =
 /**
  * Product operation for [BufferNDElement] and single element
  */
-operator fun <T: Any, F : Field<T>> BufferNDElement<T, F>.times(arg: T) =
+operator fun <T : Any, F : Field<T>> BufferNDElement<T, F>.times(arg: T) =
         context.produceBuffered { i -> buffer[i] * arg }
 
 /**
  * Division operation between [BufferNDElement] and single element
  */
-operator fun <T: Any, F : Field<T>> BufferNDElement<T, F>.div(arg: T) =
+operator fun <T : Any, F : Field<T>> BufferNDElement<T, F>.div(arg: T) =
         context.produceBuffered { i -> buffer[i] / arg }

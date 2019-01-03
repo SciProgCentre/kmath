@@ -9,14 +9,13 @@ class RealNDField(shape: IntArray) : BufferNDField<Double, DoubleField>(shape, D
     /**
      * Inline map an NDStructure to
      */
-    private inline fun NDStructure<Double>.mapInline(crossinline operation: DoubleField.(Double) -> Double): RealNDElement {
-        return if (this is BufferNDElement<Double, *>) {
-            val array = DoubleArray(strides.linearSize) { offset -> DoubleField.operation(buffer[offset]) }
-            BufferNDElement(this@RealNDField, DoubleBuffer(array))
-        } else {
-            produce { index -> DoubleField.operation(get(index)) }
-        }
-    }
+    private inline fun NDStructure<Double>.mapInline(crossinline operation: DoubleField.(Double) -> Double): RealNDElement =
+            if (this is BufferNDElement<Double, *>) {
+                val array = DoubleArray(strides.linearSize) { offset -> DoubleField.operation(buffer[offset]) }
+                BufferNDElement(this@RealNDField, DoubleBuffer(array))
+            } else {
+                produce { index -> DoubleField.operation(get(index)) }
+            }
 
 
     @Suppress("OVERRIDE_BY_INLINE")
@@ -58,16 +57,12 @@ inline fun BufferNDField<Double, DoubleField>.produceInline(crossinline initiali
 operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
         ndElement.context.produceInline { i -> invoke(ndElement.buffer[i]) }
 
-/* plus and minus */
-
 /**
  * Summation operation for [BufferNDElement] and single element
  */
-operator fun RealNDElement.plus(arg: Double) =
-        context.produceInline { i -> buffer[i] + arg }
+operator fun RealNDElement.plus(arg: Double) = context.produceInline { i -> buffer[i] + arg }
 
 /**
  * Subtraction operation between [BufferNDElement] and single element
  */
-operator fun RealNDElement.minus(arg: Double) =
-        context.produceInline { i -> buffer[i] - arg }
+operator fun RealNDElement.minus(arg: Double) = context.produceInline { i -> buffer[i] - arg }

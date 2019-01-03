@@ -19,11 +19,8 @@ interface MutableNDStructure<T> : NDStructure<T> {
     operator fun set(index: IntArray, value: T)
 }
 
-fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
-    elements().forEach { (index, oldValue) ->
-        this[index] = action(index, oldValue)
-    }
-}
+fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) =
+        elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
 /**
  * A way to convert ND index to linear one and back
@@ -56,11 +53,11 @@ interface Strides {
 
     /**
      * Iterate over ND indices in a natural order
+     *
+     * TODO: introduce a fast way to calculate index of the next element?
      */
-    fun indices(): Sequence<IntArray> {
-        //TODO introduce a fast way to calculate index of the next element?
-        return (0 until linearSize).asSequence().map { index(it) }
-    }
+    fun indices(): Sequence<IntArray> =
+            (0 until linearSize).asSequence().map { index(it) }
 }
 
 class DefaultStrides private constructor(override val shape: IntArray) : Strides {
@@ -128,25 +125,21 @@ abstract class GenericNDStructure<T, B : Buffer<T>> : NDStructure<T> {
 /**
  * Boxing generic [NDStructure]
  */
-class BufferNDStructure<T>(
-        override val strides: Strides,
-        override val buffer: Buffer<T>
-) : GenericNDStructure<T, Buffer<T>>() {
-
+class BufferNDStructure<T>(override val strides: Strides,
+                           override val buffer: Buffer<T>) : GenericNDStructure<T, Buffer<T>>() {
     init {
         if (strides.linearSize != buffer.size) {
             error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
         }
     }
 
-    override fun equals(other: Any?): Boolean {
-        return when {
-            this === other -> true
-            other is BufferNDStructure<*> -> this.strides == other.strides && this.buffer.contentEquals(other.buffer)
-            other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
-            else -> false
-        }
-    }
+    override fun equals(other: Any?): Boolean =
+            when {
+                this === other -> true
+                other is BufferNDStructure<*> -> this.strides == other.strides && this.buffer.contentEquals(other.buffer)
+                other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
+                else -> false
+            }
 
     override fun hashCode(): Int {
         var result = strides.hashCode()
@@ -158,14 +151,13 @@ class BufferNDStructure<T>(
 /**
  * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferNDStructure]
  */
-inline fun <T, reified R : Any> NDStructure<T>.map(factory: BufferFactory<R> = ::inlineBuffer, crossinline transform: (T) -> R): BufferNDStructure<R> {
-    return if (this is BufferNDStructure<T>) {
-        BufferNDStructure(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
-    } else {
-        val strides = DefaultStrides(shape)
-        BufferNDStructure(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
-    }
-}
+inline fun <T, reified R : Any> NDStructure<T>.map(factory: BufferFactory<R> = ::inlineBuffer, crossinline transform: (T) -> R): BufferNDStructure<R> =
+        if (this is BufferNDStructure<T>) {
+            BufferNDStructure(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
+        } else {
+            val strides = DefaultStrides(shape)
+            BufferNDStructure(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
+        }
 
 /**
  * Create a NDStructure with explicit buffer factory

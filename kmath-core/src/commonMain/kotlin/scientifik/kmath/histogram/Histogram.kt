@@ -12,7 +12,7 @@ typealias RealPoint = Buffer<Double>
  * A simple geometric domain
  * TODO move to geometry module
  */
-interface Domain<T: Any> {
+interface Domain<T : Any> {
     operator fun contains(vector: Point<out T>): Boolean
     val dimension: Int
 }
@@ -20,7 +20,7 @@ interface Domain<T: Any> {
 /**
  * The bin in the histogram. The histogram is by definition always done in the real space
  */
-interface Bin<T: Any> : Domain<T> {
+interface Bin<T : Any> : Domain<T> {
     /**
      * The value of this bin
      */
@@ -28,7 +28,7 @@ interface Bin<T: Any> : Domain<T> {
     val center: Point<T>
 }
 
-interface Histogram<T: Any, out B : Bin<T>> : Iterable<B> {
+interface Histogram<T : Any, out B : Bin<T>> : Iterable<B> {
 
     /**
      * Find existing bin, corresponding to given coordinates
@@ -42,7 +42,7 @@ interface Histogram<T: Any, out B : Bin<T>> : Iterable<B> {
 
 }
 
-interface MutableHistogram<T: Any, out B : Bin<T>>: Histogram<T,B>{
+interface MutableHistogram<T : Any, out B : Bin<T>> : Histogram<T, B> {
 
     /**
      * Increment appropriate bin
@@ -50,14 +50,14 @@ interface MutableHistogram<T: Any, out B : Bin<T>>: Histogram<T,B>{
     fun put(point: Point<out T>, weight: Double = 1.0)
 }
 
-fun <T: Any> MutableHistogram<T,*>.put(vararg point: T) = put(ArrayBuffer(point))
+fun <T : Any> MutableHistogram<T, *>.put(vararg point: T) = put(ArrayBuffer(point))
 
-fun MutableHistogram<Double,*>.put(vararg point: Number) = put(DoubleBuffer(point.map { it.toDouble() }.toDoubleArray()))
-fun MutableHistogram<Double,*>.put(vararg point: Double) = put(DoubleBuffer(point))
+fun MutableHistogram<Double, *>.put(vararg point: Number) = put(DoubleBuffer(point.map { it.toDouble() }.toDoubleArray()))
+fun MutableHistogram<Double, *>.put(vararg point: Double) = put(DoubleBuffer(point))
 
-fun <T: Any> MutableHistogram<T,*>.fill(sequence: Iterable<Point<T>>) = sequence.forEach { put(it) }
+fun <T : Any> MutableHistogram<T, *>.fill(sequence: Iterable<Point<T>>) = sequence.forEach { put(it) }
 
 /**
  * Pass a sequence builder into histogram
  */
-fun <T: Any> MutableHistogram<T, *>.fill(buider: suspend SequenceScope<Point<T>>.() -> Unit) = fill(sequence(buider).asIterable())
+fun <T : Any> MutableHistogram<T, *>.fill(buider: suspend SequenceScope<Point<T>>.() -> Unit) = fill(sequence(buider).asIterable())
