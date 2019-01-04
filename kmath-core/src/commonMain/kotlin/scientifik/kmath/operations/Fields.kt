@@ -79,11 +79,11 @@ object DoubleField : ExtendedField<Double>, Norm<Double, Double> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object IntField : Field<Int>{
+object IntField : Field<Int> {
     override val zero: Int = 0
     override fun add(a: Int, b: Int): Int = a + b
     override fun multiply(a: Int, b: Int): Int = a * b
-    override fun multiply(a: Int, k: Double): Int = (k*a).toInt()
+    override fun multiply(a: Int, k: Double): Int = (k * a).toInt()
     override val one: Int = 1
     override fun divide(a: Int, b: Int): Int = a / b
 }

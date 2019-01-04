@@ -86,7 +86,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
         }
 
     /**
-     * In-place transformation for [MutableNDArray], using given transformation for each element
+     * In-place transformation for [MutableNDStructure], using given transformation for each element
      */
     operator fun <T> MutableNDStructure<T>.set(i: Int, j: Int, value: T) {
         this[intArrayOf(i, j)] = value
@@ -174,9 +174,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
      * @return the pivot permutation vector
      * @see .getP
      */
-    fun getPivot(): IntArray {
-        return pivot.copyOf()
-    }
+    fun getPivot(): IntArray = pivot.copyOf()
 
 }
 

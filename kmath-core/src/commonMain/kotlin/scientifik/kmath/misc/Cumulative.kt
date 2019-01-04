@@ -32,28 +32,28 @@ fun <T, R> List<T>.cumulative(initial: R, operation: (T, R) -> R): List<R> = thi
 //Cumulative sum
 
 @JvmName("cumulativeSumOfDouble")
-fun Iterable<Double>.cumulativeSum() = this.cumulative(0.0){ element, sum -> sum + element}
+fun Iterable<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
-fun Iterable<Int>.cumulativeSum() = this.cumulative(0){ element, sum -> sum + element}
+fun Iterable<Int>.cumulativeSum() = this.cumulative(0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfLong")
-fun Iterable<Long>.cumulativeSum() = this.cumulative(0L){ element, sum -> sum + element}
+fun Iterable<Long>.cumulativeSum() = this.cumulative(0L) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfDouble")
-fun Sequence<Double>.cumulativeSum() = this.cumulative(0.0){ element, sum -> sum + element}
+fun Sequence<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
-fun Sequence<Int>.cumulativeSum() = this.cumulative(0){ element, sum -> sum + element}
+fun Sequence<Int>.cumulativeSum() = this.cumulative(0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfLong")
-fun Sequence<Long>.cumulativeSum() = this.cumulative(0L){ element, sum -> sum + element}
+fun Sequence<Long>.cumulativeSum() = this.cumulative(0L) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfDouble")
-fun List<Double>.cumulativeSum() = this.cumulative(0.0){ element, sum -> sum + element}
+fun List<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
-fun List<Int>.cumulativeSum() = this.cumulative(0){ element, sum -> sum + element}
+fun List<Int>.cumulativeSum() = this.cumulative(0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfLong")
-fun List<Long>.cumulativeSum() = this.cumulative(0L){ element, sum -> sum + element}
+fun List<Long>.cumulativeSum() = this.cumulative(0L) { element, sum -> sum + element }

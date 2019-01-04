@@ -5,16 +5,16 @@ package scientifik.kmath.histogram
  */
 
 
-expect class LongCounter(){
-    fun	decrement()
-    fun	increment()
-    fun	reset()
-    fun	sum(): Long
-    fun add(l:Long)
+expect class LongCounter() {
+    fun decrement()
+    fun increment()
+    fun reset()
+    fun sum(): Long
+    fun add(l: Long)
 }
 
-expect class DoubleCounter(){
-    fun	reset()
-    fun	sum(): Double
+expect class DoubleCounter() {
+    fun reset()
+    fun sum(): Double
     fun add(d: Double)
 }

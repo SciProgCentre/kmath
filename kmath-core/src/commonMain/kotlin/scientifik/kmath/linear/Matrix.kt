@@ -33,9 +33,11 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
 
     val one get() = produce { i, j -> if (i == j) ring.one else ring.zero }
 
-    override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> = produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
+    override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> =
+            produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
 
-    override fun multiply(a: Matrix<T, R>, k: Double): Matrix<T, R> = produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
+    override fun multiply(a: Matrix<T, R>, k: Double): Matrix<T, R> =
+            produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
 
     companion object {
         /**
@@ -120,21 +122,24 @@ data class StructureMatrixSpace<T : Any, R : Ring<T>>(
 
     private val strides = DefaultStrides(shape)
 
-    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T, R> {
-        return if (rows == rowNum && columns == colNum) {
-            val structure = NdStructure(strides, bufferFactory) { initializer(it[0], it[1]) }
-            StructureMatrix(this, structure)
-        } else {
-            val context = StructureMatrixSpace(rows, columns, ring, bufferFactory)
-            val structure = NdStructure(context.strides, bufferFactory) { initializer(it[0], it[1]) }
-            StructureMatrix(context, structure)
-        }
-    }
+    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T, R> =
+            if (rows == rowNum && columns == colNum) {
+                val structure = NdStructure(strides, bufferFactory) { initializer(it[0], it[1]) }
+                StructureMatrix(this, structure)
+            } else {
+                val context = StructureMatrixSpace(rows, columns, ring, bufferFactory)
+                val structure = NdStructure(context.strides, bufferFactory) { initializer(it[0], it[1]) }
+                StructureMatrix(context, structure)
+            }
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 }
 
-data class StructureMatrix<T : Any, R : Ring<T>>(override val context: StructureMatrixSpace<T, R>, val structure: NDStructure<T>) : Matrix<T, R> {
+data class StructureMatrix<T : Any, R : Ring<T>>(
+        override val context: StructureMatrixSpace<T, R>,
+        val structure: NDStructure<T>
+) : Matrix<T, R> {
+
     init {
         if (structure.shape.size != 2 || structure.shape[0] != context.rowNum || structure.shape[1] != context.colNum) {
             error("Dimension mismatch for structure, (${context.rowNum}, ${context.colNum}) expected, but ${structure.shape} found")

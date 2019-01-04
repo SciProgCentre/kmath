@@ -139,14 +139,13 @@ inline fun <T> boxingBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = Lis
  * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineBuffer(size: Int, initializer: (Int) -> T): Buffer<T> {
-    return when (T::class) {
-        Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
-        Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
-        Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
-        else -> boxingBuffer(size, initializer)
-    }
-}
+inline fun <reified T : Any> inlineBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
+        when (T::class) {
+            Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
+            Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
+            Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
+            else -> boxingBuffer(size, initializer)
+        }
 
 /**
  * Create a boxing mutable buffer of given type
@@ -157,14 +156,13 @@ inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): Mu
  * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-    return when (T::class) {
-        Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
-        Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
-        Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
-        else -> boxingMutableBuffer(size, initializer)
-    }
-}
+inline fun <reified T : Any> inlineMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+        when (T::class) {
+            Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
+            Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
+            Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
+            else -> boxingMutableBuffer(size, initializer)
+        }
 
 typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
 typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>

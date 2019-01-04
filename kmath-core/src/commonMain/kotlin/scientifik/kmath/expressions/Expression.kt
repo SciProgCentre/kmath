@@ -17,9 +17,8 @@ interface ExpressionContext<T> {
 }
 
 internal class VariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T {
-        return arguments[name] ?: default ?: error("The parameter not found: $name")
-    }
+    override fun invoke(arguments: Map<String, T>): T =
+            arguments[name] ?: default ?: error("Parameter not found: $name")
 }
 
 internal class ConstantExpression<T>(val value: T) : Expression<T> {

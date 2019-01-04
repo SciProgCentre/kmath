@@ -8,8 +8,8 @@ import scientifik.kmath.structures.asSequence
 data class BinTemplate<T : Comparable<T>>(val center: Vector<T, *>, val sizes: Point<T>) {
     fun contains(vector: Point<out T>): Boolean {
         if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
-        val upper = center.context.run { center + sizes / 2.0}
-        val lower =  center.context.run {center - sizes / 2.0}
+        val upper = center.context.run { center + sizes / 2.0 }
+        val lower = center.context.run { center - sizes / 2.0 }
         return vector.asSequence().mapIndexed { i, value ->
             value in lower[i]..upper[i]
         }.all { it }
@@ -51,9 +51,8 @@ class PhantomHistogram<T : Comparable<T>>(
     override val dimension: Int
         get() = data.dimension
 
-    override fun iterator(): Iterator<PhantomBin<T>> {
-        return bins.asSequence().map { entry -> PhantomBin(entry.key, data[entry.value]) }.iterator()
-    }
+    override fun iterator(): Iterator<PhantomBin<T>> =
+            bins.asSequence().map { entry -> PhantomBin(entry.key, data[entry.value]) }.iterator()
 
     override fun get(point: Point<out T>): PhantomBin<T>? {
         val template = bins.keys.find { it.contains(point) }

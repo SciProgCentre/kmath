@@ -23,25 +23,16 @@ inline class ExtendedNDFieldWrapper<T : Any, F : ExtendedField<T>>(private val n
 
     override fun produce(initializer: F.(IntArray) -> T): NDElement<T, F> = ndField.produce(initializer)
 
-    override fun power(arg: NDStructure<T>, pow: Double): NDElement<T, F> {
-        return produce { with(field) { power(arg[it], pow) } }
-    }
+    override fun power(arg: NDStructure<T>, pow: Double): NDElement<T, F> =
+            produce { with(field) { power(arg[it], pow) } }
 
-    override fun exp(arg: NDStructure<T>): NDElement<T, F> {
-        return produce { with(field) { exp(arg[it]) } }
-    }
+    override fun exp(arg: NDStructure<T>): NDElement<T, F> = produce { with(field) { exp(arg[it]) } }
 
-    override fun ln(arg: NDStructure<T>): NDElement<T, F> {
-        return produce { with(field) { ln(arg[it]) } }
-    }
+    override fun ln(arg: NDStructure<T>): NDElement<T, F> = produce { with(field) { ln(arg[it]) } }
 
-    override fun sin(arg: NDStructure<T>): NDElement<T, F> {
-        return produce { with(field) { sin(arg[it]) } }
-    }
+    override fun sin(arg: NDStructure<T>): NDElement<T, F> = produce { with(field) { sin(arg[it]) } }
 
-    override fun cos(arg: NDStructure<T>): NDElement<T, F> {
-        return produce { with(field) { cos(arg[it]) } }
-    }
+    override fun cos(arg: NDStructure<T>): NDElement<T, F> = produce { with(field) { cos(arg[it]) } }
 }
 
 

@@ -11,8 +11,8 @@ class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : Run
 
 /**
  * Field for n-dimensional arrays.
- * @param shape - the list of dimensions of the array
- * @param field - operations field defined on individual array element
+ * @property shape - the list of dimensions of the array
+ * @property field - operations field defined on individual array element
  * @param T the type of the element contained in NDArray
  */
 interface NDField<T, F : Field<T>> : Field<NDStructure<T>> {
@@ -33,13 +33,8 @@ interface NDField<T, F : Field<T>> : Field<NDStructure<T>> {
     /**
      * Check the shape of given NDArray and throw exception if it does not coincide with shape of the field
      */
-    fun checkShape(vararg elements: NDStructure<T>) {
-        elements.forEach {
-            if (!shape.contentEquals(it.shape)) {
-                throw ShapeMismatchException(shape, it.shape)
-            }
-        }
-    }
+    fun checkShape(vararg elements: NDStructure<T>) =
+        elements.forEach { if (!shape.contentEquals(it.shape)) throw ShapeMismatchException(shape, it.shape) }
 
     /**
      * Element-by-element addition
@@ -97,21 +92,17 @@ interface NDElement<T, F : Field<T>> : FieldElement<NDStructure<T>, NDField<T, F
         /**
          * Create a platform-optimized NDArray of doubles
          */
-        fun real(shape: IntArray, initializer: DoubleField.(IntArray) -> Double = { 0.0 }): NDElement<Double, DoubleField> {
-            return NDField.real(shape).produce(initializer)
-        }
+        fun real(shape: IntArray, initializer: DoubleField.(IntArray) -> Double = { 0.0 }): NDElement<Double, DoubleField> =
+                NDField.real(shape).produce(initializer)
 
-        fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDElement<Double, DoubleField> {
-            return real(intArrayOf(dim)) { initializer(it[0]) }
-        }
+        fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): NDElement<Double, DoubleField> =
+                real(intArrayOf(dim)) { initializer(it[0]) }
 
-        fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDElement<Double, DoubleField> {
-            return real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
-        }
+        fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): NDElement<Double, DoubleField> =
+                real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
 
-        fun real3D(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDElement<Double, DoubleField> {
-            return real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
-        }
+        fun real3D(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }): NDElement<Double, DoubleField> =
+                real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
 
 //        inline fun real(shape: IntArray, block: ExtendedNDField<Double, DoubleField>.() -> NDStructure<Double>): NDElement<Double, DoubleField> {
 //            val field = NDField.real(shape)
@@ -121,13 +112,11 @@ interface NDElement<T, F : Field<T>> : FieldElement<NDStructure<T>, NDField<T, F
         /**
          * Simple boxing NDArray
          */
-        fun <T : Any, F : Field<T>> generic(shape: IntArray, field: F, initializer: F.(IntArray) -> T): NDElement<T, F> {
-            return NDField.generic(shape, field).produce(initializer)
-        }
+        fun <T : Any, F : Field<T>> generic(shape: IntArray, field: F, initializer: F.(IntArray) -> T): NDElement<T, F> =
+                NDField.generic(shape, field).produce(initializer)
 
-        inline fun <reified T : Any, F : Field<T>> inline(shape: IntArray, field: F, noinline initializer: F.(IntArray) -> T): NDElement<T, F> {
-            return NDField.inline(shape, field).produce(initializer)
-        }
+        inline fun <reified T : Any, F : Field<T>> inline(shape: IntArray, field: F, noinline initializer: F.(IntArray) -> T): NDElement<T, F> =
+                NDField.inline(shape, field).produce(initializer)
     }
 }
 
