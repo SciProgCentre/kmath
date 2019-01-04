@@ -42,7 +42,7 @@ class PhantomBin<T : Comparable<T>>(val template: BinTemplate<T>, override val v
 /**
  * Immutable histogram with explicit structure for content and additional external bin description.
  * Bin search is slow, but full histogram algebra is supported.
- * @param bins map a template into structure index
+ * @param bins transform a template into structure index
  */
 class PhantomHistogram<T : Comparable<T>>(
     val bins: Map<BinTemplate<T>, IntArray>,

@@ -1,41 +1,47 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.RealField
 
-typealias RealNDElement = BufferNDElement<Double, DoubleField>
+typealias RealNDElement = BufferNDElement<Double, RealField>
 
 class RealNDField(shape: IntArray) :
-    StridedNDField<Double, DoubleField>(shape, DoubleField),
-    ExtendedNDField<Double, DoubleField, NDBuffer<Double>> {
+    StridedNDField<Double, RealField>(shape, RealField),
+    ExtendedNDField<Double, RealField, NDBuffer<Double>> {
 
-    override val bufferFactory: BufferFactory<Double>
-        get() = DoubleBufferFactory
+    override fun buildBuffer(size: Int, initializer: (Int) -> Double): Buffer<Double> =
+        DoubleBuffer(DoubleArray(size, initializer))
 
     /**
-     * Inline map an NDStructure to
+     * Inline transform an NDStructure to
      */
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDBuffer<Double>.map(crossinline transform: DoubleField.(Double) -> Double): RealNDElement {
-        check(this)
-        val array = DoubleArray(strides.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
-        return BufferNDElement(this@RealNDField, DoubleBuffer(array))
+    override inline fun map(
+        arg: NDBuffer<Double>,
+        crossinline transform: RealField.(Double) -> Double
+    ): RealNDElement {
+        check(arg)
+        val array = DoubleArray(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
+        return BufferNDElement(this, DoubleBuffer(array))
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun produce(crossinline initializer: DoubleField.(IntArray) -> Double): RealNDElement {
+    override inline fun produce(crossinline initializer: RealField.(IntArray) -> Double): RealNDElement {
         val array = DoubleArray(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) }
         return BufferNDElement(this, DoubleBuffer(array))
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDBuffer<Double>.mapIndexed(crossinline transform: DoubleField.(index: IntArray, Double) -> Double): BufferNDElement<Double, DoubleField> {
-        check(this)
+    override inline fun mapIndexed(
+        arg: NDBuffer<Double>,
+        crossinline transform: RealField.(index: IntArray, Double) -> Double
+    ): BufferNDElement<Double, RealField> {
+        check(arg)
         return BufferNDElement(
-            this@RealNDField,
-            bufferFactory(strides.linearSize) { offset ->
+            this,
+            buildBuffer(arg.strides.linearSize) { offset ->
                 elementField.transform(
-                    strides.index(offset),
-                    buffer[offset]
+                    arg.strides.index(offset),
+                    arg.buffer[offset]
                 )
             })
     }
@@ -44,23 +50,23 @@ class RealNDField(shape: IntArray) :
     override inline fun combine(
         a: NDBuffer<Double>,
         b: NDBuffer<Double>,
-        crossinline transform: DoubleField.(Double, Double) -> Double
-    ): BufferNDElement<Double, DoubleField> {
+        crossinline transform: RealField.(Double, Double) -> Double
+    ): BufferNDElement<Double, RealField> {
         check(a, b)
         return BufferNDElement(
             this,
-            bufferFactory(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
+            buildBuffer(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
     }
 
-    override fun power(arg: NDBuffer<Double>, pow: Double) = arg.map { power(it, pow) }
+    override fun power(arg: NDBuffer<Double>, pow: Double) = map(arg) { power(it, pow) }
 
-    override fun exp(arg: NDBuffer<Double>) = arg.map { exp(it) }
+    override fun exp(arg: NDBuffer<Double>) = map(arg) { exp(it) }
 
-    override fun ln(arg: NDBuffer<Double>) = arg.map { ln(it) }
+    override fun ln(arg: NDBuffer<Double>) = map(arg) { ln(it) }
 
-    override fun sin(arg: NDBuffer<Double>) = arg.map { sin(it) }
+    override fun sin(arg: NDBuffer<Double>) = map(arg) { sin(it) }
 
-    override fun cos(arg: NDBuffer<Double>) = arg.map { cos(it) }
+    override fun cos(arg: NDBuffer<Double>) = map(arg) { cos(it) }
 //
 //    override fun NDBuffer<Double>.times(k: Number) = mapInline { value -> value * k.toDouble() }
 //
@@ -75,7 +81,7 @@ class RealNDField(shape: IntArray) :
 /**
  * Fast element production using function inlining
  */
-inline fun StridedNDField<Double, DoubleField>.produceInline(crossinline initializer: DoubleField.(Int) -> Double): RealNDElement {
+inline fun StridedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> elementField.initializer(offset) }
     return BufferNDElement(this, DoubleBuffer(array))
 }

@@ -23,9 +23,9 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N> {
 
     fun produce(initializer: F.(IntArray) -> T): N
 
-    fun N.map(transform: F.(T) -> T): N
+    fun map(arg: N, transform: F.(T) -> T): N
 
-    fun N.mapIndexed(transform: F.(index: IntArray, T) -> T): N
+    fun mapIndexed(arg: N, transform: F.(index: IntArray, T) -> T): N
 
     fun combine(a: N, b: N, transform: F.(T, T) -> T): N
 
@@ -87,11 +87,11 @@ abstract class AbstractNDField<T, F : Field<T>, N : NDStructure<T>>(
 
     override val one: N by lazy { produce { one } }
 
-    final override operator fun Function1<T, T>.invoke(structure: N) = structure.map { value -> this@invoke(value) }
-    final override operator fun N.plus(arg: T) = this.map { value -> elementField.run { arg + value } }
-    final override operator fun N.minus(arg: T) = this.map { value -> elementField.run { arg - value } }
-    final override operator fun N.times(arg: T) = this.map { value -> elementField.run { arg * value } }
-    final override operator fun N.div(arg: T) = this.map { value -> elementField.run { arg / value } }
+    final override operator fun Function1<T, T>.invoke(structure: N) = map(structure) { value -> this@invoke(value) }
+    final override operator fun N.plus(arg: T) = map(this) { value -> elementField.run { arg + value } }
+    final override operator fun N.minus(arg: T) = map(this) { value -> elementField.run { arg - value } }
+    final override operator fun N.times(arg: T) = map(this) { value -> elementField.run { arg * value } }
+    final override operator fun N.div(arg: T) = map(this) { value -> elementField.run { arg / value } }
 
     final override operator fun T.plus(arg: N) = arg + this
     final override operator fun T.minus(arg: N) = arg - this
@@ -109,7 +109,7 @@ abstract class AbstractNDField<T, F : Field<T>, N : NDStructure<T>>(
      * Multiply all elements by cinstant
      */
     override fun multiply(a: N, k: Double): N =
-        a.map { it * k }
+        map(a) { it * k }
 
 
     /**
@@ -140,17 +140,16 @@ class GenericNDField<T : Any, F : Field<T>>(
     shape: IntArray,
     elementField: F,
     val bufferFactory: BufferFactory<T> = ::boxingBuffer
-) :
-    AbstractNDField<T, F, NDStructure<T>>(shape, elementField) {
+) : AbstractNDField<T, F, NDStructure<T>>(shape, elementField) {
 
     override fun produce(initializer: F.(IntArray) -> T): NDStructure<T> =
         ndStructure(shape, bufferFactory) { elementField.initializer(it) }
 
-    override fun NDStructure<T>.map(transform: F.(T) -> T): NDStructure<T> =
-        produce { index -> transform(get(index)) }
+    override fun map(arg: NDStructure<T>, transform: F.(T) -> T): NDStructure<T> =
+        produce { index -> transform(arg.get(index)) }
 
-    override fun NDStructure<T>.mapIndexed(transform: F.(index: IntArray, T) -> T): NDStructure<T> =
-        produce { index -> transform(index, get(index)) }
+    override fun mapIndexed(arg: NDStructure<T>, transform: F.(index: IntArray, T) -> T): NDStructure<T> =
+        produce { index -> transform(index, arg.get(index)) }
 
     override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: F.(T, T) -> T): NDStructure<T> =
         produce { index -> transform(a[index], b[index]) }

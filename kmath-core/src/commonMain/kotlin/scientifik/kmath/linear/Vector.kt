@@ -1,6 +1,6 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.*
@@ -34,13 +34,13 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 
     companion object {
 
-        private val realSpaceCache = HashMap<Int, BufferVectorSpace<Double, DoubleField>>()
+        private val realSpaceCache = HashMap<Int, BufferVectorSpace<Double, RealField>>()
 
         /**
          * Non-boxing double vector space
          */
-        fun real(size: Int): BufferVectorSpace<Double, DoubleField> {
-            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, DoubleField, DoubleBufferFactory) }
+        fun real(size: Int): BufferVectorSpace<Double, RealField> {
+            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, DoubleBufferFactory) }
         }
 
         /**
@@ -79,10 +79,10 @@ interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, Vector<T, S>, V
         fun <T : Any, S : Space<T>> generic(size: Int, field: S, initializer: (Int) -> T): Vector<T, S> =
             VectorSpace.buffered(size, field).produceElement(initializer)
 
-        fun real(size: Int, initializer: (Int) -> Double): Vector<Double, DoubleField> =
+        fun real(size: Int, initializer: (Int) -> Double): Vector<Double, RealField> =
             VectorSpace.real(size).produceElement(initializer)
 
-        fun ofReal(vararg elements: Double): Vector<Double, DoubleField> =
+        fun ofReal(vararg elements: Double): Vector<Double, RealField> =
             VectorSpace.real(elements.size).produceElement { elements[it] }
 
     }

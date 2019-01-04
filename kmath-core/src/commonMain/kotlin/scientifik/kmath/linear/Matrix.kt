@@ -1,6 +1,6 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
@@ -42,8 +42,8 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
         /**
          * Non-boxing double matrix
          */
-        fun real(rows: Int, columns: Int): MatrixSpace<Double, DoubleField> =
-            StructureMatrixSpace(rows, columns, DoubleField, DoubleBufferFactory)
+        fun real(rows: Int, columns: Int): MatrixSpace<Double, RealField> =
+            StructureMatrixSpace(rows, columns, RealField, DoubleBufferFactory)
 
         /**
          * A structured matrix with custom buffer

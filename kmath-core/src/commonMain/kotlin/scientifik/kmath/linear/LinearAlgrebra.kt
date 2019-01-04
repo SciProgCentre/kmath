@@ -1,8 +1,8 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Norm
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.asSequence
 import scientifik.kmath.structures.boxingBuffer
@@ -61,5 +61,5 @@ object VectorL2Norm : Norm<Vector<out Number, *>, Double> {
     }
 }
 
-typealias RealVector = Vector<Double, DoubleField>
-typealias RealMatrix = Matrix<Double, DoubleField>
+typealias RealVector = Vector<Double, RealField>
+typealias RealMatrix = Matrix<Double, RealField>

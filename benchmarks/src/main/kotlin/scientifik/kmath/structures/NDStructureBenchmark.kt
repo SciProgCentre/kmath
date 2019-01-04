@@ -1,15 +1,16 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.RealField
 import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     val dim = 1000
-    val n = 10000
+    val n = 100
 
-    val bufferedField = NDField.buffered(intArrayOf(dim, dim), DoubleField)
+    val bufferedField = NDField.buffered(intArrayOf(dim, dim), RealField)
     val specializedField = NDField.real(intArrayOf(dim, dim))
-    val genericField = NDField.generic(intArrayOf(dim, dim), DoubleField)
+    val genericField = NDField.generic(intArrayOf(dim, dim), RealField)
+    val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)
 
 //    val action: NDField<Double, DoubleField, NDStructure<Double>>.() -> Unit = {
 //        var res = one
@@ -54,6 +55,23 @@ fun main(args: Array<String>) {
 
     println("Specialized addition completed in $specializedTime millis")
 
+
+    val lazyTime = measureTimeMillis {
+        val tr : RealField.(Double)->Double = {arg->
+            var r = arg
+            repeat(n) {
+                r += 1.0
+            }
+            r
+        }
+        lazyNDField.run {
+            val res = one.map(tr)
+
+            res.elements().sumByDouble { it.second }
+        }
+    }
+
+    println("Lazy addition completed in $lazyTime millis")
 
     val genericTime = measureTimeMillis {
         //genericField.run(action)

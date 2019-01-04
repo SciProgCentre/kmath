@@ -6,7 +6,7 @@ import scientifik.kmath.operations.PowerOperations
 import scientifik.kmath.operations.TrigonometricOperations
 
 
-interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<out T>> :
+interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> :
     NDField<T, F, N>,
     TrigonometricOperations<N>,
     PowerOperations<N>,
@@ -16,7 +16,7 @@ interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<out T>>
 /**
  * NDField that supports [ExtendedField] operations on its elements
  */
-class ExtendedNDFieldWrapper<T : Any, F : ExtendedField<T>, N : NDStructure<out T>>(private val ndField: NDField<T, F, N>) :
+class ExtendedNDFieldWrapper<T : Any, F : ExtendedField<T>, N : NDStructure<T>>(private val ndField: NDField<T, F, N>) :
     ExtendedNDField<T, F, N>, NDField<T, F, N> by ndField {
 
     override val shape: IntArray get() = ndField.shape

@@ -17,12 +17,12 @@ interface ExtendedField<T : Any> :
  *
  * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
  */
-inline class Real(val value: Double) : FieldElement<Double, Real, DoubleField> {
+inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
     override fun unwrap(): Double = value
 
     override fun Double.wrap(): Real = Real(value)
 
-    override val context get() = DoubleField
+    override val context get() = RealField
 
     companion object {
 
@@ -32,7 +32,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, DoubleField> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object DoubleField : AbstractField<Double>(),ExtendedField<Double>, Norm<Double, Double> {
+object RealField : AbstractField<Double>(),ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
     override fun multiply(a: Double, @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE") b: Double): Double = a * b

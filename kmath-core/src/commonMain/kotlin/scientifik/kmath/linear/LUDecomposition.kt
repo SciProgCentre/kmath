@@ -1,7 +1,7 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.*
 import kotlin.math.absoluteValue
 
@@ -184,7 +184,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
 }
 
 class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: Double = DEFAULT_TOO_SMALL) :
-    LUDecomposition<Double, DoubleField>(matrix) {
+    LUDecomposition<Double, RealField>(matrix) {
     override fun isSingular(value: Double): Boolean {
         return value.absoluteValue < singularityThreshold
     }
@@ -197,9 +197,9 @@ class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: 
 
 
 /** Specialized solver.  */
-object RealLUSolver : LinearSolver<Double, DoubleField> {
+object RealLUSolver : LinearSolver<Double, RealField> {
 
-    fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition =
+    fun decompose(mat: Matrix<Double, RealField>, threshold: Double = 1e-11): RealLUDecomposition =
         RealLUDecomposition(mat, threshold)
 
     override fun solve(a: RealMatrix, b: RealMatrix): RealMatrix {

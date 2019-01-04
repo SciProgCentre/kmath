@@ -2,14 +2,14 @@ package scientifik.kmath.expressions
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
-import scientifik.kmath.operations.DoubleField
+import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ExpressionFieldTest {
     @Test
     fun testExpression() {
-        val context = ExpressionField(DoubleField)
+        val context = ExpressionField(RealField)
         val expression = with(context) {
             val x = variable("x", 2.0)
             x * x + 2 * x + 1.0
@@ -36,7 +36,7 @@ class ExpressionFieldTest {
             return x * x + 2 * x + one
         }
 
-        val expression = ExpressionField(DoubleField).expression()
+        val expression = ExpressionField(RealField).expression()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 
@@ -47,7 +47,7 @@ class ExpressionFieldTest {
             x * x + 2 * x + 1.0
         }
 
-        val expression = ExpressionField(DoubleField).expressionBuilder()
+        val expression = ExpressionField(RealField).expressionBuilder()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 }

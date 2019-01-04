@@ -5,18 +5,19 @@ import scientifik.kmath.operations.FieldElement
 
 abstract class StridedNDField<T, F : Field<T>>(shape: IntArray, elementField: F) :
     AbstractNDField<T, F, NDBuffer<T>>(shape, elementField) {
-
-    abstract val bufferFactory: BufferFactory<T>
     val strides = DefaultStrides(shape)
+
+    abstract fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T>
 }
 
 
 class BufferNDField<T, F : Field<T>>(
     shape: IntArray,
     elementField: F,
-    override val bufferFactory: BufferFactory<T>
-) :
-    StridedNDField<T, F>(shape, elementField) {
+    val bufferFactory: BufferFactory<T>
+) : StridedNDField<T, F>(shape, elementField) {
+
+    override fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {
         if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
@@ -32,22 +33,25 @@ class BufferNDField<T, F : Field<T>>(
             bufferFactory(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) })
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDBuffer<T>.map(crossinline transform: F.(T) -> T): BufferNDElement<T, F> {
-        check(this)
+    override inline fun map(arg: NDBuffer<T>, crossinline transform: F.(T) -> T): BufferNDElement<T, F> {
+        check(arg)
         return BufferNDElement(
-            this@BufferNDField,
-            bufferFactory(strides.linearSize) { offset -> elementField.transform(buffer[offset]) })
+            this,
+            bufferFactory(arg.strides.linearSize) { offset -> elementField.transform(arg.buffer[offset]) })
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDBuffer<T>.mapIndexed(crossinline transform: F.(index: IntArray, T) -> T): BufferNDElement<T, F> {
-        check(this)
+    override inline fun mapIndexed(
+        arg: NDBuffer<T>,
+        crossinline transform: F.(index: IntArray, T) -> T
+    ): BufferNDElement<T, F> {
+        check(arg)
         return BufferNDElement(
-            this@BufferNDField,
-            bufferFactory(strides.linearSize) { offset ->
+            this,
+            bufferFactory(arg.strides.linearSize) { offset ->
                 elementField.transform(
-                    strides.index(offset),
-                    buffer[offset]
+                    arg.strides.index(offset),
+                    arg.buffer[offset]
                 )
             })
     }
@@ -105,11 +109,11 @@ class BufferNDElement<T, F : Field<T>>(override val context: StridedNDField<T, F
     override fun elements(): Sequence<Pair<IntArray, T>> =
         strides.indices().map { it to get(it) }
 
-    override fun map(action: F.(T) -> T): BufferNDElement<T, F> =
-        context.run { map(action) }
+    override fun map(action: F.(T) -> T) =
+        context.run { map(this@BufferNDElement, action) }.wrap()
 
-    override fun mapIndexed(transform: F.(index: IntArray, T) -> T): BufferNDElement<T, F> =
-        context.run { mapIndexed(transform) }
+    override fun mapIndexed(transform: F.(index: IntArray, T) -> T) =
+        context.run { mapIndexed(this@BufferNDElement, transform) }.wrap()
 }
 
 /**

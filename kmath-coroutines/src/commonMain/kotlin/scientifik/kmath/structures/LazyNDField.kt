@@ -2,54 +2,80 @@ package scientifik.kmath.structures
 
 import kotlinx.coroutines.*
 import scientifik.kmath.operations.Field
+import scientifik.kmath.operations.FieldElement
 
 class LazyNDField<T, F : Field<T>>(shape: IntArray, field: F, val scope: CoroutineScope = GlobalScope) :
-    BufferNDField<T, F>(shape, field, ::boxingBuffer) {
+    AbstractNDField<T, F, NDStructure<T>>(shape, field) {
 
-    override fun add(a: NDStructure<T>, b: NDStructure<T>): NDElements<T, F> {
-        return LazyNDStructure(this) { index ->
-            val aDeferred = a.deferred(index)
-            val bDeferred = b.deferred(index)
-            aDeferred.await() + bDeferred.await()
+    override val zero by lazy { produce { zero } }
+
+    override val one by lazy { produce { one } }
+
+    override fun produce(initializer: F.(IntArray) -> T) =
+        LazyNDStructure(this) { elementField.initializer(it) }
+
+    override fun mapIndexed(
+        arg: NDStructure<T>,
+        transform: F.(index: IntArray, T) -> T
+    ): LazyNDStructure<T, F> {
+        check(arg)
+        return if (arg is LazyNDStructure<T, *>) {
+            LazyNDStructure(this) { index ->
+                this.elementField.transform(index, arg.function(index))
+            }
+        } else {
+            LazyNDStructure(this) { elementField.transform(it, arg.await(it)) }
         }
     }
 
-    override fun multiply(a: NDStructure<T>, k: Double): NDElements<T, F> {
-        return LazyNDStructure(this) { index -> a.await(index) * k }
-    }
+    override fun map(arg: NDStructure<T>, transform: F.(T) -> T) =
+        mapIndexed(arg) { _, t -> transform(t) }
 
-    override fun multiply(a: NDStructure<T>, b: NDStructure<T>): NDElements<T, F> {
-        return LazyNDStructure(this) { index ->
-            val aDeferred = a.deferred(index)
-            val bDeferred = b.deferred(index)
-            aDeferred.await() * bDeferred.await()
+    override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: F.(T, T) -> T): LazyNDStructure<T, F> {
+        check(a, b)
+        return if (a is LazyNDStructure<T, *> && b is LazyNDStructure<T, *>) {
+            LazyNDStructure(this@LazyNDField) { index ->
+                elementField.transform(
+                    a.function(index),
+                    b.function(index)
+                )
+            }
+        } else {
+            LazyNDStructure(this@LazyNDField) { elementField.transform(a.await(it), b.await(it)) }
         }
     }
 
-    override fun divide(a: NDStructure<T>, b: NDStructure<T>): NDElements<T, F> {
-        return LazyNDStructure(this) { index ->
-            val aDeferred = a.deferred(index)
-            val bDeferred = b.deferred(index)
-            aDeferred.await() / bDeferred.await()
+    fun NDStructure<T>.lazy(): LazyNDStructure<T, F> {
+        check(this)
+        return if (this is LazyNDStructure<T, *>) {
+            LazyNDStructure(this@LazyNDField, function)
+        } else {
+            LazyNDStructure(this@LazyNDField) { get(it) }
         }
     }
 }
 
 class LazyNDStructure<T, F : Field<T>>(
     override val context: LazyNDField<T, F>,
-    val function: suspend F.(IntArray) -> T
-) : NDElements<T, F>, NDStructure<T> {
-    override val self: NDElements<T, F> get() = this
+    val function: suspend (IntArray) -> T
+) : FieldElement<NDStructure<T>, LazyNDStructure<T, F>, LazyNDField<T, F>>, NDElement<T, F> {
+
+
+    override fun unwrap(): NDStructure<T> = this
+
+    override fun NDStructure<T>.wrap(): LazyNDStructure<T, F> = LazyNDStructure(context) { await(it) }
+
     override val shape: IntArray get() = context.shape
+    override val elementField: F get() = context.elementField
+
+    override fun mapIndexed(transform: F.(index: IntArray, T) -> T): NDElement<T, F> =
+        context.run { mapIndexed(this@LazyNDStructure, transform) }
 
     private val cache = HashMap<IntArray, Deferred<T>>()
 
     fun deferred(index: IntArray) = cache.getOrPut(index) {
         context.scope.async(context = Dispatchers.Math) {
-            function.invoke(
-                context.elementField,
-                index
-            )
+            function(index)
         }
     }
 
@@ -61,7 +87,10 @@ class LazyNDStructure<T, F : Field<T>>(
 
     override fun elements(): Sequence<Pair<IntArray, T>> {
         val strides = DefaultStrides(shape)
-        return strides.indices().map { index -> index to runBlocking { await(index) } }
+        val res = runBlocking {
+            strides.indices().toList().map { index -> index to await(index) }
+        }
+        return res.asSequence()
     }
 }
 
@@ -71,21 +100,11 @@ fun <T> NDStructure<T>.deferred(index: IntArray) =
 suspend fun <T> NDStructure<T>.await(index: IntArray) =
     if (this is LazyNDStructure<T, *>) this.await(index) else get(index)
 
-fun <T, F : Field<T>> NDElements<T, F>.lazy(scope: CoroutineScope = GlobalScope): LazyNDStructure<T, F> {
-    return if (this is LazyNDStructure<T, F>) {
-        this
-    } else {
-        val context = LazyNDField(context.shape, context.field, scope)
-        LazyNDStructure(context) { get(it) }
-    }
+
+fun <T : Any, F : Field<T>> NDField.Companion.lazy(shape: IntArray, field: F, scope: CoroutineScope = GlobalScope) =
+    LazyNDField(shape, field, scope)
+
+fun <T, F : Field<T>> NDStructure<T>.lazy(field: F, scope: CoroutineScope = GlobalScope): LazyNDStructure<T, F> {
+    val context: LazyNDField<T, F> = LazyNDField(shape, field, scope)
+    return LazyNDStructure(context) { get(it) }
 }
-
-inline fun <T, F : Field<T>> LazyNDStructure<T, F>.mapIndexed(crossinline action: suspend F.(IntArray, T) -> T) =
-    LazyNDStructure(context) { index ->
-        action.invoke(this, index, await(index))
-    }
-
-inline fun <T, F : Field<T>> LazyNDStructure<T, F>.map(crossinline action: suspend F.(T) -> T) =
-    LazyNDStructure(context) { index ->
-        action.invoke(this, await(index))
-    }

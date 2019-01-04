@@ -1,8 +1,8 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
+import scientifik.kmath.operations.RealField
 
 
 interface NDElement<T, F : Field<T>> : NDStructure<T> {
@@ -17,7 +17,7 @@ object NDElements {
     /**
      * Create a optimized NDArray of doubles
      */
-    fun real(shape: IntArray, initializer: DoubleField.(IntArray) -> Double = { 0.0 }) =
+    fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }) =
         NDField.real(shape).produce(initializer)
 
 

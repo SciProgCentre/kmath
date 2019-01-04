@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
-    compile project(':kmath-core')
+    compile project(":kmath-core")
+    compile project(":kmath-coroutines")
     //jmh project(':kmath-core')
 }
