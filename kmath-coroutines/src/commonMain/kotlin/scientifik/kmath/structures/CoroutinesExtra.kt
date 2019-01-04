@@ -6,6 +6,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-expect fun <R> runBlocking(context: CoroutineContext = EmptyCoroutineContext, function: suspend CoroutineScope.()->R): R
+expect fun <R> runBlocking(
+    context: CoroutineContext = EmptyCoroutineContext,
+    function: suspend CoroutineScope.() -> R
+): R
 
 val Dispatchers.Math: CoroutineDispatcher get() = Dispatchers.Default

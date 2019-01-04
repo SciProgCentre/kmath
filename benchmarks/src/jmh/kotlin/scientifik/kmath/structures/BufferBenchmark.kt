@@ -22,12 +22,12 @@ open class BufferBenchmark {
 
     @Benchmark
     fun complexBufferReadWrite() {
-        val buffer = Complex.createBuffer(size/2)
-        (0 until size/2).forEach {
+        val buffer = Complex.createBuffer(size / 2)
+        (0 until size / 2).forEach {
             buffer[it] = Complex(it.toDouble(), -it.toDouble())
         }
 
-        (0 until size/2).forEach {
+        (0 until size / 2).forEach {
             buffer[it]
         }
     }

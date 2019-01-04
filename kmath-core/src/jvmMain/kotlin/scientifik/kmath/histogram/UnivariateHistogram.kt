@@ -18,7 +18,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 
     override fun contains(vector: Buffer<out Double>): Boolean = contains(vector[0])
 
-    internal operator fun inc() = this.also { counter.increment()}
+    internal operator fun inc() = this.also { counter.increment() }
 
     override val dimension: Int get() = 1
 }
@@ -26,7 +26,8 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 /**
  * Univariate histogram with log(n) bin search speed
  */
-class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) : MutableHistogram<Double,UnivariateBin> {
+class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) :
+    MutableHistogram<Double, UnivariateBin> {
 
     private val bins: TreeMap<Double, UnivariateBin> = TreeMap()
 

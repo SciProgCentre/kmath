@@ -1,10 +1,11 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.histogram.Point
 import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.*
+
+typealias Point<T> = Buffer<T>
 
 /**
  * A linear space for vectors.
@@ -45,12 +46,17 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         /**
          * A structured vector space with custom buffer
          */
-        fun <T : Any, S : Space<T>> buffered(size: Int, space: S, bufferFactory: BufferFactory<T> = ::boxingBuffer): VectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
+        fun <T : Any, S : Space<T>> buffered(
+            size: Int,
+            space: S,
+            bufferFactory: BufferFactory<T> = ::boxingBuffer
+        ): VectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
 
         /**
          * Automatic buffered vector, unboxed if it is possible
          */
-        inline fun <reified T : Any, S : Space<T>> smart(size: Int, space: S): VectorSpace<T, S> = buffered(size, space, ::inlineBuffer)
+        inline fun <reified T : Any, S : Space<T>> smart(size: Int, space: S): VectorSpace<T, S> =
+            buffered(size, space, ::inlineBuffer)
     }
 }
 
@@ -58,38 +64,42 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 /**
  * A point coupled to the linear space
  */
-interface Vector<T : Any, S : Space<T>> : SpaceElement<Vector<T,S>, VectorSpace<T, S>>, Point<T> {
+interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, Vector<T, S>, VectorSpace<T, S>>, Point<T> {
     override val size: Int get() = context.size
 
-    override operator fun plus(b: Point<T>): Vector<T, S> = context.add(self, b)
-    override operator fun minus(b: Point<T>): Vector<T, S> = context.add(self, context.multiply(b, -1.0))
-    override operator fun times(k: Number): Vector<T, S> = context.multiply(self, k.toDouble())
-    override operator fun div(k: Number): Vector<T, S> = context.multiply(self, 1.0 / k.toDouble())
+    override operator fun plus(b: Point<T>): Vector<T, S> = context.add(this, b).wrap()
+    override operator fun minus(b: Point<T>): Vector<T, S> = context.add(this, context.multiply(b, -1.0)).wrap()
+    override operator fun times(k: Number): Vector<T, S> = context.multiply(this, k.toDouble()).wrap()
+    override operator fun div(k: Number): Vector<T, S> = context.multiply(this, 1.0 / k.toDouble()).wrap()
 
     companion object {
         /**
          * Create vector with custom field
          */
         fun <T : Any, S : Space<T>> generic(size: Int, field: S, initializer: (Int) -> T): Vector<T, S> =
-                VectorSpace.buffered(size, field).produceElement(initializer)
+            VectorSpace.buffered(size, field).produceElement(initializer)
 
-        fun real(size: Int, initializer: (Int) -> Double): Vector<Double,DoubleField> = VectorSpace.real(size).produceElement(initializer)
-        fun ofReal(vararg elements: Double): Vector<Double,DoubleField> = VectorSpace.real(elements.size).produceElement { elements[it] }
+        fun real(size: Int, initializer: (Int) -> Double): Vector<Double, DoubleField> =
+            VectorSpace.real(size).produceElement(initializer)
+
+        fun ofReal(vararg elements: Double): Vector<Double, DoubleField> =
+            VectorSpace.real(elements.size).produceElement { elements[it] }
 
     }
 }
 
 data class BufferVectorSpace<T : Any, S : Space<T>>(
-        override val size: Int,
-        override val space: S,
-        val bufferFactory: BufferFactory<T>
+    override val size: Int,
+    override val space: S,
+    val bufferFactory: BufferFactory<T>
 ) : VectorSpace<T, S> {
     override fun produce(initializer: (Int) -> T) = bufferFactory(size, initializer)
     override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))
 }
 
 
-data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace<T, S>, val buffer: Buffer<T>) : Vector<T, S> {
+data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace<T, S>, val buffer: Buffer<T>) :
+    Vector<T, S> {
 
     init {
         if (context.size != buffer.size) {
@@ -101,10 +111,13 @@ data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace
         return buffer[index]
     }
 
-    override fun getSelf(): BufferVector<T, S
+    override fun unwrap(): Point<T> = this
+
+    override fun Point<T>.wrap(): Vector<T, S> = BufferVector(context, this)
 
     override fun iterator(): Iterator<T> = (0 until size).map { buffer[it] }.iterator()
 
-    override fun toString(): String = this.asSequence().joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
+    override fun toString(): String =
+        this.asSequence().joinToString(prefix = "[", postfix = "]", separator = ", ") { it.toString() }
 }
 

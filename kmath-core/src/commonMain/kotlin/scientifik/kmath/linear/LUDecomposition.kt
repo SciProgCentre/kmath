@@ -104,7 +104,10 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
         val m = matrix.numCols
         val pivot = IntArray(matrix.numRows)
         //TODO fix performance
-        val lu: MutableNDStructure<T> = mutableNdStructure(intArrayOf(matrix.numRows, matrix.numCols), ::boxingMutableBuffer) { index: IntArray -> matrix[index[0], index[1]] }
+        val lu: MutableNDStructure<T> = mutableNdStructure(
+            intArrayOf(matrix.numRows, matrix.numCols),
+            ::boxingMutableBuffer
+        ) { index: IntArray -> matrix[index[0], index[1]] }
 
 
         with(matrix.context.ring) {
@@ -180,7 +183,8 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
 
 }
 
-class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: Double = DEFAULT_TOO_SMALL) : LUDecomposition<Double, DoubleField>(matrix) {
+class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: Double = DEFAULT_TOO_SMALL) :
+    LUDecomposition<Double, DoubleField>(matrix) {
     override fun isSingular(value: Double): Boolean {
         return value.absoluteValue < singularityThreshold
     }
@@ -195,7 +199,8 @@ class RealLUDecomposition(matrix: RealMatrix, private val singularityThreshold: 
 /** Specialized solver.  */
 object RealLUSolver : LinearSolver<Double, DoubleField> {
 
-    fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition = RealLUDecomposition(mat, threshold)
+    fun decompose(mat: Matrix<Double, DoubleField>, threshold: Double = 1e-11): RealLUDecomposition =
+        RealLUDecomposition(mat, threshold)
 
     override fun solve(a: RealMatrix, b: RealMatrix): RealMatrix {
         val decomposition = decompose(a, a.context.ring.zero)

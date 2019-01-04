@@ -31,7 +31,7 @@ interface FixedSizeBufferSpec<T : Any> : BufferSpec<T> {
      */
     fun ByteBuffer.readObject(index: Int): T {
         val dup = duplicate()
-        dup.position(index*unitSize)
+        dup.position(index * unitSize)
         return dup.readObject()
     }
 
@@ -49,7 +49,7 @@ interface FixedSizeBufferSpec<T : Any> : BufferSpec<T> {
      */
     fun ByteBuffer.writeObject(index: Int, obj: T) {
         val dup = duplicate()
-        dup.position(index*unitSize)
+        dup.position(index * unitSize)
         dup.writeObject(obj)
     }
 }

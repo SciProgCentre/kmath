@@ -11,8 +11,8 @@ class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
         val histogram = FastHistogram.fromRanges(
-                (-1.0..1.0),
-                (-1.0..1.0)
+            (-1.0..1.0),
+            (-1.0..1.0)
         )
         histogram.put(0.55, 0.55)
         val bin = histogram.find { it.value.toInt() > 0 }!!
@@ -22,21 +22,21 @@ class MultivariateHistogramTest {
     }
 
     @Test
-    fun testSequentialPut(){
+    fun testSequentialPut() {
         val histogram = FastHistogram.fromRanges(
-                (-1.0..1.0),
-                (-1.0..1.0),
-                (-1.0..1.0)
+            (-1.0..1.0),
+            (-1.0..1.0),
+            (-1.0..1.0)
         )
         val random = Random(1234)
 
-        fun nextDouble() = random.nextDouble(-1.0,1.0)
+        fun nextDouble() = random.nextDouble(-1.0, 1.0)
 
         val n = 10000
 
         histogram.fill {
-            repeat(n){
-                yield(Vector.ofReal(nextDouble(),nextDouble(),nextDouble()))
+            repeat(n) {
+                yield(Vector.ofReal(nextDouble(), nextDouble(), nextDouble()))
             }
         }
         assertEquals(n, histogram.sumBy { it.value.toInt() })

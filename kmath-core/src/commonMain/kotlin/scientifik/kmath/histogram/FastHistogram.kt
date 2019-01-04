@@ -6,15 +6,16 @@ import kotlin.math.floor
 
 private operator fun RealPoint.minus(other: RealPoint) = ListBuffer((0 until size).map { get(it) - other[it] })
 
-private inline fun <T> Buffer<out Double>.mapIndexed(crossinline mapper: (Int, Double) -> T): Sequence<T> = (0 until size).asSequence().map { mapper(it, get(it)) }
+private inline fun <T> Buffer<out Double>.mapIndexed(crossinline mapper: (Int, Double) -> T): Sequence<T> =
+    (0 until size).asSequence().map { mapper(it, get(it)) }
 
 /**
  * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions.
  */
 class FastHistogram(
-        private val lower: RealPoint,
-        private val upper: RealPoint,
-        private val binNums: IntArray = IntArray(lower.size) { 20 }
+    private val lower: RealPoint,
+    private val upper: RealPoint,
+    private val binNums: IntArray = IntArray(lower.size) { 20 }
 ) : MutableHistogram<Double, PhantomBin<Double>> {
 
 
@@ -25,7 +26,8 @@ class FastHistogram(
     //private val weight: NDStructure<DoubleCounter?> = ndStructure(strides){null}
 
     //TODO optimize binSize performance if needed
-    private val binSize: RealPoint = ListBuffer((upper - lower).mapIndexed { index, value -> value / binNums[index] }.toList())
+    private val binSize: RealPoint =
+        ListBuffer((upper - lower).mapIndexed { index, value -> value / binNums[index] }.toList())
 
     init {
         // argument checks
@@ -130,9 +132,9 @@ class FastHistogram(
          */
         fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram {
             return FastHistogram(
-                    ListBuffer(ranges.map { it.first.start }),
-                    ListBuffer(ranges.map { it.first.endInclusive }),
-                    ranges.map { it.second }.toIntArray()
+                ListBuffer(ranges.map { it.first.start }),
+                ListBuffer(ranges.map { it.first.endInclusive }),
+                ranges.map { it.second }.toIntArray()
             )
         }
     }

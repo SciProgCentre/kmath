@@ -14,7 +14,8 @@ object ComplexField : Field<Complex> {
 
     override fun multiply(a: Complex, k: Double): Complex = Complex(a.re * k, a.im * k)
 
-    override fun multiply(a: Complex, b: Complex): Complex = Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
+    override fun multiply(a: Complex, b: Complex): Complex =
+        Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
 
     override fun divide(a: Complex, b: Complex): Complex {
         val norm = b.square
@@ -35,8 +36,10 @@ object ComplexField : Field<Complex> {
 /**
  * Complex number class
  */
-data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
-    override val self: Complex get() = this
+data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField> {
+    override fun unwrap(): Complex = this
+
+    override fun Complex.wrap(): Complex = this
 
     override val context: ComplexField
         get() = ComplexField

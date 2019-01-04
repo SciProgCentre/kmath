@@ -14,7 +14,7 @@ class LazyNDFieldTest {
             counter++
             it * it
         }
-        assertEquals(4, result[0,0,0])
+        assertEquals(4, result[0, 0, 0])
         assertEquals(1, counter)
     }
 }

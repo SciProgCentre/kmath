@@ -12,7 +12,8 @@ interface Buffer<T> {
 
     operator fun iterator(): Iterator<T>
 
-    fun contentEquals(other: Buffer<*>): Boolean = asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
+    fun contentEquals(other: Buffer<*>): Boolean =
+        asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
 }
 
 fun <T> Buffer<T>.asSequence(): Sequence<T> = iterator().asSequence()
@@ -151,7 +152,8 @@ inline fun <reified T : Any> inlineBuffer(size: Int, initializer: (Int) -> T): B
 /**
  * Create a boxing mutable buffer of given type
  */
-inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> = MutableListBuffer(MutableList(size, initializer))
+inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    MutableListBuffer(MutableList(size, initializer))
 
 /**
  * Create most appropriate mutable buffer for given type avoiding boxing wherever possible

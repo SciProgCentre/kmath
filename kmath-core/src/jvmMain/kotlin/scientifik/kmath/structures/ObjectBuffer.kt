@@ -2,7 +2,8 @@ package scientifik.kmath.structures
 
 import java.nio.ByteBuffer
 
-class ObjectBuffer<T : Any>(private val buffer: ByteBuffer, private val spec: FixedSizeBufferSpec<T>) : MutableBuffer<T> {
+class ObjectBuffer<T : Any>(private val buffer: ByteBuffer, private val spec: FixedSizeBufferSpec<T>) :
+    MutableBuffer<T> {
     override val size: Int
         get() = buffer.limit() / spec.unitSize
 
@@ -23,6 +24,6 @@ class ObjectBuffer<T : Any>(private val buffer: ByteBuffer, private val spec: Fi
 
     companion object {
         fun <T : Any> create(spec: FixedSizeBufferSpec<T>, size: Int) =
-                ObjectBuffer<T>(ByteBuffer.allocate(size * spec.unitSize), spec)
+            ObjectBuffer<T>(ByteBuffer.allocate(size * spec.unitSize), spec)
     }
 }

@@ -6,10 +6,10 @@ import scientifik.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FieldExpressionContextTest {
+class ExpressionFieldTest {
     @Test
     fun testExpression() {
-        val context = FieldExpressionContext(DoubleField)
+        val context = ExpressionField(DoubleField)
         val expression = with(context) {
             val x = variable("x", 2.0)
             x * x + 2 * x + 1.0
@@ -20,10 +20,10 @@ class FieldExpressionContextTest {
 
     @Test
     fun testComplex() {
-        val context = FieldExpressionContext(ComplexField)
+        val context = ExpressionField(ComplexField)
         val expression = with(context) {
             val x = variable("x", Complex(2.0, 0.0))
-            x * x + 2 * x + 1.0
+            x * x + 2 * x + one
         }
         assertEquals(expression("x" to Complex(1.0, 0.0)), Complex(4.0, 0.0))
         assertEquals(expression(), Complex(9.0, 0.0))
@@ -31,23 +31,23 @@ class FieldExpressionContextTest {
 
     @Test
     fun separateContext() {
-        fun <T> FieldExpressionContext<T>.expression(): Expression<T>{
+        fun <T> ExpressionField<T>.expression(): Expression<T> {
             val x = variable("x")
-            return x * x + 2 * x + 1.0
+            return x * x + 2 * x + one
         }
 
-        val expression = FieldExpressionContext(DoubleField).expression()
+        val expression = ExpressionField(DoubleField).expression()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 
     @Test
     fun valueExpression() {
-        val expressionBuilder: FieldExpressionContext<Double>.()->Expression<Double> = {
+        val expressionBuilder: ExpressionField<Double>.() -> Expression<Double> = {
             val x = variable("x")
             x * x + 2 * x + 1.0
         }
 
-        val expression = FieldExpressionContext(DoubleField).expressionBuilder()
+        val expression = ExpressionField(DoubleField).expressionBuilder()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 }

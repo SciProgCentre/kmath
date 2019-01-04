@@ -1,6 +1,6 @@
 buildscript {
     extra["kotlinVersion"] = "1.3.20-eap-52"
-    extra["ioVersion"] = "0.1.2-dev-2"
+    extra["ioVersion"] = "0.1.2"
     extra["coroutinesVersion"] = "1.1.0"
 
     val kotlinVersion: String by extra
@@ -8,7 +8,7 @@ buildscript {
     val coroutinesVersion: String by extra
 
     repositories {
-        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         jcenter()
     }
 
@@ -19,7 +19,7 @@ buildscript {
 }
 
 plugins {
-    id("com.jfrog.artifactory") version "4.8.1"  apply false
+    id("com.jfrog.artifactory") version "4.8.1" apply false
 //    id("org.jetbrains.kotlin.multiplatform") apply false
 }
 
@@ -28,14 +28,14 @@ allprojects {
     apply(plugin = "com.jfrog.artifactory")
 
     group = "scientifik"
-    version = "0.0.2-dev-1"
+    version = "0.0.3-dev-1"
 
-    repositories{
-        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+    repositories {
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         jcenter()
     }
 }
 
-if(file("artifactory.gradle").exists()){
+if (file("artifactory.gradle").exists()) {
     apply(from = "artifactory.gradle")
 }

@@ -1,6 +1,5 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.histogram.Point
 import scientifik.kmath.operations.DoubleField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
@@ -33,25 +32,34 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
 
     val one get() = produce { i, j -> if (i == j) ring.one else ring.zero }
 
-    override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> = produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
+    override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> =
+        produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
 
-    override fun multiply(a: Matrix<T, R>, k: Double): Matrix<T, R> = produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
+    override fun multiply(a: Matrix<T, R>, k: Double): Matrix<T, R> =
+        produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
 
     companion object {
         /**
          * Non-boxing double matrix
          */
-        fun real(rows: Int, columns: Int): MatrixSpace<Double, DoubleField> = StructureMatrixSpace(rows, columns, DoubleField, DoubleBufferFactory)
+        fun real(rows: Int, columns: Int): MatrixSpace<Double, DoubleField> =
+            StructureMatrixSpace(rows, columns, DoubleField, DoubleBufferFactory)
 
         /**
          * A structured matrix with custom buffer
          */
-        fun <T : Any, R : Ring<T>> buffered(rows: Int, columns: Int, ring: R, bufferFactory: BufferFactory<T> = ::boxingBuffer): MatrixSpace<T, R> = StructureMatrixSpace(rows, columns, ring, bufferFactory)
+        fun <T : Any, R : Ring<T>> buffered(
+            rows: Int,
+            columns: Int,
+            ring: R,
+            bufferFactory: BufferFactory<T> = ::boxingBuffer
+        ): MatrixSpace<T, R> = StructureMatrixSpace(rows, columns, ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        inline fun <reified T : Any, R : Ring<T>> smart(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> = buffered(rows, columns, ring, ::inlineBuffer)
+        inline fun <reified T : Any, R : Ring<T>> smart(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
+            buffered(rows, columns, ring, ::inlineBuffer)
     }
 }
 
@@ -59,7 +67,7 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
 /**
  * Specialized 2-d structure
  */
-interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, R>, MatrixSpace<T, R>> {
+interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, R>, Matrix<T, R>, MatrixSpace<T, R>> {
     operator fun get(i: Int, j: Int): T
 
     override fun get(index: IntArray): T = get(index[0], index[1])
@@ -82,7 +90,7 @@ interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, 
 
     companion object {
         fun real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
-                MatrixSpace.real(rows, columns).produce(rows, columns, initializer)
+            MatrixSpace.real(rows, columns).produce(rows, columns, initializer)
     }
 }
 
@@ -110,10 +118,10 @@ infix fun <T : Any, R : Ring<T>> Matrix<T, R>.dot(vector: Point<T>): Point<T> {
 }
 
 data class StructureMatrixSpace<T : Any, R : Ring<T>>(
-        override val rowNum: Int,
-        override val colNum: Int,
-        override val ring: R,
-        private val bufferFactory: BufferFactory<T>
+    override val rowNum: Int,
+    override val colNum: Int,
+    override val ring: R,
+    private val bufferFactory: BufferFactory<T>
 ) : MatrixSpace<T, R> {
 
     override val shape: IntArray = intArrayOf(rowNum, colNum)
@@ -134,15 +142,21 @@ data class StructureMatrixSpace<T : Any, R : Ring<T>>(
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 }
 
-data class StructureMatrix<T : Any, R : Ring<T>>(override val context: StructureMatrixSpace<T, R>, val structure: NDStructure<T>) : Matrix<T, R> {
+data class StructureMatrix<T : Any, R : Ring<T>>(
+    override val context: StructureMatrixSpace<T, R>,
+    val structure: NDStructure<T>
+) : Matrix<T, R> {
     init {
         if (structure.shape.size != 2 || structure.shape[0] != context.rowNum || structure.shape[1] != context.colNum) {
             error("Dimension mismatch for structure, (${context.rowNum}, ${context.colNum}) expected, but ${structure.shape} found")
         }
     }
 
+    override fun unwrap(): Matrix<T, R> = this
+
+    override fun Matrix<T, R>.wrap(): Matrix<T, R> = this
+
     override val shape: IntArray get() = structure.shape
-    override val self: Matrix<T, R> get() = this
 
     override fun get(index: IntArray): T = structure[index]
 
@@ -153,4 +167,4 @@ data class StructureMatrix<T : Any, R : Ring<T>>(override val context: Structure
 
 //TODO produce transposed matrix via reference without creating new space and structure
 fun <T : Any, R : Ring<T>> Matrix<T, R>.transpose(): Matrix<T, R> =
-        context.produce(numCols, numRows) { i, j -> get(j, i) }
+    context.produce(numCols, numRows) { i, j -> get(j, i) }

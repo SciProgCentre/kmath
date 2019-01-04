@@ -19,7 +19,7 @@ open class ArrayBenchmark {
         arrayBuffer = IntBuffer.wrap(array)
         nativeBuffer = IntBuffer.allocate(10000)
         for (i in 0 until 10000) {
-            nativeBuffer.put(i,i)
+            nativeBuffer.put(i, i)
         }
     }
 
