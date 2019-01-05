@@ -2,7 +2,11 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.RealField
-import scientifik.kmath.structures.*
+import scientifik.kmath.structures.MutableBuffer.Companion.boxing
+import scientifik.kmath.structures.MutableNDStructure
+import scientifik.kmath.structures.NDStructure
+import scientifik.kmath.structures.get
+import scientifik.kmath.structures.mutableNdStructure
 import kotlin.math.absoluteValue
 
 /**
@@ -106,7 +110,7 @@ abstract class LUDecomposition<T : Comparable<T>, F : Field<T>>(val matrix: Matr
         //TODO fix performance
         val lu: MutableNDStructure<T> = mutableNdStructure(
             intArrayOf(matrix.numRows, matrix.numCols),
-            ::boxingMutableBuffer
+            ::boxing
         ) { index: IntArray -> matrix[index[0], index[1]] }
 
 

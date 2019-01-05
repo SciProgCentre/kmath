@@ -1,7 +1,7 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Norm
-import scientifik.kmath.structures.NDElements.real2D
+import scientifik.kmath.structures.NDElement.Companion.real2D
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.Test

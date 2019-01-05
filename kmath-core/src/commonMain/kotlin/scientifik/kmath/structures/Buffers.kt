@@ -1,6 +1,10 @@
 package scientifik.kmath.structures
 
 
+typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
+typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
+
+
 /**
  * A generic random access structure for both primitives and objects
  */
@@ -14,6 +18,31 @@ interface Buffer<T> {
 
     fun contentEquals(other: Buffer<*>): Boolean =
         asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
+
+    companion object {
+
+        /**
+         * Create a boxing buffer of given type
+         */
+        inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
+
+        /**
+         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> {
+            return when (T::class) {
+                Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
+                Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
+                Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
+                else -> boxing(size, initializer)
+            }
+        }
+
+        val DoubleBufferFactory: BufferFactory<Double> = { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
+        val IntBufferFactory: BufferFactory<Int> = { size, initializer -> IntBuffer(IntArray(size, initializer)) }
+        val LongBufferFactory: BufferFactory<Long> = { size, initializer -> LongBuffer(LongArray(size, initializer)) }
+    }
 }
 
 fun <T> Buffer<T>.asSequence(): Sequence<T> = iterator().asSequence()
@@ -27,6 +56,27 @@ interface MutableBuffer<T> : Buffer<T> {
      * A shallow copy of the buffer
      */
     fun copy(): MutableBuffer<T>
+
+    companion object {
+        /**
+         * Create a boxing mutable buffer of given type
+         */
+        inline fun <T : Any> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            MutableListBuffer(MutableList(size, initializer))
+
+        /**
+         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
+            return when (T::class) {
+                Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
+                Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
+                Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
+                else -> boxing(size, initializer)
+            }
+        }
+    }
 }
 
 
@@ -130,48 +180,3 @@ fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
 } else {
     this
 }
-
-/**
- * Create a boxing buffer of given type
- */
-inline fun <T> boxingBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
-
-/**
- * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
- */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> autoBuffer(size: Int, initializer: (Int) -> T): Buffer<T> {
-    return when (T::class) {
-        Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
-        Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
-        Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
-        else -> boxingBuffer(size, initializer)
-    }
-}
-
-/**
- * Create a boxing mutable buffer of given type
- */
-inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-    MutableListBuffer(MutableList(size, initializer))
-
-/**
- * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
- */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> autoMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-    return when (T::class) {
-        Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
-        Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
-        Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
-        else -> boxingMutableBuffer(size, initializer)
-    }
-}
-
-typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
-typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
-
-val DoubleBufferFactory: BufferFactory<Double> = { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
-val IntBufferFactory: BufferFactory<Int> = { size, initializer -> IntBuffer(IntArray(size, initializer)) }
-val LongBufferFactory: BufferFactory<Long> = { size, initializer -> LongBuffer(LongArray(size, initializer)) }
-

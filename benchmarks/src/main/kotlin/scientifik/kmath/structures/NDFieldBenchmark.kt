@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         bufferedField.run {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += 1.0
+                res += one
             }
         }
     }
@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 
 
     val elementTime = measureTimeMillis {
-        var res = bufferedField.produce { one }
+        var res = bufferedField.run{one.toElement()}
         repeat(n) {
             res += 1.0
         }
@@ -77,7 +77,7 @@ fun main(args: Array<String>) {
         genericField.run {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += 1.0
+                res += one
             }
         }
     }

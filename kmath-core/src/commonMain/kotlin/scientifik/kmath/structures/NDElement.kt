@@ -10,47 +10,46 @@ interface NDElement<T, F : Field<T>> : NDStructure<T> {
 
     fun mapIndexed(transform: F.(index: IntArray, T) -> T): NDElement<T, F>
     fun map(action: F.(T) -> T) = mapIndexed { _, value -> action(value) }
-}
+
+    companion object {
+        /**
+         * Create a optimized NDArray of doubles
+         */
+        fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }) =
+            NDField.real(shape).produce(initializer)
 
 
-object NDElements {
-    /**
-     * Create a optimized NDArray of doubles
-     */
-    fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }) =
-        NDField.real(shape).produce(initializer)
+        fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }) =
+            real(intArrayOf(dim)) { initializer(it[0]) }
 
 
-    fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }) =
-        real(intArrayOf(dim)) { initializer(it[0]) }
+        fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }) =
+            real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
+
+        fun real3D(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }) =
+            real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
 
 
-    fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }) =
-        real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
+        /**
+         * Simple boxing NDArray
+         */
+        fun <T : Any, F : Field<T>> buffered(
+            shape: IntArray,
+            field: F,
+            initializer: F.(IntArray) -> T
+        ): StridedNDElement<T, F> {
+            val ndField = BufferNDField(shape, field, Buffer.Companion::boxing)
+            return ndField.produce(initializer)
+        }
 
-    fun real3D(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }) =
-        real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
-
-
-    /**
-     * Simple boxing NDArray
-     */
-    fun <T : Any, F : Field<T>> buffered(
-        shape: IntArray,
-        field: F,
-        initializer: F.(IntArray) -> T
-    ): BufferNDElement<T, F> {
-        val ndField = BufferNDField(shape, field, ::boxingBuffer)
-        return ndField.produce(initializer)
-    }
-
-    inline fun <reified T : Any, F : Field<T>> auto(
-        shape: IntArray,
-        field: F,
-        noinline initializer: F.(IntArray) -> T
-    ): BufferNDElement<T, F> {
-        val ndField = NDField.auto(shape, field)
-        return ndField.produce(initializer)
+        inline fun <reified T : Any, F : Field<T>> auto(
+            shape: IntArray,
+            field: F,
+            noinline initializer: F.(IntArray) -> T
+        ): StridedNDElement<T, F> {
+            val ndField = NDField.auto(shape, field)
+            return StridedNDElement(ndField, ndField.produce(initializer).buffer)
+        }
     }
 }
 

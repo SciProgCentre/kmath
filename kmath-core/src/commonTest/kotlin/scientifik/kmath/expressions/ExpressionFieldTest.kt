@@ -12,7 +12,7 @@ class ExpressionFieldTest {
         val context = ExpressionField(RealField)
         val expression = with(context) {
             val x = variable("x", 2.0)
-            x * x + 2 * x + 1.0
+            x * x + 2 * x + one
         }
         assertEquals(expression("x" to 1.0), 4.0)
         assertEquals(expression(), 9.0)
@@ -44,7 +44,7 @@ class ExpressionFieldTest {
     fun valueExpression() {
         val expressionBuilder: ExpressionField<Double>.() -> Expression<Double> = {
             val x = variable("x")
-            x * x + 2 * x + 1.0
+            x * x + 2 * x + one
         }
 
         val expression = ExpressionField(RealField).expressionBuilder()

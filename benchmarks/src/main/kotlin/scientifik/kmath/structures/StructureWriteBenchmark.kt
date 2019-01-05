@@ -1,5 +1,6 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import kotlin.system.measureTimeMillis
 
 

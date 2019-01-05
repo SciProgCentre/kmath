@@ -68,14 +68,14 @@ interface Ring<T> : Space<T> {
 
     operator fun T.times(b: T): T = multiply(this, b)
 
-//    operator fun T.plus(b: Number) = this.plus(b * one)
-//    operator fun Number.plus(b: T) = b + this
-//
-//    operator fun T.minus(b: Number) = this.minus(b * one)
-//    operator fun Number.minus(b: T) = -b + this
+    operator fun T.plus(b: Number) = this.plus(b * one)
+    operator fun Number.plus(b: T) = b + this
+
+    operator fun T.minus(b: Number) = this.minus(b * one)
+    operator fun Number.minus(b: T) = -b + this
 }
 
-abstract class AbstractRing<T: Any> : AbstractSpace<T>(), Ring<T> {
+abstract class AbstractRing<T : Any> : AbstractSpace<T>(), Ring<T> {
     final override operator fun T.times(b: T): T = multiply(this, b)
 }
 
@@ -89,7 +89,7 @@ interface Field<T> : Ring<T> {
     operator fun Number.div(b: T) = this * divide(one, b)
 }
 
-abstract class AbstractField<T: Any> : AbstractRing<T>(), Field<T> {
+abstract class AbstractField<T : Any> : AbstractRing<T>(), Field<T> {
     final override operator fun T.div(b: T): T = divide(this, b)
     final override operator fun Number.div(b: T) = this * divide(one, b)
 }

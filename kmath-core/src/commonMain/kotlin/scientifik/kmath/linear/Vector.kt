@@ -3,7 +3,9 @@ package scientifik.kmath.linear
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
-import scientifik.kmath.structures.*
+import scientifik.kmath.structures.Buffer
+import scientifik.kmath.structures.BufferFactory
+import scientifik.kmath.structures.asSequence
 
 typealias Point<T> = Buffer<T>
 
@@ -40,7 +42,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
          * Non-boxing double vector space
          */
         fun real(size: Int): BufferVectorSpace<Double, RealField> {
-            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, DoubleBufferFactory) }
+            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, Buffer.DoubleBufferFactory) }
         }
 
         /**
@@ -49,14 +51,14 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         fun <T : Any, S : Space<T>> buffered(
             size: Int,
             space: S,
-            bufferFactory: BufferFactory<T> = ::boxingBuffer
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
         ): VectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
 
         /**
          * Automatic buffered vector, unboxed if it is possible
          */
         inline fun <reified T : Any, S : Space<T>> smart(size: Int, space: S): VectorSpace<T, S> =
-            buffered(size, space, ::autoBuffer)
+            buffered(size, space, Buffer.Companion::auto)
     }
 }
 

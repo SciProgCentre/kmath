@@ -5,6 +5,9 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.*
+import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
+import scientifik.kmath.structures.Buffer.Companion.auto
+import scientifik.kmath.structures.Buffer.Companion.boxing
 
 
 interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
@@ -52,14 +55,14 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
             rows: Int,
             columns: Int,
             ring: R,
-            bufferFactory: BufferFactory<T> = ::boxingBuffer
+            bufferFactory: BufferFactory<T> = ::boxing
         ): MatrixSpace<T, R> = StructureMatrixSpace(rows, columns, ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
         inline fun <reified T : Any, R : Ring<T>> smart(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
-            buffered(rows, columns, ring, ::autoBuffer)
+            buffered(rows, columns, ring, ::auto)
     }
 }
 

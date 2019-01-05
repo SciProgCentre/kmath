@@ -20,7 +20,7 @@ val c3 = ComplexField.run{ c1 - i*2.0}
 ```
 
 **Note**: In theory it is possible to add behaviors directly to the context, but currently kotlin syntax does not support
-that. Watch [KT-10468](https://youtrack.jetbrains.com/issue/KT-10468) for updates.
+that. Watch [KT-10468](https://youtrack.jetbrains.com/issue/KT-10468) and [KEEP-176](https://github.com/Kotlin/KEEP/pull/176) for updates.
 
 ## Nested fields
 

@@ -4,8 +4,9 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Norm
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
+import scientifik.kmath.structures.Buffer.Companion.boxing
 import scientifik.kmath.structures.asSequence
-import scientifik.kmath.structures.boxingBuffer
+
 
 
 /**
@@ -52,7 +53,7 @@ fun <T : Any, R : Ring<T>> Vector<T, R>.toMatrix(): Matrix<T, R> {
 //        matrix(size, 1, context.field) { i, j -> get(i) }
 //    }
     //return Matrix.of(size, 1, context.space) { i, _ -> get(i) }
-    return StructureMatrixSpace(size, 1, context.space, ::boxingBuffer).produce { i, _ -> get(i) }
+    return StructureMatrixSpace(size, 1, context.space, ::boxing).produce { i, _ -> get(i) }
 }
 
 object VectorL2Norm : Norm<Vector<out Number, *>, Double> {

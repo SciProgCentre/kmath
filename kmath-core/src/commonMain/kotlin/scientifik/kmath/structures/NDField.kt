@@ -2,6 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.AbstractField
 import scientifik.kmath.operations.Field
+import scientifik.kmath.structures.Buffer.Companion.boxing
 
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs
@@ -36,13 +37,18 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N> {
          * Create a nd-field with boxing generic buffer
          */
         fun <T : Any, F : Field<T>> buffered(shape: IntArray, field: F) =
-            BufferNDField(shape, field, ::boxingBuffer)
+            BufferNDField(shape, field, Buffer.Companion::boxing)
 
         /**
          * Create a most suitable implementation for nd-field using reified class.
          */
-        inline fun <reified T : Any, F : Field<T>> auto(shape: IntArray, field: F) =
-            BufferNDField(shape, field, ::autoBuffer)
+        inline fun <reified T : Any, F : Field<T>> auto(shape: IntArray, field: F): StridedNDField<T, F> =
+            if (T::class == Double::class) {
+                @Suppress("UNCHECKED_CAST")
+                real(shape) as StridedNDField<T, F>
+            } else {
+                BufferNDField(shape, field, Buffer.Companion::auto)
+            }
     }
 }
 

@@ -2,7 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.RealField
 
-typealias RealNDElement = BufferNDElement<Double, RealField>
+typealias RealNDElement = StridedNDElement<Double, RealField>
 
 class RealNDField(shape: IntArray) :
     StridedNDField<Double, RealField>(shape, RealField),
@@ -21,20 +21,20 @@ class RealNDField(shape: IntArray) :
     ): RealNDElement {
         check(arg)
         val array = buildBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
-        return BufferNDElement(this, array)
+        return StridedNDElement(this, array)
     }
 
     override fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
         val array = buildBuffer(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) }
-        return BufferNDElement(this, array)
+        return StridedNDElement(this, array)
     }
 
     override fun mapIndexed(
         arg: NDBuffer<Double>,
         transform: RealField.(index: IntArray, Double) -> Double
-    ): BufferNDElement<Double, RealField> {
+    ): StridedNDElement<Double, RealField> {
         check(arg)
-        return BufferNDElement(
+        return StridedNDElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
                 elementField.transform(
@@ -48,9 +48,9 @@ class RealNDField(shape: IntArray) :
         a: NDBuffer<Double>,
         b: NDBuffer<Double>,
         transform: RealField.(Double, Double) -> Double
-    ): BufferNDElement<Double, RealField> {
+    ): StridedNDElement<Double, RealField> {
         check(a, b)
-        return BufferNDElement(
+        return StridedNDElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
     }
@@ -80,7 +80,7 @@ class RealNDField(shape: IntArray) :
  */
 inline fun StridedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> elementField.initializer(offset) }
-    return BufferNDElement(this, DoubleBuffer(array))
+    return StridedNDElement(this, DoubleBuffer(array))
 }
 
 /**
@@ -93,13 +93,13 @@ operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
 /* plus and minus */
 
 /**
- * Summation operation for [BufferNDElement] and single element
+ * Summation operation for [StridedNDElement] and single element
  */
 operator fun RealNDElement.plus(arg: Double) =
     context.produceInline { i -> buffer[i] + arg }
 
 /**
- * Subtraction operation between [BufferNDElement] and single element
+ * Subtraction operation between [StridedNDElement] and single element
  */
 operator fun RealNDElement.minus(arg: Double) =
     context.produceInline { i -> buffer[i] - arg }
