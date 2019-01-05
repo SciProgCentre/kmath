@@ -34,6 +34,7 @@ interface Space<T> {
     operator fun T.div(k: Number) = multiply(this, 1.0 / k.toDouble())
     operator fun Number.times(b: T) = b * this
     fun Iterable<T>.sum(): T = fold(zero) { left, right -> left + right }
+
     fun Sequence<T>.sum(): T = fold(zero) { left, right -> left + right }
 }
 

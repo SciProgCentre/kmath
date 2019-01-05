@@ -29,8 +29,8 @@ fun List<Double>.toVector() = Vector.real(this.size) { this[it] }
 /**
  * Convert matrix to vector if it is possible
  */
-fun <T : Any, F : Ring<T>> Matrix<T, F>.toVector(): Vector<T, F> {
-    return if (this.numCols == 1) {
+fun <T : Any, F : Ring<T>> Matrix<T, F>.toVector(): Vector<T, F> =
+        if (this.numCols == 1) {
 //            if (this is ArrayMatrix) {
 //                //Reuse existing underlying array
 //                ArrayVector(ArrayVectorSpace(rows, context.field, context.ndFactory), array)
@@ -38,9 +38,8 @@ fun <T : Any, F : Ring<T>> Matrix<T, F>.toVector(): Vector<T, F> {
 //                //Generic vector
 //                vector(rows, context.field) { get(it, 0) }
 //            }
-        Vector.generic(numRows, context.ring) { get(it, 0) }
-    } else error("Can't convert matrix with more than one column to vector")
-}
+            Vector.generic(numRows, context.ring) { get(it, 0) }
+        } else error("Can't convert matrix with more than one column to vector")
 
 fun <T : Any, R : Ring<T>> Vector<T, R>.toMatrix(): Matrix<T, R> {
 //    val context = StructureMatrixContext(size, 1, context.space)
@@ -57,9 +56,8 @@ fun <T : Any, R : Ring<T>> Vector<T, R>.toMatrix(): Matrix<T, R> {
 }
 
 object VectorL2Norm : Norm<Vector<out Number, *>, Double> {
-    override fun norm(arg: Vector<out Number, *>): Double {
-        return kotlin.math.sqrt(arg.asSequence().sumByDouble { it.toDouble() })
-    }
+    override fun norm(arg: Vector<out Number, *>): Double =
+            kotlin.math.sqrt(arg.asSequence().sumByDouble { it.toDouble() })
 }
 
 typealias RealVector = Vector<Double, RealField>

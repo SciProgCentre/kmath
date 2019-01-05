@@ -52,9 +52,8 @@ class PhantomHistogram<T : Comparable<T>>(
     override val dimension: Int
         get() = data.dimension
 
-    override fun iterator(): Iterator<PhantomBin<T>> {
-        return bins.asSequence().map { entry -> PhantomBin(entry.key, data[entry.value]) }.iterator()
-    }
+    override fun iterator(): Iterator<PhantomBin<T>> =
+            bins.asSequence().map { entry -> PhantomBin(entry.key, data[entry.value]) }.iterator()
 
     override fun get(point: Point<out T>): PhantomBin<T>? {
         val template = bins.keys.find { it.contains(point) }
