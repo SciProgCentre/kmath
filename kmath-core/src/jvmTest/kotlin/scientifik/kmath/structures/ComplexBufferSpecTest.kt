@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class ComplexBufferSpecTest {
     @Test
     fun testComplexBuffer() {
-        val buffer = Complex.createBuffer(20)
+        val buffer = MutableBuffer.complex(20)
         (0 until 20).forEach {
             buffer[it] = Complex(it.toDouble(), -it.toDouble())
         }

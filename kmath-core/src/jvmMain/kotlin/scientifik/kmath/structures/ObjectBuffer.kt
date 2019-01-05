@@ -23,7 +23,13 @@ class ObjectBuffer<T : Any>(private val buffer: ByteBuffer, private val spec: Fi
     }
 
     companion object {
-        fun <T : Any> create(spec: FixedSizeBufferSpec<T>, size: Int) =
-            ObjectBuffer<T>(ByteBuffer.allocate(size * spec.unitSize), spec)
+        fun <T : Any> create(spec: FixedSizeBufferSpec<T>, size: Int, initializer: ((Int) -> T)? = null) =
+            ObjectBuffer(ByteBuffer.allocate(size * spec.unitSize), spec).also { buffer ->
+                if (initializer != null) {
+                    (0 until size).forEach {
+                        buffer[it] = initializer(it)
+                    }
+                }
+            }
     }
 }

@@ -1,6 +1,7 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
+import scientifik.kmath.operations.ComplexField
 import java.nio.ByteBuffer
 
 object ComplexBufferSpec : FixedSizeBufferSpec<Complex> {
@@ -19,8 +20,18 @@ object ComplexBufferSpec : FixedSizeBufferSpec<Complex> {
 }
 
 /**
- * Create a mutable buffer which ignores boxing
+ * Create a read-only/mutable buffer which ignores boxing
  */
-fun Complex.Companion.createBuffer(size: Int) = ObjectBuffer.create(ComplexBufferSpec, size)
+fun Buffer.Companion.complex(size: Int): Buffer<Complex> =
+    ObjectBuffer.create(ComplexBufferSpec, size)
+
+fun MutableBuffer.Companion.complex(size: Int) =
+    ObjectBuffer.create(ComplexBufferSpec, size)
+
+fun NDField.Companion.complex(shape: IntArray) =
+    BufferNDField(shape, ComplexField) { size, init -> ObjectBuffer.create(ComplexBufferSpec, size, init) }
+
+fun NDElement.Companion.complex(shape: IntArray, initializer: ComplexField.(IntArray) -> Complex) =
+    NDField.complex(shape).produce(initializer)
 
 
