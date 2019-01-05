@@ -71,10 +71,11 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N> {
         fun <T : Any, F : Field<T>> generic(shape: IntArray, field: F) = GenericNDField(shape, field)
 
         /**
-         * Create a most suitable implementation for nd-field using reified class
+         * Create a most suitable implementation for nd-field using reified class.
          */
-        inline fun <reified T : Any, F : Field<T>> buffered(shape: IntArray, field: F) =
-            BufferNDField(shape, field, ::inlineBuffer)
+        inline fun <reified T : Any, F : Field<T>> auto(shape: IntArray, field: F): BufferNDField<T, F> {
+            return BufferNDField(shape, field, ::autoBuffer)
+        }
     }
 }
 

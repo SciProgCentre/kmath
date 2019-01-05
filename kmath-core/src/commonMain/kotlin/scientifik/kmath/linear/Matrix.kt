@@ -59,7 +59,7 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
          * Automatic buffered matrix, unboxed if it is possible
          */
         inline fun <reified T : Any, R : Ring<T>> smart(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
-            buffered(rows, columns, ring, ::inlineBuffer)
+            buffered(rows, columns, ring, ::autoBuffer)
     }
 }
 

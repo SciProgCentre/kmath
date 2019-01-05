@@ -163,7 +163,7 @@ data class BufferNDStructure<T>(
  * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferNDStructure]
  */
 inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
-    factory: BufferFactory<R> = ::inlineBuffer,
+    factory: BufferFactory<R> = ::autoBuffer,
     crossinline transform: (T) -> R
 ): BufferNDStructure<R> {
     return if (this is BufferNDStructure<T>) {
@@ -186,7 +186,7 @@ fun <T> ndStructure(strides: Strides, bufferFactory: BufferFactory<T> = ::boxing
  * Inline create NDStructure with non-boxing buffer implementation if it is possible
  */
 inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
-    BufferNDStructure(strides, inlineBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+    BufferNDStructure(strides, autoBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 fun <T> ndStructure(shape: IntArray, bufferFactory: BufferFactory<T> = ::boxingBuffer, initializer: (IntArray) -> T) =
     ndStructure(DefaultStrides(shape), bufferFactory, initializer)
@@ -195,7 +195,7 @@ inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline init
     inlineNDStructure(DefaultStrides(shape), initializer)
 
 /**
- * Mutable ND buffer based on linear [inlineBuffer]
+ * Mutable ND buffer based on linear [autoBuffer]
  */
 class MutableBufferNDStructure<T>(
     override val strides: Strides,
@@ -222,7 +222,7 @@ fun <T : Any> mutableNdStructure(
     MutableBufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 inline fun <reified T : Any> inlineMutableNdStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
-    MutableBufferNDStructure(strides, inlineMutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+    MutableBufferNDStructure(strides, autoMutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 fun <T : Any> mutableNdStructure(
     shape: IntArray,

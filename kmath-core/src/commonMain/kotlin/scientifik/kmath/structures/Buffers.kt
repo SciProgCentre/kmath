@@ -140,7 +140,7 @@ inline fun <T> boxingBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = Lis
  * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineBuffer(size: Int, initializer: (Int) -> T): Buffer<T> {
+inline fun <reified T : Any> autoBuffer(size: Int, initializer: (Int) -> T): Buffer<T> {
     return when (T::class) {
         Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
         Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
@@ -159,7 +159,7 @@ inline fun <T : Any> boxingMutableBuffer(size: Int, initializer: (Int) -> T): Mu
  * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any> inlineMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
+inline fun <reified T : Any> autoMutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
     return when (T::class) {
         Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
         Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>

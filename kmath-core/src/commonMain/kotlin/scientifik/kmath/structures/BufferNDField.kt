@@ -8,6 +8,20 @@ abstract class StridedNDField<T, F : Field<T>>(shape: IntArray, elementField: F)
     val strides = DefaultStrides(shape)
 
     abstract fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T>
+
+    /**
+     * Convert any [NDStructure] to buffered structure using strides from this context.
+     * If the structure is already [NDBuffer], conversion is free. If not, it could be expensive because iteration over indexes
+     *
+     * If the argument is [NDBuffer] with different strides structure, the new element will be produced.
+     */
+    fun NDStructure<T>.toBuffer(): NDBuffer<T> {
+        return if (this is NDBuffer<T> && this.strides == this@StridedNDField.strides) {
+            this
+        } else {
+            produce { index -> get(index) }
+        }
+    }
 }
 
 
@@ -26,29 +40,26 @@ class BufferNDField<T, F : Field<T>>(
     override val zero by lazy { produce { zero } }
     override val one by lazy { produce { one } }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun produce(crossinline initializer: F.(IntArray) -> T): BufferNDElement<T, F> =
+    override fun produce(initializer: F.(IntArray) -> T): BufferNDElement<T, F> =
         BufferNDElement(
             this,
-            bufferFactory(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) })
+            buildBuffer(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) })
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun map(arg: NDBuffer<T>, crossinline transform: F.(T) -> T): BufferNDElement<T, F> {
+    override fun map(arg: NDBuffer<T>, transform: F.(T) -> T): BufferNDElement<T, F> {
         check(arg)
         return BufferNDElement(
             this,
-            bufferFactory(arg.strides.linearSize) { offset -> elementField.transform(arg.buffer[offset]) })
+            buildBuffer(arg.strides.linearSize) { offset -> elementField.transform(arg.buffer[offset]) })
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun mapIndexed(
+    override fun mapIndexed(
         arg: NDBuffer<T>,
-        crossinline transform: F.(index: IntArray, T) -> T
+        transform: F.(index: IntArray, T) -> T
     ): BufferNDElement<T, F> {
         check(arg)
         return BufferNDElement(
             this,
-            bufferFactory(arg.strides.linearSize) { offset ->
+            buildBuffer(arg.strides.linearSize) { offset ->
                 elementField.transform(
                     arg.strides.index(offset),
                     arg.buffer[offset]
@@ -56,30 +67,15 @@ class BufferNDField<T, F : Field<T>>(
             })
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun combine(
+    override fun combine(
         a: NDBuffer<T>,
         b: NDBuffer<T>,
-        crossinline transform: F.(T, T) -> T
+        transform: F.(T, T) -> T
     ): BufferNDElement<T, F> {
         check(a, b)
         return BufferNDElement(
             this,
-            bufferFactory(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
-    }
-
-    /**
-     * Convert any [NDStructure] to buffered structure using strides from this context.
-     * If the structure is already [NDBuffer], conversion is free. If not, it could be expensive because iteration over indexes
-     *
-     * If the argument is [NDBuffer] with different strides structure, the new element will be produced.
-     */
-    fun NDStructure<T>.toBuffer(): NDBuffer<T> {
-        return if (this is NDBuffer<T> && this.strides == this@BufferNDField.strides) {
-            this
-        } else {
-            produce { index -> get(index) }
-        }
+            buildBuffer(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
     }
 }
 

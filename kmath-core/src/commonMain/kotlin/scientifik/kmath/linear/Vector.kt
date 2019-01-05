@@ -56,7 +56,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
          * Automatic buffered vector, unboxed if it is possible
          */
         inline fun <reified T : Any, S : Space<T>> smart(size: Int, space: S): VectorSpace<T, S> =
-            buffered(size, space, ::inlineBuffer)
+            buffered(size, space, ::autoBuffer)
     }
 }
 

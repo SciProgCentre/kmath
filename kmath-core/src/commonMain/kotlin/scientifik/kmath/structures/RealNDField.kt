@@ -8,32 +8,30 @@ class RealNDField(shape: IntArray) :
     StridedNDField<Double, RealField>(shape, RealField),
     ExtendedNDField<Double, RealField, NDBuffer<Double>> {
 
-    override fun buildBuffer(size: Int, initializer: (Int) -> Double): Buffer<Double> =
-        DoubleBuffer(DoubleArray(size, initializer))
+    @Suppress("OVERRIDE_BY_INLINE")
+    override inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
+        DoubleBuffer(DoubleArray(size){initializer(it)})
 
     /**
      * Inline transform an NDStructure to
      */
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun map(
+    override fun map(
         arg: NDBuffer<Double>,
-        crossinline transform: RealField.(Double) -> Double
+        transform: RealField.(Double) -> Double
     ): RealNDElement {
         check(arg)
-        val array = DoubleArray(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
-        return BufferNDElement(this, DoubleBuffer(array))
+        val array = buildBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
+        return BufferNDElement(this, array)
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun produce(crossinline initializer: RealField.(IntArray) -> Double): RealNDElement {
-        val array = DoubleArray(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) }
-        return BufferNDElement(this, DoubleBuffer(array))
+    override fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
+        val array = buildBuffer(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) }
+        return BufferNDElement(this, array)
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun mapIndexed(
+    override fun mapIndexed(
         arg: NDBuffer<Double>,
-        crossinline transform: RealField.(index: IntArray, Double) -> Double
+        transform: RealField.(index: IntArray, Double) -> Double
     ): BufferNDElement<Double, RealField> {
         check(arg)
         return BufferNDElement(
@@ -46,11 +44,10 @@ class RealNDField(shape: IntArray) :
             })
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun combine(
+    override fun combine(
         a: NDBuffer<Double>,
         b: NDBuffer<Double>,
-        crossinline transform: RealField.(Double, Double) -> Double
+        transform: RealField.(Double, Double) -> Double
     ): BufferNDElement<Double, RealField> {
         check(a, b)
         return BufferNDElement(

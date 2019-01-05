@@ -51,7 +51,7 @@ object NDElements {
         noinline initializer: F.(IntArray) -> T
     ): GenericNDElement<T, F> {
         val ndField = GenericNDField(shape, field)
-        val structure = ndStructure(shape, ::inlineBuffer) { index -> field.initializer(index) }
+        val structure = ndStructure(shape, ::autoBuffer) { index -> field.initializer(index) }
         return GenericNDElement(ndField, structure)
     }
 }

@@ -5,9 +5,9 @@ import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     val dim = 1000
-    val n = 100
+    val n = 1000
 
-    val bufferedField = NDField.buffered(intArrayOf(dim, dim), RealField)
+    val bufferedField = NDField.auto(intArrayOf(dim, dim), RealField)
     val specializedField = NDField.real(intArrayOf(dim, dim))
     val genericField = NDField.generic(intArrayOf(dim, dim), RealField)
     val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)
@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
 //            res += 1.0
 //        }
 //    }
-
 
 
     val doubleTime = measureTimeMillis {
