@@ -32,6 +32,6 @@ fun ClosedFloatingPointRange<Double>.toSequence(step: Double): Sequence<Double> 
  * Convert double range to array of evenly spaced doubles, where the size of array equals [numPoints]
  */
 fun ClosedFloatingPointRange<Double>.toGrid(numPoints: Int): DoubleArray {
-    if (numPoints < 2) error("Can't generic grid with less than two points")
+    if (numPoints < 2) error("Can't buffered grid with less than two points")
     return DoubleArray(numPoints) { i -> start + (endInclusive - start) / (numPoints - 1) * i }
 }

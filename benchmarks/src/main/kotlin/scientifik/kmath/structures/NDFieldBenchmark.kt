@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
 
     val bufferedField = NDField.auto(intArrayOf(dim, dim), RealField)
     val specializedField = NDField.real(intArrayOf(dim, dim))
-    val genericField = NDField.generic(intArrayOf(dim, dim), RealField)
+    val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
     val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)
 
 //    val action: NDField<Double, DoubleField, NDStructure<Double>>.() -> Unit = {
@@ -75,7 +75,7 @@ fun main(args: Array<String>) {
     val genericTime = measureTimeMillis {
         //genericField.run(action)
         genericField.run {
-            var res = one
+            var res: NDBuffer<Double> = one
             repeat(n) {
                 res += 1.0
             }

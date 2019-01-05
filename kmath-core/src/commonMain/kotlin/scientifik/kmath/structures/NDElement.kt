@@ -35,24 +35,22 @@ object NDElements {
     /**
      * Simple boxing NDArray
      */
-    fun <T : Any, F : Field<T>> generic(
+    fun <T : Any, F : Field<T>> buffered(
         shape: IntArray,
         field: F,
         initializer: F.(IntArray) -> T
-    ): GenericNDElement<T, F> {
-        val ndField = GenericNDField(shape, field)
-        val structure = ndStructure(shape) { index -> field.initializer(index) }
-        return GenericNDElement(ndField, structure)
+    ): BufferNDElement<T, F> {
+        val ndField = BufferNDField(shape, field, ::boxingBuffer)
+        return ndField.produce(initializer)
     }
 
-    inline fun <reified T : Any, F : Field<T>> inline(
+    inline fun <reified T : Any, F : Field<T>> auto(
         shape: IntArray,
         field: F,
         noinline initializer: F.(IntArray) -> T
-    ): GenericNDElement<T, F> {
-        val ndField = GenericNDField(shape, field)
-        val structure = ndStructure(shape, ::autoBuffer) { index -> field.initializer(index) }
-        return GenericNDElement(ndField, structure)
+    ): BufferNDElement<T, F> {
+        val ndField = NDField.auto(shape, field)
+        return ndField.produce(initializer)
     }
 }
 

@@ -9,7 +9,7 @@ class LazyNDFieldTest {
     @Test
     fun testLazyStructure() {
         var counter = 0
-        val regularStructure = NDField.generic(intArrayOf(2, 2, 2), IntField).produce { it[0] + it[1] - it[2] }
+        val regularStructure = NDField.auto(intArrayOf(2, 2, 2), IntField).produce { it[0] + it[1] - it[2] }
         val result = (regularStructure.lazy(IntField) + 2).map {
             counter++
             it * it
