@@ -66,6 +66,11 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
     }
 }
 
+/**
+ * A marker interface representing some matrix feature like diagonal, sparce, zero, etc. Features used to optimize matrix
+ * operations performance in some cases.
+ */
+interface MatrixFeature
 
 /**
  * Specialized 2-d structure
@@ -90,6 +95,8 @@ interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, 
         get() = (0 until numCols).map { j ->
             context.point(numRows) { i -> get(i, j) }
         }
+
+    val features: Set<MatrixFeature>
 
     companion object {
         fun real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
@@ -147,7 +154,8 @@ data class StructureMatrixSpace<T : Any, R : Ring<T>>(
 
 data class StructureMatrix<T : Any, R : Ring<T>>(
     override val context: StructureMatrixSpace<T, R>,
-    val structure: NDStructure<T>
+    val structure: NDStructure<T>,
+    override val features: Set<MatrixFeature> = emptySet()
 ) : Matrix<T, R> {
     init {
         if (structure.shape.size != 2 || structure.shape[0] != context.rowNum || structure.shape[1] != context.colNum) {
