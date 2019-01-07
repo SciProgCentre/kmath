@@ -69,11 +69,11 @@ interface Ring<T> : Space<T> {
 
     operator fun T.times(b: T): T = multiply(this, b)
 
-    operator fun T.plus(b: Number) = this.plus(b * one)
-    operator fun Number.plus(b: T) = b + this
-
-    operator fun T.minus(b: Number) = this.minus(b * one)
-    operator fun Number.minus(b: T) = -b + this
+//    operator fun T.plus(b: Number) = this.plus(b * one)
+//    operator fun Number.plus(b: T) = b + this
+//
+//    operator fun T.minus(b: Number) = this.minus(b * one)
+//    operator fun Number.minus(b: T) = -b + this
 }
 
 abstract class AbstractRing<T : Any> : AbstractSpace<T>(), Ring<T> {

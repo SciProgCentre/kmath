@@ -1,49 +1,48 @@
 package scientifik.kmath.structures
 
-import org.openjdk.jmh.annotations.*
+import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.Scope
+import org.openjdk.jmh.annotations.State
 import java.nio.IntBuffer
 
 
-@Warmup(iterations = 1)
-@Measurement(iterations = 5)
 @State(Scope.Benchmark)
 open class ArrayBenchmark {
-
-    lateinit var array: IntArray
-    lateinit var arrayBuffer: IntBuffer
-    lateinit var nativeBuffer: IntBuffer
-
-    @Setup
-    fun setup() {
-        array = IntArray(10000) { it }
-        arrayBuffer = IntBuffer.wrap(array)
-        nativeBuffer = IntBuffer.allocate(10000)
-        for (i in 0 until 10000) {
-            nativeBuffer.put(i, i)
-        }
-    }
 
     @Benchmark
     fun benchmarkArrayRead() {
         var res = 0
-        for (i in 1..10000) {
-            res += array[10000 - i]
+        for (i in 1..size) {
+            res += array[size - i]
         }
     }
 
     @Benchmark
     fun benchmarkBufferRead() {
         var res = 0
-        for (i in 1..10000) {
-            res += arrayBuffer.get(10000 - i)
+        for (i in 1..size) {
+            res += arrayBuffer.get(size - i)
         }
     }
 
     @Benchmark
     fun nativeBufferRead() {
         var res = 0
-        for (i in 1..10000) {
-            res += nativeBuffer.get(10000 - i)
+        for (i in 1..size) {
+            res += nativeBuffer.get(size - i)
+        }
+    }
+    
+    companion object {
+        val size = 1000
+        
+        val array = IntArray(size) { it }
+        val arrayBuffer = IntBuffer.wrap(array)
+        val nativeBuffer = IntBuffer.allocate(size).also {
+            for (i in 0 until size) {
+                it.put(i, i)
+            }
+
         }
     }
 }

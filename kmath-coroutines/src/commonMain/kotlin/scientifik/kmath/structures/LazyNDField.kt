@@ -21,11 +21,13 @@ class LazyNDField<T, F : Field<T>>(shape: IntArray, field: F, val scope: Corouti
         check(arg)
         return if (arg is LazyNDStructure<T, *>) {
             LazyNDStructure(this) { index ->
-                this.elementField.transform(index, arg.function(index))
+                //FIXME if value of arg is already calculated, it should be used
+                elementField.transform(index, arg.function(index))
             }
         } else {
             LazyNDStructure(this) { elementField.transform(it, arg.await(it)) }
         }
+//        return LazyNDStructure(this) { elementField.transform(it, arg.await(it)) }
     }
 
     override fun map(arg: NDStructure<T>, transform: F.(T) -> T) =
@@ -43,6 +45,7 @@ class LazyNDField<T, F : Field<T>>(shape: IntArray, field: F, val scope: Corouti
         } else {
             LazyNDStructure(this@LazyNDField) { elementField.transform(a.await(it), b.await(it)) }
         }
+//        return LazyNDStructure(this) { elementField.transform(a.await(it), b.await(it)) }
     }
 
     fun NDStructure<T>.lazy(): LazyNDStructure<T, F> {

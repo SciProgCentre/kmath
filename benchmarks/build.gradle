@@ -9,3 +9,9 @@ dependencies {
     compile project(":kmath-coroutines")
     //jmh project(':kmath-core')
 }
+
+jmh{
+    warmupIterations = 1
+}
+
+jmhClasses.dependsOn(compileKotlin)

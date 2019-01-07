@@ -7,34 +7,29 @@ fun main(args: Array<String>) {
     val dim = 1000
     val n = 1000
 
-    val bufferedField = NDField.auto(intArrayOf(dim, dim), RealField)
+    // automatically build context most suited for given type.
+    val autoField = NDField.auto(intArrayOf(dim, dim), RealField)
+    // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(intArrayOf(dim, dim))
+    //A field implementing lazy computations. All elements are computed on-demand
+    val lazyField = NDField.lazy(intArrayOf(dim, dim), RealField)
+    //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
-    val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)
-
-//    val action: NDField<Double, DoubleField, NDStructure<Double>>.() -> Unit = {
-//        var res = one
-//        repeat(n) {
-//            res += 1.0
-//        }
-//    }
 
 
-    val doubleTime = measureTimeMillis {
-
-        bufferedField.run {
-            var res: NDBuffer<Double> = one
+    val autoTime = measureTimeMillis {
+        autoField.run {
+            var res = one
             repeat(n) {
-                res += one
+                res += 1.0
             }
         }
     }
 
-    println("Buffered addition completed in $doubleTime millis")
-
+    println("Buffered addition completed in $autoTime millis")
 
     val elementTime = measureTimeMillis {
-        var res = bufferedField.run{one.toElement()}
+        var res = genericField.one
         repeat(n) {
             res += 1.0
         }
@@ -43,9 +38,8 @@ fun main(args: Array<String>) {
     println("Element addition completed in $elementTime millis")
 
     val specializedTime = measureTimeMillis {
-        //specializedField.run(action)
         specializedField.run {
-            var res: NDBuffer<Double> = one
+            var res = one
             repeat(n) {
                 res += 1.0
             }
@@ -56,17 +50,16 @@ fun main(args: Array<String>) {
 
 
     val lazyTime = measureTimeMillis {
-        val tr : RealField.(Double)->Double = {arg->
-            var r = arg
-            repeat(n) {
-                r += 1.0
+        lazyField.run {
+            val res = one.map {
+                var c = 0.0
+                repeat(n) {
+                    c += 1.0
+                }
+                c
             }
-            r
-        }
-        lazyNDField.run {
-            val res = one.map(tr)
 
-            res.elements().sumByDouble { it.second }
+            res.elements().forEach { it.second }
         }
     }
 
@@ -77,10 +70,11 @@ fun main(args: Array<String>) {
         genericField.run {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += one
+                res += 1.0
             }
         }
     }
 
     println("Generic addition completed in $genericTime millis")
+
 }

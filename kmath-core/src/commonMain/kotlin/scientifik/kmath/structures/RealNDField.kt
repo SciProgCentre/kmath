@@ -79,7 +79,7 @@ class RealNDField(shape: IntArray) :
  * Fast element production using function inlining
  */
 inline fun StridedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
-    val array = DoubleArray(strides.linearSize) { offset -> elementField.initializer(offset) }
+    val array = DoubleArray(strides.linearSize) { offset -> RealField.initializer(offset) }
     return StridedNDElement(this, DoubleBuffer(array))
 }
 
