@@ -32,7 +32,6 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N> {
          * Create a nd-field for [Double] values
          */
         fun real(shape: IntArray) = RealNDField(shape)
-
         /**
          * Create a nd-field with boxing generic buffer
          */
@@ -42,12 +41,11 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N> {
         /**
          * Create a most suitable implementation for nd-field using reified class.
          */
+        @Suppress("UNCHECKED_CAST")
         inline fun <reified T : Any, F : Field<T>> auto(shape: IntArray, field: F): StridedNDField<T, F> =
-            if (T::class == Double::class) {
-                @Suppress("UNCHECKED_CAST")
-                real(shape) as StridedNDField<T, F>
-            } else {
-                BufferNDField(shape, field, Buffer.Companion::auto)
+            when {
+                T::class == Double::class -> real(shape) as StridedNDField<T, F>
+                else -> BufferNDField(shape, field, Buffer.Companion::auto)
             }
     }
 }

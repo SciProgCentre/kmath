@@ -32,7 +32,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object RealField : AbstractField<Double>(),ExtendedField<Double>, Norm<Double, Double> {
+object RealField : AbstractField<Double>(), ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
     override fun multiply(a: Double, @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE") b: Double): Double = a * b
@@ -52,15 +52,25 @@ object RealField : AbstractField<Double>(),ExtendedField<Double>, Norm<Double, D
 }
 
 /**
- * A field for double without boxing. Does not produce appropriate field element
+ * A field for [Int] without boxing. Does not produce corresponding field element
  */
-object IntField : Field<Int> {
+object IntRing : Ring<Int> {
     override val zero: Int = 0
     override fun add(a: Int, b: Int): Int = a + b
     override fun multiply(a: Int, b: Int): Int = a * b
     override fun multiply(a: Int, k: Double): Int = (k * a).toInt()
     override val one: Int = 1
-    override fun divide(a: Int, b: Int): Int = a / b
+}
+
+/**
+ * A field for [Short] without boxing. Does not produce appropriate field element
+ */
+object ShortRing : Ring<Short> {
+    override val zero: Short = 0
+    override fun add(a: Short, b: Short): Short = (a + b).toShort()
+    override fun multiply(a: Short, b: Short): Short = (a * b).toShort()
+    override fun multiply(a: Short, k: Double): Short = (a * k).toShort()
+    override val one: Short = 1
 }
 
 //interface FieldAdapter<T, R> : Field<R> {
