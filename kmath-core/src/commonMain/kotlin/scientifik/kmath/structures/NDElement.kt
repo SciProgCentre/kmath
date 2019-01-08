@@ -5,7 +5,9 @@ import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 
-
+/**
+ * The root for all [NDStructure] based algebra elements. Does not implement algebra element root because of problems with recursive self-types
+ */
 interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
 
     val context: NDAlgebra<T, C, N>

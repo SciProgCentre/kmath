@@ -65,14 +65,12 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
     /**
      * Element-by-element addition
      */
-    override fun add(a: N, b: N): N =
-        combine(a, b) { aValue, bValue -> add(aValue, bValue) }
+    override fun add(a: N, b: N): N = combine(a, b) { aValue, bValue -> add(aValue, bValue) }
 
     /**
      * Multiply all elements by constant
      */
-    override fun multiply(a: N, k: Double): N =
-        map(a) { multiply(it, k) }
+    override fun multiply(a: N, k: Double): N = map(a) { multiply(it, k) }
 
     operator fun N.plus(arg: T) = map(this) { value -> add(arg, value) }
     operator fun N.minus(arg: T) = map(this) { value -> add(arg, -value) }
@@ -89,8 +87,7 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
     /**
      * Element-by-element multiplication
      */
-    override fun multiply(a: N, b: N): N =
-        combine(a, b) { aValue, bValue -> aValue * bValue }
+    override fun multiply(a: N, b: N): N = combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     operator fun N.times(arg: T) = map(this) { value -> multiply(arg, value) }
     operator fun T.times(arg: N) = map(arg) { value -> multiply(this@times, value) }
@@ -109,11 +106,10 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
     /**
      * Element-by-element division
      */
-    override fun divide(a: N, b: N): N =
-        combine(a, b) { aValue, bValue -> aValue / bValue }
+    override fun divide(a: N, b: N): N = combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
-    operator fun N.div(arg: T) = map(this) { value -> arg / value }
-    operator fun T.div(arg: N) = arg / this
+    operator fun N.div(arg: T) = map(this) { value -> divide(arg, value) }
+    operator fun T.div(arg: N) = map(arg) { divide(it, this@div) }
 
     companion object {
         /**
@@ -124,8 +120,12 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
         /**
          * Create a nd-field with boxing generic buffer
          */
-        fun <T : Any, F : Field<T>> buffered(shape: IntArray, field: F) =
-            BoxingNDField(shape, field, Buffer.Companion::boxing)
+        fun <T : Any, F : Field<T>> buffered(
+            shape: IntArray,
+            field: F,
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+        ) =
+            BoxingNDField(shape, field, bufferFactory)
 
         /**
          * Create a most suitable implementation for nd-field using reified class.
