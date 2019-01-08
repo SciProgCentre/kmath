@@ -38,21 +38,6 @@ interface Space<T> {
     fun Sequence<T>.sum(): T = fold(zero) { left, right -> left + right }
 }
 
-abstract class AbstractSpace<T> : Space<T> {
-    //TODO move to external extensions when they are available
-    final override operator fun T.unaryMinus(): T = multiply(this, -1.0)
-
-    final override operator fun T.plus(b: T): T = add(this, b)
-    final override operator fun T.minus(b: T): T = add(this, -b)
-    final override operator fun T.times(k: Number) = multiply(this, k.toDouble())
-    final override operator fun T.div(k: Number) = multiply(this, 1.0 / k.toDouble())
-    final override operator fun Number.times(b: T) = b * this
-
-    final override fun Iterable<T>.sum(): T = fold(zero) { left, right -> left + right }
-
-    final override fun Sequence<T>.sum(): T = fold(zero) { left, right -> left + right }
-}
-
 /**
  * The same as {@link Space} but with additional multiplication operation
  */
@@ -76,10 +61,6 @@ interface Ring<T> : Space<T> {
 //    operator fun Number.minus(b: T) = -b + this
 }
 
-abstract class AbstractRing<T : Any> : AbstractSpace<T>(), Ring<T> {
-    final override operator fun T.times(b: T): T = multiply(this, b)
-}
-
 /**
  * Four operations algebra
  */
@@ -88,9 +69,4 @@ interface Field<T> : Ring<T> {
 
     operator fun T.div(b: T): T = divide(this, b)
     operator fun Number.div(b: T) = this * divide(one, b)
-}
-
-abstract class AbstractField<T : Any> : AbstractRing<T>(), Field<T> {
-    final override operator fun T.div(b: T): T = divide(this, b)
-    final override operator fun Number.div(b: T) = this * divide(one, b)
 }

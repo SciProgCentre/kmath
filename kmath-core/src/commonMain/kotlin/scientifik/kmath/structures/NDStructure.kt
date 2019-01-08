@@ -241,18 +241,3 @@ inline fun <reified T : Any> NDStructure<T>.combine(
     if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
     return inlineNdStructure(shape) { block(this[it], struct[it]) }
 }
-
-
-///**
-// * Create universal mutable structure
-// */
-//fun <T> genericNdStructure(shape: IntArray, initializer: (IntArray) -> T): MutableBufferNDStructure<T> {
-//    val strides = DefaultStrides(shape)
-//    val sequence = sequence {
-//        strides.indices().forEach {
-//            yield(initializer(it))
-//        }
-//    }
-//    val buffer = MutableListBuffer(sequence.toMutableList())
-//    return MutableBufferNDStructure(strides, buffer)
-//}

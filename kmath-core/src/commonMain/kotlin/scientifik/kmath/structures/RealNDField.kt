@@ -2,15 +2,19 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.RealField
 
-typealias RealNDElement = StridedNDElement<Double, RealField>
+typealias RealNDElement = StridedNDFieldElement<Double, RealField>
 
 class RealNDField(shape: IntArray) :
-    StridedNDField<Double, RealField>(shape, RealField),
+    StridedNDField<Double, RealField>(shape),
     ExtendedNDField<Double, RealField, NDBuffer<Double>> {
+
+    override val elementContext: RealField get() = RealField
+    override val zero by lazy { produce { zero } }
+    override val one by lazy { produce { one } }
 
     @Suppress("OVERRIDE_BY_INLINE")
     override inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
-        DoubleBuffer(DoubleArray(size){initializer(it)})
+        DoubleBuffer(DoubleArray(size) { initializer(it) })
 
     /**
      * Inline transform an NDStructure to
@@ -21,23 +25,23 @@ class RealNDField(shape: IntArray) :
     ): RealNDElement {
         check(arg)
         val array = buildBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
-        return StridedNDElement(this, array)
+        return StridedNDFieldElement(this, array)
     }
 
     override fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
-        val array = buildBuffer(strides.linearSize) { offset -> elementField.initializer(strides.index(offset)) }
-        return StridedNDElement(this, array)
+        val array = buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) }
+        return StridedNDFieldElement(this, array)
     }
 
     override fun mapIndexed(
         arg: NDBuffer<Double>,
         transform: RealField.(index: IntArray, Double) -> Double
-    ): StridedNDElement<Double, RealField> {
+    ): StridedNDFieldElement<Double, RealField> {
         check(arg)
-        return StridedNDElement(
+        return StridedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
-                elementField.transform(
+                elementContext.transform(
                     arg.strides.index(offset),
                     arg.buffer[offset]
                 )
@@ -48,11 +52,11 @@ class RealNDField(shape: IntArray) :
         a: NDBuffer<Double>,
         b: NDBuffer<Double>,
         transform: RealField.(Double, Double) -> Double
-    ): StridedNDElement<Double, RealField> {
+    ): StridedNDFieldElement<Double, RealField> {
         check(a, b)
-        return StridedNDElement(
+        return StridedNDFieldElement(
             this,
-            buildBuffer(strides.linearSize) { offset -> elementField.transform(a.buffer[offset], b.buffer[offset]) })
+            buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
     }
 
     override fun power(arg: NDBuffer<Double>, pow: Double) = map(arg) { power(it, pow) }
@@ -64,14 +68,7 @@ class RealNDField(shape: IntArray) :
     override fun sin(arg: NDBuffer<Double>) = map(arg) { sin(it) }
 
     override fun cos(arg: NDBuffer<Double>) = map(arg) { cos(it) }
-//
-//    override fun NDBuffer<Double>.times(k: Number) = mapInline { value -> value * k.toDouble() }
-//
-//    override fun NDBuffer<Double>.div(k: Number) = mapInline { value -> value / k.toDouble() }
-//
-//    override fun Number.times(b: NDBuffer<Double>) = b * this
-//
-//    override fun Number.div(b: NDBuffer<Double>) = b * (1.0 / this.toDouble())
+
 }
 
 
@@ -80,7 +77,7 @@ class RealNDField(shape: IntArray) :
  */
 inline fun StridedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.initializer(offset) }
-    return StridedNDElement(this, DoubleBuffer(array))
+    return StridedNDFieldElement(this, DoubleBuffer(array))
 }
 
 /**
@@ -93,13 +90,13 @@ operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
 /* plus and minus */
 
 /**
- * Summation operation for [StridedNDElement] and single element
+ * Summation operation for [StridedNDFieldElement] and single element
  */
 operator fun RealNDElement.plus(arg: Double) =
     context.produceInline { i -> buffer[i] + arg }
 
 /**
- * Subtraction operation between [StridedNDElement] and single element
+ * Subtraction operation between [StridedNDFieldElement] and single element
  */
 operator fun RealNDElement.minus(arg: Double) =
     context.produceInline { i -> buffer[i] - arg }

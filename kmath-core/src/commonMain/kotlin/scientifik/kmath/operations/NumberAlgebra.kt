@@ -32,7 +32,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
-object RealField : AbstractField<Double>(), ExtendedField<Double>, Norm<Double, Double> {
+object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
     override fun multiply(a: Double, @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE") b: Double): Double = a * b
@@ -54,41 +54,51 @@ object RealField : AbstractField<Double>(), ExtendedField<Double>, Norm<Double, 
 /**
  * A field for [Int] without boxing. Does not produce corresponding field element
  */
-object IntRing : Ring<Int> {
+object IntRing : Ring<Int>, Norm<Int,Int> {
     override val zero: Int = 0
     override fun add(a: Int, b: Int): Int = a + b
     override fun multiply(a: Int, b: Int): Int = a * b
     override fun multiply(a: Int, k: Double): Int = (k * a).toInt()
     override val one: Int = 1
+
+    override fun norm(arg: Int): Int  = arg
 }
 
 /**
  * A field for [Short] without boxing. Does not produce appropriate field element
  */
-object ShortRing : Ring<Short> {
+object ShortRing : Ring<Short>, Norm<Short,Short>{
     override val zero: Short = 0
     override fun add(a: Short, b: Short): Short = (a + b).toShort()
     override fun multiply(a: Short, b: Short): Short = (a * b).toShort()
     override fun multiply(a: Short, k: Double): Short = (a * k).toShort()
     override val one: Short = 1
+
+    override fun norm(arg: Short): Short  = arg
 }
 
-//interface FieldAdapter<T, R> : Field<R> {
-//
-//    val field: Field<T>
-//
-//    abstract fun T.evolve(): R
-//    abstract fun R.devolve(): T
-//
-//    override val zero get() = field.zero.evolve()
-//    override val one get() = field.zero.evolve()
-//
-//    override fun add(a: R, b: R): R = field.add(a.devolve(), b.devolve()).evolve()
-//
-//    override fun multiply(a: R, k: Double): R = field.multiply(a.devolve(), k).evolve()
-//
-//
-//    override fun multiply(a: R, b: R): R = field.multiply(a.devolve(), b.devolve()).evolve()
-//
-//    override fun divide(a: R, b: R): R = field.divide(a.devolve(), b.devolve()).evolve()
-//}
+/**
+ * A field for [Byte] values
+ */
+object ByteRing : Ring<Byte>, Norm<Byte,Byte> {
+    override val zero: Byte = 0
+    override fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
+    override fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
+    override fun multiply(a: Byte, k: Double): Byte = (a * k).toByte()
+    override val one: Byte = 1
+
+    override fun norm(arg: Byte): Byte  = arg
+}
+
+/**
+ * A field for [Long] values
+ */
+object LongRing : Ring<Long>, Norm<Long,Long> {
+    override val zero: Long = 0
+    override fun add(a: Long, b: Long): Long = (a + b)
+    override fun multiply(a: Long, b: Long): Long = (a * b)
+    override fun multiply(a: Long, k: Double): Long = (a * k).toLong()
+    override val one: Long = 1
+
+    override fun norm(arg: Long): Long  = arg
+}

@@ -3,13 +3,14 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.Space
 
 
-interface NDElement<T, F : Field<T>> : NDStructure<T> {
-    val elementField: F
+interface NDElement<T, S : Space<T>> : NDStructure<T> {
+    val elementField: S
 
-    fun mapIndexed(transform: F.(index: IntArray, T) -> T): NDElement<T, F>
-    fun map(action: F.(T) -> T) = mapIndexed { _, value -> action(value) }
+    fun mapIndexed(transform: S.(index: IntArray, T) -> T): NDElement<T, S>
+    fun map(action: S.(T) -> T) = mapIndexed { _, value -> action(value) }
 
     companion object {
         /**
@@ -37,7 +38,7 @@ interface NDElement<T, F : Field<T>> : NDStructure<T> {
             shape: IntArray,
             field: F,
             initializer: F.(IntArray) -> T
-        ): StridedNDElement<T, F> {
+        ): StridedNDFieldElement<T, F> {
             val ndField = BufferNDField(shape, field, Buffer.Companion::boxing)
             return ndField.produce(initializer)
         }
@@ -46,9 +47,9 @@ interface NDElement<T, F : Field<T>> : NDStructure<T> {
             shape: IntArray,
             field: F,
             noinline initializer: F.(IntArray) -> T
-        ): StridedNDElement<T, F> {
+        ): StridedNDFieldElement<T, F> {
             val ndField = NDField.auto(shape, field)
-            return StridedNDElement(ndField, ndField.produce(initializer).buffer)
+            return StridedNDFieldElement(ndField, ndField.produce(initializer).buffer)
         }
     }
 }
@@ -121,19 +122,19 @@ operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> =
 /**
  *  Read-only [NDStructure] coupled to the context.
  */
-class GenericNDElement<T, F : Field<T>>(
+class GenericNDFieldElement<T, F : Field<T>>(
     override val context: NDField<T, F, NDStructure<T>>,
     private val structure: NDStructure<T>
 ) :
     NDStructure<T> by structure,
     NDElement<T, F>,
-    FieldElement<NDStructure<T>, GenericNDElement<T, F>, NDField<T, F, NDStructure<T>>> {
-    override val elementField: F get() = context.elementField
+    FieldElement<NDStructure<T>, GenericNDFieldElement<T, F>, NDField<T, F, NDStructure<T>>> {
+    override val elementField: F get() = context.elementContext
 
     override fun unwrap(): NDStructure<T> = structure
 
-    override fun NDStructure<T>.wrap() = GenericNDElement(context, this)
+    override fun NDStructure<T>.wrap() = GenericNDFieldElement(context, this)
 
     override fun mapIndexed(transform: F.(index: IntArray, T) -> T) =
-        ndStructure(context.shape) { index: IntArray -> context.elementField.transform(index, get(index)) }.wrap()
+        ndStructure(context.shape) { index: IntArray -> context.elementContext.transform(index, get(index)) }.wrap()
 }

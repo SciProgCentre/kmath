@@ -33,6 +33,7 @@ interface Buffer<T> {
         inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> {
             return when (T::class) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
+                Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
                 else -> boxing(size, initializer)
@@ -40,6 +41,7 @@ interface Buffer<T> {
         }
 
         val DoubleBufferFactory: BufferFactory<Double> = { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
+        val ShortBufferFactory: BufferFactory<Short> = { size, initializer -> ShortBuffer(ShortArray(size, initializer)) }
         val IntBufferFactory: BufferFactory<Int> = { size, initializer -> IntBuffer(IntArray(size, initializer)) }
         val LongBufferFactory: BufferFactory<Long> = { size, initializer -> LongBuffer(LongArray(size, initializer)) }
     }
@@ -71,6 +73,7 @@ interface MutableBuffer<T> : Buffer<T> {
         inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
             return when (T::class) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
+                Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
                 else -> boxing(size, initializer)
@@ -134,6 +137,20 @@ inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double
     override fun iterator(): Iterator<Double> = array.iterator()
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
+}
+
+inline class ShortBuffer(private val array: ShortArray) : MutableBuffer<Short> {
+    override val size: Int get() = array.size
+
+    override fun get(index: Int): Short = array[index]
+
+    override fun set(index: Int, value: Short) {
+        array[index] = value
+    }
+
+    override fun iterator(): Iterator<Short> = array.iterator()
+
+    override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
 }
 
 inline class IntBuffer(private val array: IntArray) : MutableBuffer<Int> {
