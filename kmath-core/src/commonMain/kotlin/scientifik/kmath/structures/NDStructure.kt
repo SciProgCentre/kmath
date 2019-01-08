@@ -102,6 +102,20 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     override val linearSize: Int
         get() = strides[shape.size]
 
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DefaultStrides) return false
+
+        if (!shape.contentEquals(other.shape)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return shape.contentHashCode()
+    }
+
     companion object {
         private val defaultStridesCache = HashMap<IntArray, Strides>()
 

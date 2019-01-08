@@ -24,9 +24,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 
     override val context get() = RealField
 
-    companion object {
-
-    }
+    companion object
 }
 
 /**
