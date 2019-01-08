@@ -1,16 +1,21 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.FieldElement
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 
 
-interface NDElement<T, S : Space<T>> : NDStructure<T> {
-    val elementField: S
+interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
 
-    fun mapIndexed(transform: S.(index: IntArray, T) -> T): NDElement<T, S>
-    fun map(action: S.(T) -> T) = mapIndexed { _, value -> action(value) }
+    val context: NDAlgebra<T, C, N>
+
+    fun unwrap(): N
+
+    fun N.wrap(): NDElement<T, C, N>
+
+    fun mapIndexed(transform: C.(index: IntArray, T) -> T) = context.mapIndexed(unwrap(), transform).wrap()
+    fun map(transform: C.(T) -> T) = context.map(unwrap(), transform).wrap()
 
     companion object {
         /**
@@ -38,8 +43,8 @@ interface NDElement<T, S : Space<T>> : NDStructure<T> {
             shape: IntArray,
             field: F,
             initializer: F.(IntArray) -> T
-        ): StridedNDFieldElement<T, F> {
-            val ndField = BufferNDField(shape, field, Buffer.Companion::boxing)
+        ): BufferedNDElement<T, F> {
+            val ndField = BoxingNDField(shape, field, Buffer.Companion::boxing)
             return ndField.produce(initializer)
         }
 
@@ -47,47 +52,46 @@ interface NDElement<T, S : Space<T>> : NDStructure<T> {
             shape: IntArray,
             field: F,
             noinline initializer: F.(IntArray) -> T
-        ): StridedNDFieldElement<T, F> {
+        ): BufferedNDFieldElement<T, F> {
             val ndField = NDField.auto(shape, field)
-            return StridedNDFieldElement(ndField, ndField.produce(initializer).buffer)
+            return BufferedNDFieldElement(ndField, ndField.produce(initializer).buffer)
         }
     }
 }
 
-
 /**
- * Element by element application of any operation on elements to the whole array. Just like in numpy
+ * Element by element application of any operation on elements to the whole [NDElement]
  */
-operator fun <T, F : Field<T>> Function1<T, T>.invoke(ndElement: NDElement<T, F>) =
+operator fun <T, C> Function1<T, T>.invoke(ndElement: NDElement<T, C, *>) =
     ndElement.map { value -> this@invoke(value) }
 
 /* plus and minus */
 
 /**
- * Summation operation for [NDElements] and single element
+ * Summation operation for [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.plus(arg: T): NDElement<T, F> =
-    this.map { value -> elementField.run { arg + value } }
+operator fun <T, S : Space<T>> NDElement<T, S, *>.plus(arg: T) =
+    map { value -> arg + value }
 
 /**
- * Subtraction operation between [NDElements] and single element
+ * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.minus(arg: T): NDElement<T, F> =
-    this.map { value -> elementField.run { arg - value } }
+operator fun <T, S : Space<T>> NDElement<T, S, *>.minus(arg: T) =
+    map { value -> arg - value }
 
 /* prod and div */
 
 /**
- * Product operation for [NDElements] and single element
+ * Product operation for [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.times(arg: T): NDElement<T, F> =
-    this.map { value -> elementField.run { arg * value } }
+operator fun <T, R : Ring<T>> NDElement<T, R, *>.times(arg: T) =
+    map { value -> arg * value }
 
 /**
- * Division operation between [NDElements] and single element
+ * Division operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> =
-    this.map { value -> elementField.run { arg / value } }
+operator fun <T, F : Field<T>> NDElement<T, F, *>.div(arg: T) =
+    map { value -> arg / value }
 
 
 //    /**
@@ -117,24 +121,3 @@ operator fun <T, F : Field<T>> NDElement<T, F>.div(arg: T): NDElement<T, F> =
 //    operator fun T.div(arg: NDStructure<T>): NDElement<T, F> = produce { index ->
 //        field.run { this@div / arg[index] }
 //    }
-
-
-/**
- *  Read-only [NDStructure] coupled to the context.
- */
-class GenericNDFieldElement<T, F : Field<T>>(
-    override val context: NDField<T, F, NDStructure<T>>,
-    private val structure: NDStructure<T>
-) :
-    NDStructure<T> by structure,
-    NDElement<T, F>,
-    FieldElement<NDStructure<T>, GenericNDFieldElement<T, F>, NDField<T, F, NDStructure<T>>> {
-    override val elementField: F get() = context.elementContext
-
-    override fun unwrap(): NDStructure<T> = structure
-
-    override fun NDStructure<T>.wrap() = GenericNDFieldElement(context, this)
-
-    override fun mapIndexed(transform: F.(index: IntArray, T) -> T) =
-        ndStructure(context.shape) { index: IntArray -> context.elementContext.transform(index, get(index)) }.wrap()
-}

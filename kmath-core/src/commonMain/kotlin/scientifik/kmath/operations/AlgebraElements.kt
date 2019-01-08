@@ -2,13 +2,20 @@ package scientifik.kmath.operations
 
 /**
  * The generic mathematics elements which is able to store its context
- * @param S the type of mathematical context for this element
+ * @param T the type of space operation results
+ * @param I self type of the element. Needed for static type checking
+ * @param C the type of mathematical context for this element
  */
-interface MathElement<S> {
+interface MathElement<C> {
     /**
      * The context this element belongs to
      */
-    val context: S
+    val context: C
+}
+
+interface MathWrapper<T, I> {
+    fun unwrap(): T
+    fun T.wrap(): I
 }
 
 /**
@@ -17,13 +24,7 @@ interface MathElement<S> {
  * @param I self type of the element. Needed for static type checking
  * @param S the type of space
  */
-interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement<S> {
-    /**
-     * Self value. Needed for static type checking.
-     */
-    fun unwrap(): T
-
-    fun T.wrap(): I
+interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement<S>, MathWrapper<T, I> {
 
     operator fun plus(b: T) = context.add(unwrap(), b).wrap()
     operator fun minus(b: T) = context.add(unwrap(), context.multiply(b, -1.0)).wrap()
@@ -35,7 +36,6 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
  * Ring element
  */
 interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T, I, R> {
-    override val context: R
     operator fun times(b: T) = context.multiply(unwrap(), b).wrap()
 }
 
@@ -44,6 +44,5 @@ interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T
  */
 interface FieldElement<T, I : FieldElement<T, I, F>, F : Field<T>> : RingElement<T, I, F> {
     override val context: F
-
     operator fun div(b: T) = context.divide(unwrap(), b).wrap()
 }

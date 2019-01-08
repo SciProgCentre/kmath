@@ -8,8 +8,7 @@ class LazyNDField<T, F : Field<T>>(
     override val shape: IntArray,
     override val elementContext: F,
     val scope: CoroutineScope = GlobalScope
-) :
-    NDField<T, F, NDStructure<T>> {
+) : NDField<T, F, NDStructure<T>> {
 
     override val zero by lazy { produce { zero } }
 
@@ -65,7 +64,8 @@ class LazyNDField<T, F : Field<T>>(
 class LazyNDStructure<T, F : Field<T>>(
     override val context: LazyNDField<T, F>,
     val function: suspend (IntArray) -> T
-) : FieldElement<NDStructure<T>, LazyNDStructure<T, F>, LazyNDField<T, F>>, NDElement<T, F> {
+) : FieldElement<NDStructure<T>, LazyNDStructure<T, F>, LazyNDField<T, F>>,
+    NDElement<T, F, NDStructure<T>> {
 
 
     override fun unwrap(): NDStructure<T> = this
@@ -73,10 +73,6 @@ class LazyNDStructure<T, F : Field<T>>(
     override fun NDStructure<T>.wrap(): LazyNDStructure<T, F> = LazyNDStructure(context) { await(it) }
 
     override val shape: IntArray get() = context.shape
-    override val elementField: F get() = context.elementContext
-
-    override fun mapIndexed(transform: F.(index: IntArray, T) -> T): NDElement<T, F> =
-        context.run { mapIndexed(this@LazyNDStructure, transform) }
 
     private val cache = HashMap<IntArray, Deferred<T>>()
 

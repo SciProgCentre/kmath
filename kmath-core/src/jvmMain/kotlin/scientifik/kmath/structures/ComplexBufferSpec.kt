@@ -29,7 +29,7 @@ fun MutableBuffer.Companion.complex(size: Int) =
     ObjectBuffer.create(ComplexBufferSpec, size)
 
 fun NDField.Companion.complex(shape: IntArray) =
-    BufferNDField(shape, ComplexField) { size, init -> ObjectBuffer.create(ComplexBufferSpec, size, init) }
+    BoxingNDField(shape, ComplexField) { size, init -> ObjectBuffer.create(ComplexBufferSpec, size, init) }
 
 fun NDElement.Companion.complex(shape: IntArray, initializer: ComplexField.(IntArray) -> Complex) =
     NDField.complex(shape).produce(initializer)

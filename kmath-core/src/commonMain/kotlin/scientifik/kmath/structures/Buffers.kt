@@ -30,7 +30,7 @@ interface Buffer<T> {
          * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
          */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> {
+        inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
             return when (T::class) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
@@ -40,8 +40,10 @@ interface Buffer<T> {
             }
         }
 
-        val DoubleBufferFactory: BufferFactory<Double> = { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
-        val ShortBufferFactory: BufferFactory<Short> = { size, initializer -> ShortBuffer(ShortArray(size, initializer)) }
+        val DoubleBufferFactory: BufferFactory<Double> =
+            { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
+        val ShortBufferFactory: BufferFactory<Short> =
+            { size, initializer -> ShortBuffer(ShortArray(size, initializer)) }
         val IntBufferFactory: BufferFactory<Int> = { size, initializer -> IntBuffer(IntArray(size, initializer)) }
         val LongBufferFactory: BufferFactory<Long> = { size, initializer -> LongBuffer(LongArray(size, initializer)) }
     }

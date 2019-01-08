@@ -32,6 +32,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 /**
  * A field for double without boxing. Does not produce appropriate field element
  */
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
@@ -45,10 +46,13 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override fun power(arg: Double, pow: Double): Double = arg.pow(pow)
 
     override fun exp(arg: Double): Double = kotlin.math.exp(arg)
-
     override fun ln(arg: Double): Double = kotlin.math.ln(arg)
 
     override fun norm(arg: Double): Double = kotlin.math.abs(arg)
+
+    override fun Double.unaryMinus(): Double  = -this
+
+    override fun Double.minus(b: Double): Double = this - b
 }
 
 /**

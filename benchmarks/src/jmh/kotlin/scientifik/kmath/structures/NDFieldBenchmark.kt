@@ -17,7 +17,7 @@ open class NDFieldBenchmark {
 
     @Benchmark
     fun autoElementAdd() {
-        var res = bufferedField.run { one.toElement() }
+        var res = genericField.one
         repeat(n) {
             res += 1.0
         }
