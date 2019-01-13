@@ -65,7 +65,7 @@ class RealNDField(override val shape: IntArray) :
     override fun NDBuffer<Double>.toElement(): FieldElement<NDBuffer<Double>, *, out BufferedNDField<Double, RealField>> =
         BufferedNDFieldElement(this@RealNDField, buffer)
 
-    override fun power(arg: NDBuffer<Double>, pow: Double) = map(arg) { power(it, pow) }
+    override fun power(arg: NDBuffer<Double>, pow: Number) = map(arg) { power(it, pow) }
 
     override fun exp(arg: NDBuffer<Double>) = map(arg) { exp(it) }
 

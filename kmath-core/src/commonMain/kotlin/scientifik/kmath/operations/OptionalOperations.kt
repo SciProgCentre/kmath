@@ -30,7 +30,7 @@ fun <T : MathElement<out TrigonometricOperations<T>>> ctg(arg: T): T = arg.conte
  * A context extension to include power operations like square roots, etc
  */
 interface PowerOperations<T> {
-    fun power(arg: T, pow: Double): T
+    fun power(arg: T, pow: Number): T
     fun sqrt(arg: T) = power(arg, 0.5)
 }
 

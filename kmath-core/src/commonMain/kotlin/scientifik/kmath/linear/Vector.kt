@@ -30,7 +30,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 
     override fun add(a: Point<T>, b: Point<T>): Point<T> = produce { with(space) { a[it] + b[it] } }
 
-    override fun multiply(a: Point<T>, k: Double): Point<T> = produce { with(space) { a[it] * k } }
+    override fun multiply(a: Point<T>, k: Number): Point<T> = produce { with(space) { a[it] * k } }
 
     //TODO add basis
 

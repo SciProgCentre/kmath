@@ -12,7 +12,7 @@ object ComplexField : Field<Complex> {
 
     override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
 
-    override fun multiply(a: Complex, k: Double): Complex = Complex(a.re * k, a.im * k)
+    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
 
     override fun multiply(a: Complex, b: Complex): Complex =
         Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)

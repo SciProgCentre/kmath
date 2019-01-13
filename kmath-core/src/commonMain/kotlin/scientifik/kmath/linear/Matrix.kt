@@ -6,7 +6,6 @@ import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.*
 import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
-import scientifik.kmath.structures.Buffer.Companion.auto
 import scientifik.kmath.structures.Buffer.Companion.boxing
 
 
@@ -18,8 +17,6 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
 
     val rowNum: Int
     val colNum: Int
-
-    val shape get() = intArrayOf(rowNum, colNum)
 
     /**
      * Produce a matrix with this context and given dimensions
@@ -38,7 +35,7 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
     override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> =
         produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
 
-    override fun multiply(a: Matrix<T, R>, k: Double): Matrix<T, R> =
+    override fun multiply(a: Matrix<T, R>, k: Number): Matrix<T, R> =
         produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
 
     companion object {
@@ -61,8 +58,8 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        inline fun <reified T : Any, R : Ring<T>> smart(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
-            buffered(rows, columns, ring, ::auto)
+        inline fun <reified T : Any, R : Ring<T>> auto(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
+            buffered(rows, columns, ring, Buffer.Companion::auto)
     }
 }
 
@@ -80,21 +77,19 @@ interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, 
 
     override fun get(index: IntArray): T = get(index[0], index[1])
 
-    override val shape: IntArray get() = context.shape
-
     val numRows get() = context.rowNum
     val numCols get() = context.colNum
 
     //TODO replace by lazy buffers
-    val rows: List<Point<T>>
-        get() = (0 until numRows).map { i ->
+    val rows: Point<Point<T>>
+        get() = ListBuffer((0 until numRows).map { i ->
             context.point(numCols) { j -> get(i, j) }
-        }
+        })
 
-    val columns: List<Point<T>>
-        get() = (0 until numCols).map { j ->
+    val columns: Point<Point<T>>
+        get() = ListBuffer((0 until numCols).map { j ->
             context.point(numRows) { i -> get(i, j) }
-        }
+        })
 
     val features: Set<MatrixFeature>
 
@@ -134,7 +129,7 @@ data class StructureMatrixSpace<T : Any, R : Ring<T>>(
     private val bufferFactory: BufferFactory<T>
 ) : MatrixSpace<T, R> {
 
-    override val shape: IntArray = intArrayOf(rowNum, colNum)
+    val shape: IntArray = intArrayOf(rowNum, colNum)
 
     private val strides = DefaultStrides(shape)
 

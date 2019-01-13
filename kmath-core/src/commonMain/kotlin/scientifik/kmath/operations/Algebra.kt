@@ -7,7 +7,7 @@ package scientifik.kmath.operations
  * One must note that in some cases context is a singleton class, but in some cases it
  * works as a context for operations inside it.
  *
- * TODO do we need commutative context?
+ * TODO do we need non-commutative context?
  */
 interface Space<T> {
     /**
@@ -23,7 +23,7 @@ interface Space<T> {
     /**
      * Multiplication operation for context element and real number
      */
-    fun multiply(a: T, k: Double): T
+    fun multiply(a: T, k: Number): T
 
     //Operation to be performed in this context
     operator fun T.unaryMinus(): T = multiply(this, -1.0)

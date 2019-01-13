@@ -70,7 +70,7 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
     /**
      * Multiply all elements by constant
      */
-    override fun multiply(a: N, k: Double): N = map(a) { multiply(it, k) }
+    override fun multiply(a: N, k: Number): N = map(a) { multiply(it, k) }
 
     operator fun N.plus(arg: T) = map(this) { value -> add(arg, value) }
     operator fun N.minus(arg: T) = map(this) { value -> add(arg, -value) }

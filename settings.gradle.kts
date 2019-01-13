@@ -12,5 +12,6 @@ include(
     ":kmath-core",
     ":kmath-io",
     ":kmath-coroutines",
+    ":kmath-commons",
     ":benchmarks"
 )
