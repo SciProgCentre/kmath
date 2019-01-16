@@ -188,57 +188,57 @@ class LUPDecompositionBuilder<T : Comparable<T>, F : Field<T>>(val context: F, v
 }
 
 
-//class LUSolver<T : Comparable<T>, F : Field<T>>(val singularityCheck: (T) -> Boolean) : LinearSolver<T, F> {
-//
-//
-//    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
-//        val decomposition = LUPDecompositionBuilder(ring, singularityCheck).decompose(a)
-//
-//        if (b.rowNum != a.colNum) {
-//            error("Matrix dimension mismatch expected ${a.rowNum}, but got ${b.colNum}")
-//        }
-//
-//
-////        val bp = Array(a.rowNum) { Array<T>(b.colNum){ring.zero} }
-////        for (row in 0 until a.rowNum) {
-////            val bpRow = bp[row]
-////            val pRow = decomposition.pivot[row]
-////            for (col in 0 until b.colNum) {
-////                bpRow[col] = b[pRow, col]
-////            }
-////        }
-//
-//        // Apply permutations to b
-//        val bp = produce(a.rowNum, a.colNum) { i, j -> b[decomposition.pivot[i], j] }
-//
-//        // Solve LY = b
-//        for (col in 0 until a.rowNum) {
-//            val bpCol = bp[col]
-//            for (i in col + 1 until a.rowNum) {
-//                val bpI = bp[i]
-//                val luICol = decomposition.lu[i, col]
-//                for (j in 0 until b.colNum) {
-//                    bpI[j] -= bpCol[j] * luICol
-//                }
+class LUSolver<T : Comparable<T>, F : Field<T>>(val singularityCheck: (T) -> Boolean) : LinearSolver<T, F> {
+
+
+    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
+        val decomposition = LUPDecompositionBuilder(ring, singularityCheck).decompose(a)
+
+        if (b.rowNum != a.colNum) {
+            error("Matrix dimension mismatch expected ${a.rowNum}, but got ${b.colNum}")
+        }
+
+
+//        val bp = Array(a.rowNum) { Array<T>(b.colNum){ring.zero} }
+//        for (row in 0 until a.rowNum) {
+//            val bpRow = bp[row]
+//            val pRow = decomposition.pivot[row]
+//            for (col in 0 until b.colNum) {
+//                bpRow[col] = b[pRow, col]
 //            }
 //        }
-//
-//        // Solve UX = Y
-//        for (col in a.rowNum - 1 downTo 0) {
-//            val bpCol = bp[col]
-//            val luDiag = decomposition.lu[col, col]
-//            for (j in 0 until b.colNum) {
-//                bpCol[j] /= luDiag
-//            }
-//            for (i in 0 until col) {
-//                val bpI = bp[i]
-//                val luICol = decomposition.lu[i, col]
-//                for (j in 0 until b.colNum) {
-//                    bpI[j] -= bpCol[j] * luICol
-//                }
-//            }
-//        }
-//
-//        return produce(a.rowNum, a.colNum) { i, j -> bp[i][j] }
-//    }
-//}
+
+        // Apply permutations to b
+        val bp = produce(a.rowNum, a.colNum) { i, j -> b[decomposition.pivot[i], j] }
+
+        // Solve LY = b
+        for (col in 0 until a.rowNum) {
+            val bpCol = bp[col]
+            for (i in col + 1 until a.rowNum) {
+                val bpI = bp[i]
+                val luICol = decomposition.lu[i, col]
+                for (j in 0 until b.colNum) {
+                    bpI[j] -= bpCol[j] * luICol
+                }
+            }
+        }
+
+        // Solve UX = Y
+        for (col in a.rowNum - 1 downTo 0) {
+            val bpCol = bp[col]
+            val luDiag = decomposition.lu[col, col]
+            for (j in 0 until b.colNum) {
+                bpCol[j] /= luDiag
+            }
+            for (i in 0 until col) {
+                val bpI = bp[i]
+                val luICol = decomposition.lu[i, col]
+                for (j in 0 until b.colNum) {
+                    bpI[j] -= bpCol[j] * luICol
+                }
+            }
+        }
+
+        return produce(a.rowNum, a.colNum) { i, j -> bp[i][j] }
+    }
+}
