@@ -200,7 +200,7 @@ fun <T> ndStructure(strides: Strides, bufferFactory: BufferFactory<T> = Buffer.C
  * Inline create NDStructure with non-boxing buffer implementation if it is possible
  */
 inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
-    BufferNDStructure(strides, Buffer.Companion.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
+    BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 fun <T> ndStructure(shape: IntArray, bufferFactory: BufferFactory<T> = Buffer.Companion::boxing, initializer: (IntArray) -> T) =
     ndStructure(DefaultStrides(shape), bufferFactory, initializer)

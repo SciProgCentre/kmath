@@ -31,11 +31,6 @@ interface Buffer<T> {
     fun contentEquals(other: Buffer<*>): Boolean =
         asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
 
-    /**
-     * Map the contents of the buffer to new buffer of the same type
-     */
-    fun transform(transformation: (index: Int, value: T) -> T): Buffer<T>
-
     companion object {
 
         /**
@@ -78,8 +73,6 @@ interface MutableBuffer<T> : Buffer<T> {
      */
     fun copy(): MutableBuffer<T>
 
-    fun transformInPlace(transformation: (index: Int, value: T) -> T)
-
     companion object {
         /**
          * Create a boxing mutable buffer of given type
@@ -112,9 +105,6 @@ inline class ListBuffer<T>(private val list: List<T>) : Buffer<T> {
     override fun get(index: Int): T = list[index]
 
     override fun iterator(): Iterator<T> = list.iterator()
-
-    override fun transform(transformation: (index: Int, value: T) -> T): ListBuffer<T> =
-        list.mapIndexed(transformation).asBuffer()
 }
 
 fun <T> List<T>.asBuffer() = ListBuffer(this)
@@ -131,15 +121,7 @@ inline class MutableListBuffer<T>(private val list: MutableList<T>) : MutableBuf
     }
 
     override fun iterator(): Iterator<T> = list.iterator()
-
-    override fun transform(transformation: (index: Int, value: T) -> T): ListBuffer<T> =
-        list.mapIndexed(transformation).asBuffer()
-
     override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
-
-    override fun transformInPlace(transformation: (index: Int, value: T) -> T) = list.forEachIndexed { index, value ->
-        list[index] = transformation(index, value)
-    }
 }
 
 fun <T> MutableList<T>.asBuffer() = MutableListBuffer(this)
@@ -158,14 +140,6 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     override fun iterator(): Iterator<T> = array.iterator()
 
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
-
-    override fun transform(transformation: (index: Int, value: T) -> T): ArrayBuffer<T> =
-        Array(size) { index -> transformation(index, get(index)) }.asBuffer()
-
-
-    override fun transformInPlace(transformation: (index: Int, value: T) -> T) = array.forEachIndexed { index, value ->
-        array[index] = transformation(index, value)
-    }
 }
 
 fun <T> Array<T>.asBuffer() = ArrayBuffer(this)
@@ -183,13 +157,6 @@ inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
 
-    override fun transform(transformation: (index: Int, value: Double) -> Double): DoubleBuffer =
-        DoubleArray(size) { index -> transformation(index, get(index)) }.asBuffer()
-
-    override fun transformInPlace(transformation: (index: Int, value: Double) -> Double) =
-        array.forEachIndexed { index, value ->
-            array[index] = transformation(index, value)
-        }
 }
 
 fun DoubleArray.asBuffer() = DoubleBuffer(this)
@@ -207,13 +174,6 @@ inline class ShortBuffer(private val array: ShortArray) : MutableBuffer<Short> {
 
     override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
 
-    override fun transform(transformation: (index: Int, value: Short) -> Short): ShortBuffer =
-        ShortArray(size) { index -> transformation(index, get(index)) }.asBuffer()
-
-    override fun transformInPlace(transformation: (index: Int, value: Short) -> Short) =
-        array.forEachIndexed { index, value ->
-            array[index] = transformation(index, value)
-        }
 }
 
 fun ShortArray.asBuffer() = ShortBuffer(this)
@@ -231,13 +191,6 @@ inline class IntBuffer(private val array: IntArray) : MutableBuffer<Int> {
 
     override fun copy(): MutableBuffer<Int> = IntBuffer(array.copyOf())
 
-    override fun transform(transformation: (index: Int, value: Int) -> Int): IntBuffer =
-        IntArray(size) { index -> transformation(index, get(index)) }.asBuffer()
-
-    override fun transformInPlace(transformation: (index: Int, value: Int) -> Int) =
-        array.forEachIndexed { index, value ->
-            array[index] = transformation(index, value)
-        }
 }
 
 fun IntArray.asBuffer() = IntBuffer(this)
@@ -255,13 +208,6 @@ inline class LongBuffer(private val array: LongArray) : MutableBuffer<Long> {
 
     override fun copy(): MutableBuffer<Long> = LongBuffer(array.copyOf())
 
-    override fun transform(transformation: (index: Int, value: Long) -> Long): LongBuffer =
-        LongArray(size) { index -> transformation(index, get(index)) }.asBuffer()
-
-    override fun transformInPlace(transformation: (index: Int, value: Long) -> Long) =
-        array.forEachIndexed { index, value ->
-            array[index] = transformation(index, value)
-        }
 }
 
 fun LongArray.asBuffer() = LongBuffer(this)
@@ -272,8 +218,6 @@ inline class ReadOnlyBuffer<T>(private val buffer: MutableBuffer<T>) : Buffer<T>
     override fun get(index: Int): T = buffer.get(index)
 
     override fun iterator(): Iterator<T> = buffer.iterator()
-
-    override fun transform(transformation: (index: Int, value: T) -> T): Buffer<T> = buffer.transform(transformation)
 }
 
 /**
@@ -292,10 +236,6 @@ class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T
             super.contentEquals(other)
         }
     }
-
-    // TODO this composition could become very compex very fast, replace it by boxed generator?
-    override fun transform(transformation: (index: Int, value: T) -> T): Buffer<T> =
-        VirtualBuffer(size) { index -> transformation(index, generator(index)) }
 }
 
 /**

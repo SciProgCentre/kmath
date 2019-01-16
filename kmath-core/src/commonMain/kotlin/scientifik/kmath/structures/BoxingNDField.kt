@@ -32,6 +32,10 @@ class BoxingNDField<T, F : Field<T>>(
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset -> elementContext.transform(arg.buffer[offset]) })
+
+//        val buffer = arg.buffer.transform { _, value -> elementContext.transform(value) }
+//        return BufferedNDFieldElement(this, buffer)
+
     }
 
     override fun mapIndexed(
@@ -47,6 +51,10 @@ class BoxingNDField<T, F : Field<T>>(
                     arg.buffer[offset]
                 )
             })
+
+//        val buffer =
+//            arg.buffer.transform { offset, value -> elementContext.transform(arg.strides.index(offset), value) }
+//        return BufferedNDFieldElement(this, buffer)
     }
 
     override fun combine(
