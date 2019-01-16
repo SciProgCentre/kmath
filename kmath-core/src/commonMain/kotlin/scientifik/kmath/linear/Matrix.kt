@@ -152,25 +152,16 @@ interface Matrix<T : Any> : NDStructure<T> {
 /**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> {
-    return object : Matrix<T> {
-        override val rowNum: Int get() = rows
-        override val colNum: Int get() = columns
-        override val features: Set<MatrixFeature> get() = setOf(DiagonalFeature, UnitFeature)
-        override fun get(i: Int, j: Int): T = if (i == j) elementContext.one else elementContext.zero
-    }
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T>  = VirtualMatrix<T>(rows,columns){i, j->
+    if (i == j) elementContext.one else elementContext.zero
 }
+
 
 /**
  * A virtual matrix of zeroes
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> {
-    return object : Matrix<T> {
-        override val rowNum: Int get() = rows
-        override val colNum: Int get() = columns
-        override val features: Set<MatrixFeature> get() = setOf(ZeroFeature)
-        override fun get(i: Int, j: Int): T = elementContext.zero
-    }
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T>  = VirtualMatrix<T>(rows,columns){i, j->
+    elementContext.zero
 }
 
 

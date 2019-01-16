@@ -23,7 +23,7 @@ class StructureMatrixContext<T : Any, R : Ring<T>>(
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 }
 
-data class StructureMatrix<T : Any>(
+class StructureMatrix<T : Any>(
     val structure: NDStructure<T>,
     override val features: Set<MatrixFeature> = emptySet()
 ) : Matrix<T> {
@@ -47,4 +47,21 @@ data class StructureMatrix<T : Any>(
     override fun get(i: Int, j: Int): T = structure[i, j]
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        return when (other) {
+            is StructureMatrix<*> -> return this.structure == other.structure
+            is Matrix<*> -> elements().all { (index, value) -> value == other[index] }
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = structure.hashCode()
+        result = 31 * result + features.hashCode()
+        return result
+    }
+
+
 }

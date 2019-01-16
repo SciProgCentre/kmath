@@ -14,7 +14,7 @@ class RealLUSolverTest {
 //    @Test
 //    fun testInvert() {
 //        val matrix = realMatrix(2,2){}
-//        val inverted = RealLUSolver.inverse(matrix)
-//        assertTrue { Matrix.equals(matrix,inverted) }
+//        val inverted = LUSolver.real.inverse(matrix)
+//        assertEquals(matrix, inverted)
 //    }
 }
