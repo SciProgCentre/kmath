@@ -11,7 +11,7 @@ interface MatrixContext<T : Any, R : Ring<T>> {
     /**
      * The ring context for matrix elements
      */
-    val ring: R
+    val elementContext: R
 
     /**
      * Produce a matrix with this context and given dimensions
@@ -25,7 +25,7 @@ interface MatrixContext<T : Any, R : Ring<T>> {
 
     fun scale(a: Matrix<T>, k: Number): Matrix<T> {
         //TODO create a special wrapper class for scaled matrices
-        return produce(a.rowNum, a.colNum) { i, j -> ring.run { a[i, j] * k } }
+        return produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a[i, j] * k } }
     }
 
     infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
@@ -34,7 +34,7 @@ interface MatrixContext<T : Any, R : Ring<T>> {
         return produce(rowNum, other.colNum) { i, j ->
             val row = rows[i]
             val column = other.columns[j]
-            with(ring) {
+            with(elementContext) {
                 row.asSequence().zip(column.asSequence(), ::multiply).sum()
             }
         }
@@ -45,27 +45,27 @@ interface MatrixContext<T : Any, R : Ring<T>> {
         if (this.colNum != vector.size) error("Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})")
         return point(rowNum) { i ->
             val row = rows[i]
-            with(ring) {
+            with(elementContext) {
                 row.asSequence().zip(vector.asSequence(), ::multiply).sum()
             }
         }
     }
 
     operator fun Matrix<T>.unaryMinus() =
-        produce(rowNum, colNum) { i, j -> ring.run { -get(i, j) } }
+        produce(rowNum, colNum) { i, j -> elementContext.run { -get(i, j) } }
 
     operator fun Matrix<T>.plus(b: Matrix<T>): Matrix<T> {
         if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] + [${b.rowNum},${b.colNum}]")
-        return produce(rowNum, colNum) { i, j -> ring.run { get(i, j) + b[i, j] } }
+        return produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) + b[i, j] } }
     }
 
     operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
         if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]")
-        return produce(rowNum, colNum) { i, j -> ring.run { get(i, j) + b[i, j] } }
+        return produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) + b[i, j] } }
     }
 
     operator fun Matrix<T>.times(number: Number): Matrix<T> =
-        produce(rowNum, colNum) { i, j -> ring.run { get(i, j) * number } }
+        produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * number } }
 
     operator fun Number.times(m: Matrix<T>): Matrix<T> = m * this
 
@@ -157,7 +157,7 @@ fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Mat
         override val rowNum: Int get() = rows
         override val colNum: Int get() = columns
         override val features: Set<MatrixFeature> get() = setOf(DiagonalFeature, UnitFeature)
-        override fun get(i: Int, j: Int): T = if (i == j) ring.one else ring.zero
+        override fun get(i: Int, j: Int): T = if (i == j) elementContext.one else elementContext.zero
     }
 }
 
@@ -169,7 +169,7 @@ fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Ma
         override val rowNum: Int get() = rows
         override val colNum: Int get() = columns
         override val features: Set<MatrixFeature> get() = setOf(ZeroFeature)
-        override fun get(i: Int, j: Int): T = ring.zero
+        override fun get(i: Int, j: Int): T = elementContext.zero
     }
 }
 

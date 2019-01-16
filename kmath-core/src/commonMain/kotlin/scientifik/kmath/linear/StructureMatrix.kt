@@ -10,7 +10,7 @@ import scientifik.kmath.structures.ndStructure
  * Basic implementation of Matrix space based on [NDStructure]
  */
 class StructureMatrixContext<T : Any, R : Ring<T>>(
-    override val ring: R,
+    override val elementContext: R,
     private val bufferFactory: BufferFactory<T>
 ) : MatrixContext<T, R> {
 

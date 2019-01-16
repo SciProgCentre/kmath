@@ -4,26 +4,20 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Norm
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
+import scientifik.kmath.structures.VirtualBuffer
 import scientifik.kmath.structures.asSequence
 
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
  */
-interface LinearSolver<T : Any, R : Ring<T>> : MatrixContext<T, R> {
-    /**
-     * Convert matrix to vector if it is possible
-     */
-    fun Matrix<T>.toVector(): Point<T> =
-        if (this.colNum == 1) {
-            point(rowNum){ get(it, 0) }
-        } else error("Can't convert matrix with more than one column to vector")
+interface LinearSolver<T : Any, R : Ring<T>>  {
+    val context: MatrixContext<T,R>
 
-    fun Point<T>.toMatrix(): Matrix<T> = produce(size, 1) { i, _ -> get(i) }
 
     fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>
     fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.toMatrix()).toVector()
-    fun inverse(a: Matrix<T>): Matrix<T> = solve(a, one(a.rowNum, a.colNum))
+    fun inverse(a: Matrix<T>): Matrix<T> = solve(a, context.one(a.rowNum, a.colNum))
 }
 
 /**
@@ -41,3 +35,15 @@ object VectorL2Norm : Norm<Point<out Number>, Double> {
 
 typealias RealVector = Vector<Double, RealField>
 typealias RealMatrix = Matrix<Double>
+
+
+
+/**
+ * Convert matrix to vector if it is possible
+ */
+fun <T: Any> Matrix<T>.toVector(): Point<T> =
+    if (this.colNum == 1) {
+        VirtualBuffer(rowNum){ get(it, 0) }
+    } else error("Can't convert matrix with more than one column to vector")
+
+fun <T: Any> Point<T>.toMatrix(): Matrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

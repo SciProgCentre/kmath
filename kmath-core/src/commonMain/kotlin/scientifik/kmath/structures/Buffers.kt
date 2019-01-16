@@ -124,8 +124,6 @@ inline class MutableListBuffer<T>(private val list: MutableList<T>) : MutableBuf
     override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
 }
 
-fun <T> MutableList<T>.asBuffer() = MutableListBuffer(this)
-
 class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     //Can't inline because array is invariant
     override val size: Int

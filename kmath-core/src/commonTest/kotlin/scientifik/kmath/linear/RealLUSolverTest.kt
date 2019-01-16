@@ -6,8 +6,8 @@ import kotlin.test.assertEquals
 class RealLUSolverTest {
     @Test
     fun testInvertOne() {
-        val matrix = MatrixContext.real(2, 2).one
-        val inverted = RealLUSolver.inverse(matrix)
+        val matrix = MatrixContext.real.one(2, 2)
+        val inverted = LUSolver.real.inverse(matrix)
         assertEquals(matrix, inverted)
     }
 
