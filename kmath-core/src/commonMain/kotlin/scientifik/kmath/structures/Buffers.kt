@@ -95,6 +95,8 @@ inline class ListBuffer<T>(private val list: List<T>) : Buffer<T> {
     override fun iterator(): Iterator<T> = list.iterator()
 }
 
+fun <T> List<T>.asBuffer() = ListBuffer(this)
+
 inline class MutableListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int
@@ -189,6 +191,25 @@ inline class ReadOnlyBuffer<T>(private val buffer: MutableBuffer<T>) : Buffer<T>
     override fun get(index: Int): T = buffer.get(index)
 
     override fun iterator(): Iterator<T> = buffer.iterator()
+}
+
+/**
+ * A buffer with content calculated on-demand. The calculated contect is not stored, so it is recalculated on each call.
+ * Useful when one needs single element from the buffer.
+ */
+class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
+    override fun get(index: Int): T = generator(index)
+
+    override fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
+
+    override fun contentEquals(other: Buffer<*>): Boolean {
+        return if (other is VirtualBuffer) {
+            this.size == other.size && this.generator == other.generator
+        } else {
+            super.contentEquals(other)
+        }
+    }
+
 }
 
 /**

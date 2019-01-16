@@ -22,7 +22,7 @@ class MatrixTest {
 
     @Test
     fun testTranspose() {
-        val matrix = MatrixSpace.real(3, 3).one
+        val matrix = MatrixContext.real(3, 3).one
         val transposed = matrix.transpose()
         assertEquals(matrix.context, transposed.context)
         assertEquals((matrix as StructureMatrix).structure, (transposed as StructureMatrix).structure)

@@ -2,64 +2,91 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.operations.Space
-import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.*
 import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import scientifik.kmath.structures.Buffer.Companion.boxing
 
 
-interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
+interface MatrixContext<T : Any, R : Ring<T>> {
     /**
      * The ring context for matrix elements
      */
     val ring: R
 
-    val rowNum: Int
-    val colNum: Int
-
     /**
      * Produce a matrix with this context and given dimensions
      */
-    fun produce(rows: Int = rowNum, columns: Int = colNum, initializer: (i: Int, j: Int) -> T): Matrix<T, R>
+    fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
 
     /**
      * Produce a point compatible with matrix space
      */
     fun point(size: Int, initializer: (Int) -> T): Point<T>
 
-    override val zero: Matrix<T, R> get() = produce { _, _ -> ring.zero }
+    fun scale(a: Matrix<T>, k: Number): Matrix<T> {
+        //TODO create a special wrapper class for scaled matrices
+        return produce(a.rowNum, a.colNum) { i, j -> ring.run { a[i, j] * k } }
+    }
 
-    val one get() = produce { i, j -> if (i == j) ring.one else ring.zero }
+    infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
+        //TODO add typed error
+        if (this.colNum != other.rowNum) error("Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})")
+        return produce(rowNum, other.colNum) { i, j ->
+            val row = rows[i]
+            val column = other.columns[j]
+            with(ring) {
+                row.asSequence().zip(column.asSequence(), ::multiply).sum()
+            }
+        }
+    }
 
-    override fun add(a: Matrix<T, R>, b: Matrix<T, R>): Matrix<T, R> =
-        produce(rowNum, colNum) { i, j -> ring.run { a[i, j] + b[i, j] } }
+    infix fun Matrix<T>.dot(vector: Point<T>): Point<T> {
+        //TODO add typed error
+        if (this.colNum != vector.size) error("Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})")
+        return point(rowNum) { i ->
+            val row = rows[i]
+            with(ring) {
+                row.asSequence().zip(vector.asSequence(), ::multiply).sum()
+            }
+        }
+    }
 
-    override fun multiply(a: Matrix<T, R>, k: Number): Matrix<T, R> =
-        produce(rowNum, colNum) { i, j -> ring.run { a[i, j] * k } }
+    operator fun Matrix<T>.unaryMinus() =
+        produce(rowNum, colNum) { i, j -> ring.run { -get(i, j) } }
+
+    operator fun Matrix<T>.plus(b: Matrix<T>): Matrix<T> {
+        if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] + [${b.rowNum},${b.colNum}]")
+        return produce(rowNum, colNum) { i, j -> ring.run { get(i, j) + b[i, j] } }
+    }
+
+    operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
+        if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]")
+        return produce(rowNum, colNum) { i, j -> ring.run { get(i, j) + b[i, j] } }
+    }
+
+    operator fun Matrix<T>.times(number: Number): Matrix<T> =
+        produce(rowNum, colNum) { i, j -> ring.run { get(i, j) * number } }
+
+    operator fun Number.times(m: Matrix<T>): Matrix<T> = m * this
+
 
     companion object {
         /**
          * Non-boxing double matrix
          */
-        fun real(rows: Int, columns: Int): MatrixSpace<Double, RealField> =
-            StructureMatrixSpace(rows, columns, RealField, DoubleBufferFactory)
+        val real: MatrixContext<Double, RealField> = StructureMatrixContext(RealField, DoubleBufferFactory)
 
         /**
          * A structured matrix with custom buffer
          */
-        fun <T : Any, R : Ring<T>> buffered(
-            rows: Int,
-            columns: Int,
-            ring: R,
-            bufferFactory: BufferFactory<T> = ::boxing
-        ): MatrixSpace<T, R> = StructureMatrixSpace(rows, columns, ring, bufferFactory)
+        fun <T : Any, R : Ring<T>> buffered(ring: R, bufferFactory: BufferFactory<T> = ::boxing): MatrixContext<T, R> =
+            StructureMatrixContext(ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        inline fun <reified T : Any, R : Ring<T>> auto(rows: Int, columns: Int, ring: R): MatrixSpace<T, R> =
-            buffered(rows, columns, ring, Buffer.Companion::auto)
+        inline fun <reified T : Any, R : Ring<T>> auto(ring: R): MatrixContext<T, R> =
+            buffered(ring, Buffer.Companion::auto)
     }
 }
 
@@ -69,108 +96,102 @@ interface MatrixSpace<T : Any, R : Ring<T>> : Space<Matrix<T, R>> {
  */
 interface MatrixFeature
 
+object DiagonalFeature : MatrixFeature
+
+object ZeroFeature : MatrixFeature
+
+object UnitFeature : MatrixFeature
+
+interface InverseMatrixFeature<T : Any> : MatrixFeature {
+    val inverse: Matrix<T>
+}
+
+interface DeterminantFeature<T : Any> : MatrixFeature {
+    val determinant: T
+}
+
 /**
  * Specialized 2-d structure
  */
-interface Matrix<T : Any, R : Ring<T>> : NDStructure<T>, SpaceElement<Matrix<T, R>, Matrix<T, R>, MatrixSpace<T, R>> {
+interface Matrix<T : Any> : NDStructure<T> {
+    val rowNum: Int
+    val colNum: Int
+
+    val features: Set<MatrixFeature>
+
     operator fun get(i: Int, j: Int): T
 
     override fun get(index: IntArray): T = get(index[0], index[1])
 
-    val numRows get() = context.rowNum
-    val numCols get() = context.colNum
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
-    //TODO replace by lazy buffers
     val rows: Point<Point<T>>
-        get() = ListBuffer((0 until numRows).map { i ->
-            context.point(numCols) { j -> get(i, j) }
-        })
+        get() = VirtualBuffer(rowNum) { i ->
+            VirtualBuffer(colNum) { j -> get(i, j) }
+        }
 
     val columns: Point<Point<T>>
-        get() = ListBuffer((0 until numCols).map { j ->
-            context.point(numRows) { i -> get(i, j) }
-        })
+        get() = VirtualBuffer(colNum) { j ->
+            VirtualBuffer(rowNum) { i -> get(i, j) }
+        }
 
-    val features: Set<MatrixFeature>
+    override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
+        for (i in (0 until rowNum)) {
+            for (j in (0 until colNum)) {
+                yield(intArrayOf(i, j) to get(i, j))
+            }
+        }
+    }
 
     companion object {
         fun real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
-            MatrixSpace.real(rows, columns).produce(rows, columns, initializer)
+            MatrixContext.real.produce(rows, columns, initializer)
     }
 }
 
-infix fun <T : Any, R : Ring<T>> Matrix<T, R>.dot(other: Matrix<T, R>): Matrix<T, R> {
-    //TODO add typed error
-    if (this.numCols != other.numRows) error("Matrix dot operation dimension mismatch: ($numRows, $numCols) x (${other.numRows}, ${other.numCols})")
-    return context.produce(numRows, other.numCols) { i, j ->
-        val row = rows[i]
-        val column = other.columns[j]
-        with(context.ring) {
-            row.asSequence().zip(column.asSequence(), ::multiply).sum()
-        }
+/**
+ * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
+ */
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> {
+    return object : Matrix<T> {
+        override val rowNum: Int get() = rows
+        override val colNum: Int get() = columns
+        override val features: Set<MatrixFeature> get() = setOf(DiagonalFeature, UnitFeature)
+        override fun get(i: Int, j: Int): T = if (i == j) ring.one else ring.zero
     }
 }
 
-infix fun <T : Any, R : Ring<T>> Matrix<T, R>.dot(vector: Point<T>): Point<T> {
-    //TODO add typed error
-    if (this.numCols != vector.size) error("Matrix dot vector operation dimension mismatch: ($numRows, $numCols) x (${vector.size})")
-    return context.point(numRows) { i ->
-        val row = rows[i]
-        with(context.ring) {
-            row.asSequence().zip(vector.asSequence(), ::multiply).sum()
-        }
+/**
+ * A virtual matrix of zeroes
+ */
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> {
+    return object : Matrix<T> {
+        override val rowNum: Int get() = rows
+        override val colNum: Int get() = columns
+        override val features: Set<MatrixFeature> get() = setOf(ZeroFeature)
+        override fun get(i: Int, j: Int): T = ring.zero
     }
 }
 
-data class StructureMatrixSpace<T : Any, R : Ring<T>>(
-    override val rowNum: Int,
-    override val colNum: Int,
-    override val ring: R,
-    private val bufferFactory: BufferFactory<T>
-) : MatrixSpace<T, R> {
 
-    val shape: IntArray = intArrayOf(rowNum, colNum)
+inline class TransposedMatrix<T : Any>(val original: Matrix<T>) : Matrix<T> {
+    override val rowNum: Int get() = original.colNum
+    override val colNum: Int get() = original.rowNum
+    override val features: Set<MatrixFeature> get() = emptySet() //TODO retain some features
 
-    private val strides = DefaultStrides(shape)
+    override fun get(i: Int, j: Int): T = original[j, i]
 
-    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T, R> {
-        return if (rows == rowNum && columns == colNum) {
-            val structure = ndStructure(strides, bufferFactory) { initializer(it[0], it[1]) }
-            StructureMatrix(this, structure)
-        } else {
-            val context = StructureMatrixSpace(rows, columns, ring, bufferFactory)
-            val structure = ndStructure(context.strides, bufferFactory) { initializer(it[0], it[1]) }
-            StructureMatrix(context, structure)
-        }
-    }
-
-    override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
+    override fun elements(): Sequence<Pair<IntArray, T>> =
+        original.elements().map { (key, value) -> intArrayOf(key[1], key[0]) to value }
 }
 
-data class StructureMatrix<T : Any, R : Ring<T>>(
-    override val context: StructureMatrixSpace<T, R>,
-    val structure: NDStructure<T>,
-    override val features: Set<MatrixFeature> = emptySet()
-) : Matrix<T, R> {
-    init {
-        if (structure.shape.size != 2 || structure.shape[0] != context.rowNum || structure.shape[1] != context.colNum) {
-            error("Dimension mismatch for structure, (${context.rowNum}, ${context.colNum}) expected, but ${structure.shape} found")
-        }
+/**
+ * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
+ */
+fun <T : Any, R : Ring<T>> Matrix<T>.transpose(): Matrix<T> {
+    return if (this is TransposedMatrix) {
+        original
+    } else {
+        TransposedMatrix(this)
     }
-
-    override fun unwrap(): Matrix<T, R> = this
-
-    override fun Matrix<T, R>.wrap(): Matrix<T, R> = this
-
-    override val shape: IntArray get() = structure.shape
-
-    override fun get(index: IntArray): T = structure[index]
-
-    override fun get(i: Int, j: Int): T = structure[i, j]
-
-    override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
-
-//TODO produce transposed matrix via reference without creating new space and structure
-fun <T : Any, R : Ring<T>> Matrix<T, R>.transpose(): Matrix<T, R> =
-    context.produce(numCols, numRows) { i, j -> get(j, i) }
