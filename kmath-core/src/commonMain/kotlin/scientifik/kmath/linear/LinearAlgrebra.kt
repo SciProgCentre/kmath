@@ -12,12 +12,9 @@ import scientifik.kmath.structures.asSequence
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
  */
 interface LinearSolver<T : Any, R : Ring<T>>  {
-    val context: MatrixContext<T,R>
-
-
     fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>
     fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.toMatrix()).toVector()
-    fun inverse(a: Matrix<T>): Matrix<T> = solve(a, context.one(a.rowNum, a.colNum))
+    fun inverse(a: Matrix<T>): Matrix<T>
 }
 
 /**

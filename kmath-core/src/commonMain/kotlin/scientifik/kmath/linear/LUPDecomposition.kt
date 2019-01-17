@@ -2,13 +2,16 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.structures.*
+import scientifik.kmath.structures.MutableBuffer
 import scientifik.kmath.structures.MutableBuffer.Companion.boxing
+import scientifik.kmath.structures.MutableBufferFactory
+import scientifik.kmath.structures.NDStructure
+import scientifik.kmath.structures.get
 
 
 class LUPDecomposition<T : Comparable<T>>(
     private val elementContext: Ring<T>,
-    private val lu: NDStructure<T>,
+    internal val lu: NDStructure<T>,
     val pivot: IntArray,
     private val even: Boolean
 ) : DeterminantFeature<T> {
@@ -62,18 +65,11 @@ class LUPDecomposition<T : Comparable<T>>(
 
 
 class LUSolver<T : Comparable<T>, F : Field<T>>(
-    override val context: MatrixContext<T, F>,
+    val context: MatrixContext<T, F>,
     val bufferFactory: MutableBufferFactory<T> = ::boxing,
     val singularityCheck: (T) -> Boolean
 ) : LinearSolver<T, F> {
 
-
-    /**
-     * In-place transformation for [MutableNDStructure], using given transformation for each element
-     */
-    private operator fun <T> MutableNDStructure<T>.set(i: Int, j: Int, value: T) {
-        this[intArrayOf(i, j)] = value
-    }
 
     private fun abs(value: T) =
         if (value > context.elementContext.zero) value else with(context.elementContext) { -value }
@@ -180,19 +176,19 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
                 for (col in 0 until a.rowNum) {
                     for (i in col + 1 until a.rowNum) {
                         for (j in 0 until b.colNum) {
-                            bp[i, j] -= bp[col, j] * l[i, col]
+                            bp[i, j] -= bp[col, j] * lu[i, col]
                         }
                     }
                 }
 
                 // Solve UX = Y
                 for (col in a.rowNum - 1 downTo 0) {
-                    for(j in 0 until b.colNum){
-                        bp[col,j]/= u[col,col]
+                    for (j in 0 until b.colNum) {
+                        bp[col, j] /= lu[col, col]
                     }
                     for (i in 0 until col) {
                         for (j in 0 until b.colNum) {
-                            bp[i, j] -= bp[col, j]  * u[i, col]
+                            bp[i, j] -= bp[col, j] * lu[i, col]
                         }
                     }
                 }
@@ -201,6 +197,8 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
             }
         }
     }
+
+    override fun inverse(a: Matrix<T>): Matrix<T> = solve(a, context.one(a.rowNum, a.colNum))
 
     companion object {
         val real = LUSolver(MatrixContext.real, MutableBuffer.Companion::auto) { it < 1e-11 }

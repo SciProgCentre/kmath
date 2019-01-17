@@ -200,3 +200,5 @@ fun <T : Any, R : Ring<T>> Matrix<T>.transpose(): Matrix<T> {
         setOf(TransposedFeature(this))
     ) { i, j -> get(j, i) }
 }
+
+infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = with(MatrixContext.real) { dot(other) }
