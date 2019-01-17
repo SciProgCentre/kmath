@@ -1,52 +1,28 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
 import scientifik.kmath.structures.MutableBuffer.Companion.boxing
 
-/**
- * Matrix LUP decomposition
- */
-interface LUPDecompositionFeature<T : Any> : DeterminantFeature<T> {
-    /**
-     * A reference to L-matrix
-     */
-    val l: Matrix<T>
-    /**
-     * A reference to u-matrix
-     */
-    val u: Matrix<T>
-    /**
-     * Pivoting points for each row
-     */
-    val pivot: IntArray
-    /**
-     * Permutation matrix based on [pivot]
-     */
-    val p: Matrix<T>
-}
 
-
-private class LUPDecomposition<T : Comparable<T>, R : Ring<T>>(
-    val context: R,
-    val lu: NDStructure<T>,
-    override val pivot: IntArray,
+class LUPDecomposition<T : Comparable<T>>(
+    private val elementContext: Ring<T>,
+    private val lu: NDStructure<T>,
+    val pivot: IntArray,
     private val even: Boolean
-) : LUPDecompositionFeature<T> {
+) : DeterminantFeature<T> {
 
     /**
      * Returns the matrix L of the decomposition.
      *
-     * L is a lower-triangular matrix
-     * @return the L matrix (or null if decomposed matrix is singular)
+     * L is a lower-triangular matrix with [Ring.one] in diagonal
      */
-    override val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+    val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
         when {
             j < i -> lu[i, j]
-            j == i -> context.one
-            else -> context.zero
+            j == i -> elementContext.one
+            else -> elementContext.zero
         }
     }
 
@@ -54,26 +30,21 @@ private class LUPDecomposition<T : Comparable<T>, R : Ring<T>>(
     /**
      * Returns the matrix U of the decomposition.
      *
-     * U is an upper-triangular matrix
-     * @return the U matrix (or null if decomposed matrix is singular)
+     * U is an upper-triangular matrix including the diagonal
      */
-    override val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
-        if (j >= i) lu[i, j] else context.zero
+    val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+        if (j >= i) lu[i, j] else elementContext.zero
     }
 
 
     /**
      * Returns the P rows permutation matrix.
      *
-     * P is a sparse matrix with exactly one element set to 1.0 in
-     * each row and each column, all other elements being set to 0.0.
-     *
-     * The positions of the 1 elements are given by the [ pivot permutation vector][.getPivot].
-     * @return the P rows permutation matrix (or null if decomposed matrix is singular)
-     * @see .getPivot
+     * P is a sparse matrix with exactly one element set to [Ring.one] in
+     * each row and each column, all other elements being set to [Ring.zero].
      */
-    override val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
-        if (j == pivot[i]) context.one else context.zero
+    val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+        if (j == pivot[i]) elementContext.one else elementContext.zero
     }
 
 
@@ -82,7 +53,7 @@ private class LUPDecomposition<T : Comparable<T>, R : Ring<T>>(
      * @return determinant of the matrix
      */
     override val determinant: T by lazy {
-        with(context) {
+        with(elementContext) {
             (0 until lu.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] }
         }
     }
@@ -90,14 +61,12 @@ private class LUPDecomposition<T : Comparable<T>, R : Ring<T>>(
 }
 
 
-/**
- * Implementation based on Apache common-maths LU-decomposition
- */
-class LUPDecompositionBuilder<T : Comparable<T>, F : Field<T>>(
-    val context: F,
+class LUSolver<T : Comparable<T>, F : Field<T>>(
+    override val context: MatrixContext<T, F>,
     val bufferFactory: MutableBufferFactory<T> = ::boxing,
     val singularityCheck: (T) -> Boolean
-) {
+) : LinearSolver<T, F> {
+
 
     /**
      * In-place transformation for [MutableNDStructure], using given transformation for each element
@@ -106,9 +75,10 @@ class LUPDecompositionBuilder<T : Comparable<T>, F : Field<T>>(
         this[intArrayOf(i, j)] = value
     }
 
-    private fun abs(value: T) = if (value > context.zero) value else with(context) { -value }
+    private fun abs(value: T) =
+        if (value > context.elementContext.zero) value else with(context.elementContext) { -value }
 
-    fun decompose(matrix: Matrix<T>): LUPDecompositionFeature<T> {
+    fun buildDecomposition(matrix: Matrix<T>): LUPDecomposition<T> {
         if (matrix.rowNum != matrix.colNum) {
             error("LU decomposition supports only square matrices")
         }
@@ -121,7 +91,7 @@ class LUPDecompositionBuilder<T : Comparable<T>, F : Field<T>>(
         }
 
 
-        with(context) {
+        with(context.elementContext) {
             // Initialize permutation array and parity
             for (row in 0 until m) {
                 pivot[row] = row
@@ -174,22 +144,21 @@ class LUPDecompositionBuilder<T : Comparable<T>, F : Field<T>>(
                     lu[row, col] = lu[row, col] / luDiag
                 }
             }
-            return LUPDecomposition(context, lu, pivot, even)
+            return LUPDecomposition(context.elementContext, lu, pivot, even)
         }
     }
 
-    companion object {
-        val real: LUPDecompositionBuilder<Double, RealField> = LUPDecompositionBuilder(RealField) { it < 1e-11 }
+    /**
+     * Produce a matrix with added decomposition feature
+     */
+    fun decompose(matrix: Matrix<T>): Matrix<T> {
+        if (matrix.hasFeature<LUPDecomposition<*>>()) {
+            return matrix
+        } else {
+            val decomposition = buildDecomposition(matrix)
+            return VirtualMatrix.wrap(matrix, decomposition)
+        }
     }
-
-}
-
-
-class LUSolver<T : Comparable<T>, F : Field<T>>(
-    override val context: MatrixContext<T, F>,
-    val bufferFactory: MutableBufferFactory<T> = ::boxing,
-    val singularityCheck: (T) -> Boolean
-) : LinearSolver<T, F> {
 
 
     override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
@@ -198,10 +167,7 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
         }
 
         // Use existing decomposition if it is provided by matrix
-        @Suppress("UNCHECKED_CAST")
-        val decomposition = a.features.find { it is LUPDecompositionFeature<*> }?.let {
-            it as LUPDecompositionFeature<T>
-        } ?: LUPDecompositionBuilder(context.elementContext, bufferFactory, singularityCheck).decompose(a)
+        val decomposition = a.getFeature() ?: buildDecomposition(a)
 
         with(decomposition) {
             with(context.elementContext) {
@@ -219,12 +185,14 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
                     }
                 }
 
-
                 // Solve UX = Y
                 for (col in a.rowNum - 1 downTo 0) {
+                    for(j in 0 until b.colNum){
+                        bp[col,j]/= u[col,col]
+                    }
                     for (i in 0 until col) {
                         for (j in 0 until b.colNum) {
-                            bp[i, j] -= bp[col, j] / u[col, col] * u[i, col]
+                            bp[i, j] -= bp[col, j]  * u[i, col]
                         }
                     }
                 }

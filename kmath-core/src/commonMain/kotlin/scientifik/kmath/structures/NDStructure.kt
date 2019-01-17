@@ -11,6 +11,16 @@ interface NDStructure<T> {
     operator fun get(index: IntArray): T
 
     fun elements(): Sequence<Pair<IntArray, T>>
+
+    companion object {
+        fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
+            return when {
+                st1 === st2 -> true
+                st1 is BufferNDStructure<*> && st2 is BufferNDStructure<*> && st1.strides == st2.strides -> st1.buffer.contentEquals(st2.buffer)
+                else -> st1.elements().all { (index, value) -> value == st2[index] }
+            }
+        }
+    }
 }
 
 operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
@@ -140,7 +150,7 @@ interface NDBuffer<T> : NDStructure<T> {
 /**
  * Boxing generic [NDStructure]
  */
-data class BufferNDStructure<T>(
+class BufferNDStructure<T>(
     override val strides: Strides,
     override val buffer: Buffer<T>
 ) : NDBuffer<T> {
@@ -160,7 +170,7 @@ data class BufferNDStructure<T>(
     override fun equals(other: Any?): Boolean {
         return when {
             this === other -> true
-            other is BufferNDStructure<*> -> this.strides == other.strides && this.buffer.contentEquals(other.buffer)
+            other is BufferNDStructure<*> && this.strides == other.strides -> this.buffer.contentEquals(other.buffer)
             other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
             else -> false
         }
@@ -193,7 +203,11 @@ inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
  *
  * Strides should be reused if possible
  */
-fun <T> ndStructure(strides: Strides, bufferFactory: BufferFactory<T> = Buffer.Companion::boxing, initializer: (IntArray) -> T) =
+fun <T> ndStructure(
+    strides: Strides,
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+    initializer: (IntArray) -> T
+) =
     BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
 /**
@@ -202,7 +216,11 @@ fun <T> ndStructure(strides: Strides, bufferFactory: BufferFactory<T> = Buffer.C
 inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
     BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-fun <T> ndStructure(shape: IntArray, bufferFactory: BufferFactory<T> = Buffer.Companion::boxing, initializer: (IntArray) -> T) =
+fun <T> ndStructure(
+    shape: IntArray,
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+    initializer: (IntArray) -> T
+) =
     ndStructure(DefaultStrides(shape), bufferFactory, initializer)
 
 inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =

@@ -5,6 +5,7 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
 import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import scientifik.kmath.structures.Buffer.Companion.boxing
+import kotlin.math.sqrt
 
 
 interface MatrixContext<T : Any, R : Ring<T>> {
@@ -146,43 +147,56 @@ interface Matrix<T : Any> : NDStructure<T> {
     companion object {
         fun real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
             MatrixContext.real.produce(rows, columns, initializer)
+
+        /**
+         * Build a square matrix from given elements.
+         */
+        fun <T : Any> build(vararg elements: T): Matrix<T> {
+            val buffer = elements.asBuffer()
+            val size: Int = sqrt(elements.size.toDouble()).toInt()
+            if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
+            val structure = Mutable2DStructure(size, size, buffer)
+            return StructureMatrix(structure)
+        }
     }
 }
 
 /**
+ * Check if matrix has the given feature class
+ */
+inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean = features.find { T::class.isInstance(it) } != null
+
+/**
+ * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
+ */
+inline fun <reified T : Any> Matrix<*>.getFeature(): T? = features.filterIsInstance<T>().firstOrNull()
+
+/**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T>  = VirtualMatrix<T>(rows,columns){i, j->
-    if (i == j) elementContext.one else elementContext.zero
-}
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> =
+    VirtualMatrix<T>(rows, columns) { i, j ->
+        if (i == j) elementContext.one else elementContext.zero
+    }
 
 
 /**
  * A virtual matrix of zeroes
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T>  = VirtualMatrix<T>(rows,columns){i, j->
-    elementContext.zero
-}
+fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> =
+    VirtualMatrix<T>(rows, columns) { i, j ->
+        elementContext.zero
+    }
 
-
-inline class TransposedMatrix<T : Any>(val original: Matrix<T>) : Matrix<T> {
-    override val rowNum: Int get() = original.colNum
-    override val colNum: Int get() = original.rowNum
-    override val features: Set<MatrixFeature> get() = emptySet() //TODO retain some features
-
-    override fun get(i: Int, j: Int): T = original[j, i]
-
-    override fun elements(): Sequence<Pair<IntArray, T>> =
-        original.elements().map { (key, value) -> intArrayOf(key[1], key[0]) to value }
-}
+class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature
 
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
 fun <T : Any, R : Ring<T>> Matrix<T>.transpose(): Matrix<T> {
-    return if (this is TransposedMatrix) {
-        original
-    } else {
-        TransposedMatrix(this)
-    }
+    return this.getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
+        this.colNum,
+        this.rowNum,
+        setOf(TransposedFeature(this))
+    ) { i, j -> get(j, i) }
 }

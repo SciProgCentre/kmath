@@ -27,4 +27,18 @@ class VirtualMatrix<T : Any>(
     }
 
 
+    companion object {
+        /**
+         * Wrap a matrix adding additional features to it
+         */
+        fun <T : Any> wrap(matrix: Matrix<T>, vararg features: MatrixFeature): Matrix<T> {
+            return if (matrix is VirtualMatrix) {
+                VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features, matrix.generator)
+            } else {
+                VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features) { i, j ->
+                    matrix[i, j]
+                }
+            }
+        }
+    }
 }

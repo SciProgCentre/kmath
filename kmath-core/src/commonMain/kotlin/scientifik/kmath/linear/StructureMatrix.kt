@@ -1,10 +1,7 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.structures.BufferFactory
-import scientifik.kmath.structures.NDStructure
-import scientifik.kmath.structures.get
-import scientifik.kmath.structures.ndStructure
+import scientifik.kmath.structures.*
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -24,7 +21,7 @@ class StructureMatrixContext<T : Any, R : Ring<T>>(
 }
 
 class StructureMatrix<T : Any>(
-    val structure: NDStructure<T>,
+    val structure: NDStructure<out T>,
     override val features: Set<MatrixFeature> = emptySet()
 ) : Matrix<T> {
 
@@ -51,8 +48,7 @@ class StructureMatrix<T : Any>(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         return when (other) {
-            is StructureMatrix<*> -> return this.structure == other.structure
-            is Matrix<*> -> elements().all { (index, value) -> value == other[index] }
+            is NDStructure<*> -> return NDStructure.equals(this, other)
             else -> false
         }
     }
@@ -61,6 +57,17 @@ class StructureMatrix<T : Any>(
         var result = structure.hashCode()
         result = 31 * result + features.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return if (rowNum <= 5 && colNum <= 5) {
+            "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)\n" +
+                    rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") {
+                        it.asSequence().joinToString(separator = "\t") { it.toString() }
+                    }
+        } else {
+            "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)"
+        }
     }
 
 
