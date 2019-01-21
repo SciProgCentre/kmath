@@ -1,5 +1,6 @@
 package scientifik.kmath.linear
 
+import koma.matrix.ejml.EJMLMatrixFactory
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -13,14 +14,28 @@ fun main() {
 //    //warmup
 //    matrix1 dot matrix2
 
-    val cmMatrix1 = matrix1.toCM()
-    val cmMatrix2 = matrix2.toCM()
+    CMMatrixContext.run {
+        val cmMatrix1 = matrix1.toCM()
+        val cmMatrix2 = matrix2.toCM()
 
-    val cmTime = measureTimeMillis {
-        cmMatrix1 dot cmMatrix2
+        val cmTime = measureTimeMillis {
+            cmMatrix1 dot cmMatrix2
+        }
+
+        println("CM implementation time: $cmTime")
     }
 
-    println("CM implementation time: $cmTime")
+
+    KomaMatrixContext(EJMLMatrixFactory()).run {
+        val komaMatrix1 = matrix1.toKoma()
+        val komaMatrix2 = matrix2.toKoma()
+
+        val komaTime = measureTimeMillis {
+            komaMatrix1 dot komaMatrix2
+        }
+
+        println("Koma-ejml implementation time: $komaTime")
+    }
 
     val genericTime = measureTimeMillis {
         val res = matrix1 dot matrix2

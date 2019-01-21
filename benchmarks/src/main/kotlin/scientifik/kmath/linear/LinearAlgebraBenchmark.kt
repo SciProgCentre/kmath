@@ -30,12 +30,14 @@ fun main() {
 
     //commons-math
 
-    val cmSolver = CMMatrixContext
+    val cmContext = CMMatrixContext
 
     val commonsTime = measureTimeMillis {
-        val cm = matrix.toCM()             //avoid overhead on conversion
-        repeat(n) {
-            val res = cmSolver.inverse(cm)
+        cmContext.run {
+            val cm = matrix.toCM()             //avoid overhead on conversion
+            repeat(n) {
+                val res = inverse(cm)
+            }
         }
     }
 
@@ -50,7 +52,7 @@ fun main() {
         komaContext.run {
             val km = matrix.toKoma()      //avoid overhead on conversion
             repeat(n) {
-                val res = cmSolver.inverse(km)
+                val res = inverse(km)
             }
         }
     }
