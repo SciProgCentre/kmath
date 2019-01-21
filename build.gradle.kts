@@ -28,7 +28,7 @@ allprojects {
     apply(plugin = "com.jfrog.artifactory")
 
     group = "scientifik"
-    version = "0.0.3-dev-2"
+    version = "0.0.3-dev-3"
 
     repositories {
         maven("https://dl.bintray.com/kotlin/kotlin-eap")

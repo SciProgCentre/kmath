@@ -24,7 +24,7 @@ class MatrixTest {
     fun testTranspose() {
         val matrix = MatrixContext.real.one(3, 3)
         val transposed = matrix.transpose()
-        assertEquals((matrix as StructureMatrix).structure, (transposed as StructureMatrix).structure)
+        assertEquals((matrix as BufferMatrix).buffer, (transposed as BufferMatrix).buffer)
         assertEquals(matrix, transposed)
     }
 

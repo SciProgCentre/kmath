@@ -3,14 +3,11 @@ plugins {
 }
 
 kotlin {
-    targets {
-        fromPreset(presets.jvm, 'jvm')
-        fromPreset(presets.js, 'js')
-        // For ARM, preset should be changed to presets.iosArm32 or presets.iosArm64
-        // For Linux, preset should be changed to e.g. presets.linuxX64
-        // For MacOS, preset should be changed to e.g. presets.macosX64
-        //fromPreset(presets.mingwX64, 'mingw')
+    jvm {
+        compilations["main"].kotlinOptions.jvmTarget = "1.8"
     }
+    js()
+
     sourceSets {
         commonMain {
             dependencies {

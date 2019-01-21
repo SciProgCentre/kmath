@@ -97,7 +97,7 @@ interface MutableBuffer<T> : Buffer<T> {
 }
 
 
-inline class ListBuffer<T>(private val list: List<T>) : Buffer<T> {
+inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
 
     override val size: Int
         get() = list.size
@@ -109,7 +109,7 @@ inline class ListBuffer<T>(private val list: List<T>) : Buffer<T> {
 
 fun <T> List<T>.asBuffer() = ListBuffer(this)
 
-inline class MutableListBuffer<T>(private val list: MutableList<T>) : MutableBuffer<T> {
+inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int
         get() = list.size
@@ -142,7 +142,7 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
 
 fun <T> Array<T>.asBuffer() = ArrayBuffer(this)
 
-inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double> {
+inline class DoubleBuffer(val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
     override fun get(index: Int): Double = array[index]
@@ -157,9 +157,19 @@ inline class DoubleBuffer(private val array: DoubleArray) : MutableBuffer<Double
 
 }
 
+/**
+ * Transform buffer of doubles into array for high performance operations
+ */
+val Buffer<out Double>.array: DoubleArray
+    get() = if (this is DoubleBuffer) {
+        array
+    } else {
+        DoubleArray(size) { get(it) }
+    }
+
 fun DoubleArray.asBuffer() = DoubleBuffer(this)
 
-inline class ShortBuffer(private val array: ShortArray) : MutableBuffer<Short> {
+inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
     override val size: Int get() = array.size
 
     override fun get(index: Int): Short = array[index]
@@ -176,7 +186,7 @@ inline class ShortBuffer(private val array: ShortArray) : MutableBuffer<Short> {
 
 fun ShortArray.asBuffer() = ShortBuffer(this)
 
-inline class IntBuffer(private val array: IntArray) : MutableBuffer<Int> {
+inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override fun get(index: Int): Int = array[index]
@@ -193,7 +203,7 @@ inline class IntBuffer(private val array: IntArray) : MutableBuffer<Int> {
 
 fun IntArray.asBuffer() = IntBuffer(this)
 
-inline class LongBuffer(private val array: LongArray) : MutableBuffer<Long> {
+inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
     override val size: Int get() = array.size
 
     override fun get(index: Int): Long = array[index]
@@ -210,7 +220,7 @@ inline class LongBuffer(private val array: LongArray) : MutableBuffer<Long> {
 
 fun LongArray.asBuffer() = LongBuffer(this)
 
-inline class ReadOnlyBuffer<T>(private val buffer: MutableBuffer<T>) : Buffer<T> {
+inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
     override fun get(index: Int): T = buffer.get(index)

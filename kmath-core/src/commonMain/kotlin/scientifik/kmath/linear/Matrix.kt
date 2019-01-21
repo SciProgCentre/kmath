@@ -75,13 +75,13 @@ interface MatrixContext<T : Any, R : Ring<T>> {
         /**
          * Non-boxing double matrix
          */
-        val real: MatrixContext<Double, RealField> = StructureMatrixContext(RealField, DoubleBufferFactory)
+        val real = BufferMatrixContext(RealField, DoubleBufferFactory)
 
         /**
          * A structured matrix with custom buffer
          */
         fun <T : Any, R : Ring<T>> buffered(ring: R, bufferFactory: BufferFactory<T> = ::boxing): MatrixContext<T, R> =
-            StructureMatrixContext(ring, bufferFactory)
+            BufferMatrixContext(ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -152,11 +152,10 @@ interface Matrix<T : Any> : NDStructure<T> {
          * Build a square matrix from given elements.
          */
         fun <T : Any> build(vararg elements: T): Matrix<T> {
-            val buffer = elements.asBuffer()
             val size: Int = sqrt(elements.size.toDouble()).toInt()
             if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
-            val structure = Mutable2DStructure(size, size, buffer)
-            return StructureMatrix(structure)
+            val buffer = elements.asBuffer()
+            return BufferMatrix(size, size, buffer)
         }
     }
 }

@@ -1,6 +1,5 @@
 package scientifik.kmath.linear
 
-import org.apache.commons.math3.linear.Array2DRowRealMatrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -28,17 +27,13 @@ fun main() {
 
     println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
 
-    //commons
+    //commons-math
 
     val cmSolver = CMSolver
 
-    val commonsMatrix = Array2DRowRealMatrix(dim, dim)
-    matrix.elements().forEach { (index, value) -> commonsMatrix.setEntry(index[0], index[1], value) }
-
     val commonsTime = measureTimeMillis {
-        val cm = matrix.toCM()
+        val cm = matrix.toCM()             //avoid overhead on conversion
         repeat(n) {
-            //overhead on coversion could be mitigated
             val res = cmSolver.inverse(cm)
         }
     }

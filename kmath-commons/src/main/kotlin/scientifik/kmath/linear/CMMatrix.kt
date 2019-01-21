@@ -55,7 +55,7 @@ object CMMatrixContext : MatrixContext<Double, RealField> {
         return CMVector(ArrayRealVector(array))
     }
 
-    override fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = this.toCM().dot(other.toCM())
+    override fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = CMMatrix(this.toCM().origin.multiply(other.toCM().origin))
 }
 
 operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.add(other.origin))
