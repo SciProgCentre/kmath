@@ -9,6 +9,7 @@ repositories {
 kotlin {
     jvm {
         compilations["main"].kotlinOptions.jvmTarget = "1.8"
+        compilations["test"].kotlinOptions.jvmTarget = "1.8"
     }
     js()
 
@@ -17,8 +18,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":kmath-core"))
-                implementation("com.kyonifer:koma-core-api-common:0.12")
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
+                api("com.kyonifer:koma-core-api-common:0.12")
             }
         }
         val commonTest by getting {
@@ -29,7 +29,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
+                api("com.kyonifer:koma-core-api-jvm:0.12")
             }
         }
         val jvmTest by getting {
@@ -41,7 +41,7 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-js"))
+                api("com.kyonifer:koma-core-api-js:0.12")
             }
         }
         val jsTest by getting {

@@ -1,5 +1,6 @@
 package scientifik.kmath.linear
 
+import koma.matrix.ejml.EJMLMatrixFactory
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -40,4 +41,19 @@ fun main() {
 
 
     println("[commons-math] Inversion of $n matrices $dim x $dim finished in $commonsTime millis")
+
+    //koma-ejml
+
+    val komaContext = KomaMatrixContext(EJMLMatrixFactory())
+
+    val komaTime = measureTimeMillis {
+        komaContext.run {
+            val km = matrix.toKoma()      //avoid overhead on conversion
+            repeat(n) {
+                val res = cmSolver.inverse(km)
+            }
+        }
+    }
+
+    println("[koma-ejml] Inversion of $n matrices $dim x $dim finished in $komaTime millis")
 }

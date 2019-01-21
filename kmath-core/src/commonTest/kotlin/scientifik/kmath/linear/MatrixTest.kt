@@ -22,9 +22,8 @@ class MatrixTest {
 
     @Test
     fun testTranspose() {
-        val matrix = GenericMatrixContext.real.one(3, 3)
+        val matrix = MatrixContext.real.one(3, 3)
         val transposed = matrix.transpose()
-        assertEquals((matrix as BufferMatrix).buffer, (transposed as BufferMatrix).buffer)
         assertEquals(matrix, transposed)
     }
 
@@ -36,7 +35,7 @@ class MatrixTest {
 
         val matrix1 = vector1.toMatrix()
         val matrix2 = vector2.toMatrix().transpose()
-        val product = GenericMatrixContext.real.run { matrix1 dot matrix2 }
+        val product = MatrixContext.real.run { matrix1 dot matrix2 }
 
 
         assertEquals(5.0, product[1, 0])

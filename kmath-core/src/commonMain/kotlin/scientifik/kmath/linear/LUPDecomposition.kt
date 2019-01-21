@@ -68,7 +68,7 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
     val context: GenericMatrixContext<T, F>,
     val bufferFactory: MutableBufferFactory<T> = ::boxing,
     val singularityCheck: (T) -> Boolean
-) : LinearSolver<T, F> {
+) : LinearSolver<T> {
 
 
     private fun abs(value: T) =
@@ -201,6 +201,6 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
     override fun inverse(a: Matrix<T>): Matrix<T> = solve(a, context.one(a.rowNum, a.colNum))
 
     companion object {
-        val real = LUSolver(GenericMatrixContext.real, MutableBuffer.Companion::auto) { it < 1e-11 }
+        val real = LUSolver(MatrixContext.real, MutableBuffer.Companion::auto) { it < 1e-11 }
     }
 }

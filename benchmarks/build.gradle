@@ -4,11 +4,18 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
+repositories {
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven{ url "http://dl.bintray.com/kyonifer/maven"}
+    mavenCentral()
+}
+
 dependencies {
     implementation project(":kmath-core")
     implementation project(":kmath-coroutines")
     implementation project(":kmath-commons")
     implementation project(":kmath-koma")
+    compile group: "com.kyonifer", name:"koma-core-ejml", version: "0.12"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     //jmh project(':kmath-core')
 }
@@ -18,10 +25,6 @@ jmh{
 }
 
 jmhClasses.dependsOn(compileKotlin)
-repositories {
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    mavenCentral()
-}
 
 compileKotlin {
     kotlinOptions {
