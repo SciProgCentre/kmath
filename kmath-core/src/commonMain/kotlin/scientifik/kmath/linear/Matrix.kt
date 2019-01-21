@@ -8,28 +8,61 @@ import scientifik.kmath.structures.Buffer.Companion.boxing
 import kotlin.math.sqrt
 
 
-interface MatrixContext<T : Any, R : Ring<T>> {
+interface MatrixContext<T : Any> {
+    /**
+     * Produce a matrix with this context and given dimensions
+     */
+    fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
+
+    infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T>
+
+    infix fun Matrix<T>.dot(vector: Point<T>): Point<T>
+
+    operator fun Matrix<T>.unaryMinus(): Matrix<T>
+
+    operator fun Matrix<T>.plus(b: Matrix<T>): Matrix<T>
+
+    operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T>
+
+    operator fun Matrix<T>.times(value: T): Matrix<T>
+
+    operator fun T.times(m: Matrix<T>): Matrix<T> = m * this
+
+    companion object {
+        /**
+         * Non-boxing double matrix
+         */
+        val real = BufferMatrixContext(RealField, DoubleBufferFactory)
+
+        /**
+         * A structured matrix with custom buffer
+         */
+        fun <T : Any, R : Ring<T>> buffered(
+            ring: R,
+            bufferFactory: BufferFactory<T> = ::boxing
+        ): GenericMatrixContext<T, R> =
+            BufferMatrixContext(ring, bufferFactory)
+
+        /**
+         * Automatic buffered matrix, unboxed if it is possible
+         */
+        inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R> =
+            buffered(ring, Buffer.Companion::auto)
+    }
+}
+
+interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
     /**
      * The ring context for matrix elements
      */
     val elementContext: R
 
     /**
-     * Produce a matrix with this context and given dimensions
-     */
-    fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
-
-    /**
      * Produce a point compatible with matrix space
      */
     fun point(size: Int, initializer: (Int) -> T): Point<T>
 
-    fun scale(a: Matrix<T>, k: Number): Matrix<T> {
-        //TODO create a special wrapper class for scaled matrices
-        return produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a[i, j] * k } }
-    }
-
-    infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
+    override infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         //TODO add typed error
         if (this.colNum != other.rowNum) error("Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})")
         return produce(rowNum, other.colNum) { i, j ->
@@ -41,7 +74,7 @@ interface MatrixContext<T : Any, R : Ring<T>> {
         }
     }
 
-    infix fun Matrix<T>.dot(vector: Point<T>): Point<T> {
+    override infix fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         //TODO add typed error
         if (this.colNum != vector.size) error("Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})")
         return point(rowNum) { i ->
@@ -52,15 +85,15 @@ interface MatrixContext<T : Any, R : Ring<T>> {
         }
     }
 
-    operator fun Matrix<T>.unaryMinus() =
+    override operator fun Matrix<T>.unaryMinus() =
         produce(rowNum, colNum) { i, j -> elementContext.run { -get(i, j) } }
 
-    operator fun Matrix<T>.plus(b: Matrix<T>): Matrix<T> {
+    override operator fun Matrix<T>.plus(b: Matrix<T>): Matrix<T> {
         if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] + [${b.rowNum},${b.colNum}]")
         return produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) + b[i, j] } }
     }
 
-    operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
+    override operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
         if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]")
         return produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) + b[i, j] } }
     }
@@ -68,27 +101,10 @@ interface MatrixContext<T : Any, R : Ring<T>> {
     operator fun Matrix<T>.times(number: Number): Matrix<T> =
         produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * number } }
 
-    operator fun Number.times(m: Matrix<T>): Matrix<T> = m * this
+    operator fun Number.times(matrix: Matrix<T>): Matrix<T> = matrix * this
 
-
-    companion object {
-        /**
-         * Non-boxing double matrix
-         */
-        val real = BufferMatrixContext(RealField, DoubleBufferFactory)
-
-        /**
-         * A structured matrix with custom buffer
-         */
-        fun <T : Any, R : Ring<T>> buffered(ring: R, bufferFactory: BufferFactory<T> = ::boxing): MatrixContext<T, R> =
-            BufferMatrixContext(ring, bufferFactory)
-
-        /**
-         * Automatic buffered matrix, unboxed if it is possible
-         */
-        inline fun <reified T : Any, R : Ring<T>> auto(ring: R): MatrixContext<T, R> =
-            buffered(ring, Buffer.Companion::auto)
-    }
+    override fun Matrix<T>.times(value: T): Matrix<T> =
+        produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * value } }
 }
 
 /**
@@ -173,7 +189,7 @@ inline fun <reified T : Any> Matrix<*>.getFeature(): T? = features.filterIsInsta
 /**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> =
+fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> =
     VirtualMatrix<T>(rows, columns) { i, j ->
         if (i == j) elementContext.one else elementContext.zero
     }
@@ -182,7 +198,7 @@ fun <T : Any, R : Ring<T>> MatrixContext<T, R>.one(rows: Int, columns: Int): Mat
 /**
  * A virtual matrix of zeroes
  */
-fun <T : Any, R : Ring<T>> MatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> =
+fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> =
     VirtualMatrix<T>(rows, columns) { i, j ->
         elementContext.zero
     }

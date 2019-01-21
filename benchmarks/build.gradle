@@ -5,9 +5,10 @@ plugins {
 }
 
 dependencies {
-    api project(":kmath-core")
-    api project(":kmath-coroutines")
-    api project(":kmath-commons")
+    implementation project(":kmath-core")
+    implementation project(":kmath-coroutines")
+    implementation project(":kmath-commons")
+    implementation project(":kmath-koma")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     //jmh project(':kmath-core')
 }

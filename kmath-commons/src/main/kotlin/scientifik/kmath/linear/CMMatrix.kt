@@ -3,8 +3,6 @@ package scientifik.kmath.linear
 import org.apache.commons.math3.linear.*
 import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
-import scientifik.kmath.operations.RealField
-import scientifik.kmath.structures.DoubleBuffer
 
 inline class CMMatrix(val origin: RealMatrix) : Matrix<Double> {
     override val rowNum: Int get() = origin.rowDimension
@@ -40,44 +38,51 @@ fun Point<Double>.toCM(): CMVector = if (this is CMVector) {
     CMVector(ArrayRealVector(array))
 }
 
-fun RealVector.toPoint() = DoubleBuffer(this.toArray())
+fun RealVector.toPoint() = CMVector(this)
 
-object CMMatrixContext : MatrixContext<Double, RealField> {
-    override val elementContext: RealField get() = RealField
+object CMMatrixContext : MatrixContext<Double>, LinearSolver<Double> {
 
-    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
+    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
         val array = Array(rows) { i -> DoubleArray(columns) { j -> initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
     }
 
-    override fun point(size: Int, initializer: (Int) -> Double): Point<Double> {
-        val array = DoubleArray(size, initializer)
-        return CMVector(ArrayRealVector(array))
+    override fun solve(a: Matrix<Double>, b: Matrix<Double>): CMMatrix {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.solve(b.toCM().origin).toMatrix()
     }
 
-    override fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = CMMatrix(this.toCM().origin.multiply(other.toCM().origin))
+    override fun solve(a: Matrix<Double>, b: Point<Double>): CMVector {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.solve(b.toCM().origin).toPoint()
+    }
+
+    override fun inverse(a: Matrix<Double>): CMMatrix {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.inverse.toMatrix()
+    }
+
+    override fun Matrix<Double>.dot(other: Matrix<Double>) =
+        CMMatrix(this.toCM().origin.multiply(other.toCM().origin))
+
+    override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
+        CMVector(this.toCM().origin.preMultiply(vector.toCM().origin))
+
+
+    override fun Matrix<Double>.unaryMinus(): CMMatrix =
+        produce(rowNum, colNum) { i, j -> -get(i, j) }
+
+    override fun Matrix<Double>.plus(b: Matrix<Double>) =
+        CMMatrix(this.toCM().origin.multiply(b.toCM().origin))
+
+    override fun Matrix<Double>.minus(b: Matrix<Double>) =
+        CMMatrix(this.toCM().origin.subtract(b.toCM().origin))
+
+    override fun Matrix<Double>.times(value: Double) =
+        CMMatrix(this.toCM().origin.scalarMultiply(value.toDouble()))
 }
 
 operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.add(other.origin))
 operator fun CMMatrix.minus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.subtract(other.origin))
 
 infix fun CMMatrix.dot(other: CMMatrix): CMMatrix = CMMatrix(this.origin.multiply(other.origin))
-
-object CMSolver : LinearSolver<Double, RealField> {
-
-    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.solve(b.toCM().origin).toMatrix()
-    }
-
-    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.solve(b.toCM().origin).toPoint()
-    }
-
-    override fun inverse(a: Matrix<Double>): Matrix<Double> {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.inverse.toMatrix()
-    }
-
-}

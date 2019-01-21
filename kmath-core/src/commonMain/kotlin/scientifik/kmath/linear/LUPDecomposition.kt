@@ -65,7 +65,7 @@ class LUPDecomposition<T : Comparable<T>>(
 
 
 class LUSolver<T : Comparable<T>, F : Field<T>>(
-    val context: MatrixContext<T, F>,
+    val context: GenericMatrixContext<T, F>,
     val bufferFactory: MutableBufferFactory<T> = ::boxing,
     val singularityCheck: (T) -> Boolean
 ) : LinearSolver<T, F> {
@@ -201,6 +201,6 @@ class LUSolver<T : Comparable<T>, F : Field<T>>(
     override fun inverse(a: Matrix<T>): Matrix<T> = solve(a, context.one(a.rowNum, a.colNum))
 
     companion object {
-        val real = LUSolver(MatrixContext.real, MutableBuffer.Companion::auto) { it < 1e-11 }
+        val real = LUSolver(GenericMatrixContext.real, MutableBuffer.Companion::auto) { it < 1e-11 }
     }
 }

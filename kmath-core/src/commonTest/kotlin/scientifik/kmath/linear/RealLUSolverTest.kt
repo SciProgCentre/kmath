@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class RealLUSolverTest {
     @Test
     fun testInvertOne() {
-        val matrix = MatrixContext.real.one(2, 2)
+        val matrix = GenericMatrixContext.real.one(2, 2)
         val inverted = LUSolver.real.inverse(matrix)
         assertEquals(matrix, inverted)
     }
@@ -25,7 +25,7 @@ class RealLUSolverTest {
         assertEquals(8.0, decomposition.determinant)
 
         //Check decomposition
-        with(MatrixContext.real) {
+        with(GenericMatrixContext.real) {
             assertEquals(decomposition.p dot matrix, decomposition.l dot decomposition.u)
         }
 

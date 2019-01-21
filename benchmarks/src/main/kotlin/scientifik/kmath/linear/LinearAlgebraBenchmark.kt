@@ -29,7 +29,7 @@ fun main() {
 
     //commons-math
 
-    val cmSolver = CMSolver
+    val cmSolver = CMMatrixContext
 
     val commonsTime = measureTimeMillis {
         val cm = matrix.toCM()             //avoid overhead on conversion

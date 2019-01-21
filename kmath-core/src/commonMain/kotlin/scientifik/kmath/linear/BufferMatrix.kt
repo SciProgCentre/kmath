@@ -9,7 +9,7 @@ import scientifik.kmath.structures.*
 class BufferMatrixContext<T : Any, R : Ring<T>>(
     override val elementContext: R,
     private val bufferFactory: BufferFactory<T>
-) : MatrixContext<T, R> {
+) : GenericMatrixContext<T, R> {
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): BufferMatrix<T> {
         val buffer = bufferFactory(rows * columns) { offset -> initializer(offset / columns, offset % columns) }

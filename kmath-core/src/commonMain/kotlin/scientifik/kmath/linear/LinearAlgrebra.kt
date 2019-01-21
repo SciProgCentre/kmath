@@ -3,7 +3,6 @@ package scientifik.kmath.linear
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Norm
 import scientifik.kmath.operations.RealField
-import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.VirtualBuffer
 import scientifik.kmath.structures.asSequence
 
@@ -11,7 +10,7 @@ import scientifik.kmath.structures.asSequence
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
  */
-interface LinearSolver<T : Any, R : Ring<T>>  {
+interface LinearSolver<T : Any>  {
     fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>
     fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.toMatrix()).toVector()
     fun inverse(a: Matrix<T>): Matrix<T>
