@@ -7,6 +7,9 @@ import scientifik.kmath.operations.Space
 
 /**
  * The root for all [NDStructure] based algebra elements. Does not implement algebra element root because of problems with recursive self-types
+ * @param T  the type of the element of the structure
+ * @param C the type of the context for the element
+ * @param N the type of the underlying [NDStructure]
  */
 interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
 
@@ -15,9 +18,6 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
     fun unwrap(): N
 
     fun N.wrap(): NDElement<T, C, N>
-
-    fun mapIndexed(transform: C.(index: IntArray, T) -> T) = context.mapIndexed(unwrap(), transform).wrap()
-    fun map(transform: C.(T) -> T) = context.map(unwrap(), transform).wrap()
 
     companion object {
         /**
@@ -61,10 +61,17 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
     }
 }
 
+
+fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index: IntArray, T) -> T) =
+    context.mapIndexed(unwrap(), transform).wrap()
+
+fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T) = context.map(unwrap(), transform).wrap()
+
+
 /**
  * Element by element application of any operation on elements to the whole [NDElement]
  */
-operator fun <T, C> Function1<T, T>.invoke(ndElement: NDElement<T, C, *>) =
+operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElement<T, C, N>) =
     ndElement.map { value -> this@invoke(value) }
 
 /* plus and minus */
@@ -72,13 +79,13 @@ operator fun <T, C> Function1<T, T>.invoke(ndElement: NDElement<T, C, *>) =
 /**
  * Summation operation for [NDElement] and single element
  */
-operator fun <T, S : Space<T>> NDElement<T, S, *>.plus(arg: T) =
+operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.plus(arg: T) =
     map { value -> arg + value }
 
 /**
  * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, S : Space<T>> NDElement<T, S, *>.minus(arg: T) =
+operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg: T) =
     map { value -> arg - value }
 
 /* prod and div */
@@ -86,13 +93,13 @@ operator fun <T, S : Space<T>> NDElement<T, S, *>.minus(arg: T) =
 /**
  * Product operation for [NDElement] and single element
  */
-operator fun <T, R : Ring<T>> NDElement<T, R, *>.times(arg: T) =
+operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: T) =
     map { value -> arg * value }
 
 /**
  * Division operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>> NDElement<T, F, *>.div(arg: T) =
+operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T) =
     map { value -> arg / value }
 
 
