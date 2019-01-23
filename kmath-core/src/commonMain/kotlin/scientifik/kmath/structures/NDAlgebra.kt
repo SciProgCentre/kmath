@@ -14,7 +14,7 @@ class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : Run
 /**
  * The base interface for all nd-algebra implementations
  * @param T the type of nd-structure element
- * @param C the type of the context
+ * @param C the type of the element context
  * @param N the type of the structure
  */
 interface NDAlgebra<T, C, N : NDStructure<T>> {
@@ -112,10 +112,13 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
     operator fun T.div(arg: N) = map(arg) { divide(it, this@div) }
 
     companion object {
+
+        private val realNDFieldCache = HashMap<IntArray, RealNDField>()
+
         /**
-         * Create a nd-field for [Double] values
+         * Create a nd-field for [Double] values or pull it from cache if it was created previously
          */
-        fun real(shape: IntArray) = RealNDField(shape)
+        fun real(shape: IntArray) = realNDFieldCache.getOrPut(shape){RealNDField(shape)}
 
         /**
          * Create a nd-field with boxing generic buffer

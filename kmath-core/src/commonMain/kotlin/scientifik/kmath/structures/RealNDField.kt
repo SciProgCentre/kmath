@@ -87,10 +87,24 @@ inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initiali
 }
 
 /**
+ * Map one [RealNDElement] using function with indexes
+ */
+inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double) =
+    context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
+
+/**
+ * Map one [RealNDElement] using function without indexes
+ */
+inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
+    val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }
+    return BufferedNDFieldElement(context, DoubleBuffer(array))
+}
+
+/**
  * Element by element application of any operation on elements to the whole array. Just like in numpy
  */
 operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
-    ndElement.context.produceInline { i -> invoke(ndElement.buffer[i]) }
+    ndElement.map { this@invoke(it) }
 
 
 /* plus and minus */
@@ -99,10 +113,10 @@ operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
  * Summation operation for [BufferedNDElement] and single element
  */
 operator fun RealNDElement.plus(arg: Double) =
-    context.produceInline { i -> buffer[i] + arg }
+    map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
 operator fun RealNDElement.minus(arg: Double) =
-    context.produceInline { i -> buffer[i] - arg }
+    map { it - arg }
