@@ -108,26 +108,6 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
 }
 
 /**
- * A marker interface representing some matrix feature like diagonal, sparce, zero, etc. Features used to optimize matrix
- * operations performance in some cases.
- */
-interface MatrixFeature
-
-object DiagonalFeature : MatrixFeature
-
-object ZeroFeature : MatrixFeature
-
-object UnitFeature : MatrixFeature
-
-interface InverseMatrixFeature<T : Any> : MatrixFeature {
-    val inverse: Matrix<T>
-}
-
-interface DeterminantFeature<T : Any> : MatrixFeature {
-    val determinant: T
-}
-
-/**
  * Specialized 2-d structure
  */
 interface Matrix<T : Any> : NDStructure<T> {
@@ -173,6 +153,16 @@ interface Matrix<T : Any> : NDStructure<T> {
             val buffer = elements.asBuffer()
             return BufferMatrix(size, size, buffer)
         }
+
+        fun <T : Any> build(rows: Int, columns: Int): MatrixBuilder<T> = MatrixBuilder(rows, columns)
+    }
+}
+
+class MatrixBuilder<T : Any>(val rows: Int, val columns: Int) {
+    operator fun invoke(vararg elements: T): Matrix<T> {
+        if (rows * columns != elements.size) error("The number of elements ${elements.size} is not equal $rows * $columns")
+        val buffer = elements.asBuffer()
+        return BufferMatrix(rows, columns, buffer)
     }
 }
 

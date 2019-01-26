@@ -41,4 +41,14 @@ class MatrixTest {
         assertEquals(5.0, product[1, 0])
         assertEquals(6.0, product[2, 2])
     }
+
+    @Test
+    fun testBuilder() {
+        val matrix = Matrix.build<Double>(2, 3)(
+            1.0, 0.0, 0.0,
+            0.0, 1.0, 2.0
+        )
+
+        assertEquals(2.0, matrix[1, 2])
+    }
 }

@@ -8,8 +8,12 @@ repositories {
 
 kotlin {
     jvm {
-        compilations["main"].kotlinOptions.jvmTarget = "1.8"
-        compilations["test"].kotlinOptions.jvmTarget = "1.8"
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+                freeCompilerArgs += "-progressive"
+            }
+        }
     }
     js()
 
