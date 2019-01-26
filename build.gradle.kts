@@ -1,14 +1,10 @@
 buildscript {
-    extra["kotlinVersion"] = "1.3.20-eap-100"
-    extra["ioVersion"] = "0.1.2"
-    extra["coroutinesVersion"] = "1.1.0"
-
-    val kotlinVersion: String by extra
-    val ioVersion: String by extra
-    val coroutinesVersion: String by extra
+    val kotlinVersion: String by rootProject.extra("1.3.20")
+    val ioVersion: String by rootProject.extra("0.1.2")
+    val coroutinesVersion: String by rootProject.extra("1.1.1")
 
     repositories {
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        //maven("https://dl.bintray.com/kotlin/kotlin-eap")
         jcenter()
     }
 
@@ -28,7 +24,7 @@ allprojects {
     apply(plugin = "com.jfrog.artifactory")
 
     group = "scientifik"
-    version = "0.0.3-dev-3"
+    version = "0.0.3-dev-4"
 
     repositories {
         maven("https://dl.bintray.com/kotlin/kotlin-eap")

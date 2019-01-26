@@ -2,23 +2,22 @@ plugins {
     kotlin("multiplatform")
 }
 
-repositories {
-    maven("http://dl.bintray.com/kyonifer/maven")
-}
 
 kotlin {
     jvm {
-        compilations["main"].kotlinOptions.jvmTarget = "1.8"
-        compilations["test"].kotlinOptions.jvmTarget = "1.8"
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+                freeCompilerArgs += "-progressive"
+            }
+        }
     }
     js()
 
     sourceSets {
-
         val commonMain by getting {
             dependencies {
-                api(project(":kmath-core"))
-                api("com.kyonifer:koma-core-api-common:0.12")
+                api(kotlin("stdlib"))
             }
         }
         val commonTest by getting {
@@ -29,19 +28,18 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                api("com.kyonifer:koma-core-api-jvm:0.12")
+                api(kotlin("stdlib-jdk8"))
             }
         }
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
-                implementation("com.kyonifer:koma-core-ejml:0.12")
             }
         }
         val jsMain by getting {
             dependencies {
-                api("com.kyonifer:koma-core-api-js:0.12")
+                api(kotlin("stdlib-js"))
             }
         }
         val jsTest by getting {
@@ -49,5 +47,9 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
+//        mingwMain {
+//        }
+//        mingwTest {
+//        }
     }
 }

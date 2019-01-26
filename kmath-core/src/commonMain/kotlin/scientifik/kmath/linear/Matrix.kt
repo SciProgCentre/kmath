@@ -167,7 +167,7 @@ interface Matrix<T : Any> : NDStructure<T> {
         /**
          * Build a square matrix from given elements.
          */
-        fun <T : Any> build(vararg elements: T): Matrix<T> {
+        fun <T : Any> square(vararg elements: T): Matrix<T> {
             val size: Int = sqrt(elements.size.toDouble()).toInt()
             if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
             val buffer = elements.asBuffer()
