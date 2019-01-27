@@ -8,6 +8,9 @@ class VirtualMatrix<T : Any>(
 ) : Matrix<T> {
     override fun get(i: Int, j: Int): T = generator(i, j)
 
+    override fun suggestFeature(vararg features: MatrixFeature) =
+        VirtualMatrix(rowNum, colNum, this.features + features, generator)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Matrix<*>) return false

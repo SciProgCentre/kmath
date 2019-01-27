@@ -4,11 +4,16 @@ import org.apache.commons.math3.linear.*
 import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
 
-inline class CMMatrix(val origin: RealMatrix) : Matrix<Double> {
+class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) : Matrix<Double> {
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
-    override val features: Set<MatrixFeature> get() = emptySet()
+    override val features: Set<MatrixFeature> = features ?: sequence<MatrixFeature> {
+        if(origin is DiagonalMatrix) yield(DiagonalFeature)
+    }.toSet()
+
+    override fun suggestFeature(vararg features: MatrixFeature) =
+        CMMatrix(origin, this.features + features)
 
     override fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
 }
@@ -23,7 +28,7 @@ fun Matrix<Double>.toCM(): CMMatrix = if (this is CMMatrix) {
 
 fun RealMatrix.toMatrix() = CMMatrix(this)
 
-inline class CMVector(val origin: RealVector) : Point<Double> {
+class CMVector(val origin: RealVector) : Point<Double> {
     override val size: Int get() = origin.dimension
 
     override fun get(index: Int): Double = origin.getEntry(index)

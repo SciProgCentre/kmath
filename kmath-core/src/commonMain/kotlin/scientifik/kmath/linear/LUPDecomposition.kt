@@ -8,20 +8,19 @@ import scientifik.kmath.structures.MutableBufferFactory
 import scientifik.kmath.structures.NDStructure
 import scientifik.kmath.structures.get
 
-
 class LUPDecomposition<T : Comparable<T>>(
     private val elementContext: Ring<T>,
     internal val lu: NDStructure<T>,
     val pivot: IntArray,
     private val even: Boolean
-) : DeterminantFeature<T> {
+) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
 
     /**
      * Returns the matrix L of the decomposition.
      *
      * L is a lower-triangular matrix with [Ring.one] in diagonal
      */
-    val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+    override val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(LFeature)) { i, j ->
         when {
             j < i -> lu[i, j]
             j == i -> elementContext.one
@@ -35,7 +34,7 @@ class LUPDecomposition<T : Comparable<T>>(
      *
      * U is an upper-triangular matrix including the diagonal
      */
-    val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+    override val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(UFeature)) { i, j ->
         if (j >= i) lu[i, j] else elementContext.zero
     }
 
@@ -46,7 +45,7 @@ class LUPDecomposition<T : Comparable<T>>(
      * P is a sparse matrix with exactly one element set to [Ring.one] in
      * each row and each column, all other elements being set to [Ring.zero].
      */
-    val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+    override val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
         if (j == pivot[i]) elementContext.one else elementContext.zero
     }
 

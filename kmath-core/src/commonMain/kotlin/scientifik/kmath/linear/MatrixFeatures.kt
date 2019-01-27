@@ -12,7 +12,7 @@ interface MatrixFeature
 object DiagonalFeature : MatrixFeature
 
 /**
- * Matix with this feature has all zero elements
+ * Matrix with this feature has all zero elements
  */
 object ZeroFeature : MatrixFeature
 
@@ -21,10 +21,42 @@ object ZeroFeature : MatrixFeature
  */
 object UnitFeature : MatrixFeature
 
+/**
+ * Inverted matrix feature
+ */
 interface InverseMatrixFeature<T : Any> : MatrixFeature {
     val inverse: Matrix<T>
 }
 
+/**
+ * A determinant container
+ */
 interface DeterminantFeature<T : Any> : MatrixFeature {
     val determinant: T
 }
+
+@Suppress("FunctionName")
+fun <T: Any> DeterminantFeature(determinant: T) = object: DeterminantFeature<T>{
+    override val determinant: T = determinant
+}
+
+/**
+ * Lower triangular matrix
+ */
+object LFeature: MatrixFeature
+
+/**
+ * Upper triangular feature
+ */
+object UFeature: MatrixFeature
+
+/**
+ * TODO add documentation
+ */
+interface LUPDecompositionFeature<T : Any> : MatrixFeature {
+    val l: Matrix<T>
+    val u: Matrix<T>
+    val p: Matrix<T>
+}
+
+//TODO add sparse matrix feature

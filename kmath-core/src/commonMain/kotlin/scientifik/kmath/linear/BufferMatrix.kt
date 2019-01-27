@@ -35,6 +35,9 @@ class BufferMatrix<T : Any>(
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
+    override fun suggestFeature(vararg features: MatrixFeature) =
+        BufferMatrix(rowNum, colNum, buffer, this.features + features)
+
     override fun get(index: IntArray): T = get(index[0], index[1])
 
     override fun get(i: Int, j: Int): T = buffer[i * colNum + j]

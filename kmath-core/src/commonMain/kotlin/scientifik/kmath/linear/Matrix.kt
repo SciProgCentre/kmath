@@ -116,6 +116,14 @@ interface Matrix<T : Any> : NDStructure<T> {
 
     val features: Set<MatrixFeature>
 
+    /**
+     * Suggest new feature for this matrix. The result is the new matrix that may or may not reuse existing data structure.
+     *
+     * The implementation does not guarantee to check that matrix actually have the feature, so one should be careful to
+     * add only those features that are valid.
+     */
+    fun suggestFeature(vararg features: MatrixFeature): Matrix<T>
+
     operator fun get(i: Int, j: Int): T
 
     override fun get(index: IntArray): T = get(index[0], index[1])
