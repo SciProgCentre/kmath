@@ -110,7 +110,7 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
 /**
  * Specialized 2-d structure
  */
-interface Matrix<T : Any> : NDStructure<T> {
+interface Matrix<T : Any> : Structure2D<T> {
     val rowNum: Int
     val colNum: Int
 
@@ -123,8 +123,6 @@ interface Matrix<T : Any> : NDStructure<T> {
      * add only those features that are valid.
      */
     fun suggestFeature(vararg features: MatrixFeature): Matrix<T>
-
-    operator fun get(i: Int, j: Int): T
 
     override fun get(index: IntArray): T = get(index[0], index[1])
 

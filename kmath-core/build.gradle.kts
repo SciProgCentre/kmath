@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("multiplatform")
 }
@@ -8,13 +10,16 @@ kotlin {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
-                freeCompilerArgs += "-progressive"
             }
         }
     }
     js()
 
     sourceSets {
+        all {
+            languageSettings.progressiveMode = true
+        }
+        
         val commonMain by getting {
             dependencies {
                 api(kotlin("stdlib"))

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
 buildscript {
     val kotlinVersion: String by rootProject.extra("1.3.20")
     val ioVersion: String by rootProject.extra("0.1.2")
@@ -27,8 +29,24 @@ allprojects {
     version = "0.0.3-dev-4"
 
     repositories {
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        //maven("https://dl.bintray.com/kotlin/kotlin-eap")
         jcenter()
+    }
+
+    extensions.findByType<KotlinMultiplatformExtension>()?.apply {
+        jvm {
+            compilations.all {
+                kotlinOptions {
+                    jvmTarget = "1.8"
+                }
+            }
+        }
+        targets.all {
+            sourceSets.all {
+                languageSettings.progressiveMode = true
+                languageSettings.enableLanguageFeature("+InlineClasses")
+            }
+        }
     }
 }
 

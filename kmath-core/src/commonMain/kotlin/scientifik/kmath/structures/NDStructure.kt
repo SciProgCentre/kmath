@@ -16,7 +16,9 @@ interface NDStructure<T> {
         fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
             return when {
                 st1 === st2 -> true
-                st1 is BufferNDStructure<*> && st2 is BufferNDStructure<*> && st1.strides == st2.strides -> st1.buffer.contentEquals(st2.buffer)
+                st1 is BufferNDStructure<*> && st2 is BufferNDStructure<*> && st1.strides == st2.strides -> st1.buffer.contentEquals(
+                    st2.buffer
+                )
                 else -> st1.elements().all { (index, value) -> value == st2[index] }
             }
         }
