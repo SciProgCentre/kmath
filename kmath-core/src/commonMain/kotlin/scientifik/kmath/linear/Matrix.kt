@@ -175,7 +175,7 @@ class MatrixBuilder<T : Any>(val rows: Int, val columns: Int) {
 /**
  * Check if matrix has the given feature class
  */
-inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean = features.find { T::class.isInstance(it) } != null
+inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean = features.find { it is T } != null
 
 /**
  * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
@@ -195,9 +195,7 @@ fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: In
  * A virtual matrix of zeroes
  */
 fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> =
-    VirtualMatrix<T>(rows, columns) { i, j ->
-        elementContext.zero
-    }
+    VirtualMatrix<T>(rows, columns) { _, _ -> elementContext.zero }
 
 class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature
 
