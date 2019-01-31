@@ -15,6 +15,7 @@ class ShortNDRing(override val shape: IntArray) :
     override val zero by lazy { produce { ShortRing.zero } }
     override val one by lazy { produce { ShortRing.one } }
 
+    @Suppress("OVERRIDE_BY_INLINE")
     override inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Short): Buffer<Short> =
         ShortBuffer(ShortArray(size) { initializer(it) })
 

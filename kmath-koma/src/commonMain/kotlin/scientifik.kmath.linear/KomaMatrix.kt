@@ -48,10 +48,25 @@ class KomaMatrixContext<T : Any>(val factory: MatrixFactory<koma.matrix.Matrix<T
         KomaMatrix(a.toKoma().origin.inv())
 }
 
-inline class KomaMatrix<T : Any>(val origin: koma.matrix.Matrix<T>) : Matrix<T> {
+class KomaMatrix<T : Any>(val origin: koma.matrix.Matrix<T>, features: Set<MatrixFeature>? = null) :
+    Matrix<T> {
     override val rowNum: Int get() = origin.numRows()
     override val colNum: Int get() = origin.numCols()
-    override val features: Set<MatrixFeature> get() = emptySet()
+
+    override val features: Set<MatrixFeature> = features ?: setOf(
+        object : DeterminantFeature<T> {
+            override val determinant: T get() = origin.det()
+        },
+        object : LUPDecompositionFeature<T> {
+            private val lup by lazy { origin.LU() }
+            override val l: Matrix<T> get() = KomaMatrix(lup.second)
+            override val u: Matrix<T> get() = KomaMatrix(lup.third)
+            override val p: Matrix<T> get() = KomaMatrix(lup.first)
+        }
+    )
+
+    override fun suggestFeature(vararg features: MatrixFeature): Matrix<T> =
+        KomaMatrix(this.origin, this.features + features)
 
     override fun get(i: Int, j: Int): T = origin.getGeneric(i, j)
 }

@@ -108,26 +108,6 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
 }
 
 /**
- * A marker interface representing some matrix feature like diagonal, sparce, zero, etc. Features used to optimize matrix
- * operations performance in some cases.
- */
-interface MatrixFeature
-
-object DiagonalFeature : MatrixFeature
-
-object ZeroFeature : MatrixFeature
-
-object UnitFeature : MatrixFeature
-
-interface InverseMatrixFeature<T : Any> : MatrixFeature {
-    val inverse: Matrix<T>
-}
-
-interface DeterminantFeature<T : Any> : MatrixFeature {
-    val determinant: T
-}
-
-/**
  * Specialized 2-d structure
  */
 interface Matrix<T : Any> : NDStructure<T> {
@@ -135,6 +115,14 @@ interface Matrix<T : Any> : NDStructure<T> {
     val colNum: Int
 
     val features: Set<MatrixFeature>
+
+    /**
+     * Suggest new feature for this matrix. The result is the new matrix that may or may not reuse existing data structure.
+     *
+     * The implementation does not guarantee to check that matrix actually have the feature, so one should be careful to
+     * add only those features that are valid.
+     */
+    fun suggestFeature(vararg features: MatrixFeature): Matrix<T>
 
     operator fun get(i: Int, j: Int): T
 
@@ -167,12 +155,22 @@ interface Matrix<T : Any> : NDStructure<T> {
         /**
          * Build a square matrix from given elements.
          */
-        fun <T : Any> build(vararg elements: T): Matrix<T> {
+        fun <T : Any> square(vararg elements: T): Matrix<T> {
             val size: Int = sqrt(elements.size.toDouble()).toInt()
             if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
             val buffer = elements.asBuffer()
             return BufferMatrix(size, size, buffer)
         }
+
+        fun <T : Any> build(rows: Int, columns: Int): MatrixBuilder<T> = MatrixBuilder(rows, columns)
+    }
+}
+
+class MatrixBuilder<T : Any>(val rows: Int, val columns: Int) {
+    operator fun invoke(vararg elements: T): Matrix<T> {
+        if (rows * columns != elements.size) error("The number of elements ${elements.size} is not equal $rows * $columns")
+        val buffer = elements.asBuffer()
+        return BufferMatrix(rows, columns, buffer)
     }
 }
 
