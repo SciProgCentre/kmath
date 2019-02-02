@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    id("kotlinx-atomicfu")
 }
 
 
@@ -10,7 +11,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(kotlin("stdlib"))
+                api(project(":kmath-core"))
+                api(project(":kmath-coroutines"))
+                compileOnly("org.jetbrains.kotlinx:atomicfu-common:0.12.1")
             }
         }
         val commonTest by getting {
@@ -21,7 +24,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                api(kotlin("stdlib-jdk8"))
+                compileOnly("org.jetbrains.kotlinx:atomicfu:0.12.1")
             }
         }
         val jvmTest by getting {
@@ -30,11 +33,11 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        val jsMain by getting {
-            dependencies {
-                api(kotlin("stdlib-js"))
-            }
-        }
+//        val jsMain by getting {
+//            dependencies {
+//                api(kotlin("stdlib-js"))
+//            }
+//        }
         val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))

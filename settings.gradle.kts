@@ -1,8 +1,27 @@
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.12.1")
+    }
+
+    repositories {
+        jcenter()
+    }
+}
+
 pluginManagement {
     repositories {
         mavenCentral()
-        maven("https://plugins.gradle.org/m2/")
+        gradlePluginPortal()
         //maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+    }
+    resolutionStrategy {
+        eachPlugin {
+            when (requested.id.id) {
+                "kotlinx-atomicfu" -> {
+                    useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.12.1")
+                }
+            }
+        }
     }
 }
 
@@ -15,5 +34,6 @@ include(
     ":kmath-coroutines",
     ":kmath-commons",
     ":kmath-koma",
+    ":kmath-sequential",
     ":benchmarks"
 )

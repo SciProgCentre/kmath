@@ -26,7 +26,7 @@ allprojects {
     apply(plugin = "com.jfrog.artifactory")
 
     group = "scientifik"
-    version = "0.0.3-dev-4"
+    version = "0.0.3-dev-5"
 
     repositories {
         //maven("https://dl.bintray.com/kotlin/kotlin-eap")
@@ -44,7 +44,6 @@ allprojects {
         targets.all {
             sourceSets.all {
                 languageSettings.progressiveMode = true
-                languageSettings.enableLanguageFeature("+InlineClasses")
             }
         }
     }

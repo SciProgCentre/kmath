@@ -1,4 +1,4 @@
-package scientifik.kmath.misc
+package scientifik.kmath.sequential
 
 import kotlin.jvm.JvmName
 
