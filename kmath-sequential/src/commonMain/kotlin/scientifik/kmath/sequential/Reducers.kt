@@ -16,6 +16,6 @@ inline fun <T, C, R> Array<T>.reduce(context: C, crossinline reducer: Reducer<T,
 
 object Reducers {
     fun <T : Any> mean(): Reducer<T, Space<T>, T> = { context, data ->
-        data.fold(GenericSum(context)) { sum, value -> sum.apply { push(value) } }.value
+        data.fold(GenericMean(context)) { sum, value -> sum.apply { push(value) } }.value
     }
 }

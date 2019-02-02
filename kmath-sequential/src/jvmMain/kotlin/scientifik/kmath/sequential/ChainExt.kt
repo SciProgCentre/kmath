@@ -1,7 +1,6 @@
-package scientifik.kmath.chains
+package scientifik.kmath.sequential
 
 import kotlinx.coroutines.runBlocking
-import scientifik.kmath.sequential.Chain
 import kotlin.sequences.Sequence
 
 /**
