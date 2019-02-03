@@ -1,13 +1,3 @@
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.12.1")
-    }
-
-    repositories {
-        jcenter()
-    }
-}
-
 pluginManagement {
     repositories {
         mavenCentral()
@@ -18,7 +8,7 @@ pluginManagement {
         eachPlugin {
             when (requested.id.id) {
                 "kotlinx-atomicfu" -> {
-                    useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.12.1")
+                    useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:${requested.version}")
                 }
             }
         }

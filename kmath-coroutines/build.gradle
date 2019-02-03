@@ -3,13 +3,8 @@ plugins {
 }
 
 kotlin {
-    targets {
-        fromPreset(presets.jvm, 'jvm')
-        // For ARM, preset should be changed to presets.iosArm32 or presets.iosArm64
-        // For Linux, preset should be changed to e.g. presets.linuxX64
-        // For MacOS, preset should be changed to e.g. presets.macosX64
-        //fromPreset(presets.mingwX64, 'mingw')
-    }
+    jvm()
+    js()
     sourceSets {
         commonMain {
             dependencies {
@@ -32,6 +27,11 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+        jsMain{
+            dependencies{
+                api "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion"
             }
         }
 //        mingwMain {

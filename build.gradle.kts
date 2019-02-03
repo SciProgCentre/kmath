@@ -4,6 +4,7 @@ buildscript {
     val kotlinVersion: String by rootProject.extra("1.3.20")
     val ioVersion: String by rootProject.extra("0.1.2")
     val coroutinesVersion: String by rootProject.extra("1.1.1")
+    val atomicfuVersion: String by rootProject.extra("0.12.1")
 
     repositories {
         //maven("https://dl.bintray.com/kotlin/kotlin-eap")

@@ -97,11 +97,12 @@ class MarkovChain<out R : Any>(private val seed: () -> R, private val gen: suspe
 
     constructor(seed: R, gen: suspend (R) -> R) : this({ seed }, gen)
 
-    private val atomicValue by lazy { atomic(seed()) }
-    override val value: R get() = atomicValue.value
+    private val atomicValue = atomic<R?>(null)
+    override val value: R get() = atomicValue.value ?: seed()
 
     override suspend fun next(): R {
-        atomicValue.lazySet(gen(value))
+        val newValue = gen(value)
+        atomicValue.lazySet(newValue)
         return value
     }
 
@@ -122,11 +123,12 @@ class StatefulChain<S, out R>(
 
     constructor(state: S, seed: R, gen: suspend S.(R) -> R) : this(state, { seed }, gen)
 
-    private val atomicValue by lazy { atomic(seed(state)) }
-    override val value: R get() = atomicValue.value
+    private val atomicValue = atomic<R?>(null)
+    override val value: R get() = atomicValue.value ?: seed(state)
 
     override suspend fun next(): R {
-        atomicValue.lazySet(gen(state, value))
+        val newValue = gen(state, value)
+        atomicValue.lazySet(newValue)
         return value
     }
 

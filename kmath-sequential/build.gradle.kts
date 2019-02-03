@@ -1,19 +1,20 @@
 plugins {
     kotlin("multiplatform")
-    id("kotlinx-atomicfu")
+    id("kotlinx-atomicfu") version "0.12.1"
 }
 
+val atomicfuVersion: String by rootProject.extra
 
 kotlin {
     jvm ()
-    js()
+    //js()
 
     sourceSets {
         val commonMain by getting {
             dependencies {
                 api(project(":kmath-core"))
                 api(project(":kmath-coroutines"))
-                compileOnly("org.jetbrains.kotlinx:atomicfu-common:0.12.1")
+                compileOnly("org.jetbrains.kotlinx:atomicfu-common:$atomicfuVersion")
             }
         }
         val commonTest by getting {
@@ -24,7 +25,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                compileOnly("org.jetbrains.kotlinx:atomicfu:0.12.1")
+                compileOnly("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
             }
         }
         val jvmTest by getting {
@@ -35,17 +36,18 @@ kotlin {
         }
 //        val jsMain by getting {
 //            dependencies {
-//                api(kotlin("stdlib-js"))
+//                compileOnly("org.jetbrains.kotlinx:atomicfu-js:$atomicfuVersion")
 //            }
 //        }
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
-//        mingwMain {
+//        val jsTest by getting {
+//            dependencies {
+//                implementation(kotlin("test-js"))
+//            }
 //        }
-//        mingwTest {
-//        }
+
     }
+}
+
+atomicfu {
+    variant = "VH"
 }
