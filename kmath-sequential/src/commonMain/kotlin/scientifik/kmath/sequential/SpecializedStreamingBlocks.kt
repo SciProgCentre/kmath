@@ -1,16 +1,17 @@
 package scientifik.kmath.sequential
 
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.channels.toChannel
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.launch
 
 interface DoubleProducer : Producer<Double> {
-    val arrayOutput: ReceiveChannel<DoubleArray>
+    suspend fun receiveArray(): DoubleArray
 }
 
 interface DoubleConsumer : Consumer<Double> {
-    val arrayInput: SendChannel<DoubleArray>
+    suspend fun sendArray(): DoubleArray
 }
 
 
@@ -19,7 +20,7 @@ abstract class AbstractDoubleProducer(scope: CoroutineScope) : AbstractProducer<
         if (consumer is DoubleConsumer) {
             arrayOutput.toChannel(consumer.arrayInput)
         } else {
-            super.connectOutput(consumer)
+            connectOutput(super, consumer)
         }
     }
 }
@@ -41,7 +42,7 @@ abstract class AbstractDoubleProcessor(scope: CoroutineScope) : AbstractProcesso
         if (consumer is DoubleConsumer) {
             arrayOutput.toChannel(consumer.arrayInput)
         } else {
-            super.connectOutput(consumer)
+            connectOutput(super, consumer)
         }
     }
 
@@ -52,4 +53,27 @@ abstract class AbstractDoubleProcessor(scope: CoroutineScope) : AbstractProcesso
             super.connectInput(producer)
         }
     }
+}
+
+class DoubleReducer<S>(
+    scope: CoroutineScope,
+    initialState: S,
+    fold: suspend (S, DoubleArray) -> S
+) : AbstractDoubleConsumer(scope) {
+    private val state = atomic(initialState)
+
+    val value: S = state.value
+
+    override val arrayInput: SendChannel<DoubleArray> by lazy {
+        //create a channel and start process of reading all elements into aggregator
+        Channel<DoubleArray>(capacity = Channel.RENDEZVOUS).also {
+            launch {
+                it.consumeEach { value -> state.update { fold(it, value) } }
+            }
+        }
+    }
+
+    override val input: SendChannel<DoubleArray> = object :Abstr
+
+
 }
