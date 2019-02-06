@@ -3,10 +3,12 @@ package scientifik.kmath.sequential
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Initial chain block. Could produce an element sequence and be connected to single [Consumer]
@@ -17,7 +19,7 @@ import kotlinx.coroutines.sync.withLock
  * Also connections are not reversible. Once connected block stays faithful until it finishes processing.
  * Manually putting elements to connected block could lead to undetermined behavior and must be avoided.
  */
-interface Producer<T> {
+interface Producer<T> : CoroutineScope {
     val output: ReceiveChannel<T>
     fun connect(consumer: Consumer<T>)
 
@@ -29,7 +31,7 @@ interface Producer<T> {
 /**
  * Terminal chain block. Could consume an element sequence and be connected to signle [Producer]
  */
-interface Consumer<T> {
+interface Consumer<T> : CoroutineScope {
     val input: SendChannel<T>
     fun connect(producer: Producer<T>)
 
@@ -40,7 +42,9 @@ interface Consumer<T> {
 
 interface Processor<T, R> : Consumer<T>, Producer<R>
 
-abstract class AbstractProducer<T>(protected val scope: CoroutineScope) : Producer<T> {
+abstract class AbstractProducer<T>(scope: CoroutineScope) : Producer<T> {
+    override val coroutineContext: CoroutineContext = scope.coroutineContext
+
     override var consumer: Consumer<T>? = null
         protected set
 
@@ -52,17 +56,23 @@ abstract class AbstractProducer<T>(protected val scope: CoroutineScope) : Produc
             this.consumer = consumer
             if (consumer.producer != null) {
                 //No need to save the job, it will be canceled on scope cancel
-                scope.launch {
-                    output.toChannel(consumer.input)
+                launch {
+                    connectOutput(consumer)
                 }
                 // connect back, consumer is already set so no circular reference
                 consumer.connect(this)
             } else error("Unreachable statement")
         }
     }
+
+    protected open suspend fun connectOutput(consumer: Consumer<T>) {
+        output.toChannel(consumer.input)
+    }
 }
 
-abstract class AbstractConsumer<T>(protected val scope: CoroutineScope) : Consumer<T> {
+abstract class AbstractConsumer<T>(scope: CoroutineScope) : Consumer<T> {
+    override val coroutineContext: CoroutineContext = scope.coroutineContext
+
     override var producer: Producer<T>? = null
         protected set
 
@@ -74,17 +84,21 @@ abstract class AbstractConsumer<T>(protected val scope: CoroutineScope) : Consum
             this.producer = producer
             //No need to save the job, it will be canceled on scope cancel
             if (producer.consumer != null) {
-                scope.launch {
-                    producer.output.toChannel(input)
+                launch {
+                    connectInput(producer)
                 }
                 // connect back
                 producer.connect(this)
             } else error("Unreachable statement")
         }
     }
+
+    protected open suspend fun connectInput(producer: Producer<T>) {
+        producer.output.toChannel(input)
+    }
 }
 
-abstract class AbstracProcessor<T, R>(scope: CoroutineScope) : Processor<T, R>, AbstractProducer<R>(scope) {
+abstract class AbstractProcessor<T, R>(scope: CoroutineScope) : Processor<T, R>, AbstractProducer<R>(scope) {
 
     override var producer: Producer<T>? = null
         protected set
@@ -97,13 +111,17 @@ abstract class AbstracProcessor<T, R>(scope: CoroutineScope) : Processor<T, R>, 
             this.producer = producer
             //No need to save the job, it will be canceled on scope cancel
             if (producer.consumer != null) {
-                scope.launch {
-                    producer.output.toChannel(input)
+                launch {
+                    connectInput(producer)
                 }
                 // connect back
                 producer.connect(this)
             } else error("Unreachable statement")
         }
+    }
+
+    protected open suspend fun connectInput(producer: Producer<T>) {
+        producer.output.toChannel(input)
     }
 }
 
@@ -116,8 +134,66 @@ class GenericProducer<T>(
     block: suspend ProducerScope<T>.() -> Unit
 ) : AbstractProducer<T>(scope) {
     //The generation begins on first request to output
-    override val output: ReceiveChannel<T> by lazy { scope.produce(capacity = capacity, block = block) }
+    override val output: ReceiveChannel<T> by lazy { produce(capacity = capacity, block = block) }
 }
+
+/**
+ * A simple pipeline [Processor] block
+ */
+class PipeProcessor<T, R>(
+    scope: CoroutineScope,
+    capacity: Int = Channel.RENDEZVOUS,
+    process: suspend (T) -> R
+) : AbstractProcessor<T, R>(scope) {
+
+    private val _input = Channel<T>(capacity)
+    override val input: SendChannel<T> get() = _input
+    override val output: ReceiveChannel<R> = _input.map(coroutineContext, process)
+}
+
+/**
+ * A [Processor] that splits the input in fixed chunk size and transforms each chunk
+ */
+class ChunkProcessor<T, R>(
+    scope: CoroutineScope,
+    chunkSize: Int,
+    process: suspend (List<T>) -> R
+) : AbstractProcessor<T, R>(scope) {
+
+    private val _input = Channel<T>(chunkSize)
+
+    override val input: SendChannel<T> get() = _input
+
+    private val chunked = produce<List<T>>(coroutineContext) {
+        val list = ArrayList<T>(chunkSize)
+        repeat(chunkSize) {
+            list.add(_input.receive())
+        }
+        send(list)
+    }
+
+    override val output: ReceiveChannel<R> = chunked.map(coroutineContext, process)
+}
+
+/**
+ * A moving window [Processor]
+ */
+class WindowProcessor<T, R>(
+    scope: CoroutineScope,
+    window: Int,
+    process: suspend (List<T>) -> R
+) : AbstractProcessor<T, R>(scope) {
+
+
+    override val output: ReceiveChannel<R>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val input: SendChannel<T>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
+
+}
+
+//TODO add circular buffer processor
 
 /**
  * Thread-safe aggregator of values from input. The aggregator does not store all incoming values, it uses fold procedure
@@ -139,7 +215,7 @@ class Reducer<T, S>(
     override val input: SendChannel<T> by lazy {
         //create a channel and start process of reading all elements into aggregator
         Channel<T>(capacity = Channel.RENDEZVOUS).also {
-            scope.launch {
+            launch {
                 it.consumeEach { value -> state.update { fold(it, value) } }
             }
         }
@@ -158,7 +234,7 @@ class Collector<T>(scope: CoroutineScope) : AbstractConsumer<T>(scope) {
     override val input: SendChannel<T> by lazy {
         //create a channel and start process of reading all elements into aggregator
         Channel<T>(capacity = Channel.RENDEZVOUS).also {
-            scope.launch {
+            launch {
                 it.consumeEach { value ->
                     mutex.withLock {
                         _list.add(value)
@@ -168,3 +244,33 @@ class Collector<T>(scope: CoroutineScope) : AbstractConsumer<T>(scope) {
         }
     }
 }
+
+/**
+ * Convert a sequence to [Producer]
+ */
+fun <T> Sequence<T>.produce(scope: CoroutineScope = GlobalScope) =
+    GenericProducer<T>(scope) { forEach { send(it) } }
+
+/**
+ * Convert a [ReceiveChannel] to [Producer]
+ */
+fun <T> ReceiveChannel<T>.produce(scope: CoroutineScope = GlobalScope) =
+    GenericProducer<T>(scope) { for (e in this@produce) send(e) }
+
+/**
+ * Create a reducer and connect this producer to reducer
+ */
+fun <T, S> Producer<T>.reduce(initialState: S, fold: suspend (S, T) -> S) =
+    Reducer(this, initialState, fold).also { connect(it) }
+
+/**
+ * Create a [Collector] and attach it to this [Producer]
+ */
+fun <T> Producer<T>.collect() =
+    Collector<T>(this).also { connect(it) }
+
+fun <T, R> Producer<T>.process(capacity: Int = Channel.RENDEZVOUS, process: suspend (T) -> R) =
+    PipeProcessor(this, capacity, process)
+
+fun <T, R> Producer<T>.chunk(chunkSize: Int, process: suspend (List<T>) -> R) =
+    ChunkProcessor(this, chunkSize, process)
