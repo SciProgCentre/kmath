@@ -77,7 +77,7 @@ interface MutableBuffer<T> : Buffer<T> {
         /**
          * Create a boxing mutable buffer of given type
          */
-        inline fun <T : Any> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+        inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             MutableListBuffer(MutableList(size, initializer))
 
         /**

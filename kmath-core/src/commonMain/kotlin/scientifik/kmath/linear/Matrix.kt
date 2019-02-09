@@ -2,6 +2,7 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
+import scientifik.kmath.operations.sum
 import scientifik.kmath.structures.*
 import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import scientifik.kmath.structures.Buffer.Companion.boxing
@@ -69,7 +70,7 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
             val row = rows[i]
             val column = other.columns[j]
             with(elementContext) {
-                row.asSequence().zip(column.asSequence(), ::multiply).sum()
+                sum(row.asSequence().zip(column.asSequence(), ::multiply))
             }
         }
     }
@@ -80,7 +81,7 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
         return point(rowNum) { i ->
             val row = rows[i]
             with(elementContext) {
-                row.asSequence().zip(vector.asSequence(), ::multiply).sum()
+                sum(row.asSequence().zip(vector.asSequence(), ::multiply))
             }
         }
     }

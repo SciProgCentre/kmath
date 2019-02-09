@@ -20,7 +20,7 @@ pluginManagement {
 rootProject.name = "kmath"
 include(
     ":kmath-core",
-    ":kmath-io",
+//    ":kmath-io",
     ":kmath-coroutines",
     ":kmath-commons",
     ":kmath-koma",

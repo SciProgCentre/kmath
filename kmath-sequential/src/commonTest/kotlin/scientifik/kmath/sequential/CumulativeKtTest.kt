@@ -1,5 +1,6 @@
 package scientifik.kmath.misc
 
+import scientifik.kmath.sequential.cumulativeSum
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

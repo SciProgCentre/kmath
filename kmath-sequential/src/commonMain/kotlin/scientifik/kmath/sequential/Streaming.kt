@@ -1,7 +1,5 @@
 package scientifik.kmath.sequential
 
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.*
@@ -9,6 +7,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import scientifik.kmath.structures.Buffer
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -172,7 +171,7 @@ class PipeProcessor<T, R>(
 }
 
 /**
- * A [Processor] that splits the input in fixed chunk size and transforms each chunk
+ * A [Processor] that splits the input in fixed chunked size and transforms each chunked
  */
 class ChunkProcessor<T, R>(
     scope: CoroutineScope,
@@ -205,47 +204,44 @@ class ChunkProcessor<T, R>(
 class WindowedProcessor<T, R>(
     scope: CoroutineScope,
     window: Int,
-    process: suspend (List<T>) -> R
+    val process: suspend (Buffer<T?>) -> R
 ) : AbstractProcessor<T, R>(scope) {
 
+    private val ringBuffer = RingBuffer.boxing<T>(window)
+
+    private val channel = Channel<R>(Channel.RENDEZVOUS)
+
     override suspend fun receive(): R {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return channel.receive()
     }
 
     override suspend fun send(value: T) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        ringBuffer.push(value)
+        channel.send(process(ringBuffer.snapshot()))
     }
-
-
 }
 
 /**
  * Thread-safe aggregator of values from input. The aggregator does not store all incoming values, it uses fold procedure
  * to incorporate them into state on-arrival.
- * The current aggregated state could be accessed by [value]. The input channel is inactive unless requested
+ * The current aggregated state could be accessed by [state]. The input channel is inactive unless requested
  * @param T - the type of the input element
  * @param S - the type of the aggregator
  */
 class Reducer<T, S>(
     scope: CoroutineScope,
     initialState: S,
-    fold: suspend (S, T) -> S
+    val fold: suspend (S, T) -> S
 ) : AbstractConsumer<T>(scope) {
 
-    private val state = atomic(initialState)
+    var state: S = initialState
+        private set
 
-    val value: S = state.value
+    private val mutex = Mutex()
 
-    private val input: SendChannel<T> by lazy {
-        //create a channel and start process of reading all elements into aggregator
-        Channel<T>(capacity = Channel.RENDEZVOUS).also {
-            launch {
-                it.consumeEach { value -> state.update { fold(it, value) } }
-            }
-        }
+    override suspend fun send(value: T) = mutex.withLock {
+        state = fold(state, value)
     }
-
-    override suspend fun send(value: T) = input.send(value)
 }
 
 /**
@@ -257,20 +253,11 @@ class Collector<T>(scope: CoroutineScope) : AbstractConsumer<T>(scope) {
     private val mutex = Mutex()
     val list: List<T> get() = _list
 
-    private val input: SendChannel<T> by lazy {
-        //create a channel and start process of reading all elements into aggregator
-        Channel<T>(capacity = Channel.RENDEZVOUS).also {
-            launch {
-                it.consumeEach { value ->
-                    mutex.withLock {
-                        _list.add(value)
-                    }
-                }
-            }
+    override suspend fun send(value: T) {
+        mutex.withLock {
+            _list.add(value)
         }
     }
-
-    override suspend fun send(value: T) = input.send(value)
 }
 
 /**
@@ -285,6 +272,10 @@ fun <T> Sequence<T>.produce(scope: CoroutineScope = GlobalScope) =
 fun <T> ReceiveChannel<T>.produce(scope: CoroutineScope = GlobalScope) =
     GenericProducer<T>(scope) { for (e in this@produce) send(e) }
 
+
+fun <T, C : Consumer<T>> Producer<T>.consumer(consumerFactory: () -> C): C =
+    consumerFactory().also { connect(it) }
+
 /**
  * Create a reducer and connect this producer to reducer
  */
@@ -297,8 +288,13 @@ fun <T, S> Producer<T>.reduce(initialState: S, fold: suspend (S, T) -> S) =
 fun <T> Producer<T>.collect() =
     Collector<T>(this).also { connect(it) }
 
-fun <T, R> Producer<T>.process(capacity: Int = Channel.RENDEZVOUS, process: suspend (T) -> R) =
-    PipeProcessor(this, capacity, process)
+fun <T, R, P : Processor<T, R>> Producer<T>.process(processorBuilder: () -> P): P =
+    processorBuilder().also { connect(it) }
 
-fun <T, R> Producer<T>.chunk(chunkSize: Int, process: suspend (List<T>) -> R) =
-    ChunkProcessor(this, chunkSize, process)
+fun <T, R> Producer<T>.process(capacity: Int = Channel.RENDEZVOUS, process: suspend (T) -> R) =
+    PipeProcessor<T, R>(this, capacity, process).also { connect(it) }
+
+fun <T, R> Producer<T>.chunked(chunkSize: Int, process: suspend (List<T>) -> R) =
+    ChunkProcessor(this, chunkSize, process).also { connect(it) }
+
+fun <T> Producer<T>.chunked(chunkSize: Int) = chunked(chunkSize) { it }

@@ -1,5 +1,6 @@
 package scientifik.kmath.sequential
 
+import scientifik.kmath.operations.Space
 import kotlin.jvm.JvmName
 
 
@@ -32,6 +33,10 @@ fun <T, R> List<T>.cumulative(initial: R, operation: (T, R) -> R): List<R> =
 
 //Cumulative sum
 
+fun <T> Iterable<T>.cumulativeSum(space: Space<T>) = with(space) {
+    cumulative(zero) { element: T, sum: T -> sum + element }
+}
+
 @JvmName("cumulativeSumOfDouble")
 fun Iterable<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
 
@@ -41,6 +46,10 @@ fun Iterable<Int>.cumulativeSum() = this.cumulative(0) { element, sum -> sum + e
 @JvmName("cumulativeSumOfLong")
 fun Iterable<Long>.cumulativeSum() = this.cumulative(0L) { element, sum -> sum + element }
 
+fun <T> Sequence<T>.cumulativeSum(space: Space<T>) = with(space) {
+    cumulative(zero) { element: T, sum: T -> sum + element }
+}
+
 @JvmName("cumulativeSumOfDouble")
 fun Sequence<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
 
@@ -49,6 +58,10 @@ fun Sequence<Int>.cumulativeSum() = this.cumulative(0) { element, sum -> sum + e
 
 @JvmName("cumulativeSumOfLong")
 fun Sequence<Long>.cumulativeSum() = this.cumulative(0L) { element, sum -> sum + element }
+
+fun <T> List<T>.cumulativeSum(space: Space<T>) = with(space) {
+    cumulative(zero) { element: T, sum: T -> sum + element }
+}
 
 @JvmName("cumulativeSumOfDouble")
 fun List<Double>.cumulativeSum() = this.cumulative(0.0) { element, sum -> sum + element }
