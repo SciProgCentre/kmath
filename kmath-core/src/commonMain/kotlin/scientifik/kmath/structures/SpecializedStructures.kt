@@ -36,6 +36,12 @@ fun <T> NDStructure<T>.as1D(): Structure1D<T> = if (shape.size == 1) {
     error("Can't create 1d-structure from ${shape.size}d-structure")
 }
 
+fun <T> NDBuffer<T>.as1D(): Structure1D<T> = if (shape.size == 1) {
+    Buffer1DWrapper(this.buffer)
+} else {
+    error("Can't create 1d-structure from ${shape.size}d-structure")
+}
+
 /**
  * A structure wrapper for buffer
  */
