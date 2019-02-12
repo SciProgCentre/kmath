@@ -2,6 +2,9 @@ package scientifik.kmath.structures
 
 import java.nio.ByteBuffer
 
+/**
+ * A non-boxing buffer based on [ByteBuffer] storage
+ */
 class ObjectBuffer<T : Any>(private val buffer: ByteBuffer, private val spec: FixedSizeBufferSpec<T>) :
     MutableBuffer<T> {
     override val size: Int

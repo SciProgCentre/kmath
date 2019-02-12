@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
 
     val specializedTime = measureTimeMillis {
         specializedField.run {
-            var res:NDBuffer<Double> = one
+            var res: NDBuffer<Double> = one
             repeat(n) {
                 res += 1.0
             }

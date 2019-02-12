@@ -12,7 +12,7 @@ class BoxingNDField<T, F : Field<T>>(
 
     override val strides: Strides = DefaultStrides(shape)
 
-    override fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
+    fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {

@@ -1,9 +1,11 @@
 package scientifik.kmath.operations
 
+import kotlin.math.*
+
 /**
  * A field for complex numbers
  */
-object ComplexField : Field<Complex> {
+object ComplexField : ExtendedField<Complex> {
     override val zero: Complex = Complex(0.0, 0.0)
 
     override val one: Complex = Complex(1.0, 0.0)
@@ -21,6 +23,17 @@ object ComplexField : Field<Complex> {
         val norm = b.square
         return Complex((a.re * b.re + a.im * b.im) / norm, (a.re * b.im - a.im * b.re) / norm)
     }
+
+    override fun sin(arg: Complex): Complex = i / 2 * (exp(-i * arg) - exp(i * arg))
+
+    override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
+
+    override fun power(arg: Complex, pow: Number): Complex =
+        arg.abs.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))
+
+    override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
+
+    override fun ln(arg: Complex): Complex = ln(arg.abs) + i * atan2(arg.im, arg.re)
 
     operator fun Double.plus(c: Complex) = add(this.toComplex(), c)
 
@@ -41,20 +54,18 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 
     override fun Complex.wrap(): Complex = this
 
-    override val context: ComplexField
-        get() = ComplexField
+    override val context: ComplexField get() = ComplexField
 
     /**
      * A complex conjugate
      */
-    val conjugate: Complex
-        get() = Complex(re, -im)
+    val conjugate: Complex get() = Complex(re, -im)
 
-    val square: Double
-        get() = re * re + im * im
+    val square: Double get() = re * re + im * im
 
-    val abs: Double
-        get() = kotlin.math.sqrt(square)
+    val abs: Double get() = sqrt(square)
+
+    val theta: Double get() = atan(im / re)
 
     companion object
 }

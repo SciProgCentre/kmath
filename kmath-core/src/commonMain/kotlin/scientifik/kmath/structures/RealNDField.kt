@@ -15,8 +15,7 @@ class RealNDField(override val shape: IntArray) :
     override val zero by lazy { produce { zero } }
     override val one by lazy { produce { one } }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
+    inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
         DoubleBuffer(DoubleArray(size) { initializer(it) })
 
     /**
