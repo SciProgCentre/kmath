@@ -1,7 +1,7 @@
 package scientifik.kmath.sequential
 
+import kotlinx.coroutines.runBlocking
 import scientifik.kmath.structures.asSequence
-import scientifik.kmath.structures.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
