@@ -26,10 +26,16 @@ object ComplexBufferSpec : FixedSizeBufferSpec<Complex> {
 /**
  * Create a read-only/mutable buffer which ignores boxing
  */
-fun Buffer.Companion.complex(size: Int, initializer: ((Int) -> Complex)? = null): Buffer<Complex> =
+fun Buffer.Companion.complex(size: Int): Buffer<Complex> =
+    ObjectBuffer.create(ComplexBufferSpec, size)
+
+inline fun Buffer.Companion.complex(size: Int, crossinline initializer: (Int) -> Complex): Buffer<Complex> =
     ObjectBuffer.create(ComplexBufferSpec, size, initializer)
 
-fun MutableBuffer.Companion.complex(size: Int, initializer: ((Int) -> Complex)? = null) =
+fun MutableBuffer.Companion.complex(size: Int) =
+    ObjectBuffer.create(ComplexBufferSpec, size)
+
+inline fun MutableBuffer.Companion.complex(size: Int, crossinline initializer: (Int) -> Complex) =
     ObjectBuffer.create(ComplexBufferSpec, size, initializer)
 
 fun NDField.Companion.complex(shape: IntArray) = ComplexNDField(shape)
