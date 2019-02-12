@@ -25,5 +25,6 @@ include(
     ":kmath-commons",
     ":kmath-koma",
     ":kmath-sequential",
-    ":benchmarks"
+    ":benchmarks",
+    ":examples"
 )

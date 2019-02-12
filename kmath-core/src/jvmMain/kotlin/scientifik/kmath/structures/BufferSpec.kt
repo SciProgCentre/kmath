@@ -4,7 +4,7 @@ import java.nio.ByteBuffer
 
 
 /**
- * A specification for serialization and deserialization objects to buffer
+ * A specification for serialization and deserialization objects to buffer (at current buffer position)
  */
 interface BufferSpec<T : Any> {
     /**

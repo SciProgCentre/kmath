@@ -123,3 +123,9 @@ operator fun ComplexNDElement.plus(arg: Complex) =
  */
 operator fun ComplexNDElement.minus(arg: Complex) =
     map { it - arg }
+
+operator fun ComplexNDElement.plus(arg: Double) =
+    map { it + arg }
+
+operator fun ComplexNDElement.minus(arg: Double) =
+    map { it - arg }

@@ -1,5 +1,6 @@
 package scientifik.kmath.structures
 
+import kotlinx.coroutines.GlobalScope
 import scientifik.kmath.operations.RealField
 import kotlin.system.measureTimeMillis
 
@@ -11,8 +12,6 @@ fun main(args: Array<String>) {
     val autoField = NDField.auto(intArrayOf(dim, dim), RealField)
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(intArrayOf(dim, dim))
-    //A field implementing lazy computations. All elements are computed on-demand
-    val lazyField = NDField.lazy(intArrayOf(dim, dim), RealField)
     //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
 
@@ -26,7 +25,7 @@ fun main(args: Array<String>) {
         }
     }
 
-    println("Buffered addition completed in $autoTime millis")
+    println("Automatic field addition completed in $autoTime millis")
 
     val elementTime = measureTimeMillis {
         var res = genericField.one
@@ -50,17 +49,15 @@ fun main(args: Array<String>) {
 
 
     val lazyTime = measureTimeMillis {
-        lazyField.run {
-            val res = one.map {
-                var c = 0.0
-                repeat(n) {
-                    c += 1.0
-                }
-                c
+        val res = specializedField.one.mapAsync(GlobalScope) {
+            var c = 0.0
+            repeat(n) {
+                c += 1.0
             }
-
-            res.elements().forEach { it.second }
+            c
         }
+
+        res.elements().forEach { it.second }
     }
 
     println("Lazy addition completed in $lazyTime millis")

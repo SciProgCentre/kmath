@@ -24,7 +24,9 @@ plugins {
 
 allprojects {
     apply(plugin = "maven-publish")
-    apply(plugin = "com.jfrog.artifactory")
+    if(project.name.startsWith("kmath")) {
+        apply(plugin = "com.jfrog.artifactory")
+    }
 
     group = "scientifik"
     version = "0.0.3"
