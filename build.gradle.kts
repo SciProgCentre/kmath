@@ -18,8 +18,7 @@ buildscript {
 }
 
 plugins {
-    id("com.jfrog.artifactory") version "4.8.1" apply false
-//    id("org.jetbrains.kotlin.multiplatform") apply false
+    id("com.jfrog.artifactory") version "4.9.1" apply false
 }
 
 allprojects {
@@ -29,7 +28,7 @@ allprojects {
     }
 
     group = "scientifik"
-    version = "0.0.3"
+    version = "0.0.3-dev"
 
     repositories {
         //maven("https://dl.bintray.com/kotlin/kotlin-eap")
