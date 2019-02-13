@@ -1,5 +1,8 @@
-package scientifik.kmath.histogram
+package scietifik.kmath.histogram
 
+import scientifik.kmath.histogram.FastHistogram
+import scientifik.kmath.histogram.fill
+import scientifik.kmath.histogram.put
 import scientifik.kmath.linear.Vector
 import kotlin.random.Random
 import kotlin.test.Test

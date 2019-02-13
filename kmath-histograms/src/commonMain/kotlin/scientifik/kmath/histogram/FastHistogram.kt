@@ -118,7 +118,10 @@ class FastHistogram(
          *```
          */
         fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): FastHistogram {
-            return FastHistogram(ranges.map { it.start }.toVector(), ranges.map { it.endInclusive }.toVector())
+            return FastHistogram(
+                ranges.map { it.start }.toVector(),
+                ranges.map { it.endInclusive }.toVector()
+            )
         }
 
         /**

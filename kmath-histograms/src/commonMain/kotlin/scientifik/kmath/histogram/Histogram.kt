@@ -42,7 +42,8 @@ interface Histogram<T : Any, out B : Bin<T>> : Iterable<B> {
 
 }
 
-interface MutableHistogram<T : Any, out B : Bin<T>> : Histogram<T, B> {
+interface MutableHistogram<T : Any, out B : Bin<T>> :
+    Histogram<T, B> {
 
     /**
      * Increment appropriate bin

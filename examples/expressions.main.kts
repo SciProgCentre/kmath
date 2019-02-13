@@ -1,1 +1,0 @@
-@file:DependsOn("scientifik:kmath-core-jvm:0.0.3-dev")

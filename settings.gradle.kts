@@ -22,6 +22,7 @@ include(
     ":kmath-core",
 //    ":kmath-io",
     ":kmath-coroutines",
+    ":kmath-histograms",
     ":kmath-commons",
     ":kmath-koma",
     ":kmath-sequential",

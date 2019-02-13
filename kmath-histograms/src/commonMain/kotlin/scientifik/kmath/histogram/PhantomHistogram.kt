@@ -27,7 +27,8 @@ interface HistogramSpace<T : Any, B : Bin<T>, H : Histogram<T, B>> : Space<H> {
     val binSpace: Space<Bin<T>>
 }
 
-class PhantomBin<T : Comparable<T>>(val template: BinTemplate<T>, override val value: Number) : Bin<T> {
+class PhantomBin<T : Comparable<T>>(val template: BinTemplate<T>, override val value: Number) :
+    Bin<T> {
 
     override fun contains(vector: Point<out T>): Boolean = template.contains(vector)
 
