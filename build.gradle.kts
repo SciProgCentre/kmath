@@ -22,8 +22,8 @@ plugins {
 }
 
 allprojects {
-    apply(plugin = "maven-publish")
-    if(project.name.startsWith("kmath")) {
+    if (project.name.startsWith("kmath")) {
+        apply(plugin = "maven-publish")
         apply(plugin = "com.jfrog.artifactory")
     }
 

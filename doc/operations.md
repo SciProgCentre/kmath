@@ -14,7 +14,7 @@ val c3 = c1 + c2
 `ComplexField` also features special operations to mix complex and real numbers, for example:
 
 ```kotlin
-val c1 = Complex(1.0,2.0)
+val c1 = Complex(1.0, 2.0)
 val c2 = ComplexField.run{ c1 - 1.0} // Returns: [re:0.0, im: 2.0]
 val c3 = ComplexField.run{ c1 - i*2.0}
 ```
@@ -27,8 +27,8 @@ that. Watch [KT-10468](https://youtrack.jetbrains.com/issue/KT-10468) and [KEEP-
 Contexts allow one to build more complex structures. For example, it is possible to create a `Matrix` from complex elements like so:
 
 ```kotlin
-val element = NDElements.create(field = ComplexField, shape = intArrayOf(2,2)){index: IntArray ->
-    Complex(index[0] - index[1], index[0] + index[1])
+val element = NDElement.complex(shape = intArrayOf(2,2)){ index: IntArray ->
+    Complex(index[0].toDouble() - index[1].toDouble(), index[0].toDouble() + index[1].toDouble())
 }
 ```
 
