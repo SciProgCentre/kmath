@@ -10,7 +10,7 @@ package scientifik.kmath.operations
  * It also allows to override behavior for optional operations
  *
  */
-interface TrigonometricOperations<T> : Field<T> {
+interface TrigonometricOperations<T> : FieldOperations<T> {
     fun sin(arg: T): T
     fun cos(arg: T): T
 

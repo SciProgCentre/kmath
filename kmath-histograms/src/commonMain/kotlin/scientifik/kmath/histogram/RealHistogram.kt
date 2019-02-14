@@ -1,43 +1,64 @@
 package scientifik.kmath.histogram
 
+import scientifik.kmath.linear.Point
 import scientifik.kmath.linear.toVector
+import scientifik.kmath.operations.SpaceOperations
 import scientifik.kmath.structures.*
 import kotlin.math.floor
 
-private operator fun RealPoint.minus(other: RealPoint) = ListBuffer((0 until size).map { get(it) - other[it] })
 
-private inline fun <T> Buffer<out Double>.mapIndexed(crossinline mapper: (Int, Double) -> T): Sequence<T> =
-    (0 until size).asSequence().map { mapper(it, get(it)) }
+data class BinDef<T : Comparable<T>>(val space: SpaceOperations<Point<T>>, val center: Point<T>, val sizes: Point<T>) {
+    fun contains(vector: Point<out T>): Boolean {
+        if (vector.size != center.size) error("Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}")
+        val upper = space.run { center + sizes / 2.0 }
+        val lower = space.run { center - sizes / 2.0 }
+        return vector.asSequence().mapIndexed { i, value ->
+            value in lower[i]..upper[i]
+        }.all { it }
+    }
+}
+
+
+class MultivariateBin<T : Comparable<T>>(val def: BinDef<T>, override val value: Number) : Bin<T> {
+
+    override fun contains(vector: Point<out T>): Boolean = def.contains(vector)
+
+    override val dimension: Int
+        get() = def.center.size
+
+    override val center: Point<T>
+        get() = def.center
+
+}
 
 /**
  * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions.
  */
-class FastHistogram(
-    private val lower: RealPoint,
-    private val upper: RealPoint,
+class RealHistogram(
+    private val lower: Buffer<Double>,
+    private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 }
-) : MutableHistogram<Double, PhantomBin<Double>> {
+) : MutableHistogram<Double, MultivariateBin<Double>> {
 
 
     private val strides = DefaultStrides(IntArray(binNums.size) { binNums[it] + 2 })
 
-    private val values: NDStructure<LongCounter> = inlineNDStructure(strides) { LongCounter() }
+    private val values: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
 
     //private val weight: NDStructure<DoubleCounter?> = ndStructure(strides){null}
 
-    //TODO optimize binSize performance if needed
-    private val binSize: RealPoint =
-        ListBuffer((upper - lower).mapIndexed { index, value -> value / binNums[index] }.toList())
+
+    override val dimension: Int get() = lower.size
+
+
+    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     init {
         // argument checks
         if (lower.size != upper.size) error("Dimension mismatch in histogram lower and upper limits.")
         if (lower.size != binNums.size) error("Dimension mismatch in bin count.")
-        if ((upper - lower).asSequence().any { it <= 0 }) error("Range for one of axis is not strictly positive")
+        if ((0 until dimension).any { upper[it] - lower[it] < 0 }) error("Range for one of axis is not strictly positive")
     }
-
-
-    override val dimension: Int get() = lower.size
 
 
     /**
@@ -61,49 +82,41 @@ class FastHistogram(
         return getValue(getIndex(point))
     }
 
-    private fun getTemplate(index: IntArray): BinTemplate<Double> {
+    private fun getDef(index: IntArray): BinDef<Double> {
         val center = index.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
                 strides.shape[axis] - 1 -> Double.POSITIVE_INFINITY
                 else -> lower[axis] + (i.toDouble() - 0.5) * binSize[axis]
             }
-        }.toVector()
-        return BinTemplate(center, binSize)
+        }.asBuffer()
+        return BinDef(RealBufferFieldOperations, center, binSize)
     }
 
-    fun getTemplate(point: Buffer<out Double>): BinTemplate<Double> {
-        return getTemplate(getIndex(point))
+    fun getDef(point: Buffer<out Double>): BinDef<Double> {
+        return getDef(getIndex(point))
     }
 
-    override fun get(point: Buffer<out Double>): PhantomBin<Double>? {
+    override fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
         val index = getIndex(point)
-        return PhantomBin(getTemplate(index), getValue(index))
+        return MultivariateBin(getDef(index), getValue(index))
     }
 
-    override fun put(point: Buffer<out Double>, weight: Double) {
+    override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
         if (weight != 1.0) TODO("Implement weighting")
         val index = getIndex(point)
         values[index].increment()
     }
 
-    override fun iterator(): Iterator<PhantomBin<Double>> = values.elements().map { (index, value) ->
-        PhantomBin(getTemplate(index), value.sum())
+    override fun iterator(): Iterator<MultivariateBin<Double>> = values.elements().map { (index, value) ->
+        MultivariateBin(getDef(index), value.sum())
     }.iterator()
 
     /**
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
     fun asNDStructure(): NDStructure<Number> {
-        return inlineNdStructure(this.values.shape) { values[it].sum() }
-    }
-
-    /**
-     * Create a phantom lightweight immutable copy of this histogram
-     */
-    fun asPhantomHistogram(): PhantomHistogram<Double> {
-        val binTemplates = values.elements().associate { (index, _) -> getTemplate(index) to index }
-        return PhantomHistogram(binTemplates, asNDStructure())
+        return NDStructure.auto(this.values.shape) { values[it].sum() }
     }
 
     companion object {
@@ -117,8 +130,8 @@ class FastHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): FastHistogram {
-            return FastHistogram(
+        fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogram {
+            return RealHistogram(
                 ranges.map { it.start }.toVector(),
                 ranges.map { it.endInclusive }.toVector()
             )
@@ -133,8 +146,8 @@ class FastHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): FastHistogram {
-            return FastHistogram(
+        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): RealHistogram {
+            return RealHistogram(
                 ListBuffer(ranges.map { it.first.start }),
                 ListBuffer(ranges.map { it.first.endInclusive }),
                 ranges.map { it.second }.toIntArray()

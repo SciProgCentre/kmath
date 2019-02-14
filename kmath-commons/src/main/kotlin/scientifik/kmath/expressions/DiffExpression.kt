@@ -2,6 +2,7 @@ package scientifik.kmath.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import scientifik.kmath.operations.ExtendedField
+import scientifik.kmath.operations.ExtendedFieldOperations
 import scientifik.kmath.operations.Field
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

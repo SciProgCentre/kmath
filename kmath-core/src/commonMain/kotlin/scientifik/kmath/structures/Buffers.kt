@@ -109,6 +109,9 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
 
 fun <T> List<T>.asBuffer() = ListBuffer(this)
 
+@Suppress("FunctionName")
+inline fun <T> ListBuffer(size: Int, init: (Int) -> T) = List(size, init).asBuffer()
+
 inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int
@@ -154,8 +157,11 @@ inline class DoubleBuffer(val array: DoubleArray) : MutableBuffer<Double> {
     override fun iterator(): Iterator<Double> = array.iterator()
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
-
 }
+
+@Suppress("FunctionName")
+inline fun DoubleBuffer(size: Int, init: (Int) -> Double) = DoubleBuffer(DoubleArray(size) { init(it) })
+
 
 /**
  * Transform buffer of doubles into array for high performance operations

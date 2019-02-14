@@ -5,12 +5,13 @@ import kotlin.math.pow
 /**
  * Advanced Number-like field that implements basic operations
  */
-interface ExtendedField<T : Any> :
-    Field<T>,
+interface ExtendedFieldOperations<T> :
+    FieldOperations<T>,
     TrigonometricOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T>
 
+interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>
 
 /**
  * Real field element wrapping double.
@@ -31,7 +32,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
  * A field for double without boxing. Does not produce appropriate field element
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-object RealField : ExtendedField<Double>, Norm<Double, Double> {
+object RealField : Field<Double>, ExtendedFieldOperations<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override fun add(a: Double, b: Double): Double = a + b
     override fun multiply(a: Double, b: Double): Double = a * b

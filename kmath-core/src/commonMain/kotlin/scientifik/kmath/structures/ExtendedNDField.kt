@@ -1,16 +1,14 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.ExponentialOperations
-import scientifik.kmath.operations.ExtendedField
-import scientifik.kmath.operations.PowerOperations
-import scientifik.kmath.operations.TrigonometricOperations
+import scientifik.kmath.operations.*
 
 
-interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> :
+interface ExtendedNDField<T : Any, F, N : NDStructure<T>> :
     NDField<T, F, N>,
     TrigonometricOperations<N>,
     PowerOperations<N>,
     ExponentialOperations<N>
+        where F : ExtendedFieldOperations<T>, F : Field<T>
 
 
 ///**

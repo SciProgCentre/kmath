@@ -22,6 +22,33 @@ interface NDStructure<T> {
                 else -> st1.elements().all { (index, value) -> value == st2[index] }
             }
         }
+
+        /**
+         * Create a NDStructure with explicit buffer factory
+         *
+         * Strides should be reused if possible
+         */
+        fun <T> build(
+            strides: Strides,
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            initializer: (IntArray) -> T
+        ) =
+            BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+        /**
+         * Inline create NDStructure with non-boxing buffer implementation if it is possible
+         */
+        inline fun <reified T : Any> auto(strides: Strides, crossinline initializer: (IntArray) -> T) =
+            BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+        fun <T> build(
+            shape: IntArray,
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            initializer: (IntArray) -> T
+        ) = build(DefaultStrides(shape), bufferFactory, initializer)
+
+        inline fun <reified T : Any> auto(shape: IntArray, crossinline initializer: (IntArray) -> T) =
+            auto(DefaultStrides(shape), initializer)
     }
 }
 
@@ -201,34 +228,6 @@ inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 }
 
 /**
- * Create a NDStructure with explicit buffer factory
- *
- * Strides should be reused if possible
- */
-fun <T> ndStructure(
-    strides: Strides,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-    initializer: (IntArray) -> T
-) =
-    BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-/**
- * Inline create NDStructure with non-boxing buffer implementation if it is possible
- */
-inline fun <reified T : Any> inlineNDStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
-    BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-fun <T> ndStructure(
-    shape: IntArray,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-    initializer: (IntArray) -> T
-) =
-    ndStructure(DefaultStrides(shape), bufferFactory, initializer)
-
-inline fun <reified T : Any> inlineNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
-    inlineNDStructure(DefaultStrides(shape), initializer)
-
-/**
  * Mutable ND buffer based on linear [autoBuffer]
  */
 class MutableBufferNDStructure<T>(
@@ -245,33 +244,10 @@ class MutableBufferNDStructure<T>(
     override fun set(index: IntArray, value: T) = buffer.set(strides.offset(index), value)
 }
 
-/**
- * The same as [inlineNDStructure], but mutable
- */
-fun <T : Any> mutableNdStructure(
-    strides: Strides,
-    bufferFactory: MutableBufferFactory<T> = MutableBuffer.Companion::boxing,
-    initializer: (IntArray) -> T
-) =
-    MutableBufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-inline fun <reified T : Any> inlineMutableNdStructure(strides: Strides, crossinline initializer: (IntArray) -> T) =
-    MutableBufferNDStructure(strides, MutableBuffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-fun <T : Any> mutableNdStructure(
-    shape: IntArray,
-    bufferFactory: MutableBufferFactory<T> = MutableBuffer.Companion::boxing,
-    initializer: (IntArray) -> T
-) =
-    mutableNdStructure(DefaultStrides(shape), bufferFactory, initializer)
-
-inline fun <reified T : Any> inlineMutableNdStructure(shape: IntArray, crossinline initializer: (IntArray) -> T) =
-    inlineMutableNdStructure(DefaultStrides(shape), initializer)
-
 inline fun <reified T : Any> NDStructure<T>.combine(
     struct: NDStructure<T>,
     crossinline block: (T, T) -> T
 ): NDStructure<T> {
     if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
-    return inlineNdStructure(shape) { block(this[it], struct[it]) }
+    return NDStructure.auto(shape) { block(this[it], struct[it]) }
 }

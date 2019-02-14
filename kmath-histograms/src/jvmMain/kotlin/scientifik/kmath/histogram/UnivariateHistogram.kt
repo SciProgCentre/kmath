@@ -59,7 +59,7 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         (get(value) ?: createBin(value)).inc()
     }
 
-    override fun put(point: Buffer<out Double>, weight: Double) {
+    override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
         if (weight != 1.0) TODO("Implement weighting")
         put(point[0])
     }

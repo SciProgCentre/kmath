@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
 
     val n = 6000
 
-    val structure = ndStructure(intArrayOf(n, n), DoubleBufferFactory) { 1.0 }
+    val structure = NDStructure.build(intArrayOf(n, n), DoubleBufferFactory) { 1.0 }
 
     structure.mapToBuffer { it + 1 } // warm-up
 

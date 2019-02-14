@@ -2,8 +2,8 @@ package scientifik.kmath.histogram
 
 /*
  * Common representation for atomic counters
+ * TODO replace with atomics
  */
-
 
 expect class LongCounter() {
     fun decrement()

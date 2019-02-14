@@ -1,6 +1,6 @@
 package scietifik.kmath.histogram
 
-import scientifik.kmath.histogram.FastHistogram
+import scientifik.kmath.histogram.RealHistogram
 import scientifik.kmath.histogram.fill
 import scientifik.kmath.histogram.put
 import scientifik.kmath.linear.Vector
@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val histogram = FastHistogram.fromRanges(
+        val histogram = RealHistogram.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
@@ -26,7 +26,7 @@ class MultivariateHistogramTest {
 
     @Test
     fun testSequentialPut() {
-        val histogram = FastHistogram.fromRanges(
+        val histogram = RealHistogram.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)

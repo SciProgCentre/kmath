@@ -2,11 +2,7 @@ package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.ArrayBuffer
-import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.DoubleBuffer
-
-
-typealias RealPoint = Buffer<Double>
 
 /**
  * A simple geometric domain
@@ -42,13 +38,14 @@ interface Histogram<T : Any, out B : Bin<T>> : Iterable<B> {
 
 }
 
-interface MutableHistogram<T : Any, out B : Bin<T>> :
-    Histogram<T, B> {
+interface MutableHistogram<T : Any, out B : Bin<T>> : Histogram<T, B> {
 
     /**
      * Increment appropriate bin
      */
-    fun put(point: Point<out T>, weight: Double = 1.0)
+    fun putWithWeight(point: Point<out T>, weight: Double)
+
+    fun put(point: Point<out T>) = putWithWeight(point, 1.0)
 }
 
 fun <T : Any> MutableHistogram<T, *>.put(vararg point: T) = put(ArrayBuffer(point))

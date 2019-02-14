@@ -5,7 +5,7 @@ import kotlin.math.*
 /**
  * A field for complex numbers
  */
-object ComplexField : ExtendedField<Complex> {
+object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
     override val zero: Complex = Complex(0.0, 0.0)
 
     override val one: Complex = Complex(1.0, 0.0)
