@@ -1,20 +1,7 @@
 package scientifik.kmath.operations
 
 
-/**
- * A general interface representing linear context of some kind.
- * The context defines sum operation for its elements and multiplication by real value.
- * One must note that in some cases context is a singleton class, but in some cases it
- * works as a context for operations inside it.
- *
- * TODO do we need non-commutative context?
- */
-interface Space<T> {
-    /**
-     * Neutral element for sum operation
-     */
-    val zero: T
-
+interface SpaceOperations<T> {
     /**
      * Addition operation for two context elements
      */
@@ -35,21 +22,39 @@ interface Space<T> {
     operator fun Number.times(b: T) = b * this
 }
 
-/**
- * The same as {@link Space} but with additional multiplication operation
- */
-interface Ring<T> : Space<T> {
-    /**
-     * neutral operation for multiplication
-     */
-    val one: T
 
+/**
+ * A general interface representing linear context of some kind.
+ * The context defines sum operation for its elements and multiplication by real value.
+ * One must note that in some cases context is a singleton class, but in some cases it
+ * works as a context for operations inside it.
+ *
+ * TODO do we need non-commutative context?
+ */
+interface Space<T> : SpaceOperations<T> {
+    /**
+     * Neutral element for sum operation
+     */
+    val zero: T
+}
+
+interface RingOperations<T> : SpaceOperations<T> {
     /**
      * Multiplication for two field elements
      */
     fun multiply(a: T, b: T): T
 
     operator fun T.times(b: T): T = multiply(this, b)
+}
+
+/**
+ * The same as {@link Space} but with additional multiplication operation
+ */
+interface Ring<T> : Space<T>, RingOperations<T> {
+    /**
+     * neutral operation for multiplication
+     */
+    val one: T
 
 //    operator fun T.plus(b: Number) = this.plus(b * one)
 //    operator fun Number.plus(b: T) = b + this
@@ -59,11 +64,17 @@ interface Ring<T> : Space<T> {
 }
 
 /**
- * Four operations algebra
+ * All ring operations but without neutral elements
  */
-interface Field<T> : Ring<T> {
+interface FieldOperations<T> : RingOperations<T> {
     fun divide(a: T, b: T): T
 
     operator fun T.div(b: T): T = divide(this, b)
+}
+
+/**
+ * Four operations algebra
+ */
+interface Field<T> : Ring<T>, FieldOperations<T> {
     operator fun Number.div(b: T) = this * divide(one, b)
 }
