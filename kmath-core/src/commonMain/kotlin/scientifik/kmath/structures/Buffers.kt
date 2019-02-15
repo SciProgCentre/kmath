@@ -154,14 +154,13 @@ inline class DoubleBuffer(val array: DoubleArray) : MutableBuffer<Double> {
         array[index] = value
     }
 
-    override fun iterator(): Iterator<Double> = array.iterator()
+    override fun iterator() = array.iterator()
 
     override fun copy(): MutableBuffer<Double> = DoubleBuffer(array.copyOf())
 }
 
 @Suppress("FunctionName")
 inline fun DoubleBuffer(size: Int, init: (Int) -> Double) = DoubleBuffer(DoubleArray(size) { init(it) })
-
 
 /**
  * Transform buffer of doubles into array for high performance operations
@@ -184,7 +183,7 @@ inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
         array[index] = value
     }
 
-    override fun iterator(): Iterator<Short> = array.iterator()
+    override fun iterator() = array.iterator()
 
     override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
 
@@ -201,7 +200,7 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
         array[index] = value
     }
 
-    override fun iterator(): Iterator<Int> = array.iterator()
+    override fun iterator() = array.iterator()
 
     override fun copy(): MutableBuffer<Int> = IntBuffer(array.copyOf())
 
@@ -218,7 +217,7 @@ inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
         array[index] = value
     }
 
-    override fun iterator(): Iterator<Long> = array.iterator()
+    override fun iterator() = array.iterator()
 
     override fun copy(): MutableBuffer<Long> = LongBuffer(array.copyOf())
 
@@ -231,7 +230,7 @@ inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
 
     override fun get(index: Int): T = buffer.get(index)
 
-    override fun iterator(): Iterator<T> = buffer.iterator()
+    override fun iterator() = buffer.iterator()
 }
 
 /**
@@ -260,3 +259,8 @@ fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
 } else {
     this
 }
+
+/**
+ * Typealias for buffer transformations
+ */
+typealias BufferTransform<T, R> = (Buffer<T>) -> Buffer<R>
