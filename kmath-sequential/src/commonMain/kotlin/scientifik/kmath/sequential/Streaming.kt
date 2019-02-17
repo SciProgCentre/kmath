@@ -170,33 +170,6 @@ class PipeProcessor<T, R>(
     }
 }
 
-/**
- * A [Processor] that splits the input in fixed chunked size and transforms each chunked
- */
-class ChunkProcessor<T, R>(
-    scope: CoroutineScope,
-    chunkSize: Int,
-    process: suspend (List<T>) -> R
-) : AbstractProcessor<T, R>(scope) {
-
-    private val input = Channel<T>(chunkSize)
-
-    private val chunked = produce<List<T>>(coroutineContext) {
-        val list = ArrayList<T>(chunkSize)
-        repeat(chunkSize) {
-            list.add(input.receive())
-        }
-        send(list)
-    }
-
-    private val output: ReceiveChannel<R> = chunked.map(coroutineContext, process)
-
-    override suspend fun receive(): R = output.receive()
-
-    override suspend fun send(value: T) {
-        input.send(value)
-    }
-}
 
 /**
  * A moving window [Processor] with circular buffer
@@ -276,6 +249,9 @@ fun <T> ReceiveChannel<T>.produce(scope: CoroutineScope = GlobalScope) =
 fun <T, C : Consumer<T>> Producer<T>.consumer(consumerFactory: () -> C): C =
     consumerFactory().also { connect(it) }
 
+fun <T, R> Producer<T>.map(capacity: Int = Channel.RENDEZVOUS, process: suspend (T) -> R) =
+    PipeProcessor(this, capacity, process).also { connect(it) }
+
 /**
  * Create a reducer and connect this producer to reducer
  */
@@ -294,7 +270,6 @@ fun <T, R, P : Processor<T, R>> Producer<T>.process(processorBuilder: () -> P): 
 fun <T, R> Producer<T>.process(capacity: Int = Channel.RENDEZVOUS, process: suspend (T) -> R) =
     PipeProcessor<T, R>(this, capacity, process).also { connect(it) }
 
-fun <T, R> Producer<T>.chunked(chunkSize: Int, process: suspend (List<T>) -> R) =
-    ChunkProcessor(this, chunkSize, process).also { connect(it) }
 
-fun <T> Producer<T>.chunked(chunkSize: Int) = chunked(chunkSize) { it }
+fun <T, R> Producer<T>.windowed(window: Int, process: suspend (Buffer<T?>) -> R) =
+    WindowedProcessor(this, window, process).also { connect(it) }

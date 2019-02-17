@@ -2,6 +2,9 @@ package scientifik.kmath.transform
 
 import org.apache.commons.math3.transform.*
 import scientifik.kmath.operations.Complex
+import scientifik.kmath.sequential.Processor
+import scientifik.kmath.sequential.Producer
+import scientifik.kmath.sequential.map
 import scientifik.kmath.structures.*
 
 
@@ -60,4 +63,24 @@ object Transformations {
     ): BufferTransform<Double, Double> = {
         FastHadamardTransformer().transform(it.asArray(), direction).asBuffer()
     }
+}
+
+/**
+ * Process given [Producer] with commons-math fft transformation
+ */
+fun Producer<Buffer<Complex>>.FFT(
+    normalization: DftNormalization = DftNormalization.STANDARD,
+    direction: TransformType = TransformType.FORWARD
+): Processor<Buffer<Complex>, Buffer<Complex>> {
+    val transform = Transformations.fourier(normalization, direction)
+    return map { transform(it) }
+}
+
+@JvmName("realFFT")
+fun Producer<Buffer<Double>>.FFT(
+    normalization: DftNormalization = DftNormalization.STANDARD,
+    direction: TransformType = TransformType.FORWARD
+): Processor<Buffer<Double>, Buffer<Complex>> {
+    val transform = Transformations.realFourier(normalization, direction)
+    return map { transform(it) }
 }
