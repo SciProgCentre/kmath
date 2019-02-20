@@ -10,7 +10,7 @@ package scientifik.kmath.operations
  * It also allows to override behavior for optional operations
  *
  */
-interface TrigonometricOperations<T> : Field<T> {
+interface TrigonometricOperations<T> : FieldOperations<T> {
     fun sin(arg: T): T
     fun cos(arg: T): T
 
@@ -19,10 +19,10 @@ interface TrigonometricOperations<T> : Field<T> {
     fun ctg(arg: T): T = cos(arg) / sin(arg)
 }
 
-fun <T : FieldElement<T, out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
-fun <T : FieldElement<T, out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
-fun <T : FieldElement<T, out TrigonometricOperations<T>>> tg(arg: T): T = arg.context.tg(arg)
-fun <T : FieldElement<T, out TrigonometricOperations<T>>> ctg(arg: T): T = arg.context.ctg(arg)
+fun <T : MathElement<out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
+fun <T : MathElement<out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
+fun <T : MathElement<out TrigonometricOperations<T>>> tg(arg: T): T = arg.context.tg(arg)
+fun <T : MathElement<out TrigonometricOperations<T>>> ctg(arg: T): T = arg.context.ctg(arg)
 
 /* Power and roots */
 
@@ -30,12 +30,13 @@ fun <T : FieldElement<T, out TrigonometricOperations<T>>> ctg(arg: T): T = arg.c
  * A context extension to include power operations like square roots, etc
  */
 interface PowerOperations<T> {
-    fun power(arg: T, pow: Double): T
+    fun power(arg: T, pow: Number): T
+    fun sqrt(arg: T) = power(arg, 0.5)
 }
 
-infix fun <T : MathElement<T, out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
-fun <T : MathElement<T, out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
-fun <T : MathElement<T, out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
+infix fun <T : MathElement<out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
+fun <T : MathElement<out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
+fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
@@ -44,11 +45,11 @@ interface ExponentialOperations<T> {
     fun ln(arg: T): T
 }
 
-fun <T : MathElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
-fun <T : MathElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
+fun <T : MathElement<out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
+fun <T : MathElement<out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
 
-interface Norm<in T, out R> {
+interface Norm<in T: Any, out R> {
     fun norm(arg: T): R
 }
 
-fun <T : MathElement<T, out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)
+fun <T : MathElement<out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)

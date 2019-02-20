@@ -11,6 +11,45 @@ interface NDStructure<T> {
     operator fun get(index: IntArray): T
 
     fun elements(): Sequence<Pair<IntArray, T>>
+
+    companion object {
+        fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
+            return when {
+                st1 === st2 -> true
+                st1 is BufferNDStructure<*> && st2 is BufferNDStructure<*> && st1.strides == st2.strides -> st1.buffer.contentEquals(
+                    st2.buffer
+                )
+                else -> st1.elements().all { (index, value) -> value == st2[index] }
+            }
+        }
+
+        /**
+         * Create a NDStructure with explicit buffer factory
+         *
+         * Strides should be reused if possible
+         */
+        fun <T> build(
+            strides: Strides,
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            initializer: (IntArray) -> T
+        ) =
+            BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+        /**
+         * Inline create NDStructure with non-boxing buffer implementation if it is possible
+         */
+        inline fun <reified T : Any> auto(strides: Strides, crossinline initializer: (IntArray) -> T) =
+            BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+        fun <T> build(
+            shape: IntArray,
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            initializer: (IntArray) -> T
+        ) = build(DefaultStrides(shape), bufferFactory, initializer)
+
+        inline fun <reified T : Any> auto(shape: IntArray, crossinline initializer: (IntArray) -> T) =
+            auto(DefaultStrides(shape), initializer)
+    }
 }
 
 operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
@@ -19,7 +58,7 @@ interface MutableNDStructure<T> : NDStructure<T> {
     operator fun set(index: IntArray, value: T)
 }
 
-fun <T> MutableNDStructure<T>.transformInPlace(action: (IntArray, T) -> T) {
+fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
     elements().forEach { (index, oldValue) ->
         this[index] = action(index, oldValue)
     }
@@ -49,6 +88,9 @@ interface Strides {
      */
     fun index(offset: Int): IntArray
 
+    /**
+     * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
+     */
     val linearSize: Int
 
     /**
@@ -60,7 +102,7 @@ interface Strides {
     }
 }
 
-class DefaultStrides(override val shape: IntArray) : Strides {
+class DefaultStrides private constructor(override val shape: IntArray) : Strides {
     /**
      * Strides for memory access
      */
@@ -77,7 +119,7 @@ class DefaultStrides(override val shape: IntArray) : Strides {
 
     override fun offset(index: IntArray): Int {
         return index.mapIndexed { i, value ->
-            if (value < 0 || value >= shape[i]) {
+            if (value < 0 || value >= this.shape[i]) {
                 throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
             }
             value * strides[i]
@@ -98,50 +140,100 @@ class DefaultStrides(override val shape: IntArray) : Strides {
 
     override val linearSize: Int
         get() = strides[shape.size]
+
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DefaultStrides) return false
+
+        if (!shape.contentEquals(other.shape)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return shape.contentHashCode()
+    }
+
+    companion object {
+        private val defaultStridesCache = HashMap<IntArray, Strides>()
+
+        /**
+         * Cached builder for default strides
+         */
+        operator fun invoke(shape: IntArray): Strides = defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
+    }
 }
 
-abstract class GenericNDStructure<T, B : Buffer<T>> : NDStructure<T> {
-    protected abstract val buffer: B
-    protected abstract val strides: Strides
+interface NDBuffer<T> : NDStructure<T> {
+    val buffer: Buffer<T>
+    val strides: Strides
 
     override fun get(index: IntArray): T = buffer[strides.offset(index)]
 
-    override val shape: IntArray
-        get() = strides.shape
+    override val shape: IntArray get() = strides.shape
 
-    override fun elements()=
-            strides.indices().map { it to this[it] }
+    override fun elements() = strides.indices().map { it to this[it] }
 }
 
 /**
  * Boxing generic [NDStructure]
  */
 class BufferNDStructure<T>(
-        override val strides: Strides,
-        override val buffer: Buffer<T>
-) : GenericNDStructure<T, Buffer<T>>() {
+    override val strides: Strides,
+    override val buffer: Buffer<T>
+) : NDBuffer<T> {
 
     init {
         if (strides.linearSize != buffer.size) {
             error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
         }
     }
+
+    override fun get(index: IntArray): T = buffer[strides.offset(index)]
+
+    override val shape: IntArray get() = strides.shape
+
+    override fun elements() = strides.indices().map { it to this[it] }
+
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other is BufferNDStructure<*> && this.strides == other.strides -> this.buffer.contentEquals(other.buffer)
+            other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = strides.hashCode()
+        result = 31 * result + buffer.hashCode()
+        return result
+    }
 }
 
-inline fun <reified T : Any> ndStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-        BufferNDStructure<T>(strides, buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-inline fun <reified T : Any> ndStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
-        ndStructure(DefaultStrides(shape), initializer)
-
+/**
+ * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferNDStructure]
+ */
+inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
+    factory: BufferFactory<R> = Buffer.Companion::auto,
+    crossinline transform: (T) -> R
+): BufferNDStructure<R> {
+    return if (this is BufferNDStructure<T>) {
+        BufferNDStructure(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
+    } else {
+        val strides = DefaultStrides(shape)
+        BufferNDStructure(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
+    }
+}
 
 /**
- * Mutable ND buffer based on linear [Buffer]
+ * Mutable ND buffer based on linear [autoBuffer]
  */
 class MutableBufferNDStructure<T>(
-        override val strides: Strides,
-        override val buffer: MutableBuffer<T>
-) : GenericNDStructure<T, MutableBuffer<T>>(), MutableNDStructure<T> {
+    override val strides: Strides,
+    override val buffer: MutableBuffer<T>
+) : NDBuffer<T>, MutableNDStructure<T> {
 
     init {
         if (strides.linearSize != buffer.size) {
@@ -152,25 +244,10 @@ class MutableBufferNDStructure<T>(
     override fun set(index: IntArray, value: T) = buffer.set(strides.offset(index), value)
 }
 
-/**
- * Create optimized mutable structure for given type
- */
-inline fun <reified T : Any> mutableNdStructure(strides: Strides, noinline initializer: (IntArray) -> T) =
-        MutableBufferNDStructure(strides, mutableBuffer(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-inline fun <reified T : Any> mutableNdStructure(shape: IntArray, noinline initializer: (IntArray) -> T) =
-        mutableNdStructure(DefaultStrides(shape), initializer)
-
-/**
- * Create universal mutable structure
- */
-fun <T> genericNdStructure(shape: IntArray, initializer: (IntArray) -> T): MutableBufferNDStructure<T> {
-    val strides = DefaultStrides(shape)
-    val sequence = sequence {
-        strides.indices().forEach {
-            yield(initializer(it))
-        }
-    }
-    val buffer = MutableListBuffer(sequence.toMutableList())
-    return MutableBufferNDStructure(strides, buffer)
+inline fun <reified T : Any> NDStructure<T>.combine(
+    struct: NDStructure<T>,
+    crossinline block: (T, T) -> T
+): NDStructure<T> {
+    if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
+    return NDStructure.auto(shape) { block(this[it], struct[it]) }
 }

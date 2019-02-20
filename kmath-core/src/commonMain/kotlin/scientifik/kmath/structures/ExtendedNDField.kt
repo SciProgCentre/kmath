@@ -1,42 +1,46 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.ExponentialOperations
-import scientifik.kmath.operations.ExtendedField
-import scientifik.kmath.operations.PowerOperations
-import scientifik.kmath.operations.TrigonometricOperations
+import scientifik.kmath.operations.*
 
 
-/**
- * NDField that supports [ExtendedField] operations on its elements
- */
-class ExtendedNDField<N : Any, F : ExtendedField<N>>(shape: IntArray, field: F) : NDField<N, F>(shape, field),
-        TrigonometricOperations<NDElement<N, F>>,
-        PowerOperations<NDElement<N, F>>,
-        ExponentialOperations<NDElement<N, F>> {
+interface ExtendedNDField<T : Any, F, N : NDStructure<T>> :
+    NDField<T, F, N>,
+    TrigonometricOperations<N>,
+    PowerOperations<N>,
+    ExponentialOperations<N>
+        where F : ExtendedFieldOperations<T>, F : Field<T>
 
-    override fun produceStructure(initializer: F.(IntArray) -> N): NDStructure<N> {
-        return genericNdStructure(shape) { field.initializer(it) }
-    }
 
-    override fun power(arg: NDElement<N, F>, pow: Double): NDElement<N, F> {
-        return arg.transform { d -> with(field) { power(d, pow) } }
-    }
-
-    override fun exp(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { exp(d) } }
-    }
-
-    override fun ln(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { ln(d) } }
-    }
-
-    override fun sin(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { sin(d) } }
-    }
-
-    override fun cos(arg: NDElement<N, F>): NDElement<N, F> {
-        return arg.transform { d -> with(field) { cos(d) } }
-    }
-}
+///**
+// * NDField that supports [ExtendedField] operations on its elements
+// */
+//class ExtendedNDFieldWrapper<T : Any, F : ExtendedField<T>, N : NDStructure<T>>(private val ndField: NDField<T, F, N>) :
+//    ExtendedNDField<T, F, N>, NDField<T, F, N> by ndField {
+//
+//    override val shape: IntArray get() = ndField.shape
+//    override val elementContext: F get() = ndField.elementContext
+//
+//    override fun produce(initializer: F.(IntArray) -> T) = ndField.produce(initializer)
+//
+//    override fun power(arg: N, pow: Double): N {
+//        return produce { with(elementContext) { power(arg[it], pow) } }
+//    }
+//
+//    override fun exp(arg: N): N {
+//        return produce { with(elementContext) { exp(arg[it]) } }
+//    }
+//
+//    override fun ln(arg: N): N {
+//        return produce { with(elementContext) { ln(arg[it]) } }
+//    }
+//
+//    override fun sin(arg: N): N {
+//        return produce { with(elementContext) { sin(arg[it]) } }
+//    }
+//
+//    override fun cos(arg: N): N {
+//        return produce { with(elementContext) { cos(arg[it]) } }
+//    }
+//}
 
 
