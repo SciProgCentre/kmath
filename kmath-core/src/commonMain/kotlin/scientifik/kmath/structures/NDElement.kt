@@ -24,7 +24,7 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
          * Create a optimized NDArray of doubles
          */
         fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }) =
-            NDField.real(shape).produce(initializer)
+            NDField.real(*shape).produce(initializer)
 
 
         fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }) =
@@ -55,7 +55,7 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
             field: F,
             noinline initializer: F.(IntArray) -> T
         ): BufferedNDFieldElement<T, F> {
-            val ndField = NDField.auto(shape, field)
+            val ndField = NDField.auto(field, *shape)
             return BufferedNDFieldElement(ndField, ndField.produce(initializer).buffer)
         }
     }

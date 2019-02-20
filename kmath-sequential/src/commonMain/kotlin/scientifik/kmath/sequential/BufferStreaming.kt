@@ -1,6 +1,7 @@
 package scientifik.kmath.sequential
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.isActive
@@ -12,6 +13,7 @@ import scientifik.kmath.structures.BufferFactory
 /**
  * A processor that collects incoming elements into fixed size buffers
  */
+@ExperimentalCoroutinesApi
 class JoinProcessor<T>(
     scope: CoroutineScope,
     bufferSize: Int,
@@ -68,9 +70,11 @@ class SplitProcessor<T>(scope: CoroutineScope) : AbstractProcessor<Buffer<T>, T>
     }
 }
 
+@ExperimentalCoroutinesApi
 fun <T> Producer<T>.chunked(chunkSize: Int, bufferFactory: BufferFactory<T>) =
     JoinProcessor<T>(this, chunkSize, bufferFactory).also { connect(it) }
 
+@ExperimentalCoroutinesApi
 inline fun <reified T : Any> Producer<T>.chunked(chunkSize: Int) =
     JoinProcessor<T>(this, chunkSize, Buffer.Companion::auto).also { connect(it) }
 

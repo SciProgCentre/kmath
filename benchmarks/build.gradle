@@ -16,6 +16,7 @@ dependencies {
     implementation project(":kmath-commons")
     implementation project(":kmath-koma")
     implementation group: "com.kyonifer", name:"koma-core-ejml", version: "0.12"
+    implementation "org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.5"
     //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     //jmh project(':kmath-core')
 }

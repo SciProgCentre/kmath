@@ -3,6 +3,7 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
 import scientifik.kmath.operations.FieldElement
+import scientifik.kmath.operations.complex
 
 typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
@@ -129,3 +130,5 @@ operator fun ComplexNDElement.plus(arg: Double) =
 
 operator fun ComplexNDElement.minus(arg: Double) =
     map { it - arg }
+
+fun NDField.Companion.complex(vararg shape: Int) = ComplexNDField(shape)

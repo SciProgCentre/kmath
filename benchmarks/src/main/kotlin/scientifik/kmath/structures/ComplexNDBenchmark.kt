@@ -1,15 +1,13 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.operations.Complex
-import scientifik.kmath.operations.toComplex
 import kotlin.system.measureTimeMillis
 
 fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = NDField.real(intArrayOf(dim, dim))
-    val complexField = NDField.complex(intArrayOf(dim, dim))
+    val realField = NDField.real(dim, dim)
+    val complexField = NDField.complex(dim, dim)
 
 
     val realTime = measureTimeMillis {

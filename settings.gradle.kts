@@ -15,10 +15,11 @@ pluginManagement {
     }
 }
 
-//enableFeaturePreview("GRADLE_METADATA")
+enableFeaturePreview("GRADLE_METADATA")
 
 rootProject.name = "kmath"
 include(
+    ":kmath-memory",
     ":kmath-core",
 //    ":kmath-io",
     ":kmath-coroutines",

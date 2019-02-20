@@ -61,7 +61,7 @@ open class NDFieldBenchmark {
         val dim = 1000
         val n = 100
 
-        val bufferedField = NDField.auto(intArrayOf(dim, dim), RealField)
+        val bufferedField = NDField.auto(RealField, intArrayOf(dim, dim))
         val specializedField = NDField.real(intArrayOf(dim, dim))
         val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
         val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)

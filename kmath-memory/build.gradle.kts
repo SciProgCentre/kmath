@@ -12,7 +12,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":kmath-memory"))
                 api(kotlin("stdlib"))
             }
         }

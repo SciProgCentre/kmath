@@ -9,9 +9,9 @@ fun main(args: Array<String>) {
     val n = 1000
 
     // automatically build context most suited for given type.
-    val autoField = NDField.auto(intArrayOf(dim, dim), RealField)
+    val autoField = NDField.auto(RealField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
-    val specializedField = NDField.real(intArrayOf(dim, dim))
+    val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
 

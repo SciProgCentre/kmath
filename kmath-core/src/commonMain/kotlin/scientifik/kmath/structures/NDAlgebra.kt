@@ -3,6 +3,7 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
+import kotlin.jvm.JvmName
 
 
 /**
@@ -118,7 +119,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
         /**
          * Create a nd-field for [Double] values or pull it from cache if it was created previously
          */
-        fun real(shape: IntArray) = realNDFieldCache.getOrPut(shape){RealNDField(shape)}
+        fun real(vararg shape: Int) = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
 
         /**
          * Create a nd-field with boxing generic buffer
@@ -134,9 +135,9 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
          * Create a most suitable implementation for nd-field using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any, F : Field<T>> auto(shape: IntArray, field: F): BufferedNDField<T, F> =
+        inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): BufferedNDField<T, F> =
             when {
-                T::class == Double::class -> real(shape) as BufferedNDField<T, F>
+                T::class == Double::class -> real(*shape) as BufferedNDField<T, F>
                 else -> BoxingNDField(shape, field, Buffer.Companion::auto)
             }
     }

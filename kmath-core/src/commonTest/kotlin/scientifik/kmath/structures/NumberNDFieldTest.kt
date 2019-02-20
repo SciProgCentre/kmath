@@ -63,7 +63,7 @@ class NumberNDFieldTest {
 
     @Test
     fun testInternalContext() {
-        NDField.real(array1.shape).run {
+        NDField.real(*array1.shape).run {
             with(L2Norm) {
                 1 + norm(array1) + exp(array2)
             }

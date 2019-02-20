@@ -1,5 +1,11 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.structures.Buffer
+import scientifik.kmath.structures.MutableBuffer
+import scientifik.kmath.structures.ObjectBuffer
+import scientifik.memory.MemoryReader
+import scientifik.memory.MemorySpec
+import scientifik.memory.MemoryWriter
 import kotlin.math.*
 
 /**
@@ -67,7 +73,25 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 
     val theta: Double get() = atan(im / re)
 
-    companion object
+    companion object : MemorySpec<Complex> {
+        override val objectSize: Int = 16
+
+        override fun MemoryReader.read(offset: Int): Complex =
+            Complex(readDouble(offset), readDouble(offset + 8))
+
+        override fun MemoryWriter.write(offset: Int, value: Complex) {
+            writeDouble(offset, value.re)
+            writeDouble(offset + 8, value.im)
+        }
+    }
 }
 
 fun Double.toComplex() = Complex(this, 0.0)
+
+fun Buffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> {
+    return ObjectBuffer.create(Complex, size, init)
+}
+
+fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> {
+    return ObjectBuffer.create(Complex, size, init)
+}

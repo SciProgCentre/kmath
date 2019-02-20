@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 buildscript {
     val kotlinVersion: String by rootProject.extra("1.3.21")
-    val ioVersion: String by rootProject.extra("0.1.4")
+    val ioVersion: String by rootProject.extra("0.1.5")
     val coroutinesVersion: String by rootProject.extra("1.1.1")
     val atomicfuVersion: String by rootProject.extra("0.12.1")
 
