@@ -1,8 +1,8 @@
 package scientifik.kmath.operations
 
 import scientifik.kmath.structures.Buffer
+import scientifik.kmath.structures.MemoryBuffer
 import scientifik.kmath.structures.MutableBuffer
-import scientifik.kmath.structures.ObjectBuffer
 import scientifik.memory.MemoryReader
 import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
@@ -88,10 +88,10 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 
 fun Double.toComplex() = Complex(this, 0.0)
 
-fun Buffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> {
-    return ObjectBuffer.create(Complex, size, init)
+inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+    return MemoryBuffer.create(Complex, size, init)
 }
 
-fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> {
-    return ObjectBuffer.create(Complex, size, init)
+inline fun MutableBuffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+    return MemoryBuffer.create(Complex, size, init)
 }

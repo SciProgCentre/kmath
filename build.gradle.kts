@@ -28,7 +28,7 @@ allprojects {
     }
 
     group = "scientifik"
-    version = "0.0.3-dev"
+    version = "0.1.0-dev"
 
     repositories {
         //maven("https://dl.bintray.com/kotlin/kotlin-eap")

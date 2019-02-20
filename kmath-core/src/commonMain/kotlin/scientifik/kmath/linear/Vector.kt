@@ -42,7 +42,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
          * Non-boxing double vector space
          */
         fun real(size: Int): BufferVectorSpace<Double, RealField> {
-            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, Buffer.DoubleBufferFactory) }
+            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, Buffer.Companion::auto) }
         }
 
         /**

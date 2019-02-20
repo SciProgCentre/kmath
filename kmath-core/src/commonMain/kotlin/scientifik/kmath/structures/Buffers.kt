@@ -1,5 +1,8 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.operations.Complex
+import scientifik.kmath.operations.complex
+
 
 typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
 typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
@@ -43,21 +46,16 @@ interface Buffer<T> {
          */
         @Suppress("UNCHECKED_CAST")
         inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
+            //TODO add resolution based on Annotation or companion resolution
             return when (T::class) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
+                Complex::class -> complex(size) { initializer(it) as Complex } as Buffer<T>
                 else -> boxing(size, initializer)
             }
         }
-
-        val DoubleBufferFactory: BufferFactory<Double> =
-            { size, initializer -> DoubleBuffer(DoubleArray(size, initializer)) }
-        val ShortBufferFactory: BufferFactory<Short> =
-            { size, initializer -> ShortBuffer(ShortArray(size, initializer)) }
-        val IntBufferFactory: BufferFactory<Int> = { size, initializer -> IntBuffer(IntArray(size, initializer)) }
-        val LongBufferFactory: BufferFactory<Long> = { size, initializer -> LongBuffer(LongArray(size, initializer)) }
     }
 }
 

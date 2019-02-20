@@ -1,6 +1,5 @@
 package scientifik.kmath.structures
 
-import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import kotlin.system.measureTimeMillis
 
 
@@ -8,7 +7,7 @@ fun main(args: Array<String>) {
 
     val n = 6000
 
-    val structure = NDStructure.build(intArrayOf(n, n), DoubleBufferFactory) { 1.0 }
+    val structure = NDStructure.build(intArrayOf(n, n), Buffer.Companion::auto) { 1.0 }
 
     structure.mapToBuffer { it + 1 } // warm-up
 

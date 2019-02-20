@@ -4,7 +4,6 @@ import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.sum
 import scientifik.kmath.structures.*
-import scientifik.kmath.structures.Buffer.Companion.DoubleBufferFactory
 import scientifik.kmath.structures.Buffer.Companion.boxing
 import kotlin.math.sqrt
 
@@ -33,7 +32,7 @@ interface MatrixContext<T : Any> {
         /**
          * Non-boxing double matrix
          */
-        val real = BufferMatrixContext(RealField, DoubleBufferFactory)
+        val real = BufferMatrixContext(RealField, Buffer.Companion::auto)
 
         /**
          * A structured matrix with custom buffer
