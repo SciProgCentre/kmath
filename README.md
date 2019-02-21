@@ -52,7 +52,7 @@ or for the Gradle Kotlin DSL:
 
 ```kotlin
 repositories {
-    maven { setUrl("http://npm.mipt.ru:8081/artifactory/gradle-dev") }
+    maven("http://npm.mipt.ru:8081/artifactory/gradle-dev")
     mavenCentral()
 } 
 ```
