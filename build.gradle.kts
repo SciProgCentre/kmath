@@ -14,6 +14,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:4+")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
     }
 }
 
@@ -49,8 +50,28 @@ allprojects {
             }
         }
     }
+
+    extensions.findByType<PublishingExtension>()?.apply {
+        val javadocJar by tasks.creating(Jar::class) {
+            archiveClassifier.value("javadoc")
+            // TODO: instead of a single empty Javadoc JAR, generate real documentation for each module
+        }
+
+        val sourcesJar by tasks.creating(Jar::class) {
+            archiveClassifier.value("sources")
+        }
+
+        repositories {
+            maven(uri("$buildDir/repo"))
+        }
+        publications.withType<MavenPublication>().all {
+            artifact(javadocJar)
+            artifact(sourcesJar)
+        }
+        //apply(from = "${rootProject.rootDir}/gradle/bintray.gradle")
+    }
 }
 
-if (file("artifactory.gradle").exists()) {
-    apply(from = "artifactory.gradle")
+if (file("gradle/artifactory.gradle").exists()) {
+    apply(from = "gradle/artifactory.gradle")
 }

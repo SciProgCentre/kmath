@@ -60,13 +60,13 @@ repositories {
 Then use a regular dependency like so:
 
 ```groovy
-compile(group: 'scientifik', name: 'kmath-core', version: '0.0.1-SNAPSHOT')
+api "scientifik:kmath-core-jvm:0.1.0-dev"
 ```
 
 or in the Gradle Kotlin DSL:
 
 ```kotlin
-compile(group = "scientifik", name = "kmath-core", version = "0.0.1-SNAPSHOT")
+api("scientifik:kmath-core-jvm:0.1.0-dev")
 ```
 
 Working builds can be obtained here: [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath).
