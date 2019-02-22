@@ -17,7 +17,7 @@ Actual feature list is [here](doc/features.md)
 including mixed arithmetic operations and function operations over arrays and numbers (with the added benefit of static type checking).
 
 * **Expressions** By writing a single mathematical expression
-once, users will be able to apply different types of objects to the expression by providing a context. Exceptions
+once, users will be able to apply different types of objects to the expression by providing a context. Expressions
 can be used for a wide variety of purposes from high performance calculations to code generation.
 
 * **Histograms** Fast multi-dimensional histograms.
