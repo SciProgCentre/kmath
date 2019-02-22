@@ -8,5 +8,4 @@
 # Cache of project
 .gradletasknamecache
 
-gradle/artifactory.gradle
-gradle/bintray.gradle
+gradle.properties
