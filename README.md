@@ -1,26 +1,47 @@
+Bintray: [ ![Download](https://api.bintray.com/packages/mipt-npm/scientifik/scientifik.kmath/images/download.svg) ](https://bintray.com/mipt-npm/scientifik/scientifik.kmath/_latestVersion)
+
 # KMath
 The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's `numpy` library. In contrast to `numpy` and `scipy` it is modular and has a lightweight core.
 
 ## Features
 
+Actual feature list is [here](doc/features.md)
+
 * **Algebra**
     * Algebraic structures like rings, spaces and field (**TODO** add example to wiki)
     * Basic linear algebra operations (sums, products, etc.), backed by the `Space` API.
     * Complex numbers backed by the `Field` API (meaning that they will be usable in any structure like vectors and N-dimensional arrays).
-    * [In progress] advanced linear algebra operations like matrix inversion and LU decomposition.
-* **Array-like structures** Full support of [numpy-like ndarrays](https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.ndarray.html) including mixed arithmetic operations and function operations over arrays and numbers just like in Python (with the added benefit of static type checking).
+    * Advanced linear algebra operations like matrix inversion and LU decomposition.
 
-* **Expressions** Expressions are one of the ultimate goals of KMath. By writing a single mathematical expression
+* **Array-like structures** Full support of many-dimenstional array-like structures 
+including mixed arithmetic operations and function operations over arrays and numbers (with the added benefit of static type checking).
+
+* **Expressions** By writing a single mathematical expression
 once, users will be able to apply different types of objects to the expression by providing a context. Exceptions
 can be used for a wide variety of purposes from high performance calculations to code generation.
 
+* **Histograms** Fast multi-dimensional histograms.
+
+* **Streaming** Streaming operations on mathematica objects and objects buffers.
+
+* **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
+                           library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
+                           to submit a feature request if you want something to be done first.
+                           
+* **Koma wrapper** [Koma](https://github.com/kyonifer/koma) is a well established numerics library in kotlin, specifically linear algebra.
+The plan is to have wrappers for koma implementations for compatibility with kmath API.
+
 ## Planned features
 
-* **Common mathematics** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/) 
-library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
-to submit a feature request if you want something to be done first.
-
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
+
+* **Array statistics** 
+
+* **Integration** Univariate and multivariate integration framework.
+
+* **Probability and distributions**
+
+* **Fitting** Non-linear curve fitting facilities
 
 ## Multi-platform support
 
@@ -39,6 +60,10 @@ of optimized parts should be better than SciPy.
 
 ## Releases
 
+Working builds can be obtained here: [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath).
+
+### Development
+
 The project is currently in pre-release stage. Nightly builds can be used by adding an additional repository to the Gradle config like so:
 
 ```groovy
@@ -52,7 +77,7 @@ or for the Gradle Kotlin DSL:
 
 ```kotlin
 repositories {
-    maven { setUrl("http://npm.mipt.ru:8081/artifactory/gradle-dev") }
+    maven("http://npm.mipt.ru:8081/artifactory/gradle-dev")
     mavenCentral()
 } 
 ```
@@ -60,16 +85,28 @@ repositories {
 Then use a regular dependency like so:
 
 ```groovy
-compile(group: 'scientifik', name: 'kmath-core', version: '0.0.1-SNAPSHOT')
+api "scientifik:kmath-core-jvm:0.1.0-dev"
 ```
 
 or in the Gradle Kotlin DSL:
 
 ```kotlin
-compile(group = "scientifik", name = "kmath-core", version = "0.0.1-SNAPSHOT")
+api("scientifik:kmath-core-jvm:0.1.0-dev")
 ```
 
-Working builds can be obtained here: [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath).
+### Release
+
+Release artifacts are accessible from bintray with following configuration:
+
+```kotlin
+repositories{
+    maven("https://dl.bintray.com/mipt-npm/scientifik")
+}
+
+dependencies{
+    api("scientifik:kmath-core-jvm:0.1.0")
+}
+```
 
 ## Contributing
 

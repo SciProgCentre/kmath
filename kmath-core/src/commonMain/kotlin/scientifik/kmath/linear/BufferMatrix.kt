@@ -2,6 +2,7 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -31,7 +32,6 @@ class BufferMatrix<T : Any>(
             error("Dimension mismatch for matrix structure")
         }
     }
-
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 

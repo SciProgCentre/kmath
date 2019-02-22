@@ -8,4 +8,4 @@
 # Cache of project
 .gradletasknamecache
 
-artifactory.gradle
+gradle.properties
