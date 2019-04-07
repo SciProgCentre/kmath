@@ -12,7 +12,7 @@ fun main() {
     val l = Matrix.real(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
     val matrix = l dot u
 
-    val n = 500 // iterations
+    val n = 5000 // iterations
 
     val solver = LUSolver.real
 
