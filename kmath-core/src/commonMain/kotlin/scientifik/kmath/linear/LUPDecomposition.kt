@@ -2,12 +2,12 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.structures.MutableBuffer
+import scientifik.kmath.structures.*
 import scientifik.kmath.structures.MutableBuffer.Companion.boxing
-import scientifik.kmath.structures.MutableBufferFactory
-import scientifik.kmath.structures.NDStructure
-import scientifik.kmath.structures.get
 
+/**
+ * Common implementation of [LUPDecompositionFeature]
+ */
 class LUPDecomposition<T : Comparable<T>>(
     private val elementContext: Ring<T>,
     internal val lu: NDStructure<T>,
@@ -20,7 +20,7 @@ class LUPDecomposition<T : Comparable<T>>(
      *
      * L is a lower-triangular matrix with [Ring.one] in diagonal
      */
-    override val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(LFeature)) { i, j ->
+    override val l: FeaturedMatrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(LFeature)) { i, j ->
         when {
             j < i -> lu[i, j]
             j == i -> elementContext.one
@@ -34,7 +34,7 @@ class LUPDecomposition<T : Comparable<T>>(
      *
      * U is an upper-triangular matrix including the diagonal
      */
-    override val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(UFeature)) { i, j ->
+    override val u: FeaturedMatrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1], setOf(UFeature)) { i, j ->
         if (j >= i) lu[i, j] else elementContext.zero
     }
 
@@ -45,7 +45,7 @@ class LUPDecomposition<T : Comparable<T>>(
      * P is a sparse matrix with exactly one element set to [Ring.one] in
      * each row and each column, all other elements being set to [Ring.zero].
      */
-    override val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
+    override val p: FeaturedMatrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
         if (j == pivot[i]) elementContext.one else elementContext.zero
     }
 
@@ -62,7 +62,9 @@ class LUPDecomposition<T : Comparable<T>>(
 
 }
 
-
+/**
+ * Common implementation of LUP [LinearSolver] based on commons-math code
+ */
 class LUSolver<T : Comparable<T>, F : Field<T>>(
     val context: GenericMatrixContext<T, F>,
     val bufferFactory: MutableBufferFactory<T> = ::boxing,

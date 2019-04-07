@@ -1,6 +1,7 @@
 package scientifik.kmath.linear
 
 import koma.matrix.ejml.EJMLMatrixFactory
+import scientifik.kmath.structures.Matrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 

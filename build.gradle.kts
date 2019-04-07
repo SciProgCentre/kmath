@@ -193,6 +193,7 @@ subprojects {
             targets.all {
                 sourceSets.all {
                     languageSettings.progressiveMode = true
+                    languageSettings.enableLanguageFeature("InlineClasses")
                 }
             }
 

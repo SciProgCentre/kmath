@@ -3,13 +3,14 @@ package scientifik.kmath.linear
 import org.apache.commons.math3.linear.*
 import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
+import scientifik.kmath.structures.Matrix
 
-class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) : Matrix<Double> {
+class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
     override val features: Set<MatrixFeature> = features ?: sequence<MatrixFeature> {
-        if(origin is DiagonalMatrix) yield(DiagonalFeature)
+        if (origin is DiagonalMatrix) yield(DiagonalFeature)
     }.toSet()
 
     override fun suggestFeature(vararg features: MatrixFeature) =
@@ -45,26 +46,11 @@ fun Point<Double>.toCM(): CMVector = if (this is CMVector) {
 
 fun RealVector.toPoint() = CMVector(this)
 
-object CMMatrixContext : MatrixContext<Double>, LinearSolver<Double> {
+object CMMatrixContext : MatrixContext<Double> {
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
         val array = Array(rows) { i -> DoubleArray(columns) { j -> initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
-    }
-
-    override fun solve(a: Matrix<Double>, b: Matrix<Double>): CMMatrix {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.solve(b.toCM().origin).toMatrix()
-    }
-
-    override fun solve(a: Matrix<Double>, b: Point<Double>): CMVector {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.solve(b.toCM().origin).toPoint()
-    }
-
-    override fun inverse(a: Matrix<Double>): CMMatrix {
-        val decomposition = LUDecomposition(a.toCM().origin)
-        return decomposition.solver.inverse.toMatrix()
     }
 
     override fun Matrix<Double>.dot(other: Matrix<Double>) =
@@ -85,6 +71,23 @@ object CMMatrixContext : MatrixContext<Double>, LinearSolver<Double> {
 
     override fun Matrix<Double>.times(value: Double) =
         CMMatrix(this.toCM().origin.scalarMultiply(value.toDouble()))
+}
+
+object CMLUPSolver: LinearSolver<Double>{
+    override fun solve(a: Matrix<Double>, b: Matrix<Double>): CMMatrix {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.solve(b.toCM().origin).toMatrix()
+    }
+
+    override fun solve(a: Matrix<Double>, b: Point<Double>): CMVector {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.solve(b.toCM().origin).toPoint()
+    }
+
+    override fun inverse(a: Matrix<Double>): CMMatrix {
+        val decomposition = LUDecomposition(a.toCM().origin)
+        return decomposition.solver.inverse.toMatrix()
+    }
 }
 
 operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.add(other.origin))

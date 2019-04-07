@@ -44,7 +44,7 @@ class MatrixTest {
 
     @Test
     fun testBuilder() {
-        val matrix = Matrix.build<Double>(2, 3)(
+        val matrix = FeaturedMatrix.build<Double>(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )

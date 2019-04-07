@@ -13,7 +13,7 @@ class RealLUSolverTest {
 
     @Test
     fun testInvert() {
-        val matrix = Matrix.square(
+        val matrix = FeaturedMatrix.square(
             3.0, 1.0,
             1.0, 3.0
         )
@@ -31,7 +31,7 @@ class RealLUSolverTest {
 
         val inverted = LUSolver.real.inverse(decomposed)
 
-        val expected = Matrix.square(
+        val expected = FeaturedMatrix.square(
             0.375, -0.125,
             -0.125, 0.375
         )

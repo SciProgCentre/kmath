@@ -8,6 +8,9 @@ import scientifik.kmath.structures.Buffer.Companion.boxing
 import kotlin.math.sqrt
 
 
+/**
+ * Basic operations on matrices. Operates on [Matrix]
+ */
 interface MatrixContext<T : Any> {
     /**
      * Produce a matrix with this context and given dimensions
@@ -101,18 +104,18 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
     operator fun Matrix<T>.times(number: Number): Matrix<T> =
         produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * number } }
 
-    operator fun Number.times(matrix: Matrix<T>): Matrix<T> = matrix * this
+    operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
 
     override fun Matrix<T>.times(value: T): Matrix<T> =
         produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * value } }
 }
 
 /**
- * Specialized 2-d structure
+ * A 2d structure plus optional matrix-specific features
  */
-interface Matrix<T : Any> : Structure2D<T> {
-    val rowNum: Int
-    val colNum: Int
+interface FeaturedMatrix<T : Any> : Matrix<T> {
+
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     val features: Set<MatrixFeature>
 
@@ -122,70 +125,54 @@ interface Matrix<T : Any> : Structure2D<T> {
      * The implementation does not guarantee to check that matrix actually have the feature, so one should be careful to
      * add only those features that are valid.
      */
-    fun suggestFeature(vararg features: MatrixFeature): Matrix<T>
-
-    override fun get(index: IntArray): T = get(index[0], index[1])
-
-    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
-
-    val rows: Point<Point<T>>
-        get() = VirtualBuffer(rowNum) { i ->
-            VirtualBuffer(colNum) { j -> get(i, j) }
-        }
-
-    val columns: Point<Point<T>>
-        get() = VirtualBuffer(colNum) { j ->
-            VirtualBuffer(rowNum) { i -> get(i, j) }
-        }
-
-    override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
-        for (i in (0 until rowNum)) {
-            for (j in (0 until colNum)) {
-                yield(intArrayOf(i, j) to get(i, j))
-            }
-        }
-    }
+    fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<T>
 
     companion object {
-        fun real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
-            MatrixContext.real.produce(rows, columns, initializer)
 
-        /**
-         * Build a square matrix from given elements.
-         */
-        fun <T : Any> square(vararg elements: T): Matrix<T> {
-            val size: Int = sqrt(elements.size.toDouble()).toInt()
-            if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
-            val buffer = elements.asBuffer()
-            return BufferMatrix(size, size, buffer)
-        }
-
-        fun <T : Any> build(rows: Int, columns: Int): MatrixBuilder<T> = MatrixBuilder(rows, columns)
     }
 }
 
+fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
+    MatrixContext.real.produce(rows, columns, initializer)
+
+/**
+ * Build a square matrix from given elements.
+ */
+fun <T : Any> Structure2D.Companion.square(vararg elements: T): FeaturedMatrix<T> {
+    val size: Int = sqrt(elements.size.toDouble()).toInt()
+    if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
+    val buffer = elements.asBuffer()
+    return BufferMatrix(size, size, buffer)
+}
+
+fun <T : Any> Structure2D.Companion.build(rows: Int, columns: Int): MatrixBuilder<T> = MatrixBuilder(rows, columns)
+
 class MatrixBuilder<T : Any>(val rows: Int, val columns: Int) {
-    operator fun invoke(vararg elements: T): Matrix<T> {
+    operator fun invoke(vararg elements: T): FeaturedMatrix<T> {
         if (rows * columns != elements.size) error("The number of elements ${elements.size} is not equal $rows * $columns")
         val buffer = elements.asBuffer()
         return BufferMatrix(rows, columns, buffer)
     }
 }
 
+val Matrix<*>.features get() = (this as? FeaturedMatrix)?.features?: emptySet()
+
 /**
  * Check if matrix has the given feature class
  */
-inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean = features.find { it is T } != null
+inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean =
+    features.find { it is T } != null
 
 /**
  * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
  */
-inline fun <reified T : Any> Matrix<*>.getFeature(): T? = features.filterIsInstance<T>().firstOrNull()
+inline fun <reified T : Any> Matrix<*>.getFeature(): T? =
+    features.filterIsInstance<T>().firstOrNull()
 
 /**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: Int): Matrix<T> =
+fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix<T>(rows, columns) { i, j ->
         if (i == j) elementContext.one else elementContext.zero
     }
@@ -194,7 +181,7 @@ fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: In
 /**
  * A virtual matrix of zeroes
  */
-fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): Matrix<T> =
+fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix<T>(rows, columns) { _, _ -> elementContext.zero }
 
 class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature

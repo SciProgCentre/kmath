@@ -5,8 +5,7 @@ interface NDStructure<T> {
 
     val shape: IntArray
 
-    val dimension
-        get() = shape.size
+    val dimension get() = shape.size
 
     operator fun get(index: IntArray): T
 

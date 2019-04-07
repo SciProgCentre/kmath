@@ -2,7 +2,6 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
-import kotlin.jvm.JvmSynthetic
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -25,7 +24,7 @@ class BufferMatrix<T : Any>(
     override val colNum: Int,
     val buffer: Buffer<out T>,
     override val features: Set<MatrixFeature> = emptySet()
-) : Matrix<T> {
+) : FeaturedMatrix<T> {
 
     init {
         if (buffer.size != rowNum * colNum) {
