@@ -15,19 +15,20 @@ fun main() {
 
     val n = 5000 // iterations
 
-    val solver = LUSolver.real
+    MatrixContext.real.run {
 
-    repeat(50) {
-        val res = solver.inverse(matrix)
-    }
-
-    val inverseTime = measureTimeMillis {
-        repeat(n) {
-            val res = solver.inverse(matrix)
+        repeat(50) {
+            val res = inverse(matrix)
         }
-    }
 
-    println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
+        val inverseTime = measureTimeMillis {
+            repeat(n) {
+                val res = inverse(matrix)
+            }
+        }
+
+        println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
+    }
 
     //commons-math
 

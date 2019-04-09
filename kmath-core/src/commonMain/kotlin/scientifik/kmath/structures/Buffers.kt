@@ -2,6 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
+import kotlin.reflect.KClass
 
 
 typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
@@ -41,13 +42,10 @@ interface Buffer<T> {
          */
         inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
 
-        /**
-         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
-         */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
+        inline fun <T : Any> auto(type: KClass<T>, size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
             //TODO add resolution based on Annotation or companion resolution
-            return when (T::class) {
+            return when (type) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
@@ -56,6 +54,13 @@ interface Buffer<T> {
                 else -> boxing(size, initializer)
             }
         }
+
+        /**
+         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> =
+            auto(T::class, size, initializer)
     }
 }
 
@@ -78,18 +83,26 @@ interface MutableBuffer<T> : Buffer<T> {
         inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             MutableListBuffer(MutableList(size, initializer))
 
-        /**
-         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
-         */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-            return when (T::class) {
+        inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
+            return when (type) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
+        }
+
+        /**
+         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            auto(T::class, size, initializer)
+
+        val real: MutableBufferFactory<Double> = { size: Int, initializer: (Int) -> Double ->
+            DoubleBuffer(DoubleArray(size) { initializer(it) })
         }
     }
 }

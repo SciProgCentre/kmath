@@ -1,5 +1,6 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
 
@@ -17,6 +18,10 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
     }
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
+
+    companion object {
+
+    }
 }
 
 class BufferMatrix<T : Any>(
