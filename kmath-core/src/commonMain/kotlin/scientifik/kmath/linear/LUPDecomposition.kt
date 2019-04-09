@@ -103,8 +103,8 @@ open class BufferAccessor<T : Any>(val type: KClass<T>, val field: Field<T>, val
  * Specialized LU operations for Doubles
  */
 class RealBufferAccessor(rowNum: Int, colNum: Int) : BufferAccessor<Double>(Double::class, RealField, rowNum, colNum) {
-    override inline fun MutableBuffer<Double>.get(i: Int, j: Int) = (this as DoubleBuffer).array[i + colNum * j]
-    override inline fun MutableBuffer<Double>.set(i: Int, j: Int, value: Double) {
+    override fun MutableBuffer<Double>.get(i: Int, j: Int) = (this as DoubleBuffer).array[i + colNum * j]
+    override fun MutableBuffer<Double>.set(i: Int, j: Int, value: Double) {
         (this as DoubleBuffer).array[i + colNum * j] = value
     }
 
