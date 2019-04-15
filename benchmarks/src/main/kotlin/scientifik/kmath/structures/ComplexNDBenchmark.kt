@@ -23,7 +23,7 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField.run {
-            var res: ComplexNDElement = one
+            var res = one
             repeat(n) {
                 res += 1.0
             }

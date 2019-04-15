@@ -1,10 +1,13 @@
 package scientifik.kmath.linear
 
 import koma.matrix.ejml.EJMLMatrixFactory
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.Matrix
+import kotlin.contracts.ExperimentalContracts
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
+@ExperimentalContracts
 fun main() {
     val random = Random(12224)
     val dim = 100
@@ -32,10 +35,8 @@ fun main() {
 
     //commons-math
 
-    val cmContext = CMLUPSolver
-
     val commonsTime = measureTimeMillis {
-        cmContext.run {
+        CMMatrixContext.run {
             val cm = matrix.toCM()             //avoid overhead on conversion
             repeat(n) {
                 val res = inverse(cm)
@@ -48,10 +49,8 @@ fun main() {
 
     //koma-ejml
 
-    val komaContext = KomaMatrixContext(EJMLMatrixFactory())
-
     val komaTime = measureTimeMillis {
-        komaContext.run {
+        KomaMatrixContext(EJMLMatrixFactory(), RealField).run {
             val km = matrix.toKoma()      //avoid overhead on conversion
             repeat(n) {
                 val res = inverse(km)

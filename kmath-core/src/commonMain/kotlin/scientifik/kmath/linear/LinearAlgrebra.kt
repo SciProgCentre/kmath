@@ -13,7 +13,7 @@ import scientifik.kmath.structures.asSequence
  */
 interface LinearSolver<T : Any> {
     fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>
-    fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.toMatrix()).asPoint()
+    fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.asMatrix()).asPoint()
     fun inverse(a: Matrix<T>): Matrix<T>
 }
 
@@ -43,4 +43,4 @@ fun <T : Any> Matrix<T>.asPoint(): Point<T> =
         error("Can't convert matrix with more than one column to vector")
     }
 
-fun <T : Any> Point<T>.toMatrix() = VirtualMatrix(size, 1) { i, _ -> get(i) }
+fun <T : Any> Point<T>.asMatrix() = VirtualMatrix(size, 1) { i, _ -> get(i) }

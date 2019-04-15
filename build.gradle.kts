@@ -1,9 +1,6 @@
 import com.moowork.gradle.node.NodeExtension
 import com.moowork.gradle.node.npm.NpmTask
 import com.moowork.gradle.node.task.NodeTask
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     val kotlinVersion: String by rootProject.extra("1.3.21")
@@ -194,6 +191,8 @@ subprojects {
                 sourceSets.all {
                     languageSettings.progressiveMode = true
                     languageSettings.enableLanguageFeature("InlineClasses")
+                    languageSettings.useExperimentalAnnotation("ExperimentalContracts")
+                    //languageSettings.enableLanguageFeature("Contracts")
                 }
             }
 

@@ -73,6 +73,7 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
      */
     override fun multiply(a: N, k: Number): N = map(a) { multiply(it, k) }
 
+    //TODO move to extensions after KEEP-176
     operator fun N.plus(arg: T) = map(this) { value -> add(arg, value) }
     operator fun N.minus(arg: T) = map(this) { value -> add(arg, -value) }
 
@@ -90,6 +91,7 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
      */
     override fun multiply(a: N, b: N): N = combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
+    //TODO move to extensions after KEEP-176
     operator fun N.times(arg: T) = map(this) { value -> multiply(arg, value) }
     operator fun T.times(arg: N) = map(arg) { value -> multiply(this@times, value) }
 }
@@ -109,6 +111,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
      */
     override fun divide(a: N, b: N): N = combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
+    //TODO move to extensions after KEEP-176
     operator fun N.div(arg: T) = map(this) { value -> divide(arg, value) }
     operator fun T.div(arg: N) = map(arg) { divide(it, this@div) }
 

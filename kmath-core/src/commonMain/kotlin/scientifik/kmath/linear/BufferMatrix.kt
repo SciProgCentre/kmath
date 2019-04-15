@@ -1,6 +1,5 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
 

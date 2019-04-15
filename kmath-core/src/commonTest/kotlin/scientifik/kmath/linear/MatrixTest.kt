@@ -1,5 +1,6 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.structures.Matrix
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,7 +17,7 @@ class MatrixTest {
     @Test
     fun testVectorToMatrix() {
         val vector = Vector.real(5) { it.toDouble() }
-        val matrix = vector.toMatrix()
+        val matrix = vector.asMatrix()
         assertEquals(4.0, matrix[4, 0])
     }
 
@@ -33,8 +34,8 @@ class MatrixTest {
         val vector1 = Vector.real(5) { it.toDouble() }
         val vector2 = Vector.real(5) { 5 - it.toDouble() }
 
-        val matrix1 = vector1.toMatrix()
-        val matrix2 = vector2.toMatrix().transpose()
+        val matrix1 = vector1.asMatrix()
+        val matrix2 = vector2.asMatrix().transpose()
         val product = MatrixContext.real.run { matrix1 dot matrix2 }
 
 
@@ -44,7 +45,7 @@ class MatrixTest {
 
     @Test
     fun testBuilder() {
-        val matrix = FeaturedMatrix.build<Double>(2, 3)(
+        val matrix = Matrix.build<Double>(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )

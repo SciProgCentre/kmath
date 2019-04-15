@@ -1,6 +1,7 @@
 package scientifik.kmath.linear
 
 import koma.matrix.ejml.EJMLMatrixFactory
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.Matrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
@@ -27,7 +28,7 @@ fun main() {
     }
 
 
-    KomaMatrixContext(EJMLMatrixFactory()).run {
+    KomaMatrixContext(EJMLMatrixFactory(), RealField).run {
         val komaMatrix1 = matrix1.toKoma()
         val komaMatrix2 = matrix2.toKoma()
 

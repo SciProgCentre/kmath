@@ -4,6 +4,9 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -63,7 +66,12 @@ class LUPDecomposition<T : Any>(
 
 }
 
-open class BufferAccessor<T : Any>(val type: KClass<T>, val field: Field<T>, val rowNum: Int, val colNum: Int) {
+internal open class BufferAccessor<T : Any>(
+    val type: KClass<T>,
+    val field: Field<T>,
+    val rowNum: Int,
+    val colNum: Int
+) {
     open operator fun MutableBuffer<T>.get(i: Int, j: Int) = get(i + colNum * j)
     open operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
         set(i + colNum * j, value)
@@ -102,7 +110,8 @@ open class BufferAccessor<T : Any>(val type: KClass<T>, val field: Field<T>, val
 /**
  * Specialized LU operations for Doubles
  */
-class RealBufferAccessor(rowNum: Int, colNum: Int) : BufferAccessor<Double>(Double::class, RealField, rowNum, colNum) {
+private class RealBufferAccessor(rowNum: Int, colNum: Int) :
+    BufferAccessor<Double>(Double::class, RealField, rowNum, colNum) {
     override fun MutableBuffer<Double>.get(i: Int, j: Int) = (this as DoubleBuffer).array[i + colNum * j]
     override fun MutableBuffer<Double>.set(i: Int, j: Int, value: Double) {
         (this as DoubleBuffer).array[i + colNum * j] = value
@@ -125,24 +134,33 @@ class RealBufferAccessor(rowNum: Int, colNum: Int) : BufferAccessor<Double>(Doub
     }
 }
 
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.buildAccessor(
-    type:KClass<T>,
+@ExperimentalContracts
+private inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.withAccessor(
+    type: KClass<T>,
     rowNum: Int,
-    colNum: Int
-): BufferAccessor<T> {
-    return if (elementContext == RealField) {
+    colNum: Int,
+    block: BufferAccessor<T>.() -> Unit
+) {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    if (elementContext == RealField) {
         @Suppress("UNCHECKED_CAST")
         RealBufferAccessor(rowNum, colNum) as BufferAccessor<T>
     } else {
         BufferAccessor(type, elementContext, rowNum, colNum)
-    }
+    }.run(block)
 }
 
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
+private fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
     if (value > elementContext.zero) value else with(elementContext) { -value }
 
 
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lupDecompose(
+/**
+ * Create a lup decomposition of generic matrix
+ */
+@ExperimentalContracts
+fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
     type: KClass<T>,
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
@@ -155,7 +173,7 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lupDecompose(
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
 
-    buildAccessor(type, matrix.rowNum, matrix.colNum).run {
+    withAccessor(type, matrix.rowNum, matrix.colNum) {
 
         val lu = create(matrix)
 
@@ -170,21 +188,12 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lupDecompose(
 
             // upper
             for (row in 0 until col) {
-//                var sum = lu[row, col]
-//                for (i in 0 until row) {
-//                    sum -= lu[row, i] * lu[i, col]
-//                }
                 val sum = lu.innerProduct(row, col, row)
                 lu[row, col] = field.run { lu[row, col] - sum }
             }
 
             // lower
             val max = (col until m).maxBy { row ->
-                //                var sum = lu[row, col]
-//                for (i in 0 until col) {
-//                    sum -= lu[row, i] * lu[i, col]
-//                }
-//                lu[row, col] = sum
                 val sum = lu.innerProduct(row, col, col)
                 lu[row, col] = field.run { lu[row, col] - sum }
                 abs(sum)
@@ -214,14 +223,17 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lupDecompose(
                 //lu[row, col] = lu[row, col] / luDiag
             }
         }
-        return scientifik.kmath.linear.LUPDecomposition(elementContext, lu.collect(), pivot, even)
-
+        return LUPDecomposition(elementContext, lu.collect(), pivot, even)
     }
 }
+
+@ExperimentalContracts
+fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(Double::class, matrix) { it < 1e-11 }
 
 /**
  * Solve a linear equation **a*x = b**
  */
+@ExperimentalContracts
 fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
     type: KClass<T>,
     a: Matrix<T>,
@@ -233,9 +245,9 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
     }
 
     // Use existing decomposition if it is provided by matrix
-    val decomposition = a.getFeature() ?: lupDecompose(type, a, checkSingular)
+    val decomposition = a.getFeature() ?: lup(type, a, checkSingular)
 
-    buildAccessor(type, a.rowNum, a.colNum).run {
+    withAccessor(type, a.rowNum, a.colNum) {
 
         val lu = create(decomposition.lu)
 
@@ -271,14 +283,19 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
 
         return produce(a.rowNum, a.colNum) { i, j -> bp[i, j] }
     }
-
 }
 
+@ExperimentalContracts
+fun GenericMatrixContext<Double, RealField>.solve(a: Matrix<Double>, b: Matrix<Double>) =
+    solve(Double::class, a, b) { it < 1e-11 }
+
+@ExperimentalContracts
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
 ) =
     solve(T::class, matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
 
+@ExperimentalContracts
 fun GenericMatrixContext<Double, RealField>.inverse(matrix: Matrix<Double>) =
     inverse(matrix) { it < 1e-11 }

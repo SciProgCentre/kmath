@@ -4,68 +4,23 @@ import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.Buffer
-import scientifik.kmath.structures.BufferFactory
 import scientifik.kmath.structures.asSequence
+import kotlin.jvm.JvmName
 
 typealias Point<T> = Buffer<T>
 
-/**
- * A linear space for vectors.
- * Could be used on any point-like structure
- */
-interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 
-    val size: Int
+fun <T : Any, S : Space<T>> BufferVectorSpace<T, S>.produceElement(initializer: (Int) -> T): Vector<T, S> =
+    BufferVector(this, produce(initializer))
 
-    val space: S
-
-    fun produce(initializer: (Int) -> T): Point<T>
-
-    /**
-     * Produce a space-element of this vector space for expressions
-     */
-    fun produceElement(initializer: (Int) -> T): Vector<T, S>
-
-    override val zero: Point<T> get() = produce { space.zero }
-
-    override fun add(a: Point<T>, b: Point<T>): Point<T> = produce { with(space) { a[it] + b[it] } }
-
-    override fun multiply(a: Point<T>, k: Number): Point<T> = produce { with(space) { a[it] * k } }
-
-    //TODO add basis
-
-    companion object {
-
-        private val realSpaceCache = HashMap<Int, BufferVectorSpace<Double, RealField>>()
-
-        /**
-         * Non-boxing double vector space
-         */
-        fun real(size: Int): BufferVectorSpace<Double, RealField> {
-            return realSpaceCache.getOrPut(size) { BufferVectorSpace(size, RealField, Buffer.Companion::auto) }
-        }
-
-        /**
-         * A structured vector space with custom buffer
-         */
-        fun <T : Any, S : Space<T>> buffered(
-            size: Int,
-            space: S,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ): VectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
-
-        /**
-         * Automatic buffered vector, unboxed if it is possible
-         */
-        inline fun <reified T : Any, S : Space<T>> smart(size: Int, space: S): VectorSpace<T, S> =
-            buffered(size, space, Buffer.Companion::auto)
-    }
-}
-
+@JvmName("produceRealElement")
+fun BufferVectorSpace<Double, RealField>.produceElement(initializer: (Int) -> Double): Vector<Double, RealField> =
+    BufferVector(this, produce(initializer))
 
 /**
  * A point coupled to the linear space
  */
+@Deprecated("Use VectorContext instead")
 interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, Vector<T, S>, VectorSpace<T, S>>, Point<T> {
     override val size: Int get() = context.size
 
@@ -90,16 +45,7 @@ interface Vector<T : Any, S : Space<T>> : SpaceElement<Point<T>, Vector<T, S>, V
     }
 }
 
-data class BufferVectorSpace<T : Any, S : Space<T>>(
-    override val size: Int,
-    override val space: S,
-    val bufferFactory: BufferFactory<T>
-) : VectorSpace<T, S> {
-    override fun produce(initializer: (Int) -> T) = bufferFactory(size, initializer)
-    override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))
-}
-
-
+@Deprecated("Use VectorContext instead")
 data class BufferVector<T : Any, S : Space<T>>(override val context: VectorSpace<T, S>, val buffer: Buffer<T>) :
     Vector<T, S> {
 
