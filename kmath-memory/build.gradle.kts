@@ -1,16 +1,9 @@
 plugins {
-    kotlin("multiplatform")
+    id("multiplatform-config")
 }
 
-val ioVersion: String by rootProject.extra
-
-
+// We actually don't need this, we define jvm and js targets in multiplatform-config
 kotlin {
     jvm()
     js()
-//        mingwMain {
-//        }
-//        mingwTest {
-//        }
-    
 }

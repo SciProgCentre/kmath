@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform")
+    id("multiplatform-config")
 }
 
 val ioVersion: String by rootProject.extra
@@ -10,7 +10,7 @@ kotlin {
     js()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(project(":kmath-memory"))
             }

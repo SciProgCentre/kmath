@@ -10,9 +10,6 @@ pluginManagement {
                 "kotlinx-atomicfu" -> {
                     useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:${requested.version}")
                 }
-                "kotlin-multiplatform" ->{
-                    useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-                }
             }
         }
     }
