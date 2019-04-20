@@ -3,21 +3,21 @@ package scientifik.kmath.linear
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.structures.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.reflect.KClass
+import scientifik.kmath.structures.BufferAccessor2D
+import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.Structure2D
 
 /**
  * Common implementation of [LUPDecompositionFeature]
  */
 class LUPDecomposition<T : Any>(
-    private val elementContext: Ring<T>,
+    val context: GenericMatrixContext<T, out Field<T>>,
     val lu: Structure2D<T>,
     val pivot: IntArray,
     private val even: Boolean
 ) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
+
+    val elementContext get() = context.elementContext
 
     /**
      * Returns the matrix L of the decomposition.
@@ -66,102 +66,14 @@ class LUPDecomposition<T : Any>(
 
 }
 
-internal open class BufferAccessor<T : Any>(
-    val type: KClass<T>,
-    val field: Field<T>,
-    val rowNum: Int,
-    val colNum: Int
-) {
-    open operator fun MutableBuffer<T>.get(i: Int, j: Int) = get(i + colNum * j)
-    open operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
-        set(i + colNum * j, value)
-    }
-
-    fun create(init: (i: Int, j: Int) -> T) =
-        MutableBuffer.auto(type, rowNum * colNum) { offset -> init(offset / colNum, offset % colNum) }
-
-    fun create(mat: Structure2D<T>) = create { i, j -> mat[i, j] }
-
-    //TODO optimize wrapper
-    fun MutableBuffer<T>.collect(): Structure2D<T> =
-        NDStructure.auto(type, rowNum, colNum) { (i, j) -> get(i, j) }.as2D()
-
-    open fun MutableBuffer<T>.innerProduct(row: Int, col: Int, max: Int): T {
-        var sum = field.zero
-        field.run {
-            for (i in 0 until max) {
-                sum += get(row, i) * get(i, col)
-            }
-        }
-        return sum
-    }
-
-    open fun MutableBuffer<T>.divideInPlace(i: Int, j: Int, factor: T) {
-        field.run { set(i, j, get(i, j) / factor) }
-    }
-
-    open fun MutableBuffer<T>.subtractInPlace(i: Int, j: Int, lu: MutableBuffer<T>, col: Int) {
-        field.run {
-            set(i, j, get(i, j) - get(col, j) * lu[i, col])
-        }
-    }
-}
-
-/**
- * Specialized LU operations for Doubles
- */
-private class RealBufferAccessor(rowNum: Int, colNum: Int) :
-    BufferAccessor<Double>(Double::class, RealField, rowNum, colNum) {
-    override fun MutableBuffer<Double>.get(i: Int, j: Int) = (this as DoubleBuffer).array[i + colNum * j]
-    override fun MutableBuffer<Double>.set(i: Int, j: Int, value: Double) {
-        (this as DoubleBuffer).array[i + colNum * j] = value
-    }
-
-    override fun MutableBuffer<Double>.innerProduct(row: Int, col: Int, max: Int): Double {
-        var sum = 0.0
-        for (i in 0 until max) {
-            sum += get(row, i) * get(i, col)
-        }
-        return sum
-    }
-
-    override fun MutableBuffer<Double>.divideInPlace(i: Int, j: Int, factor: Double) {
-        set(i, j, get(i, j) / factor)
-    }
-
-    override fun MutableBuffer<Double>.subtractInPlace(i: Int, j: Int, lu: MutableBuffer<Double>, col: Int) {
-        set(i, j, get(i, j) - get(col, j) * lu[i, col])
-    }
-}
-
-@ExperimentalContracts
-private inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.withAccessor(
-    type: KClass<T>,
-    rowNum: Int,
-    colNum: Int,
-    block: BufferAccessor<T>.() -> Unit
-) {
-    contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-    }
-    if (elementContext == RealField) {
-        @Suppress("UNCHECKED_CAST")
-        RealBufferAccessor(rowNum, colNum) as BufferAccessor<T>
-    } else {
-        BufferAccessor(type, elementContext, rowNum, colNum)
-    }.run(block)
-}
-
-private fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
+fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
     if (value > elementContext.zero) value else with(elementContext) { -value }
 
 
 /**
  * Create a lup decomposition of generic matrix
  */
-@ExperimentalContracts
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
-    type: KClass<T>,
+inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
 ): LUPDecomposition<T> {
@@ -169,133 +81,166 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
         error("LU decomposition supports only square matrices")
     }
 
-
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
 
-    withAccessor(type, matrix.rowNum, matrix.colNum) {
+    //TODO just waits for KEEP-176
+    BufferAccessor2D(T::class, matrix.rowNum, matrix.colNum).run {
+        elementContext.run {
 
-        val lu = create(matrix)
+            val lu = create(matrix)
 
-        // Initialize permutation array and parity
-        for (row in 0 until m) {
-            pivot[row] = row
-        }
-        var even = true
-
-        // Loop over columns
-        for (col in 0 until m) {
-
-            // upper
-            for (row in 0 until col) {
-                val sum = lu.innerProduct(row, col, row)
-                lu[row, col] = field.run { lu[row, col] - sum }
+            // Initialize permutation array and parity
+            for (row in 0 until m) {
+                pivot[row] = row
             }
+            var even = true
 
-            // lower
-            val max = (col until m).maxBy { row ->
-                val sum = lu.innerProduct(row, col, col)
-                lu[row, col] = field.run { lu[row, col] - sum }
-                abs(sum)
-            } ?: col
-
-            // Singularity check
-            if (checkSingular(lu[max, col])) {
-                error("Singular matrix")
+            // Initialize permutation array and parity
+            for (row in 0 until m) {
+                pivot[row] = row
             }
+            var singular = false
 
-            // Pivot if necessary
-            if (max != col) {
-                for (i in 0 until m) {
-                    lu[max, i] = lu[col, i]
-                    lu[col, i] = lu[max, i]
+            // Loop over columns
+            for (col in 0 until m) {
+
+                // upper
+                for (row in 0 until col) {
+                    val luRow = lu.row(row)
+                    var sum = luRow[col]
+                    for (i in 0 until row) {
+                        sum -= luRow[i] * lu[i, col]
+                    }
+                    luRow[col] = sum
                 }
-                val temp = pivot[max]
-                pivot[max] = pivot[col]
-                pivot[col] = temp
-                even = !even
+
+                // lower
+                var max = col // permutation row
+                var largest = -one
+                for (row in col until m) {
+                    val luRow = lu.row(row)
+                    var sum = luRow[col]
+                    for (i in 0 until col) {
+                        sum -= luRow[i] * lu[i, col]
+                    }
+                    luRow[col] = sum
+
+                    // maintain best permutation choice
+                    if (abs(sum) > largest) {
+                        largest = abs(sum)
+                        max = row
+                    }
+                }
+
+                // Singularity check
+                if (checkSingular(abs(lu[max, col]))) {
+                    error("The matrix is singular")
+                }
+
+                // Pivot if necessary
+                if (max != col) {
+                    val luMax = lu.row(max)
+                    val luCol = lu.row(col)
+                    for (i in 0 until m) {
+                        val tmp = luMax[i]
+                        luMax[i] = luCol[i]
+                        luCol[i] = tmp
+                    }
+                    val temp = pivot[max]
+                    pivot[max] = pivot[col]
+                    pivot[col] = temp
+                    even = !even
+                }
+
+                // Divide the lower elements by the "winning" diagonal elt.
+                val luDiag = lu[col, col]
+                for (row in col + 1 until m) {
+                    lu[row, col] /= luDiag
+                }
             }
 
-            // Divide the lower elements by the "winning" diagonal elt.
-            val luDiag = lu[col, col]
-            for (row in col + 1 until m) {
-                lu.divideInPlace(row, col, luDiag)
-                //lu[row, col] = lu[row, col] / luDiag
-            }
+            return LUPDecomposition(this@lup, lu.collect(), pivot, even)
         }
-        return LUPDecomposition(elementContext, lu.collect(), pivot, even)
     }
 }
 
-@ExperimentalContracts
-fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(Double::class, matrix) { it < 1e-11 }
+fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(matrix) { it < 1e-11 }
+
+inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matrix<T> {
+
+    if (matrix.rowNum != pivot.size) {
+        error("Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}")
+    }
+
+    BufferAccessor2D(T::class, matrix.rowNum, matrix.colNum).run {
+        elementContext.run {
+
+            val lu = create{i,j-> this@solve.lu[i,j]}
+
+            // Apply permutations to b
+            val bp = create { i, j -> zero }
+            for (row in 0 until pivot.size) {
+                val bpRow = bp.row(row)
+                val pRow = pivot[row]
+                for (col in 0 until matrix.colNum) {
+                    bpRow[col] = matrix[pRow, col]
+                }
+            }
+
+            // Solve LY = b
+            for (col in 0 until pivot.size) {
+                val bpCol = bp.row(col)
+                for (i in col + 1 until pivot.size) {
+                    val bpI = bp.row(i)
+                    val luICol = lu[i, col]
+                    for (j in 0 until matrix.colNum) {
+                        bpI[j] -= bpCol[j] * luICol
+                    }
+                }
+            }
+
+            // Solve UX = Y
+            for (col in pivot.size - 1 downTo 0) {
+                val bpCol = bp.row(col)
+                val luDiag = lu[col, col]
+                for (j in 0 until matrix.colNum) {
+                    bpCol[j] /= luDiag
+                }
+                for (i in 0 until col) {
+                    val bpI = bp.row(i)
+                    val luICol = lu[i, col]
+                    for (j in 0 until matrix.colNum) {
+                        bpI[j] -= bpCol[j] * luICol
+                    }
+                }
+            }
+            return context.produce(pivot.size, matrix.colNum) { i, j -> bp[i, j] }
+        }
+    }
+}
+
 
 /**
  * Solve a linear equation **a*x = b**
  */
-@ExperimentalContracts
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
-    type: KClass<T>,
+inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
     a: Matrix<T>,
     b: Matrix<T>,
-    checkSingular: (T) -> Boolean
+    crossinline checkSingular: (T) -> Boolean
 ): Matrix<T> {
-    if (b.rowNum != a.colNum) {
-        error("Matrix dimension mismatch. Expected ${a.rowNum}, but got ${b.colNum}")
-    }
-
     // Use existing decomposition if it is provided by matrix
-    val decomposition = a.getFeature() ?: lup(type, a, checkSingular)
-
-    withAccessor(type, a.rowNum, a.colNum) {
-
-        val lu = create(decomposition.lu)
-
-        // Apply permutations to b
-        val bp = create { i, j ->
-            b[decomposition.pivot[i], j]
-        }
-
-        // Solve LY = b
-        for (col in 0 until a.rowNum) {
-            for (i in col + 1 until a.rowNum) {
-                for (j in 0 until b.colNum) {
-                    bp.subtractInPlace(i, j, lu, col)
-                    //bp[i, j] -= bp[col, j] * lu[i, col]
-                }
-            }
-        }
-
-        // Solve UX = Y
-        for (col in a.rowNum - 1 downTo 0) {
-            val luDiag = lu[col, col]
-            for (j in 0 until b.colNum) {
-                bp.divideInPlace(col, j, luDiag)
-                //bp[col, j] /= lu[col, col]
-            }
-            for (i in 0 until col) {
-                for (j in 0 until b.colNum) {
-                    bp.subtractInPlace(i, j, lu, col)
-                    //bp[i, j] -= bp[col, j] * lu[i, col]
-                }
-            }
-        }
-
-        return produce(a.rowNum, a.colNum) { i, j -> bp[i, j] }
-    }
+    val decomposition = a.getFeature() ?: lup(a, checkSingular)
+    return decomposition.solve(b)
 }
 
-@ExperimentalContracts
-fun GenericMatrixContext<Double, RealField>.solve(a: Matrix<Double>, b: Matrix<Double>) =
-    solve(Double::class, a, b) { it < 1e-11 }
+fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>) =
+    solve(a, b) { it < 1e-11 }
 
-@ExperimentalContracts
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
-) =
-    solve(T::class, matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
+) = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
 
-@ExperimentalContracts
-fun GenericMatrixContext<Double, RealField>.inverse(matrix: Matrix<Double>) =
-    inverse(matrix) { it < 1e-11 }
+fun RealMatrixContext.inverse(matrix: Matrix<Double>) =
+    solve(matrix, one(matrix.rowNum, matrix.colNum)) { it < 1e-11 }

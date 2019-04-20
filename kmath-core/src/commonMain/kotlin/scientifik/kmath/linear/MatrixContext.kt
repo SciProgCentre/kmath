@@ -1,6 +1,5 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.SpaceOperations
 import scientifik.kmath.operations.sum
@@ -30,7 +29,7 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
         /**
          * Non-boxing double matrix
          */
-        val real = BufferMatrixContext(RealField, Buffer.Companion::auto)
+        val real = RealMatrixContext
 
         /**
          * A structured matrix with custom buffer

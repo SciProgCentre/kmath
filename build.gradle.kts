@@ -1,9 +1,12 @@
 import com.moowork.gradle.node.NodeExtension
 import com.moowork.gradle.node.npm.NpmTask
 import com.moowork.gradle.node.task.NodeTask
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    val kotlinVersion: String by rootProject.extra("1.3.21")
+    val kotlinVersion: String by rootProject.extra("1.3.30")
     val ioVersion: String by rootProject.extra("0.1.5")
     val coroutinesVersion: String by rootProject.extra("1.1.1")
     val atomicfuVersion: String by rootProject.extra("0.12.1")

@@ -1,5 +1,6 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
 
@@ -21,6 +22,18 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
     companion object {
 
     }
+}
+
+object RealMatrixContext : GenericMatrixContext<Double, RealField> {
+
+    override val elementContext = RealField
+
+    override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
+        val buffer = DoubleBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
+        return BufferMatrix(rows, columns, buffer)
+    }
+
+    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = DoubleBuffer(size,initializer)
 }
 
 class BufferMatrix<T : Any>(

@@ -9,7 +9,7 @@ import kotlin.system.measureTimeMillis
 
 @ExperimentalContracts
 fun main() {
-    val random = Random(12224)
+    val random = Random(1224)
     val dim = 100
     //creating invertible matrix
     val u = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }

@@ -84,7 +84,7 @@ interface MutableBuffer<T> : Buffer<T> {
             MutableListBuffer(MutableList(size, initializer))
 
         @Suppress("UNCHECKED_CAST")
-        inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
+        inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
             return when (type) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
