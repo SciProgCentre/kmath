@@ -6,6 +6,7 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.BufferAccessor2D
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.Structure2D
+import kotlin.reflect.KClass
 
 /**
  * Common implementation of [LUPDecompositionFeature]
@@ -73,7 +74,8 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
 /**
  * Create a lup decomposition of generic matrix
  */
-inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
+fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
+    type: KClass<T>,
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
 ): LUPDecomposition<T> {
@@ -85,7 +87,7 @@ inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.
     val pivot = IntArray(matrix.rowNum)
 
     //TODO just waits for KEEP-176
-    BufferAccessor2D(T::class, matrix.rowNum, matrix.colNum).run {
+    BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
         elementContext.run {
 
             val lu = create(matrix)
@@ -100,7 +102,6 @@ inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.
             for (row in 0 until m) {
                 pivot[row] = row
             }
-            var singular = false
 
             // Loop over columns
             for (col in 0 until m) {
@@ -165,21 +166,25 @@ inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.
     }
 }
 
-fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(matrix) { it < 1e-11 }
+inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
+    matrix: Matrix<T>,
+    noinline checkSingular: (T) -> Boolean
+) = lup(T::class, matrix, checkSingular)
 
-inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matrix<T> {
+fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(Double::class, matrix) { it < 1e-11 }
+
+fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Matrix<T> {
 
     if (matrix.rowNum != pivot.size) {
         error("Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}")
     }
 
-    BufferAccessor2D(T::class, matrix.rowNum, matrix.colNum).run {
+    BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
         elementContext.run {
-
-            val lu = create{i,j-> this@solve.lu[i,j]}
 
             // Apply permutations to b
             val bp = create { i, j -> zero }
+
             for (row in 0 until pivot.size) {
                 val bpRow = bp.row(row)
                 val pRow = pivot[row]
@@ -220,6 +225,7 @@ inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matri
     }
 }
 
+inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>) = solve(T::class, matrix)
 
 /**
  * Solve a linear equation **a*x = b**
@@ -227,11 +233,11 @@ inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matri
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
     a: Matrix<T>,
     b: Matrix<T>,
-    crossinline checkSingular: (T) -> Boolean
+    noinline checkSingular: (T) -> Boolean
 ): Matrix<T> {
     // Use existing decomposition if it is provided by matrix
-    val decomposition = a.getFeature() ?: lup(a, checkSingular)
-    return decomposition.solve(b)
+    val decomposition = a.getFeature() ?: lup(T::class, a, checkSingular)
+    return decomposition.solve(T::class, b)
 }
 
 fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>) =

@@ -16,21 +16,28 @@ class RealLUSolverTest {
     }
 
     @Test
-    fun testInvert() {
+    fun testDecomposition() {
         val matrix = Matrix.square(
             3.0, 1.0,
             1.0, 3.0
         )
 
-        val decomposition = MatrixContext.real.lup(matrix)
+        MatrixContext.real.run {
+            val lup = lup(matrix)
 
-        //Check determinant
-        assertEquals(8.0, decomposition.determinant)
+            //Check determinant
+            assertEquals(8.0, lup.determinant)
 
-        //Check decomposition
-        with(MatrixContext.real) {
-            assertEquals(decomposition.p dot matrix, decomposition.l dot decomposition.u)
+            assertEquals(lup.p dot matrix, lup.l dot lup.u)
         }
+    }
+
+    @Test
+    fun testInvert() {
+        val matrix = Matrix.square(
+            3.0, 1.0,
+            1.0, 3.0
+        )
 
         val inverted = MatrixContext.real.inverse(matrix)
 

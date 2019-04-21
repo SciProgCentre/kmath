@@ -9,6 +9,13 @@ class VirtualMatrix<T : Any>(
     val generator: (i: Int, j: Int) -> T
 ) : FeaturedMatrix<T> {
 
+    constructor(rowNum: Int, colNum: Int, vararg features: MatrixFeature, generator: (i: Int, j: Int) -> T) : this(
+        rowNum,
+        colNum,
+        setOf(*features),
+        generator
+    )
+
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     override fun get(i: Int, j: Int): T = generator(i, j)

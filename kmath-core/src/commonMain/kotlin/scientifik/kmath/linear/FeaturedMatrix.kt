@@ -1,10 +1,9 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
-import scientifik.kmath.operations.sum
-import scientifik.kmath.structures.*
-import scientifik.kmath.structures.Buffer.Companion.boxing
+import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.Structure2D
+import scientifik.kmath.structures.asBuffer
 import kotlin.math.sqrt
 
 /**
@@ -70,7 +69,7 @@ inline fun <reified T : Any> Matrix<*>.getFeature(): T? =
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
 fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: Int): FeaturedMatrix<T> =
-    VirtualMatrix<T>(rows, columns) { i, j ->
+    VirtualMatrix(rows, columns, DiagonalFeature) { i, j ->
         if (i == j) elementContext.one else elementContext.zero
     }
 

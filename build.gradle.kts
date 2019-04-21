@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
     val kotlinVersion: String by rootProject.extra("1.3.30")
     val ioVersion: String by rootProject.extra("0.1.5")
-    val coroutinesVersion: String by rootProject.extra("1.1.1")
+    val coroutinesVersion: String by rootProject.extra("1.2.0")
     val atomicfuVersion: String by rootProject.extra("0.12.1")
     val dokkaVersion: String by rootProject.extra("0.9.17")
     val serializationVersion: String by rootProject.extra("0.10.0")
