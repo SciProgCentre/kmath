@@ -7,9 +7,9 @@ import kotlin.reflect.KClass
  */
 class BufferAccessor2D<T : Any>(val type: KClass<T>, val rowNum: Int, val colNum: Int) {
 
-    inline operator fun Buffer<T>.get(i: Int, j: Int) = get(i + colNum * j)
+    operator fun Buffer<T>.get(i: Int, j: Int) = get(i + colNum * j)
 
-    inline operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
+    operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
         set(i + colNum * j, value)
     }
 

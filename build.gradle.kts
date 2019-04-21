@@ -90,6 +90,7 @@ subprojects {
                 compilations.all {
                     kotlinOptions {
                         jvmTarget = "1.8"
+                        //freeCompilerArgs = listOf("-Xno-call-assertions", "-Xno-param-assertions")
                     }
                 }
             }
