@@ -35,19 +35,6 @@ open class NDFieldBenchmark {
 
 
     @Benchmark
-    fun lazyFieldAdd() {
-        lazyNDField.run {
-            var res = one
-            repeat(n) {
-                res += one
-            }
-
-            res.elements().sumByDouble { it.second }
-        }
-    }
-
-
-    @Benchmark
     fun boxingFieldAdd() {
         genericField.run {
             var res: NDBuffer<Double> = one
@@ -61,9 +48,8 @@ open class NDFieldBenchmark {
         val dim = 1000
         val n = 100
 
-        val bufferedField = NDField.auto(RealField, intArrayOf(dim, dim))
-        val specializedField = NDField.real(intArrayOf(dim, dim))
+        val bufferedField = NDField.auto(RealField, dim, dim)
+        val specializedField = NDField.real(dim, dim)
         val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
-        val lazyNDField = NDField.lazy(intArrayOf(dim, dim), RealField)
     }
 }
