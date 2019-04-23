@@ -3,10 +3,7 @@ plugins {
 }
 
 kotlin {
-    jvm()
-    js()
-
-    sourceSets.invoke {
+    sourceSets {
         commonMain {
             dependencies {
                 api(project(":kmath-core"))
@@ -19,23 +16,23 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        "jvmMain" {
+        jvmMain {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Ver.coroutinesVersion}")
             }
         }
-        "jvmTest" {
+        jvmTest {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
             }
         }
-        "jsMain" {
+        jsMain {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${Ver.coroutinesVersion}")
             }
         }
-        "jsTest" {
+        jsTest {
             dependencies {
                 implementation(kotlin("test-js"))
             }

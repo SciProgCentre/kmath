@@ -4,10 +4,7 @@ plugins {
 }
 
 kotlin {
-    jvm()
-    js()
-
-    sourceSets.invoke {
+    sourceSets {
         commonMain {
             dependencies {
                 api(project(":kmath-core"))
@@ -15,12 +12,12 @@ kotlin {
                 compileOnly("org.jetbrains.kotlinx:atomicfu-common:${Ver.atomicfuVersion}")
             }
         }
-        "jvmMain" {
+        jvmMain {
             dependencies {
                 compileOnly("org.jetbrains.kotlinx:atomicfu:${Ver.atomicfuVersion}")
             }
         }
-        "jsMain" {
+        jsMain {
             dependencies {
                 compileOnly("org.jetbrains.kotlinx:atomicfu-js:${Ver.atomicfuVersion}")
             }

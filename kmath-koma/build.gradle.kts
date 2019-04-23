@@ -14,10 +14,8 @@ kotlin {
             }
         }
     }
-    js()
 
-    sourceSets.invoke {
-
+    sourceSets {
         commonMain {
             dependencies {
                 api(project(":kmath-core"))
@@ -30,24 +28,24 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        "jvmMain" {
+        jvmMain {
             dependencies {
                 api("com.kyonifer:koma-core-api-jvm:0.12")
             }
         }
-        "jvmTest" {
+        jvmTest {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
                 implementation("com.kyonifer:koma-core-ejml:0.12")
             }
         }
-        "jsMain" {
+        jsMain {
             dependencies {
                 api("com.kyonifer:koma-core-api-js:0.12")
             }
         }
-        "jsTest" {
+        jsTest {
             dependencies {
                 implementation(kotlin("test-js"))
             }
