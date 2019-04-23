@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinMultiplatformPlugin
+
 val kmathVersion by extra("0.1.2-dev-1")
 
 allprojects {
@@ -16,20 +18,19 @@ subprojects {
 
         //apply artifactory configuration
         apply(plugin = "artifactory-config")
-
-        plugins.withId("org.jetbrains.kotlin.multiplatform") {
-            apply(plugin = "multiplatform-config")
-        }
-
     }
-    //    dokka {
-//        outputFormat = "html"
-//        outputDirectory = javadoc.destinationDir
-//    }
+
+    plugins.withType<KotlinMultiplatformPlugin> {
+        apply(plugin = "multiplatform-config")
+//        dokka {
+//            outputFormat = "html"
+//            outputDirectory = javadoc.destinationDir
+//        }
 //
-//    task dokkaJar (type: Jar, dependsOn: dokka) {
-//           from javadoc . destinationDir
-//            classifier = "javadoc"
+//        task dokkaJar (type: Jar, dependsOn: dokka) {
+//        from javadoc . destinationDir
+//                classifier = "javadoc"
 //    }
+    }
 
 }
