@@ -1,4 +1,4 @@
-package scientifik.kmath.sequential
+package scientifik.kmath.streaming
 
 import kotlinx.coroutines.runBlocking
 import kotlin.sequences.Sequence

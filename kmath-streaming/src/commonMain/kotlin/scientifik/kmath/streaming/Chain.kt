@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package scientifik.kmath.sequential
+package scientifik.kmath.streaming
 
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope

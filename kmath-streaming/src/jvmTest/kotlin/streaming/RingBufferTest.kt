@@ -1,9 +1,7 @@
-package scientifik.kmath.sequential
+package scientifik.kmath.streaming
 
 import kotlinx.coroutines.runBlocking
 import scientifik.kmath.structures.asSequence
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class RingBufferTest {
     @Test

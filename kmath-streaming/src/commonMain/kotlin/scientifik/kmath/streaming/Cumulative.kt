@@ -1,4 +1,4 @@
-package scientifik.kmath.sequential
+package scientifik.kmath.streaming
 
 import scientifik.kmath.operations.Space
 import kotlin.jvm.JvmName
