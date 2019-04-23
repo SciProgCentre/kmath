@@ -10,7 +10,7 @@ kotlin {
     js()
 
     sourceSets {
-        commonMain {
+        val commonMain by getting {
             dependencies {
                 api(project(":kmath-memory"))
             }

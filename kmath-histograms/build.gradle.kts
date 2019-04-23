@@ -6,25 +6,26 @@ kotlin {
     jvm()
     js()
 
-    sourceSets.invoke {
-        commonMain {
+    sourceSets {
+
+        val commonMain by getting {
             dependencies {
                 api(project(":kmath-core"))
             }
         }
-        commonTest {
+        val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        "jvmTest" {
+        val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
             }
         }
-        "jsTest" {
+        val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
             }

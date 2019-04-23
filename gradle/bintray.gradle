@@ -1,0 +1,85 @@
+apply plugin: 'com.jfrog.bintray'
+
+def vcs = "https://github.com/mipt-npm/kmath"
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "MIPT-NPM"
+            name "MIPT nuclear physics methods laboratory"
+            organization "MIPT"
+            organizationUrl "http://npm.mipt.ru"
+        }
+    }
+    scm {
+        url vcs
+    }
+}
+
+project.ext.configureMavenCentralMetadata = { pom ->
+    def root = asNode()
+    root.appendNode('name', project.name)
+    root.appendNode('description', project.description)
+    root.appendNode('url', vcs)
+    root.children().last() + pomConfig
+}
+
+project.ext.configurePom = pomConfig
+
+
+// Configure publishing
+publishing {
+    repositories {
+        maven {
+            url = "https://bintray.com/mipt-npm/scientifik"
+        }
+    }
+
+    // Process each publication we have in this project
+    publications.all { publication ->
+        // apply changes to pom.xml files, see pom.gradle
+        pom.withXml(configureMavenCentralMetadata)
+
+
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publish = true
+    override = true // for multi-platform Kotlin/Native publishing
+
+    pkg {
+        userOrg = "mipt-npm"
+        repo = "scientifik"
+        name = "scientifik.kmath"
+        issueTrackerUrl = "https://github.com/mipt-npm/kmath/issues"
+        licenses = ['Apache-2.0']
+        vcsUrl = vcs
+        version {
+            name = project.version
+            vcsTag = project.version
+            released = new Date()
+        }
+    }
+}
+
+bintrayUpload.dependsOn publishToMavenLocal
+
+// This is for easier debugging of bintray uploading problems
+bintrayUpload.doFirst {
+    publications = project.publishing.publications.findAll {
+        !it.name.contains('-test') && it.name != 'kotlinMultiplatform'
+    }.collect {
+        println("Uploading artifact '$it.groupId:$it.artifactId:$it.version' from publication '$it.name'")
+        it.name//https://github.com/bintray/gradle-bintray-plugin/issues/256
+    }
+}

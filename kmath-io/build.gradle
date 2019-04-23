@@ -16,7 +16,7 @@ kotlin {
             dependencies {
                 api project(":kmath-core")
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
-                api "org.jetbrains.kotlinx:kotlinx-io:${Ver.ioVersion}"
+                api "org.jetbrains.kotlinx:kotlinx-io:$ioVersion"
             }
         }
         commonTest {
@@ -28,7 +28,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-                api "org.jetbrains.kotlinx:kotlinx-io-jvm:${Ver.ioVersion}"
+                api "org.jetbrains.kotlinx:kotlinx-io-jvm:$ioVersion"
             }
         }
         jvmTest {

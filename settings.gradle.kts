@@ -8,9 +8,10 @@ pluginManagement {
         eachPlugin {
             when (requested.id.id) {
                 "kotlinx-atomicfu" -> {
-                    // Just hardcode version here, 
-                    // because anyway different submodules cannot use different versions
-                    useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.12.1")
+                    useModule("org.jetbrains.kotlinx:atomicfu-gradle-plugin:${requested.version}")
+                }
+                "kotlin-multiplatform" ->{
+                    useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
                 }
             }
         }

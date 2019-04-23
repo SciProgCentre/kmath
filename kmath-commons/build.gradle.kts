@@ -15,13 +15,13 @@ dependencies {
 
 
 val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
+    classifier = "sources"
     from(sourceSets.main.get().allSource)
 }
 
 publishing {
     publications {
-        register<MavenPublication>("jvm") {
+        register("jvm", MavenPublication::class) {
             from(components["java"])
             artifact(sourcesJar.get())
         }
