@@ -11,6 +11,8 @@ kotlin {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
+                // This was used in kmath-koma, but probably if we need it better to apply it for all modules
+                //freeCompilerArgs += "-progressive"
             }
         }
     }

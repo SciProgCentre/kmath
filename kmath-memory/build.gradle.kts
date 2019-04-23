@@ -1,3 +1,3 @@
 plugins {
-    id("multiplatform-config")
+    `multiplatform-config`
 }
