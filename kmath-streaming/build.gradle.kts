@@ -1,9 +1,9 @@
 plugins {
     kotlin("multiplatform")
-    id("kotlinx-atomicfu")
+    id("kotlinx-atomicfu") version Ver.atomicfuVersion
 }
 
-val atomicfuVersion: String by rootProject.extra
+
 
 kotlin {
     jvm ()

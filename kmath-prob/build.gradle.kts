@@ -1,34 +1,27 @@
 plugins {
-    kotlin("multiplatform")
-    id("kotlinx-atomicfu")
+    `multiplatform-config`
+    id("kotlinx-atomicfu") version Ver.atomicfuVersion
 }
 
-val atomicfuVersion: String by rootProject.extra
-
-kotlin {
-    jvm ()
-    js()
-
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(project(":kmath-core"))
-                api(project(":kmath-coroutines"))
-                compileOnly("org.jetbrains.kotlinx:atomicfu-common:${Ver.atomicfuVersion}")
-            }
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+            api(project(":kmath-coroutines"))
+            compileOnly("org.jetbrains.kotlinx:atomicfu-common:${Ver.atomicfuVersion}")
         }
-        val jvmMain by getting {
-            dependencies {
-                compileOnly("org.jetbrains.kotlinx:atomicfu:${Ver.atomicfuVersion}")
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                compileOnly("org.jetbrains.kotlinx:atomicfu-js:${Ver.atomicfuVersion}")
-            }
-        }
-
     }
+    jvmMain {
+        dependencies {
+            compileOnly("org.jetbrains.kotlinx:atomicfu:${Ver.atomicfuVersion}")
+        }
+    }
+    jsMain {
+        dependencies {
+            compileOnly("org.jetbrains.kotlinx:atomicfu-js:${Ver.atomicfuVersion}")
+        }
+    }
+
 }
 
 atomicfu {

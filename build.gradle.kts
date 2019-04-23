@@ -1,36 +1,33 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinMultiplatformPlugin
-
 val kmathVersion by extra("0.1.2-dev-1")
 
 allprojects {
+//    apply(plugin = "maven")
+//    apply(plugin = "maven-publish")
+//    apply(plugin = "com.jfrog.artifactory")
+
     repositories {
         jcenter()
         maven("https://kotlin.bintray.com/kotlinx")
     }
+    
     group = "scientifik"
     version = kmathVersion
 }
 
 subprojects {
+    // Actually, probably we should apply it to plugins explicitly
+    // We also can merge them to single kmath-publish plugin
     if (name.startsWith("kmath")) {
-        // apply bintray configuration
         apply(plugin = "bintray-config")
-
-        //apply artifactory configuration
         apply(plugin = "artifactory-config")
     }
-
-    plugins.withType<KotlinMultiplatformPlugin> {
-        apply(plugin = "multiplatform-config")
-//        dokka {
-//            outputFormat = "html"
-//            outputDirectory = javadoc.destinationDir
-//        }
-//
-//        task dokkaJar (type: Jar, dependsOn: dokka) {
-//        from javadoc . destinationDir
-//                classifier = "javadoc"
+    //    dokka {
+//        outputFormat = "html"
+//        outputDirectory = javadoc.destinationDir
 //    }
-    }
-
+//
+//    task dokkaJar (type: Jar, dependsOn: dokka) {
+//           from javadoc . destinationDir
+//            classifier = "javadoc"
+//    }
 }
