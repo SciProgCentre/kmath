@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform")
+    `multiplatform-config`
     id("kotlinx-atomicfu") version Ver.atomicfuVersion
 }
 
