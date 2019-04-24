@@ -2,9 +2,9 @@ package scientifik.kmath.transform
 
 import org.apache.commons.math3.transform.*
 import scientifik.kmath.operations.Complex
-import scientifik.kmath.sequential.Processor
-import scientifik.kmath.sequential.Producer
-import scientifik.kmath.sequential.map
+import scientifik.kmath.streaming.Processor
+import scientifik.kmath.streaming.Producer
+import scientifik.kmath.streaming.map
 import scientifik.kmath.structures.*
 
 

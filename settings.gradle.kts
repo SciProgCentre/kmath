@@ -29,6 +29,6 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-koma",
-    ":kmath-sequential",
+    ":kmath-streaming",
     ":benchmarks"
 )

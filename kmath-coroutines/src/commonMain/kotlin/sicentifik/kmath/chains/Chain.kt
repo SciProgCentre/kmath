@@ -14,14 +14,10 @@
  *  limitations under the License.
  */
 
-package scientifik.kmath.sequential
+package sicentifik.kmath.chains
 
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.FlowPreview
 
 
 /**
@@ -47,10 +43,11 @@ interface Chain<out R> {
 }
 
 /**
- * Chain as a coroutine receive channel
+ * Chain as a coroutine flow. The flow emit affects chain state and vice versa
  */
-@ExperimentalCoroutinesApi
-fun <R> Chain<R>.asChannel(scope: CoroutineScope): ReceiveChannel<R> = scope.produce { while (isActive) send(next()) }
+@FlowPreview
+val <R> Chain<R>.flow
+    get() = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
 
 fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
