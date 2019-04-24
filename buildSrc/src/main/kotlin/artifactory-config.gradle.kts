@@ -3,7 +3,7 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig
 
 plugins {
-    id("com.jfrog.artifactory") version "4.9.5"
+    id("com.jfrog.artifactory")
 }
 
 artifactory {

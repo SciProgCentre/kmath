@@ -9,7 +9,7 @@ import com.jfrog.bintray.gradle.BintrayExtension.VersionConfig
 // (excluding Property.set and bintray dynamic configs)
 
 plugins {
-    id("com.jfrog.bintray") version "1.8.4"
+    id("com.jfrog.bintray")
     `maven-publish`
 }
 

@@ -1,4 +1,4 @@
-val kmathVersion by extra("0.1.2-dev-1")
+val kmathVersion by extra("0.1.2-dev-2")
 
 allprojects {
 //    apply(plugin = "maven")
