@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package sicentifik.kmath.chains
+package scientifik.kmath.chains
 
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.FlowPreview
@@ -26,7 +26,7 @@ import kotlinx.coroutines.FlowPreview
  */
 interface Chain<out R> {
     /**
-     * Last value of the chain. Returns null if [next] was not called
+     * Last cached value of the chain. Returns null if [next] was not called
      */
     val value: R?
 

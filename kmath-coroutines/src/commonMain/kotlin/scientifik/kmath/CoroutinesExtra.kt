@@ -1,4 +1,4 @@
-package scientifik.kmath.structures
+package scientifik.kmath
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

@@ -26,7 +26,6 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-koma",
-    ":kmath-streaming",
     ":kmath-prob",
     ":benchmarks"
 )

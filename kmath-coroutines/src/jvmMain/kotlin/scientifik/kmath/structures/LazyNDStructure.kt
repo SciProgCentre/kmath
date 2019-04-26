@@ -1,6 +1,7 @@
 package scientifik.kmath.structures
 
 import kotlinx.coroutines.*
+import scientifik.kmath.Math
 
 class LazyNDStructure<T>(
     val scope: CoroutineScope,
