@@ -1,24 +1,26 @@
 package scientifik.kmath.streaming
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import scientifik.kmath.async
+import scientifik.kmath.collect
 
+@ExperimentalCoroutinesApi
 @InternalCoroutinesApi
+@FlowPreview
 class BufferFlowTest {
 
-    @Test(timeout = 2000)
+
+    @Test
     fun mapParallel() {
         runBlocking {
-            (1..20).asFlow().mapParallel {
+            (1..20).asFlow().async(Dispatchers.IO) {
+                println("Started $it")
+                @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
                 it
-            }.collect {
+            }.collect(4) {
                 println("Completed $it")
             }
         }

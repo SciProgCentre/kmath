@@ -60,36 +60,3 @@ fun Flow<Double>.chunked(bufferSize: Int) = flow {
         }
     }
 }
-
-/**
- * Perform parallel mapping of flow elements
- */
-@InternalCoroutinesApi
-@ExperimentalCoroutinesApi
-@FlowPreview
-fun <T, R> Flow<T>.mapParallel(dispatcher: CoroutineDispatcher = Dispatchers.Default, bufferSize: Int = 16, transform: suspend (T) -> R) : Flow<R>{
-    require(bufferSize >= 0) {
-        "Buffer size should be positive, but was $bufferSize"
-    }
-    return flow {
-        coroutineScope {
-            val channel: ReceiveChannel<Deferred<R>> = produce(capacity = bufferSize) {
-                collect { value ->
-                    send(async(dispatcher) { transform(value) })
-                }
-            }
-
-            // TODO semantics doesn't play well here and we pay for that with additional object
-            (channel as Job).invokeOnCompletion { if (it is CancellationException && it.cause == null) cancel() }
-            for (element in channel) {
-                emit(element.await())
-            }
-
-            val producer = channel as Job
-            if (producer.isCancelled) {
-                producer.join()
-                throw producer.getCancellationException()
-            }
-        }
-    }
-}
