@@ -1,10 +1,10 @@
 package scientifik.kmath.transform
 
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.apache.commons.math3.transform.*
 import scientifik.kmath.operations.Complex
-import scientifik.kmath.streaming.Processor
-import scientifik.kmath.streaming.Producer
-import scientifik.kmath.streaming.map
 import scientifik.kmath.structures.*
 
 
@@ -68,19 +68,21 @@ object Transformations {
 /**
  * Process given [Producer] with commons-math fft transformation
  */
-fun Producer<Buffer<Complex>>.FFT(
+@FlowPreview
+fun Flow<Buffer<Complex>>.FFT(
     normalization: DftNormalization = DftNormalization.STANDARD,
     direction: TransformType = TransformType.FORWARD
-): Processor<Buffer<Complex>, Buffer<Complex>> {
+): Flow<Buffer<Complex>> {
     val transform = Transformations.fourier(normalization, direction)
     return map { transform(it) }
 }
 
+@FlowPreview
 @JvmName("realFFT")
-fun Producer<Buffer<Double>>.FFT(
+fun Flow<Buffer<Double>>.FFT(
     normalization: DftNormalization = DftNormalization.STANDARD,
     direction: TransformType = TransformType.FORWARD
-): Processor<Buffer<Double>, Buffer<Complex>> {
+): Flow<Buffer<Complex>> {
     val transform = Transformations.realFourier(normalization, direction)
     return map { transform(it) }
 }

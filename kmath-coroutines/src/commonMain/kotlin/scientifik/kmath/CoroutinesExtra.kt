@@ -13,12 +13,12 @@ val Dispatchers.Math: CoroutineDispatcher get() = Dispatchers.Default
 /**
  * An imitator of [Deferred] which holds a suspended function block and dispatcher
  */
-class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: suspend CoroutineScope.() -> T) {
+internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: suspend CoroutineScope.() -> T) {
     private var deferred: Deferred<T>? = null
 
-    fun CoroutineScope.start() {
+    internal fun start(scope: CoroutineScope) {
         if(deferred==null) {
-            deferred = async(dispatcher, block = block)
+            deferred = scope.async(dispatcher, block = block)
         }
     }
 
@@ -26,7 +26,7 @@ class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: suspend Co
 }
 
 @FlowPreview
-inline class AsyncFlow<T>(val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
+class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
     override suspend fun collect(collector: FlowCollector<T>) {
         deferredFlow.collect {
             collector.emit((it.await()))
@@ -46,23 +46,23 @@ fun <T, R> Flow<T>.async(
 }
 
 @FlowPreview
-fun <T, R> AsyncFlow<T>.map(action: (T) -> R) = deferredFlow.map { input ->
-    //TODO add actual composition
+fun <T, R> AsyncFlow<T>.map(action: (T) -> R) = AsyncFlow(deferredFlow.map { input ->
+    //TODO add function composition
     LazyDeferred(input.dispatcher) {
-        input.run { start() }
+        input.start(this)
         action(input.await())
     }
-}
+})
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<T>) {
-    require(concurrency >= 0) { "Buffer size should be positive, but was $concurrency" }
+    require(concurrency >= 1) { "Buffer size should be more than 1, but was $concurrency" }
     coroutineScope {
         //Starting up to N deferred coroutines ahead of time
-        val channel = produce(capacity = concurrency) {
+        val channel = produce(capacity = concurrency-1) {
             deferredFlow.collect { value ->
-                value.run { start() }
+                value.start(this@coroutineScope)
                 send(value)
             }
         }
@@ -90,4 +90,32 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T
         override suspend fun emit(value: T) = action(value)
     })
 }
+
+//suspend fun <T> Flow<T>.collect(concurrency: Int, dispatcher: CoroutineDispatcher, collector: FlowCollector<T>){
+//    require(concurrency >= 1) { "Buffer size should be more than 1, but was $concurrency" }
+//    coroutineScope {
+//        //Starting up to N deferred coroutines ahead of time
+//        val channel = produce(capacity = concurrency-1) {
+//            this@collect.
+//            deferredFlow.collect { value ->
+//                value.start(this@coroutineScope)
+//                send(value)
+//            }
+//        }
+//
+//        (channel as Job).invokeOnCompletion {
+//            if (it is CancellationException && it.cause == null) cancel()
+//        }
+//
+//        for (element in channel) {
+//            collector.emit(element.await())
+//        }
+//
+//        val producer = channel as Job
+//        if (producer.isCancelled) {
+//            producer.join()
+//            //throw producer.getCancellationException()
+//        }
+//    }
+//}
 

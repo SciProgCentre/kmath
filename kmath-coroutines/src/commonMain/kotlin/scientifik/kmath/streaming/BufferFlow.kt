@@ -1,13 +1,10 @@
 package scientifik.kmath.streaming
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.BufferFactory
 import scientifik.kmath.structures.DoubleBuffer
-import kotlin.coroutines.coroutineContext
 
 /**
  * Create a [Flow] from buffer
@@ -58,5 +55,19 @@ fun Flow<Double>.chunked(bufferSize: Int) = flow {
             val buffer = DoubleBuffer(array)
             emit(buffer)
         }
+    }
+}
+
+/**
+ * Map a flow to a moving window buffer. The window step is one.
+ * In order to get different steps, one could use skip operation.
+ */
+@FlowPreview
+fun <T> Flow<T>.windowed(window: Int): Flow<Buffer<T>> = flow {
+    require(window > 1) { "Window size must be more than one" }
+    val ringBuffer = RingBuffer.boxing<T>(window)
+    this@windowed.collect { element ->
+        ringBuffer.push(element)
+        emit(ringBuffer.snapshot())
     }
 }

@@ -249,7 +249,10 @@ inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
  * Useful when one needs single element from the buffer.
  */
 class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
-    override fun get(index: Int): T = generator(index)
+    override fun get(index: Int): T {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
+        return generator(index)
+    }
 
     override fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
 
