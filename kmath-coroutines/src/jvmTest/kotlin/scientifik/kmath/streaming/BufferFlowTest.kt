@@ -11,11 +11,10 @@ import scientifik.kmath.collect
 @FlowPreview
 class BufferFlowTest {
 
-
-    @Test
+    @Test(timeout = 2000)
     fun mapParallel() {
         runBlocking {
-            (1..20).asFlow().async(Dispatchers.IO) {
+            (1..20).asFlow().async(Dispatchers.Default) {
                 println("Started $it")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
