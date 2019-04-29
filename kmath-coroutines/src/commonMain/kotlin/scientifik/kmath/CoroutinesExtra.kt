@@ -89,8 +89,8 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T
 
 @FlowPreview
 fun <T, R> Flow<T>.map(
-    concurrencyLevel: Int,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    dispatcher: CoroutineDispatcher,
+    concurrencyLevel: Int = 16,
     bufferSize: Int = concurrencyLevel,
     transform: suspend (T) -> R
 ): Flow<R> {
