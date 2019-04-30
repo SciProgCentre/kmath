@@ -37,6 +37,9 @@ fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>) = flow
             counter = 0
         }
     }
+    if (counter > 0) {
+        emit(bufferFactory(counter) { list[it] })
+    }
 }
 
 /**
@@ -54,7 +57,11 @@ fun Flow<Double>.chunked(bufferSize: Int) = flow {
         if (counter == bufferSize) {
             val buffer = DoubleBuffer(array)
             emit(buffer)
+            counter = 0
         }
+    }
+    if (counter > 0) {
+        emit(DoubleBuffer(counter) { array[it] })
     }
 }
 

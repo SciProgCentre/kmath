@@ -278,3 +278,5 @@ fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
  * Typealias for buffer transformations
  */
 typealias BufferTransform<T, R> = (Buffer<T>) -> Buffer<R>
+
+typealias SuspendBufferTransform<T, R> = suspend (Buffer<T>) -> Buffer<R>
