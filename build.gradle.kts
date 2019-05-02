@@ -1,10 +1,6 @@
 val kmathVersion by extra("0.1.2-dev-3")
 
 allprojects {
-//    apply(plugin = "maven")
-//    apply(plugin = "maven-publish")
-//    apply(plugin = "com.jfrog.artifactory")
-
     repositories {
         jcenter()
         maven("https://kotlin.bintray.com/kotlinx")

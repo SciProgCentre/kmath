@@ -7,7 +7,7 @@ repositories {
     jcenter()
 }
 
-val kotlinVersion = "1.3.30"
+val kotlinVersion = "1.3.31"
 
 // Add plugins used in buildSrc as dependencies, also we should specify version only here
 dependencies {

@@ -1,7 +1,8 @@
 package scientifik.kmath.streaming
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import org.junit.Test
 import scientifik.kmath.async
 import scientifik.kmath.collect
@@ -20,7 +21,7 @@ class BufferFlowTest {
     fun map() {
         runBlocking {
             (1..20).asFlow().map( dispatcher) {
-                println("Started $it on ${Thread.currentThread().name}")
+                //println("Started $it on ${Thread.currentThread().name}")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
                 it
@@ -34,7 +35,7 @@ class BufferFlowTest {
     fun async() {
         runBlocking {
             (1..20).asFlow().async(dispatcher) {
-                println("Started $it on ${Thread.currentThread().name}")
+                //println("Started $it on ${Thread.currentThread().name}")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
                 it
