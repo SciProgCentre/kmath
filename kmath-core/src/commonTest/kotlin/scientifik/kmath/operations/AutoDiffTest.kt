@@ -119,7 +119,7 @@ class AutoDiffTest {
     @Test
     fun testExample() {
         val x = ValueWithDeriv(2)
-        val y = deriv { sqr(x) + 5 * x + 3*one }
+        val y = deriv { sqr(x) + 5 * x + 3 }
         assertEquals(17.0, y.x) // the value of result (y)
         assertEquals(9.0, x.d)  // dy/dx
     }
