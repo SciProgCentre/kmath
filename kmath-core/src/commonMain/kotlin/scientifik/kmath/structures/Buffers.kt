@@ -37,6 +37,11 @@ interface Buffer<T> {
 
     companion object {
 
+        inline fun real(size: Int, initializer: (Int) -> Double): DoubleBuffer {
+            val array = DoubleArray(size) { initializer(it) }
+            return DoubleBuffer(array)
+        }
+
         /**
          * Create a boxing buffer of given type
          */

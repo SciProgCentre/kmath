@@ -1,5 +1,7 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.linear.Point
+import scientifik.kmath.structures.asBuffer
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -12,12 +14,26 @@ import kotlin.math.sqrt
  * Differentiable variable with value and derivative of differentiation ([deriv]) result
  * with respect to this variable.
  */
-open class Variable(val x: Double) {
+open class Variable(val value: Double) {
     constructor(x: Number) : this(x.toDouble())
 }
 
-class DerivationResult(x: Double, val deriv: Map<Variable, Double>): Variable(x) {
+class DerivationResult(value: Double, val deriv: Map<Variable, Double>) : Variable(value) {
     fun deriv(variable: Variable) = deriv[variable] ?: 0.0
+
+    /**
+     * compute divergence
+     */
+    fun div() = deriv.values.sum()
+
+    /**
+     * Compute a gradient for variables in given order
+     */
+    fun grad(vararg variables: Variable): Point<Double> = if (variables.isEmpty()) {
+        error("Variable order is not provided for gradient construction")
+    } else {
+        variables.map(::deriv).toDoubleArray().asBuffer()
+    }
 }
 
 /**
@@ -38,7 +54,7 @@ fun deriv(body: AutoDiffField.() -> Variable): DerivationResult =
         val result = body()
         result.d = 1.0 // computing derivative w.r.t result
         runBackwardPass()
-        DerivationResult(result.x, derivatives)
+        DerivationResult(result.value, derivatives)
     }
 
 
@@ -61,19 +77,21 @@ abstract class AutoDiffField : Field<Variable> {
      */
     abstract var Variable.d: Double
 
+    abstract fun variable(value: Double): Variable
+
     // Overloads for Double constants
 
-    operator fun Number.plus(that: Variable): Variable = derive(Variable(this.toDouble() + that.x)) { z ->
+    operator fun Number.plus(that: Variable): Variable = derive(variable(this.toDouble() + that.value)) { z ->
         that.d += z.d
     }
 
     operator fun Variable.plus(b: Number): Variable = b.plus(this)
 
-    operator fun Number.minus(that: Variable): Variable = derive(Variable(this.toDouble() - that.x)) { z ->
+    operator fun Number.minus(that: Variable): Variable = derive(variable(this.toDouble() - that.value)) { z ->
         that.d -= z.d
     }
 
-    operator fun Variable.minus(that: Number): Variable = derive(Variable(this.x - that.toDouble())) { z ->
+    operator fun Variable.minus(that: Number): Variable = derive(variable(this.value - that.toDouble())) { z ->
         this.d += z.d
     }
 }
@@ -89,10 +107,22 @@ private class AutoDiffContext : AutoDiffField() {
 
     internal val derivatives = HashMap<Variable, Double>()
 
+
+    /**
+     * A variable coupled with its derivative. For internal use only
+     */
+    class VariableWithDeriv(x: Double, var d: Double = 0.0): Variable(x)
+
+    override fun variable(value: Double): Variable  = VariableWithDeriv(value)
+
     override var Variable.d: Double
-        get() = derivatives[this] ?: 0.0
+        get() = (this as? VariableWithDeriv)?.d ?: derivatives[this] ?: 0.0
         set(value) {
-            derivatives[this] = value
+            if(this is VariableWithDeriv){
+                d = value
+            }else {
+                derivatives[this] = value
+            }
         }
 
     @Suppress("UNCHECKED_CAST")
@@ -117,25 +147,25 @@ private class AutoDiffContext : AutoDiffField() {
 
 
     override fun add(a: Variable, b: Variable): Variable =
-        derive(Variable(a.x + b.x)) { z ->
+        derive(variable(a.value + b.value)) { z ->
             a.d += z.d
             b.d += z.d
         }
 
     override fun multiply(a: Variable, b: Variable): Variable =
-        derive(Variable(a.x * b.x)) { z ->
-            a.d += z.d * b.x
-            b.d += z.d * a.x
+        derive(variable(a.value * b.value)) { z ->
+            a.d += z.d * b.value
+            b.d += z.d * a.value
         }
 
     override fun divide(a: Variable, b: Variable): Variable =
-        derive(Variable(a.x / b.x)) { z ->
-            a.d += z.d / b.x
-            b.d -= z.d * a.x / (b.x * b.x)
+        derive(Variable(a.value / b.value)) { z ->
+            a.d += z.d / b.value
+            b.d -= z.d * a.value / (b.value * b.value)
         }
 
     override fun multiply(a: Variable, k: Number): Variable =
-        derive(Variable(k.toDouble() * a.x)) { z ->
+        derive(variable(k.toDouble() * a.value)) { z ->
             a.d += z.d * k.toDouble()
         }
 
@@ -146,41 +176,41 @@ private class AutoDiffContext : AutoDiffField() {
 // Extensions for differentiation of various basic mathematical functions
 
 // x ^ 2
-fun AutoDiffField.sqr(x: Variable): Variable = derive(Variable(x.x * x.x)) { z ->
-    x.d += z.d * 2 * x.x
+fun AutoDiffField.sqr(x: Variable): Variable = derive(variable(x.value * x.value)) { z ->
+    x.d += z.d * 2 * x.value
 }
 
 // x ^ 1/2
-fun AutoDiffField.sqrt(x: Variable): Variable = derive(Variable(sqrt(x.x))) { z ->
-    x.d += z.d * 0.5 / z.x
+fun AutoDiffField.sqrt(x: Variable): Variable = derive(variable(sqrt(x.value))) { z ->
+    x.d += z.d * 0.5 / z.value
 }
 
 // x ^ y (const)
-fun AutoDiffField.pow(x: Variable, y: Double): Variable = derive(Variable(x.x.pow(y))) { z ->
-    x.d += z.d * y * x.x.pow(y - 1)
+fun AutoDiffField.pow(x: Variable, y: Double): Variable = derive(variable(x.value.pow(y))) { z ->
+    x.d += z.d * y * x.value.pow(y - 1)
 }
 
 fun AutoDiffField.pow(x: Variable, y: Int): Variable = pow(x, y.toDouble())
 
 // exp(x)
-fun AutoDiffField.exp(x: Variable): Variable = derive(Variable(kotlin.math.exp(x.x))) { z ->
-    x.d += z.d * z.x
+fun AutoDiffField.exp(x: Variable): Variable = derive(variable(kotlin.math.exp(x.value))) { z ->
+    x.d += z.d * z.value
 }
 
 // ln(x)
-fun AutoDiffField.ln(x: Variable): Variable = derive(Variable(kotlin.math.ln(x.x))) { z ->
-    x.d += z.d / x.x
+fun AutoDiffField.ln(x: Variable): Variable = derive(Variable(kotlin.math.ln(x.value))) { z ->
+    x.d += z.d / x.value
 }
 
 // x ^ y (any)
 fun AutoDiffField.pow(x: Variable, y: Variable): Variable = exp(y * ln(x))
 
 // sin(x)
-fun AutoDiffField.sin(x: Variable): Variable = derive(Variable(kotlin.math.sin(x.x))) { z ->
-    x.d += z.d * kotlin.math.cos(x.x)
+fun AutoDiffField.sin(x: Variable): Variable = derive(variable(kotlin.math.sin(x.value))) { z ->
+    x.d += z.d * kotlin.math.cos(x.value)
 }
 
 // cos(x)
-fun AutoDiffField.cos(x: Variable): Variable = derive(Variable(kotlin.math.cos(x.x))) { z ->
-    x.d -= z.d * kotlin.math.sin(x.x)
+fun AutoDiffField.cos(x: Variable): Variable = derive(variable(kotlin.math.cos(x.value))) { z ->
+    x.d -= z.d * kotlin.math.sin(x.value)
 }
