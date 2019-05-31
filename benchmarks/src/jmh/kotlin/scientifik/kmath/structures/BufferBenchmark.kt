@@ -4,16 +4,14 @@ import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import scientifik.kmath.operations.Complex
+import scientifik.kmath.operations.complex
 
 @State(Scope.Benchmark)
 open class BufferBenchmark {
 
     @Benchmark
     fun genericDoubleBufferReadWrite() {
-        val buffer = Double.createBuffer(size)
-        (0 until size).forEach {
-            buffer[it] = it.toDouble()
-        }
+        val buffer = DoubleBuffer(size){it.toDouble()}
 
         (0 until size).forEach {
             buffer[it]
@@ -22,10 +20,7 @@ open class BufferBenchmark {
 
     @Benchmark
     fun complexBufferReadWrite() {
-        val buffer = MutableBuffer.complex(size / 2)
-        (0 until size / 2).forEach {
-            buffer[it] = Complex(it.toDouble(), -it.toDouble())
-        }
+        val buffer = MutableBuffer.complex(size / 2){Complex(it.toDouble(), -it.toDouble())}
 
         (0 until size / 2).forEach {
             buffer[it]

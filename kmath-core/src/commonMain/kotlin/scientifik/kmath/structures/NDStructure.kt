@@ -1,12 +1,14 @@
 package scientifik.kmath.structures
 
+import kotlin.jvm.JvmName
+import kotlin.reflect.KClass
+
 
 interface NDStructure<T> {
 
     val shape: IntArray
 
-    val dimension
-        get() = shape.size
+    val dimension get() = shape.size
 
     operator fun get(index: IntArray): T
 
@@ -41,6 +43,9 @@ interface NDStructure<T> {
         inline fun <reified T : Any> auto(strides: Strides, crossinline initializer: (IntArray) -> T) =
             BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
+        inline fun <T : Any> auto(type: KClass<T>, strides: Strides, crossinline initializer: (IntArray) -> T) =
+            BufferNDStructure(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
+
         fun <T> build(
             shape: IntArray,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
@@ -49,6 +54,13 @@ interface NDStructure<T> {
 
         inline fun <reified T : Any> auto(shape: IntArray, crossinline initializer: (IntArray) -> T) =
             auto(DefaultStrides(shape), initializer)
+
+        @JvmName("autoVarArg")
+        inline fun <reified T : Any> auto(vararg shape: Int, crossinline initializer: (IntArray) -> T) =
+            auto(DefaultStrides(shape), initializer)
+
+        inline fun <T : Any> auto(type: KClass<T>, vararg shape: Int, crossinline initializer: (IntArray) -> T) =
+            auto(type, DefaultStrides(shape), initializer)
     }
 }
 
@@ -58,7 +70,7 @@ interface MutableNDStructure<T> : NDStructure<T> {
     operator fun set(index: IntArray, value: T)
 }
 
-fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
+inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
     elements().forEach { (index, oldValue) ->
         this[index] = action(index, oldValue)
     }

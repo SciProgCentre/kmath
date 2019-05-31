@@ -1,8 +1,8 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.*
-import kotlin.jvm.JvmSynthetic
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -18,6 +18,22 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
     }
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
+
+    companion object {
+
+    }
+}
+
+object RealMatrixContext : GenericMatrixContext<Double, RealField> {
+
+    override val elementContext = RealField
+
+    override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
+        val buffer = DoubleBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
+        return BufferMatrix(rows, columns, buffer)
+    }
+
+    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = DoubleBuffer(size,initializer)
 }
 
 class BufferMatrix<T : Any>(
@@ -25,7 +41,7 @@ class BufferMatrix<T : Any>(
     override val colNum: Int,
     val buffer: Buffer<out T>,
     override val features: Set<MatrixFeature> = emptySet()
-) : Matrix<T> {
+) : FeaturedMatrix<T> {
 
     init {
         if (buffer.size != rowNum * colNum) {

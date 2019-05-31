@@ -1,34 +1,10 @@
 plugins {
-    kotlin("multiplatform")
+    `multiplatform-config`
 }
 
-kotlin {
-    jvm()
-    js()
-
-    sourceSets {
-
-        val commonMain by getting {
-            dependencies {
-                api(project(":kmath-core"))
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
+// Just an example how we can collapse nested DSL for simple declarations
+kotlin.sourceSets.commonMain {
+    dependencies {
+        api(project(":kmath-core"))
     }
 }

@@ -1,39 +1,42 @@
 package scientifik.kmath.linear
 
 import koma.matrix.ejml.EJMLMatrixFactory
+import scientifik.kmath.operations.RealField
+import scientifik.kmath.structures.Matrix
+import kotlin.contracts.ExperimentalContracts
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
+@ExperimentalContracts
 fun main() {
-    val random = Random(12224)
+    val random = Random(1224)
     val dim = 100
     //creating invertible matrix
     val u = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
     val l = Matrix.real(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
     val matrix = l dot u
 
-    val n = 500 // iterations
+    val n = 5000 // iterations
 
-    val solver = LUSolver.real
+    MatrixContext.real.run {
 
-    repeat(50) {
-        val res = solver.inverse(matrix)
-    }
-
-    val inverseTime = measureTimeMillis {
-        repeat(n) {
-            val res = solver.inverse(matrix)
+        repeat(50) {
+            val res = inverse(matrix)
         }
-    }
 
-    println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
+        val inverseTime = measureTimeMillis {
+            repeat(n) {
+                val res = inverse(matrix)
+            }
+        }
+
+        println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
+    }
 
     //commons-math
 
-    val cmContext = CMMatrixContext
-
     val commonsTime = measureTimeMillis {
-        cmContext.run {
+        CMMatrixContext.run {
             val cm = matrix.toCM()             //avoid overhead on conversion
             repeat(n) {
                 val res = inverse(cm)
@@ -46,10 +49,8 @@ fun main() {
 
     //koma-ejml
 
-    val komaContext = KomaMatrixContext(EJMLMatrixFactory())
-
     val komaTime = measureTimeMillis {
-        komaContext.run {
+        KomaMatrixContext(EJMLMatrixFactory(), RealField).run {
             val km = matrix.toKoma()      //avoid overhead on conversion
             repeat(n) {
                 val res = inverse(km)

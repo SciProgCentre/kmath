@@ -1,46 +1,26 @@
 plugins {
-    kotlin("multiplatform")
+    `multiplatform-config`
+    id("kotlinx-atomicfu") version Versions.atomicfuVersion
 }
 
-val coroutinesVersion: String by rootProject.extra
-
-kotlin {
-    jvm()
-    js()
-
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(project(":kmath-core"))
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion")
-            }
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+            api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutinesVersion}")
+            compileOnly("org.jetbrains.kotlinx:atomicfu-common:${Versions.atomicfuVersion}")
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
+    }
+    jvmMain {
+        dependencies {
+            api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesVersion}")
+            compileOnly("org.jetbrains.kotlinx:atomicfu:${Versions.atomicfuVersion}")
         }
-        val jvmMain by getting {
-            dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
+    }
+    jsMain {
+        dependencies {
+            api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${Versions.coroutinesVersion}")
+            compileOnly("org.jetbrains.kotlinx:atomicfu-js:${Versions.atomicfuVersion}")
         }
     }
 }

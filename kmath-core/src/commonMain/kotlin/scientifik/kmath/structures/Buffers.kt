@@ -2,6 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
+import kotlin.reflect.KClass
 
 
 typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
@@ -36,18 +37,20 @@ interface Buffer<T> {
 
     companion object {
 
+        inline fun real(size: Int, initializer: (Int) -> Double): DoubleBuffer {
+            val array = DoubleArray(size) { initializer(it) }
+            return DoubleBuffer(array)
+        }
+
         /**
          * Create a boxing buffer of given type
          */
         inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
 
-        /**
-         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
-         */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
+        inline fun <T : Any> auto(type: KClass<T>, size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
             //TODO add resolution based on Annotation or companion resolution
-            return when (T::class) {
+            return when (type) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
@@ -56,6 +59,13 @@ interface Buffer<T> {
                 else -> boxing(size, initializer)
             }
         }
+
+        /**
+         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> =
+            auto(T::class, size, initializer)
     }
 }
 
@@ -78,18 +88,26 @@ interface MutableBuffer<T> : Buffer<T> {
         inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             MutableListBuffer(MutableList(size, initializer))
 
-        /**
-         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
-         */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-            return when (T::class) {
+        inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
+            return when (type) {
                 Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
+        }
+
+        /**
+         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
+         */
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            auto(T::class, size, initializer)
+
+        val real: MutableBufferFactory<Double> = { size: Int, initializer: (Int) -> Double ->
+            DoubleBuffer(DoubleArray(size) { initializer(it) })
         }
     }
 }
@@ -236,7 +254,10 @@ inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
  * Useful when one needs single element from the buffer.
  */
 class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
-    override fun get(index: Int): T = generator(index)
+    override fun get(index: Int): T {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
+        return generator(index)
+    }
 
     override fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
 
@@ -262,3 +283,5 @@ fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
  * Typealias for buffer transformations
  */
 typealias BufferTransform<T, R> = (Buffer<T>) -> Buffer<R>
+
+typealias SuspendBufferTransform<T, R> = suspend (Buffer<T>) -> Buffer<R>

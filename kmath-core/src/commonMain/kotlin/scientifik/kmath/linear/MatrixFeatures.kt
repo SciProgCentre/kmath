@@ -25,7 +25,7 @@ object UnitFeature : MatrixFeature
  * Inverted matrix feature
  */
 interface InverseMatrixFeature<T : Any> : MatrixFeature {
-    val inverse: Matrix<T>
+    val inverse: FeaturedMatrix<T>
 }
 
 /**
@@ -54,9 +54,9 @@ object UFeature: MatrixFeature
  * TODO add documentation
  */
 interface LUPDecompositionFeature<T : Any> : MatrixFeature {
-    val l: Matrix<T>
-    val u: Matrix<T>
-    val p: Matrix<T>
+    val l: FeaturedMatrix<T>
+    val u: FeaturedMatrix<T>
+    val p: FeaturedMatrix<T>
 }
 
 //TODO add sparse matrix feature

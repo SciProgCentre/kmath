@@ -1,11 +1,23 @@
 package scientifik.kmath.linear
 
+import scientifik.kmath.structures.Matrix
+
 class VirtualMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
     override val features: Set<MatrixFeature> = emptySet(),
     val generator: (i: Int, j: Int) -> T
-) : Matrix<T> {
+) : FeaturedMatrix<T> {
+
+    constructor(rowNum: Int, colNum: Int, vararg features: MatrixFeature, generator: (i: Int, j: Int) -> T) : this(
+        rowNum,
+        colNum,
+        setOf(*features),
+        generator
+    )
+
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+
     override fun get(i: Int, j: Int): T = generator(i, j)
 
     override fun suggestFeature(vararg features: MatrixFeature) =
@@ -13,7 +25,7 @@ class VirtualMatrix<T : Any>(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Matrix<*>) return false
+        if (other !is FeaturedMatrix<*>) return false
 
         if (rowNum != other.rowNum) return false
         if (colNum != other.colNum) return false
@@ -34,7 +46,7 @@ class VirtualMatrix<T : Any>(
         /**
          * Wrap a matrix adding additional features to it
          */
-        fun <T : Any> wrap(matrix: Matrix<T>, vararg features: MatrixFeature): Matrix<T> {
+        fun <T : Any> wrap(matrix: Matrix<T>, vararg features: MatrixFeature): FeaturedMatrix<T> {
             return if (matrix is VirtualMatrix) {
                 VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features, matrix.generator)
             } else {

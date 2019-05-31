@@ -21,7 +21,7 @@ dependencies {
     //jmh project(':kmath-core')
 }
 
-jmh{
+jmh {
     warmupIterations = 1
 }
 

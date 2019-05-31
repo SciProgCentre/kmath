@@ -55,23 +55,14 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
 /**
  * Complex number class
  */
-data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField> {
+data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
     override fun unwrap(): Complex = this
 
     override fun Complex.wrap(): Complex = this
 
     override val context: ComplexField get() = ComplexField
 
-    /**
-     * A complex conjugate
-     */
-    val conjugate: Complex get() = Complex(re, -im)
-
-    val square: Double get() = re * re + im * im
-
-    val abs: Double get() = sqrt(square)
-
-    val theta: Double get() = atan(im / re)
+    override fun compareTo(other: Complex): Int = abs.compareTo(other.abs)
 
     companion object : MemorySpec<Complex> {
         override val objectSize: Int = 16
@@ -85,6 +76,26 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
         }
     }
 }
+
+/**
+ * A complex conjugate
+ */
+val Complex.conjugate: Complex get() = Complex(re, -im)
+
+/**
+ * Square of the complex number
+ */
+val Complex.square: Double get() = re * re + im * im
+
+/**
+ * Absolute value of complex number
+ */
+val Complex.abs: Double get() = sqrt(square)
+
+/**
+ * An angle between vector represented by complex number and X axis
+ */
+val Complex.theta: Double get() = atan(im / re)
 
 fun Double.toComplex() = Complex(this, 0.0)
 
