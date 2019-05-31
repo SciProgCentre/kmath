@@ -73,7 +73,8 @@ abstract class AutoDiffField : Field<Variable> {
     abstract fun <R> derive(value: R, block: (R) -> Unit): R
 
     /**
-     * A variable accessing inner state of derivatives. Use only in extensions
+     * A variable accessing inner state of derivatives.
+     * Use this function in inner builders to avoid creating additional derivative bindings
      */
     abstract var Variable.d: Double
 
@@ -111,16 +112,17 @@ private class AutoDiffContext : AutoDiffField() {
     /**
      * A variable coupled with its derivative. For internal use only
      */
-    class VariableWithDeriv(x: Double, var d: Double = 0.0): Variable(x)
+    class VariableWithDeriv(x: Double, var d: Double = 0.0) : Variable(x)
 
-    override fun variable(value: Double): Variable  = VariableWithDeriv(value)
+
+    override fun variable(value: Double): Variable = VariableWithDeriv(value)
 
     override var Variable.d: Double
         get() = (this as? VariableWithDeriv)?.d ?: derivatives[this] ?: 0.0
         set(value) {
-            if(this is VariableWithDeriv){
+            if (this is VariableWithDeriv) {
                 d = value
-            }else {
+            } else {
                 derivatives[this] = value
             }
         }

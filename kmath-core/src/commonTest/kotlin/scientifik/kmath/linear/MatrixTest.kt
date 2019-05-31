@@ -52,4 +52,26 @@ class MatrixTest {
 
         assertEquals(2.0, matrix[1, 2])
     }
+
+    @Test
+    fun testMatrixExtension() {
+        val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
+            when {
+                col == 0 -> .50
+                row + 1 == col -> .50
+                row == 5 && col == 5 -> 1.0
+                else -> 0.0
+            }
+        }
+
+        infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
+            var res = this
+            repeat(power - 1) {
+                res = res dot this
+            }
+            return res
+        }
+
+        val toTenthPower = transitionMatrix pow 10
+    }
 }

@@ -85,7 +85,7 @@ class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
-fun <T : Any, R : Ring<T>> Matrix<T>.transpose(): Matrix<T> {
+fun <T : Any> Matrix<T>.transpose(): Matrix<T> {
     return this.getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
         this.colNum,
         this.rowNum,
