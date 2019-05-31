@@ -1,5 +1,5 @@
 plugins {
-    `multiplatform-config`
+    `npm-multiplatform`
 }
 
 // Just an example how we can collapse nested DSL for simple declarations

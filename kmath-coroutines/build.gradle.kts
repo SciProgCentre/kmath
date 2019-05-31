@@ -1,5 +1,5 @@
 plugins {
-    `multiplatform-config`
+    `npm-multiplatform`
     id("kotlinx-atomicfu") version Versions.atomicfuVersion
 }
 

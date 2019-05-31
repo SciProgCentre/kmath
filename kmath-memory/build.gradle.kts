@@ -1,3 +1,3 @@
 plugins {
-    `multiplatform-config`
+    `npm-multiplatform`
 }
