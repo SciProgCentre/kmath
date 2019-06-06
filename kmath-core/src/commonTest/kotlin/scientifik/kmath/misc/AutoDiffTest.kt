@@ -11,7 +11,7 @@ class AutoDiffTest {
 
     fun Variable(int: Int) = Variable(int.toDouble())
 
-    fun deriv(body: AutoDiffField<Double>.() -> Variable<Double>) = RealField.deriv(body)
+    fun deriv(body: AutoDiffField<Double, RealField>.() -> Variable<Double>) = RealField.deriv(body)
 
     @Test
     fun testPlusX2() {

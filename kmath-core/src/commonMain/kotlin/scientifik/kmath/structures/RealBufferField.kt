@@ -1,7 +1,7 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.ExtendedFieldOperations
-import scientifik.kmath.operations.Field
 import kotlin.math.*
 
 
@@ -98,7 +98,7 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     }
 }
 
-class RealBufferField(val size: Int) : Field<Buffer<Double>>, ExtendedFieldOperations<Buffer<Double>> {
+class RealBufferField(val size: Int) : ExtendedField<Buffer<Double>> {
 
     override val zero: Buffer<Double> by lazy { DoubleBuffer(size) { 0.0 } }
 

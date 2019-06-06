@@ -2,7 +2,6 @@ package scientifik.kmath.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import scientifik.kmath.operations.ExtendedField
-import scientifik.kmath.operations.ExtendedFieldOperations
 import scientifik.kmath.operations.Field
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -10,8 +9,10 @@ import kotlin.reflect.KProperty
 /**
  * A field wrapping commons-math derivative structures
  */
-class DerivativeStructureField(val order: Int, val parameters: Map<String, Double>) :
-    ExtendedField<DerivativeStructure> {
+class DerivativeStructureField(
+    val order: Int,
+    val parameters: Map<String, Double>
+) : ExtendedField<DerivativeStructure> {
 
     override val zero: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size) }
 
