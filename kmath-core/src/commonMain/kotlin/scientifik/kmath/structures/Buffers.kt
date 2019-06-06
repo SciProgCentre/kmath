@@ -123,7 +123,7 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
     override fun iterator(): Iterator<T> = list.iterator()
 }
 
-fun <T> List<T>.asBuffer() = ListBuffer(this)
+fun <T> List<T>.asBuffer() = ListBuffer<T>(this)
 
 @Suppress("FunctionName")
 inline fun <T> ListBuffer(size: Int, init: (Int) -> T) = List(size, init).asBuffer()

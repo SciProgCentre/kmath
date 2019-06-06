@@ -33,7 +33,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
  * A field for double without boxing. Does not produce appropriate field element
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object RealField : Field<Double>, ExtendedFieldOperations<Double>, Norm<Double, Double> {
+object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override inline fun add(a: Double, b: Double) = a + b
     override inline fun multiply(a: Double, b: Double) = a * b
@@ -64,7 +64,7 @@ object RealField : Field<Double>, ExtendedFieldOperations<Double>, Norm<Double, 
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object FloatField : Field<Float>, ExtendedFieldOperations<Float>, Norm<Float, Float> {
+object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override val zero: Float = 0f
     override inline fun add(a: Float, b: Float) = a + b
     override inline fun multiply(a: Float, b: Float) = a * b

@@ -1,5 +1,6 @@
-package scientifik.kmath.operations
+package scientifik.kmath.misc
 
+import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.asBuffer
 import kotlin.math.PI
 import kotlin.test.Test
@@ -7,6 +8,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AutoDiffTest {
+
+    fun Variable(int: Int) = Variable(int.toDouble())
+
+    fun deriv(body: AutoDiffField<Double>.() -> Variable<Double>) = RealField.deriv(body)
+
     @Test
     fun testPlusX2() {
         val x = Variable(3) // diff w.r.t this x at 3
