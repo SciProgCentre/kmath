@@ -1,4 +1,4 @@
-package scientifik.kmath
+package scientifik.kmath.coroutines
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
@@ -42,13 +42,14 @@ fun <T, R> Flow<T>.async(
 }
 
 @FlowPreview
-fun <T, R> AsyncFlow<T>.map(action: (T) -> R) = AsyncFlow(deferredFlow.map { input ->
-    //TODO add function composition
-    LazyDeferred(input.dispatcher) {
-        input.start(this)
-        action(input.await())
-    }
-})
+fun <T, R> AsyncFlow<T>.map(action: (T) -> R) =
+    AsyncFlow(deferredFlow.map { input ->
+        //TODO add function composition
+        LazyDeferred(input.dispatcher) {
+            input.start(this)
+            action(input.await())
+        }
+    })
 
 @ExperimentalCoroutinesApi
 @FlowPreview

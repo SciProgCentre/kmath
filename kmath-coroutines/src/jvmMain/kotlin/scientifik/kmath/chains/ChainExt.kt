@@ -27,7 +27,7 @@ fun <R> Chain<R>.asSequence(): Sequence<R> = object : Sequence<R> {
 fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> {
     val parent = this;
     return object : Chain<R> {
-        override val value: R? get() = runBlocking { parent.value?.let { func(it) } }
+        override fun peek(): R? = runBlocking { parent.peek()?.let { func(it) } }
 
         override suspend fun next(): R {
             return func(parent.next())

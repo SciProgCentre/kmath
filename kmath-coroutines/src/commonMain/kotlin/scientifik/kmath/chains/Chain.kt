@@ -18,6 +18,7 @@ package scientifik.kmath.chains
 
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 
 
 /**
@@ -28,7 +29,7 @@ interface Chain<out R> {
     /**
      * Last cached value of the chain. Returns null if [next] was not called
      */
-    val value: R?
+    fun peek(): R?
 
     /**
      * Generate next value, changing state if needed
@@ -46,12 +47,11 @@ interface Chain<out R> {
  * Chain as a coroutine flow. The flow emit affects chain state and vice versa
  */
 @FlowPreview
-val <R> Chain<R>.flow
+val <R> Chain<R>.flow: Flow<R>
     get() = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
 
 fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
-
 
 /**
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed
@@ -60,7 +60,7 @@ fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
 fun <T, R> Chain<T>.map(func: (T) -> R): Chain<R> {
     val parent = this;
     return object : Chain<R> {
-        override val value: R? get() = parent.value?.let(func)
+        override fun peek(): R? = parent.peek()?.let(func)
 
         override suspend fun next(): R {
             return func(parent.next())
@@ -77,7 +77,7 @@ fun <T, R> Chain<T>.map(func: (T) -> R): Chain<R> {
  */
 class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
     private val atomicValue = atomic<R?>(null)
-    override val value: R? get() = atomicValue.value
+    override fun peek(): R? = atomicValue.value
 
     override suspend fun next(): R = gen().also { atomicValue.lazySet(it) }
 
@@ -95,16 +95,16 @@ class MarkovChain<out R : Any>(private val seed: () -> R, private val gen: suspe
     constructor(seed: R, gen: suspend (R) -> R) : this({ seed }, gen)
 
     private val atomicValue = atomic<R?>(null)
-    override val value: R get() = atomicValue.value ?: seed()
+    override fun peek(): R = atomicValue.value ?: seed()
 
     override suspend fun next(): R {
-        val newValue = gen(value)
+        val newValue = gen(peek())
         atomicValue.lazySet(newValue)
-        return value
+        return peek()
     }
 
     override fun fork(): Chain<R> {
-        return MarkovChain(value, gen)
+        return MarkovChain(peek(), gen)
     }
 }
 
@@ -121,12 +121,12 @@ class StatefulChain<S, out R>(
     constructor(state: S, seed: R, gen: suspend S.(R) -> R) : this(state, { seed }, gen)
 
     private val atomicValue = atomic<R?>(null)
-    override val value: R get() = atomicValue.value ?: seed(state)
+    override fun peek(): R = atomicValue.value ?: seed(state)
 
     override suspend fun next(): R {
-        val newValue = gen(state, value)
+        val newValue = gen(state, peek())
         atomicValue.lazySet(newValue)
-        return value
+        return peek()
     }
 
     override fun fork(): Chain<R> {
@@ -137,10 +137,10 @@ class StatefulChain<S, out R>(
 /**
  * A chain that repeats the same value
  */
-class ConstantChain<out T>(override val value: T) : Chain<T> {
-    override suspend fun next(): T {
-        return value
-    }
+class ConstantChain<out T>(val value: T) : Chain<T> {
+    override fun peek(): T? = value
+
+    override suspend fun next(): T = value
 
     override fun fork(): Chain<T> {
         return this
