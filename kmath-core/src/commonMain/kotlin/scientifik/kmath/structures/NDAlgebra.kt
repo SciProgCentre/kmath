@@ -1,9 +1,9 @@
 package scientifik.kmath.structures
 
+import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
-import kotlin.jvm.JvmName
 
 
 /**
@@ -57,6 +57,8 @@ interface NDAlgebra<T, C, N : NDStructure<T>> {
      * element-by-element invoke a function working on [T] on a [NDStructure]
      */
     operator fun Function1<T, T>.invoke(structure: N) = map(structure) { value -> this@invoke(value) }
+
+    companion object
 }
 
 /**
@@ -75,6 +77,7 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
 
     //TODO move to extensions after KEEP-176
     operator fun N.plus(arg: T) = map(this) { value -> add(arg, value) }
+
     operator fun N.minus(arg: T) = map(this) { value -> add(arg, -value) }
 
     operator fun T.plus(arg: N) = map(arg) { value -> add(this@plus, value) }
@@ -93,6 +96,7 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
 
     //TODO move to extensions after KEEP-176
     operator fun N.times(arg: T) = map(this) { value -> multiply(arg, value) }
+
     operator fun T.times(arg: N) = map(arg) { value -> multiply(this@times, value) }
 }
 
@@ -113,6 +117,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
 
     //TODO move to extensions after KEEP-176
     operator fun N.div(arg: T) = map(this) { value -> divide(arg, value) }
+
     operator fun T.div(arg: N) = map(arg) { divide(it, this@div) }
 
     companion object {
@@ -128,11 +133,10 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
          * Create a nd-field with boxing generic buffer
          */
         fun <T : Any, F : Field<T>> buffered(
-            shape: IntArray,
             field: F,
+            vararg shape: Int,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ) =
-            BoxingNDField(shape, field, bufferFactory)
+        ) = BoxingNDField(shape, field, bufferFactory)
 
         /**
          * Create a most suitable implementation for nd-field using reified class.
@@ -141,6 +145,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
         inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): BufferedNDField<T, F> =
             when {
                 T::class == Double::class -> real(*shape) as BufferedNDField<T, F>
+                T::class == Complex::class -> complex(*shape) as BufferedNDField<T, F>
                 else -> BoxingNDField(shape, field, Buffer.Companion::auto)
             }
     }

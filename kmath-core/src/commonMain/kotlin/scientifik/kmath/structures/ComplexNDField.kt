@@ -131,4 +131,7 @@ operator fun ComplexNDElement.plus(arg: Double) =
 operator fun ComplexNDElement.minus(arg: Double) =
     map { it - arg }
 
-fun NDField.Companion.complex(vararg shape: Int) = ComplexNDField(shape)
+fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDField(shape)
+
+fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(IntArray) -> Complex): ComplexNDElement =
+    NDField.complex(*shape).produce(initializer)

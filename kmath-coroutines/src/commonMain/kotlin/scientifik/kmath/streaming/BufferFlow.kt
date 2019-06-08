@@ -22,7 +22,7 @@ fun <T> Flow<Buffer<out T>>.spread(): Flow<T> = flatMapConcat { it.asFlow() }
  * Collect incoming flow into fixed size chunks
  */
 @FlowPreview
-fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>) = flow {
+fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>): Flow<Buffer<T>> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
     val list = ArrayList<T>(bufferSize)
     var counter = 0
@@ -46,7 +46,7 @@ fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>) = flow
  * Specialized flow chunker for real buffer
  */
 @FlowPreview
-fun Flow<Double>.chunked(bufferSize: Int) = flow {
+fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
     val array = DoubleArray(bufferSize)
     var counter = 0

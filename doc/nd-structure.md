@@ -9,17 +9,12 @@ structures. In `kmath` performance depends on which particular context was used 
 
 Let us consider following contexts:
 ```kotlin
-    // specialized nd-field for Double. It works as generic Double field as well
-    val specializedField = NDField.real(intArrayOf(dim, dim))
-
     // automatically build context most suited for given type.
-    val autoField = NDField.auto(intArrayOf(dim, dim), RealField)
-
-    //A field implementing lazy computations. All elements are computed on-demand
-    val lazyField = NDField.lazy(intArrayOf(dim, dim), RealField)
-
+    val autoField = NDField.auto(RealField, dim, dim)
+    // specialized nd-field for Double. It works as generic Double field as well
+    val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
+    val genericField = NDField.buffered(RealField, dim, dim)
 ```
 Now let us perform several tests and see which implementation is best suited for each case:
 
@@ -32,7 +27,7 @@ to it `n = 1000` times.
 The code to run this looks like:
 ```kotlin
     specializedField.run {
-        var res = one
+        var res: NDBuffer<Double> = one
         repeat(n) {
             res += 1.0
         }
@@ -93,7 +88,7 @@ In this case it completes in about `4x-5x` time due to boxing.
 The boxing field produced by
 ```kotlin
     genericField.run {
-        var res = one
+        var res: NDBuffer<Double> = one
         repeat(n) {
             res += 1.0
         }
