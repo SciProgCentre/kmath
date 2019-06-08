@@ -3,6 +3,7 @@ pluginManagement {
         jcenter()
         gradlePluginPortal()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        maven("https://dl.bintray.com/orangy/maven")
     }
     resolutionStrategy {
         eachPlugin {

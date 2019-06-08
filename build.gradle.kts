@@ -5,7 +5,7 @@ allprojects {
         jcenter()
         maven("https://kotlin.bintray.com/kotlinx")
     }
-    
+
     group = "scientifik"
     version = kmathVersion
 }

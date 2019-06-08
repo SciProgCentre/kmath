@@ -57,6 +57,8 @@ interface NDAlgebra<T, C, N : NDStructure<T>> {
      * element-by-element invoke a function working on [T] on a [NDStructure]
      */
     operator fun Function1<T, T>.invoke(structure: N) = map(structure) { value -> this@invoke(value) }
+
+    companion object
 }
 
 /**

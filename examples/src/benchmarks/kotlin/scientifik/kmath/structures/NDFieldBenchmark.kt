@@ -1,9 +1,12 @@
 package scientifik.kmath.structures
 
 import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.Scope
+import org.openjdk.jmh.annotations.State
 import scientifik.kmath.operations.RealField
 
-open class NDFieldBenchmark {
+@State(Scope.Benchmark)
+class NDFieldBenchmark {
 
     @Benchmark
     fun autoFieldAdd() {

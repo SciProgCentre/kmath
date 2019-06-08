@@ -7,7 +7,7 @@ import java.nio.IntBuffer
 
 
 @State(Scope.Benchmark)
-open class ArrayBenchmark {
+class ArrayBenchmark {
 
     @Benchmark
     fun benchmarkArrayRead() {
@@ -32,10 +32,10 @@ open class ArrayBenchmark {
             res += nativeBuffer.get(size - i)
         }
     }
-    
+
     companion object {
         val size = 1000
-        
+
         val array = IntArray(size) { it }
         val arrayBuffer = IntBuffer.wrap(array)
         val nativeBuffer = IntBuffer.allocate(size).also {

@@ -7,7 +7,7 @@ import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
 
 @State(Scope.Benchmark)
-open class BufferBenchmark {
+class BufferBenchmark {
 
     @Benchmark
     fun genericDoubleBufferReadWrite() {
