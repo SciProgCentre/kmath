@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
+    val genericField = NDField.buffered(RealField, dim, dim)
 
 
     val autoTime = measureTimeMillis {

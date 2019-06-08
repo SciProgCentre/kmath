@@ -14,7 +14,7 @@ Let us consider following contexts:
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val genericField = NDField.buffered(intArrayOf(dim, dim), RealField)
+    val genericField = NDField.buffered(RealField, dim, dim)
 ```
 Now let us perform several tests and see which implementation is best suited for each case:
 

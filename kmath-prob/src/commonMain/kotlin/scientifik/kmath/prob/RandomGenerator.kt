@@ -8,4 +8,6 @@ interface RandomGenerator {
     fun nextInt(): Int
     fun nextLong(): Long
     fun nextBlock(size: Int): ByteArray
+
+    companion object
 }

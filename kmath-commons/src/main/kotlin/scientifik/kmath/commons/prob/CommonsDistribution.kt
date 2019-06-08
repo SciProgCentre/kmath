@@ -1,8 +1,6 @@
 package scientifik.kmath.commons.prob
 
 import org.apache.commons.math3.distribution.*
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.chains.SimpleChain
 import scientifik.kmath.prob.Distribution
 import scientifik.kmath.prob.RandomChain
 import scientifik.kmath.prob.RandomGenerator
@@ -38,7 +36,7 @@ class CMIntDistributionWrapper(val builder: (CMRandom?) -> IntegerDistribution) 
 }
 
 
-fun Distribution.Companion.normal(mean: Double, sigma: Double): UnivariateDistribution<Double> =
+fun Distribution.Companion.normal(mean: Double = 0.0, sigma: Double = 1.0): UnivariateDistribution<Double> =
     CMRealDistributionWrapper { generator -> NormalDistribution(generator, mean, sigma) }
 
 fun Distribution.Companion.poisson(mean: Double): UnivariateDistribution<Int> = CMIntDistributionWrapper { generator ->
