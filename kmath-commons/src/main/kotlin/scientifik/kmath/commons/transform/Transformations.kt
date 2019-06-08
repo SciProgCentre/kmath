@@ -1,4 +1,4 @@
-package scientifik.kmath.transform
+package scientifik.kmath.commons.transform
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow

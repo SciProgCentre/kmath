@@ -16,8 +16,13 @@ interface Distribution<T : Any> {
      * Create a chain of samples from this distribution.
      * The chain is not guaranteed to be stateless.
      */
-    fun sample(generator: RandomGenerator): Chain<T>
+    fun sample(generator: RandomGenerator): RandomChain<T>
     //TODO add sample bunch generator
+
+    /**
+     * An empty companion. Distribution factories should be written as its extensions
+     */
+    companion object
 }
 
 interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {

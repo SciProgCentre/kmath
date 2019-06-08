@@ -1,6 +1,8 @@
 package scientifik.kmath.linear
 
 import koma.matrix.ejml.EJMLMatrixFactory
+import scientifik.kmath.commons.linear.CMMatrixContext
+import scientifik.kmath.commons.linear.toCM
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.Matrix
 import kotlin.random.Random

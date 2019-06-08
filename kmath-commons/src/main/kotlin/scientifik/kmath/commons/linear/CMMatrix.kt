@@ -1,11 +1,13 @@
-package scientifik.kmath.linear
+package scientifik.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
 import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
+import scientifik.kmath.linear.*
 import scientifik.kmath.structures.Matrix
 
-class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
+class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) :
+    FeaturedMatrix<Double> {
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
@@ -70,10 +72,14 @@ object CMMatrixContext : MatrixContext<Double> {
     override fun multiply(a: Matrix<Double>, k: Number) =
         CMMatrix(a.toCM().origin.scalarMultiply(k.toDouble()))
 
-    override fun Matrix<Double>.times(value: Double): Matrix<Double>  = produce(rowNum,colNum){i,j-> get(i,j)*value}
+    override fun Matrix<Double>.times(value: Double): Matrix<Double>  =
+        produce(rowNum, colNum) { i, j -> get(i, j) * value }
 }
 
-operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.add(other.origin))
-operator fun CMMatrix.minus(other: CMMatrix): CMMatrix = CMMatrix(this.origin.subtract(other.origin))
+operator fun CMMatrix.plus(other: CMMatrix): CMMatrix =
+    CMMatrix(this.origin.add(other.origin))
+operator fun CMMatrix.minus(other: CMMatrix): CMMatrix =
+    CMMatrix(this.origin.subtract(other.origin))
 
-infix fun CMMatrix.dot(other: CMMatrix): CMMatrix = CMMatrix(this.origin.multiply(other.origin))
+infix fun CMMatrix.dot(other: CMMatrix): CMMatrix =
+    CMMatrix(this.origin.multiply(other.origin))

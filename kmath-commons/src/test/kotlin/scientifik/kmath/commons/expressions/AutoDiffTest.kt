@@ -1,6 +1,9 @@
-package scientifik.kmath.expressions
+package scientifik.kmath.commons.expressions
 
 import org.junit.Test
+import scientifik.kmath.commons.expressions.DerivativeStructureField
+import scientifik.kmath.commons.expressions.DiffExpression
+import scientifik.kmath.commons.expressions.derivative
 import kotlin.test.assertEquals
 
 inline fun <R> diff(order: Int, vararg parameters: Pair<String, Double>, block: DerivativeStructureField.() -> R) =

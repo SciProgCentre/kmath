@@ -1,6 +1,7 @@
-package scientifik.kmath.linear
+package scientifik.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.Matrix
 
 enum class CMDecomposition {

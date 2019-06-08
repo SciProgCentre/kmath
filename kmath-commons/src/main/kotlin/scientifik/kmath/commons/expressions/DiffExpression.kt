@@ -1,6 +1,8 @@
-package scientifik.kmath.expressions
+package scientifik.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
+import scientifik.kmath.expressions.Expression
+import scientifik.kmath.expressions.ExpressionContext
 import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.Field
 import kotlin.properties.ReadOnlyProperty
@@ -81,8 +83,12 @@ class DerivativeStructureField(
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
-class DiffExpression(val function: DerivativeStructureField.() -> DerivativeStructure) : Expression<Double> {
-    override fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(0, arguments)
+class DiffExpression(val function: DerivativeStructureField.() -> DerivativeStructure) :
+    Expression<Double> {
+    override fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(
+        0,
+        arguments
+    )
         .run(function).value
 
     /**
@@ -109,21 +115,27 @@ fun DiffExpression.derivative(name: String) = derivative(name to 1)
  * A context for [DiffExpression] (not to be confused with [DerivativeStructure])
  */
 object DiffExpressionContext : ExpressionContext<Double>, Field<DiffExpression> {
-    override fun variable(name: String, default: Double?) = DiffExpression { variable(name, default?.const()) }
+    override fun variable(name: String, default: Double?) =
+        DiffExpression { variable(name, default?.const()) }
 
-    override fun const(value: Double): DiffExpression = DiffExpression { value.const() }
+    override fun const(value: Double): DiffExpression =
+        DiffExpression { value.const() }
 
-    override fun add(a: DiffExpression, b: DiffExpression) = DiffExpression { a.function(this) + b.function(this) }
+    override fun add(a: DiffExpression, b: DiffExpression) =
+        DiffExpression { a.function(this) + b.function(this) }
 
     override val zero = DiffExpression { 0.0.const() }
 
-    override fun multiply(a: DiffExpression, k: Number) = DiffExpression { a.function(this) * k }
+    override fun multiply(a: DiffExpression, k: Number) =
+        DiffExpression { a.function(this) * k }
 
     override val one = DiffExpression { 1.0.const() }
 
-    override fun multiply(a: DiffExpression, b: DiffExpression) = DiffExpression { a.function(this) * b.function(this) }
+    override fun multiply(a: DiffExpression, b: DiffExpression) =
+        DiffExpression { a.function(this) * b.function(this) }
 
-    override fun divide(a: DiffExpression, b: DiffExpression) = DiffExpression { a.function(this) / b.function(this) }
+    override fun divide(a: DiffExpression, b: DiffExpression) =
+        DiffExpression { a.function(this) / b.function(this) }
 }
 
 

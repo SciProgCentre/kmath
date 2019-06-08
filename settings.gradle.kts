@@ -28,5 +28,5 @@ include(
     ":kmath-commons",
     ":kmath-koma",
     ":kmath-prob",
-    ":benchmarks"
+    ":examples"
 )
