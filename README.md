@@ -14,7 +14,7 @@ Actual feature list is [here](doc/features.md)
     * Complex numbers backed by the `Field` API (meaning that they will be usable in any structure like vectors and N-dimensional arrays).
     * Advanced linear algebra operations like matrix inversion and LU decomposition.
 
-* **Array-like structures** Full support of many-dimenstional array-like structures 
+* **Array-like structures** Full support of many-dimensional array-like structures 
 including mixed arithmetic operations and function operations over arrays and numbers (with the added benefit of static type checking).
 
 * **Expressions** By writing a single mathematical expression
@@ -23,13 +23,13 @@ can be used for a wide variety of purposes from high performance calculations to
 
 * **Histograms** Fast multi-dimensional histograms.
 
-* **Streaming** Streaming operations on mathematica objects and objects buffers.
+* **Streaming** Streaming operations on mathematical objects and objects buffers.
 
 * **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
                            
-* **Koma wrapper** [Koma](https://github.com/kyonifer/koma) is a well established numerics library in kotlin, specifically linear algebra.
+* **Koma wrapper** [Koma](https://github.com/kyonifer/koma) is a well established numerics library in Kotlin, specifically linear algebra.
 The plan is to have wrappers for koma implementations for compatibility with kmath API.
 
 ## Planned features
@@ -111,4 +111,4 @@ dependencies{
 
 ## Contributing
 
-The project requires a lot of additional work. Please fill free to contribute in any way and propose new features.
+The project requires a lot of additional work. Please feel free to contribute in any way and propose new features.
