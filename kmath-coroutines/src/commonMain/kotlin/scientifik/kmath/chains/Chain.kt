@@ -37,6 +37,8 @@ interface Chain<out R> {
      */
     fun fork(): Chain<R>
 
+    companion object
+
 }
 
 /**
@@ -138,3 +140,12 @@ fun <T, S, R> Chain<T>.mapWithState(state: S, stateFork: (S) -> S, mapper: suspe
         override suspend fun next(): R = state.mapper(this@mapWithState)
         override fun fork(): Chain<R> = this@mapWithState.fork().mapWithState(stateFork(state), stateFork, mapper)
     }
+
+/**
+ * Zip two chains together using given transformation
+ */
+fun <T, U, R> Chain<T>.zip(other: Chain<U>, block: suspend (T, U) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = block(this@zip.next(), other.next())
+
+    override fun fork(): Chain<R> = this@zip.fork().zip(other.fork(), block)
+}

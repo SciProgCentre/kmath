@@ -5,7 +5,7 @@ import scientifik.kmath.chains.map
 import kotlin.jvm.JvmName
 
 interface Sampler<T : Any> {
-    fun sample(generator: RandomGenerator): RandomChain<T>
+    fun sample(generator: RandomGenerator): Chain<T>
 }
 
 /**
@@ -22,7 +22,7 @@ interface Distribution<T : Any> : Sampler<T> {
      * Create a chain of samples from this distribution.
      * The chain is not guaranteed to be stateless.
      */
-    override fun sample(generator: RandomGenerator): RandomChain<T>
+    override fun sample(generator: RandomGenerator): Chain<T>
 
     /**
      * An empty companion. Distribution factories should be written as its extensions
