@@ -82,6 +82,8 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
 
     operator fun T.plus(arg: N) = map(arg) { value -> add(this@plus, value) }
     operator fun T.minus(arg: N) = map(arg) { value -> add(-this@minus, value) }
+
+    companion object
 }
 
 /**
@@ -98,6 +100,8 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
     operator fun N.times(arg: T) = map(this) { value -> multiply(arg, value) }
 
     operator fun T.times(arg: N) = map(arg) { value -> multiply(this@times, value) }
+
+    companion object
 }
 
 /**
@@ -132,7 +136,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
         /**
          * Create a nd-field with boxing generic buffer
          */
-        fun <T : Any, F : Field<T>> buffered(
+        fun <T : Any, F : Field<T>> boxing(
             field: F,
             vararg shape: Int,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing

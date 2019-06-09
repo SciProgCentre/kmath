@@ -41,7 +41,7 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
         /**
          * Simple boxing NDArray
          */
-        fun <T : Any, F : Field<T>> buffered(
+        fun <T : Any, F : Field<T>> boxing(
             shape: IntArray,
             field: F,
             initializer: F.(IntArray) -> T
