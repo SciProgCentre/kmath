@@ -9,9 +9,8 @@ import scientifik.kmath.chains.Chain
  */
 class RandomChain<out R>(val generator: RandomGenerator, private val gen: suspend RandomGenerator.() -> R) : Chain<R> {
     private val atomicValue = atomic<R?>(null)
-    override fun peek(): R? = atomicValue.value
 
     override suspend fun next(): R = generator.gen().also { atomicValue.lazySet(it) }
 
-    override fun fork(): Chain<R> = RandomChain(generator, gen)
+    override fun fork(): Chain<R> = RandomChain(generator.fork(), gen)
 }

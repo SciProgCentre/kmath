@@ -9,5 +9,10 @@ interface RandomGenerator {
     fun nextLong(): Long
     fun nextBlock(size: Int): ByteArray
 
+    /**
+     * Fork the current state of generator
+     */
+    fun fork(): RandomGenerator
+
     companion object
 }

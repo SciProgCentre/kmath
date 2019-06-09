@@ -83,13 +83,12 @@ class DerivativeStructureField(
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
-class DiffExpression(val function: DerivativeStructureField.() -> DerivativeStructure) :
-    Expression<Double> {
+class DiffExpression(val function: DerivativeStructureField.() -> DerivativeStructure) : Expression<Double> {
+
     override fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(
         0,
         arguments
-    )
-        .run(function).value
+    ).run(function).value
 
     /**
      * Get the derivative expression with given orders

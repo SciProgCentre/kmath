@@ -12,6 +12,10 @@ inline class CMRandomGeneratorWrapper(val generator: CMRandom) : RandomGenerator
     override fun nextLong(): Long = generator.nextLong()
 
     override fun nextBlock(size: Int): ByteArray = ByteArray(size).apply { generator.nextBytes(this) }
+
+    override fun fork(): RandomGenerator {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
 
 fun CMRandom.asKmathGenerator(): RandomGenerator = CMRandomGeneratorWrapper(this)

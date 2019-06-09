@@ -24,6 +24,7 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
     }
 }
 
+@Suppress("OVERRIDE_BY_INLINE")
 object RealMatrixContext : GenericMatrixContext<Double, RealField> {
 
     override val elementContext = RealField
