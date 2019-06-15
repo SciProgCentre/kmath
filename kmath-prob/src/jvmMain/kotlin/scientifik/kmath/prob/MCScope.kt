@@ -33,9 +33,7 @@ val MCScope.random get() = coroutineContext.random!!
  * Launches a supervised Monte-Carlo scope
  */
 suspend fun <T> mc(generator: RandomGenerator, block: suspend MCScope.() -> T): T =
-    supervisorScope {
-        MCScope.init(generator).block()
-    }
+    MCScope.init(generator).block()
 
 suspend fun <T> mc(seed: Long = -1, block: suspend MCScope.() -> T): T =
     mc(SplitRandomWrapper(seed), block)
