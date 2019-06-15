@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
     val dim = 1000
     val n = 1000
 
-    // automatically build context most suited for given type.
+    // automatically build coroutineContext most suited for given type.
     val autoField = NDField.auto(RealField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(dim, dim)

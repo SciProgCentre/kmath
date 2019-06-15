@@ -111,7 +111,7 @@ fun DiffExpression.derivative(vararg orders: Pair<String, Int>) = derivative(map
 fun DiffExpression.derivative(name: String) = derivative(name to 1)
 
 /**
- * A context for [DiffExpression] (not to be confused with [DerivativeStructure])
+ * A coroutineContext for [DiffExpression] (not to be confused with [DerivativeStructure])
  */
 object DiffExpressionContext : ExpressionContext<Double>, Field<DiffExpression> {
     override fun variable(name: String, default: Double?) =
