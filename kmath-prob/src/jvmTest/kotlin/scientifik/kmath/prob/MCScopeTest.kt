@@ -11,7 +11,7 @@ data class RandomResult(val branch: String, val order: Int, val value: Int)
 typealias ATest = suspend CoroutineScope.() -> Set<RandomResult>
 
 class MCScopeTest {
-    val test: ATest = {
+    val simpleTest: ATest = {
         mc(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
@@ -39,7 +39,7 @@ class MCScopeTest {
         }
     }
 
-    val test2: ATest = {
+    val testWithJoin: ATest = {
         mc(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
@@ -48,14 +48,11 @@ class MCScopeTest {
                     delay(10)
                     res.add(RandomResult("first", it, random.nextInt()))
                 }
-                launch {
-                    "empty fork"
-                }
             }
             launch {
                 repeat(10) {
                     delay(10)
-                    if(it == 4) job.join()
+                    if (it == 4) job.join()
                     res.add(RandomResult("second", it, random.nextInt()))
                 }
             }
@@ -65,19 +62,24 @@ class MCScopeTest {
     }
 
 
-    @Test
-    fun testParallel() {
+    fun compareResult(test: ATest) {
         val res1 = runBlocking(Dispatchers.Default) { test() }
         val res2 = runBlocking(newSingleThreadContext("test")) { test() }
-        assertEquals(res1.find { it.branch=="first" && it.order==7 }?.value, res2.find { it.branch=="first" && it.order==7 }?.value)
+        assertEquals(
+            res1.find { it.branch == "first" && it.order == 7 }?.value,
+            res2.find { it.branch == "first" && it.order == 7 }?.value
+        )
         assertEquals(res1, res2)
+    }
+
+    @Test
+    fun testParallel() {
+        compareResult(simpleTest)
     }
 
 
     @Test
     fun testConditionalJoin() {
-        val res1 = runBlocking(Dispatchers.Default) { test2() }
-        val res2 = runBlocking(newSingleThreadContext("test")) { test2() }
-        assertEquals(res1, res2)
+        compareResult(testWithJoin)
     }
 }

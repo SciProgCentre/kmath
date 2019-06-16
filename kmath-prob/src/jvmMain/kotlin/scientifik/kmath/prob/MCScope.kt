@@ -8,7 +8,7 @@ import kotlin.coroutines.coroutineContext
 /**
  * A scope for a monte-carlo simulation or multi-coroutine random number generation
  */
-class MCScope(val coroutineContext: CoroutineContext, val random: RandomGenerator)
+class MCScope(override val coroutineContext: CoroutineContext, val random: RandomGenerator): CoroutineScope
 
 /**
  * Launches a supervised Monte-Carlo scope

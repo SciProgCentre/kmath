@@ -4,7 +4,9 @@ import org.apache.commons.math3.random.JDKRandomGenerator
 import scientifik.kmath.prob.RandomGenerator
 import org.apache.commons.math3.random.RandomGenerator as CMRandom
 
-inline class CMRandomGeneratorWrapper(val generator: CMRandom) : RandomGenerator {
+class CMRandomGeneratorWrapper(seed: Long?, val builder: (Long?) -> CMRandom) : RandomGenerator {
+    val generator = builder(seed)
+
     override fun nextDouble(): Double = generator.nextDouble()
 
     override fun nextInt(): Int = generator.nextInt()
@@ -13,20 +15,12 @@ inline class CMRandomGeneratorWrapper(val generator: CMRandom) : RandomGenerator
 
     override fun nextBlock(size: Int): ByteArray = ByteArray(size).apply { generator.nextBytes(this) }
 
-    override fun fork(): RandomGenerator {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun fork(): RandomGenerator = CMRandomGeneratorWrapper(nextLong(), builder)
 }
-
-fun CMRandom.asKmathGenerator(): RandomGenerator = CMRandomGeneratorWrapper(this)
 
 fun RandomGenerator.asCMGenerator(): CMRandom =
     (this as? CMRandomGeneratorWrapper)?.generator ?: TODO("Implement reverse CM wrapper")
 
-val RandomGenerator.Companion.default: RandomGenerator by lazy { JDKRandomGenerator().asKmathGenerator() }
 
-fun RandomGenerator.Companion.jdk(seed: Int? = null): RandomGenerator = if (seed == null) {
-    JDKRandomGenerator()
-} else {
-    JDKRandomGenerator(seed)
-}.asKmathGenerator()
+fun RandomGenerator.Companion.jdk(seed: Long? = null): RandomGenerator =
+    CMRandomGeneratorWrapper(seed) { JDKRandomGenerator() }
