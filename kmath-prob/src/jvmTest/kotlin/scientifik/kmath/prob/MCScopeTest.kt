@@ -1,9 +1,6 @@
 package scientifik.kmath.prob
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.HashSet
 import kotlin.test.Test
@@ -15,11 +12,40 @@ typealias ATest = suspend CoroutineScope.() -> Set<RandomResult>
 
 class MCScopeTest {
     val test: ATest = {
-        mc(1122) {
+        mc(1111) {
+            val res = Collections.synchronizedSet(HashSet<RandomResult>())
+
+            launch {
+                //println(random)
+                repeat(10) {
+                    delay(10)
+                    res.add(RandomResult("first", it, random.nextInt()))
+                }
+                launch {
+                    "empty fork"
+                }
+            }
+
+            launch {
+                //println(random)
+                repeat(10) {
+                    delay(10)
+                    res.add(RandomResult("second", it, random.nextInt()))
+                }
+            }
+
+
+            res
+        }
+    }
+
+    val test2: ATest = {
+        mc(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
             val job = launch {
                 repeat(10) {
+                    delay(10)
                     res.add(RandomResult("first", it, random.nextInt()))
                 }
                 launch {
@@ -28,18 +54,30 @@ class MCScopeTest {
             }
             launch {
                 repeat(10) {
+                    delay(10)
+                    if(it == 4) job.join()
                     res.add(RandomResult("second", it, random.nextInt()))
                 }
             }
+
             res
         }
     }
 
 
     @Test
-    fun testGenerator() {
+    fun testParallel() {
         val res1 = runBlocking(Dispatchers.Default) { test() }
-        val res2 = runBlocking(newSingleThreadContext("test")) {test()}
-        assertEquals(res1,res2)
+        val res2 = runBlocking(newSingleThreadContext("test")) { test() }
+        assertEquals(res1.find { it.branch=="first" && it.order==7 }?.value, res2.find { it.branch=="first" && it.order==7 }?.value)
+        assertEquals(res1, res2)
+    }
+
+
+    @Test
+    fun testConditionalJoin() {
+        val res1 = runBlocking(Dispatchers.Default) { test2() }
+        val res2 = runBlocking(newSingleThreadContext("test")) { test2() }
+        assertEquals(res1, res2)
     }
 }

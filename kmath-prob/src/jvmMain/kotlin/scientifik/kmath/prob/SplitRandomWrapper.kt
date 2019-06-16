@@ -2,7 +2,10 @@ package scientifik.kmath.prob
 
 import java.util.*
 
-class SplitRandomWrapper(val random: SplittableRandom) : RandomGenerator {
+class SplitRandomWrapper(random: SplittableRandom) : RandomGenerator {
+
+    var random = random
+        private set
 
     constructor(seed: Long) : this(SplittableRandom(seed))
 
@@ -14,5 +17,9 @@ class SplitRandomWrapper(val random: SplittableRandom) : RandomGenerator {
 
     override fun nextBlock(size: Int): ByteArray = ByteArray(size).also { random.nextBytes(it) }
 
-    override fun fork(): RandomGenerator = SplitRandomWrapper(random.split())
+    override fun fork(): RandomGenerator {
+        synchronized(this) {
+            return SplitRandomWrapper(random.split()).also { this.random = random.split() }
+        }
+    }
 }
