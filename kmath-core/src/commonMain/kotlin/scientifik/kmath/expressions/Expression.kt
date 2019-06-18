@@ -58,32 +58,35 @@ internal class DivExpession<T>(val context: Field<T>, val expr: Expression<T>, v
     override fun invoke(arguments: Map<String, T>): T = context.divide(expr.invoke(arguments), second.invoke(arguments))
 }
 
-class ExpressionField<T>(val field: Field<T>) : Field<Expression<T>>, ExpressionContext<T> {
-
-    override val zero: Expression<T> = ConstantExpression(field.zero)
-
-    override val one: Expression<T> = ConstantExpression(field.one)
+open class ExpressionSpace<T>(val space: Space<T>) : Space<Expression<T>>, ExpressionContext<T> {
+    override val zero: Expression<T> = ConstantExpression(space.zero)
 
     override fun const(value: T): Expression<T> = ConstantExpression(value)
 
     override fun variable(name: String, default: T?): Expression<T> = VariableExpression(name, default)
 
-    override fun add(a: Expression<T>, b: Expression<T>): Expression<T> = SumExpression(field, a, b)
+    override fun add(a: Expression<T>, b: Expression<T>): Expression<T> = SumExpression(space, a, b)
 
-    override fun multiply(a: Expression<T>, k: Number): Expression<T> = ConstProductExpession(field, a, k)
-
-    override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
-
-    override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> = DivExpession(field, a, b)
+    override fun multiply(a: Expression<T>, k: Number): Expression<T> = ConstProductExpession(space, a, k)
 
 
     operator fun Expression<T>.plus(arg: T) = this + const(arg)
     operator fun Expression<T>.minus(arg: T) = this - const(arg)
-    operator fun Expression<T>.times(arg: T) = this * const(arg)
-    operator fun Expression<T>.div(arg: T) = this / const(arg)
 
     operator fun T.plus(arg: Expression<T>) = arg + this
     operator fun T.minus(arg: Expression<T>) = arg - this
+}
+
+
+class ExpressionField<T>(val field: Field<T>) : Field<Expression<T>>, ExpressionSpace<T>(field) {
+    override val one: Expression<T> = ConstantExpression(field.one)
+    override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
+
+    override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> = DivExpession(field, a, b)
+
+    operator fun Expression<T>.times(arg: T) = this * const(arg)
+    operator fun Expression<T>.div(arg: T) = this / const(arg)
+
     operator fun T.times(arg: Expression<T>) = arg * this
     operator fun T.div(arg: Expression<T>) = arg / this
 }
