@@ -93,22 +93,6 @@ bintray {
     }
 }
 
-//workaround for bintray
-tasks.withType<BintrayUploadTask> {
-    doFirst {
-        publishing.publications
-            .filterIsInstance<MavenPublication>()
-            .forEach { publication ->
-                val moduleFile = buildDir.resolve("publications/${publication.name}/module.json")
-                if (moduleFile.exists()) {
-                    publication.artifact(object : FileBasedMavenArtifact(moduleFile) {
-                        override fun getDefaultExtension() = "module"
-                    })
-                }
-            }
-    }
-}
-
 artifactory {
     val artifactoryUser: String? by project
     val artifactoryPassword: String? by project
