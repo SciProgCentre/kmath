@@ -1,4 +1,4 @@
-val kmathVersion by extra("0.1.3-dev-1")
+val kmathVersion by extra("0.1.3")
 
 allprojects {
     repositories {
