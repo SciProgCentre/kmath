@@ -32,12 +32,12 @@ Typical case of `Field` is the `RealField` which works on doubles. And typical c
 
 In some cases algebra context could hold additional operation like `exp` or `sin`, in this case it inherits appropriate
 interface. Also a context could have an operation which produces an element outside of its context. For example
-`Matrix` `dot` operation produces a matrix with new dimensions which could not be compatible with initial matrix in
+`Matrix` `dot` operation produces a matrix with new dimensions which can be incompatible with initial matrix in
 terms of linear operations.
 
 ## Algebra element
 
-In order to achieve more familiar behavior (where you apply operations directly to mathematica objects), without involving contexts
+In order to achieve more familiar behavior (where you apply operations directly to mathematical objects), without involving contexts
 `kmath` introduces special type objects called `MathElement`. A `MathElement` is basically some object coupled to
 a mathematical context. For example `Complex` is the pair of real numbers representing real and imaginary parts,
 but it also holds reference to the `ComplexField` singleton which allows to perform direct operations on `Complex`

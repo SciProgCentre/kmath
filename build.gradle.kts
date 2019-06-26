@@ -1,11 +1,11 @@
-val kmathVersion by extra("0.1.2")
+val kmathVersion by extra("0.1.3")
 
 allprojects {
     repositories {
         jcenter()
         maven("https://kotlin.bintray.com/kotlinx")
     }
-    
+
     group = "scientifik"
     version = kmathVersion
 }

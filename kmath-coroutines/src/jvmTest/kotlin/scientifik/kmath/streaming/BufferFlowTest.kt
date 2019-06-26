@@ -4,9 +4,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import org.junit.Test
-import scientifik.kmath.async
-import scientifik.kmath.collect
-import scientifik.kmath.map
+import scientifik.kmath.coroutines.async
+import scientifik.kmath.coroutines.collect
+import scientifik.kmath.coroutines.map
 import java.util.concurrent.Executors
 
 
