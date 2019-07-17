@@ -8,15 +8,15 @@ class MatrixTest {
 
     @Test
     fun testSum() {
-        val vector1 = Vector.real(5) { it.toDouble() }
-        val vector2 = Vector.real(5) { 5 - it.toDouble() }
+        val vector1 = RealVector(5) { it.toDouble() }
+        val vector2 = RealVector(5) { 5 - it.toDouble() }
         val sum = vector1 + vector2
         assertEquals(5.0, sum[2])
     }
 
     @Test
     fun testVectorToMatrix() {
-        val vector = Vector.real(5) { it.toDouble() }
+        val vector = RealVector(5) { it.toDouble() }
         val matrix = vector.asMatrix()
         assertEquals(4.0, matrix[4, 0])
     }
@@ -31,8 +31,8 @@ class MatrixTest {
 
     @Test
     fun testDot() {
-        val vector1 = Vector.real(5) { it.toDouble() }
-        val vector2 = Vector.real(5) { 5 - it.toDouble() }
+        val vector1 = RealVector(5) { it.toDouble() }
+        val vector2 = RealVector(5) { 5 - it.toDouble() }
 
         val matrix1 = vector1.asMatrix()
         val matrix2 = vector2.asMatrix().transpose()
