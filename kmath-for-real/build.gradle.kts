@@ -1,9 +1,11 @@
 plugins {
-    `npm-multiplatform`
+    id("scientifik.mpp")
 }
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
     }
 }
