@@ -20,6 +20,8 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.updateAndGet
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 
 /**
@@ -64,16 +66,22 @@ class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
  */
 class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
 
-    constructor(seedValue: R, gen: suspend (R) -> R) : this({ seedValue }, gen)
+    //constructor(seedValue: R, gen: suspend (R) -> R) : this({ seedValue }, gen)
 
-    private val value = atomic<R?>(null)
+    private val mutex = Mutex()
+
+    private var value: R? = null
 
     override suspend fun next(): R {
-        return value.updateAndGet { prev -> gen(prev ?: seed()) }!!
+        mutex.withLock {
+            val newValue = gen(value ?: seed())
+            value = newValue
+            return newValue
+        }
     }
 
     override fun fork(): Chain<R> {
-        return MarkovChain(seed = { value.value ?: seed() }, gen = gen)
+        return MarkovChain(seed = { value ?: seed() }, gen = gen)
     }
 }
 
@@ -89,17 +97,22 @@ class StatefulChain<S, out R>(
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
 
-    constructor(state: S, seedValue: R, forkState: ((S) -> S), gen: suspend S.(R) -> R) : this(
-        state,
-        { seedValue },
-        forkState,
-        gen
-    )
+//    constructor(state: S, seedValue: R, forkState: ((S) -> S), gen: suspend S.(R) -> R) : this(
+//        state,
+//        { seedValue },
+//        forkState,
+//        gen
+//    )
+    private val mutex = Mutex()
 
-    private val atomicValue = atomic<R?>(null)
+    private var value: R? = null
 
     override suspend fun next(): R {
-        return atomicValue.updateAndGet { prev -> state.gen(prev ?: state.seed()) }!!
+        mutex.withLock {
+            val newValue = state.gen(value ?: state.seed())
+            value = newValue
+            return newValue
+        }
     }
 
     override fun fork(): Chain<R> {
