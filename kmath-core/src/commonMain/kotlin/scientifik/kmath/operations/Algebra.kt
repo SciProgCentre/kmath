@@ -1,7 +1,14 @@
 package scientifik.kmath.operations
 
+/**
+ * Marker interface for any algebra
+ */
+interface Algebra
 
-interface SpaceOperations<T> {
+/**
+ * Space-like operations without neutral element
+ */
+interface SpaceOperations<T> : Algebra {
     /**
      * Addition operation for two context elements
      */
@@ -38,6 +45,9 @@ interface Space<T> : SpaceOperations<T> {
     val zero: T
 }
 
+/**
+ * Operations on ring without multiplication neutral element
+ */
 interface RingOperations<T> : SpaceOperations<T> {
     /**
      * Multiplication for two field elements

@@ -8,6 +8,4 @@ kotlin.sourceSets {
             api(project(":kmath-memory"))
         }
     }
-    //mingwMain {}
-    //mingwTest {}
 }

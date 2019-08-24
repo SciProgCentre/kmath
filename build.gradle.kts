@@ -1,6 +1,6 @@
 plugins {
-    id("scientifik.mpp") version "0.1.3" apply false
-    id("scientifik.publish") version "0.1.3" apply false
+    id("scientifik.mpp") version "0.1.4" apply false
+    id("scientifik.publish") version "0.1.4" apply false
     id("kotlinx-atomicfu") version "0.12.9" apply false
 }
 

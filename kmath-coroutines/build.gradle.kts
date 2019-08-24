@@ -1,6 +1,5 @@
 plugins {
     id("scientifik.mpp")
-    id("kotlinx-atomicfu")
 }
 
 kotlin.sourceSets {
