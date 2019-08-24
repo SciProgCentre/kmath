@@ -26,7 +26,7 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
         Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
 
     override fun divide(a: Complex, b: Complex): Complex {
-        val norm = b.square
+        val norm = b.re * b.re + b.im * b.im
         return Complex((a.re * b.re + a.im * b.im) / norm, (a.re * b.im - a.im * b.re) / norm)
     }
 
@@ -35,11 +35,11 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
     override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
 
     override fun power(arg: Complex, pow: Number): Complex =
-        arg.abs.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))
+        arg.r.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))
 
     override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
 
-    override fun ln(arg: Complex): Complex = ln(arg.abs) + i * atan2(arg.im, arg.re)
+    override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
     operator fun Double.plus(c: Complex) = add(this.toComplex(), c)
 
@@ -62,7 +62,7 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 
     override val context: ComplexField get() = ComplexField
 
-    override fun compareTo(other: Complex): Int = abs.compareTo(other.abs)
+    override fun compareTo(other: Complex): Int = r.compareTo(other.r)
 
     companion object : MemorySpec<Complex> {
         override val objectSize: Int = 16
@@ -83,14 +83,9 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 val Complex.conjugate: Complex get() = Complex(re, -im)
 
 /**
- * Square of the complex number
- */
-val Complex.square: Double get() = re * re + im * im
-
-/**
  * Absolute value of complex number
  */
-val Complex.abs: Double get() = sqrt(square)
+val Complex.r: Double get() = sqrt(re * re + im * im)
 
 /**
  * An angle between vector represented by complex number and X axis
