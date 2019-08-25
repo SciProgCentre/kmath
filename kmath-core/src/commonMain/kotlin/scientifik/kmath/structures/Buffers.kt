@@ -69,9 +69,9 @@ interface Buffer<T> {
     }
 }
 
-fun <T> Buffer<T>.asSequence(): Sequence<T> = iterator().asSequence()
+fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 
-fun <T> Buffer<T>.asIterable(): Iterable<T> = iterator().asSequence().asIterable()
+fun <T> Buffer<T>.asIterable(): Iterable<T> = asSequence().asIterable()
 
 interface MutableBuffer<T> : Buffer<T> {
     operator fun set(index: Int, value: T)

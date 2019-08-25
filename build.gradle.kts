@@ -1,10 +1,8 @@
 plugins {
-    id("scientifik.mpp") version "0.1.4" apply false
-    id("scientifik.publish") version "0.1.4" apply false
-    id("kotlinx-atomicfu") version "0.12.9" apply false
+    id("scientifik.publish") version "0.1.6" apply false
 }
 
-val kmathVersion by extra("0.1.4-dev-1")
+val kmathVersion by extra("0.1.4-dev")
 
 val bintrayRepo by extra("scientifik")
 val githubProject by extra("kmath")

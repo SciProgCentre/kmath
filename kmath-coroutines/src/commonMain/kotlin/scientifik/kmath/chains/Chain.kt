@@ -16,9 +16,6 @@
 
 package scientifik.kmath.chains
 
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.updateAndGet
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -46,9 +43,7 @@ interface Chain<out R> {
 /**
  * Chain as a coroutine flow. The flow emit affects chain state and vice versa
  */
-@FlowPreview
-val <R> Chain<R>.flow: Flow<R>
-    get() = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
+fun <R> Chain<R>.flow(): Flow<R> = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
 
 fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
@@ -65,8 +60,6 @@ class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
  * A stateless Markov chain
  */
 class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
-
-    //constructor(seedValue: R, gen: suspend (R) -> R) : this({ seedValue }, gen)
 
     private val mutex = Mutex()
 
@@ -97,12 +90,6 @@ class StatefulChain<S, out R>(
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
 
-//    constructor(state: S, seedValue: R, forkState: ((S) -> S), gen: suspend S.(R) -> R) : this(
-//        state,
-//        { seedValue },
-//        forkState,
-//        gen
-//    )
     private val mutex = Mutex()
 
     private var value: R? = null

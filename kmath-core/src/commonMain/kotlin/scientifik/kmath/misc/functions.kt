@@ -1,7 +1,8 @@
-package scientifik.kmath.operations
+package scientifik.kmath.coroutines
 
+import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.SpaceOperations
 import kotlin.jvm.JvmName
-import kotlin.reflect.KClass
 
 /**
  * A suspendable univariate function defined in algebraic context
@@ -28,7 +29,9 @@ suspend fun MFunction<Double, RealField>.invoke(args: DoubleArray) = RealField.i
 @JvmName("varargInvoke")
 suspend fun MFunction<Double, RealField>.invoke(vararg args: Double) = RealField.invoke(*args.toTypedArray())
 
-
+/**
+ * A suspendable univariate function with parameter
+ */
 interface ParametricUFunction<T, P, C : SpaceOperations<T>> {
     suspend operator fun C.invoke(arg: T, parameter: P): T
 }

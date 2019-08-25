@@ -9,7 +9,6 @@ import scientifik.kmath.structures.DoubleBuffer
 /**
  * Create a [Flow] from buffer
  */
-@FlowPreview
 fun <T> Buffer<T>.asFlow() = iterator().asFlow()
 
 /**
@@ -21,7 +20,6 @@ fun <T> Flow<Buffer<out T>>.spread(): Flow<T> = flatMapConcat { it.asFlow() }
 /**
  * Collect incoming flow into fixed size chunks
  */
-@FlowPreview
 fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>): Flow<Buffer<T>> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
     val list = ArrayList<T>(bufferSize)
@@ -45,7 +43,6 @@ fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>): Flow<
 /**
  * Specialized flow chunker for real buffer
  */
-@FlowPreview
 fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
     val array = DoubleArray(bufferSize)
@@ -69,7 +66,6 @@ fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
  * Map a flow to a moving window buffer. The window step is one.
  * In order to get different steps, one could use skip operation.
  */
-@FlowPreview
 fun <T> Flow<T>.windowed(window: Int): Flow<Buffer<T>> = flow {
     require(window > 1) { "Window size must be more than one" }
     val ringBuffer = RingBuffer.boxing<T>(window)
