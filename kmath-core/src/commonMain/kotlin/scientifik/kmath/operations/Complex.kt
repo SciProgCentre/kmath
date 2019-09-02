@@ -56,6 +56,8 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
  * Complex number class
  */
 data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
+    constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
+
     override fun unwrap(): Complex = this
 
     override fun Complex.wrap(): Complex = this

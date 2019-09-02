@@ -20,7 +20,7 @@ interface Distribution<T : Any> : Sampler<T> {
 
     /**
      * Create a chain of samples from this distribution.
-     * The chain is not guaranteed to be stateless.
+     * The chain is not guaranteed to be stateless, but different sample chains should be independent.
      */
     override fun sample(generator: RandomGenerator): Chain<T>
 
@@ -32,7 +32,7 @@ interface Distribution<T : Any> : Sampler<T> {
 
 interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
     /**
-     * Cumulative distribution for ordered parameter
+     * Cumulative distribution for ordered parameter (CDF)
      */
     fun cumulative(arg: T): Double
 }
