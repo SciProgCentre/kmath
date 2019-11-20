@@ -5,6 +5,8 @@ package scientifik.kmath.operations
  */
 interface Algebra
 
+inline operator fun <T : Algebra, R> T.invoke(block: T.() -> R): R = run(block)
+
 /**
  * Space-like operations without neutral element
  */

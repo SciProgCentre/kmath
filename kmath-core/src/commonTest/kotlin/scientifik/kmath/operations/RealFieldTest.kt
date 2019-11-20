@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class RealFieldTest {
     @Test
     fun testSqrt() {
-        val sqrt = with(RealField) {
+        val sqrt = RealField {
             sqrt(25 * one)
         }
         assertEquals(5.0, sqrt)

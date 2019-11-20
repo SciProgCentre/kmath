@@ -119,3 +119,10 @@ operator fun RealNDElement.plus(arg: Double) =
  */
 operator fun RealNDElement.minus(arg: Double) =
     map { it - arg }
+
+/**
+ * Produce a context for n-dimensional operations inside this real field
+ */
+inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R {
+    return NDField.real(*shape).run(action)
+}

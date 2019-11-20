@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.3.41"
-    id("kotlinx.benchmark") version "0.2.0-dev-2"
+    kotlin("plugin.allopen") version "1.3.60"
+    id("kotlinx.benchmark") version "0.2.0-dev-5"
 }
 
 configure<AllOpenExtension> {
@@ -59,6 +59,6 @@ benchmark {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Scientifik.JVM_VERSION
     }
 }

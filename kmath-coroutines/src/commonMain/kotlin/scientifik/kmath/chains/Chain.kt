@@ -122,23 +122,23 @@ class ConstantChain<out T>(val value: T) : Chain<T> {
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed
  * since mapped chain consumes tokens. Accepts regular transformation function
  */
-fun <T, R> Chain<T>.pipe(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = func(this@pipe.next())
-    override fun fork(): Chain<R> = this@pipe.fork().pipe(func)
+fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = func(this@map.next())
+    override fun fork(): Chain<R> = this@map.fork().map(func)
 }
 
 /**
  * Map the whole chain
  */
-fun <T, R> Chain<T>.map(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = mapper(this@map)
-    override fun fork(): Chain<R> = this@map.fork().map(mapper)
+fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = mapper(this@collect)
+    override fun fork(): Chain<R> = this@collect.fork().collect(mapper)
 }
 
-fun <T, S, R> Chain<T>.mapWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
+fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
     object : Chain<R> {
-        override suspend fun next(): R = state.mapper(this@mapWithState)
-        override fun fork(): Chain<R> = this@mapWithState.fork().mapWithState(stateFork(state), stateFork, mapper)
+        override suspend fun next(): R = state.mapper(this@collectWithState)
+        override fun fork(): Chain<R> = this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
     }
 
 /**

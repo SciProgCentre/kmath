@@ -21,10 +21,16 @@ interface Statistic<T, R> {
 
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
+ * @param T - source type
+ * @param I - intermediate block type
+ * @param R - result type
  */
 interface ComposableStatistic<T, I, R> : Statistic<T, R> {
+    //compute statistic on a single block
     suspend fun computeIntermediate(data: Buffer<T>): I
+    //Compose two blocks
     suspend fun composeIntermediate(first: I, second: I): I
+    //Transform block to result
     suspend fun toResult(intermediate: I): R
 
     override suspend fun invoke(data: Buffer<T>): R = toResult(computeIntermediate(data))
@@ -32,7 +38,7 @@ interface ComposableStatistic<T, I, R> : Statistic<T, R> {
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
+private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
     flow: Flow<Buffer<T>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default
 ): Flow<I> = flow

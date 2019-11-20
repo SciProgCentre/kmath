@@ -1,10 +1,10 @@
 pluginManagement {
 
     plugins {
-        id("scientifik.mpp") version "0.1.6"
-        id("scientifik.jvm") version "0.1.6"
-        id("scientifik.atomic") version "0.1.6"
-        id("scientifik.publish") version "0.1.6"
+        id("scientifik.mpp") version "0.2.5"
+        id("scientifik.jvm") version "0.2.5"
+        id("scientifik.atomic") version "0.2.5"
+        id("scientifik.publish") version "0.2.5"
     }
 
     repositories {
@@ -24,8 +24,6 @@ pluginManagement {
         }
     }
 }
-
-enableFeaturePreview("GRADLE_METADATA")
 
 rootProject.name = "kmath"
 include(

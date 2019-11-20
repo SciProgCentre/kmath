@@ -24,3 +24,24 @@ class FactorizedDistribution<T>(val distributions: Collection<NamedDistribution<
         }
     }
 }
+
+class NamedDistributionWrapper<T : Any>(val name: String, val distribution: Distribution<T>) : NamedDistribution<T> {
+    override fun probability(arg: Map<String, T>): Double = distribution.probability(
+        arg[name] ?: error("Argument with name $name not found in input parameters")
+    )
+
+    override fun sample(generator: RandomGenerator): Chain<Map<String, T>> {
+        val chain = distribution.sample(generator)
+        return SimpleChain {
+            mapOf(name to chain.next())
+        }
+    }
+}
+
+class DistributionBuilder<T: Any>{
+    private val distributions = ArrayList<NamedDistribution<T>>()
+
+    infix fun String.to(distribution: Distribution<T>){
+        distributions.add(NamedDistributionWrapper(this,distribution))
+    }
+}

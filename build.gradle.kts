@@ -1,5 +1,5 @@
 plugins {
-    id("scientifik.publish") version "0.1.6" apply false
+    id("scientifik.publish") version "0.2.5" apply false
 }
 
 val kmathVersion by extra("0.1.4-dev")
