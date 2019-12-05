@@ -88,13 +88,13 @@ repositories {
 Then use a regular dependency like so:
 
 ```groovy
-api "scientifik:kmath-core-jvm:0.1.0-dev"
+api "scientifik:kmath-core-jvm:0.1.3-dev"
 ```
 
 or in the Gradle Kotlin DSL:
 
 ```kotlin
-api("scientifik:kmath-core-jvm:0.1.0-dev")
+api("scientifik:kmath-core-jvm:0.1.3-dev")
 ```
 
 ### Release
@@ -107,7 +107,7 @@ repositories{
 }
 
 dependencies{
-    api("scientifik:kmath-core-jvm:0.1.0")
+    api("scientifik:kmath-core-jvm:0.1.3")
 }
 ```
 
