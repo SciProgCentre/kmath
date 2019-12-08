@@ -1,5 +1,8 @@
 package scientifik.kmath.operations
 
+@DslMarker
+annotation class KMathContext
+
 /**
  * Marker interface for any algebra
  */
