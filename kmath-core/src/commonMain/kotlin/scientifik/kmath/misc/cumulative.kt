@@ -10,29 +10,32 @@ import kotlin.jvm.JvmName
  * @param R type of resulting iterable
  * @param initial lazy evaluated
  */
-fun <T, R> Iterator<T>.cumulative(initial: R, operation: (T, R) -> R): Iterator<R> = object : Iterator<R> {
+fun <T, R> Iterator<T>.cumulative(initial: R, operation: (R, T) -> R): Iterator<R> = object : Iterator<R> {
     var state: R = initial
     override fun hasNext(): Boolean = this@cumulative.hasNext()
 
     override fun next(): R {
-        state = operation.invoke(this@cumulative.next(), state)
+        state = operation(state, this@cumulative.next())
         return state
     }
 }
 
-fun <T, R> Iterable<T>.cumulative(initial: R, operation: (T, R) -> R): Iterable<R> = object : Iterable<R> {
+fun <T, R> Iterable<T>.cumulative(initial: R, operation: (R, T) -> R): Iterable<R> = object : Iterable<R> {
     override fun iterator(): Iterator<R> = this@cumulative.iterator().cumulative(initial, operation)
 }
 
-fun <T, R> Sequence<T>.cumulative(initial: R, operation: (T, R) -> R): Sequence<R> = object : Sequence<R> {
+fun <T, R> Sequence<T>.cumulative(initial: R, operation: (R, T) -> R): Sequence<R> = object : Sequence<R> {
     override fun iterator(): Iterator<R> = this@cumulative.iterator().cumulative(initial, operation)
 }
 
-fun <T, R> List<T>.cumulative(initial: R, operation: (T, R) -> R): List<R> =
+fun <T, R> List<T>.cumulative(initial: R, operation: (R, T) -> R): List<R> =
     this.iterator().cumulative(initial, operation).asSequence().toList()
 
 //Cumulative sum
 
+/**
+ * Cumulative sum with custom space
+ */
 fun <T> Iterable<T>.cumulativeSum(space: Space<T>) = with(space) {
     cumulative(zero) { element: T, sum: T -> sum + element }
 }

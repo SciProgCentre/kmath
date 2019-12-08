@@ -1,10 +1,23 @@
 Bintray: [ ![Download](https://api.bintray.com/packages/mipt-npm/scientifik/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/scientifik/kmath-core/_latestVersion)
 
+Bintray-dev: [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/scientifik/kmath-core/_latestVersion)
+
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
 
 # KMath
 Could be pronounced as `key-math`.
 The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's `numpy` library. In contrast to `numpy` and `scipy` it is modular and has a lightweight core.
+
+# Goal
+* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM and JS for now and Native in future). 
+* Provide basic multiplatform implementations for those abstractions (without significant performance optimization).
+* Provide bindings and wrappers with those abstractions for popular optimized platform libraries.
+
+## Non-goals
+* Be like Numpy. It was the idea at the beginning, but we decided that we can do better in terms of API.
+* Provide best performance out of the box. We have specialized libraries for that. Need only API wrappers for them.
+* Cover all cases as immediately and in one bundle. We will modularize everything and add new features gradually.
+* Provide specialized behavior in the core. API is made generic on purpose, so one needs to specialize for types, like for `Double` in the core. For that we will have specialization modules like `for-real`, which will give better experience for those, who want to work with specific types.
 
 ## Features
 
@@ -48,58 +61,15 @@ The plan is to have wrappers for koma implementations for compatibility with kma
 
 ## Multi-platform support
 
-KMath is developed as a multi-platform library, which means that most of interfaces are declared in the [common module](kmath-core/src/commonMain).
-Implementation is also done in the common module wherever possible. In some cases, features are delegated to
-platform-specific implementations even if they could be done in the common module for performance reasons.
-Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
+KMath is developed as a multi-platform library, which means that most of interfaces are declared in the [common module](kmath-core/src/commonMain). Implementation is also done in the common module wherever possible. In some cases, features are delegated to platform-specific implementations even if they could be done in the common module for performance reasons. Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
 
 ## Performance
 
-Calculation performance is one of major goals of KMath in the future, but in some cases it is not possible to achieve
-both performance and flexibility. We expect to focus on creating convenient universal API first and then work on
-increasing performance for specific cases. We expect the worst KMath benchmarks will perform better than native Python,
-but worse than optimized native/SciPy (mostly due to boxing operations on primitive numbers). The best performance
-of optimized parts should be better than SciPy.
+Calculation performance is one of major goals of KMath in the future, but in some cases it is not possible to achieve both performance and flexibility. We expect to focus on creating convenient universal API first and then work on increasing performance for specific cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
 
-## Releases
+### Dependency
 
-Working builds can be obtained here: [![](https://jitpack.io/v/altavir/kmath.svg)](https://jitpack.io/#altavir/kmath).
-
-### Development
-
-The project is currently in pre-release stage. Nightly builds can be used by adding an additional repository to the Gradle config like so:
-
-```groovy
-repositories {
-    maven { url = "http://npm.mipt.ru:8081/artifactory/gradle-dev" }
-    mavenCentral()
-} 
-```
-
-or for the Gradle Kotlin DSL:
-
-```kotlin
-repositories {
-    maven("http://npm.mipt.ru:8081/artifactory/gradle-dev")
-    mavenCentral()
-} 
-```
-
-Then use a regular dependency like so:
-
-```groovy
-api "scientifik:kmath-core-jvm:0.1.3-dev"
-```
-
-or in the Gradle Kotlin DSL:
-
-```kotlin
-api("scientifik:kmath-core-jvm:0.1.3-dev")
-```
-
-### Release
-
-Release artifacts are accessible from bintray with following configuration:
+Release artifacts are accessible from bintray with following configuration (see documentation for [kotlin-multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) form more details):
 
 ```kotlin
 repositories{
@@ -107,9 +77,22 @@ repositories{
 }
 
 dependencies{
-    api("scientifik:kmath-core-jvm:0.1.3")
+    api("scientifik:kmath-core:${kmathVersion}")
+    //api("scientifik:kmath-core-jvm:${kmathVersion}") for jvm-specific version
 }
 ```
+
+Gradle `5.2+` is required for multiplatform artifacts.
+
+### Development
+
+Development builds are accessible from the reposirtory 
+```kotlin
+repositories{
+    maven("https://dl.bintray.com/mipt-npm/dev")
+}
+```
+with the same artifact names.
 
 ## Contributing
 

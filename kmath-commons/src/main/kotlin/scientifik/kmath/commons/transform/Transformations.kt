@@ -11,7 +11,7 @@ import scientifik.kmath.structures.*
 
 
 /**
- *
+ * Streaming and buffer transformations
  */
 object Transformations {
 

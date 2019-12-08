@@ -21,8 +21,8 @@ internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: s
     suspend fun await(): T = deferred?.await() ?: error("Coroutine not started")
 }
 
-@FlowPreview
 class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
+    @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<T>) {
         deferredFlow.collect {
             collector.emit((it.await()))
@@ -88,14 +88,13 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T
     })
 }
 
+@ExperimentalCoroutinesApi
 @FlowPreview
-fun <T, R> Flow<T>.map(
-    dispatcher: CoroutineDispatcher,
-    concurrencyLevel: Int = 16,
-    bufferSize: Int = concurrencyLevel,
+fun <T, R> Flow<T>.mapParallel(
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
     transform: suspend (T) -> R
 ): Flow<R> {
-    return flatMapMerge(concurrencyLevel, bufferSize) { value ->
+    return flatMapMerge{ value ->
         flow { emit(transform(value)) }
     }.flowOn(dispatcher)
 }

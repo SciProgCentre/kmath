@@ -32,6 +32,8 @@ fun <T : MathElement<out TrigonometricOperations<T>>> ctg(arg: T): T = arg.conte
 interface PowerOperations<T> {
     fun power(arg: T, pow: Number): T
     fun sqrt(arg: T) = power(arg, 0.5)
+
+    infix fun T.pow(pow: Number) = power(this, pow)
 }
 
 infix fun <T : MathElement<out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
@@ -48,7 +50,7 @@ interface ExponentialOperations<T> {
 fun <T : MathElement<out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
 fun <T : MathElement<out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
 
-interface Norm<in T: Any, out R> {
+interface Norm<in T : Any, out R> {
     fun norm(arg: T): R
 }
 

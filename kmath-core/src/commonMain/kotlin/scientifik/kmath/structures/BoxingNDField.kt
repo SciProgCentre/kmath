@@ -71,3 +71,12 @@ class BoxingNDField<T, F : Field<T>>(
     override fun NDBuffer<T>.toElement(): FieldElement<NDBuffer<T>, *, out BufferedNDField<T, F>> =
         BufferedNDFieldElement(this@BoxingNDField, buffer)
 }
+
+inline fun <T : Any, F : Field<T>, R> F.nd(
+    noinline bufferFactory: BufferFactory<T>,
+    vararg shape: Int,
+    action: NDField<T, F, *>.() -> R
+): R {
+    val ndfield: BoxingNDField<T, F> = NDField.boxing(this, *shape, bufferFactory = bufferFactory)
+    return ndfield.action()
+}

@@ -1,7 +1,5 @@
 package scientifik.memory
 
-import kotlin.reflect.KClass
-
 /**
  * A specification to read or write custom objects with fixed size in bytes
  */
@@ -27,7 +25,7 @@ inline fun <reified T : Any> MemoryReader.readArray(spec: MemorySpec<T>, offset:
 
 fun <T : Any> MemoryWriter.writeArray(spec: MemorySpec<T>, offset: Int, array: Array<T>) {
     spec.run {
-        for (i in 0 until array.size) {
+        for (i in array.indices) {
             write(offset + i * objectSize, array[i])
         }
     }

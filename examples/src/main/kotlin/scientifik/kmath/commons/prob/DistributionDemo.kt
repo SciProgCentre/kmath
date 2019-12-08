@@ -2,17 +2,17 @@ package scientifik.kmath.commons.prob
 
 import kotlinx.coroutines.runBlocking
 import scientifik.kmath.chains.Chain
-import scientifik.kmath.chains.mapWithState
+import scientifik.kmath.chains.collectWithState
 import scientifik.kmath.prob.Distribution
 import scientifik.kmath.prob.RandomGenerator
 
 data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
-fun Chain<Double>.mean(): Chain<Double> = mapWithState(AveragingChainState(),{it.copy()}){chain->
+fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(),{it.copy()}){ chain->
     val next = chain.next()
     num++
     value += next
-    return@mapWithState value / num
+    return@collectWithState value / num
 }
 
 

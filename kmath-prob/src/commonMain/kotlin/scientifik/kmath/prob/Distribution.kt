@@ -1,8 +1,9 @@
 package scientifik.kmath.prob
 
 import scientifik.kmath.chains.Chain
-import scientifik.kmath.chains.map
-import kotlin.jvm.JvmName
+import scientifik.kmath.chains.collect
+import scientifik.kmath.structures.Buffer
+import scientifik.kmath.structures.BufferFactory
 
 interface Sampler<T : Any> {
     fun sample(generator: RandomGenerator): Chain<T>
@@ -20,7 +21,7 @@ interface Distribution<T : Any> : Sampler<T> {
 
     /**
      * Create a chain of samples from this distribution.
-     * The chain is not guaranteed to be stateless.
+     * The chain is not guaranteed to be stateless, but different sample chains should be independent.
      */
     override fun sample(generator: RandomGenerator): Chain<T>
 
@@ -32,7 +33,7 @@ interface Distribution<T : Any> : Sampler<T> {
 
 interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
     /**
-     * Cumulative distribution for ordered parameter
+     * Cumulative distribution for ordered parameter (CDF)
      */
     fun cumulative(arg: T): Double
 }
@@ -45,24 +46,27 @@ fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Doub
     return cumulative(to) - cumulative(from)
 }
 
-
 /**
  * Sample a bunch of values
  */
-fun <T : Any> Sampler<T>.sampleBunch(generator: RandomGenerator, size: Int): Chain<List<T>> {
+fun <T : Any> Sampler<T>.sampleBuffer(
+    generator: RandomGenerator,
+    size: Int,
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+): Chain<Buffer<T>> {
     require(size > 1)
-    return sample(generator).map{chain ->
-        List(size){chain.next()}
+    //creating temporary storage once
+    val tmp = ArrayList<T>(size)
+    return sample(generator).collect { chain ->
+        for (i in tmp.indices) {
+            tmp[i] = chain.next()
+        }
+        bufferFactory(size) { tmp[it] }
     }
 }
 
 /**
  * Generate a bunch of samples from real distributions
  */
-@JvmName("realSampleBunch")
-fun Sampler<Double>.sampleBunch(generator: RandomGenerator, size: Int): Chain<DoubleArray> {
-    require(size > 1)
-    return sample(generator).map{chain ->
-        DoubleArray(size){chain.next()}
-    }
-}
+fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int) =
+    sampleBuffer(generator, size, Buffer.Companion::real)

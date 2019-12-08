@@ -1,12 +1,11 @@
-import org.jetbrains.gradle.benchmarks.JvmBenchmarkTarget
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.3.31"
-    id("org.jetbrains.gradle.benchmarks.plugin") version "0.1.7-dev-24"
+    kotlin("plugin.allopen") version "1.3.60"
+    id("kotlinx.benchmark") version "0.2.0-dev-5"
 }
 
 configure<AllOpenExtension> {
@@ -16,7 +15,8 @@ configure<AllOpenExtension> {
 repositories {
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
     maven("http://dl.bintray.com/kyonifer/maven")
-    maven("https://dl.bintray.com/orangy/maven")
+    maven ("https://dl.bintray.com/orangy/maven")
+
     mavenCentral()
 }
 
@@ -30,9 +30,9 @@ dependencies {
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-koma"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:${Scientifik.ioVersion}")
 
-    implementation("org.jetbrains.gradle.benchmarks:runtime:0.1.7-dev-24")
+    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-2")
 
 
     "benchmarksCompile"(sourceSets.main.get().compileClasspath)
@@ -43,10 +43,7 @@ benchmark {
     // Setup configurations
     targets {
         // This one matches sourceSet name above
-        register("benchmarks") {
-            this as JvmBenchmarkTarget
-            jmhVersion = "1.21"
-        }
+        register("benchmarks")
     }
 
     configurations {
@@ -62,6 +59,6 @@ benchmark {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Scientifik.JVM_VERSION
     }
 }

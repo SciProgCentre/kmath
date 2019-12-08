@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.collect
 import org.junit.Test
 import scientifik.kmath.coroutines.async
 import scientifik.kmath.coroutines.collect
-import scientifik.kmath.coroutines.map
+import scientifik.kmath.coroutines.mapParallel
 import java.util.concurrent.Executors
 
 
@@ -20,8 +20,8 @@ class BufferFlowTest {
     @Test(timeout = 2000)
     fun map() {
         runBlocking {
-            (1..20).asFlow().map( dispatcher) {
-                //println("Started $it on ${Thread.currentThread().name}")
+            (1..20).asFlow().mapParallel( dispatcher) {
+                println("Started $it on ${Thread.currentThread().name}")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
                 it
@@ -35,7 +35,7 @@ class BufferFlowTest {
     fun async() {
         runBlocking {
             (1..20).asFlow().async(dispatcher) {
-                //println("Started $it on ${Thread.currentThread().name}")
+                println("Started $it on ${Thread.currentThread().name}")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
                 it

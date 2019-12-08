@@ -1,7 +1,19 @@
 package scientifik.kmath.operations
 
+@DslMarker
+annotation class KMathContext
 
-interface SpaceOperations<T> {
+/**
+ * Marker interface for any algebra
+ */
+interface Algebra
+
+inline operator fun <T : Algebra, R> T.invoke(block: T.() -> R): R = run(block)
+
+/**
+ * Space-like operations without neutral element
+ */
+interface SpaceOperations<T> : Algebra {
     /**
      * Addition operation for two context elements
      */
@@ -38,6 +50,9 @@ interface Space<T> : SpaceOperations<T> {
     val zero: T
 }
 
+/**
+ * Operations on ring without multiplication neutral element
+ */
 interface RingOperations<T> : SpaceOperations<T> {
     /**
      * Multiplication for two field elements
