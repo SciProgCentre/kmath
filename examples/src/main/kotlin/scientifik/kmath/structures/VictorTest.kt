@@ -13,6 +13,12 @@ fun main() {
 
     val viktorField = ViktorNDField(intArrayOf(dim, dim))
 
+    autoField.run {
+        var res = one
+        repeat(n/2) {
+            res += 1.0
+        }
+    }
 
     measureAndPrint("Automatic field addition") {
         autoField.run {
@@ -23,11 +29,10 @@ fun main() {
         }
     }
 
-    measureAndPrint("Raw Viktor") {
-        val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
+    viktorField.run {
         var res = one
-        repeat(n) {
-            res = res + one
+        repeat(n/2) {
+            res += one
         }
     }
 
@@ -35,8 +40,16 @@ fun main() {
         viktorField.run {
             var res = one
             repeat(n) {
-                res += 1.0
+                res += one
             }
+        }
+    }
+
+    measureAndPrint("Raw Viktor") {
+        val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
+        var res = one
+        repeat(n) {
+            res = res + one
         }
     }
 }

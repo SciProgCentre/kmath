@@ -65,9 +65,15 @@ class ViktorNDField(override val shape: IntArray) : NDField<Double, RealField, V
         }
     }.asStructure()
 
-    override fun ViktorNDStructure.plus(b: ViktorNDStructure): ViktorNDStructure =
-        (f64Buffer + b.f64Buffer).asStructure()
+    override fun add(a: ViktorNDStructure, b: ViktorNDStructure): ViktorNDStructure {
+        return (a.f64Buffer + b.f64Buffer).asStructure()
+    }
 
-    override fun ViktorNDStructure.minus(b: ViktorNDStructure): ViktorNDStructure =
-        (f64Buffer - b.f64Buffer).asStructure()
+//    override inline fun ViktorNDStructure.plus(b: ViktorNDStructure): ViktorNDStructure {
+//        return (f64Buffer + b.f64Buffer).asStructure()
+//    }
+
+    override fun multiply(a: ViktorNDStructure, k: Number): ViktorNDStructure {
+        return (a.f64Buffer * k.toDouble()).asStructure()
+    }
 }
