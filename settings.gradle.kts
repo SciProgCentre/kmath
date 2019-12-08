@@ -33,6 +33,7 @@ include(
     ":kmath-coroutines",
     ":kmath-histograms",
     ":kmath-commons",
+    ":kmath-viktor",
     ":kmath-koma",
     ":kmath-prob",
     ":kmath-io",

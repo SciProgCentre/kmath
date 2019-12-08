@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.3.60"
+    kotlin("plugin.allopen") version "1.3.61"
     id("kotlinx.benchmark") version "0.2.0-dev-5"
 }
 
@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-koma"))
+    implementation(project(":kmath-viktor"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:${Scientifik.ioVersion}")
 
