@@ -19,12 +19,10 @@ interface Dimension {
                 }
             }
         }
-
-        inline fun <reified D : Dimension> dim(): UInt {
-            return D::class.objectInstance?.dim ?: error("Dimension object must be a singleton")
-        }
     }
 }
+
+expect inline fun <reified D : Dimension>  Dimension.Companion.dim(): UInt
 
 object D1 : Dimension {
     override val dim: UInt = 1u

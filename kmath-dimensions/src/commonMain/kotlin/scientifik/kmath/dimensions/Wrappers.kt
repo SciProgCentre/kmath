@@ -66,7 +66,8 @@ interface DPoint<T, D : Dimension> : Point<T> {
 /**
  * Dimension-safe point wrapper
  */
-inline class DPointWrapper<T, D : Dimension>(val point: Point<T>) : DPoint<T, D> {
+inline class DPointWrapper<T, D : Dimension>(val point: Point<T>) :
+    DPoint<T, D> {
     override val size: Int get() = point.size
 
     override fun get(index: Int): T = point[index]
@@ -94,7 +95,12 @@ inline class DMatrixContext<T : Any, Ri : Ring<T>>(val context: GenericMatrixCon
 
     inline fun <reified D : Dimension> point(noinline initializer: (Int) -> T): DPoint<T, D> {
         val size = Dimension.dim<D>()
-        return DPoint.coerceUnsafe(context.point(size.toInt(), initializer))
+        return DPoint.coerceUnsafe(
+            context.point(
+                size.toInt(),
+                initializer
+            )
+        )
     }
 
     inline infix fun <reified R1 : Dimension, reified C1 : Dimension, reified C2 : Dimension> DMatrix<T, R1, C1>.dot(
