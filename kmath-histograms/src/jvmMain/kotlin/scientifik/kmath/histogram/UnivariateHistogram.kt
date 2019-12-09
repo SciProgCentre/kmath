@@ -1,7 +1,7 @@
 package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.RealVector
-import scientifik.kmath.linear.toVector
+import scientifik.kmath.linear.asVector
 import scientifik.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.floor
@@ -12,7 +12,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
     //TODO add weighting
     override val value: Number get() = counter.sum()
 
-    override val center: RealVector get() = doubleArrayOf(position).toVector()
+    override val center: RealVector get() = doubleArrayOf(position).asVector()
 
     operator fun contains(value: Double): Boolean = value in (position - size / 2)..(position + size / 2)
 

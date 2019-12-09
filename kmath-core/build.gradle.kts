@@ -1,5 +1,5 @@
 plugins {
-    `npm-multiplatform`
+    id("scientifik.mpp")
 }
 
 kotlin.sourceSets {
@@ -8,6 +8,4 @@ kotlin.sourceSets {
             api(project(":kmath-memory"))
         }
     }
-    //mingwMain {}
-    //mingwTest {}
 }

@@ -2,7 +2,7 @@ package scientifik.kmath.prob
 
 import scientifik.kmath.chains.Chain
 import scientifik.kmath.chains.ConstantChain
-import scientifik.kmath.chains.pipe
+import scientifik.kmath.chains.map
 import scientifik.kmath.chains.zip
 import scientifik.kmath.operations.Space
 
@@ -26,6 +26,6 @@ class SamplerSpace<T : Any>(val space: Space<T>) : Space<Sampler<T>> {
     }
 
     override fun multiply(a: Sampler<T>, k: Number): Sampler<T> = BasicSampler { generator ->
-        a.sample(generator).pipe { space.run { it * k.toDouble() } }
+        a.sample(generator).map { space.run { it * k.toDouble() } }
     }
 }

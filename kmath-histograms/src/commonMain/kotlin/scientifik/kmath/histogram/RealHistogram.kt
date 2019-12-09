@@ -1,7 +1,7 @@
 package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.Point
-import scientifik.kmath.linear.toVector
+import scientifik.kmath.linear.asVector
 import scientifik.kmath.operations.SpaceOperations
 import scientifik.kmath.structures.*
 import kotlin.math.floor
@@ -132,8 +132,8 @@ class RealHistogram(
          */
         fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogram {
             return RealHistogram(
-                ranges.map { it.start }.toVector(),
-                ranges.map { it.endInclusive }.toVector()
+                ranges.map { it.start }.asVector(),
+                ranges.map { it.endInclusive }.asVector()
             )
         }
 

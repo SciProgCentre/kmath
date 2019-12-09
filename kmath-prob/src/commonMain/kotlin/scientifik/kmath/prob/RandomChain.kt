@@ -1,6 +1,5 @@
 package scientifik.kmath.prob
 
-import kotlinx.atomicfu.atomic
 import scientifik.kmath.chains.Chain
 
 /**
@@ -11,3 +10,6 @@ class RandomChain<out R>(val generator: RandomGenerator, private val gen: suspen
 
     override fun fork(): Chain<R> = RandomChain(generator.fork(), gen)
 }
+
+fun <R> RandomGenerator.chain(gen: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, gen)
+fun <R> RandomGenerator.flow(gen: suspend RandomGenerator.() -> R) = chain(gen).fork()

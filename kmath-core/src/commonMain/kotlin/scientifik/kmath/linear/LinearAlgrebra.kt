@@ -3,10 +3,12 @@ package scientifik.kmath.linear
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Norm
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.VirtualBuffer
 import scientifik.kmath.structures.asSequence
 
+typealias Point<T> = Buffer<T>
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
@@ -17,20 +19,6 @@ interface LinearSolver<T : Any> {
     fun inverse(a: Matrix<T>): Matrix<T>
 }
 
-/**
- * Convert vector to array (copying content of array)
- */
-fun <T : Any> Array<T>.toVector(field: Field<T>) = Vector.generic(size, field) { this[it] }
-
-fun DoubleArray.toVector() = Vector.real(this.size) { this[it] }
-fun List<Double>.toVector() = Vector.real(this.size) { this[it] }
-
-object VectorL2Norm : Norm<Point<out Number>, Double> {
-    override fun norm(arg: Point<out Number>): Double =
-        kotlin.math.sqrt(arg.asSequence().sumByDouble { it.toDouble() })
-}
-
-typealias RealVector = Vector<Double, RealField>
 typealias RealMatrix = Matrix<Double>
 
 /**

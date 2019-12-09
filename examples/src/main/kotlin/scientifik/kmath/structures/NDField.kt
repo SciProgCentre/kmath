@@ -4,7 +4,13 @@ import kotlinx.coroutines.GlobalScope
 import scientifik.kmath.operations.RealField
 import kotlin.system.measureTimeMillis
 
-fun main(args: Array<String>) {
+internal inline fun measureAndPrint(title: String, block: () -> Unit) {
+    val time = measureTimeMillis(block)
+    println("$title completed in $time millis")
+}
+
+
+fun main() {
     val dim = 1000
     val n = 1000
 
@@ -15,8 +21,7 @@ fun main(args: Array<String>) {
     //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.boxing(RealField, dim, dim)
 
-
-    val autoTime = measureTimeMillis {
+    measureAndPrint("Automatic field addition") {
         autoField.run {
             var res = one
             repeat(n) {
@@ -25,18 +30,14 @@ fun main(args: Array<String>) {
         }
     }
 
-    println("Automatic field addition completed in $autoTime millis")
-
-    val elementTime = measureTimeMillis {
+    measureAndPrint("Element addition"){
         var res = genericField.one
         repeat(n) {
             res += 1.0
         }
     }
 
-    println("Element addition completed in $elementTime millis")
-
-    val specializedTime = measureTimeMillis {
+    measureAndPrint("Specialized addition") {
         specializedField.run {
             var res: NDBuffer<Double> = one
             repeat(n) {
@@ -45,10 +46,7 @@ fun main(args: Array<String>) {
         }
     }
 
-    println("Specialized addition completed in $specializedTime millis")
-
-
-    val lazyTime = measureTimeMillis {
+    measureAndPrint("Lazy addition") {
         val res = specializedField.one.mapAsync(GlobalScope) {
             var c = 0.0
             repeat(n) {
@@ -60,9 +58,7 @@ fun main(args: Array<String>) {
         res.elements().forEach { it.second }
     }
 
-    println("Lazy addition completed in $lazyTime millis")
-
-    val genericTime = measureTimeMillis {
+    measureAndPrint("Generic addition") {
         //genericField.run(action)
         genericField.run {
             var res: NDBuffer<Double> = one
@@ -71,7 +67,5 @@ fun main(args: Array<String>) {
             }
         }
     }
-
-    println("Generic addition completed in $genericTime millis")
 
 }

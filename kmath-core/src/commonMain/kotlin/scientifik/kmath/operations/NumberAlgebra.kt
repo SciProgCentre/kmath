@@ -1,7 +1,7 @@
 package scientifik.kmath.operations
 
 import kotlin.math.abs
-import kotlin.math.pow
+import kotlin.math.pow as kpow
 
 /**
  * Advanced Number-like field that implements basic operations
@@ -45,7 +45,7 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override inline fun sin(arg: Double) = kotlin.math.sin(arg)
     override inline fun cos(arg: Double) = kotlin.math.cos(arg)
 
-    override inline fun power(arg: Double, pow: Number) = arg.pow(pow.toDouble())
+    override inline fun power(arg: Double, pow: Number) = arg.kpow(pow.toDouble())
 
     override inline fun exp(arg: Double) = kotlin.math.exp(arg)
     override inline fun ln(arg: Double) = kotlin.math.ln(arg)

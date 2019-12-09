@@ -135,3 +135,10 @@ fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDFiel
 
 fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(IntArray) -> Complex): ComplexNDElement =
     NDField.complex(*shape).produce(initializer)
+
+/**
+ * Produce a context for n-dimensional operations inside this real field
+ */
+inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
+    return NDField.complex(*shape).run(action)
+}

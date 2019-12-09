@@ -183,7 +183,7 @@ fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Mat
         elementContext.run {
 
             // Apply permutations to b
-            val bp = create { i, j -> zero }
+            val bp = create { _, _ -> zero }
 
             for (row in 0 until pivot.size) {
                 val bpRow = bp.row(row)

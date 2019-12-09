@@ -1,9 +1,16 @@
-val kmathVersion by extra("0.1.3-dev-2")
+plugins {
+    id("scientifik.publish") version "0.2.6" apply false
+}
+
+val kmathVersion by extra("0.1.4-dev-1")
+
+val bintrayRepo by extra("scientifik")
+val githubProject by extra("kmath")
 
 allprojects {
     repositories {
         jcenter()
-        maven("https://kotlin.bintray.com/kotlinx")
+        maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
     group = "scientifik"
@@ -11,8 +18,7 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "dokka-publish")
     if (name.startsWith("kmath")) {
-        apply(plugin = "npm-publish")
+        apply(plugin = "scientifik.publish")
     }
 }

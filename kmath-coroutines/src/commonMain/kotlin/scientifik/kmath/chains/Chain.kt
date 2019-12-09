@@ -16,10 +16,9 @@
 
 package scientifik.kmath.chains
 
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.updateAndGet
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 
 /**
@@ -44,9 +43,7 @@ interface Chain<out R> {
 /**
  * Chain as a coroutine flow. The flow emit affects chain state and vice versa
  */
-@FlowPreview
-val <R> Chain<R>.flow: Flow<R>
-    get() = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
+fun <R> Chain<R>.flow(): Flow<R> = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
 
 fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
@@ -64,16 +61,20 @@ class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
  */
 class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
 
-    constructor(seedValue: R, gen: suspend (R) -> R) : this({ seedValue }, gen)
+    private val mutex = Mutex()
 
-    private val value = atomic<R?>(null)
+    private var value: R? = null
 
     override suspend fun next(): R {
-        return value.updateAndGet { prev -> gen(prev ?: seed()) }!!
+        mutex.withLock {
+            val newValue = gen(value ?: seed())
+            value = newValue
+            return newValue
+        }
     }
 
     override fun fork(): Chain<R> {
-        return MarkovChain(seed = { value.value ?: seed() }, gen = gen)
+        return MarkovChain(seed = { value ?: seed() }, gen = gen)
     }
 }
 
@@ -89,17 +90,16 @@ class StatefulChain<S, out R>(
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
 
-    constructor(state: S, seedValue: R, forkState: ((S) -> S), gen: suspend S.(R) -> R) : this(
-        state,
-        { seedValue },
-        forkState,
-        gen
-    )
+    private val mutex = Mutex()
 
-    private val atomicValue = atomic<R?>(null)
+    private var value: R? = null
 
     override suspend fun next(): R {
-        return atomicValue.updateAndGet { prev -> state.gen(prev ?: state.seed()) }!!
+        mutex.withLock {
+            val newValue = state.gen(value ?: state.seed())
+            value = newValue
+            return newValue
+        }
     }
 
     override fun fork(): Chain<R> {
@@ -122,23 +122,23 @@ class ConstantChain<out T>(val value: T) : Chain<T> {
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed
  * since mapped chain consumes tokens. Accepts regular transformation function
  */
-fun <T, R> Chain<T>.pipe(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = func(this@pipe.next())
-    override fun fork(): Chain<R> = this@pipe.fork().pipe(func)
+fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = func(this@map.next())
+    override fun fork(): Chain<R> = this@map.fork().map(func)
 }
 
 /**
  * Map the whole chain
  */
-fun <T, R> Chain<T>.map(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = mapper(this@map)
-    override fun fork(): Chain<R> = this@map.fork().map(mapper)
+fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = mapper(this@collect)
+    override fun fork(): Chain<R> = this@collect.fork().collect(mapper)
 }
 
-fun <T, S, R> Chain<T>.mapWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
+fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
     object : Chain<R> {
-        override suspend fun next(): R = state.mapper(this@mapWithState)
-        override fun fork(): Chain<R> = this@mapWithState.fork().mapWithState(stateFork(state), stateFork, mapper)
+        override suspend fun next(): R = state.mapper(this@collectWithState)
+        override fun fork(): Chain<R> = this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
     }
 
 /**
