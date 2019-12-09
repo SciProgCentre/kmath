@@ -40,6 +40,8 @@ can be used for a wide variety of purposes from high performance calculations to
 
 * **Streaming** Streaming operations on mathematical objects and objects buffers.
 
+* **Type-safe dimensions** Type-safe dimensions for matrix operations.
+
 * **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
