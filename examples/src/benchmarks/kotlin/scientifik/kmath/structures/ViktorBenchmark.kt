@@ -1,28 +1,26 @@
 package scientifik.kmath.structures
 
 import org.jetbrains.bio.viktor.F64Array
+import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.Scope
+import org.openjdk.jmh.annotations.State
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.viktor.ViktorNDField
 
 
-fun main() {
-    val dim = 1000
-    val n = 400
+@State(Scope.Benchmark)
+class ViktorBenchmark {
+    final val dim = 1000
+    final val n = 100
 
     // automatically build context most suited for given type.
-    val autoField = NDField.auto(RealField, dim, dim)
-    val realField = NDField.real(dim,dim)
+    final val autoField = NDField.auto(RealField, dim, dim)
+    final val realField = NDField.real(dim, dim)
 
-    val viktorField = ViktorNDField(intArrayOf(dim, dim))
+    final val viktorField = ViktorNDField(intArrayOf(dim, dim))
 
-    autoField.run {
-        var res = one
-        repeat(n/2) {
-            res += 1.0
-        }
-    }
-
-    measureAndPrint("Automatic field addition") {
+    @Benchmark
+    fun `Automatic field addition`() {
         autoField.run {
             var res = one
             repeat(n) {
@@ -31,14 +29,8 @@ fun main() {
         }
     }
 
-    viktorField.run {
-        var res = one
-        repeat(n/2) {
-            res += one
-        }
-    }
-
-    measureAndPrint("Viktor field addition") {
+    @Benchmark
+    fun `Viktor field addition`() {
         viktorField.run {
             var res = one
             repeat(n) {
@@ -47,7 +39,8 @@ fun main() {
         }
     }
 
-    measureAndPrint("Raw Viktor") {
+    @Benchmark
+    fun `Raw Viktor`() {
         val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
         var res = one
         repeat(n) {
@@ -55,9 +48,10 @@ fun main() {
         }
     }
 
-    measureAndPrint("Automatic field log") {
+    @Benchmark
+    fun `Real field log`() {
         realField.run {
-            val fortyTwo  = produce { 42.0 }
+            val fortyTwo = produce { 42.0 }
             var res = one
 
             repeat(n) {
@@ -66,7 +60,8 @@ fun main() {
         }
     }
 
-    measureAndPrint("Raw Viktor log") {
+    @Benchmark
+    fun `Raw Viktor log`() {
         val fortyTwo = F64Array.full(dim, dim, init = 42.0)
         var res: F64Array
         repeat(n) {

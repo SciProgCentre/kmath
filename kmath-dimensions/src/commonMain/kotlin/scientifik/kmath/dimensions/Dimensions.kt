@@ -1,9 +1,14 @@
 package scientifik.kmath.dimensions
 
+/**
+ * An interface which is not used in runtime. Designates a size of some structure.
+ * All descendants should be singleton objects.
+ */
 interface Dimension {
     val dim: UInt
 
     companion object {
+        @Suppress("NOTHING_TO_INLINE")
         inline fun of(dim: UInt): Dimension {
             return when (dim) {
                 1u -> D1
@@ -15,8 +20,8 @@ interface Dimension {
             }
         }
 
-        inline fun <reified D: Dimension> dim(): UInt{
-            return D::class.objectInstance!!.dim
+        inline fun <reified D : Dimension> dim(): UInt {
+            return D::class.objectInstance?.dim ?: error("Dimension object must be a singleton")
         }
     }
 }

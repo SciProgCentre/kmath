@@ -8,14 +8,21 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.Structure2D
 
+/**
+ * A matrix with compile-time controlled dimension
+ */
 interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
     companion object {
         /**
          * Coerces a regular matrix to a matrix with type-safe dimensions and throws a error if coercion failed
          */
         inline fun <T, reified R : Dimension, reified C : Dimension> coerce(structure: Structure2D<T>): DMatrix<T, R, C> {
-            if (structure.rowNum != Dimension.dim<R>().toInt()) error("Row number mismatch: expected ${Dimension.dim<R>()} but found ${structure.rowNum}")
-            if (structure.colNum != Dimension.dim<C>().toInt()) error("Column number mismatch: expected ${Dimension.dim<C>()} but found ${structure.colNum}")
+            if (structure.rowNum != Dimension.dim<R>().toInt()) {
+                error("Row number mismatch: expected ${Dimension.dim<R>()} but found ${structure.rowNum}")
+            }
+            if (structure.colNum != Dimension.dim<C>().toInt()) {
+                error("Column number mismatch: expected ${Dimension.dim<C>()} but found ${structure.colNum}")
+            }
             return DMatrixWrapper(structure)
         }
 
@@ -28,6 +35,9 @@ interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
     }
 }
 
+/**
+ * An inline wrapper for a Matrix
+ */
 inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
     val structure: Structure2D<T>
 ) : DMatrix<T, R, C> {
@@ -35,10 +45,15 @@ inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
     override fun get(i: Int, j: Int): T = structure[i, j]
 }
 
+/**
+ * Dimension-safe point
+ */
 interface DPoint<T, D : Dimension> : Point<T> {
     companion object {
         inline fun <T, reified D : Dimension> coerce(point: Point<T>): DPoint<T, D> {
-            if (point.size != Dimension.dim<D>().toInt()) error("Vector dimension mismatch: expected ${Dimension.dim<D>()}, but found ${point.size}")
+            if (point.size != Dimension.dim<D>().toInt()) {
+                error("Vector dimension mismatch: expected ${Dimension.dim<D>()}, but found ${point.size}")
+            }
             return DPointWrapper(point)
         }
 
@@ -48,6 +63,9 @@ interface DPoint<T, D : Dimension> : Point<T> {
     }
 }
 
+/**
+ * Dimension-safe point wrapper
+ */
 inline class DPointWrapper<T, D : Dimension>(val point: Point<T>) : DPoint<T, D> {
     override val size: Int get() = point.size
 
@@ -58,7 +76,7 @@ inline class DPointWrapper<T, D : Dimension>(val point: Point<T>) : DPoint<T, D>
 
 
 /**
- * Basic operations on matrices. Operates on [Matrix]
+ * Basic operations on dimension-safe matrices. Operates on [Matrix]
  */
 inline class DMatrixContext<T : Any, Ri : Ring<T>>(val context: GenericMatrixContext<T, Ri>) {
 
