@@ -4,12 +4,14 @@ import org.jetbrains.bio.viktor.F64Array
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.viktor.ViktorNDField
 
+
 fun main() {
     val dim = 1000
     val n = 400
 
     // automatically build context most suited for given type.
     val autoField = NDField.auto(RealField, dim, dim)
+    val realField = NDField.real(dim,dim)
 
     val viktorField = ViktorNDField(intArrayOf(dim, dim))
 
@@ -50,6 +52,25 @@ fun main() {
         var res = one
         repeat(n) {
             res = res + one
+        }
+    }
+
+    measureAndPrint("Automatic field log") {
+        realField.run {
+            val fortyTwo  = produce { 42.0 }
+            var res = one
+
+            repeat(n) {
+                res = ln(fortyTwo)
+            }
+        }
+    }
+
+    measureAndPrint("Raw Viktor log") {
+        val fortyTwo = F64Array.full(dim, dim, init = 42.0)
+        var res: F64Array
+        repeat(n) {
+            res = fortyTwo.log()
         }
     }
 }

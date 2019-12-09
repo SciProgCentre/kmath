@@ -6,14 +6,15 @@ import scientifik.kmath.structures.DefaultStrides
 import scientifik.kmath.structures.MutableNDStructure
 import scientifik.kmath.structures.NDField
 
+@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 inline class ViktorNDStructure(val f64Buffer: F64Array) : MutableNDStructure<Double> {
 
     override val shape: IntArray get() = f64Buffer.shape
 
-    override fun get(index: IntArray): Double = f64Buffer.get(*index)
+    override inline fun get(index: IntArray): Double = f64Buffer.get(*index)
 
-    override fun set(index: IntArray, value: Double) {
-        f64Buffer.set(value = value, indices = *index)
+    override inline fun set(index: IntArray, value: Double) {
+        f64Buffer.set(*index, value = value)
     }
 
     override fun elements(): Sequence<Pair<IntArray, Double>> {
@@ -23,6 +24,7 @@ inline class ViktorNDStructure(val f64Buffer: F64Array) : MutableNDStructure<Dou
 
 fun F64Array.asStructure(): ViktorNDStructure = ViktorNDStructure(this)
 
+@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 class ViktorNDField(override val shape: IntArray) : NDField<Double, RealField, ViktorNDStructure> {
     override val zero: ViktorNDStructure
         get() = F64Array.full(init = 0.0, shape = *shape).asStructure()
@@ -69,16 +71,16 @@ class ViktorNDField(override val shape: IntArray) : NDField<Double, RealField, V
         return (a.f64Buffer + b.f64Buffer).asStructure()
     }
 
-    override inline fun ViktorNDStructure.plus(b: ViktorNDStructure): ViktorNDStructure {
-        return (f64Buffer + b.f64Buffer).asStructure()
-    }
+    override fun multiply(a: ViktorNDStructure, k: Number): ViktorNDStructure =
+        (a.f64Buffer * k.toDouble()).asStructure()
 
-    override inline fun ViktorNDStructure.minus(b: ViktorNDStructure): ViktorNDStructure {
-        return (f64Buffer - b.f64Buffer).asStructure()
-    }
+    override inline fun ViktorNDStructure.plus(b: ViktorNDStructure): ViktorNDStructure =
+        (f64Buffer + b.f64Buffer).asStructure()
 
+    override inline fun ViktorNDStructure.minus(b: ViktorNDStructure): ViktorNDStructure =
+        (f64Buffer - b.f64Buffer).asStructure()
 
-    override fun multiply(a: ViktorNDStructure, k: Number): ViktorNDStructure {
-        return (a.f64Buffer * k.toDouble()).asStructure()
-    }
+    override inline fun ViktorNDStructure.times(k: Number): ViktorNDStructure = (f64Buffer * k.toDouble()).asStructure()
+
+    override inline fun ViktorNDStructure.plus(arg: Double): ViktorNDStructure = (f64Buffer.plus(arg)).asStructure()
 }
