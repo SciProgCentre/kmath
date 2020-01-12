@@ -1,2 +1,0 @@
-package scientifik.kmath.functions
-

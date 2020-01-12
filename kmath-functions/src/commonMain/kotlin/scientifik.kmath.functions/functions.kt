@@ -1,54 +1,33 @@
-package scientifik.kmath.misc
+package scientifik.kmath.functions
 
+import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.RealField
-import scientifik.kmath.operations.SpaceOperations
-import kotlin.jvm.JvmName
 
 /**
  * A regular function that could be called only inside specific algebra context
+ * @param T source type
+ * @param C source algebra constraint
+ * @param R result type
  */
-interface UFunction<T, C : SpaceOperations<T>>  {
-    operator fun C.invoke(arg: T): T
+interface MathFunction<T, C : Algebra<T>, R> {
+    operator fun C.invoke(arg: T): R
 }
+
+fun <R> MathFunction<Double, RealField, R>.invoke(arg: Double): R = RealField.invoke(arg)
 
 /**
- * A suspendable univariate function defined in algebraic context
+ * A suspendable function defined in algebraic context
  */
-interface USFunction<T, C : SpaceOperations<T>> {
-    suspend operator fun C.invoke(arg: T): T
+interface SuspendableMathFunction<T, C : Algebra<T>, R> {
+    suspend operator fun C.invoke(arg: T): R
 }
 
-suspend fun USFunction<Double, RealField>.invoke(arg: Double) = RealField.invoke(arg)
+suspend fun <R> SuspendableMathFunction<Double, RealField, R>.invoke(arg: Double) = RealField.invoke(arg)
 
-
-interface MFunction<T, C : SpaceOperations<T>> {
-    /**
-     * The input dimension of the function
-     */
-    val dimension: UInt
-
-    operator fun C.invoke(vararg args: T): T
-}
 
 /**
- * A suspendable multivariate (N->1) function defined on algebraic context
+ * A parametric function with parameter
  */
-interface MSFunction<T, C : SpaceOperations<T>> {
-    /**
-     * The input dimension of the function
-     */
-    val dimension: UInt
-
-    suspend operator fun C.invoke(vararg args: T): T
-}
-
-suspend fun MSFunction<Double, RealField>.invoke(args: DoubleArray) = RealField.invoke(*args.toTypedArray())
-@JvmName("varargInvoke")
-suspend fun MSFunction<Double, RealField>.invoke(vararg args: Double) = RealField.invoke(*args.toTypedArray())
-
-/**
- * A suspendable parametric function with parameter
- */
-interface PSFunction<T, P, C : SpaceOperations<T>> {
-    suspend operator fun C.invoke(arg: T, parameter: P): T
+interface ParametricFunction<T, P, C : Algebra<T>> {
+    operator fun C.invoke(arg: T, parameter: P): T
 }
