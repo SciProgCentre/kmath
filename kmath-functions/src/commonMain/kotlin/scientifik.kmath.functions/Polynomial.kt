@@ -1,9 +1,7 @@
 package scientifik.kmath.functions
 
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
-import kotlin.jvm.JvmName
 import kotlin.math.max
 import kotlin.math.pow
 
@@ -20,11 +18,11 @@ fun Polynomial<Double>.value() =
 
 
 fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring.run {
-    if( coefficients.isEmpty()) return@run zero
+    if (coefficients.isEmpty()) return@run zero
     var res = coefficients.first()
     var powerArg = arg
-    for( index in 1 until coefficients.size){
-        res += coefficients[index]*powerArg
+    for (index in 1 until coefficients.size) {
+        res += coefficients[index] * powerArg
         //recalculating power on each step to avoid power costs on long polynomials
         powerArg *= arg
     }
@@ -42,9 +40,6 @@ fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, out C
  * Represent the polynomial as a regular context-less function
  */
 fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = { value(ring, it) }
-
-@JvmName("asRealUFunction")
-fun Polynomial<Double>.asFunction(): (Double) -> Double = asFunction(RealField)
 
 /**
  * An algebra for polynomials
@@ -74,21 +69,3 @@ class PolynomialSpace<T : Any, C : Ring<T>>(val ring: C) : Space<Polynomial<T>> 
 fun <T : Any, C : Ring<T>, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R {
     return PolynomialSpace(this).run(block)
 }
-
-class PiecewisePolynomial<T : Comparable<T>> internal constructor(
-    val lowerBoundary: T,
-    val pieces: List<Pair<T, Polynomial<T>>>
-)
-
-private fun <T : Comparable<T>> PiecewisePolynomial<T>.findPiece(arg: T): Polynomial<T>? {
-    if (arg < lowerBoundary || arg > pieces.last().first) return null
-    return pieces.first { arg < it.first }.second
-}
-
-/**
- * Return a value of polynomial function with given [ring] an given [arg] or null if argument is outside of piecewise definition.
- */
-fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
-    findPiece(arg)?.value(ring, arg)
-
-fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }

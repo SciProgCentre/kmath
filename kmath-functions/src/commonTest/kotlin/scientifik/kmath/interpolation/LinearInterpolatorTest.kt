@@ -18,8 +18,8 @@ class LinearInterpolatorTest {
         val polynomial = LinearInterpolator(RealField).interpolatePolynomials(data)
         val function = polynomial.asFunction(RealField)
 
-//        assertEquals(null, function(-1.0))
-//        assertEquals(0.5, function(0.5))
+        assertEquals(null, function(-1.0))
+        assertEquals(0.5, function(0.5))
         assertEquals(2.0, function(1.5))
         assertEquals(3.0, function(2.0))
     }
