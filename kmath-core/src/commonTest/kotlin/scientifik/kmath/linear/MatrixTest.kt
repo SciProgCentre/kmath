@@ -7,40 +7,10 @@ import kotlin.test.assertEquals
 class MatrixTest {
 
     @Test
-    fun testSum() {
-        val vector1 = RealVector(5) { it.toDouble() }
-        val vector2 = RealVector(5) { 5 - it.toDouble() }
-        val sum = vector1 + vector2
-        assertEquals(5.0, sum[2])
-    }
-
-    @Test
-    fun testVectorToMatrix() {
-        val vector = RealVector(5) { it.toDouble() }
-        val matrix = vector.asMatrix()
-        assertEquals(4.0, matrix[4, 0])
-    }
-
-    @Test
     fun testTranspose() {
         val matrix = MatrixContext.real.one(3, 3)
         val transposed = matrix.transpose()
         assertEquals(matrix, transposed)
-    }
-
-
-    @Test
-    fun testDot() {
-        val vector1 = RealVector(5) { it.toDouble() }
-        val vector2 = RealVector(5) { 5 - it.toDouble() }
-
-        val matrix1 = vector1.asMatrix()
-        val matrix2 = vector2.asMatrix().transpose()
-        val product = MatrixContext.real.run { matrix1 dot matrix2 }
-
-
-        assertEquals(5.0, product[1, 0])
-        assertEquals(6.0, product[2, 2])
     }
 
     @Test

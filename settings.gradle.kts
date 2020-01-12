@@ -39,5 +39,6 @@ include(
     ":kmath-prob",
     ":kmath-io",
     ":kmath-dimensions",
+    ":kmath-for-real",
     ":examples"
 )
