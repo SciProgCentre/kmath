@@ -10,18 +10,16 @@ import scientifik.kmath.operations.Field
  */
 class LinearInterpolator<T : Comparable<T>>(override val algebra: Field<T>) : PolynomialInterpolator<T> {
 
-    override fun interpolatePolynomials(points: Collection<Pair<T, T>>): PiecewisePolynomial<T> = algebra.run {
-        require(points.isNotEmpty()) { "Point array should not be empty" }
+    override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra.run {
+        require(points.size > 0) { "Point array should not be empty" }
+        insureSorted(points)
 
-        //sorting points
-        val sorted = points.sortedBy { it.first }
-
-        return@run OrderedPiecewisePolynomial(points.first().first).apply {
+        OrderedPiecewisePolynomial(points.x[0]).apply {
             for (i in 0 until points.size - 1) {
-                val slope = (sorted[i + 1].second - sorted[i].second) / (sorted[i + 1].first - sorted[i].first)
-                val const = sorted[i].second - slope * sorted[i].first
+                val slope = (points.y[i + 1] - points.y[i]) / (points.x[i + 1] - points.x[i])
+                val const = points.x[i] - slope * points.x[i]
                 val polynomial = Polynomial(const, slope)
-                putRight(sorted[i + 1].first, polynomial)
+                putRight(points.x[i + 1], polynomial)
             }
         }
     }

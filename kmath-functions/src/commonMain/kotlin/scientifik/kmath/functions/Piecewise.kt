@@ -6,14 +6,16 @@ interface Piecewise<T, R> {
     fun findPiece(arg: T): R?
 }
 
-interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
+interface PiecewisePolynomial<T : Any> :
+    Piecewise<T, Polynomial<T>>
 
 /**
  * Ordered list of pieces in piecewise function
  */
-class OrderedPiecewisePolynomial<T : Comparable<T>>(left: T) : PiecewisePolynomial<T> {
+class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
+    PiecewisePolynomial<T> {
 
-    private val delimiters: ArrayList<T> = arrayListOf(left)
+    private val delimiters: ArrayList<T> = arrayListOf(delimeter)
     private val pieces: ArrayList<Polynomial<T>> = ArrayList()
 
     /**

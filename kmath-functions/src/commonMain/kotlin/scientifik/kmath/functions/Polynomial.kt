@@ -32,7 +32,8 @@ fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring.run {
 /**
  * Represent a polynomial as a context-dependent function
  */
-fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, out C, T> = object : MathFunction<T, C, T> {
+fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, out C, T> = object :
+    MathFunction<T, C, T> {
     override fun C.invoke(arg: T): T = value(this, arg)
 }
 
@@ -61,7 +62,8 @@ class PolynomialSpace<T : Any, C : Ring<T>>(val ring: C) : Space<Polynomial<T>> 
         }
     }
 
-    override val zero: Polynomial<T> = Polynomial(emptyList())
+    override val zero: Polynomial<T> =
+        Polynomial(emptyList())
 
     operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)
 }

@@ -5,7 +5,7 @@ import scientifik.kmath.functions.value
 import scientifik.kmath.operations.Ring
 
 interface Interpolator<X, Y> {
-    fun interpolate(points: Collection<Pair<X, Y>>): (X) -> Y
+    fun interpolate(points: XYPointSet<X, Y>): (X) -> Y
 }
 
 interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T> {
@@ -13,9 +13,9 @@ interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T> {
 
     fun getDefaultValue(): T = error("Out of bounds")
 
-    fun interpolatePolynomials(points: Collection<Pair<T, T>>): PiecewisePolynomial<T>
+    fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T>
 
-    override fun interpolate(points: Collection<Pair<T, T>>): (T) -> T = { x ->
+    override fun interpolate(points: XYPointSet<T, T>): (T) -> T = { x ->
         interpolatePolynomials(points).value(algebra, x) ?: getDefaultValue()
     }
 }
