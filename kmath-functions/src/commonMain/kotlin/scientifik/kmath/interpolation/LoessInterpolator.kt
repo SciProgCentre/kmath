@@ -1,4 +1,4 @@
-//package scientifik.kmath.interpolation
+package scientifik.kmath.interpolation
 //
 //import scientifik.kmath.functions.PiecewisePolynomial
 //import scientifik.kmath.operations.Ring
