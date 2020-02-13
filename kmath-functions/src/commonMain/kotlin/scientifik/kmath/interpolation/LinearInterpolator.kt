@@ -17,7 +17,7 @@ class LinearInterpolator<T : Comparable<T>>(override val algebra: Field<T>) : Po
         OrderedPiecewisePolynomial(points.x[0]).apply {
             for (i in 0 until points.size - 1) {
                 val slope = (points.y[i + 1] - points.y[i]) / (points.x[i + 1] - points.x[i])
-                val const = points.x[i] - slope * points.x[i]
+                val const = points.y[i] - slope * points.x[i]
                 val polynomial = Polynomial(const, slope)
                 putRight(points.x[i + 1], polynomial)
             }

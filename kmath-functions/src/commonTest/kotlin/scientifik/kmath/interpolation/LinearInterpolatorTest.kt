@@ -1,5 +1,6 @@
 package scientifik.kmath.interpolation
 
+import scientifik.kmath.functions.PiecewisePolynomial
 import scientifik.kmath.functions.asFunction
 import scientifik.kmath.operations.RealField
 import kotlin.test.Test
@@ -15,7 +16,7 @@ class LinearInterpolatorTest {
             2.0 to 3.0,
             3.0 to 4.0
         )
-        val polynomial = LinearInterpolator(RealField).interpolatePolynomials(data)
+        val polynomial: PiecewisePolynomial<Double> = LinearInterpolator(RealField).interpolatePolynomials(data)
         val function = polynomial.asFunction(RealField)
 
         assertEquals(null, function(-1.0))
