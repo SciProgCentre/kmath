@@ -245,6 +245,62 @@ class KBigIntegerOperationsTest {
     }
 
     @Test
+    fun test_shr_20() {
+        val x = KBigInteger(20)
+        assertEquals(KBigInteger(10), x shr 1)
+    }
+
+    @Test
+    fun test_shl_20() {
+        val x = KBigInteger(20)
+        assertEquals(KBigInteger(40), x shl 1)
+    }
+
+    @Test
+    fun test_shl_1_0() {
+        assertEquals(KBigInteger.ONE, KBigInteger.ONE shl 0)
+    }
+
+    @Test
+    fun test_shl_1_32() {
+        assertEquals(KBigInteger(0x100000000UL), KBigInteger.ONE shl 32)
+    }
+
+    @Test
+    fun test_shl_1_33() {
+        assertEquals(KBigInteger(0x200000000UL), KBigInteger.ONE shl 33)
+    }
+
+    @Test
+    fun test_shr_1_33_33() {
+        assertEquals(KBigInteger.ONE, (KBigInteger.ONE shl 33) shr 33)
+    }
+
+    @Test
+    fun test_shr_1_32() {
+        assertEquals(KBigInteger.ZERO, KBigInteger.ONE shr 32)
+    }
+
+    @Test
+    fun test_and_123_456() {
+        val x = KBigInteger(123)
+        val y = KBigInteger(456)
+        assertEquals(KBigInteger(72), x and y)
+    }
+
+    @Test
+    fun test_or_123_456() {
+        val x = KBigInteger(123)
+        val y = KBigInteger(456)
+        assertEquals(KBigInteger(507), x or y)
+    }
+
+    @Test
+    fun test_asd() {
+        assertEquals(KBigInteger.ONE, KBigInteger.ZERO or ((KBigInteger(20) shr 4) and KBigInteger.ONE))
+    }
+
+    @Test
     fun test_square_0x11223344U_0xad2ffffdU_0x17eU() {
         val num = KBigInteger(-1, uintArrayOf(0x11223344U, 0xad2ffffdU, 0x17eU ))
         println(num)
@@ -305,6 +361,12 @@ class KBigIntegerOperationsTest {
         val div = KBigInteger(0xffffffffL)
 
         assertEquals(div, res)
+    }
+
+    @Test
+    fun testBigDivision_0xfffffffeabcdef01UL_0xfffffffeabc() {
+        val res = KBigInteger(0xfffffffeabcdef01UL) / KBigInteger(0xfffffffeabc)
+        assertEquals(res, KBigInteger(0x100000))
     }
 
     @Test
@@ -379,7 +441,7 @@ class KBigIntegerOperationsTest {
         val exp = KBigInteger(2)
         val mod = KBigInteger(0xfffffffeabcUL)
 
-        val res = KBigInteger(0x6deec7895faUL)
+        val res = KBigInteger(0xc2253cde01)
 
         return assertEquals(res, x.modPow(exp, mod))
     }
@@ -434,26 +496,9 @@ class KBigIntegerConversionsTest {
     }
 }
 
-@kotlin.ExperimentalUnsignedTypes
-class DivisionTests {
-    // TODO
-    @Test
-    fun test_0xfffffffeabcdef01UL_0xfffffffeabc() {
-        val res = KBigInteger(0xfffffffeabcdef01UL) / KBigInteger(0xfffffffeabc)
-        assertEquals(res, KBigInteger(0x100000))
-
-    }
-
-//        println(KBigInteger(+1, uintArrayOf(1000U, 1000U, 1000U)) / KBigInteger(0xfffffffeabc)  )
-        // >>> hex((1000 + 1000*2**32 + 1000*2**64)/ 0xfffffffeabc) == 0x3e800000L
-//        println(KBigInteger(+1, KBigInteger.divideMagnitudeByUInt(uintArrayOf(1000U, 1000U, 1000U),456789U)))
-        // 0x8f789719813969L
-
-}
-
 class KBigIntegerRingTest {
     @Test
-    fun testSum() {
+    fun testKBigIntegerRingSum() {
         val res = KBigIntegerRing {
             KBigInteger(1_000L) * KBigInteger(1_000L)
         }
@@ -461,7 +506,7 @@ class KBigIntegerRingTest {
     }
 
     @Test
-    fun test_sum_100_000_000__100_000_000() {
+    fun testKBigIntegerRingSum_100_000_000__100_000_000() {
         KBigIntegerRing {
             val sum = +"100_000_000" + +"100_000_000"
             assertEquals(sum, KBigInteger("200_000_000"))
@@ -473,6 +518,24 @@ class KBigIntegerRingTest {
         KBigIntegerRing {
             val prod = +"0x3000_0000_0000" * +"0x4000_0000_0000_0000_0000"
             assertEquals(prod, KBigInteger("0xc00_0000_0000_0000_0000_0000_0000_0000"))
+        }
+    }
+
+    @Test
+    fun test_div_big_1() {
+        KBigIntegerRing {
+            val res = +"1_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000" /
+                    +"555_000_444_000_333_000_222_000_111_000_999_001"
+            assertEquals(res, +"1801800360360432432518919022699")
+        }
+    }
+
+    @Test
+    fun test_rem_big_1() {
+        KBigIntegerRing {
+            val res = +"1_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000" %
+                    +"555_000_444_000_333_000_222_000_111_000_999_001"
+            assertEquals(res, +"324121220440768000291647788404676301")
         }
     }
 

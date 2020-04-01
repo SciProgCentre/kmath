@@ -1,6 +1,8 @@
 package scientifik.kmath.operations
 
+import kotlin.math.log2
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sign
 
 /*
@@ -27,7 +29,6 @@ object KBigIntegerRing: Ring<KBigInteger> {
     operator fun String.unaryPlus(): KBigInteger = KBigInteger(this)!!
 
     operator fun String.unaryMinus(): KBigInteger = -KBigInteger(this)!!
-
 }
 
 
@@ -161,7 +162,7 @@ class KBigInteger(sign: Int = 0, magnitude: Magnitude = Magnitude(0)):
             return result
         }
 
-        internal fun divideMagnitudeByUInt(mag: Magnitude, x: UInt): Magnitude {
+        private fun divideMagnitudeByUInt(mag: Magnitude, x: UInt): Magnitude {
             val resultLength: Int = mag.size
             val result = Magnitude(resultLength)
             var carry: ULong = 0UL
@@ -174,39 +175,6 @@ class KBigInteger(sign: Int = 0, magnitude: Magnitude = Magnitude(0)):
             return result
         }
 
-        internal fun divideMagnitudes(mag1_: Magnitude, mag2: Magnitude): Magnitude {
-            val mag1 = ULongArray(mag1_.size) { mag1_[it].toULong() }
-
-            val resultLength: Int = mag1.size - mag2.size + 1
-            val result = LongArray(resultLength)
-
-            for (i in mag1.size - 1 downTo mag2.size - 1) {
-                val div: ULong = mag1[i] / mag2[mag2.size - 1]
-                result[i - mag2.size + 1] = div.toLong()
-                for (j in mag2.indices) {
-                    mag1[i - j] -= mag2[mag2.size - 1 - j] * div
-                }
-                if (i > 0) {
-                    mag1[i - 1] += (mag1[i] shl BASE_SIZE)
-                }
-            }
-
-            val normalizedResult = Magnitude(resultLength)
-            var carry = 0L
-
-            for (i in result.indices) {
-                result[i] += carry
-                if (result[i] < 0L) {
-                    normalizedResult[i] = (result[i] + (BASE + 1UL).toLong()).toUInt()
-                    carry = -1
-                } else {
-                    normalizedResult[i] = result[i].toUInt()
-                    carry = 0
-                }
-            }
-
-            return normalizedResult
-        }
     }
 
     override fun compareTo(other: KBigInteger): Int {
@@ -287,12 +255,100 @@ class KBigInteger(sign: Int = 0, magnitude: Magnitude = Magnitude(0)):
         return KBigInteger(this.sign * other.sign, divideMagnitudeByUInt(this.magnitude, kotlin.math.abs(other).toUInt()))
     }
 
-    operator fun div(other: KBigInteger): KBigInteger {
-        return when {
-            this < other -> ZERO
-            this == other -> ONE
-            else -> KBigInteger(this.sign * other.sign, divideMagnitudes(this.magnitude, other.magnitude))
+    private fun division(other: KBigInteger): Pair<KBigInteger, KBigInteger> {
+        // Long division algorithm:
+        //     https://en.wikipedia.org/wiki/Division_algorithm#Integer_division_(unsigned)_with_remainder
+        // TODO: Implement more effective algorithm
+        var q: KBigInteger = ZERO
+        var r: KBigInteger = ZERO
+
+        val bitSize = (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.last().toFloat() + 1)).toInt()
+        for (i in bitSize downTo 0) {
+            r = r shl 1
+            r = r or ((abs(this) shr i) and ONE)
+            if (r >= abs(other)) {
+                r -= abs(other)
+                q += (ONE shl i)
+            }
         }
+
+        return Pair(KBigInteger(this.sign * other.sign, q.magnitude), r)
+    }
+
+    operator fun div(other: KBigInteger): KBigInteger {
+        return this.division(other).first
+    }
+
+    infix fun shl(i: Int): KBigInteger {
+        if (this == ZERO) return ZERO
+        if (i == 0) return this
+
+        val fullShifts = i / BASE_SIZE + 1
+        val relShift = i % BASE_SIZE
+        val shiftLeft = {x: UInt -> if (relShift >= 32) 0U else x shl relShift}
+        val shiftRight = {x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shr (BASE_SIZE - relShift)}
+
+        val newMagnitude: Magnitude = Magnitude(this.magnitude.size + fullShifts)
+
+        for (j in this.magnitude.indices) {
+            newMagnitude[j + fullShifts - 1] = shiftLeft(this.magnitude[j])
+            if (j != 0) {
+                newMagnitude[j + fullShifts - 1] = newMagnitude[j + fullShifts - 1] or shiftRight(this.magnitude[j - 1])
+            }
+        }
+
+        newMagnitude[this.magnitude.size + fullShifts - 1] = shiftRight(this.magnitude.last())
+
+        return KBigInteger(this.sign, newMagnitude)
+    }
+
+    infix fun shr(i: Int): KBigInteger {
+        if (this == ZERO) return ZERO
+        if (i == 0) return this
+
+        val fullShifts = i / BASE_SIZE
+        val relShift = i % BASE_SIZE
+        val shiftRight = {x: UInt -> if (relShift >= 32) 0U else x shr relShift}
+        val shiftLeft = {x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shl (BASE_SIZE - relShift)}
+        if (this.magnitude.size - fullShifts <= 0) {
+            return ZERO
+        }
+        val newMagnitude: Magnitude = Magnitude(this.magnitude.size - fullShifts)
+
+        for (j in fullShifts until this.magnitude.size) {
+            newMagnitude[j - fullShifts] = shiftRight(this.magnitude[j])
+            if (j != this.magnitude.size - 1) {
+                newMagnitude[j - fullShifts] = newMagnitude[j - fullShifts] or shiftLeft(this.magnitude[j + 1])
+            }
+        }
+
+        return KBigInteger(this.sign, newMagnitude)
+    }
+
+    infix fun or(other: KBigInteger): KBigInteger {
+        if (this == ZERO) return other;
+        if (other == ZERO) return this;
+        val resSize = max(this.magnitude.size, other.magnitude.size)
+        val newMagnitude: Magnitude = Magnitude(resSize)
+        for (i in 0 until resSize) {
+            if (i < this.magnitude.size) {
+                newMagnitude[i] = newMagnitude[i] or this.magnitude[i]
+            }
+            if (i < other.magnitude.size) {
+                newMagnitude[i] = newMagnitude[i] or other.magnitude[i]
+            }
+        }
+        return KBigInteger(1, newMagnitude)
+    }
+
+    infix fun and(other: KBigInteger): KBigInteger {
+        if ((this == ZERO) or (other == ZERO)) return ZERO;
+        val resSize = min(this.magnitude.size, other.magnitude.size)
+        val newMagnitude: Magnitude = Magnitude(resSize)
+        for (i in 0 until resSize) {
+            newMagnitude[i] = this.magnitude[i] and other.magnitude[i]
+        }
+        return KBigInteger(1, newMagnitude)
     }
 
     operator fun rem(other: Int): Int {
