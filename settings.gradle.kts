@@ -1,10 +1,10 @@
 pluginManagement {
 
     plugins {
-        id("scientifik.mpp") version "0.3.1"
-        id("scientifik.jvm") version "0.3.1"
-        id("scientifik.atomic") version "0.3.1"
-        id("scientifik.publish") version "0.3.1"
+        id("scientifik.mpp") version "0.4.1"
+        id("scientifik.jvm") version "0.4.1"
+        id("scientifik.atomic") version "0.4.1"
+        id("scientifik.publish") version "0.4.1"
     }
 
     repositories {
@@ -13,6 +13,7 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/mipt-npm/scientifik")
+        maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
