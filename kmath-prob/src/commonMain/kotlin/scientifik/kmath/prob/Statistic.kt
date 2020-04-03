@@ -11,6 +11,7 @@ import scientifik.kmath.coroutines.mapParallel
 import scientifik.kmath.operations.*
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.asIterable
+import scientifik.kmath.structures.asSequence
 
 /**
  * A function, that transforms a buffer of random quantities to some resulting value
@@ -83,9 +84,9 @@ class Mean<T>(val space: Space<T>) : ComposableStatistic<T, Pair<T, Int>, T> {
 /**
  * Non-composable median
  */
-class Median<T>(comparator: Comparator<T>) : Statistic<T, T> {
+class Median<T>(private val comparator: Comparator<T>) : Statistic<T, T> {
     override suspend fun invoke(data: Buffer<T>): T {
-        return data.asIterable().toList()[data.size / 2] //TODO check if this is correct
+        return data.asSequence().sortedWith(comparator).toList()[data.size / 2] //TODO check if this is correct
     }
 
     companion object {
