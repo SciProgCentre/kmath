@@ -485,13 +485,13 @@ class KBigIntegerConversionsTest {
 
     @Test
     fun testFromString_0x17ead2ffffd11223344() {
-        val x = KBigInteger("0x17ead2ffffd11223344")!!
+        val x = "0x17ead2ffffd11223344".toKBigInteger()
         assertEquals( "0x17ead2ffffd11223344", x.toString())
     }
 
     @Test
     fun testFromString_7059135710711894913860() {
-        val x = KBigInteger("-7059135710711894913860")
+        val x = "-7059135710711894913860".toKBigInteger()
         assertEquals("-0x17ead2ffffd11223344", x.toString())
     }
 }
@@ -509,7 +509,7 @@ class KBigIntegerRingTest {
     fun testKBigIntegerRingSum_100_000_000__100_000_000() {
         KBigIntegerRing {
             val sum = +"100_000_000" + +"100_000_000"
-            assertEquals(sum, KBigInteger("200_000_000"))
+            assertEquals(sum, "200_000_000".toKBigInteger())
         }
     }
 
@@ -517,7 +517,7 @@ class KBigIntegerRingTest {
     fun test_mul_3__4() {
         KBigIntegerRing {
             val prod = +"0x3000_0000_0000" * +"0x4000_0000_0000_0000_0000"
-            assertEquals(prod, KBigInteger("0xc00_0000_0000_0000_0000_0000_0000_0000"))
+            assertEquals(prod, "0xc00_0000_0000_0000_0000_0000_0000_0000".toKBigInteger())
         }
     }
 
