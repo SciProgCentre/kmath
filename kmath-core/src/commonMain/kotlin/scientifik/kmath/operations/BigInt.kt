@@ -1,49 +1,45 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.BigInt.Companion.BASE
+import scientifik.kmath.operations.BigInt.Companion.BASE_SIZE
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
-/*
- * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
- * Initial version from https://github.com/robdrynkin/kotlin-big-integer
- */
 
-@kotlin.ExperimentalUnsignedTypes
 typealias Magnitude = UIntArray
-
-@kotlin.ExperimentalUnsignedTypes
 typealias TBase = ULong
 
-object KBigIntegerRing: Ring<KBigInteger> {
-    override val zero: KBigInteger = KBigInteger.ZERO
-    override val one: KBigInteger = KBigInteger.ONE
+/**
+ * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
+ *
+ * @author Robert Drynkin (https://github.com/robdrynkin) and Peter Klimai (https://github.com/pklimai)
+ */
+object BigIntField : Field<BigInt> {
+    override val zero: BigInt = BigInt.ZERO
+    override val one: BigInt = BigInt.ONE
 
-    override fun add(a: KBigInteger, b: KBigInteger): KBigInteger = a.plus(b)
+    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
 
-    override fun multiply(a: KBigInteger, k: Number): KBigInteger = a.times(k.toLong())
+    override fun multiply(a: BigInt, k: Number): BigInt = a.times(k.toLong())
 
-    override fun multiply(a: KBigInteger, b: KBigInteger): KBigInteger = a.times(b)
+    override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
 
-    operator fun String.unaryPlus(): KBigInteger = this.toKBigInteger()!!
+    operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
 
-    operator fun String.unaryMinus(): KBigInteger = -this.toKBigInteger()!!
+    operator fun String.unaryMinus(): BigInt =
+        -(this.parseBigInteger() ?: error("Can't parse $this as big integer"))
+
+    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
 }
 
-@kotlin.ExperimentalUnsignedTypes
-class KBigInteger internal constructor(
-        private val sign: Byte = 0,
-        private val magnitude: Magnitude = Magnitude(0)
-): Comparable<KBigInteger> {
+class BigInt internal constructor(
+    private val sign: Byte,
+    private val magnitude: Magnitude
+) : Comparable<BigInt> {
 
-    constructor(x: Int) : this(x.sign.toByte(), uintArrayOf(kotlin.math.abs(x).toUInt()))
-
-    constructor(x: Long) : this(x.sign.toByte(), stripLeadingZeros(uintArrayOf(
-            (kotlin.math.abs(x).toULong() and BASE).toUInt(),
-            ((kotlin.math.abs(x).toULong() shr BASE_SIZE) and BASE).toUInt())))
-
-    override fun compareTo(other: KBigInteger): Int {
+    override fun compareTo(other: BigInt): Int {
         return when {
             (this.sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
             this.sign < other.sign -> -1
@@ -53,85 +49,87 @@ class KBigInteger internal constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is KBigInteger) {
+        if (other is BigInt) {
             return this.compareTo(other) == 0
-        }
-        else error("Can't compare KBigInteger to a different type")
+        } else error("Can't compare KBigInteger to a different type")
     }
 
     override fun hashCode(): Int {
         return magnitude.hashCode() + this.sign
     }
 
-    fun abs(): KBigInteger = if (sign == 0.toByte()) this else KBigInteger(1, magnitude)
+    fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 
-    operator fun unaryMinus(): KBigInteger {
-        return if (this.sign == 0.toByte()) this else KBigInteger((-this.sign).toByte(), this.magnitude)
+    operator fun unaryMinus(): BigInt {
+        return if (this.sign == 0.toByte()) this else BigInt((-this.sign).toByte(), this.magnitude)
     }
 
-    operator fun plus(b: KBigInteger): KBigInteger {
+    operator fun plus(b: BigInt): BigInt {
         return when {
             b.sign == 0.toByte() -> this
             this.sign == 0.toByte() -> b
             this == -b -> ZERO
-            this.sign == b.sign -> KBigInteger(this.sign, addMagnitudes(this.magnitude, b.magnitude))
+            this.sign == b.sign -> BigInt(this.sign, addMagnitudes(this.magnitude, b.magnitude))
             else -> {
                 val comp: Int = compareMagnitudes(this.magnitude, b.magnitude)
 
                 if (comp == 1) {
-                    KBigInteger(this.sign, subtractMagnitudes(this.magnitude, b.magnitude))
+                    BigInt(this.sign, subtractMagnitudes(this.magnitude, b.magnitude))
                 } else {
-                    KBigInteger((-this.sign).toByte(), subtractMagnitudes(b.magnitude, this.magnitude))
+                    BigInt((-this.sign).toByte(), subtractMagnitudes(b.magnitude, this.magnitude))
                 }
             }
         }
     }
 
-    operator fun minus(b: KBigInteger): KBigInteger {
+    operator fun minus(b: BigInt): BigInt {
         return this + (-b)
     }
 
-    operator fun times(b: KBigInteger): KBigInteger {
+    operator fun times(b: BigInt): BigInt {
         return when {
             this.sign == 0.toByte() -> ZERO
             b.sign == 0.toByte() -> ZERO
 //          TODO: Karatsuba
-            else -> KBigInteger((this.sign * b.sign).toByte(), multiplyMagnitudes(this.magnitude, b.magnitude))
+            else -> BigInt((this.sign * b.sign).toByte(), multiplyMagnitudes(this.magnitude, b.magnitude))
         }
     }
 
-    operator fun times(other: UInt): KBigInteger {
+    operator fun times(other: UInt): BigInt {
         return when {
             this.sign == 0.toByte() -> ZERO
             other == 0U -> ZERO
-            else -> KBigInteger(this.sign, multiplyMagnitudeByUInt(this.magnitude, other))
+            else -> BigInt(this.sign, multiplyMagnitudeByUInt(this.magnitude, other))
         }
     }
 
-    operator fun times(other: Int): KBigInteger {
+    operator fun times(other: Int): BigInt {
         return if (other > 0)
             this * kotlin.math.abs(other).toUInt()
         else
             -this * kotlin.math.abs(other).toUInt()
     }
 
-    operator fun div(other: UInt): KBigInteger {
-        return KBigInteger(this.sign, divideMagnitudeByUInt(this.magnitude, other))
+    operator fun div(other: UInt): BigInt {
+        return BigInt(this.sign, divideMagnitudeByUInt(this.magnitude, other))
     }
 
-    operator fun div(other: Int): KBigInteger {
-        return KBigInteger((this.sign * other.sign).toByte(),
-                divideMagnitudeByUInt(this.magnitude, kotlin.math.abs(other).toUInt()))
+    operator fun div(other: Int): BigInt {
+        return BigInt(
+            (this.sign * other.sign).toByte(),
+            divideMagnitudeByUInt(this.magnitude, kotlin.math.abs(other).toUInt())
+        )
     }
 
-    private fun division(other: KBigInteger): Pair<KBigInteger, KBigInteger> {
+    private fun division(other: BigInt): Pair<BigInt, BigInt> {
         // Long division algorithm:
         //     https://en.wikipedia.org/wiki/Division_algorithm#Integer_division_(unsigned)_with_remainder
         // TODO: Implement more effective algorithm
-        var q: KBigInteger = ZERO
-        var r: KBigInteger = ZERO
+        var q: BigInt = ZERO
+        var r: BigInt = ZERO
 
-        val bitSize = (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.last().toFloat() + 1)).toInt()
+        val bitSize =
+            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: 0f + 1)).toInt()
         for (i in bitSize downTo 0) {
             r = r shl 1
             r = r or ((abs(this) shr i) and ONE)
@@ -141,21 +139,21 @@ class KBigInteger internal constructor(
             }
         }
 
-        return Pair(KBigInteger((this.sign * other.sign).toByte(), q.magnitude), r)
+        return Pair(BigInt((this.sign * other.sign).toByte(), q.magnitude), r)
     }
 
-    operator fun div(other: KBigInteger): KBigInteger {
+    operator fun div(other: BigInt): BigInt {
         return this.division(other).first
     }
 
-    infix fun shl(i: Int): KBigInteger {
+    infix fun shl(i: Int): BigInt {
         if (this == ZERO) return ZERO
         if (i == 0) return this
 
         val fullShifts = i / BASE_SIZE + 1
         val relShift = i % BASE_SIZE
-        val shiftLeft = {x: UInt -> if (relShift >= 32) 0U else x shl relShift}
-        val shiftRight = {x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shr (BASE_SIZE - relShift)}
+        val shiftLeft = { x: UInt -> if (relShift >= 32) 0U else x shl relShift }
+        val shiftRight = { x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shr (BASE_SIZE - relShift) }
 
         val newMagnitude: Magnitude = Magnitude(this.magnitude.size + fullShifts)
 
@@ -168,17 +166,17 @@ class KBigInteger internal constructor(
 
         newMagnitude[this.magnitude.size + fullShifts - 1] = shiftRight(this.magnitude.last())
 
-        return KBigInteger(this.sign, stripLeadingZeros(newMagnitude))
+        return BigInt(this.sign, stripLeadingZeros(newMagnitude))
     }
 
-    infix fun shr(i: Int): KBigInteger {
+    infix fun shr(i: Int): BigInt {
         if (this == ZERO) return ZERO
         if (i == 0) return this
 
         val fullShifts = i / BASE_SIZE
         val relShift = i % BASE_SIZE
-        val shiftRight = {x: UInt -> if (relShift >= 32) 0U else x shr relShift}
-        val shiftLeft = {x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shl (BASE_SIZE - relShift)}
+        val shiftRight = { x: UInt -> if (relShift >= 32) 0U else x shr relShift }
+        val shiftLeft = { x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shl (BASE_SIZE - relShift) }
         if (this.magnitude.size - fullShifts <= 0) {
             return ZERO
         }
@@ -191,10 +189,10 @@ class KBigInteger internal constructor(
             }
         }
 
-        return KBigInteger(this.sign, stripLeadingZeros(newMagnitude))
+        return BigInt(this.sign, stripLeadingZeros(newMagnitude))
     }
 
-    infix fun or(other: KBigInteger): KBigInteger {
+    infix fun or(other: BigInt): BigInt {
         if (this == ZERO) return other;
         if (other == ZERO) return this;
         val resSize = max(this.magnitude.size, other.magnitude.size)
@@ -207,17 +205,17 @@ class KBigInteger internal constructor(
                 newMagnitude[i] = newMagnitude[i] or other.magnitude[i]
             }
         }
-        return KBigInteger(1, stripLeadingZeros(newMagnitude))
+        return BigInt(1, stripLeadingZeros(newMagnitude))
     }
 
-    infix fun and(other: KBigInteger): KBigInteger {
+    infix fun and(other: BigInt): BigInt {
         if ((this == ZERO) or (other == ZERO)) return ZERO;
         val resSize = min(this.magnitude.size, other.magnitude.size)
         val newMagnitude: Magnitude = Magnitude(resSize)
         for (i in 0 until resSize) {
             newMagnitude[i] = this.magnitude[i] and other.magnitude[i]
         }
-        return KBigInteger(1, stripLeadingZeros(newMagnitude))
+        return BigInt(1, stripLeadingZeros(newMagnitude))
     }
 
     operator fun rem(other: Int): Int {
@@ -225,11 +223,11 @@ class KBigInteger internal constructor(
         return if (res == ZERO) 0 else res.sign * res.magnitude[0].toInt()
     }
 
-    operator fun rem(other: KBigInteger): KBigInteger {
+    operator fun rem(other: BigInt): BigInt {
         return this - (this / other) * other
     }
 
-    fun modPow(exponent: KBigInteger, m: KBigInteger): KBigInteger {
+    fun modPow(exponent: BigInt, m: BigInt): BigInt {
         return when {
             exponent == ZERO -> ONE
             exponent % 2 == 1 -> (this * modPow(exponent - ONE, m)) % m
@@ -263,29 +261,15 @@ class KBigInteger internal constructor(
     companion object {
         const val BASE = 0xffffffffUL
         const val BASE_SIZE: Int = 32
-        val ZERO: KBigInteger = KBigInteger()
-        val ONE: KBigInteger = KBigInteger(1)
+        val ZERO: BigInt = BigInt(0, uintArrayOf())
+        val ONE: BigInt = BigInt(1, uintArrayOf(1u))
 
-        private val hexMapping: HashMap<UInt, String> =
-                hashMapOf(
-                        0U to "0",  1U to "1",  2U to "2",  3U to "3",
-                        4U to "4",  5U to "5",  6U to "6",  7U to "7",
-                        8U to "8",  9U to "9",  10U to "a", 11U to "b",
-                        12U to "c", 13U to "d", 14U to "e", 15U to "f"
-                )
-
-        internal fun stripLeadingZeros(mag: Magnitude): Magnitude {
-            if (mag.isEmpty() || mag.last() != 0U) {
-                return mag
-            }
-            var resSize: Int = mag.size - 1
-            while (mag[resSize] == 0U) {
-                if (resSize == 0)
-                    break
-                resSize -= 1
-            }
-            return mag.sliceArray(IntRange(0, resSize))
-        }
+        private val hexMapping: HashMap<UInt, String> = hashMapOf(
+            0U to "0", 1U to "1", 2U to "2", 3U to "3",
+            4U to "4", 5U to "5", 6U to "6", 7U to "7",
+            8U to "8", 9U to "9", 10U to "a", 11U to "b",
+            12U to "c", 13U to "d", 14U to "e", 15U to "f"
+        )
 
         private fun compareMagnitudes(mag1: Magnitude, mag2: Magnitude): Int {
             when {
@@ -329,8 +313,8 @@ class KBigInteger internal constructor(
 
             for (i in 0 until resultLength) {
                 var res: Long =
-                        if (i < mag2.size) mag1[i].toLong() - mag2[i].toLong() - carry
-                        else mag1[i].toLong() - carry
+                    if (i < mag2.size) mag1[i].toLong() - mag2[i].toLong() - carry
+                    else mag1[i].toLong() - carry
 
                 carry = if (res < 0) 1 else 0
                 res += carry * (BASE + 1UL).toLong()
@@ -390,33 +374,76 @@ class KBigInteger internal constructor(
 
 }
 
-@kotlin.ExperimentalUnsignedTypes
-fun abs(x: KBigInteger): KBigInteger = x.abs()
 
-@kotlin.ExperimentalUnsignedTypes
-// Can't put it as constructor in class due to platform declaration clash with KBigInteger(Int)
-fun KBigInteger(x: UInt): KBigInteger
-        = KBigInteger(1, uintArrayOf(x))
+private fun stripLeadingZeros(mag: Magnitude): Magnitude {
+    if (mag.isEmpty() || mag.last() != 0U) {
+        return mag
+    }
+    var resSize: Int = mag.size - 1
+    while (mag[resSize] == 0U) {
+        if (resSize == 0)
+            break
+        resSize -= 1
+    }
+    return mag.sliceArray(IntRange(0, resSize))
+}
 
-@kotlin.ExperimentalUnsignedTypes
-// Can't put it as constructor in class due to platform declaration clash with KBigInteger(Long)
-fun KBigInteger(x: ULong): KBigInteger
-        = KBigInteger(1,
-            KBigInteger.stripLeadingZeros(uintArrayOf(
-                    (x and KBigInteger.BASE).toUInt(),
-                    ((x shr KBigInteger.BASE_SIZE) and KBigInteger.BASE).toUInt())
-            )
+fun abs(x: BigInt): BigInt = x.abs()
+
+/**
+ * Convert this [Int] to [BigInt]
+ */
+fun Int.toBigInt() = BigInt(sign.toByte(), uintArrayOf(kotlin.math.abs(this).toUInt()))
+
+/**
+ * Convert this [Long] to [BigInt]
+ */
+fun Long.toBigInt() = BigInt(
+    sign.toByte(), stripLeadingZeros(
+        uintArrayOf(
+            (kotlin.math.abs(this).toULong() and BASE).toUInt(),
+            ((kotlin.math.abs(this).toULong() shr BASE_SIZE) and BASE).toUInt()
         )
-
-val hexChToInt = hashMapOf(
-        '0' to 0,  '1' to 1,  '2' to 2,  '3' to 3,
-        '4' to 4,  '5' to 5,  '6' to 6,  '7' to 7,
-        '8' to 8,  '9' to 9,  'A' to 10, 'B' to 11,
-        'C' to 12, 'D' to 13, 'E' to 14, 'F' to 15
+    )
 )
 
-// Returns None if a valid number can not be read from a string
-fun String.toKBigInteger(): KBigInteger? {
+/**
+ * Convert UInt to [BigInt]
+ */
+fun UInt.toBigInt() = BigInt(1, uintArrayOf(this))
+
+/**
+ * Convert ULong to [BigInt]
+ */
+fun ULong.toBigInt() = BigInt(
+    1,
+    stripLeadingZeros(
+        uintArrayOf(
+            (this and BigInt.BASE).toUInt(),
+            ((this shr BigInt.BASE_SIZE) and BigInt.BASE).toUInt()
+        )
+    )
+)
+
+/**
+ * Create a [BigInt] with this array of magnitudes with protective copy
+ */
+fun UIntArray.toBigInt(sign: Byte): BigInt {
+    if (sign == 0.toByte() && isNotEmpty()) error("")
+    return BigInt(sign, this.copyOf())
+}
+
+val hexChToInt = hashMapOf(
+    '0' to 0, '1' to 1, '2' to 2, '3' to 3,
+    '4' to 4, '5' to 5, '6' to 6, '7' to 7,
+    '8' to 8, '9' to 9, 'A' to 10, 'B' to 11,
+    'C' to 12, 'D' to 13, 'E' to 14, 'F' to 15
+)
+
+/**
+ * Returns null if a valid number can not be read from a string
+ */
+fun String.parseBigInteger(): BigInt? {
     val sign: Int
     val sPositive: String
     when {
@@ -433,27 +460,25 @@ fun String.toKBigInteger(): KBigInteger? {
             sign = +1
         }
     }
-    var res = KBigInteger.ZERO
-    var digitValue = KBigInteger.ONE
+    var res = BigInt.ZERO
+    var digitValue = BigInt.ONE
     val sPositiveUpper = sPositive.toUpperCase()
     if (sPositiveUpper.startsWith("0X")) {  // hex representation
         val sHex = sPositiveUpper.substring(2)
         for (ch in sHex.reversed()) {
             if (ch == '_') continue
-            res +=  digitValue * (hexChToInt[ch] ?: return null)
-            digitValue *= KBigInteger(16)
+            res += digitValue * (hexChToInt[ch] ?: return null)
+            digitValue *= 16.toBigInt()
         }
-    }
-    else { // decimal representation
-        val sDecimal = sPositiveUpper
-        for (ch in sDecimal.reversed()) {
+    } else { // decimal representation
+        for (ch in sPositiveUpper.reversed()) {
             if (ch == '_') continue
             if (ch !in '0'..'9') {
                 return null
             }
-            res +=  digitValue * (ch.toInt() - '0'.toInt())
-            digitValue *= KBigInteger(10)
+            res += digitValue * (ch.toInt() - '0'.toInt())
+            digitValue *= 10.toBigInt()
         }
     }
-    return  res * sign
+    return res * sign
 }
