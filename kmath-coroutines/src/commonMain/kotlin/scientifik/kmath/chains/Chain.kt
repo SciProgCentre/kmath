@@ -16,7 +16,9 @@
 
 package scientifik.kmath.chains
 
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -25,7 +27,7 @@ import kotlinx.coroutines.sync.withLock
  * A not-necessary-Markov chain of some type
  * @param R - the chain element type
  */
-interface Chain<out R> {
+interface Chain<out R>: Flow<R> {
     /**
      * Generate next value, changing state if needed
      */
@@ -36,14 +38,15 @@ interface Chain<out R> {
      */
     fun fork(): Chain<R>
 
+    @InternalCoroutinesApi
+    override suspend fun collect(collector: FlowCollector<R>) {
+        kotlinx.coroutines.flow.flow { while (true) emit(next()) }.collect(collector)
+    }
+
     companion object
 
 }
 
-/**
- * Chain as a coroutine flow. The flow emit affects chain state and vice versa
- */
-fun <R> Chain<R>.flow(): Flow<R> = kotlinx.coroutines.flow.flow { while (true) emit(next()) }
 
 fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()

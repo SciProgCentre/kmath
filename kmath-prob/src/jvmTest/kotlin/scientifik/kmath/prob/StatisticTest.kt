@@ -3,7 +3,7 @@ package scientifik.kmath.prob
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import scientifik.kmath.chains.flow
+
 import scientifik.kmath.streaming.chunked
 import kotlin.test.Test
 
@@ -13,7 +13,7 @@ class StatisticTest {
     //Create a stateless chain from generator.
     val data = generator.chain { nextDouble() }
     //Convert a chaint to Flow and break it into chunks.
-    val chunked = data.flow().chunked(1000)
+    val chunked = data.chunked(1000)
 
     @Test
     fun testParallelMean() {
