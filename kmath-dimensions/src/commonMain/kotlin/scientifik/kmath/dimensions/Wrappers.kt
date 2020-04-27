@@ -29,7 +29,7 @@ interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
         /**
          * The same as [coerce] but without dimension checks. Use with caution
          */
-        inline fun <T, reified R : Dimension, reified C : Dimension> coerceUnsafe(structure: Structure2D<T>): DMatrix<T, R, C> {
+        fun <T, R : Dimension, C : Dimension> coerceUnsafe(structure: Structure2D<T>): DMatrix<T, R, C> {
             return DMatrixWrapper(structure)
         }
     }
@@ -57,7 +57,7 @@ interface DPoint<T, D : Dimension> : Point<T> {
             return DPointWrapper(point)
         }
 
-        inline fun <T, reified D : Dimension> coerceUnsafe(point: Point<T>): DPoint<T, D> {
+        fun <T, D : Dimension> coerceUnsafe(point: Point<T>): DPoint<T, D> {
             return DPointWrapper(point)
         }
     }
@@ -81,8 +81,15 @@ inline class DPointWrapper<T, D : Dimension>(val point: Point<T>) :
  */
 inline class DMatrixContext<T : Any, Ri : Ring<T>>(val context: GenericMatrixContext<T, Ri>) {
 
-    inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, C, R> =
-        DMatrix.coerceUnsafe(this)
+    inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
+        if (rowNum != Dimension.dim<R>().toInt()) {
+            error("Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum")
+        }
+        if (colNum != Dimension.dim<C>().toInt()) {
+            error("Column number mismatch: expected ${Dimension.dim<C>()} but found $colNum")
+        }
+        return DMatrix.coerceUnsafe(this)
+    }
 
     /**
      * Produce a matrix with this context and given dimensions
@@ -90,7 +97,7 @@ inline class DMatrixContext<T : Any, Ri : Ring<T>>(val context: GenericMatrixCon
     inline fun <reified R : Dimension, reified C : Dimension> produce(noinline initializer: (i: Int, j: Int) -> T): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
-        return context.produce(rows.toInt(), cols.toInt(), initializer).coerce()
+        return context.produce(rows.toInt(), cols.toInt(), initializer).coerce<R,C>()
     }
 
     inline fun <reified D : Dimension> point(noinline initializer: (Int) -> T): DPoint<T, D> {

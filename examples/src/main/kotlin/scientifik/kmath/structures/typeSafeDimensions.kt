@@ -14,6 +14,7 @@ fun DMatrixContext<Double, RealField>.simple() {
     m1.transpose() + m2
 }
 
+
 object D5 : Dimension {
     override val dim: UInt = 5u
 }
