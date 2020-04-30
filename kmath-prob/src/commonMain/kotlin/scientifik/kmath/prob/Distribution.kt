@@ -58,9 +58,13 @@ fun <T : Any> Sampler<T>.sampleBuffer(
     //creating temporary storage once
     val tmp = ArrayList<T>(size)
     return sample(generator).collect { chain ->
-        for (i in tmp.indices) {
-            tmp[i] = chain.next()
+        //clear list from previous run
+        tmp.clear()
+        //Fill list
+        repeat(size){
+            tmp.add(chain.next())
         }
+        //return new buffer with elements from tmp
         bufferFactory(size) { tmp[it] }
     }
 }

@@ -12,4 +12,3 @@ class RandomChain<out R>(val generator: RandomGenerator, private val gen: suspen
 }
 
 fun <R> RandomGenerator.chain(gen: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, gen)
-fun <R> RandomGenerator.flow(gen: suspend RandomGenerator.() -> R) = chain(gen).fork()
