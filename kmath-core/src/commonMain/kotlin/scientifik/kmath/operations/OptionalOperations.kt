@@ -29,7 +29,7 @@ fun <T : MathElement<out TrigonometricOperations<T>>> ctg(arg: T): T = arg.conte
 /**
  * A context extension to include power operations like square roots, etc
  */
-interface PowerOperations<T> {
+interface PowerOperations<T> : Algebra<T> {
     fun power(arg: T, pow: Number): T
     fun sqrt(arg: T) = power(arg, 0.5)
 
@@ -42,7 +42,7 @@ fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
-interface ExponentialOperations<T> {
+interface ExponentialOperations<T>: Algebra<T> {
     fun exp(arg: T): T
     fun ln(arg: T): T
 }

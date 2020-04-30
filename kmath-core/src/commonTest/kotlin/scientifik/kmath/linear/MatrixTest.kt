@@ -1,46 +1,18 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.NDStructure
+import scientifik.kmath.structures.as2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MatrixTest {
 
     @Test
-    fun testSum() {
-        val vector1 = RealVector(5) { it.toDouble() }
-        val vector2 = RealVector(5) { 5 - it.toDouble() }
-        val sum = vector1 + vector2
-        assertEquals(5.0, sum[2])
-    }
-
-    @Test
-    fun testVectorToMatrix() {
-        val vector = RealVector(5) { it.toDouble() }
-        val matrix = vector.asMatrix()
-        assertEquals(4.0, matrix[4, 0])
-    }
-
-    @Test
     fun testTranspose() {
         val matrix = MatrixContext.real.one(3, 3)
         val transposed = matrix.transpose()
         assertEquals(matrix, transposed)
-    }
-
-
-    @Test
-    fun testDot() {
-        val vector1 = RealVector(5) { it.toDouble() }
-        val vector2 = RealVector(5) { 5 - it.toDouble() }
-
-        val matrix1 = vector1.asMatrix()
-        val matrix2 = vector2.asMatrix().transpose()
-        val product = MatrixContext.real.run { matrix1 dot matrix2 }
-
-
-        assertEquals(5.0, product[1, 0])
-        assertEquals(6.0, product[2, 2])
     }
 
     @Test
@@ -73,5 +45,21 @@ class MatrixTest {
         }
 
         val toTenthPower = transitionMatrix pow 10
+    }
+
+    @Test
+    fun test2DDot() {
+        val firstMatrix = NDStructure.auto(2,3){ (i, j) -> (i + j).toDouble() }.as2D()
+        val secondMatrix = NDStructure.auto(3,2){ (i, j) -> (i + j).toDouble() }.as2D()
+        MatrixContext.real.run {
+//            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
+//            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }
+            val result = firstMatrix dot secondMatrix
+            assertEquals(2, result.rowNum)
+            assertEquals(2, result.colNum)
+            assertEquals(8.0, result[0,1])
+            assertEquals(8.0, result[1,0])
+            assertEquals(14.0, result[1,1])
+        }
     }
 }

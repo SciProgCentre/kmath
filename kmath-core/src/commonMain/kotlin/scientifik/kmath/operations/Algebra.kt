@@ -6,14 +6,14 @@ annotation class KMathContext
 /**
  * Marker interface for any algebra
  */
-interface Algebra
+interface Algebra<T>
 
-inline operator fun <T : Algebra, R> T.invoke(block: T.() -> R): R = run(block)
+inline operator fun <T : Algebra<*>, R> T.invoke(block: T.() -> R): R = run(block)
 
 /**
  * Space-like operations without neutral element
  */
-interface SpaceOperations<T> : Algebra {
+interface SpaceOperations<T> : Algebra<T> {
     /**
      * Addition operation for two context elements
      */

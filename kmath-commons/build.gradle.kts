@@ -8,7 +8,6 @@ dependencies {
     api(project(":kmath-core"))
     api(project(":kmath-coroutines"))
     api(project(":kmath-prob"))
+    api(project(":kmath-functions"))
     api("org.apache.commons:commons-math3:3.6.1")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }

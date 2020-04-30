@@ -1,6 +1,10 @@
 package scientifik.memory
 
 import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 
 
 /**
@@ -11,7 +15,7 @@ actual fun Memory.Companion.allocate(length: Int): Memory {
     return ByteBufferMemory(buffer)
 }
 
-class ByteBufferMemory(
+private class ByteBufferMemory(
     val buffer: ByteBuffer,
     val startOffset: Int = 0,
     override val size: Int = buffer.limit()
@@ -90,4 +94,13 @@ class ByteBufferMemory(
     }
 
     override fun writer(): MemoryWriter = writer
+}
+
+/**
+ * Use direct memory-mapped buffer from file to read something and close it afterwards.
+ */
+fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {
+    return FileChannel.open(this, StandardOpenOption.READ).use {
+        ByteBufferMemory(it.map(FileChannel.MapMode.READ_ONLY, position, size)).block()
+    }
 }

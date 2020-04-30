@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.3.60"
-    id("kotlinx.benchmark") version "0.2.0-dev-5"
+    kotlin("plugin.allopen") version "1.3.71"
+    id("kotlinx.benchmark") version "0.2.0-dev-7"
 }
 
 configure<AllOpenExtension> {
@@ -13,10 +13,9 @@ configure<AllOpenExtension> {
 }
 
 repositories {
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
     maven("http://dl.bintray.com/kyonifer/maven")
-    maven ("https://dl.bintray.com/orangy/maven")
-
+    maven("https://dl.bintray.com/mipt-npm/scientifik")
+    maven("https://dl.bintray.com/mipt-npm/dev")
     mavenCentral()
 }
 
@@ -29,12 +28,11 @@ dependencies {
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-koma"))
+    implementation(project(":kmath-viktor"))
+    implementation(project(":kmath-dimensions"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:${Scientifik.ioVersion}")
-
-    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-2")
-
-
+    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
+    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-7")
     "benchmarksCompile"(sourceSets.main.get().compileClasspath)
 }
 

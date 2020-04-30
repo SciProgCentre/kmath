@@ -2,8 +2,8 @@ package scientifik.kmath.streaming
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import org.junit.Test
 import scientifik.kmath.structures.asSequence
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RingBufferTest {

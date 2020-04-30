@@ -2,7 +2,6 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.*
 
-
 interface ExtendedNDField<T : Any, F, N : NDStructure<T>> :
     NDField<T, F, N>,
     TrigonometricOperations<N>,

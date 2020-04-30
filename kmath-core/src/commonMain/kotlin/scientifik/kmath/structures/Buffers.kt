@@ -73,6 +73,8 @@ fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 
 fun <T> Buffer<T>.asIterable(): Iterable<T> = asSequence().asIterable()
 
+val Buffer<*>.indices: IntRange get() = IntRange(0, size - 1)
+
 interface MutableBuffer<T> : Buffer<T> {
     operator fun set(index: Int, value: T)
 

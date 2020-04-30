@@ -3,11 +3,12 @@ package scientifik.kmath.streaming
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import org.junit.Test
+import org.junit.jupiter.api.Timeout
 import scientifik.kmath.coroutines.async
 import scientifik.kmath.coroutines.collect
 import scientifik.kmath.coroutines.mapParallel
 import java.util.concurrent.Executors
+import kotlin.test.Test
 
 
 @ExperimentalCoroutinesApi
@@ -17,7 +18,8 @@ class BufferFlowTest {
 
     val dispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
-    @Test(timeout = 2000)
+    @Test
+    @Timeout(2000)
     fun map() {
         runBlocking {
             (1..20).asFlow().mapParallel( dispatcher) {
@@ -31,7 +33,8 @@ class BufferFlowTest {
         }
     }
 
-    @Test(timeout = 2000)
+    @Test
+    @Timeout(2000)
     fun async() {
         runBlocking {
             (1..20).asFlow().async(dispatcher) {
