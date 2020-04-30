@@ -45,8 +45,7 @@ class RealHistogram(
 
     private val values: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
 
-    //private val weight: NDStructure<DoubleCounter?> = ndStructure(strides){null}
-
+    private val weights: NDStructure<DoubleCounter> = NDStructure.auto(strides) { DoubleCounter() }
 
     override val dimension: Int get() = lower.size
 
@@ -102,21 +101,33 @@ class RealHistogram(
         return MultivariateBin(getDef(index), getValue(index))
     }
 
+//    fun put(point: Point<out Double>){
+//        val index = getIndex(point)
+//        values[index].increment()
+//    }
+
     override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
-        if (weight != 1.0) TODO("Implement weighting")
         val index = getIndex(point)
         values[index].increment()
+        weights[index].add(weight)
     }
 
-    override fun iterator(): Iterator<MultivariateBin<Double>> = values.elements().map { (index, value) ->
+    override fun iterator(): Iterator<MultivariateBin<Double>> = weights.elements().map { (index, value) ->
         MultivariateBin(getDef(index), value.sum())
     }.iterator()
 
     /**
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
-    fun asNDStructure(): NDStructure<Number> {
-        return NDStructure.auto(this.values.shape) { values[it].sum() }
+    fun values(): NDStructure<Number> {
+        return NDStructure.auto(values.shape) { values[it].sum() }
+    }
+
+    /**
+     * Sum of weights
+     */
+    fun weights():NDStructure<Double>{
+        return NDStructure.auto(weights.shape) { weights[it].sum() }
     }
 
     companion object {

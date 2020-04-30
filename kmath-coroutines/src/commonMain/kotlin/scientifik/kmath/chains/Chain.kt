@@ -131,6 +131,21 @@ fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
 }
 
 /**
+ * [block] must be a pure function or at least not use external random variables, otherwise fork could be broken
+ */
+fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain<T> {
+    override suspend fun next(): T {
+        var next: T
+        do {
+            next = this@filter.next()
+        } while (!block(next))
+        return next
+    }
+
+    override fun fork(): Chain<T> = this@filter.fork().filter(block)
+}
+
+/**
  * Map the whole chain
  */
 fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
