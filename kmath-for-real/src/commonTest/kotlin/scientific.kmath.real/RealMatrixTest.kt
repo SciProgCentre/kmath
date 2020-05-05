@@ -126,10 +126,10 @@ class RealMatrixTest {
         assertEquals(matrix1.appendColumn { it[0] }, matrix2)
         assertEquals(matrix1.extractColumn(1), col1)
         assertEquals(matrix1.extractColumns(1..2), cols1to2)
-        assertEquals(matrix1.sumByColumn(), Matrix.build<Double>(4, 1)(3.0, -6.0, 10.0, 4.0))
-        assertEquals(matrix1.minByColumn(), Matrix.build<Double>(4, 1)(-1.0, -6.0, 3.0, -11.0))
-        assertEquals(matrix1.maxByColumn(), Matrix.build<Double>(4, 1)(4.0, 0.0, 7.0, 15.0))
-        assertEquals(matrix1.averageByColumn(), Matrix.build<Double>(4, 1)(1.5, -3.0, 5.0, 2.0))
+        assertEquals(matrix1.sumByColumn(), Matrix.build<Double>(1, 4)(3.0, -6.0, 10.0, 4.0))
+        assertEquals(matrix1.minByColumn(), Matrix.build<Double>(1, 4)(-1.0, -6.0, 3.0, -11.0))
+        assertEquals(matrix1.maxByColumn(), Matrix.build<Double>(1, 4)(4.0, 0.0, 7.0, 15.0))
+        assertEquals(matrix1.averageByColumn(), Matrix.build<Double>(1, 4)(1.5, -3.0, 5.0, 2.0))
     }
 
     @Test
