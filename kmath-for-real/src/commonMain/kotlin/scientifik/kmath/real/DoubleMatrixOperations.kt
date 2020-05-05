@@ -57,7 +57,7 @@ operator fun Double.times(matrix: Matrix<Double>) = MatrixContext.real.produce(m
 }
 
 operator fun Double.plus(matrix: Matrix<Double>) = MatrixContext.real.produce(matrix.rowNum, matrix.colNum) {
-    row, col -> this * matrix[row, col]
+    row, col -> this + matrix[row, col]
 }
 
 operator fun Double.minus(matrix: Matrix<Double>) = MatrixContext.real.produce(matrix.rowNum, matrix.colNum) {
