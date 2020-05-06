@@ -14,7 +14,6 @@ interface Structure2D<T> : NDStructure<T> {
         return get(index[0], index[1])
     }
 
-
     val rows: Buffer<Buffer<T>>
         get() = VirtualBuffer(rowNum) { i ->
             VirtualBuffer(colNum) { j -> get(i, j) }
@@ -57,23 +56,5 @@ fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2) {
 } else {
     error("Can't create 2d-structure from ${shape.size}d-structure")
 }
-
-/**
- * Represent this 2D structure as 1D if it has exactly one column. Throw error otherwise.
- */
-fun <T> Structure2D<T>.as1D() = if (colNum == 1) {
-    object : Structure1D<T> {
-        override fun get(index: Int): T = get(index, 0)
-
-        override val shape: IntArray get() = intArrayOf(rowNum)
-
-        override fun elements(): Sequence<Pair<IntArray, T>> = elements()
-
-        override val size: Int get() = rowNum
-    }
-} else {
-    error("Can't convert matrix with more than one column to vector")
-}
-
 
 typealias Matrix<T> = Structure2D<T>

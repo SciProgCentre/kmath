@@ -57,6 +57,6 @@ benchmark {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = Scientifik.JVM_VERSION
+        jvmTarget = Scientifik.JVM_TARGET.toString()
     }
 }

@@ -14,15 +14,21 @@ interface NDStructure<T> {
 
     fun elements(): Sequence<Pair<IntArray, T>>
 
+    override fun equals(other: Any?): Boolean
+
+    override fun hashCode(): Int
+
     companion object {
         fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
-            return when {
-                st1 === st2 -> true
-                st1 is BufferNDStructure<*> && st2 is BufferNDStructure<*> && st1.strides == st2.strides -> st1.buffer.contentEquals(
-                    st2.buffer
-                )
-                else -> st1.elements().all { (index, value) -> value == st2[index] }
+            if(st1===st2) return true
+
+            // fast comparison of buffers if possible
+            if(st1 is NDBuffer && st2 is NDBuffer && st1.strides == st2.strides){
+                return st1.buffer.contentEquals(st2.buffer)
             }
+
+            //element by element comparison if it could not be avoided
+            return st1.elements().all { (index, value) -> value == st2[index] }
         }
 
         /**
@@ -177,15 +183,25 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     }
 }
 
-interface NDBuffer<T> : NDStructure<T> {
-    val buffer: Buffer<T>
-    val strides: Strides
+abstract class NDBuffer<T> : NDStructure<T> {
+    abstract val buffer: Buffer<T>
+    abstract val strides: Strides
 
     override fun get(index: IntArray): T = buffer[strides.offset(index)]
 
     override val shape: IntArray get() = strides.shape
 
-    override fun elements() = strides.indices().map { it to this[it] }
+    override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map { it to this[it] }
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
+
+    override fun hashCode(): Int {
+        var result = strides.hashCode()
+        result = 31 * result + buffer.hashCode()
+        return result
+    }
 }
 
 /**
@@ -194,33 +210,11 @@ interface NDBuffer<T> : NDStructure<T> {
 class BufferNDStructure<T>(
     override val strides: Strides,
     override val buffer: Buffer<T>
-) : NDBuffer<T> {
-
+) : NDBuffer<T>(){
     init {
         if (strides.linearSize != buffer.size) {
             error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
         }
-    }
-
-    override fun get(index: IntArray): T = buffer[strides.offset(index)]
-
-    override val shape: IntArray get() = strides.shape
-
-    override fun elements() = strides.indices().map { it to this[it] }
-
-    override fun equals(other: Any?): Boolean {
-        return when {
-            this === other -> true
-            other is BufferNDStructure<*> && this.strides == other.strides -> this.buffer.contentEquals(other.buffer)
-            other is NDStructure<*> -> elements().all { (index, value) -> value == other[index] }
-            else -> false
-        }
-    }
-
-    override fun hashCode(): Int {
-        var result = strides.hashCode()
-        result = 31 * result + buffer.hashCode()
-        return result
     }
 }
 
@@ -245,7 +239,7 @@ inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 class MutableBufferNDStructure<T>(
     override val strides: Strides,
     override val buffer: MutableBuffer<T>
-) : NDBuffer<T>, MutableNDStructure<T> {
+) : NDBuffer<T>(), MutableNDStructure<T> {
 
     init {
         if (strides.linearSize != buffer.size) {

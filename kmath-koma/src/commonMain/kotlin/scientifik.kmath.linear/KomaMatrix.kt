@@ -4,6 +4,7 @@ import koma.extensions.fill
 import koma.matrix.MatrixFactory
 import scientifik.kmath.operations.Space
 import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.NDStructure
 
 class KomaMatrixContext<T : Any>(
     private val factory: MatrixFactory<koma.matrix.Matrix<T>>,
@@ -85,6 +86,18 @@ class KomaMatrix<T : Any>(val origin: koma.matrix.Matrix<T>, features: Set<Matri
         KomaMatrix(this.origin, this.features + features)
 
     override fun get(i: Int, j: Int): T = origin.getGeneric(i, j)
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
+
+    override fun hashCode(): Int {
+        var result = origin.hashCode()
+        result = 31 * result + features.hashCode()
+        return result
+    }
+
+
 }
 
 class KomaVector<T : Any> internal constructor(val origin: koma.matrix.Matrix<T>) : Point<T> {

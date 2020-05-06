@@ -71,7 +71,7 @@ interface Buffer<T> {
 
 fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 
-fun <T> Buffer<T>.asIterable(): Iterable<T> = asSequence().asIterable()
+fun <T> Buffer<T>.asIterable(): Iterable<T> = Iterable(::iterator)
 
 val Buffer<*>.indices: IntRange get() = IntRange(0, size - 1)
 
