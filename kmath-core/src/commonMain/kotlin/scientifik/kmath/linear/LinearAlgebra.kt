@@ -1,12 +1,8 @@
 package scientifik.kmath.linear
 
-import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.Norm
-import scientifik.kmath.operations.RealField
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.VirtualBuffer
-import scientifik.kmath.structures.asSequence
 
 typealias Point<T> = Buffer<T>
 
@@ -18,8 +14,6 @@ interface LinearSolver<T : Any> {
     fun solve(a: Matrix<T>, b: Point<T>): Point<T> = solve(a, b.asMatrix()).asPoint()
     fun inverse(a: Matrix<T>): Matrix<T>
 }
-
-typealias RealMatrix = Matrix<Double>
 
 /**
  * Convert matrix to vector if it is possible

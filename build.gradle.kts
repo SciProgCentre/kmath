@@ -2,7 +2,7 @@ plugins {
     id("scientifik.publish") apply false
 }
 
-val kmathVersion by extra("0.1.4-dev-5")
+val kmathVersion by extra("0.1.4-dev-6")
 
 val bintrayRepo by extra("scientifik")
 val githubProject by extra("kmath")

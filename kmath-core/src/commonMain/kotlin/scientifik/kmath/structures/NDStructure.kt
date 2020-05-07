@@ -20,10 +20,14 @@ interface NDStructure<T> {
 
     companion object {
         fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
-            if(st1===st2) return true
+            if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if(st1 is NDBuffer && st2 is NDBuffer && st1.strides == st2.strides){
+            if (
+                st1 is NDBuffer &&
+                st2 is NDBuffer &&
+                st1.strides == st2.strides
+            ) {
                 return st1.buffer.contentEquals(st2.buffer)
             }
 
@@ -210,7 +214,7 @@ abstract class NDBuffer<T> : NDStructure<T> {
 class BufferNDStructure<T>(
     override val strides: Strides,
     override val buffer: Buffer<T>
-) : NDBuffer<T>(){
+) : NDBuffer<T>() {
     init {
         if (strides.linearSize != buffer.size) {
             error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")

@@ -27,7 +27,7 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
 @Suppress("OVERRIDE_BY_INLINE")
 object RealMatrixContext : GenericMatrixContext<Double, RealField> {
 
-    override val elementContext = RealField
+    override val elementContext get() = RealField
 
     override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
         val buffer = DoubleBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
@@ -101,8 +101,15 @@ infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Do
 
     val array = DoubleArray(this.rowNum * other.colNum)
 
-    val a = this.buffer.array
-    val b = other.buffer.array
+    //convert to array to insure there is not memory indirection
+    fun Buffer<out Double>.unsafeArray(): DoubleArray = if (this is DoubleBuffer) {
+        array
+    } else {
+        DoubleArray(size) { get(it) }
+    }
+
+    val a = this.buffer.unsafeArray()
+    val b = other.buffer.unsafeArray()
 
     for (i in (0 until rowNum)) {
         for (j in (0 until other.colNum)) {
