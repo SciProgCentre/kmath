@@ -40,11 +40,9 @@ internal class DivExpession<T>(val context: Field<T>, val expr: Expression<T>, v
 open class FunctionalExpressionSpace<T>(
     val space: Space<T>,
     one: T
-) : Space<Expression<T>>, ExpressionContext<T> {
+) : Space<Expression<T>>, ExpressionSpace<T,Expression<T>> {
 
     override val zero: Expression<T> = ConstantExpression(space.zero)
-
-    val one: Expression<T> = ConstantExpression(one)
 
     override fun const(value: T): Expression<T> = ConstantExpression(value)
 
@@ -60,46 +58,17 @@ open class FunctionalExpressionSpace<T>(
 
     operator fun T.plus(arg: Expression<T>) = arg + this
     operator fun T.minus(arg: Expression<T>) = arg - this
-
-    fun const(value: Double): Expression<T> = one.times(value)
-
-    open fun produceSingular(value: String): Expression<T> {
-        val numberValue = value.toDoubleOrNull()
-        return if (numberValue == null) {
-            variable(value)
-        } else {
-            const(numberValue)
-        }
-    }
-
-    open fun produceUnary(operation: String, value: Expression<T>): Expression<T> {
-        return when (operation) {
-            UnaryNode.PLUS_OPERATION -> value
-            UnaryNode.MINUS_OPERATION -> -value
-            else -> error("Unary operation $operation is not supported by $this")
-        }
-    }
-
-    open fun produceBinary(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> {
-        return when (operation) {
-            BinaryNode.PLUS_OPERATION -> left + right
-            BinaryNode.MINUS_OPERATION -> left - right
-            else -> error("Binary operation $operation is not supported by $this")
-        }
-    }
-
-    override fun produce(node: SyntaxTreeNode): Expression<T> {
-        return when (node) {
-            is SingularNode -> produceSingular(node.value)
-            is UnaryNode -> produceUnary(node.operation, produce(node.value))
-            is BinaryNode -> produceBinary(node.operation, produce(node.left), produce(node.right))
-        }
-    }
 }
 
 open class FunctionalExpressionField<T>(
     val field: Field<T>
-) : Field<Expression<T>>, FunctionalExpressionSpace<T>(field, field.one) {
+) : ExpressionField<T,Expression<T>>, FunctionalExpressionSpace<T>(field, field.one) {
+
+    override val one: Expression<T>
+        get() = const(this.field.one)
+
+    override fun const(value: Double): Expression<T> = const(field.run { one*value})
+
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
 
     override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> = DivExpession(field, a, b)
@@ -109,17 +78,4 @@ open class FunctionalExpressionField<T>(
 
     operator fun T.times(arg: Expression<T>) = arg * this
     operator fun T.div(arg: Expression<T>) = arg / this
-
-    override fun produce(node: SyntaxTreeNode): Expression<T> {
-        //TODO bring together numeric and typed expressions
-        return super.produce(node)
-    }
-
-    override fun produceBinary(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> {
-        return when (operation) {
-            BinaryNode.TIMES_OPERATION -> left * right
-            BinaryNode.DIV_OPERATION -> left / right
-            else -> super.produceBinary(operation, left, right)
-        }
-    }
 }
