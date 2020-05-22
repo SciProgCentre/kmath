@@ -38,9 +38,13 @@ interface Chain<out R>: Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @InternalCoroutinesApi
+    @OptIn(InternalCoroutinesApi::class)
     override suspend fun collect(collector: FlowCollector<R>) {
-        kotlinx.coroutines.flow.flow { while (true) emit(next()) }.collect(collector)
+        kotlinx.coroutines.flow.flow {
+            while (true){
+                emit(next())
+            }
+        }.collect(collector)
     }
 
     companion object
