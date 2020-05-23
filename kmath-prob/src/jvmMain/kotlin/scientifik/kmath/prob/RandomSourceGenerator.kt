@@ -5,7 +5,7 @@ import org.apache.commons.rng.simple.RandomSource
 
 class RandomSourceGenerator(val source: RandomSource, seed: Long?) : RandomGenerator {
     internal val random: UniformRandomProvider = seed?.let {
-        RandomSource.create(source, seed, null)
+        RandomSource.create(source, seed)
     } ?: RandomSource.create(source)
 
     override fun nextBoolean(): Boolean = random.nextBoolean()
@@ -59,3 +59,9 @@ fun RandomGenerator.asUniformRandomProvider(): UniformRandomProvider = if (this 
 } else {
     RandomGeneratorProvider(this)
 }
+
+fun RandomGenerator.Companion.fromSource(source: RandomSource, seed: Long? = null): RandomSourceGenerator =
+    RandomSourceGenerator(source, seed)
+
+fun RandomGenerator.Companion.mersenneTwister(seed: Long? = null): RandomSourceGenerator =
+    fromSource(RandomSource.MT, seed)

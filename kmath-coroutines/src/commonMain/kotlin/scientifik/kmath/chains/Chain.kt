@@ -48,7 +48,6 @@ interface Chain<out R>: Flow<R> {
     }
 
     companion object
-
 }
 
 

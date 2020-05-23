@@ -2,6 +2,8 @@ package scientifik.kmath.prob
 
 import org.apache.commons.rng.UniformRandomProvider
 import org.apache.commons.rng.sampling.distribution.*
+import scientifik.kmath.chains.BlockingIntChain
+import scientifik.kmath.chains.BlockingRealChain
 import scientifik.kmath.chains.Chain
 import java.util.*
 import kotlin.math.PI
@@ -11,32 +13,32 @@ import kotlin.math.sqrt
 
 abstract class ContinuousSamplerDistribution : Distribution<Double> {
 
-    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : Chain<Double> {
-        private val sampler = buildSampler(generator)
+    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingRealChain() {
+        private val sampler = buildCMSampler(generator)
 
-        override suspend fun next(): Double = sampler.sample()
+        override fun nextDouble(): Double = sampler.sample()
 
         override fun fork(): Chain<Double> = ContinuousSamplerChain(generator.fork())
     }
 
-    protected abstract fun buildSampler(generator: RandomGenerator): ContinuousSampler
+    protected abstract fun buildCMSampler(generator: RandomGenerator): ContinuousSampler
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = ContinuousSamplerChain(generator)
+    override fun sample(generator: RandomGenerator): BlockingRealChain = ContinuousSamplerChain(generator)
 }
 
 abstract class DiscreteSamplerDistribution : Distribution<Int> {
 
-    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : Chain<Int> {
+    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingIntChain() {
         private val sampler = buildSampler(generator)
 
-        override suspend fun next(): Int = sampler.sample()
+        override fun nextInt(): Int = sampler.sample()
 
         override fun fork(): Chain<Int> = ContinuousSamplerChain(generator.fork())
     }
 
     protected abstract fun buildSampler(generator: RandomGenerator): DiscreteSampler
 
-    override fun sample(generator: RandomGenerator): Chain<Int> = ContinuousSamplerChain(generator)
+    override fun sample(generator: RandomGenerator): BlockingIntChain = ContinuousSamplerChain(generator)
 }
 
 enum class NormalSamplerMethod {
@@ -55,7 +57,7 @@ private fun normalSampler(method: NormalSamplerMethod, provider: UniformRandomPr
 fun Distribution.Companion.normal(
     method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
 ): Distribution<Double> = object : ContinuousSamplerDistribution() {
-    override fun buildSampler(generator: RandomGenerator): ContinuousSampler {
+    override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider: UniformRandomProvider = generator.asUniformRandomProvider()
         return normalSampler(method, provider)
     }
@@ -69,11 +71,11 @@ fun Distribution.Companion.normal(
     mean: Double,
     sigma: Double,
     method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
-): Distribution<Double> = object : ContinuousSamplerDistribution() {
+): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     private val sigma2 = sigma.pow(2)
     private val norm = sigma * sqrt(PI * 2)
 
-    override fun buildSampler(generator: RandomGenerator): ContinuousSampler {
+    override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider: UniformRandomProvider = generator.asUniformRandomProvider()
         val normalizedSampler = normalSampler(method, provider)
         return GaussianSampler(normalizedSampler, mean, sigma)
@@ -86,7 +88,7 @@ fun Distribution.Companion.normal(
 
 fun Distribution.Companion.poisson(
     lambda: Double
-): Distribution<Int> = object : DiscreteSamplerDistribution() {
+): DiscreteSamplerDistribution = object : DiscreteSamplerDistribution() {
 
     override fun buildSampler(generator: RandomGenerator): DiscreteSampler {
         return PoissonSampler.of(generator.asUniformRandomProvider(), lambda)

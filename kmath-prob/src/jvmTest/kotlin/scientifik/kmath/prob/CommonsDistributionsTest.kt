@@ -8,12 +8,21 @@ import org.junit.jupiter.api.Test
 
 class CommonsDistributionsTest {
     @Test
-    fun testNormalDistribution(){
-        val distribution = Distribution.normal(7.0,2.0)
+    fun testNormalDistributionSuspend() {
+        val distribution = Distribution.normal(7.0, 2.0)
         val generator = RandomGenerator.default(1)
         val sample = runBlocking {
             distribution.sample(generator).take(1000).toList()
         }
         Assertions.assertEquals(7.0, sample.average(), 0.1)
     }
+
+    @Test
+    fun testNormalDistributionBlocking() {
+        val distribution = Distribution.normal(7.0, 2.0)
+        val generator = RandomGenerator.default(1)
+        val sample = distribution.sample(generator).nextBlock(1000)
+        Assertions.assertEquals(7.0, sample.average(), 0.1)
+    }
+
 }
