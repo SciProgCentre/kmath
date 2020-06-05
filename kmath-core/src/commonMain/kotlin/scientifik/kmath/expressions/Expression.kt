@@ -15,7 +15,7 @@ operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = invoke
 /**
  * A context for expression construction
  */
-interface ExpressionContext<T, E : Expression<T>> {
+interface ExpressionContext<T, E> {
     /**
      * Introduce a variable into expression context
      */
@@ -29,11 +29,11 @@ interface ExpressionContext<T, E : Expression<T>> {
     fun produce(node: SyntaxTreeNode): E
 }
 
-interface ExpressionSpace<T, E : Expression<T>> : Space<E>, ExpressionContext<T, E> {
+interface ExpressionSpace<T, E> : Space<E>, ExpressionContext<T, E> {
 
-    open fun produceSingular(value: String): E = variable(value)
+    fun produceSingular(value: String): E = variable(value)
 
-    open fun produceUnary(operation: String, value: E): E {
+    fun produceUnary(operation: String, value: E): E {
         return when (operation) {
             UnaryNode.PLUS_OPERATION -> value
             UnaryNode.MINUS_OPERATION -> -value
@@ -41,7 +41,7 @@ interface ExpressionSpace<T, E : Expression<T>> : Space<E>, ExpressionContext<T,
         }
     }
 
-    open fun produceBinary(operation: String, left: E, right: E): E {
+    fun produceBinary(operation: String, left: E, right: E): E {
         return when (operation) {
             BinaryNode.PLUS_OPERATION -> left + right
             BinaryNode.MINUS_OPERATION -> left - right
@@ -75,7 +75,7 @@ interface ExpressionSpace<T, E : Expression<T>> : Space<E>, ExpressionContext<T,
     }
 }
 
-interface ExpressionField<T, E : Expression<T>> : Field<E>, ExpressionSpace<T, E> {
+interface ExpressionField<T, E> : Field<E>, ExpressionSpace<T, E> {
     fun const(value: Double): E = one.times(value)
 
     override fun produce(node: SyntaxTreeNode): E {
