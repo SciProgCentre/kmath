@@ -7,7 +7,6 @@ import org.objectweb.asm.Opcodes.*
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
-import java.io.File
 
 abstract class AsmCompiled<T>(@JvmField val algebra: Algebra<T>, @JvmField val constants: MutableList<T>) {
     abstract fun evaluate(arguments: Map<String, T>): T
@@ -223,15 +222,13 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
         evaluateMethodVisitor.visitTypeInsn(CHECKCAST, T_ALGEBRA_CLASS)
     }
 
-    fun visitInvokeAlgebraOperation(owner: String, method: String, descriptor: String) {
+    fun visitAlgebraOperation(owner: String, method: String, descriptor: String) {
         maxStack++
         evaluateMethodVisitor.visitMethodInsn(INVOKEINTERFACE, owner, method, descriptor, true)
         visitCastToT()
     }
 
-    fun visitCastToT() {
-        evaluateMethodVisitor.visitTypeInsn(CHECKCAST, T_CLASS)
-    }
+    fun visitCastToT(): Unit = evaluateMethodVisitor.visitTypeInsn(CHECKCAST, T_CLASS)
 
     companion object {
         const val ASM_COMPILED_CLASS = "scientifik/kmath/expressions/AsmCompiled"
@@ -243,6 +240,7 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
         const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
         const val FIELD_CLASS = "scientifik/kmath/operations/Field"
         const val STRING_CLASS = "java/lang/String"
+        const val FIELD_OPERATIONS_CLASS = "scientifik/kmath/operations/FieldOperations"
     }
 }
 
@@ -252,16 +250,12 @@ interface AsmExpression<T> {
 
 internal class AsmVariableExpression<T>(val name: String, val default: T? = null) :
     AsmExpression<T> {
-    override fun invoke(gen: AsmGenerationContext<T>) {
-        gen.visitLoadFromVariables(name, default)
-    }
+    override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromVariables(name, default)
 }
 
 internal class AsmConstantExpression<T>(val value: T) :
     AsmExpression<T> {
-    override fun invoke(gen: AsmGenerationContext<T>) {
-        gen.visitLoadFromConstants(value)
-    }
+    override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
 }
 
 internal class AsmSumExpression<T>(
@@ -273,7 +267,7 @@ internal class AsmSumExpression<T>(
         first.invoke(gen)
         second.invoke(gen)
 
-        gen.visitInvokeAlgebraOperation(
+        gen.visitAlgebraOperation(
             owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
             method = "add",
             descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
@@ -290,8 +284,8 @@ internal class AsmProductExpression<T>(
         first.invoke(gen)
         second.invoke(gen)
 
-        gen.visitInvokeAlgebraOperation(
-            owner = AsmGenerationContext.SPACE_CLASS,
+        gen.visitAlgebraOperation(
+            owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
             method = "times",
             descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
         )
@@ -307,7 +301,7 @@ internal class AsmConstProductExpression<T>(
         expr.invoke(gen)
         gen.visitNumberConstant(const)
 
-        gen.visitInvokeAlgebraOperation(
+        gen.visitAlgebraOperation(
             owner = AsmGenerationContext.SPACE_CLASS,
             method = "multiply",
             descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
@@ -324,8 +318,8 @@ internal class AsmDivExpression<T>(
         expr.invoke(gen)
         second.invoke(gen)
 
-        gen.visitInvokeAlgebraOperation(
-            owner = AsmGenerationContext.FIELD_CLASS,
+        gen.visitAlgebraOperation(
+            owner = AsmGenerationContext.FIELD_OPERATIONS_CLASS,
             method = "divide",
             descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
         )
