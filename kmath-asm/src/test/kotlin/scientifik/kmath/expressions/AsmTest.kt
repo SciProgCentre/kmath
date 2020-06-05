@@ -65,4 +65,18 @@ class AsmTest {
         AsmConstProductExpression(AsmVariableExpression("x"), 5.0),
         mapOf("x" to 5.0)
     )
+
+    @Test
+    fun testVar() = testDoubleExpressionValue(
+        10000.0,
+        AsmVariableExpression("x"),
+        mapOf("x" to 10000.0)
+    )
+
+    @Test
+    fun testVarWithDefault() = testDoubleExpressionValue(
+        10000.0,
+        AsmVariableExpression("x", 10000.0),
+        mapOf()
+    )
 }
