@@ -7,6 +7,7 @@ import org.objectweb.asm.Opcodes.*
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
+import java.io.File
 
 abstract class AsmCompiled<T>(@JvmField val algebra: Algebra<T>, @JvmField val constants: MutableList<T>) {
     abstract fun evaluate(arguments: Map<String, T>): T
@@ -184,10 +185,13 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
 
     private fun visitLoadThis(): Unit = evaluateMethodVisitor.visitVarInsn(ALOAD, evaluateThisVar)
 
-    fun visitNumberConstant(value: Number): Unit = evaluateMethodVisitor.visitLdcInsn(value)
+    fun visitNumberConstant(value: Number) {
+        maxStack++
+        evaluateMethodVisitor.visitBoxedNumberConstant(value)
+    }
 
     fun visitLoadFromVariables(name: String, defaultValue: T? = null) = evaluateMethodVisitor.run {
-        maxStack++
+        maxStack += 2
         visitVarInsn(ALOAD, evaluateArgumentsVar)
 
         if (defaultValue != null) {
@@ -228,7 +232,7 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
         visitCastToT()
     }
 
-    fun visitCastToT(): Unit = evaluateMethodVisitor.visitTypeInsn(CHECKCAST, T_CLASS)
+    private fun visitCastToT(): Unit = evaluateMethodVisitor.visitTypeInsn(CHECKCAST, T_CLASS)
 
     companion object {
         const val ASM_COMPILED_CLASS = "scientifik/kmath/expressions/AsmCompiled"
@@ -236,11 +240,11 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
         const val MAP_CLASS = "java/util/Map"
         const val OBJECT_CLASS = "java/lang/Object"
         const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
-        const val SPACE_CLASS = "scientifik/kmath/operations/Space"
         const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
-        const val FIELD_CLASS = "scientifik/kmath/operations/Field"
         const val STRING_CLASS = "java/lang/String"
         const val FIELD_OPERATIONS_CLASS = "scientifik/kmath/operations/FieldOperations"
+        const val RING_OPERATIONS_CLASS = "scientifik/kmath/operations/RingOperations"
+        const val NUMBER_CLASS = "java/lang/Number"
     }
 }
 
@@ -285,8 +289,8 @@ internal class AsmProductExpression<T>(
         second.invoke(gen)
 
         gen.visitAlgebraOperation(
-            owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
-            method = "times",
+            owner = AsmGenerationContext.RING_OPERATIONS_CLASS,
+            method = "multiply",
             descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
         )
     }
@@ -298,13 +302,13 @@ internal class AsmConstProductExpression<T>(
 ) : AsmExpression<T> {
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
-        expr.invoke(gen)
         gen.visitNumberConstant(const)
+        expr.invoke(gen)
 
         gen.visitAlgebraOperation(
-            owner = AsmGenerationContext.SPACE_CLASS,
+            owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
             method = "multiply",
-            descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.OBJECT_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
+            descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.NUMBER_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
         )
     }
 }
@@ -325,7 +329,6 @@ internal class AsmDivExpression<T>(
         )
     }
 }
-
 
 open class AsmFunctionalExpressionSpace<T>(
     val space: Space<T>,
