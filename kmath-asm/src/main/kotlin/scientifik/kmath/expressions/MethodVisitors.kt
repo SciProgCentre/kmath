@@ -33,8 +33,7 @@ private val signatureLetters = mapOf(
     java.lang.Integer::class.java to "I",
     java.lang.Long::class.java to "J",
     java.lang.Float::class.java to "F",
-    java.lang.Double::class.java to "D",
-    java.lang.Short::class.java to "S"
+    java.lang.Double::class.java to "D"
 )
 
 fun MethodVisitor.visitBoxedNumberConstant(number: Number) {
