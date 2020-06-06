@@ -26,26 +26,3 @@ fun MethodVisitor.visitLdcOrFConstInsn(value: Float) = when (value) {
     2f -> visitInsn(FCONST_2)
     else -> visitLdcInsn(value)
 }
-
-private val signatureLetters = mapOf(
-    java.lang.Byte::class.java to "B",
-    java.lang.Short::class.java to "S",
-    java.lang.Integer::class.java to "I",
-    java.lang.Long::class.java to "J",
-    java.lang.Float::class.java to "F",
-    java.lang.Double::class.java to "D"
-)
-
-fun MethodVisitor.visitBoxedNumberConstant(number: Number) {
-    val clazz = number.javaClass
-    val c = clazz.name.replace('.', '/')
-
-    when (number) {
-        is Int -> visitLdcOrIConstInsn(number)
-        is Double -> visitLdcOrDConstInsn(number)
-        is Float -> visitLdcOrFConstInsn(number)
-        else -> visitLdcInsn(number)
-    }
-
-    visitMethodInsn(INVOKESTATIC, c, "valueOf", "(${signatureLetters[clazz]})L${c};", false)
-}
