@@ -7,7 +7,6 @@ import org.objectweb.asm.Opcodes.*
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
-import java.io.File
 
 abstract class AsmCompiled<T>(@JvmField val algebra: Algebra<T>, @JvmField val constants: MutableList<T>) {
     abstract fun evaluate(arguments: Map<String, T>): T
