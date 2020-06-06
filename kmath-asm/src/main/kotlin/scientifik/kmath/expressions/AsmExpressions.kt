@@ -178,9 +178,9 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
             .newInstance(algebra, constants) as AsmCompiled<T>
     }
 
-    fun visitLoadFromConstants(value: T) = visitLoadAnyFromConstants(value as Any)
+    fun visitLoadFromConstants(value: T) = visitLoadAnyFromConstants(value as Any, T_CLASS)
 
-    fun visitLoadAnyFromConstants(value: Any) {
+    fun visitLoadAnyFromConstants(value: Any, type: String) {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
         maxStack++
 
@@ -189,7 +189,7 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
             visitFieldInsn(GETFIELD, slashesClassName, "constants", "L$LIST_CLASS;")
             visitLdcOrIConstInsn(idx)
             visitMethodInsn(INVOKEINTERFACE, LIST_CLASS, "get", "(I)L$OBJECT_CLASS;", true)
-            visitCastToT()
+            evaluateMethodVisitor.visitTypeInsn(CHECKCAST, type)
         }
     }
 
@@ -214,7 +214,7 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
             return
         }
 
-        visitLoadAnyFromConstants(value)
+        visitLoadAnyFromConstants(value, c)
     }
 
     fun visitLoadFromVariables(name: String, defaultValue: T? = null) = evaluateMethodVisitor.run {
