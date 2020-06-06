@@ -24,17 +24,26 @@ class AsmGenerationContext<T>(classOfT: Class<*>, private val algebra: Algebra<T
 
     @Suppress("PrivatePropertyName")
     private val T_CLASS: String = classOfT.name.replace('.', '/')
-    private val constants: MutableList<T> = mutableListOf()
-    private val asmCompiledClassWriter = ClassWriter(0)
+
     private val slashesClassName: String = className.replace(oldChar = '.', newChar = '/')
-    private val evaluateMethodVisitor: MethodVisitor
     private val evaluateThisVar: Int = 0
     private val evaluateArgumentsVar: Int = 1
-    private var evaluateL0: Label
+    private var maxStack: Int = 0
+    private lateinit var constants: MutableList<T>
+    private lateinit var asmCompiledClassWriter: ClassWriter
+    private lateinit var evaluateMethodVisitor: MethodVisitor
+    private lateinit var evaluateL0: Label
     private lateinit var evaluateL1: Label
-    var maxStack: Int = 0
 
     init {
+        start()
+    }
+
+    fun start() {
+        constants = mutableListOf()
+        asmCompiledClassWriter = ClassWriter(0)
+        maxStack = 0
+
         asmCompiledClassWriter.visit(
             V1_8,
             ACC_PUBLIC or ACC_FINAL or ACC_SUPER,
