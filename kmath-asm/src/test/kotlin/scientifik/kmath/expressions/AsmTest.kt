@@ -12,15 +12,12 @@ class AsmTest {
         arguments: Map<String, T>,
         algebra: Algebra<T>,
         clazz: Class<*>
-    ) {
-        assertEquals(
-            expectedValue, AsmGenerationContext(
-                clazz,
-                algebra,
-                "TestAsmCompiled"
-            ).also(expr::invoke).generate().evaluate(arguments)
-        )
-    }
+    ): Unit = assertEquals(
+        expectedValue, AsmGenerationContext(clazz, algebra, "TestAsmCompiled")
+            .also(expr::invoke)
+            .generate()
+            .invoke(arguments)
+    )
 
     @Suppress("UNCHECKED_CAST")
     private fun testDoubleExpressionValue(
@@ -29,7 +26,7 @@ class AsmTest {
         arguments: Map<String, Double>,
         algebra: Algebra<Double> = RealField,
         clazz: Class<Double> = java.lang.Double::class.java as Class<Double>
-    ) = testExpressionValue(expectedValue, expr, arguments, algebra, clazz)
+    ): Unit = testExpressionValue(expectedValue, expr, arguments, algebra, clazz)
 
     @Test
     fun testSum() = testDoubleExpressionValue(
@@ -39,28 +36,28 @@ class AsmTest {
     )
 
     @Test
-    fun testConst() = testDoubleExpressionValue(
+    fun testConst(): Unit = testDoubleExpressionValue(
         123.0,
         AsmConstantExpression(123.0),
         mapOf()
     )
 
     @Test
-    fun testDiv() = testDoubleExpressionValue(
+    fun testDiv(): Unit = testDoubleExpressionValue(
         0.5,
         AsmDivExpression(AsmConstantExpression(1.0), AsmConstantExpression(2.0)),
         mapOf()
     )
 
     @Test
-    fun testProduct() = testDoubleExpressionValue(
+    fun testProduct(): Unit = testDoubleExpressionValue(
         25.0,
         AsmProductExpression(AsmVariableExpression("x"), AsmVariableExpression("x")),
         mapOf("x" to 5.0)
     )
 
     @Test
-    fun testCProduct() = testDoubleExpressionValue(
+    fun testCProduct(): Unit = testDoubleExpressionValue(
         25.0,
         AsmConstProductExpression(AsmVariableExpression("x"), 5.0),
         mapOf("x" to 5.0)

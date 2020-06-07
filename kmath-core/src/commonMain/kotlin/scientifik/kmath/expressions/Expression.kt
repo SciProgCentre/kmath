@@ -76,7 +76,7 @@ interface ExpressionSpace<T, E> : Space<E>, ExpressionContext<T, E> {
 }
 
 interface ExpressionField<T, E> : Field<E>, ExpressionSpace<T, E> {
-    fun const(value: Double): E = one.times(value)
+    fun number(value: Number): E = one * value
 
     override fun produce(node: SyntaxTreeNode): E {
         if (node is BinaryNode) {
