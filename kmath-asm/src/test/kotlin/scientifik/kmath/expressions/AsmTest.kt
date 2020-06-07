@@ -64,7 +64,7 @@ class AsmTest {
     )
 
     @Test
-    fun testCProductWithOtherTypeNumber() = testDoubleExpressionValue(
+    fun testCProductWithOtherTypeNumber(): Unit = testDoubleExpressionValue(
         25.0,
         AsmConstProductExpression(AsmVariableExpression("x"), 5f),
         mapOf("x" to 5.0)
@@ -81,21 +81,21 @@ class AsmTest {
     }
 
     @Test
-    fun testCProductWithCustomTypeNumber() = testDoubleExpressionValue(
+    fun testCProductWithCustomTypeNumber(): Unit = testDoubleExpressionValue(
         0.0,
         AsmConstProductExpression(AsmVariableExpression("x"), CustomZero),
         mapOf("x" to 5.0)
     )
 
     @Test
-    fun testVar() = testDoubleExpressionValue(
+    fun testVar(): Unit = testDoubleExpressionValue(
         10000.0,
         AsmVariableExpression("x"),
         mapOf("x" to 10000.0)
     )
 
     @Test
-    fun testVarWithDefault() = testDoubleExpressionValue(
+    fun testVarWithDefault(): Unit = testDoubleExpressionValue(
         10000.0,
         AsmVariableExpression("x", 10000.0),
         mapOf()
