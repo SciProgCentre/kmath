@@ -1,20 +1,18 @@
 package scientifik.kmath.prob
 
-import org.apache.commons.rng.UniformRandomProvider
 import org.apache.commons.rng.simple.RandomSource
+import scientifik.commons.rng.UniformRandomProvider
 
-class RandomSourceGenerator(val source: RandomSource, seed: Long?) : RandomGenerator {
-    internal val random: UniformRandomProvider = seed?.let {
+class RandomSourceGenerator(val source: RandomSource, seed: Long?) :
+    RandomGenerator {
+    internal val random = seed?.let {
         RandomSource.create(source, seed)
     } ?: RandomSource.create(source)
 
     override fun nextBoolean(): Boolean = random.nextBoolean()
-
     override fun nextDouble(): Double = random.nextDouble()
-
     override fun nextInt(): Int = random.nextInt()
     override fun nextInt(until: Int): Int = random.nextInt(until)
-
     override fun nextLong(): Long = random.nextLong()
     override fun nextLong(until: Long): Long = random.nextLong(until)
 
@@ -26,39 +24,23 @@ class RandomSourceGenerator(val source: RandomSource, seed: Long?) : RandomGener
     override fun fork(): RandomGenerator = RandomSourceGenerator(source, nextLong())
 }
 
-inline class RandomGeneratorProvider(val generator: RandomGenerator) : UniformRandomProvider {
-    override fun nextBoolean(): Boolean = generator.nextBoolean()
-
-    override fun nextFloat(): Float = generator.nextDouble().toFloat()
-
-    override fun nextBytes(bytes: ByteArray) {
-        generator.fillBytes(bytes)
-    }
-
-    override fun nextBytes(bytes: ByteArray, start: Int, len: Int) {
-        generator.fillBytes(bytes, start, start + len)
-    }
-
-    override fun nextInt(): Int = generator.nextInt()
-
-    override fun nextInt(n: Int): Int = generator.nextInt(n)
-
-    override fun nextDouble(): Double = generator.nextDouble()
-
-    override fun nextLong(): Long = generator.nextLong()
-
-    override fun nextLong(n: Long): Long = generator.nextLong(n)
-}
-
 /**
  * Represent this [RandomGenerator] as commons-rng [UniformRandomProvider] preserving and mirroring its current state.
  * Getting new value from one of those changes the state of another.
  */
 fun RandomGenerator.asUniformRandomProvider(): UniformRandomProvider = if (this is RandomSourceGenerator) {
-    random
-} else {
-    RandomGeneratorProvider(this)
-}
+    object : UniformRandomProvider {
+        override fun nextBytes(bytes: ByteArray) = random.nextBytes(bytes)
+        override fun nextBytes(bytes: ByteArray, start: Int, len: Int) = random.nextBytes(bytes, start, len)
+        override fun nextInt(): Int = random.nextInt()
+        override fun nextInt(n: Int): Int = random.nextInt(n)
+        override fun nextLong(): Long = random.nextLong()
+        override fun nextLong(n: Long): Long = random.nextLong(n)
+        override fun nextBoolean(): Boolean = random.nextBoolean()
+        override fun nextFloat(): Float = random.nextFloat()
+        override fun nextDouble(): Double = random.nextDouble()
+    }
+} else RandomGeneratorProvider(this)
 
 fun RandomGenerator.Companion.fromSource(source: RandomSource, seed: Long? = null): RandomSourceGenerator =
     RandomSourceGenerator(source, seed)

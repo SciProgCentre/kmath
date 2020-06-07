@@ -35,6 +35,7 @@ include(
     ":kmath-functions",
 //    ":kmath-io",
     ":kmath-coroutines",
+    "kmath-commons-rng-part",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
