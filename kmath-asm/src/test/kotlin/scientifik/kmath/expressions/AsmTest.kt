@@ -67,6 +67,30 @@ class AsmTest {
     )
 
     @Test
+    fun testCProductWithOtherTypeNumber() = testDoubleExpressionValue(
+        25.0,
+        AsmConstProductExpression(AsmVariableExpression("x"), 5f),
+        mapOf("x" to 5.0)
+    )
+
+    object CustomZero : Number() {
+        override fun toByte(): Byte = 0
+        override fun toChar(): Char = 0.toChar()
+        override fun toDouble(): Double = 0.0
+        override fun toFloat(): Float = 0f
+        override fun toInt(): Int = 0
+        override fun toLong(): Long = 0L
+        override fun toShort(): Short = 0
+    }
+
+    @Test
+    fun testCProductWithCustomTypeNumber() = testDoubleExpressionValue(
+        0.0,
+        AsmConstProductExpression(AsmVariableExpression("x"), CustomZero),
+        mapOf("x" to 5.0)
+    )
+
+    @Test
     fun testVar() = testDoubleExpressionValue(
         10000.0,
         AsmVariableExpression("x"),
