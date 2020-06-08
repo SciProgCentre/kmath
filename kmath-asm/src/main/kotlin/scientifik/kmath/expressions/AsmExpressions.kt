@@ -1,6 +1,6 @@
 package scientifik.kmath.expressions
 
-import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.*
 
 abstract class AsmCompiledExpression<T> internal constructor(
     @JvmField private val algebra: Algebra<T>,
@@ -10,6 +10,7 @@ abstract class AsmCompiledExpression<T> internal constructor(
 }
 
 interface AsmExpression<T> {
+    fun tryEvaluate(): T? = null
     fun invoke(gen: AsmGenerationContext<T>)
 }
 
@@ -20,13 +21,22 @@ internal class AsmVariableExpression<T>(val name: String, val default: T? = null
 
 internal class AsmConstantExpression<T>(val value: T) :
     AsmExpression<T> {
+    override fun tryEvaluate(): T = value
     override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
 }
 
 internal class AsmSumExpression<T>(
-    val first: AsmExpression<T>,
-    val second: AsmExpression<T>
+    private val algebra: SpaceOperations<T>,
+    first: AsmExpression<T>,
+    second: AsmExpression<T>
 ) : AsmExpression<T> {
+    private val first: AsmExpression<T> = first.optimize()
+    private val second: AsmExpression<T> = second.optimize()
+
+    override fun tryEvaluate(): T? = algebra {
+        (first.tryEvaluate() ?: return@algebra null) + (second.tryEvaluate() ?: return@algebra null)
+    }
+
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
         first.invoke(gen)
@@ -41,9 +51,17 @@ internal class AsmSumExpression<T>(
 }
 
 internal class AsmProductExpression<T>(
-    val first: AsmExpression<T>,
-    val second: AsmExpression<T>
+    private val algebra: RingOperations<T>,
+    first: AsmExpression<T>,
+    second: AsmExpression<T>
 ) : AsmExpression<T> {
+    private val first: AsmExpression<T> = first.optimize()
+    private val second: AsmExpression<T> = second.optimize()
+
+    override fun tryEvaluate(): T? = algebra {
+        (first.tryEvaluate() ?: return@algebra null) * (second.tryEvaluate() ?: return@algebra null)
+    }
+
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
         first.invoke(gen)
@@ -58,9 +76,14 @@ internal class AsmProductExpression<T>(
 }
 
 internal class AsmConstProductExpression<T>(
-    val expr: AsmExpression<T>,
-    val const: Number
+    private val algebra: SpaceOperations<T>,
+    expr: AsmExpression<T>,
+    private val const: Number
 ) : AsmExpression<T> {
+    private val expr: AsmExpression<T> = expr.optimize()
+
+    override fun tryEvaluate(): T? = algebra { (expr.tryEvaluate() ?: return@algebra null) * const }
+
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
         gen.visitNumberConstant(const)
@@ -75,9 +98,17 @@ internal class AsmConstProductExpression<T>(
 }
 
 internal class AsmDivExpression<T>(
-    val expr: AsmExpression<T>,
-    val second: AsmExpression<T>
+    private val algebra: FieldOperations<T>,
+    expr: AsmExpression<T>,
+    second: AsmExpression<T>
 ) : AsmExpression<T> {
+    private val expr: AsmExpression<T> = expr.optimize()
+    private val second: AsmExpression<T> = second.optimize()
+
+    override fun tryEvaluate(): T? = algebra {
+        (expr.tryEvaluate() ?: return@algebra null) / (second.tryEvaluate() ?: return@algebra null)
+    }
+
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
         expr.invoke(gen)
