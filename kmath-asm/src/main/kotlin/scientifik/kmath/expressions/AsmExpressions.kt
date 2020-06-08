@@ -3,8 +3,8 @@ package scientifik.kmath.expressions
 import scientifik.kmath.operations.*
 
 abstract class AsmCompiledExpression<T> internal constructor(
-    @JvmField private val algebra: Algebra<T>,
-    @JvmField private val constants: MutableList<out Any>
+    @JvmField protected val algebra: Algebra<T>,
+    @JvmField protected val constants: MutableList<out Any>
 ) : Expression<T> {
     abstract override fun invoke(arguments: Map<String, T>): T
 }

@@ -31,7 +31,7 @@ class AsmTest {
     @Test
     fun testSum() = testDoubleExpressionValue(
         25.0,
-        AsmSumExpression(AsmConstantExpression(1.0), AsmVariableExpression("x")),
+        AsmSumExpression(RealField, AsmConstantExpression(1.0), AsmVariableExpression("x")),
         mapOf("x" to 24.0)
     )
 
@@ -45,28 +45,28 @@ class AsmTest {
     @Test
     fun testDiv(): Unit = testDoubleExpressionValue(
         0.5,
-        AsmDivExpression(AsmConstantExpression(1.0), AsmConstantExpression(2.0)),
+        AsmDivExpression(RealField, AsmConstantExpression(1.0), AsmConstantExpression(2.0)),
         mapOf()
     )
 
     @Test
     fun testProduct(): Unit = testDoubleExpressionValue(
         25.0,
-        AsmProductExpression(AsmVariableExpression("x"), AsmVariableExpression("x")),
+        AsmProductExpression(RealField,AsmVariableExpression("x"), AsmVariableExpression("x")),
         mapOf("x" to 5.0)
     )
 
     @Test
     fun testCProduct(): Unit = testDoubleExpressionValue(
         25.0,
-        AsmConstProductExpression(AsmVariableExpression("x"), 5.0),
+        AsmConstProductExpression(RealField,AsmVariableExpression("x"), 5.0),
         mapOf("x" to 5.0)
     )
 
     @Test
     fun testCProductWithOtherTypeNumber(): Unit = testDoubleExpressionValue(
         25.0,
-        AsmConstProductExpression(AsmVariableExpression("x"), 5f),
+        AsmConstProductExpression(RealField,AsmVariableExpression("x"), 5f),
         mapOf("x" to 5.0)
     )
 
@@ -83,7 +83,7 @@ class AsmTest {
     @Test
     fun testCProductWithCustomTypeNumber(): Unit = testDoubleExpressionValue(
         0.0,
-        AsmConstProductExpression(AsmVariableExpression("x"), CustomZero),
+        AsmConstProductExpression(RealField,AsmVariableExpression("x"), CustomZero),
         mapOf("x" to 5.0)
     )
 
