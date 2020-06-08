@@ -8,6 +8,11 @@ import scientifik.kmath.prob.chain
 import kotlin.math.ceil
 import kotlin.math.exp
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/SmallMeanPoissonSampler.html
+ */
 class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
     private val p0: Double = exp(-mean)
 

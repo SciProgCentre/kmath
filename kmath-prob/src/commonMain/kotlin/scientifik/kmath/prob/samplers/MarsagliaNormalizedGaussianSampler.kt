@@ -7,6 +7,11 @@ import scientifik.kmath.prob.chain
 import kotlin.math.ln
 import kotlin.math.sqrt
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/MarsagliaNormalizedGaussianSampler.html
+ */
 class MarsagliaNormalizedGaussianSampler private constructor(): NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian = Double.NaN
 

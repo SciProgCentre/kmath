@@ -4,7 +4,11 @@ import scientifik.kmath.chains.Chain
 import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
 
-
+/**
+ * Based on commons-rng implementation.
+ *
+ * https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/PoissonSampler.html
+ */
 class PoissonSampler private constructor(
     mean: Double
 ) : Sampler<Int> {

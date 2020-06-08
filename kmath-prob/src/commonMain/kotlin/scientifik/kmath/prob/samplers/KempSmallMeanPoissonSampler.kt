@@ -6,6 +6,11 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.chain
 import kotlin.math.exp
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/KempSmallMeanPoissonSampler.html
+ */
 class KempSmallMeanPoissonSampler private constructor(
     private val p0: Double,
     private val mean: Double

@@ -8,9 +8,14 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.next
 import kotlin.math.*
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/LargeMeanPoissonSampler.html
+ */
 class LargeMeanPoissonSampler private constructor(val mean: Double) : Sampler<Int> {
     private val exponential: Sampler<Double> = AhrensDieterExponentialSampler.of(1.0)
-    private val gaussian: Sampler<Double> = ZigguratNormalizedGaussianSampler()
+    private val gaussian: Sampler<Double> = ZigguratNormalizedGaussianSampler.of()
     private val factorialLog: InternalUtils.FactorialLog = NO_CACHE_FACTORIAL_LOG
     private val lambda: Double = floor(mean)
     private val logLambda: Double = ln(lambda)

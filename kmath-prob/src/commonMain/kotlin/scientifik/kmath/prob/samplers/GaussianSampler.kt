@@ -5,6 +5,11 @@ import scientifik.kmath.chains.map
 import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/GaussianSampler.html
+ */
 class GaussianSampler private constructor(
     private val mean: Double,
     private val standardDeviation: Double,

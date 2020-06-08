@@ -6,6 +6,11 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.chain
 import kotlin.math.*
 
+/**
+ * Based on commons-rng implementation.
+ *
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/BoxMullerNormalizedGaussianSampler.html
+ */
 class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian: Double = Double.NaN
 
