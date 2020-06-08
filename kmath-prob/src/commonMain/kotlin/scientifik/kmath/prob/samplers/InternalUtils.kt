@@ -18,24 +18,6 @@ internal object InternalUtils {
 
     fun factorial(n: Int): Long = FACTORIALS[n]
 
-    fun validateProbabilities(probabilities: DoubleArray): Double {
-        require(probabilities.isNotEmpty()) { "Probabilities must not be empty." }
-        var sumProb = 0.0
-
-        probabilities.forEach { prob ->
-            validateProbability(prob)
-            sumProb += prob
-        }
-
-        require(!(sumProb.isInfinite() || sumProb <= 0)) { "Invalid sum of probabilities: $sumProb" }
-        return sumProb
-    }
-
-    private fun validateProbability(probability: Double): Unit =
-        require(!(probability < 0 || probability.isInfinite() || probability.isNaN())) {
-            "Invalid probability: $probability"
-        }
-
     class FactorialLog private constructor(
         numValues: Int,
         cache: DoubleArray?
@@ -63,9 +45,6 @@ internal object InternalUtils {
                     logFactorials[i] = logFactorials[i - 1] + ln(i.toDouble())
             }
         }
-
-        fun withCache(cacheSize: Int): FactorialLog =
-            FactorialLog(cacheSize, logFactorials)
 
         fun value(n: Int): Double {
             if (n < logFactorials.size)
