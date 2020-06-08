@@ -1,4 +1,4 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
 import kotlin.math.PI
 import kotlin.math.ln

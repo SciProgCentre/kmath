@@ -1,6 +1,6 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 import kotlin.math.*
 
 class ZigguratNormalizedGaussianSampler(private val rng: UniformRandomProvider) :
@@ -26,9 +26,13 @@ class ZigguratNormalizedGaussianSampler(private val rng: UniformRandomProvider) 
 
         init {
             // Filling the tables.
-            var d = R
+            var d =
+                R
             var t = d
-            var fd = gauss(d)
+            var fd =
+                gauss(
+                    d
+                )
             val q = V / fd
             K[0] = (d / q * MAX).toLong()
             K[1] = 0
@@ -39,7 +43,10 @@ class ZigguratNormalizedGaussianSampler(private val rng: UniformRandomProvider) 
 
             (LAST - 1 downTo 1).forEach { i ->
                 d = sqrt(-2 * ln(V / d + fd))
-                fd = gauss(d)
+                fd =
+                    gauss(
+                        d
+                    )
                 K[i + 1] = (d / t * MAX).toLong()
                 t = d
                 F[i] = fd
@@ -80,7 +87,10 @@ class ZigguratNormalizedGaussianSampler(private val rng: UniformRandomProvider) 
             // else
             // Try again.
             // This branch is called about 0.012362 times per sample.
-            if (F[iz] + rng.nextDouble() * (F[iz - 1] - F[iz]) < gauss(x)) x else sample()
+            if (F[iz] + rng.nextDouble() * (F[iz - 1] - F[iz]) < gauss(
+                    x
+                )
+            ) x else sample()
         }
     }
 

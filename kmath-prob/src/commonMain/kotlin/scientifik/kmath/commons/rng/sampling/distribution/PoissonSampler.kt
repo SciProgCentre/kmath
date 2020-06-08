@@ -1,11 +1,12 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 
 class PoissonSampler(
     rng: UniformRandomProvider,
     mean: Double
-) : SamplerBase(null), SharedStateDiscreteSampler {
+) : SamplerBase(null),
+    SharedStateDiscreteSampler {
     private val poissonSamplerDelegate: SharedStateDiscreteSampler
 
     override fun sample(): Int = poissonSamplerDelegate.sample()
@@ -22,11 +23,18 @@ class PoissonSampler(
             rng: UniformRandomProvider,
             mean: Double
         ): SharedStateDiscreteSampler =// Each sampler should check the input arguments.
-            if (mean < PIVOT) SmallMeanPoissonSampler.of(rng, mean) else LargeMeanPoissonSampler.of(rng, mean)
+            if (mean < PIVOT) SmallMeanPoissonSampler.of(
+                rng,
+                mean
+            ) else LargeMeanPoissonSampler.of(
+                rng,
+                mean
+            )
     }
 
     init {
         // Delegate all work to specialised samplers.
-        poissonSamplerDelegate = of(rng, mean)
+        poissonSamplerDelegate =
+            of(rng, mean)
     }
 }

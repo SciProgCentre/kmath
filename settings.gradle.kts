@@ -29,13 +29,13 @@ pluginManagement {
 }
 
 rootProject.name = "kmath"
+
 include(
     ":kmath-memory",
     ":kmath-core",
     ":kmath-functions",
 //    ":kmath-io",
     ":kmath-coroutines",
-    "kmath-commons-rng-part",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",

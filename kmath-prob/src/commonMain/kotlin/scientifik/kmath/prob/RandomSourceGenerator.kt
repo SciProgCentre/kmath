@@ -1,9 +1,10 @@
 package scientifik.kmath.prob
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 
 
-inline class RandomGeneratorProvider(val generator: RandomGenerator) : UniformRandomProvider {
+inline class RandomGeneratorProvider(val generator: RandomGenerator) :
+    UniformRandomProvider {
     override fun nextBoolean(): Boolean = generator.nextBoolean()
 
     override fun nextFloat(): Float = generator.nextDouble().toFloat()

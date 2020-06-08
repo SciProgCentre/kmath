@@ -1,9 +1,10 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 import kotlin.math.*
 
-class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
+class LargeMeanPoissonSampler :
+    SharedStateDiscreteSampler {
     private val rng: UniformRandomProvider
     private val exponential: SharedStateContinuousSampler
     private val gaussian: SharedStateContinuousSampler
@@ -27,8 +28,13 @@ class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
         // The algorithm is not valid if Math.floor(mean) is not an integer.
         require(mean <= MAX_MEAN) { "mean $mean > $MAX_MEAN" }
         this.rng = rng
-        gaussian = ZigguratNormalizedGaussianSampler(rng)
-        exponential = AhrensDieterExponentialSampler.of(rng, 1.0)
+        gaussian =
+            ZigguratNormalizedGaussianSampler(rng)
+        exponential =
+            AhrensDieterExponentialSampler.of(
+                rng,
+                1.0
+            )
         // Plain constructor uses the uncached function.
         factorialLog = NO_CACHE_FACTORIAL_LOG!!
         // Cache values used in the algorithm
@@ -49,7 +55,10 @@ class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
         val lambdaFractional = mean - lambda
         smallMeanPoissonSampler =
             if (lambdaFractional < Double.MIN_VALUE) NO_SMALL_MEAN_POISSON_SAMPLER else  // Not used.
-                KempSmallMeanPoissonSampler.of(rng, lambdaFractional)
+                KempSmallMeanPoissonSampler.of(
+                    rng,
+                    lambdaFractional
+                )
     }
 
     internal constructor(
@@ -59,8 +68,13 @@ class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
     ) {
         require(!(lambdaFractional < 0 || lambdaFractional >= 1)) { "lambdaFractional must be in the range 0 (inclusive) to 1 (exclusive): $lambdaFractional" }
         this.rng = rng
-        gaussian = ZigguratNormalizedGaussianSampler(rng)
-        exponential = AhrensDieterExponentialSampler.of(rng, 1.0)
+        gaussian =
+            ZigguratNormalizedGaussianSampler(rng)
+        exponential =
+            AhrensDieterExponentialSampler.of(
+                rng,
+                1.0
+            )
         // Plain constructor uses the uncached function.
         factorialLog = NO_CACHE_FACTORIAL_LOG!!
         // Use the state to initialise the algorithm
@@ -79,7 +93,10 @@ class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
             if (lambdaFractional < Double.MIN_VALUE)
                 NO_SMALL_MEAN_POISSON_SAMPLER
             else  // Not used.
-                KempSmallMeanPoissonSampler.of(rng, lambdaFractional)
+                KempSmallMeanPoissonSampler.of(
+                    rng,
+                    lambdaFractional
+                )
     }
 
     /**
@@ -222,7 +239,8 @@ class LargeMeanPoissonSampler : SharedStateDiscreteSampler {
         fun of(
             rng: UniformRandomProvider,
             mean: Double
-        ): SharedStateDiscreteSampler = LargeMeanPoissonSampler(rng, mean)
+        ): SharedStateDiscreteSampler =
+            LargeMeanPoissonSampler(rng, mean)
 
         init {
             // Create without a cache.

@@ -1,4 +1,4 @@
-package scientifik.commons.rng
+package scientifik.kmath.commons.rng
 
 interface UniformRandomProvider {
     fun nextBytes(bytes: ByteArray)

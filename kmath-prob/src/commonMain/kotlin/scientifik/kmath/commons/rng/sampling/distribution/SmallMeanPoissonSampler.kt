@@ -1,10 +1,11 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 import kotlin.math.ceil
 import kotlin.math.exp
 
-class SmallMeanPoissonSampler : SharedStateDiscreteSampler {
+class SmallMeanPoissonSampler :
+    SharedStateDiscreteSampler {
     private val p0: Double
     private val limit: Int
     private val rng: UniformRandomProvider
@@ -53,6 +54,7 @@ class SmallMeanPoissonSampler : SharedStateDiscreteSampler {
         fun of(
             rng: UniformRandomProvider,
             mean: Double
-        ): SharedStateDiscreteSampler = SmallMeanPoissonSampler(rng, mean)
+        ): SharedStateDiscreteSampler =
+            SmallMeanPoissonSampler(rng, mean)
     }
 }

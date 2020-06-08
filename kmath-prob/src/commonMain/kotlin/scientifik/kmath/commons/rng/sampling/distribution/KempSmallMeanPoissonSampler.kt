@@ -1,6 +1,6 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 import kotlin.math.exp
 
 class KempSmallMeanPoissonSampler private constructor(
@@ -48,7 +48,11 @@ class KempSmallMeanPoissonSampler private constructor(
             val p0: Double = exp(-mean)
 
             // Probability must be positive. As mean increases then p(0) decreases.
-            if (p0 > 0) return KempSmallMeanPoissonSampler(rng, p0, mean)
+            if (p0 > 0) return KempSmallMeanPoissonSampler(
+                rng,
+                p0,
+                mean
+            )
             throw IllegalArgumentException("No probability for mean: $mean")
         }
     }

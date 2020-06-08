@@ -1,8 +1,9 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 
-class GaussianSampler : SharedStateContinuousSampler {
+class GaussianSampler :
+    SharedStateContinuousSampler {
     private val mean: Double
     private val standardDeviation: Double
     private val normalized: NormalizedGaussianSampler
@@ -24,7 +25,11 @@ class GaussianSampler : SharedStateContinuousSampler {
     ) {
         mean = source.mean
         standardDeviation = source.standardDeviation
-        normalized = InternalUtils.newNormalizedGaussianSampler(source.normalized, rng)
+        normalized =
+            InternalUtils.newNormalizedGaussianSampler(
+                source.normalized,
+                rng
+            )
     }
 
     override fun sample(): Double = standardDeviation * normalized.sample() + mean
@@ -40,6 +45,11 @@ class GaussianSampler : SharedStateContinuousSampler {
             normalized: NormalizedGaussianSampler,
             mean: Double,
             standardDeviation: Double
-        ): SharedStateContinuousSampler = GaussianSampler(normalized, mean, standardDeviation)
+        ): SharedStateContinuousSampler =
+            GaussianSampler(
+                normalized,
+                mean,
+                standardDeviation
+            )
     }
 }

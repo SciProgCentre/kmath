@@ -1,6 +1,6 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 
 @Deprecated("Since version 1.1. Class intended for internal use only.")
 open class SamplerBase protected constructor(private val rng: UniformRandomProvider?) {

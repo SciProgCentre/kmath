@@ -1,9 +1,9 @@
 package scientifik.kmath.prob
 
-import scientifik.commons.rng.sampling.distribution.ContinuousSampler
-import scientifik.commons.rng.sampling.distribution.DiscreteSampler
-import scientifik.commons.rng.sampling.distribution.GaussianSampler
-import scientifik.commons.rng.sampling.distribution.PoissonSampler
+import scientifik.kmath.commons.rng.sampling.distribution.ContinuousSampler
+import scientifik.kmath.commons.rng.sampling.distribution.DiscreteSampler
+import scientifik.kmath.commons.rng.sampling.distribution.GaussianSampler
+import scientifik.kmath.commons.rng.sampling.distribution.PoissonSampler
 import kotlin.math.PI
 import kotlin.math.exp
 import kotlin.math.pow
@@ -33,7 +33,11 @@ fun Distribution.Companion.normal(
     override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider = generator.asUniformRandomProvider()
         val normalizedSampler = normalSampler(method, provider)
-        return GaussianSampler(normalizedSampler, mean, sigma)
+        return GaussianSampler(
+            normalizedSampler,
+            mean,
+            sigma
+        )
     }
 
     override fun probability(arg: Double): Double {

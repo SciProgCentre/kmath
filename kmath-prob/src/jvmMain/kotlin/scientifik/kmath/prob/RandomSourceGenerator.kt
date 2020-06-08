@@ -1,7 +1,7 @@
 package scientifik.kmath.prob
 
 import org.apache.commons.rng.simple.RandomSource
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 
 class RandomSourceGenerator(val source: RandomSource, seed: Long?) :
     RandomGenerator {

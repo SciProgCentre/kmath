@@ -1,7 +1,7 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
-import scientifik.commons.rng.sampling.SharedStateSampler
+import scientifik.kmath.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.sampling.SharedStateSampler
 import kotlin.math.ln
 import kotlin.math.min
 
@@ -63,30 +63,45 @@ internal object InternalUtils {
             if (cache != null && cache.size > BEGIN_LOG_FACTORIALS) {
                 // Copy available values.
                 endCopy = min(cache.size, numValues)
-                cache.copyInto(logFactorials, BEGIN_LOG_FACTORIALS, BEGIN_LOG_FACTORIALS, endCopy)
+                cache.copyInto(logFactorials,
+                    BEGIN_LOG_FACTORIALS,
+                    BEGIN_LOG_FACTORIALS, endCopy)
             }
             // All values to be computed
             else
-                endCopy = BEGIN_LOG_FACTORIALS
+                endCopy =
+                    BEGIN_LOG_FACTORIALS
 
             // Compute remaining values.
             (endCopy until numValues).forEach { i ->
-                if (i < FACTORIALS.size) logFactorials[i] = ln(FACTORIALS[i].toDouble()) else logFactorials[i] =
+                if (i < FACTORIALS.size) logFactorials[i] = ln(
+                    FACTORIALS[i].toDouble()) else logFactorials[i] =
                     logFactorials[i - 1] + ln(i.toDouble())
             }
         }
 
-        fun withCache(cacheSize: Int): FactorialLog = FactorialLog(cacheSize, logFactorials)
+        fun withCache(cacheSize: Int): FactorialLog =
+            FactorialLog(
+                cacheSize,
+                logFactorials
+            )
 
         fun value(n: Int): Double {
             if (n < logFactorials.size)
                 return logFactorials[n]
 
-            return if (n < FACTORIALS.size) ln(FACTORIALS[n].toDouble()) else InternalGamma.logGamma(n + 1.0)
+            return if (n < FACTORIALS.size) ln(
+                FACTORIALS[n].toDouble()) else InternalGamma.logGamma(
+                n + 1.0
+            )
         }
 
         companion object {
-            fun create(): FactorialLog = FactorialLog(0, null)
+            fun create(): FactorialLog =
+                FactorialLog(
+                    0,
+                    null
+                )
         }
     }
 }

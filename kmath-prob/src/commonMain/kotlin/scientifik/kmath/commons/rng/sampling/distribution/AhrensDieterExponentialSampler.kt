@@ -1,6 +1,6 @@
-package scientifik.commons.rng.sampling.distribution
+package scientifik.kmath.commons.rng.sampling.distribution
 
-import scientifik.commons.rng.UniformRandomProvider
+import scientifik.kmath.commons.rng.UniformRandomProvider
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -76,7 +76,11 @@ class AhrensDieterExponentialSampler : SamplerBase,
         fun of(
             rng: UniformRandomProvider,
             mean: Double
-        ): SharedStateContinuousSampler = AhrensDieterExponentialSampler(rng, mean)
+        ): SharedStateContinuousSampler =
+            AhrensDieterExponentialSampler(
+                rng,
+                mean
+            )
 
         init {
             /**
@@ -87,7 +91,9 @@ class AhrensDieterExponentialSampler : SamplerBase,
             var qi = 0.0
 
             EXPONENTIAL_SA_QI.indices.forEach { i ->
-                qi += ln2.pow(i + 1.0) / InternalUtils.factorial(i + 1)
+                qi += ln2.pow(i + 1.0) / InternalUtils.factorial(
+                    i + 1
+                )
                 EXPONENTIAL_SA_QI[i] = qi
             }
         }
