@@ -7,7 +7,7 @@ import scientifik.kmath.prob.chain
 import kotlin.math.ln
 import kotlin.math.sqrt
 
-class MarsagliaNormalizedGaussianSampler : NormalizedGaussianSampler, Sampler<Double> {
+class MarsagliaNormalizedGaussianSampler private constructor(): NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian = Double.NaN
 
     override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
@@ -49,4 +49,8 @@ class MarsagliaNormalizedGaussianSampler : NormalizedGaussianSampler, Sampler<Do
     }
 
     override fun toString(): String = "Box-Muller (with rejection) normalized Gaussian deviate"
+
+    companion object {
+        fun of(): MarsagliaNormalizedGaussianSampler = MarsagliaNormalizedGaussianSampler()
+    }
 }

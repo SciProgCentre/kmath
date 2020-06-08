@@ -41,10 +41,10 @@ class KempSmallMeanPoissonSampler private constructor(
     companion object {
         fun of(mean: Double): KempSmallMeanPoissonSampler {
             require(mean > 0) { "Mean is not strictly positive: $mean" }
-            val p0: Double = exp(-mean)
+            val p0 = exp(-mean)
             // Probability must be positive. As mean increases then p(0) decreases.
-            if (p0 > 0) return KempSmallMeanPoissonSampler(p0, mean)
-            throw IllegalArgumentException("No probability for mean: $mean")
+            require(p0 > 0) { "No probability for mean: $mean" }
+            return KempSmallMeanPoissonSampler(p0, mean)
         }
     }
 }

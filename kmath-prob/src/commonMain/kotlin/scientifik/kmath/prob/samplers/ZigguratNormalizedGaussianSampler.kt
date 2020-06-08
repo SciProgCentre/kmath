@@ -7,7 +7,7 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.chain
 import kotlin.math.*
 
-class ZigguratNormalizedGaussianSampler() :
+class ZigguratNormalizedGaussianSampler private constructor() :
     NormalizedGaussianSampler, Sampler<Double> {
 
     private fun sampleOne(generator: RandomGenerator): Double {
@@ -63,7 +63,6 @@ class ZigguratNormalizedGaussianSampler() :
         private val K: LongArray = LongArray(LEN)
         private val W: DoubleArray = DoubleArray(LEN)
         private val F: DoubleArray = DoubleArray(LEN)
-        private fun gauss(x: Double): Double = exp(-0.5 * x * x)
 
         init {
             // Filling the tables.
@@ -91,5 +90,8 @@ class ZigguratNormalizedGaussianSampler() :
                 W[i] = d * ONE_OVER_MAX
             }
         }
+
+        fun of(): ZigguratNormalizedGaussianSampler = ZigguratNormalizedGaussianSampler()
+        private fun gauss(x: Double): Double = exp(-0.5 * x * x)
     }
 }

@@ -1,6 +1,5 @@
 package scientifik.kmath.prob.samplers
 
-import kotlinx.coroutines.flow.first
 import scientifik.kmath.chains.Chain
 import scientifik.kmath.chains.ConstantChain
 import scientifik.kmath.chains.SimpleChain
@@ -9,12 +8,10 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.next
 import kotlin.math.*
 
-class LargeMeanPoissonSampler(val mean: Double) : Sampler<Int> {
-    private val exponential: Sampler<Double> =
-        AhrensDieterExponentialSampler.of(1.0)
-    private val gaussian: Sampler<Double> =
-        ZigguratNormalizedGaussianSampler()
-    private val factorialLog: InternalUtils.FactorialLog = NO_CACHE_FACTORIAL_LOG!!
+class LargeMeanPoissonSampler private constructor(val mean: Double) : Sampler<Int> {
+    private val exponential: Sampler<Double> = AhrensDieterExponentialSampler.of(1.0)
+    private val gaussian: Sampler<Double> = ZigguratNormalizedGaussianSampler()
+    private val factorialLog: InternalUtils.FactorialLog = NO_CACHE_FACTORIAL_LOG
     private val lambda: Double = floor(mean)
     private val logLambda: Double = ln(lambda)
     private val logLambdaFactorial: Double = getFactorialLog(lambda.toInt())
@@ -32,12 +29,6 @@ class LargeMeanPoissonSampler(val mean: Double) : Sampler<Int> {
         NO_SMALL_MEAN_POISSON_SAMPLER
     else  // Not used.
         KempSmallMeanPoissonSampler.of(mean - lambda)
-
-    init {
-        require(mean >= 1) { "mean is not >= 1: $mean" }
-        // The algorithm is not valid if Math.floor(mean) is not an integer.
-        require(mean <= MAX_MEAN) { "mean $mean > $MAX_MEAN" }
-    }
 
     override fun sample(generator: RandomGenerator): Chain<Int> = SimpleChain {
         // This will never be null. It may be a no-op delegate that returns zero.
@@ -113,20 +104,18 @@ class LargeMeanPoissonSampler(val mean: Double) : Sampler<Int> {
     override fun toString(): String = "Large Mean Poisson deviate"
 
     companion object {
-        private const val MAX_MEAN = 0.5 * Int.MAX_VALUE
-        private var NO_CACHE_FACTORIAL_LOG: InternalUtils.FactorialLog? = null
+        private const val MAX_MEAN: Double = 0.5 * Int.MAX_VALUE
+        private val NO_CACHE_FACTORIAL_LOG: InternalUtils.FactorialLog = InternalUtils.FactorialLog.create()
 
         private val NO_SMALL_MEAN_POISSON_SAMPLER = object : Sampler<Int> {
             override fun sample(generator: RandomGenerator): Chain<Int> = ConstantChain(0)
         }
 
-        fun of(mean: Double): LargeMeanPoissonSampler =
-            LargeMeanPoissonSampler(mean)
-
-        init {
-            // Create without a cache.
-            NO_CACHE_FACTORIAL_LOG =
-                InternalUtils.FactorialLog.create()
+        fun of(mean: Double): LargeMeanPoissonSampler {
+            require(mean >= 1) { "mean is not >= 1: $mean" }
+            // The algorithm is not valid if Math.floor(mean) is not an integer.
+            require(mean <= MAX_MEAN) { "mean $mean > $MAX_MEAN" }
+            return LargeMeanPoissonSampler(mean)
         }
     }
 }

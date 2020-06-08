@@ -5,16 +5,11 @@ import scientifik.kmath.chains.map
 import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
 
-class GaussianSampler(
+class GaussianSampler private constructor(
     private val mean: Double,
     private val standardDeviation: Double,
     private val normalized: NormalizedGaussianSampler
 ) : Sampler<Double> {
-
-    init {
-        require(standardDeviation > 0) { "standard deviation is not strictly positive: $standardDeviation" }
-    }
-
     override fun sample(generator: RandomGenerator): Chain<Double> =
         normalized.sample(generator).map { standardDeviation * it + mean }
 
@@ -22,13 +17,17 @@ class GaussianSampler(
 
     companion object {
         fun of(
-            normalized: NormalizedGaussianSampler,
             mean: Double,
-            standardDeviation: Double
-        ) = GaussianSampler(
-            mean,
-            standardDeviation,
-            normalized
-        )
+            standardDeviation: Double,
+            normalized: NormalizedGaussianSampler
+        ): GaussianSampler {
+            require(standardDeviation > 0) { "standard deviation is not strictly positive: $standardDeviation" }
+
+            return GaussianSampler(
+                mean,
+                standardDeviation,
+                normalized
+            )
+        }
     }
 }

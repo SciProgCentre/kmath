@@ -7,11 +7,7 @@ import scientifik.kmath.prob.chain
 import kotlin.math.ln
 import kotlin.math.pow
 
-class AhrensDieterExponentialSampler(val mean: Double) : Sampler<Double> {
-    init {
-        require(mean > 0) { "mean is not strictly positive: $mean" }
-    }
-
+class AhrensDieterExponentialSampler private constructor(val mean: Double) : Sampler<Double> {
     override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
         // Step 1:
         var a = 0.0
@@ -46,10 +42,7 @@ class AhrensDieterExponentialSampler(val mean: Double) : Sampler<Double> {
     override fun toString(): String = "Ahrens-Dieter Exponential deviate"
 
     companion object {
-        private val EXPONENTIAL_SA_QI = DoubleArray(16)
-
-        fun of(mean: Double): Sampler<Double> =
-            AhrensDieterExponentialSampler(mean)
+        private val EXPONENTIAL_SA_QI by lazy { DoubleArray(16) }
 
         init {
             /**
@@ -63,6 +56,11 @@ class AhrensDieterExponentialSampler(val mean: Double) : Sampler<Double> {
                 qi += ln2.pow(i + 1.0) / InternalUtils.factorial(i + 1)
                 EXPONENTIAL_SA_QI[i] = qi
             }
+        }
+
+        fun of(mean: Double): AhrensDieterExponentialSampler {
+            require(mean > 0) { "mean is not strictly positive: $mean" }
+            return AhrensDieterExponentialSampler(mean)
         }
     }
 }

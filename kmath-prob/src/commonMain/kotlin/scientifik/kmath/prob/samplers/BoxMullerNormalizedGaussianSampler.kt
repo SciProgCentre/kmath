@@ -6,7 +6,7 @@ import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.chain
 import kotlin.math.*
 
-class BoxMullerNormalizedGaussianSampler : NormalizedGaussianSampler, Sampler<Double> {
+class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian: Double = Double.NaN
 
     override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
@@ -34,4 +34,8 @@ class BoxMullerNormalizedGaussianSampler : NormalizedGaussianSampler, Sampler<Do
     }
 
     override fun toString(): String = "Box-Muller normalized Gaussian deviate"
+
+    companion object {
+        fun of(): BoxMullerNormalizedGaussianSampler = BoxMullerNormalizedGaussianSampler()
+    }
 }
