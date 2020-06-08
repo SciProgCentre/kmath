@@ -60,7 +60,7 @@ class ZigguratNormalizedGaussianSampler private constructor() :
     companion object {
         private const val R: Double = 3.442619855899
         private const val ONE_OVER_R: Double = 1 / R
-        private const val V = 9.91256303526217e-3
+        private const val V: Double = 9.91256303526217e-3
         private val MAX: Double = 2.0.pow(63.0)
         private val ONE_OVER_MAX: Double = 1.0 / MAX
         private const val LEN: Int = 128
