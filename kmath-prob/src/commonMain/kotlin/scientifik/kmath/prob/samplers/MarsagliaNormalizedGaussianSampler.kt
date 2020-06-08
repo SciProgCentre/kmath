@@ -30,10 +30,8 @@ class MarsagliaNormalizedGaussianSampler private constructor(): NormalizedGaussi
                 if (r2 < 1 && r2 > 0) {
                     // Pair (x, y) is within unit circle.
                     alpha = sqrt(-2 * ln(r2) / r2)
-
                     // Keep second element of the pair for next invocation.
                     nextGaussian = alpha * y
-
                     // Return the first element of the generated pair.
                     break
                 }
@@ -46,7 +44,6 @@ class MarsagliaNormalizedGaussianSampler private constructor(): NormalizedGaussi
             // Use the second element of the pair (generated at the
             // previous invocation).
             val r = nextGaussian
-
             // Both elements of the pair have been used.
             nextGaussian = Double.NaN
             r

@@ -73,8 +73,7 @@ class ZigguratNormalizedGaussianSampler private constructor() :
             // Filling the tables.
             var d = R
             var t = d
-            var fd =
-                gauss(d)
+            var fd = gauss(d)
             val q = V / fd
             K[0] = (d / q * MAX).toLong()
             K[1] = 0
@@ -85,10 +84,7 @@ class ZigguratNormalizedGaussianSampler private constructor() :
 
             (LAST - 1 downTo 1).forEach { i ->
                 d = sqrt(-2 * ln(V / d + fd))
-                fd =
-                    gauss(
-                        d
-                    )
+                fd = gauss(d)
                 K[i + 1] = (d / t * MAX).toLong()
                 t = d
                 F[i] = fd

@@ -15,8 +15,9 @@ class GaussianSampler private constructor(
     private val standardDeviation: Double,
     private val normalized: NormalizedGaussianSampler
 ) : Sampler<Double> {
-    override fun sample(generator: RandomGenerator): Chain<Double> =
-        normalized.sample(generator).map { standardDeviation * it + mean }
+    override fun sample(generator: RandomGenerator): Chain<Double> = normalized
+        .sample(generator)
+        .map { standardDeviation * it + mean }
 
     override fun toString(): String = "Gaussian deviate [$normalized]"
 
