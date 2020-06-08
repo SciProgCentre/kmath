@@ -51,9 +51,9 @@ open class FunctionalExpressionSpace<T>(val space: Space<T>) : Space<Expression<
     operator fun T.minus(arg: Expression<T>): Expression<T> = arg - this
 }
 
-open class FunctionalExpressionField<T>(
-    val field: Field<T>
-) : ExpressionField<T, Expression<T>>, FunctionalExpressionSpace<T>(field) {
+open class FunctionalExpressionField<T>(val field: Field<T>) :
+    ExpressionField<T, Expression<T>>,
+    FunctionalExpressionSpace<T>(field) {
 
     override val one: Expression<T>
         get() = const(this.field.one)
