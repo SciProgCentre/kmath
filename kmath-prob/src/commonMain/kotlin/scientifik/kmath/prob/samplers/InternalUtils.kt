@@ -1,7 +1,5 @@
-package scientifik.kmath.commons.rng.sampling.distribution
+package scientifik.kmath.prob.samplers
 
-import scientifik.kmath.commons.rng.UniformRandomProvider
-import scientifik.kmath.commons.rng.sampling.SharedStateSampler
 import kotlin.math.ln
 import kotlin.math.min
 
@@ -20,8 +18,8 @@ internal object InternalUtils {
 
     fun factorial(n: Int): Long = FACTORIALS[n]
 
-    fun validateProbabilities(probabilities: DoubleArray?): Double {
-        require(!(probabilities == null || probabilities.isEmpty())) { "Probabilities must not be empty." }
+    fun validateProbabilities(probabilities: DoubleArray): Double {
+        require(probabilities.isNotEmpty()) { "Probabilities must not be empty." }
         var sumProb = 0.0
 
         probabilities.forEach { prob ->
@@ -33,23 +31,10 @@ internal object InternalUtils {
         return sumProb
     }
 
-    fun validateProbability(probability: Double): Unit =
-        require(!(probability < 0 || probability.isInfinite() || probability.isNaN())) { "Invalid probability: $probability" }
-
-    fun newNormalizedGaussianSampler(
-        sampler: NormalizedGaussianSampler,
-        rng: UniformRandomProvider
-    ): NormalizedGaussianSampler {
-        if (sampler !is SharedStateSampler<*>) throw UnsupportedOperationException("The underlying sampler cannot share state")
-
-        val newSampler: Any =
-            (sampler as SharedStateSampler<*>).withUniformRandomProvider(rng) as? NormalizedGaussianSampler
-                ?: throw UnsupportedOperationException(
-                    "The underlying sampler did not create a normalized Gaussian sampler"
-                )
-
-        return newSampler as NormalizedGaussianSampler
-    }
+    private fun validateProbability(probability: Double): Unit =
+        require(!(probability < 0 || probability.isInfinite() || probability.isNaN())) {
+            "Invalid probability: $probability"
+        }
 
     class FactorialLog private constructor(
         numValues: Int,
@@ -68,23 +53,19 @@ internal object InternalUtils {
                     BEGIN_LOG_FACTORIALS, endCopy)
             }
             // All values to be computed
-            else
-                endCopy =
-                    BEGIN_LOG_FACTORIALS
+            else endCopy = BEGIN_LOG_FACTORIALS
 
             // Compute remaining values.
             (endCopy until numValues).forEach { i ->
-                if (i < FACTORIALS.size) logFactorials[i] = ln(
-                    FACTORIALS[i].toDouble()) else logFactorials[i] =
-                    logFactorials[i - 1] + ln(i.toDouble())
+                if (i < FACTORIALS.size)
+                    logFactorials[i] = ln(FACTORIALS[i].toDouble())
+                else
+                    logFactorials[i] = logFactorials[i - 1] + ln(i.toDouble())
             }
         }
 
         fun withCache(cacheSize: Int): FactorialLog =
-            FactorialLog(
-                cacheSize,
-                logFactorials
-            )
+            FactorialLog(cacheSize, logFactorials)
 
         fun value(n: Int): Double {
             if (n < logFactorials.size)
@@ -98,10 +79,7 @@ internal object InternalUtils {
 
         companion object {
             fun create(): FactorialLog =
-                FactorialLog(
-                    0,
-                    null
-                )
+                FactorialLog(0, null)
         }
     }
 }

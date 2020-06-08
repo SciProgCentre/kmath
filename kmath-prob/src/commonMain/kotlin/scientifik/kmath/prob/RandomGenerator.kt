@@ -7,13 +7,11 @@ import kotlin.random.Random
  */
 interface RandomGenerator {
     fun nextBoolean(): Boolean
-
     fun nextDouble(): Double
     fun nextInt(): Int
     fun nextInt(until: Int): Int
     fun nextLong(): Long
     fun nextLong(until: Long): Long
-
     fun fillBytes(array: ByteArray, fromIndex: Int = 0, toIndex: Int = array.size)
     fun nextBytes(size: Int): ByteArray = ByteArray(size).also { fillBytes(it) }
 
@@ -28,21 +26,16 @@ interface RandomGenerator {
 
     companion object {
         val default by lazy { DefaultGenerator() }
-
         fun default(seed: Long) = DefaultGenerator(Random(seed))
     }
 }
 
-inline class DefaultGenerator(val random: Random = Random) : RandomGenerator {
+inline class DefaultGenerator(private val random: Random = Random) : RandomGenerator {
     override fun nextBoolean(): Boolean = random.nextBoolean()
-
     override fun nextDouble(): Double = random.nextDouble()
-
     override fun nextInt(): Int = random.nextInt()
     override fun nextInt(until: Int): Int = random.nextInt(until)
-
     override fun nextLong(): Long = random.nextLong()
-
     override fun nextLong(until: Long): Long = random.nextLong(until)
 
     override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
@@ -50,6 +43,5 @@ inline class DefaultGenerator(val random: Random = Random) : RandomGenerator {
     }
 
     override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
-
     override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
 }

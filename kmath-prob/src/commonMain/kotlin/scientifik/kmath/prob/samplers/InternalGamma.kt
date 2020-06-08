@@ -1,10 +1,10 @@
-package scientifik.kmath.commons.rng.sampling.distribution
+package scientifik.kmath.prob.samplers
 
 import kotlin.math.PI
 import kotlin.math.ln
 
 internal object InternalGamma {
-    const val LANCZOS_G = 607.0 / 128.0
+    private const val LANCZOS_G = 607.0 / 128.0
 
     private val LANCZOS_COEFFICIENTS = doubleArrayOf(
         0.99999999999999709182,

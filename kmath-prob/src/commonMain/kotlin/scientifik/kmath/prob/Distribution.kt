@@ -1,5 +1,6 @@
 package scientifik.kmath.prob
 
+import kotlinx.coroutines.flow.first
 import scientifik.kmath.chains.Chain
 import scientifik.kmath.chains.collect
 import scientifik.kmath.structures.Buffer
@@ -68,6 +69,8 @@ fun <T : Any> Sampler<T>.sampleBuffer(
         bufferFactory(size) { tmp[it] }
     }
 }
+
+suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator) = sample(generator).first()
 
 /**
  * Generate a bunch of samples from real distributions

@@ -12,7 +12,6 @@ interface NamedDistribution<T> : Distribution<Map<String, T>>
  * A multivariate distribution that has independent distributions for separate axis
  */
 class FactorizedDistribution<T>(val distributions: Collection<NamedDistribution<T>>) : NamedDistribution<T> {
-
     override fun probability(arg: Map<String, T>): Double {
         return distributions.fold(1.0) { acc, distr -> acc * distr.probability(arg) }
     }
