@@ -2,6 +2,7 @@ package scientifik.kmath.expressions
 
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Space
+import scientifik.kmath.operations.invoke
 
 open class AsmExpressionSpace<T>(private val space: Space<T>) : Space<AsmExpression<T>>,
     ExpressionSpace<T, AsmExpression<T>> {
@@ -21,7 +22,7 @@ class AsmExpressionField<T>(private val field: Field<T>) : ExpressionField<T, As
     override val one: AsmExpression<T>
         get() = const(this.field.one)
 
-    override fun number(value: Number): AsmExpression<T> = const(field.run { one * value })
+    override fun number(value: Number): AsmExpression<T> = const(field { one * value })
 
     override fun multiply(a: AsmExpression<T>, b: AsmExpression<T>): AsmExpression<T> =
         AsmProductExpression(field, a, b)

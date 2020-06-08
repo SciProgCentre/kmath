@@ -3,6 +3,7 @@ package scientifik.kmath.expressions
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
+import scientifik.kmath.operations.invoke
 
 internal class VariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
     override fun invoke(arguments: Map<String, T>): T =
@@ -57,7 +58,7 @@ open class FunctionalExpressionField<T>(
     override val one: Expression<T>
         get() = const(this.field.one)
 
-    override fun number(value: Number): Expression<T> = const(field.run { one * value })
+    override fun number(value: Number): Expression<T> = const(field { one * value })
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
     override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> = DivExpression(field, a, b)
     operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
