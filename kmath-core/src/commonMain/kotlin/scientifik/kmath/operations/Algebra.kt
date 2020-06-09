@@ -6,9 +6,12 @@ annotation class KMathContext
 /**
  * Marker interface for any algebra
  */
-interface Algebra<T>
+interface Algebra<T> {
+    fun unaryOperation(operation: String, arg: T): T
+    fun binaryOperation(operation: String, left: T, right: T): T
+}
 
-inline operator fun <T : Algebra<*>, R> T.invoke(block: T.() -> R): R = run(block)
+inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
  * Space-like operations without neutral element
@@ -24,7 +27,7 @@ interface SpaceOperations<T> : Algebra<T> {
      */
     fun multiply(a: T, k: Number): T
 
-    //Operation to be performed in this context
+    //Operation to be performed in this context. Could be moved to extensions in case of KEEP-176
     operator fun T.unaryMinus(): T = multiply(this, -1.0)
 
     operator fun T.plus(b: T): T = add(this, b)
@@ -32,6 +35,24 @@ interface SpaceOperations<T> : Algebra<T> {
     operator fun T.times(k: Number) = multiply(this, k.toDouble())
     operator fun T.div(k: Number) = multiply(this, 1.0 / k.toDouble())
     operator fun Number.times(b: T) = b * this
+
+    override fun unaryOperation(operation: String, arg: T): T = when (operation) {
+        PLUS_OPERATION -> arg
+        MINUS_OPERATION -> -arg
+        else -> error("Unary operation $operation not defined in $this")
+    }
+
+    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
+        PLUS_OPERATION -> add(left, right)
+        MINUS_OPERATION -> left - right
+        else -> error("Binary operation $operation not defined in $this")
+    }
+
+    companion object {
+        const val PLUS_OPERATION = "+"
+        const val MINUS_OPERATION = "-"
+        const val NOT_OPERATION = "!"
+    }
 }
 
 
@@ -60,6 +81,15 @@ interface RingOperations<T> : SpaceOperations<T> {
     fun multiply(a: T, b: T): T
 
     operator fun T.times(b: T): T = multiply(this, b)
+
+    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
+        TIMES_OPERATION -> multiply(left, right)
+        else -> super.binaryOperation(operation, left, right)
+    }
+
+    companion object{
+        const val TIMES_OPERATION = "*"
+    }
 }
 
 /**
@@ -85,6 +115,15 @@ interface FieldOperations<T> : RingOperations<T> {
     fun divide(a: T, b: T): T
 
     operator fun T.div(b: T): T = divide(this, b)
+
+    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
+        DIV_OPERATION -> divide(left, right)
+        else -> super.binaryOperation(operation, left, right)
+    }
+
+    companion object{
+        const val DIV_OPERATION = "/"
+    }
 }
 
 /**
