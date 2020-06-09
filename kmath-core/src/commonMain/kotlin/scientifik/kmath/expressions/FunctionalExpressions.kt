@@ -1,80 +1,102 @@
 package scientifik.kmath.expressions
 
-import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.Ring
-import scientifik.kmath.operations.Space
+import scientifik.kmath.operations.*
 
-internal class VariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
+internal class FunctionalUnaryOperation<T>(val context: Algebra<T>, val name: String, val expr: Expression<T>) :
+    Expression<T> {
+    override fun invoke(arguments: Map<String, T>): T = context.unaryOperation(name, expr.invoke(arguments))
+}
+
+internal class FunctionalBinaryOperation<T>(
+    val context: Algebra<T>,
+    val name: String,
+    val first: Expression<T>,
+    val second: Expression<T>
+) : Expression<T> {
+    override fun invoke(arguments: Map<String, T>): T =
+        context.binaryOperation(name, first.invoke(arguments), second.invoke(arguments))
+}
+
+internal class FunctionalVariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
     override fun invoke(arguments: Map<String, T>): T =
         arguments[name] ?: default ?: error("Parameter not found: $name")
 }
 
-internal class ConstantExpression<T>(val value: T) : Expression<T> {
+internal class FunctionalConstantExpression<T>(val value: T) : Expression<T> {
     override fun invoke(arguments: Map<String, T>): T = value
 }
 
-internal class SumExpression<T>(
-    val context: Space<T>,
-    val first: Expression<T>,
-    val second: Expression<T>
-) : Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T = context.add(first.invoke(arguments), second.invoke(arguments))
-}
-
-internal class ProductExpression<T>(val context: Ring<T>, val first: Expression<T>, val second: Expression<T>) :
-    Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T =
-        context.multiply(first.invoke(arguments), second.invoke(arguments))
-}
-
-internal class ConstProductExpession<T>(val context: Space<T>, val expr: Expression<T>, val const: Number) :
+internal class FunctionalConstProductExpression<T>(val context: Space<T>, val expr: Expression<T>, val const: Number) :
     Expression<T> {
     override fun invoke(arguments: Map<String, T>): T = context.multiply(expr.invoke(arguments), const)
 }
 
-internal class DivExpession<T>(val context: Field<T>, val expr: Expression<T>, val second: Expression<T>) :
-    Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T = context.divide(expr.invoke(arguments), second.invoke(arguments))
+open class FunctionalExpressionAlgebra<T>(val algebra: Algebra<T>) :
+    Algebra<Expression<T>>,
+    ExpressionContext<T, Expression<T>> {
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        FunctionalUnaryOperation(algebra, operation, arg)
+
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(algebra, operation, left, right)
+
+    override fun const(value: T): Expression<T> = FunctionalConstantExpression(value)
+    override fun variable(name: String, default: T?): Expression<T> = FunctionalVariableExpression(name, default)
 }
 
-open class FunctionalExpressionSpace<T>(
-    val space: Space<T>
-) : Space<Expression<T>>, ExpressionContext<T, Expression<T>> {
+open class FunctionalExpressionSpace<T>(val space: Space<T>) :
+    FunctionalExpressionAlgebra<T>(space),
+    Space<Expression<T>> {
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        FunctionalUnaryOperation(algebra, operation, arg)
 
-    override val zero: Expression<T> = ConstantExpression(space.zero)
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(algebra, operation, left, right)
 
-    override fun const(value: T): Expression<T> = ConstantExpression(value)
+    override val zero: Expression<T> = FunctionalConstantExpression(space.zero)
 
-    override fun variable(name: String, default: T?): Expression<T> = VariableExpression(name, default)
+    override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(space, SpaceOperations.PLUS_OPERATION, a, b)
 
-    override fun add(a: Expression<T>, b: Expression<T>): Expression<T> = SumExpression(space, a, b)
-
-    override fun multiply(a: Expression<T>, k: Number): Expression<T> = ConstProductExpession(space, a, k)
-
-
+    override fun multiply(a: Expression<T>, k: Number): Expression<T> = FunctionalConstProductExpression(space, a, k)
     operator fun Expression<T>.plus(arg: T) = this + const(arg)
     operator fun Expression<T>.minus(arg: T) = this - const(arg)
-
     operator fun T.plus(arg: Expression<T>) = arg + this
     operator fun T.minus(arg: Expression<T>) = arg - this
 }
 
-open class FunctionalExpressionField<T>(
-    val field: Field<T>
-) : Field<Expression<T>>, ExpressionContext<T, Expression<T>>, FunctionalExpressionSpace<T>(field) {
-
+open class FunctionalExpressionRing<T>(val ring: Ring<T>) : FunctionalExpressionSpace<T>(ring), Ring<Expression<T>> {
     override val one: Expression<T>
-        get() = const(this.field.one)
+        get() = const(this.ring.one)
 
-    fun number(value: Number): Expression<T> = const(field.run { one * value })
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        FunctionalUnaryOperation(algebra, operation, arg)
 
-    override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(algebra, operation, left, right)
 
-    override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> = DivExpession(field, a, b)
+    fun number(value: Number): Expression<T> = const(ring { one * value })
+
+    override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(space, RingOperations.TIMES_OPERATION, a, b)
 
     operator fun Expression<T>.times(arg: T) = this * const(arg)
-    operator fun Expression<T>.div(arg: T) = this / const(arg)
-
     operator fun T.times(arg: Expression<T>) = arg * this
+}
+
+open class FunctionalExpressionField<T>(val field: Field<T>) :
+    FunctionalExpressionRing<T>(field),
+    Field<Expression<T>> {
+
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        FunctionalUnaryOperation(algebra, operation, arg)
+
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(algebra, operation, left, right)
+
+    override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
+        FunctionalBinaryOperation(space, FieldOperations.DIV_OPERATION, a, b)
+
+    operator fun Expression<T>.div(arg: T) = this / const(arg)
     operator fun T.div(arg: Expression<T>) = arg / this
 }

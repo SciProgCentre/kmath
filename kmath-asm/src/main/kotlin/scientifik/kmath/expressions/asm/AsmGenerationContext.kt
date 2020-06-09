@@ -1,4 +1,4 @@
-package scientifik.kmath.expressions
+package scientifik.kmath.expressions.asm
 
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
@@ -33,15 +33,15 @@ class AsmGenerationContext<T>(
     private val invokeMethodVisitor: MethodVisitor
     private val invokeL0: Label
     private lateinit var invokeL1: Label
-    private var generatedInstance: AsmCompiledExpression<T>? = null
+    private var generatedInstance: FunctionalCompiledExpression<T>? = null
 
     init {
         asmCompiledClassWriter.visit(
             Opcodes.V1_8,
             Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_SUPER,
             slashesClassName,
-            "L$ASM_COMPILED_EXPRESSION_CLASS<L$T_CLASS;>;",
-            ASM_COMPILED_EXPRESSION_CLASS,
+            "L$FUNCTIONAL_COMPILED_EXPRESSION_CLASS<L$T_CLASS;>;",
+            FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
             arrayOf()
         )
 
@@ -58,7 +58,7 @@ class AsmGenerationContext<T>(
 
                 visitMethodInsn(
                     Opcodes.INVOKESPECIAL,
-                    ASM_COMPILED_EXPRESSION_CLASS,
+                    FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
                     "<init>",
                     "(L$ALGEBRA_CLASS;L$LIST_CLASS;)V",
                     false
@@ -103,7 +103,7 @@ class AsmGenerationContext<T>(
 
     @PublishedApi
     @Suppress("UNCHECKED_CAST")
-    internal fun generate(): AsmCompiledExpression<T> {
+    internal fun generate(): FunctionalCompiledExpression<T> {
         generatedInstance?.let { return it }
 
         invokeMethodVisitor.run {
@@ -170,7 +170,7 @@ class AsmGenerationContext<T>(
             .defineClass(className, asmCompiledClassWriter.toByteArray())
             .constructors
             .first()
-            .newInstance(algebra, constants) as AsmCompiledExpression<T>
+            .newInstance(algebra, constants) as FunctionalCompiledExpression<T>
 
         generatedInstance = new
         return new
@@ -245,7 +245,7 @@ class AsmGenerationContext<T>(
 
         invokeMethodVisitor.visitFieldInsn(
             Opcodes.GETFIELD,
-            ASM_COMPILED_EXPRESSION_CLASS, "algebra", "L$ALGEBRA_CLASS;"
+            FUNCTIONAL_COMPILED_EXPRESSION_CLASS, "algebra", "L$ALGEBRA_CLASS;"
         )
 
         invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, T_ALGEBRA_CLASS)
@@ -259,6 +259,10 @@ class AsmGenerationContext<T>(
 
     private fun visitCastToT(): Unit = invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, T_CLASS)
 
+    internal fun visitStringConstant(string: String) {
+        invokeMethodVisitor.visitLdcInsn(string)
+    }
+
     internal companion object {
         private val SIGNATURE_LETTERS = mapOf(
             java.lang.Byte::class.java to "B",
@@ -269,15 +273,13 @@ class AsmGenerationContext<T>(
             java.lang.Double::class.java to "D"
         )
 
-        internal const val ASM_COMPILED_EXPRESSION_CLASS = "scientifik/kmath/expressions/AsmCompiledExpression"
+        internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS = "scientifik/kmath/expressions/asm/FunctionalCompiledExpression"
         internal const val LIST_CLASS = "java/util/List"
         internal const val MAP_CLASS = "java/util/Map"
         internal const val OBJECT_CLASS = "java/lang/Object"
         internal const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
         internal const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
         internal const val STRING_CLASS = "java/lang/String"
-        internal const val FIELD_OPERATIONS_CLASS = "scientifik/kmath/operations/FieldOperations"
-        internal const val RING_OPERATIONS_CLASS = "scientifik/kmath/operations/RingOperations"
         internal const val NUMBER_CLASS = "java/lang/Number"
     }
 }

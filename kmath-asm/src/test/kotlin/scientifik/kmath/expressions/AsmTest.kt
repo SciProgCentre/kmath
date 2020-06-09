@@ -1,103 +1,40 @@
 package scientifik.kmath.expressions
 
-import scientifik.kmath.operations.Algebra
+import scientifik.kmath.expressions.asm.AsmExpression
+import scientifik.kmath.expressions.asm.AsmExpressionField
+import scientifik.kmath.expressions.asm.asmField
 import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AsmTest {
-    private fun <T> testExpressionValue(
-        expectedValue: T,
-        expr: AsmExpression<T>,
-        arguments: Map<String, T>,
-        algebra: Algebra<T>,
-        clazz: Class<*>
-    ): Unit = assertEquals(
-        expectedValue, AsmGenerationContext(clazz, algebra, "TestAsmCompiled")
-            .also(expr::invoke)
-            .generate()
-            .invoke(arguments)
-    )
-
-    @Suppress("UNCHECKED_CAST")
-    private fun testDoubleExpressionValue(
-        expectedValue: Double,
-        expr: AsmExpression<Double>,
-        arguments: Map<String, Double>,
-        algebra: Algebra<Double> = RealField,
-        clazz: Class<Double> = java.lang.Double::class.java as Class<Double>
-    ): Unit = testExpressionValue(expectedValue, expr, arguments, algebra, clazz)
+    private fun testDoubleExpression(
+        expected: Double?,
+        arguments: Map<String, Double> = emptyMap(),
+        block: AsmExpressionField<Double>.() -> AsmExpression<Double>
+    ): Unit = assertEquals(expected = expected, actual = asmField(RealField, block)(arguments))
 
     @Test
-    fun testSum() = testDoubleExpressionValue(
-        25.0,
-        AsmSumExpression(RealField, AsmConstantExpression(1.0), AsmVariableExpression("x")),
-        mapOf("x" to 24.0)
-    )
+    fun testConstantsSum() = testDoubleExpression(16.0) { const(8.0) + 8.0 }
 
     @Test
-    fun testConst(): Unit = testDoubleExpressionValue(
-        123.0,
-        AsmConstantExpression(123.0),
-        mapOf()
-    )
+    fun testVarsSum() = testDoubleExpression(1000.0, mapOf("x" to 500.0)) { variable("x") + 500.0 }
 
     @Test
-    fun testDiv(): Unit = testDoubleExpressionValue(
-        0.5,
-        AsmDivExpression(RealField, AsmConstantExpression(1.0), AsmConstantExpression(2.0)),
-        mapOf()
-    )
+    fun testProduct() = testDoubleExpression(24.0) { const(4.0) * const(6.0) }
 
     @Test
-    fun testProduct(): Unit = testDoubleExpressionValue(
-        25.0,
-        AsmProductExpression(RealField,AsmVariableExpression("x"), AsmVariableExpression("x")),
-        mapOf("x" to 5.0)
-    )
+    fun testConstantProduct() = testDoubleExpression(984.0) { const(8.0) * 123 }
 
     @Test
-    fun testCProduct(): Unit = testDoubleExpressionValue(
-        25.0,
-        AsmConstProductExpression(RealField,AsmVariableExpression("x"), 5.0),
-        mapOf("x" to 5.0)
-    )
+    fun testSubtraction() = testDoubleExpression(2.0) { const(4.0) - 2.0 }
 
     @Test
-    fun testCProductWithOtherTypeNumber(): Unit = testDoubleExpressionValue(
-        25.0,
-        AsmConstProductExpression(RealField,AsmVariableExpression("x"), 5f),
-        mapOf("x" to 5.0)
-    )
-
-    object CustomZero : Number() {
-        override fun toByte(): Byte = 0
-        override fun toChar(): Char = 0.toChar()
-        override fun toDouble(): Double = 0.0
-        override fun toFloat(): Float = 0f
-        override fun toInt(): Int = 0
-        override fun toLong(): Long = 0L
-        override fun toShort(): Short = 0
-    }
+    fun testDivision() = testDoubleExpression(64.0) { const(128.0) / 2 }
 
     @Test
-    fun testCProductWithCustomTypeNumber(): Unit = testDoubleExpressionValue(
-        0.0,
-        AsmConstProductExpression(RealField,AsmVariableExpression("x"), CustomZero),
-        mapOf("x" to 5.0)
-    )
+    fun testDirectCall() = testDoubleExpression(4096.0) { binaryOperation("*", const(64.0), const(64.0)) }
 
-    @Test
-    fun testVar(): Unit = testDoubleExpressionValue(
-        10000.0,
-        AsmVariableExpression("x"),
-        mapOf("x" to 10000.0)
-    )
-
-    @Test
-    fun testVarWithDefault(): Unit = testDoubleExpressionValue(
-        10000.0,
-        AsmVariableExpression("x", 10000.0),
-        mapOf()
-    )
+//    @Test
+//    fun testSine() = testDoubleExpression(0.0) { unaryOperation("sin", const(PI)) }
 }

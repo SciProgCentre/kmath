@@ -1,7 +1,9 @@
-package scientifik.kmath.expressions
+package scientifik.kmath.expressions.asm
 
+import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.Field
+import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 
 @PublishedApi
@@ -25,10 +27,20 @@ inline fun <reified T, I> asm(i: I, algebra: Algebra<T>, block: I.() -> AsmExpre
     return ctx.generate()
 }
 
+inline fun <reified T> asmAlgebra(
+    algebra: Algebra<T>,
+    block: AsmExpressionAlgebra<T>.() -> AsmExpression<T>
+): Expression<T> = asm(AsmExpressionAlgebra(algebra), algebra, block)
+
 inline fun <reified T> asmSpace(
     algebra: Space<T>,
     block: AsmExpressionSpace<T>.() -> AsmExpression<T>
 ): Expression<T> = asm(AsmExpressionSpace(algebra), algebra, block)
+
+inline fun <reified T> asmRing(
+    algebra: Ring<T>,
+    block: AsmExpressionRing<T>.() -> AsmExpression<T>
+): Expression<T> = asm(AsmExpressionRing(algebra), algebra, block)
 
 inline fun <reified T> asmField(
     algebra: Field<T>,
