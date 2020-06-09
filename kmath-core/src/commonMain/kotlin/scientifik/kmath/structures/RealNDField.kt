@@ -74,6 +74,13 @@ class RealNDField(override val shape: IntArray) :
 
     override fun cos(arg: NDBuffer<Double>) = map(arg) { cos(it) }
 
+    override fun tan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { tan(it) }
+
+    override fun asin(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { asin(it) }
+
+    override fun acos(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { acos(it) }
+
+    override fun atan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { atan(it) }
 }
 
 

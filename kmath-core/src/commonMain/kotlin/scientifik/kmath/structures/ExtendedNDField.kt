@@ -4,7 +4,7 @@ import scientifik.kmath.operations.*
 
 interface ExtendedNDField<T : Any, F, N : NDStructure<T>> :
     NDField<T, F, N>,
-    TrigonometricOperations<N>,
+    InverseTrigonometricOperations<N>,
     PowerOperations<N>,
     ExponentialOperations<N>
         where F : ExtendedFieldOperations<T>, F : Field<T>

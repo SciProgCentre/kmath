@@ -8,7 +8,7 @@ import kotlin.math.pow as kpow
  */
 interface ExtendedFieldOperations<T> :
     FieldOperations<T>,
-    TrigonometricOperations<T>,
+    InverseTrigonometricOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T>
 
@@ -44,6 +44,10 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
 
     override inline fun sin(arg: Double) = kotlin.math.sin(arg)
     override inline fun cos(arg: Double) = kotlin.math.cos(arg)
+    override inline fun tan(arg: Double): Double = kotlin.math.tan(arg)
+    override inline fun acos(arg: Double): Double = kotlin.math.acos(arg)
+    override inline fun asin(arg: Double): Double = kotlin.math.asin(arg)
+    override inline fun atan(arg: Double): Double = kotlin.math.atan(arg)
 
     override inline fun power(arg: Double, pow: Number) = arg.kpow(pow.toDouble())
 
@@ -75,6 +79,10 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 
     override inline fun sin(arg: Float) = kotlin.math.sin(arg)
     override inline fun cos(arg: Float) = kotlin.math.cos(arg)
+    override inline fun tan(arg: Float) = kotlin.math.tan(arg)
+    override inline fun acos(arg: Float) = kotlin.math.acos(arg)
+    override inline fun asin(arg: Float) = kotlin.math.asin(arg)
+    override inline fun atan(arg: Float) = kotlin.math.atan(arg)
 
     override inline fun power(arg: Float, pow: Number) = arg.pow(pow.toFloat())
 

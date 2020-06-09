@@ -8,6 +8,8 @@ import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
 import kotlin.math.*
 
+private val PI_DIV_2 = Complex(PI / 2, 0)
+
 /**
  * A field for complex numbers
  */
@@ -30,9 +32,11 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
         return Complex((a.re * b.re + a.im * b.im) / norm, (a.re * b.im - a.im * b.re) / norm)
     }
 
-    override fun sin(arg: Complex): Complex = i / 2 * (exp(-i * arg) - exp(i * arg))
-
+    override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2
     override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
+    override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - arg pow 2) + i * arg)
+    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - arg pow 2) + i * arg)
+    override fun atan(arg: Complex): Complex = i * (ln(one - i * arg) - ln(one + i * arg)) / 2
 
     override fun power(arg: Complex, pow: Number): Complex =
         arg.r.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))

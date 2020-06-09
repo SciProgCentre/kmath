@@ -59,8 +59,10 @@ class DerivativeStructureField(
     override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
 
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
-
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
+    override fun asin(arg: DerivativeStructure): DerivativeStructure = arg.asin()
+    override fun acos(arg: DerivativeStructure): DerivativeStructure = arg.acos()
+    override fun atan(arg: DerivativeStructure): DerivativeStructure = arg.atan()
 
     override fun power(arg: DerivativeStructure, pow: Number): DerivativeStructure = when (pow) {
         is Double -> arg.pow(pow)
@@ -136,6 +138,3 @@ object DiffExpressionContext : ExpressionContext<Double, DiffExpression>, Field<
     override fun divide(a: DiffExpression, b: DiffExpression) =
         DiffExpression { a.function(this) / b.function(this) }
 }
-
-
-
