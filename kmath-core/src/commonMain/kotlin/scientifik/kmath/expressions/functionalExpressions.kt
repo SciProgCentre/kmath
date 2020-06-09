@@ -38,8 +38,7 @@ internal class DivExpession<T>(val context: Field<T>, val expr: Expression<T>, v
 }
 
 open class FunctionalExpressionSpace<T>(
-    val space: Space<T>,
-    one: T
+    val space: Space<T>
 ) : Space<Expression<T>>, ExpressionSpace<T,Expression<T>> {
 
     override val zero: Expression<T> = ConstantExpression(space.zero)
@@ -62,7 +61,7 @@ open class FunctionalExpressionSpace<T>(
 
 open class FunctionalExpressionField<T>(
     val field: Field<T>
-) : ExpressionField<T,Expression<T>>, FunctionalExpressionSpace<T>(field, field.one) {
+) : ExpressionField<T,Expression<T>>, FunctionalExpressionSpace<T>(field) {
 
     override val one: Expression<T>
         get() = const(this.field.one)
