@@ -4,27 +4,54 @@ import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.invoke
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.jvm.jvmName
 
 interface AsmExpression<T> {
     fun tryEvaluate(): T? = null
     fun invoke(gen: AsmGenerationContext<T>)
 }
 
+internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+    context::class.memberFunctions.find { it.name == name && it.parameters.size == arity }
+        ?: return false
+
+    return true
+}
+
+internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+    context::class.memberFunctions.find { it.name == name && it.parameters.size == arity }
+        ?: return false
+
+    val owner = context::class.jvmName.replace('.', '/')
+
+    val sig = buildString {
+        append('(')
+        repeat(arity) { append("L${AsmGenerationContext.OBJECT_CLASS};") }
+        append(')')
+        append("L${AsmGenerationContext.OBJECT_CLASS};")
+    }
+
+    visitAlgebraOperation(owner = owner, method = name, descriptor = sig)
+
+    return true
+}
+
 internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val name: String, expr: AsmExpression<T>) :
     AsmExpression<T> {
     private val expr: AsmExpression<T> = expr.optimize()
-
-    override fun tryEvaluate(): T? = context {
-        unaryOperation(
-            name,
-            expr.tryEvaluate() ?: return@context null
-        )
-    }
+    override fun tryEvaluate(): T? = context { unaryOperation(name, expr.tryEvaluate() ?: return@context null) }
 
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
-        gen.visitStringConstant(name)
+
+        if (!hasSpecific(context, name, 1))
+            gen.visitStringConstant(name)
+
         expr.invoke(gen)
+
+        if (gen.tryInvokeSpecific(context, name, 1))
+            return
 
         gen.visitAlgebraOperation(
             owner = AsmGenerationContext.ALGEBRA_CLASS,
@@ -55,9 +82,15 @@ internal class AsmBinaryOperation<T>(
 
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
-        gen.visitStringConstant(name)
+
+        if (!hasSpecific(context, name, 1))
+            gen.visitStringConstant(name)
+
         first.invoke(gen)
         second.invoke(gen)
+
+        if (gen.tryInvokeSpecific(context, name, 1))
+            return
 
         gen.visitAlgebraOperation(
             owner = AsmGenerationContext.ALGEBRA_CLASS,
@@ -79,7 +112,11 @@ internal class AsmConstantExpression<T>(private val value: T) : AsmExpression<T>
     override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
 }
 
-internal class AsmConstProductExpression<T>(private val context: Space<T>, expr: AsmExpression<T>, private val const: Number) :
+internal class AsmConstProductExpression<T>(
+    private val context: Space<T>,
+    expr: AsmExpression<T>,
+    private val const: Number
+) :
     AsmExpression<T> {
     private val expr: AsmExpression<T> = expr.optimize()
 
@@ -100,7 +137,7 @@ internal class AsmConstProductExpression<T>(private val context: Space<T>, expr:
 
 internal abstract class FunctionalCompiledExpression<T> internal constructor(
     @JvmField protected val algebra: Algebra<T>,
-    @JvmField protected val constants: MutableList<out Any>
+    @JvmField protected val constants: Array<Any>
 ) : Expression<T> {
     abstract override fun invoke(arguments: Map<String, T>): T
 }

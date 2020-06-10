@@ -1,10 +1,8 @@
 package scientifik.kmath.expressions.asm
 
 import scientifik.kmath.expressions.Expression
-import scientifik.kmath.operations.Algebra
-import scientifik.kmath.operations.Field
-import scientifik.kmath.operations.Ring
-import scientifik.kmath.operations.Space
+import scientifik.kmath.expressions.ExpressionContext
+import scientifik.kmath.operations.*
 
 @PublishedApi
 internal fun buildName(expression: AsmExpression<*>, collision: Int = 0): String {
@@ -20,7 +18,11 @@ internal fun buildName(expression: AsmExpression<*>, collision: Int = 0): String
 }
 
 
-inline fun <reified T, I> asm(i: I, algebra: Algebra<T>, block: I.() -> AsmExpression<T>): Expression<T> {
+inline fun <reified T, E : ExpressionContext<T, AsmExpression<T>>> asm(
+    i: E,
+    algebra: Algebra<T>,
+    block: E.() -> AsmExpression<T>
+): Expression<T> {
     val expression = i.block().optimize()
     val ctx = AsmGenerationContext(T::class.java, algebra, buildName(expression))
     expression.invoke(ctx)

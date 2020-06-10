@@ -59,10 +59,10 @@ open class FunctionalExpressionSpace<T>(val space: Space<T>) :
         FunctionalBinaryOperation(space, SpaceOperations.PLUS_OPERATION, a, b)
 
     override fun multiply(a: Expression<T>, k: Number): Expression<T> = FunctionalConstProductExpression(space, a, k)
-    operator fun Expression<T>.plus(arg: T) = this + const(arg)
-    operator fun Expression<T>.minus(arg: T) = this - const(arg)
-    operator fun T.plus(arg: Expression<T>) = arg + this
-    operator fun T.minus(arg: Expression<T>) = arg - this
+    operator fun Expression<T>.plus(arg: T): Expression<T> = this + const(arg)
+    operator fun Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
+    operator fun T.plus(arg: Expression<T>): Expression<T> = arg + this
+    operator fun T.minus(arg: Expression<T>): Expression<T> = arg - this
 }
 
 open class FunctionalExpressionRing<T>(val ring: Ring<T>) : FunctionalExpressionSpace<T>(ring), Ring<Expression<T>> {
@@ -80,8 +80,8 @@ open class FunctionalExpressionRing<T>(val ring: Ring<T>) : FunctionalExpression
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(space, RingOperations.TIMES_OPERATION, a, b)
 
-    operator fun Expression<T>.times(arg: T) = this * const(arg)
-    operator fun T.times(arg: Expression<T>) = arg * this
+    operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
+    operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
 }
 
 open class FunctionalExpressionField<T>(val field: Field<T>) :
@@ -97,6 +97,6 @@ open class FunctionalExpressionField<T>(val field: Field<T>) :
     override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(space, FieldOperations.DIV_OPERATION, a, b)
 
-    operator fun Expression<T>.div(arg: T) = this / const(arg)
-    operator fun T.div(arg: Expression<T>) = arg / this
+    operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
+    operator fun T.div(arg: Expression<T>): Expression<T> = arg / this
 }

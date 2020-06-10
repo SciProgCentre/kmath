@@ -31,10 +31,10 @@ open class AsmExpressionSpace<T>(
         AsmBinaryOperation(space, SpaceOperations.PLUS_OPERATION, a, b)
 
     override fun multiply(a: AsmExpression<T>, k: Number): AsmExpression<T> = AsmConstProductExpression(space, a, k)
-    operator fun AsmExpression<T>.plus(arg: T) = this + const(arg)
-    operator fun AsmExpression<T>.minus(arg: T) = this - const(arg)
-    operator fun T.plus(arg: AsmExpression<T>) = arg + this
-    operator fun T.minus(arg: AsmExpression<T>) = arg - this
+    operator fun AsmExpression<T>.plus(arg: T): AsmExpression<T> = this + const(arg)
+    operator fun AsmExpression<T>.minus(arg: T): AsmExpression<T> = this - const(arg)
+    operator fun T.plus(arg: AsmExpression<T>): AsmExpression<T> = arg + this
+    operator fun T.minus(arg: AsmExpression<T>): AsmExpression<T> = arg - this
 }
 
 open class AsmExpressionRing<T>(private val ring: Ring<T>) : AsmExpressionSpace<T>(ring), Ring<AsmExpression<T>> {
@@ -52,8 +52,8 @@ open class AsmExpressionRing<T>(private val ring: Ring<T>) : AsmExpressionSpace<
     override fun multiply(a: AsmExpression<T>, b: AsmExpression<T>): AsmExpression<T> =
         AsmBinaryOperation(space, RingOperations.TIMES_OPERATION, a, b)
 
-    operator fun AsmExpression<T>.times(arg: T) = this * const(arg)
-    operator fun T.times(arg: AsmExpression<T>) = arg * this
+    operator fun AsmExpression<T>.times(arg: T): AsmExpression<T> = this * const(arg)
+    operator fun T.times(arg: AsmExpression<T>): AsmExpression<T> = arg * this
 }
 
 open class AsmExpressionField<T>(private val field: Field<T>) :
@@ -69,6 +69,6 @@ open class AsmExpressionField<T>(private val field: Field<T>) :
     override fun divide(a: AsmExpression<T>, b: AsmExpression<T>): AsmExpression<T> =
         AsmBinaryOperation(space, FieldOperations.DIV_OPERATION, a, b)
 
-    operator fun AsmExpression<T>.div(arg: T) = this / const(arg)
-    operator fun T.div(arg: AsmExpression<T>) = arg / this
+    operator fun AsmExpression<T>.div(arg: T): AsmExpression<T> = this / const(arg)
+    operator fun T.div(arg: AsmExpression<T>): AsmExpression<T> = arg / this
 }

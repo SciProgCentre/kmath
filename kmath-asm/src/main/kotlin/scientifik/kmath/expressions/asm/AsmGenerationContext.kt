@@ -46,7 +46,7 @@ class AsmGenerationContext<T>(
         )
 
         asmCompiledClassWriter.run {
-            visitMethod(Opcodes.ACC_PUBLIC, "<init>", "(L$ALGEBRA_CLASS;L$LIST_CLASS;)V", null, null).run {
+            visitMethod(Opcodes.ACC_PUBLIC, "<init>", "(L$ALGEBRA_CLASS;[L$OBJECT_CLASS;)V", null, null).run {
                 val thisVar = 0
                 val algebraVar = 1
                 val constantsVar = 2
@@ -60,7 +60,7 @@ class AsmGenerationContext<T>(
                     Opcodes.INVOKESPECIAL,
                     FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
                     "<init>",
-                    "(L$ALGEBRA_CLASS;L$LIST_CLASS;)V",
+                    "(L$ALGEBRA_CLASS;[L$OBJECT_CLASS;)V",
                     false
                 )
 
@@ -80,7 +80,7 @@ class AsmGenerationContext<T>(
                     algebraVar
                 )
 
-                visitLocalVariable("constants", "L$LIST_CLASS;", "L$LIST_CLASS<L$T_CLASS;>;", l0, l2, constantsVar)
+                visitLocalVariable("constants", "[L$OBJECT_CLASS;", null, l0, l2, constantsVar)
                 visitMaxs(3, 3)
                 visitEnd()
             }
@@ -170,7 +170,7 @@ class AsmGenerationContext<T>(
             .defineClass(className, asmCompiledClassWriter.toByteArray())
             .constructors
             .first()
-            .newInstance(algebra, constants) as FunctionalCompiledExpression<T>
+            .newInstance(algebra, constants.toTypedArray()) as FunctionalCompiledExpression<T>
 
         generatedInstance = new
         return new
@@ -184,9 +184,9 @@ class AsmGenerationContext<T>(
 
         invokeMethodVisitor.run {
             visitLoadThis()
-            visitFieldInsn(Opcodes.GETFIELD, slashesClassName, "constants", "L$LIST_CLASS;")
+            visitFieldInsn(Opcodes.GETFIELD, slashesClassName, "constants", "[L$OBJECT_CLASS;")
             visitLdcOrIConstInsn(idx)
-            visitMethodInsn(Opcodes.INVOKEINTERFACE, LIST_CLASS, "get", "(I)L$OBJECT_CLASS;", true)
+            visitInsn(Opcodes.AALOAD)
             invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, type)
         }
     }
@@ -273,8 +273,9 @@ class AsmGenerationContext<T>(
             java.lang.Double::class.java to "D"
         )
 
-        internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS = "scientifik/kmath/expressions/asm/FunctionalCompiledExpression"
-        internal const val LIST_CLASS = "java/util/List"
+        internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
+            "scientifik/kmath/expressions/asm/FunctionalCompiledExpression"
+
         internal const val MAP_CLASS = "java/util/Map"
         internal const val OBJECT_CLASS = "java/lang/Object"
         internal const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
