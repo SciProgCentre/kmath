@@ -102,7 +102,7 @@ object IntRing : Ring<Int>, Norm<Int, Int> {
     override val zero: Int = 0
     override inline fun add(a: Int, b: Int) = a + b
     override inline fun multiply(a: Int, b: Int) = a * b
-    override inline fun multiply(a: Int, k: Number) = (k * a)
+    override inline fun multiply(a: Int, k: Number) = k.toInt() * a
     override val one: Int = 1
 
     override inline fun norm(arg: Int) = abs(arg)
@@ -124,7 +124,7 @@ object ShortRing : Ring<Short>, Norm<Short, Short> {
     override val zero: Short = 0
     override inline fun add(a: Short, b: Short) = (a + b).toShort()
     override inline fun multiply(a: Short, b: Short) = (a * b).toShort()
-    override inline fun multiply(a: Short, k: Number) = (a * k)
+    override inline fun multiply(a: Short, k: Number) = (a * k.toShort()).toShort()
     override val one: Short = 1
 
     override fun norm(arg: Short): Short = if (arg > 0) arg else (-arg).toShort()
@@ -146,7 +146,7 @@ object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
     override val zero: Byte = 0
     override inline fun add(a: Byte, b: Byte) = (a + b).toByte()
     override inline fun multiply(a: Byte, b: Byte) = (a * b).toByte()
-    override inline fun multiply(a: Byte, k: Number) = (a * k)
+    override inline fun multiply(a: Byte, k: Number) = (a * k.toByte()).toByte()
     override val one: Byte = 1
 
     override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
@@ -168,7 +168,7 @@ object LongRing : Ring<Long>, Norm<Long, Long> {
     override val zero: Long = 0
     override inline fun add(a: Long, b: Long) = (a + b)
     override inline fun multiply(a: Long, b: Long) = (a * b)
-    override inline fun multiply(a: Long, k: Number) = (a * k)
+    override inline fun multiply(a: Long, k: Number) = a * k.toLong()
     override val one: Long = 1
 
     override fun norm(arg: Long): Long = abs(arg)
