@@ -2,9 +2,9 @@ package scientifik.kmath.prob.samplers
 
 import scientifik.kmath.chains.Chain
 import scientifik.kmath.chains.ConstantChain
-import scientifik.kmath.chains.SimpleChain
 import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
+import scientifik.kmath.prob.chain
 import scientifik.kmath.prob.next
 import kotlin.math.*
 
@@ -35,7 +35,7 @@ class LargeMeanPoissonSampler private constructor(val mean: Double) : Sampler<In
     else  // Not used.
         KempSmallMeanPoissonSampler.of(mean - lambda)
 
-    override fun sample(generator: RandomGenerator): Chain<Int> = SimpleChain {
+    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
         // This will never be null. It may be a no-op delegate that returns zero.
         val y2 = smallMeanPoissonSampler.next(generator)
         var x: Double

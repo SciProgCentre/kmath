@@ -18,6 +18,22 @@ internal object InternalUtils {
 
     fun factorial(n: Int): Long = FACTORIALS[n]
 
+    fun validateProbabilities(probabilities: DoubleArray?): Double {
+        require(!(probabilities == null || probabilities.isEmpty())) { "Probabilities must not be empty." }
+        var sumProb = 0.0
+
+        probabilities.forEach { prob ->
+            validateProbability(prob)
+            sumProb += prob
+        }
+
+        require(!(sumProb.isInfinite() || sumProb <= 0)) { "Invalid sum of probabilities: $sumProb" }
+        return sumProb
+    }
+
+    private fun validateProbability(probability: Double): Unit =
+        require(!(probability < 0 || probability.isInfinite() || probability.isNaN())) { "Invalid probability: $probability" }
+
     class FactorialLog private constructor(
         numValues: Int,
         cache: DoubleArray?
@@ -30,9 +46,11 @@ internal object InternalUtils {
             if (cache != null && cache.size > BEGIN_LOG_FACTORIALS) {
                 // Copy available values.
                 endCopy = min(cache.size, numValues)
-                cache.copyInto(logFactorials,
+                cache.copyInto(
+                    logFactorials,
                     BEGIN_LOG_FACTORIALS,
-                    BEGIN_LOG_FACTORIALS, endCopy)
+                    BEGIN_LOG_FACTORIALS, endCopy
+                )
             }
             // All values to be computed
             else endCopy = BEGIN_LOG_FACTORIALS
@@ -50,15 +68,11 @@ internal object InternalUtils {
             if (n < logFactorials.size)
                 return logFactorials[n]
 
-            return if (n < FACTORIALS.size) ln(
-                FACTORIALS[n].toDouble()) else InternalGamma.logGamma(
-                n + 1.0
-            )
+            return if (n < FACTORIALS.size) ln(FACTORIALS[n].toDouble()) else InternalGamma.logGamma(n + 1.0)
         }
 
         companion object {
-            fun create(): FactorialLog =
-                FactorialLog(0, null)
+            fun create(): FactorialLog = FactorialLog(0, null)
         }
     }
 }

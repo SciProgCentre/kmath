@@ -1,7 +1,6 @@
 package scientifik.kmath.prob.samplers
 
 import scientifik.kmath.chains.Chain
-import scientifik.kmath.chains.SimpleChain
 import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
 import scientifik.kmath.prob.chain
