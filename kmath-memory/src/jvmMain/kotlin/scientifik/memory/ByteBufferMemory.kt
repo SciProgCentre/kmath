@@ -7,14 +7,6 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 
 
-/**
- * Allocate the most effective platform-specific memory
- */
-actual fun Memory.Companion.allocate(length: Int): Memory {
-    val buffer = ByteBuffer.allocate(length)
-    return ByteBufferMemory(buffer)
-}
-
 private class ByteBufferMemory(
     val buffer: ByteBuffer,
     val startOffset: Int = 0,
@@ -95,6 +87,22 @@ private class ByteBufferMemory(
 
     override fun writer(): MemoryWriter = writer
 }
+
+/**
+ * Allocate the most effective platform-specific memory
+ */
+actual fun Memory.Companion.allocate(length: Int): Memory {
+    val buffer = ByteBuffer.allocate(length)
+    return ByteBufferMemory(buffer)
+}
+
+actual fun Memory.Companion.wrap(array: ByteArray): Memory {
+    val buffer = ByteBuffer.wrap(array)
+    return ByteBufferMemory(buffer)
+}
+
+fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memory =
+    ByteBufferMemory(this, startOffset, size)
 
 /**
  * Use direct memory-mapped buffer from file to read something and close it afterwards.

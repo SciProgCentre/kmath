@@ -2,14 +2,7 @@ package scientifik.memory
 
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView
-
-/**
- * Allocate the most effective platform-specific memory
- */
-actual fun Memory.Companion.allocate(length: Int): Memory {
-    val buffer = ArrayBuffer(length)
-    return DataViewMemory(DataView(buffer, 0, length))
-}
+import org.khronos.webgl.Int8Array
 
 class DataViewMemory(val view: DataView) : Memory {
 
@@ -88,4 +81,17 @@ class DataViewMemory(val view: DataView) : Memory {
 
     override fun writer(): MemoryWriter = writer
 
+}
+
+/**
+ * Allocate the most effective platform-specific memory
+ */
+actual fun Memory.Companion.allocate(length: Int): Memory {
+    val buffer = ArrayBuffer(length)
+    return DataViewMemory(DataView(buffer, 0, length))
+}
+
+actual fun Memory.Companion.wrap(array: ByteArray): Memory {
+    @Suppress("CAST_NEVER_SUCCEEDS") val int8Array = array as Int8Array
+    return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))
 }

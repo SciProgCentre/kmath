@@ -5,10 +5,11 @@ import scientifik.kmath.chains.Chain
 import scientifik.kmath.chains.collectWithState
 import scientifik.kmath.prob.Distribution
 import scientifik.kmath.prob.RandomGenerator
+import scientifik.kmath.prob.normal
 
 data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
-fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(),{it.copy()}){ chain->
+fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(), { it.copy() }) { chain ->
     val next = chain.next()
     num++
     value += next

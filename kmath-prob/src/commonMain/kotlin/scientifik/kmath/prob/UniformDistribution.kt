@@ -29,3 +29,6 @@ class UniformDistribution(val range: ClosedFloatingPointRange<Double>) : Univari
         }
     }
 }
+
+fun Distribution.Companion.uniform(range: ClosedFloatingPointRange<Double>): UniformDistribution =
+    UniformDistribution(range)
