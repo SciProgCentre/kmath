@@ -6,8 +6,9 @@ import scientifik.kmath.prob.RandomGenerator
 import scientifik.kmath.prob.Sampler
 
 /**
- * Based on commons-rng implementation.
+ * Sampling from a Gaussian distribution with given mean and standard deviation.
  *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/GaussianSampler.html
  */
 class GaussianSampler private constructor(

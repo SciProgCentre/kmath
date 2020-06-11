@@ -7,6 +7,16 @@ import scientifik.kmath.prob.chain
 import scientifik.kmath.prob.next
 import kotlin.math.*
 
+/**
+ * Sampling from the [gamma distribution](http://mathworld.wolfram.com/GammaDistribution.html).
+ *  - For 0 < alpha < 1:
+ *    Ahrens, J. H. and Dieter, U., Computer methods for sampling from gamma, beta, Poisson and binomial distributions, Computing, 12, 223-246, 1974.
+ *  - For alpha >= 1:
+ *    Marsaglia and Tsang, A Simple Method for Generating Gamma Variables. ACM Transactions on Mathematical Software, Volume 26 Issue 3, September, 2000.
+ *
+ * Based on Commons RNG implementation.
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterMarsagliaTsangGammaSampler.html
+ */
 class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     alpha: Double,
     theta: Double

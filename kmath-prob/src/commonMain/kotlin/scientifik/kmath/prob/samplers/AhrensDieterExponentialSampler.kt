@@ -8,8 +8,9 @@ import kotlin.math.ln
 import kotlin.math.pow
 
 /**
- * Based on commons-rng implementation.
+ * Sampling from an [exponential distribution](http://mathworld.wolfram.com/ExponentialDistribution.html).
  *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterExponentialSampler.html
  */
 class AhrensDieterExponentialSampler private constructor(val mean: Double) : Sampler<Double> {

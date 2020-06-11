@@ -8,7 +8,14 @@ import kotlin.math.ceil
 import kotlin.math.exp
 
 /**
- * Based on commons-rng implementation.
+ * Sampler for the Poisson distribution.
+ * - For small means, a Poisson process is simulated using uniform deviates, as described in
+ *   Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Chapter 3.4.1.F.3 Important
+ *   integer-valued distributions: The Poisson distribution. Addison Wesley.
+ * - The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
+ *   This sampler is suitable for mean < 40. For large means, [LargeMeanPoissonSampler] should be used instead.
+ *
+ * Based on Commons RNG implementation.
  *
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/SmallMeanPoissonSampler.html
  */

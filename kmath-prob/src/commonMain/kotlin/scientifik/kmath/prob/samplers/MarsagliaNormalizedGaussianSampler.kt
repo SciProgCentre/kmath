@@ -8,11 +8,14 @@ import kotlin.math.ln
 import kotlin.math.sqrt
 
 /**
- * Based on commons-rng implementation.
+ * [Marsaglia polar method](https://en.wikipedia.org/wiki/Marsaglia_polar_method) for sampling from a Gaussian
+ * distribution with mean 0 and standard deviation 1. This is a variation of the algorithm implemented in
+ * [BoxMullerNormalizedGaussianSampler].
  *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/MarsagliaNormalizedGaussianSampler.html
  */
-class MarsagliaNormalizedGaussianSampler private constructor(): NormalizedGaussianSampler, Sampler<Double> {
+class MarsagliaNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian = Double.NaN
 
     override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {

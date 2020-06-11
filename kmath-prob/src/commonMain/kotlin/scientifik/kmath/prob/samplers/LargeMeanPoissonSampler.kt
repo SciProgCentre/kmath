@@ -9,8 +9,14 @@ import scientifik.kmath.prob.next
 import kotlin.math.*
 
 /**
- * Based on commons-rng implementation.
+ * Sampler for the Poisson distribution.
+ * - For large means, we use the rejection algorithm described in
+ *   Devroye, Luc. (1981).The Computer Generation of Poisson Random Variables
+ *   Computing vol. 26 pp. 197-207.
  *
+ * This sampler is suitable for mean >= 40.
+ *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/LargeMeanPoissonSampler.html
  */
 class LargeMeanPoissonSampler private constructor(val mean: Double) : Sampler<Int> {
@@ -112,7 +118,7 @@ class LargeMeanPoissonSampler private constructor(val mean: Double) : Sampler<In
         private const val MAX_MEAN: Double = 0.5 * Int.MAX_VALUE
         private val NO_CACHE_FACTORIAL_LOG: InternalUtils.FactorialLog = InternalUtils.FactorialLog.create()
 
-        private val NO_SMALL_MEAN_POISSON_SAMPLER = object : Sampler<Int> {
+        private val NO_SMALL_MEAN_POISSON_SAMPLER: Sampler<Int> = object : Sampler<Int> {
             override fun sample(generator: RandomGenerator): Chain<Int> = ConstantChain(0)
         }
 

@@ -7,8 +7,10 @@ import scientifik.kmath.prob.chain
 import kotlin.math.*
 
 /**
- * Based on commons-rng implementation.
+ * [Box-Muller algorithm](https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform) for sampling from a Gaussian
+ * distribution.
  *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/BoxMullerNormalizedGaussianSampler.html
  */
 class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {

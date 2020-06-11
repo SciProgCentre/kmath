@@ -7,8 +7,15 @@ import scientifik.kmath.prob.chain
 import kotlin.math.exp
 
 /**
- * Based on commons-rng implementation.
+ * Sampler for the Poisson distribution.
+ * - Kemp, A, W, (1981) Efficient Generation of Logarithmically Distributed Pseudo-Random Variables. Journal of the Royal Statistical Society. Vol. 30, No. 3, pp. 249-253.
+ * This sampler is suitable for mean < 40. For large means, LargeMeanPoissonSampler should be used instead.
  *
+ * Note: The algorithm uses a recurrence relation to compute the Poisson probability and a rolling summation for the cumulative probability. When the mean is large the initial probability (Math.exp(-mean)) is zero and an exception is raised by the constructor.
+ *
+ * Sampling uses 1 call to UniformRandomProvider.nextDouble(). This method provides an alternative to the SmallMeanPoissonSampler for slow generators of double.
+ *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/KempSmallMeanPoissonSampler.html
  */
 class KempSmallMeanPoissonSampler private constructor(

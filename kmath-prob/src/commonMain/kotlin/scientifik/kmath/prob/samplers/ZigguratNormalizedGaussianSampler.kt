@@ -7,8 +7,11 @@ import scientifik.kmath.prob.chain
 import kotlin.math.*
 
 /**
- * Based on commons-rng implementation.
+ * [Marsaglia and Tsang "Ziggurat"](https://en.wikipedia.org/wiki/Ziggurat_algorithm) method for sampling from a
+ * Gaussian distribution with mean 0 and standard deviation 1. The algorithm is explained in this paper and this
+ * implementation has been adapted from the C code provided therein.
  *
+ * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/ZigguratNormalizedGaussianSampler.html
  */
 class ZigguratNormalizedGaussianSampler private constructor() :

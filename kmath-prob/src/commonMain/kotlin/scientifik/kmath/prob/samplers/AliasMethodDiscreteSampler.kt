@@ -9,6 +9,33 @@ import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * Distribution sampler that uses the Alias method. It can be used to sample from n values each with an associated
+ * probability. This implementation is based on the detailed explanation of the alias method by Keith Schartz and
+ * implements Vose's algorithm.
+ *
+ * Vose, M.D., A linear algorithm for generating random numbers with a given distribution, IEEE Transactions on
+ * Software Engineering, 17, 972-975, 1991. he algorithm will sample values in O(1) time after a pre-processing step
+ * of O(n) time.
+ *
+ * The alias tables are constructed using fraction probabilities with an assumed denominator of 253. In the generic
+ * case sampling uses UniformRandomProvider.nextInt(int) and the upper 53-bits from UniformRandomProvider.nextLong().
+ *
+ * Zero padding the input probabilities can be used to make more sampling more efficient. Any zero entry will always be
+ * aliased removing the requirement to compute a long. Increased sampling speed comes at the cost of increased storage
+ * space. The algorithm requires approximately 12 bytes of storage per input probability, that is n * 12 for size n.
+ * Zero-padding only requires 4 bytes of storage per padded value as the probability is known to be zero.
+ *
+ * An optimisation is performed for small table sizes that are a power of 2. In this case the sampling uses 1 or 2
+ * calls from UniformRandomProvider.nextInt() to generate up to 64-bits for creation of an 11-bit index and 53-bits
+ * for the long. This optimisation requires a generator with a high cycle length for the lower order bits.
+ *
+ * Larger table sizes that are a power of 2 will benefit from fast algorithms for UniformRandomProvider.nextInt(int)
+ * that exploit the power of 2.
+ *
+ * Based on Commons RNG implementation.
+ * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AliasMethodDiscreteSampler.html
+ */
 open class AliasMethodDiscreteSampler private constructor(
     // Deliberate direct storage of input arrays
     protected val probability: LongArray,
