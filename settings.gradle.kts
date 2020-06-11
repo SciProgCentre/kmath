@@ -39,6 +39,7 @@ include(
     ":kmath-commons",
     ":kmath-viktor",
     ":kmath-koma",
+    ":kmath-nd4j",
     ":kmath-prob",
     ":kmath-io",
     ":kmath-dimensions",
