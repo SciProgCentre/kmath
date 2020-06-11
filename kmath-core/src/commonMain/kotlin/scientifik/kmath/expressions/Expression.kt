@@ -25,12 +25,3 @@ interface ExpressionContext<T, E> : Algebra<E> {
      */
     fun const(value: T): E
 }
-
-fun <T, E> ExpressionContext<T, E>.produce(node: SyntaxTreeNode): E {
-    return when (node) {
-        is NumberNode -> error("Single number nodes are not supported")
-        is SingularNode -> variable(node.value)
-        is UnaryNode -> unaryOperation(node.operation, produce(node.value))
-        is BinaryNode -> binaryOperation(node.operation, produce(node.left), produce(node.right))
-    }
-}
