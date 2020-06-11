@@ -215,7 +215,7 @@ class AsmGenerationContext<T>(
         visitLoadAnyFromConstants(value, c)
     }
 
-    internal fun visitLoadFromVariables(name: String, defaultValue: T? = null) = invokeMethodVisitor.run {
+    internal fun visitLoadFromVariables(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
         maxStack += 2
         visitVarInsn(Opcodes.ALOAD, invokeArgumentsVar)
 
@@ -241,6 +241,7 @@ class AsmGenerationContext<T>(
     }
 
     internal fun visitLoadAlgebra() {
+        maxStack++
         invokeMethodVisitor.visitVarInsn(Opcodes.ALOAD, invokeThisVar)
 
         invokeMethodVisitor.visitFieldInsn(

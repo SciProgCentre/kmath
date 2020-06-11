@@ -3,6 +3,8 @@ package scientifik.kmath.expressions
 import scientifik.kmath.expressions.asm.AsmExpression
 import scientifik.kmath.expressions.asm.AsmExpressionField
 import scientifik.kmath.expressions.asm.asmField
+import scientifik.kmath.expressions.asm.asmRing
+import scientifik.kmath.operations.IntRing
 import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,26 +17,29 @@ class AsmTest {
     ): Unit = assertEquals(expected = expected, actual = asmField(RealField, block)(arguments))
 
     @Test
-    fun testConstantsSum() = testDoubleExpression(16.0) { const(8.0) + 8.0 }
+    fun testConstantsSum(): Unit = testDoubleExpression(16.0) { const(8.0) + 8.0 }
 
     @Test
-    fun testVarsSum() = testDoubleExpression(1000.0, mapOf("x" to 500.0)) { variable("x") + 500.0 }
+    fun testVarsSum(): Unit = testDoubleExpression(1000.0, mapOf("x" to 500.0)) { variable("x") + 500.0 }
 
     @Test
-    fun testProduct() = testDoubleExpression(24.0) { const(4.0) * const(6.0) }
+    fun testProduct(): Unit = testDoubleExpression(24.0) { const(4.0) * const(6.0) }
 
     @Test
-    fun testConstantProduct() = testDoubleExpression(984.0) { const(8.0) * 123 }
+    fun testConstantProduct(): Unit = testDoubleExpression(984.0) { const(8.0) * 123 }
 
     @Test
-    fun testSubtraction() = testDoubleExpression(2.0) { const(4.0) - 2.0 }
+    fun testVarsConstantProductVar(): Unit = testDoubleExpression(984.0, mapOf("x" to 8.0)) { variable("x") * 123 }
 
     @Test
-    fun testDivision() = testDoubleExpression(64.0) { const(128.0) / 2 }
+    fun testSubtraction(): Unit = testDoubleExpression(2.0) { const(4.0) - 2.0 }
 
     @Test
-    fun testDirectCall() = testDoubleExpression(4096.0) { binaryOperation("*", const(64.0), const(64.0)) }
+    fun testDivision(): Unit = testDoubleExpression(64.0) { const(128.0) / 2 }
 
-//    @Test
-//    fun testSine() = testDoubleExpression(0.0) { unaryOperation("sin", const(PI)) }
+    @Test
+    fun testDirectUnaryCall(): Unit = testDoubleExpression(64.0) { unaryOperation("+", const(64.0)) }
+
+    @Test
+    fun testDirectBinaryCall(): Unit = testDoubleExpression(4096.0) { binaryOperation("*", const(64.0), const(64.0)) }
 }
