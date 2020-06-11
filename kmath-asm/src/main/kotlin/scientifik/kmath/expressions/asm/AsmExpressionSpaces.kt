@@ -67,7 +67,7 @@ open class AsmExpressionField<T>(private val field: Field<T>) :
         AsmBinaryOperation(algebra, operation, left, right)
 
     override fun divide(a: AsmExpression<T>, b: AsmExpression<T>): AsmExpression<T> =
-        AsmBinaryOperation(space, FieldOperations.DIV_OPERATION, a, b)
+        AsmBinaryOperation(field, FieldOperations.DIV_OPERATION, a, b)
 
     operator fun AsmExpression<T>.div(arg: T): AsmExpression<T> = this / const(arg)
     operator fun T.div(arg: AsmExpression<T>): AsmExpression<T> = arg / this
