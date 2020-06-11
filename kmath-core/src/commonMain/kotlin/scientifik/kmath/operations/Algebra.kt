@@ -7,10 +7,35 @@ annotation class KMathContext
  * Marker interface for any algebra
  */
 interface Algebra<T> {
+    /**
+     * Wrap raw string or variable
+     */
+    fun raw(value: String): T = error("Wrapping of '$value' is not supported in $this")
+
+    /**
+     * Dynamic call of unary operation with name [operation] on [arg]
+     */
     fun unaryOperation(operation: String, arg: T): T
+
+    /**
+     * Dynamic call of binary operation [operation] on [left] and [right]
+     */
     fun binaryOperation(operation: String, left: T, right: T): T
 }
 
+/**
+ * An algebra with numeric representation of members
+ */
+interface NumericAlgebra<T> : Algebra<T> {
+    /**
+     * Wrap a number
+     */
+    fun number(value: Number): T
+}
+
+/**
+ * Call a block with an [Algebra] as receiver
+ */
 inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
@@ -87,7 +112,7 @@ interface RingOperations<T> : SpaceOperations<T> {
         else -> super.binaryOperation(operation, left, right)
     }
 
-    companion object{
+    companion object {
         const val TIMES_OPERATION = "*"
     }
 }
@@ -95,13 +120,16 @@ interface RingOperations<T> : SpaceOperations<T> {
 /**
  * The same as {@link Space} but with additional multiplication operation
  */
-interface Ring<T> : Space<T>, RingOperations<T> {
+interface Ring<T> : Space<T>, RingOperations<T>, NumericAlgebra<T> {
     /**
      * neutral operation for multiplication
      */
     val one: T
 
-//    operator fun T.plus(b: Number) = this.plus(b * one)
+    override fun number(value: Number): T = one * value.toDouble()
+
+    // those operators are blocked by type conflict in RealField
+    //    operator fun T.plus(b: Number) = this.plus(b * one)
 //    operator fun Number.plus(b: T) = b + this
 //
 //    operator fun T.minus(b: Number) = this.minus(b * one)
@@ -121,7 +149,7 @@ interface FieldOperations<T> : RingOperations<T> {
         else -> super.binaryOperation(operation, left, right)
     }
 
-    companion object{
+    companion object {
         const val DIV_OPERATION = "/"
     }
 }
