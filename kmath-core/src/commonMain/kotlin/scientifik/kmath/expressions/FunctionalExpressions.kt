@@ -75,7 +75,7 @@ open class FunctionalExpressionRing<T>(val ring: Ring<T>) : FunctionalExpression
     override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(algebra, operation, left, right)
 
-    fun number(value: Number): Expression<T> = const(ring { one * value })
+    override fun number(value: Number): Expression<T> = const(ring { one * value })
 
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(space, RingOperations.TIMES_OPERATION, a, b)

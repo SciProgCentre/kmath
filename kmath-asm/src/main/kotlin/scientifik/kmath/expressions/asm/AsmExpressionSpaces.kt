@@ -47,7 +47,7 @@ open class AsmExpressionRing<T>(private val ring: Ring<T>) : AsmExpressionSpace<
     override fun binaryOperation(operation: String, left: AsmExpression<T>, right: AsmExpression<T>): AsmExpression<T> =
         AsmBinaryOperation(algebra, operation, left, right)
 
-    fun number(value: Number): AsmExpression<T> = const(ring { one * value })
+    override fun number(value: Number): AsmExpression<T> = const(ring { one * value })
 
     override fun multiply(a: AsmExpression<T>, b: AsmExpression<T>): AsmExpression<T> =
         AsmBinaryOperation(space, RingOperations.TIMES_OPERATION, a, b)
