@@ -6,10 +6,16 @@ import kotlin.random.Random
  * A basic generator
  */
 interface RandomGenerator {
+    fun nextBoolean(): Boolean
+
     fun nextDouble(): Double
     fun nextInt(): Int
+    fun nextInt(until: Int): Int
     fun nextLong(): Long
-    fun nextBlock(size: Int): ByteArray
+    fun nextLong(until: Long): Long
+
+    fun fillBytes(array: ByteArray, fromIndex: Int = 0, toIndex: Int = array.size)
+    fun nextBytes(size: Int): ByteArray = ByteArray(size).also { fillBytes(it) }
 
     /**
      * Create a new generator which is independent from current generator (operations on new generator do not affect this one
@@ -21,21 +27,29 @@ interface RandomGenerator {
     fun fork(): RandomGenerator
 
     companion object {
-        val default by lazy { DefaultGenerator(Random.nextLong()) }
+        val default by lazy { DefaultGenerator() }
+
+        fun default(seed: Long) = DefaultGenerator(Random(seed))
     }
 }
 
-class DefaultGenerator(seed: Long?) : RandomGenerator {
-    private val random = seed?.let { Random(it) } ?: Random
+inline class DefaultGenerator(val random: Random = Random) : RandomGenerator {
+    override fun nextBoolean(): Boolean = random.nextBoolean()
 
     override fun nextDouble(): Double = random.nextDouble()
 
     override fun nextInt(): Int = random.nextInt()
+    override fun nextInt(until: Int): Int = random.nextInt(until)
 
     override fun nextLong(): Long = random.nextLong()
 
-    override fun nextBlock(size: Int): ByteArray = random.nextBytes(size)
+    override fun nextLong(until: Long): Long = random.nextLong(until)
 
-    override fun fork(): RandomGenerator = DefaultGenerator(nextLong())
+    override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
+        random.nextBytes(array, fromIndex, toIndex)
+    }
 
+    override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
+
+    override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
 }
