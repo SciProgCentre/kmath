@@ -4,7 +4,7 @@ import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.NumericAlgebra
 
 /**
- * The expression evaluates MST on-flight
+ * The expression evaluates MST on-flight. Should be much faster than functional expression, but slower than ASM-generated expressions.
  */
 class MSTExpression<T>(val algebra: NumericAlgebra<T>, val mst: MST) : Expression<T> {
 

@@ -12,6 +12,9 @@ import scientifik.kmath.operations.PowerOperations
 import scientifik.kmath.operations.RingOperations
 import scientifik.kmath.operations.SpaceOperations
 
+/**
+ * TODO move to common
+ */
 private object ArithmeticsEvaluator : Grammar<MST>() {
     val num by token("-?[\\d.]+(?:[eE]-?\\d+)?")
     val lpar by token("\\(")
