@@ -2,9 +2,7 @@ package scientifik.kmath.expressions
 
 import scientifik.kmath.expressions.asm.AsmExpression
 import scientifik.kmath.expressions.asm.AsmExpressionField
-import scientifik.kmath.expressions.asm.asmField
-import scientifik.kmath.expressions.asm.asmRing
-import scientifik.kmath.operations.IntRing
+import scientifik.kmath.expressions.asm.buildAsmField
 import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +12,7 @@ class AsmTest {
         expected: Double?,
         arguments: Map<String, Double> = emptyMap(),
         block: AsmExpressionField<Double>.() -> AsmExpression<Double>
-    ): Unit = assertEquals(expected = expected, actual = asmField(RealField, block)(arguments))
+    ): Unit = assertEquals(expected = expected, actual = buildAsmField(RealField, block)(arguments))
 
     @Test
     fun testConstantsSum(): Unit = testDoubleExpression(16.0) { const(8.0) + 8.0 }

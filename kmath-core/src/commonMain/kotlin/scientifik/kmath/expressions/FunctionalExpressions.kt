@@ -33,7 +33,7 @@ internal class FunctionalConstProductExpression<T>(val context: Space<T>, val ex
 
 open class FunctionalExpressionAlgebra<T>(val algebra: Algebra<T>) :
     Algebra<Expression<T>>,
-    ExpressionContext<T, Expression<T>> {
+    ExpressionAlgebra<T, Expression<T>> {
     override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
         FunctionalUnaryOperation(algebra, operation, arg)
 

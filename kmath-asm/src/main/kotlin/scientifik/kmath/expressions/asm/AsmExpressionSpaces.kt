@@ -1,11 +1,11 @@
 package scientifik.kmath.expressions.asm
 
-import scientifik.kmath.expressions.ExpressionContext
+import scientifik.kmath.expressions.ExpressionAlgebra
 import scientifik.kmath.operations.*
 
 open class AsmExpressionAlgebra<T>(val algebra: Algebra<T>) :
     Algebra<AsmExpression<T>>,
-    ExpressionContext<T, AsmExpression<T>> {
+    ExpressionAlgebra<T, AsmExpression<T>> {
     override fun unaryOperation(operation: String, arg: AsmExpression<T>): AsmExpression<T> =
         AsmUnaryOperation(algebra, operation, arg)
 
