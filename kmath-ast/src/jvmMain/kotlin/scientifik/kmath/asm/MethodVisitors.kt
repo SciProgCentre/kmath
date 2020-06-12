@@ -1,4 +1,4 @@
-package scientifik.kmath.expressions.asm
+package scientifik.kmath.asm
 
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*

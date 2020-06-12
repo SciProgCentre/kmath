@@ -1,4 +1,4 @@
-package scientifik.kmath.expressions.asm
+package scientifik.kmath.asm
 
 @PublishedApi
 internal fun <T> AsmExpression<T>.optimize(): AsmExpression<T> {

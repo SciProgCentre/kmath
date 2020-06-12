@@ -1,4 +1,4 @@
-package scientifik.kmath.expressions.asm
+package scientifik.kmath.asm
 
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
@@ -15,7 +15,8 @@ class AsmGenerationContext<T>(
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
     }
 
-    private val classLoader: ClassLoader = ClassLoader(javaClass.classLoader)
+    private val classLoader: ClassLoader =
+        ClassLoader(javaClass.classLoader)
 
     @Suppress("PrivatePropertyName")
     private val T_ALGEBRA_CLASS: String = algebra.javaClass.name.replace(oldChar = '.', newChar = '/')
@@ -236,7 +237,8 @@ class AsmGenerationContext<T>(
         }
 
         visitLdcInsn(name)
-        visitMethodInsn(Opcodes.INVOKEINTERFACE, MAP_CLASS, "get", "(L$OBJECT_CLASS;)L$OBJECT_CLASS;", true)
+        visitMethodInsn(Opcodes.INVOKEINTERFACE,
+            MAP_CLASS, "get", "(L$OBJECT_CLASS;)L$OBJECT_CLASS;", true)
         visitCastToT()
     }
 
@@ -275,7 +277,7 @@ class AsmGenerationContext<T>(
         )
 
         internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
-            "scientifik/kmath/expressions/asm/FunctionalCompiledExpression"
+            "scientifik/kmath/asm/FunctionalCompiledExpression"
 
         internal const val MAP_CLASS = "java/util/Map"
         internal const val OBJECT_CLASS = "java/lang/Object"
