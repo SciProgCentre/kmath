@@ -20,4 +20,4 @@ inline fun <reified T : Any, A : Algebra<T>> A.asm(
     block: AsmExpressionAlgebra<T, A>.() -> AsmExpression<T>
 ): Expression<T> = TODO()
 
-inline fun <reified T : Any, A : Algebra<T>> A.asm(ast: MathSyntaxTree): Expression<T> = asm { compile(ast) }
+inline fun <reified T : Any, A : Algebra<T>> A.asm(ast: MST): Expression<T> = asm { evaluate(ast) }

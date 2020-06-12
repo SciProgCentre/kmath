@@ -50,6 +50,12 @@ object ComplexField : ExtendedField<Complex> {
     operator fun Complex.minus(d: Double) = add(this, -d.toComplex())
 
     operator fun Double.times(c: Complex) = Complex(c.re * this, c.im * this)
+
+    override fun raw(value: String): Complex = if (value == "i") {
+        i
+    } else {
+        super.raw(value)
+    }
 }
 
 /**

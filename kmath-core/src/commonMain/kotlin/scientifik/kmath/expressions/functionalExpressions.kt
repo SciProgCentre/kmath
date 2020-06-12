@@ -66,8 +66,7 @@ open class FunctionalExpressionField<T>(
     val field: Field<T>
 ) : Field<Expression<T>>, ExpressionAlgebra<T, Expression<T>>, FunctionalExpressionSpace<T>(field) {
 
-    override val one: Expression<T>
-        get() = const(this.field.one)
+    override val one: Expression<T> = ConstantExpression(this.field.one)
 
     fun const(value: Double): Expression<T> = const(field.run { one * value })
 
@@ -81,3 +80,15 @@ open class FunctionalExpressionField<T>(
     operator fun T.times(arg: Expression<T>) = arg * this
     operator fun T.div(arg: Expression<T>) = arg / this
 }
+
+/**
+ * Create a functional expression on this [Space]
+ */
+fun <T> Space<T>.buildExpression(block: FunctionalExpressionSpace<T>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionSpace(this).run(block)
+
+/**
+ * Create a functional expression on this [Field]
+ */
+fun <T> Field<T>.buildExpression(block: FunctionalExpressionField<T>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionField(this).run(block)
