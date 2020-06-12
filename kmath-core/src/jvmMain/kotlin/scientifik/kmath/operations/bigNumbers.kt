@@ -1,10 +1,12 @@
 package scientifik.kmath.operations
 
-import scientifik.kmath.structures.*
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 
+/**
+ * A field wrapper for Java [BigInteger]
+ */
 object JBigIntegerField : Field<BigInteger> {
     override val zero: BigInteger = BigInteger.ZERO
     override val one: BigInteger = BigInteger.ONE
@@ -18,6 +20,9 @@ object JBigIntegerField : Field<BigInteger> {
     override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
 }
 
+/**
+ * A Field wrapper for Java [BigDecimal]
+ */
 class JBigDecimalField(val mathContext: MathContext = MathContext.DECIMAL64) : Field<BigDecimal> {
     override val zero: BigDecimal = BigDecimal.ZERO
     override val one: BigDecimal = BigDecimal.ONE

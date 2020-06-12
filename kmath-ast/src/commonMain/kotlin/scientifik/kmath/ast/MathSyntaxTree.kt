@@ -1,4 +1,4 @@
-package scientifik.kmath.expressions
+package scientifik.kmath.ast
 
 import scientifik.kmath.operations.NumericAlgebra
 import scientifik.kmath.operations.RealField

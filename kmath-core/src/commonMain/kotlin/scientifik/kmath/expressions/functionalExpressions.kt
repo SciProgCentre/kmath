@@ -21,8 +21,11 @@ internal class SumExpression<T>(
     override fun invoke(arguments: Map<String, T>): T = context.add(first.invoke(arguments), second.invoke(arguments))
 }
 
-internal class ProductExpression<T>(val context: Ring<T>, val first: Expression<T>, val second: Expression<T>) :
-    Expression<T> {
+internal class ProductExpression<T>(
+    val context: Ring<T>,
+    val first: Expression<T>,
+    val second: Expression<T>
+) : Expression<T> {
     override fun invoke(arguments: Map<String, T>): T =
         context.multiply(first.invoke(arguments), second.invoke(arguments))
 }
@@ -39,7 +42,7 @@ internal class DivExpession<T>(val context: Field<T>, val expr: Expression<T>, v
 
 open class FunctionalExpressionSpace<T>(
     val space: Space<T>
-) : Space<Expression<T>>, ExpressionContext<T,Expression<T>> {
+) : Space<Expression<T>>, ExpressionAlgebra<T, Expression<T>> {
 
     override val zero: Expression<T> = ConstantExpression(space.zero)
 
@@ -61,12 +64,12 @@ open class FunctionalExpressionSpace<T>(
 
 open class FunctionalExpressionField<T>(
     val field: Field<T>
-) :  Field<Expression<T>>, ExpressionContext<T,Expression<T>>, FunctionalExpressionSpace<T>(field) {
+) : Field<Expression<T>>, ExpressionAlgebra<T, Expression<T>>, FunctionalExpressionSpace<T>(field) {
 
     override val one: Expression<T>
         get() = const(this.field.one)
 
-    fun const(value: Double): Expression<T> = const(field.run { one*value})
+    fun const(value: Double): Expression<T> = const(field.run { one * value })
 
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> = ProductExpression(field, a, b)
 
