@@ -2,7 +2,7 @@ package scientifik.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import scientifik.kmath.expressions.Expression
-import scientifik.kmath.expressions.ExpressionContext
+import scientifik.kmath.expressions.ExpressionAlgebra
 import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.Field
 import kotlin.properties.ReadOnlyProperty
@@ -113,7 +113,7 @@ fun DiffExpression.derivative(name: String) = derivative(name to 1)
 /**
  * A context for [DiffExpression] (not to be confused with [DerivativeStructure])
  */
-object DiffExpressionContext : ExpressionContext<Double, DiffExpression>, Field<DiffExpression> {
+object DiffExpressionAlgebra : ExpressionAlgebra<Double, DiffExpression>, Field<DiffExpression> {
     override fun variable(name: String, default: Double?) =
         DiffExpression { variable(name, default?.const()) }
 

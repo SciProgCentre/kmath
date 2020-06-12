@@ -44,6 +44,6 @@ include(
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
-    ":examples",
-    ":kmath-asm"
+    ":kmath-ast",
+    ":examples"
 )

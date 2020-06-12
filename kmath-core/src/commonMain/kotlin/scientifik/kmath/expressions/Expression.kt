@@ -7,6 +7,12 @@ import scientifik.kmath.operations.Algebra
  */
 interface Expression<T> {
     operator fun invoke(arguments: Map<String, T>): T
+
+    companion object {
+        operator fun <T> invoke(block: (Map<String, T>) -> T): Expression<T> = object : Expression<T> {
+            override fun invoke(arguments: Map<String, T>): T = block(arguments)
+        }
+    }
 }
 
 operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = invoke(mapOf(*pairs))
@@ -14,7 +20,7 @@ operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = invoke
 /**
  * A context for expression construction
  */
-interface ExpressionContext<T, E> : Algebra<E> {
+interface ExpressionAlgebra<T, E> : Algebra<E> {
     /**
      * Introduce a variable into expression context
      */

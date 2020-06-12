@@ -10,9 +10,30 @@ interface ExtendedFieldOperations<T> :
     FieldOperations<T>,
     TrigonometricOperations<T>,
     PowerOperations<T>,
-    ExponentialOperations<T>
+    ExponentialOperations<T> {
 
-interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>
+    override fun tan(arg: T): T = sin(arg) / cos(arg)
+
+    override fun unaryOperation(operation: String, arg: T): T = when (operation) {
+        TrigonometricOperations.COS_OPERATION -> cos(arg)
+        TrigonometricOperations.SIN_OPERATION -> sin(arg)
+        PowerOperations.SQRT_OPERATION -> sqrt(arg)
+        ExponentialOperations.EXP_OPERATION -> exp(arg)
+        ExponentialOperations.LN_OPERATION -> ln(arg)
+        else -> super.unaryOperation(operation, arg)
+    }
+
+}
+
+interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T {
+        return when (operation) {
+            PowerOperations.POW_OPERATION -> power(left, right)
+            else -> super.rightSideNumberOperation(operation, left, right)
+        }
+
+    }
+}
 
 /**
  * Real field element wrapping double.
@@ -44,6 +65,7 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
 
     override inline fun sin(arg: Double) = kotlin.math.sin(arg)
     override inline fun cos(arg: Double) = kotlin.math.cos(arg)
+    override inline fun tan(arg: Double) = kotlin.math.tan(arg)
 
     override inline fun power(arg: Double, pow: Number) = arg.kpow(pow.toDouble())
 
@@ -75,6 +97,8 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 
     override inline fun sin(arg: Float) = kotlin.math.sin(arg)
     override inline fun cos(arg: Float) = kotlin.math.cos(arg)
+
+    override inline fun tan(arg: Float): Float = kotlin.math.tan(arg)
 
     override inline fun power(arg: Float, pow: Number) = arg.pow(pow.toFloat())
 

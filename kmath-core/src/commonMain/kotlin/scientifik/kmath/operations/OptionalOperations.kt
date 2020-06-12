@@ -10,30 +10,37 @@ package scientifik.kmath.operations
  * It also allows to override behavior for optional operations
  *
  */
-interface TrigonometricOperations<T> : FieldOperations<T> {
+interface TrigonometricOperations<T> {
     fun sin(arg: T): T
     fun cos(arg: T): T
 
-    fun tg(arg: T): T = sin(arg) / cos(arg)
+    fun tan(arg: T): T
 
-    fun ctg(arg: T): T = cos(arg) / sin(arg)
+    companion object {
+        const val SIN_OPERATION = "sin"
+        const val COS_OPERATION = "cos"
+    }
 }
 
 fun <T : MathElement<out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
 fun <T : MathElement<out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
-fun <T : MathElement<out TrigonometricOperations<T>>> tg(arg: T): T = arg.context.tg(arg)
-fun <T : MathElement<out TrigonometricOperations<T>>> ctg(arg: T): T = arg.context.ctg(arg)
+fun <T : MathElement<out TrigonometricOperations<T>>> tan(arg: T): T = arg.context.tan(arg)
 
 /* Power and roots */
 
 /**
  * A context extension to include power operations like square roots, etc
  */
-interface PowerOperations<T> : Algebra<T> {
+interface PowerOperations<T> {
     fun power(arg: T, pow: Number): T
     fun sqrt(arg: T) = power(arg, 0.5)
 
     infix fun T.pow(pow: Number) = power(this, pow)
+
+    companion object {
+        const val POW_OPERATION = "pow"
+        const val SQRT_OPERATION = "sqrt"
+    }
 }
 
 infix fun <T : MathElement<out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
@@ -42,9 +49,14 @@ fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
-interface ExponentialOperations<T>: Algebra<T> {
+interface ExponentialOperations<T> {
     fun exp(arg: T): T
     fun ln(arg: T): T
+
+    companion object {
+        const val EXP_OPERATION = "exp"
+        const val LN_OPERATION = "ln"
+    }
 }
 
 fun <T : MathElement<out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
