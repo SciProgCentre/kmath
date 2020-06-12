@@ -12,15 +12,21 @@ interface AsmExpression<T> {
     fun invoke(gen: AsmGenerationContext<T>)
 }
 
+internal val methodNameAdapters = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
+
 internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    context::class.memberFunctions.find { it.name == name && it.parameters.size == arity }
+    val aName = methodNameAdapters[name] ?: name
+
+    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
     return true
 }
 
 internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    context::class.memberFunctions.find { it.name == name && it.parameters.size == arity }
+    val aName = methodNameAdapters[name] ?: name
+
+    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
     val owner = context::class.jvmName.replace('.', '/')
@@ -32,7 +38,7 @@ internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, 
         append("L${AsmGenerationContext.OBJECT_CLASS};")
     }
 
-    visitAlgebraOperation(owner = owner, method = name, descriptor = sig)
+    visitAlgebraOperation(owner = owner, method = aName, descriptor = sig)
 
     return true
 }
