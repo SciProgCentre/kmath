@@ -43,7 +43,7 @@ sealed class MST {
 fun <T> NumericAlgebra<T>.evaluate(node: MST): T {
     return when (node) {
         is MST.Numeric -> number(node.value)
-        is MST.Singular -> raw(node.value)
+        is MST.Singular -> symbol(node.value)
         is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
         is MST.Binary -> when {
             node.left is MST.Numeric && node.right is MST.Numeric -> {
