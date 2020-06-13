@@ -57,13 +57,13 @@ internal class AsmBinaryOperation<T>(
     override fun invoke(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
 
-        if (!hasSpecific(context, name, 1))
+        if (!hasSpecific(context, name, 2))
             gen.visitStringConstant(name)
 
         first.invoke(gen)
         second.invoke(gen)
 
-        if (gen.tryInvokeSpecific(context, name, 1))
+        if (gen.tryInvokeSpecific(context, name, 2))
             return
 
         gen.visitAlgebraOperation(

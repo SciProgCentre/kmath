@@ -1,15 +1,14 @@
 package scientifik.kmath.asm
 
+import org.objectweb.asm.Opcodes
 import scientifik.kmath.operations.Algebra
-import kotlin.reflect.full.memberFunctions
-import kotlin.reflect.jvm.jvmName
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
 
 internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
-    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
+    context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
     return true
@@ -18,10 +17,10 @@ internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boo
 internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
-    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
+    context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
-    val owner = context::class.jvmName.replace('.', '/')
+    val owner = context::class.java.name.replace('.', '/')
 
     val sig = buildString {
         append('(')
@@ -30,7 +29,13 @@ internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, 
         append("L${AsmGenerationContext.OBJECT_CLASS};")
     }
 
-    visitAlgebraOperation(owner = owner, method = aName, descriptor = sig)
+    visitAlgebraOperation(
+        owner = owner,
+        method = aName,
+        descriptor = sig,
+        opcode = Opcodes.INVOKEVIRTUAL,
+        isInterface = false
+    )
 
     return true
 }

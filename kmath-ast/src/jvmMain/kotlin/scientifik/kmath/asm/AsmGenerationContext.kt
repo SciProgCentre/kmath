@@ -4,6 +4,7 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import scientifik.kmath.asm.AsmGenerationContext.ClassLoader
 import scientifik.kmath.operations.Algebra
 
 /**
@@ -245,8 +246,10 @@ class AsmGenerationContext<T>(
         }
 
         visitLdcInsn(name)
-        visitMethodInsn(Opcodes.INVOKEINTERFACE,
-            MAP_CLASS, "get", "(L$OBJECT_CLASS;)L$OBJECT_CLASS;", true)
+        visitMethodInsn(
+            Opcodes.INVOKEINTERFACE,
+            MAP_CLASS, "get", "(L$OBJECT_CLASS;)L$OBJECT_CLASS;", true
+        )
         visitCastToT()
     }
 
@@ -262,9 +265,15 @@ class AsmGenerationContext<T>(
         invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, T_ALGEBRA_CLASS)
     }
 
-    internal fun visitAlgebraOperation(owner: String, method: String, descriptor: String) {
+    internal fun visitAlgebraOperation(
+        owner: String,
+        method: String,
+        descriptor: String,
+        opcode: Int = Opcodes.INVOKEINTERFACE,
+        isInterface: Boolean = true
+    ) {
         maxStack++
-        invokeMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, owner, method, descriptor, true)
+        invokeMethodVisitor.visitMethodInsn(opcode, owner, method, descriptor, isInterface)
         visitCastToT()
     }
 
