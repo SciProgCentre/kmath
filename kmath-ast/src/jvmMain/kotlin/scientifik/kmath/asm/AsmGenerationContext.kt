@@ -6,6 +6,15 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.operations.Algebra
 
+/**
+ * AsmGenerationContext is a structure that abstracts building a class that unwraps [AsmExpression] to plain Java
+ * expression. This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new
+ * class.
+ *
+ * @param T the type of AsmExpression to unwrap.
+ * @param algebra the algebra the applied AsmExpressions use.
+ * @param className the unique class name of new loaded class.
+ */
 class AsmGenerationContext<T>(
     classOfT: Class<*>,
     private val algebra: Algebra<T>,
@@ -29,8 +38,7 @@ class AsmGenerationContext<T>(
     private val invokeArgumentsVar: Int = 1
     private var maxStack: Int = 0
     private val constants: MutableList<Any> = mutableListOf()
-    private val asmCompiledClassWriter: ClassWriter =
-        ClassWriter(0)
+    private val asmCompiledClassWriter: ClassWriter = ClassWriter(0)
     private val invokeMethodVisitor: MethodVisitor
     private val invokeL0: Label
     private lateinit var invokeL1: Label

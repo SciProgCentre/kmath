@@ -28,40 +28,61 @@ internal class FunctionalConstantExpression<T>(val value: T) : Expression<T> {
 
 internal class FunctionalConstProductExpression<T>(
     val context: Space<T>,
-    val expr: Expression<T>,
+    private val expr: Expression<T>,
     val const: Number
-) :
-    Expression<T> {
+) : Expression<T> {
     override fun invoke(arguments: Map<String, T>): T = context.multiply(expr.invoke(arguments), const)
 }
 
+/**
+ * A context class for [Expression] construction.
+ */
 interface FunctionalExpressionAlgebra<T, A : Algebra<T>> : ExpressionAlgebra<T, Expression<T>> {
+    /**
+     * The algebra to provide for Expressions built.
+     */
     val algebra: A
 
+    /**
+     * Builds an Expression of constant expression which does not depend on arguments.
+     */
+    override fun const(value: T): Expression<T> = FunctionalConstantExpression(value)
+
+    /**
+     * Builds an Expression to access a variable.
+     */
+    override fun variable(name: String, default: T?): Expression<T> = FunctionalVariableExpression(name, default)
+
+    /**
+     * Builds an Expression of dynamic call of binary operation [operation] on [left] and [right].
+     */
     override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(algebra, operation, left, right)
 
+    /**
+     * Builds an Expression of dynamic call of unary operation with name [operation] on [arg].
+     */
     override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
         FunctionalUnaryOperation(algebra, operation, arg)
-
-    override fun const(value: T): Expression<T> = FunctionalConstantExpression(value)
-    override fun variable(name: String, default: T?): Expression<T> = FunctionalVariableExpression(name, default)
 }
 
+/**
+ * A context class for [Expression] construction for [Space] algebras.
+ */
 open class FunctionalExpressionSpace<T, A>(override val algebra: A) : FunctionalExpressionAlgebra<T, A>,
     Space<Expression<T>> where  A : Space<T> {
     override val zero: Expression<T>
         get() = const(algebra.zero)
 
-    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        FunctionalBinaryOperation(algebra, operation, left, right)
-
-    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        FunctionalUnaryOperation(algebra, operation, arg)
-
+    /**
+     * Builds an Expression of addition of two another expressions.
+     */
     override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(algebra, SpaceOperations.PLUS_OPERATION, a, b)
 
+    /**
+     * Builds an Expression of multiplication of expression by number.
+     */
     override fun multiply(a: Expression<T>, k: Number): Expression<T> =
         FunctionalConstProductExpression(algebra, a, k)
 
@@ -69,6 +90,12 @@ open class FunctionalExpressionSpace<T, A>(override val algebra: A) : Functional
     operator fun Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
     operator fun T.plus(arg: Expression<T>): Expression<T> = arg + this
     operator fun T.minus(arg: Expression<T>): Expression<T> = arg - this
+
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        super<FunctionalExpressionAlgebra>.unaryOperation(operation, arg)
+
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        super<FunctionalExpressionAlgebra>.binaryOperation(operation, left, right)
 }
 
 open class FunctionalExpressionRing<T, A>(override val algebra: A) : FunctionalExpressionSpace<T, A>(algebra),
@@ -76,34 +103,37 @@ open class FunctionalExpressionRing<T, A>(override val algebra: A) : FunctionalE
     override val one: Expression<T>
         get() = const(algebra.one)
 
-    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        FunctionalUnaryOperation(algebra, operation, arg)
-
-    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        FunctionalBinaryOperation(algebra, operation, left, right)
-
-    override fun number(value: Number): Expression<T> = const(algebra { one * value })
-
+    /**
+     * Builds an Expression of multiplication of two expressions.
+     */
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(algebra, RingOperations.TIMES_OPERATION, a, b)
 
     operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
     operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
+
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        super<FunctionalExpressionSpace>.unaryOperation(operation, arg)
+
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        super<FunctionalExpressionSpace>.binaryOperation(operation, left, right)
 }
 
 open class FunctionalExpressionField<T, A>(override val algebra: A) :
     FunctionalExpressionRing<T, A>(algebra),
     Field<Expression<T>> where A : Field<T>, A : NumericAlgebra<T> {
-
-    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        FunctionalUnaryOperation(algebra, operation, arg)
-
-    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        FunctionalBinaryOperation(algebra, operation, left, right)
-
+    /**
+     * Builds an Expression of division an expression by another one.
+     */
     override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
         FunctionalBinaryOperation(algebra, FieldOperations.DIV_OPERATION, a, b)
 
     operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
     operator fun T.div(arg: Expression<T>): Expression<T> = arg / this
+
+    override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
+        super<FunctionalExpressionRing>.unaryOperation(operation, arg)
+
+    override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
+        super<FunctionalExpressionRing>.binaryOperation(operation, left, right)
 }
