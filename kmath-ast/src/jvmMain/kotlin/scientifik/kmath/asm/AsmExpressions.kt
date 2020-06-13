@@ -11,37 +11,6 @@ interface AsmExpression<T> {
     fun invoke(gen: AsmGenerationContext<T>)
 }
 
-private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
-
-internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val aName = methodNameAdapters[name] ?: name
-
-    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
-        ?: return false
-
-    return true
-}
-
-internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val aName = methodNameAdapters[name] ?: name
-
-    context::class.memberFunctions.find { it.name == aName && it.parameters.size == arity }
-        ?: return false
-
-    val owner = context::class.jvmName.replace('.', '/')
-
-    val sig = buildString {
-        append('(')
-        repeat(arity) { append("L${AsmGenerationContext.OBJECT_CLASS};") }
-        append(')')
-        append("L${AsmGenerationContext.OBJECT_CLASS};")
-    }
-
-    visitAlgebraOperation(owner = owner, method = aName, descriptor = sig)
-
-    return true
-}
-
 internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val name: String, expr: AsmExpression<T>) :
     AsmExpression<T> {
     private val expr: AsmExpression<T> = expr.optimize()
