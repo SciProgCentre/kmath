@@ -10,7 +10,10 @@ interface Algebra<T> {
     /**
      * Wrap raw string or variable
      */
-    fun raw(value: String): T = error("Wrapping of '$value' is not supported in $this")
+    fun symbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
+
+    @Deprecated("Symbol is more concise",replaceWith = ReplaceWith("symbol"))
+    fun raw(value: String): T = symbol(value)
 
     /**
      * Dynamic call of unary operation with name [operation] on [arg]

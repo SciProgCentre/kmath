@@ -12,7 +12,7 @@ class MSTExpression<T>(val algebra: NumericAlgebra<T>, val mst: MST) : Expressio
      * Substitute algebra raw value
      */
     private inner class InnerAlgebra(val arguments: Map<String, T>) : NumericAlgebra<T> by algebra {
-        override fun raw(value: String): T = arguments[value] ?: super.raw(value)
+        override fun symbol(value: String): T = arguments[value] ?: super.symbol(value)
     }
 
     override fun invoke(arguments: Map<String, T>): T = InnerAlgebra(arguments).evaluate(mst)
