@@ -1,17 +1,15 @@
-package scientifik.kmath.asm
+package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import scientifik.kmath.asm.AsmGenerationContext.ClassLoader
-import scientifik.kmath.asm.internal.visitLdcOrDConstInsn
-import scientifik.kmath.asm.internal.visitLdcOrFConstInsn
-import scientifik.kmath.asm.internal.visitLdcOrIConstInsn
+import scientifik.kmath.asm.FunctionalCompiledExpression
+import scientifik.kmath.asm.internal.AsmGenerationContext.ClassLoader
 import scientifik.kmath.operations.Algebra
 
 /**
- * AsmGenerationContext is a structure that abstracts building a class that unwraps [AsmExpression] to plain Java
+ * AsmGenerationContext is a structure that abstracts building a class that unwraps [AsmNode] to plain Java
  * expression. This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new
  * class.
  *
@@ -19,7 +17,8 @@ import scientifik.kmath.operations.Algebra
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
  */
-class AsmGenerationContext<T> @PublishedApi internal constructor(
+@PublishedApi
+internal class AsmGenerationContext<T> @PublishedApi internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String
