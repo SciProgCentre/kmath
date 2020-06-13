@@ -17,7 +17,7 @@ import scientifik.kmath.operations.Algebra
  * @param className the unique class name of new loaded class.
  */
 class AsmGenerationContext<T>(
-    classOfT: Class<*>,
+    private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String
 ) {
@@ -186,7 +186,15 @@ class AsmGenerationContext<T>(
         return new
     }
 
-    internal fun visitLoadFromConstants(value: T) = visitLoadAnyFromConstants(value as Any, T_CLASS)
+    internal fun visitLoadFromConstants(value: T) {
+        if (classOfT in INLINABLE_NUMBERS) {
+            visitNumberConstant(value as Number)
+            visitCastToT()
+            return
+        }
+
+        visitLoadAnyFromConstants(value as Any, T_CLASS)
+    }
 
     private fun visitLoadAnyFromConstants(value: Any, type: String) {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
@@ -207,7 +215,6 @@ class AsmGenerationContext<T>(
         maxStack++
         val clazz = value.javaClass
         val c = clazz.name.replace('.', '/')
-
         val sigLetter = SIGNATURE_LETTERS[clazz]
 
         if (sigLetter != null) {
@@ -284,14 +291,18 @@ class AsmGenerationContext<T>(
     }
 
     internal companion object {
-        private val SIGNATURE_LETTERS = mapOf(
-            java.lang.Byte::class.java to "B",
-            java.lang.Short::class.java to "S",
-            java.lang.Integer::class.java to "I",
-            java.lang.Long::class.java to "J",
-            java.lang.Float::class.java to "F",
-            java.lang.Double::class.java to "D"
-        )
+        private val SIGNATURE_LETTERS by lazy {
+            mapOf(
+                java.lang.Byte::class.java to "B",
+                java.lang.Short::class.java to "S",
+                java.lang.Integer::class.java to "I",
+                java.lang.Long::class.java to "J",
+                java.lang.Float::class.java to "F",
+                java.lang.Double::class.java to "D"
+            )
+        }
+
+        private val INLINABLE_NUMBERS by lazy { SIGNATURE_LETTERS.keys }
 
         internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
             "scientifik/kmath/asm/FunctionalCompiledExpression"

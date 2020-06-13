@@ -2,6 +2,7 @@ package scientifik.kmath.asm
 
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.ByteRing
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
 
