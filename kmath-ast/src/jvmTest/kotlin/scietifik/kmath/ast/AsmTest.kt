@@ -1,12 +1,12 @@
 package scietifik.kmath.ast
 
-import org.junit.jupiter.api.Test
 import scientifik.kmath.asm.asmField
 import scientifik.kmath.ast.parseMath
 import scientifik.kmath.expressions.invoke
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
 import kotlin.test.assertEquals
+import kotlin.test.Test
 
 class AsmTest {
     @Test

@@ -1,11 +1,11 @@
 package scietifik.kmath.ast
 
-import org.junit.jupiter.api.Test
 import scientifik.kmath.ast.evaluate
 import scientifik.kmath.ast.parseMath
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
 import kotlin.test.assertEquals
+import kotlin.test.Test
 
 internal class ParserTest {
     @Test
