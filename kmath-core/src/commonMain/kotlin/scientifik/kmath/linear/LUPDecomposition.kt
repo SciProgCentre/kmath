@@ -128,14 +128,14 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
                     luRow[col] = sum
 
                     // maintain best permutation choice
-                    if (abs(sum) > largest) {
-                        largest = abs(sum)
+                    if (this@lup.abs(sum) > largest) {
+                        largest = this@lup.abs(sum)
                         max = row
                     }
                 }
 
                 // Singularity check
-                if (checkSingular(abs(lu[max, col]))) {
+                if (checkSingular(this@lup.abs(lu[max, col]))) {
                     error("The matrix is singular")
                 }
 

@@ -10,10 +10,30 @@ interface ExtendedFieldOperations<T> :
     FieldOperations<T>,
     InverseTrigonometricOperations<T>,
     PowerOperations<T>,
-    ExponentialOperations<T>
+    ExponentialOperations<T> {
 
-interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>
+    override fun tan(arg: T): T = sin(arg) / cos(arg)
 
+    override fun unaryOperation(operation: String, arg: T): T = when (operation) {
+        TrigonometricOperations.COS_OPERATION -> cos(arg)
+        TrigonometricOperations.SIN_OPERATION -> sin(arg)
+        PowerOperations.SQRT_OPERATION -> sqrt(arg)
+        ExponentialOperations.EXP_OPERATION -> exp(arg)
+        ExponentialOperations.LN_OPERATION -> ln(arg)
+        else -> super.unaryOperation(operation, arg)
+    }
+
+}
+
+interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T {
+        return when (operation) {
+            PowerOperations.POW_OPERATION -> power(left, right)
+            else -> super.rightSideNumberOperation(operation, left, right)
+        }
+
+    }
+}
 /**
  * Real field element wrapping double.
  *

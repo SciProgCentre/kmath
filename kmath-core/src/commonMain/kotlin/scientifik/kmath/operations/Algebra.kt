@@ -10,7 +10,10 @@ interface Algebra<T> {
     /**
      * Wrap raw string or variable
      */
-    fun raw(value: String): T = error("Wrapping of '$value' is not supported in $this")
+    fun symbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
+
+    @Deprecated("Symbol is more concise",replaceWith = ReplaceWith("symbol"))
+    fun raw(value: String): T = symbol(value)
 
     /**
      * Dynamic call of unary operation with name [operation] on [arg]
@@ -31,6 +34,12 @@ interface NumericAlgebra<T> : Algebra<T> {
      * Wrap a number
      */
     fun number(value: Number): T
+
+    fun leftSideNumberOperation(operation: String, left: Number, right: T): T =
+        binaryOperation(operation, number(left), right)
+
+    fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
+        leftSideNumberOperation(operation, right, left)
 }
 
 /**
@@ -128,8 +137,14 @@ interface Ring<T> : Space<T>, RingOperations<T>, NumericAlgebra<T> {
 
     override fun number(value: Number): T = one * value.toDouble()
 
-    // those operators are blocked by type conflict in RealField
-    //    operator fun T.plus(b: Number) = this.plus(b * one)
+    override fun leftSideNumberOperation(operation: String, left: Number, right: T): T = when (operation) {
+        RingOperations.TIMES_OPERATION -> left * right
+        else -> super.leftSideNumberOperation(operation, left, right)
+    }
+
+    //TODO those operators are blocked by type conflict in RealField
+
+//    operator fun T.plus(b: Number) = this.plus(b * one)
 //    operator fun Number.plus(b: T) = b + this
 //
 //    operator fun T.minus(b: Number) = this.minus(b * one)

@@ -13,7 +13,7 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field for complex numbers
  */
-object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
+object ComplexField : ExtendedField<Complex> {
     override val zero: Complex = Complex(0.0, 0.0)
 
     override val one: Complex = Complex(1.0, 0.0)
@@ -54,6 +54,12 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
     operator fun Complex.minus(d: Double) = add(this, -d.toComplex())
 
     operator fun Double.times(c: Complex) = Complex(c.re * this, c.im * this)
+
+    override fun symbol(value: String): Complex = if (value == "i") {
+        i
+    } else {
+        super.symbol(value)
+    }
 }
 
 /**

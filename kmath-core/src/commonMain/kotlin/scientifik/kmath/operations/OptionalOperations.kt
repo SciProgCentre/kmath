@@ -49,9 +49,11 @@ fun <T : MathElement<out InverseTrigonometricOperations<T>>> atan(arg: T): T = a
 interface PowerOperations<T> : Algebra<T> {
     fun power(arg: T, pow: Number): T
     fun sqrt(arg: T) = power(arg, 0.5)
+
     infix fun T.pow(pow: Number) = power(this, pow)
 
     companion object {
+        const val POW_OPERATION = "pow"
         const val SQRT_OPERATION = "sqrt"
     }
 }
@@ -62,9 +64,14 @@ fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
-interface ExponentialOperations<T> : Algebra<T> {
+interface ExponentialOperations<T>: Algebra<T> {
     fun exp(arg: T): T
     fun ln(arg: T): T
+
+    companion object {
+        const val EXP_OPERATION = "exp"
+        const val LN_OPERATION = "ln"
+    }
 }
 
 fun <T : MathElement<out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
