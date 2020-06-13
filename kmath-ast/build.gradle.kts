@@ -2,7 +2,7 @@ plugins {
     id("scientifik.mpp")
 }
 
-repositories{
+repositories {
     maven("https://dl.bintray.com/hotkeytlt/maven")
 }
 
@@ -14,13 +14,18 @@ kotlin.sourceSets {
             implementation("com.github.h0tk3y.betterParse:better-parse-multiplatform-metadata:0.4.0-alpha-3")
         }
     }
-    jvmMain{
-        dependencies{
+
+    jvmMain {
+        dependencies {
             implementation("com.github.h0tk3y.betterParse:better-parse-jvm:0.4.0-alpha-3")
+            implementation("org.ow2.asm:asm:8.0.1")
+            implementation("org.ow2.asm:asm-commons:8.0.1")
+            implementation(kotlin("reflect"))
         }
     }
-    jsMain{
-        dependencies{
+
+    jsMain {
+        dependencies {
             implementation("com.github.h0tk3y.betterParse:better-parse-js:0.4.0-alpha-3")
         }
     }
