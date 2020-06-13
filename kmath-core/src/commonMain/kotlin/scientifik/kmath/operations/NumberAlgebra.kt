@@ -20,20 +20,18 @@ interface ExtendedFieldOperations<T> :
         PowerOperations.SQRT_OPERATION -> sqrt(arg)
         ExponentialOperations.EXP_OPERATION -> exp(arg)
         ExponentialOperations.LN_OPERATION -> ln(arg)
-        else -> super.unaryOperation(operation, arg)
+        else -> super<InverseTrigonometricOperations>.unaryOperation(operation, arg)
     }
 
 }
 
 interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
-    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T {
-        return when (operation) {
-            PowerOperations.POW_OPERATION -> power(left, right)
-            else -> super.rightSideNumberOperation(operation, left, right)
-        }
-
+    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
+        PowerOperations.POW_OPERATION -> power(left, right)
+        else -> super.rightSideNumberOperation(operation, left, right)
     }
 }
+
 /**
  * Real field element wrapping double.
  *
