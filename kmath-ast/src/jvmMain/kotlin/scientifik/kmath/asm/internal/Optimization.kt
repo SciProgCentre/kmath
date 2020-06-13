@@ -1,8 +1,10 @@
-package scientifik.kmath.asm
+package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.Opcodes
+import scientifik.kmath.asm.AsmConstantExpression
+import scientifik.kmath.asm.AsmExpression
+import scientifik.kmath.asm.AsmGenerationContext
 import scientifik.kmath.operations.Algebra
-import scientifik.kmath.operations.ByteRing
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
 

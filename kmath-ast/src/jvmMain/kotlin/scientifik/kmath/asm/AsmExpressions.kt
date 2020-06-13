@@ -1,14 +1,31 @@
 package scientifik.kmath.asm
 
+import scientifik.kmath.asm.internal.hasSpecific
+import scientifik.kmath.asm.internal.optimize
+import scientifik.kmath.asm.internal.tryInvokeSpecific
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.expressions.ExpressionAlgebra
 import scientifik.kmath.operations.*
-import kotlin.reflect.full.memberFunctions
-import kotlin.reflect.jvm.jvmName
 
+/**
+ * A function declaration that could be compiled to [AsmGenerationContext].
+ *
+ * @param T the type the stored function returns.
+ */
 interface AsmExpression<T> {
+    /**
+     * Tries to evaluate this function without its variables. This method is intended for optimization.
+     *
+     * @return `null` if the function depends on its variables, the value if the function is a constant.
+     */
     fun tryEvaluate(): T? = null
-    fun invoke(gen: AsmGenerationContext<T>)
+
+    /**
+     * Compiles this declaration.
+     *
+     * @param gen the target [AsmGenerationContext].
+     */
+    fun compile(gen: AsmGenerationContext<T>)
 }
 
 internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val name: String, expr: AsmExpression<T>) :
@@ -16,13 +33,13 @@ internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val
     private val expr: AsmExpression<T> = expr.optimize()
     override fun tryEvaluate(): T? = context { unaryOperation(name, expr.tryEvaluate() ?: return@context null) }
 
-    override fun invoke(gen: AsmGenerationContext<T>) {
+    override fun compile(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
 
         if (!hasSpecific(context, name, 1))
             gen.visitStringConstant(name)
 
-        expr.invoke(gen)
+        expr.compile(gen)
 
         if (gen.tryInvokeSpecific(context, name, 1))
             return
@@ -54,14 +71,14 @@ internal class AsmBinaryOperation<T>(
         )
     }
 
-    override fun invoke(gen: AsmGenerationContext<T>) {
+    override fun compile(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
 
         if (!hasSpecific(context, name, 2))
             gen.visitStringConstant(name)
 
-        first.invoke(gen)
-        second.invoke(gen)
+        first.compile(gen)
+        second.compile(gen)
 
         if (gen.tryInvokeSpecific(context, name, 2))
             return
@@ -79,13 +96,13 @@ internal class AsmBinaryOperation<T>(
 
 internal class AsmVariableExpression<T>(private val name: String, private val default: T? = null) :
     AsmExpression<T> {
-    override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromVariables(name, default)
+    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromVariables(name, default)
 }
 
 internal class AsmConstantExpression<T>(private val value: T) :
     AsmExpression<T> {
     override fun tryEvaluate(): T = value
-    override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
+    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
 }
 
 internal class AsmConstProductExpression<T>(
@@ -98,10 +115,10 @@ internal class AsmConstProductExpression<T>(
 
     override fun tryEvaluate(): T? = context { (expr.tryEvaluate() ?: return@context null) * const }
 
-    override fun invoke(gen: AsmGenerationContext<T>) {
+    override fun compile(gen: AsmGenerationContext<T>) {
         gen.visitLoadAlgebra()
         gen.visitNumberConstant(const)
-        expr.invoke(gen)
+        expr.compile(gen)
 
         gen.visitAlgebraOperation(
             owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
@@ -117,7 +134,7 @@ internal class AsmNumberExpression<T>(private val context: NumericAlgebra<T>, pr
     AsmExpression<T> {
     override fun tryEvaluate(): T? = context.number(value)
 
-    override fun invoke(gen: AsmGenerationContext<T>): Unit = gen.visitNumberConstant(value)
+    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitNumberConstant(value)
 }
 
 internal abstract class FunctionalCompiledExpression<T> internal constructor(

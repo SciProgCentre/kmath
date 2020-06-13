@@ -5,6 +5,9 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.AsmGenerationContext.ClassLoader
+import scientifik.kmath.asm.internal.visitLdcOrDConstInsn
+import scientifik.kmath.asm.internal.visitLdcOrFConstInsn
+import scientifik.kmath.asm.internal.visitLdcOrIConstInsn
 import scientifik.kmath.operations.Algebra
 
 /**
@@ -16,7 +19,7 @@ import scientifik.kmath.operations.Algebra
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
  */
-class AsmGenerationContext<T>(
+class AsmGenerationContext<T> @PublishedApi internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String

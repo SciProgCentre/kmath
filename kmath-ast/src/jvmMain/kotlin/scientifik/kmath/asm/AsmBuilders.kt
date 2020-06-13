@@ -18,9 +18,10 @@ internal fun buildName(expression: AsmExpression<*>, collision: Int = 0): String
     return buildName(expression, collision + 1)
 }
 
-inline fun <reified T> AsmExpression<T>.compile(algebra: Algebra<T>): Expression<T> {
+@PublishedApi
+internal inline fun <reified T> AsmExpression<T>.compile(algebra: Algebra<T>): Expression<T> {
     val ctx = AsmGenerationContext(T::class.java, algebra, buildName(this))
-    invoke(ctx)
+    compile(ctx)
     return ctx.generate()
 }
 
