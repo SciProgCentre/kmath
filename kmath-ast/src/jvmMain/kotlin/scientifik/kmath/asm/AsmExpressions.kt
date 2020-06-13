@@ -11,7 +11,7 @@ interface AsmExpression<T> {
     fun invoke(gen: AsmGenerationContext<T>)
 }
 
-internal val methodNameAdapters = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
+private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
 
 internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
@@ -137,7 +137,9 @@ internal class AsmConstProductExpression<T>(
         gen.visitAlgebraOperation(
             owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
             method = "multiply",
-            descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};L${AsmGenerationContext.NUMBER_CLASS};)L${AsmGenerationContext.OBJECT_CLASS};"
+            descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};" +
+                    "L${AsmGenerationContext.NUMBER_CLASS};)" +
+                    "L${AsmGenerationContext.OBJECT_CLASS};"
         )
     }
 }

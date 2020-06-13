@@ -2,7 +2,7 @@ package scientifik.kmath.expressions
 
 import scientifik.kmath.operations.*
 
-internal class FunctionalUnaryOperation<T>(val context: Algebra<T>, val name: String, val expr: Expression<T>) :
+internal class FunctionalUnaryOperation<T>(val context: Algebra<T>, val name: String, private val expr: Expression<T>) :
     Expression<T> {
     override fun invoke(arguments: Map<String, T>): T = context.unaryOperation(name, expr.invoke(arguments))
 }
