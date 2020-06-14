@@ -16,7 +16,7 @@ internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boo
     return true
 }
 
-internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+internal fun <T> AsmGenerator<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
     context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
@@ -26,12 +26,12 @@ internal fun <T> AsmGenerationContext<T>.tryInvokeSpecific(context: Algebra<T>, 
 
     val sig = buildString {
         append('(')
-        repeat(arity) { append("L${AsmGenerationContext.OBJECT_CLASS};") }
+        repeat(arity) { append("L${AsmGenerator.OBJECT_CLASS};") }
         append(')')
-        append("L${AsmGenerationContext.OBJECT_CLASS};")
+        append("L${AsmGenerator.OBJECT_CLASS};")
     }
 
-    visitAlgebraOperation(
+    invokeAlgebraOperation(
         owner = owner,
         method = aName,
         descriptor = sig,

@@ -1,6 +1,6 @@
 package scientifik.kmath.asm
 
-import scientifik.kmath.asm.internal.AsmGenerationContext
+import scientifik.kmath.asm.internal.AsmGenerator
 import scientifik.kmath.ast.MST
 import scientifik.kmath.ast.evaluate
 import scientifik.kmath.expressions.Expression
@@ -20,12 +20,8 @@ internal fun buildName(expression: AsmNode<*>, collision: Int = 0): String {
 }
 
 @PublishedApi
-internal inline fun <reified T> AsmNode<T>.compile(algebra: Algebra<T>): Expression<T> {
-    val ctx =
-        AsmGenerationContext(T::class.java, algebra, buildName(this))
-    compile(ctx)
-    return ctx.generate()
-}
+internal inline fun <reified T> AsmNode<T>.compile(algebra: Algebra<T>): Expression<T> =
+    AsmGenerator(T::class.java, algebra, buildName(this), this).getInstance()
 
 inline fun <reified T, A : NumericAlgebra<T>, E : AsmExpressionAlgebra<T, A>> A.asm(
     expressionAlgebra: E,

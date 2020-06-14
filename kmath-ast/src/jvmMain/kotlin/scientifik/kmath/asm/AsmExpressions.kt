@@ -1,6 +1,6 @@
 package scientifik.kmath.asm
 
-import scientifik.kmath.asm.internal.AsmGenerationContext
+import scientifik.kmath.asm.internal.AsmGenerator
 import scientifik.kmath.asm.internal.hasSpecific
 import scientifik.kmath.asm.internal.optimize
 import scientifik.kmath.asm.internal.tryInvokeSpecific
@@ -9,7 +9,7 @@ import scientifik.kmath.expressions.ExpressionAlgebra
 import scientifik.kmath.operations.*
 
 /**
- * A function declaration that could be compiled to [AsmGenerationContext].
+ * A function declaration that could be compiled to [AsmGenerator].
  *
  * @param T the type the stored function returns.
  */
@@ -24,10 +24,10 @@ abstract class AsmNode<T> internal constructor() {
     /**
      * Compiles this declaration.
      *
-     * @param gen the target [AsmGenerationContext].
+     * @param gen the target [AsmGenerator].
      */
     @PublishedApi
-    internal abstract fun compile(gen: AsmGenerationContext<T>)
+    internal abstract fun compile(gen: AsmGenerator<T>)
 }
 
 internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val name: String, expr: AsmNode<T>) :
@@ -35,23 +35,23 @@ internal class AsmUnaryOperation<T>(private val context: Algebra<T>, private val
     private val expr: AsmNode<T> = expr.optimize()
     override fun tryEvaluate(): T? = context { unaryOperation(name, expr.tryEvaluate() ?: return@context null) }
 
-    override fun compile(gen: AsmGenerationContext<T>) {
-        gen.visitLoadAlgebra()
+    override fun compile(gen: AsmGenerator<T>) {
+        gen.loadAlgebra()
 
         if (!hasSpecific(context, name, 1))
-            gen.visitStringConstant(name)
+            gen.loadStringConstant(name)
 
         expr.compile(gen)
 
         if (gen.tryInvokeSpecific(context, name, 1))
             return
 
-        gen.visitAlgebraOperation(
-            owner = AsmGenerationContext.ALGEBRA_CLASS,
+        gen.invokeAlgebraOperation(
+            owner = AsmGenerator.ALGEBRA_CLASS,
             method = "unaryOperation",
-            descriptor = "(L${AsmGenerationContext.STRING_CLASS};" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};)" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};"
+            descriptor = "(L${AsmGenerator.STRING_CLASS};" +
+                    "L${AsmGenerator.OBJECT_CLASS};)" +
+                    "L${AsmGenerator.OBJECT_CLASS};"
         )
     }
 }
@@ -73,11 +73,11 @@ internal class AsmBinaryOperation<T>(
         )
     }
 
-    override fun compile(gen: AsmGenerationContext<T>) {
-        gen.visitLoadAlgebra()
+    override fun compile(gen: AsmGenerator<T>) {
+        gen.loadAlgebra()
 
         if (!hasSpecific(context, name, 2))
-            gen.visitStringConstant(name)
+            gen.loadStringConstant(name)
 
         first.compile(gen)
         second.compile(gen)
@@ -85,26 +85,26 @@ internal class AsmBinaryOperation<T>(
         if (gen.tryInvokeSpecific(context, name, 2))
             return
 
-        gen.visitAlgebraOperation(
-            owner = AsmGenerationContext.ALGEBRA_CLASS,
+        gen.invokeAlgebraOperation(
+            owner = AsmGenerator.ALGEBRA_CLASS,
             method = "binaryOperation",
-            descriptor = "(L${AsmGenerationContext.STRING_CLASS};" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};)" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};"
+            descriptor = "(L${AsmGenerator.STRING_CLASS};" +
+                    "L${AsmGenerator.OBJECT_CLASS};" +
+                    "L${AsmGenerator.OBJECT_CLASS};)" +
+                    "L${AsmGenerator.OBJECT_CLASS};"
         )
     }
 }
 
 internal class AsmVariableExpression<T>(private val name: String, private val default: T? = null) :
     AsmNode<T>() {
-    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromVariables(name, default)
+    override fun compile(gen: AsmGenerator<T>): Unit = gen.loadFromVariables(name, default)
 }
 
 internal class AsmConstantExpression<T>(private val value: T) :
     AsmNode<T>() {
     override fun tryEvaluate(): T = value
-    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitLoadFromConstants(value)
+    override fun compile(gen: AsmGenerator<T>): Unit = gen.loadTConstant(value)
 }
 
 internal class AsmConstProductExpression<T>(
@@ -116,17 +116,17 @@ internal class AsmConstProductExpression<T>(
 
     override fun tryEvaluate(): T? = context { (expr.tryEvaluate() ?: return@context null) * const }
 
-    override fun compile(gen: AsmGenerationContext<T>) {
-        gen.visitLoadAlgebra()
-        gen.visitNumberConstant(const)
+    override fun compile(gen: AsmGenerator<T>) {
+        gen.loadAlgebra()
+        gen.loadNumberConstant(const)
         expr.compile(gen)
 
-        gen.visitAlgebraOperation(
-            owner = AsmGenerationContext.SPACE_OPERATIONS_CLASS,
+        gen.invokeAlgebraOperation(
+            owner = AsmGenerator.SPACE_OPERATIONS_CLASS,
             method = "multiply",
-            descriptor = "(L${AsmGenerationContext.OBJECT_CLASS};" +
-                    "L${AsmGenerationContext.NUMBER_CLASS};)" +
-                    "L${AsmGenerationContext.OBJECT_CLASS};"
+            descriptor = "(L${AsmGenerator.OBJECT_CLASS};" +
+                    "L${AsmGenerator.NUMBER_CLASS};)" +
+                    "L${AsmGenerator.OBJECT_CLASS};"
         )
     }
 }
@@ -135,7 +135,7 @@ internal class AsmNumberExpression<T>(private val context: NumericAlgebra<T>, pr
     AsmNode<T>() {
     override fun tryEvaluate(): T? = context.number(value)
 
-    override fun compile(gen: AsmGenerationContext<T>): Unit = gen.visitNumberConstant(value)
+    override fun compile(gen: AsmGenerator<T>): Unit = gen.loadNumberConstant(value)
 }
 
 internal abstract class FunctionalCompiledExpression<T> internal constructor(
