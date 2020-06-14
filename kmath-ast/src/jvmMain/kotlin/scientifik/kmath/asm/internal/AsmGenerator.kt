@@ -228,7 +228,7 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
         loadConstant(value, c)
     }
 
-    internal fun loadFromVariables(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
+    internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
         visitLoadObjectVar(invokeArgumentsVar)
 
         if (defaultValue != null) {

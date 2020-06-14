@@ -98,7 +98,7 @@ internal class AsmBinaryOperation<T>(
 
 internal class AsmVariableExpression<T>(private val name: String, private val default: T? = null) :
     AsmNode<T>() {
-    override fun compile(gen: AsmGenerator<T>): Unit = gen.loadFromVariables(name, default)
+    override fun compile(gen: AsmGenerator<T>): Unit = gen.loadVariable(name, default)
 }
 
 internal class AsmConstantExpression<T>(private val value: T) :
