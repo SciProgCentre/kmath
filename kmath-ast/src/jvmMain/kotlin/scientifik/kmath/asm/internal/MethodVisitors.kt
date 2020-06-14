@@ -44,9 +44,7 @@ internal fun MethodVisitor.visitCheckCast(type: String): Unit = visitTypeInsn(CH
 internal fun MethodVisitor.visitGetField(owner: String, name: String, descriptor: String): Unit =
     visitFieldInsn(GETFIELD, owner, name, descriptor)
 
-internal fun MethodVisitor.visitLoadObjectVar(`var`: Int) {
-    visitVarInsn(ALOAD, `var`)
-}
+internal fun MethodVisitor.visitLoadObjectVar(`var`: Int): Unit = visitVarInsn(ALOAD, `var`)
 
 internal fun MethodVisitor.visitGetObjectArrayElement(): Unit = visitInsn(AALOAD)
 
