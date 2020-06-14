@@ -17,7 +17,6 @@ import scientifik.kmath.operations.Algebra
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
  */
-@Suppress("UNCHECKED_CAST")
 @PublishedApi
 internal class AsmGenerator<T> @PublishedApi internal constructor(
     private val classOfT: Class<*>,
@@ -45,6 +44,7 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
     private lateinit var invokeMethodVisitor: MethodVisitor
     private var generatedInstance: FunctionalCompiledExpression<T>? = null
 
+    @Suppress("UNCHECKED_CAST")
     fun getInstance(): FunctionalCompiledExpression<T> {
         generatedInstance?.let { return it }
 
@@ -101,15 +101,14 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
                 visitEnd()
             }
 
-            invokeMethodVisitor = visitMethod(
+            visitMethod(
                 access = Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
                 name = "invoke",
                 descriptor = "(L$MAP_CLASS;)L$T_CLASS;",
                 signature = "(L$MAP_CLASS<L$STRING_CLASS;+L$T_CLASS;>;)L$T_CLASS;",
                 exceptions = null
-            ) {}
-
-            invokeMethodVisitor.run {
+            ) {
+                invokeMethodVisitor = this
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
@@ -121,7 +120,7 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
                 visitLocalVariable(
                     "this",
                     "L$slashesClassName;",
-                    T_CLASS,
+                    null,
                     l0,
                     l1,
                     invokeThisVar
@@ -280,9 +279,7 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
         invokeMethodVisitor.visitCheckCast(T_CLASS)
     }
 
-    internal fun loadStringConstant(string: String) {
-        invokeMethodVisitor.visitLdcInsn(string)
-    }
+    internal fun loadStringConstant(string: String): Unit = invokeMethodVisitor.visitLdcInsn(string)
 
     internal companion object {
         private val SIGNATURE_LETTERS: Map<Class<out Any>, String> by lazy {
