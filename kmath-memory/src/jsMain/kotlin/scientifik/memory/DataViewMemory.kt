@@ -11,16 +11,15 @@ class DataViewMemory(val view: DataView) : Memory {
     override fun view(offset: Int, length: Int): Memory {
         require(offset >= 0) { "offset shouldn't be negative: $offset" }
         require(length >= 0) { "length shouldn't be negative: $length" }
-        if (offset + length > size) {
+
+        if (offset + length > size)
             throw IndexOutOfBoundsException("offset + length > size: $offset + $length > $size")
-        }
+
         return DataViewMemory(DataView(view.buffer, view.byteOffset + offset, length))
     }
 
 
-    override fun copy(): Memory {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun copy(): Memory = DataViewMemory(DataView(view.buffer.slice(0)))
 
     private val reader = object : MemoryReader {
         override val memory: Memory get() = this@DataViewMemory
