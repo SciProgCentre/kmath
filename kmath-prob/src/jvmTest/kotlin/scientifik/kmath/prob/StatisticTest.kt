@@ -9,7 +9,7 @@ import kotlin.test.Test
 
 class StatisticTest {
     //create a random number generator.
-    val generator = DefaultGenerator(1)
+    val generator = RandomGenerator.default(1)
     //Create a stateless chain from generator.
     val data = generator.chain { nextDouble() }
     //Convert a chaint to Flow and break it into chunks.

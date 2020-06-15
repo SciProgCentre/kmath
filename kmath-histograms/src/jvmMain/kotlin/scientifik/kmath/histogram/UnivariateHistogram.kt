@@ -1,7 +1,7 @@
 package scientifik.kmath.histogram
 
-import scientifik.kmath.linear.RealVector
-import scientifik.kmath.linear.asVector
+import scientifik.kmath.real.RealVector
+import scientifik.kmath.real.asVector
 import scientifik.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.floor

@@ -1,7 +1,7 @@
 package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.Point
-import scientifik.kmath.linear.asVector
+import scientifik.kmath.real.asVector
 import scientifik.kmath.operations.SpaceOperations
 import scientifik.kmath.structures.*
 import kotlin.math.floor

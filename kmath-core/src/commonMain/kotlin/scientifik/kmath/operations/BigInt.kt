@@ -2,6 +2,7 @@ package scientifik.kmath.operations
 
 import scientifik.kmath.operations.BigInt.Companion.BASE
 import scientifik.kmath.operations.BigInt.Companion.BASE_SIZE
+import scientifik.kmath.structures.*
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
@@ -482,3 +483,18 @@ fun String.parseBigInteger(): BigInt? {
     }
     return res * sign
 }
+
+inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    boxing(size, initializer)
+
+inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
+    boxing(size, initializer)
+
+fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInt, BigIntField> =
+    BoxingNDRing(shape, BigIntField, Buffer.Companion::bigInt)
+
+fun NDElement.Companion.bigInt(
+    vararg shape: Int,
+    initializer: BigIntField.(IntArray) -> BigInt
+): BufferedNDRingElement<BigInt, BigIntField> =
+    NDAlgebra.bigInt(*shape).produce(initializer)

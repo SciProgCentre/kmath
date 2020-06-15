@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 
-object BigIntegerRing : Ring<BigInteger> {
+object JBigIntegerField : Field<BigInteger> {
     override val zero: BigInteger = BigInteger.ZERO
     override val one: BigInteger = BigInteger.ONE
 
@@ -14,9 +14,11 @@ object BigIntegerRing : Ring<BigInteger> {
     override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
 
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
+
+    override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
 }
 
-class BigDecimalField(val mathContext: MathContext = MathContext.DECIMAL64) : Field<BigDecimal> {
+class JBigDecimalField(val mathContext: MathContext = MathContext.DECIMAL64) : Field<BigDecimal> {
     override val zero: BigDecimal = BigDecimal.ZERO
     override val one: BigDecimal = BigDecimal.ONE
 
@@ -28,18 +30,3 @@ class BigDecimalField(val mathContext: MathContext = MathContext.DECIMAL64) : Fi
     override fun multiply(a: BigDecimal, b: BigDecimal): BigDecimal = a.multiply(b, mathContext)
     override fun divide(a: BigDecimal, b: BigDecimal): BigDecimal = a.divide(b, mathContext)
 }
-
-inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInteger): Buffer<BigInteger> =
-    boxing(size, initializer)
-
-inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInteger): MutableBuffer<BigInteger> =
-    boxing(size, initializer)
-
-fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInteger, BigIntegerRing> =
-    BoxingNDRing(shape, BigIntegerRing, Buffer.Companion::bigInt)
-
-fun NDElement.Companion.bigInt(
-    vararg shape: Int,
-    initializer: BigIntegerRing.(IntArray) -> BigInteger
-): BufferedNDRingElement<BigInteger, BigIntegerRing> =
-    NDAlgebra.bigInt(*shape).produce(initializer)

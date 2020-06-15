@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
+    implementation(project(":kmath-prob"))
     implementation(project(":kmath-koma"))
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
@@ -57,6 +58,6 @@ benchmark {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = Scientifik.JVM_VERSION
+        jvmTarget = Scientifik.JVM_TARGET.toString()
     }
 }

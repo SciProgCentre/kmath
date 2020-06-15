@@ -38,13 +38,16 @@ interface Chain<out R>: Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @InternalCoroutinesApi
+    @OptIn(InternalCoroutinesApi::class)
     override suspend fun collect(collector: FlowCollector<R>) {
-        kotlinx.coroutines.flow.flow { while (true) emit(next()) }.collect(collector)
+        kotlinx.coroutines.flow.flow {
+            while (true){
+                emit(next())
+            }
+        }.collect(collector)
     }
 
     companion object
-
 }
 
 
@@ -67,6 +70,8 @@ class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val ge
     private val mutex = Mutex()
 
     private var value: R? = null
+
+    fun value() = value
 
     override suspend fun next(): R {
         mutex.withLock {
@@ -96,6 +101,8 @@ class StatefulChain<S, out R>(
     private val mutex = Mutex()
 
     private var value: R? = null
+
+    fun value() = value
 
     override suspend fun next(): R {
         mutex.withLock {

@@ -30,6 +30,20 @@ class LazyNDStructure<T>(
         }
         return res.asSequence()
     }
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
+
+    override fun hashCode(): Int {
+        var result = scope.hashCode()
+        result = 31 * result + shape.contentHashCode()
+        result = 31 * result + function.hashCode()
+        result = 31 * result + cache.hashCode()
+        return result
+    }
+
+
 }
 
 fun <T> NDStructure<T>.deferred(index: IntArray) =

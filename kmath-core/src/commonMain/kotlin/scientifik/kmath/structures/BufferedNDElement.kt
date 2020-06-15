@@ -3,10 +3,10 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.*
 
 /**
- * Base interface for an element with context, containing strides
+ * Base class for an element with context, containing strides
  */
-interface BufferedNDElement<T, C> : NDBuffer<T>, NDElement<T, C, NDBuffer<T>> {
-    override val context: BufferedNDAlgebra<T, C>
+abstract class BufferedNDElement<T, C> : NDBuffer<T>(), NDElement<T, C, NDBuffer<T>> {
+    abstract override val context: BufferedNDAlgebra<T, C>
 
     override val strides get() = context.strides
 
@@ -16,7 +16,7 @@ interface BufferedNDElement<T, C> : NDBuffer<T>, NDElement<T, C, NDBuffer<T>> {
 class BufferedNDSpaceElement<T, S : Space<T>>(
     override val context: BufferedNDSpace<T, S>,
     override val buffer: Buffer<T>
-) : BufferedNDElement<T, S>, SpaceElement<NDBuffer<T>, BufferedNDSpaceElement<T, S>, BufferedNDSpace<T, S>> {
+) : BufferedNDElement<T, S>(), SpaceElement<NDBuffer<T>, BufferedNDSpaceElement<T, S>, BufferedNDSpace<T, S>> {
 
     override fun unwrap(): NDBuffer<T> = this
 
@@ -29,7 +29,7 @@ class BufferedNDSpaceElement<T, S : Space<T>>(
 class BufferedNDRingElement<T, R : Ring<T>>(
     override val context: BufferedNDRing<T, R>,
     override val buffer: Buffer<T>
-) : BufferedNDElement<T, R>, RingElement<NDBuffer<T>, BufferedNDRingElement<T, R>, BufferedNDRing<T, R>> {
+) : BufferedNDElement<T, R>(), RingElement<NDBuffer<T>, BufferedNDRingElement<T, R>, BufferedNDRing<T, R>> {
 
     override fun unwrap(): NDBuffer<T> = this
 
@@ -42,7 +42,7 @@ class BufferedNDRingElement<T, R : Ring<T>>(
 class BufferedNDFieldElement<T, F : Field<T>>(
     override val context: BufferedNDField<T, F>,
     override val buffer: Buffer<T>
-) : BufferedNDElement<T, F>, FieldElement<NDBuffer<T>, BufferedNDFieldElement<T, F>, BufferedNDField<T, F>> {
+) : BufferedNDElement<T, F>(), FieldElement<NDBuffer<T>, BufferedNDFieldElement<T, F>, BufferedNDField<T, F>> {
 
     override fun unwrap(): NDBuffer<T> = this
 
