@@ -11,7 +11,7 @@ sealed class MST {
     /**
      * A node containing unparsed string
      */
-    data class Singular(val value: String) : MST()
+    data class Symbolic(val value: String) : MST()
 
     /**
      * A node containing a number
@@ -43,7 +43,7 @@ sealed class MST {
 fun <T> NumericAlgebra<T>.evaluate(node: MST): T {
     return when (node) {
         is MST.Numeric -> number(node.value)
-        is MST.Singular -> symbol(node.value)
+        is MST.Symbolic -> symbol(node.value)
         is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
         is MST.Binary -> when {
             node.left is MST.Numeric && node.right is MST.Numeric -> {

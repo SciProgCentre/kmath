@@ -1,4 +1,4 @@
-package scietifik.kmath.ast.asm
+package scietifik.kmath.asm
 
 import scientifik.kmath.asm.asmField
 import scientifik.kmath.asm.asmRing
