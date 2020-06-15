@@ -2,7 +2,7 @@ package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.AsmConstantExpression
-import scientifik.kmath.asm.AsmNode
+import scientifik.kmath.asm.AsmExpression
 import scientifik.kmath.operations.Algebra
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
@@ -16,7 +16,7 @@ internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boo
     return true
 }
 
-internal fun <T> AsmGenerator<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
     context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
@@ -26,9 +26,9 @@ internal fun <T> AsmGenerator<T>.tryInvokeSpecific(context: Algebra<T>, name: St
 
     val sig = buildString {
         append('(')
-        repeat(arity) { append("L${AsmGenerator.OBJECT_CLASS};") }
+        repeat(arity) { append("L${AsmBuilder.OBJECT_CLASS};") }
         append(')')
-        append("L${AsmGenerator.OBJECT_CLASS};")
+        append("L${AsmBuilder.OBJECT_CLASS};")
     }
 
     invokeAlgebraOperation(
@@ -43,7 +43,7 @@ internal fun <T> AsmGenerator<T>.tryInvokeSpecific(context: Algebra<T>, name: St
 }
 
 @PublishedApi
-internal fun <T> AsmNode<T>.optimize(): AsmNode<T> {
+internal fun <T> AsmExpression<T>.optimize(): AsmExpression<T> {
     val a = tryEvaluate()
     return if (a == null) this else AsmConstantExpression(a)
 }

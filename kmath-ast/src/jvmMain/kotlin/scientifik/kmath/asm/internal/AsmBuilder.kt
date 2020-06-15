@@ -4,13 +4,13 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import scientifik.kmath.asm.AsmNode
+import scientifik.kmath.asm.AsmExpression
 import scientifik.kmath.asm.FunctionalCompiledExpression
-import scientifik.kmath.asm.internal.AsmGenerator.ClassLoader
+import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.operations.Algebra
 
 /**
- * ASM Generator is a structure that abstracts building a class that unwraps [AsmNode] to plain Java expression.
+ * ASM Builder is a structure that abstracts building a class that unwraps [AsmExpression] to plain Java expression.
  * This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new class.
  *
  * @param T the type of AsmExpression to unwrap.
@@ -18,11 +18,11 @@ import scientifik.kmath.operations.Algebra
  * @param className the unique class name of new loaded class.
  */
 @PublishedApi
-internal class AsmGenerator<T> @PublishedApi internal constructor(
+internal class AsmBuilder<T> @PublishedApi internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
-    private val root: AsmNode<T>
+    private val root: AsmExpression<T>
 ) {
     private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
@@ -112,7 +112,7 @@ internal class AsmGenerator<T> @PublishedApi internal constructor(
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
-                root.compile(this@AsmGenerator)
+                root.compile(this@AsmBuilder)
                 visitReturnObject()
                 val l1 = Label()
                 visitLabel(l1)
