@@ -5,30 +5,29 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.FunctionalCompiledExpression
-import scientifik.kmath.asm.internal.AsmGenerationContext.ClassLoader
+import scientifik.kmath.asm.internal.AsmBuilder.AsmClassLoader
 import scientifik.kmath.operations.Algebra
 
 /**
  * AsmGenerationContext is a structure that abstracts building a class that unwraps [AsmNode] to plain Java
- * expression. This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new
+ * expression. This class uses [AsmClassLoader] for loading the generated class, then it is able to instantiate the new
  * class.
  *
  * @param T the type of AsmExpression to unwrap.
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
  */
-@PublishedApi
-internal class AsmGenerationContext<T> @PublishedApi internal constructor(
+internal class AsmBuilder<T>(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String
 ) {
-    private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
+    private class AsmClassLoader(parent: ClassLoader) : ClassLoader(parent) {
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
     }
 
-    private val classLoader: ClassLoader =
-        ClassLoader(javaClass.classLoader)
+    private val classLoader: AsmClassLoader =
+        AsmClassLoader(javaClass.classLoader)
 
     @Suppress("PrivatePropertyName")
     private val T_ALGEBRA_CLASS: String = algebra.javaClass.name.replace(oldChar = '.', newChar = '/')
@@ -113,9 +112,8 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
         }
     }
 
-    @PublishedApi
     @Suppress("UNCHECKED_CAST")
-    internal fun generate(): FunctionalCompiledExpression<T> {
+    fun generate(): FunctionalCompiledExpression<T> {
         generatedInstance?.let { return it }
 
         invokeMethodVisitor.run {
@@ -188,7 +186,7 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
         return new
     }
 
-    internal fun visitLoadFromConstants(value: T) {
+    fun visitLoadFromConstants(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
             visitNumberConstant(value as Number)
             visitCastToT()
@@ -213,7 +211,7 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
 
     private fun visitLoadThis(): Unit = invokeMethodVisitor.visitVarInsn(Opcodes.ALOAD, invokeThisVar)
 
-    internal fun visitNumberConstant(value: Number) {
+    fun visitNumberConstant(value: Number) {
         maxStack++
         val clazz = value.javaClass
         val c = clazz.name.replace('.', '/')
@@ -234,7 +232,7 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
         visitLoadAnyFromConstants(value, c)
     }
 
-    internal fun visitLoadFromVariables(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
+    fun visitLoadFromVariables(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
         maxStack += 2
         visitVarInsn(Opcodes.ALOAD, invokeArgumentsVar)
 
@@ -262,7 +260,7 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
         visitCastToT()
     }
 
-    internal fun visitLoadAlgebra() {
+    fun visitLoadAlgebra() {
         maxStack++
         invokeMethodVisitor.visitVarInsn(Opcodes.ALOAD, invokeThisVar)
 
@@ -274,7 +272,7 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
         invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, T_ALGEBRA_CLASS)
     }
 
-    internal fun visitAlgebraOperation(
+    fun visitAlgebraOperation(
         owner: String,
         method: String,
         descriptor: String,
@@ -288,32 +286,28 @@ internal class AsmGenerationContext<T> @PublishedApi internal constructor(
 
     private fun visitCastToT(): Unit = invokeMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, T_CLASS)
 
-    internal fun visitStringConstant(string: String) {
+    fun visitStringConstant(string: String) {
         invokeMethodVisitor.visitLdcInsn(string)
     }
 
-    internal companion object {
-        private val SIGNATURE_LETTERS by lazy {
-            mapOf(
-                java.lang.Byte::class.java to "B",
-                java.lang.Short::class.java to "S",
-                java.lang.Integer::class.java to "I",
-                java.lang.Long::class.java to "J",
-                java.lang.Float::class.java to "F",
-                java.lang.Double::class.java to "D"
-            )
-        }
+    companion object {
+        private val SIGNATURE_LETTERS = mapOf(
+            java.lang.Byte::class.java to "B",
+            java.lang.Short::class.java to "S",
+            java.lang.Integer::class.java to "I",
+            java.lang.Long::class.java to "J",
+            java.lang.Float::class.java to "F",
+            java.lang.Double::class.java to "D"
+        )
 
-        private val INLINABLE_NUMBERS by lazy { SIGNATURE_LETTERS.keys }
+        private val INLINABLE_NUMBERS = SIGNATURE_LETTERS.keys
 
-        internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
-            "scientifik/kmath/asm/FunctionalCompiledExpression"
-
-        internal const val MAP_CLASS = "java/util/Map"
-        internal const val OBJECT_CLASS = "java/lang/Object"
-        internal const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
-        internal const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
-        internal const val STRING_CLASS = "java/lang/String"
-        internal const val NUMBER_CLASS = "java/lang/Number"
+        const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS = "scientifik/kmath/asm/FunctionalCompiledExpression"
+        const val MAP_CLASS = "java/util/Map"
+        const val OBJECT_CLASS = "java/lang/Object"
+        const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
+        const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
+        const val STRING_CLASS = "java/lang/String"
+        const val NUMBER_CLASS = "java/lang/Number"
     }
 }
