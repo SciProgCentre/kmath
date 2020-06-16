@@ -1,5 +1,6 @@
 package scientifik.kmath.ast
 
+import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
 import scientifik.kmath.operations.RealField
 
@@ -40,12 +41,14 @@ sealed class MST {
 
 //TODO add a function with named arguments
 
-fun <T> NumericAlgebra<T>.evaluate(node: MST): T {
+fun <T> Algebra<T>.evaluate(node: MST): T {
     return when (node) {
-        is MST.Numeric -> number(node.value)
+        is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
+            ?: error("Numeric nodes are not supported by $this")
         is MST.Symbolic -> symbol(node.value)
         is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
         is MST.Binary -> when {
+            this !is NumericAlgebra -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
             node.left is MST.Numeric && node.right is MST.Numeric -> {
                 val number = RealField.binaryOperation(
                     node.operation,
@@ -60,3 +63,5 @@ fun <T> NumericAlgebra<T>.evaluate(node: MST): T {
         }
     }
 }
+
+fun <T> MST.compile(algebra: Algebra<T>): T = algebra.evaluate(this)
