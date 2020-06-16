@@ -7,6 +7,11 @@ repositories {
 }
 
 kotlin.sourceSets {
+//    all {
+//       languageSettings.apply{
+//            enableLanguageFeature("NewInference")
+//       }
+//    }
     commonMain {
         dependencies {
             api(project(":kmath-core"))

@@ -69,10 +69,10 @@ interface FunctionalExpressionAlgebra<T, A : Algebra<T>> : ExpressionAlgebra<T, 
 /**
  * A context class for [Expression] construction for [Space] algebras.
  */
-open class FunctionalExpressionSpace<T, A>(override val algebra: A) : FunctionalExpressionAlgebra<T, A>,
-    Space<Expression<T>> where  A : Space<T> {
-    override val zero: Expression<T>
-        get() = const(algebra.zero)
+open class FunctionalExpressionSpace<T, A : Space<T>>(override val algebra: A) :
+    FunctionalExpressionAlgebra<T, A>, Space<Expression<T>> {
+
+    override val zero: Expression<T> get() = const(algebra.zero)
 
     /**
      * Builds an Expression of addition of two another expressions.
