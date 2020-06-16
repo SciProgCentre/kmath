@@ -1,8 +1,6 @@
 package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.Opcodes
-import scientifik.kmath.asm.AsmConstantExpression
-import scientifik.kmath.asm.AsmExpression
 import scientifik.kmath.operations.Algebra
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
@@ -41,8 +39,8 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
 
     return true
 }
-
-internal fun <T : Any> AsmExpression<T>.optimize(): AsmExpression<T> {
-    val a = tryEvaluate()
-    return if (a == null) this else AsmConstantExpression(type, algebra, a)
-}
+//
+//internal fun <T : Any> AsmExpression<T>.optimize(): AsmExpression<T> {
+//    val a = tryEvaluate()
+//    return if (a == null) this else AsmConstantExpression(type, algebra, a)
+//}

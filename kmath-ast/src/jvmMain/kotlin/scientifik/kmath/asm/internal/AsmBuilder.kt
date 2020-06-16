@@ -4,9 +4,18 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import scientifik.kmath.asm.FunctionalCompiledExpression
 import scientifik.kmath.asm.internal.AsmBuilder.AsmClassLoader
+import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+
+
+private abstract class FunctionalCompiledExpression<T> internal constructor(
+    @JvmField protected val algebra: Algebra<T>,
+    @JvmField protected val constants: Array<Any>
+) : Expression<T> {
+    abstract override fun invoke(arguments: Map<String, T>): T
+}
+
 
 /**
  * AsmGenerationContext is a structure that abstracts building a class that unwraps [AsmNode] to plain Java
@@ -16,6 +25,8 @@ import scientifik.kmath.operations.Algebra
  * @param T the type of AsmExpression to unwrap.
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
+ *
+ * @author [Iaroslav Postovalov](https://github.com/CommanderTvis)
  */
 internal class AsmBuilder<T>(
     private val classOfT: Class<*>,
@@ -44,7 +55,6 @@ internal class AsmBuilder<T>(
     private val invokeMethodVisitor: MethodVisitor
     private val invokeL0: Label
     private lateinit var invokeL1: Label
-    private var generatedInstance: FunctionalCompiledExpression<T>? = null
 
     init {
         asmCompiledClassWriter.visit(
@@ -113,8 +123,7 @@ internal class AsmBuilder<T>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun generate(): FunctionalCompiledExpression<T> {
-        generatedInstance?.let { return it }
+    fun generate(): Expression<T> {
 
         invokeMethodVisitor.run {
             visitInsn(Opcodes.ARETURN)
@@ -182,7 +191,6 @@ internal class AsmBuilder<T>(
             .first()
             .newInstance(algebra, constants.toTypedArray()) as FunctionalCompiledExpression<T>
 
-        generatedInstance = new
         return new
     }
 

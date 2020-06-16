@@ -90,20 +90,20 @@ abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
 
     // Overloads for Double constants
 
-    operator fun Number.plus(that: Variable<T>): Variable<T> =
-        derive(variable { this@plus.toDouble() * one + that.value }) { z ->
-            that.d += z.d
+    override operator fun Number.plus(b: Variable<T>): Variable<T> =
+        derive(variable { this@plus.toDouble() * one + b.value }) { z ->
+            b.d += z.d
         }
 
-    operator fun Variable<T>.plus(b: Number): Variable<T> = b.plus(this)
+    override operator fun Variable<T>.plus(b: Number): Variable<T> = b.plus(this)
 
-    operator fun Number.minus(that: Variable<T>): Variable<T> =
-        derive(variable { this@minus.toDouble() * one - that.value }) { z ->
-            that.d -= z.d
+    override operator fun Number.minus(b: Variable<T>): Variable<T> =
+        derive(variable { this@minus.toDouble() * one - b.value }) { z ->
+            b.d -= z.d
         }
 
-    operator fun Variable<T>.minus(that: Number): Variable<T> =
-        derive(variable { this@minus.value - one * that.toDouble() }) { z ->
+    override operator fun Variable<T>.minus(b: Number): Variable<T> =
+        derive(variable { this@minus.value - one * b.toDouble() }) { z ->
             this@minus.d += z.d
         }
 }
