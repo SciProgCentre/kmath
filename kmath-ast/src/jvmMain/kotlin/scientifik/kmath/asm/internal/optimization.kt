@@ -29,7 +29,7 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
         append("L${AsmBuilder.OBJECT_CLASS};")
     }
 
-    visitAlgebraOperation(
+    invokeAlgebraOperation(
         owner = owner,
         method = aName,
         descriptor = sig,
@@ -39,8 +39,3 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
 
     return true
 }
-//
-//internal fun <T : Any> AsmExpression<T>.optimize(): AsmExpression<T> {
-//    val a = tryEvaluate()
-//    return if (a == null) this else AsmConstantExpression(type, algebra, a)
-//}
