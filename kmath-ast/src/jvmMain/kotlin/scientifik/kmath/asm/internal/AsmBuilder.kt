@@ -4,9 +4,8 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import scientifik.kmath.asm.AsmExpression
-import scientifik.kmath.asm.FunctionalCompiledExpression
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
+import scientifik.kmath.ast.MST
 import scientifik.kmath.operations.Algebra
 
 /**
@@ -22,7 +21,7 @@ internal class AsmBuilder<T> @PublishedApi internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
-    private val root: AsmExpression<T>
+    private val evaluateMethodVisitor: AsmBuilder<T>.() -> Unit
 ) {
     private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
@@ -42,10 +41,10 @@ internal class AsmBuilder<T> @PublishedApi internal constructor(
     private val invokeArgumentsVar: Int = 1
     private val constants: MutableList<Any> = mutableListOf()
     private lateinit var invokeMethodVisitor: MethodVisitor
-    private var generatedInstance: FunctionalCompiledExpression<T>? = null
+    private var generatedInstance: AsmCompiledExpression<T>? = null
 
     @Suppress("UNCHECKED_CAST")
-    fun getInstance(): FunctionalCompiledExpression<T> {
+    fun getInstance(): AsmCompiledExpression<T> {
         generatedInstance?.let { return it }
 
         val classWriter = ClassWriter(ClassWriter.COMPUTE_FRAMES) {
@@ -112,7 +111,7 @@ internal class AsmBuilder<T> @PublishedApi internal constructor(
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
-                root.compile(this@AsmBuilder)
+                evaluateMethodVisitor()
                 visitReturnObject()
                 val l1 = Label()
                 visitLabel(l1)
@@ -178,7 +177,7 @@ internal class AsmBuilder<T> @PublishedApi internal constructor(
             .defineClass(className, classWriter.toByteArray())
             .constructors
             .first()
-            .newInstance(algebra, constants.toTypedArray()) as FunctionalCompiledExpression<T>
+            .newInstance(algebra, constants.toTypedArray()) as AsmCompiledExpression<T>
 
         generatedInstance = new
         return new
@@ -296,13 +295,11 @@ internal class AsmBuilder<T> @PublishedApi internal constructor(
         private val INLINABLE_NUMBERS: Set<Class<out Any>> by lazy { SIGNATURE_LETTERS.keys }
 
         internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
-            "scientifik/kmath/asm/FunctionalCompiledExpression"
+            "scientifik/kmath/asm/internal/AsmCompiledExpression"
 
         internal const val MAP_CLASS = "java/util/Map"
         internal const val OBJECT_CLASS = "java/lang/Object"
         internal const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
-        internal const val SPACE_OPERATIONS_CLASS = "scientifik/kmath/operations/SpaceOperations"
         internal const val STRING_CLASS = "java/lang/String"
-        internal const val NUMBER_CLASS = "java/lang/Number"
     }
 }
