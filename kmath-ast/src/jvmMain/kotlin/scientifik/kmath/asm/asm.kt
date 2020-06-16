@@ -1,6 +1,7 @@
 package scientifik.kmath.asm
 
 import scientifik.kmath.asm.internal.AsmBuilder
+import scientifik.kmath.asm.internal.buildName
 import scientifik.kmath.asm.internal.hasSpecific
 import scientifik.kmath.asm.internal.tryInvokeSpecific
 import scientifik.kmath.ast.MST
@@ -10,44 +11,30 @@ import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
 import kotlin.reflect.KClass
 
-
 /**
  * Compile given MST to an Expression using AST compiler
  */
 fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
-
-    fun buildName(mst: MST, collision: Int = 0): String {
-        val name = "scientifik.kmath.expressions.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
-
-        try {
-            Class.forName(name)
-        } catch (ignored: ClassNotFoundException) {
-            return name
-        }
-
-        return buildName(mst, collision + 1)
-    }
-
-    fun AsmBuilder<T>.visit(node: MST): Unit {
+    fun AsmBuilder<T>.visit(node: MST) {
         when (node) {
-            is MST.Symbolic -> visitLoadFromVariables(node.value)
+            is MST.Symbolic -> loadVariable(node.value)
             is MST.Numeric -> {
                 val constant = if (algebra is NumericAlgebra<T>) {
                     algebra.number(node.value)
                 } else {
                     error("Number literals are not supported in $algebra")
                 }
-                visitLoadFromConstants(constant)
+                loadTConstant(constant)
             }
             is MST.Unary -> {
-                visitLoadAlgebra()
+                loadAlgebra()
 
-                if (!hasSpecific(algebra, node.operation, 1)) visitStringConstant(node.operation)
+                if (!hasSpecific(algebra, node.operation, 1)) loadStringConstant(node.operation)
 
                 visit(node.value)
 
                 if (!tryInvokeSpecific(algebra, node.operation, 1)) {
-                    visitAlgebraOperation(
+                    invokeAlgebraOperation(
                         owner = AsmBuilder.ALGEBRA_CLASS,
                         method = "unaryOperation",
                         descriptor = "(L${AsmBuilder.STRING_CLASS};" +
@@ -57,17 +44,17 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
                 }
             }
             is MST.Binary -> {
-                visitLoadAlgebra()
+                loadAlgebra()
 
                 if (!hasSpecific(algebra, node.operation, 2))
-                    visitStringConstant(node.operation)
+                    loadStringConstant(node.operation)
 
                 visit(node.left)
                 visit(node.right)
 
                 if (!tryInvokeSpecific(algebra, node.operation, 2)) {
 
-                    visitAlgebraOperation(
+                    invokeAlgebraOperation(
                         owner = AsmBuilder.ALGEBRA_CLASS,
                         method = "binaryOperation",
                         descriptor = "(L${AsmBuilder.STRING_CLASS};" +
@@ -80,9 +67,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
         }
     }
 
-    val builder = AsmBuilder(type.java, algebra, buildName(this))
-    builder.visit(this)
-    return builder.generate()
+    return AsmBuilder(type.java, algebra, buildName(this)) { visit(this@compileWith) }.getInstance()
 }
 
 inline fun <reified T : Any> Algebra<T>.compile(mst: MST): Expression<T> = mst.compileWith(T::class, this)
