@@ -4,11 +4,10 @@ import scientifik.kmath.asm.internal.AsmBuilder
 import scientifik.kmath.asm.internal.hasSpecific
 import scientifik.kmath.asm.internal.tryInvokeSpecific
 import scientifik.kmath.ast.MST
-import scientifik.kmath.ast.MSTField
-import scientifik.kmath.ast.MSTRing
-import scientifik.kmath.ast.MSTSpace
+import scientifik.kmath.ast.MSTExpression
 import scientifik.kmath.expressions.Expression
-import scientifik.kmath.operations.*
+import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.NumericAlgebra
 import kotlin.reflect.KClass
 
 
@@ -88,16 +87,21 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 
 inline fun <reified T : Any> Algebra<T>.compile(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
-inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.asm(
-    mstAlgebra: E,
-    block: E.() -> MST
-): Expression<T> = mstAlgebra.block().compileWith(T::class, this)
+/**
+ * Optimize performance of an [MSTExpression] using ASM codegen
+ */
+inline fun <reified T : Any> MSTExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
 
-inline fun <reified T : Any, A : Space<T>> A.asmInSpace(block: MSTSpace.() -> MST): Expression<T> =
-    MSTSpace.block().compileWith(T::class, this)
-
-inline fun <reified T : Any, A : Ring<T>> A.asmInRing(block: MSTRing.() -> MST): Expression<T> =
-    MSTRing.block().compileWith(T::class, this)
-
-inline fun <reified T : Any, A : Field<T>> A.asmInField(block: MSTField.() -> MST): Expression<T> =
-    MSTField.block().compileWith(T::class, this)
+//inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.asm(
+//    mstAlgebra: E,
+//    block: E.() -> MST
+//): Expression<T> = mstAlgebra.block().compileWith(T::class, this)
+//
+//inline fun <reified T : Any, A : Space<T>> A.asmInSpace(block: MSTSpace.() -> MST): Expression<T> =
+//    MSTSpace.block().compileWith(T::class, this)
+//
+//inline fun <reified T : Any, A : Ring<T>> A.asmInRing(block: MSTRing.() -> MST): Expression<T> =
+//    MSTRing.block().compileWith(T::class, this)
+//
+//inline fun <reified T : Any, A : Field<T>> A.asmInField(block: MSTField.() -> MST): Expression<T> =
+//    MSTField.block().compileWith(T::class, this)
