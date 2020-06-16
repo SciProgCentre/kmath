@@ -16,8 +16,7 @@ import scientifik.kmath.operations.Algebra
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
  */
-@PublishedApi
-internal class AsmBuilder<T> @PublishedApi internal constructor(
+internal class AsmBuilder<T> internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
