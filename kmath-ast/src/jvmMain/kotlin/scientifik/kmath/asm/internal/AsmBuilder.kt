@@ -5,7 +5,6 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
-import scientifik.kmath.ast.MST
 import scientifik.kmath.operations.Algebra
 
 /**
@@ -20,7 +19,7 @@ internal class AsmBuilder<T> internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
-    private val evaluateMethodVisitor: AsmBuilder<T>.() -> Unit
+    private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
 ) {
     private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
@@ -110,7 +109,7 @@ internal class AsmBuilder<T> internal constructor(
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
-                evaluateMethodVisitor()
+                invokeLabel0Visitor()
                 visitReturnObject()
                 val l1 = Label()
                 visitLabel(l1)
