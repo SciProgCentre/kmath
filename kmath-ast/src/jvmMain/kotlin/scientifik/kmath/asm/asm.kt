@@ -19,11 +19,10 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
         when (node) {
             is MST.Symbolic -> loadVariable(node.value)
             is MST.Numeric -> {
-                val constant = if (algebra is NumericAlgebra<T>) {
-                    algebra.number(node.value)
-                } else {
+                val constant = if (algebra is NumericAlgebra<T>)
+                    algebra.number(node.value) else
                     error("Number literals are not supported in $algebra")
-                }
+
                 loadTConstant(constant)
             }
             is MST.Unary -> {

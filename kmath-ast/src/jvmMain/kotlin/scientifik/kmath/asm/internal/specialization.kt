@@ -24,9 +24,9 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
 
     val sig = buildString {
         append('(')
-        repeat(arity) { append("L${AsmBuilder.OBJECT_CLASS};") }
+        repeat(arity) { append(primitiveTypeSig) }
         append(')')
-        append("L${AsmBuilder.OBJECT_CLASS};")
+        append(primitiveTypeReturnSig)
     }
 
     invokeAlgebraOperation(
