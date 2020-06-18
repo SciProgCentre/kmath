@@ -6,9 +6,10 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.operations.Algebra
+import scientifik.kmath.ast.MST
 
 /**
- * ASM Builder is a structure that abstracts building a class that unwraps [AsmExpression] to plain Java expression.
+ * ASM Builder is a structure that abstracts building a class that is used to unwrap [MST] to plain Java expression.
  * This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new class.
  *
  * @param T the type of AsmExpression to unwrap.
@@ -205,7 +206,7 @@ internal class AsmBuilder<T> internal constructor(
 
     private fun loadThis(): Unit = invokeMethodVisitor.visitLoadObjectVar(invokeThisVar)
 
-    internal fun loadNumberConstant(value: Number) {
+    private fun loadNumberConstant(value: Number) {
         val clazz = value.javaClass
         val c = clazz.name.replace('.', '/')
         val sigLetter = SIGNATURE_LETTERS[clazz]
@@ -280,7 +281,7 @@ internal class AsmBuilder<T> internal constructor(
 
     internal companion object {
         private val SIGNATURE_LETTERS: Map<Class<out Any>, String> by lazy {
-            mapOf(
+            hashMapOf(
                 java.lang.Byte::class.java to "B",
                 java.lang.Short::class.java to "S",
                 java.lang.Integer::class.java to "I",
