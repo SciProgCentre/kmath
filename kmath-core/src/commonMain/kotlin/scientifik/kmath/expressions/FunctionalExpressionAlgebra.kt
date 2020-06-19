@@ -36,12 +36,10 @@ internal class FunctionalConstProductExpression<T>(
 
 /**
  * A context class for [Expression] construction.
+ *
+ * @param algebra The algebra to provide for Expressions built.
  */
-interface FunctionalExpressionAlgebra<T, A : Algebra<T>> : ExpressionAlgebra<T, Expression<T>> {
-    /**
-     * The algebra to provide for Expressions built.
-     */
-    val algebra: A
+abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(val algebra: A) : ExpressionAlgebra<T, Expression<T>> {
 
     /**
      * Builds an Expression of constant expression which does not depend on arguments.
@@ -69,8 +67,8 @@ interface FunctionalExpressionAlgebra<T, A : Algebra<T>> : ExpressionAlgebra<T, 
 /**
  * A context class for [Expression] construction for [Space] algebras.
  */
-open class FunctionalExpressionSpace<T, A : Space<T>>(override val algebra: A) :
-    FunctionalExpressionAlgebra<T, A>, Space<Expression<T>> {
+open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
+    FunctionalExpressionAlgebra<T, A>(algebra), Space<Expression<T>> {
 
     override val zero: Expression<T> get() = const(algebra.zero)
 
@@ -98,7 +96,7 @@ open class FunctionalExpressionSpace<T, A : Space<T>>(override val algebra: A) :
         super<FunctionalExpressionAlgebra>.binaryOperation(operation, left, right)
 }
 
-open class FunctionalExpressionRing<T, A>(override val algebra: A) : FunctionalExpressionSpace<T, A>(algebra),
+open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpressionSpace<T, A>(algebra),
     Ring<Expression<T>> where  A : Ring<T>, A : NumericAlgebra<T> {
     override val one: Expression<T>
         get() = const(algebra.one)
@@ -119,7 +117,7 @@ open class FunctionalExpressionRing<T, A>(override val algebra: A) : FunctionalE
         super<FunctionalExpressionSpace>.binaryOperation(operation, left, right)
 }
 
-open class FunctionalExpressionField<T, A>(override val algebra: A) :
+open class FunctionalExpressionField<T, A>(algebra: A) :
     FunctionalExpressionRing<T, A>(algebra),
     Field<Expression<T>> where A : Field<T>, A : NumericAlgebra<T> {
     /**
@@ -137,3 +135,12 @@ open class FunctionalExpressionField<T, A>(override val algebra: A) :
     override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
         super<FunctionalExpressionRing>.binaryOperation(operation, left, right)
 }
+
+inline fun <T, A : Space<T>> A.expressionInSpace(block: FunctionalExpressionSpace<T, A>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionSpace(this).block()
+
+inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressionRing<T, A>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionRing(this).block()
+
+inline fun <T, A : Field<T>> A.expressionInField(block: FunctionalExpressionField<T, A>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionField(this).block()
