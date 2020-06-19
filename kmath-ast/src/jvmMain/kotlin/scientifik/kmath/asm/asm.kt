@@ -73,7 +73,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 /**
  * Compile an [MST] to ASM using given algebra
  */
-inline fun <reified T : Any> Algebra<T>.expresion(mst: MST): Expression<T> = mst.compileWith(T::class, this)
+inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
 /**
  * Optimize performance of an [MSTExpression] using ASM codegen
