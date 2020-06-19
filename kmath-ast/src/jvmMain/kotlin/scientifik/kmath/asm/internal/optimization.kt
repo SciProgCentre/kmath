@@ -5,6 +5,11 @@ import scientifik.kmath.operations.Algebra
 
 private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
 
+/**
+ * Checks if the target [context] for code generation contains a method with needed [name] and [arity].
+ *
+ * @return `true` if contains, else `false`.
+ */
 internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
@@ -14,6 +19,12 @@ internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boo
     return true
 }
 
+/**
+ * Checks if the target [context] for code generation contains a method with needed [name] and [arity] and inserts
+ * [AsmBuilder.invokeAlgebraOperation] of this method.
+ *
+ * @return `true` if contains, else `false`.
+ */
 internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
