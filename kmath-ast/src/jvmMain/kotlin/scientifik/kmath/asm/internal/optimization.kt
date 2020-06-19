@@ -33,8 +33,7 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
         owner = owner,
         method = aName,
         descriptor = sig,
-        opcode = Opcodes.INVOKEVIRTUAL,
-        isInterface = false
+        opcode = Opcodes.INVOKEVIRTUAL
     )
 
     return true
