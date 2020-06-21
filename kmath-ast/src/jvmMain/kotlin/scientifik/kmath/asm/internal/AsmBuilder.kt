@@ -260,6 +260,7 @@ internal class AsmBuilder<T> internal constructor(
                 is Int -> invokeMethodVisitor.visitLdcOrIntConstant(value)
                 is Double -> invokeMethodVisitor.visitLdcOrDoubleConstant(value)
                 is Float -> invokeMethodVisitor.visitLdcOrFloatConstant(value)
+                is Long -> invokeMethodVisitor.visitLdcOrLongConstant(value)
                 else -> invokeMethodVisitor.visitLdcInsn(value)
             }
 
