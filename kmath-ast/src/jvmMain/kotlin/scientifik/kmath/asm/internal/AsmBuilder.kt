@@ -257,6 +257,8 @@ internal class AsmBuilder<T> internal constructor(
 
         if (sigLetter != null) {
             when (value) {
+                is Byte -> invokeMethodVisitor.visitLdcOrIntConstant(value.toInt())
+                is Short -> invokeMethodVisitor.visitLdcOrIntConstant(value.toInt())
                 is Int -> invokeMethodVisitor.visitLdcOrIntConstant(value)
                 is Double -> invokeMethodVisitor.visitLdcOrDoubleConstant(value)
                 is Float -> invokeMethodVisitor.visitLdcOrFloatConstant(value)
