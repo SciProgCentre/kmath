@@ -23,9 +23,7 @@ class ViktorBenchmark {
     fun `Automatic field addition`() {
         autoField.run {
             var res = one
-            repeat(n) {
-                res += 1.0
-            }
+            repeat(n) { res += one }
         }
     }
 
@@ -33,9 +31,7 @@ class ViktorBenchmark {
     fun `Viktor field addition`() {
         viktorField.run {
             var res = one
-            repeat(n) {
-                res += one
-            }
+            repeat(n) { res += one }
         }
     }
 
@@ -43,9 +39,7 @@ class ViktorBenchmark {
     fun `Raw Viktor`() {
         val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
         var res = one
-        repeat(n) {
-            res = res + one
-        }
+        repeat(n) { res = res + one }
     }
 
     @Benchmark
@@ -53,10 +47,7 @@ class ViktorBenchmark {
         realField.run {
             val fortyTwo = produce { 42.0 }
             var res = one
-
-            repeat(n) {
-                res = ln(fortyTwo)
-            }
+            repeat(n) { res = ln(fortyTwo) }
         }
     }
 
