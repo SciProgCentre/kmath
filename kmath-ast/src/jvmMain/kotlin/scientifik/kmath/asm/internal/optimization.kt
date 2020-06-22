@@ -3,7 +3,13 @@ package scientifik.kmath.asm.internal
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.operations.Algebra
 
-private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to "multiply", "/" to "divide")
+private val methodNameAdapters: Map<String, String> by lazy {
+    hashMapOf(
+        "+" to "add",
+        "*" to "multiply",
+        "/" to "divide"
+    )
+}
 
 /**
  * Checks if the target [context] for code generation contains a method with needed [name] and [arity].
@@ -13,7 +19,7 @@ private val methodNameAdapters: Map<String, String> = mapOf("+" to "add", "*" to
 internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
-    context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
+    context.javaClass.methods.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
     return true
@@ -28,7 +34,7 @@ internal fun <T> hasSpecific(context: Algebra<T>, name: String, arity: Int): Boo
 internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val aName = methodNameAdapters[name] ?: name
 
-    context::class.java.methods.find { it.name == aName && it.parameters.size == arity }
+    context.javaClass.methods.find { it.name == aName && it.parameters.size == arity }
         ?: return false
 
     val owner = context::class.java.name.replace('.', '/')
