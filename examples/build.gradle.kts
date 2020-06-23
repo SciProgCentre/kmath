@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.3.71"
-    id("kotlinx.benchmark") version "0.2.0-dev-7"
+    kotlin("plugin.allopen") version "1.3.72"
+    id("kotlinx.benchmark") version "0.2.0-dev-8"
 }
 
 configure<AllOpenExtension> {
@@ -33,8 +33,8 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
-    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-7")
-    "benchmarksCompile"(sourceSets.main.get().compileClasspath)
+    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-8")
+    "benchmarksCompile"(sourceSets.main.get().output + sourceSets.main.get().compileClasspath) //sourceSets.main.output + sourceSets.main.runtimeClasspath
 }
 
 // Configure benchmark

@@ -20,7 +20,7 @@ class ViktorBenchmark {
     final val viktorField = ViktorNDField(intArrayOf(dim, dim))
 
     @Benchmark
-    fun `Automatic field addition`() {
+    fun automaticFieldAddition() {
         autoField.run {
             var res = one
             repeat(n) {
@@ -30,7 +30,7 @@ class ViktorBenchmark {
     }
 
     @Benchmark
-    fun `Viktor field addition`() {
+    fun viktorFieldAddition() {
         viktorField.run {
             var res = one
             repeat(n) {
@@ -40,7 +40,7 @@ class ViktorBenchmark {
     }
 
     @Benchmark
-    fun `Raw Viktor`() {
+    fun rawViktor() {
         val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
         var res = one
         repeat(n) {
@@ -49,7 +49,7 @@ class ViktorBenchmark {
     }
 
     @Benchmark
-    fun `Real field log`() {
+    fun realdFieldLog() {
         realField.run {
             val fortyTwo = produce { 42.0 }
             var res = one
@@ -61,7 +61,7 @@ class ViktorBenchmark {
     }
 
     @Benchmark
-    fun `Raw Viktor log`() {
+    fun rawViktorLog() {
         val fortyTwo = F64Array.full(dim, dim, init = 42.0)
         var res: F64Array
         repeat(n) {

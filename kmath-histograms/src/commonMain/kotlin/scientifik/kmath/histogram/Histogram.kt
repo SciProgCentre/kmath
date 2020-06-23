@@ -1,17 +1,9 @@
 package scientifik.kmath.histogram
 
+import scientifik.kmath.domains.Domain
 import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.ArrayBuffer
 import scientifik.kmath.structures.DoubleBuffer
-
-/**
- * A simple geometric domain
- * TODO move to geometry module
- */
-interface Domain<T : Any> {
-    operator fun contains(vector: Point<out T>): Boolean
-    val dimension: Int
-}
 
 /**
  * The bin in the histogram. The histogram is by definition always done in the real space
