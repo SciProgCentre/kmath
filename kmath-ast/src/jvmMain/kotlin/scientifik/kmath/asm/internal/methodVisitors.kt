@@ -11,12 +11,20 @@ internal fun MethodVisitor.visitLdcOrIntConstant(value: Int): Unit = when (value
     3 -> visitInsn(ICONST_3)
     4 -> visitInsn(ICONST_4)
     5 -> visitInsn(ICONST_5)
+    in -128..127 -> visitIntInsn(BIPUSH, value)
+    in -32768..32767 -> visitIntInsn(SIPUSH, value)
     else -> visitLdcInsn(value)
 }
 
 internal fun MethodVisitor.visitLdcOrDoubleConstant(value: Double): Unit = when (value) {
     0.0 -> visitInsn(DCONST_0)
     1.0 -> visitInsn(DCONST_1)
+    else -> visitLdcInsn(value)
+}
+
+internal fun MethodVisitor.visitLdcOrLongConstant(value: Long): Unit = when (value) {
+    0L -> visitInsn(LCONST_0)
+    1L -> visitInsn(LCONST_1)
     else -> visitLdcInsn(value)
 }
 

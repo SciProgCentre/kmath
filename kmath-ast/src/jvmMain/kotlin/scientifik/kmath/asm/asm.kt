@@ -4,11 +4,11 @@ import scientifik.kmath.asm.internal.AsmBuilder
 import scientifik.kmath.asm.internal.buildName
 import scientifik.kmath.asm.internal.hasSpecific
 import scientifik.kmath.asm.internal.tryInvokeSpecific
-import scientifik.kmath.ast.MST
-import scientifik.kmath.ast.MSTExpression
+import scientifik.kmath.ast.*
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
+import scientifik.kmath.operations.RealField
 import kotlin.reflect.KClass
 
 /**
@@ -19,11 +19,11 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
         when (node) {
             is MST.Symbolic -> loadVariable(node.value)
             is MST.Numeric -> {
-                val constant = if (algebra is NumericAlgebra<T>) {
+                val constant = if (algebra is NumericAlgebra<T>)
                     algebra.number(node.value)
-                } else {
+                else
                     error("Number literals are not supported in $algebra")
-                }
+
                 loadTConstant(constant)
             }
             is MST.Unary -> {
@@ -79,3 +79,7 @@ inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = ms
  * Optimize performance of an [MSTExpression] using ASM codegen
  */
 inline fun <reified T : Any> MSTExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
+
+fun main() {
+    RealField.mstInField { symbol("x") + 2 }.compile()
+}
