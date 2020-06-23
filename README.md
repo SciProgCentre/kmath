@@ -87,7 +87,7 @@ dependencies{
 }
 ```
 
-Gradle `5.2+` is required for multiplatform artifacts.
+Gradle `6.0+` is required for multiplatform artifacts.
 
 ### Development
 
