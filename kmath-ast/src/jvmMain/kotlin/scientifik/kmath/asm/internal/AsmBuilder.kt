@@ -387,7 +387,7 @@ internal class AsmBuilder<T> internal constructor(
          * Maps JVM primitive numbers boxed types to their letters of JVM signature convention.
          */
         private val SIGNATURE_LETTERS: Map<Class<out Any>, String> by lazy {
-            mapOf(
+            hashMapOf(
                 java.lang.Byte::class.java to "B",
                 java.lang.Short::class.java to "S",
                 java.lang.Integer::class.java to "I",
@@ -397,8 +397,8 @@ internal class AsmBuilder<T> internal constructor(
             )
         }
 
-        private val NUMBER_CONVERTER_METHODS by lazy {
-            mapOf(
+        private val NUMBER_CONVERTER_METHODS: Map<String, String> by lazy {
+            hashMapOf(
                 "B" to "byteValue",
                 "S" to "shortValue",
                 "I" to "intValue",
