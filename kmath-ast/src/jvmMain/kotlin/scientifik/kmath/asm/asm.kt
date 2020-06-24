@@ -79,7 +79,3 @@ inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = ms
  * Optimize performance of an [MSTExpression] using ASM codegen
  */
 inline fun <reified T : Any> MSTExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
-
-fun main() {
-    RealField.mstInField { symbol("x") + 2 }.compile()
-}
