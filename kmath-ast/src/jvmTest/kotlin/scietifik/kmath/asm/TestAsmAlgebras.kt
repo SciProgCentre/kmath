@@ -1,9 +1,12 @@
 package scietifik.kmath.asm
 
 import scientifik.kmath.asm.compile
+import scientifik.kmath.ast.mstInField
+import scientifik.kmath.ast.mstInRing
 import scientifik.kmath.ast.mstInSpace
 import scientifik.kmath.expressions.invoke
 import scientifik.kmath.operations.ByteRing
+import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -45,65 +48,63 @@ class TestAsmAlgebras {
         assertEquals(res1, res2)
     }
 
-//    @Test
-//    fun space() {
-//        val res = ByteRing.asm {
-//            binaryOperation(
-//                "+",
-//
-//                unaryOperation(
-//                    "+",
-//                    3.toByte() - (2.toByte() + (multiply(
-//                        add(number(1), number(1)),
-//                        2
-//                    ) + 1.toByte()) * 3.toByte() - 1.toByte())
-//                ),
-//
-//                number(1)
-//            ) + symbol("x") + zero
-//        }("x" to 2.toByte())
-//
-//        assertEquals(16, res)
-//    }
-//
-//    @Test
-//    fun ring() {
-//        val res = ByteRing.asmInRing {
-//            binaryOperation(
-//                "+",
-//
-//                unaryOperation(
-//                    "+",
-//                    (3.toByte() - (2.toByte() + (multiply(
-//                        add(const(1), const(1)),
-//                        2
-//                    ) + 1.toByte()))) * 3.0 - 1.toByte()
-//                ),
-//
-//                number(1)
-//            ) * const(2)
-//        }()
-//
-//        assertEquals(24, res)
-//    }
-//
-//    @Test
-//    fun field() {
-//        val res = RealField.asmInField {
-//            +(3 - 2 + 2*(number(1)+1.0)
-//
-//                unaryOperation(
-//                    "+",
-//                    (3.0 - (2.0 + (multiply(
-//                        add((1.0), const(1.0)),
-//                        2
-//                    ) + 1.0))) * 3 - 1.0
-//                )+
-//
-//                number(1)
-//            ) / 2, const(2.0)) * one
-//        }()
-//
-//        assertEquals(3.0, res)
-//    }
+    @Test
+    fun ring() {
+        val res1 = ByteRing.mstInRing {
+            binaryOperation(
+                "+",
+
+                unaryOperation(
+                    "+",
+                    (symbol("x") - (2.toByte() + (multiply(
+                        add(number(1), number(1)),
+                        2
+                    ) + 1.toByte()))) * 3.0 - 1.toByte()
+                ),
+
+                number(1)
+            ) * number(2)
+        }("x" to 3.toByte())
+
+        val res2 = ByteRing.mstInRing {
+            binaryOperation(
+                "+",
+
+                unaryOperation(
+                    "+",
+                    (symbol("x") - (2.toByte() + (multiply(
+                        add(number(1), number(1)),
+                        2
+                    ) + 1.toByte()))) * 3.0 - 1.toByte()
+                ),
+
+                number(1)
+            ) * number(2)
+        }.compile()("x" to 3.toByte())
+
+        assertEquals(res1, res2)
+    }
+
+    @Test
+    fun field() {
+        val res1 = RealField.mstInField {
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation(
+                "+",
+                (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
+                        + number(1),
+                1 / 2 + number(2.0) * one
+            )
+        }("x" to 2.0)
+
+        val res2 = RealField.mstInField {
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation(
+                "+",
+                (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
+                        + number(1),
+                1 / 2 + number(2.0) * one
+            )
+        }.compile()("x" to 2.0)
+
+        assertEquals(res1, res2)
+    }
 }

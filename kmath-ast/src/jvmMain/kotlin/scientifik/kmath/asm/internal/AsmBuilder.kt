@@ -368,7 +368,7 @@ internal class AsmBuilder<T> internal constructor(
         tArity: Int,
         opcode: Int = Opcodes.INVOKEINTERFACE
     ) {
-        repeat(tArity) { typeStack.pop() }
+        repeat(tArity) { if (!typeStack.empty()) typeStack.pop() }
 
         invokeMethodVisitor.visitMethodInsn(
             opcode,
