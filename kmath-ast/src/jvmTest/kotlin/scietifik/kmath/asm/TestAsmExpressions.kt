@@ -17,6 +17,13 @@ class TestAsmExpressions {
     }
 
     @Test
+    fun testBinaryOperationInvocation() {
+        val expression = RealField.mstInSpace { -symbol("x") + number(1.0) }.compile()
+        val res = expression("x" to 2.0)
+        assertEquals(-1.0, res)
+    }
+
+    @Test
     fun testConstProductInvocation() {
         val res = RealField.mstInField { symbol("x") * 2 }("x" to 2.0)
         assertEquals(4.0, res)
