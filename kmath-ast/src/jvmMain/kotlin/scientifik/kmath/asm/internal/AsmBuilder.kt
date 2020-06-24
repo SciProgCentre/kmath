@@ -1,25 +1,25 @@
 package scientifik.kmath.asm.internal
 
-import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.Label
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
+import org.objectweb.asm.*
+import org.objectweb.asm.Opcodes.AALOAD
+import org.objectweb.asm.Opcodes.RETURN
+import org.objectweb.asm.commons.InstructionAdapter
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
+import scientifik.kmath.ast.MST
 import scientifik.kmath.operations.Algebra
+import java.util.*
+import kotlin.reflect.KClass
 
 /**
- * ASM Builder is a structure that abstracts building a class for unwrapping [MST] to plain Java expression.
+ * ASM Builder is a structure that abstracts building a class designated to unwrap [MST] to plain Java expression.
  * This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new class.
  *
- * @param T the type generated [AsmCompiledExpression] operates.
- * @property classOfT the [Class] of T.
- * @property algebra the algebra the applied AsmExpressions use.
- * @property className the unique class name of new loaded class.
- * @property invokeLabel0Visitor the function applied to this object when the L0 label of invoke implementation is
- * being written.
+ * @param T the type of AsmExpression to unwrap.
+ * @param algebra the algebra the applied AsmExpressions use.
+ * @param className the unique class name of new loaded class.
  */
 internal class AsmBuilder<T> internal constructor(
-    private val classOfT: Class<*>,
+    private val classOfT: KClass<*>,
     private val algebra: Algebra<T>,
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
@@ -34,16 +34,16 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * The instance of [ClassLoader] used by this builder.
      */
-    private val classLoader: ClassLoader =
-        ClassLoader(javaClass.classLoader)
+    private val classLoader: ClassLoader = ClassLoader(javaClass.classLoader)
 
     @Suppress("PrivatePropertyName")
-    private val T_ALGEBRA_CLASS: String = algebra.javaClass.name.replace(oldChar = '.', newChar = '/')
+    private val T_ALGEBRA_TYPE: Type = algebra::class.asm
 
     @Suppress("PrivatePropertyName")
-    private val T_CLASS: String = classOfT.name.replace('.', '/')
+    internal val T_TYPE: Type = classOfT.asm
 
-    private val slashesClassName: String = className.replace(oldChar = '.', newChar = '/')
+    @Suppress("PrivatePropertyName")
+    private val CLASS_TYPE: Type = Type.getObjectType(className.replace(oldChar = '.', newChar = '/'))!!
 
     /**
      * Index of `this` variable in invoke method of [AsmCompiledExpression] built subclass.
@@ -63,7 +63,16 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Method visitor of `invoke` method of [AsmCompiledExpression] subclass.
      */
-    private lateinit var invokeMethodVisitor: MethodVisitor
+    private lateinit var invokeMethodVisitor: InstructionAdapter
+    internal var primitiveMode = false
+
+    @Suppress("PropertyName")
+    internal var PRIMITIVE_MASK: Type = OBJECT_TYPE
+
+    @Suppress("PropertyName")
+    internal var PRIMITIVE_MASK_BOXED: Type = OBJECT_TYPE
+    private val typeStack = Stack<Type>()
+    internal val expectationStack = Stack<Type>().apply { push(T_TYPE) }
 
     /**
      * The cache of [AsmCompiledExpression] subclass built by this builder.
@@ -76,81 +85,88 @@ internal class AsmBuilder<T> internal constructor(
      * The built instance is cached.
      */
     @Suppress("UNCHECKED_CAST")
-    internal fun getInstance(): AsmCompiledExpression<T> {
+    fun getInstance(): AsmCompiledExpression<T> {
         generatedInstance?.let { return it }
+
+        if (SIGNATURE_LETTERS.containsKey(classOfT.java)) {
+            primitiveMode = true
+            PRIMITIVE_MASK = SIGNATURE_LETTERS.getValue(classOfT.java)
+            PRIMITIVE_MASK_BOXED = T_TYPE
+        }
 
         val classWriter = ClassWriter(ClassWriter.COMPUTE_FRAMES) {
             visit(
                 Opcodes.V1_8,
                 Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_SUPER,
-                slashesClassName,
-                "L$FUNCTIONAL_COMPILED_EXPRESSION_CLASS<L$T_CLASS;>;",
-                FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
+                CLASS_TYPE.internalName,
+                "L${ASM_COMPILED_EXPRESSION_TYPE.internalName}<${T_TYPE.descriptor}>;",
+                ASM_COMPILED_EXPRESSION_TYPE.internalName,
                 arrayOf()
             )
 
             visitMethod(
-                access = Opcodes.ACC_PUBLIC,
-                name = "<init>",
-                descriptor = "(L$ALGEBRA_CLASS;[L$OBJECT_CLASS;)V",
-                signature = null,
-                exceptions = null
-            ) {
+                Opcodes.ACC_PUBLIC,
+                "<init>",
+                Type.getMethodDescriptor(Type.VOID_TYPE, ALGEBRA_TYPE, OBJECT_ARRAY_TYPE),
+                null,
+                null
+            ).instructionAdapter {
                 val thisVar = 0
                 val algebraVar = 1
                 val constantsVar = 2
                 val l0 = Label()
                 visitLabel(l0)
-                visitLoadObjectVar(thisVar)
-                visitLoadObjectVar(algebraVar)
-                visitLoadObjectVar(constantsVar)
+                load(thisVar, CLASS_TYPE)
+                load(algebraVar, ALGEBRA_TYPE)
+                load(constantsVar, OBJECT_ARRAY_TYPE)
 
-                visitInvokeSpecial(
-                    FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
+                invokespecial(
+                    ASM_COMPILED_EXPRESSION_TYPE.internalName,
                     "<init>",
-                    "(L$ALGEBRA_CLASS;[L$OBJECT_CLASS;)V"
+                    Type.getMethodDescriptor(Type.VOID_TYPE, ALGEBRA_TYPE, OBJECT_ARRAY_TYPE),
+                    false
                 )
 
                 val l1 = Label()
                 visitLabel(l1)
-                visitReturn()
+                visitInsn(RETURN)
                 val l2 = Label()
                 visitLabel(l2)
-                visitLocalVariable("this", "L$slashesClassName;", null, l0, l2, thisVar)
+                visitLocalVariable("this", CLASS_TYPE.descriptor, null, l0, l2, thisVar)
 
                 visitLocalVariable(
                     "algebra",
-                    "L$ALGEBRA_CLASS;",
-                    "L$ALGEBRA_CLASS<L$T_CLASS;>;",
+                    ALGEBRA_TYPE.descriptor,
+                    "L${ALGEBRA_TYPE.internalName}<${T_TYPE.descriptor}>;",
                     l0,
                     l2,
                     algebraVar
                 )
 
-                visitLocalVariable("constants", "[L$OBJECT_CLASS;", null, l0, l2, constantsVar)
+                visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, l0, l2, constantsVar)
                 visitMaxs(0, 3)
                 visitEnd()
             }
 
             visitMethod(
-                access = Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
-                name = "invoke",
-                descriptor = "(L$MAP_CLASS;)L$T_CLASS;",
-                signature = "(L$MAP_CLASS<L$STRING_CLASS;+L$T_CLASS;>;)L$T_CLASS;",
-                exceptions = null
-            ) {
+                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
+                "invoke",
+                Type.getMethodDescriptor(T_TYPE, MAP_TYPE),
+                "(L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${T_TYPE.descriptor}>;)${T_TYPE.descriptor}",
+                null
+            ).instructionAdapter {
                 invokeMethodVisitor = this
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
                 invokeLabel0Visitor()
-                visitReturnObject()
+                areturn(T_TYPE)
                 val l1 = Label()
                 visitLabel(l1)
 
                 visitLocalVariable(
                     "this",
-                    "L$slashesClassName;",
+                    CLASS_TYPE.descriptor,
                     null,
                     l0,
                     l1,
@@ -159,8 +175,8 @@ internal class AsmBuilder<T> internal constructor(
 
                 visitLocalVariable(
                     "arguments",
-                    "L$MAP_CLASS;",
-                    "L$MAP_CLASS<L$STRING_CLASS;+L$T_CLASS;>;",
+                    MAP_TYPE.descriptor,
+                    "L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${T_TYPE.descriptor}>;",
                     l0,
                     l1,
                     invokeArgumentsVar
@@ -171,28 +187,28 @@ internal class AsmBuilder<T> internal constructor(
             }
 
             visitMethod(
-                access = Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_BRIDGE or Opcodes.ACC_SYNTHETIC,
-                name = "invoke",
-                descriptor = "(L$MAP_CLASS;)L$OBJECT_CLASS;",
-                signature = null,
-                exceptions = null
-            ) {
+                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_BRIDGE or Opcodes.ACC_SYNTHETIC,
+                "invoke",
+                Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE),
+                null,
+                null
+            ).instructionAdapter {
                 val thisVar = 0
                 val argumentsVar = 1
                 visitCode()
                 val l0 = Label()
                 visitLabel(l0)
-                visitLoadObjectVar(thisVar)
-                visitLoadObjectVar(argumentsVar)
-                visitInvokeVirtual(owner = slashesClassName, name = "invoke", descriptor = "(L$MAP_CLASS;)L$T_CLASS;")
-                visitReturnObject()
+                load(thisVar, OBJECT_TYPE)
+                load(argumentsVar, MAP_TYPE)
+                invokevirtual(CLASS_TYPE.internalName, "invoke", Type.getMethodDescriptor(T_TYPE, MAP_TYPE), false)
+                areturn(T_TYPE)
                 val l1 = Label()
                 visitLabel(l1)
 
                 visitLocalVariable(
                     "this",
-                    "L$slashesClassName;",
-                    T_CLASS,
+                    CLASS_TYPE.descriptor,
+                    null,
                     l0,
                     l1,
                     thisVar
@@ -219,86 +235,111 @@ internal class AsmBuilder<T> internal constructor(
      * Loads a constant from
      */
     internal fun loadTConstant(value: T) {
-        if (classOfT in INLINABLE_NUMBERS) {
-            loadNumberConstant(value as Number)
-            invokeMethodVisitor.visitCheckCast(T_CLASS)
+        if (classOfT.java in INLINABLE_NUMBERS) {
+            val expectedType = expectationStack.pop()!!
+            val mustBeBoxed = expectedType.sort == Type.OBJECT
+            loadNumberConstant(value as Number, mustBeBoxed)
+            if (mustBeBoxed) typeStack.push(T_TYPE) else typeStack.push(PRIMITIVE_MASK)
             return
         }
 
-        loadConstant(value as Any, T_CLASS)
+        loadConstant(value as Any, T_TYPE)
     }
 
-    /**
-     * Loads an object constant [value] stored in [AsmCompiledExpression.constants] and casts it to [type].
-     */
-    private fun loadConstant(value: Any, type: String) {
+    private fun box(): Unit = invokeMethodVisitor.invokestatic(
+        T_TYPE.internalName,
+        "valueOf",
+        Type.getMethodDescriptor(T_TYPE, PRIMITIVE_MASK),
+        false
+    )
+
+    private fun unbox(): Unit = invokeMethodVisitor.invokevirtual(
+        NUMBER_TYPE.internalName,
+        NUMBER_CONVERTER_METHODS.getValue(PRIMITIVE_MASK),
+        Type.getMethodDescriptor(PRIMITIVE_MASK),
+        false
+    )
+
+    private fun loadConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
-
-        invokeMethodVisitor.run {
-            loadThis()
-            visitGetField(owner = slashesClassName, name = "constants", descriptor = "[L$OBJECT_CLASS;")
-            visitLdcOrIntConstant(idx)
-            visitGetObjectArrayElement()
-            invokeMethodVisitor.visitCheckCast(type)
-        }
+        loadThis()
+        getfield(CLASS_TYPE.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
+        iconst(idx)
+        visitInsn(AALOAD)
+        checkcast(type)
     }
 
-    private fun loadThis(): Unit = invokeMethodVisitor.visitLoadObjectVar(invokeThisVar)
+    private fun loadThis(): Unit = invokeMethodVisitor.load(invokeThisVar, CLASS_TYPE)
 
     /**
-     * Either loads a numeric constant [value] from [AsmCompiledExpression.constants] field or boxes a primitive
+     * Either loads a numeric constant [value] from [AsmCompiledExpression] constants field or boxes a primitive
      * constant from the constant pool (some numbers with special opcodes like [Opcodes.ICONST_0] aren't even loaded
      * from it).
      */
-    private fun loadNumberConstant(value: Number) {
-        val clazz = value.javaClass
-        val c = clazz.name.replace('.', '/')
-        val sigLetter = SIGNATURE_LETTERS[clazz]
+    private fun loadNumberConstant(value: Number, mustBeBoxed: Boolean) {
+        val boxed = value::class.asm
+        val primitive = BOXED_TO_PRIMITIVES[boxed]
 
-        if (sigLetter != null) {
-            when (value) {
-                is Int -> invokeMethodVisitor.visitLdcOrIntConstant(value)
-                is Double -> invokeMethodVisitor.visitLdcOrDoubleConstant(value)
-                is Float -> invokeMethodVisitor.visitLdcOrFloatConstant(value)
-                else -> invokeMethodVisitor.visitLdcInsn(value)
+        if (primitive != null) {
+            when (primitive) {
+                Type.BYTE_TYPE -> invokeMethodVisitor.iconst(value.toInt())
+                Type.DOUBLE_TYPE -> invokeMethodVisitor.dconst(value.toDouble())
+                Type.FLOAT_TYPE -> invokeMethodVisitor.fconst(value.toFloat())
+                Type.LONG_TYPE -> invokeMethodVisitor.lconst(value.toLong())
+                Type.INT_TYPE -> invokeMethodVisitor.iconst(value.toInt())
+                Type.SHORT_TYPE -> invokeMethodVisitor.iconst(value.toInt())
             }
 
-            invokeMethodVisitor.visitInvokeStatic(c, "valueOf", "($sigLetter)L${c};")
+            if (mustBeBoxed) {
+                box()
+                invokeMethodVisitor.checkcast(T_TYPE)
+            }
+
             return
         }
 
-        loadConstant(value, c)
+        loadConstant(value, boxed)
+        if (!mustBeBoxed) unbox()
+        else invokeMethodVisitor.checkcast(T_TYPE)
     }
 
     /**
      * Loads a variable [name] from [AsmCompiledExpression.invoke] [Map] parameter. The [defaultValue] may be provided.
      */
     internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
-        visitLoadObjectVar(invokeArgumentsVar)
+        load(invokeArgumentsVar, OBJECT_ARRAY_TYPE)
 
         if (defaultValue != null) {
-            visitLdcInsn(name)
+            loadStringConstant(name)
             loadTConstant(defaultValue)
 
-            visitInvokeInterface(
-                owner = MAP_CLASS,
-                name = "getOrDefault",
-                descriptor = "(L$OBJECT_CLASS;L$OBJECT_CLASS;)L$OBJECT_CLASS;"
+            invokeinterface(
+                MAP_TYPE.internalName,
+                "getOrDefault",
+                Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE, OBJECT_TYPE)
             )
 
-            invokeMethodVisitor.visitCheckCast(T_CLASS)
+            invokeMethodVisitor.checkcast(T_TYPE)
             return
         }
 
-        visitLdcInsn(name)
+        loadStringConstant(name)
 
-        visitInvokeInterface(
-            owner = MAP_CLASS,
-            name = "get",
-            descriptor = "(L$OBJECT_CLASS;)L$OBJECT_CLASS;"
+        invokeinterface(
+            MAP_TYPE.internalName,
+            "get",
+            Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE)
         )
 
-        invokeMethodVisitor.visitCheckCast(T_CLASS)
+        invokeMethodVisitor.checkcast(T_TYPE)
+        val expectedType = expectationStack.pop()!!
+
+        if (expectedType.sort == Type.OBJECT)
+            typeStack.push(T_TYPE)
+        else {
+            unbox()
+            typeStack.push(PRIMITIVE_MASK)
+        }
     }
 
     /**
@@ -307,13 +348,10 @@ internal class AsmBuilder<T> internal constructor(
     internal fun loadAlgebra() {
         loadThis()
 
-        invokeMethodVisitor.visitGetField(
-            owner = FUNCTIONAL_COMPILED_EXPRESSION_CLASS,
-            name = "algebra",
-            descriptor = "L$ALGEBRA_CLASS;"
-        )
-
-        invokeMethodVisitor.visitCheckCast(T_ALGEBRA_CLASS)
+        invokeMethodVisitor.run {
+            getfield(ASM_COMPILED_EXPRESSION_TYPE.internalName, "algebra", ALGEBRA_TYPE.descriptor)
+            checkcast(T_ALGEBRA_TYPE)
+        }
     }
 
     /**
@@ -327,29 +365,70 @@ internal class AsmBuilder<T> internal constructor(
         owner: String,
         method: String,
         descriptor: String,
+        tArity: Int,
         opcode: Int = Opcodes.INVOKEINTERFACE
     ) {
-        invokeMethodVisitor.visitMethodInsn(opcode, owner, method, descriptor, opcode == Opcodes.INVOKEINTERFACE)
-        invokeMethodVisitor.visitCheckCast(T_CLASS)
+        repeat(tArity) { typeStack.pop() }
+
+        invokeMethodVisitor.visitMethodInsn(
+            opcode,
+            owner,
+            method,
+            descriptor,
+            opcode == Opcodes.INVOKEINTERFACE
+        )
+
+        invokeMethodVisitor.checkcast(T_TYPE)
+        val isLastExpr = expectationStack.size == 1
+        val expectedType = expectationStack.pop()!!
+
+        if (expectedType.sort == Type.OBJECT || isLastExpr)
+            typeStack.push(T_TYPE)
+        else {
+            unbox()
+            typeStack.push(PRIMITIVE_MASK)
+        }
     }
 
     /**
      * Writes a LDC Instruction with string constant provided.
      */
-    internal fun loadStringConstant(string: String): Unit = invokeMethodVisitor.visitLdcInsn(string)
+    internal fun loadStringConstant(string: String): Unit = invokeMethodVisitor.aconst(string)
 
     internal companion object {
         /**
          * Maps JVM primitive numbers boxed types to their letters of JVM signature convention.
          */
-        private val SIGNATURE_LETTERS: Map<Class<out Any>, String> by lazy {
+        private val SIGNATURE_LETTERS: Map<Class<out Any>, Type> by lazy {
             hashMapOf(
-                java.lang.Byte::class.java to "B",
-                java.lang.Short::class.java to "S",
-                java.lang.Integer::class.java to "I",
-                java.lang.Long::class.java to "J",
-                java.lang.Float::class.java to "F",
-                java.lang.Double::class.java to "D"
+                java.lang.Byte::class.java to Type.BYTE_TYPE,
+                java.lang.Short::class.java to Type.SHORT_TYPE,
+                java.lang.Integer::class.java to Type.INT_TYPE,
+                java.lang.Long::class.java to Type.LONG_TYPE,
+                java.lang.Float::class.java to Type.FLOAT_TYPE,
+                java.lang.Double::class.java to Type.DOUBLE_TYPE
+            )
+        }
+
+        private val BOXED_TO_PRIMITIVES: Map<Type, Type> by lazy {
+            hashMapOf(
+                java.lang.Byte::class.asm to Type.BYTE_TYPE,
+                java.lang.Short::class.asm to Type.SHORT_TYPE,
+                java.lang.Integer::class.asm to Type.INT_TYPE,
+                java.lang.Long::class.asm to Type.LONG_TYPE,
+                java.lang.Float::class.asm to Type.FLOAT_TYPE,
+                java.lang.Double::class.asm to Type.DOUBLE_TYPE
+            )
+        }
+
+        private val NUMBER_CONVERTER_METHODS: Map<Type, String> by lazy {
+            hashMapOf(
+                Type.BYTE_TYPE to "byteValue",
+                Type.SHORT_TYPE to "shortValue",
+                Type.INT_TYPE to "intValue",
+                Type.LONG_TYPE to "longValue",
+                Type.FLOAT_TYPE to "floatValue",
+                Type.DOUBLE_TYPE to "doubleValue"
             )
         }
 
@@ -357,13 +436,14 @@ internal class AsmBuilder<T> internal constructor(
          * Provides boxed number types values of which can be stored in JVM bytecode constant pool.
          */
         private val INLINABLE_NUMBERS: Set<Class<out Any>> by lazy { SIGNATURE_LETTERS.keys }
+        internal val ASM_COMPILED_EXPRESSION_TYPE: Type = AsmCompiledExpression::class.asm
+        internal val NUMBER_TYPE: Type = java.lang.Number::class.asm
+        internal val MAP_TYPE: Type = java.util.Map::class.asm
+        internal val OBJECT_TYPE: Type = java.lang.Object::class.asm
 
-        internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
-            "scientifik/kmath/asm/internal/AsmCompiledExpression"
-
-        internal const val MAP_CLASS = "java/util/Map"
-        internal const val OBJECT_CLASS = "java/lang/Object"
-        internal const val ALGEBRA_CLASS = "scientifik/kmath/operations/Algebra"
-        internal const val STRING_CLASS = "java/lang/String"
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "RemoveRedundantQualifierName")
+        internal val OBJECT_ARRAY_TYPE: Type = Array<java.lang.Object>::class.asm
+        internal val ALGEBRA_TYPE: Type = Algebra::class.asm
+        internal val STRING_TYPE: Type = java.lang.String::class.asm
     }
 }

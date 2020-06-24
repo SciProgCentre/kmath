@@ -16,4 +16,3 @@ internal abstract class AsmCompiledExpression<T> internal constructor(
 ) : Expression<T> {
     abstract override fun invoke(arguments: Map<String, T>): T
 }
-
