@@ -1,10 +1,53 @@
 package scietifik.kmath.asm
 
-//
-//class TestAsmAlgebras {
+import scientifik.kmath.asm.compile
+import scientifik.kmath.ast.mstInSpace
+import scientifik.kmath.expressions.invoke
+import scientifik.kmath.operations.ByteRing
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+class TestAsmAlgebras {
+    @Test
+    fun space() {
+        val res1 = ByteRing.mstInSpace {
+            binaryOperation(
+                "+",
+
+                unaryOperation(
+                    "+",
+                    number(3.toByte()) - (number(2.toByte()) + (multiply(
+                        add(number(1), number(1)),
+                        2
+                    ) + number(1.toByte()) * 3.toByte() - number(1.toByte())))
+                ),
+
+                number(1)
+            ) + symbol("x") + zero
+        }("x" to 2.toByte())
+
+        val res2 = ByteRing.mstInSpace {
+            binaryOperation(
+                "+",
+
+                unaryOperation(
+                    "+",
+                    number(3.toByte()) - (number(2.toByte()) + (multiply(
+                        add(number(1), number(1)),
+                        2
+                    ) + number(1.toByte()) * 3.toByte() - number(1.toByte())))
+                ),
+
+                number(1)
+            ) + symbol("x") + zero
+        }.compile()("x" to 2.toByte())
+
+        assertEquals(res1, res2)
+    }
+
 //    @Test
 //    fun space() {
-//        val res = ByteRing.asmInRing {
+//        val res = ByteRing.asm {
 //            binaryOperation(
 //                "+",
 //
@@ -63,4 +106,4 @@ package scietifik.kmath.asm
 //
 //        assertEquals(3.0, res)
 //    }
-//}
+}

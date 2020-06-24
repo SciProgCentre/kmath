@@ -1,14 +1,15 @@
 package scientifik.kmath.asm
 
+import org.objectweb.asm.Type
 import scientifik.kmath.asm.internal.AsmBuilder
+import scientifik.kmath.asm.internal.buildExpectationStack
 import scientifik.kmath.asm.internal.buildName
-import scientifik.kmath.asm.internal.hasSpecific
 import scientifik.kmath.asm.internal.tryInvokeSpecific
-import scientifik.kmath.ast.*
+import scientifik.kmath.ast.MST
+import scientifik.kmath.ast.MSTExpression
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
-import scientifik.kmath.operations.RealField
 import kotlin.reflect.KClass
 
 /**
@@ -18,6 +19,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
     fun AsmBuilder<T>.visit(node: MST) {
         when (node) {
             is MST.Symbolic -> loadVariable(node.value)
+
             is MST.Numeric -> {
                 val constant = if (algebra is NumericAlgebra<T>)
                     algebra.number(node.value)
@@ -26,48 +28,49 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 
                 loadTConstant(constant)
             }
+
             is MST.Unary -> {
                 loadAlgebra()
-
-                if (!hasSpecific(algebra, node.operation, 1)) loadStringConstant(node.operation)
-
+                if (!buildExpectationStack(algebra, node.operation, 1)) loadStringConstant(node.operation)
                 visit(node.value)
 
-                if (!tryInvokeSpecific(algebra, node.operation, 1)) {
-                    invokeAlgebraOperation(
-                        owner = AsmBuilder.ALGEBRA_CLASS,
-                        method = "unaryOperation",
-                        descriptor = "(L${AsmBuilder.STRING_CLASS};" +
-                                "L${AsmBuilder.OBJECT_CLASS};)" +
-                                "L${AsmBuilder.OBJECT_CLASS};"
-                    )
-                }
+                if (!tryInvokeSpecific(algebra, node.operation, 1)) invokeAlgebraOperation(
+                    owner = AsmBuilder.ALGEBRA_TYPE.internalName,
+                    method = "unaryOperation",
+
+                    descriptor = Type.getMethodDescriptor(
+                        AsmBuilder.OBJECT_TYPE,
+                        AsmBuilder.STRING_TYPE,
+                        AsmBuilder.OBJECT_TYPE
+                    ),
+
+                    tArity = 1
+                )
             }
             is MST.Binary -> {
                 loadAlgebra()
-
-                if (!hasSpecific(algebra, node.operation, 2))
-                    loadStringConstant(node.operation)
-
+                if (!buildExpectationStack(algebra, node.operation, 2)) loadStringConstant(node.operation)
                 visit(node.left)
                 visit(node.right)
 
-                if (!tryInvokeSpecific(algebra, node.operation, 2)) {
+                if (!tryInvokeSpecific(algebra, node.operation, 2)) invokeAlgebraOperation(
+                    owner = AsmBuilder.ALGEBRA_TYPE.internalName,
+                    method = "binaryOperation",
 
-                    invokeAlgebraOperation(
-                        owner = AsmBuilder.ALGEBRA_CLASS,
-                        method = "binaryOperation",
-                        descriptor = "(L${AsmBuilder.STRING_CLASS};" +
-                                "L${AsmBuilder.OBJECT_CLASS};" +
-                                "L${AsmBuilder.OBJECT_CLASS};)" +
-                                "L${AsmBuilder.OBJECT_CLASS};"
-                    )
-                }
+                    descriptor = Type.getMethodDescriptor(
+                        AsmBuilder.OBJECT_TYPE,
+                        AsmBuilder.STRING_TYPE,
+                        AsmBuilder.OBJECT_TYPE,
+                        AsmBuilder.OBJECT_TYPE
+                    ),
+
+                    tArity = 2
+                )
             }
         }
     }
 
-    return AsmBuilder(type.java, algebra, buildName(this)) { visit(this@compileWith) }.getInstance()
+    return AsmBuilder(type, algebra, buildName(this)) { visit(this@compileWith) }.getInstance()
 }
 
 /**
