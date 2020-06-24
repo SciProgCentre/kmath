@@ -10,7 +10,23 @@ import kotlin.test.assertEquals
 class TestAsmAlgebras {
     @Test
     fun space() {
-        val res = ByteRing.mstInSpace {
+        val res1 = ByteRing.mstInSpace {
+            binaryOperation(
+                "+",
+
+                unaryOperation(
+                    "+",
+                    number(3.toByte()) - (number(2.toByte()) + (multiply(
+                        add(number(1), number(1)),
+                        2
+                    ) + number(1.toByte()) * 3.toByte() - number(1.toByte())))
+                ),
+
+                number(1)
+            ) + symbol("x") + zero
+        }("x" to 2.toByte())
+
+        val res2 = ByteRing.mstInSpace {
             binaryOperation(
                 "+",
 
@@ -26,7 +42,7 @@ class TestAsmAlgebras {
             ) + symbol("x") + zero
         }.compile()("x" to 2.toByte())
 
-        assertEquals(16, res)
+        assertEquals(res1, res2)
     }
 
 //    @Test
