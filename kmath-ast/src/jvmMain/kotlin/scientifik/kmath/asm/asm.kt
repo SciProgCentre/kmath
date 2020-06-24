@@ -20,7 +20,8 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
             is MST.Symbolic -> loadVariable(node.value)
             is MST.Numeric -> {
                 val constant = if (algebra is NumericAlgebra<T>)
-                    algebra.number(node.value) else
+                    algebra.number(node.value)
+                else
                     error("Number literals are not supported in $algebra")
 
                 loadTConstant(constant)
@@ -72,9 +73,13 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 /**
  * Compile an [MST] to ASM using given algebra
  */
-inline fun <reified T : Any> Algebra<T>.expresion(mst: MST): Expression<T> = mst.compileWith(T::class, this)
+inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
 /**
  * Optimize performance of an [MSTExpression] using ASM codegen
  */
 inline fun <reified T : Any> MSTExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
+
+fun main() {
+    RealField.mstInField { symbol("x") + 2 }.compile()
+}

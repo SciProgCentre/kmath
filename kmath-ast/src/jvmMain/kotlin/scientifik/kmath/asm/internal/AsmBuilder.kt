@@ -6,7 +6,6 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.operations.Algebra
-import java.io.File
 
 /**
  * ASM Builder is a structure that abstracts building a class that unwraps [AsmExpression] to plain Java expression.
@@ -22,10 +21,16 @@ internal class AsmBuilder<T> internal constructor(
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
 ) {
+    /**
+     * Internal classloader of [AsmBuilder] with alias to define class from byte array.
+     */
     private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
         internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
     }
 
+    /**
+     * The instance of [ClassLoader] used by this builder.
+     */
     private val classLoader: ClassLoader =
         ClassLoader(javaClass.classLoader)
 
@@ -36,16 +41,41 @@ internal class AsmBuilder<T> internal constructor(
     private val T_CLASS: String = classOfT.name.replace('.', '/')
 
     private val slashesClassName: String = className.replace(oldChar = '.', newChar = '/')
+
+    /**
+     * Index of `this` variable in invoke method of [AsmCompiledExpression] built subclass.
+     */
     private val invokeThisVar: Int = 0
+
+    /**
+     * Index of `arguments` variable in invoke method of [AsmCompiledExpression] built subclass.
+     */
     private val invokeArgumentsVar: Int = 1
+
+    /**
+     * List of constants to provide to [AsmCompiledExpression] subclass.
+     */
     private val constants: MutableList<Any> = mutableListOf()
+
+    /**
+     * Method visitor of `invoke` method of [AsmCompiledExpression] subclass.
+     */
     private lateinit var invokeMethodVisitor: MethodVisitor
     private var primitiveMode = false
     internal var primitiveType = OBJECT_CLASS
     internal var primitiveTypeSig = "L$OBJECT_CLASS;"
     internal var primitiveTypeReturnSig = "L$OBJECT_CLASS;"
+
+    /**
+     * The cache of [AsmCompiledExpression] subclass built by this builder.
+     */
     private var generatedInstance: AsmCompiledExpression<T>? = null
 
+    /**
+     * Subclasses, loads and instantiates the [AsmCompiledExpression] for given parameters.
+     *
+     * The built instance is cached.
+     */
     @Suppress("UNCHECKED_CAST")
     fun getInstance(): AsmCompiledExpression<T> {
         generatedInstance?.let { return it }
@@ -187,8 +217,6 @@ internal class AsmBuilder<T> internal constructor(
             visitEnd()
         }
 
-        File("dump.class").writeBytes(classWriter.toByteArray())
-
         val new = classLoader
             .defineClass(className, classWriter.toByteArray())
             .constructors
@@ -199,6 +227,9 @@ internal class AsmBuilder<T> internal constructor(
         return new
     }
 
+    /**
+     * Loads a constant from
+     */
     internal fun loadTConstant(value: T) {
         if (primitiveMode) {
             loadNumberConstant(value as Number)
@@ -214,6 +245,9 @@ internal class AsmBuilder<T> internal constructor(
         loadConstant(value as Any, T_CLASS)
     }
 
+    /**
+     * Loads an object constant [value] stored in [AsmCompiledExpression.constants] and casts it to [type].
+     */
     private fun unboxInPrimitiveMode() {
         if (!primitiveMode)
             return
@@ -241,13 +275,17 @@ internal class AsmBuilder<T> internal constructor(
             visitGetField(owner = slashesClassName, name = "constants", descriptor = "[L$OBJECT_CLASS;")
             visitLdcOrIntConstant(idx)
             visitGetObjectArrayElement()
-            visitCheckCast(type)
-            unboxInPrimitiveMode()
+            invokeMethodVisitor.visitCheckCast(type)
         }
     }
 
     private fun loadThis(): Unit = invokeMethodVisitor.visitLoadObjectVar(invokeThisVar)
 
+    /**
+     * Either loads a numeric constant [value] from [AsmCompiledExpression.constants] field or boxes a primitive
+     * constant from the constant pool (some numbers with special opcodes like [Opcodes.ICONST_0] aren't even loaded
+     * from it).
+     */
     private fun loadNumberConstant(value: Number) {
         val clazz = value.javaClass
         val c = clazz.name.replace('.', '/')
@@ -255,9 +293,12 @@ internal class AsmBuilder<T> internal constructor(
 
         if (sigLetter != null) {
             when (value) {
+                is Byte -> invokeMethodVisitor.visitLdcOrIntConstant(value.toInt())
+                is Short -> invokeMethodVisitor.visitLdcOrIntConstant(value.toInt())
                 is Int -> invokeMethodVisitor.visitLdcOrIntConstant(value)
                 is Double -> invokeMethodVisitor.visitLdcOrDoubleConstant(value)
                 is Float -> invokeMethodVisitor.visitLdcOrFloatConstant(value)
+                is Long -> invokeMethodVisitor.visitLdcOrLongConstant(value)
                 else -> invokeMethodVisitor.visitLdcInsn(value)
             }
 
@@ -270,6 +311,9 @@ internal class AsmBuilder<T> internal constructor(
         loadConstant(value, c)
     }
 
+    /**
+     * Loads a variable [name] from [AsmCompiledExpression.invoke] [Map] parameter. The [defaultValue] may be provided.
+     */
     internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
         visitLoadObjectVar(invokeArgumentsVar)
 
@@ -299,6 +343,9 @@ internal class AsmBuilder<T> internal constructor(
         unboxInPrimitiveMode()
     }
 
+    /**
+     * Loads algebra from according field of [AsmCompiledExpression] and casts it to class of [algebra] provided.
+     */
     internal fun loadAlgebra() {
         loadThis()
 
@@ -311,6 +358,13 @@ internal class AsmBuilder<T> internal constructor(
         invokeMethodVisitor.visitCheckCast(T_ALGEBRA_CLASS)
     }
 
+    /**
+     * Writes a method instruction of opcode with its [owner], [method] and its [descriptor]. The default opcode is
+     * [Opcodes.INVOKEINTERFACE], since most Algebra functions are declared in interface. [loadAlgebra] should be
+     * called before the arguments and this operation.
+     *
+     * The result is casted to [T] automatically.
+     */
     internal fun invokeAlgebraOperation(
         owner: String,
         method: String,
@@ -323,9 +377,15 @@ internal class AsmBuilder<T> internal constructor(
         unboxInPrimitiveMode()
     }
 
+    /**
+     * Writes a LDC Instruction with string constant provided.
+     */
     internal fun loadStringConstant(string: String): Unit = invokeMethodVisitor.visitLdcInsn(string)
 
     internal companion object {
+        /**
+         * Maps JVM primitive numbers boxed types to their letters of JVM signature convention.
+         */
         private val SIGNATURE_LETTERS: Map<Class<out Any>, String> by lazy {
             mapOf(
                 java.lang.Byte::class.java to "B",
@@ -348,6 +408,9 @@ internal class AsmBuilder<T> internal constructor(
             )
         }
 
+        /**
+         * Provides boxed number types values of which can be stored in JVM bytecode constant pool.
+         */
         private val INLINABLE_NUMBERS: Set<Class<out Any>> by lazy { SIGNATURE_LETTERS.keys }
 
         internal const val FUNCTIONAL_COMPILED_EXPRESSION_CLASS =
