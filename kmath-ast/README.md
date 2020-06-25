@@ -48,12 +48,11 @@ This API is an extension to MST and MSTExpression APIs. You may optimize both MS
 
 ```kotlin
 RealField.mstInField { symbol("x") + 2 }.compile()
-RealField.expression("2+2".parseMath())
+RealField.expression("x+2".parseMath())
 ```
 
 ### Known issues
 
-- Using numeric algebras causes boxing and calling bridge methods. 
 - The same classes may be generated and loaded twice, so it is recommended to cache compiled expressions to avoid
 class loading overhead. 
 - This API is not supported by non-dynamic JVM implementations (like TeaVM and GraalVM) because of using class loaders.
