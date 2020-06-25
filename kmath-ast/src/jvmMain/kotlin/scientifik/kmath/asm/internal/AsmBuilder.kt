@@ -76,7 +76,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
      */
-    internal var primitiveMode = false
+    internal var primitiveMode: Boolean = false
 
     /**
      * Primitive type to apple for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
@@ -91,7 +91,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Stack of useful objects types on stack to verify types.
      */
-    private val typeStack = Stack<Type>()
+    private val typeStack: Stack<Type> = Stack()
 
     /**
      * Stack of useful objects types on stack expected by algebra calls.
@@ -345,6 +345,7 @@ internal class AsmBuilder<T> internal constructor(
         }
 
         loadConstant(value, boxed)
+
         if (!mustBeBoxed) unbox()
         else invokeMethodVisitor.checkcast(tType)
     }
@@ -407,11 +408,11 @@ internal class AsmBuilder<T> internal constructor(
         owner: String,
         method: String,
         descriptor: String,
-        tArity: Int,
+        expectedArity: Int,
         opcode: Int = Opcodes.INVOKEINTERFACE
     ) {
         run loop@{
-            repeat(tArity) {
+            repeat(expectedArity) {
                 if (typeStack.empty()) return@loop
                 typeStack.pop()
             }

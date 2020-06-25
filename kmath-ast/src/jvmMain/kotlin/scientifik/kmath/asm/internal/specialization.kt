@@ -5,11 +5,7 @@ import org.objectweb.asm.Type
 import scientifik.kmath.operations.Algebra
 
 private val methodNameAdapters: Map<String, String> by lazy {
-    hashMapOf(
-        "+" to "add",
-        "*" to "multiply",
-        "/" to "divide"
-    )
+    hashMapOf("+" to "add", "*" to "multiply", "/" to "divide")
 }
 
 /**
@@ -19,12 +15,10 @@ private val methodNameAdapters: Map<String, String> by lazy {
  * @return `true` if contains, else `false`.
  */
 internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val aName = methodNameAdapters[name] ?: name
-
-    val hasSpecific = context.javaClass.methods.find { it.name == aName && it.parameters.size == arity } != null
+    val theName = methodNameAdapters[name] ?: name
+    val hasSpecific = context.javaClass.methods.find { it.name == theName && it.parameters.size == arity } != null
     val t = if (primitiveMode && hasSpecific) primitiveMask else tType
     repeat(arity) { expectationStack.push(t) }
-
     return hasSpecific
 }
 
@@ -35,25 +29,24 @@ internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: 
  * @return `true` if contains, else `false`.
  */
 internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val aName = methodNameAdapters[name] ?: name
+    val theName = methodNameAdapters[name] ?: name
 
-    val method =
-        context.javaClass.methods.find {
-            var suitableSignature = it.name == aName && it.parameters.size == arity
+    context.javaClass.methods.find {
+        var suitableSignature = it.name == theName && it.parameters.size == arity
 
-            if (primitiveMode && it.isBridge)
-                suitableSignature = false
+        if (primitiveMode && it.isBridge)
+            suitableSignature = false
 
-            suitableSignature
-        } ?: return false
+        suitableSignature
+    } ?: return false
 
-    val owner = context::class.java.name.replace('.', '/')
+    val owner = context::class.asm
 
     invokeAlgebraOperation(
-        owner = owner,
-        method = aName,
+        owner = owner.internalName,
+        method = theName,
         descriptor = Type.getMethodDescriptor(primitiveMaskBoxed, *Array(arity) { primitiveMask }),
-        tArity = arity,
+        expectedArity = arity,
         opcode = Opcodes.INVOKEVIRTUAL
     )
 

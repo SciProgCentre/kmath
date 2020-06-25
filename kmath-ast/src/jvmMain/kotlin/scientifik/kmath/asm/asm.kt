@@ -44,7 +44,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
                         AsmBuilder.OBJECT_TYPE
                     ),
 
-                    tArity = 1
+                    expectedArity = 1
                 )
             }
             is MST.Binary -> {
@@ -64,7 +64,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
                         AsmBuilder.OBJECT_TYPE
                     ),
 
-                    tArity = 2
+                    expectedArity = 2
                 )
             }
         }
