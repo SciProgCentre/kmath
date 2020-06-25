@@ -22,7 +22,7 @@ internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: 
     val aName = methodNameAdapters[name] ?: name
 
     val hasSpecific = context.javaClass.methods.find { it.name == aName && it.parameters.size == arity } != null
-    val t = if (primitiveMode && hasSpecific) PRIMITIVE_MASK else T_TYPE
+    val t = if (primitiveMode && hasSpecific) PRIMITIVE_MASK else tType
     repeat(arity) { expectationStack.push(t) }
 
     return hasSpecific
