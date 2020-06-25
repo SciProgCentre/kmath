@@ -22,7 +22,7 @@ internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: 
     val aName = methodNameAdapters[name] ?: name
 
     val hasSpecific = context.javaClass.methods.find { it.name == aName && it.parameters.size == arity } != null
-    val t = if (primitiveMode && hasSpecific) PRIMITIVE_MASK else tType
+    val t = if (primitiveMode && hasSpecific) primitiveMask else tType
     repeat(arity) { expectationStack.push(t) }
 
     return hasSpecific
@@ -52,7 +52,7 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
     invokeAlgebraOperation(
         owner = owner,
         method = aName,
-        descriptor = Type.getMethodDescriptor(PRIMITIVE_MASK_BOXED, *Array(arity) { PRIMITIVE_MASK }),
+        descriptor = Type.getMethodDescriptor(primitiveMaskBoxed, *Array(arity) { primitiveMask }),
         tArity = arity,
         opcode = Opcodes.INVOKEVIRTUAL
     )
