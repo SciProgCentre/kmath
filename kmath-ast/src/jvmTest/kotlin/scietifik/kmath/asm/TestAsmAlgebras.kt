@@ -92,7 +92,7 @@ class TestAsmAlgebras {
                 "+",
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
-                1 / 2 + number(2.0) * one
+                number(1) / 2 + number(2.0) * one
             )
         }("x" to 2.0)
 
@@ -101,7 +101,7 @@ class TestAsmAlgebras {
                 "+",
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
-                1 / 2 + number(2.0) * one
+                number(1) / 2 + number(2.0) * one
             )
         }.compile()("x" to 2.0)
 
