@@ -1,13 +1,16 @@
+import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen")
-    id("kotlinx.benchmark")
+    kotlin("plugin.allopen") version "1.3.72"
+    id("kotlinx.benchmark") version "0.2.0-dev-8"
 }
 
-allOpen.annotation("org.openjdk.jmh.annotations.State")
+configure<AllOpenExtension> {
+    annotation("org.openjdk.jmh.annotations.State")
+}
 
 repositories {
     maven("http://dl.bintray.com/kyonifer/maven")
@@ -21,7 +24,6 @@ sourceSets {
 }
 
 dependencies {
-    implementation(project(":kmath-ast"))
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
@@ -31,8 +33,8 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
-    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-7")
-    "benchmarksCompile"(sourceSets.main.get().compileClasspath)
+    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-8")
+    "benchmarksCompile"(sourceSets.main.get().output + sourceSets.main.get().compileClasspath) //sourceSets.main.output + sourceSets.main.runtimeClasspath
 }
 
 // Configure benchmark

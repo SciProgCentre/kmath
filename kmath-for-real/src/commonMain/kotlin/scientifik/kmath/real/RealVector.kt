@@ -12,26 +12,23 @@ import scientifik.kmath.structures.asBuffer
 import scientifik.kmath.structures.asIterable
 import kotlin.math.sqrt
 
+typealias RealPoint = Point<Double>
+
 fun DoubleArray.asVector() = RealVector(this.asBuffer())
 fun List<Double>.asVector() = RealVector(this.asBuffer())
-
 
 object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble { it.toDouble() })
 }
 
 inline class RealVector(private val point: Point<Double>) :
-    SpaceElement<Point<Double>, RealVector, VectorSpace<Double, RealField>>, Point<Double> {
+    SpaceElement<RealPoint, RealVector, VectorSpace<Double, RealField>>, RealPoint {
 
-    override val context: VectorSpace<Double, RealField>
-        get() = space(
-            point.size
-        )
+    override val context: VectorSpace<Double, RealField> get() = space(point.size)
 
-    override fun unwrap(): Point<Double> = point
+    override fun unwrap(): RealPoint = point
 
-    override fun Point<Double>.wrap(): RealVector =
-        RealVector(this)
+    override fun RealPoint.wrap(): RealVector = RealVector(this)
 
     override val size: Int get() = point.size
 
@@ -48,12 +45,8 @@ inline class RealVector(private val point: Point<Double>) :
 
         operator fun invoke(vararg values: Double): RealVector = values.asVector()
 
-        fun space(dim: Int): BufferVectorSpace<Double, RealField> =
-            spaceCache.getOrPut(dim) {
-                BufferVectorSpace(
-                    dim,
-                    RealField
-                ) { size, init -> Buffer.real(size, init) }
-            }
+        fun space(dim: Int): BufferVectorSpace<Double, RealField> = spaceCache.getOrPut(dim) {
+            BufferVectorSpace(dim, RealField) { size, init -> Buffer.real(size, init) }
+        }
     }
 }

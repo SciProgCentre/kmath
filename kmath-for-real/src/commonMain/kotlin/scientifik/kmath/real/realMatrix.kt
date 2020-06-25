@@ -27,6 +27,10 @@ typealias RealMatrix = Matrix<Double>
 fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
 
+fun Array<DoubleArray>.toMatrix(): RealMatrix{
+    return MatrixContext.real.produce(size, this[0].size) { row, col -> this[row][col] }
+}
+
 fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
     MatrixContext.real.produce(it.size, it[0].size) { row, col -> it[row][col] }
 }
