@@ -24,20 +24,20 @@ For example, the following builder:
 package scientifik.kmath.asm.generated;
 
 import java.util.Map;
-import scientifik.kmath.asm.internal.AsmCompiledExpression;
-import scientifik.kmath.operations.Algebra;
+import scientifik.kmath.expressions.Expression;
 import scientifik.kmath.operations.RealField;
 
-// The class's name is build with MST's hash-code and collision fixing number. 
-public final class AsmCompiledExpression_45045_0 extends AsmCompiledExpression<Double> {
-    // Plain constructor
-    public AsmCompiledExpression_45045_0(Algebra algebra, Object[] constants) {
-        super(algebra, constants);
+public final class AsmCompiledExpression_1073786867_0 implements Expression<Double> {
+    private final RealField algebra;
+    private final Object[] constants;
+
+    public AsmCompiledExpression_1073786867_0(RealField algebra, Object[] constants) {
+        this.algebra = algebra;
+        this.constants = constants;
     }
 
-    // The actual dynamic code: 
     public final Double invoke(Map<String, ? extends Double> arguments) {
-        return (Double)((RealField)super.algebra).add((Double)arguments.get("x"), (Double)2.0D);
+        return (Double)this.algebra.add(((Double)arguments.get("x")).doubleValue(), 2.0D);
     }
 }
 ```

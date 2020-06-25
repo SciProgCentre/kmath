@@ -1,9 +1,10 @@
 package scientifik.kmath.asm.internal
 
 import scientifik.kmath.ast.MST
+import scientifik.kmath.expressions.Expression
 
 /**
- * Creates a class name for [AsmCompiledExpression] subclassed to implement [mst] provided.
+ * Creates a class name for [Expression] subclassed to implement [mst] provided.
  *
  * This methods helps to avoid collisions of class name to prevent loading several classes with the same name. If there
  * is a colliding class, change [collision] parameter or leave it `0` to check existing classes recursively.
