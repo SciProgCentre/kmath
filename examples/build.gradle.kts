@@ -24,6 +24,7 @@ sourceSets {
 }
 
 dependencies {
+    implementation(project(":kmath-ast"))
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
