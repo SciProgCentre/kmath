@@ -7,39 +7,40 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class TestSpecialization {
+internal class TestAsmSpecialization {
     @Test
     fun testUnaryPlus() {
         val expr = RealField.mstInField { unaryOperation("+", symbol("x")) }.compile()
-        val res = expr("x" to 2.0)
-        assertEquals(2.0, res)
+        assertEquals(2.0, expr("x" to 2.0))
     }
 
     @Test
     fun testUnaryMinus() {
         val expr = RealField.mstInField { unaryOperation("-", symbol("x")) }.compile()
-        val res = expr("x" to 2.0)
-        assertEquals(-2.0, res)
+        assertEquals(-2.0, expr("x" to 2.0))
     }
 
     @Test
     fun testAdd() {
         val expr = RealField.mstInField { binaryOperation("+", symbol("x"), symbol("x")) }.compile()
-        val res = expr("x" to 2.0)
-        assertEquals(4.0, res)
+        assertEquals(4.0, expr("x" to 2.0))
+    }
+
+    @Test
+    fun testSine() {
+        val expr = RealField.mstInField { unaryOperation("sin", symbol("x")) }.compile()
+        assertEquals(0.0, expr("x" to 0.0))
     }
 
     @Test
     fun testMinus() {
         val expr = RealField.mstInField { binaryOperation("-", symbol("x"), symbol("x")) }.compile()
-        val res = expr("x" to 2.0)
-        assertEquals(0.0, res)
+        assertEquals(0.0, expr("x" to 2.0))
     }
 
     @Test
     fun testDivide() {
         val expr = RealField.mstInField { binaryOperation("/", symbol("x"), symbol("x")) }.compile()
-        val res = expr("x" to 2.0)
-        assertEquals(1.0, res)
+        assertEquals(1.0, expr("x" to 2.0))
     }
 }
