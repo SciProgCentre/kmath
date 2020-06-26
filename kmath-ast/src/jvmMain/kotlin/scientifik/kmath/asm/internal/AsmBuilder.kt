@@ -1,8 +1,7 @@
 package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.*
-import org.objectweb.asm.Opcodes.AALOAD
-import org.objectweb.asm.Opcodes.RETURN
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.commons.InstructionAdapter
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.ast.MST
@@ -120,8 +119,8 @@ internal class AsmBuilder<T> internal constructor(
 
         val classWriter = ClassWriter(ClassWriter.COMPUTE_FRAMES) {
             visit(
-                Opcodes.V1_8,
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_SUPER,
+                V1_8,
+                ACC_PUBLIC or ACC_FINAL or ACC_SUPER,
                 classType.internalName,
                 "${OBJECT_TYPE.descriptor}L${EXPRESSION_TYPE.internalName}<${tType.descriptor}>;",
                 OBJECT_TYPE.internalName,
@@ -129,7 +128,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitField(
-                access = Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
+                access = ACC_PRIVATE or ACC_FINAL,
                 name = "algebra",
                 descriptor = tAlgebraType.descriptor,
                 signature = null,
@@ -138,7 +137,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitField(
-                access = Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
+                access = ACC_PRIVATE or ACC_FINAL,
                 name = "constants",
                 descriptor = OBJECT_ARRAY_TYPE.descriptor,
                 signature = null,
@@ -147,7 +146,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitMethod(
-                Opcodes.ACC_PUBLIC,
+                ACC_PUBLIC,
                 "<init>",
                 Type.getMethodDescriptor(Type.VOID_TYPE, tAlgebraType, OBJECT_ARRAY_TYPE),
                 null,
@@ -187,7 +186,7 @@ internal class AsmBuilder<T> internal constructor(
             }
 
             visitMethod(
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
+                ACC_PUBLIC or ACC_FINAL,
                 "invoke",
                 Type.getMethodDescriptor(tType, MAP_TYPE),
                 "(L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
@@ -223,7 +222,7 @@ internal class AsmBuilder<T> internal constructor(
             }
 
             visitMethod(
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_BRIDGE or Opcodes.ACC_SYNTHETIC,
+                ACC_PUBLIC or ACC_FINAL or ACC_BRIDGE or ACC_SYNTHETIC,
                 "invoke",
                 Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE),
                 null,
@@ -351,7 +350,8 @@ internal class AsmBuilder<T> internal constructor(
     }
 
     /**
-     * Loads a variable [name] arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be provided.
+     * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be
+     * provided.
      */
     internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
         load(invokeArgumentsVar, MAP_TYPE)
@@ -391,7 +391,7 @@ internal class AsmBuilder<T> internal constructor(
 
     /**
      * Writes a method instruction of opcode with its [owner], [method] and its [descriptor]. The default opcode is
-     * [Opcodes.INVOKEINTERFACE], since most Algebra functions are declared in interface. [loadAlgebra] should be
+     * [Opcodes.INVOKEINTERFACE], since most Algebra functions are declared in interfaces. [loadAlgebra] should be
      * called before the arguments and this operation.
      *
      * The result is casted to [T] automatically.
@@ -401,7 +401,7 @@ internal class AsmBuilder<T> internal constructor(
         method: String,
         descriptor: String,
         expectedArity: Int,
-        opcode: Int = Opcodes.INVOKEINTERFACE
+        opcode: Int = INVOKEINTERFACE
     ) {
         run loop@{
             repeat(expectedArity) {
@@ -415,7 +415,7 @@ internal class AsmBuilder<T> internal constructor(
             owner,
             method,
             descriptor,
-            opcode == Opcodes.INVOKEINTERFACE
+            opcode == INVOKEINTERFACE
         )
 
         invokeMethodVisitor.checkcast(tType)

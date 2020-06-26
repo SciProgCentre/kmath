@@ -1,6 +1,6 @@
 package scientifik.kmath.asm.internal
 
-import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
 import org.objectweb.asm.Type
 import scientifik.kmath.operations.Algebra
 
@@ -54,7 +54,7 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
         method = theName,
         descriptor = Type.getMethodDescriptor(primitiveMaskBoxed, *Array(arity) { primitiveMask }),
         expectedArity = arity,
-        opcode = Opcodes.INVOKEVIRTUAL
+        opcode = INVOKEVIRTUAL
     )
 
     return true
