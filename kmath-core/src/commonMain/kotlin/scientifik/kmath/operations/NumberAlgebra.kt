@@ -17,6 +17,10 @@ interface ExtendedFieldOperations<T> :
     override fun unaryOperation(operation: String, arg: T): T = when (operation) {
         TrigonometricOperations.COS_OPERATION -> cos(arg)
         TrigonometricOperations.SIN_OPERATION -> sin(arg)
+        TrigonometricOperations.TAN_OPERATION -> tan(arg)
+        InverseTrigonometricOperations.ACOS_OPERATION -> acos(arg)
+        InverseTrigonometricOperations.ASIN_OPERATION -> asin(arg)
+        InverseTrigonometricOperations.ATAN_OPERATION -> atan(arg)
         PowerOperations.SQRT_OPERATION -> sqrt(arg)
         ExponentialOperations.EXP_OPERATION -> exp(arg)
         ExponentialOperations.LN_OPERATION -> ln(arg)

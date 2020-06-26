@@ -13,7 +13,7 @@ package scientifik.kmath.operations
 interface TrigonometricOperations<T> : FieldOperations<T> {
     fun sin(arg: T): T
     fun cos(arg: T): T
-    fun tan(arg: T): T = sin(arg) / cos(arg)
+    fun tan(arg: T): T
 
     companion object {
         const val SIN_OPERATION = "sin"
