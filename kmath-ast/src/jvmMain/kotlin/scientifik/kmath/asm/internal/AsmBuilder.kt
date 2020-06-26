@@ -91,12 +91,12 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Stack of useful objects types on stack to verify types.
      */
-    private val typeStack: Stack<Type> = Stack()
+    private val typeStack: ArrayDeque<Type> = ArrayDeque()
 
     /**
      * Stack of useful objects types on stack expected by algebra calls.
      */
-    internal val expectationStack: Stack<Type> = Stack<Type>().apply { push(tType) }
+    internal val expectationStack: ArrayDeque<Type> = ArrayDeque<Type>().apply { push(tType) }
 
     /**
      * The cache for instance built by this builder.
@@ -270,7 +270,7 @@ internal class AsmBuilder<T> internal constructor(
      */
     internal fun loadTConstant(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
-            val expectedType = expectationStack.pop()!!
+            val expectedType = expectationStack.pop()
             val mustBeBoxed = expectedType.sort == Type.OBJECT
             loadNumberConstant(value as Number, mustBeBoxed)
             if (mustBeBoxed) typeStack.push(tType) else typeStack.push(primitiveMask)
@@ -371,7 +371,7 @@ internal class AsmBuilder<T> internal constructor(
 
         checkcast(tType)
 
-        val expectedType = expectationStack.pop()!!
+        val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT)
             typeStack.push(tType)
@@ -405,7 +405,7 @@ internal class AsmBuilder<T> internal constructor(
     ) {
         run loop@{
             repeat(expectedArity) {
-                if (typeStack.empty()) return@loop
+                if (typeStack.isEmpty()) return@loop
                 typeStack.pop()
             }
         }
@@ -420,7 +420,7 @@ internal class AsmBuilder<T> internal constructor(
 
         invokeMethodVisitor.checkcast(tType)
         val isLastExpr = expectationStack.size == 1
-        val expectedType = expectationStack.pop()!!
+        val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT || isLastExpr)
             typeStack.push(tType)
