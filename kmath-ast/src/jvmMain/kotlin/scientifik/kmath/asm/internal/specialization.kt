@@ -4,8 +4,15 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import scientifik.kmath.operations.Algebra
 
-private val methodNameAdapters: Map<String, String> by lazy {
-    hashMapOf("+" to "add", "*" to "multiply", "/" to "divide")
+private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
+    hashMapOf(
+        "+" to 2 to "add",
+        "*" to 2 to "multiply",
+        "/" to 2 to "divide",
+        "+" to 1 to "unaryPlus",
+        "-" to 1 to "unaryMinus",
+        "-" to 2 to "minus"
+    )
 }
 
 /**
@@ -15,7 +22,7 @@ private val methodNameAdapters: Map<String, String> by lazy {
  * @return `true` if contains, else `false`.
  */
 internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val theName = methodNameAdapters[name] ?: name
+    val theName = methodNameAdapters[name to arity] ?: name
     val hasSpecific = context.javaClass.methods.find { it.name == theName && it.parameters.size == arity } != null
     val t = if (primitiveMode && hasSpecific) primitiveMask else tType
     repeat(arity) { expectationStack.push(t) }
@@ -29,7 +36,7 @@ internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: 
  * @return `true` if contains, else `false`.
  */
 internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val theName = methodNameAdapters[name] ?: name
+    val theName = methodNameAdapters[name to arity] ?: name
 
     context.javaClass.methods.find {
         var suitableSignature = it.name == theName && it.parameters.size == arity

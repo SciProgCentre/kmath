@@ -47,6 +47,7 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
                     expectedArity = 1
                 )
             }
+
             is MST.Binary -> {
                 loadAlgebra()
                 if (!buildExpectationStack(algebra, node.operation, 2)) loadStringConstant(node.operation)

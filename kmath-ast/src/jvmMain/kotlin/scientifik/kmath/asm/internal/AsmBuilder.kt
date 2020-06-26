@@ -354,31 +354,23 @@ internal class AsmBuilder<T> internal constructor(
      * Loads a variable [name] arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be provided.
      */
     internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
-        load(invokeArgumentsVar, OBJECT_ARRAY_TYPE)
+        load(invokeArgumentsVar, MAP_TYPE)
+        aconst(name)
 
-        if (defaultValue != null) {
-            loadStringConstant(name)
+        if (defaultValue != null)
             loadTConstant(defaultValue)
+        else
+            aconst(null)
 
-            invokeinterface(
-                MAP_TYPE.internalName,
-                "getOrDefault",
-                Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE, OBJECT_TYPE)
-            )
-
-            invokeMethodVisitor.checkcast(tType)
-            return
-        }
-
-        loadStringConstant(name)
-
-        invokeinterface(
-            MAP_TYPE.internalName,
-            "get",
-            Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE)
+        invokestatic(
+            MAP_INTRINSICS_TYPE.internalName,
+            "getOrFail",
+            Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, OBJECT_TYPE, OBJECT_TYPE),
+            false
         )
 
-        invokeMethodVisitor.checkcast(tType)
+        checkcast(tType)
+
         val expectedType = expectationStack.pop()!!
 
         if (expectedType.sort == Type.OBJECT)
@@ -517,5 +509,10 @@ internal class AsmBuilder<T> internal constructor(
          * ASM type for [java.lang.String].
          */
         internal val STRING_TYPE: Type by lazy { java.lang.String::class.asm }
+
+        /**
+         * ASM type for MapIntrinsics.
+         */
+        internal val MAP_INTRINSICS_TYPE: Type by lazy { Type.getObjectType("scientifik/kmath/asm/internal/MapIntrinsics") }
     }
 }

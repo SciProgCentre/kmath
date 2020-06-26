@@ -10,7 +10,7 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TestAsmAlgebras {
+internal class TestAsmAlgebras {
     @Test
     fun space() {
         val res1 = ByteRing.mstInSpace {
