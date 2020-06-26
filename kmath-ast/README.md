@@ -46,7 +46,7 @@ public final class AsmCompiledExpression_1073786867_0 implements Expression<Doub
 
 ### Example Usage
 
-This API is an extension to MST and MSTExpression APIs. You may optimize both MST and MSTExpression: 
+This API is an extension to MST and MstExpression APIs. You may optimize both MST and MSTExpression: 
 
 ```kotlin
 RealField.mstInField { symbol("x") + 2 }.compile()
