@@ -6,7 +6,7 @@ import scientifik.kmath.asm.internal.buildExpectationStack
 import scientifik.kmath.asm.internal.buildName
 import scientifik.kmath.asm.internal.tryInvokeSpecific
 import scientifik.kmath.ast.MST
-import scientifik.kmath.ast.MSTExpression
+import scientifik.kmath.ast.MstExpression
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
@@ -80,6 +80,6 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
 /**
- * Optimize performance of an [MSTExpression] using ASM codegen
+ * Optimize performance of an [MstExpression] using ASM codegen
  */
-inline fun <reified T : Any> MSTExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
+inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
