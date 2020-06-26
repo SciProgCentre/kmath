@@ -24,6 +24,7 @@ For example, the following builder:
 package scientifik.kmath.asm.generated;
 
 import java.util.Map;
+import scientifik.kmath.asm.internal.MapIntrinsics;
 import scientifik.kmath.expressions.Expression;
 import scientifik.kmath.operations.RealField;
 
@@ -37,9 +38,10 @@ public final class AsmCompiledExpression_1073786867_0 implements Expression<Doub
     }
 
     public final Double invoke(Map<String, ? extends Double> arguments) {
-        return (Double)this.algebra.add(((Double)arguments.get("x")).doubleValue(), 2.0D);
+        return (Double)this.algebra.add(((Double)MapIntrinsics.getOrFail(arguments, "x", (Object)null)).doubleValue(), 2.0D);
     }
 }
+
 ```
 
 ### Example Usage

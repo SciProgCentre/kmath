@@ -3,6 +3,7 @@ package scientifik.kmath.asm.internal
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.FieldVisitor
 
+@Suppress("FunctionName")
 internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter =
     ClassWriter(flags).apply(block)
 
