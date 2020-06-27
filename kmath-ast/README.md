@@ -14,6 +14,7 @@ This subproject implements the following features:
 >
 > ```gradle
 > repositories {
+>     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
@@ -25,6 +26,7 @@ This subproject implements the following features:
 >
 > ```kotlin
 > repositories {
+>     maven("https://dl.bintray.com/mipt-npm/scientifik")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
