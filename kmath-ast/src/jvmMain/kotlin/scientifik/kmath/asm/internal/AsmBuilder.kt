@@ -75,7 +75,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * State if this [AsmBuilder] needs to generate constants field.
      */
-    private var hasConstants = true
+    private var hasConstants: Boolean = true
 
     /**
      * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
