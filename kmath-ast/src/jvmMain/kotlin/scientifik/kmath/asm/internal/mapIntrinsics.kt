@@ -2,6 +2,6 @@
 
 package scientifik.kmath.asm.internal
 
-internal fun <K, V> Map<K, V>.getOrFail(key: K, default: V?): V {
-    return this[key] ?: default ?: error("Parameter not found: $key")
-}
+@JvmOverloads
+internal fun <K, V> Map<K, V>.getOrFail(key: K, default: V? = null): V =
+    this[key] ?: default ?: error("Parameter not found: $key")

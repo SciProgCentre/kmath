@@ -23,6 +23,14 @@ internal val KClass<*>.asm: Type
     get() = Type.getType(java)
 
 /**
+ * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
+ */
+internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> = if (predicate(this))
+    arrayOf(this)
+else
+    emptyArray()
+
+/**
  * Creates an [InstructionAdapter] from this [MethodVisitor].
  */
 private fun MethodVisitor.instructionAdapter(): InstructionAdapter = InstructionAdapter(this)
@@ -121,7 +129,7 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Strin
 /**
  * Builds specialized algebra call with option to fallback to generic algebra operation accepting String.
  */
-internal fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
+internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,
     name: String,
     fallbackMethodName: String,
@@ -145,4 +153,3 @@ internal fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
         expectedArity = arity
     )
 }
-

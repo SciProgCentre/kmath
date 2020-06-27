@@ -38,17 +38,17 @@ internal class AsmBuilder<T> internal constructor(
     private val classLoader: ClassLoader = ClassLoader(javaClass.classLoader)
 
     /**
-     * ASM Type for [algebra]
+     * ASM Type for [algebra].
      */
     private val tAlgebraType: Type = algebra::class.asm
 
     /**
-     * ASM type for [T]
+     * ASM type for [T].
      */
     internal val tType: Type = classOfT.asm
 
     /**
-     * ASM type for new class
+     * ASM type for new class.
      */
     private val classType: Type = Type.getObjectType(className.replace(oldChar = '.', newChar = '/'))!!
 
@@ -71,6 +71,11 @@ internal class AsmBuilder<T> internal constructor(
      * Method visitor of `invoke` method of the subclass.
      */
     private lateinit var invokeMethodVisitor: InstructionAdapter
+
+    /**
+     * State if this [AsmBuilder] needs to generate constants field.
+     */
+    private var hasConstants = true
 
     /**
      * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
@@ -108,7 +113,7 @@ internal class AsmBuilder<T> internal constructor(
      * The built instance is cached.
      */
     @Suppress("UNCHECKED_CAST")
-    fun getInstance(): Expression<T> {
+    internal fun getInstance(): Expression<T> {
         generatedInstance?.let { return it }
 
         if (SIGNATURE_LETTERS.containsKey(classOfT)) {
@@ -126,64 +131,6 @@ internal class AsmBuilder<T> internal constructor(
                 OBJECT_TYPE.internalName,
                 arrayOf(EXPRESSION_TYPE.internalName)
             )
-
-            visitField(
-                access = ACC_PRIVATE or ACC_FINAL,
-                name = "algebra",
-                descriptor = tAlgebraType.descriptor,
-                signature = null,
-                value = null,
-                block = FieldVisitor::visitEnd
-            )
-
-            visitField(
-                access = ACC_PRIVATE or ACC_FINAL,
-                name = "constants",
-                descriptor = OBJECT_ARRAY_TYPE.descriptor,
-                signature = null,
-                value = null,
-                block = FieldVisitor::visitEnd
-            )
-
-            visitMethod(
-                ACC_PUBLIC,
-                "<init>",
-                Type.getMethodDescriptor(Type.VOID_TYPE, tAlgebraType, OBJECT_ARRAY_TYPE),
-                null,
-                null
-            ).instructionAdapter {
-                val thisVar = 0
-                val algebraVar = 1
-                val constantsVar = 2
-                val l0 = label()
-                load(thisVar, classType)
-                invokespecial(OBJECT_TYPE.internalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false)
-                label()
-                load(thisVar, classType)
-                load(algebraVar, tAlgebraType)
-                putfield(classType.internalName, "algebra", tAlgebraType.descriptor)
-                label()
-                load(thisVar, classType)
-                load(constantsVar, OBJECT_ARRAY_TYPE)
-                putfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
-                label()
-                visitInsn(RETURN)
-                val l4 = label()
-                visitLocalVariable("this", classType.descriptor, null, l0, l4, thisVar)
-
-                visitLocalVariable(
-                    "algebra",
-                    tAlgebraType.descriptor,
-                    null,
-                    l0,
-                    l4,
-                    algebraVar
-                )
-
-                visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, l0, l4, constantsVar)
-                visitMaxs(0, 3)
-                visitEnd()
-            }
 
             visitMethod(
                 ACC_PUBLIC or ACC_FINAL,
@@ -251,6 +198,78 @@ internal class AsmBuilder<T> internal constructor(
                 visitEnd()
             }
 
+            hasConstants = constants.isNotEmpty()
+
+            visitField(
+                access = ACC_PRIVATE or ACC_FINAL,
+                name = "algebra",
+                descriptor = tAlgebraType.descriptor,
+                signature = null,
+                value = null,
+                block = FieldVisitor::visitEnd
+            )
+
+            if (hasConstants)
+                visitField(
+                    access = ACC_PRIVATE or ACC_FINAL,
+                    name = "constants",
+                    descriptor = OBJECT_ARRAY_TYPE.descriptor,
+                    signature = null,
+                    value = null,
+                    block = FieldVisitor::visitEnd
+                )
+
+            visitMethod(
+                ACC_PUBLIC,
+                "<init>",
+
+                Type.getMethodDescriptor(
+                    Type.VOID_TYPE,
+                    tAlgebraType,
+                    *OBJECT_ARRAY_TYPE.wrapToArrayIf { hasConstants }),
+
+                null,
+                null
+            ).instructionAdapter {
+                val thisVar = 0
+                val algebraVar = 1
+                val constantsVar = 2
+                val l0 = label()
+                load(thisVar, classType)
+                invokespecial(OBJECT_TYPE.internalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false)
+                label()
+                load(thisVar, classType)
+                load(algebraVar, tAlgebraType)
+                putfield(classType.internalName, "algebra", tAlgebraType.descriptor)
+
+                if (hasConstants) {
+                    label()
+                    load(thisVar, classType)
+                    load(constantsVar, OBJECT_ARRAY_TYPE)
+                    putfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
+                }
+
+                label()
+                visitInsn(RETURN)
+                val l4 = label()
+                visitLocalVariable("this", classType.descriptor, null, l0, l4, thisVar)
+
+                visitLocalVariable(
+                    "algebra",
+                    tAlgebraType.descriptor,
+                    null,
+                    l0,
+                    l4,
+                    algebraVar
+                )
+
+                if (hasConstants)
+                    visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, l0, l4, constantsVar)
+
+                visitMaxs(0, 3)
+                visitEnd()
+            }
+
             visitEnd()
         }
 
@@ -258,7 +277,7 @@ internal class AsmBuilder<T> internal constructor(
             .defineClass(className, classWriter.toByteArray())
             .constructors
             .first()
-            .newInstance(algebra, constants.toTypedArray()) as Expression<T>
+            .newInstance(algebra, *(constants.toTypedArray().wrapToArrayIf { hasConstants })) as Expression<T>
 
         generatedInstance = new
         return new
@@ -359,18 +378,20 @@ internal class AsmBuilder<T> internal constructor(
 
         if (defaultValue != null)
             loadTConstant(defaultValue)
-        else
-            aconst(null)
 
         invokestatic(
             MAP_INTRINSICS_TYPE.internalName,
             "getOrFail",
-            Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, OBJECT_TYPE, OBJECT_TYPE),
+
+            Type.getMethodDescriptor(
+                OBJECT_TYPE,
+                MAP_TYPE,
+                OBJECT_TYPE,
+                *OBJECT_TYPE.wrapToArrayIf { defaultValue != null }),
             false
         )
 
         checkcast(tType)
-
         val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT)
