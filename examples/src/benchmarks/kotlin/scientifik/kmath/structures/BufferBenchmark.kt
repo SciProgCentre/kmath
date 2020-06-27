@@ -10,8 +10,8 @@ import scientifik.kmath.operations.complex
 class BufferBenchmark {
 
     @Benchmark
-    fun genericDoubleBufferReadWrite() {
-        val buffer = DoubleBuffer(size){it.toDouble()}
+    fun genericRealBufferReadWrite() {
+        val buffer = RealBuffer(size){it.toDouble()}
 
         (0 until size).forEach {
             buffer[it]

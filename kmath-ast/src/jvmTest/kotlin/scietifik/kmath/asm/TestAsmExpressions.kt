@@ -8,7 +8,7 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TestAsmExpressions {
+internal class TestAsmExpressions {
     @Test
     fun testUnaryOperationInvocation() {
         val expression = RealField.mstInSpace { -symbol("x") }.compile()

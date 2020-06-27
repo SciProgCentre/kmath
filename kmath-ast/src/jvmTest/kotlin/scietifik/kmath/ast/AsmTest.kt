@@ -10,7 +10,7 @@ import scientifik.kmath.operations.ComplexField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AsmTest {
+internal class AsmTest {
     @Test
     fun `compile MST`() {
         val mst = "2+2*(2+2)".parseMath()

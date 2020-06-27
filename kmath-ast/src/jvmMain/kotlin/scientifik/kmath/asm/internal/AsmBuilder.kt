@@ -1,8 +1,7 @@
 package scientifik.kmath.asm.internal
 
 import org.objectweb.asm.*
-import org.objectweb.asm.Opcodes.AALOAD
-import org.objectweb.asm.Opcodes.RETURN
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.commons.InstructionAdapter
 import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.ast.MST
@@ -18,6 +17,7 @@ import kotlin.reflect.KClass
  * @param T the type of AsmExpression to unwrap.
  * @param algebra the algebra the applied AsmExpressions use.
  * @param className the unique class name of new loaded class.
+ * @param invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
  */
 internal class AsmBuilder<T> internal constructor(
     private val classOfT: KClass<*>,
@@ -37,8 +37,19 @@ internal class AsmBuilder<T> internal constructor(
      */
     private val classLoader: ClassLoader = ClassLoader(javaClass.classLoader)
 
+    /**
+     * ASM Type for [algebra]
+     */
     private val tAlgebraType: Type = algebra::class.asm
+
+    /**
+     * ASM type for [T]
+     */
     internal val tType: Type = classOfT.asm
+
+    /**
+     * ASM type for new class
+     */
     private val classType: Type = Type.getObjectType(className.replace(oldChar = '.', newChar = '/'))!!
 
     /**
@@ -60,15 +71,31 @@ internal class AsmBuilder<T> internal constructor(
      * Method visitor of `invoke` method of the subclass.
      */
     private lateinit var invokeMethodVisitor: InstructionAdapter
-    internal var primitiveMode = false
 
-    @Suppress("PropertyName")
-    internal var PRIMITIVE_MASK: Type = OBJECT_TYPE
+    /**
+     * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
+     */
+    internal var primitiveMode: Boolean = false
 
-    @Suppress("PropertyName")
-    internal var PRIMITIVE_MASK_BOXED: Type = OBJECT_TYPE
-    private val typeStack = Stack<Type>()
-    internal val expectationStack: Stack<Type> = Stack<Type>().apply { push(tType) }
+    /**
+     * Primitive type to apple for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
+     */
+    internal var primitiveMask: Type = OBJECT_TYPE
+
+    /**
+     * Boxed primitive type to apple for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
+     */
+    internal var primitiveMaskBoxed: Type = OBJECT_TYPE
+
+    /**
+     * Stack of useful objects types on stack to verify types.
+     */
+    private val typeStack: ArrayDeque<Type> = ArrayDeque()
+
+    /**
+     * Stack of useful objects types on stack expected by algebra calls.
+     */
+    internal val expectationStack: ArrayDeque<Type> = ArrayDeque<Type>().apply { push(tType) }
 
     /**
      * The cache for instance built by this builder.
@@ -86,14 +113,14 @@ internal class AsmBuilder<T> internal constructor(
 
         if (SIGNATURE_LETTERS.containsKey(classOfT)) {
             primitiveMode = true
-            PRIMITIVE_MASK = SIGNATURE_LETTERS.getValue(classOfT)
-            PRIMITIVE_MASK_BOXED = tType
+            primitiveMask = SIGNATURE_LETTERS.getValue(classOfT)
+            primitiveMaskBoxed = tType
         }
 
         val classWriter = ClassWriter(ClassWriter.COMPUTE_FRAMES) {
             visit(
-                Opcodes.V1_8,
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_SUPER,
+                V1_8,
+                ACC_PUBLIC or ACC_FINAL or ACC_SUPER,
                 classType.internalName,
                 "${OBJECT_TYPE.descriptor}L${EXPRESSION_TYPE.internalName}<${tType.descriptor}>;",
                 OBJECT_TYPE.internalName,
@@ -101,7 +128,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitField(
-                access = Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
+                access = ACC_PRIVATE or ACC_FINAL,
                 name = "algebra",
                 descriptor = tAlgebraType.descriptor,
                 signature = null,
@@ -110,7 +137,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitField(
-                access = Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
+                access = ACC_PRIVATE or ACC_FINAL,
                 name = "constants",
                 descriptor = OBJECT_ARRAY_TYPE.descriptor,
                 signature = null,
@@ -119,7 +146,7 @@ internal class AsmBuilder<T> internal constructor(
             )
 
             visitMethod(
-                Opcodes.ACC_PUBLIC,
+                ACC_PUBLIC,
                 "<init>",
                 Type.getMethodDescriptor(Type.VOID_TYPE, tAlgebraType, OBJECT_ARRAY_TYPE),
                 null,
@@ -159,7 +186,7 @@ internal class AsmBuilder<T> internal constructor(
             }
 
             visitMethod(
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
+                ACC_PUBLIC or ACC_FINAL,
                 "invoke",
                 Type.getMethodDescriptor(tType, MAP_TYPE),
                 "(L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
@@ -195,7 +222,7 @@ internal class AsmBuilder<T> internal constructor(
             }
 
             visitMethod(
-                Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_BRIDGE or Opcodes.ACC_SYNTHETIC,
+                ACC_PUBLIC or ACC_FINAL or ACC_BRIDGE or ACC_SYNTHETIC,
                 "invoke",
                 Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE),
                 null,
@@ -238,34 +265,43 @@ internal class AsmBuilder<T> internal constructor(
     }
 
     /**
-     * Loads a constant from
+     * Loads a [T] constant from [constants].
      */
     internal fun loadTConstant(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
-            val expectedType = expectationStack.pop()!!
+            val expectedType = expectationStack.pop()
             val mustBeBoxed = expectedType.sort == Type.OBJECT
             loadNumberConstant(value as Number, mustBeBoxed)
-            if (mustBeBoxed) typeStack.push(tType) else typeStack.push(PRIMITIVE_MASK)
+            if (mustBeBoxed) typeStack.push(tType) else typeStack.push(primitiveMask)
             return
         }
 
         loadConstant(value as Any, tType)
     }
 
+    /**
+     * Boxes the current value and pushes it.
+     */
     private fun box(): Unit = invokeMethodVisitor.invokestatic(
         tType.internalName,
         "valueOf",
-        Type.getMethodDescriptor(tType, PRIMITIVE_MASK),
+        Type.getMethodDescriptor(tType, primitiveMask),
         false
     )
 
+    /**
+     * Unboxes the current boxed value and pushes it.
+     */
     private fun unbox(): Unit = invokeMethodVisitor.invokevirtual(
         NUMBER_TYPE.internalName,
-        NUMBER_CONVERTER_METHODS.getValue(PRIMITIVE_MASK),
-        Type.getMethodDescriptor(PRIMITIVE_MASK),
+        NUMBER_CONVERTER_METHODS.getValue(primitiveMask),
+        Type.getMethodDescriptor(primitiveMask),
         false
     )
 
+    /**
+     * Loads [java.lang.Object] constant from constants.
+     */
     private fun loadConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
         loadThis()
@@ -275,6 +311,9 @@ internal class AsmBuilder<T> internal constructor(
         checkcast(type)
     }
 
+    /**
+     * Loads this variable.
+     */
     private fun loadThis(): Unit = invokeMethodVisitor.load(invokeThisVar, classType)
 
     /**
@@ -305,46 +344,40 @@ internal class AsmBuilder<T> internal constructor(
         }
 
         loadConstant(value, boxed)
+
         if (!mustBeBoxed) unbox()
         else invokeMethodVisitor.checkcast(tType)
     }
 
     /**
-     * Loads a variable [name] arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be provided.
+     * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be
+     * provided.
      */
     internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
-        load(invokeArgumentsVar, OBJECT_ARRAY_TYPE)
+        load(invokeArgumentsVar, MAP_TYPE)
+        aconst(name)
 
-        if (defaultValue != null) {
-            loadStringConstant(name)
+        if (defaultValue != null)
             loadTConstant(defaultValue)
+        else
+            aconst(null)
 
-            invokeinterface(
-                MAP_TYPE.internalName,
-                "getOrDefault",
-                Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE, OBJECT_TYPE)
-            )
-
-            invokeMethodVisitor.checkcast(tType)
-            return
-        }
-
-        loadStringConstant(name)
-
-        invokeinterface(
-            MAP_TYPE.internalName,
-            "get",
-            Type.getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE)
+        invokestatic(
+            MAP_INTRINSICS_TYPE.internalName,
+            "getOrFail",
+            Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, OBJECT_TYPE, OBJECT_TYPE),
+            false
         )
 
-        invokeMethodVisitor.checkcast(tType)
-        val expectedType = expectationStack.pop()!!
+        checkcast(tType)
+
+        val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT)
             typeStack.push(tType)
         else {
             unbox()
-            typeStack.push(PRIMITIVE_MASK)
+            typeStack.push(primitiveMask)
         }
     }
 
@@ -358,7 +391,7 @@ internal class AsmBuilder<T> internal constructor(
 
     /**
      * Writes a method instruction of opcode with its [owner], [method] and its [descriptor]. The default opcode is
-     * [Opcodes.INVOKEINTERFACE], since most Algebra functions are declared in interface. [loadAlgebra] should be
+     * [Opcodes.INVOKEINTERFACE], since most Algebra functions are declared in interfaces. [loadAlgebra] should be
      * called before the arguments and this operation.
      *
      * The result is casted to [T] automatically.
@@ -367,12 +400,12 @@ internal class AsmBuilder<T> internal constructor(
         owner: String,
         method: String,
         descriptor: String,
-        tArity: Int,
-        opcode: Int = Opcodes.INVOKEINTERFACE
+        expectedArity: Int,
+        opcode: Int = INVOKEINTERFACE
     ) {
         run loop@{
-            repeat(tArity) {
-                if (typeStack.empty()) return@loop
+            repeat(expectedArity) {
+                if (typeStack.isEmpty()) return@loop
                 typeStack.pop()
             }
         }
@@ -382,18 +415,18 @@ internal class AsmBuilder<T> internal constructor(
             owner,
             method,
             descriptor,
-            opcode == Opcodes.INVOKEINTERFACE
+            opcode == INVOKEINTERFACE
         )
 
         invokeMethodVisitor.checkcast(tType)
         val isLastExpr = expectationStack.size == 1
-        val expectedType = expectationStack.pop()!!
+        val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT || isLastExpr)
             typeStack.push(tType)
         else {
             unbox()
-            typeStack.push(PRIMITIVE_MASK)
+            typeStack.push(primitiveMask)
         }
     }
 
@@ -404,7 +437,7 @@ internal class AsmBuilder<T> internal constructor(
 
     internal companion object {
         /**
-         * Maps JVM primitive numbers boxed types to their letters of JVM signature convention.
+         * Maps JVM primitive numbers boxed types to their primitive ASM types.
          */
         private val SIGNATURE_LETTERS: Map<KClass<out Any>, Type> by lazy {
             hashMapOf(
@@ -417,8 +450,14 @@ internal class AsmBuilder<T> internal constructor(
             )
         }
 
+        /**
+         * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
+         */
         private val BOXED_TO_PRIMITIVES: Map<Type, Type> by lazy { SIGNATURE_LETTERS.mapKeys { (k, _) -> k.asm } }
 
+        /**
+         * Maps primitive ASM types to [Number] functions unboxing them.
+         */
         private val NUMBER_CONVERTER_METHODS: Map<Type, String> by lazy {
             hashMapOf(
                 Type.BYTE_TYPE to "byteValue",
@@ -434,14 +473,46 @@ internal class AsmBuilder<T> internal constructor(
          * Provides boxed number types values of which can be stored in JVM bytecode constant pool.
          */
         private val INLINABLE_NUMBERS: Set<KClass<out Any>> by lazy { SIGNATURE_LETTERS.keys }
+
+        /**
+         * ASM type for [Expression].
+         */
         internal val EXPRESSION_TYPE: Type by lazy { Expression::class.asm }
+
+        /**
+         * ASM type for [java.lang.Number].
+         */
         internal val NUMBER_TYPE: Type by lazy { java.lang.Number::class.asm }
+
+        /**
+         * ASM type for [java.util.Map].
+         */
         internal val MAP_TYPE: Type by lazy { java.util.Map::class.asm }
+
+        /**
+         * ASM type for [java.lang.Object].
+         */
         internal val OBJECT_TYPE: Type by lazy { java.lang.Object::class.asm }
 
+        /**
+         * ASM type for array of [java.lang.Object].
+         */
         @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "RemoveRedundantQualifierName")
         internal val OBJECT_ARRAY_TYPE: Type by lazy { Array<java.lang.Object>::class.asm }
+
+        /**
+         * ASM type for [Algebra].
+         */
         internal val ALGEBRA_TYPE: Type by lazy { Algebra::class.asm }
+
+        /**
+         * ASM type for [java.lang.String].
+         */
         internal val STRING_TYPE: Type by lazy { java.lang.String::class.asm }
+
+        /**
+         * ASM type for MapIntrinsics.
+         */
+        internal val MAP_INTRINSICS_TYPE: Type by lazy { Type.getObjectType("scientifik/kmath/asm/internal/MapIntrinsics") }
     }
 }

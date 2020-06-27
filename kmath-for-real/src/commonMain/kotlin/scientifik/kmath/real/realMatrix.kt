@@ -5,8 +5,8 @@ import scientifik.kmath.linear.RealMatrixContext.elementContext
 import scientifik.kmath.linear.VirtualMatrix
 import scientifik.kmath.operations.sum
 import scientifik.kmath.structures.Buffer
-import scientifik.kmath.structures.DoubleBuffer
 import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.RealBuffer
 import scientifik.kmath.structures.asIterable
 import kotlin.math.pow
 
@@ -26,6 +26,10 @@ typealias RealMatrix = Matrix<Double>
 
 fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
+
+fun Array<DoubleArray>.toMatrix(): RealMatrix{
+    return MatrixContext.real.produce(size, this[0].size) { row, col -> this[row][col] }
+}
 
 fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
     MatrixContext.real.produce(it.size, it[0].size) { row, col -> it[row][col] }
@@ -129,22 +133,22 @@ fun Matrix<Double>.extractColumns(columnRange: IntRange): RealMatrix =
 fun Matrix<Double>.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
-fun Matrix<Double>.sumByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+fun Matrix<Double>.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     val column = columns[j]
     with(elementContext) {
         sum(column.asIterable())
     }
 }
 
-fun Matrix<Double>.minByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+fun Matrix<Double>.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().min() ?: throw Exception("Cannot produce min on empty column")
 }
 
-fun Matrix<Double>.maxByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+fun Matrix<Double>.maxByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().max() ?: throw Exception("Cannot produce min on empty column")
 }
 
-fun Matrix<Double>.averageByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+fun Matrix<Double>.averageByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().average()
 }
 

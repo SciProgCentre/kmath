@@ -10,7 +10,7 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TestAsmAlgebras {
+internal class TestAsmAlgebras {
     @Test
     fun space() {
         val res1 = ByteRing.mstInSpace {
@@ -92,8 +92,8 @@ class TestAsmAlgebras {
                 "+",
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
-                1 / 2 + number(2.0) * one
-            )
+                number(1) / 2 + number(2.0) * one
+            ) + zero
         }("x" to 2.0)
 
         val res2 = RealField.mstInField {
@@ -101,8 +101,8 @@ class TestAsmAlgebras {
                 "+",
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
-                1 / 2 + number(2.0) * one
-            )
+                number(1) / 2 + number(2.0) * one
+            ) + zero
         }.compile()("x" to 2.0)
 
         assertEquals(res1, res2)

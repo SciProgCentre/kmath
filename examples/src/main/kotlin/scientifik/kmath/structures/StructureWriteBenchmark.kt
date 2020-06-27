@@ -26,10 +26,10 @@ fun main(args: Array<String>) {
     }
     println("Array mapping finished in $time2 millis")
 
-    val buffer = DoubleBuffer(DoubleArray(n * n) { 1.0 })
+    val buffer = RealBuffer(DoubleArray(n * n) { 1.0 })
 
     val time3 = measureTimeMillis {
-        val target = DoubleBuffer(DoubleArray(n * n))
+        val target = RealBuffer(DoubleArray(n * n))
         val res = array.forEachIndexed { index, value ->
             target[index] = value + 1
         }

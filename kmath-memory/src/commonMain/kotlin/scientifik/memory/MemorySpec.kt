@@ -10,6 +10,7 @@ interface MemorySpec<T : Any> {
     val objectSize: Int
 
     fun MemoryReader.read(offset: Int): T
+    //TODO consider thread safety
     fun MemoryWriter.write(offset: Int, value: T)
 }
 

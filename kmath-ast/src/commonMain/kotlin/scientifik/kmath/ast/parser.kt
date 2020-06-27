@@ -16,15 +16,15 @@ import scientifik.kmath.operations.SpaceOperations
  * TODO move to common
  */
 private object ArithmeticsEvaluator : Grammar<MST>() {
-    val num by token("-?[\\d.]+(?:[eE]-?\\d+)?")
-    val lpar by token("\\(")
-    val rpar by token("\\)")
-    val mul by token("\\*")
-    val pow by token("\\^")
-    val div by token("/")
-    val minus by token("-")
-    val plus by token("\\+")
-    val ws by token("\\s+", ignore = true)
+    val num by token("-?[\\d.]+(?:[eE]-?\\d+)?".toRegex())
+    val lpar by token("\\(".toRegex())
+    val rpar by token("\\)".toRegex())
+    val mul by token("\\*".toRegex())
+    val pow by token("\\^".toRegex())
+    val div by token("/".toRegex())
+    val minus by token("-".toRegex())
+    val plus by token("\\+".toRegex())
+    val ws by token("\\s+".toRegex(), ignore = true)
 
     val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
 
