@@ -7,7 +7,6 @@ import kotlin.math.pow as kpow
  * Advanced Number-like field that implements basic operations
  */
 interface ExtendedFieldOperations<T> :
-    FieldOperations<T>,
     InverseTrigonometricOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T> {
@@ -24,9 +23,8 @@ interface ExtendedFieldOperations<T> :
         PowerOperations.SQRT_OPERATION -> sqrt(arg)
         ExponentialOperations.EXP_OPERATION -> exp(arg)
         ExponentialOperations.LN_OPERATION -> ln(arg)
-        else -> super<InverseTrigonometricOperations>.unaryOperation(operation, arg)
+        else -> super.unaryOperation(operation, arg)
     }
-
 }
 
 interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {

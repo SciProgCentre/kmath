@@ -64,7 +64,7 @@ fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /* Exponential */
 
-interface ExponentialOperations<T>: Algebra<T> {
+interface ExponentialOperations<T> : Algebra<T> {
     fun exp(arg: T): T
     fun ln(arg: T): T
 
