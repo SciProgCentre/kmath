@@ -7,7 +7,7 @@ import scientifik.kmath.operations.Norm
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.structures.Buffer
-import scientifik.kmath.structures.DoubleBuffer
+import scientifik.kmath.structures.RealBuffer
 import scientifik.kmath.structures.asBuffer
 import scientifik.kmath.structures.asIterable
 import kotlin.math.sqrt
@@ -41,7 +41,7 @@ inline class RealVector(private val point: Point<Double>) :
         private val spaceCache = HashMap<Int, BufferVectorSpace<Double, RealField>>()
 
         inline operator fun invoke(dim: Int, initializer: (Int) -> Double) =
-            RealVector(DoubleBuffer(dim, initializer))
+            RealVector(RealBuffer(dim, initializer))
 
         operator fun invoke(vararg values: Double): RealVector = values.asVector()
 

@@ -2,7 +2,7 @@
 Buffer is one of main building blocks of kmath. It is a basic interface allowing random-access read and write (with `MutableBuffer`).
 There are different types of buffers:
 
-* Primitive buffers wrapping like `DoubleBuffer` which are wrapping primitive arrays.
+* Primitive buffers wrapping like `RealBuffer` which are wrapping primitive arrays.
 * Boxing `ListBuffer` wrapping a list
 * Functionally defined `VirtualBuffer` which does not hold a state itself, but provides a function to calculate value
 * `MemoryBuffer` allows direct allocation of objects in continuous memory block.

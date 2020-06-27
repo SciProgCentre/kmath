@@ -1,8 +1,8 @@
 package scientifik.kmath.real
 
-import scientifik.kmath.structures.DoubleBuffer
+import scientifik.kmath.structures.RealBuffer
 
 /**
- * Simplified [DoubleBuffer] to array comparison
+ * Simplified [RealBuffer] to array comparison
  */
-fun DoubleBuffer.contentEquals(vararg doubles: Double) = array.contentEquals(doubles)
+fun RealBuffer.contentEquals(vararg doubles: Double) = array.contentEquals(doubles)

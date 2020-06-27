@@ -6,7 +6,7 @@ fun main(args: Array<String>) {
     val n = 6000
 
     val array = DoubleArray(n * n) { 1.0 }
-    val buffer = DoubleBuffer(array)
+    val buffer = RealBuffer(array)
     val strides = DefaultStrides(intArrayOf(n, n))
 
     val structure = BufferNDStructure(strides, buffer)

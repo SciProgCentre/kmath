@@ -16,7 +16,7 @@
 package scientifik.kmath.domains
 
 import scientifik.kmath.linear.Point
-import scientifik.kmath.structures.DoubleBuffer
+import scientifik.kmath.structures.RealBuffer
 import scientifik.kmath.structures.indices
 
 /**
@@ -25,7 +25,7 @@ import scientifik.kmath.structures.indices
  *
  * @author Alexander Nozik
  */
-class HyperSquareDomain(private val lower: DoubleBuffer, private val upper: DoubleBuffer) : RealDomain {
+class HyperSquareDomain(private val lower: RealBuffer, private val upper: RealBuffer) : RealDomain {
 
     override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]
@@ -49,7 +49,7 @@ class HyperSquareDomain(private val lower: DoubleBuffer, private val upper: Doub
                 else -> point[i]
             }
         }
-        return DoubleBuffer(*res)
+        return RealBuffer(*res)
     }
 
     override fun volume(): Double {
