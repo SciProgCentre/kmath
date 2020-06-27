@@ -10,7 +10,7 @@ interface INDArrayStructureBase<T> : NDStructure<T> {
         get() = narrowToIntArray(ndArray.shape())
 
     fun elementsIterator(): Iterator<Pair<IntArray, T>>
-    override fun elements(): Sequence<Pair<IntArray, T>> = Sequence { elementsIterator() }
+    override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
 }
 
 data class INDArrayIntStructure(override val ndArray: INDArray) : INDArrayStructureBase<Int> {

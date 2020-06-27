@@ -9,7 +9,7 @@ internal class INDArrayStructureTest {
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
         val struct = INDArrayDoubleStructure(nd)
-        val res = struct.elements().map { it.second }.toList()
+        val res = struct.elements().map(Pair<IntArray, Double>::second).toList()
         assertEquals(listOf(1.0, 2.0, 3.0), res)
     }
 
