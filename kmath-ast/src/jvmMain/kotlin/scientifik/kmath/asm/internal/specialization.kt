@@ -21,7 +21,7 @@ private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
  *
  * @return `true` if contains, else `false`.
  */
-internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: String, arity: Int): Boolean {
+private fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: String, arity: Int): Boolean {
     val theName = methodNameAdapters[name to arity] ?: name
     val hasSpecific = context.javaClass.methods.find { it.name == theName && it.parameters.size == arity } != null
     val t = if (primitiveMode && hasSpecific) primitiveMask else tType
@@ -35,7 +35,7 @@ internal fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: 
  *
  * @return `true` if contains, else `false`.
  */
-internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+private fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
     val theName = methodNameAdapters[name to arity] ?: name
 
     context.javaClass.methods.find {
@@ -58,4 +58,29 @@ internal fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Stri
     )
 
     return true
+}
+
+internal fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
+    context: Algebra<T>,
+    name: String,
+    fallbackMethodName: String,
+    arity: Int,
+    parameters: AsmBuilder<T>.() -> Unit
+) {
+    loadAlgebra()
+    if (!buildExpectationStack(context, name, arity)) loadStringConstant(name)
+    parameters()
+
+    if (!tryInvokeSpecific(context, name, arity)) invokeAlgebraOperation(
+        owner = AsmBuilder.ALGEBRA_TYPE.internalName,
+        method = fallbackMethodName,
+
+        descriptor = Type.getMethodDescriptor(
+            AsmBuilder.OBJECT_TYPE,
+            AsmBuilder.STRING_TYPE,
+            *Array(arity) { AsmBuilder.OBJECT_TYPE }
+        ),
+
+        expectedArity = arity
+    )
 }
