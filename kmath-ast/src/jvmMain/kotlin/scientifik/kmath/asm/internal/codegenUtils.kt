@@ -1,8 +1,12 @@
 package scientifik.kmath.asm.internal
 
+import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
-import org.objectweb.asm.Type
+import org.objectweb.asm.commons.InstructionAdapter
+import scientifik.kmath.ast.MST
+import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+import kotlin.reflect.KClass
 
 private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
     hashMapOf(
@@ -14,6 +18,60 @@ private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
         "-" to 2 to "minus"
     )
 }
+
+internal val KClass<*>.asm: Type
+    get() = Type.getType(java)
+
+/**
+ * Creates an [InstructionAdapter] from this [MethodVisitor].
+ */
+private fun MethodVisitor.instructionAdapter(): InstructionAdapter = InstructionAdapter(this)
+
+/**
+ * Creates an [InstructionAdapter] from this [MethodVisitor] and applies [block] to it.
+ */
+internal fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Unit): InstructionAdapter =
+    instructionAdapter().apply(block)
+
+/**
+ * Constructs a [Label], then applies it to this visitor.
+ */
+internal fun MethodVisitor.label(): Label {
+    val l = Label()
+    visitLabel(l)
+    return l
+}
+
+/**
+ * Creates a class name for [Expression] subclassed to implement [mst] provided.
+ *
+ * This methods helps to avoid collisions of class name to prevent loading several classes with the same name. If there
+ * is a colliding class, change [collision] parameter or leave it `0` to check existing classes recursively.
+ */
+internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
+    val name = "scientifik.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
+
+    try {
+        Class.forName(name)
+    } catch (ignored: ClassNotFoundException) {
+        return name
+    }
+
+    return buildName(mst, collision + 1)
+}
+
+@Suppress("FunctionName")
+internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter =
+    ClassWriter(flags).apply(block)
+
+internal inline fun ClassWriter.visitField(
+    access: Int,
+    name: String,
+    descriptor: String,
+    signature: String?,
+    value: Any?,
+    block: FieldVisitor.() -> Unit
+): FieldVisitor = visitField(access, name, descriptor, signature, value).apply(block)
 
 /**
  * Checks if the target [context] for code generation contains a method with needed [name] and [arity], also builds
@@ -60,6 +118,9 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: Strin
     return true
 }
 
+/**
+ * Builds specialized algebra call with option to fallback to generic algebra operation accepting String.
+ */
 internal fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,
     name: String,
@@ -84,3 +145,4 @@ internal fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
         expectedArity = arity
     )
 }
+
