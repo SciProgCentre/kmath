@@ -50,7 +50,7 @@ class RealHistogram(
     override val dimension: Int get() = lower.size
 
 
-    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
+    private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     init {
         // argument checks
