@@ -37,9 +37,9 @@ interface Buffer<T> {
 
     companion object {
 
-        inline fun real(size: Int, initializer: (Int) -> Double): DoubleBuffer {
+        inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer {
             val array = DoubleArray(size) { initializer(it) }
-            return DoubleBuffer(array)
+            return RealBuffer(array)
         }
 
         /**
@@ -51,7 +51,7 @@ interface Buffer<T> {
         inline fun <T : Any> auto(type: KClass<T>, size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
             //TODO add resolution based on Annotation or companion resolution
             return when (type) {
-                Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
+                Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
@@ -93,7 +93,7 @@ interface MutableBuffer<T> : Buffer<T> {
         @Suppress("UNCHECKED_CAST")
         inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
             return when (type) {
-                Double::class -> DoubleBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
+                Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
@@ -109,11 +109,10 @@ interface MutableBuffer<T> : Buffer<T> {
             auto(T::class, size, initializer)
 
         val real: MutableBufferFactory<Double> = { size: Int, initializer: (Int) -> Double ->
-            DoubleBuffer(DoubleArray(size) { initializer(it) })
+            RealBuffer(DoubleArray(size) { initializer(it) })
         }
     }
 }
-
 
 inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
 
@@ -162,57 +161,6 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
 }
 
 fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
-
-inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
-    override val size: Int get() = array.size
-
-    override fun get(index: Int): Short = array[index]
-
-    override fun set(index: Int, value: Short) {
-        array[index] = value
-    }
-
-    override fun iterator() = array.iterator()
-
-    override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
-
-}
-
-fun ShortArray.asBuffer() = ShortBuffer(this)
-
-inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
-    override val size: Int get() = array.size
-
-    override fun get(index: Int): Int = array[index]
-
-    override fun set(index: Int, value: Int) {
-        array[index] = value
-    }
-
-    override fun iterator() = array.iterator()
-
-    override fun copy(): MutableBuffer<Int> = IntBuffer(array.copyOf())
-
-}
-
-fun IntArray.asBuffer() = IntBuffer(this)
-
-inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
-    override val size: Int get() = array.size
-
-    override fun get(index: Int): Long = array[index]
-
-    override fun set(index: Int, value: Long) {
-        array[index] = value
-    }
-
-    override fun iterator() = array.iterator()
-
-    override fun copy(): MutableBuffer<Long> = LongBuffer(array.copyOf())
-
-}
-
-fun LongArray.asBuffer() = LongBuffer(this)
 
 inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size

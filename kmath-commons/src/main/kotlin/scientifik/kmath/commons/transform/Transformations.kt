@@ -18,7 +18,7 @@ object Transformations {
     private fun Buffer<Complex>.toArray(): Array<org.apache.commons.math3.complex.Complex> =
         Array(size) { org.apache.commons.math3.complex.Complex(get(it).re, get(it).im) }
 
-    private fun Buffer<Double>.asArray() = if (this is DoubleBuffer) {
+    private fun Buffer<Double>.asArray() = if (this is RealBuffer) {
         array
     } else {
         DoubleArray(size) { i -> get(i) }

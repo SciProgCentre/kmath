@@ -30,11 +30,11 @@ object RealMatrixContext : GenericMatrixContext<Double, RealField> {
     override val elementContext get() = RealField
 
     override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
-        val buffer = DoubleBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
+        val buffer = RealBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
         return BufferMatrix(rows, columns, buffer)
     }
 
-    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = DoubleBuffer(size,initializer)
+    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = RealBuffer(size,initializer)
 }
 
 class BufferMatrix<T : Any>(
@@ -102,7 +102,7 @@ infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Do
     val array = DoubleArray(this.rowNum * other.colNum)
 
     //convert to array to insure there is not memory indirection
-    fun Buffer<out Double>.unsafeArray(): DoubleArray = if (this is DoubleBuffer) {
+    fun Buffer<out Double>.unsafeArray(): DoubleArray = if (this is RealBuffer) {
         array
     } else {
         DoubleArray(size) { get(it) }
@@ -119,6 +119,6 @@ infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Do
         }
     }
 
-    val buffer = DoubleBuffer(array)
+    val buffer = RealBuffer(array)
     return BufferMatrix(rowNum, other.colNum, buffer)
 }

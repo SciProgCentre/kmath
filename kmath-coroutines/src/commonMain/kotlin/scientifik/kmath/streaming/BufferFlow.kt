@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 import scientifik.kmath.chains.BlockingRealChain
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.BufferFactory
-import scientifik.kmath.structures.DoubleBuffer
+import scientifik.kmath.structures.RealBuffer
 import scientifik.kmath.structures.asBuffer
 
 /**
@@ -45,7 +45,7 @@ fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>): Flow<
 /**
  * Specialized flow chunker for real buffer
  */
-fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
+fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
 
     if (this@chunked is BlockingRealChain) {
@@ -61,13 +61,13 @@ fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
             array[counter] = element
             counter++
             if (counter == bufferSize) {
-                val buffer = DoubleBuffer(array)
+                val buffer = RealBuffer(array)
                 emit(buffer)
                 counter = 0
             }
         }
         if (counter > 0) {
-            emit(DoubleBuffer(counter) { array[it] })
+            emit(RealBuffer(counter) { array[it] })
         }
     }
 }
