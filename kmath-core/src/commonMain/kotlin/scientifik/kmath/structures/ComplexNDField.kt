@@ -79,6 +79,13 @@ class ComplexNDField(override val shape: IntArray) :
 
     override fun cos(arg: NDBuffer<Complex>) = map(arg) { cos(it) }
 
+    override fun tan(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) { tan(it) }
+
+    override fun asin(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) { asin(it) }
+
+    override fun acos(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) {acos(it)}
+
+    override fun atan(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) {atan(it)}
 }
 
 

@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class ExpressionFieldTest {
     @Test
     fun testExpression() {
-        val context = ExpressionField(RealField)
+        val context = FunctionalExpressionField(RealField)
         val expression = with(context) {
             val x = variable("x", 2.0)
             x * x + 2 * x + one
@@ -20,7 +20,7 @@ class ExpressionFieldTest {
 
     @Test
     fun testComplex() {
-        val context = ExpressionField(ComplexField)
+        val context = FunctionalExpressionField(ComplexField)
         val expression = with(context) {
             val x = variable("x", Complex(2.0, 0.0))
             x * x + 2 * x + one
@@ -31,23 +31,23 @@ class ExpressionFieldTest {
 
     @Test
     fun separateContext() {
-        fun <T> ExpressionField<T>.expression(): Expression<T> {
+        fun <T> FunctionalExpressionField<T,*>.expression(): Expression<T> {
             val x = variable("x")
             return x * x + 2 * x + one
         }
 
-        val expression = ExpressionField(RealField).expression()
+        val expression = FunctionalExpressionField(RealField).expression()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 
     @Test
     fun valueExpression() {
-        val expressionBuilder: ExpressionField<Double>.() -> Expression<Double> = {
+        val expressionBuilder: FunctionalExpressionField<Double,*>.() -> Expression<Double> = {
             val x = variable("x")
             x * x + 2 * x + one
         }
 
-        val expression = ExpressionField(RealField).expressionBuilder()
+        val expression = FunctionalExpressionField(RealField).expressionBuilder()
         assertEquals(expression("x" to 1.0), 4.0)
     }
 }

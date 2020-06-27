@@ -16,7 +16,7 @@ class RealNDField(override val shape: IntArray) :
     override val one by lazy { produce { one } }
 
     inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
-        DoubleBuffer(DoubleArray(size) { initializer(it) })
+        RealBuffer(DoubleArray(size) { initializer(it) })
 
     /**
      * Inline transform an NDStructure to
@@ -74,6 +74,13 @@ class RealNDField(override val shape: IntArray) :
 
     override fun cos(arg: NDBuffer<Double>) = map(arg) { cos(it) }
 
+    override fun tan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { tan(it) }
+
+    override fun asin(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { asin(it) }
+
+    override fun acos(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { acos(it) }
+
+    override fun atan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { atan(it) }
 }
 
 
@@ -82,7 +89,7 @@ class RealNDField(override val shape: IntArray) :
  */
 inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.initializer(offset) }
-    return BufferedNDFieldElement(this, DoubleBuffer(array))
+    return BufferedNDFieldElement(this, RealBuffer(array))
 }
 
 /**
@@ -96,7 +103,7 @@ inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: Int
  */
 inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }
-    return BufferedNDFieldElement(context, DoubleBuffer(array))
+    return BufferedNDFieldElement(context, RealBuffer(array))
 }
 
 /**

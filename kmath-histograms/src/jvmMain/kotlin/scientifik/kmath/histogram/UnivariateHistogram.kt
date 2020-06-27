@@ -16,7 +16,7 @@ class UnivariateBin(val position: Double, val size: Double, val counter: LongCou
 
     operator fun contains(value: Double): Boolean = value in (position - size / 2)..(position + size / 2)
 
-    override fun contains(vector: Buffer<out Double>): Boolean = contains(vector[0])
+    override fun contains(point: Buffer<Double>): Boolean = contains(point[0])
 
     internal operator fun inc() = this.also { counter.increment() }
 

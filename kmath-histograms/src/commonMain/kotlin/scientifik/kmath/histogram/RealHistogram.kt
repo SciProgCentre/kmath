@@ -1,8 +1,8 @@
 package scientifik.kmath.histogram
 
 import scientifik.kmath.linear.Point
-import scientifik.kmath.real.asVector
 import scientifik.kmath.operations.SpaceOperations
+import scientifik.kmath.real.asVector
 import scientifik.kmath.structures.*
 import kotlin.math.floor
 
@@ -21,7 +21,7 @@ data class BinDef<T : Comparable<T>>(val space: SpaceOperations<Point<T>>, val c
 
 class MultivariateBin<T : Comparable<T>>(val def: BinDef<T>, override val value: Number) : Bin<T> {
 
-    override fun contains(vector: Point<out T>): Boolean = def.contains(vector)
+    override fun contains(point: Point<T>): Boolean = def.contains(point)
 
     override val dimension: Int
         get() = def.center.size
@@ -50,7 +50,7 @@ class RealHistogram(
     override val dimension: Int get() = lower.size
 
 
-    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
+    private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     init {
         // argument checks

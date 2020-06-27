@@ -3,10 +3,12 @@ pluginManagement {
     val toolsVersion = "0.5.0"
 
     plugins {
+        id("kotlinx.benchmark") version "0.2.0-dev-8"
         id("scientifik.mpp") version toolsVersion
         id("scientifik.jvm") version toolsVersion
         id("scientifik.atomic") version toolsVersion
         id("scientifik.publish") version toolsVersion
+        kotlin("plugin.allopen") version "1.3.72"
     }
 
     repositories {
@@ -45,5 +47,6 @@ include(
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
+    ":kmath-ast",
     ":examples"
 )
