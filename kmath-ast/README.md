@@ -7,6 +7,33 @@ This subproject implements the following features:
 - Type-safe builder for MST.
 - Evaluating expressions by traversing MST.
 
+> #### Artifact:
+> This module is distributed in the artifact `scientifik:kmath-ast:0.1.4-dev-8`.
+> 
+> **Gradle:**
+>
+> ```gradle
+> repositories {
+>     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+> }
+> 
+> dependencies {
+>     implementation 'scientifik:kmath-ast:0.1.4-dev-8'
+> }
+> ```
+> **Gradle Kotlin DSL:**
+>
+> ```kotlin
+> repositories {
+>     maven("https://dl.bintray.com/mipt-npm/dev")
+> }
+> 
+> dependencies {
+>     implementation("scientifik:kmath-ast:0.1.4-dev-8")
+> }
+> ```
+>
+
 ## Dynamic expression code generation with ObjectWeb ASM
 
 `kmath-ast` JVM module supports runtime code generation to eliminate overhead of tree traversal. Code generator builds 
