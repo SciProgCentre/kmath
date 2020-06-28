@@ -7,7 +7,7 @@ import java.math.MathContext
 /**
  * A field wrapper for Java [BigInteger]
  */
-object JBigIntegerField : Field<BigInteger>, PowerOperations<BigInteger> {
+object JBigIntegerField : Field<BigInteger> {
     override val zero: BigInteger
         get() = BigInteger.ZERO
 
@@ -19,8 +19,6 @@ object JBigIntegerField : Field<BigInteger>, PowerOperations<BigInteger> {
     override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
     override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
-    override fun power(arg: BigInteger, pow: Number): BigInteger = arg.pow(pow.toInt())
-    override fun sqrt(arg: BigInteger): BigInteger = arg.sqrt()
     override fun BigInteger.unaryMinus(): BigInteger = negate()
 }
 
