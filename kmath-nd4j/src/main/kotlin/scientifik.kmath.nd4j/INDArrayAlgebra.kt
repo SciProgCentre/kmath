@@ -64,7 +64,6 @@ class RealINDArrayField(override val shape: IntArray, override val elementContex
     override fun INDArray.wrap(): INDArrayRealStructure = asRealStructure()
     override fun INDArrayRealStructure.div(arg: Double): INDArrayRealStructure = ndArray.divi(arg).wrap()
     override fun INDArrayRealStructure.plus(arg: Double): INDArrayRealStructure = ndArray.addi(arg).wrap()
-    override fun INDArrayRealStructure.div(k: Number): INDArrayRealStructure = ndArray.divi(k).wrap()
     override fun INDArrayRealStructure.minus(arg: Double): INDArrayRealStructure = ndArray.subi(arg).wrap()
     override fun INDArrayRealStructure.times(arg: Double): INDArrayRealStructure = ndArray.muli(arg).wrap()
 }
@@ -74,7 +73,6 @@ class FloatINDArrayField(override val shape: IntArray, override val elementConte
     override fun INDArray.wrap(): INDArrayFloatStructure = asFloatStructure()
     override fun INDArrayFloatStructure.div(arg: Float): INDArrayFloatStructure = ndArray.divi(arg).wrap()
     override fun INDArrayFloatStructure.plus(arg: Float): INDArrayFloatStructure = ndArray.addi(arg).wrap()
-    override fun INDArrayFloatStructure.div(k: Number): INDArrayFloatStructure = ndArray.divi(k).wrap()
     override fun INDArrayFloatStructure.minus(arg: Float): INDArrayFloatStructure = ndArray.subi(arg).wrap()
     override fun INDArrayFloatStructure.times(arg: Float): INDArrayFloatStructure = ndArray.muli(arg).wrap()
 }
@@ -83,7 +81,6 @@ class IntINDArrayRing(override val shape: IntArray, override val elementContext:
     INDArrayRing<Int, Ring<Int>, INDArrayIntStructure> {
     override fun INDArray.wrap(): INDArrayIntStructure = asIntStructure()
     override fun INDArrayIntStructure.plus(arg: Int): INDArrayIntStructure = ndArray.addi(arg).wrap()
-    override fun INDArrayIntStructure.div(k: Number): INDArrayIntStructure = ndArray.divi(k).wrap()
     override fun INDArrayIntStructure.minus(arg: Int): INDArrayIntStructure = ndArray.subi(arg).wrap()
     override fun INDArrayIntStructure.times(arg: Int): INDArrayIntStructure = ndArray.muli(arg).wrap()
 }
