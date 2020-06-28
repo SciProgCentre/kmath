@@ -340,7 +340,7 @@ internal class AsmBuilder<T> internal constructor(
         checkcast(type)
     }
 
-    fun loadNumeric(value: Number) {
+    internal fun loadNumeric(value: Number) {
         if (expectationStack.peek() == NUMBER_TYPE) {
             loadNumberConstant(value, true)
             expectationStack.pop()
