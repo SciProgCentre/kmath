@@ -57,6 +57,7 @@ interface INDArrayRing<T, R, N> :
 interface INDArrayField<T, F, N> : NDField<T, F, N>,
     INDArrayRing<T, F, N> where F : Field<T>, N : INDArrayStructure<T>, N : MutableNDStructure<T> {
     override fun divide(a: N, b: N): N = a.ndArray.divi(b.ndArray).wrap()
+    override fun Number.div(b: N): N = b.ndArray.rdivi(this).wrap()
 }
 
 class RealINDArrayField(override val shape: IntArray, override val elementContext: Field<Double> = RealField) :
