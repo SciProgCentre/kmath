@@ -6,7 +6,7 @@ import org.nd4j.linalg.api.shape.Shape
 internal sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
     private var i: Int = 0
 
-    override fun hasNext(): Boolean = i < iterateOver.length()
+    final override fun hasNext(): Boolean = i < iterateOver.length()
 
     abstract fun getSingle(indices: LongArray): T
 
