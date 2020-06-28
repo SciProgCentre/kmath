@@ -1,13 +1,42 @@
-# AST-based expression representation and operations (`kmath-ast`)
+# Abstract syntax tree expression representation and operations (`kmath-ast`)
 
 This subproject implements the following features:
 
 - Expression Language and its parser.
-- MST as expression language's syntax intermediate representation.
-- Type-safe builder of MST.
+- MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation.
+- Type-safe builder for MST.
 - Evaluating expressions by traversing MST.
 
-## Dynamic expression code generation with OW2 ASM
+> #### Artifact:
+> This module is distributed in the artifact `scientifik:kmath-ast:0.1.4-dev-8`.
+> 
+> **Gradle:**
+>
+> ```gradle
+> repositories {
+>     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
+>     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+> }
+> 
+> dependencies {
+>     implementation 'scientifik:kmath-ast:0.1.4-dev-8'
+> }
+> ```
+> **Gradle Kotlin DSL:**
+>
+> ```kotlin
+> repositories {
+>     maven("https://dl.bintray.com/mipt-npm/scientifik")
+>     maven("https://dl.bintray.com/mipt-npm/dev")
+> }
+> 
+> dependencies {
+>     implementation("scientifik:kmath-ast:0.1.4-dev-8")
+> }
+> ```
+>
+
+## Dynamic expression code generation with ObjectWeb ASM
 
 `kmath-ast` JVM module supports runtime code generation to eliminate overhead of tree traversal. Code generator builds 
 a special implementation of `Expression<T>` with implemented `invoke` function. 
@@ -30,15 +59,13 @@ import scientifik.kmath.operations.RealField;
 
 public final class AsmCompiledExpression_1073786867_0 implements Expression<Double> {
     private final RealField algebra;
-    private final Object[] constants;
-
-    public AsmCompiledExpression_1073786867_0(RealField algebra, Object[] constants) {
-        this.algebra = algebra;
-        this.constants = constants;
-    }
 
     public final Double invoke(Map<String, ? extends Double> arguments) {
-        return (Double)this.algebra.add(((Double)MapIntrinsics.getOrFail(arguments, "x", (Object)null)).doubleValue(), 2.0D);
+        return (Double)this.algebra.add(((Double)MapIntrinsics.getOrFail(arguments, "x")).doubleValue(), 2.0D);
+    }
+
+    public AsmCompiledExpression_1073786867_0(RealField algebra) {
+        this.algebra = algebra;
     }
 }
 
@@ -46,7 +73,7 @@ public final class AsmCompiledExpression_1073786867_0 implements Expression<Doub
 
 ### Example Usage
 
-This API is an extension to MST and MstExpression APIs. You may optimize both MST and MSTExpression: 
+This API is an extension to MST and MstExpression, so you may optimize as both of them: 
 
 ```kotlin
 RealField.mstInField { symbol("x") + 2 }.compile()

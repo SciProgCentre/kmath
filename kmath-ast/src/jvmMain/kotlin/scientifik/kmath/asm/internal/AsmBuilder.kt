@@ -7,7 +7,9 @@ import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.ast.MST
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.NumericAlgebra
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.reflect.KClass
 
 /**
@@ -20,7 +22,7 @@ import kotlin.reflect.KClass
  * @param invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
  */
 internal class AsmBuilder<T> internal constructor(
-    private val classOfT: KClass<*>,
+    internal val classOfT: KClass<*>,
     private val algebra: Algebra<T>,
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
@@ -38,17 +40,17 @@ internal class AsmBuilder<T> internal constructor(
     private val classLoader: ClassLoader = ClassLoader(javaClass.classLoader)
 
     /**
-     * ASM Type for [algebra]
+     * ASM Type for [algebra].
      */
     private val tAlgebraType: Type = algebra::class.asm
 
     /**
-     * ASM type for [T]
+     * ASM type for [T].
      */
     internal val tType: Type = classOfT.asm
 
     /**
-     * ASM type for new class
+     * ASM type for new class.
      */
     private val classType: Type = Type.getObjectType(className.replace(oldChar = '.', newChar = '/'))!!
 
@@ -73,6 +75,11 @@ internal class AsmBuilder<T> internal constructor(
     private lateinit var invokeMethodVisitor: InstructionAdapter
 
     /**
+     * State if this [AsmBuilder] needs to generate constants field.
+     */
+    private var hasConstants: Boolean = true
+
+    /**
      * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
      */
     internal var primitiveMode: Boolean = false
@@ -95,7 +102,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Stack of useful objects types on stack expected by algebra calls.
      */
-    internal val expectationStack: ArrayDeque<Type> = ArrayDeque<Type>().apply { push(tType) }
+    internal val expectationStack: ArrayDeque<Type> = ArrayDeque(listOf(tType))
 
     /**
      * The cache for instance built by this builder.
@@ -108,7 +115,7 @@ internal class AsmBuilder<T> internal constructor(
      * The built instance is cached.
      */
     @Suppress("UNCHECKED_CAST")
-    fun getInstance(): Expression<T> {
+    internal fun getInstance(): Expression<T> {
         generatedInstance?.let { return it }
 
         if (SIGNATURE_LETTERS.containsKey(classOfT)) {
@@ -126,64 +133,6 @@ internal class AsmBuilder<T> internal constructor(
                 OBJECT_TYPE.internalName,
                 arrayOf(EXPRESSION_TYPE.internalName)
             )
-
-            visitField(
-                access = ACC_PRIVATE or ACC_FINAL,
-                name = "algebra",
-                descriptor = tAlgebraType.descriptor,
-                signature = null,
-                value = null,
-                block = FieldVisitor::visitEnd
-            )
-
-            visitField(
-                access = ACC_PRIVATE or ACC_FINAL,
-                name = "constants",
-                descriptor = OBJECT_ARRAY_TYPE.descriptor,
-                signature = null,
-                value = null,
-                block = FieldVisitor::visitEnd
-            )
-
-            visitMethod(
-                ACC_PUBLIC,
-                "<init>",
-                Type.getMethodDescriptor(Type.VOID_TYPE, tAlgebraType, OBJECT_ARRAY_TYPE),
-                null,
-                null
-            ).instructionAdapter {
-                val thisVar = 0
-                val algebraVar = 1
-                val constantsVar = 2
-                val l0 = label()
-                load(thisVar, classType)
-                invokespecial(OBJECT_TYPE.internalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false)
-                label()
-                load(thisVar, classType)
-                load(algebraVar, tAlgebraType)
-                putfield(classType.internalName, "algebra", tAlgebraType.descriptor)
-                label()
-                load(thisVar, classType)
-                load(constantsVar, OBJECT_ARRAY_TYPE)
-                putfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
-                label()
-                visitInsn(RETURN)
-                val l4 = label()
-                visitLocalVariable("this", classType.descriptor, null, l0, l4, thisVar)
-
-                visitLocalVariable(
-                    "algebra",
-                    tAlgebraType.descriptor,
-                    null,
-                    l0,
-                    l4,
-                    algebraVar
-                )
-
-                visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, l0, l4, constantsVar)
-                visitMaxs(0, 3)
-                visitEnd()
-            }
 
             visitMethod(
                 ACC_PUBLIC or ACC_FINAL,
@@ -251,6 +200,78 @@ internal class AsmBuilder<T> internal constructor(
                 visitEnd()
             }
 
+            hasConstants = constants.isNotEmpty()
+
+            visitField(
+                access = ACC_PRIVATE or ACC_FINAL,
+                name = "algebra",
+                descriptor = tAlgebraType.descriptor,
+                signature = null,
+                value = null,
+                block = FieldVisitor::visitEnd
+            )
+
+            if (hasConstants)
+                visitField(
+                    access = ACC_PRIVATE or ACC_FINAL,
+                    name = "constants",
+                    descriptor = OBJECT_ARRAY_TYPE.descriptor,
+                    signature = null,
+                    value = null,
+                    block = FieldVisitor::visitEnd
+                )
+
+            visitMethod(
+                ACC_PUBLIC,
+                "<init>",
+
+                Type.getMethodDescriptor(
+                    Type.VOID_TYPE,
+                    tAlgebraType,
+                    *OBJECT_ARRAY_TYPE.wrapToArrayIf { hasConstants }),
+
+                null,
+                null
+            ).instructionAdapter {
+                val thisVar = 0
+                val algebraVar = 1
+                val constantsVar = 2
+                val l0 = label()
+                load(thisVar, classType)
+                invokespecial(OBJECT_TYPE.internalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false)
+                label()
+                load(thisVar, classType)
+                load(algebraVar, tAlgebraType)
+                putfield(classType.internalName, "algebra", tAlgebraType.descriptor)
+
+                if (hasConstants) {
+                    label()
+                    load(thisVar, classType)
+                    load(constantsVar, OBJECT_ARRAY_TYPE)
+                    putfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
+                }
+
+                label()
+                visitInsn(RETURN)
+                val l4 = label()
+                visitLocalVariable("this", classType.descriptor, null, l0, l4, thisVar)
+
+                visitLocalVariable(
+                    "algebra",
+                    tAlgebraType.descriptor,
+                    null,
+                    l0,
+                    l4,
+                    algebraVar
+                )
+
+                if (hasConstants)
+                    visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, l0, l4, constantsVar)
+
+                visitMaxs(0, 3)
+                visitEnd()
+            }
+
             visitEnd()
         }
 
@@ -258,7 +279,7 @@ internal class AsmBuilder<T> internal constructor(
             .defineClass(className, classWriter.toByteArray())
             .constructors
             .first()
-            .newInstance(algebra, constants.toTypedArray()) as Expression<T>
+            .newInstance(algebra, *(constants.toTypedArray().wrapToArrayIf { hasConstants })) as Expression<T>
 
         generatedInstance = new
         return new
@@ -267,48 +288,65 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Loads a [T] constant from [constants].
      */
-    internal fun loadTConstant(value: T) {
+    private fun loadTConstant(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
             val expectedType = expectationStack.pop()
             val mustBeBoxed = expectedType.sort == Type.OBJECT
             loadNumberConstant(value as Number, mustBeBoxed)
+
+            if (mustBeBoxed)
+                invokeMethodVisitor.checkcast(tType)
+
             if (mustBeBoxed) typeStack.push(tType) else typeStack.push(primitiveMask)
             return
         }
 
-        loadConstant(value as Any, tType)
+        loadObjectConstant(value as Any, tType)
     }
 
     /**
      * Boxes the current value and pushes it.
      */
-    private fun box(): Unit = invokeMethodVisitor.invokestatic(
-        tType.internalName,
-        "valueOf",
-        Type.getMethodDescriptor(tType, primitiveMask),
-        false
-    )
+    private fun box(primitive: Type) {
+        val r = PRIMITIVES_TO_BOXED.getValue(primitive)
+
+        invokeMethodVisitor.invokestatic(
+            r.internalName,
+            "valueOf",
+            Type.getMethodDescriptor(r, primitive),
+            false
+        )
+    }
 
     /**
      * Unboxes the current boxed value and pushes it.
      */
-    private fun unbox(): Unit = invokeMethodVisitor.invokevirtual(
+    private fun unboxTo(primitive: Type) = invokeMethodVisitor.invokevirtual(
         NUMBER_TYPE.internalName,
-        NUMBER_CONVERTER_METHODS.getValue(primitiveMask),
-        Type.getMethodDescriptor(primitiveMask),
+        NUMBER_CONVERTER_METHODS.getValue(primitive),
+        Type.getMethodDescriptor(primitive),
         false
     )
 
     /**
      * Loads [java.lang.Object] constant from constants.
      */
-    private fun loadConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
+    private fun loadObjectConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
         loadThis()
         getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
         iconst(idx)
         visitInsn(AALOAD)
         checkcast(type)
+    }
+
+    fun loadNumeric(value: Number) {
+        if (expectationStack.peek() == NUMBER_TYPE) {
+            loadNumberConstant(value, true)
+            expectationStack.pop()
+            typeStack.push(NUMBER_TYPE)
+        } else (algebra as? NumericAlgebra<T>)?.number(value)?.let { loadTConstant(it) }
+            ?: error("Cannot resolve numeric $value since target algebra is not numeric, and the current operation doesn't accept numbers.")
     }
 
     /**
@@ -335,18 +373,16 @@ internal class AsmBuilder<T> internal constructor(
                 Type.SHORT_TYPE -> invokeMethodVisitor.iconst(value.toInt())
             }
 
-            if (mustBeBoxed) {
-                box()
-                invokeMethodVisitor.checkcast(tType)
-            }
+            if (mustBeBoxed)
+                box(primitive)
 
             return
         }
 
-        loadConstant(value, boxed)
+        loadObjectConstant(value, boxed)
 
-        if (!mustBeBoxed) unbox()
-        else invokeMethodVisitor.checkcast(tType)
+        if (!mustBeBoxed)
+            unboxTo(primitiveMask)
     }
 
     /**
@@ -359,24 +395,26 @@ internal class AsmBuilder<T> internal constructor(
 
         if (defaultValue != null)
             loadTConstant(defaultValue)
-        else
-            aconst(null)
 
         invokestatic(
             MAP_INTRINSICS_TYPE.internalName,
             "getOrFail",
-            Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, OBJECT_TYPE, OBJECT_TYPE),
+
+            Type.getMethodDescriptor(
+                OBJECT_TYPE,
+                MAP_TYPE,
+                OBJECT_TYPE,
+                *OBJECT_TYPE.wrapToArrayIf { defaultValue != null }),
             false
         )
 
         checkcast(tType)
-
         val expectedType = expectationStack.pop()
 
         if (expectedType.sort == Type.OBJECT)
             typeStack.push(tType)
         else {
-            unbox()
+            unboxTo(primitiveMask)
             typeStack.push(primitiveMask)
         }
     }
@@ -425,7 +463,7 @@ internal class AsmBuilder<T> internal constructor(
         if (expectedType.sort == Type.OBJECT || isLastExpr)
             typeStack.push(tType)
         else {
-            unbox()
+            unboxTo(primitiveMask)
             typeStack.push(primitiveMask)
         }
     }
@@ -454,6 +492,18 @@ internal class AsmBuilder<T> internal constructor(
          * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
          */
         private val BOXED_TO_PRIMITIVES: Map<Type, Type> by lazy { SIGNATURE_LETTERS.mapKeys { (k, _) -> k.asm } }
+
+        /**
+         * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
+         */
+        private val PRIMITIVES_TO_BOXED: Map<Type, Type> by lazy {
+            BOXED_TO_PRIMITIVES.entries.stream().collect(
+                Collectors.toMap(
+                    Map.Entry<Type, Type>::value,
+                    Map.Entry<Type, Type>::key
+                )
+            )
+        }
 
         /**
          * Maps primitive ASM types to [Number] functions unboxing them.

@@ -13,8 +13,7 @@ import kotlin.test.assertEquals
 internal class AsmTest {
     @Test
     fun `compile MST`() {
-        val mst = "2+2*(2+2)".parseMath()
-        val res = ComplexField.expression(mst)()
+        val res = ComplexField.expression("2+2*(2+2)".parseMath())()
         assertEquals(Complex(10.0, 0.0), res)
     }
 
