@@ -7,13 +7,14 @@ import java.math.MathContext
 /**
  * A field wrapper for Java [BigInteger]
  */
-object JBigIntegerRing : Ring<BigInteger>, PowerOperations<BigInteger> {
+object JBigIntegerField : Field<BigInteger>, PowerOperations<BigInteger> {
     override val zero: BigInteger
         get() = BigInteger.ZERO
 
     override val one: BigInteger
         get() = BigInteger.ONE
 
+    override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
     override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
     override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
@@ -53,8 +54,4 @@ abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathCo
 
 class JBigDecimalField(mathContext: MathContext = MathContext.DECIMAL64) : JBigDecimalFieldBase(mathContext) {
     companion object : JBigDecimalFieldBase()
-}
-
-fun main() {
-    JBigDecimalField { one pow 2 }
 }
