@@ -6,6 +6,7 @@ import org.objectweb.asm.commons.InstructionAdapter
 import scientifik.kmath.ast.MST
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
 private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
@@ -25,10 +26,8 @@ internal val KClass<*>.asm: Type
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
  */
-internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> = if (predicate(this))
-    arrayOf(this)
-else
-    emptyArray()
+internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> =
+    if (predicate(this)) arrayOf(this) else emptyArray()
 
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor].
@@ -44,11 +43,7 @@ internal fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Un
 /**
  * Constructs a [Label], then applies it to this visitor.
  */
-internal fun MethodVisitor.label(): Label {
-    val l = Label()
-    visitLabel(l)
-    return l
-}
+internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
 
 /**
  * Creates a class name for [Expression] subclassed to implement [mst] provided.
@@ -81,44 +76,71 @@ internal inline fun ClassWriter.visitField(
     block: FieldVisitor.() -> Unit
 ): FieldVisitor = visitField(access, name, descriptor, signature, value).apply(block)
 
+private fun <T> AsmBuilder<T>.findSpecific(context: Algebra<T>, name: String, parameterTypes: Array<MstType>): Method? =
+    context.javaClass.methods.find { method ->
+        val nameValid = method.name == name
+        val arityValid = method.parameters.size == parameterTypes.size
+        val notBridgeInPrimitive = !(primitiveMode && method.isBridge)
+
+        val paramsValid = method.parameterTypes.zip(parameterTypes).all { (type, mstType) ->
+            !(mstType != MstType.NUMBER && type == java.lang.Number::class.java)
+        }
+
+        nameValid && arityValid && notBridgeInPrimitive && paramsValid
+    }
+
 /**
- * Checks if the target [context] for code generation contains a method with needed [name] and [arity], also builds
+ * Checks if the target [context] for code generation contains a method with needed [name] and arity, also builds
  * type expectation stack for needed arity.
  *
  * @return `true` if contains, else `false`.
  */
-private fun <T> AsmBuilder<T>.buildExpectationStack(context: Algebra<T>, name: String, arity: Int): Boolean {
-    val theName = methodNameAdapters[name to arity] ?: name
-    val hasSpecific = context.javaClass.methods.find { it.name == theName && it.parameters.size == arity } != null
-    val t = if (primitiveMode && hasSpecific) primitiveMask else tType
-    repeat(arity) { expectationStack.push(t) }
-    return hasSpecific
+private fun <T> AsmBuilder<T>.buildExpectationStack(
+    context: Algebra<T>,
+    name: String,
+    parameterTypes: Array<MstType>
+): Boolean {
+    val arity = parameterTypes.size
+    val specific = findSpecific(context, methodNameAdapters[name to arity] ?: name, parameterTypes)
+
+    if (specific != null)
+        mapTypes(specific, parameterTypes).reversed().forEach { expectationStack.push(it) }
+    else
+        repeat(arity) { expectationStack.push(tType) }
+
+    return specific != null
 }
 
+private fun <T> AsmBuilder<T>.mapTypes(method: Method, parameterTypes: Array<MstType>): List<Type> = method
+    .parameterTypes
+    .zip(parameterTypes)
+    .map { (type, mstType) ->
+        when {
+            type == java.lang.Number::class.java && mstType == MstType.NUMBER -> AsmBuilder.NUMBER_TYPE
+            else -> if (primitiveMode) primitiveMask else primitiveMaskBoxed
+        }
+    }
+
 /**
- * Checks if the target [context] for code generation contains a method with needed [name] and [arity] and inserts
+ * Checks if the target [context] for code generation contains a method with needed [name] and arity and inserts
  * [AsmBuilder.invokeAlgebraOperation] of this method.
  *
  * @return `true` if contains, else `false`.
  */
-private fun <T> AsmBuilder<T>.tryInvokeSpecific(context: Algebra<T>, name: String, arity: Int): Boolean {
+private fun <T> AsmBuilder<T>.tryInvokeSpecific(
+    context: Algebra<T>,
+    name: String,
+    parameterTypes: Array<MstType>
+): Boolean {
+    val arity = parameterTypes.size
     val theName = methodNameAdapters[name to arity] ?: name
-
-    context.javaClass.methods.find {
-        var suitableSignature = it.name == theName && it.parameters.size == arity
-
-        if (primitiveMode && it.isBridge)
-            suitableSignature = false
-
-        suitableSignature
-    } ?: return false
-
+    val spec = findSpecific(context, theName, parameterTypes) ?: return false
     val owner = context::class.asm
 
     invokeAlgebraOperation(
         owner = owner.internalName,
         method = theName,
-        descriptor = Type.getMethodDescriptor(primitiveMaskBoxed, *Array(arity) { primitiveMask }),
+        descriptor = Type.getMethodDescriptor(primitiveMaskBoxed, *mapTypes(spec, parameterTypes).toTypedArray()),
         expectedArity = arity,
         opcode = INVOKEVIRTUAL
     )
@@ -133,14 +155,15 @@ internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,
     name: String,
     fallbackMethodName: String,
-    arity: Int,
+    parameterTypes: Array<MstType>,
     parameters: AsmBuilder<T>.() -> Unit
 ) {
+    val arity = parameterTypes.size
     loadAlgebra()
-    if (!buildExpectationStack(context, name, arity)) loadStringConstant(name)
+    if (!buildExpectationStack(context, name, parameterTypes)) loadStringConstant(name)
     parameters()
 
-    if (!tryInvokeSpecific(context, name, arity)) invokeAlgebraOperation(
+    if (!tryInvokeSpecific(context, name, parameterTypes)) invokeAlgebraOperation(
         owner = AsmBuilder.ALGEBRA_TYPE.internalName,
         method = fallbackMethodName,
 

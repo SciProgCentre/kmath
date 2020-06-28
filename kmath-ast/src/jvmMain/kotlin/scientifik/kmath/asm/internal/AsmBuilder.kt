@@ -7,7 +7,9 @@ import scientifik.kmath.asm.internal.AsmBuilder.ClassLoader
 import scientifik.kmath.ast.MST
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.NumericAlgebra
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.reflect.KClass
 
 /**
@@ -20,7 +22,7 @@ import kotlin.reflect.KClass
  * @param invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
  */
 internal class AsmBuilder<T> internal constructor(
-    private val classOfT: KClass<*>,
+    internal val classOfT: KClass<*>,
     private val algebra: Algebra<T>,
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
@@ -100,7 +102,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Stack of useful objects types on stack expected by algebra calls.
      */
-    internal val expectationStack: ArrayDeque<Type> = ArrayDeque<Type>().apply { push(tType) }
+    internal val expectationStack: ArrayDeque<Type> = ArrayDeque(listOf(tType))
 
     /**
      * The cache for instance built by this builder.
@@ -286,48 +288,65 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Loads a [T] constant from [constants].
      */
-    internal fun loadTConstant(value: T) {
+    private fun loadTConstant(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
             val expectedType = expectationStack.pop()
             val mustBeBoxed = expectedType.sort == Type.OBJECT
             loadNumberConstant(value as Number, mustBeBoxed)
+
+            if (mustBeBoxed)
+                invokeMethodVisitor.checkcast(tType)
+
             if (mustBeBoxed) typeStack.push(tType) else typeStack.push(primitiveMask)
             return
         }
 
-        loadConstant(value as Any, tType)
+        loadObjectConstant(value as Any, tType)
     }
 
     /**
      * Boxes the current value and pushes it.
      */
-    private fun box(): Unit = invokeMethodVisitor.invokestatic(
-        tType.internalName,
-        "valueOf",
-        Type.getMethodDescriptor(tType, primitiveMask),
-        false
-    )
+    private fun box(primitive: Type) {
+        val r = PRIMITIVES_TO_BOXED.getValue(primitive)
+
+        invokeMethodVisitor.invokestatic(
+            r.internalName,
+            "valueOf",
+            Type.getMethodDescriptor(r, primitive),
+            false
+        )
+    }
 
     /**
      * Unboxes the current boxed value and pushes it.
      */
-    private fun unbox(): Unit = invokeMethodVisitor.invokevirtual(
+    private fun unboxTo(primitive: Type) = invokeMethodVisitor.invokevirtual(
         NUMBER_TYPE.internalName,
-        NUMBER_CONVERTER_METHODS.getValue(primitiveMask),
-        Type.getMethodDescriptor(primitiveMask),
+        NUMBER_CONVERTER_METHODS.getValue(primitive),
+        Type.getMethodDescriptor(primitive),
         false
     )
 
     /**
      * Loads [java.lang.Object] constant from constants.
      */
-    private fun loadConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
+    private fun loadObjectConstant(value: Any, type: Type): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.apply { add(value) }.lastIndex
         loadThis()
         getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
         iconst(idx)
         visitInsn(AALOAD)
         checkcast(type)
+    }
+
+    fun loadNumeric(value: Number) {
+        if (expectationStack.peek() == NUMBER_TYPE) {
+            loadNumberConstant(value, true)
+            expectationStack.pop()
+            typeStack.push(NUMBER_TYPE)
+        } else (algebra as? NumericAlgebra<T>)?.number(value)?.let { loadTConstant(it) }
+            ?: error("Cannot resolve numeric $value since target algebra is not numeric, and the current operation doesn't accept numbers.")
     }
 
     /**
@@ -354,18 +373,16 @@ internal class AsmBuilder<T> internal constructor(
                 Type.SHORT_TYPE -> invokeMethodVisitor.iconst(value.toInt())
             }
 
-            if (mustBeBoxed) {
-                box()
-                invokeMethodVisitor.checkcast(tType)
-            }
+            if (mustBeBoxed)
+                box(primitive)
 
             return
         }
 
-        loadConstant(value, boxed)
+        loadObjectConstant(value, boxed)
 
-        if (!mustBeBoxed) unbox()
-        else invokeMethodVisitor.checkcast(tType)
+        if (!mustBeBoxed)
+            unboxTo(primitiveMask)
     }
 
     /**
@@ -397,7 +414,7 @@ internal class AsmBuilder<T> internal constructor(
         if (expectedType.sort == Type.OBJECT)
             typeStack.push(tType)
         else {
-            unbox()
+            unboxTo(primitiveMask)
             typeStack.push(primitiveMask)
         }
     }
@@ -446,7 +463,7 @@ internal class AsmBuilder<T> internal constructor(
         if (expectedType.sort == Type.OBJECT || isLastExpr)
             typeStack.push(tType)
         else {
-            unbox()
+            unboxTo(primitiveMask)
             typeStack.push(primitiveMask)
         }
     }
@@ -475,6 +492,18 @@ internal class AsmBuilder<T> internal constructor(
          * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
          */
         private val BOXED_TO_PRIMITIVES: Map<Type, Type> by lazy { SIGNATURE_LETTERS.mapKeys { (k, _) -> k.asm } }
+
+        /**
+         * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
+         */
+        private val PRIMITIVES_TO_BOXED: Map<Type, Type> by lazy {
+            BOXED_TO_PRIMITIVES.entries.stream().collect(
+                Collectors.toMap(
+                    Map.Entry<Type, Type>::value,
+                    Map.Entry<Type, Type>::key
+                )
+            )
+        }
 
         /**
          * Maps primitive ASM types to [Number] functions unboxing them.
