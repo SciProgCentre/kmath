@@ -16,13 +16,13 @@ import kotlin.reflect.KClass
  * ASM Builder is a structure that abstracts building a class designated to unwrap [MST] to plain Java expression.
  * This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new class.
  *
- * @param T the type of AsmExpression to unwrap.
- * @param algebra the algebra the applied AsmExpressions use.
- * @param className the unique class name of new loaded class.
- * @param invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
+ * @property T the type of AsmExpression to unwrap.
+ * @property algebra the algebra the applied AsmExpressions use.
+ * @property className the unique class name of new loaded class.
+ * @property invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
  */
 internal class AsmBuilder<T> internal constructor(
-    internal val classOfT: KClass<*>,
+    private val classOfT: KClass<*>,
     private val algebra: Algebra<T>,
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
