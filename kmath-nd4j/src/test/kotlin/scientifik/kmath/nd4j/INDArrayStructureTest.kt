@@ -10,7 +10,7 @@ internal class INDArrayStructureTest {
     @Test
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct = INDArrayDoubleStructure(nd)
+        val struct = INDArrayRealStructure(nd)
         val res = struct.elements().map(Pair<IntArray, Double>::second).toList()
         assertEquals(listOf(1.0, 2.0, 3.0), res)
     }
@@ -25,15 +25,15 @@ internal class INDArrayStructureTest {
     @Test
     fun testEquals() {
         val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct1 = INDArrayDoubleStructure(nd1)
+        val struct1 = INDArrayRealStructure(nd1)
         assertEquals(struct1, struct1)
-        assertNotEquals(struct1, null as INDArrayDoubleStructure?)
+        assertNotEquals(struct1, null as INDArrayRealStructure?)
         val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct2 = INDArrayDoubleStructure(nd2)
+        val struct2 = INDArrayRealStructure(nd2)
         assertEquals(struct1, struct2)
         assertEquals(struct2, struct1)
         val nd3 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct3 = INDArrayDoubleStructure(nd3)
+        val struct3 = INDArrayRealStructure(nd3)
         assertEquals(struct2, struct3)
         assertEquals(struct1, struct3)
     }
@@ -41,9 +41,9 @@ internal class INDArrayStructureTest {
     @Test
     fun testHashCode() {
         val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct1 = INDArrayDoubleStructure(nd1)
+        val struct1 = INDArrayRealStructure(nd1)
         val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct2 = INDArrayDoubleStructure(nd2)
+        val struct2 = INDArrayRealStructure(nd2)
         assertEquals(struct1.hashCode(), struct2.hashCode())
     }
 

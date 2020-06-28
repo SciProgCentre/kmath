@@ -20,13 +20,18 @@ internal sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArra
     }
 }
 
-internal class INDArrayDoubleIterator(iterateOver: INDArray) : INDArrayIteratorBase<Double>(iterateOver) {
+internal class INDArrayRealIterator(iterateOver: INDArray) : INDArrayIteratorBase<Double>(iterateOver) {
     override fun getSingle(indices: LongArray): Double = iterateOver.getDouble(*indices)
 }
+
+internal fun INDArray.realIterator(): INDArrayRealIterator = INDArrayRealIterator(this)
 
 internal class INDArrayLongIterator(iterateOver: INDArray) : INDArrayIteratorBase<Long>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)
 }
+
+// TODO
+//internal fun INDArray.longI
 
 internal class INDArrayIntIterator(iterateOver: INDArray) : INDArrayIteratorBase<Int>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getInt(*narrowToIntArray(indices))
