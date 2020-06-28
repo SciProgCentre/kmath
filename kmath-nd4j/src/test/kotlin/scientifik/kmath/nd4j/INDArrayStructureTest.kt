@@ -1,9 +1,9 @@
 package scientifik.kmath.nd4j
 
 import org.nd4j.linalg.factory.Nd4j
+import scientifik.kmath.structures.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import scientifik.kmath.structures.get
 
 internal class INDArrayStructureTest {
     @Test
@@ -17,7 +17,7 @@ internal class INDArrayStructureTest {
     @Test
     fun testShape() {
         val nd = Nd4j.rand(10, 2, 3, 6)!!
-        val struct = INDArrayIntStructure(nd)
+        val struct = INDArrayLongStructure(nd)
         assertEquals(intArrayOf(10, 2, 3, 6).toList(), struct.shape.toList())
     }
 
@@ -33,7 +33,7 @@ internal class INDArrayStructureTest {
     @Test
     fun testDimension() {
         val nd = Nd4j.rand(8, 16, 3, 7, 1)!!
-        val struct = INDArrayIntStructure(nd)
+        val struct = INDArrayFloatStructure(nd)
         assertEquals(5, struct.dimension)
     }
 
@@ -42,5 +42,13 @@ internal class INDArrayStructureTest {
         val nd = Nd4j.rand(10, 2, 3, 6)!!
         val struct = INDArrayIntStructure(nd)
         assertEquals(nd.getInt(0, 0, 0, 0), struct[0, 0, 0, 0])
+    }
+
+    @Test
+    fun testSet() {
+        val nd = Nd4j.rand(17, 12, 4, 8)!!
+        val struct = INDArrayIntStructure(nd)
+        struct[intArrayOf(1, 2, 3, 4)] = 777
+        assertEquals(777, struct[1, 2, 3, 4])
     }
 }
