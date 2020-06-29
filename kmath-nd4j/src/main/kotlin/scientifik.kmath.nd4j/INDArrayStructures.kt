@@ -15,7 +15,7 @@ interface INDArrayStructure<T> : NDStructure<T> {
 }
 
 data class INDArrayIntStructure(override val ndArray: INDArray) : INDArrayStructure<Int>, MutableNDStructure<Int> {
-    override fun elementsIterator(): Iterator<Pair<IntArray, Int>> = INDArrayIntIterator(ndArray)
+    override fun elementsIterator(): Iterator<Pair<IntArray, Int>> = ndArray.intIterator()
     override fun get(index: IntArray): Int = ndArray.getInt(*index)
     override fun set(index: IntArray, value: Int): Unit = run { ndArray.putScalar(index, value) }
 }
@@ -23,7 +23,7 @@ data class INDArrayIntStructure(override val ndArray: INDArray) : INDArrayStruct
 fun INDArray.asIntStructure(): INDArrayIntStructure = INDArrayIntStructure(this)
 
 data class INDArrayLongStructure(override val ndArray: INDArray) : INDArrayStructure<Long> {
-    override fun elementsIterator(): Iterator<Pair<IntArray, Long>> = INDArrayLongIterator(ndArray)
+    override fun elementsIterator(): Iterator<Pair<IntArray, Long>> = ndArray.longIterator()
     override fun get(index: IntArray): Long = ndArray.getLong(*index.toLongArray())
 }
 
@@ -31,7 +31,7 @@ fun INDArray.asLongStructure(): INDArrayLongStructure = INDArrayLongStructure(th
 
 data class INDArrayRealStructure(override val ndArray: INDArray) : INDArrayStructure<Double>,
     MutableNDStructure<Double> {
-    override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = INDArrayRealIterator(ndArray)
+    override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()
     override fun get(index: IntArray): Double = ndArray.getDouble(*index)
     override fun set(index: IntArray, value: Double): Unit = run { ndArray.putScalar(index, value) }
 }
@@ -40,7 +40,7 @@ fun INDArray.asRealStructure(): INDArrayRealStructure = INDArrayRealStructure(th
 
 data class INDArrayFloatStructure(override val ndArray: INDArray) : INDArrayStructure<Float>,
     MutableNDStructure<Float> {
-    override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = INDArrayFloatIterator(ndArray)
+    override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = ndArray.floatIterator()
     override fun get(index: IntArray): Float = ndArray.getFloat(*index)
     override fun set(index: IntArray, value: Float): Unit = run { ndArray.putScalar(index, value) }
 }
