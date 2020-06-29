@@ -50,7 +50,7 @@ array[intArrayOf(0, 0)] = 24.0
 println(array[0, 0]) // 24.0
 ```
 
-Fast element-wise arithmetics for INDArray:
+Fast element-wise and in-place arithmetics for INDArray:
 
 ```kotlin
 import org.nd4j.linalg.factory.*
