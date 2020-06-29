@@ -16,7 +16,7 @@ internal sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArra
         else
             Shape.ind2sub(iterateOver, i++.toLong())!!
 
-        return narrowToIntArray(la) to getSingle(la)
+        return la.toIntArray() to getSingle(la)
     }
 }
 
@@ -30,13 +30,16 @@ internal class INDArrayLongIterator(iterateOver: INDArray) : INDArrayIteratorBas
     override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)
 }
 
-// TODO
-//internal fun INDArray.longI
+internal fun INDArray.longIterator(): INDArrayLongIterator = INDArrayLongIterator(this)
 
 internal class INDArrayIntIterator(iterateOver: INDArray) : INDArrayIteratorBase<Int>(iterateOver) {
-    override fun getSingle(indices: LongArray) = iterateOver.getInt(*narrowToIntArray(indices))
+    override fun getSingle(indices: LongArray) = iterateOver.getInt(*indices.toIntArray())
 }
+
+internal fun INDArray.intIterator(): INDArrayIntIterator = INDArrayIntIterator(this)
 
 internal class INDArrayFloatIterator(iterateOver: INDArray) : INDArrayIteratorBase<Float>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getFloat(*indices)
 }
+
+internal fun INDArray.floatIterator() = INDArrayFloatIterator(this)

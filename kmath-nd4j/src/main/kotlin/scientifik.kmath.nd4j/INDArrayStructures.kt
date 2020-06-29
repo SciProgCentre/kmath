@@ -8,7 +8,7 @@ interface INDArrayStructure<T> : NDStructure<T> {
     val ndArray: INDArray
 
     override val shape: IntArray
-        get() = narrowToIntArray(ndArray.shape())
+        get() = ndArray.shape().toIntArray()
 
     fun elementsIterator(): Iterator<Pair<IntArray, T>>
     override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
@@ -24,7 +24,7 @@ fun INDArray.asIntStructure(): INDArrayIntStructure = INDArrayIntStructure(this)
 
 data class INDArrayLongStructure(override val ndArray: INDArray) : INDArrayStructure<Long> {
     override fun elementsIterator(): Iterator<Pair<IntArray, Long>> = INDArrayLongIterator(ndArray)
-    override fun get(index: IntArray): Long = ndArray.getLong(*widenToLongArray(index))
+    override fun get(index: IntArray): Long = ndArray.getLong(*index.toLongArray())
 }
 
 fun INDArray.asLongStructure(): INDArrayLongStructure = INDArrayLongStructure(this)
