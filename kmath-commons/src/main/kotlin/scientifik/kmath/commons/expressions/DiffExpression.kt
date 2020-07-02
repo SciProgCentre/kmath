@@ -17,7 +17,6 @@ class DerivativeStructureField(
 ) : ExtendedField<DerivativeStructure> {
 
     override val zero: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size) }
-
     override val one: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size, 1.0) }
 
     private val variables: Map<String, DerivativeStructure> = parameters.mapValues { (key, value) ->
@@ -60,9 +59,17 @@ class DerivativeStructureField(
 
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
+    override fun tan(arg: DerivativeStructure): DerivativeStructure = arg.tan()
     override fun asin(arg: DerivativeStructure): DerivativeStructure = arg.asin()
     override fun acos(arg: DerivativeStructure): DerivativeStructure = arg.acos()
     override fun atan(arg: DerivativeStructure): DerivativeStructure = arg.atan()
+
+    override fun sinh(arg: DerivativeStructure): DerivativeStructure = arg.sinh()
+    override fun cosh(arg: DerivativeStructure): DerivativeStructure = arg.cosh()
+    override fun tanh(arg: DerivativeStructure): DerivativeStructure = arg.tanh()
+    override fun asinh(arg: DerivativeStructure): DerivativeStructure = arg.asinh()
+    override fun acosh(arg: DerivativeStructure): DerivativeStructure = arg.acosh()
+    override fun atanh(arg: DerivativeStructure): DerivativeStructure = arg.atanh()
 
     override fun power(arg: DerivativeStructure, pow: Number): DerivativeStructure = when (pow) {
         is Double -> arg.pow(pow)
@@ -71,9 +78,7 @@ class DerivativeStructureField(
     }
 
     fun power(arg: DerivativeStructure, pow: DerivativeStructure): DerivativeStructure = arg.pow(pow)
-
     override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
-
     override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
 
     override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())

@@ -15,7 +15,6 @@ class ComplexNDField(override val shape: IntArray) :
     ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>> {
 
     override val strides: Strides = DefaultStrides(shape)
-
     override val elementContext: ComplexField get() = ComplexField
     override val zero by lazy { produce { zero } }
     override val one by lazy { produce { one } }
@@ -45,6 +44,7 @@ class ComplexNDField(override val shape: IntArray) :
         transform: ComplexField.(index: IntArray, Complex) -> Complex
     ): ComplexNDElement {
         check(arg)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
@@ -61,6 +61,7 @@ class ComplexNDField(override val shape: IntArray) :
         transform: ComplexField.(Complex, Complex) -> Complex
     ): ComplexNDElement {
         check(a, b)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
@@ -69,23 +70,25 @@ class ComplexNDField(override val shape: IntArray) :
     override fun NDBuffer<Complex>.toElement(): FieldElement<NDBuffer<Complex>, *, out BufferedNDField<Complex, ComplexField>> =
         BufferedNDFieldElement(this@ComplexNDField, buffer)
 
-    override fun power(arg: NDBuffer<Complex>, pow: Number) = map(arg) { power(it, pow) }
+    override fun power(arg: NDBuffer<Complex>, pow: Number): BufferedNDFieldElement<Complex, ComplexField> =
+        map(arg) { power(it, pow) }
 
-    override fun exp(arg: NDBuffer<Complex>) = map(arg) { exp(it) }
+    override fun exp(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { exp(it) }
+    override fun ln(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { ln(it) }
 
-    override fun ln(arg: NDBuffer<Complex>) = map(arg) { ln(it) }
+    override fun sin(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { sin(it) }
+    override fun cos(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { cos(it) }
+    override fun tan(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { tan(it) }
+    override fun asin(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { asin(it) }
+    override fun acos(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { acos(it) }
+    override fun atan(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { atan(it) }
 
-    override fun sin(arg: NDBuffer<Complex>) = map(arg) { sin(it) }
-
-    override fun cos(arg: NDBuffer<Complex>) = map(arg) { cos(it) }
-
-    override fun tan(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) { tan(it) }
-
-    override fun asin(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) { asin(it) }
-
-    override fun acos(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) {acos(it)}
-
-    override fun atan(arg: NDBuffer<Complex>): NDBuffer<Complex> = map(arg) {atan(it)}
+    override fun sinh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { sinh(it) }
+    override fun cosh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { cosh(it) }
+    override fun tanh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { tanh(it) }
+    override fun asinh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { asinh(it) }
+    override fun acosh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { acosh(it) }
+    override fun atanh(arg: NDBuffer<Complex>): BufferedNDFieldElement<Complex, ComplexField> = map(arg) { atanh(it) }
 }
 
 
