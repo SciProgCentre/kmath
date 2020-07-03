@@ -90,8 +90,8 @@ object ComplexField : ExtendedField<Complex> {
         return i * (e1 - e2) / (e1 + e2)
     }
 
-    override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg pow 2)) + i * arg)
-    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg pow 2)) + i * arg)
+    override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg * arg)) + i * arg)
+    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
 
     override fun atan(arg: Complex): Complex {
         val iArg = i * arg
@@ -101,7 +101,7 @@ object ComplexField : ExtendedField<Complex> {
     override fun sinh(arg: Complex): Complex = (exp(arg) - exp(-arg)) / 2
     override fun cosh(arg: Complex): Complex = (exp(arg) + exp(-arg)) / 2
     override fun tanh(arg: Complex): Complex = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
-    override fun asinh(arg: Complex): Complex = ln(sqrt((arg pow 2) + 1) + arg)
+    override fun asinh(arg: Complex): Complex = ln(sqrt(arg * arg + 1) + arg)
     override fun acosh(arg: Complex): Complex = ln(arg + sqrt((arg - 1) * (arg + 1)))
     override fun atanh(arg: Complex): Complex = (ln(arg + 1) - ln(1 - arg)) / 2
 
