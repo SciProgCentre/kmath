@@ -9,10 +9,19 @@ import scientifik.memory.MemoryWriter
 import kotlin.math.*
 
 /**
- * A complex conjugate.
+ * This complex's conjugate.
  */
 val Complex.conjugate: Complex
     get() = Complex(re, -im)
+
+/**
+ * This complex's reciprocal.
+ */
+val Complex.reciprocal: Complex
+    get() {
+        val scale = re * re + im * im
+        return Complex(re / scale, -im / scale)
+    }
 
 /**
  * Absolute value of complex number.
@@ -46,16 +55,48 @@ object ComplexField : ExtendedField<Complex> {
     override fun multiply(a: Complex, b: Complex): Complex =
         Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
 
-    override fun divide(a: Complex, b: Complex): Complex {
-        val scale = b.re * b.re + b.im * b.im
-        return a * Complex(b.re / scale, -b.im / scale)
+    override fun divide(a: Complex, b: Complex): Complex = when {
+        b.re.isNaN() || b.im.isNaN() -> Complex(Double.NaN, Double.NaN)
+
+        (if (b.im < 0) -b.im else +b.im) < (if (b.re < 0) -b.re else +b.re) -> {
+            val wr = b.im / b.re
+            val wd = b.re + wr * b.im
+
+            if (wd.isNaN() || wd == 0.0)
+                Complex(Double.NaN, Double.NaN)
+            else
+                Complex((a.re + a.im * wr) / wd, (a.im - a.re * wr) / wd)
+        }
+
+        b.im == 0.0 -> Complex(Double.NaN, Double.NaN)
+
+        else -> {
+            val wr = b.re / b.im
+            val wd = b.im + wr * b.re
+
+            if (wd.isNaN() || wd == 0.0)
+                Complex(Double.NaN, Double.NaN)
+            else
+                Complex((a.re * wr + a.im) / wd, (a.im * wr - a.re) / wd)
+        }
     }
 
     override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2
     override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
+
+    override fun tan(arg: Complex): Complex {
+        val e1 = exp(-i * arg)
+        val e2 = exp(i * arg)
+        return i * (e1 - e2) / (e1 + e2)
+    }
+
     override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - arg pow 2) + i * arg)
     override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - arg pow 2) + i * arg)
-    override fun atan(arg: Complex): Complex = i * (ln(one - i * arg) - ln(one + i * arg)) / 2
+
+    override fun atan(arg: Complex): Complex {
+        val iArg = i * arg
+        return i * (ln(one - iArg) - ln(one + iArg)) / 2
+    }
 
     override fun sinh(arg: Complex): Complex = (exp(arg) - exp(-arg)) / 2
     override fun cosh(arg: Complex): Complex = (exp(arg) + exp(-arg)) / 2
