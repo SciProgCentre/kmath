@@ -104,7 +104,12 @@ object ComplexField : ExtendedField<Complex> {
     override fun asinh(arg: Complex): Complex = ln(sqrt((arg pow 2) + 1) + arg)
     override fun acosh(arg: Complex): Complex = ln(arg + sqrt((arg - 1) * (arg + 1)))
     override fun atanh(arg: Complex): Complex = (ln(arg + 1) - ln(1 - arg)) / 2
-    override fun power(arg: Complex, pow: Number): Complex = exp(ln(arg) * pow)
+
+    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
+        arg.re.pow(pow.toDouble()).toComplex()
+    else
+        exp(pow * ln(arg))
+
     override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
     override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
@@ -145,9 +150,9 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 }
 
 /**
- * Creates a [Complex] with its real part of this double.
+ * Creates a [Complex] with real part equal to this number.
  */
-fun Double.toComplex(): Complex = Complex(this, 0.0)
+fun Number.toComplex(): Complex = Complex(this, 0.0)
 
 inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> =
     MemoryBuffer.create(Complex, size, init)
