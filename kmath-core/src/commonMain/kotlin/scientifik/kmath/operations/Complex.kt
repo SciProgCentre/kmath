@@ -41,8 +41,8 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
  * A field for complex numbers.
  */
 object ComplexField : ExtendedField<Complex> {
-    override val zero: Complex = Complex(0, 0)
-    override val one: Complex = Complex(1, 0)
+    override val zero: Complex = 0.0.toComplex()
+    override val one: Complex = 1.0.toComplex()
 
     /**
      * The imaginary unit constant.
@@ -90,24 +90,21 @@ object ComplexField : ExtendedField<Complex> {
         return i * (e1 - e2) / (e1 + e2)
     }
 
-    override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - arg pow 2) + i * arg)
-    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - arg pow 2) + i * arg)
+    override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg pow 2)) + i * arg)
+    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg pow 2)) + i * arg)
 
     override fun atan(arg: Complex): Complex {
         val iArg = i * arg
-        return i * (ln(one - iArg) - ln(one + iArg)) / 2
+        return i * (ln(1 - iArg) - ln(1 + iArg)) / 2
     }
 
     override fun sinh(arg: Complex): Complex = (exp(arg) - exp(-arg)) / 2
     override fun cosh(arg: Complex): Complex = (exp(arg) + exp(-arg)) / 2
     override fun tanh(arg: Complex): Complex = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
-    override fun asinh(arg: Complex): Complex = ln(sqrt(arg pow 2) + arg)
+    override fun asinh(arg: Complex): Complex = ln(sqrt((arg pow 2) + 1) + arg)
     override fun acosh(arg: Complex): Complex = ln(arg + sqrt((arg - 1) * (arg + 1)))
     override fun atanh(arg: Complex): Complex = (ln(arg + 1) - ln(1 - arg)) / 2
-
-    override fun power(arg: Complex, pow: Number): Complex =
-        arg.r.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))
-
+    override fun power(arg: Complex, pow: Number): Complex = exp(ln(arg) * pow)
     override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
     override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 

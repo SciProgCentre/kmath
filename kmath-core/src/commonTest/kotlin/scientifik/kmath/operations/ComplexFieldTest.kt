@@ -37,13 +37,32 @@ internal class ComplexFieldTest {
 
     @Test
     fun testSine() {
-        assertEquals(Complex(1.2246467991473532E-16, 0), ComplexField { sin(PI.toComplex()) })
-        assertEquals(Complex(0, 11.548739357257748), ComplexField { sin(i * PI.toComplex()) })
-        assertEquals(Complex(0, 1.1752011936438014), ComplexField { sin(i) })
+        assertEquals(ComplexField { i * sinh(one) }, ComplexField { sin(i) })
+        assertEquals(ComplexField { i * sinh(PI.toComplex()) }, ComplexField { sin(i * PI.toComplex()) })
     }
 
     @Test
-    fun testArcsine() {
+    fun testInverseSine() {
         assertEquals(Complex(0, -0.0), ComplexField { asin(zero) })
+
+        assertEquals(ComplexField { i * asinh(one) }.let { it.im.toInt() to it.re.toInt() },
+            ComplexField { asin(i) }.let { it.im.toInt() to it.re.toInt() })
+    }
+
+    @Test
+    fun testInverseHyperbolicSine() {
+        assertEquals(
+            ComplexField { i * PI.toComplex() / 2 }.let { it.im.toInt() to it.re.toInt() },
+            ComplexField { asinh(i) }.let { it.im.toInt() to it.re.toInt() })
+    }
+
+    @Test
+    fun testPower() {
+        assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
+        assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
+
+        assertEquals(
+            ComplexField { i * 8 }.let { it.im.toInt() to it.re.toInt() },
+            ComplexField { Complex(2, 2) pow 2 }.let { it.im.toInt() to it.re.toInt() })
     }
 }
