@@ -16,6 +16,7 @@ This subproject implements the following features:
 > repositories {
 >     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+>     maven { url https://dl.bintray.com/hotkeytlt/maven' }
 > }
 > 
 > dependencies {
@@ -28,6 +29,7 @@ This subproject implements the following features:
 > repositories {
 >     maven("https://dl.bintray.com/mipt-npm/scientifik")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
+>     maven("https://dl.bintray.com/hotkeytlt/maven")
 > }
 > 
 > dependencies {
