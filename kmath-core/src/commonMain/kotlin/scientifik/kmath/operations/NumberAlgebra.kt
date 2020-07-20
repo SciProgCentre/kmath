@@ -126,7 +126,7 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
  * A field for [Int] without boxing. Does not produce corresponding field element
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object IntRing : Ring<Int>, Norm<Int, Int> {
+object IntRing : Ring<Int>, Norm<Int, Int>, RemainderDivisionOperations<Int> {
     override val zero: Int = 0
     override inline fun add(a: Int, b: Int) = a + b
     override inline fun multiply(a: Int, b: Int) = a * b
@@ -142,13 +142,16 @@ object IntRing : Ring<Int>, Norm<Int, Int> {
     override inline fun Int.minus(b: Int): Int = this - b
 
     override inline fun Int.times(b: Int): Int = this * b
+
+    override fun Int.rem(arg: Int): Int = this % arg
+    override fun Int.div(arg: Int): Int = this / arg
 }
 
 /**
  * A field for [Short] without boxing. Does not produce appropriate field element
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object ShortRing : Ring<Short>, Norm<Short, Short> {
+object ShortRing : Ring<Short>, Norm<Short, Short>, RemainderDivisionOperations<Short> {
     override val zero: Short = 0
     override inline fun add(a: Short, b: Short) = (a + b).toShort()
     override inline fun multiply(a: Short, b: Short) = (a * b).toShort()
@@ -164,13 +167,16 @@ object ShortRing : Ring<Short>, Norm<Short, Short> {
     override inline fun Short.minus(b: Short) = (this - b).toShort()
 
     override inline fun Short.times(b: Short) = (this * b).toShort()
+
+    override fun Short.rem(arg: Short): Short = (this % arg).toShort()
+    override fun Short.div(arg: Short): Short = (this / arg).toShort()
 }
 
 /**
  * A field for [Byte] values
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
+object ByteRing : Ring<Byte>, Norm<Byte, Byte>, RemainderDivisionOperations<Byte> {
     override val zero: Byte = 0
     override inline fun add(a: Byte, b: Byte) = (a + b).toByte()
     override inline fun multiply(a: Byte, b: Byte) = (a * b).toByte()
@@ -186,13 +192,16 @@ object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
     override inline fun Byte.minus(b: Byte) = (this - b).toByte()
 
     override inline fun Byte.times(b: Byte) = (this * b).toByte()
+
+    override fun Byte.rem(arg: Byte): Byte = (this % arg).toByte()
+    override fun Byte.div(arg: Byte): Byte = (this / arg).toByte()
 }
 
 /**
  * A field for [Long] values
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object LongRing : Ring<Long>, Norm<Long, Long> {
+object LongRing : Ring<Long>, Norm<Long, Long>, RemainderDivisionOperations<Long> {
     override val zero: Long = 0
     override inline fun add(a: Long, b: Long) = (a + b)
     override inline fun multiply(a: Long, b: Long) = (a * b)
@@ -208,4 +217,7 @@ object LongRing : Ring<Long>, Norm<Long, Long> {
     override inline fun Long.minus(b: Long) = (this - b)
 
     override inline fun Long.times(b: Long) = (this * b)
+
+    override fun Long.rem(arg: Long): Long = this % arg
+    override fun Long.div(arg: Long): Long = this / arg
 }
