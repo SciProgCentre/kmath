@@ -93,6 +93,17 @@ interface RemainderDivisionOperations<T> : RingOperations<T> {
      * Performs the floored division of this value by [arg].
      */
     infix fun T.div(arg: T): T
+
+    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
+        REM_OPERATION -> left rem right
+        DIV_OPERATION -> left div right
+        else -> super.binaryOperation(operation, left, right)
+    }
+
+    companion object {
+        const val REM_OPERATION = "rem"
+        const val DIV_OPERATION = "div"
+    }
 }
 
 infix fun <T : MathElement<out RemainderDivisionOperations<T>>> T.rem(arg: T): T = arg.context { this@rem rem arg }
