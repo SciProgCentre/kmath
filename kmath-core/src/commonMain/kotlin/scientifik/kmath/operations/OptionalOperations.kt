@@ -83,7 +83,7 @@ interface Norm<in T : Any, out R> {
 
 fun <T : MathElement<out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)
 
-interface RemainderDivisionOperations<T> : Ring<T> {
+interface RemainderDivisionOperations<T> : RingOperations<T> {
     /**
      * Calculates the remainder of dividing this value by [arg].
      */
