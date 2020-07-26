@@ -14,6 +14,7 @@ object JBigIntegerField : Field<BigInteger> {
     override val one: BigInteger
         get() = BigInteger.ONE
 
+    override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
     override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
     override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
@@ -35,9 +36,8 @@ abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathCo
         get() = BigDecimal.ONE
 
     override fun add(a: BigDecimal, b: BigDecimal): BigDecimal = a.add(b)
-    override fun BigDecimal.minus(b: BigDecimal): BigDecimal {
-        return subtract(b)
-    }
+    override fun BigDecimal.minus(b: BigDecimal): BigDecimal = subtract(b)
+    override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
 
     override fun multiply(a: BigDecimal, k: Number): BigDecimal =
         a.multiply(k.toDouble().toBigDecimal(mathContext), mathContext)
