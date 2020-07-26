@@ -1,6 +1,7 @@
 package scientifik.kmath.asm
 
 import scientifik.kmath.asm.internal.AsmBuilder
+import scientifik.kmath.asm.internal.MstType
 import scientifik.kmath.asm.internal.buildAlgebraOperationCall
 import scientifik.kmath.asm.internal.buildName
 import scientifik.kmath.ast.MST
@@ -17,28 +18,20 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
     fun AsmBuilder<T>.visit(node: MST) {
         when (node) {
             is MST.Symbolic -> loadVariable(node.value)
-
-            is MST.Numeric -> {
-                val constant = if (algebra is NumericAlgebra<T>)
-                    algebra.number(node.value)
-                else
-                    error("Number literals are not supported in $algebra")
-
-                loadTConstant(constant)
-            }
+            is MST.Numeric -> loadNumeric(node.value)
 
             is MST.Unary -> buildAlgebraOperationCall(
                 context = algebra,
                 name = node.operation,
                 fallbackMethodName = "unaryOperation",
-                arity = 1
+                parameterTypes = arrayOf(MstType.fromMst(node.value))
             ) { visit(node.value) }
 
             is MST.Binary -> buildAlgebraOperationCall(
                 context = algebra,
                 name = node.operation,
                 fallbackMethodName = "binaryOperation",
-                arity = 2
+                parameterTypes = arrayOf(MstType.fromMst(node.left), MstType.fromMst(node.right))
             ) {
                 visit(node.left)
                 visit(node.right)
