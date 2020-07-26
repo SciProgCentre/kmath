@@ -1,10 +1,4 @@
-plugins {
-    id("scientifik.mpp")
-}
-
-repositories {
-    maven("https://dl.bintray.com/hotkeytlt/maven")
-}
+plugins { id("scientifik.mpp") }
 
 kotlin.sourceSets {
 //    all {
@@ -30,8 +24,6 @@ kotlin.sourceSets {
     }
 
     jsMain {
-        dependencies {
-            implementation("com.github.h0tk3y.betterParse:better-parse-js:0.4.0-alpha-3")
-        }
+        dependencies { implementation("com.github.h0tk3y.betterParse:better-parse-js:0.4.0-alpha-3") }
     }
 }
