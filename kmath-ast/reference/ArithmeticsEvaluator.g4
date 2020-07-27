@@ -46,13 +46,12 @@ powChain
     : term (POW term)*
     ;
 
-
 divMulChain
-    : powChain ((PLUS | MINUS) powChain)*
+    : powChain ((DIV | MUL) powChain)*
     ;
 
 subSumChain
-    : divMulChain ((DIV | MUL) divMulChain)*
+    : divMulChain ((PLUS | MINUS) divMulChain)*
     ;
 
 rootParser
