@@ -1,5 +1,6 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.RealField.pow
 import kotlin.math.abs
 import kotlin.math.pow as kpow
 
@@ -34,13 +35,6 @@ interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     }
 }
 
-interface NumberExtendedField<T> : ExtendedField<T> {
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        PowerOperations.POW_OPERATION -> power(left, right as Number)
-        else -> super.binaryOperation(operation, left, right)
-    }
-}
-
 /**
  * Real field element wrapping double.
  *
@@ -60,7 +54,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
  * A field for double without boxing. Does not produce appropriate field element
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object RealField : NumberExtendedField<Double>, Norm<Double, Double> {
+object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double = 0.0
     override inline fun add(a: Double, b: Double) = a + b
     override inline fun multiply(a: Double, b: Double) = a * b
@@ -92,10 +86,15 @@ object RealField : NumberExtendedField<Double>, Norm<Double, Double> {
     override inline fun Double.times(b: Double) = this * b
 
     override inline fun Double.div(b: Double) = this / b
+
+    override fun binaryOperation(operation: String, left: Double, right: Double): Double = when (operation) {
+        PowerOperations.POW_OPERATION -> left pow right
+        else -> super.binaryOperation(operation, left, right)
+    }
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object FloatField : NumberExtendedField<Float>, Norm<Float, Float> {
+object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override val zero: Float = 0f
     override inline fun add(a: Float, b: Float) = a + b
     override inline fun multiply(a: Float, b: Float) = a * b

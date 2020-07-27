@@ -2,6 +2,7 @@ package scientifik.kmath.ast
 
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.NumericAlgebra
+import scientifik.kmath.operations.RealField
 
 /**
  * A Mathematical Syntax Tree node for mathematical expressions
@@ -47,13 +48,17 @@ fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
     is MST.Binary -> when {
         this !is NumericAlgebra -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
+
         node.left is MST.Numeric && node.right is MST.Numeric -> {
-            binaryOperation(
+            val number = RealField.binaryOperation(
                 node.operation,
-                number(node.left.value),
-                number(node.right.value)
+                node.left.value.toDouble(),
+                node.right.value.toDouble()
             )
+
+            number(number)
         }
+
         node.left is MST.Numeric -> leftSideNumberOperation(node.operation, node.left.value, evaluate(node.right))
         node.right is MST.Numeric -> rightSideNumberOperation(node.operation, evaluate(node.left), node.right.value)
         else -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
