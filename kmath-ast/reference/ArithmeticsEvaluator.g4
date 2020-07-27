@@ -6,7 +6,7 @@ fragment CAPITAL_LETTER: 'A'..'Z';
 fragment UNDERSCORE: '_';
 
 ID: (LETTER | UNDERSCORE | CAPITAL_LETTER) (LETTER | UNDERSCORE | DIGIT | CAPITAL_LETTER)*;
-NUM: (DIGIT | '.')+ ([eE] (MINUS? | PLUS?) DIGIT+)?;
+NUM: (DIGIT | '.')+ ([eE] [-+]? DIGIT+)?;
 MUL: '*';
 DIV: '/';
 PLUS: '+';
