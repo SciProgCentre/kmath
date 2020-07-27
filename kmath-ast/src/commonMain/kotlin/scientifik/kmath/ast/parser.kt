@@ -7,6 +7,7 @@ import com.github.h0tk3y.betterParse.grammar.parser
 import com.github.h0tk3y.betterParse.grammar.tryParseToEnd
 import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
+import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import scientifik.kmath.operations.FieldOperations
@@ -15,20 +16,21 @@ import scientifik.kmath.operations.RingOperations
 import scientifik.kmath.operations.SpaceOperations
 
 /**
- * TODO move to common
+ * TODO move to core
  */
 object ArithmeticsEvaluator : Grammar<MST>() {
-    private val num: Token by token("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
-    private val id: Token by token("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
-    private val lpar: Token by token("\\(".toRegex())
-    private val rpar: Token by token("\\)".toRegex())
-    private val comma: Token by token(",".toRegex())
-    private val mul: Token by token("\\*".toRegex())
-    private val pow: Token by token("\\^".toRegex())
-    private val div: Token by token("/".toRegex())
-    private val minus: Token by token("-".toRegex())
-    private val plus: Token by token("\\+".toRegex())
-    private val ws: Token by token("\\s+".toRegex(), ignore = true)
+    // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
+    private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?")
+    private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*")
+    private val lpar: Token by regexToken("\\(")
+    private val rpar: Token by regexToken("\\)")
+    private val comma: Token by regexToken(",")
+    private val mul: Token by regexToken("\\*")
+    private val pow: Token by regexToken("\\^")
+    private val div: Token by regexToken("/")
+    private val minus: Token by regexToken("-")
+    private val plus: Token by regexToken("\\+")
+    private val ws: Token by regexToken("\\s+", ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
     private val singular: Parser<MST> by id use { MST.Symbolic(text) }
