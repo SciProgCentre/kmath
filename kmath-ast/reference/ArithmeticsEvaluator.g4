@@ -2,11 +2,11 @@ grammar ArithmeticsEvaluator;
 
 fragment DIGIT: '0'..'9';
 fragment LETTER: 'a'..'z';
-fragment CAPITAL_LETTER: 'A'..'Z'
+fragment CAPITAL_LETTER: 'A'..'Z';
 fragment UNDERSCORE: '_';
 
 ID: (LETTER | UNDERSCORE | CAPITAL_LETTER) (LETTER | UNDERSCORE | DIGIT | CAPITAL_LETTER)*;
-NUM: (DIGIT | '.')+ ([eE] MINUS? DIGIT+)?;
+NUM: (DIGIT | '.')+ ([eE] (MINUS? | PLUS?) DIGIT+)?;
 MUL: '*';
 DIV: '/';
 PLUS: '+';
@@ -17,7 +17,7 @@ LPAR: '(';
 RPAR: ')';
 WS: [ \n\t\r]+ -> skip;
 
-number
+num
     : NUM
     ;
 
@@ -34,7 +34,7 @@ binaryFunction
     ;
 
 term
-    : number
+    : num
     | singular
     | unaryFunction
     | binaryFunction

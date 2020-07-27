@@ -18,7 +18,7 @@ import scientifik.kmath.operations.SpaceOperations
  * TODO move to common
  */
 object ArithmeticsEvaluator : Grammar<MST>() {
-    private val num: Token by token("[\\d.]+(?:[eE]-?\\d+)?".toRegex())
+    private val num: Token by token("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
     private val id: Token by token("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by token("\\(".toRegex())
     private val rpar: Token by token("\\)".toRegex())
