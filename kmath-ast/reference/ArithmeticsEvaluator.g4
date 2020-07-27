@@ -2,9 +2,10 @@ grammar ArithmeticsEvaluator;
 
 fragment DIGIT: '0'..'9';
 fragment LETTER: 'a'..'z';
+fragment CAPITAL_LETTER: 'A'..'Z'
 fragment UNDERSCORE: '_';
 
-ID: (LETTER | UNDERSCORE) (LETTER | UNDERSCORE | DIGIT)*;
+ID: (LETTER | UNDERSCORE | CAPITAL_LETTER) (LETTER | UNDERSCORE | DIGIT | CAPITAL_LETTER)*;
 NUM: (DIGIT | '.')+ ([eE] MINUS? DIGIT+)?;
 MUL: '*';
 DIV: '/';
