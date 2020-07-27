@@ -8,7 +8,6 @@ import scientifik.kmath.ast.MST
 import scientifik.kmath.ast.MstExpression
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
-import scientifik.kmath.operations.NumericAlgebra
 import kotlin.reflect.KClass
 
 /**
@@ -17,7 +16,19 @@ import kotlin.reflect.KClass
 fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST) {
         when (node) {
-            is MST.Symbolic -> loadVariable(node.value)
+            is MST.Symbolic -> {
+                val symbol = try {
+                    algebra.symbol(node.value)
+                } catch (ignored: Throwable) {
+                    null
+                }
+
+                if (symbol != null)
+                    loadTConstant(symbol)
+                else
+                    loadVariable(node.value)
+            }
+
             is MST.Numeric -> loadNumeric(node.value)
 
             is MST.Unary -> buildAlgebraOperationCall(

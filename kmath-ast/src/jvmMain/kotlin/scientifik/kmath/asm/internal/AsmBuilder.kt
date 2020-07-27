@@ -288,7 +288,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Loads a [T] constant from [constants].
      */
-    private fun loadTConstant(value: T) {
+    internal fun loadTConstant(value: T) {
         if (classOfT in INLINABLE_NUMBERS) {
             val expectedType = expectationStack.pop()
             val mustBeBoxed = expectedType.sort == Type.OBJECT
