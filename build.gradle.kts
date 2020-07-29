@@ -12,6 +12,7 @@ allprojects {
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlinx")
         mavenCentral()
+        maven("https://dl.bintray.com/hotkeytlt/maven")
     }
 
     group = "scientifik"
