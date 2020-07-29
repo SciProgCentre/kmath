@@ -7,7 +7,7 @@ import java.math.MathContext
 /**
  * A field wrapper for Java [BigInteger]
  */
-object JBigIntegerField : Field<BigInteger> {
+object JBigIntegerField : Ring<BigInteger>, RemainderDivisionOperations<BigInteger> {
     override val zero: BigInteger
         get() = BigInteger.ZERO
 
@@ -15,12 +15,13 @@ object JBigIntegerField : Field<BigInteger> {
         get() = BigInteger.ONE
 
     override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
-    override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
     override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
     override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
     override fun BigInteger.unaryMinus(): BigInteger = negate()
+    override infix fun BigInteger.div(arg: BigInteger): BigInteger = this.divide(arg)
+    override infix fun BigInteger.rem(arg: BigInteger): BigInteger = remainder(arg)
 }
 
 /**
