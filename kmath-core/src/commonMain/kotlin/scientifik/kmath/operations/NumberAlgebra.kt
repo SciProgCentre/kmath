@@ -1,5 +1,6 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.RealField.pow
 import kotlin.math.abs
 import kotlin.math.pow as kpow
 
@@ -85,6 +86,11 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override inline fun Double.times(b: Double) = this * b
 
     override inline fun Double.div(b: Double) = this / b
+
+    override fun binaryOperation(operation: String, left: Double, right: Double): Double = when (operation) {
+        PowerOperations.POW_OPERATION -> left pow right
+        else -> super.binaryOperation(operation, left, right)
+    }
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
