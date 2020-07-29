@@ -14,14 +14,15 @@ object JBigIntegerField : Ring<BigInteger>, RemainderDivisionOperations<BigInteg
     override val one: BigInteger
         get() = BigInteger.ONE
 
-    override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
+    override fun number(value: Number): BigInteger = value.toLong().toBigInteger()
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
-    override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
-    override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
+    override fun BigInteger.minus(b: BigInteger): BigInteger = subtract(b)
+    override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toLong().toBigInteger())
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
     override fun BigInteger.unaryMinus(): BigInteger = negate()
-    override infix fun BigInteger.div(arg: BigInteger): BigInteger = this.divide(arg)
-    override infix fun BigInteger.rem(arg: BigInteger): BigInteger = remainder(arg)
+    override fun BigInteger.div(arg: BigInteger): BigInteger = divide(arg)
+    override fun BigInteger.div(k: Number): BigInteger = this / k.toLong().toBigInteger()
+    override fun BigInteger.rem(arg: BigInteger): BigInteger = remainder(arg)
 }
 
 /**
@@ -38,7 +39,7 @@ abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathCo
 
     override fun add(a: BigDecimal, b: BigDecimal): BigDecimal = a.add(b)
     override fun BigDecimal.minus(b: BigDecimal): BigDecimal = subtract(b)
-    override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
+    override fun number(value: Number): BigDecimal = value.toDouble().toBigDecimal(mathContext)
 
     override fun multiply(a: BigDecimal, k: Number): BigDecimal =
         a.multiply(k.toDouble().toBigDecimal(mathContext), mathContext)

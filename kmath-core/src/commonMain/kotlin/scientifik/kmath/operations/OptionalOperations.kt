@@ -87,16 +87,16 @@ interface RemainderDivisionOperations<T> : RingOperations<T> {
     /**
      * Calculates the remainder of dividing this value by [arg].
      */
-    infix fun T.rem(arg: T): T
+    operator fun T.rem(arg: T): T
 
     /**
      * Performs the floored division of this value by [arg].
      */
-    infix fun T.div(arg: T): T
+    operator fun T.div(arg: T): T
 
     override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        REM_OPERATION -> left rem right
-        DIV_OPERATION -> left div right
+        REM_OPERATION -> left % right
+        DIV_OPERATION -> left / right
         else -> super.binaryOperation(operation, left, right)
     }
 
