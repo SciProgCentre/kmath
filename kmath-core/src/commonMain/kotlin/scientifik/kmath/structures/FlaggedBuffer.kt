@@ -19,11 +19,11 @@ interface FlaggedBuffer<T> : Buffer<T> {
 /**
  * The value is valid if all flags are down
  */
-fun FlaggedBuffer<*>.isValid(index: Int) = getFlag(index) != 0.toByte()
+fun FlaggedBuffer<*>.isValid(index: Int): Boolean = getFlag(index) != 0.toByte()
 
-fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag) = (getFlag(index) and flag.mask) != 0.toByte()
+fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (getFlag(index) and flag.mask) != 0.toByte()
 
-fun FlaggedBuffer<*>.isMissing(index: Int) = hasFlag(index, ValueFlag.MISSING)
+fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
 
 /**
  * A real buffer which supports flags for each value like NaN or Missing
@@ -45,8 +45,8 @@ class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : Flagged
 }
 
 inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
-    for(i in indices){
-        if(isValid(i)){
+    for (i in indices) {
+        if (isValid(i)) {
             block(values[i])
         }
     }

@@ -14,9 +14,10 @@ interface Expression<T> {
 /**
  * Create simple lazily evaluated expression inside given algebra
  */
-fun <T> Algebra<T>.expression(block:  Algebra<T>.(arguments: Map<String, T>) -> T): Expression<T> = object: Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T = block(arguments)
-}
+fun <T> Algebra<T>.expression(block: Algebra<T>.(arguments: Map<String, T>) -> T): Expression<T> =
+    object : Expression<T> {
+        override fun invoke(arguments: Map<String, T>): T = block(arguments)
+    }
 
 operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = invoke(mapOf(*pairs))
 

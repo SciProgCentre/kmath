@@ -4,7 +4,6 @@ import scientifik.kmath.operations.ExtendedField
 
 interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> : NDField<T, F, N>, ExtendedField<N>
 
-
 ///**
 // * NDField that supports [ExtendedField] operations on its elements
 // */
@@ -36,5 +35,3 @@ interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> : N
 //        return produce { with(elementContext) { cos(arg[it]) } }
 //    }
 //}
-
-

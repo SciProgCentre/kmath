@@ -9,12 +9,11 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
         array[index] = value
     }
 
-    override fun iterator() = array.iterator()
+    override fun iterator(): IntIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Int> =
         IntBuffer(array.copyOf())
 
 }
 
-
-fun IntArray.asBuffer() = IntBuffer(this)
+fun IntArray.asBuffer(): IntBuffer = IntBuffer(this)

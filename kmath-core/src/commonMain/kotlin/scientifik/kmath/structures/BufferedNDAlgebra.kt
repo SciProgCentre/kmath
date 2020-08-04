@@ -2,7 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.*
 
-interface BufferedNDAlgebra<T, C>: NDAlgebra<T, C, NDBuffer<T>>{
+interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
     val strides: Strides
 
     override fun check(vararg elements: NDBuffer<T>) {
@@ -30,7 +30,7 @@ interface BufferedNDAlgebra<T, C>: NDAlgebra<T, C, NDBuffer<T>>{
 }
 
 
-interface BufferedNDSpace<T, S : Space<T>> : NDSpace<T, S, NDBuffer<T>>, BufferedNDAlgebra<T,S>  {
+interface BufferedNDSpace<T, S : Space<T>> : NDSpace<T, S, NDBuffer<T>>, BufferedNDAlgebra<T, S> {
     override fun NDBuffer<T>.toElement(): SpaceElement<NDBuffer<T>, *, out BufferedNDSpace<T, S>>
 }
 

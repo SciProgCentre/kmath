@@ -9,7 +9,7 @@ inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
         array[index] = value
     }
 
-    override fun iterator() = array.iterator()
+    override fun iterator(): DoubleIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Double> =
         RealBuffer(array.copyOf())
@@ -31,4 +31,4 @@ val MutableBuffer<out Double>.array: DoubleArray
         DoubleArray(size) { get(it) }
     }
 
-fun DoubleArray.asBuffer() = RealBuffer(this)
+fun DoubleArray.asBuffer(): RealBuffer = RealBuffer(this)

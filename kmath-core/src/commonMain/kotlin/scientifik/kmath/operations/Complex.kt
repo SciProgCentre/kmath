@@ -18,7 +18,7 @@ object ComplexField : ExtendedField<Complex> {
 
     override val one: Complex = Complex(1.0, 0.0)
 
-    val i = Complex(0.0, 1.0)
+    val i: Complex = Complex(0.0, 1.0)
 
     override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
 
@@ -45,15 +45,15 @@ object ComplexField : ExtendedField<Complex> {
 
     override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
-    operator fun Double.plus(c: Complex) = add(this.toComplex(), c)
+    operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
 
-    operator fun Double.minus(c: Complex) = add(this.toComplex(), -c)
+    operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
 
-    operator fun Complex.plus(d: Double) = d + this
+    operator fun Complex.plus(d: Double): Complex = d + this
 
-    operator fun Complex.minus(d: Double) = add(this, -d.toComplex())
+    operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
 
-    operator fun Double.times(c: Complex) = Complex(c.re * this, c.im * this)
+    operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
     override fun symbol(value: String): Complex = if (value == "i") {
         i
@@ -104,7 +104,7 @@ val Complex.r: Double get() = sqrt(re * re + im * im)
  */
 val Complex.theta: Double get() = atan(im / re)
 
-fun Double.toComplex() = Complex(this, 0.0)
+fun Double.toComplex(): Complex = Complex(this, 0.0)
 
 inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
     return MemoryBuffer.create(Complex, size, init)

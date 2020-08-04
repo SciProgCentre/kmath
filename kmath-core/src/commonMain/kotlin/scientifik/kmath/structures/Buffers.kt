@@ -15,22 +15,22 @@ typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
 interface Buffer<T> {
 
     /**
-     * The size of the buffer
+     * The size of this buffer.
      */
     val size: Int
 
     /**
-     * Get element at given index
+     * Gets element at given index.
      */
     operator fun get(index: Int): T
 
     /**
-     * Iterate over all elements
+     * Iterates over all elements.
      */
     operator fun iterator(): Iterator<T>
 
     /**
-     * Check content eqiality with another buffer
+     * Checks content equality with another buffer.
      */
     fun contentEquals(other: Buffer<*>): Boolean =
         asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
@@ -124,10 +124,9 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
     override fun iterator(): Iterator<T> = list.iterator()
 }
 
-fun <T> List<T>.asBuffer() = ListBuffer<T>(this)
+fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
 
-@Suppress("FunctionName")
-inline fun <T> ListBuffer(size: Int, init: (Int) -> T) = List(size, init).asBuffer()
+inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> = List(size, init).asBuffer()
 
 inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
 
@@ -165,13 +164,13 @@ fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
 inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
-    override fun get(index: Int): T = buffer.get(index)
+    override fun get(index: Int): T = buffer[index]
 
-    override fun iterator() = buffer.iterator()
+    override fun iterator(): Iterator<T> = buffer.iterator()
 }
 
 /**
- * A buffer with content calculated on-demand. The calculated contect is not stored, so it is recalculated on each call.
+ * A buffer with content calculated on-demand. The calculated content is not stored, so it is recalculated on each call.
  * Useful when one needs single element from the buffer.
  */
 class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {

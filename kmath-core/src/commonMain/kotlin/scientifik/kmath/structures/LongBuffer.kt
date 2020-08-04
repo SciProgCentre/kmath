@@ -9,11 +9,11 @@ inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
         array[index] = value
     }
 
-    override fun iterator() = array.iterator()
+    override fun iterator(): LongIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Long> =
         LongBuffer(array.copyOf())
 
 }
 
-fun LongArray.asBuffer() = LongBuffer(this)
+fun LongArray.asBuffer(): LongBuffer = LongBuffer(this)

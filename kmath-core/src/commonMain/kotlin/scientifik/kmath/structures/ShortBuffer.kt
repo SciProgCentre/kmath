@@ -9,12 +9,11 @@ inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
         array[index] = value
     }
 
-    override fun iterator() = array.iterator()
+    override fun iterator(): ShortIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Short> =
         ShortBuffer(array.copyOf())
 
 }
 
-
-fun ShortArray.asBuffer() = ShortBuffer(this)
+fun ShortArray.asBuffer(): ShortBuffer = ShortBuffer(this)
