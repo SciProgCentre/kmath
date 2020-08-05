@@ -52,7 +52,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 }
 
 /**
- * A field for double without boxing. Does not produce appropriate field element
+ * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object RealField : ExtendedField<Double>, Norm<Double, Double> {
@@ -94,6 +94,9 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     }
 }
 
+/**
+ * A field for [Float] without boxing. Does not produce appropriate field element.
+ */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override val zero: Float = 0f
