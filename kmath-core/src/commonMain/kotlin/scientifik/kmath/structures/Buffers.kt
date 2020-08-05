@@ -4,13 +4,22 @@ import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
 import kotlin.reflect.KClass
 
-
+/**
+ * Function that produces [Buffer] from its size and function that supplies values.
+ *
+ * @param T the type of buffer.
+ */
 typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
-typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
-
 
 /**
- * A generic random access structure for both primitives and objects
+ * Function that produces [MutableBuffer] from its size and function that supplies values.
+ *
+ * @param T the type of buffer.
+ */
+typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
+
+/**
+ * A generic random-access structure for both primitives and objects.
  */
 interface Buffer<T> {
 
@@ -69,12 +78,24 @@ interface Buffer<T> {
     }
 }
 
+/**
+ * Creates a sequence that returns all elements from this [Buffer].
+ */
 fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 
+/**
+ * Creates an iterable that returns all elements from this [Buffer].
+ */
 fun <T> Buffer<T>.asIterable(): Iterable<T> = Iterable(::iterator)
 
-val Buffer<*>.indices: IntRange get() = IntRange(0, size - 1)
+/**
+ * Returns an [IntRange] of the valid indices for this [Buffer].
+ */
+val Buffer<*>.indices: IntRange get() = 0 until size
 
+/**
+ * A generic mutable random-access structure for both primitives and objects.
+ */
 interface MutableBuffer<T> : Buffer<T> {
     operator fun set(index: Int, value: T)
 

@@ -1,5 +1,10 @@
 package scientifik.kmath.structures
 
+/**
+ * Specialized [MutableBuffer] implementation over [IntArray].
+ *
+ * @property array the underlying array.
+ */
 inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
@@ -16,4 +21,10 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
 
 }
 
+/**
+ * Returns [IntBuffer] over this array.
+ *
+ * @receiver the array.
+ * @return the new buffer.
+ */
 fun IntArray.asBuffer(): IntBuffer = IntBuffer(this)

@@ -143,7 +143,11 @@ interface PowerOperations<T> : Algebra<T> {
 }
 
 /**
- * Raises [arg] to the power [pow].
+ * Raises this element to the power [pow].
+ *
+ * @receiver the base.
+ * @param power the exponent.
+ * @return the base raised to the power.
  */
 infix fun <T : MathElement<out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
 
