@@ -4,7 +4,7 @@ import kotlin.math.abs
 import kotlin.math.pow as kpow
 
 /**
- * Advanced Number-like field that implements basic operations
+ * Advanced Number-like semifield that implements basic operations.
  */
 interface ExtendedFieldOperations<T> :
     InverseTrigonometricOperations<T>,
@@ -27,6 +27,10 @@ interface ExtendedFieldOperations<T> :
     }
 }
 
+
+/**
+ * Advanced Number-like field that implements basic operations.
+ */
 interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
         PowerOperations.POW_OPERATION -> power(left, right)
