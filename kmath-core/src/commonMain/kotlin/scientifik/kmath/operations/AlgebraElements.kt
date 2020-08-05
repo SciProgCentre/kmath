@@ -18,10 +18,11 @@ interface MathWrapper<T, I> {
 }
 
 /**
- * The element of linear context
- * @param T the type of space operation results
- * @param I self type of the element. Needed for static type checking
- * @param S the type of space
+ * The element of [Space].
+ *
+ * @param T the type of space operation results.
+ * @param I self type of the element. Needed for static type checking.
+ * @param S the type of space.
  */
 interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement<S>, MathWrapper<T, I> {
     /**
@@ -58,7 +59,11 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
 }
 
 /**
- * Ring element
+ * The element of [Ring].
+ *
+ * @param T the type of space operation results.
+ * @param I self type of the element. Needed for static type checking.
+ * @param R the type of space.
  */
 interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T, I, R> {
     /**
@@ -71,7 +76,11 @@ interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T
 }
 
 /**
- * Field element
+ * The element of [Field].
+ *
+ * @param T the type of space operation results.
+ * @param I self type of the element. Needed for static type checking.
+ * @param F the type of field.
  */
 interface FieldElement<T, I : FieldElement<T, I, F>, F : Field<T>> : RingElement<T, I, F> {
     override val context: F
