@@ -97,10 +97,13 @@ val Buffer<*>.indices: IntRange get() = 0 until size
  * A generic mutable random-access structure for both primitives and objects.
  */
 interface MutableBuffer<T> : Buffer<T> {
+    /**
+     * Sets the array element at the specified [index] to the specified [value].
+     */
     operator fun set(index: Int, value: T)
 
     /**
-     * A shallow copy of the buffer
+     * Returns a shallow copy of the buffer.
      */
     fun copy(): MutableBuffer<T>
 

@@ -22,6 +22,28 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
 }
 
 /**
+ * Creates a new [IntBuffer] with the specified [size], where each element is calculated by calling the specified
+ * [init] function.
+ *
+ * The function [init] is called for each array element sequentially starting from the first one.
+ * It should return the value for an array element given its index.
+ */
+@Suppress("FunctionName")
+inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
+
+/**
+ * Returns a new [IntBuffer] of given elements.
+ */
+@Suppress("FunctionName")
+fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
+
+/**
+ * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
+ */
+val MutableBuffer<out Int>.array: IntArray
+    get() = (if (this is IntBuffer) array else IntArray(size) { get(it) })
+
+/**
  * Returns [IntBuffer] over this array.
  *
  * @receiver the array.
