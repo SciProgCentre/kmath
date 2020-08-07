@@ -19,10 +19,11 @@ typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
 typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
 
 /**
- * A generic random-access structure for both primitives and objects.
+ * A generic immutable random-access structure for both primitives and objects.
+ *
+ * @param T the type of elements contained in the buffer.
  */
 interface Buffer<T> {
-
     /**
      * The size of this buffer.
      */
@@ -45,7 +46,6 @@ interface Buffer<T> {
         asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
 
     companion object {
-
         inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer {
             val array = DoubleArray(size) { initializer(it) }
             return RealBuffer(array)
@@ -95,6 +95,8 @@ val Buffer<*>.indices: IntRange get() = 0 until size
 
 /**
  * A generic mutable random-access structure for both primitives and objects.
+ *
+ * @param T the type of elements contained in the buffer.
  */
 interface MutableBuffer<T> : Buffer<T> {
     /**
@@ -138,8 +140,13 @@ interface MutableBuffer<T> : Buffer<T> {
     }
 }
 
+/**
+ * [Buffer] implementation over [List].
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property list The underlying list.
+ */
 inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
-
     override val size: Int
         get() = list.size
 
@@ -148,10 +155,26 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
     override fun iterator(): Iterator<T> = list.iterator()
 }
 
+/**
+ * Returns an [ListBuffer] that wraps the original list.
+ */
 fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
 
+/**
+ * Creates a new [ListBuffer] with the specified [size], where each element is calculated by calling the specified
+ * [init] function.
+ *
+ * The function [init] is called for each array element sequentially starting from the first one.
+ * It should return the value for an array element given its index.
+ */
 inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> = List(size, init).asBuffer()
 
+/**
+ * [MutableBuffer] implementation over [MutableList].
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property list The underlying list.
+ */
 inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int
@@ -167,8 +190,14 @@ inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
     override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
 }
 
+/**
+ * [MutableBuffer] implementation over [Array].
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property array The underlying array.
+ */
 class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
-    //Can't inline because array is invariant
+    // Can't inline because array is invariant
     override val size: Int
         get() = array.size
 
@@ -183,8 +212,17 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 }
 
+/**
+ * Returns an [ArrayBuffer] that wraps the original array.
+ */
 fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
 
+/**
+ * Immutable wrapper for [MutableBuffer].
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property buffer The underlying buffer.
+ */
 inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
@@ -196,6 +234,8 @@ inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
 /**
  * A buffer with content calculated on-demand. The calculated content is not stored, so it is recalculated on each call.
  * Useful when one needs single element from the buffer.
+ *
+ * @param T the type of elements provided by the buffer.
  */
 class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
     override fun get(index: Int): T {
@@ -215,17 +255,16 @@ class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T
 }
 
 /**
- * Convert this buffer to read-only buffer
+ * Convert this buffer to read-only buffer.
  */
-fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) {
-    ReadOnlyBuffer(this)
-} else {
-    this
-}
+fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) ReadOnlyBuffer(this) else this
 
 /**
- * Typealias for buffer transformations
+ * Typealias for buffer transformations.
  */
 typealias BufferTransform<T, R> = (Buffer<T>) -> Buffer<R>
 
+/**
+ * Typealias for buffer transformations with suspend function.
+ */
 typealias SuspendBufferTransform<T, R> = suspend (Buffer<T>) -> Buffer<R>

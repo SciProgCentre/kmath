@@ -12,8 +12,21 @@ interface MathElement<C> {
     val context: C
 }
 
+/**
+ * Represents element that can be wrapped to its "primitive" value.
+ *
+ * @param T the type wrapped by this wrapper.
+ * @param I the type of this wrapper.
+ */
 interface MathWrapper<T, I> {
+    /**
+     * Unwraps [I] to [T].
+     */
     fun unwrap(): T
+
+    /**
+     * Wraps [T] to [I].
+     */
     fun T.wrap(): I
 }
 

@@ -4,12 +4,16 @@ import scientifik.memory.*
 
 /**
  * A non-boxing buffer over [Memory] object.
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property memory the underlying memory segment.
+ * @property spec the spec of [T] type.
  */
 open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spec: MemorySpec<T>) : Buffer<T> {
 
     override val size: Int get() = memory.size / spec.objectSize
 
-    private val reader = memory.reader()
+    private val reader: MemoryReader = memory.reader()
 
     override fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
 
@@ -33,6 +37,13 @@ open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spe
     }
 }
 
+/**
+ * A mutable non-boxing buffer over [Memory] object.
+ *
+ * @param T the type of elements contained in the buffer.
+ * @property memory the underlying memory segment.
+ * @property spec the spec of [T] type.
+ */
 class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) : MemoryBuffer<T>(memory, spec),
     MutableBuffer<T> {
 

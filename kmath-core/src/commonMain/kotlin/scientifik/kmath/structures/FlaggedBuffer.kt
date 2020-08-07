@@ -2,15 +2,35 @@ package scientifik.kmath.structures
 
 import kotlin.experimental.and
 
+/**
+ * Represents flags to supply additional info about values of buffer.
+ *
+ * @property mask bit mask value of this flag.
+ */
 enum class ValueFlag(val mask: Byte) {
+    /**
+     * Reports the value is NaN.
+     */
     NAN(0b0000_0001),
+
+    /**
+     * Reports the value doesn't present in the buffer (when the type of value doesn't support `null`).
+     */
     MISSING(0b0000_0010),
+
+    /**
+     * Reports the value is negative infinity.
+     */
     NEGATIVE_INFINITY(0b0000_0100),
+
+    /**
+     * Reports the value is positive infinity
+     */
     POSITIVE_INFINITY(0b0000_1000)
 }
 
 /**
- * A buffer with flagged values
+ * A buffer with flagged values.
  */
 interface FlaggedBuffer<T> : Buffer<T> {
     fun getFlag(index: Int): Byte

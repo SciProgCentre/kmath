@@ -1,5 +1,10 @@
 package scientifik.kmath.structures
 
+/**
+ * Specialized [MutableBuffer] implementation over [DoubleArray].
+ *
+ * @property array the underlying array.
+ */
 inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
@@ -16,19 +21,17 @@ inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
 }
 
 /**
- * Creates a new array with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [RealBuffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an array element given its index.
+ * It should return the value for an buffer element given its index.
  */
-@Suppress("FunctionName")
 inline fun RealBuffer(size: Int, init: (Int) -> Double): RealBuffer = RealBuffer(DoubleArray(size) { init(it) })
 
 /**
  * Returns a new [RealBuffer] of given elements.
  */
-@Suppress("FunctionName")
 fun RealBuffer(vararg doubles: Double): RealBuffer = RealBuffer(doubles)
 
 /**
