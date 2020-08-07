@@ -1,5 +1,6 @@
 package scientifik.kmath.expressions
 
+import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
@@ -21,3 +22,10 @@ fun <T> Ring<T>.ringExpression(block: FunctionalExpressionRing<T, Ring<T>>.() ->
  */
 fun <T> Field<T>.fieldExpression(block: FunctionalExpressionField<T, Field<T>>.() -> Expression<T>): Expression<T> =
     FunctionalExpressionField(this).run(block)
+
+/**
+ * Creates a functional expression with this [ExtendedField].
+ */
+fun <T> ExtendedField<T>.fieldExpression(
+    block: FunctionalExpressionExtendedField<T, ExtendedField<T>>.() -> Expression<T>
+): Expression<T> = FunctionalExpressionExtendedField(this).run(block)

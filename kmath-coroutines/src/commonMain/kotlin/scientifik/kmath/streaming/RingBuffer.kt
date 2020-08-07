@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
  * Thread-safe ring buffer
  */
 @Suppress("UNCHECKED_CAST")
-internal class RingBuffer<T>(
+class RingBuffer<T>(
     private val buffer: MutableBuffer<T?>,
     private var startIndex: Int = 0,
     size: Int = 0
