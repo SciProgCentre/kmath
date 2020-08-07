@@ -98,13 +98,13 @@ inline fun BufferedNDField<Complex, ComplexField>.produceInline(crossinline init
 }
 
 /**
- * Map one [ComplexNDElement] using function with indexes
+ * Map one [ComplexNDElement] using function with indices.
  */
 inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(index: IntArray, Complex) -> Complex): ComplexNDElement =
     context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
 
 /**
- * Map one [ComplexNDElement] using function without indexes
+ * Map one [ComplexNDElement] using function without indices.
  */
 inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) -> Complex): ComplexNDElement {
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.transform(buffer[offset]) }

@@ -2,6 +2,13 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.ExtendedField
 
+/**
+ * [ExtendedField] over [NDStructure].
+ *
+ * @param T the type of the element contained in ND structure.
+ * @param N the type of ND structure.
+ * @param F the extended field of structure elements.
+ */
 interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> : NDField<T, F, N>, ExtendedField<N>
 
 ///**

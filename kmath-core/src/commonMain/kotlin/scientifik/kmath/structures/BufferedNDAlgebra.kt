@@ -11,7 +11,8 @@ interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
 
     /**
      * Convert any [NDStructure] to buffered structure using strides from this context.
-     * If the structure is already [NDBuffer], conversion is free. If not, it could be expensive because iteration over indexes
+     * If the structure is already [NDBuffer], conversion is free. If not, it could be expensive because iteration over
+     * indices.
      *
      * If the argument is [NDBuffer] with different strides structure, the new element will be produced.
      */

@@ -3,7 +3,6 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
-
 class BoxingNDField<T, F : Field<T>>(
     override val shape: IntArray,
     override val elementContext: F,

@@ -3,15 +3,38 @@ package scientifik.kmath.structures
 import kotlin.jvm.JvmName
 import kotlin.reflect.KClass
 
-
+/**
+ * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
+ * specify the sizes of each dimension.
+ *
+ * @param T the type of items.
+ */
 interface NDStructure<T> {
-
+    /**
+     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * this structure.
+     */
     val shape: IntArray
 
+    /**
+     * The count of dimensions in this structure. It should be equal to size of [shape].
+     */
     val dimension: Int get() = shape.size
 
+    /**
+     * Returns the value at the specified indices.
+     *
+     * @param index the indices.
+     * @return the value.
+     */
     operator fun get(index: IntArray): T
 
+    /**
+     * Returns the sequence of all the elements associated by their indices.
+     *
+     * @return the lazy sequence of pairs of indices to values.
+     */
     fun elements(): Sequence<Pair<IntArray, T>>
 
     override fun equals(other: Any?): Boolean
@@ -19,6 +42,9 @@ interface NDStructure<T> {
     override fun hashCode(): Int
 
     companion object {
+        /**
+         * Indicates whether some [NDStructure] is equal to another one.
+         */
         fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
             if (st1 === st2) return true
 
@@ -36,9 +62,9 @@ interface NDStructure<T> {
         }
 
         /**
-         * Create a NDStructure with explicit buffer factory
+         * Creates a NDStructure with explicit buffer factory.
          *
-         * Strides should be reused if possible
+         * Strides should be reused if possible.
          */
         fun <T> build(
             strides: Strides,
@@ -91,9 +117,24 @@ interface NDStructure<T> {
     }
 }
 
+/**
+ * Returns the value at the specified indices.
+ *
+ * @param index the indices.
+ * @return the value.
+ */
 operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
 
+/**
+ * Represents mutable [NDStructure].
+ */
 interface MutableNDStructure<T> : NDStructure<T> {
+    /**
+     * Inserts an item at the specified indices.
+     *
+     * @param index the indices.
+     * @param value the value.
+     */
     operator fun set(index: IntArray, value: T)
 }
 
@@ -104,7 +145,7 @@ inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
 }
 
 /**
- * A way to convert ND index to linear one and back
+ * A way to convert ND index to linear one and back.
  */
 interface Strides {
     /**
@@ -141,6 +182,9 @@ interface Strides {
     }
 }
 
+/**
+ * Simple implementation of [Strides].
+ */
 class DefaultStrides private constructor(override val shape: IntArray) : Strides {
     /**
      * Strides for memory access
@@ -180,19 +224,14 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     override val linearSize: Int
         get() = strides[shape.size]
 
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DefaultStrides) return false
-
         if (!shape.contentEquals(other.shape)) return false
-
         return true
     }
 
-    override fun hashCode(): Int {
-        return shape.contentHashCode()
-    }
+    override fun hashCode(): Int = shape.contentHashCode()
 
     companion object {
         private val defaultStridesCache = HashMap<IntArray, Strides>()
@@ -204,8 +243,20 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     }
 }
 
+/**
+ * Represents [NDStructure] over [Buffer].
+ *
+ * @param T the type of items.
+ */
 abstract class NDBuffer<T> : NDStructure<T> {
+    /**
+     * The underlying buffer.
+     */
     abstract val buffer: Buffer<T>
+
+    /**
+     * The strides to access elements of [Buffer] by linear indices.
+     */
     abstract val strides: Strides
 
     override fun get(index: IntArray): T = buffer[strides.offset(index)]
@@ -263,8 +314,8 @@ class MutableBufferNDStructure<T>(
 ) : NDBuffer<T>(), MutableNDStructure<T> {
 
     init {
-        if (strides.linearSize != buffer.size) {
-            error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
+        require(strides.linearSize == buffer.size) {
+            "Expected buffer side of ${strides.linearSize}, but found ${buffer.size}"
         }
     }
 

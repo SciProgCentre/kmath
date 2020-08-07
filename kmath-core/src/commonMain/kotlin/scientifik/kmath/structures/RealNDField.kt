@@ -93,13 +93,13 @@ inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initiali
 }
 
 /**
- * Map one [RealNDElement] using function with indexes
+ * Map one [RealNDElement] using function with indices.
  */
 inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double): RealNDElement =
     context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
 
 /**
- * Map one [RealNDElement] using function without indexes
+ * Map one [RealNDElement] using function without indices.
  */
 inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }

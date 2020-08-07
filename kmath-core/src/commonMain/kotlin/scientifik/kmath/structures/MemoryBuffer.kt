@@ -10,7 +10,6 @@ import scientifik.memory.*
  * @property spec the spec of [T] type.
  */
 open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spec: MemorySpec<T>) : Buffer<T> {
-
     override val size: Int get() = memory.size / spec.objectSize
 
     private val reader: MemoryReader = memory.reader()

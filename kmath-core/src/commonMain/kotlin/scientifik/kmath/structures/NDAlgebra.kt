@@ -105,10 +105,11 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
 }
 
 /**
- * Field for n-dimensional structures.
+ * Field of [NDStructure].
  *
- * @param T the type of the element contained in ND structure
- * @param F field of structure elements
+ * @param T the type of the element contained in ND structure.
+ * @param N the type of ND structure.
+ * @param F field of structure elements.
  */
 interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, N> {
 
