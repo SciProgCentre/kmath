@@ -58,7 +58,8 @@ interface NumericAlgebra<T> : Algebra<T> {
 inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
- * Represents semigroup, i.e. algebraic structure with associative binary operation called "addition".
+ * Represents semispace, i.e. algebraic structure with associative binary operation called "addition" as well as
+ * multiplication by scalars.
  *
  * In KMath groups are called spaces, and also define multiplication of element by [Number].
  *
@@ -174,10 +175,8 @@ interface SpaceOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents group, i.e. algebraic structure with associative binary operation called "addition" and its neutral
- * element.
- *
- * In KMath groups are called spaces, and also define multiplication of element by [Number].
+ * Represents linear space, i.e. algebraic structure with associative binary operation called "addition" and its neutral
+ * element as well as multiplication by scalars.
  *
  * @param T the type of element of this group.
  */

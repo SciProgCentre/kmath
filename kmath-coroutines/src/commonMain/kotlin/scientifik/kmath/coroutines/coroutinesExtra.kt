@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.*
 
-val Dispatchers.Math: CoroutineDispatcher get() = Dispatchers.Default
+val Dispatchers.Math: CoroutineDispatcher
+    get() = Default
 
 /**
  * An imitator of [Deferred] which holds a suspended function block and dispatcher
@@ -42,7 +43,7 @@ fun <T, R> Flow<T>.async(
 }
 
 @FlowPreview
-fun <T, R> AsyncFlow<T>.map(action: (T) -> R) =
+fun <T, R> AsyncFlow<T>.map(action: (T) -> R): AsyncFlow<R> =
     AsyncFlow(deferredFlow.map { input ->
         //TODO add function composition
         LazyDeferred(input.dispatcher) {
@@ -82,9 +83,9 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T) -> Unit): Unit {
+suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T) -> Unit) {
     collect(concurrency, object : FlowCollector<T> {
-        override suspend fun emit(value: T) = action(value)
+        override suspend fun emit(value: T): Unit = action(value)
     })
 }
 
@@ -94,9 +95,7 @@ fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     transform: suspend (T) -> R
 ): Flow<R> {
-    return flatMapMerge{ value ->
+    return flatMapMerge { value ->
         flow { emit(transform(value)) }
     }.flowOn(dispatcher)
 }
-
-
