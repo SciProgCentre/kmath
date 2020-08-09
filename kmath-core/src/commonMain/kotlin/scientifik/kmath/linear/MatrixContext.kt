@@ -29,7 +29,7 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
         /**
          * Non-boxing double matrix
          */
-        val real = RealMatrixContext
+        val real: RealMatrixContext = RealMatrixContext
 
         /**
          * A structured matrix with custom buffer
@@ -82,12 +82,12 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
         }
     }
 
-    override operator fun Matrix<T>.unaryMinus() =
+    override operator fun Matrix<T>.unaryMinus(): Matrix<T> =
         produce(rowNum, colNum) { i, j -> elementContext.run { -get(i, j) } }
 
     override fun add(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
         if (a.rowNum != b.rowNum || a.colNum != b.colNum) error("Matrix operation dimension mismatch. [${a.rowNum},${a.colNum}] + [${b.rowNum},${b.colNum}]")
-        return produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a.get(i, j) + b[i, j] } }
+        return produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a[i, j] + b[i, j] } }
     }
 
     override operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
@@ -96,7 +96,7 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
     }
 
     override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
-        produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a.get(i, j) * k } }
+        produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a[i, j] * k } }
 
     operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
 

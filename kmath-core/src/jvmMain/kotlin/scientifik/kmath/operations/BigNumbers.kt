@@ -5,7 +5,7 @@ import java.math.BigInteger
 import java.math.MathContext
 
 /**
- * A field wrapper for Java [BigInteger]
+ * A field over [BigInteger].
  */
 object JBigIntegerField : Ring<BigInteger>, RemainderDivisionOperations<BigInteger> {
     override val zero: BigInteger
@@ -26,7 +26,9 @@ object JBigIntegerField : Ring<BigInteger>, RemainderDivisionOperations<BigInteg
 }
 
 /**
- * A Field wrapper for Java [BigDecimal]
+ * An abstract field over [BigDecimal].
+ *
+ * @property mathContext the [MathContext] to use.
  */
 abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathContext = MathContext.DECIMAL64) :
     Field<BigDecimal>,
@@ -52,6 +54,9 @@ abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathCo
 
 }
 
+/**
+ * A field over [BigDecimal].
+ */
 class JBigDecimalField(mathContext: MathContext = MathContext.DECIMAL64) : JBigDecimalFieldBase(mathContext) {
     companion object : JBigDecimalFieldBase()
 }

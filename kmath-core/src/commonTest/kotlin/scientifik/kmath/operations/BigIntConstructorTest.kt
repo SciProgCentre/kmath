@@ -19,7 +19,7 @@ class BigIntConstructorTest {
 
     @Test
     fun testConstructor_0xffffffffaL() {
-        val x = -0xffffffffaL.toBigInt()
+        val x = (-0xffffffffaL).toBigInt()
         val y = uintArrayOf(0xfffffffaU, 0xfU).toBigInt(-1)
         assertEquals(x, y)
     }

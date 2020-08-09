@@ -80,5 +80,18 @@ object ArithmeticsEvaluator : Grammar<MST>() {
     override val rootParser: Parser<MST> by subSumChain
 }
 
+/**
+ * Tries to parse the string into [MST].
+ *
+ * @receiver the string to parse.
+ * @return the [MST] node.
+ */
 fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
+
+/**
+ * Parses the string into [MST].
+ *
+ * @receiver the string to parse.
+ * @return the [MST] node.
+ */
 fun String.parseMath(): MST = ArithmeticsEvaluator.parseToEnd(this)

@@ -8,7 +8,7 @@ import scientifik.kmath.operations.*
 abstract class BufferedNDElement<T, C> : NDBuffer<T>(), NDElement<T, C, NDBuffer<T>> {
     abstract override val context: BufferedNDAlgebra<T, C>
 
-    override val strides get() = context.strides
+    override val strides: Strides get() = context.strides
 
     override val shape: IntArray get() = context.shape
 }
@@ -54,9 +54,9 @@ class BufferedNDFieldElement<T, F : Field<T>>(
 
 
 /**
- * Element by element application of any operation on elements to the whole array. Just like in numpy
+ * Element by element application of any operation on elements to the whole array. Just like in numpy.
  */
-operator fun <T : Any, F : Field<T>> Function1<T, T>.invoke(ndElement: BufferedNDElement<T, F>) =
+operator fun <T : Any, F : Field<T>> Function1<T, T>.invoke(ndElement: BufferedNDElement<T, F>): MathElement<out BufferedNDAlgebra<T, F>> =
     ndElement.context.run { map(ndElement) { invoke(it) }.toElement() }
 
 /* plus and minus */
@@ -64,13 +64,13 @@ operator fun <T : Any, F : Field<T>> Function1<T, T>.invoke(ndElement: BufferedN
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun <T : Any, F : Space<T>> BufferedNDElement<T, F>.plus(arg: T) =
+operator fun <T : Any, F : Space<T>> BufferedNDElement<T, F>.plus(arg: T): NDElement<T, F, NDBuffer<T>> =
     context.map(this) { it + arg }.wrap()
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun <T : Any, F : Space<T>> BufferedNDElement<T, F>.minus(arg: T) =
+operator fun <T : Any, F : Space<T>> BufferedNDElement<T, F>.minus(arg: T): NDElement<T, F, NDBuffer<T>> =
     context.map(this) { it - arg }.wrap()
 
 /* prod and div */
@@ -78,11 +78,11 @@ operator fun <T : Any, F : Space<T>> BufferedNDElement<T, F>.minus(arg: T) =
 /**
  * Product operation for [BufferedNDElement] and single element
  */
-operator fun <T : Any, F : Ring<T>> BufferedNDElement<T, F>.times(arg: T) =
+operator fun <T : Any, F : Ring<T>> BufferedNDElement<T, F>.times(arg: T): NDElement<T, F, NDBuffer<T>> =
     context.map(this) { it * arg }.wrap()
 
 /**
  * Division operation between [BufferedNDElement] and single element
  */
-operator fun <T : Any, F : Field<T>> BufferedNDElement<T, F>.div(arg: T) =
+operator fun <T : Any, F : Field<T>> BufferedNDElement<T, F>.div(arg: T): NDElement<T, F, NDBuffer<T>> =
     context.map(this) { it / arg }.wrap()

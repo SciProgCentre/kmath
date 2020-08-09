@@ -12,8 +12,8 @@ class ShortNDRing(override val shape: IntArray) :
     override val strides: Strides = DefaultStrides(shape)
 
     override val elementContext: ShortRing get() = ShortRing
-    override val zero by lazy { produce { ShortRing.zero } }
-    override val one by lazy { produce { ShortRing.one } }
+    override val zero: ShortNDElement by lazy { produce { zero } }
+    override val one: ShortNDElement by lazy { produce { one } }
 
     inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Short): Buffer<Short> =
         ShortBuffer(ShortArray(size) { initializer(it) })
@@ -40,6 +40,7 @@ class ShortNDRing(override val shape: IntArray) :
         transform: ShortRing.(index: IntArray, Short) -> Short
     ): ShortNDElement {
         check(arg)
+
         return BufferedNDRingElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
@@ -67,7 +68,7 @@ class ShortNDRing(override val shape: IntArray) :
 
 
 /**
- * Fast element production using function inlining
+ * Fast element production using function inlining.
  */
 inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): ShortNDElement {
     val array = ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }
@@ -75,22 +76,22 @@ inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initialize
 }
 
 /**
- * Element by element application of any operation on elements to the whole array. Just like in numpy
+ * Element by element application of any operation on elements to the whole array.
  */
-operator fun Function1<Short, Short>.invoke(ndElement: ShortNDElement) =
+operator fun Function1<Short, Short>.invoke(ndElement: ShortNDElement): ShortNDElement =
     ndElement.context.produceInline { i -> invoke(ndElement.buffer[i]) }
 
 
 /* plus and minus */
 
 /**
- * Summation operation for [StridedNDFieldElement] and single element
+ * Summation operation for [ShortNDElement] and single element.
  */
-operator fun ShortNDElement.plus(arg: Short) =
+operator fun ShortNDElement.plus(arg: Short): ShortNDElement =
     context.produceInline { i -> (buffer[i] + arg).toShort() }
 
 /**
- * Subtraction operation between [StridedNDFieldElement] and single element
+ * Subtraction operation between [ShortNDElement] and single element.
  */
-operator fun ShortNDElement.minus(arg: Short) =
+operator fun ShortNDElement.minus(arg: Short): ShortNDElement =
     context.produceInline { i -> (buffer[i] - arg).toShort() }

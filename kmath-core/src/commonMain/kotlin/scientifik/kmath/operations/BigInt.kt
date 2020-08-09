@@ -194,8 +194,8 @@ class BigInt internal constructor(
     }
 
     infix fun or(other: BigInt): BigInt {
-        if (this == ZERO) return other;
-        if (other == ZERO) return this;
+        if (this == ZERO) return other
+        if (other == ZERO) return this
         val resSize = max(this.magnitude.size, other.magnitude.size)
         val newMagnitude: Magnitude = Magnitude(resSize)
         for (i in 0 until resSize) {
@@ -210,7 +210,7 @@ class BigInt internal constructor(
     }
 
     infix fun and(other: BigInt): BigInt {
-        if ((this == ZERO) or (other == ZERO)) return ZERO;
+        if ((this == ZERO) or (other == ZERO)) return ZERO
         val resSize = min(this.magnitude.size, other.magnitude.size)
         val newMagnitude: Magnitude = Magnitude(resSize)
         for (i in 0 until resSize) {
@@ -260,7 +260,7 @@ class BigInt internal constructor(
     }
 
     companion object {
-        const val BASE = 0xffffffffUL
+        const val BASE: ULong = 0xffffffffUL
         const val BASE_SIZE: Int = 32
         val ZERO: BigInt = BigInt(0, uintArrayOf())
         val ONE: BigInt = BigInt(1, uintArrayOf(1u))
@@ -394,12 +394,12 @@ fun abs(x: BigInt): BigInt = x.abs()
 /**
  * Convert this [Int] to [BigInt]
  */
-fun Int.toBigInt() = BigInt(sign.toByte(), uintArrayOf(kotlin.math.abs(this).toUInt()))
+fun Int.toBigInt(): BigInt = BigInt(sign.toByte(), uintArrayOf(kotlin.math.abs(this).toUInt()))
 
 /**
  * Convert this [Long] to [BigInt]
  */
-fun Long.toBigInt() = BigInt(
+fun Long.toBigInt(): BigInt = BigInt(
     sign.toByte(), stripLeadingZeros(
         uintArrayOf(
             (kotlin.math.abs(this).toULong() and BASE).toUInt(),
@@ -411,17 +411,17 @@ fun Long.toBigInt() = BigInt(
 /**
  * Convert UInt to [BigInt]
  */
-fun UInt.toBigInt() = BigInt(1, uintArrayOf(this))
+fun UInt.toBigInt(): BigInt = BigInt(1, uintArrayOf(this))
 
 /**
  * Convert ULong to [BigInt]
  */
-fun ULong.toBigInt() = BigInt(
+fun ULong.toBigInt(): BigInt = BigInt(
     1,
     stripLeadingZeros(
         uintArrayOf(
-            (this and BigInt.BASE).toUInt(),
-            ((this shr BigInt.BASE_SIZE) and BigInt.BASE).toUInt()
+            (this and BASE).toUInt(),
+            ((this shr BASE_SIZE) and BASE).toUInt()
         )
     )
 )
@@ -434,7 +434,7 @@ fun UIntArray.toBigInt(sign: Byte): BigInt {
     return BigInt(sign, this.copyOf())
 }
 
-val hexChToInt = hashMapOf(
+val hexChToInt: MutableMap<Char, Int> = hashMapOf(
     '0' to 0, '1' to 1, '2' to 2, '3' to 3,
     '4' to 4, '5' to 5, '6' to 6, '7' to 7,
     '8' to 8, '9' to 9, 'A' to 10, 'B' to 11,

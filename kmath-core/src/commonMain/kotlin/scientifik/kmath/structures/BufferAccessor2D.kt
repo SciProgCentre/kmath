@@ -7,16 +7,16 @@ import kotlin.reflect.KClass
  */
 class BufferAccessor2D<T : Any>(val type: KClass<T>, val rowNum: Int, val colNum: Int) {
 
-    operator fun Buffer<T>.get(i: Int, j: Int) = get(i + colNum * j)
+    operator fun Buffer<T>.get(i: Int, j: Int): T = get(i + colNum * j)
 
     operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
         set(i + colNum * j, value)
     }
 
-    inline fun create(init: (i: Int, j: Int) -> T) =
+    inline fun create(init: (i: Int, j: Int) -> T): MutableBuffer<T> =
         MutableBuffer.auto(type, rowNum * colNum) { offset -> init(offset / colNum, offset % colNum) }
 
-    fun create(mat: Structure2D<T>) = create { i, j -> mat[i, j] }
+    fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
     //TODO optimize wrapper
     fun MutableBuffer<T>.collect(): Structure2D<T> =
@@ -41,5 +41,5 @@ class BufferAccessor2D<T : Any>(val type: KClass<T>, val rowNum: Int, val colNum
     /**
      * Get row
      */
-    fun MutableBuffer<T>.row(i: Int) = Row(this, i)
+    fun MutableBuffer<T>.row(i: Int): Row = Row(this, i)
 }

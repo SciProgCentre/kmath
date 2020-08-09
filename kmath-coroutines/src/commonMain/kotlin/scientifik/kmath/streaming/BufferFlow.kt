@@ -11,7 +11,7 @@ import scientifik.kmath.structures.asBuffer
 /**
  * Create a [Flow] from buffer
  */
-fun <T> Buffer<T>.asFlow() = iterator().asFlow()
+fun <T> Buffer<T>.asFlow(): Flow<T> = iterator().asFlow()
 
 /**
  * Flat map a [Flow] of [Buffer] into continuous [Flow] of elements

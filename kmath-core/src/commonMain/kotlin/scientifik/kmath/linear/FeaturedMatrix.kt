@@ -23,12 +23,10 @@ interface FeaturedMatrix<T : Any> : Matrix<T> {
      */
     fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<T>
 
-    companion object {
-
-    }
+    companion object
 }
 
-fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
+fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> =
     MatrixContext.real.produce(rows, columns, initializer)
 
 /**
@@ -41,7 +39,7 @@ fun <T : Any> Structure2D.Companion.square(vararg elements: T): FeaturedMatrix<T
     return BufferMatrix(size, size, buffer)
 }
 
-val Matrix<*>.features get() = (this as? FeaturedMatrix)?.features?: emptySet()
+val Matrix<*>.features: Set<MatrixFeature> get() = (this as? FeaturedMatrix)?.features ?: emptySet()
 
 /**
  * Check if matrix has the given feature class
@@ -68,7 +66,7 @@ fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: In
  * A virtual matrix of zeroes
  */
 fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
-    VirtualMatrix<T>(rows, columns) { _, _ -> elementContext.zero }
+    VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
 
 class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature
 
