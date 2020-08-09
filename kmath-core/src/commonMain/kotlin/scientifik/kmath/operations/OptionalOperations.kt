@@ -6,7 +6,7 @@ package scientifik.kmath.operations
  * The operations are not exposed to class directly to avoid method bloat but instead are declared in the field.
  * It also allows to override behavior for optional operations.
  */
-interface TrigonometricOperations<T> : FieldOperations<T> {
+interface TrigonometricOperations<T> : Algebra<T> {
     /**
      * Computes the sine of [arg].
      */
@@ -62,6 +62,7 @@ interface TrigonometricOperations<T> : FieldOperations<T> {
          * The identifier of inverse cosine.
          */
         const val ACOS_OPERATION = "acos"
+
         /**
          * The identifier of inverse tangent.
          */
@@ -106,7 +107,7 @@ fun <T : MathElement<out TrigonometricOperations<T>>> atan(arg: T): T = arg.cont
  * The operations are not exposed to class directly to avoid method bloat but instead are declared in the field. It
  * also allows to override behavior for optional operations.
  */
-interface HyperbolicTrigonometricOperations<T> : FieldOperations<T> {
+interface HyperbolicOperations<T> : Algebra<T> {
     /**
      * Computes the hyperbolic sine of [arg].
      */
@@ -138,21 +139,67 @@ interface HyperbolicTrigonometricOperations<T> : FieldOperations<T> {
     fun atanh(arg: T): T
 
     companion object {
+        /**
+         * The identifier of hyperbolic sine.
+         */
         const val SINH_OPERATION = "sinh"
+
+        /**
+         * The identifier of hyperbolic cosine.
+         */
         const val COSH_OPERATION = "cosh"
+
+        /**
+         * The identifier of hyperbolic tangent.
+         */
         const val TANH_OPERATION = "tanh"
+
+        /**
+         * The identifier of inverse hyperbolic sine.
+         */
         const val ASINH_OPERATION = "asinh"
+
+        /**
+         * The identifier of inverse hyperbolic cosine.
+         */
         const val ACOSH_OPERATION = "acosh"
+
+        /**
+         * The identifier of inverse hyperbolic tangent.
+         */
         const val ATANH_OPERATION = "atanh"
     }
 }
 
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
-fun <T : MathElement<out HyperbolicTrigonometricOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
+/**
+ * Computes the hyperbolic sine of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
+
+/**
+ * Computes the hyperbolic cosine of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
+
+/**
+ * Computes the hyperbolic tangent of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
+
+/**
+ * Computes the inverse hyperbolic sine of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
+
+/**
+ * Computes the inverse hyperbolic cosine of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
+
+/**
+ * Computes the inverse hyperbolic tangent of [arg].
+ */
+fun <T : MathElement<out HyperbolicOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
 
 /**
  * A context extension to include power operations based on exponentiation.

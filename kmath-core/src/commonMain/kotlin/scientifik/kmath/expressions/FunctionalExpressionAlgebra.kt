@@ -139,15 +139,9 @@ open class FunctionalExpressionExtendedField<T, A>(algebra: A) :
     ExtendedField<Expression<T>> where A : ExtendedField<T>, A : NumericAlgebra<T> {
     override fun sin(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.SIN_OPERATION, arg)
     override fun cos(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.COS_OPERATION, arg)
-
-    override fun asin(arg: Expression<T>): Expression<T> =
-        unaryOperation(InverseTrigonometricOperations.ASIN_OPERATION, arg)
-
-    override fun acos(arg: Expression<T>): Expression<T> =
-        unaryOperation(InverseTrigonometricOperations.ACOS_OPERATION, arg)
-
-    override fun atan(arg: Expression<T>): Expression<T> =
-        unaryOperation(InverseTrigonometricOperations.ATAN_OPERATION, arg)
+    override fun asin(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ASIN_OPERATION, arg)
+    override fun acos(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ACOS_OPERATION, arg)
+    override fun atan(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ATAN_OPERATION, arg)
 
     override fun power(arg: Expression<T>, pow: Number): Expression<T> =
         binaryOperation(PowerOperations.POW_OPERATION, arg, number(pow))

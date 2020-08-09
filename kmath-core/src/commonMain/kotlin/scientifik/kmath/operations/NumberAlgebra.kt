@@ -7,8 +7,9 @@ import kotlin.math.pow as kpow
  * Advanced Number-like semifield that implements basic operations.
  */
 interface ExtendedFieldOperations<T> :
+    FieldOperations<T>,
     TrigonometricOperations<T>,
-    HyperbolicTrigonometricOperations<T>,
+    HyperbolicOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T> {
 
@@ -22,16 +23,16 @@ interface ExtendedFieldOperations<T> :
         TrigonometricOperations.ACOS_OPERATION -> acos(arg)
         TrigonometricOperations.ASIN_OPERATION -> asin(arg)
         TrigonometricOperations.ATAN_OPERATION -> atan(arg)
-        HyperbolicTrigonometricOperations.COSH_OPERATION -> cosh(arg)
-        HyperbolicTrigonometricOperations.SINH_OPERATION -> sinh(arg)
-        HyperbolicTrigonometricOperations.TANH_OPERATION -> tanh(arg)
-        HyperbolicTrigonometricOperations.ACOSH_OPERATION -> acosh(arg)
-        HyperbolicTrigonometricOperations.ASINH_OPERATION -> asinh(arg)
-        HyperbolicTrigonometricOperations.ATANH_OPERATION -> atanh(arg)
+        HyperbolicOperations.COSH_OPERATION -> cosh(arg)
+        HyperbolicOperations.SINH_OPERATION -> sinh(arg)
+        HyperbolicOperations.TANH_OPERATION -> tanh(arg)
+        HyperbolicOperations.ACOSH_OPERATION -> acosh(arg)
+        HyperbolicOperations.ASINH_OPERATION -> asinh(arg)
+        HyperbolicOperations.ATANH_OPERATION -> atanh(arg)
         PowerOperations.SQRT_OPERATION -> sqrt(arg)
         ExponentialOperations.EXP_OPERATION -> exp(arg)
         ExponentialOperations.LN_OPERATION -> ln(arg)
-        else -> super<HyperbolicTrigonometricOperations>.unaryOperation(operation, arg)
+        else -> super.unaryOperation(operation, arg)
     }
 }
 
@@ -40,6 +41,13 @@ interface ExtendedFieldOperations<T> :
  * Advanced Number-like field that implements basic operations.
  */
 interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+    override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2
+    override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2
+    override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
+    override fun asinh(arg: T): T = ln(sqrt(arg * arg + one) + arg)
+    override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
+    override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2
+
     override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
         PowerOperations.POW_OPERATION -> power(left, right)
         else -> super.rightSideNumberOperation(operation, left, right)
@@ -155,7 +163,7 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 }
 
 /**
- * A field for [Int] without boxing. Does not produce corresponding field element
+ * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object IntRing : Ring<Int>, Norm<Int, Int> {
@@ -179,7 +187,7 @@ object IntRing : Ring<Int>, Norm<Int, Int> {
 }
 
 /**
- * A field for [Short] without boxing. Does not produce appropriate field element
+ * A field for [Short] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object ShortRing : Ring<Short>, Norm<Short, Short> {
@@ -203,7 +211,7 @@ object ShortRing : Ring<Short>, Norm<Short, Short> {
 }
 
 /**
- * A field for [Byte] values
+ * A field for [Byte] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
@@ -227,7 +235,7 @@ object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
 }
 
 /**
- * A field for [Long] values
+ * A field for [Double] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object LongRing : Ring<Long>, Norm<Long, Long> {
