@@ -6,7 +6,7 @@ import kotlin.math.*
 
 
 /**
- * A simple field over linear buffers of [Double].
+ * [ExtendedFieldOperations] over [RealBuffer].
  */
 object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
@@ -39,7 +39,8 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
             val aArray = a.array
             val bArray = b.array
             RealBuffer(DoubleArray(a.size) { aArray[it] * bArray[it] })
-        } else RealBuffer(DoubleArray(a.size) { a[it] * b[it] })
+        } else
+            RealBuffer(DoubleArray(a.size) { a[it] * b[it] })
     }
 
     override fun divide(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
@@ -72,7 +73,9 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun asin(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { asin(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { asin(arg[it]) })
+    } else {
+        RealBuffer(DoubleArray(arg.size) { asin(arg[it]) })
+    }
 
     override fun acos(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
@@ -132,6 +135,11 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     } else RealBuffer(DoubleArray(arg.size) { ln(arg[it]) })
 }
 
+/**
+ * [ExtendedField] over [RealBuffer].
+ *
+ * @property size the size of buffers to operate on.
+ */
 class RealBufferField(val size: Int) : ExtendedField<Buffer<Double>> {
     override val zero: Buffer<Double> by lazy { RealBuffer(size) { 0.0 } }
     override val one: Buffer<Double> by lazy { RealBuffer(size) { 1.0 } }

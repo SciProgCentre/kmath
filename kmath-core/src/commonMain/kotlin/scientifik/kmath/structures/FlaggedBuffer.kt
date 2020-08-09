@@ -2,15 +2,35 @@ package scientifik.kmath.structures
 
 import kotlin.experimental.and
 
+/**
+ * Represents flags to supply additional info about values of buffer.
+ *
+ * @property mask bit mask value of this flag.
+ */
 enum class ValueFlag(val mask: Byte) {
+    /**
+     * Reports the value is NaN.
+     */
     NAN(0b0000_0001),
+
+    /**
+     * Reports the value doesn't present in the buffer (when the type of value doesn't support `null`).
+     */
     MISSING(0b0000_0010),
+
+    /**
+     * Reports the value is negative infinity.
+     */
     NEGATIVE_INFINITY(0b0000_0100),
+
+    /**
+     * Reports the value is positive infinity
+     */
     POSITIVE_INFINITY(0b0000_1000)
 }
 
 /**
- * A buffer with flagged values
+ * A buffer with flagged values.
  */
 interface FlaggedBuffer<T> : Buffer<T> {
     fun getFlag(index: Int): Byte
@@ -19,11 +39,11 @@ interface FlaggedBuffer<T> : Buffer<T> {
 /**
  * The value is valid if all flags are down
  */
-fun FlaggedBuffer<*>.isValid(index: Int) = getFlag(index) != 0.toByte()
+fun FlaggedBuffer<*>.isValid(index: Int): Boolean = getFlag(index) != 0.toByte()
 
-fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag) = (getFlag(index) and flag.mask) != 0.toByte()
+fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (getFlag(index) and flag.mask) != 0.toByte()
 
-fun FlaggedBuffer<*>.isMissing(index: Int) = hasFlag(index, ValueFlag.MISSING)
+fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
 
 /**
  * A real buffer which supports flags for each value like NaN or Missing
@@ -45,8 +65,8 @@ class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : Flagged
 }
 
 inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
-    for(i in indices){
-        if(isValid(i)){
+    for (i in indices) {
+        if (isValid(i)) {
             block(values[i])
         }
     }

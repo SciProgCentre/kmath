@@ -20,7 +20,7 @@ class VirtualMatrix<T : Any>(
 
     override fun get(i: Int, j: Int): T = generator(i, j)
 
-    override fun suggestFeature(vararg features: MatrixFeature) =
+    override fun suggestFeature(vararg features: MatrixFeature): VirtualMatrix<T> =
         VirtualMatrix(rowNum, colNum, this.features + features, generator)
 
     override fun equals(other: Any?): Boolean {

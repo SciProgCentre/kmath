@@ -16,8 +16,8 @@ class ComplexNDField(override val shape: IntArray) :
 
     override val strides: Strides = DefaultStrides(shape)
     override val elementContext: ComplexField get() = ComplexField
-    override val zero by lazy { produce { zero } }
-    override val one by lazy { produce { one } }
+    override val zero: ComplexNDElement by lazy { produce { zero } }
+    override val one: ComplexNDElement by lazy { produce { one } }
 
     inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Complex): Buffer<Complex> =
         Buffer.complex(size) { initializer(it) }
@@ -101,13 +101,13 @@ inline fun BufferedNDField<Complex, ComplexField>.produceInline(crossinline init
 }
 
 /**
- * Map one [ComplexNDElement] using function with indexes
+ * Map one [ComplexNDElement] using function with indices.
  */
-inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(index: IntArray, Complex) -> Complex) =
+inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(index: IntArray, Complex) -> Complex): ComplexNDElement =
     context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
 
 /**
- * Map one [ComplexNDElement] using function without indexes
+ * Map one [ComplexNDElement] using function without indices.
  */
 inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) -> Complex): ComplexNDElement {
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.transform(buffer[offset]) }
@@ -117,7 +117,7 @@ inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) ->
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy
  */
-operator fun Function1<Complex, Complex>.invoke(ndElement: ComplexNDElement) =
+operator fun Function1<Complex, Complex>.invoke(ndElement: ComplexNDElement): ComplexNDElement =
     ndElement.map { this@invoke(it) }
 
 
@@ -126,19 +126,18 @@ operator fun Function1<Complex, Complex>.invoke(ndElement: ComplexNDElement) =
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun ComplexNDElement.plus(arg: Complex) =
-    map { it + arg }
+operator fun ComplexNDElement.plus(arg: Complex): ComplexNDElement = map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun ComplexNDElement.minus(arg: Complex) =
+operator fun ComplexNDElement.minus(arg: Complex): ComplexNDElement =
     map { it - arg }
 
-operator fun ComplexNDElement.plus(arg: Double) =
+operator fun ComplexNDElement.plus(arg: Double): ComplexNDElement =
     map { it + arg }
 
-operator fun ComplexNDElement.minus(arg: Double) =
+operator fun ComplexNDElement.minus(arg: Double): ComplexNDElement =
     map { it - arg }
 
 fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDField(shape)

@@ -4,7 +4,7 @@ import kotlin.math.abs
 import kotlin.math.pow as kpow
 
 /**
- * Advanced Number-like field that implements basic operations
+ * Advanced Number-like semifield that implements basic operations.
  */
 interface ExtendedFieldOperations<T> :
     TrigonometricOperations<T>,
@@ -22,12 +22,12 @@ interface ExtendedFieldOperations<T> :
         TrigonometricOperations.ACOS_OPERATION -> acos(arg)
         TrigonometricOperations.ASIN_OPERATION -> asin(arg)
         TrigonometricOperations.ATAN_OPERATION -> atan(arg)
-        HyperbolicTrigonometricOperations.COSH_OPERATION -> cos(arg)
-        HyperbolicTrigonometricOperations.SINH_OPERATION -> sin(arg)
-        HyperbolicTrigonometricOperations.TANH_OPERATION -> tan(arg)
-        HyperbolicTrigonometricOperations.ACOSH_OPERATION -> acos(arg)
-        HyperbolicTrigonometricOperations.ASINH_OPERATION -> asin(arg)
-        HyperbolicTrigonometricOperations.ATANH_OPERATION -> atan(arg)
+        HyperbolicTrigonometricOperations.COSH_OPERATION -> cosh(arg)
+        HyperbolicTrigonometricOperations.SINH_OPERATION -> sinh(arg)
+        HyperbolicTrigonometricOperations.TANH_OPERATION -> tanh(arg)
+        HyperbolicTrigonometricOperations.ACOSH_OPERATION -> acosh(arg)
+        HyperbolicTrigonometricOperations.ASINH_OPERATION -> asinh(arg)
+        HyperbolicTrigonometricOperations.ATANH_OPERATION -> atanh(arg)
         PowerOperations.SQRT_OPERATION -> sqrt(arg)
         ExponentialOperations.EXP_OPERATION -> exp(arg)
         ExponentialOperations.LN_OPERATION -> ln(arg)
@@ -35,6 +35,10 @@ interface ExtendedFieldOperations<T> :
     }
 }
 
+
+/**
+ * Advanced Number-like field that implements basic operations.
+ */
 interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
         PowerOperations.POW_OPERATION -> power(left, right)
@@ -44,6 +48,8 @@ interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
 
 /**
  * Real field element wrapping double.
+ *
+ * @property value the [Double] value wrapped by this [Real].
  *
  * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
  */
@@ -59,7 +65,7 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 }
 
 /**
- * A field for double without boxing. Does not produce appropriate field element
+ * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object RealField : ExtendedField<Double>, Norm<Double, Double> {
@@ -103,6 +109,9 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override inline fun Double.div(b: Double): Double = this / b
 }
 
+/**
+ * A field for [Float] without boxing. Does not produce appropriate field element.
+ */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override val zero: Float

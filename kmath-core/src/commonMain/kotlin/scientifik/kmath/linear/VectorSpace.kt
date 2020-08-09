@@ -54,7 +54,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
             size: Int,
             space: S,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ) = BufferVectorSpace(size, space, bufferFactory)
+        ): BufferVectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
 
         /**
          * Automatic buffered vector, unboxed if it is possible
@@ -70,6 +70,6 @@ class BufferVectorSpace<T : Any, S : Space<T>>(
     override val space: S,
     val bufferFactory: BufferFactory<T>
 ) : VectorSpace<T, S> {
-    override fun produce(initializer: (Int) -> T) = bufferFactory(size, initializer)
+    override fun produce(initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
     //override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))
 }

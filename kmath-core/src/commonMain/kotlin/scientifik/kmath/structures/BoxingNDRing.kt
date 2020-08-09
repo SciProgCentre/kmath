@@ -18,10 +18,10 @@ class BoxingNDRing<T, R : Ring<T>>(
         if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
     }
 
-    override val zero by lazy { produce { zero } }
-    override val one by lazy { produce { one } }
+    override val zero: BufferedNDRingElement<T, R> by lazy { produce { zero } }
+    override val one: BufferedNDRingElement<T, R> by lazy { produce { one } }
 
-    override fun produce(initializer: R.(IntArray) -> T) =
+    override fun produce(initializer: R.(IntArray) -> T): BufferedNDRingElement<T, R> =
         BufferedNDRingElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) })
