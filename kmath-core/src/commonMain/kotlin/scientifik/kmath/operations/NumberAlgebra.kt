@@ -180,7 +180,7 @@ object ShortRing : Ring<Short>, Norm<Short, Short>, RemainderDivisionOperations<
 
     override inline fun Short.minus(b: Short): Short = (this - b).toShort()
 
-    override inline fun Short.times(b: Short) = (this * b).toShort()
+    override inline fun Short.times(b: Short): Short = (this * b).toShort()
 
     override fun Short.rem(arg: Short): Short = (this % arg).toShort()
     override fun Short.div(arg: Short): Short = (this / arg).toShort()
@@ -192,9 +192,9 @@ object ShortRing : Ring<Short>, Norm<Short, Short>, RemainderDivisionOperations<
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 object ByteRing : Ring<Byte>, Norm<Byte, Byte>, RemainderDivisionOperations<Byte> {
     override val zero: Byte = 0
-    override inline fun add(a: Byte, b: Byte) = (a + b).toByte()
-    override inline fun multiply(a: Byte, b: Byte) = (a * b).toByte()
-    override inline fun multiply(a: Byte, k: Number) = (a * k.toByte()).toByte()
+    override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
+    override inline fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
+    override inline fun multiply(a: Byte, k: Number): Byte = (a * k.toByte()).toByte()
     override val one: Byte = 1
 
     override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
