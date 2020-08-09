@@ -1,5 +1,6 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.RealField.pow
 import kotlin.math.abs
 import kotlin.math.pow as kpow
 
@@ -83,6 +84,11 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val one: Double
         get() = 1.0
 
+    override fun binaryOperation(operation: String, left: Double, right: Double): Double = when (operation) {
+        PowerOperations.POW_OPERATION -> left pow right
+        else -> super.binaryOperation(operation, left, right)
+    }
+
     override inline fun add(a: Double, b: Double): Double = a + b
     override inline fun multiply(a: Double, k: Number): Double = a * k.toDouble()
 
@@ -127,6 +133,11 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 
     override val one: Float
         get() = 1.0f
+
+    override fun binaryOperation(operation: String, left: Float, right: Float): Float = when (operation) {
+        PowerOperations.POW_OPERATION -> left pow right
+        else -> super.binaryOperation(operation, left, right)
+    }
 
     override inline fun add(a: Float, b: Float): Float = a + b
     override inline fun multiply(a: Float, k: Number): Float = a * k.toFloat()

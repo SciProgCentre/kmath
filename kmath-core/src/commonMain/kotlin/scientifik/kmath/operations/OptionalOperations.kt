@@ -1,10 +1,9 @@
 package scientifik.kmath.operations
 
 /**
- * A container for trigonometric operations for specific type. They are limited to semifields.
+ * A container for trigonometric operations for specific type.
  *
- * The operations are not exposed to class directly to avoid method bloat but instead are declared in the field.
- * It also allows to override behavior for optional operations.
+ * @param T the type of element of this structure.
  */
 interface TrigonometricOperations<T> : Algebra<T> {
     /**
@@ -101,11 +100,9 @@ fun <T : MathElement<out TrigonometricOperations<T>>> acos(arg: T): T = arg.cont
 fun <T : MathElement<out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
 
 /**
- * A container for hyperbolic trigonometric operations for specific type. Trigonometric operations are limited to
- * fields.
+ * A container for hyperbolic trigonometric operations for specific type.
  *
- * The operations are not exposed to class directly to avoid method bloat but instead are declared in the field. It
- * also allows to override behavior for optional operations.
+ * @param T the type of element of this structure.
  */
 interface HyperbolicOperations<T> : Algebra<T> {
     /**
@@ -203,6 +200,8 @@ fun <T : MathElement<out HyperbolicOperations<T>>> atanh(arg: T): T = arg.contex
 
 /**
  * A context extension to include power operations based on exponentiation.
+ *
+ * @param T the type of element of this structure.
  */
 interface PowerOperations<T> : Algebra<T> {
     /**
@@ -254,6 +253,8 @@ fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /**
  * A container for operations related to `exp` and `ln` functions.
+ *
+ * @param T the type of element of this structure.
  */
 interface ExponentialOperations<T> : Algebra<T> {
     /**
@@ -291,6 +292,9 @@ fun <T : MathElement<out ExponentialOperations<T>>> ln(arg: T): T = arg.context.
 
 /**
  * A container for norm functional on element.
+ *
+ * @param T the type of element having norm defined.
+ * @param R the type of norm.
  */
 interface Norm<in T : Any, out R> {
     /**
