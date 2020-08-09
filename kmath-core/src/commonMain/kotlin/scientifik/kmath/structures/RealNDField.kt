@@ -12,8 +12,8 @@ class RealNDField(override val shape: IntArray) :
     override val strides: Strides = DefaultStrides(shape)
 
     override val elementContext: RealField get() = RealField
-    override val zero by lazy { produce { zero } }
-    override val one by lazy { produce { one } }
+    override val zero: RealNDElement by lazy { produce { zero } }
+    override val one: RealNDElement by lazy { produce { one } }
 
     inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
         RealBuffer(DoubleArray(size) { initializer(it) })
@@ -64,15 +64,15 @@ class RealNDField(override val shape: IntArray) :
     override fun NDBuffer<Double>.toElement(): FieldElement<NDBuffer<Double>, *, out BufferedNDField<Double, RealField>> =
         BufferedNDFieldElement(this@RealNDField, buffer)
 
-    override fun power(arg: NDBuffer<Double>, pow: Number) = map(arg) { power(it, pow) }
+    override fun power(arg: NDBuffer<Double>, pow: Number): RealNDElement = map(arg) { power(it, pow) }
 
-    override fun exp(arg: NDBuffer<Double>) = map(arg) { exp(it) }
+    override fun exp(arg: NDBuffer<Double>): RealNDElement = map(arg) { exp(it) }
 
-    override fun ln(arg: NDBuffer<Double>) = map(arg) { ln(it) }
+    override fun ln(arg: NDBuffer<Double>): RealNDElement = map(arg) { ln(it) }
 
-    override fun sin(arg: NDBuffer<Double>) = map(arg) { sin(it) }
+    override fun sin(arg: NDBuffer<Double>): RealNDElement = map(arg) { sin(it) }
 
-    override fun cos(arg: NDBuffer<Double>) = map(arg) { cos(it) }
+    override fun cos(arg: NDBuffer<Double>): RealNDElement = map(arg) { cos(it) }
 
     override fun tan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { tan(it) }
 
@@ -93,13 +93,13 @@ inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initiali
 }
 
 /**
- * Map one [RealNDElement] using function with indexes
+ * Map one [RealNDElement] using function with indices.
  */
-inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double) =
+inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double): RealNDElement =
     context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
 
 /**
- * Map one [RealNDElement] using function without indexes
+ * Map one [RealNDElement] using function without indices.
  */
 inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }
@@ -107,9 +107,9 @@ inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double
 }
 
 /**
- * Element by element application of any operation on elements to the whole array. Just like in numpy
+ * Element by element application of any operation on elements to the whole array. Just like in numpy.
  */
-operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
+operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement): RealNDElement =
     ndElement.map { this@invoke(it) }
 
 
@@ -118,13 +118,13 @@ operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement) =
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun RealNDElement.plus(arg: Double) =
+operator fun RealNDElement.plus(arg: Double): RealNDElement =
     map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun RealNDElement.minus(arg: Double) =
+operator fun RealNDElement.minus(arg: Double): RealNDElement =
     map { it - arg }
 
 /**

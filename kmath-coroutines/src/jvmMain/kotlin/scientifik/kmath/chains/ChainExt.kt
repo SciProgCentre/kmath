@@ -6,7 +6,7 @@ import kotlin.sequences.Sequence
 /**
  * Represent a chain as regular iterator (uses blocking calls)
  */
-operator fun <R> Chain<R>.iterator() = object : Iterator<R> {
+operator fun <R> Chain<R>.iterator(): Iterator<R> = object : Iterator<R> {
     override fun hasNext(): Boolean = true
 
     override fun next(): R = runBlocking { next() }

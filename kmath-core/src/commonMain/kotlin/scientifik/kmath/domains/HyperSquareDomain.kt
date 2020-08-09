@@ -42,13 +42,14 @@ class HyperSquareDomain(private val lower: RealBuffer, private val upper: RealBu
     override fun getUpperBound(num: Int): Double? = upper[num]
 
     override fun nearestInDomain(point: Point<Double>): Point<Double> {
-        val res: DoubleArray = DoubleArray(point.size) { i ->
+        val res = DoubleArray(point.size) { i ->
             when {
                 point[i] < lower[i] -> lower[i]
                 point[i] > upper[i] -> upper[i]
                 else -> point[i]
             }
         }
+
         return RealBuffer(*res)
     }
 

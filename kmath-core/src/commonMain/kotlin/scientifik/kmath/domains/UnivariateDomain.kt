@@ -4,7 +4,6 @@ import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.asBuffer
 
 inline class UnivariateDomain(val range: ClosedFloatingPointRange<Double>) : RealDomain {
-
     operator fun contains(d: Double): Boolean = range.contains(d)
 
     override operator fun contains(point: Point<Double>): Boolean {
@@ -15,10 +14,10 @@ inline class UnivariateDomain(val range: ClosedFloatingPointRange<Double>) : Rea
     override fun nearestInDomain(point: Point<Double>): Point<Double> {
         require(point.size == 1)
         val value = point[0]
-        return when{
+        return when {
             value in range -> point
             value >= range.endInclusive -> doubleArrayOf(range.endInclusive).asBuffer()
-            else ->  doubleArrayOf(range.start).asBuffer()
+            else -> doubleArrayOf(range.start).asBuffer()
         }
     }
 

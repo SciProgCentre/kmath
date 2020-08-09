@@ -5,19 +5,17 @@ import kotlinx.coroutines.sync.withLock
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.MutableBuffer
 import scientifik.kmath.structures.VirtualBuffer
-import kotlin.reflect.KClass
 
 /**
  * Thread-safe ring buffer
  */
 @Suppress("UNCHECKED_CAST")
-internal class RingBuffer<T>(
+class RingBuffer<T>(
     private val buffer: MutableBuffer<T?>,
     private var startIndex: Int = 0,
     size: Int = 0
 ) : Buffer<T> {
-
-    private val mutex = Mutex()
+    private val mutex: Mutex = Mutex()
 
     override var size: Int = size
         private set
@@ -28,7 +26,7 @@ internal class RingBuffer<T>(
         return buffer[startIndex.forward(index)] as T
     }
 
-    fun isFull() = size == buffer.size
+    fun isFull(): Boolean = size == buffer.size
 
     /**
      * Iterator could provide wrong results if buffer is changed in initialization (iteration is safe)

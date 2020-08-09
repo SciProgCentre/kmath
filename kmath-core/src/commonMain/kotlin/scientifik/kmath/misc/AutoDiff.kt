@@ -22,12 +22,12 @@ class DerivationResult<T : Any>(
     val deriv: Map<Variable<T>, T>,
     val context: Field<T>
 ) : Variable<T>(value) {
-    fun deriv(variable: Variable<T>) = deriv[variable] ?: context.zero
+    fun deriv(variable: Variable<T>): T = deriv[variable] ?: context.zero
 
     /**
      * compute divergence
      */
-    fun div() = context.run { sum(deriv.values) }
+    fun div(): T = context.run { sum(deriv.values) }
 
     /**
      * Compute a gradient for variables in given order
@@ -53,7 +53,7 @@ class DerivationResult<T : Any>(
  * ```
  */
 fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Variable<T>): DerivationResult<T> =
-    AutoDiffContext<T, F>(this).run {
+    AutoDiffContext(this).run {
         val result = body()
         result.d = context.one// computing derivative w.r.t result
         runBackwardPass()
@@ -86,7 +86,7 @@ abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
 
     abstract fun variable(value: T): Variable<T>
 
-    inline fun variable(block: F.() -> T) = variable(context.block())
+    inline fun variable(block: F.() -> T): Variable<T> = variable(context.block())
 
     // Overloads for Double constants
 

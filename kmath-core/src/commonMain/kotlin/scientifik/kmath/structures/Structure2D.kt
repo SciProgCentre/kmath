@@ -32,9 +32,7 @@ interface Structure2D<T> : NDStructure<T> {
         }
     }
 
-    companion object {
-
-    }
+    companion object
 }
 
 /**

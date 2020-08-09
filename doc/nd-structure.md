@@ -1,4 +1,4 @@
-# Nd-structure generation and operations
+# ND-structure generation and operations
 
 **TODO**
 
