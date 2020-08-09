@@ -25,4 +25,4 @@ fun <T : Any> Matrix<T>.asPoint(): Point<T> =
         error("Can't convert matrix with more than one column to vector")
     }
 
-fun <T : Any> Point<T>.asMatrix() = VirtualMatrix(size, 1) { i, _ -> get(i) }
+fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

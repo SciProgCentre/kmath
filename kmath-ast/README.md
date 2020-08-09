@@ -1,4 +1,4 @@
-# Abstract syntax tree expression representation and operations (`kmath-ast`)
+# Abstract Syntax Tree Expression Representation and Operations (`kmath-ast`)
 
 This subproject implements the following features:
 
@@ -38,7 +38,7 @@ This subproject implements the following features:
 > ```
 >
 
-## Dynamic expression code generation with ObjectWeb ASM
+## Dynamic Expression Code Generation with ObjectWeb ASM
 
 `kmath-ast` JVM module supports runtime code generation to eliminate overhead of tree traversal. Code generator builds 
 a special implementation of `Expression<T>` with implemented `invoke` function. 
@@ -46,7 +46,7 @@ a special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder: 
 
 ```kotlin
-    RealField.mstInField { symbol("x") + 2 }.compile()
+RealField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 … leads to generation of bytecode, which can be decompiled to the following Java class: 
@@ -75,7 +75,7 @@ public final class AsmCompiledExpression_1073786867_0 implements Expression<Doub
 
 ### Example Usage
 
-This API is an extension to MST and MstExpression, so you may optimize as both of them: 
+This API extends MST and MstExpression, so you may optimize as both of them: 
 
 ```kotlin
 RealField.mstInField { symbol("x") + 2 }.compile()

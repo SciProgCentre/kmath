@@ -5,42 +5,54 @@ import scientifik.kmath.operations.NumericAlgebra
 import scientifik.kmath.operations.RealField
 
 /**
- * A Mathematical Syntax Tree node for mathematical expressions
+ * A Mathematical Syntax Tree node for mathematical expressions.
  */
 sealed class MST {
-
     /**
-     * A node containing unparsed string
+     * A node containing raw string.
+     *
+     * @property value the value of this node.
      */
     data class Symbolic(val value: String) : MST()
 
     /**
-     * A node containing a number
+     * A node containing a numeric value or scalar.
+     *
+     * @property value the value of this number.
      */
     data class Numeric(val value: Number) : MST()
 
     /**
-     * A node containing an unary operation
+     * A node containing an unary operation.
+     *
+     * @property operation the identifier of operation.
+     * @property value the argument of this operation.
      */
     data class Unary(val operation: String, val value: MST) : MST() {
-        companion object {
-            const val ABS_OPERATION = "abs"
-            //TODO add operations
-        }
+        companion object
     }
 
     /**
-     * A node containing binary operation
+     * A node containing binary operation.
+     *
+     * @property operation the identifier operation.
+     * @property left the left operand.
+     * @property right the right operand.
      */
     data class Binary(val operation: String, val left: MST, val right: MST) : MST() {
         companion object
     }
 }
 
-//TODO add a function with positional arguments
+// TODO add a function with named arguments
 
-//TODO add a function with named arguments
-
+/**
+ * Interprets the [MST] node with this [Algebra].
+ *
+ * @receiver the algebra that provides operations.
+ * @param node the node to evaluate.
+ * @return the value of expression.
+ */
 fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
@@ -65,4 +77,11 @@ fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     }
 }
 
-fun <T> MST.compile(algebra: Algebra<T>): T = algebra.evaluate(this)
+/**
+ * Interprets the [MST] node with this [Algebra].
+ *
+ * @receiver the node to evaluate.
+ * @param algebra the algebra that provides operations.
+ * @return the value of expression.
+ */
+fun <T> MST.interpret(algebra: Algebra<T>): T = algebra.evaluate(this)

@@ -6,7 +6,7 @@ import kotlin.math.*
 
 
 /**
- * A simple field over linear buffers of [Double]
+ * [ExtendedFieldOperations] over [RealBuffer].
  */
 object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
@@ -109,6 +109,11 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
         RealBuffer(DoubleArray(arg.size) { ln(arg[it]) })
 }
 
+/**
+ * [ExtendedField] over [RealBuffer].
+ *
+ * @property size the size of buffers to operate on.
+ */
 class RealBufferField(val size: Int) : ExtendedField<Buffer<Double>> {
     override val zero: Buffer<Double> by lazy { RealBuffer(size) { 0.0 } }
     override val one: Buffer<Double> by lazy { RealBuffer(size) { 1.0 } }

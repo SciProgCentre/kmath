@@ -31,7 +31,7 @@ class BigIntOperationsTest {
     @Test
     fun testUnaryMinus() {
         val x = 1234.toBigInt()
-        val y = -1234.toBigInt()
+        val y = (-1234).toBigInt()
         assertEquals(-x, y)
     }
 
@@ -48,18 +48,18 @@ class BigIntOperationsTest {
 
     @Test
     fun testMinus__2_1() {
-        val x = -2.toBigInt()
+        val x = (-2).toBigInt()
         val y = 1.toBigInt()
 
         val res = x - y
-        val sum = -3.toBigInt()
+        val sum = (-3).toBigInt()
 
         assertEquals(sum, res)
     }
 
     @Test
     fun testMinus___2_1() {
-        val x = -2.toBigInt()
+        val x = (-2).toBigInt()
         val y = 1.toBigInt()
 
         val res = -x - y
@@ -74,7 +74,7 @@ class BigIntOperationsTest {
         val y = 0xffffffffaL.toBigInt()
 
         val res = x - y
-        val sum = -0xfffffcfc1L.toBigInt()
+        val sum = (-0xfffffcfc1L).toBigInt()
 
         assertEquals(sum, res)
     }
@@ -92,11 +92,11 @@ class BigIntOperationsTest {
 
     @Test
     fun testMultiply__2_3() {
-        val x = -2.toBigInt()
+        val x = (-2).toBigInt()
         val y = 3.toBigInt()
 
         val res = x * y
-        val prod = -6.toBigInt()
+        val prod = (-6).toBigInt()
 
         assertEquals(prod, res)
     }
@@ -129,7 +129,7 @@ class BigIntOperationsTest {
         val y = -0xfff456
 
         val res = x * y
-        val prod = -0xffe579ad5dc2L.toBigInt()
+        val prod = (-0xffe579ad5dc2L).toBigInt()
 
         assertEquals(prod, res)
     }
@@ -259,7 +259,7 @@ class BigIntOperationsTest {
         val y = -3
 
         val res = x / y
-        val div = -6.toBigInt()
+        val div = (-6).toBigInt()
 
         assertEquals(div, res)
     }
@@ -267,10 +267,10 @@ class BigIntOperationsTest {
     @Test
     fun testBigDivision_20__3() {
         val x = 20.toBigInt()
-        val y = -3.toBigInt()
+        val y = (-3).toBigInt()
 
         val res = x / y
-        val div = -6.toBigInt()
+        val div = (-6).toBigInt()
 
         assertEquals(div, res)
     }

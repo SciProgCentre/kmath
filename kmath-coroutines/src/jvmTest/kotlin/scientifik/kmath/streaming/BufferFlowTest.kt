@@ -15,14 +15,13 @@ import kotlin.test.Test
 @InternalCoroutinesApi
 @FlowPreview
 class BufferFlowTest {
-
-    val dispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+    val dispatcher: CoroutineDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     @Test
     @Timeout(2000)
     fun map() {
         runBlocking {
-            (1..20).asFlow().mapParallel( dispatcher) {
+            (1..20).asFlow().mapParallel(dispatcher) {
                 println("Started $it on ${Thread.currentThread().name}")
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Thread.sleep(200)
