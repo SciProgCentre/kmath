@@ -153,7 +153,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      */
     operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
-    override fun norm(arg: Complex): Complex = arg.conjugate * arg
+    override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
     override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
 }

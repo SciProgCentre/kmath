@@ -1,6 +1,7 @@
 package scientifik.kmath.operations
 
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -63,5 +64,10 @@ internal class ComplexFieldTest {
         assertEquals(
             ComplexField { i * 8 }.let { it.im.toInt() to it.re.toInt() },
             ComplexField { Complex(2, 2) pow 2 }.let { it.im.toInt() to it.re.toInt() })
+    }
+
+    @Test
+    fun testNorm() {
+        assertEquals(2.toComplex(), ComplexField { norm(2 * i) })
     }
 }
