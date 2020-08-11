@@ -164,7 +164,7 @@ interface HyperbolicOperations<T> : Algebra<T> {
         /**
          * The identifier of inverse hyperbolic tangent.
          */
-        const val ATANH_OPERATION = "atanh"
+        const val ATANH_OPERATION: String = "atanh"
     }
 }
 
