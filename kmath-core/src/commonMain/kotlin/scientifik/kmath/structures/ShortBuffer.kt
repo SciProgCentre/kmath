@@ -1,7 +1,7 @@
 package scientifik.kmath.structures
 
 /**
- * Specialized [MutableBuffer] implementation over [ShortBuffer].
+ * Specialized [MutableBuffer] implementation over [ShortArray].
  *
  * @property array the underlying array.
  */

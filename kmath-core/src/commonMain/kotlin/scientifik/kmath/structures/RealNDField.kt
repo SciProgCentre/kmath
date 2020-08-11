@@ -40,6 +40,7 @@ class RealNDField(override val shape: IntArray) :
         transform: RealField.(index: IntArray, Double) -> Double
     ): RealNDElement {
         check(arg)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
@@ -71,16 +72,18 @@ class RealNDField(override val shape: IntArray) :
     override fun ln(arg: NDBuffer<Double>): RealNDElement = map(arg) { ln(it) }
 
     override fun sin(arg: NDBuffer<Double>): RealNDElement = map(arg) { sin(it) }
-
     override fun cos(arg: NDBuffer<Double>): RealNDElement = map(arg) { cos(it) }
+    override fun tan(arg: NDBuffer<Double>): RealNDElement = map(arg) { tan(it) }
+    override fun asin(arg: NDBuffer<Double>): RealNDElement = map(arg) { asin(it) }
+    override fun acos(arg: NDBuffer<Double>): RealNDElement = map(arg) { acos(it) }
+    override fun atan(arg: NDBuffer<Double>): RealNDElement = map(arg) { atan(it) }
 
-    override fun tan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { tan(it) }
-
-    override fun asin(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { asin(it) }
-
-    override fun acos(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { acos(it) }
-
-    override fun atan(arg: NDBuffer<Double>): NDBuffer<Double> = map(arg) { atan(it) }
+    override fun sinh(arg: NDBuffer<Double>): RealNDElement = map(arg) { sinh(it) }
+    override fun cosh(arg: NDBuffer<Double>): RealNDElement = map(arg) { cosh(it) }
+    override fun tanh(arg: NDBuffer<Double>): RealNDElement = map(arg) { tanh(it) }
+    override fun asinh(arg: NDBuffer<Double>): RealNDElement = map(arg) { asinh(it) }
+    override fun acosh(arg: NDBuffer<Double>): RealNDElement = map(arg) { acosh(it) }
+    override fun atanh(arg: NDBuffer<Double>): RealNDElement = map(arg) { atanh(it) }
 }
 
 
@@ -130,6 +133,5 @@ operator fun RealNDElement.minus(arg: Double): RealNDElement =
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R {
-    return NDField.real(*shape).run(action)
-}
+
+inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R = NDField.real(*shape).run(action)

@@ -4,7 +4,7 @@ package scientifik.kmath.operations
  * Returns the sum of all elements in the iterable in this [Space].
  *
  * @receiver the algebra that provides addition.
- * @param data the collection to sum up.
+ * @param data the iterable to sum up.
  * @return the sum.
  */
 fun <T> Space<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> add(left, right) }
@@ -13,10 +13,28 @@ fun <T> Space<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> ad
  * Returns the sum of all elements in the sequence in this [Space].
  *
  * @receiver the algebra that provides addition.
- * @param data the collection to sum up.
+ * @param data the sequence to sum up.
  * @return the sum.
  */
 fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> add(left, right) }
+
+/**
+ * Returns an average value of elements in the iterable in this [Space].
+ *
+ * @receiver the algebra that provides addition and division.
+ * @param data the iterable to find average.
+ * @return the average value.
+ */
+fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
+
+/**
+ * Returns an average value of elements in the sequence in this [Space].
+ *
+ * @receiver the algebra that provides addition and division.
+ * @param data the sequence to find average.
+ * @return the average value.
+ */
+fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
 
 /**
  * Returns the sum of all elements in the iterable in provided space.
@@ -25,7 +43,34 @@ fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> ad
  * @param space the algebra that provides addition.
  * @return the sum.
  */
-fun <T : Any, S : Space<T>> Iterable<T>.sumWith(space: S): T = space.sum(this)
+fun <T> Iterable<T>.sumWith(space: Space<T>): T = space.sum(this)
+
+/**
+ * Returns the sum of all elements in the sequence in provided space.
+ *
+ * @receiver the collection to sum up.
+ * @param space the algebra that provides addition.
+ * @return the sum.
+ */
+fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
+
+/**
+ * Returns an average value of elements in the iterable in this [Space].
+ *
+ * @receiver the iterable to find average.
+ * @param space the algebra that provides addition and division.
+ * @return the average value.
+ */
+fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
+
+/**
+ * Returns an average value of elements in the sequence in this [Space].
+ *
+ * @receiver the sequence to find average.
+ * @param space the algebra that provides addition and division.
+ * @return the average value.
+ */
+fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
 
 //TODO optimized power operation
 
