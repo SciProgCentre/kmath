@@ -40,7 +40,7 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
-object ComplexField : ExtendedField<Complex> {
+object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()
 
@@ -152,6 +152,8 @@ object ComplexField : ExtendedField<Complex> {
      * @receiver the product.
      */
     operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+
+    override fun norm(arg: Complex): Complex = arg.conjugate * arg
 
     override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
 }

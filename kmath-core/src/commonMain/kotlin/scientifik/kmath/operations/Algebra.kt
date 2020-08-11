@@ -61,7 +61,7 @@ inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(bloc
  * Represents "semispace", i.e. algebraic structure with associative binary operation called "addition" as well as
  * multiplication by scalars.
  *
- * @param T the type of element of this "semispace".
+ * @param T the type of element of this semispace.
  */
 interface SpaceOperations<T> : Algebra<T> {
     /**
