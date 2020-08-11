@@ -1,7 +1,10 @@
 package scientifik.kmath.operations
 
+import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 internal class ComplexFieldTest {
     @Test
@@ -35,6 +38,25 @@ internal class ComplexFieldTest {
     }
 
     @Test
+    fun testSine() {
+        assertEquals(ComplexField { i * sinh(one) }, ComplexField { sin(i) })
+        assertEquals(ComplexField { i * sinh(PI.toComplex()) }, ComplexField { sin(i * PI.toComplex()) })
+    }
+
+    @Test
+    fun testInverseSine() {
+        assertEquals(Complex(0, -0.0), ComplexField { asin(zero) })
+        assertTrue(abs(ComplexField { i * asinh(one) }.r - ComplexField { asin(i) }.r) < 0.000000000000001)
+    }
+
+    @Test
+    fun testInverseHyperbolicSine() {
+        assertEquals(
+            ComplexField { i * PI.toComplex() / 2 },
+            ComplexField { asinh(i) })
+    }
+
+    @Test
     fun testPower() {
         assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
         assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
@@ -42,5 +64,10 @@ internal class ComplexFieldTest {
         assertEquals(
             ComplexField { i * 8 }.let { it.im.toInt() to it.re.toInt() },
             ComplexField { Complex(2, 2) pow 2 }.let { it.im.toInt() to it.re.toInt() })
+    }
+
+    @Test
+    fun testNorm() {
+        assertEquals(2.toComplex(), ComplexField { norm(2 * i) })
     }
 }
