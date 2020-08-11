@@ -1,8 +1,8 @@
 plugins {
-    id("scientifik.publish") version "0.4.2" apply false
+    id("scientifik.publish") apply false
 }
 
-val kmathVersion by extra("0.1.4-dev-4")
+val kmathVersion by extra("0.1.4-dev-8")
 
 val bintrayRepo by extra("scientifik")
 val githubProject by extra("kmath")
@@ -11,6 +11,7 @@ allprojects {
     repositories {
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlinx")
+        maven("https://dl.bintray.com/hotkeytlt/maven")
     }
 
     group = "scientifik"

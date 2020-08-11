@@ -3,7 +3,7 @@ package scietifik.kmath.histogram
 import scientifik.kmath.histogram.RealHistogram
 import scientifik.kmath.histogram.fill
 import scientifik.kmath.histogram.put
-import scientifik.kmath.linear.RealVector
+import scientifik.kmath.real.RealVector
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,10 +1,14 @@
 pluginManagement {
 
+    val toolsVersion = "0.5.0"
+
     plugins {
-        id("scientifik.mpp") version "0.4.1"
-        id("scientifik.jvm") version "0.4.1"
-        id("scientifik.atomic") version "0.4.1"
-        id("scientifik.publish") version "0.4.1"
+        id("kotlinx.benchmark") version "0.2.0-dev-8"
+        id("scientifik.mpp") version toolsVersion
+        id("scientifik.jvm") version toolsVersion
+        id("scientifik.atomic") version toolsVersion
+        id("scientifik.publish") version toolsVersion
+        kotlin("plugin.allopen") version "1.3.72"
     }
 
     repositories {
@@ -20,7 +24,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             when (requested.id.id) {
-                "scientifik.mpp", "scientifik.jvm", "scientifik.publish" -> useModule("scientifik:gradle-tools:${requested.version}")
+                "scientifik.mpp", "scientifik.jvm", "scientifik.publish" -> useModule("scientifik:gradle-tools:$toolsVersion")
             }
         }
     }
@@ -42,5 +46,6 @@ include(
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
+    ":kmath-ast",
     ":examples"
 )

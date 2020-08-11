@@ -23,14 +23,14 @@ fun main() {
 
     measureAndPrint("Automatic field addition") {
         autoField.run {
-            var res = one
+            var res: NDBuffer<Double> = one
             repeat(n) {
-                res += 1.0
+                res += number(1.0)
             }
         }
     }
 
-    measureAndPrint("Element addition"){
+    measureAndPrint("Element addition") {
         var res = genericField.one
         repeat(n) {
             res += 1.0
@@ -63,7 +63,7 @@ fun main() {
         genericField.run {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += 1.0
+                res += one // con't avoid using `one` due to resolution ambiguity
             }
         }
     }

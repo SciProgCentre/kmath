@@ -1,17 +1,9 @@
 package scientifik.kmath.histogram
 
+import scientifik.kmath.domains.Domain
 import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.ArrayBuffer
-import scientifik.kmath.structures.DoubleBuffer
-
-/**
- * A simple geometric domain
- * TODO move to geometry module
- */
-interface Domain<T : Any> {
-    operator fun contains(vector: Point<out T>): Boolean
-    val dimension: Int
-}
+import scientifik.kmath.structures.RealBuffer
 
 /**
  * The bin in the histogram. The histogram is by definition always done in the real space
@@ -51,9 +43,9 @@ interface MutableHistogram<T : Any, out B : Bin<T>> : Histogram<T, B> {
 fun <T : Any> MutableHistogram<T, *>.put(vararg point: T) = put(ArrayBuffer(point))
 
 fun MutableHistogram<Double, *>.put(vararg point: Number) =
-    put(DoubleBuffer(point.map { it.toDouble() }.toDoubleArray()))
+    put(RealBuffer(point.map { it.toDouble() }.toDoubleArray()))
 
-fun MutableHistogram<Double, *>.put(vararg point: Double) = put(DoubleBuffer(point))
+fun MutableHistogram<Double, *>.put(vararg point: Double) = put(RealBuffer(point))
 
 fun <T : Any> MutableHistogram<T, *>.fill(sequence: Iterable<Point<T>>) = sequence.forEach { put(it) }
 

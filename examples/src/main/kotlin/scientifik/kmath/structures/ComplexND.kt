@@ -27,7 +27,7 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField.run {
-            var res = one
+            var res: NDBuffer<Complex> = one
             repeat(n) {
                 res += 1.0
             }

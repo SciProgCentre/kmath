@@ -5,6 +5,7 @@ import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
 import scientifik.kmath.linear.*
 import scientifik.kmath.structures.Matrix
+import scientifik.kmath.structures.NDStructure
 
 class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) :
     FeaturedMatrix<Double> {
@@ -19,6 +20,16 @@ class CMMatrix(val origin: RealMatrix, features: Set<MatrixFeature>? = null) :
         CMMatrix(origin, this.features + features)
 
     override fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
+
+    override fun hashCode(): Int {
+        var result = origin.hashCode()
+        result = 31 * result + features.hashCode()
+        return result
+    }
 }
 
 fun Matrix<Double>.toCM(): CMMatrix = if (this is CMMatrix) {

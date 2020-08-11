@@ -8,15 +8,20 @@ import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
 import kotlin.math.*
 
+private val PI_DIV_2 = Complex(PI / 2, 0)
+
 /**
- * A field for complex numbers
+ * A field of [Complex].
  */
-object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
+object ComplexField : ExtendedField<Complex> {
     override val zero: Complex = Complex(0.0, 0.0)
 
     override val one: Complex = Complex(1.0, 0.0)
 
-    val i = Complex(0.0, 1.0)
+    /**
+     * The imaginary unit.
+     */
+    val i: Complex = Complex(0.0, 1.0)
 
     override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
 
@@ -30,9 +35,11 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
         return Complex((a.re * b.re + a.im * b.im) / norm, (a.re * b.im - a.im * b.re) / norm)
     }
 
-    override fun sin(arg: Complex): Complex = i / 2 * (exp(-i * arg) - exp(i * arg))
-
+    override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2
     override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
+    override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - arg pow 2) + i * arg)
+    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - arg pow 2) + i * arg)
+    override fun atan(arg: Complex): Complex = i * (ln(one - i * arg) - ln(one + i * arg)) / 2
 
     override fun power(arg: Complex, pow: Number): Complex =
         arg.r.pow(pow.toDouble()) * (cos(pow.toDouble() * arg.theta) + i * sin(pow.toDouble() * arg.theta))
@@ -41,19 +48,59 @@ object ComplexField : ExtendedFieldOperations<Complex>, Field<Complex> {
 
     override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
-    operator fun Double.plus(c: Complex) = add(this.toComplex(), c)
+    /**
+     * Adds complex number to real one.
+     *
+     * @receiver the addend.
+     * @param c the augend.
+     * @return the sum.
+     */
+    operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
 
-    operator fun Double.minus(c: Complex) = add(this.toComplex(), -c)
+    /**
+     * Subtracts complex number from real one.
+     *
+     * @receiver the minuend.
+     * @param c the subtrahend.
+     * @return the difference.
+     */
+    operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
 
-    operator fun Complex.plus(d: Double) = d + this
+    /**
+     * Adds real number to complex one.
+     *
+     * @receiver the addend.
+     * @param d the augend.
+     * @return the sum.
+     */
+    operator fun Complex.plus(d: Double): Complex = d + this
 
-    operator fun Complex.minus(d: Double) = add(this, -d.toComplex())
+    /**
+     * Subtracts real number from complex one.
+     *
+     * @receiver the minuend.
+     * @param d the subtrahend.
+     * @return the difference.
+     */
+    operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
 
-    operator fun Double.times(c: Complex) = Complex(c.re * this, c.im * this)
+    /**
+     * Multiplies real number by complex one.
+     *
+     * @receiver the multiplier.
+     * @param c the multiplicand.
+     * @receiver the product.
+     */
+    operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+
+    override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
 }
 
 /**
- * Complex number class
+ * Represents complex number.
+ *
+ * @property re The real part.
+ * @property im The imaginary part.
  */
 data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
     constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
@@ -94,7 +141,13 @@ val Complex.r: Double get() = sqrt(re * re + im * im)
  */
 val Complex.theta: Double get() = atan(im / re)
 
-fun Double.toComplex() = Complex(this, 0.0)
+/**
+ * Creates a complex number with real part equal to this real.
+ *
+ * @receiver the real part.
+ * @return the new complex number.
+ */
+fun Double.toComplex(): Complex = Complex(this, 0.0)
 
 inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
     return MemoryBuffer.create(Complex, size, init)

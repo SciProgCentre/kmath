@@ -2,14 +2,16 @@ package scientifik.kmath.streaming
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import scientifik.kmath.chains.BlockingRealChain
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.BufferFactory
-import scientifik.kmath.structures.DoubleBuffer
+import scientifik.kmath.structures.RealBuffer
+import scientifik.kmath.structures.asBuffer
 
 /**
  * Create a [Flow] from buffer
  */
-fun <T> Buffer<T>.asFlow() = iterator().asFlow()
+fun <T> Buffer<T>.asFlow(): Flow<T> = iterator().asFlow()
 
 /**
  * Flat map a [Flow] of [Buffer] into continuous [Flow] of elements
@@ -43,22 +45,30 @@ fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>): Flow<
 /**
  * Specialized flow chunker for real buffer
  */
-fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
+fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
-    val array = DoubleArray(bufferSize)
-    var counter = 0
 
-    this@chunked.collect { element ->
-        array[counter] = element
-        counter++
-        if (counter == bufferSize) {
-            val buffer = DoubleBuffer(array)
-            emit(buffer)
-            counter = 0
+    if (this@chunked is BlockingRealChain) {
+        //performance optimization for blocking primitive chain
+        while (true) {
+            emit(nextBlock(bufferSize).asBuffer())
         }
-    }
-    if (counter > 0) {
-        emit(DoubleBuffer(counter) { array[it] })
+    } else {
+        val array = DoubleArray(bufferSize)
+        var counter = 0
+
+        this@chunked.collect { element ->
+            array[counter] = element
+            counter++
+            if (counter == bufferSize) {
+                val buffer = RealBuffer(array)
+                emit(buffer)
+                counter = 0
+            }
+        }
+        if (counter > 0) {
+            emit(RealBuffer(counter) { array[it] })
+        }
     }
 }
 

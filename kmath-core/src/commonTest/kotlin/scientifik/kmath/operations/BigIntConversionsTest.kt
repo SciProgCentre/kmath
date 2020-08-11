@@ -19,7 +19,7 @@ class BigIntConversionsTest {
 
     @Test
     fun testToString_0x17ead2ffffd() {
-        val x = -0x17ead2ffffdL.toBigInt()
+        val x = (-0x17ead2ffffdL).toBigInt()
         assertEquals("-0x17ead2ffffd", x.toString())
     }
 

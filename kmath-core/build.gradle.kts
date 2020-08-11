@@ -1,11 +1,7 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("scientifik.mpp") }
 
 kotlin.sourceSets {
     commonMain {
-        dependencies {
-            api(project(":kmath-memory"))
-        }
+        dependencies { api(project(":kmath-memory")) }
     }
 }

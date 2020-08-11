@@ -2,34 +2,25 @@ package scientifik.memory
 
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView
+import org.khronos.webgl.Int8Array
 
-/**
- * Allocate the most effective platform-specific memory
- */
-actual fun Memory.Companion.allocate(length: Int): Memory {
-    val buffer = ArrayBuffer(length)
-    return DataViewMemory(DataView(buffer, 0, length))
-}
-
-class DataViewMemory(val view: DataView) : Memory {
-
+private class DataViewMemory(val view: DataView) : Memory {
     override val size: Int get() = view.byteLength
 
     override fun view(offset: Int, length: Int): Memory {
         require(offset >= 0) { "offset shouldn't be negative: $offset" }
         require(length >= 0) { "length shouldn't be negative: $length" }
-        if (offset + length > size) {
+        require(offset + length <= size) { "Can't view memory outside the parent region." }
+
+        if (offset + length > size)
             throw IndexOutOfBoundsException("offset + length > size: $offset + $length > $size")
-        }
+
         return DataViewMemory(DataView(view.buffer, view.byteOffset + offset, length))
     }
 
+    override fun copy(): Memory = DataViewMemory(DataView(view.buffer.slice(0)))
 
-    override fun copy(): Memory {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private val reader = object : MemoryReader {
+    private val reader: MemoryReader = object : MemoryReader {
         override val memory: Memory get() = this@DataViewMemory
 
         override fun readDouble(offset: Int): Double = view.getFloat64(offset, false)
@@ -42,17 +33,17 @@ class DataViewMemory(val view: DataView) : Memory {
 
         override fun readInt(offset: Int): Int = view.getInt32(offset, false)
 
-        override fun readLong(offset: Int): Long = (view.getInt32(offset, false).toLong() shl 32) or
-                view.getInt32(offset + 4, false).toLong()
+        override fun readLong(offset: Int): Long =
+            view.getInt32(offset, false).toLong() shl 32 or view.getInt32(offset + 4, false).toLong()
 
         override fun release() {
-            // does nothing on JS because of GC
+            // does nothing on JS
         }
     }
 
     override fun reader(): MemoryReader = reader
 
-    private val writer = object : MemoryWriter {
+    private val writer: MemoryWriter = object : MemoryWriter {
         override val memory: Memory get() = this@DataViewMemory
 
         override fun writeDouble(offset: Int, value: Double) {
@@ -81,11 +72,27 @@ class DataViewMemory(val view: DataView) : Memory {
         }
 
         override fun release() {
-            //does nothing on JS
+            // does nothing on JS
         }
-
     }
 
     override fun writer(): MemoryWriter = writer
 
+}
+
+/**
+ * Allocates memory based on a [DataView].
+ */
+actual fun Memory.Companion.allocate(length: Int): Memory {
+    val buffer = ArrayBuffer(length)
+    return DataViewMemory(DataView(buffer, 0, length))
+}
+
+/**
+ * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
+ * and could be mutated independently from the resulting [Memory].
+ */
+actual fun Memory.Companion.wrap(array: ByteArray): Memory {
+    @Suppress("CAST_NEVER_SUCCEEDS") val int8Array = array as Int8Array
+    return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))
 }

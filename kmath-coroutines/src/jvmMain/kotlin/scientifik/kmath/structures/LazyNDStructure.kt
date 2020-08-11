@@ -8,10 +8,9 @@ class LazyNDStructure<T>(
     override val shape: IntArray,
     val function: suspend (IntArray) -> T
 ) : NDStructure<T> {
+    private val cache: MutableMap<IntArray, Deferred<T>> = hashMapOf()
 
-    private val cache = HashMap<IntArray, Deferred<T>>()
-
-    fun deferred(index: IntArray) = cache.getOrPut(index) {
+    fun deferred(index: IntArray): Deferred<T> = cache.getOrPut(index) {
         scope.async(context = Dispatchers.Math) {
             function(index)
         }
@@ -30,19 +29,33 @@ class LazyNDStructure<T>(
         }
         return res.asSequence()
     }
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
+
+    override fun hashCode(): Int {
+        var result = scope.hashCode()
+        result = 31 * result + shape.contentHashCode()
+        result = 31 * result + function.hashCode()
+        result = 31 * result + cache.hashCode()
+        return result
+    }
 }
 
-fun <T> NDStructure<T>.deferred(index: IntArray) =
+fun <T> NDStructure<T>.deferred(index: IntArray): Deferred<T> =
     if (this is LazyNDStructure<T>) this.deferred(index) else CompletableDeferred(get(index))
 
-suspend fun <T> NDStructure<T>.await(index: IntArray) =
+suspend fun <T> NDStructure<T>.await(index: IntArray): T =
     if (this is LazyNDStructure<T>) this.await(index) else get(index)
 
 /**
- * PENDING would benifit from KEEP-176
+ * PENDING would benefit from KEEP-176
  */
-fun <T, R> NDStructure<T>.mapAsyncIndexed(scope: CoroutineScope, function: suspend (T, index: IntArray) -> R) =
-    LazyNDStructure(scope, shape) { index -> function(get(index), index) }
+fun <T, R> NDStructure<T>.mapAsyncIndexed(
+    scope: CoroutineScope,
+    function: suspend (T, index: IntArray) -> R
+): LazyNDStructure<R> = LazyNDStructure(scope, shape) { index -> function(get(index), index) }
 
-fun <T, R> NDStructure<T>.mapAsync(scope: CoroutineScope, function: suspend (T) -> R) =
+fun <T, R> NDStructure<T>.mapAsync(scope: CoroutineScope, function: suspend (T) -> R): LazyNDStructure<R> =
     LazyNDStructure(scope, shape) { index -> function(get(index)) }

@@ -39,14 +39,14 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
     override fun elements(): Sequence<Pair<IntArray, T>> =
         asSequence().mapIndexed { index, value -> intArrayOf(index) to value }
 
-    override fun get(index: Int): T = buffer.get(index)
+    override fun get(index: Int): T = buffer[index]
 }
 
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
 fun <T> NDStructure<T>.as1D(): Structure1D<T> = if (shape.size == 1) {
-    if( this is NDBuffer){
+    if (this is NDBuffer) {
         Buffer1DWrapper(this.buffer)
     } else {
         Structure1DWrapper(this)

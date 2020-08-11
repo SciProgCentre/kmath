@@ -18,7 +18,7 @@ class LUPDecomposition<T : Any>(
     private val even: Boolean
 ) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
 
-    val elementContext get() = context.elementContext
+    val elementContext: Field<T> get() = context.elementContext
 
     /**
      * Returns the matrix L of the decomposition.
@@ -67,7 +67,7 @@ class LUPDecomposition<T : Any>(
 
 }
 
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
+fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T): T =
     if (value > elementContext.zero) value else with(elementContext) { -value }
 
 
@@ -128,14 +128,14 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
                     luRow[col] = sum
 
                     // maintain best permutation choice
-                    if (abs(sum) > largest) {
-                        largest = abs(sum)
+                    if (this@lup.abs(sum) > largest) {
+                        largest = this@lup.abs(sum)
                         max = row
                     }
                 }
 
                 // Singularity check
-                if (checkSingular(abs(lu[max, col]))) {
+                if (checkSingular(this@lup.abs(lu[max, col]))) {
                     error("The matrix is singular")
                 }
 
@@ -169,9 +169,10 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
-) = lup(T::class, matrix, checkSingular)
+): LUPDecomposition<T> = lup(T::class, matrix, checkSingular)
 
-fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(Double::class, matrix) { it < 1e-11 }
+fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
+    lup(Double::class, matrix) { it < 1e-11 }
 
 fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Matrix<T> {
 
@@ -185,7 +186,7 @@ fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Mat
             // Apply permutations to b
             val bp = create { _, _ -> zero }
 
-            for (row in 0 until pivot.size) {
+            for (row in pivot.indices) {
                 val bpRow = bp.row(row)
                 val pRow = pivot[row]
                 for (col in 0 until matrix.colNum) {
@@ -194,7 +195,7 @@ fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Mat
             }
 
             // Solve LY = b
-            for (col in 0 until pivot.size) {
+            for (col in pivot.indices) {
                 val bpCol = bp.row(col)
                 for (i in col + 1 until pivot.size) {
                     val bpI = bp.row(i)
@@ -225,7 +226,7 @@ fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Mat
     }
 }
 
-inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>) = solve(T::class, matrix)
+inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matrix<T> = solve(T::class, matrix)
 
 /**
  * Solve a linear equation **a*x = b**
@@ -240,13 +241,12 @@ inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.
     return decomposition.solve(T::class, b)
 }
 
-fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>) =
-    solve(a, b) { it < 1e-11 }
+fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solve(a, b) { it < 1e-11 }
 
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
-) = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
+): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
 
-fun RealMatrixContext.inverse(matrix: Matrix<Double>) =
+fun RealMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> =
     solve(matrix, one(matrix.rowNum, matrix.colNum)) { it < 1e-11 }

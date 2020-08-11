@@ -19,22 +19,20 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 
-    companion object {
-
-    }
+    companion object
 }
 
 @Suppress("OVERRIDE_BY_INLINE")
 object RealMatrixContext : GenericMatrixContext<Double, RealField> {
 
-    override val elementContext = RealField
+    override val elementContext: RealField get() = RealField
 
     override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
-        val buffer = DoubleBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
+        val buffer = RealBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
         return BufferMatrix(rows, columns, buffer)
     }
 
-    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = DoubleBuffer(size,initializer)
+    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = RealBuffer(size, initializer)
 }
 
 class BufferMatrix<T : Any>(
@@ -52,7 +50,7 @@ class BufferMatrix<T : Any>(
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
-    override fun suggestFeature(vararg features: MatrixFeature) =
+    override fun suggestFeature(vararg features: MatrixFeature): BufferMatrix<T> =
         BufferMatrix(rowNum, colNum, buffer, this.features + features)
 
     override fun get(index: IntArray): T = get(index[0], index[1])
@@ -84,8 +82,8 @@ class BufferMatrix<T : Any>(
     override fun toString(): String {
         return if (rowNum <= 5 && colNum <= 5) {
             "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)\n" +
-                    rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") {
-                        it.asSequence().joinToString(separator = "\t") { it.toString() }
+                    rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") { buffer ->
+                        buffer.asSequence().joinToString(separator = "\t") { it.toString() }
                     }
         } else {
             "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)"
@@ -101,8 +99,15 @@ infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Do
 
     val array = DoubleArray(this.rowNum * other.colNum)
 
-    val a = this.buffer.array
-    val b = other.buffer.array
+    //convert to array to insure there is not memory indirection
+    fun Buffer<out Double>.unsafeArray(): DoubleArray = if (this is RealBuffer) {
+        array
+    } else {
+        DoubleArray(size) { get(it) }
+    }
+
+    val a = this.buffer.unsafeArray()
+    val b = other.buffer.unsafeArray()
 
     for (i in (0 until rowNum)) {
         for (j in (0 until other.colNum)) {
@@ -112,6 +117,6 @@ infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Do
         }
     }
 
-    val buffer = DoubleBuffer(array)
+    val buffer = RealBuffer(array)
     return BufferMatrix(rowNum, other.colNum, buffer)
 }

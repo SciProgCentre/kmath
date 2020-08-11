@@ -2,7 +2,7 @@ package scientifik.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import scientifik.kmath.expressions.Expression
-import scientifik.kmath.expressions.ExpressionContext
+import scientifik.kmath.expressions.ExpressionAlgebra
 import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.Field
 import kotlin.properties.ReadOnlyProperty
@@ -59,8 +59,10 @@ class DerivativeStructureField(
     override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
 
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
-
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
+    override fun asin(arg: DerivativeStructure): DerivativeStructure = arg.asin()
+    override fun acos(arg: DerivativeStructure): DerivativeStructure = arg.acos()
+    override fun atan(arg: DerivativeStructure): DerivativeStructure = arg.atan()
 
     override fun power(arg: DerivativeStructure, pow: Number): DerivativeStructure = when (pow) {
         is Double -> arg.pow(pow)
@@ -74,10 +76,10 @@ class DerivativeStructureField(
 
     override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
 
-    operator fun DerivativeStructure.plus(n: Number): DerivativeStructure = add(n.toDouble())
-    operator fun DerivativeStructure.minus(n: Number): DerivativeStructure = subtract(n.toDouble())
-    operator fun Number.plus(s: DerivativeStructure) = s + this
-    operator fun Number.minus(s: DerivativeStructure) = s - this
+    override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
+    override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
+    override operator fun Number.plus(b: DerivativeStructure) = b + this
+    override operator fun Number.minus(b: DerivativeStructure) = b - this
 }
 
 /**
@@ -113,7 +115,7 @@ fun DiffExpression.derivative(name: String) = derivative(name to 1)
 /**
  * A context for [DiffExpression] (not to be confused with [DerivativeStructure])
  */
-object DiffExpressionContext : ExpressionContext<Double>, Field<DiffExpression> {
+object DiffExpressionAlgebra : ExpressionAlgebra<Double, DiffExpression>, Field<DiffExpression> {
     override fun variable(name: String, default: Double?) =
         DiffExpression { variable(name, default?.const()) }
 
@@ -136,6 +138,3 @@ object DiffExpressionContext : ExpressionContext<Double>, Field<DiffExpression> 
     override fun divide(a: DiffExpression, b: DiffExpression) =
         DiffExpression { a.function(this) / b.function(this) }
 }
-
-
-

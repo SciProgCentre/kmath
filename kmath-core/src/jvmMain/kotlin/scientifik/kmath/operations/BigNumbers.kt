@@ -1,45 +1,60 @@
 package scientifik.kmath.operations
 
-import scientifik.kmath.structures.*
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 
-object BigIntegerRing : Ring<BigInteger> {
-    override val zero: BigInteger = BigInteger.ZERO
-    override val one: BigInteger = BigInteger.ONE
+/**
+ * A field over [BigInteger].
+ */
+object JBigIntegerField : Field<BigInteger> {
+    override val zero: BigInteger
+        get() = BigInteger.ZERO
 
+    override val one: BigInteger
+        get() = BigInteger.ONE
+
+    override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
+    override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
-
+    override fun BigInteger.minus(b: BigInteger): BigInteger = this.subtract(b)
     override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
-
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
+    override fun BigInteger.unaryMinus(): BigInteger = negate()
 }
 
-class BigDecimalField(val mathContext: MathContext = MathContext.DECIMAL64) : Field<BigDecimal> {
-    override val zero: BigDecimal = BigDecimal.ZERO
-    override val one: BigDecimal = BigDecimal.ONE
+/**
+ * An abstract field over [BigDecimal].
+ *
+ * @property mathContext the [MathContext] to use.
+ */
+abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathContext = MathContext.DECIMAL64) :
+    Field<BigDecimal>,
+    PowerOperations<BigDecimal> {
+    override val zero: BigDecimal
+        get() = BigDecimal.ZERO
+
+    override val one: BigDecimal
+        get() = BigDecimal.ONE
 
     override fun add(a: BigDecimal, b: BigDecimal): BigDecimal = a.add(b)
+    override fun BigDecimal.minus(b: BigDecimal): BigDecimal = subtract(b)
+    override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
 
     override fun multiply(a: BigDecimal, k: Number): BigDecimal =
         a.multiply(k.toDouble().toBigDecimal(mathContext), mathContext)
 
     override fun multiply(a: BigDecimal, b: BigDecimal): BigDecimal = a.multiply(b, mathContext)
     override fun divide(a: BigDecimal, b: BigDecimal): BigDecimal = a.divide(b, mathContext)
+    override fun power(arg: BigDecimal, pow: Number): BigDecimal = arg.pow(pow.toInt(), mathContext)
+    override fun sqrt(arg: BigDecimal): BigDecimal = arg.sqrt(mathContext)
+    override fun BigDecimal.unaryMinus(): BigDecimal = negate(mathContext)
+
 }
 
-inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInteger): Buffer<BigInteger> =
-    boxing(size, initializer)
-
-inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInteger): MutableBuffer<BigInteger> =
-    boxing(size, initializer)
-
-fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInteger, BigIntegerRing> =
-    BoxingNDRing(shape, BigIntegerRing, Buffer.Companion::bigInt)
-
-fun NDElement.Companion.bigInt(
-    vararg shape: Int,
-    initializer: BigIntegerRing.(IntArray) -> BigInteger
-): BufferedNDRingElement<BigInteger, BigIntegerRing> =
-    NDAlgebra.bigInt(*shape).produce(initializer)
+/**
+ * A field over [BigDecimal].
+ */
+class JBigDecimalField(mathContext: MathContext = MathContext.DECIMAL64) : JBigDecimalFieldBase(mathContext) {
+    companion object : JBigDecimalFieldBase()
+}

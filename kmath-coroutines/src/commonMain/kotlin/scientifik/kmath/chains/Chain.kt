@@ -22,12 +22,11 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-
 /**
  * A not-necessary-Markov chain of some type
  * @param R - the chain element type
  */
-interface Chain<out R>: Flow<R> {
+interface Chain<out R> : Flow<R> {
     /**
      * Generate next value, changing state if needed
      */
@@ -38,13 +37,16 @@ interface Chain<out R>: Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @InternalCoroutinesApi
+    @OptIn(InternalCoroutinesApi::class)
     override suspend fun collect(collector: FlowCollector<R>) {
-        kotlinx.coroutines.flow.flow { while (true) emit(next()) }.collect(collector)
+        kotlinx.coroutines.flow.flow {
+            while (true) {
+                emit(next())
+            }
+        }.collect(collector)
     }
 
     companion object
-
 }
 
 
@@ -67,6 +69,8 @@ class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val ge
     private val mutex = Mutex()
 
     private var value: R? = null
+
+    fun value(): R? = value
 
     override suspend fun next(): R {
         mutex.withLock {
@@ -92,10 +96,11 @@ class StatefulChain<S, out R>(
     private val forkState: ((S) -> S),
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
-
-    private val mutex = Mutex()
+    private val mutex: Mutex = Mutex()
 
     private var value: R? = null
+
+    fun value(): R? = value
 
     override suspend fun next(): R {
         mutex.withLock {
@@ -105,9 +110,7 @@ class StatefulChain<S, out R>(
         }
     }
 
-    override fun fork(): Chain<R> {
-        return StatefulChain(forkState(state), seed, forkState, gen)
-    }
+    override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
 }
 
 /**
@@ -156,7 +159,8 @@ fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object 
 fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
     object : Chain<R> {
         override suspend fun next(): R = state.mapper(this@collectWithState)
-        override fun fork(): Chain<R> = this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
+        override fun fork(): Chain<R> =
+            this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
     }
 
 /**
