@@ -40,32 +40,32 @@ interface TrigonometricOperations<T> : Algebra<T> {
         /**
          * The identifier of sine.
          */
-        const val SIN_OPERATION = "sin"
+        const val SIN_OPERATION: String = "sin"
 
         /**
          * The identifier of cosine.
          */
-        const val COS_OPERATION = "cos"
+        const val COS_OPERATION: String = "cos"
 
         /**
          * The identifier of tangent.
          */
-        const val TAN_OPERATION = "tan"
+        const val TAN_OPERATION: String = "tan"
 
         /**
          * The identifier of inverse sine.
          */
-        const val ASIN_OPERATION = "asin"
+        const val ASIN_OPERATION: String = "asin"
 
         /**
          * The identifier of inverse cosine.
          */
-        const val ACOS_OPERATION = "acos"
+        const val ACOS_OPERATION: String = "acos"
 
         /**
          * The identifier of inverse tangent.
          */
-        const val ATAN_OPERATION = "atan"
+        const val ATAN_OPERATION: String = "atan"
     }
 }
 
@@ -139,27 +139,27 @@ interface HyperbolicOperations<T> : Algebra<T> {
         /**
          * The identifier of hyperbolic sine.
          */
-        const val SINH_OPERATION = "sinh"
+        const val SINH_OPERATION: String = "sinh"
 
         /**
          * The identifier of hyperbolic cosine.
          */
-        const val COSH_OPERATION = "cosh"
+        const val COSH_OPERATION: String = "cosh"
 
         /**
          * The identifier of hyperbolic tangent.
          */
-        const val TANH_OPERATION = "tanh"
+        const val TANH_OPERATION: String = "tanh"
 
         /**
          * The identifier of inverse hyperbolic sine.
          */
-        const val ASINH_OPERATION = "asinh"
+        const val ASINH_OPERATION: String = "asinh"
 
         /**
          * The identifier of inverse hyperbolic cosine.
          */
-        const val ACOSH_OPERATION = "acosh"
+        const val ACOSH_OPERATION: String = "acosh"
 
         /**
          * The identifier of inverse hyperbolic tangent.
