@@ -1,5 +1,6 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.internal.FieldVerifier
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.test.Test
@@ -7,6 +8,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class ComplexFieldTest {
+    @Test
+    fun verify() = ComplexField { FieldVerifier(this, 42.0 * i, 66.0 + 28 * i, 2.0 + 0 * i, 5).verify() }
+
     @Test
     fun testAddition() {
         assertEquals(Complex(42, 42), ComplexField { Complex(16, 16) + Complex(26, 26) })
