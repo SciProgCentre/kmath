@@ -22,8 +22,9 @@ object BigIntField : Field<BigInt> {
     override val one: BigInt = BigInt.ONE
 
     override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun number(value: Number): BigInt = value.toLong().toBigInt()
 
-    override fun multiply(a: BigInt, k: Number): BigInt = a.times(k.toLong())
+    override fun multiply(a: BigInt, k: Number): BigInt = a.times(number(k))
 
     override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
 
