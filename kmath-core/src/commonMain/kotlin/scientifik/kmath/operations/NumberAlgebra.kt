@@ -1,6 +1,5 @@
 package scientifik.kmath.operations
 
-import scientifik.kmath.operations.RealField.pow
 import kotlin.math.abs
 import kotlin.math.pow as kpow
 
