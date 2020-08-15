@@ -43,7 +43,6 @@ class BufferedNDFieldElement<T, F : Field<T>>(
     override val context: BufferedNDField<T, F>,
     override val buffer: Buffer<T>
 ) : BufferedNDElement<T, F>(), FieldElement<NDBuffer<T>, BufferedNDFieldElement<T, F>, BufferedNDField<T, F>> {
-
     override fun unwrap(): NDBuffer<T> = this
 
     override fun NDBuffer<T>.wrap(): BufferedNDFieldElement<T, F> {
@@ -56,8 +55,9 @@ class BufferedNDFieldElement<T, F : Field<T>>(
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy.
  */
-operator fun <T : Any, F : Field<T>> Function1<T, T>.invoke(ndElement: BufferedNDElement<T, F>): MathElement<out BufferedNDAlgebra<T, F>> =
-    ndElement.context.run { map(ndElement) { invoke(it) }.toElement() }
+operator fun <T : Any, F : Field<T>> Function1<T, T>.invoke(
+    ndElement: BufferedNDElement<T, F>
+): MathElement<out BufferedNDAlgebra<T, F>> = ndElement.context.run { map(ndElement) { invoke(it) }.toElement() }
 
 /* plus and minus */
 

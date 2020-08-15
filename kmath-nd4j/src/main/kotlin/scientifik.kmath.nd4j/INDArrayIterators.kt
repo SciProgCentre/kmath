@@ -3,7 +3,24 @@ package scientifik.kmath.nd4j
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.api.shape.Shape
 
-internal sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
+private class INDArrayIndicesIterator(private val iterateOver: INDArray) : Iterator<IntArray> {
+    private var i: Int = 0
+
+    override fun hasNext(): Boolean = i < iterateOver.length()
+
+    override fun next(): IntArray {
+        val la = if (iterateOver.ordering() == 'c')
+            Shape.ind2subC(iterateOver, i++.toLong())!!
+        else
+            Shape.ind2sub(iterateOver, i++.toLong())!!
+
+        return la.toIntArray()
+    }
+}
+
+internal fun INDArray.indicesIterator(): Iterator<IntArray>     = INDArrayIndicesIterator(this)
+
+private sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
     private var i: Int = 0
 
     final override fun hasNext(): Boolean = i < iterateOver.length()
@@ -20,26 +37,26 @@ internal sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArra
     }
 }
 
-internal class INDArrayRealIterator(iterateOver: INDArray) : INDArrayIteratorBase<Double>(iterateOver) {
+private class INDArrayRealIterator(iterateOver: INDArray) : INDArrayIteratorBase<Double>(iterateOver) {
     override fun getSingle(indices: LongArray): Double = iterateOver.getDouble(*indices)
 }
 
-internal fun INDArray.realIterator(): INDArrayRealIterator = INDArrayRealIterator(this)
+internal fun INDArray.realIterator(): Iterator<Pair<IntArray, Double>> = INDArrayRealIterator(this)
 
-internal class INDArrayLongIterator(iterateOver: INDArray) : INDArrayIteratorBase<Long>(iterateOver) {
+private class INDArrayLongIterator(iterateOver: INDArray) : INDArrayIteratorBase<Long>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)
 }
 
-internal fun INDArray.longIterator(): INDArrayLongIterator = INDArrayLongIterator(this)
+internal fun INDArray.longIterator(): Iterator<Pair<IntArray, Long>> = INDArrayLongIterator(this)
 
-internal class INDArrayIntIterator(iterateOver: INDArray) : INDArrayIteratorBase<Int>(iterateOver) {
+private class INDArrayIntIterator(iterateOver: INDArray) : INDArrayIteratorBase<Int>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getInt(*indices.toIntArray())
 }
 
-internal fun INDArray.intIterator(): INDArrayIntIterator = INDArrayIntIterator(this)
+internal fun INDArray.intIterator(): Iterator<Pair<IntArray, Int>> = INDArrayIntIterator(this)
 
-internal class INDArrayFloatIterator(iterateOver: INDArray) : INDArrayIteratorBase<Float>(iterateOver) {
+private class INDArrayFloatIterator(iterateOver: INDArray) : INDArrayIteratorBase<Float>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getFloat(*indices)
 }
 
-internal fun INDArray.floatIterator() = INDArrayFloatIterator(this)
+internal fun INDArray.floatIterator(): Iterator<Pair<IntArray, Float>> = INDArrayFloatIterator(this)

@@ -18,6 +18,7 @@
 - Blocking chains in `kmath-coroutines`
 - Full hyperbolic functions support and default implementations within `ExtendedField`
 - Norm support for `Complex`
+- ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
 
 ### Changed
 - BigInteger and BigDecimal algebra: JBigDecimalField has companion object with default math context; minor optimizations
