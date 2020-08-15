@@ -16,6 +16,8 @@
 - Local coding conventions
 - Geometric Domains API in `kmath-core`
 - Blocking chains in `kmath-coroutines`
+- Full hyperbolic functions support and default implementations within `ExtendedField`
+- Norm support for `Complex`
 
 ### Changed
 - BigInteger and BigDecimal algebra: JBigDecimalField has companion object with default math context; minor optimizations
@@ -23,10 +25,11 @@
 - Memory objects have more preconditions (overflow checking)
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
 - Gradle version: 6.3 -> 6.5.1
-- Moved probability distributions to commons-rng and to `kmath-prob`.
+- Moved probability distributions to commons-rng and to `kmath-prob`
 
 ### Fixed
 - Missing copy method in Memory implementation on JS (https://github.com/mipt-npm/kmath/pull/106)
 - D3.dim value in `kmath-dimensions`
 - Multiplication in integer rings in `kmath-core` (https://github.com/mipt-npm/kmath/pull/101)
 - Commons RNG compatibility (https://github.com/mipt-npm/kmath/issues/93)
+- Multiplication of BigInt by scalar
