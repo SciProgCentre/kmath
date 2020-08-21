@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MatrixTest {
-
     @Test
     fun testTranspose() {
         val matrix = MatrixContext.real.one(3, 3)
@@ -51,6 +50,7 @@ class MatrixTest {
     fun test2DDot() {
         val firstMatrix = NDStructure.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
         val secondMatrix = NDStructure.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
+
         MatrixContext.real.run {
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }

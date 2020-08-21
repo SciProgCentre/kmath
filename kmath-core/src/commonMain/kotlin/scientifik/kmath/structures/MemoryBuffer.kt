@@ -14,10 +14,8 @@ open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spe
 
     private val reader: MemoryReader = memory.reader()
 
-    override fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
-
-    override fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
-
+    override operator fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
+    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
 
     companion object {
         fun <T : Any> create(spec: MemorySpec<T>, size: Int): MemoryBuffer<T> =
@@ -48,8 +46,7 @@ class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) : Memory
 
     private val writer: MemoryWriter = memory.writer()
 
-    override fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
-
+    override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
     override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
 
     companion object {

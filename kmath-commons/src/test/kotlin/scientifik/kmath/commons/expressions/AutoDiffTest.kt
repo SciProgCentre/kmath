@@ -1,11 +1,17 @@
 package scientifik.kmath.commons.expressions
 
 import scientifik.kmath.expressions.invoke
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-inline fun <R> diff(order: Int, vararg parameters: Pair<String, Double>, block: DerivativeStructureField.() -> R) =
-    DerivativeStructureField(order, mapOf(*parameters)).run(block)
+@OptIn(ExperimentalContracts::class)
+inline fun <R> diff(order: Int, vararg parameters: Pair<String, Double>, block: DerivativeStructureField.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return DerivativeStructureField(order, mapOf(*parameters)).run(block)
+}
 
 class AutoDiffTest {
     @Test

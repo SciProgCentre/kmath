@@ -38,11 +38,7 @@ fun <T : Any> MemoryWriter.write(spec: MemorySpec<T>, offset: Int, value: T): Un
  * Reads array of [size] objects mapped by [spec] at certain [offset].
  */
 inline fun <reified T : Any> MemoryReader.readArray(spec: MemorySpec<T>, offset: Int, size: Int): Array<T> =
-    Array(size) { i ->
-        spec.run {
-            read(offset + i * objectSize)
-        }
-    }
+    Array(size) { i -> with(spec) { read(offset + i * objectSize) } }
 
 /**
  * Writes [array] of objects mapped by [spec] at certain [offset].

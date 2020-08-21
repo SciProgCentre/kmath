@@ -3,6 +3,8 @@ package scientifik.kmath.coroutines
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 val Dispatchers.Math: CoroutineDispatcher
     get() = Default
@@ -81,21 +83,24 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<
     }
 }
 
+@OptIn(ExperimentalContracts::class)
 @ExperimentalCoroutinesApi
 @FlowPreview
-suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T) -> Unit) {
+suspend inline fun <T> AsyncFlow<T>.collect(concurrency: Int, crossinline action: suspend (value: T) -> Unit) {
+    contract { callsInPlace(action) }
+
     collect(concurrency, object : FlowCollector<T> {
         override suspend fun emit(value: T): Unit = action(value)
     })
 }
 
+@OptIn(ExperimentalContracts::class)
 @ExperimentalCoroutinesApi
 @FlowPreview
-fun <T, R> Flow<T>.mapParallel(
+inline fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    transform: suspend (T) -> R
+    crossinline transform: suspend (T) -> R
 ): Flow<R> {
-    return flatMapMerge { value ->
-        flow { emit(transform(value)) }
-    }.flowOn(dispatcher)
+    contract { callsInPlace(transform) }
+    return flatMapMerge { value -> flow { emit(transform(value)) } }.flowOn(dispatcher)
 }

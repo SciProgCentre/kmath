@@ -22,7 +22,7 @@ interface Expression<T> {
  */
 fun <T> Algebra<T>.expression(block: Algebra<T>.(arguments: Map<String, T>) -> T): Expression<T> =
     object : Expression<T> {
-        override fun invoke(arguments: Map<String, T>): T = block(arguments)
+        override operator fun invoke(arguments: Map<String, T>): T = block(arguments)
     }
 
 /**

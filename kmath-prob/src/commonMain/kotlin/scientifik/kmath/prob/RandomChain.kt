@@ -1,6 +1,7 @@
 package scientifik.kmath.prob
 
 import scientifik.kmath.chains.Chain
+import kotlin.contracts.ExperimentalContracts
 
 /**
  * A possibly stateful chain producing random values.

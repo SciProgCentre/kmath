@@ -18,7 +18,7 @@ class LazyNDStructure<T>(
 
     suspend fun await(index: IntArray): T = deferred(index).await()
 
-    override fun get(index: IntArray): T = runBlocking {
+    override operator fun get(index: IntArray): T = runBlocking {
         deferred(index).await()
     }
 
@@ -52,10 +52,12 @@ suspend fun <T> NDStructure<T>.await(index: IntArray): T =
 /**
  * PENDING would benefit from KEEP-176
  */
-fun <T, R> NDStructure<T>.mapAsyncIndexed(
+inline fun <T, R> NDStructure<T>.mapAsyncIndexed(
     scope: CoroutineScope,
-    function: suspend (T, index: IntArray) -> R
+    crossinline function: suspend (T, index: IntArray) -> R
 ): LazyNDStructure<R> = LazyNDStructure(scope, shape) { index -> function(get(index), index) }
 
-fun <T, R> NDStructure<T>.mapAsync(scope: CoroutineScope, function: suspend (T) -> R): LazyNDStructure<R> =
-    LazyNDStructure(scope, shape) { index -> function(get(index)) }
+inline fun <T, R> NDStructure<T>.mapAsync(
+    scope: CoroutineScope,
+    crossinline function: suspend (T) -> R
+): LazyNDStructure<R> = LazyNDStructure(scope, shape) { index -> function(get(index)) }

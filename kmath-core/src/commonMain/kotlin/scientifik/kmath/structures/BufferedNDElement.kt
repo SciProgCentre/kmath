@@ -30,7 +30,6 @@ class BufferedNDRingElement<T, R : Ring<T>>(
     override val context: BufferedNDRing<T, R>,
     override val buffer: Buffer<T>
 ) : BufferedNDElement<T, R>(), RingElement<NDBuffer<T>, BufferedNDRingElement<T, R>, BufferedNDRing<T, R>> {
-
     override fun unwrap(): NDBuffer<T> = this
 
     override fun NDBuffer<T>.wrap(): BufferedNDRingElement<T, R> {
@@ -43,7 +42,6 @@ class BufferedNDFieldElement<T, F : Field<T>>(
     override val context: BufferedNDField<T, F>,
     override val buffer: Buffer<T>
 ) : BufferedNDElement<T, F>(), FieldElement<NDBuffer<T>, BufferedNDFieldElement<T, F>, BufferedNDField<T, F>> {
-
     override fun unwrap(): NDBuffer<T> = this
 
     override fun NDBuffer<T>.wrap(): BufferedNDFieldElement<T, F> {

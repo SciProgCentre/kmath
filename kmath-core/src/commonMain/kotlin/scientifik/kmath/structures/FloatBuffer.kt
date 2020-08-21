@@ -1,5 +1,8 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
+
 /**
  * Specialized [MutableBuffer] implementation over [FloatArray].
  *
@@ -8,13 +11,13 @@ package scientifik.kmath.structures
 inline class FloatBuffer(val array: FloatArray) : MutableBuffer<Float> {
     override val size: Int get() = array.size
 
-    override fun get(index: Int): Float = array[index]
+    override operator fun get(index: Int): Float = array[index]
 
-    override fun set(index: Int, value: Float) {
+    override operator fun set(index: Int, value: Float) {
         array[index] = value
     }
 
-    override fun iterator(): FloatIterator = array.iterator()
+    override operator fun iterator(): FloatIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Float> =
         FloatBuffer(array.copyOf())
@@ -27,7 +30,11 @@ inline class FloatBuffer(val array: FloatArray) : MutableBuffer<Float> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer = FloatBuffer(FloatArray(size) { init(it) })
+@OptIn(ExperimentalContracts::class)
+inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer {
+    contract { callsInPlace(init) }
+    return FloatBuffer(FloatArray(size) { init(it) })
+}
 
 /**
  * Returns a new [FloatBuffer] of given elements.

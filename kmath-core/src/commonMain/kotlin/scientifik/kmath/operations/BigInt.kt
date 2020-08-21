@@ -3,6 +3,8 @@ package scientifik.kmath.operations
 import scientifik.kmath.operations.BigInt.Companion.BASE
 import scientifik.kmath.operations.BigInt.Companion.BASE_SIZE
 import scientifik.kmath.structures.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
@@ -431,8 +433,8 @@ fun ULong.toBigInt(): BigInt = BigInt(
  * Create a [BigInt] with this array of magnitudes with protective copy
  */
 fun UIntArray.toBigInt(sign: Byte): BigInt {
-    if (sign == 0.toByte() && isNotEmpty()) error("")
-    return BigInt(sign, this.copyOf())
+    require(sign != 0.toByte() || !isNotEmpty())
+    return BigInt(sign, copyOf())
 }
 
 val hexChToInt: MutableMap<Char, Int> = hashMapOf(
@@ -485,11 +487,17 @@ fun String.parseBigInteger(): BigInt? {
     return res * sign
 }
 
-inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
-    boxing(size, initializer)
+@OptIn(ExperimentalContracts::class)
+inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> {
+    contract { callsInPlace(initializer) }
+    return boxing(size, initializer)
+}
 
-inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
-    boxing(size, initializer)
+@OptIn(ExperimentalContracts::class)
+inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> {
+    contract { callsInPlace(initializer) }
+    return boxing(size, initializer)
+}
 
 fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInt, BigIntField> =
     BoxingNDRing(shape, BigIntField, Buffer.Companion::bigInt)
@@ -497,5 +505,4 @@ fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInt, BigIntFi
 fun NDElement.Companion.bigInt(
     vararg shape: Int,
     initializer: BigIntField.(IntArray) -> BigInt
-): BufferedNDRingElement<BigInt, BigIntField> =
-    NDAlgebra.bigInt(*shape).produce(initializer)
+): BufferedNDRingElement<BigInt, BigIntField> = NDAlgebra.bigInt(*shape).produce(initializer)

@@ -1,5 +1,7 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.experimental.and
 
 /**
@@ -57,17 +59,19 @@ class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : Flagged
 
     override val size: Int get() = values.size
 
-    override fun get(index: Int): Double? = if (isValid(index)) values[index] else null
+    override operator fun get(index: Int): Double? = if (isValid(index)) values[index] else null
 
-    override fun iterator(): Iterator<Double?> = values.indices.asSequence().map {
+    override operator fun iterator(): Iterator<Double?> = values.indices.asSequence().map {
         if (isValid(it)) values[it] else null
     }.iterator()
 }
 
+@OptIn(ExperimentalContracts::class)
 inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
-    for (i in indices) {
-        if (isValid(i)) {
-            block(values[i])
-        }
-    }
+    contract { callsInPlace(block) }
+
+    indices
+        .asSequence()
+        .filter(::isValid)
+        .forEach { block(values[it]) }
 }

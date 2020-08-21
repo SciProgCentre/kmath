@@ -4,6 +4,9 @@ import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
 import scientifik.kmath.operations.FieldElement
 import scientifik.kmath.operations.complex
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
@@ -109,7 +112,9 @@ inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(inde
 /**
  * Map one [ComplexNDElement] using function without indices.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) -> Complex): ComplexNDElement {
+    contract { callsInPlace(transform) }
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.transform(buffer[offset]) }
     return BufferedNDFieldElement(context, buffer)
 }
@@ -148,6 +153,8 @@ fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(In
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
-    return NDField.complex(*shape).run(action)
+    contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+    return NDField.complex(*shape).action()
 }

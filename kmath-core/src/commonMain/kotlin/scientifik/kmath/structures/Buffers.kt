@@ -2,6 +2,8 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -117,15 +119,14 @@ interface MutableBuffer<T> : Buffer<T> {
             MutableListBuffer(MutableList(size, initializer))
 
         @Suppress("UNCHECKED_CAST")
-        inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-            return when (type) {
+        inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            when (type) {
                 Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
                 Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
                 Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
-        }
 
         /**
          * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
@@ -150,9 +151,8 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
     override val size: Int
         get() = list.size
 
-    override fun get(index: Int): T = list[index]
-
-    override fun iterator(): Iterator<T> = list.iterator()
+    override operator fun get(index: Int): T = list[index]
+    override operator fun iterator(): Iterator<T> = list.iterator()
 }
 
 /**
@@ -167,7 +167,11 @@ fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an array element given its index.
  */
-inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> = List(size, init).asBuffer()
+@OptIn(ExperimentalContracts::class)
+inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> {
+    contract { callsInPlace(init) }
+    return List(size, init).asBuffer()
+}
 
 /**
  * [MutableBuffer] implementation over [MutableList].
@@ -176,17 +180,16 @@ inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> = List(siz
  * @property list The underlying list.
  */
 inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
-
     override val size: Int
         get() = list.size
 
-    override fun get(index: Int): T = list[index]
+    override operator fun get(index: Int): T = list[index]
 
-    override fun set(index: Int, value: T) {
+    override operator fun set(index: Int, value: T) {
         list[index] = value
     }
 
-    override fun iterator(): Iterator<T> = list.iterator()
+    override operator fun iterator(): Iterator<T> = list.iterator()
     override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
 }
 
@@ -201,14 +204,13 @@ class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     override val size: Int
         get() = array.size
 
-    override fun get(index: Int): T = array[index]
+    override operator fun get(index: Int): T = array[index]
 
-    override fun set(index: Int, value: T) {
+    override operator fun set(index: Int, value: T) {
         array[index] = value
     }
 
-    override fun iterator(): Iterator<T> = array.iterator()
-
+    override operator fun iterator(): Iterator<T> = array.iterator()
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 }
 
@@ -226,9 +228,9 @@ fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
 inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
-    override fun get(index: Int): T = buffer[index]
+    override operator fun get(index: Int): T = buffer[index]
 
-    override fun iterator(): Iterator<T> = buffer.iterator()
+    override operator fun iterator(): Iterator<T> = buffer.iterator()
 }
 
 /**
@@ -238,12 +240,12 @@ inline class ReadOnlyBuffer<T>(val buffer: MutableBuffer<T>) : Buffer<T> {
  * @param T the type of elements provided by the buffer.
  */
 class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
-    override fun get(index: Int): T {
+    override operator fun get(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
         return generator(index)
     }
 
-    override fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
+    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
 
     override fun contentEquals(other: Buffer<*>): Boolean {
         return if (other is VirtualBuffer) {

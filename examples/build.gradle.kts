@@ -60,5 +60,6 @@ benchmark {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = Scientifik.JVM_TARGET.toString()
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
     }
 }

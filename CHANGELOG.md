@@ -20,11 +20,14 @@
 - Norm support for `Complex`
 
 ### Changed
+- `readAsMemory` now has `throws IOException` in JVM signature.
+- Several functions taking functional types were made `inline`.
+- Several functions taking functional types now have `callsInPlace` contracts.
 - BigInteger and BigDecimal algebra: JBigDecimalField has companion object with default math context; minor optimizations
 - `power(T, Int)` extension function has preconditions and supports `Field<T>`
 - Memory objects have more preconditions (overflow checking)
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
-- Gradle version: 6.3 -> 6.5.1
+- Gradle version: 6.3 -> 6.6
 - Moved probability distributions to commons-rng and to `kmath-prob`
 
 ### Fixed

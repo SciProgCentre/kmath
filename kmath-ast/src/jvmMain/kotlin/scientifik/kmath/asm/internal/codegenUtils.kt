@@ -7,6 +7,9 @@ import scientifik.kmath.ast.MST
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
 import java.lang.reflect.Method
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
@@ -26,8 +29,11 @@ internal val KClass<*>.asm: Type
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
  */
-internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> =
-    if (predicate(this)) arrayOf(this) else emptyArray()
+@OptIn(ExperimentalContracts::class)
+internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> {
+    contract { callsInPlace(predicate, InvocationKind.EXACTLY_ONCE) }
+    return if (predicate(this)) arrayOf(this) else emptyArray()
+}
 
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor].
@@ -37,8 +43,11 @@ private fun MethodVisitor.instructionAdapter(): InstructionAdapter = Instruction
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor] and applies [block] to it.
  */
-internal fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Unit): InstructionAdapter =
-    instructionAdapter().apply(block)
+@OptIn(ExperimentalContracts::class)
+internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Unit): InstructionAdapter {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return instructionAdapter().apply(block)
+}
 
 /**
  * Constructs a [Label], then applies it to this visitor.
@@ -63,10 +72,14 @@ internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
     return buildName(mst, collision + 1)
 }
 
+@OptIn(ExperimentalContracts::class)
 @Suppress("FunctionName")
-internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter =
-    ClassWriter(flags).apply(block)
+internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return ClassWriter(flags).apply(block)
+}
 
+@OptIn(ExperimentalContracts::class)
 internal inline fun ClassWriter.visitField(
     access: Int,
     name: String,
@@ -74,7 +87,10 @@ internal inline fun ClassWriter.visitField(
     signature: String?,
     value: Any?,
     block: FieldVisitor.() -> Unit
-): FieldVisitor = visitField(access, name, descriptor, signature, value).apply(block)
+): FieldVisitor {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return visitField(access, name, descriptor, signature, value).apply(block)
+}
 
 private fun <T> AsmBuilder<T>.findSpecific(context: Algebra<T>, name: String, parameterTypes: Array<MstType>): Method? =
     context.javaClass.methods.find { method ->
@@ -151,6 +167,7 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(
 /**
  * Builds specialized algebra call with option to fallback to generic algebra operation accepting String.
  */
+@OptIn(ExperimentalContracts::class)
 internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,
     name: String,
@@ -158,6 +175,7 @@ internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     parameterTypes: Array<MstType>,
     parameters: AsmBuilder<T>.() -> Unit
 ) {
+    contract { callsInPlace(parameters, InvocationKind.EXACTLY_ONCE) }
     val arity = parameterTypes.size
     loadAlgebra()
     if (!buildExpectationStack(context, name, parameterTypes)) loadStringConstant(name)
