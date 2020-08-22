@@ -71,7 +71,6 @@ class PolynomialSpace<T : Any, C : Ring<T>>(val ring: C) : Space<Polynomial<T>> 
     operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun <T : Any, C : Ring<T>, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return PolynomialSpace(this).block()

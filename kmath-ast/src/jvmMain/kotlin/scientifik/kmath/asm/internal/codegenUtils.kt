@@ -29,7 +29,6 @@ internal val KClass<*>.asm: Type
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
  */
-@OptIn(ExperimentalContracts::class)
 internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> {
     contract { callsInPlace(predicate, InvocationKind.EXACTLY_ONCE) }
     return if (predicate(this)) arrayOf(this) else emptyArray()
@@ -43,7 +42,6 @@ private fun MethodVisitor.instructionAdapter(): InstructionAdapter = Instruction
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor] and applies [block] to it.
  */
-@OptIn(ExperimentalContracts::class)
 internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Unit): InstructionAdapter {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return instructionAdapter().apply(block)
@@ -72,14 +70,12 @@ internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
     return buildName(mst, collision + 1)
 }
 
-@OptIn(ExperimentalContracts::class)
 @Suppress("FunctionName")
 internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return ClassWriter(flags).apply(block)
 }
 
-@OptIn(ExperimentalContracts::class)
 internal inline fun ClassWriter.visitField(
     access: Int,
     name: String,
@@ -167,7 +163,6 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(
 /**
  * Builds specialized algebra call with option to fallback to generic algebra operation accepting String.
  */
-@OptIn(ExperimentalContracts::class)
 internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,
     name: String,

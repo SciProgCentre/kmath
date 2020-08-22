@@ -3,7 +3,6 @@ package scientifik.kmath.coroutines
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.*
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 val Dispatchers.Math: CoroutineDispatcher
@@ -25,15 +24,11 @@ internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: s
 }
 
 class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
-    @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<T>) {
-        deferredFlow.collect {
-            collector.emit((it.await()))
-        }
+        deferredFlow.collect { collector.emit((it.await())) }
     }
 }
 
-@FlowPreview
 fun <T, R> Flow<T>.async(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     block: suspend CoroutineScope.(T) -> R
@@ -44,7 +39,6 @@ fun <T, R> Flow<T>.async(
     return AsyncFlow(flow)
 }
 
-@FlowPreview
 fun <T, R> AsyncFlow<T>.map(action: (T) -> R): AsyncFlow<R> =
     AsyncFlow(deferredFlow.map { input ->
         //TODO add function composition
@@ -54,10 +48,9 @@ fun <T, R> AsyncFlow<T>.map(action: (T) -> R): AsyncFlow<R> =
         }
     })
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<T>) {
     require(concurrency >= 1) { "Buffer size should be more than 1, but was $concurrency" }
+
     coroutineScope {
         //Starting up to N deferred coroutines ahead of time
         val channel = produce(capacity = concurrency - 1) {
@@ -83,9 +76,6 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<
     }
 }
 
-@OptIn(ExperimentalContracts::class)
-@ExperimentalCoroutinesApi
-@FlowPreview
 suspend inline fun <T> AsyncFlow<T>.collect(concurrency: Int, crossinline action: suspend (value: T) -> Unit) {
     contract { callsInPlace(action) }
 
@@ -94,9 +84,6 @@ suspend inline fun <T> AsyncFlow<T>.collect(concurrency: Int, crossinline action
     })
 }
 
-@OptIn(ExperimentalContracts::class)
-@ExperimentalCoroutinesApi
-@FlowPreview
 inline fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     crossinline transform: suspend (T) -> R

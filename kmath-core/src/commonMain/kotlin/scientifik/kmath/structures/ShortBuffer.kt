@@ -30,7 +30,6 @@ inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer {
     contract { callsInPlace(init) }
     return ShortBuffer(ShortArray(size) { init(it) })

@@ -167,7 +167,6 @@ fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an array element given its index.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> {
     contract { callsInPlace(init) }
     return List(size, init).asBuffer()

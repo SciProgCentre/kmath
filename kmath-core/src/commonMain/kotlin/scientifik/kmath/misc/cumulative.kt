@@ -13,7 +13,6 @@ import kotlin.jvm.JvmName
  * @param R the type of resulting iterable.
  * @param initial lazy evaluated.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <T, R> Iterator<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): Iterator<R> {
     contract { callsInPlace(operation) }
 

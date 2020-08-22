@@ -30,7 +30,6 @@ inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun RealBuffer(size: Int, init: (Int) -> Double): RealBuffer {
     contract { callsInPlace(init) }
     return RealBuffer(DoubleArray(size) { init(it) })

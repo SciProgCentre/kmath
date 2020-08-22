@@ -28,7 +28,6 @@ interface FeaturedMatrix<T : Any> : Matrix<T> {
     companion object
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> {
     contract { callsInPlace(initializer) }
     return MatrixContext.real.produce(rows, columns, initializer)

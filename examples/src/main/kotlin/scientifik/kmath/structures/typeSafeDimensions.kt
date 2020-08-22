@@ -16,7 +16,6 @@ fun DMatrixContext<Double, RealField>.simple() {
 
 
 object D5 : Dimension {
-    @OptIn(ExperimentalUnsignedTypes::class)
     override val dim: UInt = 5u
 }
 

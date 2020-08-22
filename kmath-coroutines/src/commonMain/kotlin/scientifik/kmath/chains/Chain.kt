@@ -16,9 +16,9 @@
 
 package scientifik.kmath.chains
 
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -37,14 +37,8 @@ interface Chain<out R> : Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @OptIn(InternalCoroutinesApi::class)
-    override suspend fun collect(collector: FlowCollector<R>) {
-        kotlinx.coroutines.flow.flow {
-            while (true) {
-                emit(next())
-            }
-        }.collect(collector)
-    }
+    override suspend fun collect(collector: FlowCollector<R>): Unit =
+        flow { while (true) emit(next()) }.collect(collector)
 
     companion object
 }

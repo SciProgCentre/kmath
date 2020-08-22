@@ -9,7 +9,6 @@ import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.SpaceOperations
 import scientifik.kmath.operations.invoke
 
-
 @ExperimentalCoroutinesApi
 fun <T> Flow<T>.cumulativeSum(space: SpaceOperations<T>): Flow<T> = space {
     scanReduce { sum: T, element: T -> sum + element }

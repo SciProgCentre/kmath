@@ -41,7 +41,6 @@ inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
 /**
  * Builds [MstExpression] over [Space].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstSpace.block())
@@ -50,7 +49,6 @@ inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MST): Mst
 /**
  * Builds [MstExpression] over [Ring].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstRing.block())
@@ -59,7 +57,6 @@ inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST): MstExp
 /**
  * Builds [MstExpression] over [Field].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstField.block())
@@ -68,7 +65,6 @@ inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MST): Mst
 /**
  * Builds [MstExpression] over [ExtendedField].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstExtendedField.block())
@@ -77,7 +73,6 @@ inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtendedField
 /**
  * Builds [MstExpression] over [FunctionalExpressionSpace].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInSpace(block)
@@ -86,8 +81,6 @@ inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstIn
 /**
  * Builds [MstExpression] over [FunctionalExpressionRing].
  */
-
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInRing(block)
@@ -96,7 +89,6 @@ inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRi
 /**
  * Builds [MstExpression] over [FunctionalExpressionField].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstInField(block: MstField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInField(block)
@@ -105,7 +97,6 @@ inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstIn
 /**
  * Builds [MstExpression] over [FunctionalExpressionExtendedField].
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any, A : ExtendedField<T>> FunctionalExpressionExtendedField<T, A>.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInExtendedField(block)

@@ -66,7 +66,6 @@ class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : Flagged
     }.iterator()
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
     contract { callsInPlace(block) }
 

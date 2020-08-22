@@ -10,7 +10,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
-
 typealias Magnitude = UIntArray
 typealias TBase = ULong
 
@@ -487,13 +486,11 @@ fun String.parseBigInteger(): BigInt? {
     return res * sign
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> {
     contract { callsInPlace(initializer) }
     return boxing(size, initializer)
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> {
     contract { callsInPlace(initializer) }
     return boxing(size, initializer)

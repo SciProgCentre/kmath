@@ -120,7 +120,6 @@ operator fun Matrix<Double>.minus(other: Matrix<Double>): RealMatrix =
  *  Operations on columns
  */
 
-@OptIn(ExperimentalContracts::class)
 inline fun Matrix<Double>.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): Matrix<Double> {
     contract { callsInPlace(mapper) }
 

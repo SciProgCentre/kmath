@@ -30,7 +30,6 @@ inline class FloatBuffer(val array: FloatArray) : MutableBuffer<Float> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer {
     contract { callsInPlace(init) }
     return FloatBuffer(FloatArray(size) { init(it) })

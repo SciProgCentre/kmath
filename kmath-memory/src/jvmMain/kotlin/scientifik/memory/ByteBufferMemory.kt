@@ -117,7 +117,6 @@ fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memory =
 /**
  * Uses direct memory-mapped buffer from file to read something and close it afterwards.
  */
-@OptIn(ExperimentalContracts::class)
 @Throws(IOException::class)
 inline fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }

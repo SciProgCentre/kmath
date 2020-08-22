@@ -1,6 +1,5 @@
 package scientifik.memory
 
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -84,7 +83,6 @@ interface MemoryReader {
 /**
  * Uses the memory for read then releases the reader.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun Memory.read(block: MemoryReader.() -> Unit) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     reader().apply(block).release()
@@ -138,7 +136,6 @@ interface MemoryWriter {
 /**
  * Uses the memory for write then releases the writer.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun Memory.write(block: MemoryWriter.() -> Unit) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     writer().apply(block).release()

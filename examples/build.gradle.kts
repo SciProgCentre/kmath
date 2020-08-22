@@ -56,6 +56,12 @@ benchmark {
     }
 }
 
+kotlin.sourceSets.all {
+    with(languageSettings) {
+        useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+        useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+    }
+}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

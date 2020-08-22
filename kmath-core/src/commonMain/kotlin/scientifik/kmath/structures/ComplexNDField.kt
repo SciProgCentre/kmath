@@ -112,7 +112,6 @@ inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(inde
 /**
  * Map one [ComplexNDElement] using function without indices.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) -> Complex): ComplexNDElement {
     contract { callsInPlace(transform) }
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.transform(buffer[offset]) }
@@ -153,7 +152,6 @@ fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(In
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return NDField.complex(*shape).action()

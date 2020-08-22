@@ -55,7 +55,6 @@ class DerivationResult<T : Any>(
  * assertEquals(9.0, x.d)  // dy/dx
  * ```
  */
-@OptIn(ExperimentalContracts::class)
 inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Variable<T>): DerivationResult<T> {
     contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
 

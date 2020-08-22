@@ -140,7 +140,6 @@ interface MutableNDStructure<T> : NDStructure<T> {
     operator fun set(index: IntArray, value: T)
 }
 
-@OptIn(ExperimentalContracts::class)
 inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
     contract { callsInPlace(action) }
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }

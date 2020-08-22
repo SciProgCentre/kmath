@@ -31,7 +31,6 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-@OptIn(ExperimentalContracts::class)
 inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer {
     contract { callsInPlace(init) }
     return IntBuffer(IntArray(size) { init(it) })
