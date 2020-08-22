@@ -26,19 +26,20 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
         fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }): RealNDElement =
             NDField.real(*shape).produce(initializer)
 
-
-        fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }): RealNDElement =
+        inline fun real1D(dim: Int, crossinline initializer: (Int) -> Double = { _ -> 0.0 }): RealNDElement =
             real(intArrayOf(dim)) { initializer(it[0]) }
 
+        inline fun real2D(
+            dim1: Int,
+            dim2: Int,
+            crossinline initializer: (Int, Int) -> Double = { _, _ -> 0.0 }
+        ): RealNDElement = real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
 
-        fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }): RealNDElement =
-            real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
-
-        fun real3D(
+        inline fun real3D(
             dim1: Int,
             dim2: Int,
             dim3: Int,
-            initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }
+            crossinline initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }
         ): RealNDElement = real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
 
 
@@ -71,7 +72,6 @@ fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index
 
 fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T): NDElement<T, C, N> =
     context.map(unwrap(), transform).wrap()
-
 
 /**
  * Element by element application of any operation on elements to the whole [NDElement]
@@ -106,7 +106,6 @@ operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: 
  */
 operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T): NDElement<T, F, N> =
     map { value -> arg / value }
-
 
 //    /**
 //     * Reverse sum operation

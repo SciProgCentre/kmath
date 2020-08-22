@@ -5,9 +5,8 @@ import scientifik.kmath.operations.*
 interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
     val strides: Strides
 
-    override fun check(vararg elements: NDBuffer<T>) {
-        if (!elements.all { it.strides == this.strides }) error("Strides mismatch")
-    }
+    override fun check(vararg elements: NDBuffer<T>): Unit =
+        require(elements.all { it.strides == strides }) { ("Strides mismatch") }
 
     /**
      * Convert any [NDStructure] to buffered structure using strides from this context.

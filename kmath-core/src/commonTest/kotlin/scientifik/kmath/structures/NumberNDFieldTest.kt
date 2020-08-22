@@ -1,6 +1,7 @@
 package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Norm
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.NDElement.Companion.real2D
 import kotlin.math.abs
 import kotlin.math.pow
@@ -56,17 +57,12 @@ class NumberNDFieldTest {
     }
 
     object L2Norm : Norm<NDStructure<out Number>, Double> {
-        override fun norm(arg: NDStructure<out Number>): Double {
-            return kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
-        }
+        override fun norm(arg: NDStructure<out Number>): Double =
+            kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
     }
 
     @Test
     fun testInternalContext() {
-        NDField.real(*array1.shape).run {
-            with(L2Norm) {
-                1 + norm(array1) + exp(array2)
-            }
-        }
+        (NDField.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
     }
 }

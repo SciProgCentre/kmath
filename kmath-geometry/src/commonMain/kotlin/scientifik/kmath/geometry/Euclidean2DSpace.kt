@@ -9,25 +9,21 @@ import kotlin.math.sqrt
 interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Vector2D, Euclidean2DSpace> {
     val x: Double
     val y: Double
-
+    override val context: Euclidean2DSpace get() = Euclidean2DSpace
     override val size: Int get() = 2
 
-    override fun get(index: Int): Double = when (index) {
+    override operator fun get(index: Int): Double = when (index) {
         1 -> x
         2 -> y
         else -> error("Accessing outside of point bounds")
     }
 
-    override fun iterator(): Iterator<Double> = listOf(x, y).iterator()
-
-    override val context: Euclidean2DSpace get() = Euclidean2DSpace
-
+    override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
     override fun unwrap(): Vector2D = this
-
     override fun Vector2D.wrap(): Vector2D = this
 }
 
-val Vector2D.r: Double get() = Euclidean2DSpace.run { sqrt(norm()) }
+val Vector2D.r: Double get() = Euclidean2DSpace { sqrt(norm()) }
 
 @Suppress("FunctionName")
 fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)

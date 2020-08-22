@@ -6,6 +6,8 @@ import scientifik.kmath.structures.MutableBuffer
 import scientifik.memory.MemoryReader
 import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.*
 
 /**
@@ -197,9 +199,11 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 fun Number.toComplex(): Complex = Complex(this, 0.0)
 
 inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+    contract { callsInPlace(init) }
     return MemoryBuffer.create(Complex, size, init)
 }
 
 inline fun MutableBuffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+    contract { callsInPlace(init) }
     return MemoryBuffer.create(Complex, size, init)
 }

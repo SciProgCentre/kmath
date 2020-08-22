@@ -1,5 +1,7 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.jvm.JvmName
 import kotlin.reflect.KClass
 
@@ -139,9 +141,8 @@ interface MutableNDStructure<T> : NDStructure<T> {
 }
 
 inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
-    elements().forEach { (index, oldValue) ->
-        this[index] = action(index, oldValue)
-    }
+    contract { callsInPlace(action) }
+    elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 }
 
 /**
@@ -200,14 +201,12 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
         }.toList()
     }
 
-    override fun offset(index: IntArray): Int {
-        return index.mapIndexed { i, value ->
-            if (value < 0 || value >= this.shape[i]) {
-                throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
-            }
-            value * strides[i]
-        }.sum()
-    }
+    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
+        if (value < 0 || value >= this.shape[i])
+            throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
+
+        value * strides[i]
+    }.sum()
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)
@@ -259,7 +258,7 @@ abstract class NDBuffer<T> : NDStructure<T> {
      */
     abstract val strides: Strides
 
-    override fun get(index: IntArray): T = buffer[strides.offset(index)]
+    override operator fun get(index: IntArray): T = buffer[strides.offset(index)]
 
     override val shape: IntArray get() = strides.shape
 
@@ -319,13 +318,13 @@ class MutableBufferNDStructure<T>(
         }
     }
 
-    override fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
+    override operator fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
 }
 
 inline fun <reified T : Any> NDStructure<T>.combine(
     struct: NDStructure<T>,
     crossinline block: (T, T) -> T
 ): NDStructure<T> {
-    if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
+    require(shape.contentEquals(struct.shape)) { "Shape mismatch in structure combination" }
     return NDStructure.auto(shape) { block(this[it], struct[it]) }
 }

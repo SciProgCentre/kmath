@@ -29,8 +29,10 @@ interface Statistic<T, R> {
 interface ComposableStatistic<T, I, R> : Statistic<T, R> {
     //compute statistic on a single block
     suspend fun computeIntermediate(data: Buffer<T>): I
+
     //Compose two blocks
     suspend fun composeIntermediate(first: I, second: I): I
+
     //Transform block to result
     suspend fun toResult(intermediate: I): R
 
@@ -58,26 +60,26 @@ private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
 fun <T, I, R> ComposableStatistic<T, I, R>.flow(
     flow: Flow<Buffer<T>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default
-): Flow<R> = flowIntermediate(flow,dispatcher).map(::toResult)
+): Flow<R> = flowIntermediate(flow, dispatcher).map(::toResult)
 
 /**
  * Arithmetic mean
  */
 class Mean<T>(val space: Space<T>) : ComposableStatistic<T, Pair<T, Int>, T> {
     override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =
-        space.run { sum(data.asIterable()) } to data.size
+        space { sum(data.asIterable()) } to data.size
 
     override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
-        space.run { first.first + second.first } to (first.second + second.second)
+        space { first.first + second.first } to (first.second + second.second)
 
     override suspend fun toResult(intermediate: Pair<T, Int>): T =
-        space.run { intermediate.first / intermediate.second }
+        space { intermediate.first / intermediate.second }
 
     companion object {
         //TODO replace with optimized version which respects overflow
-        val real = Mean(RealField)
-        val int = Mean(IntRing)
-        val long = Mean(LongRing)
+        val real: Mean<Double> = Mean(RealField)
+        val int: Mean<Int> = Mean(IntRing)
+        val long: Mean<Long> = Mean(LongRing)
     }
 }
 
@@ -85,11 +87,10 @@ class Mean<T>(val space: Space<T>) : ComposableStatistic<T, Pair<T, Int>, T> {
  * Non-composable median
  */
 class Median<T>(private val comparator: Comparator<T>) : Statistic<T, T> {
-    override suspend fun invoke(data: Buffer<T>): T {
-        return data.asSequence().sortedWith(comparator).toList()[data.size / 2] //TODO check if this is correct
-    }
+    override suspend fun invoke(data: Buffer<T>): T =
+        data.asSequence().sortedWith(comparator).toList()[data.size / 2] //TODO check if this is correct
 
     companion object {
-        val real = Median(Comparator { a: Double, b: Double -> a.compareTo(b) })
+        val real: Median<Double> = Median(Comparator { a: Double, b: Double -> a.compareTo(b) })
     }
 }

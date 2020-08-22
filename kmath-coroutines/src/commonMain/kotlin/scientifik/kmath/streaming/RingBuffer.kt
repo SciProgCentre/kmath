@@ -20,7 +20,7 @@ class RingBuffer<T>(
     override var size: Int = size
         private set
 
-    override fun get(index: Int): T {
+    override operator fun get(index: Int): T {
         require(index >= 0) { "Index must be positive" }
         require(index < size) { "Index $index is out of circular buffer size $size" }
         return buffer[startIndex.forward(index)] as T
@@ -31,15 +31,13 @@ class RingBuffer<T>(
     /**
      * Iterator could provide wrong results if buffer is changed in initialization (iteration is safe)
      */
-    override fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
+    override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
         private var count = size
         private var index = startIndex
         val copy = buffer.copy()
 
         override fun computeNext() {
-            if (count == 0) {
-                done()
-            } else {
+            if (count == 0) done() else {
                 setNext(copy[index] as T)
                 index = index.forward(1)
                 count--
