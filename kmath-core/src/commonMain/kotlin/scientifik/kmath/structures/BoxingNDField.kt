@@ -14,8 +14,9 @@ class BoxingNDField<T, F : Field<T>>(
     fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
-    override fun check(vararg elements: NDBuffer<T>) {
+    override fun check(vararg elements: NDBuffer<T>): Array<out NDBuffer<T>> {
         if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
+        return elements
     }
 
     override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
