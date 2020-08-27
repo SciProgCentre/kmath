@@ -83,9 +83,12 @@ interface MemoryReader {
 /**
  * Uses the memory for read then releases the reader.
  */
-inline fun Memory.read(block: MemoryReader.() -> Unit) {
+inline fun <R> Memory.read(block: MemoryReader.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    reader().apply(block).release()
+    val reader = reader()
+    val result = reader.block()
+    reader.release()
+    return result
 }
 
 /**
