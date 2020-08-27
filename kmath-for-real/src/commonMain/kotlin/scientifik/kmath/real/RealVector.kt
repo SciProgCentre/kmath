@@ -14,8 +14,8 @@ import kotlin.math.sqrt
 
 typealias RealPoint = Point<Double>
 
-fun DoubleArray.asVector() = RealVector(this.asBuffer())
-fun List<Double>.asVector() = RealVector(this.asBuffer())
+fun DoubleArray.asVector(): RealVector = RealVector(this.asBuffer())
+fun List<Double>.asVector(): RealVector = RealVector(this.asBuffer())
 
 object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble { it.toDouble() })
@@ -32,15 +32,14 @@ inline class RealVector(private val point: Point<Double>) :
 
     override val size: Int get() = point.size
 
-    override fun get(index: Int): Double = point[index]
+    override operator fun get(index: Int): Double = point[index]
 
-    override fun iterator(): Iterator<Double> = point.iterator()
+    override operator fun iterator(): Iterator<Double> = point.iterator()
 
     companion object {
+        private val spaceCache: MutableMap<Int, BufferVectorSpace<Double, RealField>> = hashMapOf()
 
-        private val spaceCache = HashMap<Int, BufferVectorSpace<Double, RealField>>()
-
-        inline operator fun invoke(dim: Int, initializer: (Int) -> Double) =
+        inline operator fun invoke(dim: Int, initializer: (Int) -> Double): RealVector =
             RealVector(RealBuffer(dim, initializer))
 
         operator fun invoke(vararg values: Double): RealVector = values.asVector()

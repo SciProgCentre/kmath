@@ -8,7 +8,8 @@ class BoxingNDField<T, F : Field<T>>(
     override val elementContext: F,
     val bufferFactory: BufferFactory<T>
 ) : BufferedNDField<T, F> {
-
+    override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
+    override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
     override val strides: Strides = DefaultStrides(shape)
 
     fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
@@ -19,9 +20,6 @@ class BoxingNDField<T, F : Field<T>>(
         return elements
     }
 
-    override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
-    override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
-
     override fun produce(initializer: F.(IntArray) -> T): BufferedNDFieldElement<T, F> =
         BufferedNDFieldElement(
             this,
@@ -29,6 +27,7 @@ class BoxingNDField<T, F : Field<T>>(
 
     override fun map(arg: NDBuffer<T>, transform: F.(T) -> T): BufferedNDFieldElement<T, F> {
         check(arg)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset -> elementContext.transform(arg.buffer[offset]) })

@@ -1,11 +1,8 @@
 plugins { id("scientifik.mpp") }
 
 kotlin.sourceSets {
-//    all {
-//       languageSettings.apply{
-//            enableLanguageFeature("NewInference")
-//       }
-//    }
+    all { languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts") }
+
     commonMain {
         dependencies {
             api(project(":kmath-core"))

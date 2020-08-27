@@ -1,12 +1,17 @@
 package scientifik.memory
 
+import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-private class ByteBufferMemory(
+@PublishedApi
+internal class ByteBufferMemory(
     val buffer: ByteBuffer,
     val startOffset: Int = 0,
     override val size: Int = buffer.limit()
@@ -112,7 +117,11 @@ fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memory =
 /**
  * Uses direct memory-mapped buffer from file to read something and close it afterwards.
  */
-fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R =
-    FileChannel.open(this, StandardOpenOption.READ).use {
-        ByteBufferMemory(it.map(FileChannel.MapMode.READ_ONLY, position, size)).block()
-    }
+@Throws(IOException::class)
+inline fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+
+    return FileChannel
+        .open(this, StandardOpenOption.READ)
+        .use { ByteBufferMemory(it.map(FileChannel.MapMode.READ_ONLY, position, size)).block() }
+}

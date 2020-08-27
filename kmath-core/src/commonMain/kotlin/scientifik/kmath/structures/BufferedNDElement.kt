@@ -30,7 +30,6 @@ class BufferedNDRingElement<T, R : Ring<T>>(
     override val context: BufferedNDRing<T, R>,
     override val buffer: Buffer<T>
 ) : BufferedNDElement<T, R>(), RingElement<NDBuffer<T>, BufferedNDRingElement<T, R>, BufferedNDRing<T, R>> {
-
     override fun unwrap(): NDBuffer<T> = this
 
     override fun NDBuffer<T>.wrap(): BufferedNDRingElement<T, R> {

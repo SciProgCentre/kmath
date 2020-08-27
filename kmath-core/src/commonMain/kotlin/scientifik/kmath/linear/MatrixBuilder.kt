@@ -7,7 +7,7 @@ import scientifik.kmath.structures.asBuffer
 
 class MatrixBuilder(val rows: Int, val columns: Int) {
     operator fun <T : Any> invoke(vararg elements: T): FeaturedMatrix<T> {
-        if (rows * columns != elements.size) error("The number of elements ${elements.size} is not equal $rows * $columns")
+        require(rows * columns == elements.size) { "The number of elements ${elements.size} is not equal $rows * $columns" }
         val buffer = elements.asBuffer()
         return BufferMatrix(rows, columns, buffer)
     }

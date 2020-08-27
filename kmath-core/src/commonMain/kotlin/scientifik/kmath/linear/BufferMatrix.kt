@@ -53,16 +53,12 @@ class BufferMatrix<T : Any>(
     override fun suggestFeature(vararg features: MatrixFeature): BufferMatrix<T> =
         BufferMatrix(rowNum, colNum, buffer, this.features + features)
 
-    override fun get(index: IntArray): T = get(index[0], index[1])
+    override operator fun get(index: IntArray): T = get(index[0], index[1])
 
-    override fun get(i: Int, j: Int): T = buffer[i * colNum + j]
+    override operator fun get(i: Int, j: Int): T = buffer[i * colNum + j]
 
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
-        for (i in 0 until rowNum) {
-            for (j in 0 until colNum) {
-                yield(intArrayOf(i, j) to get(i, j))
-            }
-        }
+        for (i in 0 until rowNum) for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
     }
 
     override fun equals(other: Any?): Boolean {
@@ -95,7 +91,7 @@ class BufferMatrix<T : Any>(
  * Optimized dot product for real matrices
  */
 infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Double> {
-    if (this.colNum != other.rowNum) error("Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})")
+    require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
 
     val array = DoubleArray(this.rowNum * other.colNum)
 

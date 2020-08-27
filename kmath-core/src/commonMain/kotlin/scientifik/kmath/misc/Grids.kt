@@ -41,6 +41,6 @@ fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Seque
  */
 @Deprecated("Replace by 'toSequenceWithPoints'")
 fun ClosedFloatingPointRange<Double>.toGrid(numPoints: Int): DoubleArray {
-    if (numPoints < 2) error("Can't create generic grid with less than two points")
+    require(numPoints >= 2) { "Can't create generic grid with less than two points" }
     return DoubleArray(numPoints) { i -> start + (endInclusive - start) / (numPoints - 1) * i }
 }

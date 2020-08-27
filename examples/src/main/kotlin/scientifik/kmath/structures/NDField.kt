@@ -2,13 +2,17 @@ package scientifik.kmath.structures
 
 import kotlinx.coroutines.GlobalScope
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.invoke
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis
 
 internal inline fun measureAndPrint(title: String, block: () -> Unit) {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     val time = measureTimeMillis(block)
     println("$title completed in $time millis")
 }
-
 
 fun main() {
     val dim = 1000
@@ -22,27 +26,21 @@ fun main() {
     val genericField = NDField.boxing(RealField, dim, dim)
 
     measureAndPrint("Automatic field addition") {
-        autoField.run {
+        autoField {
             var res: NDBuffer<Double> = one
-            repeat(n) {
-                res += number(1.0)
-            }
+            repeat(n) { res += number(1.0) }
         }
     }
 
     measureAndPrint("Element addition") {
         var res = genericField.one
-        repeat(n) {
-            res += 1.0
-        }
+        repeat(n) { res += 1.0 }
     }
 
     measureAndPrint("Specialized addition") {
-        specializedField.run {
+        specializedField {
             var res: NDBuffer<Double> = one
-            repeat(n) {
-                res += 1.0
-            }
+            repeat(n) { res += 1.0 }
         }
     }
 
@@ -60,12 +58,11 @@ fun main() {
 
     measureAndPrint("Generic addition") {
         //genericField.run(action)
-        genericField.run {
+        genericField {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += one // con't avoid using `one` due to resolution ambiguity
+                res += one // couldn't avoid using `one` due to resolution ambiguity }
             }
         }
     }
-
 }

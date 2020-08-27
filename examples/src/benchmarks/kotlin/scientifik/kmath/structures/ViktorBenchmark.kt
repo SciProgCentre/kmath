@@ -5,8 +5,8 @@ import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.viktor.ViktorNDField
-
 
 @State(Scope.Benchmark)
 class ViktorBenchmark {
@@ -14,14 +14,13 @@ class ViktorBenchmark {
     final val n = 100
 
     // automatically build context most suited for given type.
-    final val autoField = NDField.auto(RealField, dim, dim)
-    final val realField = NDField.real(dim, dim)
-
-    final val viktorField = ViktorNDField(intArrayOf(dim, dim))
+    final val autoField: BufferedNDField<Double, RealField> = NDField.auto(RealField, dim, dim)
+    final val realField: RealNDField = NDField.real(dim, dim)
+    final val viktorField: ViktorNDField = ViktorNDField(intArrayOf(dim, dim))
 
     @Benchmark
     fun automaticFieldAddition() {
-        autoField.run {
+        autoField {
             var res = one
             repeat(n) { res += one }
         }
@@ -29,7 +28,7 @@ class ViktorBenchmark {
 
     @Benchmark
     fun viktorFieldAddition() {
-        viktorField.run {
+        viktorField {
             var res = one
             repeat(n) { res += one }
         }
@@ -44,7 +43,7 @@ class ViktorBenchmark {
 
     @Benchmark
     fun realdFieldLog() {
-        realField.run {
+        realField {
             val fortyTwo = produce { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }

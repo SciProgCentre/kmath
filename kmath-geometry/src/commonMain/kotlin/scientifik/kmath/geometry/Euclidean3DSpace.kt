@@ -2,6 +2,7 @@ package scientifik.kmath.geometry
 
 import scientifik.kmath.linear.Point
 import scientifik.kmath.operations.SpaceElement
+import scientifik.kmath.operations.invoke
 import kotlin.math.sqrt
 
 
@@ -9,19 +10,17 @@ interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector3D, Euc
     val x: Double
     val y: Double
     val z: Double
-
+    override val context: Euclidean3DSpace get() = Euclidean3DSpace
     override val size: Int get() = 3
 
-    override fun get(index: Int): Double = when (index) {
+    override operator fun get(index: Int): Double = when (index) {
         1 -> x
         2 -> y
         3 -> z
         else -> error("Accessing outside of point bounds")
     }
 
-    override fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
-
-    override val context: Euclidean3DSpace get() = Euclidean3DSpace
+    override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
 
     override fun unwrap(): Vector3D = this
 
@@ -31,7 +30,7 @@ interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector3D, Euc
 @Suppress("FunctionName")
 fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
 
-val Vector3D.r: Double get() = Euclidean3DSpace.run { sqrt(norm()) }
+val Vector3D.r: Double get() = Euclidean3DSpace { sqrt(norm()) }
 
 private data class Vector3DImpl(
     override val x: Double,

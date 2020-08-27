@@ -16,5 +16,5 @@ inline class ViktorBuffer(val flatArray: F64FlatArray) : MutableBuffer<Double> {
         return ViktorBuffer(flatArray.copy().flatten())
     }
 
-    override fun iterator(): Iterator<Double> = flatArray.data.iterator()
+    override operator fun iterator(): Iterator<Double> = flatArray.data.iterator()
 }

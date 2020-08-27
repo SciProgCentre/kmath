@@ -14,9 +14,7 @@ interface XYZPointSet<X, Y, Z> : XYPointSet<X, Y> {
 }
 
 internal fun <T : Comparable<T>> insureSorted(points: XYPointSet<T, *>) {
-    for (i in 0 until points.size - 1) {
-        if (points.x[i + 1] <= points.x[i]) error("Input data is not sorted at index $i")
-    }
+    for (i in 0 until points.size - 1) require(points.x[i + 1] > points.x[i]) { "Input data is not sorted at index $i" }
 }
 
 class NDStructureColumn<T>(val structure: Structure2D<T>, val column: Int) : Buffer<T> {
@@ -26,9 +24,9 @@ class NDStructureColumn<T>(val structure: Structure2D<T>, val column: Int) : Buf
 
     override val size: Int get() = structure.rowNum
 
-    override fun get(index: Int): T = structure[index, column]
+    override operator fun get(index: Int): T = structure[index, column]
 
-    override fun iterator(): Iterator<T> = sequence {
+    override operator fun iterator(): Iterator<T> = sequence {
         repeat(size) {
             yield(get(it))
         }

@@ -16,9 +16,9 @@
 
 package scientifik.kmath.chains
 
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -37,14 +37,8 @@ interface Chain<out R> : Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @OptIn(InternalCoroutinesApi::class)
-    override suspend fun collect(collector: FlowCollector<R>) {
-        kotlinx.coroutines.flow.flow {
-            while (true) {
-                emit(next())
-            }
-        }.collect(collector)
-    }
+    override suspend fun collect(collector: FlowCollector<R>): Unit =
+        flow { while (true) emit(next()) }.collect(collector)
 
     companion object
 }
@@ -139,9 +133,10 @@ fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
 fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain<T> {
     override suspend fun next(): T {
         var next: T
-        do {
-            next = this@filter.next()
-        } while (!block(next))
+
+        do next = this@filter.next()
+        while (!block(next))
+
         return next
     }
 
@@ -159,6 +154,7 @@ fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object 
 fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
     object : Chain<R> {
         override suspend fun next(): R = state.mapper(this@collectWithState)
+
         override fun fork(): Chain<R> =
             this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
     }
@@ -168,6 +164,5 @@ fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: s
  */
 fun <T, U, R> Chain<T>.zip(other: Chain<U>, block: suspend (T, U) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = block(this@zip.next(), other.next())
-
     override fun fork(): Chain<R> = this@zip.fork().zip(other.fork(), block)
 }
