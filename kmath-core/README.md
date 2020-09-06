@@ -1,4 +1,4 @@
-# The Core Module (`kmath-ast`)
+# The Core Module (`kmath-core`)
 
 The core features of KMath:
 
