@@ -6,20 +6,19 @@ import scientifik.kmath.structures.MutableBuffer
 import scientifik.memory.MemoryReader
 import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.math.*
 
 /**
  * This complex's conjugate.
  */
-val Complex.conjugate: Complex
+public val Complex.conjugate: Complex
     get() = Complex(re, -im)
 
 /**
  * This complex's reciprocal.
  */
-val Complex.reciprocal: Complex
+public val Complex.reciprocal: Complex
     get() {
         val scale = re * re + im * im
         return Complex(re / scale, -im / scale)
@@ -28,13 +27,13 @@ val Complex.reciprocal: Complex
 /**
  * Absolute value of complex number.
  */
-val Complex.r: Double
+public val Complex.r: Double
     get() = sqrt(re * re + im * im)
 
 /**
  * An angle between vector represented by complex number and X axis.
  */
-val Complex.theta: Double
+public val Complex.theta: Double
     get() = atan(im / re)
 
 private val PI_DIV_2 = Complex(PI / 2, 0)
@@ -42,14 +41,14 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
-object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
+public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()
 
     /**
      * The imaginary unit.
      */
-    val i: Complex = Complex(0.0, 1.0)
+    public val i: Complex = Complex(0.0, 1.0)
 
     override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
 
@@ -117,7 +116,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * @param c the augend.
      * @return the sum.
      */
-    operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
+    public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
 
     /**
      * Subtracts complex number from real one.
@@ -126,7 +125,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * @param c the subtrahend.
      * @return the difference.
      */
-    operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
+    public operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
 
     /**
      * Adds real number to complex one.
@@ -135,7 +134,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * @param d the augend.
      * @return the sum.
      */
-    operator fun Complex.plus(d: Double): Complex = d + this
+    public operator fun Complex.plus(d: Double): Complex = d + this
 
     /**
      * Subtracts real number from complex one.
@@ -144,7 +143,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * @param d the subtrahend.
      * @return the difference.
      */
-    operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
+    public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
 
     /**
      * Multiplies real number by complex one.
@@ -153,7 +152,7 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * @param c the multiplicand.
      * @receiver the product.
      */
-    operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+    public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
@@ -166,8 +165,8 @@ object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
  * @property re The real part.
  * @property im The imaginary part.
  */
-data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
-    constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
+public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
+    public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
 
     override val context: ComplexField get() = ComplexField
 
@@ -177,7 +176,7 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
 
     override fun compareTo(other: Complex): Int = r.compareTo(other.r)
 
-    companion object : MemorySpec<Complex> {
+    public companion object : MemorySpec<Complex> {
         override val objectSize: Int = 16
 
         override fun MemoryReader.read(offset: Int): Complex =
@@ -196,14 +195,14 @@ data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Compl
  * @receiver the real part.
  * @return the new complex number.
  */
-fun Number.toComplex(): Complex = Complex(this, 0.0)
+public fun Number.toComplex(): Complex = Complex(this, 0.0)
 
-inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+public inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
     contract { callsInPlace(init) }
     return MemoryBuffer.create(Complex, size, init)
 }
 
-inline fun MutableBuffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
+public inline fun MutableBuffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
     contract { callsInPlace(init) }
     return MemoryBuffer.create(Complex, size, init)
 }

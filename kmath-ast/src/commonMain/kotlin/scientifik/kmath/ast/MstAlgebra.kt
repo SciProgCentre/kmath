@@ -5,7 +5,7 @@ import scientifik.kmath.operations.*
 /**
  * [Algebra] over [MST] nodes.
  */
-object MstAlgebra : NumericAlgebra<MST> {
+public object MstAlgebra : NumericAlgebra<MST> {
     override fun number(value: Number): MST = MST.Numeric(value)
 
     override fun symbol(value: String): MST = MST.Symbolic(value)
@@ -20,7 +20,7 @@ object MstAlgebra : NumericAlgebra<MST> {
 /**
  * [Space] over [MST] nodes.
  */
-object MstSpace : Space<MST>, NumericAlgebra<MST> {
+public object MstSpace : Space<MST>, NumericAlgebra<MST> {
     override val zero: MST = number(0.0)
 
     override fun number(value: Number): MST = MstAlgebra.number(value)

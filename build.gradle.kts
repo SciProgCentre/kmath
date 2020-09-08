@@ -1,11 +1,8 @@
-plugins {
-    id("scientifik.publish") apply false
-}
+plugins { id("ru.mipt.npm.publish") apply false }
 
-val kmathVersion by extra("0.1.4-dev-8")
-
-val bintrayRepo by extra("scientifik")
-val githubProject by extra("kmath")
+val kmathVersion: String by extra("0.1.4-dev-8")
+val bintrayRepo: String by extra("scientifik")
+val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
@@ -18,8 +15,4 @@ allprojects {
     version = kmathVersion
 }
 
-subprojects {
-    if (name.startsWith("kmath")) {
-        apply(plugin = "scientifik.publish")
-    }
-}
+subprojects { if (name.startsWith("kmath")) apply(plugin = "ru.mipt.npm.publish") }

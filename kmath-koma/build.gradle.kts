@@ -1,10 +1,6 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("ru.mipt.npm.mpp") }
 
-repositories {
-    maven("http://dl.bintray.com/kyonifer/maven")
-}
+repositories.maven("http://dl.bintray.com/kyonifer/maven")
 
 kotlin.sourceSets {
     commonMain {
@@ -13,16 +9,19 @@ kotlin.sourceSets {
             api("com.kyonifer:koma-core-api-common:0.12")
         }
     }
+
     jvmMain {
         dependencies {
             api("com.kyonifer:koma-core-api-jvm:0.12")
         }
     }
+
     jvmTest {
         dependencies {
             implementation("com.kyonifer:koma-core-ejml:0.12")
         }
     }
+
     jsMain {
         dependencies {
             api("com.kyonifer:koma-core-api-js:0.12")

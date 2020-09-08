@@ -3,26 +3,22 @@ package scientifik.kmath.structures
 /**
  * A structure that is guaranteed to be two-dimensional
  */
-interface Structure2D<T> : NDStructure<T> {
-    val rowNum: Int get() = shape[0]
-    val colNum: Int get() = shape[1]
+public interface Structure2D<T> : NDStructure<T> {
+    public val rowNum: Int get() = shape[0]
+    public val colNum: Int get() = shape[1]
 
-    operator fun get(i: Int, j: Int): T
+    public operator fun get(i: Int, j: Int): T
 
     override operator fun get(index: IntArray): T {
         require(index.size == 2) { "Index dimension mismatch. Expected 2 but found ${index.size}" }
         return get(index[0], index[1])
     }
 
-    val rows: Buffer<Buffer<T>>
-        get() = VirtualBuffer(rowNum) { i ->
-            VirtualBuffer(colNum) { j -> get(i, j) }
-        }
+    public val rows: Buffer<Buffer<T>>
+        get() = VirtualBuffer(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
 
-    val columns: Buffer<Buffer<T>>
-        get() = VirtualBuffer(colNum) { j ->
-            VirtualBuffer(rowNum) { i -> get(i, j) }
-        }
+    public val columns: Buffer<Buffer<T>>
+        get() = VirtualBuffer(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
 
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
         for (i in (0 until rowNum)) {
@@ -32,7 +28,7 @@ interface Structure2D<T> : NDStructure<T> {
         }
     }
 
-    companion object
+    public companion object
 }
 
 /**
@@ -49,10 +45,10 @@ private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Stru
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
-fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2) {
+public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2) {
     Structure2DWrapper(this)
 } else {
     error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
-typealias Matrix<T> = Structure2D<T>
+public typealias Matrix<T> = Structure2D<T>

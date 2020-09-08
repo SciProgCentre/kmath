@@ -3,8 +3,8 @@ package scientifik.kmath.domains
 import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.asBuffer
 
-inline class UnivariateDomain(val range: ClosedFloatingPointRange<Double>) : RealDomain {
-    operator fun contains(d: Double): Boolean = range.contains(d)
+public inline class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : RealDomain {
+    public operator fun contains(d: Double): Boolean = range.contains(d)
 
     override operator fun contains(point: Point<Double>): Boolean {
         require(point.size == 0)

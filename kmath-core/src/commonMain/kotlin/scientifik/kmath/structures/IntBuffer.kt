@@ -9,7 +9,7 @@ import kotlin.contracts.contract
  *
  * @property array the underlying array.
  */
-inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
+public inline class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]

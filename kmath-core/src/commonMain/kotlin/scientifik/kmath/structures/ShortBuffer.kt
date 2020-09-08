@@ -8,7 +8,7 @@ import kotlin.contracts.contract
  *
  * @property array the underlying array.
  */
-inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
+public inline class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Short = array[index]
@@ -30,7 +30,7 @@ inline class ShortBuffer(val array: ShortArray) : MutableBuffer<Short> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer {
+public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer {
     contract { callsInPlace(init) }
     return ShortBuffer(ShortArray(size) { init(it) })
 }
@@ -38,12 +38,12 @@ inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer {
 /**
  * Returns a new [ShortBuffer] of given elements.
  */
-fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
+public fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
 
 /**
  * Returns a [ShortArray] containing all of the elements of this [MutableBuffer].
  */
-val MutableBuffer<out Short>.array: ShortArray
+public val MutableBuffer<out Short>.array: ShortArray
     get() = (if (this is ShortBuffer) array else ShortArray(size) { get(it) })
 
 /**
@@ -52,4 +52,4 @@ val MutableBuffer<out Short>.array: ShortArray
  * @receiver the array.
  * @return the new buffer.
  */
-fun ShortArray.asBuffer(): ShortBuffer = ShortBuffer(this)
+public fun ShortArray.asBuffer(): ShortBuffer = ShortBuffer(this)

@@ -10,17 +10,21 @@ import kotlin.math.abs
  *
  * If step is negative, the same goes from upper boundary downwards
  */
-fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Sequence<Double> = when {
+public fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Sequence<Double> = when {
     step == 0.0 -> error("Zero step in double progression")
+
     step > 0 -> sequence {
         var current = start
+
         while (current <= endInclusive) {
             yield(current)
             current += step
         }
     }
+
     else -> sequence {
         var current = endInclusive
+
         while (current >= start) {
             yield(current)
             current += step
@@ -31,7 +35,7 @@ fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Sequence<
 /**
  * Convert double range to sequence with the fixed number of points
  */
-fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Sequence<Double> {
+public fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Sequence<Double> {
     require(numPoints > 1) { "The number of points should be more than 2" }
     return toSequenceWithStep(abs(endInclusive - start) / (numPoints - 1))
 }
@@ -40,7 +44,7 @@ fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Seque
  * Convert double range to array of evenly spaced doubles, where the size of array equals [numPoints]
  */
 @Deprecated("Replace by 'toSequenceWithPoints'")
-fun ClosedFloatingPointRange<Double>.toGrid(numPoints: Int): DoubleArray {
+public fun ClosedFloatingPointRange<Double>.toGrid(numPoints: Int): DoubleArray {
     require(numPoints >= 2) { "Can't create generic grid with less than two points" }
     return DoubleArray(numPoints) { i -> start + (endInclusive - start) / (numPoints - 1) * i }
 }

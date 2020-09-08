@@ -7,7 +7,7 @@ import kotlin.math.pow as kpow
 /**
  * Advanced Number-like semifield that implements basic operations.
  */
-interface ExtendedFieldOperations<T> :
+public interface ExtendedFieldOperations<T> :
     FieldOperations<T>,
     TrigonometricOperations<T>,
     HyperbolicOperations<T>,
@@ -41,7 +41,7 @@ interface ExtendedFieldOperations<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2
     override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2
     override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))

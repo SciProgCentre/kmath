@@ -2,17 +2,17 @@ package scientifik.kmath.functions
 
 import scientifik.kmath.operations.Ring
 
-interface Piecewise<T, R> {
-    fun findPiece(arg: T): R?
+public fun interface Piecewise<T, R> {
+    public fun findPiece(arg: T): R?
 }
 
-interface PiecewisePolynomial<T : Any> :
+public fun interface PiecewisePolynomial<T : Any> :
     Piecewise<T, Polynomial<T>>
 
 /**
  * Ordered list of pieces in piecewise function
  */
-class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
+public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
     PiecewisePolynomial<T> {
 
     private val delimiters: ArrayList<T> = arrayListOf(delimeter)
@@ -22,13 +22,13 @@ class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
      * Dynamically add a piece to the "right" side (beyond maximum argument value of previous piece)
      * @param right new rightmost position. If is less then current rightmost position, a error is thrown.
      */
-    fun putRight(right: T, piece: Polynomial<T>) {
+    public fun putRight(right: T, piece: Polynomial<T>) {
         require(right > delimiters.last()) { "New delimiter should be to the right of old one" }
         delimiters.add(right)
         pieces.add(piece)
     }
 
-    fun putLeft(left: T, piece: Polynomial<T>) {
+    public fun putLeft(left: T, piece: Polynomial<T>) {
         require(left < delimiters.first()) { "New delimiter should be to the left of old one" }
         delimiters.add(0, left)
         pieces.add(0, piece)
@@ -51,7 +51,7 @@ class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
 /**
  * Return a value of polynomial function with given [ring] an given [arg] or null if argument is outside of piecewise definition.
  */
-fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
     findPiece(arg)?.value(ring, arg)
 
-fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }

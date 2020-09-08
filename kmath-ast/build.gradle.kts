@@ -1,8 +1,6 @@
-plugins { id("scientifik.mpp") }
+plugins { id("ru.mipt.npm.mpp") }
 
 kotlin.sourceSets {
-    all { languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts") }
-
     commonMain {
         dependencies {
             api(project(":kmath-core"))

@@ -25,7 +25,7 @@ import scientifik.kmath.structures.indices
  *
  * @author Alexander Nozik
  */
-class HyperSquareDomain(private val lower: RealBuffer, private val upper: RealBuffer) : RealDomain {
+public class HyperSquareDomain(private val lower: RealBuffer, private val upper: RealBuffer) : RealDomain {
 
     override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]

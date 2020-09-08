@@ -6,16 +6,16 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.asBuffer
 
-interface Interpolator<X, Y> {
-    fun interpolate(points: XYPointSet<X, Y>): (X) -> Y
+public fun interface Interpolator<X, Y> {
+    public fun interpolate(points: XYPointSet<X, Y>): (X) -> Y
 }
 
-interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T> {
-    val algebra: Ring<T>
+public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T> {
+    public val algebra: Ring<T>
 
-    fun getDefaultValue(): T = error("Out of bounds")
+    public fun getDefaultValue(): T = error("Out of bounds")
 
-    fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T>
+    public fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T>
 
     override fun interpolate(points: XYPointSet<T, T>): (T) -> T = { x ->
         interpolatePolynomials(points).value(algebra, x) ?: getDefaultValue()

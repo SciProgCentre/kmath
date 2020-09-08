@@ -9,7 +9,7 @@ import kotlin.experimental.and
  *
  * @property mask bit mask value of this flag.
  */
-enum class ValueFlag(val mask: Byte) {
+public enum class ValueFlag(public val mask: Byte) {
     /**
      * Reports the value is NaN.
      */

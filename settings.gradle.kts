@@ -1,14 +1,12 @@
 pluginManagement {
-
-    val toolsVersion = "0.5.0"
+    val toolsVersion = "0.6.0-dev-3"
 
     plugins {
-        id("kotlinx.benchmark") version "0.2.0-dev-8"
-        id("scientifik.mpp") version toolsVersion
-        id("scientifik.jvm") version toolsVersion
-        id("scientifik.atomic") version toolsVersion
-        id("scientifik.publish") version toolsVersion
-        kotlin("plugin.allopen") version "1.3.72"
+        id("kotlinx.benchmark") version "0.2.0-dev-20"
+        id("ru.mipt.npm.mpp") version toolsVersion
+        id("ru.mipt.npm.jvm") version toolsVersion
+        id("ru.mipt.npm.publish") version toolsVersion
+        kotlin("plugin.allopen") version "1.4.0"
     }
 
     repositories {
@@ -20,17 +18,10 @@ pluginManagement {
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
-
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "scientifik.mpp", "scientifik.jvm", "scientifik.publish" -> useModule("scientifik:gradle-tools:$toolsVersion")
-            }
-        }
-    }
 }
 
 rootProject.name = "kmath"
+
 include(
     ":kmath-memory",
     ":kmath-core",

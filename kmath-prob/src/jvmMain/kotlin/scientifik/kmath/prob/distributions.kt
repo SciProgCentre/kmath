@@ -11,7 +11,7 @@ import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-abstract class ContinuousSamplerDistribution : Distribution<Double> {
+public abstract class ContinuousSamplerDistribution : Distribution<Double> {
 
     private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingRealChain() {
         private val sampler = buildCMSampler(generator)
@@ -26,7 +26,7 @@ abstract class ContinuousSamplerDistribution : Distribution<Double> {
     override fun sample(generator: RandomGenerator): BlockingRealChain = ContinuousSamplerChain(generator)
 }
 
-abstract class DiscreteSamplerDistribution : Distribution<Int> {
+public abstract class DiscreteSamplerDistribution : Distribution<Int> {
 
     private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingIntChain() {
         private val sampler = buildSampler(generator)
@@ -41,7 +41,7 @@ abstract class DiscreteSamplerDistribution : Distribution<Int> {
     override fun sample(generator: RandomGenerator): BlockingIntChain = ContinuousSamplerChain(generator)
 }
 
-enum class NormalSamplerMethod {
+public enum class NormalSamplerMethod {
     BoxMuller,
     Marsaglia,
     Ziggurat
@@ -54,7 +54,7 @@ private fun normalSampler(method: NormalSamplerMethod, provider: UniformRandomPr
         NormalSamplerMethod.Ziggurat -> ZigguratNormalizedGaussianSampler(provider)
     }
 
-fun Distribution.Companion.normal(
+public fun Distribution.Companion.normal(
     method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
 ): Distribution<Double> = object : ContinuousSamplerDistribution() {
     override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
@@ -67,7 +67,7 @@ fun Distribution.Companion.normal(
     }
 }
 
-fun Distribution.Companion.normal(
+public fun Distribution.Companion.normal(
     mean: Double,
     sigma: Double,
     method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
@@ -86,7 +86,7 @@ fun Distribution.Companion.normal(
     }
 }
 
-fun Distribution.Companion.poisson(
+public fun Distribution.Companion.poisson(
     lambda: Double
 ): DiscreteSamplerDistribution = object : DiscreteSamplerDistribution() {
 

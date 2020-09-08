@@ -17,7 +17,7 @@ package scientifik.kmath.domains
 
 import scientifik.kmath.linear.Point
 
-class UnconstrainedDomain(override val dimension: Int) : RealDomain {
+public class UnconstrainedDomain(override val dimension: Int) : RealDomain {
     override operator fun contains(point: Point<Double>): Boolean = true
 
     override fun getLowerBound(num: Int, point: Point<Double>): Double? = Double.NEGATIVE_INFINITY

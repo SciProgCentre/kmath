@@ -94,14 +94,14 @@ internal class ByteBufferMemory(
 /**
  * Allocates memory based on a [ByteBuffer].
  */
-actual fun Memory.Companion.allocate(length: Int): Memory =
+public actual fun Memory.Companion.allocate(length: Int): Memory =
     ByteBufferMemory(checkNotNull(ByteBuffer.allocate(length)))
 
 /**
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
  * and could be mutated independently from the resulting [Memory].
  */
-actual fun Memory.Companion.wrap(array: ByteArray): Memory = ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
+public actual fun Memory.Companion.wrap(array: ByteArray): Memory = ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
 
 /**
  * Wraps this [ByteBuffer] to [Memory] object.
@@ -111,14 +111,14 @@ actual fun Memory.Companion.wrap(array: ByteArray): Memory = ByteBufferMemory(ch
  * @param size the size of memory to map.
  * @return the [Memory] object.
  */
-fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memory =
+public fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memory =
     ByteBufferMemory(this, startOffset, size)
 
 /**
  * Uses direct memory-mapped buffer from file to read something and close it afterwards.
  */
 @Throws(IOException::class)
-inline fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {
+public inline fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
 
     return FileChannel

@@ -8,12 +8,12 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
+public typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
 /**
  * An optimized nd-field for complex numbers
  */
-class ComplexNDField(override val shape: IntArray) :
+public class ComplexNDField(override val shape: IntArray) :
     BufferedNDField<Complex, ComplexField>,
     ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>> {
 
@@ -22,7 +22,7 @@ class ComplexNDField(override val shape: IntArray) :
     override val zero: ComplexNDElement by lazy { produce { zero } }
     override val one: ComplexNDElement by lazy { produce { one } }
 
-    inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Complex): Buffer<Complex> =
+    public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Complex): Buffer<Complex> =
         Buffer.complex(size) { initializer(it) }
 
     /**
@@ -130,29 +130,25 @@ operator fun Function1<Complex, Complex>.invoke(ndElement: ComplexNDElement): Co
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun ComplexNDElement.plus(arg: Complex): ComplexNDElement = map { it + arg }
+public operator fun ComplexNDElement.plus(arg: Complex): ComplexNDElement = map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun ComplexNDElement.minus(arg: Complex): ComplexNDElement =
-    map { it - arg }
+public operator fun ComplexNDElement.minus(arg: Complex): ComplexNDElement = map { it - arg }
 
-operator fun ComplexNDElement.plus(arg: Double): ComplexNDElement =
-    map { it + arg }
+public operator fun ComplexNDElement.plus(arg: Double): ComplexNDElement = map { it + arg }
+public operator fun ComplexNDElement.minus(arg: Double): ComplexNDElement = map { it - arg }
 
-operator fun ComplexNDElement.minus(arg: Double): ComplexNDElement =
-    map { it - arg }
+public fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDField(shape)
 
-fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDField(shape)
-
-fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(IntArray) -> Complex): ComplexNDElement =
+public fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(IntArray) -> Complex): ComplexNDElement =
     NDField.complex(*shape).produce(initializer)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
+public inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return NDField.complex(*shape).action()
 }

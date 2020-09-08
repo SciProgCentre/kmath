@@ -7,7 +7,7 @@ import java.math.MathContext
 /**
  * A field over [BigInteger].
  */
-object JBigIntegerField : Field<BigInteger> {
+public object JBigIntegerField : Field<BigInteger> {
     override val zero: BigInteger
         get() = BigInteger.ZERO
 
@@ -28,7 +28,7 @@ object JBigIntegerField : Field<BigInteger> {
  *
  * @property mathContext the [MathContext] to use.
  */
-abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathContext = MathContext.DECIMAL64) :
+public abstract class JBigDecimalFieldBase internal constructor(public val mathContext: MathContext = MathContext.DECIMAL64) :
     Field<BigDecimal>,
     PowerOperations<BigDecimal> {
     override val zero: BigDecimal
@@ -54,6 +54,6 @@ abstract class JBigDecimalFieldBase internal constructor(val mathContext: MathCo
 /**
  * A field over [BigDecimal].
  */
-class JBigDecimalField(mathContext: MathContext = MathContext.DECIMAL64) : JBigDecimalFieldBase(mathContext) {
-    companion object : JBigDecimalFieldBase()
+public class JBigDecimalField(mathContext: MathContext = MathContext.DECIMAL64) : JBigDecimalFieldBase(mathContext) {
+    public companion object : JBigDecimalFieldBase()
 }

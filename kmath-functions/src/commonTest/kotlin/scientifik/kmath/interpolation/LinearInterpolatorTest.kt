@@ -6,7 +6,6 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class LinearInterpolatorTest {
     @Test
     fun testInterpolation() {

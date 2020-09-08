@@ -2,7 +2,7 @@ package scientifik.kmath.structures
 
 import kotlin.system.measureTimeMillis
 
-fun main(args: Array<String>) {
+fun main() {
     val n = 6000
 
     val array = DoubleArray(n * n) { 1.0 }

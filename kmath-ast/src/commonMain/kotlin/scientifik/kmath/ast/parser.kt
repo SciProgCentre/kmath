@@ -18,7 +18,7 @@ import scientifik.kmath.operations.SpaceOperations
 /**
  * TODO move to core
  */
-object ArithmeticsEvaluator : Grammar<MST>() {
+public object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
     private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?")
     private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*")
@@ -35,23 +35,23 @@ object ArithmeticsEvaluator : Grammar<MST>() {
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
     private val singular: Parser<MST> by id use { MST.Symbolic(text) }
 
-    private val unaryFunction: Parser<MST> by (id and skip(lpar) and parser(::subSumChain) and skip(rpar))
+    private val unaryFunction: Parser<MST> by (id and -lpar and parser(::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }
 
     private val binaryFunction: Parser<MST> by id
-        .and(skip(lpar))
+        .and(-lpar)
         .and(parser(::subSumChain))
-        .and(skip(comma))
+        .and(-comma)
         .and(parser(::subSumChain))
-        .and(skip(rpar))
+        .and(-rpar)
         .map { (id, left, right) -> MST.Binary(id.text, left, right) }
 
     private val term: Parser<MST> by number
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
-        .or(skip(minus) and parser(::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
-        .or(skip(lpar) and parser(::subSumChain) and skip(rpar))
+        .or(-minus and parser(::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
+        .or(-lpar and parser(::subSumChain) and -rpar)
 
     private val powChain: Parser<MST> by leftAssociative(term = term, operator = pow) { a, _, b ->
         MST.Binary(PowerOperations.POW_OPERATION, a, b)
@@ -86,7 +86,7 @@ object ArithmeticsEvaluator : Grammar<MST>() {
  * @receiver the string to parse.
  * @return the [MST] node.
  */
-fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
+public fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
 
 /**
  * Parses the string into [MST].
@@ -94,4 +94,4 @@ fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd
  * @receiver the string to parse.
  * @return the [MST] node.
  */
-fun String.parseMath(): MST = ArithmeticsEvaluator.parseToEnd(this)
+public fun String.parseMath(): MST = ArithmeticsEvaluator.parseToEnd(this)

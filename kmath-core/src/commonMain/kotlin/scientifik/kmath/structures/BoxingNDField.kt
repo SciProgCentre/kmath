@@ -3,16 +3,16 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
-class BoxingNDField<T, F : Field<T>>(
+public class BoxingNDField<T, F : Field<T>>(
     override val shape: IntArray,
     override val elementContext: F,
-    val bufferFactory: BufferFactory<T>
+    public val bufferFactory: BufferFactory<T>
 ) : BufferedNDField<T, F> {
     override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
     override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
     override val strides: Strides = DefaultStrides(shape)
 
-    fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
+    public fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {
@@ -70,7 +70,7 @@ class BoxingNDField<T, F : Field<T>>(
         BufferedNDFieldElement(this@BoxingNDField, buffer)
 }
 
-inline fun <T : Any, F : Field<T>, R> F.nd(
+public inline fun <T : Any, F : Field<T>, R> F.nd(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: NDField<T, F, *>.() -> R

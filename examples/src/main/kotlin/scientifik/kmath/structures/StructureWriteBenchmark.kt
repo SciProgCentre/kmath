@@ -2,9 +2,7 @@ package scientifik.kmath.structures
 
 import kotlin.system.measureTimeMillis
 
-
-fun main(args: Array<String>) {
-
+fun main() {
     val n = 6000
 
     val structure = NDStructure.build(intArrayOf(n, n), Buffer.Companion::auto) { 1.0 }

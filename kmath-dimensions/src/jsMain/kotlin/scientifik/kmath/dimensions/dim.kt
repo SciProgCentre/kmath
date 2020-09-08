@@ -9,11 +9,11 @@ private val dimensionMap = hashMapOf<UInt, Dimension>(
 )
 
 @Suppress("UNCHECKED_CAST")
-actual fun <D : Dimension> Dimension.Companion.resolve(type: KClass<D>): D {
+public actual fun <D : Dimension> Dimension.Companion.resolve(type: KClass<D>): D {
     return dimensionMap.entries.find { it.value::class == type }?.value as? D ?: error("Can't resolve dimension $type")
 }
 
-actual fun Dimension.Companion.of(dim: UInt): Dimension {
+public actual fun Dimension.Companion.of(dim: UInt): Dimension {
     return dimensionMap.getOrPut(dim) {
         object : Dimension {
             override val dim: UInt get() = dim

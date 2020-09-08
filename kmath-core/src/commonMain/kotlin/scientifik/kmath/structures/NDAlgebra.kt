@@ -5,12 +5,10 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
 
-
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs
  */
-class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : RuntimeException()
-
+public class ShapeMismatchException(public val expected: IntArray, public val actual: IntArray) : RuntimeException()
 
 /**
  * The base interface for all nd-algebra implementations
@@ -18,53 +16,49 @@ class ShapeMismatchException(val expected: IntArray, val actual: IntArray) : Run
  * @param C the type of the element context
  * @param N the type of the structure
  */
-interface NDAlgebra<T, C, N : NDStructure<T>> {
-    val shape: IntArray
-    val elementContext: C
+public interface NDAlgebra<T, C, N : NDStructure<T>> {
+    public val shape: IntArray
+    public val elementContext: C
 
     /**
      * Produce a new [N] structure using given initializer function
      */
-    fun produce(initializer: C.(IntArray) -> T): N
+    public fun produce(initializer: C.(IntArray) -> T): N
 
     /**
      * Map elements from one structure to another one
      */
-    fun map(arg: N, transform: C.(T) -> T): N
+    public fun map(arg: N, transform: C.(T) -> T): N
 
     /**
      * Map indexed elements
      */
-    fun mapIndexed(arg: N, transform: C.(index: IntArray, T) -> T): N
+    public fun mapIndexed(arg: N, transform: C.(index: IntArray, T) -> T): N
 
     /**
      * Combine two structures into one
      */
-    fun combine(a: N, b: N, transform: C.(T, T) -> T): N
+    public fun combine(a: N, b: N, transform: C.(T, T) -> T): N
 
     /**
      * Check if given elements are consistent with this context
      */
-    fun check(vararg elements: N) {
-        elements.forEach {
-            if (!shape.contentEquals(it.shape)) {
-                throw ShapeMismatchException(shape, it.shape)
-            }
-        }
+    public fun check(vararg elements: N): Unit = elements.forEach {
+        if (!shape.contentEquals(it.shape)) throw ShapeMismatchException(shape, it.shape)
     }
 
     /**
      * element-by-element invoke a function working on [T] on a [NDStructure]
      */
-    operator fun Function1<T, T>.invoke(structure: N): N = map(structure) { value -> this@invoke(value) }
+    public operator fun Function1<T, T>.invoke(structure: N): N = map(structure) { value -> this@invoke(value) }
 
-    companion object
+    public companion object
 }
 
 /**
  * An nd-space over element space
  */
-interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, S, N> {
+public interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, S, N> {
     /**
      * Element-by-element addition
      */
@@ -76,32 +70,31 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
     override fun multiply(a: N, k: Number): N = map(a) { multiply(it, k) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.plus(arg: T): N = map(this) { value -> add(arg, value) }
+    public operator fun N.plus(arg: T): N = map(this) { value -> add(arg, value) }
 
-    operator fun N.minus(arg: T): N = map(this) { value -> add(arg, -value) }
+    public operator fun N.minus(arg: T): N = map(this) { value -> add(arg, -value) }
 
-    operator fun T.plus(arg: N): N = map(arg) { value -> add(this@plus, value) }
-    operator fun T.minus(arg: N): N = map(arg) { value -> add(-this@minus, value) }
+    public operator fun T.plus(arg: N): N = map(arg) { value -> add(this@plus, value) }
+    public operator fun T.minus(arg: N): N = map(arg) { value -> add(-this@minus, value) }
 
-    companion object
+    public companion object
 }
 
 /**
  * An nd-ring over element ring
  */
-interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N> {
-
+public interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N> {
     /**
      * Element-by-element multiplication
      */
     override fun multiply(a: N, b: N): N = combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.times(arg: T): N = map(this) { value -> multiply(arg, value) }
+    public operator fun N.times(arg: T): N = map(this) { value -> multiply(arg, value) }
 
-    operator fun T.times(arg: N): N = map(arg) { value -> multiply(this@times, value) }
+    public operator fun T.times(arg: N): N = map(arg) { value -> multiply(this@times, value) }
 
-    companion object
+    public companion object
 }
 
 /**
@@ -111,17 +104,16 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
  * @param N the type of ND structure.
  * @param F field of structure elements.
  */
-interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, N> {
-
+public interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, N> {
     /**
      * Element-by-element division
      */
     override fun divide(a: N, b: N): N = combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.div(arg: T): N = map(this) { value -> divide(arg, value) }
+    public operator fun N.div(arg: T): N = map(this) { value -> divide(arg, value) }
 
-    operator fun T.div(arg: N): N = map(arg) { divide(it, this@div) }
+    public operator fun T.div(arg: N): N = map(arg) { divide(it, this@div) }
 
     companion object {
 

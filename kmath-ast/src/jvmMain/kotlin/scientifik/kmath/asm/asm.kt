@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 /**
  * Compile given MST to an Expression using AST compiler
  */
-fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
+public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST) {
         when (node) {
             is MST.Symbolic -> {
@@ -56,9 +56,9 @@ fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<
 /**
  * Compile an [MST] to ASM using given algebra
  */
-inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
+public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
 /**
  * Optimize performance of an [MstExpression] using ASM codegen
  */
-inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
+public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)

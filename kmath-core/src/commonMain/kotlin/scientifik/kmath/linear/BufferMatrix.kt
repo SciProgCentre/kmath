@@ -7,7 +7,7 @@ import scientifik.kmath.structures.*
 /**
  * Basic implementation of Matrix space based on [NDStructure]
  */
-class BufferMatrixContext<T : Any, R : Ring<T>>(
+public class BufferMatrixContext<T : Any, R : Ring<T>>(
     override val elementContext: R,
     private val bufferFactory: BufferFactory<T>
 ) : GenericMatrixContext<T, R> {
@@ -19,11 +19,11 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 
-    companion object
+    public companion object
 }
 
 @Suppress("OVERRIDE_BY_INLINE")
-object RealMatrixContext : GenericMatrixContext<Double, RealField> {
+public object RealMatrixContext : GenericMatrixContext<Double, RealField> {
 
     override val elementContext: RealField get() = RealField
 
@@ -35,10 +35,10 @@ object RealMatrixContext : GenericMatrixContext<Double, RealField> {
     override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = RealBuffer(size, initializer)
 }
 
-class BufferMatrix<T : Any>(
+public class BufferMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
-    val buffer: Buffer<out T>,
+    public val buffer: Buffer<out T>,
     override val features: Set<MatrixFeature> = emptySet()
 ) : FeaturedMatrix<T> {
 
@@ -90,7 +90,7 @@ class BufferMatrix<T : Any>(
 /**
  * Optimized dot product for real matrices
  */
-infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Double> {
+public infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Double> {
     require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
 
     val array = DoubleArray(this.rowNum * other.colNum)
