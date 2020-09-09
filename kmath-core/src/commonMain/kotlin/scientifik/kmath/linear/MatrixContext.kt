@@ -18,12 +18,45 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      */
     fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
 
+    override fun binaryOperation(operation: String, left: Matrix<T>, right: Matrix<T>): Matrix<T> = when (operation) {
+        "dot" -> left dot right
+        else -> super.binaryOperation(operation, left, right)
+    }
+
+    /**
+     * Computes the dot product of this matrix and another one.
+     *
+     * @receiver the multiplicand.
+     * @param other the multiplier.
+     * @return the dot product.
+     */
     infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T>
 
+    /**
+     * Computes the dot product of this matrix and a vector.
+     *
+     * @receiver the multiplicand.
+     * @param vector the multiplier.
+     * @return the dot product.
+     */
     infix fun Matrix<T>.dot(vector: Point<T>): Point<T>
 
+    /**
+     * Multiplies a matrix by its element.
+     *
+     * @receiver the multiplicand.
+     * @param value the multiplier.
+     * @receiver the product.
+     */
     operator fun Matrix<T>.times(value: T): Matrix<T>
 
+    /**
+     * Multiplies an element by a matrix of it.
+     *
+     * @receiver the multiplicand.
+     * @param value the multiplier.
+     * @receiver the product.
+     */
     operator fun T.times(m: Matrix<T>): Matrix<T> = m * this
 
     companion object {
