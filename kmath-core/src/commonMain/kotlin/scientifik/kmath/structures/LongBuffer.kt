@@ -21,7 +21,6 @@ public inline class LongBuffer(public val array: LongArray) : MutableBuffer<Long
 
     override fun copy(): MutableBuffer<Long> =
         LongBuffer(array.copyOf())
-
 }
 
 /**

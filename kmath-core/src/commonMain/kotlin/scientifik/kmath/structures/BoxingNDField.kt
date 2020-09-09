@@ -4,27 +4,27 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
 public class BoxingNDField<T, F : Field<T>>(
-    override val shape: IntArray,
-    override val elementContext: F,
+    public override val shape: IntArray,
+    public override val elementContext: F,
     public val bufferFactory: BufferFactory<T>
 ) : BufferedNDField<T, F> {
-    override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
-    override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
-    override val strides: Strides = DefaultStrides(shape)
+    public override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
+    public override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
+    public override val strides: Strides = DefaultStrides(shape)
 
     public fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
-    override fun check(vararg elements: NDBuffer<T>) {
+    public override fun check(vararg elements: NDBuffer<T>) {
         check(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
     }
 
-    override fun produce(initializer: F.(IntArray) -> T): BufferedNDFieldElement<T, F> =
+    public override fun produce(initializer: F.(IntArray) -> T): BufferedNDFieldElement<T, F> =
         BufferedNDFieldElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) })
 
-    override fun map(arg: NDBuffer<T>, transform: F.(T) -> T): BufferedNDFieldElement<T, F> {
+    public override fun map(arg: NDBuffer<T>, transform: F.(T) -> T): BufferedNDFieldElement<T, F> {
         check(arg)
 
         return BufferedNDFieldElement(
@@ -36,7 +36,7 @@ public class BoxingNDField<T, F : Field<T>>(
 
     }
 
-    override fun mapIndexed(
+    public override fun mapIndexed(
         arg: NDBuffer<T>,
         transform: F.(index: IntArray, T) -> T
     ): BufferedNDFieldElement<T, F> {
@@ -55,7 +55,7 @@ public class BoxingNDField<T, F : Field<T>>(
 //        return BufferedNDFieldElement(this, buffer)
     }
 
-    override fun combine(
+    public override fun combine(
         a: NDBuffer<T>,
         b: NDBuffer<T>,
         transform: F.(T, T) -> T
@@ -66,7 +66,7 @@ public class BoxingNDField<T, F : Field<T>>(
             buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
     }
 
-    override fun NDBuffer<T>.toElement(): FieldElement<NDBuffer<T>, *, out BufferedNDField<T, F>> =
+    public override fun NDBuffer<T>.toElement(): FieldElement<NDBuffer<T>, *, out BufferedNDField<T, F>> =
         BufferedNDFieldElement(this@BoxingNDField, buffer)
 }
 

@@ -27,7 +27,6 @@ include(
     ":kmath-memory",
     ":kmath-core",
     ":kmath-functions",
-//    ":kmath-io",
     ":kmath-coroutines",
     ":kmath-histograms",
     ":kmath-commons",
@@ -38,6 +37,6 @@ include(
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
-    ":kmath-ast",
+//    ":kmath-ast",
     ":examples"
 )

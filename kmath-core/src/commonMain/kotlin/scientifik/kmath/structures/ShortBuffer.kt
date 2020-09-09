@@ -1,25 +1,21 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.contract
-
 /**
  * Specialized [MutableBuffer] implementation over [ShortArray].
  *
  * @property array the underlying array.
  */
 public inline class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
-    override val size: Int get() = array.size
+    public override val size: Int get() = array.size
 
-    override operator fun get(index: Int): Short = array[index]
+    public override operator fun get(index: Int): Short = array[index]
 
-    override operator fun set(index: Int, value: Short) {
+    public override operator fun set(index: Int, value: Short) {
         array[index] = value
     }
 
-    override operator fun iterator(): ShortIterator = array.iterator()
-
-    override fun copy(): MutableBuffer<Short> =
-        ShortBuffer(array.copyOf())
+    public override operator fun iterator(): ShortIterator = array.iterator()
+    public override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
 }
 
 /**

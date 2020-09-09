@@ -15,15 +15,11 @@ public class SplineInterpolator<T : Comparable<T>>(
     public override val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>
 ) : PolynomialInterpolator<T> {
-
     //TODO possibly optimize zeroed buffers
 
     public override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
-        if (points.size < 3) {
-            error("Can't use spline interpolator with less than 3 points")
-        }
+        require(points.size >= 3) { "Can't use spline interpolator with less than 3 points" }
         insureSorted(points)
-
         // Number of intervals.  The number of data points is n + 1.
         val n = points.size - 1
         // Differences between knot points
@@ -34,6 +30,7 @@ public class SplineInterpolator<T : Comparable<T>>(
         for (i in 1 until n) {
             val g = 2.0 * (points.x[i + 1] - points.x[i - 1]) - h[i - 1] * mu[i - 1]
             mu[i] = h[i] / g
+
             z[i] =
                 (3.0 * (points.y[i + 1] * h[i - 1] - points.x[i] * (points.x[i + 1] - points.x[i - 1]) + points.y[i - 1] * h[i]) / (h[i - 1] * h[i])
                         - h[i - 1] * z[i - 1]) / g
@@ -54,7 +51,5 @@ public class SplineInterpolator<T : Comparable<T>>(
                 putLeft(points.x[j], polynomial)
             }
         }
-
     }
-
 }

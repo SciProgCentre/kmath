@@ -1,33 +1,37 @@
 package scientifik.kmath.histogram
 
-actual class LongCounter {
-    private var sum: Long = 0
-    actual fun decrement() {
+public actual class LongCounter {
+    private var sum: Long = 0L
+
+    public actual fun decrement() {
         sum--
     }
 
-    actual fun increment() {
+    public actual fun increment() {
         sum++
     }
 
-    actual fun reset() {
+    public actual fun reset() {
         sum = 0
     }
 
-    actual fun sum(): Long = sum
-    actual fun add(l: Long) {
+    public actual fun sum(): Long = sum
+
+    public actual fun add(l: Long) {
         sum += l
     }
 }
 
-actual class DoubleCounter {
+public actual class DoubleCounter {
     private var sum: Double = 0.0
-    actual fun reset() {
+
+    public actual fun reset() {
         sum = 0.0
     }
 
-    actual fun sum(): Double = sum
-    actual fun add(d: Double) {
+    public actual fun sum(): Double = sum
+
+    public actual fun add(d: Double) {
         sum += d
     }
 }

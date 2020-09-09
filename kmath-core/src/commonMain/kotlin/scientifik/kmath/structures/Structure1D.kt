@@ -4,25 +4,24 @@ package scientifik.kmath.structures
  * A structure that is guaranteed to be one-dimensional
  */
 public interface Structure1D<T> : NDStructure<T>, Buffer<T> {
-    override val dimension: Int get() = 1
+    public override val dimension: Int get() = 1
 
-    override operator fun get(index: IntArray): T {
+    public override operator fun get(index: IntArray): T {
         require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         return get(index[0])
     }
 
-    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(::get).iterator()
+    public override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(::get).iterator()
 }
 
 /**
  * A 1D wrapper for nd-structure
  */
-private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Structure1D<T> {
+private inline class Structure1DWrapper<T>(public val structure: NDStructure<T>) : Structure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
     override operator fun get(index: Int): T = structure[index]
-
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
 
@@ -32,7 +31,6 @@ private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Stru
  */
 private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> {
     override val shape: IntArray get() = intArrayOf(buffer.size)
-
     override val size: Int get() = buffer.size
 
     override fun elements(): Sequence<Pair<IntArray, T>> =

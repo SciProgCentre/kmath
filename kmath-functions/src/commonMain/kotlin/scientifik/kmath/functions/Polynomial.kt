@@ -36,8 +36,10 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring
 /**
  * Represent a polynomial as a context-dependent function
  */
-public fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, out C, T> =
-    MathFunction { arg -> value(this, arg) }
+public fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, C, T> =
+    object : MathFunction<T, C, T> {
+        override fun C.invoke(arg: T): T = value(this, arg)
+    }
 
 /**
  * Represent the polynomial as a regular context-less function

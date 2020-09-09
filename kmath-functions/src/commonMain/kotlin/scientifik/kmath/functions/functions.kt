@@ -3,13 +3,14 @@ package scientifik.kmath.functions
 import scientifik.kmath.operations.Algebra
 import scientifik.kmath.operations.RealField
 
+// TODO make fun interface when KT-41770 is fixed
 /**
  * A regular function that could be called only inside specific algebra context
  * @param T source type
  * @param C source algebra constraint
  * @param R result type
  */
-public fun interface MathFunction<T, C : Algebra<T>, R> {
+public /*fun*/ interface MathFunction<T, C : Algebra<T>, R> {
     public operator fun C.invoke(arg: T): R
 }
 

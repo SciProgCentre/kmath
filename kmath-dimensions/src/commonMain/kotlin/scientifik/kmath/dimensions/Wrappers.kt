@@ -118,39 +118,39 @@ public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: Ge
         other: DMatrix<T, C1, C2>
     ): DMatrix<T, R1, C2> = context { this@dot dot other }.coerce()
 
-    inline infix fun <reified R : Dimension, reified C : Dimension> DMatrix<T, R, C>.dot(vector: DPoint<T, C>): DPoint<T, R> =
+    public inline infix fun <reified R : Dimension, reified C : Dimension> DMatrix<T, R, C>.dot(vector: DPoint<T, C>): DPoint<T, R> =
         DPoint.coerceUnsafe(context { this@dot dot vector })
 
-    inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, R, C>.times(value: T): DMatrix<T, R, C> =
+    public inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, R, C>.times(value: T): DMatrix<T, R, C> =
         context { this@times.times(value) }.coerce()
 
-    inline operator fun <reified R : Dimension, reified C : Dimension> T.times(m: DMatrix<T, R, C>): DMatrix<T, R, C> =
+    public inline operator fun <reified R : Dimension, reified C : Dimension> T.times(m: DMatrix<T, R, C>): DMatrix<T, R, C> =
         m * this
 
-    inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.plus(other: DMatrix<T, C, R>): DMatrix<T, C, R> =
+    public inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.plus(other: DMatrix<T, C, R>): DMatrix<T, C, R> =
         context { this@plus + other }.coerce()
 
-    inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.minus(other: DMatrix<T, C, R>): DMatrix<T, C, R> =
+    public inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.minus(other: DMatrix<T, C, R>): DMatrix<T, C, R> =
         context { this@minus + other }.coerce()
 
-    inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.unaryMinus(): DMatrix<T, C, R> =
+    public inline operator fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.unaryMinus(): DMatrix<T, C, R> =
         context { this@unaryMinus.unaryMinus() }.coerce()
 
-    inline fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.transpose(): DMatrix<T, R, C> =
+    public inline fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.transpose(): DMatrix<T, R, C> =
         context { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     /**
      * A square unit matrix
      */
-    inline fun <reified D : Dimension> one(): DMatrix<T, D, D> = produce { i, j ->
+    public inline fun <reified D : Dimension> one(): DMatrix<T, D, D> = produce { i, j ->
         if (i == j) context.elementContext.one else context.elementContext.zero
     }
 
-    inline fun <reified R : Dimension, reified C : Dimension> zero(): DMatrix<T, R, C> = produce { _, _ ->
+    public inline fun <reified R : Dimension, reified C : Dimension> zero(): DMatrix<T, R, C> = produce { _, _ ->
         context.elementContext.zero
     }
 
-    companion object {
-        val real: DMatrixContext<Double, RealField> = DMatrixContext(MatrixContext.real)
+    public companion object {
+        public val real: DMatrixContext<Double, RealField> = DMatrixContext(MatrixContext.real)
     }
 }

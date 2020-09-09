@@ -7,9 +7,12 @@ import scientifik.kmath.real.asVector
 import scientifik.kmath.structures.*
 import kotlin.math.floor
 
-
-data class BinDef<T : Comparable<T>>(val space: SpaceOperations<Point<T>>, val center: Point<T>, val sizes: Point<T>) {
-    fun contains(vector: Point<out T>): Boolean {
+public data class BinDef<T : Comparable<T>>(
+    public val space: SpaceOperations<Point<T>>,
+    public val center: Point<T>,
+    public val sizes: Point<T>
+) {
+    public fun contains(vector: Point<out T>): Boolean {
         require(vector.size == center.size) { "Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}" }
         val upper = space { center + sizes / 2.0 }
         val lower = space { center - sizes / 2.0 }
@@ -18,21 +21,20 @@ data class BinDef<T : Comparable<T>>(val space: SpaceOperations<Point<T>>, val c
 }
 
 
-class MultivariateBin<T : Comparable<T>>(val def: BinDef<T>, override val value: Number) : Bin<T> {
-    override operator fun contains(point: Point<T>): Boolean = def.contains(point)
-
-    override val dimension: Int
+public class MultivariateBin<T : Comparable<T>>(public val def: BinDef<T>, public override val value: Number) : Bin<T> {
+    public override val dimension: Int
         get() = def.center.size
 
-    override val center: Point<T>
+    public override val center: Point<T>
         get() = def.center
 
+    public override operator fun contains(point: Point<T>): Boolean = def.contains(point)
 }
 
 /**
  * Uniform multivariate histogram with fixed borders. Based on NDStructure implementation with complexity of m for bin search, where m is the number of dimensions.
  */
-class RealHistogram(
+public class RealHistogram(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 }
@@ -40,7 +42,7 @@ class RealHistogram(
     private val strides = DefaultStrides(IntArray(binNums.size) { binNums[it] + 2 })
     private val values: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
     private val weights: NDStructure<DoubleCounter> = NDStructure.auto(strides) { DoubleCounter() }
-    override val dimension: Int get() = lower.size
+    public override val dimension: Int get() = lower.size
     private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     init {
@@ -64,7 +66,7 @@ class RealHistogram(
 
     private fun getValue(index: IntArray): Long = values[index].sum()
 
-    fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
+    public fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
 
     private fun getDef(index: IntArray): BinDef<Double> {
         val center = index.mapIndexed { axis, i ->
@@ -78,9 +80,9 @@ class RealHistogram(
         return BinDef(RealBufferFieldOperations, center, binSize)
     }
 
-    fun getDef(point: Buffer<out Double>): BinDef<Double> = getDef(getIndex(point))
+    public fun getDef(point: Buffer<out Double>): BinDef<Double> = getDef(getIndex(point))
 
-    override operator fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
+    public override operator fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
         val index = getIndex(point)
         return MultivariateBin(getDef(index), getValue(index))
     }
@@ -90,27 +92,27 @@ class RealHistogram(
 //        values[index].increment()
 //    }
 
-    override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
+    public override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
         val index = getIndex(point)
         values[index].increment()
         weights[index].add(weight)
     }
 
-    override operator fun iterator(): Iterator<MultivariateBin<Double>> = weights.elements().map { (index, value) ->
-        MultivariateBin(getDef(index), value.sum())
-    }.iterator()
+    public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
+        weights.elements().map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
+            .iterator()
 
     /**
      * Convert this histogram into NDStructure containing bin values but not bin descriptions
      */
-    fun values(): NDStructure<Number> = NDStructure.auto(values.shape) { values[it].sum() }
+    public fun values(): NDStructure<Number> = NDStructure.auto(values.shape) { values[it].sum() }
 
     /**
      * Sum of weights
      */
-    fun weights(): NDStructure<Double> = NDStructure.auto(weights.shape) { weights[it].sum() }
+    public fun weights(): NDStructure<Double> = NDStructure.auto(weights.shape) { weights[it].sum() }
 
-    companion object {
+    public companion object {
         /**
          * Use it like
          * ```
@@ -120,9 +122,9 @@ class RealHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogram = RealHistogram(
-            ranges.map { it.start }.asVector(),
-            ranges.map { it.endInclusive }.asVector()
+        public fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogram = RealHistogram(
+            ranges.map(ClosedFloatingPointRange<Double>::start).asVector(),
+            ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asVector()
         )
 
         /**
@@ -134,10 +136,21 @@ class RealHistogram(
          *)
          *```
          */
-        fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): RealHistogram = RealHistogram(
-            ListBuffer(ranges.map { it.first.start }),
-            ListBuffer(ranges.map { it.first.endInclusive }),
-            ranges.map { it.second }.toIntArray()
-        )
+        public fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): RealHistogram =
+            RealHistogram(
+                ListBuffer(
+                    ranges
+                        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+                        .map(ClosedFloatingPointRange<Double>::start)
+                ),
+
+                ListBuffer(
+                    ranges
+                        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+                        .map(ClosedFloatingPointRange<Double>::endInclusive)
+                ),
+
+                ranges.map(Pair<ClosedFloatingPointRange<Double>, Int>::second).toIntArray()
+            )
     }
 }

@@ -138,11 +138,11 @@ public fun Matrix<Double>.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
 }
 
 public fun Matrix<Double>.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
-    columns[j].asIterable().min() ?: error("Cannot produce min on empty column")
+    columns[j].asIterable().minOrNull() ?: error("Cannot produce min on empty column")
 }
 
 public fun Matrix<Double>.maxByColumn(): RealBuffer = RealBuffer(colNum) { j ->
-    columns[j].asIterable().max() ?: error("Cannot produce min on empty column")
+    columns[j].asIterable().maxOrNull() ?: error("Cannot produce min on empty column")
 }
 
 public fun Matrix<Double>.averageByColumn(): RealBuffer = RealBuffer(colNum) { j ->
@@ -154,6 +154,6 @@ public fun Matrix<Double>.averageByColumn(): RealBuffer = RealBuffer(colNum) { j
  */
 
 public fun Matrix<Double>.sum(): Double = elements().map { (_, value) -> value }.sum()
-public fun Matrix<Double>.min(): Double? = elements().map { (_, value) -> value }.min()
-public fun Matrix<Double>.max(): Double? = elements().map { (_, value) -> value }.max()
+public fun Matrix<Double>.min(): Double? = elements().map { (_, value) -> value }.minOrNull()
+public fun Matrix<Double>.max(): Double? = elements().map { (_, value) -> value }.maxOrNull()
 public fun Matrix<Double>.average(): Double = elements().map { (_, value) -> value }.average()

@@ -5,4 +5,4 @@ import scientifik.kmath.structures.RealBuffer
 /**
  * Simplified [RealBuffer] to array comparison
  */
-fun RealBuffer.contentEquals(vararg doubles: Double) = array.contentEquals(doubles)
+public fun RealBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
