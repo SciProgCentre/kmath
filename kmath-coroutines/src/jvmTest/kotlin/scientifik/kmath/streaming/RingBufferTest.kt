@@ -6,7 +6,7 @@ import scientifik.kmath.structures.asSequence
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RingBufferTest {
+internal class RingBufferTest {
     @Test
     fun push() {
         val buffer = RingBuffer.build(20, Double.NaN)

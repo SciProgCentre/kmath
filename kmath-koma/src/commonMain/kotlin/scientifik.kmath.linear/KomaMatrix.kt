@@ -7,67 +7,64 @@ import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.NDStructure
 
-class KomaMatrixContext<T : Any>(
+public class KomaMatrixContext<T : Any>(
     private val factory: MatrixFactory<koma.matrix.Matrix<T>>,
     private val space: Space<T>
 ) : MatrixContext<T> {
-
-    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): KomaMatrix<T> =
+    public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): KomaMatrix<T> =
         KomaMatrix(factory.zeros(rows, columns).fill(initializer))
 
-    fun Matrix<T>.toKoma(): KomaMatrix<T> = if (this is KomaMatrix) {
+    public fun Matrix<T>.toKoma(): KomaMatrix<T> = if (this is KomaMatrix)
         this
-    } else {
+    else
         produce(rowNum, colNum) { i, j -> get(i, j) }
-    }
 
-    fun Point<T>.toKoma(): KomaVector<T> = if (this is KomaVector) {
+    public fun Point<T>.toKoma(): KomaVector<T> = if (this is KomaVector)
         this
-    } else {
+    else
         KomaVector(factory.zeros(size, 1).fill { i, _ -> get(i) })
-    }
 
-
-    override fun Matrix<T>.dot(other: Matrix<T>): KomaMatrix<T> =
+    public override fun Matrix<T>.dot(other: Matrix<T>): KomaMatrix<T> =
         KomaMatrix(toKoma().origin * other.toKoma().origin)
 
-    override fun Matrix<T>.dot(vector: Point<T>): KomaVector<T> =
+    public override fun Matrix<T>.dot(vector: Point<T>): KomaVector<T> =
         KomaVector(toKoma().origin * vector.toKoma().origin)
 
-    override operator fun Matrix<T>.unaryMinus(): KomaMatrix<T> =
+    public override operator fun Matrix<T>.unaryMinus(): KomaMatrix<T> =
         KomaMatrix(toKoma().origin.unaryMinus())
 
-    override fun add(a: Matrix<T>, b: Matrix<T>): KomaMatrix<T> =
+    public override fun add(a: Matrix<T>, b: Matrix<T>): KomaMatrix<T> =
         KomaMatrix(a.toKoma().origin + b.toKoma().origin)
 
-    override operator fun Matrix<T>.minus(b: Matrix<T>): KomaMatrix<T> =
+    public override operator fun Matrix<T>.minus(b: Matrix<T>): KomaMatrix<T> =
         KomaMatrix(toKoma().origin - b.toKoma().origin)
 
-    override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
+    public override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
         produce(a.rowNum, a.colNum) { i, j -> space { a[i, j] * k } }
 
-    override operator fun Matrix<T>.times(value: T): KomaMatrix<T> =
+    public override operator fun Matrix<T>.times(value: T): KomaMatrix<T> =
         KomaMatrix(toKoma().origin * value)
 
-    companion object
+    public companion object
 }
 
-fun <T : Any> KomaMatrixContext<T>.solve(a: Matrix<T>, b: Matrix<T>) =
+public fun <T : Any> KomaMatrixContext<T>.solve(a: Matrix<T>, b: Matrix<T>): KomaMatrix<T> =
     KomaMatrix(a.toKoma().origin.solve(b.toKoma().origin))
 
-fun <T : Any> KomaMatrixContext<T>.solve(a: Matrix<T>, b: Point<T>) =
+public fun <T : Any> KomaMatrixContext<T>.solve(a: Matrix<T>, b: Point<T>): KomaVector<T> =
     KomaVector(a.toKoma().origin.solve(b.toKoma().origin))
 
-fun <T : Any> KomaMatrixContext<T>.inverse(a: Matrix<T>) =
+public fun <T : Any> KomaMatrixContext<T>.inverse(a: Matrix<T>): KomaMatrix<T> =
     KomaMatrix(a.toKoma().origin.inv())
 
-class KomaMatrix<T : Any>(val origin: koma.matrix.Matrix<T>, features: Set<MatrixFeature>? = null) : FeaturedMatrix<T> {
-    override val rowNum: Int get() = origin.numRows()
-    override val colNum: Int get() = origin.numCols()
+public class KomaMatrix<T : Any>(public val origin: koma.matrix.Matrix<T>, features: Set<MatrixFeature>? = null) :
+    FeaturedMatrix<T> {
+    public override val rowNum: Int get() = origin.numRows()
+    public override val colNum: Int get() = origin.numCols()
 
-    override val shape: IntArray get() = intArrayOf(origin.numRows(), origin.numCols())
+    public override val shape: IntArray get() = intArrayOf(origin.numRows(), origin.numCols())
 
-    override val features: Set<MatrixFeature> = features ?: hashSetOf(
+    public override val features: Set<MatrixFeature> = features ?: hashSetOf(
         object : DeterminantFeature<T> {
             override val determinant: T get() = origin.det()
         },
@@ -94,11 +91,9 @@ class KomaMatrix<T : Any>(val origin: koma.matrix.Matrix<T>, features: Set<Matri
         result = 31 * result + features.hashCode()
         return result
     }
-
-
 }
 
-class KomaVector<T : Any> internal constructor(val origin: koma.matrix.Matrix<T>) : Point<T> {
+public class KomaVector<T : Any> internal constructor(public val origin: koma.matrix.Matrix<T>) : Point<T> {
     override val size: Int get() = origin.numRows()
 
     init {

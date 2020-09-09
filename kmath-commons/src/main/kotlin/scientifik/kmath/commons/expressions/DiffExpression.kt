@@ -15,8 +15,8 @@ public class DerivativeStructureField(
     public val order: Int,
     public val parameters: Map<String, Double>
 ) : ExtendedField<DerivativeStructure> {
-    override val zero: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size) }
-    override val one: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size, 1.0) }
+    public override val zero: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size) }
+    public override val one: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size, 1.0) }
 
     private val variables: Map<String, DerivativeStructure> = parameters.mapValues { (key, value) ->
         DerivativeStructure(parameters.size, order, parameters.keys.indexOf(key), value)
@@ -40,46 +40,43 @@ public class DerivativeStructureField(
     }
 
     public fun DerivativeStructure.deriv(vararg orders: Pair<String, Int>): Double = deriv(mapOf(*orders))
+    public override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
 
-    override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
-
-    override fun multiply(a: DerivativeStructure, k: Number): DerivativeStructure = when (k) {
+    public override fun multiply(a: DerivativeStructure, k: Number): DerivativeStructure = when (k) {
         is Double -> a.multiply(k)
         is Int -> a.multiply(k)
         else -> a.multiply(k.toDouble())
     }
 
-    override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
+    public override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
+    public override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
+    public override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
+    public override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
+    public override fun tan(arg: DerivativeStructure): DerivativeStructure = arg.tan()
+    public override fun asin(arg: DerivativeStructure): DerivativeStructure = arg.asin()
+    public override fun acos(arg: DerivativeStructure): DerivativeStructure = arg.acos()
+    public override fun atan(arg: DerivativeStructure): DerivativeStructure = arg.atan()
+    public override fun sinh(arg: DerivativeStructure): DerivativeStructure = arg.sinh()
+    public override fun cosh(arg: DerivativeStructure): DerivativeStructure = arg.cosh()
+    public override fun tanh(arg: DerivativeStructure): DerivativeStructure = arg.tanh()
+    public override fun asinh(arg: DerivativeStructure): DerivativeStructure = arg.asinh()
+    public override fun acosh(arg: DerivativeStructure): DerivativeStructure = arg.acosh()
+    public override fun atanh(arg: DerivativeStructure): DerivativeStructure = arg.atanh()
 
-    override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
-
-    override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
-    override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
-    override fun tan(arg: DerivativeStructure): DerivativeStructure = arg.tan()
-    override fun asin(arg: DerivativeStructure): DerivativeStructure = arg.asin()
-    override fun acos(arg: DerivativeStructure): DerivativeStructure = arg.acos()
-    override fun atan(arg: DerivativeStructure): DerivativeStructure = arg.atan()
-    override fun sinh(arg: DerivativeStructure): DerivativeStructure = arg.sinh()
-    override fun cosh(arg: DerivativeStructure): DerivativeStructure = arg.cosh()
-    override fun tanh(arg: DerivativeStructure): DerivativeStructure = arg.tanh()
-    override fun asinh(arg: DerivativeStructure): DerivativeStructure = arg.asinh()
-    override fun acosh(arg: DerivativeStructure): DerivativeStructure = arg.acosh()
-    override fun atanh(arg: DerivativeStructure): DerivativeStructure = arg.atanh()
-
-    override fun power(arg: DerivativeStructure, pow: Number): DerivativeStructure = when (pow) {
+    public override fun power(arg: DerivativeStructure, pow: Number): DerivativeStructure = when (pow) {
         is Double -> arg.pow(pow)
         is Int -> arg.pow(pow)
         else -> arg.pow(pow.toDouble())
     }
 
     public fun power(arg: DerivativeStructure, pow: DerivativeStructure): DerivativeStructure = arg.pow(pow)
-    override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
-    override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
+    public override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
+    public override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
 
-    override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
-    override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
-    override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
-    override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
+    public override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
+    public override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
+    public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
+    public override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
 }
 
 /**
@@ -87,10 +84,10 @@ public class DerivativeStructureField(
  */
 public class DiffExpression(public val function: DerivativeStructureField.() -> DerivativeStructure) :
     Expression<Double> {
-    override operator fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(
+    public override operator fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(
         0,
         arguments
-    ).run(function).value
+    ).function().value
 
     /**
      * Get the derivative expression with given orders
@@ -110,25 +107,22 @@ public fun DiffExpression.derivative(name: String): Expression<Double> = derivat
  * A context for [DiffExpression] (not to be confused with [DerivativeStructure])
  */
 public object DiffExpressionAlgebra : ExpressionAlgebra<Double, DiffExpression>, Field<DiffExpression> {
-    override fun variable(name: String, default: Double?): DiffExpression =
+    public override val zero: DiffExpression = DiffExpression { 0.0.const() }
+    public override val one: DiffExpression = DiffExpression { 1.0.const() }
+
+    public override fun variable(name: String, default: Double?): DiffExpression =
         DiffExpression { variable(name, default?.const()) }
 
-    override fun const(value: Double): DiffExpression =
-        DiffExpression { value.const() }
+    public override fun const(value: Double): DiffExpression = DiffExpression { value.const() }
 
-    override fun add(a: DiffExpression, b: DiffExpression): DiffExpression =
+    public override fun add(a: DiffExpression, b: DiffExpression): DiffExpression =
         DiffExpression { a.function(this) + b.function(this) }
 
-    override val zero: DiffExpression = DiffExpression { 0.0.const() }
+    public override fun multiply(a: DiffExpression, k: Number): DiffExpression = DiffExpression { a.function(this) * k }
 
-    override fun multiply(a: DiffExpression, k: Number): DiffExpression =
-        DiffExpression { a.function(this) * k }
-
-    override val one: DiffExpression = DiffExpression { 1.0.const() }
-
-    override fun multiply(a: DiffExpression, b: DiffExpression): DiffExpression =
+    public override fun multiply(a: DiffExpression, b: DiffExpression): DiffExpression =
         DiffExpression { a.function(this) * b.function(this) }
 
-    override fun divide(a: DiffExpression, b: DiffExpression): DiffExpression =
+    public override fun divide(a: DiffExpression, b: DiffExpression): DiffExpression =
         DiffExpression { a.function(this) / b.function(this) }
 }

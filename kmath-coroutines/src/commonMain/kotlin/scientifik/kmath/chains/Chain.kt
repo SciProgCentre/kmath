@@ -149,13 +149,16 @@ public fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = 
     override fun fork(): Chain<R> = this@collect.fork().collect(mapper)
 }
 
-public fun <T, S, R> Chain<T>.collectWithState(state: S, stateFork: (S) -> S, mapper: suspend S.(Chain<T>) -> R): Chain<R> =
-    object : Chain<R> {
-        override suspend fun next(): R = state.mapper(this@collectWithState)
+public fun <T, S, R> Chain<T>.collectWithState(
+    state: S,
+    stateFork: (S) -> S,
+    mapper: suspend S.(Chain<T>) -> R
+): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = state.mapper(this@collectWithState)
 
-        override fun fork(): Chain<R> =
-            this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
-    }
+    override fun fork(): Chain<R> =
+        this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
+}
 
 /**
  * Zip two chains together using given transformation

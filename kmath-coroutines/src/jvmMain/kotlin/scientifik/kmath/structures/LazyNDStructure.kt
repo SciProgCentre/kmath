@@ -37,10 +37,10 @@ public class LazyNDStructure<T>(
 }
 
 public fun <T> NDStructure<T>.deferred(index: IntArray): Deferred<T> =
-    if (this is LazyNDStructure<T>) this.deferred(index) else CompletableDeferred(get(index))
+    if (this is LazyNDStructure<T>) deferred(index) else CompletableDeferred(get(index))
 
 public suspend fun <T> NDStructure<T>.await(index: IntArray): T =
-    if (this is LazyNDStructure<T>) this.await(index) else get(index)
+    if (this is LazyNDStructure<T>) await(index) else get(index)
 
 /**
  * PENDING would benefit from KEEP-176

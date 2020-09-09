@@ -49,10 +49,8 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
 
     if (this@chunked is BlockingRealChain) {
-        //performance optimization for blocking primitive chain
-        while (true) {
-            emit(nextBlock(bufferSize).asBuffer())
-        }
+        // performance optimization for blocking primitive chain
+        while (true) emit(nextBlock(bufferSize).asBuffer())
     } else {
         val array = DoubleArray(bufferSize)
         var counter = 0
@@ -60,6 +58,7 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
         this@chunked.collect { element ->
             array[counter] = element
             counter++
+
             if (counter == bufferSize) {
                 val buffer = RealBuffer(array)
                 emit(buffer)

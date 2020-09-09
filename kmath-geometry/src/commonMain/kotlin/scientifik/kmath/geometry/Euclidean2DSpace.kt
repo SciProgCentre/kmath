@@ -5,28 +5,28 @@ import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.operations.invoke
 import kotlin.math.sqrt
 
+public interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Vector2D, Euclidean2DSpace> {
+    public val x: Double
+    public val y: Double
+    public override val context: Euclidean2DSpace get() = Euclidean2DSpace
+    public override val size: Int get() = 2
 
-interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Vector2D, Euclidean2DSpace> {
-    val x: Double
-    val y: Double
-    override val context: Euclidean2DSpace get() = Euclidean2DSpace
-    override val size: Int get() = 2
-
-    override operator fun get(index: Int): Double = when (index) {
+    public override operator fun get(index: Int): Double = when (index) {
         1 -> x
         2 -> y
         else -> error("Accessing outside of point bounds")
     }
 
-    override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
-    override fun unwrap(): Vector2D = this
-    override fun Vector2D.wrap(): Vector2D = this
+    public override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
+    public override fun unwrap(): Vector2D = this
+    public override fun Vector2D.wrap(): Vector2D = this
 }
 
-val Vector2D.r: Double get() = Euclidean2DSpace { sqrt(norm()) }
+public val Vector2D.r: Double
+    get() = Euclidean2DSpace { sqrt(norm()) }
 
 @Suppress("FunctionName")
-fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
+public fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
 
 private data class Vector2DImpl(
     override val x: Double,
@@ -36,19 +36,12 @@ private data class Vector2DImpl(
 /**
  * 2D Euclidean space
  */
-object Euclidean2DSpace : GeometrySpace<Vector2D> {
-    fun Vector2D.norm(): Double = sqrt(x * x + y * y)
+public object Euclidean2DSpace : GeometrySpace<Vector2D> {
+    public override val zero: Vector2D by lazy { Vector2D(0.0, 0.0) }
 
-    override fun Vector2D.distanceTo(other: Vector2D): Double = (this - other).norm()
-
-    override fun add(a: Vector2D, b: Vector2D): Vector2D =
-        Vector2D(a.x + b.x, a.y + b.y)
-
-    override fun multiply(a: Vector2D, k: Number): Vector2D =
-        Vector2D(a.x * k.toDouble(), a.y * k.toDouble())
-
-    override val zero: Vector2D = Vector2D(0.0, 0.0)
-
-    override fun Vector2D.dot(other: Vector2D): Double =
-        x * other.x + y * other.y
+    public fun Vector2D.norm(): Double = sqrt(x * x + y * y)
+    public override fun Vector2D.distanceTo(other: Vector2D): Double = (this - other).norm()
+    public override fun add(a: Vector2D, b: Vector2D): Vector2D = Vector2D(a.x + b.x, a.y + b.y)
+    public override fun multiply(a: Vector2D, k: Number): Vector2D = Vector2D(a.x * k.toDouble(), a.y * k.toDouble())
+    public override fun Vector2D.dot(other: Vector2D): Double = x * other.x + y * other.y
 }

@@ -14,7 +14,7 @@ import kotlin.test.Test
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @FlowPreview
-class BufferFlowTest {
+internal class BufferFlowTest {
     val dispatcher: CoroutineDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     @Test

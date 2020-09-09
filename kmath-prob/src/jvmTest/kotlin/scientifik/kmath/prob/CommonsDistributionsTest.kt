@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class CommonsDistributionsTest {
+internal class CommonsDistributionsTest {
     @Test
     fun testNormalDistributionSuspend() {
         val distribution = Distribution.normal(7.0, 2.0)
@@ -24,5 +24,4 @@ class CommonsDistributionsTest {
         val sample = distribution.sample(generator).nextBlock(1000)
         Assertions.assertEquals(7.0, sample.average(), 0.1)
     }
-
 }

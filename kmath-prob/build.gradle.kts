@@ -13,4 +13,8 @@ kotlin.sourceSets {
             api("org.apache.commons:commons-rng-simple:1.3")
         }
     }
+
+    jvmTest {
+        languageSettings.useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
+    }
 }

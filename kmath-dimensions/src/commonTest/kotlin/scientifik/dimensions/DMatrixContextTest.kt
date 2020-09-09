@@ -5,7 +5,7 @@ import scientifik.kmath.dimensions.D3
 import scientifik.kmath.dimensions.DMatrixContext
 import kotlin.test.Test
 
-class DMatrixContextTest {
+internal class DMatrixContextTest {
     @Test
     fun testDimensionSafeMatrix() {
         val res = with(DMatrixContext.real) {

@@ -41,10 +41,10 @@ public class BigInt internal constructor(
     private val magnitude: Magnitude
 ) : Comparable<BigInt> {
     public override fun compareTo(other: BigInt): Int = when {
-        (this.sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
-        this.sign < other.sign -> -1
-        this.sign > other.sign -> 1
-        else -> this.sign * compareMagnitudes(this.magnitude, other.magnitude)
+        (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
+        sign < other.sign -> -1
+        sign > other.sign -> 1
+        else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
     public override fun equals(other: Any?): Boolean =
@@ -123,7 +123,7 @@ public class BigInt internal constructor(
         return Pair(BigInt((this.sign * other.sign).toByte(), q.magnitude), r)
     }
 
-    public operator fun div(other: BigInt): BigInt = this.division(other).first
+    public operator fun div(other: BigInt): BigInt = division(other).first
 
     public infix fun shl(i: Int): BigInt {
         if (this == ZERO) return ZERO
@@ -132,16 +132,16 @@ public class BigInt internal constructor(
         val relShift = i % BASE_SIZE
         val shiftLeft = { x: UInt -> if (relShift >= 32) 0U else x shl relShift }
         val shiftRight = { x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shr (BASE_SIZE - relShift) }
-        val newMagnitude = Magnitude(this.magnitude.size + fullShifts)
+        val newMagnitude = Magnitude(magnitude.size + fullShifts)
 
-        for (j in this.magnitude.indices) {
+        for (j in magnitude.indices) {
             newMagnitude[j + fullShifts - 1] = shiftLeft(this.magnitude[j])
 
             if (j != 0)
                 newMagnitude[j + fullShifts - 1] = newMagnitude[j + fullShifts - 1] or shiftRight(this.magnitude[j - 1])
         }
 
-        newMagnitude[this.magnitude.size + fullShifts - 1] = shiftRight(this.magnitude.last())
+        newMagnitude[magnitude.size + fullShifts - 1] = shiftRight(magnitude.last())
         return BigInt(this.sign, stripLeadingZeros(newMagnitude))
     }
 
@@ -153,13 +153,13 @@ public class BigInt internal constructor(
         val shiftRight = { x: UInt -> if (relShift >= 32) 0U else x shr relShift }
         val shiftLeft = { x: UInt -> if (BASE_SIZE - relShift >= 32) 0U else x shl (BASE_SIZE - relShift) }
         if (this.magnitude.size - fullShifts <= 0) return ZERO
-        val newMagnitude: Magnitude = Magnitude(this.magnitude.size - fullShifts)
+        val newMagnitude: Magnitude = Magnitude(magnitude.size - fullShifts)
 
-        for (j in fullShifts until this.magnitude.size) {
-            newMagnitude[j - fullShifts] = shiftRight(this.magnitude[j])
+        for (j in fullShifts until magnitude.size) {
+            newMagnitude[j - fullShifts] = shiftRight(magnitude[j])
 
-            if (j != this.magnitude.size - 1)
-                newMagnitude[j - fullShifts] = newMagnitude[j - fullShifts] or shiftLeft(this.magnitude[j + 1])
+            if (j != magnitude.size - 1)
+                newMagnitude[j - fullShifts] = newMagnitude[j - fullShifts] or shiftLeft(magnitude[j + 1])
         }
 
         return BigInt(this.sign, stripLeadingZeros(newMagnitude))
@@ -168,11 +168,11 @@ public class BigInt internal constructor(
     public infix fun or(other: BigInt): BigInt {
         if (this == ZERO) return other
         if (other == ZERO) return this
-        val resSize = max(this.magnitude.size, other.magnitude.size)
+        val resSize = max(magnitude.size, other.magnitude.size)
         val newMagnitude: Magnitude = Magnitude(resSize)
 
         for (i in 0 until resSize) {
-            if (i < this.magnitude.size) newMagnitude[i] = newMagnitude[i] or this.magnitude[i]
+            if (i < magnitude.size) newMagnitude[i] = newMagnitude[i] or magnitude[i]
             if (i < other.magnitude.size) newMagnitude[i] = newMagnitude[i] or other.magnitude[i]
         }
 
