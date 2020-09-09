@@ -1,9 +1,10 @@
 package scientifik.kmath.linear
 
-import koma.matrix.ejml.EJMLMatrixFactory
 import scientifik.kmath.commons.linear.CMMatrixContext
 import scientifik.kmath.commons.linear.inverse
 import scientifik.kmath.commons.linear.toCM
+import scientifik.kmath.ejml.EjmlMatrixContext
+import scientifik.kmath.ejml.inverse
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.Matrix
@@ -23,8 +24,8 @@ fun main() {
     val n = 5000 // iterations
 
     MatrixContext.real {
-        repeat(50) { val res = inverse(matrix) }
-        val inverseTime = measureTimeMillis { repeat(n) { val res = inverse(matrix) } }
+        repeat(50) { inverse(matrix) }
+        val inverseTime = measureTimeMillis { repeat(n) { inverse(matrix) } }
         println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
     }
 
@@ -33,23 +34,19 @@ fun main() {
     val commonsTime = measureTimeMillis {
         CMMatrixContext {
             val cm = matrix.toCM()             //avoid overhead on conversion
-            repeat(n) { val res = inverse(cm) }
+            repeat(n) { inverse(cm) }
         }
     }
 
 
     println("[commons-math] Inversion of $n matrices $dim x $dim finished in $commonsTime millis")
 
-    //koma-ejml
-
-    val komaTime = measureTimeMillis {
-        (KomaMatrixContext(EJMLMatrixFactory(), RealField)) {
-            val km = matrix.toKoma()      //avoid overhead on conversion
-            repeat(n) {
-                val res = inverse(km)
-            }
+    val ejmlTime = measureTimeMillis {
+        (EjmlMatrixContext(RealField)) {
+            val km = matrix.toEjml()      //avoid overhead on conversion
+            repeat(n) { inverse(km) }
         }
     }
 
-    println("[koma-ejml] Inversion of $n matrices $dim x $dim finished in $komaTime millis")
+    println("[ejml] Inversion of $n matrices $dim x $dim finished in $ejmlTime millis")
 }

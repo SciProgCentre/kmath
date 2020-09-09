@@ -29,10 +29,9 @@ dependencies {
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-prob"))
-    implementation(project(":kmath-koma"))
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
-    implementation("com.kyonifer:koma-core-ejml:0.12")
+    implementation(project(":kmath-ejml"))
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-8")
     "benchmarksCompile"(sourceSets.main.get().output + sourceSets.main.get().compileClasspath) //sourceSets.main.output + sourceSets.main.runtimeClasspath

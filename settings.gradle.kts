@@ -40,12 +40,12 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
-    ":kmath-koma",
     ":kmath-prob",
     ":kmath-io",
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
     ":kmath-ast",
-    ":examples"
+    ":examples",
+    ":kmath-ejml"
 )
