@@ -43,7 +43,6 @@ public interface Chain<out R> : Flow<R> {
     public companion object
 }
 
-
 public fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
 
@@ -51,22 +50,20 @@ public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
  * A simple chain of independent tokens
  */
 public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
-    override suspend fun next(): R = gen()
-    override fun fork(): Chain<R> = this
+    public override suspend fun next(): R = gen()
+    public override fun fork(): Chain<R> = this
 }
 
 /**
  * A stateless Markov chain
  */
 public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
-
-    private val mutex = Mutex()
-
+    private val mutex: Mutex = Mutex()
     private var value: R? = null
 
     public fun value(): R? = value
 
-    override suspend fun next(): R {
+    public override suspend fun next(): R {
         mutex.withLock {
             val newValue = gen(value ?: seed())
             value = newValue
@@ -74,9 +71,7 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
         }
     }
 
-    override fun fork(): Chain<R> {
-        return MarkovChain(seed = { value ?: seed() }, gen = gen)
-    }
+    public override fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
 }
 
 /**
@@ -91,12 +86,11 @@ public class StatefulChain<S, out R>(
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
     private val mutex: Mutex = Mutex()
-
     private var value: R? = null
 
     public fun value(): R? = value
 
-    override suspend fun next(): R {
+    public override suspend fun next(): R {
         mutex.withLock {
             val newValue = state.gen(value ?: state.seed())
             value = newValue
@@ -104,16 +98,15 @@ public class StatefulChain<S, out R>(
         }
     }
 
-    override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
+    public override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
 }
 
 /**
  * A chain that repeats the same value
  */
 public class ConstantChain<out T>(public val value: T) : Chain<T> {
-    override suspend fun next(): T = value
-
-    override fun fork(): Chain<T> = this
+    public override suspend fun next(): T = value
+    public override fun fork(): Chain<T> = this
 }
 
 /**

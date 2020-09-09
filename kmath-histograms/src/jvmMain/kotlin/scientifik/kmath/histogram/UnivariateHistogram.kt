@@ -44,7 +44,7 @@ public class UnivariateHistogram private constructor(private val factory: (Doubl
     }
 
     private fun createBin(value: Double): UnivariateBin = factory(value).also {
-        synchronized(this) { bins.put(it.position, it) }
+        synchronized(this) { bins[it.position] = it }
     }
 
     public override operator fun get(point: Buffer<out Double>): UnivariateBin? = get(point[0])
@@ -87,7 +87,7 @@ public class UnivariateHistogram private constructor(private val factory: (Doubl
                     )
 
                     else -> {
-                        val index = (0 until sorted.size).first { value > sorted[it] }
+                        val index = sorted.indices.first { value > sorted[it] }
                         val left = sorted[index]
                         val right = sorted[index + 1]
                         UnivariateBin((left + right) / 2, (right - left))

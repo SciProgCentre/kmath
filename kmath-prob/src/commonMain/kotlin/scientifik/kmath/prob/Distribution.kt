@@ -73,5 +73,5 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
 /**
  * Generate a bunch of samples from real distributions
  */
-public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int) =
+public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
     sampleBuffer(generator, size, Buffer.Companion::real)

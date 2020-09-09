@@ -15,8 +15,8 @@ public abstract class ContinuousSamplerDistribution : Distribution<Double> {
     private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingRealChain() {
         private val sampler = buildCMSampler(generator)
 
-        public override fun nextDouble(): Double = sampler.sample()
-        public override fun fork(): Chain<Double> = ContinuousSamplerChain(generator.fork())
+        override fun nextDouble(): Double = sampler.sample()
+        override fun fork(): Chain<Double> = ContinuousSamplerChain(generator.fork())
     }
 
     protected abstract fun buildCMSampler(generator: RandomGenerator): ContinuousSampler
@@ -28,8 +28,8 @@ public abstract class DiscreteSamplerDistribution : Distribution<Int> {
     private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingIntChain() {
         private val sampler = buildSampler(generator)
 
-        public override fun nextInt(): Int = sampler.sample()
-        public override fun fork(): Chain<Int> = ContinuousSamplerChain(generator.fork())
+        override fun nextInt(): Int = sampler.sample()
+        override fun fork(): Chain<Int> = ContinuousSamplerChain(generator.fork())
     }
 
     protected abstract fun buildSampler(generator: RandomGenerator): DiscreteSampler
@@ -58,9 +58,7 @@ public fun Distribution.Companion.normal(
         return normalSampler(method, provider)
     }
 
-    override fun probability(arg: Double): Double {
-        return exp(-arg.pow(2) / 2) / sqrt(PI * 2)
-    }
+    override fun probability(arg: Double): Double = exp(-arg.pow(2) / 2) / sqrt(PI * 2)
 }
 
 public fun Distribution.Companion.normal(

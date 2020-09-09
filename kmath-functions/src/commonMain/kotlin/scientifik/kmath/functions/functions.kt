@@ -24,7 +24,7 @@ public interface SuspendableMathFunction<T, C : Algebra<T>, R> {
     public suspend operator fun C.invoke(arg: T): R
 }
 
-public suspend fun <R> SuspendableMathFunction<Double, RealField, R>.invoke(arg: Double) = RealField.invoke(arg)
+public suspend fun <R> SuspendableMathFunction<Double, RealField, R>.invoke(arg: Double): R = RealField.invoke(arg)
 
 /**
  * A parametric function with parameter

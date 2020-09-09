@@ -29,7 +29,6 @@ public interface Histogram<T : Any, out B : Bin<T>> : Iterable<B> {
      * Dimension of the histogram
      */
     public val dimension: Int
-
 }
 
 public interface MutableHistogram<T : Any, out B : Bin<T>> : Histogram<T, B> {
