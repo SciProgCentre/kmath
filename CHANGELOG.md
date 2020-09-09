@@ -18,6 +18,7 @@
 - Blocking chains in `kmath-coroutines`
 - Full hyperbolic functions support and default implementations within `ExtendedField`
 - Norm support for `Complex`
+- `kmath-ejml` to supply EJML SimpleMatrix wrapper.
 
 ### Changed
 - `readAsMemory` now has `throws IOException` in JVM signature.
@@ -36,3 +37,6 @@
 - Multiplication in integer rings in `kmath-core` (https://github.com/mipt-npm/kmath/pull/101)
 - Commons RNG compatibility (https://github.com/mipt-npm/kmath/issues/93)
 - Multiplication of BigInt by scalar
+
+### Removed
+- `kmath-koma` module.
