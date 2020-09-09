@@ -19,10 +19,9 @@ public interface LinearSolver<T : Any> {
  * Convert matrix to vector if it is possible
  */
 public fun <T : Any> Matrix<T>.asPoint(): Point<T> =
-    if (this.colNum == 1) {
+    if (this.colNum == 1)
         VirtualBuffer(rowNum) { get(it, 0) }
-    } else {
+    else
         error("Can't convert matrix with more than one column to vector")
-    }
 
 public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

@@ -37,7 +37,7 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
 /**
  * [Ring] over [MST] nodes.
  */
-object MstRing : Ring<MST>, NumericAlgebra<MST> {
+public object MstRing : Ring<MST>, NumericAlgebra<MST> {
     override val zero: MST = number(0.0)
     override val one: MST = number(1.0)
 
@@ -58,18 +58,18 @@ object MstRing : Ring<MST>, NumericAlgebra<MST> {
 /**
  * [Field] over [MST] nodes.
  */
-object MstField : Field<MST> {
-    override val zero: MST = number(0.0)
-    override val one: MST = number(1.0)
+public object MstField : Field<MST> {
+    public override val zero: MST = number(0.0)
+    public override val one: MST = number(1.0)
 
-    override fun symbol(value: String): MST = MstRing.symbol(value)
-    override fun number(value: Number): MST = MstRing.number(value)
-    override fun add(a: MST, b: MST): MST = MstRing.add(a, b)
-    override fun multiply(a: MST, k: Number): MST = MstRing.multiply(a, k)
-    override fun multiply(a: MST, b: MST): MST = MstRing.multiply(a, b)
-    override fun divide(a: MST, b: MST): MST = binaryOperation(FieldOperations.DIV_OPERATION, a, b)
+    public override fun symbol(value: String): MST = MstRing.symbol(value)
+    public override fun number(value: Number): MST = MstRing.number(value)
+    public override fun add(a: MST, b: MST): MST = MstRing.add(a, b)
+    public override fun multiply(a: MST, k: Number): MST = MstRing.multiply(a, k)
+    public override fun multiply(a: MST, b: MST): MST = MstRing.multiply(a, b)
+    public override fun divide(a: MST, b: MST): MST = binaryOperation(FieldOperations.DIV_OPERATION, a, b)
 
-    override fun binaryOperation(operation: String, left: MST, right: MST): MST =
+    public override fun binaryOperation(operation: String, left: MST, right: MST): MST =
         MstRing.binaryOperation(operation, left, right)
 
     override fun unaryOperation(operation: String, arg: MST): MST = MstRing.unaryOperation(operation, arg)
@@ -78,7 +78,7 @@ object MstField : Field<MST> {
 /**
  * [ExtendedField] over [MST] nodes.
  */
-object MstExtendedField : ExtendedField<MST> {
+public object MstExtendedField : ExtendedField<MST> {
     override val zero: MST = number(0.0)
     override val one: MST = number(1.0)
 

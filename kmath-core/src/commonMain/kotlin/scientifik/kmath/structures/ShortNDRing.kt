@@ -2,7 +2,6 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.RingElement
 import scientifik.kmath.operations.ShortRing
-import kotlin.contracts.contract
 
 public typealias ShortNDElement = BufferedNDRingElement<Short, ShortRing>
 
@@ -69,11 +68,8 @@ public class ShortNDRing(override val shape: IntArray) :
 /**
  * Fast element production using function inlining.
  */
-public inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): ShortNDElement {
-    contract { callsInPlace(initializer) }
-    val array = ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }
-    return BufferedNDRingElement(this, ShortBuffer(array))
-}
+public inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): ShortNDElement =
+    BufferedNDRingElement(this, ShortBuffer(ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }))
 
 /**
  * Element by element application of any operation on elements to the whole array.

@@ -1,6 +1,5 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 /**
@@ -30,10 +29,7 @@ public inline class ShortBuffer(public val array: ShortArray) : MutableBuffer<Sh
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer {
-    contract { callsInPlace(init) }
-    return ShortBuffer(ShortArray(size) { init(it) })
-}
+public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer = ShortBuffer(ShortArray(size) { init(it) })
 
 /**
  * Returns a new [ShortBuffer] of given elements.

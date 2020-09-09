@@ -116,16 +116,13 @@ public operator fun Matrix<Double>.minus(other: Matrix<Double>): RealMatrix =
  *  Operations on columns
  */
 
-public inline fun Matrix<Double>.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): Matrix<Double> {
-    contract { callsInPlace(mapper) }
-
-    return MatrixContext.real.produce(rowNum, colNum + 1) { row, col ->
+public inline fun Matrix<Double>.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): Matrix<Double> =
+    MatrixContext.real.produce(rowNum, colNum + 1) { row, col ->
         if (col < colNum)
             this[row, col]
         else
             mapper(rows[row])
     }
-}
 
 public fun Matrix<Double>.extractColumns(columnRange: IntRange): RealMatrix =
     MatrixContext.real.produce(rowNum, columnRange.count()) { row, col ->

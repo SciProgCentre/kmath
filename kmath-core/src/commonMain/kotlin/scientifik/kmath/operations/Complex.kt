@@ -6,7 +6,6 @@ import scientifik.kmath.structures.MutableBuffer
 import scientifik.memory.MemoryReader
 import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
-import kotlin.contracts.contract
 import kotlin.math.*
 
 /**
@@ -165,7 +164,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
  * @property re The real part.
  * @property im The imaginary part.
  */
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>, Comparable<Complex> {
+public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>,
+    Comparable<Complex> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
 
     override val context: ComplexField get() = ComplexField
@@ -197,12 +197,8 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
  */
 public fun Number.toComplex(): Complex = Complex(this, 0.0)
 
-public inline fun Buffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
-    contract { callsInPlace(init) }
-    return MemoryBuffer.create(Complex, size, init)
-}
+public inline fun Buffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> =
+    MemoryBuffer.create(Complex, size, init)
 
-public inline fun MutableBuffer.Companion.complex(size: Int, crossinline init: (Int) -> Complex): Buffer<Complex> {
-    contract { callsInPlace(init) }
-    return MemoryBuffer.create(Complex, size, init)
-}
+public inline fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> =
+    MemoryBuffer.create(Complex, size, init)

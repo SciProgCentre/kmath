@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.4.0"
+    kotlin("plugin.allopen") version "1.4.20-dev-3898-14"
     id("kotlinx.benchmark") version "0.2.0-dev-20"
 }
 
@@ -13,6 +13,7 @@ repositories {
     maven("http://dl.bintray.com/kyonifer/maven")
     maven("https://dl.bintray.com/mipt-npm/scientifik")
     maven("https://dl.bintray.com/mipt-npm/dev")
+    maven("https://dl.bintray.com/kotlin/kotlin-dev/")
     mavenCentral()
 }
 
@@ -55,9 +56,4 @@ kotlin.sourceSets.all {
     }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "11"    
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-    }
-}
+tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "11" }

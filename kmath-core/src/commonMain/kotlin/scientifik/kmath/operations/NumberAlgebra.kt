@@ -62,7 +62,7 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
  *
  * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
  */
-inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
+public inline class Real(public val value: Double) : FieldElement<Double, Real, RealField> {
     override val context: RealField
         get() = RealField
 
@@ -70,14 +70,14 @@ inline class Real(val value: Double) : FieldElement<Double, Real, RealField> {
 
     override fun Double.wrap(): Real = Real(value)
 
-    companion object
+    public companion object
 }
 
 /**
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object RealField : ExtendedField<Double>, Norm<Double, Double> {
+public object RealField : ExtendedField<Double>, Norm<Double, Double> {
     override val zero: Double
         get() = 0.0
 
@@ -127,7 +127,7 @@ object RealField : ExtendedField<Double>, Norm<Double, Double> {
  * A field for [Float] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object FloatField : ExtendedField<Float>, Norm<Float, Float> {
+public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override val zero: Float
         get() = 0.0f
 
@@ -177,7 +177,7 @@ object FloatField : ExtendedField<Float>, Norm<Float, Float> {
  * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object IntRing : Ring<Int>, Norm<Int, Int> {
+public object IntRing : Ring<Int>, Norm<Int, Int> {
     override val zero: Int
         get() = 0
 
@@ -201,7 +201,7 @@ object IntRing : Ring<Int>, Norm<Int, Int> {
  * A field for [Short] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object ShortRing : Ring<Short>, Norm<Short, Short> {
+public object ShortRing : Ring<Short>, Norm<Short, Short> {
     override val zero: Short
         get() = 0
 
@@ -225,7 +225,7 @@ object ShortRing : Ring<Short>, Norm<Short, Short> {
  * A field for [Byte] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
+public object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
     override val zero: Byte
         get() = 0
 
@@ -249,7 +249,7 @@ object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
  * A field for [Double] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-object LongRing : Ring<Long>, Norm<Long, Long> {
+public object LongRing : Ring<Long>, Norm<Long, Long> {
     override val zero: Long
         get() = 0
 

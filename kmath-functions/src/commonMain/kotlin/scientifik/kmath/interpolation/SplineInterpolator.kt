@@ -12,13 +12,13 @@ import scientifik.kmath.structures.MutableBufferFactory
  * Based on https://github.com/apache/commons-math/blob/eb57d6d457002a0bb5336d789a3381a24599affe/src/main/java/org/apache/commons/math4/analysis/interpolation/SplineInterpolator.java
  */
 public class SplineInterpolator<T : Comparable<T>>(
-    override val algebra: Field<T>,
+    public override val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>
 ) : PolynomialInterpolator<T> {
 
     //TODO possibly optimize zeroed buffers
 
-    override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
+    public override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
         if (points.size < 3) {
             error("Can't use spline interpolator with less than 3 points")
         }
@@ -41,8 +41,9 @@ public class SplineInterpolator<T : Comparable<T>>(
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)
 
-        OrderedPiecewisePolynomial<T>(points.x[points.size - 1]).apply {
+        OrderedPiecewisePolynomial(points.x[points.size - 1]).apply {
             var cOld = zero
+
             for (j in n - 1 downTo 0) {
                 val c = z[j] - mu[j] * cOld
                 val a = points.y[j]

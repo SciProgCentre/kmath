@@ -48,9 +48,9 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
  * An algebra for polynomials
  */
 public class PolynomialSpace<T : Any, C : Ring<T>>(public val ring: C) : Space<Polynomial<T>> {
-    override val zero: Polynomial<T> = Polynomial(emptyList())
+    public override val zero: Polynomial<T> = Polynomial(emptyList())
 
-    override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
+    public override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
         val dim = max(a.coefficients.size, b.coefficients.size)
 
         return ring {
@@ -60,7 +60,7 @@ public class PolynomialSpace<T : Any, C : Ring<T>>(public val ring: C) : Space<P
         }
     }
 
-    override fun multiply(a: Polynomial<T>, k: Number): Polynomial<T> =
+    public override fun multiply(a: Polynomial<T>, k: Number): Polynomial<T> =
         ring { Polynomial(List(a.coefficients.size) { index -> a.coefficients[index] * k }) }
 
     public operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)

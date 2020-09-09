@@ -5,7 +5,7 @@ import scientifik.kmath.operations.*
 public interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
     public val strides: Strides
 
-    override fun check(vararg elements: NDBuffer<T>): Unit =
+    public override fun check(vararg elements: NDBuffer<T>): Unit =
         require(elements.all { it.strides == strides }) { ("Strides mismatch") }
 
     /**
@@ -29,7 +29,7 @@ public interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
 
 
 public interface BufferedNDSpace<T, S : Space<T>> : NDSpace<T, S, NDBuffer<T>>, BufferedNDAlgebra<T, S> {
-    override fun NDBuffer<T>.toElement(): SpaceElement<NDBuffer<T>, *, out BufferedNDSpace<T, S>>
+    public override fun NDBuffer<T>.toElement(): SpaceElement<NDBuffer<T>, *, out BufferedNDSpace<T, S>>
 }
 
 public interface BufferedNDRing<T, R : Ring<T>> : NDRing<T, R, NDBuffer<T>>, BufferedNDSpace<T, R> {

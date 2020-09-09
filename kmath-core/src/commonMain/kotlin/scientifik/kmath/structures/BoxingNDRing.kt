@@ -59,6 +59,7 @@ public class BoxingNDRing<T, R : Ring<T>>(
         transform: R.(T, T) -> T
     ): BufferedNDRingElement<T, R> {
         check(a, b)
+
         return BufferedNDRingElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })

@@ -31,10 +31,7 @@ public inline class LongBuffer(public val array: LongArray) : MutableBuffer<Long
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer {
-    contract { callsInPlace(init) }
-    return LongBuffer(LongArray(size) { init(it) })
-}
+public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongBuffer(LongArray(size) { init(it) })
 
 /**
  * Returns a new [LongBuffer] of given elements.

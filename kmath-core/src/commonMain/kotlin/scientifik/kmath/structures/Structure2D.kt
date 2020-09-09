@@ -21,11 +21,8 @@ public interface Structure2D<T> : NDStructure<T> {
         get() = VirtualBuffer(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
 
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
-        for (i in (0 until rowNum)) {
-            for (j in (0 until colNum)) {
-                yield(intArrayOf(i, j) to get(i, j))
-            }
-        }
+        for (i in (0 until rowNum))
+            for (j in (0 until colNum)) yield(intArrayOf(i, j) to get(i, j))
     }
 
     public companion object
@@ -45,10 +42,9 @@ private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Stru
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2) {
+public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2)
     Structure2DWrapper(this)
-} else {
+else
     error("Can't create 2d-structure from ${shape.size}d-structure")
-}
 
 public typealias Matrix<T> = Structure2D<T>

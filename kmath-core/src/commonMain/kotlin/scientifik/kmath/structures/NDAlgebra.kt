@@ -115,19 +115,18 @@ public interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing
 
     public operator fun T.div(arg: N): N = map(arg) { divide(it, this@div) }
 
-    companion object {
-
-        private val realNDFieldCache = HashMap<IntArray, RealNDField>()
+    public companion object {
+        private val realNDFieldCache: MutableMap<IntArray, RealNDField> = hashMapOf()
 
         /**
          * Create a nd-field for [Double] values or pull it from cache if it was created previously
          */
-        fun real(vararg shape: Int): RealNDField = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
+        public fun real(vararg shape: Int): RealNDField = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
 
         /**
          * Create a nd-field with boxing generic buffer
          */
-        fun <T : Any, F : Field<T>> boxing(
+        public fun <T : Any, F : Field<T>> boxing(
             field: F,
             vararg shape: Int,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
@@ -137,7 +136,7 @@ public interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing
          * Create a most suitable implementation for nd-field using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): BufferedNDField<T, F> =
+        public inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): BufferedNDField<T, F> =
             when {
                 T::class == Double::class -> real(*shape) as BufferedNDField<T, F>
                 T::class == Complex::class -> complex(*shape) as BufferedNDField<T, F>

@@ -12,10 +12,8 @@ import kotlin.jvm.JvmName
  * @param R the type of resulting iterable.
  * @param initial lazy evaluated.
  */
-public inline fun <T, R> Iterator<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): Iterator<R> {
-    contract { callsInPlace(operation) }
-
-    return object : Iterator<R> {
+public inline fun <T, R> Iterator<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): Iterator<R> =
+    object : Iterator<R> {
         var state: R = initial
 
         override fun hasNext(): Boolean = this@cumulative.hasNext()
@@ -25,7 +23,6 @@ public inline fun <T, R> Iterator<T>.cumulative(initial: R, crossinline operatio
             return state
         }
     }
-}
 
 public inline fun <T, R> Iterable<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): Iterable<R> =
     Iterable { this@cumulative.iterator().cumulative(initial, operation) }

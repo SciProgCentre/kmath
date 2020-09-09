@@ -1,5 +1,7 @@
 package scientifik.kmath.operations
 
+import kotlin.contracts.contract
+
 /**
  * Stub for DSL the [Algebra] is.
  */

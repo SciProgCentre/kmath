@@ -4,11 +4,10 @@ import scientifik.kmath.operations.ExtendedField
 import scientifik.kmath.operations.ExtendedFieldOperations
 import kotlin.math.*
 
-
 /**
  * [ExtendedFieldOperations] over [RealBuffer].
  */
-object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
+public object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
         require(b.size == a.size) {
             "The size of the first buffer ${a.size} should be the same as for second one: ${b.size} "
@@ -73,9 +72,8 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun asin(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { asin(array[it]) })
-    } else {
+    } else
         RealBuffer(DoubleArray(arg.size) { asin(arg[it]) })
-    }
 
     override fun acos(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
@@ -92,37 +90,44 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun sinh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { sinh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { sinh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { sinh(arg[it]) })
 
     override fun cosh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { cosh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { cosh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { cosh(arg[it]) })
 
     override fun tanh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { tanh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { tanh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { tanh(arg[it]) })
 
     override fun asinh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { asinh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { asinh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { asinh(arg[it]) })
 
     override fun acosh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { acosh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { acosh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { acosh(arg[it]) })
 
     override fun atanh(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { atanh(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { atanh(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { atanh(arg[it]) })
 
     override fun power(arg: Buffer<Double>, pow: Number): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { array[it].pow(pow.toDouble()) })
-    } else RealBuffer(DoubleArray(arg.size) { arg[it].pow(pow.toDouble()) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { arg[it].pow(pow.toDouble()) })
 
     override fun exp(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
@@ -132,7 +137,8 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun ln(arg: Buffer<Double>): RealBuffer = if (arg is RealBuffer) {
         val array = arg.array
         RealBuffer(DoubleArray(arg.size) { ln(array[it]) })
-    } else RealBuffer(DoubleArray(arg.size) { ln(arg[it]) })
+    } else
+        RealBuffer(DoubleArray(arg.size) { ln(arg[it]) })
 }
 
 /**
@@ -140,7 +146,7 @@ object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
  *
  * @property size the size of buffers to operate on.
  */
-class RealBufferField(val size: Int) : ExtendedField<Buffer<Double>> {
+public class RealBufferField(public val size: Int) : ExtendedField<Buffer<Double>> {
     override val zero: Buffer<Double> by lazy { RealBuffer(size) { 0.0 } }
     override val one: Buffer<Double> by lazy { RealBuffer(size) { 1.0 } }
 

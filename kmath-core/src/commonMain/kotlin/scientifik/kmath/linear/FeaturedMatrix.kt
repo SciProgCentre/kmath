@@ -26,10 +26,8 @@ public interface FeaturedMatrix<T : Any> : Matrix<T> {
     public companion object
 }
 
-public inline fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> {
-    contract { callsInPlace(initializer) }
-    return MatrixContext.real.produce(rows, columns, initializer)
-}
+public inline fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> =
+    MatrixContext.real.produce(rows, columns, initializer)
 
 /**
  * Build a square matrix from given elements.

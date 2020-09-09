@@ -14,32 +14,32 @@ public interface XYZPointSet<X, Y, Z> : XYPointSet<X, Y> {
 }
 
 internal fun <T : Comparable<T>> insureSorted(points: XYPointSet<T, *>) {
-    for (i in 0 until points.size - 1) require(points.x[i + 1] > points.x[i]) { "Input data is not sorted at index $i" }
+    for (i in 0 until points.size - 1)
+        require(points.x[i + 1] > points.x[i]) { "Input data is not sorted at index $i" }
 }
 
 public class NDStructureColumn<T>(public val structure: Structure2D<T>, public val column: Int) : Buffer<T> {
+    public override val size: Int
+        get() = structure.rowNum
+
     init {
         require(column < structure.colNum) { "Column index is outside of structure column range" }
     }
 
-    override val size: Int get() = structure.rowNum
-
-    override operator fun get(index: Int): T = structure[index, column]
-
-    override operator fun iterator(): Iterator<T> = sequence {
-        repeat(size) {
-            yield(get(it))
-        }
-    }.iterator()
+    public override operator fun get(index: Int): T = structure[index, column]
+    public override operator fun iterator(): Iterator<T> = sequence { repeat(size) { yield(get(it)) } }.iterator()
 }
 
-public class BufferXYPointSet<X, Y>(override val x: Buffer<X>, override val y: Buffer<Y>) : XYPointSet<X, Y> {
+public class BufferXYPointSet<X, Y>(
+    public override val x: Buffer<X>,
+    public override val y: Buffer<Y>
+) : XYPointSet<X, Y> {
+    public override val size: Int
+        get() = x.size
+
     init {
         require(x.size == y.size) { "Sizes of x and y buffers should be the same" }
     }
-
-    override val size: Int
-        get() = x.size
 }
 
 public fun <T> Structure2D<T>.asXYPointSet(): XYPointSet<T, T> {

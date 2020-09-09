@@ -76,7 +76,6 @@ public inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.l
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
 ): LUPDecomposition<T> {
-    contract { callsInPlace(checkSingular) }
     require(matrix.rowNum == matrix.colNum) { "LU decomposition supports only square matrices" }
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
@@ -153,10 +152,7 @@ public inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.l
 public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
-): LUPDecomposition<T> {
-    contract { callsInPlace(checkSingular) }
-    return lup(T::class, matrix, checkSingular)
-}
+): LUPDecomposition<T> = lup(T::class, matrix, checkSingular)
 
 public fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
     lup(Double::class, matrix) { it < 1e-11 }
@@ -216,7 +212,6 @@ public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext
     b: Matrix<T>,
     checkSingular: (T) -> Boolean
 ): Matrix<T> {
-    contract { callsInPlace(checkSingular) }
     // Use existing decomposition if it is provided by matrix
     val decomposition = a.getFeature() ?: lup(T::class, a, checkSingular)
     return decomposition.solve(T::class, b)
@@ -227,10 +222,7 @@ public fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): Matrix
 public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean
-): Matrix<T> {
-    contract { callsInPlace(checkSingular) }
-    return solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
-}
+): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
 
 public fun RealMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> =
     solve(matrix, one(matrix.rowNum, matrix.colNum)) { it < 1e-11 }

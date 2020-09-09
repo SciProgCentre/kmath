@@ -40,18 +40,17 @@ public class BigInt internal constructor(
     private val sign: Byte,
     private val magnitude: Magnitude
 ) : Comparable<BigInt> {
-
-    override fun compareTo(other: BigInt): Int = when {
+    public override fun compareTo(other: BigInt): Int = when {
         (this.sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         this.sign < other.sign -> -1
         this.sign > other.sign -> 1
         else -> this.sign * compareMagnitudes(this.magnitude, other.magnitude)
     }
 
-    override fun equals(other: Any?): Boolean =
+    public override fun equals(other: Any?): Boolean =
         if (other is BigInt) compareTo(other) == 0 else error("Can't compare KBigInteger to a different type")
 
-    override fun hashCode(): Int = magnitude.hashCode() + sign
+    public override fun hashCode(): Int = magnitude.hashCode() + sign
 
     public fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 
@@ -456,15 +455,11 @@ public fun String.parseBigInteger(): BigInt? {
     return res * sign
 }
 
-public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> {
-    contract { callsInPlace(initializer) }
-    return boxing(size, initializer)
-}
+public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    boxing(size, initializer)
 
-public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> {
-    contract { callsInPlace(initializer) }
-    return boxing(size, initializer)
-}
+public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
+    boxing(size, initializer)
 
 public fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInt, BigIntField> =
     BoxingNDRing(shape, BigIntField, Buffer.Companion::bigInt)

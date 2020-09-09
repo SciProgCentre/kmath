@@ -12,11 +12,10 @@ public fun interface PiecewisePolynomial<T : Any> :
 /**
  * Ordered list of pieces in piecewise function
  */
-public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
+public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
     PiecewisePolynomial<T> {
-
-    private val delimiters: ArrayList<T> = arrayListOf(delimeter)
-    private val pieces: ArrayList<Polynomial<T>> = ArrayList()
+    private val delimiters: MutableList<T> = arrayListOf(delimiter)
+    private val pieces: MutableList<Polynomial<T>> = arrayListOf()
 
     /**
      * Dynamically add a piece to the "right" side (beyond maximum argument value of previous piece)
@@ -35,14 +34,13 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimeter: T) :
     }
 
     override fun findPiece(arg: T): Polynomial<T>? {
-        if (arg < delimiters.first() || arg >= delimiters.last()) {
+        if (arg < delimiters.first() || arg >= delimiters.last())
             return null
-        } else {
-            for (index in 1 until delimiters.size) {
-                if (arg < delimiters[index]) {
+        else {
+            for (index in 1 until delimiters.size)
+                if (arg < delimiters[index])
                     return pieces[index - 1]
-                }
-            }
+
             error("Piece not found")
         }
     }

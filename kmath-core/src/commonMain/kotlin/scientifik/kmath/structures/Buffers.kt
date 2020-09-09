@@ -2,8 +2,6 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -56,7 +54,8 @@ public interface Buffer<T> {
         /**
          * Create a boxing buffer of given type
          */
-        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> = ListBuffer(List(size, initializer))
+        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> =
+            ListBuffer(List(size, initializer))
 
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<T>, size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
@@ -115,11 +114,11 @@ public interface MutableBuffer<T> : Buffer<T> {
         /**
          * Create a boxing mutable buffer of given type
          */
-        inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             MutableListBuffer(MutableList(size, initializer))
 
         @Suppress("UNCHECKED_CAST")
-        inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+        public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             when (type) {
                 Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
                 Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
@@ -132,12 +131,11 @@ public interface MutableBuffer<T> : Buffer<T> {
          * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
          */
         @Suppress("UNCHECKED_CAST")
-        inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             auto(T::class, size, initializer)
 
-        val real: MutableBufferFactory<Double> = { size: Int, initializer: (Int) -> Double ->
-            RealBuffer(DoubleArray(size) { initializer(it) })
-        }
+        public val real: MutableBufferFactory<Double> =
+            { size, initializer -> RealBuffer(DoubleArray(size) { initializer(it) }) }
     }
 }
 
@@ -147,7 +145,7 @@ public interface MutableBuffer<T> : Buffer<T> {
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
+public inline class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
     override val size: Int
         get() = list.size
 
@@ -158,7 +156,7 @@ inline class ListBuffer<T>(val list: List<T>) : Buffer<T> {
 /**
  * Returns an [ListBuffer] that wraps the original list.
  */
-fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
+public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
 
 /**
  * Creates a new [ListBuffer] with the specified [size], where each element is calculated by calling the specified
@@ -167,10 +165,7 @@ fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an array element given its index.
  */
-inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> {
-    contract { callsInPlace(init) }
-    return List(size, init).asBuffer()
-}
+public inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> = List(size, init).asBuffer()
 
 /**
  * [MutableBuffer] implementation over [MutableList].
@@ -178,7 +173,7 @@ inline fun <T> ListBuffer(size: Int, init: (Int) -> T): ListBuffer<T> {
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
+public inline class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
     override val size: Int
         get() = list.size
 
@@ -198,7 +193,7 @@ inline class MutableListBuffer<T>(val list: MutableList<T>) : MutableBuffer<T> {
  * @param T the type of elements contained in the buffer.
  * @property array The underlying array.
  */
-class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
+public class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     // Can't inline because array is invariant
     override val size: Int
         get() = array.size

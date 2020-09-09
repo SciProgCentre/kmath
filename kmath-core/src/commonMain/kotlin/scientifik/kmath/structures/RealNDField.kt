@@ -112,26 +112,22 @@ public inline fun RealNDElement.map(crossinline transform: RealField.(Double) ->
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy.
  */
-operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement): RealNDElement =
+public operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement): RealNDElement =
     ndElement.map { this@invoke(it) }
-
 
 /* plus and minus */
 
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun RealNDElement.plus(arg: Double): RealNDElement =
-    map { it + arg }
+public operator fun RealNDElement.plus(arg: Double): RealNDElement = map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun RealNDElement.minus(arg: Double): RealNDElement =
-    map { it - arg }
+public operator fun RealNDElement.minus(arg: Double): RealNDElement = map { it - arg }
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-
-inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R = NDField.real(*shape).run(action)
+public inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R = NDField.real(*shape).run(action)
