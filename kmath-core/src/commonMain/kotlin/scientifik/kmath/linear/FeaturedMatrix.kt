@@ -4,6 +4,8 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.Structure2D
 import scientifik.kmath.structures.asBuffer
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.sqrt
 
 /**
@@ -23,25 +25,25 @@ interface FeaturedMatrix<T : Any> : Matrix<T> {
      */
     fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<T>
 
-    companion object {
-
-    }
+    companion object
 }
 
-fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double) =
-    MatrixContext.real.produce(rows, columns, initializer)
+inline fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> {
+    contract { callsInPlace(initializer) }
+    return MatrixContext.real.produce(rows, columns, initializer)
+}
 
 /**
  * Build a square matrix from given elements.
  */
 fun <T : Any> Structure2D.Companion.square(vararg elements: T): FeaturedMatrix<T> {
     val size: Int = sqrt(elements.size.toDouble()).toInt()
-    if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
+    require(size * size == elements.size) { "The number of elements ${elements.size} is not a full square" }
     val buffer = elements.asBuffer()
     return BufferMatrix(size, size, buffer)
 }
 
-val Matrix<*>.features get() = (this as? FeaturedMatrix)?.features?: emptySet()
+val Matrix<*>.features: Set<MatrixFeature> get() = (this as? FeaturedMatrix)?.features ?: emptySet()
 
 /**
  * Check if matrix has the given feature class
@@ -68,7 +70,7 @@ fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: In
  * A virtual matrix of zeroes
  */
 fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
-    VirtualMatrix<T>(rows, columns) { _, _ -> elementContext.zero }
+    VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
 
 class TransposedFeature<T : Any>(val original: Matrix<T>) : MatrixFeature
 

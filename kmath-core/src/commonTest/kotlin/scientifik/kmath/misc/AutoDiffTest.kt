@@ -8,10 +8,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AutoDiffTest {
+    fun Variable(int: Int): Variable<Double> = Variable(int.toDouble())
 
-    fun Variable(int: Int) = Variable(int.toDouble())
-
-    fun deriv(body: AutoDiffField<Double, RealField>.() -> Variable<Double>) = RealField.deriv(body)
+    fun deriv(body: AutoDiffField<Double, RealField>.() -> Variable<Double>): DerivationResult<Double> =
+        RealField.deriv(body)
 
     @Test
     fun testPlusX2() {
@@ -178,5 +178,4 @@ class AutoDiffTest {
     private fun assertApprox(a: Double, b: Double) {
         if ((a - b) > 1e-10) assertEquals(a, b)
     }
-
 }

@@ -56,7 +56,7 @@ interface NDAlgebra<T, C, N : NDStructure<T>> {
     /**
      * element-by-element invoke a function working on [T] on a [NDStructure]
      */
-    operator fun Function1<T, T>.invoke(structure: N) = map(structure) { value -> this@invoke(value) }
+    operator fun Function1<T, T>.invoke(structure: N): N = map(structure) { value -> this@invoke(value) }
 
     companion object
 }
@@ -76,12 +76,12 @@ interface NDSpace<T, S : Space<T>, N : NDStructure<T>> : Space<N>, NDAlgebra<T, 
     override fun multiply(a: N, k: Number): N = map(a) { multiply(it, k) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.plus(arg: T) = map(this) { value -> add(arg, value) }
+    operator fun N.plus(arg: T): N = map(this) { value -> add(arg, value) }
 
-    operator fun N.minus(arg: T) = map(this) { value -> add(arg, -value) }
+    operator fun N.minus(arg: T): N = map(this) { value -> add(arg, -value) }
 
-    operator fun T.plus(arg: N) = map(arg) { value -> add(this@plus, value) }
-    operator fun T.minus(arg: N) = map(arg) { value -> add(-this@minus, value) }
+    operator fun T.plus(arg: N): N = map(arg) { value -> add(this@plus, value) }
+    operator fun T.minus(arg: N): N = map(arg) { value -> add(-this@minus, value) }
 
     companion object
 }
@@ -97,20 +97,19 @@ interface NDRing<T, R : Ring<T>, N : NDStructure<T>> : Ring<N>, NDSpace<T, R, N>
     override fun multiply(a: N, b: N): N = combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.times(arg: T) = map(this) { value -> multiply(arg, value) }
+    operator fun N.times(arg: T): N = map(this) { value -> multiply(arg, value) }
 
-    operator fun T.times(arg: N) = map(arg) { value -> multiply(this@times, value) }
+    operator fun T.times(arg: N): N = map(arg) { value -> multiply(this@times, value) }
 
     companion object
 }
 
 /**
- * Field for n-dimensional structures.
- * @param shape - the list of dimensions of the array
- * @param elementField - operations field defined on individual array element
- * @param T - the type of the element contained in ND structure
- * @param F - field of structure elements
- * @param R - actual nd-element type of this field
+ * Field of [NDStructure].
+ *
+ * @param T the type of the element contained in ND structure.
+ * @param N the type of ND structure.
+ * @param F field of structure elements.
  */
 interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, N> {
 
@@ -120,9 +119,9 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
     override fun divide(a: N, b: N): N = combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
-    operator fun N.div(arg: T) = map(this) { value -> divide(arg, value) }
+    operator fun N.div(arg: T): N = map(this) { value -> divide(arg, value) }
 
-    operator fun T.div(arg: N) = map(arg) { divide(it, this@div) }
+    operator fun T.div(arg: N): N = map(arg) { divide(it, this@div) }
 
     companion object {
 
@@ -131,7 +130,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
         /**
          * Create a nd-field for [Double] values or pull it from cache if it was created previously
          */
-        fun real(vararg shape: Int) = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
+        fun real(vararg shape: Int): RealNDField = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
 
         /**
          * Create a nd-field with boxing generic buffer
@@ -140,7 +139,7 @@ interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing<T, F, 
             field: F,
             vararg shape: Int,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ) = BoxingNDField(shape, field, bufferFactory)
+        ): BoxingNDField<T, F> = BoxingNDField(shape, field, bufferFactory)
 
         /**
          * Create a most suitable implementation for nd-field using reified class.

@@ -3,6 +3,7 @@ package scientifik.kmath.linear
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.BufferAccessor2D
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.Structure2D
@@ -18,7 +19,7 @@ class LUPDecomposition<T : Any>(
     private val even: Boolean
 ) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
 
-    val elementContext get() = context.elementContext
+    val elementContext: Field<T> get() = context.elementContext
 
     /**
      * Returns the matrix L of the decomposition.
@@ -60,15 +61,13 @@ class LUPDecomposition<T : Any>(
      * @return determinant of the matrix
      */
     override val determinant: T by lazy {
-        with(elementContext) {
-            (0 until lu.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] }
-        }
+        elementContext { (0 until lu.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] } }
     }
 
 }
 
-fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T) =
-    if (value > elementContext.zero) value else with(elementContext) { -value }
+fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T): T =
+    if (value > elementContext.zero) value else elementContext { -value }
 
 
 /**
@@ -88,43 +87,34 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
 
     //TODO just waits for KEEP-176
     BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
-        elementContext.run {
-
+        elementContext {
             val lu = create(matrix)
 
             // Initialize permutation array and parity
-            for (row in 0 until m) {
-                pivot[row] = row
-            }
+            for (row in 0 until m) pivot[row] = row
             var even = true
 
             // Initialize permutation array and parity
-            for (row in 0 until m) {
-                pivot[row] = row
-            }
+            for (row in 0 until m) pivot[row] = row
 
             // Loop over columns
             for (col in 0 until m) {
-
                 // upper
                 for (row in 0 until col) {
                     val luRow = lu.row(row)
                     var sum = luRow[col]
-                    for (i in 0 until row) {
-                        sum -= luRow[i] * lu[i, col]
-                    }
+                    for (i in 0 until row) sum -= luRow[i] * lu[i, col]
                     luRow[col] = sum
                 }
 
                 // lower
                 var max = col // permutation row
                 var largest = -one
+
                 for (row in col until m) {
                     val luRow = lu.row(row)
                     var sum = luRow[col]
-                    for (i in 0 until col) {
-                        sum -= luRow[i] * lu[i, col]
-                    }
+                    for (i in 0 until col) sum -= luRow[i] * lu[i, col]
                     luRow[col] = sum
 
                     // maintain best permutation choice
@@ -135,19 +125,19 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
                 }
 
                 // Singularity check
-                if (checkSingular(this@lup.abs(lu[max, col]))) {
-                    error("The matrix is singular")
-                }
+                check(!checkSingular(this@lup.abs(lu[max, col]))) { "The matrix is singular" }
 
                 // Pivot if necessary
                 if (max != col) {
                     val luMax = lu.row(max)
                     val luCol = lu.row(col)
+
                     for (i in 0 until m) {
                         val tmp = luMax[i]
                         luMax[i] = luCol[i]
                         luCol[i] = tmp
                     }
+
                     val temp = pivot[max]
                     pivot[max] = pivot[col]
                     pivot[col] = temp
@@ -156,9 +146,7 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
 
                 // Divide the lower elements by the "winning" diagonal elt.
                 val luDiag = lu[col, col]
-                for (row in col + 1 until m) {
-                    lu[row, col] /= luDiag
-                }
+                for (row in col + 1 until m) lu[row, col] /= luDiag
             }
 
             return LUPDecomposition(this@lup, lu.collect(), pivot, even)
@@ -169,33 +157,29 @@ fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
-) = lup(T::class, matrix, checkSingular)
+): LUPDecomposition<T> = lup(T::class, matrix, checkSingular)
 
-fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>) = lup(Double::class, matrix) { it < 1e-11 }
+fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
+    lup(Double::class, matrix) { it < 1e-11 }
 
 fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Matrix<T> {
-
-    if (matrix.rowNum != pivot.size) {
-        error("Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}")
-    }
+    require(matrix.rowNum == pivot.size) { "Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}" }
 
     BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
-        elementContext.run {
-
+        elementContext {
             // Apply permutations to b
             val bp = create { _, _ -> zero }
 
-            for (row in 0 until pivot.size) {
+            for (row in pivot.indices) {
                 val bpRow = bp.row(row)
                 val pRow = pivot[row]
-                for (col in 0 until matrix.colNum) {
-                    bpRow[col] = matrix[pRow, col]
-                }
+                for (col in 0 until matrix.colNum) bpRow[col] = matrix[pRow, col]
             }
 
             // Solve LY = b
-            for (col in 0 until pivot.size) {
+            for (col in pivot.indices) {
                 val bpCol = bp.row(col)
+
                 for (i in col + 1 until pivot.size) {
                     val bpI = bp.row(i)
                     val luICol = lu[i, col]
@@ -209,23 +193,21 @@ fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Mat
             for (col in pivot.size - 1 downTo 0) {
                 val bpCol = bp.row(col)
                 val luDiag = lu[col, col]
-                for (j in 0 until matrix.colNum) {
-                    bpCol[j] /= luDiag
-                }
+                for (j in 0 until matrix.colNum) bpCol[j] /= luDiag
+
                 for (i in 0 until col) {
                     val bpI = bp.row(i)
                     val luICol = lu[i, col]
-                    for (j in 0 until matrix.colNum) {
-                        bpI[j] -= bpCol[j] * luICol
-                    }
+                    for (j in 0 until matrix.colNum) bpI[j] -= bpCol[j] * luICol
                 }
             }
+
             return context.produce(pivot.size, matrix.colNum) { i, j -> bp[i, j] }
         }
     }
 }
 
-inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>) = solve(T::class, matrix)
+inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matrix<T> = solve(T::class, matrix)
 
 /**
  * Solve a linear equation **a*x = b**
@@ -240,13 +222,12 @@ inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.
     return decomposition.solve(T::class, b)
 }
 
-fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>) =
-    solve(a, b) { it < 1e-11 }
+fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solve(a, b) { it < 1e-11 }
 
 inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
     matrix: Matrix<T>,
     noinline checkSingular: (T) -> Boolean
-) = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
+): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
 
-fun RealMatrixContext.inverse(matrix: Matrix<Double>) =
+fun RealMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> =
     solve(matrix, one(matrix.rowNum, matrix.colNum)) { it < 1e-11 }

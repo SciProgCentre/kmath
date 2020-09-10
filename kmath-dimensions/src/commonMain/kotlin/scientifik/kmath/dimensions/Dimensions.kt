@@ -31,5 +31,5 @@ object D2 : Dimension {
 }
 
 object D3 : Dimension {
-    override val dim: UInt get() = 31U
+    override val dim: UInt get() = 3U
 }

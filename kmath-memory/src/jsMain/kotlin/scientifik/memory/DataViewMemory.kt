@@ -4,13 +4,13 @@ import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView
 import org.khronos.webgl.Int8Array
 
-class DataViewMemory(val view: DataView) : Memory {
-
+private class DataViewMemory(val view: DataView) : Memory {
     override val size: Int get() = view.byteLength
 
     override fun view(offset: Int, length: Int): Memory {
         require(offset >= 0) { "offset shouldn't be negative: $offset" }
         require(length >= 0) { "length shouldn't be negative: $length" }
+        require(offset + length <= size) { "Can't view memory outside the parent region." }
 
         if (offset + length > size)
             throw IndexOutOfBoundsException("offset + length > size: $offset + $length > $size")
@@ -33,11 +33,11 @@ class DataViewMemory(val view: DataView) : Memory {
 
         override fun readInt(offset: Int): Int = view.getInt32(offset, false)
 
-        override fun readLong(offset: Int): Long = (view.getInt32(offset, false).toLong() shl 32) or
-                view.getInt32(offset + 4, false).toLong()
+        override fun readLong(offset: Int): Long =
+            view.getInt32(offset, false).toLong() shl 32 or view.getInt32(offset + 4, false).toLong()
 
         override fun release() {
-            // does nothing on JS because of GC
+            // does nothing on JS
         }
     }
 
@@ -72,7 +72,7 @@ class DataViewMemory(val view: DataView) : Memory {
         }
 
         override fun release() {
-            //does nothing on JS
+            // does nothing on JS
         }
     }
 
@@ -81,13 +81,17 @@ class DataViewMemory(val view: DataView) : Memory {
 }
 
 /**
- * Allocate the most effective platform-specific memory
+ * Allocates memory based on a [DataView].
  */
 actual fun Memory.Companion.allocate(length: Int): Memory {
     val buffer = ArrayBuffer(length)
     return DataViewMemory(DataView(buffer, 0, length))
 }
 
+/**
+ * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
+ * and could be mutated independently from the resulting [Memory].
+ */
 actual fun Memory.Companion.wrap(array: ByteArray): Memory {
     @Suppress("CAST_NEVER_SUCCEEDS") val int8Array = array as Int8Array
     return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))

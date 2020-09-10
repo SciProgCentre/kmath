@@ -6,6 +6,12 @@ import scientifik.kmath.operations.Algebra
  * An elementary function that could be invoked on a map of arguments
  */
 interface Expression<T> {
+    /**
+     * Calls this expression from arguments.
+     *
+     * @param arguments the map of arguments.
+     * @return the value.
+     */
     operator fun invoke(arguments: Map<String, T>): T
 
     companion object
@@ -14,10 +20,17 @@ interface Expression<T> {
 /**
  * Create simple lazily evaluated expression inside given algebra
  */
-fun <T> Algebra<T>.expression(block:  Algebra<T>.(arguments: Map<String, T>) -> T): Expression<T> = object: Expression<T> {
-    override fun invoke(arguments: Map<String, T>): T = block(arguments)
-}
+fun <T> Algebra<T>.expression(block: Algebra<T>.(arguments: Map<String, T>) -> T): Expression<T> =
+    object : Expression<T> {
+        override operator fun invoke(arguments: Map<String, T>): T = block(arguments)
+    }
 
+/**
+ * Calls this expression from arguments.
+ *
+ * @param pairs the pair of arguments' names to values.
+ * @return the value.
+ */
 operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = invoke(mapOf(*pairs))
 
 /**

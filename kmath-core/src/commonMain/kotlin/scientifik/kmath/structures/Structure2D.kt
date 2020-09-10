@@ -9,8 +9,8 @@ interface Structure2D<T> : NDStructure<T> {
 
     operator fun get(i: Int, j: Int): T
 
-    override fun get(index: IntArray): T {
-        if (index.size != 2) error("Index dimension mismatch. Expected 2 but found ${index.size}")
+    override operator fun get(index: IntArray): T {
+        require(index.size == 2) { "Index dimension mismatch. Expected 2 but found ${index.size}" }
         return get(index[0], index[1])
     }
 
@@ -32,18 +32,16 @@ interface Structure2D<T> : NDStructure<T> {
         }
     }
 
-    companion object {
-
-    }
+    companion object
 }
 
 /**
  * A 2D wrapper for nd-structure
  */
 private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
-    override fun get(i: Int, j: Int): T = structure[i, j]
-
     override val shape: IntArray get() = structure.shape
+
+    override operator fun get(i: Int, j: Int): T = structure[i, j]
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }

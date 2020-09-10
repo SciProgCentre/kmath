@@ -1,9 +1,13 @@
 package scientifik.kmath.operations
 
+import scientifik.kmath.operations.internal.RingVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BigIntAlgebraTest {
+internal class BigIntAlgebraTest {
+    @Test
+    fun verify() = BigIntField { RingVerifier(this, +"42", +"10", +"-12", 10).verify() }
+
     @Test
     fun testKBigIntegerRingSum() {
         val res = BigIntField {
@@ -47,4 +51,3 @@ class BigIntAlgebraTest {
     }
 
 }
-

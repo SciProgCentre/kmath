@@ -1,7 +1,7 @@
 package scientifik.kmath.linear
 
 /**
- * A marker interface representing some matrix feature like diagonal, sparce, zero, etc. Features used to optimize matrix
+ * A marker interface representing some matrix feature like diagonal, sparse, zero, etc. Features used to optimize matrix
  * operations performance in some cases.
  */
 interface MatrixFeature
@@ -36,19 +36,19 @@ interface DeterminantFeature<T : Any> : MatrixFeature {
 }
 
 @Suppress("FunctionName")
-fun <T: Any> DeterminantFeature(determinant: T) = object: DeterminantFeature<T>{
+fun <T : Any> DeterminantFeature(determinant: T): DeterminantFeature<T> = object : DeterminantFeature<T> {
     override val determinant: T = determinant
 }
 
 /**
  * Lower triangular matrix
  */
-object LFeature: MatrixFeature
+object LFeature : MatrixFeature
 
 /**
  * Upper triangular feature
  */
-object UFeature: MatrixFeature
+object UFeature : MatrixFeature
 
 /**
  * TODO add documentation

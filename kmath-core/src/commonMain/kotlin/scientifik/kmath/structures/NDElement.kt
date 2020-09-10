@@ -23,19 +23,24 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
         /**
          * Create a optimized NDArray of doubles
          */
-        fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }) =
+        fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }): RealNDElement =
             NDField.real(*shape).produce(initializer)
 
-
-        fun real1D(dim: Int, initializer: (Int) -> Double = { _ -> 0.0 }) =
+        inline fun real1D(dim: Int, crossinline initializer: (Int) -> Double = { _ -> 0.0 }): RealNDElement =
             real(intArrayOf(dim)) { initializer(it[0]) }
 
+        inline fun real2D(
+            dim1: Int,
+            dim2: Int,
+            crossinline initializer: (Int, Int) -> Double = { _, _ -> 0.0 }
+        ): RealNDElement = real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
 
-        fun real2D(dim1: Int, dim2: Int, initializer: (Int, Int) -> Double = { _, _ -> 0.0 }) =
-            real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
-
-        fun real3D(dim1: Int, dim2: Int, dim3: Int, initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }) =
-            real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
+        inline fun real3D(
+            dim1: Int,
+            dim2: Int,
+            dim3: Int,
+            crossinline initializer: (Int, Int, Int) -> Double = { _, _, _ -> 0.0 }
+        ): RealNDElement = real(intArrayOf(dim1, dim2, dim3)) { initializer(it[0], it[1], it[2]) }
 
 
         /**
@@ -62,16 +67,16 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
 }
 
 
-fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index: IntArray, T) -> T) =
+fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDElement<T, C, N> =
     context.mapIndexed(unwrap(), transform).wrap()
 
-fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T) = context.map(unwrap(), transform).wrap()
-
+fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T): NDElement<T, C, N> =
+    context.map(unwrap(), transform).wrap()
 
 /**
  * Element by element application of any operation on elements to the whole [NDElement]
  */
-operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElement<T, C, N>) =
+operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElement<T, C, N>): NDElement<T, C, N> =
     ndElement.map { value -> this@invoke(value) }
 
 /* plus and minus */
@@ -79,13 +84,13 @@ operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElem
 /**
  * Summation operation for [NDElement] and single element
  */
-operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.plus(arg: T) =
+operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.plus(arg: T): NDElement<T, S, N> =
     map { value -> arg + value }
 
 /**
  * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg: T) =
+operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg: T): NDElement<T, S, N> =
     map { value -> arg - value }
 
 /* prod and div */
@@ -93,15 +98,14 @@ operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg:
 /**
  * Product operation for [NDElement] and single element
  */
-operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: T) =
+operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: T): NDElement<T, R, N> =
     map { value -> arg * value }
 
 /**
  * Division operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T) =
+operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T): NDElement<T, F, N> =
     map { value -> arg / value }
-
 
 //    /**
 //     * Reverse sum operation

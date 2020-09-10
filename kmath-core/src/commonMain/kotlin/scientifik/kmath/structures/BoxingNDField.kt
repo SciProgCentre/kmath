@@ -3,32 +3,30 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.FieldElement
 
-
 class BoxingNDField<T, F : Field<T>>(
     override val shape: IntArray,
     override val elementContext: F,
     val bufferFactory: BufferFactory<T>
 ) : BufferedNDField<T, F> {
-
+    override val zero: BufferedNDFieldElement<T, F> by lazy { produce { zero } }
+    override val one: BufferedNDFieldElement<T, F> by lazy { produce { one } }
     override val strides: Strides = DefaultStrides(shape)
 
     fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {
-        if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
+        check(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
     }
 
-    override val zero by lazy { produce { zero } }
-    override val one by lazy { produce { one } }
-
-    override fun produce(initializer: F.(IntArray) -> T) =
+    override fun produce(initializer: F.(IntArray) -> T): BufferedNDFieldElement<T, F> =
         BufferedNDFieldElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) })
 
     override fun map(arg: NDBuffer<T>, transform: F.(T) -> T): BufferedNDFieldElement<T, F> {
         check(arg)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset -> elementContext.transform(arg.buffer[offset]) })

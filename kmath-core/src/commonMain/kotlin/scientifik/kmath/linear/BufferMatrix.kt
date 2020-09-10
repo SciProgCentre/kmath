@@ -19,22 +19,20 @@ class BufferMatrixContext<T : Any, R : Ring<T>>(
 
     override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 
-    companion object {
-
-    }
+    companion object
 }
 
 @Suppress("OVERRIDE_BY_INLINE")
 object RealMatrixContext : GenericMatrixContext<Double, RealField> {
 
-    override val elementContext get() = RealField
+    override val elementContext: RealField get() = RealField
 
     override inline fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): Matrix<Double> {
         val buffer = RealBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
         return BufferMatrix(rows, columns, buffer)
     }
 
-    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = RealBuffer(size,initializer)
+    override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> = RealBuffer(size, initializer)
 }
 
 class BufferMatrix<T : Any>(
@@ -52,19 +50,15 @@ class BufferMatrix<T : Any>(
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
-    override fun suggestFeature(vararg features: MatrixFeature) =
+    override fun suggestFeature(vararg features: MatrixFeature): BufferMatrix<T> =
         BufferMatrix(rowNum, colNum, buffer, this.features + features)
 
-    override fun get(index: IntArray): T = get(index[0], index[1])
+    override operator fun get(index: IntArray): T = get(index[0], index[1])
 
-    override fun get(i: Int, j: Int): T = buffer[i * colNum + j]
+    override operator fun get(i: Int, j: Int): T = buffer[i * colNum + j]
 
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
-        for (i in 0 until rowNum) {
-            for (j in 0 until colNum) {
-                yield(intArrayOf(i, j) to get(i, j))
-            }
-        }
+        for (i in 0 until rowNum) for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
     }
 
     override fun equals(other: Any?): Boolean {
@@ -84,8 +78,8 @@ class BufferMatrix<T : Any>(
     override fun toString(): String {
         return if (rowNum <= 5 && colNum <= 5) {
             "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)\n" +
-                    rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") {
-                        it.asSequence().joinToString(separator = "\t") { it.toString() }
+                    rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") { buffer ->
+                        buffer.asSequence().joinToString(separator = "\t") { it.toString() }
                     }
         } else {
             "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)"
@@ -97,7 +91,7 @@ class BufferMatrix<T : Any>(
  * Optimized dot product for real matrices
  */
 infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMatrix<Double> {
-    if (this.colNum != other.rowNum) error("Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})")
+    require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
 
     val array = DoubleArray(this.rowNum * other.colNum)
 

@@ -3,8 +3,10 @@ package scientifik.kmath.coroutines
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.*
+import kotlin.contracts.contract
 
-val Dispatchers.Math: CoroutineDispatcher get() = Dispatchers.Default
+val Dispatchers.Math: CoroutineDispatcher
+    get() = Default
 
 /**
  * An imitator of [Deferred] which holds a suspended function block and dispatcher
@@ -22,15 +24,11 @@ internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: s
 }
 
 class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
-    @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<T>) {
-        deferredFlow.collect {
-            collector.emit((it.await()))
-        }
+        deferredFlow.collect { collector.emit((it.await())) }
     }
 }
 
-@FlowPreview
 fun <T, R> Flow<T>.async(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     block: suspend CoroutineScope.(T) -> R
@@ -41,8 +39,7 @@ fun <T, R> Flow<T>.async(
     return AsyncFlow(flow)
 }
 
-@FlowPreview
-fun <T, R> AsyncFlow<T>.map(action: (T) -> R) =
+fun <T, R> AsyncFlow<T>.map(action: (T) -> R): AsyncFlow<R> =
     AsyncFlow(deferredFlow.map { input ->
         //TODO add function composition
         LazyDeferred(input.dispatcher) {
@@ -51,10 +48,9 @@ fun <T, R> AsyncFlow<T>.map(action: (T) -> R) =
         }
     })
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<T>) {
     require(concurrency >= 1) { "Buffer size should be more than 1, but was $concurrency" }
+
     coroutineScope {
         //Starting up to N deferred coroutines ahead of time
         val channel = produce(capacity = concurrency - 1) {
@@ -80,23 +76,18 @@ suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCollector<
     }
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
-suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, action: suspend (value: T) -> Unit): Unit {
+suspend inline fun <T> AsyncFlow<T>.collect(concurrency: Int, crossinline action: suspend (value: T) -> Unit) {
+    contract { callsInPlace(action) }
+
     collect(concurrency, object : FlowCollector<T> {
-        override suspend fun emit(value: T) = action(value)
+        override suspend fun emit(value: T): Unit = action(value)
     })
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
-fun <T, R> Flow<T>.mapParallel(
+inline fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    transform: suspend (T) -> R
+    crossinline transform: suspend (T) -> R
 ): Flow<R> {
-    return flatMapMerge{ value ->
-        flow { emit(transform(value)) }
-    }.flowOn(dispatcher)
+    contract { callsInPlace(transform) }
+    return flatMapMerge { value -> flow { emit(transform(value)) } }.flowOn(dispatcher)
 }
-
-

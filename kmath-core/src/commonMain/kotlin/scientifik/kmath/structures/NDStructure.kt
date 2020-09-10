@@ -1,17 +1,42 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.jvm.JvmName
 import kotlin.reflect.KClass
 
-
+/**
+ * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
+ * specify the sizes of each dimension.
+ *
+ * @param T the type of items.
+ */
 interface NDStructure<T> {
-
+    /**
+     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * this structure.
+     */
     val shape: IntArray
 
-    val dimension get() = shape.size
+    /**
+     * The count of dimensions in this structure. It should be equal to size of [shape].
+     */
+    val dimension: Int get() = shape.size
 
+    /**
+     * Returns the value at the specified indices.
+     *
+     * @param index the indices.
+     * @return the value.
+     */
     operator fun get(index: IntArray): T
 
+    /**
+     * Returns the sequence of all the elements associated by their indices.
+     *
+     * @return the lazy sequence of pairs of indices to values.
+     */
     fun elements(): Sequence<Pair<IntArray, T>>
 
     override fun equals(other: Any?): Boolean
@@ -19,6 +44,9 @@ interface NDStructure<T> {
     override fun hashCode(): Int
 
     companion object {
+        /**
+         * Indicates whether some [NDStructure] is equal to another one.
+         */
         fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
             if (st1 === st2) return true
 
@@ -36,58 +64,89 @@ interface NDStructure<T> {
         }
 
         /**
-         * Create a NDStructure with explicit buffer factory
+         * Creates a NDStructure with explicit buffer factory.
          *
-         * Strides should be reused if possible
+         * Strides should be reused if possible.
          */
         fun <T> build(
             strides: Strides,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T
-        ) =
+        ): BufferNDStructure<T> =
             BufferNDStructure(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
         /**
          * Inline create NDStructure with non-boxing buffer implementation if it is possible
          */
-        inline fun <reified T : Any> auto(strides: Strides, crossinline initializer: (IntArray) -> T) =
+        inline fun <reified T : Any> auto(
+            strides: Strides,
+            crossinline initializer: (IntArray) -> T
+        ): BufferNDStructure<T> =
             BufferNDStructure(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-        inline fun <T : Any> auto(type: KClass<T>, strides: Strides, crossinline initializer: (IntArray) -> T) =
+        inline fun <T : Any> auto(
+            type: KClass<T>,
+            strides: Strides,
+            crossinline initializer: (IntArray) -> T
+        ): BufferNDStructure<T> =
             BufferNDStructure(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
         fun <T> build(
             shape: IntArray,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T
-        ) = build(DefaultStrides(shape), bufferFactory, initializer)
+        ): BufferNDStructure<T> = build(DefaultStrides(shape), bufferFactory, initializer)
 
-        inline fun <reified T : Any> auto(shape: IntArray, crossinline initializer: (IntArray) -> T) =
+        inline fun <reified T : Any> auto(
+            shape: IntArray,
+            crossinline initializer: (IntArray) -> T
+        ): BufferNDStructure<T> =
             auto(DefaultStrides(shape), initializer)
 
         @JvmName("autoVarArg")
-        inline fun <reified T : Any> auto(vararg shape: Int, crossinline initializer: (IntArray) -> T) =
+        inline fun <reified T : Any> auto(
+            vararg shape: Int,
+            crossinline initializer: (IntArray) -> T
+        ): BufferNDStructure<T> =
             auto(DefaultStrides(shape), initializer)
 
-        inline fun <T : Any> auto(type: KClass<T>, vararg shape: Int, crossinline initializer: (IntArray) -> T) =
+        inline fun <T : Any> auto(
+            type: KClass<T>,
+            vararg shape: Int,
+            crossinline initializer: (IntArray) -> T
+        ): BufferNDStructure<T> =
             auto(type, DefaultStrides(shape), initializer)
     }
 }
 
+/**
+ * Returns the value at the specified indices.
+ *
+ * @param index the indices.
+ * @return the value.
+ */
 operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
 
+/**
+ * Represents mutable [NDStructure].
+ */
 interface MutableNDStructure<T> : NDStructure<T> {
+    /**
+     * Inserts an item at the specified indices.
+     *
+     * @param index the indices.
+     * @param value the value.
+     */
     operator fun set(index: IntArray, value: T)
 }
 
 inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T) {
-    elements().forEach { (index, oldValue) ->
-        this[index] = action(index, oldValue)
-    }
+    contract { callsInPlace(action) }
+    elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 }
 
 /**
- * A way to convert ND index to linear one and back
+ * A way to convert ND index to linear one and back.
  */
 interface Strides {
     /**
@@ -124,11 +183,14 @@ interface Strides {
     }
 }
 
+/**
+ * Simple implementation of [Strides].
+ */
 class DefaultStrides private constructor(override val shape: IntArray) : Strides {
     /**
      * Strides for memory access
      */
-    override val strides by lazy {
+    override val strides: List<Int> by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -139,14 +201,12 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
         }.toList()
     }
 
-    override fun offset(index: IntArray): Int {
-        return index.mapIndexed { i, value ->
-            if (value < 0 || value >= this.shape[i]) {
-                throw RuntimeException("Index $value out of shape bounds: (0,${this.shape[i]})")
-            }
-            value * strides[i]
-        }.sum()
-    }
+    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
+        if (value < 0 || value >= this.shape[i])
+            throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
+
+        value * strides[i]
+    }.sum()
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)
@@ -163,19 +223,14 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     override val linearSize: Int
         get() = strides[shape.size]
 
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DefaultStrides) return false
-
         if (!shape.contentEquals(other.shape)) return false
-
         return true
     }
 
-    override fun hashCode(): Int {
-        return shape.contentHashCode()
-    }
+    override fun hashCode(): Int = shape.contentHashCode()
 
     companion object {
         private val defaultStridesCache = HashMap<IntArray, Strides>()
@@ -187,11 +242,23 @@ class DefaultStrides private constructor(override val shape: IntArray) : Strides
     }
 }
 
+/**
+ * Represents [NDStructure] over [Buffer].
+ *
+ * @param T the type of items.
+ */
 abstract class NDBuffer<T> : NDStructure<T> {
+    /**
+     * The underlying buffer.
+     */
     abstract val buffer: Buffer<T>
+
+    /**
+     * The strides to access elements of [Buffer] by linear indices.
+     */
     abstract val strides: Strides
 
-    override fun get(index: IntArray): T = buffer[strides.offset(index)]
+    override operator fun get(index: IntArray): T = buffer[strides.offset(index)]
 
     override val shape: IntArray get() = strides.shape
 
@@ -238,7 +305,7 @@ inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 }
 
 /**
- * Mutable ND buffer based on linear [autoBuffer]
+ * Mutable ND buffer based on linear [MutableBuffer].
  */
 class MutableBufferNDStructure<T>(
     override val strides: Strides,
@@ -246,18 +313,18 @@ class MutableBufferNDStructure<T>(
 ) : NDBuffer<T>(), MutableNDStructure<T> {
 
     init {
-        if (strides.linearSize != buffer.size) {
-            error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
+        require(strides.linearSize == buffer.size) {
+            "Expected buffer side of ${strides.linearSize}, but found ${buffer.size}"
         }
     }
 
-    override fun set(index: IntArray, value: T) = buffer.set(strides.offset(index), value)
+    override operator fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
 }
 
 inline fun <reified T : Any> NDStructure<T>.combine(
     struct: NDStructure<T>,
     crossinline block: (T, T) -> T
 ): NDStructure<T> {
-    if (!this.shape.contentEquals(struct.shape)) error("Shape mismatch in structure combination")
+    require(shape.contentEquals(struct.shape)) { "Shape mismatch in structure combination" }
     return NDStructure.auto(shape) { block(this[it], struct[it]) }
 }

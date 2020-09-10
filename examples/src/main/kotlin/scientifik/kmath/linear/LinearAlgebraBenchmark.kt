@@ -5,6 +5,7 @@ import scientifik.kmath.commons.linear.CMMatrixContext
 import scientifik.kmath.commons.linear.inverse
 import scientifik.kmath.commons.linear.toCM
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.Matrix
 import kotlin.contracts.ExperimentalContracts
 import kotlin.random.Random
@@ -21,29 +22,18 @@ fun main() {
 
     val n = 5000 // iterations
 
-    MatrixContext.real.run {
-
-        repeat(50) {
-            val res = inverse(matrix)
-        }
-
-        val inverseTime = measureTimeMillis {
-            repeat(n) {
-                val res = inverse(matrix)
-            }
-        }
-
+    MatrixContext.real {
+        repeat(50) { val res = inverse(matrix) }
+        val inverseTime = measureTimeMillis { repeat(n) { val res = inverse(matrix) } }
         println("[kmath] Inversion of $n matrices $dim x $dim finished in $inverseTime millis")
     }
 
     //commons-math
 
     val commonsTime = measureTimeMillis {
-        CMMatrixContext.run {
+        CMMatrixContext {
             val cm = matrix.toCM()             //avoid overhead on conversion
-            repeat(n) {
-                val res = inverse(cm)
-            }
+            repeat(n) { val res = inverse(cm) }
         }
     }
 
@@ -53,7 +43,7 @@ fun main() {
     //koma-ejml
 
     val komaTime = measureTimeMillis {
-        KomaMatrixContext(EJMLMatrixFactory(), RealField).run {
+        (KomaMatrixContext(EJMLMatrixFactory(), RealField)) {
             val km = matrix.toKoma()      //avoid overhead on conversion
             repeat(n) {
                 val res = inverse(km)

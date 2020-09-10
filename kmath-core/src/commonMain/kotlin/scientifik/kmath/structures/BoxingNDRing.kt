@@ -8,20 +8,17 @@ class BoxingNDRing<T, R : Ring<T>>(
     override val elementContext: R,
     val bufferFactory: BufferFactory<T>
 ) : BufferedNDRing<T, R> {
-
     override val strides: Strides = DefaultStrides(shape)
+    override val zero: BufferedNDRingElement<T, R> by lazy { produce { zero } }
+    override val one: BufferedNDRingElement<T, R> by lazy { produce { one } }
 
-    fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
-        bufferFactory(size, initializer)
+    fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {
-        if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
+        require(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
     }
 
-    override val zero by lazy { produce { zero } }
-    override val one by lazy { produce { one } }
-
-    override fun produce(initializer: R.(IntArray) -> T) =
+    override fun produce(initializer: R.(IntArray) -> T): BufferedNDRingElement<T, R> =
         BufferedNDRingElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) })

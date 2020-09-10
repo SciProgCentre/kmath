@@ -2,6 +2,7 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.SpaceOperations
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.operations.sum
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.BufferFactory
@@ -29,7 +30,7 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
         /**
          * Non-boxing double matrix
          */
-        val real = RealMatrixContext
+        val real: RealMatrixContext = RealMatrixContext
 
         /**
          * A structured matrix with custom buffer
@@ -37,8 +38,7 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
         fun <T : Any, R : Ring<T>> buffered(
             ring: R,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ): GenericMatrixContext<T, R> =
-            BufferMatrixContext(ring, bufferFactory)
+        ): GenericMatrixContext<T, R> = BufferMatrixContext(ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -61,45 +61,49 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
 
     override infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         //TODO add typed error
-        if (this.colNum != other.rowNum) error("Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})")
+        require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
+
         return produce(rowNum, other.colNum) { i, j ->
             val row = rows[i]
             val column = other.columns[j]
-            with(elementContext) {
-                sum(row.asSequence().zip(column.asSequence(), ::multiply))
-            }
+            elementContext { sum(row.asSequence().zip(column.asSequence(), ::multiply)) }
         }
     }
 
     override infix fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         //TODO add typed error
-        if (this.colNum != vector.size) error("Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})")
+        require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
+
         return point(rowNum) { i ->
             val row = rows[i]
-            with(elementContext) {
-                sum(row.asSequence().zip(vector.asSequence(), ::multiply))
-            }
+            elementContext { sum(row.asSequence().zip(vector.asSequence(), ::multiply)) }
         }
     }
 
-    override operator fun Matrix<T>.unaryMinus() =
-        produce(rowNum, colNum) { i, j -> elementContext.run { -get(i, j) } }
+    override operator fun Matrix<T>.unaryMinus(): Matrix<T> =
+        produce(rowNum, colNum) { i, j -> elementContext { -get(i, j) } }
 
     override fun add(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
-        if (a.rowNum != b.rowNum || a.colNum != b.colNum) error("Matrix operation dimension mismatch. [${a.rowNum},${a.colNum}] + [${b.rowNum},${b.colNum}]")
-        return produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a.get(i, j) + b[i, j] } }
+        require(a.rowNum == b.rowNum && a.colNum == b.colNum) {
+            "Matrix operation dimension mismatch. [${a.rowNum},${a.colNum}] + [${b.rowNum},${b.colNum}]"
+        }
+
+        return produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] + b[i, j] } }
     }
 
     override operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
-        if (rowNum != b.rowNum || colNum != b.colNum) error("Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]")
-        return produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) + b[i, j] } }
+        require(rowNum == b.rowNum && colNum == b.colNum) {
+            "Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]"
+        }
+
+        return produce(rowNum, colNum) { i, j -> elementContext { get(i, j) + b[i, j] } }
     }
 
     override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
-        produce(a.rowNum, a.colNum) { i, j -> elementContext.run { a.get(i, j) * k } }
+        produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
 
     operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
 
-    override fun Matrix<T>.times(value: T): Matrix<T> =
-        produce(rowNum, colNum) { i, j -> elementContext.run { get(i, j) * value } }
+    override operator fun Matrix<T>.times(value: T): Matrix<T> =
+        produce(rowNum, colNum) { i, j -> elementContext { get(i, j) * value } }
 }

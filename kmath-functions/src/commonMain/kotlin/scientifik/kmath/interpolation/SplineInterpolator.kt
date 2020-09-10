@@ -4,6 +4,7 @@ import scientifik.kmath.functions.OrderedPiecewisePolynomial
 import scientifik.kmath.functions.PiecewisePolynomial
 import scientifik.kmath.functions.Polynomial
 import scientifik.kmath.operations.Field
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.MutableBufferFactory
 
 /**
@@ -17,7 +18,7 @@ class SplineInterpolator<T : Comparable<T>>(
 
     //TODO possibly optimize zeroed buffers
 
-    override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra.run {
+    override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
         if (points.size < 3) {
             error("Can't use spline interpolator with less than 3 points")
         }

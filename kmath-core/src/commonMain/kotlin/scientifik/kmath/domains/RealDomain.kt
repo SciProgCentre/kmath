@@ -22,8 +22,7 @@ import scientifik.kmath.linear.Point
  *
  * @author Alexander Nozik
  */
-interface RealDomain: Domain<Double> {
-
+interface RealDomain : Domain<Double> {
     fun nearestInDomain(point: Point<Double>): Point<Double>
 
     /**
@@ -61,5 +60,4 @@ interface RealDomain: Domain<Double> {
      * @return
      */
     fun volume(): Double
-
 }

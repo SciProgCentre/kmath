@@ -1,11 +1,6 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("scientifik.mpp") }
 
 kotlin.sourceSets {
-    commonMain {
-        dependencies {
-            api(project(":kmath-memory"))
-        }
-    }
+    all { languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts") }
+    commonMain { dependencies { api(project(":kmath-memory")) } }
 }

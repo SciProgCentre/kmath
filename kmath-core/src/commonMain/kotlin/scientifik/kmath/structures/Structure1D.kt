@@ -6,23 +6,23 @@ package scientifik.kmath.structures
 interface Structure1D<T> : NDStructure<T>, Buffer<T> {
     override val dimension: Int get() = 1
 
-    override fun get(index: IntArray): T {
-        if (index.size != 1) error("Index dimension mismatch. Expected 1 but found ${index.size}")
+    override operator fun get(index: IntArray): T {
+        require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         return get(index[0])
     }
 
-    override fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
+    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
 }
 
 /**
  * A 1D wrapper for nd-structure
  */
-private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Structure1D<T>{
+private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Structure1D<T> {
 
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
-    override fun get(index: Int): T = structure[index]
+    override operator fun get(index: Int): T = structure[index]
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
@@ -39,14 +39,14 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
     override fun elements(): Sequence<Pair<IntArray, T>> =
         asSequence().mapIndexed { index, value -> intArrayOf(index) to value }
 
-    override fun get(index: Int): T = buffer.get(index)
+    override operator fun get(index: Int): T = buffer[index]
 }
 
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
 fun <T> NDStructure<T>.as1D(): Structure1D<T> = if (shape.size == 1) {
-    if( this is NDBuffer){
+    if (this is NDBuffer) {
         Buffer1DWrapper(this.buffer)
     } else {
         Structure1DWrapper(this)

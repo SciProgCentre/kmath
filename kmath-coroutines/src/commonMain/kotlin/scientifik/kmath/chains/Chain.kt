@@ -16,13 +16,11 @@
 
 package scientifik.kmath.chains
 
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-
 
 /**
  * A not-necessary-Markov chain of some type
@@ -39,12 +37,8 @@ interface Chain<out R> : Flow<R> {
      */
     fun fork(): Chain<R>
 
-    @OptIn(InternalCoroutinesApi::class)
-    override suspend fun collect(collector: FlowCollector<R>): Unit = flow {
-        while (true)
-            emit(next())
-
-    }.collect(collector)
+    override suspend fun collect(collector: FlowCollector<R>): Unit =
+        flow { while (true) emit(next()) }.collect(collector)
 
     companion object
 }
@@ -65,18 +59,24 @@ class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
  * A stateless Markov chain
  */
 class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
-    private val mutex: Mutex = Mutex()
+
+    private val mutex = Mutex()
+
     private var value: R? = null
 
-    fun value() = value
+    fun value(): R? = value
 
-    override suspend fun next(): R = mutex.withLock {
-        val newValue = gen(value ?: seed())
-        value = newValue
-        return newValue
+    override suspend fun next(): R {
+        mutex.withLock {
+            val newValue = gen(value ?: seed())
+            value = newValue
+            return newValue
+        }
     }
 
-    override fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
+    override fun fork(): Chain<R> {
+        return MarkovChain(seed = { value ?: seed() }, gen = gen)
+    }
 }
 
 /**
@@ -90,15 +90,18 @@ class StatefulChain<S, out R>(
     private val forkState: ((S) -> S),
     private val gen: suspend S.(R) -> R
 ) : Chain<R> {
-    private val mutex = Mutex()
+    private val mutex: Mutex = Mutex()
+
     private var value: R? = null
 
-    fun value() = value
+    fun value(): R? = value
 
-    override suspend fun next(): R = mutex.withLock {
-        val newValue = state.gen(value ?: state.seed())
-        value = newValue
-        return newValue
+    override suspend fun next(): R {
+        mutex.withLock {
+            val newValue = state.gen(value ?: state.seed())
+            value = newValue
+            return newValue
+        }
     }
 
     override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
@@ -128,8 +131,10 @@ fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
 fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain<T> {
     override suspend fun next(): T {
         var next: T
+
         do next = this@filter.next()
         while (!block(next))
+
         return next
     }
 
