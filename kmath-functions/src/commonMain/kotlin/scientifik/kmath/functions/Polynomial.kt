@@ -8,16 +8,16 @@ import kotlin.contracts.contract
 import kotlin.math.max
 import kotlin.math.pow
 
+// TODO make `inline`, when KT-41771 gets fixed
 /**
  * Polynomial coefficients without fixation on specific context they are applied to
  * @param coefficients constant is the leftmost coefficient
  */
-public inline class Polynomial<T : Any>(public val coefficients: List<T>) {
+public /*inline*/ class Polynomial<T : Any>(public val coefficients: List<T>) {
     public constructor(vararg coefficients: T) : this(coefficients.toList())
 }
 
-public fun Polynomial<Double>.value(): Double =
-    coefficients.reduceIndexed { index: Int, acc: Double, d: Double -> acc + d.pow(index) }
+public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { index, acc, d -> acc + d.pow(index) }
 
 public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring {
     if (coefficients.isEmpty()) return@ring zero
@@ -26,7 +26,7 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring
 
     for (index in 1 until coefficients.size) {
         res += coefficients[index] * powerArg
-        //recalculating power on each step to avoid power costs on long polynomials
+        // recalculating power on each step to avoid power costs on long polynomials
         powerArg *= arg
     }
 

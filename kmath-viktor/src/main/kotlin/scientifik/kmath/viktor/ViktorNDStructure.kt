@@ -26,10 +26,10 @@ public fun F64Array.asStructure(): ViktorNDStructure = ViktorNDStructure(this)
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public class ViktorNDField(public override val shape: IntArray) : NDField<Double, RealField, ViktorNDStructure> {
     public override val zero: ViktorNDStructure
-        get() = F64Array.full(init = 0.0, shape = *shape).asStructure()
+        get() = F64Array.full(init = 0.0, shape = shape).asStructure()
 
     public override val one: ViktorNDStructure
-        get() = F64Array.full(init = 1.0, shape = *shape).asStructure()
+        get() = F64Array.full(init = 1.0, shape = shape).asStructure()
 
     public val strides: Strides = DefaultStrides(shape)
 
