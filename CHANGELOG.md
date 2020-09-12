@@ -27,7 +27,7 @@
 - `power(T, Int)` extension function has preconditions and supports `Field<T>`
 - Memory objects have more preconditions (overflow checking)
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
-- Gradle version: 6.3 -> 6.6
+- Gradle version: 6.3 -> 6.6.1
 - Moved probability distributions to commons-rng and to `kmath-prob`
 
 ### Fixed

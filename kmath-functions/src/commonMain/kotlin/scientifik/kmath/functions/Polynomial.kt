@@ -13,9 +13,9 @@ import kotlin.math.pow
  * Polynomial coefficients without fixation on specific context they are applied to
  * @param coefficients constant is the leftmost coefficient
  */
-public /*inline*/ class Polynomial<T : Any>(public val coefficients: List<T>) {
-    public constructor(vararg coefficients: T) : this(coefficients.toList())
-}
+public inline class Polynomial<T : Any>(public val coefficients: List<T>)
+
+public fun <T : Any> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
 
 public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { index, acc, d -> acc + d.pow(index) }
 

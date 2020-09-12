@@ -10,7 +10,7 @@ public inline class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBu
 
     public override inline fun get(index: Int): Double = flatArray[index]
 
-    override inline fun set(index: Int, value: Double) {
+    public override inline fun set(index: Int, value: Double) {
         flatArray[index] = value
     }
 

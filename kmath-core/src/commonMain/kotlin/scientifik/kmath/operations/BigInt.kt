@@ -255,9 +255,9 @@ public class BigInt internal constructor(
         }
 
         private fun addMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
-            val resultLength: Int = max(mag1.size, mag2.size) + 1
+            val resultLength = max(mag1.size, mag2.size) + 1
             val result = Magnitude(resultLength)
-            var carry: TBase = 0UL
+            var carry = 0uL
 
             for (i in 0 until resultLength - 1) {
                 val res = when {
@@ -265,20 +265,22 @@ public class BigInt internal constructor(
                     i >= mag2.size -> mag1[i].toULong() + carry
                     else -> mag1[i].toULong() + mag2[i].toULong() + carry
                 }
+
                 result[i] = (res and BASE).toUInt()
                 carry = (res shr BASE_SIZE)
             }
+
             result[resultLength - 1] = carry.toUInt()
             return stripLeadingZeros(result)
         }
 
         private fun subtractMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
-            val resultLength: Int = mag1.size
+            val resultLength = mag1.size
             val result = Magnitude(resultLength)
             var carry = 0L
 
             for (i in 0 until resultLength) {
-                var res: Long =
+                var res =
                     if (i < mag2.size) mag1[i].toLong() - mag2[i].toLong() - carry
                     else mag1[i].toLong() - carry
 
@@ -292,9 +294,9 @@ public class BigInt internal constructor(
         }
 
         private fun multiplyMagnitudeByUInt(mag: Magnitude, x: UInt): Magnitude {
-            val resultLength: Int = mag.size + 1
+            val resultLength = mag.size + 1
             val result = Magnitude(resultLength)
-            var carry: ULong = 0UL
+            var carry = 0uL
 
             for (i in mag.indices) {
                 val cur: ULong = carry + mag[i].toULong() * x.toULong()
@@ -307,11 +309,11 @@ public class BigInt internal constructor(
         }
 
         private fun multiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
-            val resultLength: Int = mag1.size + mag2.size
+            val resultLength = mag1.size + mag2.size
             val result = Magnitude(resultLength)
 
             for (i in mag1.indices) {
-                var carry: ULong = 0UL
+                var carry = 0uL
 
                 for (j in mag2.indices) {
                     val cur: ULong = result[i + j].toULong() + mag1[i].toULong() * mag2[j].toULong() + carry
@@ -338,9 +340,7 @@ public class BigInt internal constructor(
 
             return stripLeadingZeros(result)
         }
-
     }
-
 }
 
 private fun stripLeadingZeros(mag: Magnitude): Magnitude {
@@ -366,7 +366,8 @@ public fun Int.toBigInt(): BigInt = BigInt(sign.toByte(), uintArrayOf(kotlin.mat
  * Convert this [Long] to [BigInt]
  */
 public fun Long.toBigInt(): BigInt = BigInt(
-    sign.toByte(), stripLeadingZeros(
+    sign.toByte(),
+    stripLeadingZeros(
         uintArrayOf(
             (kotlin.math.abs(this).toULong() and BASE).toUInt(),
             ((kotlin.math.abs(this).toULong() shr BASE_SIZE) and BASE).toUInt()
@@ -384,7 +385,6 @@ public fun UInt.toBigInt(): BigInt = BigInt(1, uintArrayOf(this))
  */
 public fun ULong.toBigInt(): BigInt = BigInt(
     1,
-
     stripLeadingZeros(
         uintArrayOf(
             (this and BASE).toUInt(),
