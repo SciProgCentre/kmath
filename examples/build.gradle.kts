@@ -32,6 +32,8 @@ dependencies {
     implementation(project(":kmath-koma"))
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
+    implementation(project(":kmath-bignum"))
+    implementation(project(":kmath-memory"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-8")

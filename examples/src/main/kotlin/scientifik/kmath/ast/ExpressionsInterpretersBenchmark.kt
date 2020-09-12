@@ -9,8 +9,9 @@ import scientifik.kmath.operations.RealField
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class ExpressionsInterpretersBenchmark {
+private class ExpressionsInterpretersBenchmark {
     private val algebra: Field<Double> = RealField
+
     fun functionalExpression() {
         val expr = algebra.expressionInField {
             variable("x") * const(2.0) + const(2.0) / variable("x") - const(16.0)
