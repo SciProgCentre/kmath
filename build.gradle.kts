@@ -14,8 +14,18 @@ allprojects {
         maven("https://dl.bintray.com/hotkeytlt/maven")
     }
 
-    group = "scientifik"
+    group = "kscience.kmath"
     version = kmathVersion
+
+    afterEvaluate {
+        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.run {
+            targets.all {
+                sourceSets.all {
+                    languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+                }
+            }
+        }
+    }
 }
 
 subprojects {
