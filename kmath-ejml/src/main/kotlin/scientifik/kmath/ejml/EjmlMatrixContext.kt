@@ -12,34 +12,6 @@ import scientifik.kmath.structures.Matrix
  */
 class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double> {
     /**
-     * Solves for X in the following equation: x = a^-1*b, where 'a' is base matrix and 'b' is an n by p matrix.
-     *
-     * @param a the base matrix.
-     * @param b n by p matrix.
-     * @return the solution for 'x' that is n by p.
-     */
-    fun solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
-        EjmlMatrix(a.toEjml().origin.solve(b.toEjml().origin))
-
-    /**
-     * Solves for X in the following equation: x = a^(-1)*b, where 'a' is base matrix and 'b' is an n by p matrix.
-     *
-     * @param a the base matrix.
-     * @param b n by p vector.
-     * @return the solution for 'x' that is n by p.
-     */
-    fun solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
-        EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
-
-    /**
-     * Returns the inverse of given matrix: b = a^(-1).
-     *
-     * @param a the matrix.
-     * @return the inverse of this matrix.
-     */
-    fun inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())
-
-    /**
      * Converts this matrix to EJML one.
      */
     fun Matrix<Double>.toEjml(): EjmlMatrix =
@@ -52,17 +24,6 @@ class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double
         if (this is EjmlVector) this else EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = get(row) }
         })
-
-    override fun unaryOperation(operation: String, arg: Matrix<Double>): Matrix<Double> = when (operation) {
-        "inverse" -> inverse(arg)
-        else -> super.unaryOperation(operation, arg)
-    }
-
-    override fun binaryOperation(operation: String, left: Matrix<Double>, right: Matrix<Double>): Matrix<Double> =
-        when (operation) {
-            "solve" -> solve(left, right)
-            else -> super.binaryOperation(operation, left, right)
-        }
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
@@ -90,3 +51,31 @@ class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double
 
     companion object
 }
+
+/**
+ * Solves for X in the following equation: x = a^-1*b, where 'a' is base matrix and 'b' is an n by p matrix.
+ *
+ * @param a the base matrix.
+ * @param b n by p matrix.
+ * @return the solution for 'x' that is n by p.
+ */
+fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
+    EjmlMatrix(a.toEjml().origin.solve(b.toEjml().origin))
+
+/**
+ * Solves for X in the following equation: x = a^(-1)*b, where 'a' is base matrix and 'b' is an n by p matrix.
+ *
+ * @param a the base matrix.
+ * @param b n by p vector.
+ * @return the solution for 'x' that is n by p.
+ */
+fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
+    EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
+
+/**
+ * Returns the inverse of given matrix: b = a^(-1).
+ *
+ * @param a the matrix.
+ * @return the inverse of this matrix.
+ */
+fun EjmlMatrixContext.inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())
