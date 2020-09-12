@@ -3,7 +3,7 @@ package scientifik.kmath.bignum
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import scientifik.kmath.operations.Ring
 
-class BigIntegerRing : Ring<BigInteger> {
+object BigIntegerRing : Ring<BigInteger> {
     override val zero: BigInteger
         get() = BigInteger.ZERO
 
