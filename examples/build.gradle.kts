@@ -36,7 +36,7 @@ dependencies {
     implementation(project(":kmath-memory"))
     implementation("com.kyonifer:koma-core-ejml:0.12")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
-    implementation("org.slf4j:slf4j-simple:jar:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
     "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
     "benchmarksImplementation"(sourceSets.main.get().output.plus(sourceSets.main.get().runtimeClasspath))
 }
