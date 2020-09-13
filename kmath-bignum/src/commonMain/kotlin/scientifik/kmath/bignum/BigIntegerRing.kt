@@ -12,10 +12,10 @@ object BigIntegerRing : Ring<BigInteger> {
 
     override fun number(value: Number): BigInteger = BigInteger.fromLong(value.toLong())
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a + b
-    override fun multiply(a: BigInteger, k: Number): BigInteger = a * (number(k))
+    override fun multiply(a: BigInteger, k: Number): BigInteger = a * k.toLong()
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a * b
-    override fun BigInteger.plus(b: Number): BigInteger = plus(number(b))
-    override fun BigInteger.minus(b: Number): BigInteger = minus(number(b))
-    override fun BigInteger.div(k: Number): BigInteger = divide(number(k))
-    override fun BigInteger.times(k: Number): BigInteger = multiply(number(k))
+    override fun BigInteger.plus(b: Number): BigInteger = plus(b.toLong())
+    override fun BigInteger.minus(b: Number): BigInteger = minus(b.toLong())
+    override fun BigInteger.div(k: Number): BigInteger = div(k.toLong())
+    override fun BigInteger.times(k: Number): BigInteger = times(k.toLong())
 }
