@@ -25,7 +25,7 @@ abstract class BigDecimalFieldBase internal constructor(val mode: DecimalMode = 
     override fun BigDecimal.div(k: Number): BigDecimal = divide(number(k), mode)
 
     companion object {
-        internal val DEFAULT_MODE = DecimalMode(16, RoundingMode.ROUND_HALF_AWAY_FROM_ZERO)
+        internal val DEFAULT_MODE = DecimalMode(16, RoundingMode.ROUND_HALF_TOWARDS_ZERO)
     }
 }
 
