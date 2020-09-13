@@ -14,8 +14,6 @@ object BigIntegerRing : Ring<BigInteger> {
     override fun add(a: BigInteger, b: BigInteger): BigInteger = a + b
     override fun multiply(a: BigInteger, k: Number): BigInteger = a * (number(k))
     override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a * b
-    override fun BigInteger.unaryMinus(): BigInteger = negate()
-    override fun BigInteger.minus(b: BigInteger): BigInteger = minus(b)
     override fun BigInteger.plus(b: Number): BigInteger = plus(number(b))
     override fun BigInteger.minus(b: Number): BigInteger = minus(number(b))
     override fun BigInteger.div(k: Number): BigInteger = divide(number(k))
