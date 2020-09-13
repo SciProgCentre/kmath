@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 @State(Scope.Benchmark)
 class BigIntegerBenchmark {
-    var times: Int = 1000000
+    final var times: Int = 1000000
 
     @Benchmark
     fun java() {
