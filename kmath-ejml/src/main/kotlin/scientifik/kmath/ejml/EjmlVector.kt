@@ -2,6 +2,7 @@ package scientifik.kmath.ejml
 
 import org.ejml.simple.SimpleMatrix
 import scientifik.kmath.linear.Point
+import scientifik.kmath.structures.Buffer
 
 /**
  * Represents point over EJML [SimpleMatrix].
@@ -27,4 +28,11 @@ class EjmlVector internal constructor(val origin: SimpleMatrix) : Point<Double> 
 
         override fun hasNext(): Boolean = cursor < origin.numCols() * origin.numRows()
     }
+
+    override fun contentEquals(other: Buffer<*>): Boolean {
+        if (other is EjmlVector) return origin.isIdentical(other.origin, 0.0)
+        return super.contentEquals(other)
+    }
+
+    override fun toString(): String = "EjmlVector(origin=$origin)"
 }
