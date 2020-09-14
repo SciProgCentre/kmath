@@ -24,12 +24,10 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
         get() = intArrayOf(origin.numRows(), origin.numCols())
 
     override val features: Set<MatrixFeature> = hashSetOf(
-        object : DeterminantFeature<Double> {
+        object : LUPDecompositionFeature<Double>, DeterminantFeature<Double> {
             override val determinant: Double
                 get() = origin.determinant()
-        },
 
-        object : LUPDecompositionFeature<Double> {
             private val lup by lazy {
                 val ludecompositionF64 = DecompositionFactory_DDRM.lu(origin.numRows(), origin.numCols())
                     .also { it.decompose(origin.ddrm.copy()) }
@@ -50,7 +48,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
             override val p: FeaturedMatrix<Double>
                 get() = lup.first
         }
-    ).addAll(features)
+    ).addAll(features.orEmpty())
 
     override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
         EjmlMatrix(origin, this.features + features)
