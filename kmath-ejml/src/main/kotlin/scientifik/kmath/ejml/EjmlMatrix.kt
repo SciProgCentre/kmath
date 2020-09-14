@@ -65,4 +65,6 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
         result = 31 * result + features.hashCode()
         return result
     }
+
+    override fun toString(): String = "EjmlMatrix(origin=$origin, features=$features)"
 }
