@@ -23,7 +23,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
     override val shape: IntArray
         get() = intArrayOf(origin.numRows(), origin.numCols())
 
-    override val features: Set<MatrixFeature> = hashSetOf(
+    override val features: Set<MatrixFeature> = setOf(
         object : LUPDecompositionFeature<Double>, DeterminantFeature<Double> {
             override val determinant: Double
                 get() = origin.determinant()
@@ -48,7 +48,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
             override val p: FeaturedMatrix<Double>
                 get() = lup.first
         }
-    ).addAll(features.orEmpty())
+    ) union features.orEmpty()
 
     override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
         EjmlMatrix(origin, this.features + features)
@@ -56,6 +56,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
     override operator fun get(i: Int, j: Int): Double = origin[i, j]
 
     override fun equals(other: Any?): Boolean {
+        if (other is EjmlMatrix) return origin.isIdentical(other.origin, 0.0)
         return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
