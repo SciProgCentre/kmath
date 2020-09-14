@@ -13,9 +13,8 @@ fun main() {
     val realField = NDField.real(dim, dim)
     val complexField = NDField.complex(dim, dim)
 
-
     val realTime = measureTimeMillis {
-        realField.run {
+        realField {
             var res: NDBuffer<Double> = one
             repeat(n) {
                 res += 1.0
@@ -26,17 +25,14 @@ fun main() {
     println("Real addition completed in $realTime millis")
 
     val complexTime = measureTimeMillis {
-        complexField.run {
+        complexField {
             var res: NDBuffer<Complex> = one
-            repeat(n) {
-                res += 1.0
-            }
+            repeat(n) { res += 1.0 }
         }
     }
 
     println("Complex addition completed in $complexTime millis")
 }
-
 
 fun complexExample() {
     //Create a context for 2-d structure with complex values
@@ -46,10 +42,7 @@ fun complexExample() {
             val x = one * 2.5
             operator fun Number.plus(other: Complex) = Complex(this.toDouble() + other.re, other.im)
             //a structure generator specific to this context
-            val matrix = produce { (k, l) ->
-                k + l * i
-            }
-
+            val matrix = produce { (k, l) -> k + l * i }
             //Perform sum
             val sum = matrix + x + 1.0
 

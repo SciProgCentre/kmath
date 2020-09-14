@@ -1,5 +1,8 @@
 package scientifik.memory
 
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+
 /**
  * Represents a display of certain memory structure.
  */
@@ -80,8 +83,12 @@ interface MemoryReader {
 /**
  * Uses the memory for read then releases the reader.
  */
-inline fun Memory.read(block: MemoryReader.() -> Unit) {
-    reader().apply(block).release()
+inline fun <R> Memory.read(block: MemoryReader.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    val reader = reader()
+    val result = reader.block()
+    reader.release()
+    return result
 }
 
 /**
@@ -133,6 +140,7 @@ interface MemoryWriter {
  * Uses the memory for write then releases the writer.
  */
 inline fun Memory.write(block: MemoryWriter.() -> Unit) {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     writer().apply(block).release()
 }
 

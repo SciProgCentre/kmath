@@ -1,5 +1,8 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
+
 /**
  * Specialized [MutableBuffer] implementation over [LongArray].
  *
@@ -8,13 +11,13 @@ package scientifik.kmath.structures
 inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
     override val size: Int get() = array.size
 
-    override fun get(index: Int): Long = array[index]
+    override operator fun get(index: Int): Long = array[index]
 
-    override fun set(index: Int, value: Long) {
+    override operator fun set(index: Int, value: Long) {
         array[index] = value
     }
 
-    override fun iterator(): LongIterator = array.iterator()
+    override operator fun iterator(): LongIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Long> =
         LongBuffer(array.copyOf())
@@ -28,7 +31,10 @@ inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongBuffer(LongArray(size) { init(it) })
+inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer {
+    contract { callsInPlace(init) }
+    return LongBuffer(LongArray(size) { init(it) })
+}
 
 /**
  * Returns a new [LongBuffer] of given elements.

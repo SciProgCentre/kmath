@@ -4,6 +4,9 @@ import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.ComplexField
 import scientifik.kmath.operations.FieldElement
 import scientifik.kmath.operations.complex
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
@@ -15,7 +18,6 @@ class ComplexNDField(override val shape: IntArray) :
     ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>> {
 
     override val strides: Strides = DefaultStrides(shape)
-
     override val elementContext: ComplexField get() = ComplexField
     override val zero: ComplexNDElement by lazy { produce { zero } }
     override val one: ComplexNDElement by lazy { produce { one } }
@@ -45,6 +47,7 @@ class ComplexNDField(override val shape: IntArray) :
         transform: ComplexField.(index: IntArray, Complex) -> Complex
     ): ComplexNDElement {
         check(arg)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(arg.strides.linearSize) { offset ->
@@ -61,6 +64,7 @@ class ComplexNDField(override val shape: IntArray) :
         transform: ComplexField.(Complex, Complex) -> Complex
     ): ComplexNDElement {
         check(a, b)
+
         return BufferedNDFieldElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
@@ -69,23 +73,25 @@ class ComplexNDField(override val shape: IntArray) :
     override fun NDBuffer<Complex>.toElement(): FieldElement<NDBuffer<Complex>, *, out BufferedNDField<Complex, ComplexField>> =
         BufferedNDFieldElement(this@ComplexNDField, buffer)
 
-    override fun power(arg: NDBuffer<Complex>, pow: Number): ComplexNDElement = map(arg) { power(it, pow) }
+    override fun power(arg: NDBuffer<Complex>, pow: Number): ComplexNDElement =
+        map(arg) { power(it, pow) }
 
     override fun exp(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { exp(it) }
-
     override fun ln(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { ln(it) }
 
     override fun sin(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { sin(it) }
-
     override fun cos(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { cos(it) }
-
     override fun tan(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { tan(it) }
-
     override fun asin(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { asin(it) }
-
     override fun acos(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { acos(it) }
-
     override fun atan(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { atan(it) }
+
+    override fun sinh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { sinh(it) }
+    override fun cosh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { cosh(it) }
+    override fun tanh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { tanh(it) }
+    override fun asinh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { asinh(it) }
+    override fun acosh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { acosh(it) }
+    override fun atanh(arg: NDBuffer<Complex>): ComplexNDElement = map(arg) { atanh(it) }
 }
 
 
@@ -107,6 +113,7 @@ inline fun ComplexNDElement.mapIndexed(crossinline transform: ComplexField.(inde
  * Map one [ComplexNDElement] using function without indices.
  */
 inline fun ComplexNDElement.map(crossinline transform: ComplexField.(Complex) -> Complex): ComplexNDElement {
+    contract { callsInPlace(transform) }
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.transform(buffer[offset]) }
     return BufferedNDFieldElement(context, buffer)
 }
@@ -146,5 +153,6 @@ fun NDElement.Companion.complex(vararg shape: Int, initializer: ComplexField.(In
  * Produce a context for n-dimensional operations inside this real field
  */
 inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
-    return NDField.complex(*shape).run(action)
+    contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+    return NDField.complex(*shape).action()
 }

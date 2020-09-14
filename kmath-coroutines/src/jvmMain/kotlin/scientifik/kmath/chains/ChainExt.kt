@@ -1,7 +1,6 @@
 package scientifik.kmath.chains
 
 import kotlinx.coroutines.runBlocking
-import kotlin.sequences.Sequence
 
 /**
  * Represent a chain as regular iterator (uses blocking calls)
@@ -15,6 +14,4 @@ operator fun <R> Chain<R>.iterator(): Iterator<R> = object : Iterator<R> {
 /**
  * Represent a chain as a sequence
  */
-fun <R> Chain<R>.asSequence(): Sequence<R> = object : Sequence<R> {
-    override fun iterator(): Iterator<R> = this@asSequence.iterator()
-}
+fun <R> Chain<R>.asSequence(): Sequence<R> = Sequence { this@asSequence.iterator() }

@@ -4,46 +4,38 @@ import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.invoke
 
 @State(Scope.Benchmark)
 class NDFieldBenchmark {
-
     @Benchmark
     fun autoFieldAdd() {
-        bufferedField.run {
+        bufferedField {
             var res: NDBuffer<Double> = one
-            repeat(n) {
-                res += one
-            }
+            repeat(n) { res += one }
         }
     }
 
     @Benchmark
     fun autoElementAdd() {
         var res = genericField.one
-        repeat(n) {
-            res += 1.0
-        }
+        repeat(n) { res += 1.0 }
     }
 
     @Benchmark
     fun specializedFieldAdd() {
-        specializedField.run {
+        specializedField {
             var res: NDBuffer<Double> = one
-            repeat(n) {
-                res += 1.0
-            }
+            repeat(n) { res += 1.0 }
         }
     }
 
 
     @Benchmark
     fun boxingFieldAdd() {
-        genericField.run {
+        genericField {
             var res: NDBuffer<Double> = one
-            repeat(n) {
-                res += one
-            }
+            repeat(n) { res += one }
         }
     }
 

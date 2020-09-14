@@ -46,11 +46,11 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
         synchronized(this) { bins.put(it.position, it) }
     }
 
-    override fun get(point: Buffer<out Double>): UnivariateBin? = get(point[0])
+    override operator fun get(point: Buffer<out Double>): UnivariateBin? = get(point[0])
 
     override val dimension: Int get() = 1
 
-    override fun iterator(): Iterator<UnivariateBin> = bins.values.iterator()
+    override operator fun iterator(): Iterator<UnivariateBin> = bins.values.iterator()
 
     /**
      * Thread safe put operation
@@ -65,15 +65,14 @@ class UnivariateHistogram private constructor(private val factory: (Double) -> U
     }
 
     companion object {
-        fun uniform(binSize: Double, start: Double = 0.0): UnivariateHistogram {
-            return UnivariateHistogram { value ->
-                val center = start + binSize * floor((value - start) / binSize + 0.5)
-                UnivariateBin(center, binSize)
-            }
+        fun uniform(binSize: Double, start: Double = 0.0): UnivariateHistogram = UnivariateHistogram { value ->
+            val center = start + binSize * floor((value - start) / binSize + 0.5)
+            UnivariateBin(center, binSize)
         }
 
         fun custom(borders: DoubleArray): UnivariateHistogram {
             val sorted = borders.sortedArray()
+
             return UnivariateHistogram { value ->
                 when {
                     value < sorted.first() -> UnivariateBin(

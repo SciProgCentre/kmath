@@ -4,6 +4,8 @@ import scientifik.kmath.operations.Ring
 import scientifik.kmath.structures.Matrix
 import scientifik.kmath.structures.Structure2D
 import scientifik.kmath.structures.asBuffer
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.sqrt
 
 /**
@@ -26,15 +28,17 @@ interface FeaturedMatrix<T : Any> : Matrix<T> {
     companion object
 }
 
-fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> =
-    MatrixContext.real.produce(rows, columns, initializer)
+inline fun Structure2D.Companion.real(rows: Int, columns: Int, initializer: (Int, Int) -> Double): Matrix<Double> {
+    contract { callsInPlace(initializer) }
+    return MatrixContext.real.produce(rows, columns, initializer)
+}
 
 /**
  * Build a square matrix from given elements.
  */
 fun <T : Any> Structure2D.Companion.square(vararg elements: T): FeaturedMatrix<T> {
     val size: Int = sqrt(elements.size.toDouble()).toInt()
-    if (size * size != elements.size) error("The number of elements ${elements.size} is not a full square")
+    require(size * size == elements.size) { "The number of elements ${elements.size} is not a full square" }
     val buffer = elements.asBuffer()
     return BufferMatrix(size, size, buffer)
 }

@@ -1,5 +1,8 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
+
 /**
  * Specialized [MutableBuffer] implementation over [DoubleArray].
  *
@@ -8,13 +11,13 @@ package scientifik.kmath.structures
 inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
-    override fun get(index: Int): Double = array[index]
+    override operator fun get(index: Int): Double = array[index]
 
-    override fun set(index: Int, value: Double) {
+    override operator fun set(index: Int, value: Double) {
         array[index] = value
     }
 
-    override fun iterator(): DoubleIterator = array.iterator()
+    override operator fun iterator(): DoubleIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Double> =
         RealBuffer(array.copyOf())
@@ -27,7 +30,10 @@ inline class RealBuffer(val array: DoubleArray) : MutableBuffer<Double> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun RealBuffer(size: Int, init: (Int) -> Double): RealBuffer = RealBuffer(DoubleArray(size) { init(it) })
+inline fun RealBuffer(size: Int, init: (Int) -> Double): RealBuffer {
+    contract { callsInPlace(init) }
+    return RealBuffer(DoubleArray(size) { init(it) })
+}
 
 /**
  * Returns a new [RealBuffer] of given elements.

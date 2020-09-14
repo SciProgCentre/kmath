@@ -4,6 +4,7 @@ import koma.matrix.ejml.EJMLMatrixFactory
 import scientifik.kmath.commons.linear.CMMatrixContext
 import scientifik.kmath.commons.linear.toCM
 import scientifik.kmath.operations.RealField
+import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.Matrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
@@ -18,7 +19,7 @@ fun main() {
 //    //warmup
 //    matrix1 dot matrix2
 
-    CMMatrixContext.run {
+    CMMatrixContext {
         val cmMatrix1 = matrix1.toCM()
         val cmMatrix2 = matrix2.toCM()
 
@@ -29,8 +30,7 @@ fun main() {
         println("CM implementation time: $cmTime")
     }
 
-
-    KomaMatrixContext(EJMLMatrixFactory(), RealField).run {
+    (KomaMatrixContext(EJMLMatrixFactory(), RealField)) {
         val komaMatrix1 = matrix1.toKoma()
         val komaMatrix2 = matrix2.toKoma()
 

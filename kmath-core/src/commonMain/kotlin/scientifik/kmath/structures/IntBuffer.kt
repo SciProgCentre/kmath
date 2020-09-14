@@ -1,5 +1,9 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+
 /**
  * Specialized [MutableBuffer] implementation over [IntArray].
  *
@@ -8,17 +12,16 @@ package scientifik.kmath.structures
 inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
-    override fun get(index: Int): Int = array[index]
+    override operator fun get(index: Int): Int = array[index]
 
-    override fun set(index: Int, value: Int) {
+    override operator fun set(index: Int, value: Int) {
         array[index] = value
     }
 
-    override fun iterator(): IntIterator = array.iterator()
+    override operator fun iterator(): IntIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Int> =
         IntBuffer(array.copyOf())
-
 }
 
 /**
@@ -28,7 +31,10 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
+inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer {
+    contract { callsInPlace(init) }
+    return IntBuffer(IntArray(size) { init(it) })
+}
 
 /**
  * Returns a new [IntBuffer] of given elements.

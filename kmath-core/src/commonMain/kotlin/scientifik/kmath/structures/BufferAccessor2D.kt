@@ -6,7 +6,6 @@ import kotlin.reflect.KClass
  * A context that allows to operate on a [MutableBuffer] as on 2d array
  */
 class BufferAccessor2D<T : Any>(val type: KClass<T>, val rowNum: Int, val colNum: Int) {
-
     operator fun Buffer<T>.get(i: Int, j: Int): T = get(i + colNum * j)
 
     operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
@@ -26,15 +25,14 @@ class BufferAccessor2D<T : Any>(val type: KClass<T>, val rowNum: Int, val colNum
     inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
         override val size: Int get() = colNum
 
-        override fun get(index: Int): T = buffer[rowIndex, index]
+        override operator fun get(index: Int): T = buffer[rowIndex, index]
 
-        override fun set(index: Int, value: T) {
+        override operator fun set(index: Int, value: T) {
             buffer[rowIndex, index] = value
         }
 
         override fun copy(): MutableBuffer<T> = MutableBuffer.auto(type, colNum) { get(it) }
-
-        override fun iterator(): Iterator<T> = (0 until colNum).map(::get).iterator()
+        override operator fun iterator(): Iterator<T> = (0 until colNum).map(::get).iterator()
 
     }
 

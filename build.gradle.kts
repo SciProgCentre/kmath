@@ -1,8 +1,9 @@
 plugins {
     id("scientifik.publish") apply false
+    id("org.jetbrains.changelog") version "0.4.0"
 }
 
-val kmathVersion by extra("0.1.4-dev-8")
+val kmathVersion by extra("0.1.4")
 
 val bintrayRepo by extra("scientifik")
 val githubProject by extra("kmath")
@@ -14,8 +15,18 @@ allprojects {
         maven("https://dl.bintray.com/hotkeytlt/maven")
     }
 
-    group = "scientifik"
+    group = "kscience.kmath"
     version = kmathVersion
+
+    afterEvaluate {
+        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.run {
+            targets.all {
+                sourceSets.all {
+                    languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+                }
+            }
+        }
+    }
 }
 
 subprojects {
