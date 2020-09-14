@@ -1,5 +1,6 @@
 plugins {
     id("scientifik.publish") apply false
+    id("org.jetbrains.changelog") version "0.4.0"
 }
 
 val kmathVersion by extra("0.1.4")
