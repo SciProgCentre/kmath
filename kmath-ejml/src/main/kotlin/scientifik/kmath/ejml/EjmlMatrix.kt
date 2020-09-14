@@ -23,7 +23,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
     override val shape: IntArray
         get() = intArrayOf(origin.numRows(), origin.numCols())
 
-    override val features: Set<MatrixFeature> = features ?: hashSetOf(
+    override val features: Set<MatrixFeature> = hashSetOf(
         object : DeterminantFeature<Double> {
             override val determinant: Double
                 get() = origin.determinant()
@@ -50,7 +50,7 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
             override val p: FeaturedMatrix<Double>
                 get() = lup.first
         }
-    )
+    ).addAll(features)
 
     override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
         EjmlMatrix(origin, this.features + features)
