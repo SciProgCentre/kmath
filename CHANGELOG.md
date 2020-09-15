@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
 
 ### Changed
 
@@ -30,7 +31,6 @@
 - Blocking chains in `kmath-coroutines`
 - Full hyperbolic functions support and default implementations within `ExtendedField`
 - Norm support for `Complex`
-- ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
 
 ### Changed
 - `readAsMemory` now has `throws IOException` in JVM signature.
