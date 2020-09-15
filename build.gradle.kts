@@ -1,6 +1,6 @@
 plugins { id("ru.mipt.npm.publish") apply false }
 
-val kmathVersion: String by extra("0.1.4-dev-8")
+val kmathVersion: String by extra("0.1.4")
 val bintrayRepo: String by extra("scientifik")
 val githubProject: String by extra("kmath")
 
