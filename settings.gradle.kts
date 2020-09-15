@@ -1,6 +1,6 @@
 pluginManagement {
 
-    val toolsVersion = "0.5.0"
+    val toolsVersion = "0.5.2"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-8"
@@ -19,14 +19,6 @@ pluginManagement {
         maven("https://dl.bintray.com/mipt-npm/scientifik")
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
-    }
-
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "scientifik.mpp", "scientifik.jvm", "scientifik.publish" -> useModule("scientifik:gradle-tools:$toolsVersion")
-            }
-        }
     }
 }
 
