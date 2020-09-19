@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.KSciencePublishPlugin
+
 plugins { id("ru.mipt.npm.publish") apply false }
 
 val kmathVersion: String by extra("0.1.4")
@@ -15,4 +17,4 @@ allprojects {
     version = kmathVersion
 }
 
-subprojects { if (name.startsWith("kmath")) apply(plugin = "ru.mipt.npm.publish") }
+subprojects { if (name.startsWith("kmath")) apply<KSciencePublishPlugin>() }

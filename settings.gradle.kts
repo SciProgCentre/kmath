@@ -1,12 +1,12 @@
 pluginManagement {
-    val toolsVersion = "0.6.0-dev-5"
+    val toolsVersion = "0.6.0"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"
         id("ru.mipt.npm.mpp") version toolsVersion
         id("ru.mipt.npm.jvm") version toolsVersion
         id("ru.mipt.npm.publish") version toolsVersion
-        kotlin("plugin.allopen") version "1.4.20-dev-3898-14"
+        kotlin("plugin.allopen") version "1.4.10"
     }
 
     repositories {

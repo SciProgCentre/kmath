@@ -8,14 +8,21 @@ import kotlin.contracts.contract
 import kotlin.math.max
 import kotlin.math.pow
 
-// TODO make `inline`, when KT-41771 gets fixed
 /**
  * Polynomial coefficients without fixation on specific context they are applied to
  * @param coefficients constant is the leftmost coefficient
  */
 public inline class Polynomial<T : Any>(public val coefficients: List<T>)
 
+/**
+ * Constructs a [Polynomial] with given [coefficients].
+ */
 public fun <T : Any> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
+
+/**
+ * Constructs a [Polynomial] with given [coefficients].
+ */
+public fun <T : Any> Polynomial(coefficients: Iterable<T>): Polynomial<T> = Polynomial(coefficients.toList())
 
 public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { index, acc, d -> acc + d.pow(index) }
 
@@ -50,7 +57,7 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
  * An algebra for polynomials
  */
 public class PolynomialSpace<T : Any, C : Ring<T>>(public val ring: C) : Space<Polynomial<T>> {
-    public override val zero: Polynomial<T> = Polynomial(emptyList())
+    public override val zero: Polynomial<T> by lazy { Polynomial(emptyList()) }
 
     public override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
         val dim = max(a.coefficients.size, b.coefficients.size)

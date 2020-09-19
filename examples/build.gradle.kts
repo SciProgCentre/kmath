@@ -1,9 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
     kotlin("jvm")
-    kotlin("plugin.allopen") version "1.4.20-dev-3898-14"
+    kotlin("plugin.allopen") version "1.4.10"
     id("kotlinx.benchmark") version "0.2.0-dev-20"
 }
 
@@ -28,15 +27,14 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.2.0-npm-dev-6")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
-    "benchmarksCompile"(sourceSets.main.get().output + sourceSets.main.get().compileClasspath) //sourceSets.main.output + sourceSets.main.runtimeClasspath
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+    "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
+    "benchmarksImplementation"(sourceSets.main.get().output + sourceSets.main.get().runtimeClasspath)
 }
 
 // Configure benchmark
 benchmark {
-    // Setup configurations
-    targets
-        // This one matches sourceSet name above
-        .register("benchmarks")
+    targets.register("benchmarks")
 
     configurations.register("fast") {
         warmups = 5 // number of warmup iterations
