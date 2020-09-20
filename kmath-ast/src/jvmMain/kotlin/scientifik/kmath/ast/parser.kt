@@ -16,8 +16,7 @@ import scientifik.kmath.operations.RingOperations
 import scientifik.kmath.operations.SpaceOperations
 
 /**
- * TODO move to core
- *
+ * TODO move to common after IR version is released
  * @author Alexander Nozik and Iaroslav Postovalov
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
@@ -37,14 +36,14 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
     private val singular: Parser<MST> by id use { MST.Symbolic(text) }
 
-    private val unaryFunction: Parser<MST> by (id and -lpar and parser(::subSumChain) and -rpar)
+    private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }
 
     private val binaryFunction: Parser<MST> by id
         .and(-lpar)
-        .and(parser(::subSumChain))
+        .and(parser(ArithmeticsEvaluator::subSumChain))
         .and(-comma)
-        .and(parser(::subSumChain))
+        .and(parser(ArithmeticsEvaluator::subSumChain))
         .and(-rpar)
         .map { (id, left, right) -> MST.Binary(id.text, left, right) }
 
@@ -52,8 +51,8 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
-        .or(-minus and parser(::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
-        .or(-lpar and parser(::subSumChain) and -rpar)
+        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
+        .or(-lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
 
     private val powChain: Parser<MST> by leftAssociative(term = term, operator = pow) { a, _, b ->
         MST.Binary(PowerOperations.POW_OPERATION, a, b)
