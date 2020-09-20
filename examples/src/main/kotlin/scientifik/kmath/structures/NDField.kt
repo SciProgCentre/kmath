@@ -3,7 +3,6 @@ package scientifik.kmath.structures
 import kotlinx.coroutines.GlobalScope
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.invoke
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis

@@ -1,6 +1,5 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.experimental.and
 

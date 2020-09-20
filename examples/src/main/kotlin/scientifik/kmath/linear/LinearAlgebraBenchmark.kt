@@ -8,11 +8,9 @@ import scientifik.kmath.ejml.inverse
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.invoke
 import scientifik.kmath.structures.Matrix
-import kotlin.contracts.ExperimentalContracts
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-@ExperimentalContracts
 fun main() {
     val random = Random(1224)
     val dim = 100

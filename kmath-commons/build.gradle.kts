@@ -1,4 +1,7 @@
-plugins { id("scientifik.jvm") }
+plugins {
+    id("scientifik.jvm")
+}
+
 description = "Commons math binding for kmath"
 
 dependencies {
@@ -8,5 +11,3 @@ dependencies {
     api(project(":kmath-functions"))
     api("org.apache.commons:commons-math3:3.6.1")
 }
-
-kotlin.sourceSets.all { languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts") }
