@@ -6,8 +6,7 @@ import scientifik.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
-class LinearInterpolatorTest {
+internal class LinearInterpolatorTest {
     @Test
     fun testInterpolation() {
         val data = listOf(
@@ -16,9 +15,9 @@ class LinearInterpolatorTest {
             2.0 to 3.0,
             3.0 to 4.0
         )
+
         val polynomial: PiecewisePolynomial<Double> = LinearInterpolator(RealField).interpolatePolynomials(data)
         val function = polynomial.asFunction(RealField)
-
         assertEquals(null, function(-1.0))
         assertEquals(0.5, function(0.5))
         assertEquals(2.0, function(1.5))

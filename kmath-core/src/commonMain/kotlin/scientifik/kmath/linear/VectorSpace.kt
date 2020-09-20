@@ -10,12 +10,12 @@ import scientifik.kmath.structures.BufferFactory
  * A linear space for vectors.
  * Could be used on any point-like structure
  */
-interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
-    val size: Int
-    val space: S
+public interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
+    public val size: Int
+    public val space: S
     override val zero: Point<T> get() = produce { space.zero }
 
-    fun produce(initializer: (Int) -> T): Point<T>
+    public fun produce(initializer: (Int) -> T): Point<T>
 
     /**
      * Produce a space-element of this vector space for expressions
@@ -28,13 +28,13 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 
     //TODO add basis
 
-    companion object {
+    public companion object {
         private val realSpaceCache: MutableMap<Int, BufferVectorSpace<Double, RealField>> = hashMapOf()
 
         /**
          * Non-boxing double vector space
          */
-        fun real(size: Int): BufferVectorSpace<Double, RealField> = realSpaceCache.getOrPut(size) {
+        public fun real(size: Int): BufferVectorSpace<Double, RealField> = realSpaceCache.getOrPut(size) {
             BufferVectorSpace(
                 size,
                 RealField,
@@ -45,7 +45,7 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         /**
          * A structured vector space with custom buffer
          */
-        fun <T : Any, S : Space<T>> buffered(
+        public fun <T : Any, S : Space<T>> buffered(
             size: Int,
             space: S,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
@@ -54,16 +54,16 @@ interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         /**
          * Automatic buffered vector, unboxed if it is possible
          */
-        inline fun <reified T : Any, S : Space<T>> auto(size: Int, space: S): VectorSpace<T, S> =
+        public inline fun <reified T : Any, S : Space<T>> auto(size: Int, space: S): VectorSpace<T, S> =
             buffered(size, space, Buffer.Companion::auto)
     }
 }
 
 
-class BufferVectorSpace<T : Any, S : Space<T>>(
+public class BufferVectorSpace<T : Any, S : Space<T>>(
     override val size: Int,
     override val space: S,
-    val bufferFactory: BufferFactory<T>
+    public val bufferFactory: BufferFactory<T>
 ) : VectorSpace<T, S> {
     override fun produce(initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
     //override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))

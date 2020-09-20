@@ -1,3 +1,4 @@
+plugins { id("ru.mipt.npm.publish") apply false }
 plugins {
     id("scientifik.publish") apply false
     id("org.jetbrains.changelog") version "0.4.0"
@@ -17,20 +18,6 @@ allprojects {
 
     group = "kscience.kmath"
     version = kmathVersion
-
-    afterEvaluate {
-        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.run {
-            targets.all {
-                sourceSets.all {
-                    languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-                }
-            }
-        }
-    }
 }
 
-subprojects {
-    if (name.startsWith("kmath")) {
-        apply(plugin = "scientifik.publish")
-    }
-}
+subprojects { if (name.startsWith("kmath")) apply(plugin = "ru.mipt.npm.publish") }

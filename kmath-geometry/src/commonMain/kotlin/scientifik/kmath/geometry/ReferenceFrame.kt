@@ -1,4 +1,3 @@
 package scientifik.kmath.geometry
 
-interface ReferenceFrame {
-}
+public interface ReferenceFrame

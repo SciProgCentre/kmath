@@ -7,7 +7,7 @@ package scientifik.kmath.operations
  * @param data the iterable to sum up.
  * @return the sum.
  */
-fun <T> Space<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> add(left, right) }
+public fun <T> Space<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> add(left, right) }
 
 /**
  * Returns the sum of all elements in the sequence in this [Space].
@@ -16,7 +16,7 @@ fun <T> Space<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> ad
  * @param data the sequence to sum up.
  * @return the sum.
  */
-fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> add(left, right) }
+public fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> add(left, right) }
 
 /**
  * Returns an average value of elements in the iterable in this [Space].
@@ -25,7 +25,7 @@ fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> ad
  * @param data the iterable to find average.
  * @return the average value.
  */
-fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
+public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
 
 /**
  * Returns an average value of elements in the sequence in this [Space].
@@ -34,7 +34,7 @@ fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
  * @param data the sequence to find average.
  * @return the average value.
  */
-fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
+public fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
 
 /**
  * Returns the sum of all elements in the iterable in provided space.
@@ -43,7 +43,7 @@ fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
  * @param space the algebra that provides addition.
  * @return the sum.
  */
-fun <T> Iterable<T>.sumWith(space: Space<T>): T = space.sum(this)
+public fun <T> Iterable<T>.sumWith(space: Space<T>): T = space.sum(this)
 
 /**
  * Returns the sum of all elements in the sequence in provided space.
@@ -52,7 +52,7 @@ fun <T> Iterable<T>.sumWith(space: Space<T>): T = space.sum(this)
  * @param space the algebra that provides addition.
  * @return the sum.
  */
-fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
+public fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
 
 /**
  * Returns an average value of elements in the iterable in this [Space].
@@ -61,7 +61,7 @@ fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
  * @param space the algebra that provides addition and division.
  * @return the average value.
  */
-fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
+public fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
 
 /**
  * Returns an average value of elements in the sequence in this [Space].
@@ -70,7 +70,7 @@ fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
  * @param space the algebra that provides addition and division.
  * @return the average value.
  */
-fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
+public fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
 
 //TODO optimized power operation
 
@@ -82,7 +82,7 @@ fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
  * @param power the exponent.
  * @return the base raised to the power.
  */
-fun <T> Ring<T>.power(arg: T, power: Int): T {
+public fun <T> Ring<T>.power(arg: T, power: Int): T {
     require(power >= 0) { "The power can't be negative." }
     require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
     if (power == 0) return one
@@ -99,7 +99,7 @@ fun <T> Ring<T>.power(arg: T, power: Int): T {
  * @param power the exponent.
  * @return the base raised to the power.
  */
-fun <T> Field<T>.power(arg: T, power: Int): T {
+public fun <T> Field<T>.power(arg: T, power: Int): T {
     require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
     if (power == 0) return one
     if (power < 0) return one / (this as Ring<T>).power(arg, -power)

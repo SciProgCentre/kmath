@@ -7,20 +7,20 @@ import scientifik.kmath.operations.RealField
 /**
  * A Mathematical Syntax Tree node for mathematical expressions.
  */
-sealed class MST {
+public sealed class MST {
     /**
      * A node containing raw string.
      *
      * @property value the value of this node.
      */
-    data class Symbolic(val value: String) : MST()
+    public data class Symbolic(val value: String) : MST()
 
     /**
      * A node containing a numeric value or scalar.
      *
      * @property value the value of this number.
      */
-    data class Numeric(val value: Number) : MST()
+    public data class Numeric(val value: Number) : MST()
 
     /**
      * A node containing an unary operation.
@@ -28,9 +28,7 @@ sealed class MST {
      * @property operation the identifier of operation.
      * @property value the argument of this operation.
      */
-    data class Unary(val operation: String, val value: MST) : MST() {
-        companion object
-    }
+    public data class Unary(val operation: String, val value: MST) : MST()
 
     /**
      * A node containing binary operation.
@@ -39,9 +37,7 @@ sealed class MST {
      * @property left the left operand.
      * @property right the right operand.
      */
-    data class Binary(val operation: String, val left: MST, val right: MST) : MST() {
-        companion object
-    }
+    public data class Binary(val operation: String, val left: MST, val right: MST) : MST()
 }
 
 // TODO add a function with named arguments
@@ -53,7 +49,7 @@ sealed class MST {
  * @param node the node to evaluate.
  * @return the value of expression.
  */
-fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
+public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
     is MST.Symbolic -> symbol(node.value)
@@ -84,4 +80,4 @@ fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
  * @param algebra the algebra that provides operations.
  * @return the value of expression.
  */
-fun <T> MST.interpret(algebra: Algebra<T>): T = algebra.evaluate(this)
+public fun <T> MST.interpret(algebra: Algebra<T>): T = algebra.evaluate(this)

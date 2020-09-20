@@ -3,19 +3,17 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.RingElement
 import scientifik.kmath.operations.ShortRing
 
+public typealias ShortNDElement = BufferedNDRingElement<Short, ShortRing>
 
-typealias ShortNDElement = BufferedNDRingElement<Short, ShortRing>
-
-class ShortNDRing(override val shape: IntArray) :
+public class ShortNDRing(override val shape: IntArray) :
     BufferedNDRing<Short, ShortRing> {
 
     override val strides: Strides = DefaultStrides(shape)
-
     override val elementContext: ShortRing get() = ShortRing
     override val zero: ShortNDElement by lazy { produce { zero } }
     override val one: ShortNDElement by lazy { produce { one } }
 
-    inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Short): Buffer<Short> =
+    public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Short): Buffer<Short> =
         ShortBuffer(ShortArray(size) { initializer(it) })
 
     /**
@@ -70,15 +68,13 @@ class ShortNDRing(override val shape: IntArray) :
 /**
  * Fast element production using function inlining.
  */
-inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): ShortNDElement {
-    val array = ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }
-    return BufferedNDRingElement(this, ShortBuffer(array))
-}
+public inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): ShortNDElement =
+    BufferedNDRingElement(this, ShortBuffer(ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }))
 
 /**
  * Element by element application of any operation on elements to the whole array.
  */
-operator fun Function1<Short, Short>.invoke(ndElement: ShortNDElement): ShortNDElement =
+public operator fun Function1<Short, Short>.invoke(ndElement: ShortNDElement): ShortNDElement =
     ndElement.context.produceInline { i -> invoke(ndElement.buffer[i]) }
 
 
@@ -87,11 +83,11 @@ operator fun Function1<Short, Short>.invoke(ndElement: ShortNDElement): ShortNDE
 /**
  * Summation operation for [ShortNDElement] and single element.
  */
-operator fun ShortNDElement.plus(arg: Short): ShortNDElement =
+public operator fun ShortNDElement.plus(arg: Short): ShortNDElement =
     context.produceInline { i -> (buffer[i] + arg).toShort() }
 
 /**
  * Subtraction operation between [ShortNDElement] and single element.
  */
-operator fun ShortNDElement.minus(arg: Short): ShortNDElement =
+public operator fun ShortNDElement.minus(arg: Short): ShortNDElement =
     context.produceInline { i -> (buffer[i] - arg).toShort() }

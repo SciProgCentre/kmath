@@ -3,10 +3,10 @@ package scientifik.kmath.chains
 /**
  * Performance optimized chain for real values
  */
-abstract class BlockingRealChain : Chain<Double> {
-    abstract fun nextDouble(): Double
+public abstract class BlockingRealChain : Chain<Double> {
+    public abstract fun nextDouble(): Double
 
     override suspend fun next(): Double = nextDouble()
 
-    fun nextBlock(size: Int): DoubleArray = DoubleArray(size) { nextDouble() }
+    public fun nextBlock(size: Int): DoubleArray = DoubleArray(size) { nextDouble() }
 }

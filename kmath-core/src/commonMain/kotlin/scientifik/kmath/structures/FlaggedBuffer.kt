@@ -1,7 +1,5 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import kotlin.experimental.and
 
 /**
@@ -9,7 +7,7 @@ import kotlin.experimental.and
  *
  * @property mask bit mask value of this flag.
  */
-enum class ValueFlag(val mask: Byte) {
+public enum class ValueFlag(public val mask: Byte) {
     /**
      * Reports the value is NaN.
      */
@@ -34,23 +32,23 @@ enum class ValueFlag(val mask: Byte) {
 /**
  * A buffer with flagged values.
  */
-interface FlaggedBuffer<T> : Buffer<T> {
-    fun getFlag(index: Int): Byte
+public interface FlaggedBuffer<T> : Buffer<T> {
+    public fun getFlag(index: Int): Byte
 }
 
 /**
  * The value is valid if all flags are down
  */
-fun FlaggedBuffer<*>.isValid(index: Int): Boolean = getFlag(index) != 0.toByte()
+public fun FlaggedBuffer<*>.isValid(index: Int): Boolean = getFlag(index) != 0.toByte()
 
-fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (getFlag(index) and flag.mask) != 0.toByte()
+public fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (getFlag(index) and flag.mask) != 0.toByte()
 
-fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
+public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
 
 /**
  * A real buffer which supports flags for each value like NaN or Missing
  */
-class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : FlaggedBuffer<Double?>, Buffer<Double?> {
+public class FlaggedRealBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>, Buffer<Double?> {
     init {
         require(values.size == flags.size) { "Values and flags must have the same dimensions" }
     }
@@ -66,9 +64,7 @@ class FlaggedRealBuffer(val values: DoubleArray, val flags: ByteArray) : Flagged
     }.iterator()
 }
 
-inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
-    contract { callsInPlace(block) }
-
+public inline fun FlaggedRealBuffer.forEachValid(block: (Double) -> Unit) {
     indices
         .asSequence()
         .filter(::isValid)

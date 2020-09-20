@@ -5,11 +5,11 @@ package scientifik.kmath.operations
  *
  * @param C the type of mathematical context for this element.
  */
-interface MathElement<C> {
+public interface MathElement<C> {
     /**
      * The context this element belongs to.
      */
-    val context: C
+    public val context: C
 }
 
 /**
@@ -18,16 +18,16 @@ interface MathElement<C> {
  * @param T the type wrapped by this wrapper.
  * @param I the type of this wrapper.
  */
-interface MathWrapper<T, I> {
+public interface MathWrapper<T, I> {
     /**
      * Unwraps [I] to [T].
      */
-    fun unwrap(): T
+    public fun unwrap(): T
 
     /**
      * Wraps [T] to [I].
      */
-    fun T.wrap(): I
+    public fun T.wrap(): I
 }
 
 /**
@@ -37,14 +37,14 @@ interface MathWrapper<T, I> {
  * @param I self type of the element. Needed for static type checking.
  * @param S the type of space.
  */
-interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement<S>, MathWrapper<T, I> {
+public interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement<S>, MathWrapper<T, I> {
     /**
      * Adds element to this one.
      *
      * @param b the augend.
      * @return the sum.
      */
-    operator fun plus(b: T): I = context.add(unwrap(), b).wrap()
+    public operator fun plus(b: T): I = context.add(unwrap(), b).wrap()
 
     /**
      * Subtracts element from this one.
@@ -52,7 +52,7 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
      * @param b the subtrahend.
      * @return the difference.
      */
-    operator fun minus(b: T): I = context.add(unwrap(), context.multiply(b, -1.0)).wrap()
+    public operator fun minus(b: T): I = context.add(unwrap(), context.multiply(b, -1.0)).wrap()
 
     /**
      * Multiplies this element by number.
@@ -60,7 +60,7 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
      * @param k the multiplicand.
      * @return the product.
      */
-    operator fun times(k: Number): I = context.multiply(unwrap(), k.toDouble()).wrap()
+    public operator fun times(k: Number): I = context.multiply(unwrap(), k.toDouble()).wrap()
 
     /**
      * Divides this element by number.
@@ -68,7 +68,7 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
      * @param k the divisor.
      * @return the quotient.
      */
-    operator fun div(k: Number): I = context.multiply(unwrap(), 1.0 / k.toDouble()).wrap()
+    public operator fun div(k: Number): I = context.multiply(unwrap(), 1.0 / k.toDouble()).wrap()
 }
 
 /**
@@ -78,14 +78,14 @@ interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : MathElement
  * @param I self type of the element. Needed for static type checking.
  * @param R the type of space.
  */
-interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T, I, R> {
+public interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T, I, R> {
     /**
      * Multiplies this element by another one.
      *
      * @param b the multiplicand.
      * @return the product.
      */
-    operator fun times(b: T): I = context.multiply(unwrap(), b).wrap()
+    public operator fun times(b: T): I = context.multiply(unwrap(), b).wrap()
 }
 
 /**
@@ -95,7 +95,7 @@ interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T
  * @param I self type of the element. Needed for static type checking.
  * @param F the type of field.
  */
-interface FieldElement<T, I : FieldElement<T, I, F>, F : Field<T>> : RingElement<T, I, F> {
+public interface FieldElement<T, I : FieldElement<T, I, F>, F : Field<T>> : RingElement<T, I, F> {
     override val context: F
 
     /**
@@ -104,5 +104,5 @@ interface FieldElement<T, I : FieldElement<T, I, F>, F : Field<T>> : RingElement
      * @param b the divisor.
      * @return the quotient.
      */
-    operator fun div(b: T): I = context.divide(unwrap(), b).wrap()
+    public operator fun div(b: T): I = context.divide(unwrap(), b).wrap()
 }

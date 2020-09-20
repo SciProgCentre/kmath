@@ -9,7 +9,7 @@ import scientifik.kmath.operations.ExtendedField
  * @param N the type of ND structure.
  * @param F the extended field of structure elements.
  */
-interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> : NDField<T, F, N>, ExtendedField<N>
+public interface ExtendedNDField<T : Any, F : ExtendedField<T>, N : NDStructure<T>> : NDField<T, F, N>, ExtendedField<N>
 
 ///**
 // * NDField that supports [ExtendedField] operations on its elements

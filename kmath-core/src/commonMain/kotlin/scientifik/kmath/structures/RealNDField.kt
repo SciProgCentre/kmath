@@ -3,9 +3,9 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.FieldElement
 import scientifik.kmath.operations.RealField
 
-typealias RealNDElement = BufferedNDFieldElement<Double, RealField>
+public typealias RealNDElement = BufferedNDFieldElement<Double, RealField>
 
-class RealNDField(override val shape: IntArray) :
+public class RealNDField(override val shape: IntArray) :
     BufferedNDField<Double, RealField>,
     ExtendedNDField<Double, RealField, NDBuffer<Double>> {
 
@@ -15,7 +15,7 @@ class RealNDField(override val shape: IntArray) :
     override val zero: RealNDElement by lazy { produce { zero } }
     override val one: RealNDElement by lazy { produce { one } }
 
-    inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
+    public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
         RealBuffer(DoubleArray(size) { initializer(it) })
 
     /**
@@ -90,7 +90,7 @@ class RealNDField(override val shape: IntArray) :
 /**
  * Fast element production using function inlining
  */
-inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
+public inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.initializer(offset) }
     return BufferedNDFieldElement(this, RealBuffer(array))
 }
@@ -98,13 +98,13 @@ inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initiali
 /**
  * Map one [RealNDElement] using function with indices.
  */
-inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double): RealNDElement =
+public inline fun RealNDElement.mapIndexed(crossinline transform: RealField.(index: IntArray, Double) -> Double): RealNDElement =
     context.produceInline { offset -> transform(strides.index(offset), buffer[offset]) }
 
 /**
  * Map one [RealNDElement] using function without indices.
  */
-inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
+public inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double): RealNDElement {
     val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }
     return BufferedNDFieldElement(context, RealBuffer(array))
 }
@@ -112,26 +112,22 @@ inline fun RealNDElement.map(crossinline transform: RealField.(Double) -> Double
 /**
  * Element by element application of any operation on elements to the whole array. Just like in numpy.
  */
-operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement): RealNDElement =
+public operator fun Function1<Double, Double>.invoke(ndElement: RealNDElement): RealNDElement =
     ndElement.map { this@invoke(it) }
-
 
 /* plus and minus */
 
 /**
  * Summation operation for [BufferedNDElement] and single element
  */
-operator fun RealNDElement.plus(arg: Double): RealNDElement =
-    map { it + arg }
+public operator fun RealNDElement.plus(arg: Double): RealNDElement = map { it + arg }
 
 /**
  * Subtraction operation between [BufferedNDElement] and single element
  */
-operator fun RealNDElement.minus(arg: Double): RealNDElement =
-    map { it - arg }
+public operator fun RealNDElement.minus(arg: Double): RealNDElement = map { it - arg }
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-
-inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R = NDField.real(*shape).run(action)
+public inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R = NDField.real(*shape).run(action)

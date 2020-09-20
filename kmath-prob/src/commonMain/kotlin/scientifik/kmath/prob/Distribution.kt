@@ -5,19 +5,19 @@ import scientifik.kmath.chains.collect
 import scientifik.kmath.structures.Buffer
 import scientifik.kmath.structures.BufferFactory
 
-interface Sampler<T : Any> {
-    fun sample(generator: RandomGenerator): Chain<T>
+public interface Sampler<T : Any> {
+    public fun sample(generator: RandomGenerator): Chain<T>
 }
 
 /**
  * A distribution of typed objects
  */
-interface Distribution<T : Any> : Sampler<T> {
+public interface Distribution<T : Any> : Sampler<T> {
     /**
      * A probability value for given argument [arg].
      * For continuous distributions returns PDF
      */
-    fun probability(arg: T): Double
+    public fun probability(arg: T): Double
 
     /**
      * Create a chain of samples from this distribution.
@@ -28,20 +28,20 @@ interface Distribution<T : Any> : Sampler<T> {
     /**
      * An empty companion. Distribution factories should be written as its extensions
      */
-    companion object
+    public companion object
 }
 
-interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
+public interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
     /**
      * Cumulative distribution for ordered parameter (CDF)
      */
-    fun cumulative(arg: T): Double
+    public fun cumulative(arg: T): Double
 }
 
 /**
  * Compute probability integral in an interval
  */
-fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Double {
+public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Double {
     require(to > from)
     return cumulative(to) - cumulative(from)
 }
@@ -49,7 +49,7 @@ fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Doub
 /**
  * Sample a bunch of values
  */
-fun <T : Any> Sampler<T>.sampleBuffer(
+public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
     bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
@@ -57,6 +57,7 @@ fun <T : Any> Sampler<T>.sampleBuffer(
     require(size > 1)
     //creating temporary storage once
     val tmp = ArrayList<T>(size)
+
     return sample(generator).collect { chain ->
         //clear list from previous run
         tmp.clear()
@@ -72,5 +73,5 @@ fun <T : Any> Sampler<T>.sampleBuffer(
 /**
  * Generate a bunch of samples from real distributions
  */
-fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int) =
+public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
     sampleBuffer(generator, size, Buffer.Companion::real)

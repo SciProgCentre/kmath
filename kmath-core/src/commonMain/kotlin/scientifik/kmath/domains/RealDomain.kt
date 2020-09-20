@@ -22,8 +22,8 @@ import scientifik.kmath.linear.Point
  *
  * @author Alexander Nozik
  */
-interface RealDomain : Domain<Double> {
-    fun nearestInDomain(point: Point<Double>): Point<Double>
+public interface RealDomain : Domain<Double> {
+    public fun nearestInDomain(point: Point<Double>): Point<Double>
 
     /**
      * The lower edge for the domain going down from point
@@ -31,7 +31,7 @@ interface RealDomain : Domain<Double> {
      * @param point
      * @return
      */
-    fun getLowerBound(num: Int, point: Point<Double>): Double?
+    public fun getLowerBound(num: Int, point: Point<Double>): Double?
 
     /**
      * The upper edge of the domain going up from point
@@ -39,25 +39,25 @@ interface RealDomain : Domain<Double> {
      * @param point
      * @return
      */
-    fun getUpperBound(num: Int, point: Point<Double>): Double?
+    public fun getUpperBound(num: Int, point: Point<Double>): Double?
 
     /**
      * Global lower edge
      * @param num
      * @return
      */
-    fun getLowerBound(num: Int): Double?
+    public fun getLowerBound(num: Int): Double?
 
     /**
      * Global upper edge
      * @param num
      * @return
      */
-    fun getUpperBound(num: Int): Double?
+    public fun getUpperBound(num: Int): Double?
 
     /**
      * Hyper volume
      * @return
      */
-    fun volume(): Double
+    public fun volume(): Double
 }

@@ -5,32 +5,29 @@ import scientifik.kmath.operations.SpaceElement
 import scientifik.kmath.operations.invoke
 import kotlin.math.sqrt
 
+public interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector3D, Euclidean3DSpace> {
+    public val x: Double
+    public val y: Double
+    public val z: Double
+    public override val context: Euclidean3DSpace get() = Euclidean3DSpace
+    public override val size: Int get() = 3
 
-interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector3D, Euclidean3DSpace> {
-    val x: Double
-    val y: Double
-    val z: Double
-    override val context: Euclidean3DSpace get() = Euclidean3DSpace
-    override val size: Int get() = 3
-
-    override operator fun get(index: Int): Double = when (index) {
+    public override operator fun get(index: Int): Double = when (index) {
         1 -> x
         2 -> y
         3 -> z
         else -> error("Accessing outside of point bounds")
     }
 
-    override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
-
-    override fun unwrap(): Vector3D = this
-
-    override fun Vector3D.wrap(): Vector3D = this
+    public override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
+    public override fun unwrap(): Vector3D = this
+    public override fun Vector3D.wrap(): Vector3D = this
 }
 
 @Suppress("FunctionName")
-fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
+public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
 
-val Vector3D.r: Double get() = Euclidean3DSpace { sqrt(norm()) }
+public val Vector3D.r: Double get() = Euclidean3DSpace { sqrt(norm()) }
 
 private data class Vector3DImpl(
     override val x: Double,
@@ -38,19 +35,19 @@ private data class Vector3DImpl(
     override val z: Double
 ) : Vector3D
 
-object Euclidean3DSpace : GeometrySpace<Vector3D> {
-    override val zero: Vector3D = Vector3D(0.0, 0.0, 0.0)
+public object Euclidean3DSpace : GeometrySpace<Vector3D> {
+    public override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
 
-    fun Vector3D.norm(): Double = sqrt(x * x + y * y + z * z)
+    public fun Vector3D.norm(): Double = sqrt(x * x + y * y + z * z)
 
-    override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
+    public override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
 
-    override fun add(a: Vector3D, b: Vector3D): Vector3D =
+    public override fun add(a: Vector3D, b: Vector3D): Vector3D =
         Vector3D(a.x + b.x, a.y + b.y, a.z + b.z)
 
-    override fun multiply(a: Vector3D, k: Number): Vector3D =
+    public override fun multiply(a: Vector3D, k: Number): Vector3D =
         Vector3D(a.x * k.toDouble(), a.y * k.toDouble(), a.z * k.toDouble())
 
-    override fun Vector3D.dot(other: Vector3D): Double =
+    public override fun Vector3D.dot(other: Vector3D): Double =
         x * other.x + y * other.y + z * other.z
 }

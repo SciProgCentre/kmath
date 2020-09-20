@@ -83,7 +83,7 @@ private class DataViewMemory(val view: DataView) : Memory {
 /**
  * Allocates memory based on a [DataView].
  */
-actual fun Memory.Companion.allocate(length: Int): Memory {
+public actual fun Memory.Companion.allocate(length: Int): Memory {
     val buffer = ArrayBuffer(length)
     return DataViewMemory(DataView(buffer, 0, length))
 }
@@ -92,7 +92,7 @@ actual fun Memory.Companion.allocate(length: Int): Memory {
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
  * and could be mutated independently from the resulting [Memory].
  */
-actual fun Memory.Companion.wrap(array: ByteArray): Memory {
+public actual fun Memory.Companion.wrap(array: ByteArray): Memory {
     @Suppress("CAST_NEVER_SUCCEEDS") val int8Array = array as Int8Array
     return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))
 }

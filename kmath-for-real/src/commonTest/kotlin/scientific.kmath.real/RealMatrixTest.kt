@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class RealMatrixTest {
+internal class RealMatrixTest {
     @Test
     fun testSum() {
         val m = realMatrix(10, 10) { i, j -> (i + j).toDouble() }

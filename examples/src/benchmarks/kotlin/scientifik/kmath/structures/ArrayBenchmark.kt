@@ -5,44 +5,33 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import java.nio.IntBuffer
 
-
 @State(Scope.Benchmark)
 class ArrayBenchmark {
-
     @Benchmark
     fun benchmarkArrayRead() {
         var res = 0
-        for (i in 1..size) {
-            res += array[size - i]
-        }
+        for (i in 1..size) res += array[size - i]
     }
 
     @Benchmark
     fun benchmarkBufferRead() {
         var res = 0
-        for (i in 1..size) {
-            res += arrayBuffer.get(size - i)
-        }
+        for (i in 1..size) res += arrayBuffer.get(size - i)
     }
 
     @Benchmark
     fun nativeBufferRead() {
         var res = 0
-        for (i in 1..size) {
-            res += nativeBuffer.get(size - i)
-        }
+        for (i in 1..size) res += nativeBuffer.get(size - i)
     }
 
     companion object {
-        val size = 1000
+        const val size: Int = 1000
+        val array: IntArray = IntArray(size) { it }
+        val arrayBuffer: IntBuffer = IntBuffer.wrap(array)
 
-        val array = IntArray(size) { it }
-        val arrayBuffer = IntBuffer.wrap(array)
-        val nativeBuffer = IntBuffer.allocate(size).also {
-            for (i in 0 until size) {
-                it.put(i, i)
-            }
-
+        val nativeBuffer: IntBuffer = IntBuffer.allocate(size).also {
+            for (i in 0 until size) it.put(i, i)
         }
     }
 }

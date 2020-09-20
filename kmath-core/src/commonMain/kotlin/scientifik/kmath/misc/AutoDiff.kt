@@ -19,24 +19,24 @@ import kotlin.contracts.contract
  * Differentiable variable with value and derivative of differentiation ([deriv]) result
  * with respect to this variable.
  */
-open class Variable<T : Any>(val value: T)
+public open class Variable<T : Any>(public val value: T)
 
-class DerivationResult<T : Any>(
+public class DerivationResult<T : Any>(
     value: T,
-    val deriv: Map<Variable<T>, T>,
-    val context: Field<T>
+    public val deriv: Map<Variable<T>, T>,
+    public val context: Field<T>
 ) : Variable<T>(value) {
-    fun deriv(variable: Variable<T>): T = deriv[variable] ?: context.zero
+    public fun deriv(variable: Variable<T>): T = deriv[variable] ?: context.zero
 
     /**
      * compute divergence
      */
-    fun div(): T = context { sum(deriv.values) }
+    public fun div(): T = context { sum(deriv.values) }
 
     /**
      * Compute a gradient for variables in given order
      */
-    fun grad(vararg variables: Variable<T>): Point<T> {
+    public fun grad(vararg variables: Variable<T>): Point<T> {
         check(variables.isNotEmpty()) { "Variable order is not provided for gradient construction" }
         return variables.map(::deriv).asBuffer()
     }
@@ -55,7 +55,7 @@ class DerivationResult<T : Any>(
  * assertEquals(9.0, x.d)  // dy/dx
  * ```
  */
-inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Variable<T>): DerivationResult<T> {
+public inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Variable<T>): DerivationResult<T> {
     contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
 
     return (AutoDiffContext(this)) {
@@ -67,14 +67,14 @@ inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Varia
 }
 
 
-abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
-    abstract val context: F
+public abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
+    public abstract val context: F
 
     /**
      * A variable accessing inner state of derivatives.
      * Use this function in inner builders to avoid creating additional derivative bindings
      */
-    abstract var Variable<T>.d: T
+    public abstract var Variable<T>.d: T
 
     /**
      * Performs update of derivative after the rest of the formula in the back-pass.
@@ -87,11 +87,11 @@ abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
      * }
      * ```
      */
-    abstract fun <R> derive(value: R, block: F.(R) -> Unit): R
+    public abstract fun <R> derive(value: R, block: F.(R) -> Unit): R
 
-    abstract fun variable(value: T): Variable<T>
+    public abstract fun variable(value: T): Variable<T>
 
-    inline fun variable(block: F.() -> T): Variable<T> = variable(context.block())
+    public inline fun variable(block: F.() -> T): Variable<T> = variable(context.block())
 
     // Overloads for Double constants
 
@@ -153,7 +153,6 @@ internal class AutoDiffContext<T : Any, F : Field<T>>(override val context: F) :
 
     // Basic math (+, -, *, /)
 
-
     override fun add(a: Variable<T>, b: Variable<T>): Variable<T> = derive(variable { a.value + b.value }) { z ->
         a.d += z.d
         b.d += z.d
@@ -177,35 +176,36 @@ internal class AutoDiffContext<T : Any, F : Field<T>>(override val context: F) :
 // Extensions for differentiation of various basic mathematical functions
 
 // x ^ 2
-fun <T : Any, F : Field<T>> AutoDiffField<T, F>.sqr(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : Field<T>> AutoDiffField<T, F>.sqr(x: Variable<T>): Variable<T> =
     derive(variable { x.value * x.value }) { z -> x.d += z.d * 2 * x.value }
 
 // x ^ 1/2
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sqrt(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sqrt(x: Variable<T>): Variable<T> =
     derive(variable { sqrt(x.value) }) { z -> x.d += z.d * 0.5 / z.value }
 
 // x ^ y (const)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Double): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Double): Variable<T> =
     derive(variable { power(x.value, y) }) { z -> x.d += z.d * y * power(x.value, y - 1) }
 
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Int): Variable<T> = pow(x, y.toDouble())
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Int): Variable<T> =
+    pow(x, y.toDouble())
 
 // exp(x)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.exp(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.exp(x: Variable<T>): Variable<T> =
     derive(variable { exp(x.value) }) { z -> x.d += z.d * z.value }
 
 // ln(x)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.ln(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.ln(x: Variable<T>): Variable<T> =
     derive(variable { ln(x.value) }) { z -> x.d += z.d / x.value }
 
 // x ^ y (any)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Variable<T>): Variable<T> =
     exp(y * ln(x))
 
 // sin(x)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sin(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sin(x: Variable<T>): Variable<T> =
     derive(variable { sin(x.value) }) { z -> x.d += z.d * cos(x.value) }
 
 // cos(x)
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.cos(x: Variable<T>): Variable<T> =
+public fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.cos(x: Variable<T>): Variable<T> =
     derive(variable { cos(x.value) }) { z -> x.d -= z.d * sin(x.value) }

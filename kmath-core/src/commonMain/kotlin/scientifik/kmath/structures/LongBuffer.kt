@@ -8,7 +8,7 @@ import kotlin.contracts.contract
  *
  * @property array the underlying array.
  */
-inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
+public inline class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Long = array[index]
@@ -21,7 +21,6 @@ inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
 
     override fun copy(): MutableBuffer<Long> =
         LongBuffer(array.copyOf())
-
 }
 
 /**
@@ -31,20 +30,17 @@ inline class LongBuffer(val array: LongArray) : MutableBuffer<Long> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer {
-    contract { callsInPlace(init) }
-    return LongBuffer(LongArray(size) { init(it) })
-}
+public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongBuffer(LongArray(size) { init(it) })
 
 /**
  * Returns a new [LongBuffer] of given elements.
  */
-fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
+public fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
 
 /**
  * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
  */
-val MutableBuffer<out Long>.array: LongArray
+public val MutableBuffer<out Long>.array: LongArray
     get() = (if (this is LongBuffer) array else LongArray(size) { get(it) })
 
 /**
@@ -53,4 +49,4 @@ val MutableBuffer<out Long>.array: LongArray
  * @receiver the array.
  * @return the new buffer.
  */
-fun LongArray.asBuffer(): LongBuffer = LongBuffer(this)
+public fun LongArray.asBuffer(): LongBuffer = LongBuffer(this)

@@ -4,6 +4,7 @@ import scientifik.kmath.operations.Field
 import scientifik.kmath.operations.RealField
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.Space
+import kotlin.contracts.contract
 
 /**
  * The root for all [NDStructure] based algebra elements. Does not implement algebra element root because of problems with recursive self-types
@@ -11,31 +12,30 @@ import scientifik.kmath.operations.Space
  * @param C the type of the context for the element
  * @param N the type of the underlying [NDStructure]
  */
-interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
+public interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
+    public val context: NDAlgebra<T, C, N>
 
-    val context: NDAlgebra<T, C, N>
+    public fun unwrap(): N
 
-    fun unwrap(): N
+    public fun N.wrap(): NDElement<T, C, N>
 
-    fun N.wrap(): NDElement<T, C, N>
-
-    companion object {
+    public companion object {
         /**
          * Create a optimized NDArray of doubles
          */
-        fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }): RealNDElement =
+        public fun real(shape: IntArray, initializer: RealField.(IntArray) -> Double = { 0.0 }): RealNDElement =
             NDField.real(*shape).produce(initializer)
 
-        inline fun real1D(dim: Int, crossinline initializer: (Int) -> Double = { _ -> 0.0 }): RealNDElement =
+        public inline fun real1D(dim: Int, crossinline initializer: (Int) -> Double = { _ -> 0.0 }): RealNDElement =
             real(intArrayOf(dim)) { initializer(it[0]) }
 
-        inline fun real2D(
+        public inline fun real2D(
             dim1: Int,
             dim2: Int,
             crossinline initializer: (Int, Int) -> Double = { _, _ -> 0.0 }
         ): RealNDElement = real(intArrayOf(dim1, dim2)) { initializer(it[0], it[1]) }
 
-        inline fun real3D(
+        public inline fun real3D(
             dim1: Int,
             dim2: Int,
             dim3: Int,
@@ -46,7 +46,7 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
         /**
          * Simple boxing NDArray
          */
-        fun <T : Any, F : Field<T>> boxing(
+        public fun <T : Any, F : Field<T>> boxing(
             shape: IntArray,
             field: F,
             initializer: F.(IntArray) -> T
@@ -55,7 +55,7 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
             return ndField.produce(initializer)
         }
 
-        inline fun <reified T : Any, F : Field<T>> auto(
+        public inline fun <reified T : Any, F : Field<T>> auto(
             shape: IntArray,
             field: F,
             noinline initializer: F.(IntArray) -> T
@@ -66,17 +66,16 @@ interface NDElement<T, C, N : NDStructure<T>> : NDStructure<T> {
     }
 }
 
-
-fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDElement<T, C, N> =
+public fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDElement<T, C, N> =
     context.mapIndexed(unwrap(), transform).wrap()
 
-fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T): NDElement<T, C, N> =
+public fun <T, C, N : NDStructure<T>> NDElement<T, C, N>.map(transform: C.(T) -> T): NDElement<T, C, N> =
     context.map(unwrap(), transform).wrap()
 
 /**
  * Element by element application of any operation on elements to the whole [NDElement]
  */
-operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElement<T, C, N>): NDElement<T, C, N> =
+public operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElement<T, C, N>): NDElement<T, C, N> =
     ndElement.map { value -> this@invoke(value) }
 
 /* plus and minus */
@@ -84,13 +83,13 @@ operator fun <T, C, N : NDStructure<T>> Function1<T, T>.invoke(ndElement: NDElem
 /**
  * Summation operation for [NDElement] and single element
  */
-operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.plus(arg: T): NDElement<T, S, N> =
+public operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.plus(arg: T): NDElement<T, S, N> =
     map { value -> arg + value }
 
 /**
  * Subtraction operation between [NDElement] and single element
  */
-operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg: T): NDElement<T, S, N> =
+public operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg: T): NDElement<T, S, N> =
     map { value -> arg - value }
 
 /* prod and div */
@@ -98,13 +97,13 @@ operator fun <T, S : Space<T>, N : NDStructure<T>> NDElement<T, S, N>.minus(arg:
 /**
  * Product operation for [NDElement] and single element
  */
-operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: T): NDElement<T, R, N> =
+public operator fun <T, R : Ring<T>, N : NDStructure<T>> NDElement<T, R, N>.times(arg: T): NDElement<T, R, N> =
     map { value -> arg * value }
 
 /**
  * Division operation between [NDElement] and single element
  */
-operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T): NDElement<T, F, N> =
+public operator fun <T, F : Field<T>, N : NDStructure<T>> NDElement<T, F, N>.div(arg: T): NDElement<T, F, N> =
     map { value -> arg / value }
 
 //    /**

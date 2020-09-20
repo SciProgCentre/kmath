@@ -1,6 +1,4 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("ru.mipt.npm.mpp") }
 
 kotlin.sourceSets {
     commonMain {
@@ -8,10 +6,15 @@ kotlin.sourceSets {
             api(project(":kmath-coroutines"))
         }
     }
-    jvmMain{
-        dependencies{
+
+    jvmMain {
+        dependencies {
             api("org.apache.commons:commons-rng-sampling:1.3")
             api("org.apache.commons:commons-rng-simple:1.3")
         }
+    }
+
+    jvmTest {
+        languageSettings.useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
     }
 }

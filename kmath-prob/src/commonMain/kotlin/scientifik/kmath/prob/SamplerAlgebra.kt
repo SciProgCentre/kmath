@@ -7,26 +7,25 @@ import scientifik.kmath.chains.zip
 import scientifik.kmath.operations.Space
 import scientifik.kmath.operations.invoke
 
-class BasicSampler<T : Any>(val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
-    override fun sample(generator: RandomGenerator): Chain<T> = chainBuilder(generator)
+public class BasicSampler<T : Any>(public val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
+    public override fun sample(generator: RandomGenerator): Chain<T> = chainBuilder(generator)
 }
 
-class ConstantSampler<T : Any>(val value: T) : Sampler<T> {
-    override fun sample(generator: RandomGenerator): Chain<T> = ConstantChain(value)
+public class ConstantSampler<T : Any>(public val value: T) : Sampler<T> {
+    public override fun sample(generator: RandomGenerator): Chain<T> = ConstantChain(value)
 }
 
 /**
  * A space for samplers. Allows to perform simple operations on distributions
  */
-class SamplerSpace<T : Any>(val space: Space<T>) : Space<Sampler<T>> {
+public class SamplerSpace<T : Any>(public val space: Space<T>) : Space<Sampler<T>> {
+    public override val zero: Sampler<T> = ConstantSampler(space.zero)
 
-    override val zero: Sampler<T> = ConstantSampler(space.zero)
-
-    override fun add(a: Sampler<T>, b: Sampler<T>): Sampler<T> = BasicSampler { generator ->
+    public override fun add(a: Sampler<T>, b: Sampler<T>): Sampler<T> = BasicSampler { generator ->
         a.sample(generator).zip(b.sample(generator)) { aValue, bValue -> space { aValue + bValue } }
     }
 
-    override fun multiply(a: Sampler<T>, k: Number): Sampler<T> = BasicSampler { generator ->
+    public override fun multiply(a: Sampler<T>, k: Number): Sampler<T> = BasicSampler { generator ->
         a.sample(generator).map { space { it * k.toDouble() } }
     }
 }

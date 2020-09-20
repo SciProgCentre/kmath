@@ -12,30 +12,31 @@ import scientifik.kmath.structures.asSequence
 /**
  * Basic operations on matrices. Operates on [Matrix]
  */
-interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
+public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
     /**
      * Produce a matrix with this context and given dimensions
      */
-    fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
+    public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
 
-    infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T>
+    public infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T>
 
-    infix fun Matrix<T>.dot(vector: Point<T>): Point<T>
+    public infix fun Matrix<T>.dot(vector: Point<T>): Point<T>
 
-    operator fun Matrix<T>.times(value: T): Matrix<T>
+    public operator fun Matrix<T>.times(value: T): Matrix<T>
 
-    operator fun T.times(m: Matrix<T>): Matrix<T> = m * this
+    public operator fun T.times(m: Matrix<T>): Matrix<T> = m * this
 
-    companion object {
+    public companion object {
         /**
          * Non-boxing double matrix
          */
-        val real: RealMatrixContext = RealMatrixContext
+        public val real: RealMatrixContext
+            get() = RealMatrixContext
 
         /**
          * A structured matrix with custom buffer
          */
-        fun <T : Any, R : Ring<T>> buffered(
+        public fun <T : Any, R : Ring<T>> buffered(
             ring: R,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
         ): GenericMatrixContext<T, R> = BufferMatrixContext(ring, bufferFactory)
@@ -43,21 +44,21 @@ interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R> =
+        public inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R> =
             buffered(ring, Buffer.Companion::auto)
     }
 }
 
-interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
+public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
     /**
      * The ring context for matrix elements
      */
-    val elementContext: R
+    public val elementContext: R
 
     /**
      * Produce a point compatible with matrix space
      */
-    fun point(size: Int, initializer: (Int) -> T): Point<T>
+    public fun point(size: Int, initializer: (Int) -> T): Point<T>
 
     override infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         //TODO add typed error
@@ -102,7 +103,7 @@ interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
     override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
         produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
 
-    operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
+    public operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
 
     override operator fun Matrix<T>.times(value: T): Matrix<T> =
         produce(rowNum, colNum) { i, j -> elementContext { get(i, j) * value } }

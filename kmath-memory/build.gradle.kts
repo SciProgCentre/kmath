@@ -1,3 +1,1 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("ru.mipt.npm.mpp") }

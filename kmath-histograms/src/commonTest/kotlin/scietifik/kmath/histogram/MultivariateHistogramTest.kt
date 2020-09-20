@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class MultivariateHistogramTest {
+internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
         val histogram = RealHistogram.fromRanges(

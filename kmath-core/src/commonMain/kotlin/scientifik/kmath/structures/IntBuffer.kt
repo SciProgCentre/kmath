@@ -1,15 +1,11 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-
 /**
  * Specialized [MutableBuffer] implementation over [IntArray].
  *
  * @property array the underlying array.
  */
-inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
+public inline class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]
@@ -31,20 +27,17 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer {
-    contract { callsInPlace(init) }
-    return IntBuffer(IntArray(size) { init(it) })
-}
+public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
 
 /**
  * Returns a new [IntBuffer] of given elements.
  */
-fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
+public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
 
 /**
  * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
  */
-val MutableBuffer<out Int>.array: IntArray
+public val MutableBuffer<out Int>.array: IntArray
     get() = (if (this is IntBuffer) array else IntArray(size) { get(it) })
 
 /**
@@ -53,4 +46,4 @@ val MutableBuffer<out Int>.array: IntArray
  * @receiver the array.
  * @return the new buffer.
  */
-fun IntArray.asBuffer(): IntBuffer = IntBuffer(this)
+public fun IntArray.asBuffer(): IntBuffer = IntBuffer(this)

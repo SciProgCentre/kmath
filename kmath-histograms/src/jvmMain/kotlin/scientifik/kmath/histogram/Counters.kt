@@ -3,5 +3,5 @@ package scientifik.kmath.histogram
 import java.util.concurrent.atomic.DoubleAdder
 import java.util.concurrent.atomic.LongAdder
 
-actual typealias LongCounter = LongAdder
-actual typealias DoubleCounter = DoubleAdder
+public actual typealias LongCounter = LongAdder
+public actual typealias DoubleCounter = DoubleAdder

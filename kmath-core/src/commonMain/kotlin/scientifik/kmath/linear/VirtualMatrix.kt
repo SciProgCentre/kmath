@@ -2,14 +2,18 @@ package scientifik.kmath.linear
 
 import scientifik.kmath.structures.Matrix
 
-class VirtualMatrix<T : Any>(
+public class VirtualMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
     override val features: Set<MatrixFeature> = emptySet(),
-    val generator: (i: Int, j: Int) -> T
+    public val generator: (i: Int, j: Int) -> T
 ) : FeaturedMatrix<T> {
-
-    constructor(rowNum: Int, colNum: Int, vararg features: MatrixFeature, generator: (i: Int, j: Int) -> T) : this(
+    public constructor(
+        rowNum: Int,
+        colNum: Int,
+        vararg features: MatrixFeature,
+        generator: (i: Int, j: Int) -> T
+    ) : this(
         rowNum,
         colNum,
         setOf(*features),
@@ -42,18 +46,15 @@ class VirtualMatrix<T : Any>(
     }
 
 
-    companion object {
+    public companion object {
         /**
          * Wrap a matrix adding additional features to it
          */
-        fun <T : Any> wrap(matrix: Matrix<T>, vararg features: MatrixFeature): FeaturedMatrix<T> {
-            return if (matrix is VirtualMatrix) {
+        public fun <T : Any> wrap(matrix: Matrix<T>, vararg features: MatrixFeature): FeaturedMatrix<T> {
+            return if (matrix is VirtualMatrix)
                 VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features, matrix.generator)
-            } else {
-                VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features) { i, j ->
-                    matrix[i, j]
-                }
-            }
+            else
+                VirtualMatrix(matrix.rowNum, matrix.colNum, matrix.features + features) { i, j -> matrix[i, j] }
         }
     }
 }

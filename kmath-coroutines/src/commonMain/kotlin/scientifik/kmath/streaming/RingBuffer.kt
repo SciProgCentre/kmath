@@ -10,28 +10,28 @@ import scientifik.kmath.structures.VirtualBuffer
  * Thread-safe ring buffer
  */
 @Suppress("UNCHECKED_CAST")
-class RingBuffer<T>(
+public class RingBuffer<T>(
     private val buffer: MutableBuffer<T?>,
     private var startIndex: Int = 0,
     size: Int = 0
 ) : Buffer<T> {
     private val mutex: Mutex = Mutex()
 
-    override var size: Int = size
+    public override var size: Int = size
         private set
 
-    override operator fun get(index: Int): T {
+    public override operator fun get(index: Int): T {
         require(index >= 0) { "Index must be positive" }
         require(index < size) { "Index $index is out of circular buffer size $size" }
         return buffer[startIndex.forward(index)] as T
     }
 
-    fun isFull(): Boolean = size == buffer.size
+    public fun isFull(): Boolean = size == buffer.size
 
     /**
      * Iterator could provide wrong results if buffer is changed in initialization (iteration is safe)
      */
-    override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
+    public override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
         private var count = size
         private var index = startIndex
         val copy = buffer.copy()
@@ -48,23 +48,17 @@ class RingBuffer<T>(
     /**
      * A safe snapshot operation
      */
-    suspend fun snapshot(): Buffer<T> {
+    public suspend fun snapshot(): Buffer<T> {
         mutex.withLock {
             val copy = buffer.copy()
-            return VirtualBuffer(size) { i ->
-                copy[startIndex.forward(i)] as T
-            }
+            return VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
         }
     }
 
-    suspend fun push(element: T) {
+    public suspend fun push(element: T) {
         mutex.withLock {
             buffer[startIndex.forward(size)] = element
-            if (isFull()) {
-                startIndex++
-            } else {
-                size++
-            }
+            if (isFull()) startIndex++ else size++
         }
     }
 
@@ -72,8 +66,8 @@ class RingBuffer<T>(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
 
-    companion object {
-        inline fun <reified T : Any> build(size: Int, empty: T): RingBuffer<T> {
+    public companion object {
+        public inline fun <reified T : Any> build(size: Int, empty: T): RingBuffer<T> {
             val buffer = MutableBuffer.auto(size) { empty } as MutableBuffer<T?>
             return RingBuffer(buffer)
         }
@@ -81,7 +75,7 @@ class RingBuffer<T>(
         /**
          * Slow yet universal buffer
          */
-        fun <T> boxing(size: Int): RingBuffer<T> {
+        public fun <T> boxing(size: Int): RingBuffer<T> {
             val buffer: MutableBuffer<T?> = MutableBuffer.boxing(size) { null }
             return RingBuffer(buffer)
         }

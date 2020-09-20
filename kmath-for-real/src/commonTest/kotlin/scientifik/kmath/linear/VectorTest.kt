@@ -5,7 +5,7 @@ import scientifik.kmath.real.RealVector
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class VectorTest {
+internal class VectorTest {
     @Test
     fun testSum() {
         val vector1 = RealVector(5) { it.toDouble() }

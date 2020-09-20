@@ -3,16 +3,16 @@ package scientifik.kmath.structures
 import scientifik.kmath.operations.Ring
 import scientifik.kmath.operations.RingElement
 
-class BoxingNDRing<T, R : Ring<T>>(
+public class BoxingNDRing<T, R : Ring<T>>(
     override val shape: IntArray,
     override val elementContext: R,
-    val bufferFactory: BufferFactory<T>
+    public val bufferFactory: BufferFactory<T>
 ) : BufferedNDRing<T, R> {
     override val strides: Strides = DefaultStrides(shape)
     override val zero: BufferedNDRingElement<T, R> by lazy { produce { zero } }
     override val one: BufferedNDRingElement<T, R> by lazy { produce { one } }
 
-    fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
+    public fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
 
     override fun check(vararg elements: NDBuffer<T>) {
         require(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
@@ -59,6 +59,7 @@ class BoxingNDRing<T, R : Ring<T>>(
         transform: R.(T, T) -> T
     ): BufferedNDRingElement<T, R> {
         check(a, b)
+
         return BufferedNDRingElement(
             this,
             buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })

@@ -54,9 +54,6 @@ can be used for a wide variety of purposes from high performance calculations to
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
                            
-* **Koma wrapper** [Koma](https://github.com/kyonifer/koma) is a well established numerics library in Kotlin, specifically linear algebra.
-The plan is to have wrappers for koma implementations for compatibility with kmath API.
-
 ## Planned features
 
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
