@@ -202,24 +202,24 @@ class AutoDiffTest {
     fun testSinh() {
         val x = Variable(0.0)
         val y = deriv { sinh(x) }
-        assertApprox(kotlin.math.sinh(0.0), y.value) // y = sinh(pi/6)
-        assertApprox(kotlin.math.cosh(0.0), y.deriv(x)) // dy/dx = cosh(pi/6)
+        assertApprox(kotlin.math.sinh(0.0), y.value) // y = sinh(0)
+        assertApprox(kotlin.math.cosh(0.0), y.deriv(x)) // dy/dx = cosh(0)
     }
 
     @Test
     fun testCosh() {
         val x = Variable(0.0)
         val y = deriv { cosh(x) }
-        assertApprox(1.0, y.value) //y = cosh(pi/6)
-        assertApprox(0.0, y.deriv(x)) // dy/dx = sinh(pi/6)
+        assertApprox(1.0, y.value) //y = cosh(0)
+        assertApprox(0.0, y.deriv(x)) // dy/dx = sinh(0)
     }
 
     @Test
     fun testTanh() {
         val x = Variable(PI / 6)
         val y = deriv { tanh(x) }
-        assertApprox(1.0 / sqrt(3.0), y.value) // y = tan(pi/6) = 1/sqrt(3)
-        assertApprox(1.0 / kotlin.math.cosh(PI / 6.0).pow(2), y.deriv(x)) // dy/dx = sec(PI/6)^2
+        assertApprox(1.0 / sqrt(3.0), y.value) // y = tanh(pi/6)
+        assertApprox(1.0 / kotlin.math.cosh(PI / 6.0).pow(2), y.deriv(x)) // dy/dx = sech(pi/6)^2
     }
 
     @Test
