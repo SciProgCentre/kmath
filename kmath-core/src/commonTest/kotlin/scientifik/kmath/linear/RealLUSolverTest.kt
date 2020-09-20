@@ -1,11 +1,9 @@
 package scientifik.kmath.linear
 
 import scientifik.kmath.structures.Matrix
-import kotlin.contracts.ExperimentalContracts
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@ExperimentalContracts
 class RealLUSolverTest {
 
     @Test

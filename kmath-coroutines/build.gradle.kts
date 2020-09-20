@@ -6,7 +6,6 @@ plugins {
 kotlin.sourceSets {
     all {
         with(languageSettings) {
-            useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
             useExperimentalAnnotation("kotlinx.coroutines.InternalCoroutinesApi")
             useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")

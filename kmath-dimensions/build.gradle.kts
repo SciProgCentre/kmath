@@ -11,8 +11,8 @@ kotlin.sourceSets {
         }
     }
 
-    jvmMain{
-        dependencies{
+    jvmMain {
+        dependencies {
             api(kotlin("reflect"))
         }
     }
