@@ -1,8 +1,8 @@
-package scientifik.dimensions
+package kscience.dimensions
 
-import scientifik.kmath.dimensions.D2
-import scientifik.kmath.dimensions.D3
-import scientifik.kmath.dimensions.DMatrixContext
+import kscience.kmath.dimensions.D2
+import kscience.kmath.dimensions.D3
+import kscience.kmath.dimensions.DMatrixContext
 import kotlin.test.Test
 
 internal class DMatrixContextTest {

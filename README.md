@@ -3,7 +3,7 @@
 
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
 
-Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/scientifik/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/scientifik/kmath-core/_latestVersion)
+Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
 
 Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
 
@@ -80,12 +80,12 @@ Release artifacts are accessible from bintray with following configuration (see 
 
 ```kotlin
 repositories{
-    maven("https://dl.bintray.com/mipt-npm/scientifik")
+    maven("https://dl.bintray.com/mipt-npm/kscience")
 }
 
 dependencies{
-    api("scientifik:kmath-core:${kmathVersion}")
-    //api("scientifik:kmath-core-jvm:${kmathVersion}") for jvm-specific version
+    api("kscience.kmath:kmath-core:${kmathVersion}")
+    //api("kscience.kmath:kmath-core-jvm:${kmathVersion}") for jvm-specific version
 }
 ```
 

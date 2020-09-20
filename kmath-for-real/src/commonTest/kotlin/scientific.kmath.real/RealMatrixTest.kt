@@ -1,9 +1,9 @@
 package scientific.kmath.real
 
-import scientifik.kmath.linear.VirtualMatrix
-import scientifik.kmath.linear.build
-import scientifik.kmath.real.*
-import scientifik.kmath.structures.Matrix
+import kscience.kmath.linear.VirtualMatrix
+import kscience.kmath.linear.build
+import kscience.kmath.real.*
+import kscience.kmath.structures.Matrix
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

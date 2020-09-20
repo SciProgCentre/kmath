@@ -1,4 +1,4 @@
-package scientifik.memory
+package kscience.memory
 
 import java.io.IOException
 import java.nio.ByteBuffer

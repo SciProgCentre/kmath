@@ -1,4 +1,4 @@
-package scientifik.memory
+package kscience.memory
 
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView

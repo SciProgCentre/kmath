@@ -1,4 +1,4 @@
-package scientifik.memory
+package kscience.memory
 
 /**
  * A specification to read or write custom objects with fixed size in bytes.

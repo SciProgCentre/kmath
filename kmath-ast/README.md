@@ -8,32 +8,32 @@ This subproject implements the following features:
 - Evaluating expressions by traversing MST.
 
 > #### Artifact:
-> This module is distributed in the artifact `scientifik:kmath-ast:0.1.4-dev-8`.
+> This module is distributed in the artifact `kscience.kmath:kmath-ast:0.1.4-dev-8`.
 > 
 > **Gradle:**
 >
 > ```gradle
 > repositories {
->     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
+>     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 >     maven { url https://dl.bintray.com/hotkeytlt/maven' }
 > }
 > 
 > dependencies {
->     implementation 'scientifik:kmath-ast:0.1.4-dev-8'
+>     implementation 'kscience.kmath:kmath-ast:0.1.4-dev-8'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
->     maven("https://dl.bintray.com/mipt-npm/scientifik")
+>     maven("https://dl.bintray.com/mipt-npm/kscience")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 >     maven("https://dl.bintray.com/hotkeytlt/maven")
 > }
 > 
 > dependencies {
->     implementation("scientifik:kmath-ast:0.1.4-dev-8")
+>     implementation("kscience.kmath:kmath-ast:0.1.4-dev-8")
 > }
 > ```
 >
@@ -52,12 +52,12 @@ RealField.mstInField { symbol("x") + 2 }.compile()
 … leads to generation of bytecode, which can be decompiled to the following Java class: 
 
 ```java
-package scientifik.kmath.asm.generated;
+package kscience.kmath.asm.generated;
 
 import java.util.Map;
-import scientifik.kmath.asm.internal.MapIntrinsics;
-import scientifik.kmath.expressions.Expression;
-import scientifik.kmath.operations.RealField;
+import kscience.kmath.asm.internal.MapIntrinsics;
+import kscience.kmath.expressions.Expression;
+import kscience.kmath.operations.RealField;
 
 public final class AsmCompiledExpression_1073786867_0 implements Expression<Double> {
     private final RealField algebra;
