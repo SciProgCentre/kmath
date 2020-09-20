@@ -4,6 +4,7 @@
 ### Added
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 ### Changed
+- Package changed from `scientifik` to `kscience.kmath`. 
 
 ### Deprecated
 
