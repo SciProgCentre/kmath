@@ -24,6 +24,7 @@ public fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, righ
  * @receiver the algebra that provides addition and division.
  * @param data the iterable to find average.
  * @return the average value.
+ * @author Iaroslav Postovalov
  */
 public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
 
@@ -33,6 +34,7 @@ public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
  * @receiver the algebra that provides addition and division.
  * @param data the sequence to find average.
  * @return the average value.
+ * @author Iaroslav Postovalov
  */
 public fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
 
@@ -60,6 +62,7 @@ public fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
  * @receiver the iterable to find average.
  * @param space the algebra that provides addition and division.
  * @return the average value.
+ * @author Iaroslav Postovalov
  */
 public fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
 
@@ -69,6 +72,7 @@ public fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
  * @receiver the sequence to find average.
  * @param space the algebra that provides addition and division.
  * @return the average value.
+ * @author Iaroslav Postovalov
  */
 public fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
 
@@ -98,6 +102,7 @@ public fun <T> Ring<T>.power(arg: T, power: Int): T {
  * @param arg the base.
  * @param power the exponent.
  * @return the base raised to the power.
+ * @author Iaroslav Postovalov
  */
 public fun <T> Field<T>.power(arg: T, power: Int): T {
     require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }

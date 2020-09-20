@@ -20,6 +20,7 @@ import kotlin.reflect.KClass
  * @property algebra the algebra the applied AsmExpressions use.
  * @property className the unique class name of new loaded class.
  * @property invokeLabel0Visitor the function to apply to this object when generating invoke method, label 0.
+ * @author Iaroslav Postovalov
  */
 internal class AsmBuilder<T> internal constructor(
     private val classOfT: KClass<*>,

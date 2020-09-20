@@ -1,5 +1,7 @@
 package scientifik.kmath.structures
 
+import kotlin.contracts.contract
+
 /**
  * Specialized [MutableBuffer] implementation over [DoubleArray].
  *

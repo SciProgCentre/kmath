@@ -2,6 +2,7 @@ package scientifik.kmath.structures
 
 import scientifik.kmath.operations.Complex
 import scientifik.kmath.operations.complex
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**

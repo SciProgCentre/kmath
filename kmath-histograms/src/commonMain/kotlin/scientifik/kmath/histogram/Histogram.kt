@@ -4,9 +4,6 @@ import scientifik.kmath.domains.Domain
 import scientifik.kmath.linear.Point
 import scientifik.kmath.structures.ArrayBuffer
 import scientifik.kmath.structures.RealBuffer
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 /**
  * The bin in the histogram. The histogram is by definition always done in the real space

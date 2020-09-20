@@ -1,12 +1,12 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 /**
  * Specialized [MutableBuffer] implementation over [FloatArray].
  *
  * @property array the underlying array.
+ * @author Iaroslav Postovalov
  */
 public inline class FloatBuffer(public val array: FloatArray) : MutableBuffer<Float> {
     override val size: Int get() = array.size

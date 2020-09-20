@@ -6,28 +6,37 @@ import org.objectweb.asm.commons.InstructionAdapter
 import scientifik.kmath.ast.MST
 import scientifik.kmath.expressions.Expression
 import scientifik.kmath.operations.Algebra
+import scientifik.kmath.operations.FieldOperations
+import scientifik.kmath.operations.RingOperations
+import scientifik.kmath.operations.SpaceOperations
 import java.lang.reflect.Method
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
     hashMapOf(
-        "+" to 2 to "add",
-        "*" to 2 to "multiply",
-        "/" to 2 to "divide",
-        "+" to 1 to "unaryPlus",
-        "-" to 1 to "unaryMinus",
-        "-" to 2 to "minus"
+        SpaceOperations.PLUS_OPERATION to 2 to "add",
+        RingOperations.TIMES_OPERATION to 2 to "multiply",
+        FieldOperations.DIV_OPERATION to 2 to "divide",
+        SpaceOperations.PLUS_OPERATION to 1 to "unaryPlus",
+        SpaceOperations.MINUS_OPERATION to 1 to "unaryMinus",
+        SpaceOperations.MINUS_OPERATION to 2 to "minus"
     )
 }
 
+/**
+ * Returns ASM [Type] for given [KClass].
+ *
+ * @author Iaroslav Postovalov
+ */
 internal val KClass<*>.asm: Type
     get() = Type.getType(java)
 
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
+ *
+ * @author Iaroslav Postovalov
  */
 internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Array<T> {
     contract { callsInPlace(predicate, InvocationKind.EXACTLY_ONCE) }
@@ -36,11 +45,15 @@ internal inline fun <reified T> T.wrapToArrayIf(predicate: (T) -> Boolean): Arra
 
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor].
+ *
+ * @author Iaroslav Postovalov
  */
 private fun MethodVisitor.instructionAdapter(): InstructionAdapter = InstructionAdapter(this)
 
 /**
  * Creates an [InstructionAdapter] from this [MethodVisitor] and applies [block] to it.
+ *
+ * @author Iaroslav Postovalov
  */
 internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.() -> Unit): InstructionAdapter {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -49,6 +62,8 @@ internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.(
 
 /**
  * Constructs a [Label], then applies it to this visitor.
+ *
+ * @author Iaroslav Postovalov
  */
 internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
 
@@ -57,6 +72,8 @@ internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
  *
  * This methods helps to avoid collisions of class name to prevent loading several classes with the same name. If there
  * is a colliding class, change [collision] parameter or leave it `0` to check existing classes recursively.
+ *
+ * @author Iaroslav Postovalov
  */
 internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
     val name = "scientifik.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
@@ -76,6 +93,11 @@ internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): Clas
     return ClassWriter(flags).apply(block)
 }
 
+/**
+ * Invokes [visitField] and applies [block] to the [FieldVisitor].
+ *
+ * @author Iaroslav Postovalov
+ */
 internal inline fun ClassWriter.visitField(
     access: Int,
     name: String,
@@ -105,7 +127,7 @@ private fun <T> AsmBuilder<T>.findSpecific(context: Algebra<T>, name: String, pa
  * Checks if the target [context] for code generation contains a method with needed [name] and arity, also builds
  * type expectation stack for needed arity.
  *
- * @return `true` if contains, else `false`.
+ * @author Iaroslav Postovalov
  */
 private fun <T> AsmBuilder<T>.buildExpectationStack(
     context: Algebra<T>,
@@ -137,7 +159,7 @@ private fun <T> AsmBuilder<T>.mapTypes(method: Method, parameterTypes: Array<Mst
  * Checks if the target [context] for code generation contains a method with needed [name] and arity and inserts
  * [AsmBuilder.invokeAlgebraOperation] of this method.
  *
- * @return `true` if contains, else `false`.
+ * @author Iaroslav Postovalov
  */
 private fun <T> AsmBuilder<T>.tryInvokeSpecific(
     context: Algebra<T>,
@@ -161,7 +183,9 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(
 }
 
 /**
- * Builds specialized algebra call with option to fallback to generic algebra operation accepting String.
+ * Builds specialized [context] call with option to fallback to generic algebra operation accepting [String].
+ *
+ * @author Iaroslav Postovalov
  */
 internal inline fun <T> AsmBuilder<T>.buildAlgebraOperationCall(
     context: Algebra<T>,

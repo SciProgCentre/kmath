@@ -6,6 +6,8 @@ import scientifik.kmath.operations.RealField
 
 /**
  * A Mathematical Syntax Tree node for mathematical expressions.
+ *
+ * @author Alexander Nozik
  */
 public sealed class MST {
     /**
@@ -48,6 +50,7 @@ public sealed class MST {
  * @receiver the algebra that provides operations.
  * @param node the node to evaluate.
  * @return the value of expression.
+ * @author Alexander Nozik
  */
 public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)

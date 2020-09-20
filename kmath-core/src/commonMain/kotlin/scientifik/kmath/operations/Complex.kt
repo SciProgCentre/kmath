@@ -6,6 +6,7 @@ import scientifik.kmath.structures.MutableBuffer
 import scientifik.memory.MemoryReader
 import scientifik.memory.MemorySpec
 import scientifik.memory.MemoryWriter
+import kotlin.contracts.contract
 import kotlin.math.*
 
 /**

@@ -38,7 +38,8 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
  * [Ring] over [MST] nodes.
  */
 public object MstRing : Ring<MST>, NumericAlgebra<MST> {
-    override val zero: MST = number(0.0)
+    override val zero: MST
+        get() = MstSpace.zero
     override val one: MST = number(1.0)
 
     override fun number(value: Number): MST = MstSpace.number(value)
@@ -59,8 +60,11 @@ public object MstRing : Ring<MST>, NumericAlgebra<MST> {
  * [Field] over [MST] nodes.
  */
 public object MstField : Field<MST> {
-    public override val zero: MST = number(0.0)
-    public override val one: MST = number(1.0)
+    public override val zero: MST
+        get() = MstRing.zero
+
+    public override val one: MST
+        get() = MstRing.one
 
     public override fun symbol(value: String): MST = MstRing.symbol(value)
     public override fun number(value: Number): MST = MstRing.number(value)
@@ -79,14 +83,25 @@ public object MstField : Field<MST> {
  * [ExtendedField] over [MST] nodes.
  */
 public object MstExtendedField : ExtendedField<MST> {
-    override val zero: MST = number(0.0)
-    override val one: MST = number(1.0)
+    override val zero: MST
+        get() = MstField.zero
 
+    override val one: MST
+        get() = MstField.one
+
+    override fun symbol(value: String): MST = MstField.symbol(value)
     override fun sin(arg: MST): MST = unaryOperation(TrigonometricOperations.SIN_OPERATION, arg)
     override fun cos(arg: MST): MST = unaryOperation(TrigonometricOperations.COS_OPERATION, arg)
+    override fun tan(arg: MST): MST = unaryOperation(TrigonometricOperations.TAN_OPERATION, arg)
     override fun asin(arg: MST): MST = unaryOperation(TrigonometricOperations.ASIN_OPERATION, arg)
     override fun acos(arg: MST): MST = unaryOperation(TrigonometricOperations.ACOS_OPERATION, arg)
     override fun atan(arg: MST): MST = unaryOperation(TrigonometricOperations.ATAN_OPERATION, arg)
+    override fun sinh(arg: MST): MST = unaryOperation(HyperbolicOperations.SINH_OPERATION, arg)
+    override fun cosh(arg: MST): MST = unaryOperation(HyperbolicOperations.COSH_OPERATION, arg)
+    override fun tanh(arg: MST): MST = unaryOperation(HyperbolicOperations.TANH_OPERATION, arg)
+    override fun asinh(arg: MST): MST = unaryOperation(HyperbolicOperations.ASINH_OPERATION, arg)
+    override fun acosh(arg: MST): MST = unaryOperation(HyperbolicOperations.ACOSH_OPERATION, arg)
+    override fun atanh(arg: MST): MST = unaryOperation(HyperbolicOperations.ATANH_OPERATION, arg)
     override fun add(a: MST, b: MST): MST = MstField.add(a, b)
     override fun multiply(a: MST, k: Number): MST = MstField.multiply(a, k)
     override fun multiply(a: MST, b: MST): MST = MstField.multiply(a, b)

@@ -2,6 +2,9 @@ package scientifik.kmath.asm.internal
 
 import scientifik.kmath.ast.MST
 
+/**
+ * Represents types known in [MST], numbers and general values.
+ */
 internal enum class MstType {
     GENERAL,
     NUMBER;

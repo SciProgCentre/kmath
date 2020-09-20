@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 ### Added
-
+- Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 ### Changed
 
 ### Deprecated
@@ -10,7 +10,7 @@
 ### Removed
 
 ### Fixed
-
+- `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
 ### Security
 ## [0.1.4]
 

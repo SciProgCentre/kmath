@@ -5,7 +5,6 @@ plugins {
 }
 
 val kmathVersion by extra("0.1.4")
-
 val bintrayRepo by extra("scientifik")
 val githubProject by extra("kmath")
 
@@ -18,6 +17,14 @@ allprojects {
 
     group = "kscience.kmath"
     version = kmathVersion
+
+    afterEvaluate {
+        extensions.findByType<KotlinProjectExtension>()?.run {
+            sourceSets.all {
+                languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+            }
+        }
+    }
 }
 
 subprojects { if (name.startsWith("kmath")) apply(plugin = "ru.mipt.npm.publish") }

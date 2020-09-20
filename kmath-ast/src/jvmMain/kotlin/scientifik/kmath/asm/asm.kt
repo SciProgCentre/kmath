@@ -11,7 +11,12 @@ import scientifik.kmath.operations.Algebra
 import kotlin.reflect.KClass
 
 /**
- * Compile given MST to an Expression using AST compiler
+ * Compiles given MST to an Expression using AST compiler.
+ *
+ * @param type the target type.
+ * @param algebra the target algebra.
+ * @return the compiled expression.
+ * @author Alexander Nozik
  */
 public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST) {
@@ -54,11 +59,15 @@ public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expr
 }
 
 /**
- * Compile an [MST] to ASM using given algebra
+ * Compiles an [MST] to ASM using given algebra.
+ *
+ * @author Alexander Nozik.
  */
 public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
 
 /**
- * Optimize performance of an [MstExpression] using ASM codegen
+ * Optimizes performance of an [MstExpression] using ASM codegen.
+ *
+ * @author Alexander Nozik.
  */
 public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
