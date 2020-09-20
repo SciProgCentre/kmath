@@ -1,4 +1,6 @@
-plugins { id("scientifik.jvm") }
+plugins {
+    id("scientifik.jvm")
+}
 
 dependencies {
     implementation("org.ejml:ejml-simple:0.39")
