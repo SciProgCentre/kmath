@@ -1,4 +1,6 @@
-plugins { id("scientifik.jvm") }
+plugins {
+    id("scientifik.jvm")
+}
 
 dependencies {
     api(project(":kmath-core"))
