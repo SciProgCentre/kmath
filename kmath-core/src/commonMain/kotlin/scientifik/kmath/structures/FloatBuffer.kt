@@ -6,6 +6,7 @@ import kotlin.contracts.contract
  * Specialized [MutableBuffer] implementation over [FloatArray].
  *
  * @property array the underlying array.
+ * @author Iaroslav Postovalov
  */
 inline class FloatBuffer(val array: FloatArray) : MutableBuffer<Float> {
     override val size: Int get() = array.size

@@ -4,6 +4,8 @@ import scientifik.kmath.operations.*
 
 /**
  * [Algebra] over [MST] nodes.
+ *
+ * @author Alexander Nozik
  */
 object MstAlgebra : NumericAlgebra<MST> {
     override fun number(value: Number): MST = MST.Numeric(value)
@@ -19,6 +21,8 @@ object MstAlgebra : NumericAlgebra<MST> {
 
 /**
  * [Space] over [MST] nodes.
+ *
+ * @author Alexander Nozik
  */
 object MstSpace : Space<MST>, NumericAlgebra<MST> {
     override val zero: MST = number(0.0)
@@ -36,6 +40,8 @@ object MstSpace : Space<MST>, NumericAlgebra<MST> {
 
 /**
  * [Ring] over [MST] nodes.
+ *
+ * @author Alexander Nozik
  */
 object MstRing : Ring<MST>, NumericAlgebra<MST> {
     override val zero: MST = number(0.0)
@@ -57,6 +63,8 @@ object MstRing : Ring<MST>, NumericAlgebra<MST> {
 
 /**
  * [Field] over [MST] nodes.
+ *
+ * @author Alexander Nozik
  */
 object MstField : Field<MST> {
     override val zero: MST = number(0.0)
@@ -77,6 +85,8 @@ object MstField : Field<MST> {
 
 /**
  * [ExtendedField] over [MST] nodes.
+ *
+ * @author Iaroslav Postovalov
  */
 object MstExtendedField : ExtendedField<MST> {
     override val zero: MST = number(0.0)
