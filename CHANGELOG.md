@@ -4,15 +4,18 @@
 ### Added
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 ### Changed
-- Package changed from `scientifik` to `kscience.kmath`. 
+- Package changed from `scientifik` to `kscience.kmath`.
 
 ### Deprecated
 
 ### Removed
+- Koma module
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
+
 ### Security
+
 ## [0.1.4]
 
 ### Added
