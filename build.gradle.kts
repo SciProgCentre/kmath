@@ -1,6 +1,8 @@
 import ru.mipt.npm.gradle.KSciencePublishPlugin
 
-plugins { id("ru.mipt.npm.publish") apply false }
+plugins {
+    id("ru.mipt.npm.publish") apply false
+}
 
 val kmathVersion: String by extra("0.1.4")
 val bintrayRepo: String by extra("scientifik")
@@ -17,4 +19,6 @@ allprojects {
     version = kmathVersion
 }
 
-subprojects { if (name.startsWith("kmath")) apply<KSciencePublishPlugin>() }
+subprojects {
+    if (name.startsWith("kmath")) apply<KSciencePublishPlugin>()
+}
