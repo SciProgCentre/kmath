@@ -65,7 +65,6 @@ inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Varia
     }
 }
 
-
 abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
     abstract val context: F
 
@@ -152,7 +151,6 @@ internal class AutoDiffContext<T : Any, F : Field<T>>(override val context: F) :
 
     // Basic math (+, -, *, /)
 
-
     override fun add(a: Variable<T>, b: Variable<T>): Variable<T> = derive(variable { a.value + b.value }) { z ->
         a.d += z.d
         b.d += z.d
@@ -173,38 +171,66 @@ internal class AutoDiffContext<T : Any, F : Field<T>>(override val context: F) :
     }
 }
 
-// Extensions for differentiation of various basic mathematical functions
-
-// x ^ 2
 fun <T : Any, F : Field<T>> AutoDiffField<T, F>.sqr(x: Variable<T>): Variable<T> =
     derive(variable { x.value * x.value }) { z -> x.d += z.d * 2 * x.value }
 
-// x ^ 1/2
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sqrt(x: Variable<T>): Variable<T> =
     derive(variable { sqrt(x.value) }) { z -> x.d += z.d * 0.5 / z.value }
 
-// x ^ y (const)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Double): Variable<T> =
     derive(variable { power(x.value, y) }) { z -> x.d += z.d * y * power(x.value, y - 1) }
 
-fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Int): Variable<T> = pow(x, y.toDouble())
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Int): Variable<T> =
+    pow(x, y.toDouble())
 
-// exp(x)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.exp(x: Variable<T>): Variable<T> =
     derive(variable { exp(x.value) }) { z -> x.d += z.d * z.value }
 
-// ln(x)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.ln(x: Variable<T>): Variable<T> =
     derive(variable { ln(x.value) }) { z -> x.d += z.d / x.value }
 
-// x ^ y (any)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.pow(x: Variable<T>, y: Variable<T>): Variable<T> =
     exp(y * ln(x))
 
-// sin(x)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sin(x: Variable<T>): Variable<T> =
     derive(variable { sin(x.value) }) { z -> x.d += z.d * cos(x.value) }
 
-// cos(x)
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.cos(x: Variable<T>): Variable<T> =
     derive(variable { cos(x.value) }) { z -> x.d -= z.d * sin(x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.tan(x: Variable<T>): Variable<T> =
+    derive(variable { tan(x.value) }) { z ->
+        val c = cos(x.value)
+        x.d += z.d / (c * c)
+    }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.asin(x: Variable<T>): Variable<T> =
+    derive(variable { asin(x.value) }) { z -> x.d += z.d / sqrt(one - x.value * x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.acos(x: Variable<T>): Variable<T> =
+    derive(variable { acos(x.value) }) { z -> x.d -= z.d / sqrt(one - x.value * x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.atan(x: Variable<T>): Variable<T> =
+    derive(variable { atan(x.value) }) { z -> x.d += z.d / (one + x.value * x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sinh(x: Variable<T>): Variable<T> =
+    derive(variable { sin(x.value) }) { z -> x.d += z.d * cosh(x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.cosh(x: Variable<T>): Variable<T> =
+    derive(variable { cos(x.value) }) { z -> x.d += z.d * sinh(x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.tanh(x: Variable<T>): Variable<T> =
+    derive(variable { tan(x.value) }) { z ->
+        val c = cosh(x.value)
+        x.d += z.d / (c * c)
+    }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.asinh(x: Variable<T>): Variable<T> =
+    derive(variable { asinh(x.value) }) { z -> x.d += z.d / sqrt(one + x.value * x.value) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.acosh(x: Variable<T>): Variable<T> =
+    derive(variable { acosh(x.value) }) { z -> x.d += z.d / (sqrt((x.value - one) * (x.value + one))) }
+
+fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.atanh(x: Variable<T>): Variable<T> =
+    derive(variable { atanh(x.value) }) { z -> x.d += z.d / (one - x.value * x.value) }
+
