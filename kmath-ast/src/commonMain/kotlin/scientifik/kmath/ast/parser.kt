@@ -17,6 +17,8 @@ import scientifik.kmath.operations.SpaceOperations
 
 /**
  * TODO move to core
+ *
+ * @author Alexander Nozik and Iaroslav Postovalov
  */
 object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
@@ -85,6 +87,7 @@ object ArithmeticsEvaluator : Grammar<MST>() {
  *
  * @receiver the string to parse.
  * @return the [MST] node.
+ * @author Alexander Nozik
  */
 fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
 
@@ -93,5 +96,6 @@ fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd
  *
  * @receiver the string to parse.
  * @return the [MST] node.
+ * @author Alexander Nozik
  */
 fun String.parseMath(): MST = ArithmeticsEvaluator.parseToEnd(this)

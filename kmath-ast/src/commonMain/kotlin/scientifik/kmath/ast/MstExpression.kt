@@ -11,6 +11,7 @@ import kotlin.contracts.contract
  *
  * @property algebra the algebra that provides operations.
  * @property mst the [MST] node.
+ * @author Alexander Nozik
  */
 class MstExpression<T>(val algebra: Algebra<T>, val mst: MST) : Expression<T> {
     private inner class InnerAlgebra(val arguments: Map<String, T>) : NumericAlgebra<T> {
@@ -31,6 +32,8 @@ class MstExpression<T>(val algebra: Algebra<T>, val mst: MST) : Expression<T> {
 
 /**
  * Builds [MstExpression] over [Algebra].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
     mstAlgebra: E,
@@ -39,6 +42,8 @@ inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
 
 /**
  * Builds [MstExpression] over [Space].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -47,6 +52,8 @@ inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MST): Mst
 
 /**
  * Builds [MstExpression] over [Ring].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -55,6 +62,8 @@ inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST): MstExp
 
 /**
  * Builds [MstExpression] over [Field].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -63,6 +72,8 @@ inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MST): Mst
 
 /**
  * Builds [MstExpression] over [ExtendedField].
+ *
+ * @author Iaroslav Postovalov
  */
 inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -71,6 +82,8 @@ inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtendedField
 
 /**
  * Builds [MstExpression] over [FunctionalExpressionSpace].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -79,6 +92,8 @@ inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstIn
 
 /**
  * Builds [MstExpression] over [FunctionalExpressionRing].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -87,6 +102,8 @@ inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRi
 
 /**
  * Builds [MstExpression] over [FunctionalExpressionField].
+ *
+ * @author Alexander Nozik
  */
 inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstInField(block: MstField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -95,6 +112,8 @@ inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstIn
 
 /**
  * Builds [MstExpression] over [FunctionalExpressionExtendedField].
+ *
+ * @author Iaroslav Postovalov
  */
 inline fun <reified T : Any, A : ExtendedField<T>> FunctionalExpressionExtendedField<T, A>.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
