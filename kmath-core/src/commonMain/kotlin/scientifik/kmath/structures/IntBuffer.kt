@@ -1,7 +1,5 @@
 package scientifik.kmath.structures
 
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 /**
@@ -31,10 +29,7 @@ inline class IntBuffer(val array: IntArray) : MutableBuffer<Int> {
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for an buffer element given its index.
  */
-inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer {
-    contract { callsInPlace(init) }
-    return IntBuffer(IntArray(size) { init(it) })
-}
+inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
 
 /**
  * Returns a new [IntBuffer] of given elements.

@@ -3,7 +3,6 @@ package scientifik.kmath.operations
 import scientifik.kmath.operations.BigInt.Companion.BASE
 import scientifik.kmath.operations.BigInt.Companion.BASE_SIZE
 import scientifik.kmath.structures.*
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.math.log2
 import kotlin.math.max
