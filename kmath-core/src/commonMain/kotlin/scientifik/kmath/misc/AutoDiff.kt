@@ -226,11 +226,11 @@ fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.tanh(x: Variable<T>): Va
     }
 
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.asinh(x: Variable<T>): Variable<T> =
-    derive(variable { asin(x.value) }) { z -> x.d += z.d / sqrt(one + x.value * x.value) }
+    derive(variable { asinh(x.value) }) { z -> x.d += z.d / sqrt(one + x.value * x.value) }
 
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.acosh(x: Variable<T>): Variable<T> =
-    derive(variable { acos(x.value) }) { z -> x.d += z.d / (sqrt((x.value - one) * (x.value + one))) }
+    derive(variable { acosh(x.value) }) { z -> x.d += z.d / (sqrt((x.value - one) * (x.value + one))) }
 
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.atanh(x: Variable<T>): Variable<T> =
-    derive(variable { atan(x.value) }) { z -> x.d += z.d / (one - x.value * x.value) }
+    derive(variable { atanh(x.value) }) { z -> x.d += z.d / (one - x.value * x.value) }
 
