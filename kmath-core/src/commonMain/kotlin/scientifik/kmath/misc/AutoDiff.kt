@@ -217,7 +217,7 @@ fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.sinh(x: Variable<T>): Va
     derive(variable { sin(x.value) }) { z -> x.d += z.d * cosh(x.value) }
 
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.cosh(x: Variable<T>): Variable<T> =
-    derive(variable { cos(x.value) }) { z -> x.d -= z.d * sinh(x.value) }
+    derive(variable { cos(x.value) }) { z -> x.d += z.d * sinh(x.value) }
 
 fun <T : Any, F : ExtendedField<T>> AutoDiffField<T, F>.tanh(x: Variable<T>): Variable<T> =
     derive(variable { tan(x.value) }) { z ->
