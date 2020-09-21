@@ -1,8 +1,8 @@
-package scientifik.kmath.ejml
+package kscience.kmath.ejml
 
 import org.ejml.simple.SimpleMatrix
-import scientifik.kmath.linear.Point
-import scientifik.kmath.structures.Buffer
+import kscience.kmath.linear.Point
+import kscience.kmath.structures.Buffer
 
 /**
  * Represents point over EJML [SimpleMatrix].

@@ -1,26 +1,26 @@
-package scientifik.kmath.ejml
+package kscience.kmath.ejml
 
 import org.ejml.simple.SimpleMatrix
-import scientifik.kmath.linear.MatrixContext
-import scientifik.kmath.linear.Point
-import scientifik.kmath.operations.Space
-import scientifik.kmath.operations.invoke
-import scientifik.kmath.structures.Matrix
+import kscience.kmath.linear.MatrixContext
+import kscience.kmath.linear.Point
+import kscience.kmath.operations.Space
+import kscience.kmath.operations.invoke
+import kscience.kmath.structures.Matrix
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
  */
-class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double> {
+public class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double> {
     /**
      * Converts this matrix to EJML one.
      */
-    fun Matrix<Double>.toEjml(): EjmlMatrix =
+    public fun Matrix<Double>.toEjml(): EjmlMatrix =
         if (this is EjmlMatrix) this else produce(rowNum, colNum) { i, j -> get(i, j) }
 
     /**
      * Converts this vector to EJML one.
      */
-    fun Point<Double>.toEjml(): EjmlVector =
+    public fun Point<Double>.toEjml(): EjmlVector =
         if (this is EjmlVector) this else EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = get(row) }
         })
@@ -49,7 +49,7 @@ class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double
 
     override operator fun Matrix<Double>.times(value: Double): EjmlMatrix = EjmlMatrix(toEjml().origin.scale(value))
 
-    companion object
+    public companion object
 }
 
 /**
@@ -59,7 +59,7 @@ class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double
  * @param b n by p matrix.
  * @return the solution for 'x' that is n by p.
  */
-fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
+public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
     EjmlMatrix(a.toEjml().origin.solve(b.toEjml().origin))
 
 /**
@@ -69,7 +69,7 @@ fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
  * @param b n by p vector.
  * @return the solution for 'x' that is n by p.
  */
-fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
+public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
 
 /**
@@ -78,4 +78,4 @@ fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
  * @param a the matrix.
  * @return the inverse of this matrix.
  */
-fun EjmlMatrixContext.inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())
+public fun EjmlMatrixContext.inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())

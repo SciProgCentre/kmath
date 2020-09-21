@@ -1,29 +1,29 @@
-package scientifik.kmath.ejml
+package kscience.kmath.ejml
 
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
-import scientifik.kmath.linear.DeterminantFeature
-import scientifik.kmath.linear.FeaturedMatrix
-import scientifik.kmath.linear.LUPDecompositionFeature
-import scientifik.kmath.linear.MatrixFeature
-import scientifik.kmath.structures.NDStructure
+import kscience.kmath.linear.DeterminantFeature
+import kscience.kmath.linear.FeaturedMatrix
+import kscience.kmath.linear.LUPDecompositionFeature
+import kscience.kmath.linear.MatrixFeature
+import kscience.kmath.structures.NDStructure
 
 /**
  * Represents featured matrix over EJML [SimpleMatrix].
  *
  * @property origin the underlying [SimpleMatrix].
  */
-class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
-    override val rowNum: Int
+public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
+    public override val rowNum: Int
         get() = origin.numRows()
 
-    override val colNum: Int
+    public override val colNum: Int
         get() = origin.numCols()
 
-    override val shape: IntArray
+    public override val shape: IntArray
         get() = intArrayOf(origin.numRows(), origin.numCols())
 
-    override val features: Set<MatrixFeature> = setOf(
+    public override val features: Set<MatrixFeature> = setOf(
         object : LUPDecompositionFeature<Double>, DeterminantFeature<Double> {
             override val determinant: Double
                 get() = origin.determinant()
@@ -50,21 +50,21 @@ class EjmlMatrix(val origin: SimpleMatrix, features: Set<MatrixFeature>? = null)
         }
     ) union features.orEmpty()
 
-    override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
+    public override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
         EjmlMatrix(origin, this.features + features)
 
-    override operator fun get(i: Int, j: Int): Double = origin[i, j]
+    public override operator fun get(i: Int, j: Int): Double = origin[i, j]
 
-    override fun equals(other: Any?): Boolean {
+    public override fun equals(other: Any?): Boolean {
         if (other is EjmlMatrix) return origin.isIdentical(other.origin, 0.0)
         return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
-    override fun hashCode(): Int {
+    public override fun hashCode(): Int {
         var result = origin.hashCode()
         result = 31 * result + features.hashCode()
         return result
     }
 
-    override fun toString(): String = "EjmlMatrix(origin=$origin, features=$features)"
+    public override fun toString(): String = "EjmlMatrix(origin=$origin, features=$features)"
 }
