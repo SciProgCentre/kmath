@@ -36,7 +36,7 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
                 Triple(
                     EjmlMatrix(SimpleMatrix(ludecompositionF64.getRowPivot(null))),
                     EjmlMatrix(SimpleMatrix(ludecompositionF64.getLower(null))),
-                    EjmlMatrix(SimpleMatrix(ludecompositionF64.getUpper(null)))
+                    EjmlMatrix(SimpleMatrix(ludecompositionF64.getUpper(null))),
                 )
             }
 
@@ -51,7 +51,7 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
         }
     ) union features.orEmpty()
 
-    public override fun suggestFeature(vararg features: MatrixFeature): FeaturedMatrix<Double> =
+    public override fun suggestFeature(vararg features: MatrixFeature): EjmlMatrix =
         EjmlMatrix(origin, this.features + features)
 
     public override operator fun get(i: Int, j: Int): Double = origin[i, j]
