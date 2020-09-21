@@ -8,7 +8,7 @@ import kscience.kmath.structures.Buffer
  * Represents point over EJML [SimpleMatrix].
  *
  * @property origin the underlying [SimpleMatrix].
- * @author Iaroslav Postavalov
+ * @author Iaroslav Postovalov
  */
 public class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
     override val size: Int get() = origin.numRows()
