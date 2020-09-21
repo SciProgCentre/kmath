@@ -36,14 +36,3 @@ fun main() {
     val genericTime = measureTimeMillis { val res = matrix1 dot matrix2 }
     println("Generic implementation time: $genericTime")
 }
-
-    (EjmlMatrixContext(RealField)) {
-        val ejmlMatrix1 = matrix1.toEjml()
-        val ejmlMatrix2 = matrix2.toEjml()
-        val ejmlTime = measureTimeMillis { ejmlMatrix1 dot ejmlMatrix2 }
-        println("EJML implementation time: $ejmlTime")
-    }
-
-    val genericTime = measureTimeMillis { val res = matrix1 dot matrix2 }
-    println("Generic implementation time: $genericTime")
-}
