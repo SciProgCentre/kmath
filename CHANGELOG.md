@@ -5,6 +5,7 @@
 - `fun` annotation for SAM interfaces in library
 - Explicit `public` visibility for all public APIs
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
+- Automatic documentation generation for features (#139)
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
