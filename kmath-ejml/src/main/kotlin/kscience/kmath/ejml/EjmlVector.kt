@@ -11,10 +11,11 @@ import kscience.kmath.structures.Buffer
  * @author Iaroslav Postovalov
  */
 public class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
-    override val size: Int get() = origin.numRows()
+    public override val size: Int
+        get() = origin.numRows()
 
     init {
-        require(origin.numCols() == 1) { error("Only single column matrices are allowed") }
+        require(origin.numCols() == 1) { "Only single column matrices are allowed" }
     }
 
     public override operator fun get(index: Int): Double = origin[index]
