@@ -17,9 +17,9 @@ public class EjmlVector internal constructor(public val origin: SimpleMatrix) : 
         require(origin.numCols() == 1) { error("Only single column matrices are allowed") }
     }
 
-    override operator fun get(index: Int): Double = origin[index]
+    public override operator fun get(index: Int): Double = origin[index]
 
-    override operator fun iterator(): Iterator<Double> = object : Iterator<Double> {
+    public override operator fun iterator(): Iterator<Double> = object : Iterator<Double> {
         private var cursor: Int = 0
 
         override fun next(): Double {
@@ -30,10 +30,10 @@ public class EjmlVector internal constructor(public val origin: SimpleMatrix) : 
         override fun hasNext(): Boolean = cursor < origin.numCols() * origin.numRows()
     }
 
-    override fun contentEquals(other: Buffer<*>): Boolean {
+    public override fun contentEquals(other: Buffer<*>): Boolean {
         if (other is EjmlVector) return origin.isIdentical(other.origin, 0.0)
         return super.contentEquals(other)
     }
 
-    override fun toString(): String = "EjmlVector(origin=$origin)"
+    public override fun toString(): String = "EjmlVector(origin=$origin)"
 }

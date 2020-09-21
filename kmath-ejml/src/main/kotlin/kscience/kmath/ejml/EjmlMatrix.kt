@@ -40,13 +40,13 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
                 )
             }
 
-            public override val l: FeaturedMatrix<Double>
+            override val l: FeaturedMatrix<Double>
                 get() = lup.second
 
-            public override val u: FeaturedMatrix<Double>
+            override val u: FeaturedMatrix<Double>
                 get() = lup.third
 
-            public override val p: FeaturedMatrix<Double>
+            override val p: FeaturedMatrix<Double>
                 get() = lup.first
         }
     ) union features.orEmpty()
