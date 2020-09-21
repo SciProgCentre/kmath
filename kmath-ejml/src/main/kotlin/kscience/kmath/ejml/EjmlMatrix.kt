@@ -12,6 +12,7 @@ import kscience.kmath.structures.NDStructure
  * Represents featured matrix over EJML [SimpleMatrix].
  *
  * @property origin the underlying [SimpleMatrix].
+ * @author Iaroslav Postovalov
  */
 public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
     public override val rowNum: Int
