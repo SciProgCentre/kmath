@@ -2,14 +2,20 @@
 
 ## [Unreleased]
 ### Added
+- `fun` annotation for SAM interfaces in library
+- Explicit `public` visibility for all public APIs
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
+
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
+- Gradle version: 6.6 -> 6.6.1
+- Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
+- `Polynomial` secondary constructor made function.
 
 ### Deprecated
 
 ### Removed
-- Koma module
+- `kmath-koma` module because it doesn't support Kotlin 1.4.
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
@@ -43,7 +49,7 @@
 - `power(T, Int)` extension function has preconditions and supports `Field<T>`
 - Memory objects have more preconditions (overflow checking)
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
-- Gradle version: 6.3 -> 6.6.1
+- Gradle version: 6.3 -> 6.6
 - Moved probability distributions to commons-rng and to `kmath-prob`
 
 ### Fixed
