@@ -1,0 +1,36 @@
+{
+  "description": "Core classes, algebra definitions, basic linear algebra",
+  "maturity": "development",
+  "features": [
+    {
+      "id": "algebras",
+      "description": "Algebraic structures: contexts and elements",
+      "ref": "src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt"
+    },
+    {
+      "id": "nd",
+      "description": "Many-dimensional structures",
+      "ref": "src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt"
+    },
+    {
+      "id": "buffers",
+      "description": "One-dimensional structure",
+      "ref": "src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt"
+    },
+    {
+      "id": "expressions",
+      "description": "Functional Expressions",
+      "ref": "src/commonMain/kotlin/kscience/kmath/expressions"
+    },
+    {
+      "id": "domains",
+      "description": "Domains",
+      "ref": "src/commonMain/kotlin/kscience/kmath/domains"
+    },
+    {
+      "id": "autodif",
+      "description": "Automatic differentiation",
+      "ref": "src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt"
+    }
+  ]
+}

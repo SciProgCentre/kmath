@@ -68,26 +68,7 @@ can be used for a wide variety of purposes from high performance calculations to
 
 ## Modules
 
-### [kmath-core](kmath-core)
- - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
- - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
- - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
- - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
- - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
- - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
-
-### [kmath-coroutines](kmath-coroutines)
-### [kmath-viktor](kmath-viktor)
-### [kmath-prob](kmath-prob)
-### [kmath-ast](kmath-ast)
-### [kmath-commons](kmath-commons)
-### [kmath-memory](kmath-memory)
-### [kmath-for-real](kmath-for-real)
-### [kmath-functions](kmath-functions)
-### [kmath-dimensions](kmath-dimensions)
-### [kmath-histograms](kmath-histograms)
-### [kmath-geometry](kmath-geometry)
-
+$modulesString
 
 ## Multi-platform support
 
@@ -107,8 +88,8 @@ repositories{
 }
 
 dependencies{
-    api("kscience.kmath:kmath-core:0.2.0-dev-1")
-    //api("kscience.kmath:kmath-core-jvm:0.2.0-dev-1") for jvm-specific version
+    api("kscience.kmath:kmath-core:$version")
+    //api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
 

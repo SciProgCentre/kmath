@@ -1,16 +1,10 @@
 # The Core Module (`kmath-core`)
 
 The core features of KMath:
-
-- Algebraic structures: contexts and elements.
-- ND structures.
-- Buffers.
-- Functional Expressions.
-- Domains.
-- Automatic differentiation.
+$featuresString
 
 > #### Artifact:
-> This module is distributed in the artifact `kscience.kmath:kmath-core:0.1.4-dev-8`.
+> This module artifact: `$group:kmath-core:$version`.
 > 
 > **Gradle:**
 >
@@ -22,7 +16,7 @@ The core features of KMath:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-core:0.1.4-dev-8'
+>     implementation '$group:kmath-core:$version'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -35,6 +29,6 @@ The core features of KMath:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-core:0.1.4-dev-8")
+>     implementation("$group:kmath-core:$version")
 > }
 > ```
