@@ -12,3 +12,5 @@ api and multiple library back-ends.
 * [Expressions](./expressions.md)
 
 * Commons math integration
+
+* EJML integration

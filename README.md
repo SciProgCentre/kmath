@@ -53,7 +53,9 @@ can be used for a wide variety of purposes from high performance calculations to
 * **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
-                           
+
+* **EJML wrapper** Provides EJML `SimpleMatrix` wrapper consistent with the core matrix structures.
+
 ## Planned features
 
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
