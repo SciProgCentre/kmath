@@ -1,7 +1,4 @@
-plugins {
-    id("scientifik.mpp")
-    //id("scientifik.atomic")
-}
+plugins { id("ru.mipt.npm.mpp") }
 
 kotlin.sourceSets {
     all {
@@ -15,15 +12,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-core"))
-            api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Scientifik.coroutinesVersion}")
+            api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${ru.mipt.npm.gradle.KScienceVersions.coroutinesVersion}")
         }
-    }
-
-    jvmMain {
-        dependencies { api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Scientifik.coroutinesVersion}") }
-    }
-
-    jsMain {
-        dependencies { api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${Scientifik.coroutinesVersion}") }
     }
 }

@@ -10,31 +10,31 @@ The core features of KMath:
 - Automatic differentiation.
 
 > #### Artifact:
-> This module is distributed in the artifact `scientifik:kmath-core:0.1.4-dev-8`.
+> This module is distributed in the artifact `kscience.kmath:kmath-core:0.1.4-dev-8`.
 > 
 > **Gradle:**
 >
 > ```gradle
 > repositories {
->     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
+>     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 >     maven { url https://dl.bintray.com/hotkeytlt/maven' }
 > }
 > 
 > dependencies {
->     implementation 'scientifik:kmath-core:0.1.4-dev-8'
+>     implementation 'kscience.kmath:kmath-core:0.1.4-dev-8'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
->     maven("https://dl.bintray.com/mipt-npm/scientifik")
+>     maven("https://dl.bintray.com/mipt-npm/kscience")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 >     maven("https://dl.bintray.com/hotkeytlt/maven")
 > }
 > 
-> dependencies {``
->     implementation("scientifik:kmath-core:0.1.4-dev-8")
+> dependencies {
+>     implementation("kscience.kmath:kmath-core:0.1.4-dev-8")
 > }
 > ```

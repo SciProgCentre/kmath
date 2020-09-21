@@ -1,11 +1,11 @@
-package scientifik.dimensions
+package kscience.dimensions
 
-import scientifik.kmath.dimensions.D2
-import scientifik.kmath.dimensions.D3
-import scientifik.kmath.dimensions.DMatrixContext
+import kscience.kmath.dimensions.D2
+import kscience.kmath.dimensions.D3
+import kscience.kmath.dimensions.DMatrixContext
 import kotlin.test.Test
 
-class DMatrixContextTest {
+internal class DMatrixContextTest {
     @Test
     fun testDimensionSafeMatrix() {
         val res = with(DMatrixContext.real) {

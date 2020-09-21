@@ -1,8 +1,6 @@
-plugins {
-    id("scientifik.mpp")
-}
+plugins { id("ru.mipt.npm.mpp") }
 
-description = "A proof of concept module for adding typ-safe dimensions to structures"
+description = "A proof of concept module for adding type-safe dimensions to structures"
 
 kotlin.sourceSets {
     commonMain {
