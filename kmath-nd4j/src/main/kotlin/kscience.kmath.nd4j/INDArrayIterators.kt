@@ -1,4 +1,4 @@
-package scientifik.kmath.nd4j
+package kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.api.shape.Shape
@@ -18,7 +18,7 @@ private class INDArrayIndicesIterator(private val iterateOver: INDArray) : Itera
     }
 }
 
-internal fun INDArray.indicesIterator(): Iterator<IntArray>     = INDArrayIndicesIterator(this)
+internal fun INDArray.indicesIterator(): Iterator<IntArray> = INDArrayIndicesIterator(this)
 
 private sealed class INDArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
     private var i: Int = 0

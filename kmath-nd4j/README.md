@@ -13,26 +13,33 @@ This subproject implements the following features:
 >
 > ```gradle
 > repositories {
+>     mavenCentral()
 >     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
 > dependencies {
 >     implementation 'scientifik:kmath-nd4j:0.1.4-dev-8'
+>     implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
+>     mavenCentral()
 >     maven("https://dl.bintray.com/mipt-npm/scientifik")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
 > dependencies {
 >     implementation("scientifik:kmath-nd4j:0.1.4-dev-8")
+>     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
 > }
 > ```
+> 
+> This distribution also needs an implementation of ND4J API. The ND4J Native Platform is usually the fastest one, so 
+> it is included to the snippet.
 >
 
 ## Examples

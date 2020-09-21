@@ -11,7 +11,7 @@ import kscience.kmath.operations.Space
  * @property expected the expected shape.
  * @property actual the actual shape.
  */
-public class ShapeMismatchException(val expected: IntArray, val actual: IntArray) :
+public class ShapeMismatchException(public val expected: IntArray, public val actual: IntArray) :
     RuntimeException("Shape ${actual.contentToString()} doesn't fit in expected shape ${expected.contentToString()}.")
 
 /**
