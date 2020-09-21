@@ -1,8 +1,8 @@
 package scietifik.kmath.asm
 
-import scientifik.kmath.ast.mstInRing
-import scientifik.kmath.expressions.invoke
-import scientifik.kmath.operations.ByteRing
+import kscience.kmath.ast.mstInRing
+import kscience.kmath.expressions.invoke
+import kscience.kmath.operations.ByteRing
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

@@ -1,12 +1,12 @@
 package scietifik.kmath.ast
 
-import scientifik.kmath.asm.compile
-import scientifik.kmath.asm.expression
-import scientifik.kmath.ast.mstInField
-import scientifik.kmath.ast.parseMath
-import scientifik.kmath.expressions.invoke
-import scientifik.kmath.operations.Complex
-import scientifik.kmath.operations.ComplexField
+import kscience.kmath.asm.compile
+import kscience.kmath.asm.expression
+import kscience.kmath.ast.mstInField
+import kscience.kmath.ast.parseMath
+import kscience.kmath.expressions.invoke
+import kscience.kmath.operations.Complex
+import kscience.kmath.operations.ComplexField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

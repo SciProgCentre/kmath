@@ -1,11 +1,11 @@
-package scientifik.kmath.linear
+package kscience.kmath.linear
 
-import scientifik.kmath.commons.linear.CMMatrixContext
-import scientifik.kmath.commons.linear.toCM
-import scientifik.kmath.ejml.EjmlMatrixContext
-import scientifik.kmath.operations.RealField
-import scientifik.kmath.operations.invoke
-import scientifik.kmath.structures.Matrix
+import kscience.kmath.commons.linear.CMMatrixContext
+import kscience.kmath.commons.linear.toCM
+import kscience.kmath.ejml.EjmlMatrixContext
+import kscience.kmath.operations.RealField
+import kscience.kmath.operations.invoke
+import kscience.kmath.structures.Matrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -25,6 +25,17 @@ fun main() {
         val cmTime = measureTimeMillis { cmMatrix1 dot cmMatrix2 }
         println("CM implementation time: $cmTime")
     }
+
+    (EjmlMatrixContext(RealField)) {
+        val ejmlMatrix1 = matrix1.toEjml()
+        val ejmlMatrix2 = matrix2.toEjml()
+        val ejmlTime = measureTimeMillis { ejmlMatrix1 dot ejmlMatrix2 }
+        println("EJML implementation time: $ejmlTime")
+    }
+
+    val genericTime = measureTimeMillis { val res = matrix1 dot matrix2 }
+    println("Generic implementation time: $genericTime")
+}
 
     (EjmlMatrixContext(RealField)) {
         val ejmlMatrix1 = matrix1.toEjml()

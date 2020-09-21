@@ -2,18 +2,27 @@
 
 ## [Unreleased]
 ### Added
+- `fun` annotation for SAM interfaces in library
+- Explicit `public` visibility for all public APIs
+- Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 - `kmath-ejml` to supply EJML SimpleMatrix wrapper.
 
 ### Changed
+- Package changed from `scientifik` to `kscience.kmath`.
+- Gradle version: 6.6 -> 6.6.1
+- Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
+- `Polynomial` secondary constructor made function.
 
 ### Deprecated
 
 ### Removed
-- `kmath-koma` module.
+- `kmath-koma` module because it doesn't support Kotlin 1.4.
 
 ### Fixed
+- `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
 
 ### Security
+
 ## [0.1.4]
 
 ### Added

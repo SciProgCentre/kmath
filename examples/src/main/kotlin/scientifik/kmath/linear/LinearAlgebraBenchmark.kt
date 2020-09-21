@@ -1,13 +1,13 @@
-package scientifik.kmath.linear
+package kscience.kmath.linear
 
-import scientifik.kmath.commons.linear.CMMatrixContext
-import scientifik.kmath.commons.linear.inverse
-import scientifik.kmath.commons.linear.toCM
-import scientifik.kmath.ejml.EjmlMatrixContext
-import scientifik.kmath.ejml.inverse
-import scientifik.kmath.operations.RealField
-import scientifik.kmath.operations.invoke
-import scientifik.kmath.structures.Matrix
+import kscience.kmath.commons.linear.CMMatrixContext
+import kscience.kmath.commons.linear.inverse
+import kscience.kmath.commons.linear.toCM
+import kscience.kmath.ejml.EjmlMatrixContext
+import kscience.kmath.ejml.inverse
+import kscience.kmath.operations.RealField
+import kscience.kmath.operations.invoke
+import kscience.kmath.structures.Matrix
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 

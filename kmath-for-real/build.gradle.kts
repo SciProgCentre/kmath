@@ -1,5 +1,5 @@
 plugins {
-    id("scientifik.mpp")
+    id("ru.mipt.npm.mpp")
 }
 
 kotlin.sourceSets.commonMain {

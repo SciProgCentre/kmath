@@ -1,16 +1,16 @@
 package scietifik.kmath.histogram
 
-import scientifik.kmath.histogram.RealHistogram
-import scientifik.kmath.histogram.fill
-import scientifik.kmath.histogram.put
-import scientifik.kmath.real.RealVector
+import kscience.kmath.histogram.RealHistogram
+import kscience.kmath.histogram.fill
+import kscience.kmath.histogram.put
+import kscience.kmath.real.RealVector
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class MultivariateHistogramTest {
+internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
         val histogram = RealHistogram.fromRanges(
