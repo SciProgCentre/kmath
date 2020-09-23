@@ -159,7 +159,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
 }
 
 /**
- * Represents complex number.
+ * Represents `double`-based complex number.
  *
  * @property re The real part.
  * @property im The imaginary part.

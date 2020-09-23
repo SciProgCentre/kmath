@@ -3,9 +3,9 @@ plugins {
     id("org.jetbrains.changelog") version "0.4.0"
 }
 
-val kmathVersion by extra("0.2.0-dev-1")
-val bintrayRepo by extra("kscience")
-val githubProject by extra("kmath")
+val kmathVersion: String by extra("0.2.0-dev-1")
+val bintrayRepo: String by extra("kscience")
+val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {

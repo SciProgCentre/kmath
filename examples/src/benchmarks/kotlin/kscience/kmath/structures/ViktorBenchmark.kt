@@ -10,8 +10,8 @@ import org.openjdk.jmh.annotations.State
 
 @State(Scope.Benchmark)
 class ViktorBenchmark {
-    final val dim = 1000
-    final val n = 100
+    final val dim: Int = 1000
+    final val n: Int = 100
 
     // automatically build context most suited for given type.
     final val autoField: BufferedNDField<Double, RealField> = NDField.auto(RealField, dim, dim)

@@ -32,7 +32,7 @@ internal class AsmBuilder<T> internal constructor(
      * Internal classloader of [AsmBuilder] with alias to define class from byte array.
      */
     private class ClassLoader(parent: java.lang.ClassLoader) : java.lang.ClassLoader(parent) {
-        internal fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
+        fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
     }
 
     /**

@@ -10,30 +10,29 @@ class ArrayBenchmark {
     @Benchmark
     fun benchmarkArrayRead() {
         var res = 0
-        for (i in 1.._root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size) res += _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.array[_root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size - i]
+        for (i in 1..size) res += array[size - i]
     }
 
     @Benchmark
     fun benchmarkBufferRead() {
         var res = 0
-        for (i in 1.._root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size) res += _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.arrayBuffer.get(
-            _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size - i)
+        for (i in 1..size) res += arrayBuffer.get(
+            size - i
+        )
     }
 
     @Benchmark
     fun nativeBufferRead() {
         var res = 0
-        for (i in 1.._root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size) res += _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.nativeBuffer.get(
-            _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size - i)
+        for (i in 1..size) res += nativeBuffer.get(
+            size - i
+        )
     }
 
     companion object {
         const val size: Int = 1000
-        val array: IntArray = IntArray(_root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size) { it }
-        val arrayBuffer: IntBuffer = IntBuffer.wrap(_root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.array)
-
-        val nativeBuffer: IntBuffer = IntBuffer.allocate(_root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size).also {
-            for (i in 0 until _root_ide_package_.kscience.kmath.structures.ArrayBenchmark.Companion.size) it.put(i, i)
-        }
+        val array: IntArray = IntArray(size) { it }
+        val arrayBuffer: IntBuffer = IntBuffer.wrap(array)
+        val nativeBuffer: IntBuffer = IntBuffer.allocate(size).also { for (i in 0 until size) it.put(i, i) }
     }
 }

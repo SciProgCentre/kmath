@@ -94,7 +94,7 @@ public class DiffExpression(public val function: DerivativeStructureField.() -> 
      * TODO make result [DiffExpression]
      */
     public fun derivative(orders: Map<String, Int>): Expression<Double> = Expression { arguments ->
-        (DerivativeStructureField(orders.values.max() ?: 0, arguments)) { function().deriv(orders) }
+        (DerivativeStructureField(orders.values.maxOrNull() ?: 0, arguments)) { function().deriv(orders) }
     }
 
     //TODO add gradient and maybe other vector operators

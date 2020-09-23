@@ -62,7 +62,7 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
         //clear list from previous run
         tmp.clear()
         //Fill list
-        repeat(size){
+        repeat(size) {
             tmp.add(chain.next())
         }
         //return new buffer with elements from tmp

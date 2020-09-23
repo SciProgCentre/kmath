@@ -32,7 +32,8 @@ public fun <T : Any> MemoryReader.read(spec: MemorySpec<T>, offset: Int): T = wi
 /**
  * Writes the object [value] with [spec] starting from [offset].
  */
-public fun <T : Any> MemoryWriter.write(spec: MemorySpec<T>, offset: Int, value: T): Unit = with(spec) { write(offset, value) }
+public fun <T : Any> MemoryWriter.write(spec: MemorySpec<T>, offset: Int, value: T): Unit =
+    with(spec) { write(offset, value) }
 
 /**
  * Reads array of [size] objects mapped by [spec] at certain [offset].

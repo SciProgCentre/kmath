@@ -10,10 +10,8 @@ import org.apache.commons.rng.simple.RandomSource
 import java.time.Duration
 import java.time.Instant
 
-
-private suspend fun runChain(): Duration {
+private fun runChain(): Duration {
     val generator = RandomGenerator.fromSource(RandomSource.MT, 123L)
-
     val normal = Distribution.normal(NormalSamplerMethod.Ziggurat)
     val chain = normal.sample(generator) as BlockingRealChain
 
@@ -67,5 +65,4 @@ fun main() {
         println("Chain: ${chainJob.await()}")
         println("Direct: ${directJob.await()}")
     }
-
 }

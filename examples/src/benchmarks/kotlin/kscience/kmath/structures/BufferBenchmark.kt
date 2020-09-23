@@ -11,7 +11,7 @@ class BufferBenchmark {
 
     @Benchmark
     fun genericRealBufferReadWrite() {
-        val buffer = RealBuffer(size){it.toDouble()}
+        val buffer = RealBuffer(size) { it.toDouble() }
 
         (0 until size).forEach {
             buffer[it]
@@ -20,7 +20,7 @@ class BufferBenchmark {
 
     @Benchmark
     fun complexBufferReadWrite() {
-        val buffer = MutableBuffer.complex(size / 2){Complex(it.toDouble(), -it.toDouble())}
+        val buffer = MutableBuffer.complex(size / 2) { Complex(it.toDouble(), -it.toDouble()) }
 
         (0 until size / 2).forEach {
             buffer[it]
@@ -28,6 +28,6 @@ class BufferBenchmark {
     }
 
     companion object {
-        const val size = 100
+        const val size: Int = 100
     }
 }

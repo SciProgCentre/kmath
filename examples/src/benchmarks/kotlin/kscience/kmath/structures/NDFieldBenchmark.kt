@@ -40,11 +40,10 @@ class NDFieldBenchmark {
     }
 
     companion object {
-        val dim = 1000
-        val n = 100
-
-        val bufferedField = NDField.auto(RealField, dim, dim)
-        val specializedField = NDField.real(dim, dim)
-        val genericField = NDField.boxing(RealField, dim, dim)
+        const val dim: Int = 1000
+        const val n: Int = 100
+        val bufferedField: BufferedNDField<Double, RealField> = NDField.auto(RealField, dim, dim)
+        val specializedField: RealNDField = NDField.real(dim, dim)
+        val genericField: BoxingNDField<Double, RealField> = NDField.boxing(RealField, dim, dim)
     }
 }
