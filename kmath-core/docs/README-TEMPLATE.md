@@ -1,10 +1,10 @@
 # The Core Module (`kmath-core`)
 
 The core features of KMath:
-$featuresString
+$features
 
 > #### Artifact:
-> This module artifact: `$group:kmath-core:$version`.
+> This module artifact: `${group}:${name}:${version}`.
 > 
 > **Gradle:**
 >
@@ -16,7 +16,7 @@ $featuresString
 > }
 > 
 > dependencies {
->     implementation '$group:kmath-core:$version'
+>     implementation '${group}:${name}:${version}'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -29,6 +29,6 @@ $featuresString
 > }
 > 
 > dependencies {
->     implementation("$group:kmath-core:$version")
+>     implementation("${group}:${name}:${version}")
 > }
 > ```

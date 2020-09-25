@@ -9,9 +9,9 @@ Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmat
 
 # KMath
 Could be pronounced as `key-math`.
-The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's `numpy` library. In contrast to `numpy` and `scipy` it is modular and has a lightweight core.
+The Kotlin MATHematics library  was initially intended as a Kotlin-based analog to Python's `numpy` library. Later we found that kotlin is much more flexible language and allows superior architecture designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like experience could be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
-## Publications
+## Publications and talks
 * [A conceptual article about context-oriented design](https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2)
 * [Another article about context-oriented design](https://proandroiddev.com/diving-deeper-into-context-oriented-programming-in-kotlin-3ecb4ec38814)
 * [ACAT 2019 conference paper](https://aip.scitation.org/doi/abs/10.1063/1.5130103)
@@ -29,7 +29,7 @@ The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's 
 
 ## Features
 
-Actual feature list is [here](docs/features.md)
+Actual feature list is [here](/docs/features.md)
 
 * **Algebra**
     * Algebraic structures like rings, spaces and field (**TODO** add example to wiki)
@@ -68,11 +68,11 @@ can be used for a wide variety of purposes from high performance calculations to
 
 ## Modules
 
-$modulesString
+$modules
 
 ## Multi-platform support
 
-KMath is developed as a multi-platform library, which means that most of interfaces are declared in the [common module](kmath-core/src/commonMain). Implementation is also done in the common module wherever possible. In some cases, features are delegated to platform-specific implementations even if they could be done in the common module for performance reasons. Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
+KMath is developed as a multi-platform library, which means that most of the interfaces are declared in the [common module](/kmath-core/src/commonMain). Implementation is also done in the common module wherever possible. In some cases, features are delegated to platform-specific implementations even if they could be done in the common module for performance reasons. Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
 
 ## Performance
 

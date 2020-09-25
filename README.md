@@ -68,6 +68,12 @@ can be used for a wide variety of purposes from high performance calculations to
 
 ## Modules
 
+### [examples](examples)
+
+### [kmath-ast](kmath-ast)
+
+### [kmath-commons](kmath-commons)
+
 ### [kmath-core](kmath-core)
  - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
  - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
@@ -77,16 +83,23 @@ can be used for a wide variety of purposes from high performance calculations to
  - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
 
 ### [kmath-coroutines](kmath-coroutines)
-### [kmath-viktor](kmath-viktor)
-### [kmath-prob](kmath-prob)
-### [kmath-ast](kmath-ast)
-### [kmath-commons](kmath-commons)
-### [kmath-memory](kmath-memory)
-### [kmath-for-real](kmath-for-real)
-### [kmath-functions](kmath-functions)
+
 ### [kmath-dimensions](kmath-dimensions)
-### [kmath-histograms](kmath-histograms)
+
+### [kmath-for-real](kmath-for-real)
+
+### [kmath-functions](kmath-functions)
+
 ### [kmath-geometry](kmath-geometry)
+
+### [kmath-histograms](kmath-histograms)
+
+### [kmath-memory](kmath-memory)
+
+### [kmath-prob](kmath-prob)
+
+### [kmath-viktor](kmath-viktor)
+
 
 
 ## Multi-platform support
