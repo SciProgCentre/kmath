@@ -11,7 +11,12 @@ The core features of KMath:
 
 
 > #### Artifact:
+>
 > This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-1`.
+>
+> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
+>
+> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
 >
 > **Gradle:**
 >

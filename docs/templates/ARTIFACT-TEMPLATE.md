@@ -1,5 +1,10 @@
 > #### Artifact:
+>
 > This module artifact: `${group}:${name}:${version}`.
+>
+> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/${name}/images/download.svg) ](https://bintray.com/mipt-npm/kscience/${name}/_latestVersion)
+>
+> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/${name}/images/download.svg) ](https://bintray.com/mipt-npm/dev/${name}/_latestVersion)
 >
 > **Gradle:**
 >
