@@ -9,9 +9,9 @@ Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmat
 
 # KMath
 Could be pronounced as `key-math`.
-The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's `numpy` library. In contrast to `numpy` and `scipy` it is modular and has a lightweight core.
+The Kotlin MATHematics library  was initially intended as a Kotlin-based analog to Python's `numpy` library. Later we found that kotlin is much more flexible language and allows superior architecture designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like experience could be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
-## Publications
+## Publications and talks
 * [A conceptual article about context-oriented design](https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2)
 * [Another article about context-oriented design](https://proandroiddev.com/diving-deeper-into-context-oriented-programming-in-kotlin-3ecb4ec38814)
 * [ACAT 2019 conference paper](https://aip.scitation.org/doi/abs/10.1063/1.5130103)
@@ -29,7 +29,7 @@ The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's 
 
 ## Features
 
-Actual feature list is [here](docs/features.md)
+Actual feature list is [here](/docs/features.md)
 
 * **Algebra**
     * Algebraic structures like rings, spaces and field (**TODO** add example to wiki)
@@ -68,43 +68,99 @@ can be used for a wide variety of purposes from high performance calculations to
 
 ## Modules
 
-### [examples](examples)
+<hr/>
 
-### [kmath-ast](kmath-ast)
+* ### [examples](examples)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-commons](kmath-commons)
+* ### [kmath-ast](kmath-ast)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-core](kmath-core)
- - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
- - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
- - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
- - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
- - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
- - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+* ### [kmath-commons](kmath-commons)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-coroutines](kmath-coroutines)
+* ### [kmath-core](kmath-core)
+> Core classes, algebra definitions, basic linear algebra
+>
+> **Maturity**: DEVELOPMENT
+>
+> **Features:**
+> - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
+> - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
+> - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
+> - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
+> - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
+> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
 
-### [kmath-dimensions](kmath-dimensions)
+<hr/>
 
-### [kmath-for-real](kmath-for-real)
+* ### [kmath-coroutines](kmath-coroutines)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-functions](kmath-functions)
+* ### [kmath-dimensions](kmath-dimensions)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-geometry](kmath-geometry)
+* ### [kmath-for-real](kmath-for-real)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-histograms](kmath-histograms)
+* ### [kmath-functions](kmath-functions)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-memory](kmath-memory)
+* ### [kmath-geometry](kmath-geometry)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-prob](kmath-prob)
+* ### [kmath-histograms](kmath-histograms)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
-### [kmath-viktor](kmath-viktor)
+* ### [kmath-memory](kmath-memory)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
+* ### [kmath-prob](kmath-prob)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-viktor](kmath-viktor)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
 
 
 ## Multi-platform support
 
-KMath is developed as a multi-platform library, which means that most of interfaces are declared in the [common module](kmath-core/src/commonMain). Implementation is also done in the common module wherever possible. In some cases, features are delegated to platform-specific implementations even if they could be done in the common module for performance reasons. Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
+KMath is developed as a multi-platform library, which means that most of the interfaces are declared in the [common module](/kmath-core/src/commonMain). Implementation is also done in the common module wherever possible. In some cases, features are delegated to platform-specific implementations even if they could be done in the common module for performance reasons. Currently, the JVM is the main focus of development, however Kotlin/Native and Kotlin/JS contributions are also welcome.
 
 ## Performance
 

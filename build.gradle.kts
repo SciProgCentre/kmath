@@ -1,5 +1,4 @@
 plugins {
-    //id("ru.mipt.npm.publish") apply false
     id("ru.mipt.npm.project")
 }
 
@@ -23,5 +22,5 @@ subprojects {
 }
 
 readme{
-    readmeTemplate = file("docs/template/README-TEMPLATE.md")
+    readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }
