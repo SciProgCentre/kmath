@@ -10,9 +10,11 @@
 >
 > ```gradle
 > repositories {
+>     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
 >     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+
 > }
 > 
 > dependencies {
@@ -23,6 +25,7 @@
 >
 > ```kotlin
 > repositories {
+>     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 >     maven("https://dl.bintray.com/mipt-npm/kscience")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 >     maven("https://dl.bintray.com/hotkeytlt/maven")

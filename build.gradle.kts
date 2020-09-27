@@ -2,13 +2,14 @@ plugins {
     id("ru.mipt.npm.project")
 }
 
-val kmathVersion by extra("0.2.0-dev-1")
+val kmathVersion by extra("0.2.0-dev-2")
 val bintrayRepo by extra("kscience")
 val githubProject by extra("kmath")
 
 allprojects {
     repositories {
         jcenter()
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
         maven("https://dl.bintray.com/hotkeytlt/maven")
     }
