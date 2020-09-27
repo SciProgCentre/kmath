@@ -6,6 +6,7 @@
 - Explicit `public` visibility for all public APIs
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 - Automatic README generation for features (#139)
+- Native support for `memory`, `core` and `dimensions`
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
@@ -18,6 +19,7 @@
 
 ### Removed
 - `kmath-koma` module because it doesn't support Kotlin 1.4.
+- Support of `legacy` JS backend (we will support only IR)
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
