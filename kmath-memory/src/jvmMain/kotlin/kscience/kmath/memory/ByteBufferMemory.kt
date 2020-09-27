@@ -1,4 +1,4 @@
-package kscience.memory
+package kscience.kmath.memory
 
 import java.io.IOException
 import java.nio.ByteBuffer

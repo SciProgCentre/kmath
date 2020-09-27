@@ -19,39 +19,37 @@ import kotlin.reflect.KClass
  * @author Alexander Nozik
  */
 public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
-    fun AsmBuilder<T>.visit(node: MST) {
-        when (node) {
-            is MST.Symbolic -> {
-                val symbol = try {
-                    algebra.symbol(node.value)
-                } catch (ignored: Throwable) {
-                    null
-                }
-
-                if (symbol != null)
-                    loadTConstant(symbol)
-                else
-                    loadVariable(node.value)
+    fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
+        is MST.Symbolic -> {
+            val symbol = try {
+                algebra.symbol(node.value)
+            } catch (ignored: Throwable) {
+                null
             }
 
-            is MST.Numeric -> loadNumeric(node.value)
+            if (symbol != null)
+                loadTConstant(symbol)
+            else
+                loadVariable(node.value)
+        }
 
-            is MST.Unary -> buildAlgebraOperationCall(
-                context = algebra,
-                name = node.operation,
-                fallbackMethodName = "unaryOperation",
-                parameterTypes = arrayOf(MstType.fromMst(node.value))
-            ) { visit(node.value) }
+        is MST.Numeric -> loadNumeric(node.value)
 
-            is MST.Binary -> buildAlgebraOperationCall(
-                context = algebra,
-                name = node.operation,
-                fallbackMethodName = "binaryOperation",
-                parameterTypes = arrayOf(MstType.fromMst(node.left), MstType.fromMst(node.right))
-            ) {
-                visit(node.left)
-                visit(node.right)
-            }
+        is MST.Unary -> buildAlgebraOperationCall(
+            context = algebra,
+            name = node.operation,
+            fallbackMethodName = "unaryOperation",
+            parameterTypes = arrayOf(MstType.fromMst(node.value))
+        ) { visit(node.value) }
+
+        is MST.Binary -> buildAlgebraOperationCall(
+            context = algebra,
+            name = node.operation,
+            fallbackMethodName = "binaryOperation",
+            parameterTypes = arrayOf(MstType.fromMst(node.left), MstType.fromMst(node.right))
+        ) {
+            visit(node.left)
+            visit(node.right)
         }
     }
 

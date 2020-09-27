@@ -2,27 +2,33 @@
 
 The core features of KMath:
 
-- Algebraic structures: contexts and elements.
-- ND structures.
-- Buffers.
-- Functional Expressions.
-- Domains.
-- Automatic differentiation.
+ - [algebras](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
+ - [nd](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
+ - [buffers](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
+ - [expressions](src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
+ - [domains](src/commonMain/kotlin/kscience/kmath/domains) : Domains
+ - [autodif](src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+
 
 > #### Artifact:
-> This module is distributed in the artifact `kscience.kmath:kmath-core:0.1.4-dev-8`.
-> 
+>
+> This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-1`.
+>
+> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
+>
+> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
+>
 > **Gradle:**
 >
 > ```gradle
 > repositories {
 >     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
->     maven { url https://dl.bintray.com/hotkeytlt/maven' }
+>     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-core:0.1.4-dev-8'
+>     implementation 'kscience.kmath:kmath-core:0.2.0-dev-1'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -35,6 +41,6 @@ The core features of KMath:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-core:0.1.4-dev-8")
+>     implementation("kscience.kmath:kmath-core:0.2.0-dev-1")
 > }
 > ```
