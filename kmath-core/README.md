@@ -1,6 +1,7 @@
 # The Core Module (`kmath-core`)
 
 The core features of KMath:
+
  - [algebras](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
  - [nd](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
  - [buffers](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
@@ -10,15 +11,20 @@ The core features of KMath:
 
 
 > #### Artifact:
+>
 > This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-1`.
-> 
+>
+> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
+>
+> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
+>
 > **Gradle:**
 >
 > ```gradle
 > repositories {
 >     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
->     maven { url https://dl.bintray.com/hotkeytlt/maven' }
+>     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
 > }
 > 
 > dependencies {
