@@ -3,7 +3,7 @@
 
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
 
-Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/scientifik/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/scientifik/kmath-core/_latestVersion)
+Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
 
 Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
 
@@ -29,7 +29,7 @@ The Kotlin MATHematics library is intended as a Kotlin-based analog to Python's 
 
 ## Features
 
-Actual feature list is [here](doc/features.md)
+Actual feature list is [here](docs/features.md)
 
 * **Algebra**
     * Algebraic structures like rings, spaces and field (**TODO** add example to wiki)
@@ -54,9 +54,6 @@ can be used for a wide variety of purposes from high performance calculations to
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
                            
-* **Koma wrapper** [Koma](https://github.com/kyonifer/koma) is a well established numerics library in Kotlin, specifically linear algebra.
-The plan is to have wrappers for koma implementations for compatibility with kmath API.
-
 ## Planned features
 
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
@@ -68,6 +65,29 @@ The plan is to have wrappers for koma implementations for compatibility with kma
 * **Probability and distributions**
 
 * **Fitting** Non-linear curve fitting facilities
+
+## Modules
+
+### [kmath-core](kmath-core)
+ - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
+ - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
+ - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
+ - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
+ - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
+ - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+
+### [kmath-coroutines](kmath-coroutines)
+### [kmath-viktor](kmath-viktor)
+### [kmath-prob](kmath-prob)
+### [kmath-ast](kmath-ast)
+### [kmath-commons](kmath-commons)
+### [kmath-memory](kmath-memory)
+### [kmath-for-real](kmath-for-real)
+### [kmath-functions](kmath-functions)
+### [kmath-dimensions](kmath-dimensions)
+### [kmath-histograms](kmath-histograms)
+### [kmath-geometry](kmath-geometry)
+
 
 ## Multi-platform support
 
@@ -83,12 +103,12 @@ Release artifacts are accessible from bintray with following configuration (see 
 
 ```kotlin
 repositories{
-    maven("https://dl.bintray.com/mipt-npm/scientifik")
+    maven("https://dl.bintray.com/mipt-npm/kscience")
 }
 
 dependencies{
-    api("scientifik:kmath-core:${kmathVersion}")
-    //api("scientifik:kmath-core-jvm:${kmathVersion}") for jvm-specific version
+    api("kscience.kmath:kmath-core:0.2.0-dev-1")
+    //api("kscience.kmath:kmath-core-jvm:0.2.0-dev-1") for jvm-specific version
 }
 ```
 

@@ -1,10 +1,10 @@
 package scietifik.kmath.asm
 
-import scientifik.kmath.asm.compile
-import scientifik.kmath.ast.mstInField
-import scientifik.kmath.ast.mstInSpace
-import scientifik.kmath.expressions.invoke
-import scientifik.kmath.operations.RealField
+import kscience.kmath.asm.compile
+import kscience.kmath.ast.mstInField
+import kscience.kmath.ast.mstInSpace
+import kscience.kmath.expressions.invoke
+import kscience.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
