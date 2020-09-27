@@ -1,4 +1,4 @@
-package kscience.memory
+package kscience.kmath.memory
 
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

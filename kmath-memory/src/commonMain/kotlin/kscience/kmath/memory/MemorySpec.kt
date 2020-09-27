@@ -1,4 +1,4 @@
-package kscience.memory
+package kscience.kmath.memory
 
 /**
  * A specification to read or write custom objects with fixed size in bytes.

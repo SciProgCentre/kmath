@@ -53,9 +53,7 @@ can be used for a wide variety of purposes from high performance calculations to
 * **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
-
-* **EJML wrapper** Provides EJML `SimpleMatrix` wrapper consistent with the core matrix structures.
-
+                           
 ## Planned features
 
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
@@ -70,95 +68,7 @@ can be used for a wide variety of purposes from high performance calculations to
 
 ## Modules
 
-<hr/>
-
-* ### [examples](examples)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-ast](kmath-ast)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-commons](kmath-commons)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-core](kmath-core)
-> Core classes, algebra definitions, basic linear algebra
->
-> **Maturity**: DEVELOPMENT
->
-> **Features:**
-> - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
-> - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
-> - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
-> - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
-> - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
-> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
-
-<hr/>
-
-* ### [kmath-coroutines](kmath-coroutines)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-dimensions](kmath-dimensions)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-for-real](kmath-for-real)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-functions](kmath-functions)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-geometry](kmath-geometry)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-histograms](kmath-histograms)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-memory](kmath-memory)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-prob](kmath-prob)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
-* ### [kmath-viktor](kmath-viktor)
-> 
->
-> **Maturity**: EXPERIMENTAL
-<hr/>
-
+$modules
 
 ## Multi-platform support
 
@@ -178,8 +88,8 @@ repositories{
 }
 
 dependencies{
-    api("kscience.kmath:kmath-core:0.2.0-dev-1")
-    //api("kscience.kmath:kmath-core-jvm:0.2.0-dev-1") for jvm-specific version
+    api("kscience.kmath:kmath-core:$version")
+    //api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
 
