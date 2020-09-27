@@ -14,7 +14,7 @@ public interface NamedDistribution<T> : Distribution<Map<String, T>>
 public class FactorizedDistribution<T>(public val distributions: Collection<NamedDistribution<T>>) :
     NamedDistribution<T> {
     override fun probability(arg: Map<String, T>): Double =
-        distributions.fold(1.0) { acc, distr -> acc * distr.probability(arg) }
+        distributions.fold(1.0) { acc, dist -> acc * dist.probability(arg) }
 
     override fun sample(generator: RandomGenerator): Chain<Map<String, T>> {
         val chains = distributions.map { it.sample(generator) }

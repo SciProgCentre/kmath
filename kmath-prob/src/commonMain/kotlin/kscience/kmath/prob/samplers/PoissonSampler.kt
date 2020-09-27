@@ -1,8 +1,8 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
 
 /**
  * Sampler for the Poisson distribution.
@@ -16,17 +16,15 @@ import scientifik.kmath.prob.Sampler
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/PoissonSampler.html
  */
-class PoissonSampler private constructor(
-    mean: Double
-) : Sampler<Int> {
+public class PoissonSampler private constructor(mean: Double) : Sampler<Int> {
     private val poissonSamplerDelegate: Sampler<Int> = of(mean)
-    override fun sample(generator: RandomGenerator): Chain<Int> = poissonSamplerDelegate.sample(generator)
-    override fun toString(): String = poissonSamplerDelegate.toString()
+    public override fun sample(generator: RandomGenerator): Chain<Int> = poissonSamplerDelegate.sample(generator)
+    public override fun toString(): String = poissonSamplerDelegate.toString()
 
-    companion object {
+    public companion object {
         private const val PIVOT = 40.0
 
-        fun of(mean: Double) =// Each sampler should check the input arguments.
+        public fun of(mean: Double): Sampler<Int> =// Each sampler should check the input arguments.
             if (mean < PIVOT) SmallMeanPoissonSampler.of(mean) else LargeMeanPoissonSampler.of(mean)
     }
 }

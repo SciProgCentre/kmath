@@ -1,10 +1,10 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
-import scientifik.kmath.prob.next
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
+import kscience.kmath.prob.next
 import kotlin.math.*
 
 /**
@@ -17,15 +17,12 @@ import kotlin.math.*
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterMarsagliaTsangGammaSampler.html
  */
-class AhrensDieterMarsagliaTsangGammaSampler private constructor(
+public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     alpha: Double,
     theta: Double
 ) : Sampler<Double> {
     private val delegate: BaseGammaSampler =
-        if (alpha < 1) AhrensDieterGammaSampler(alpha, theta) else MarsagliaTsangGammaSampler(
-            alpha,
-            theta
-        )
+        if (alpha < 1) AhrensDieterGammaSampler(alpha, theta) else MarsagliaTsangGammaSampler(alpha, theta)
 
     private abstract class BaseGammaSampler internal constructor(
         protected val alpha: Double,
@@ -39,7 +36,7 @@ class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         override fun toString(): String = "Ahrens-Dieter-Marsaglia-Tsang Gamma deviate"
     }
 
-    private class AhrensDieterGammaSampler internal constructor(alpha: Double, theta: Double) :
+    private class AhrensDieterGammaSampler(alpha: Double, theta: Double) :
         BaseGammaSampler(alpha, theta) {
         private val oneOverAlpha: Double = 1.0 / alpha
         private val bGSOptim: Double = 1.0 + alpha / E
@@ -75,7 +72,7 @@ class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         }
     }
 
-    private class MarsagliaTsangGammaSampler internal constructor(alpha: Double, theta: Double) :
+    private class MarsagliaTsangGammaSampler(alpha: Double, theta: Double) :
         BaseGammaSampler(alpha, theta) {
         private val dOptim: Double
         private val cOptim: Double
@@ -110,11 +107,11 @@ class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         }
     }
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
-    override fun toString(): String = delegate.toString()
+    public override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
+    public override fun toString(): String = delegate.toString()
 
-    companion object {
-        fun of(
+    public companion object {
+        public fun of(
             alpha: Double,
             theta: Double
         ): Sampler<Double> = AhrensDieterMarsagliaTsangGammaSampler(alpha, theta)

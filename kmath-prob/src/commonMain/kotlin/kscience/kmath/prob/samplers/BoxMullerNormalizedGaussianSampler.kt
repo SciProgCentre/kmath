@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.*
 
 /**
@@ -13,10 +13,10 @@ import kotlin.math.*
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/BoxMullerNormalizedGaussianSampler.html
  */
-class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
+public class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian: Double = Double.NaN
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
+    public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
         val random: Double
 
         if (nextGaussian.isNaN()) {
@@ -40,9 +40,9 @@ class BoxMullerNormalizedGaussianSampler private constructor() : NormalizedGauss
         random
     }
 
-    override fun toString(): String = "Box-Muller normalized Gaussian deviate"
+    public override fun toString(): String = "Box-Muller normalized Gaussian deviate"
 
-    companion object {
-        fun of(): BoxMullerNormalizedGaussianSampler = BoxMullerNormalizedGaussianSampler()
+    public companion object {
+        public fun of(): BoxMullerNormalizedGaussianSampler = BoxMullerNormalizedGaussianSampler()
     }
 }

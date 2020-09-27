@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.ceil
 import kotlin.math.exp
 
@@ -19,7 +19,7 @@ import kotlin.math.exp
  *
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/SmallMeanPoissonSampler.html
  */
-class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
+public class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
     private val p0: Double = exp(-mean)
 
     private val limit: Int = (if (p0 > 0)
@@ -27,7 +27,7 @@ class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
     else
         throw IllegalArgumentException("No p(x=0) probability for mean: $mean")).toInt()
 
-    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
+    public override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
         var n = 0
         var r = 1.0
 
@@ -39,10 +39,10 @@ class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
         n
     }
 
-    override fun toString(): String = "Small Mean Poisson deviate"
+    public override fun toString(): String = "Small Mean Poisson deviate"
 
-    companion object {
-        fun of(mean: Double): SmallMeanPoissonSampler {
+    public companion object {
+        public fun of(mean: Double): SmallMeanPoissonSampler {
             require(mean > 0) { "mean is not strictly positive: $mean" }
             return SmallMeanPoissonSampler(mean)
         }

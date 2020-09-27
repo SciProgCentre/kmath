@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.*
 
 /**
@@ -14,7 +14,7 @@ import kotlin.math.*
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/ZigguratNormalizedGaussianSampler.html
  */
-class ZigguratNormalizedGaussianSampler private constructor() :
+public class ZigguratNormalizedGaussianSampler private constructor() :
     NormalizedGaussianSampler, Sampler<Double> {
 
     private fun sampleOne(generator: RandomGenerator): Double {
@@ -23,9 +23,8 @@ class ZigguratNormalizedGaussianSampler private constructor() :
         return if (abs(j) < K[i]) j * W[i] else fix(generator, j, i)
     }
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain { sampleOne(this) }
-
-    override fun toString(): String = "Ziggurat normalized Gaussian deviate"
+    public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain { sampleOne(this) }
+    public override fun toString(): String = "Ziggurat normalized Gaussian deviate"
 
     private fun fix(
         generator: RandomGenerator,
@@ -59,7 +58,7 @@ class ZigguratNormalizedGaussianSampler private constructor() :
         }
     }
 
-    companion object {
+    public companion object {
         private const val R: Double = 3.442619855899
         private const val ONE_OVER_R: Double = 1 / R
         private const val V: Double = 9.91256303526217e-3
@@ -94,7 +93,7 @@ class ZigguratNormalizedGaussianSampler private constructor() :
             }
         }
 
-        fun of(): ZigguratNormalizedGaussianSampler = ZigguratNormalizedGaussianSampler()
+        public fun of(): ZigguratNormalizedGaussianSampler = ZigguratNormalizedGaussianSampler()
         private fun gauss(x: Double): Double = exp(-0.5 * x * x)
     }
 }

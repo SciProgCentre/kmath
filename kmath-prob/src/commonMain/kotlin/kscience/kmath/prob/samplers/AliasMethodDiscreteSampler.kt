@@ -1,10 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
-import kotlin.jvm.JvmOverloads
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -36,7 +35,7 @@ import kotlin.math.min
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AliasMethodDiscreteSampler.html
  */
-open class AliasMethodDiscreteSampler private constructor(
+public open class AliasMethodDiscreteSampler private constructor(
     // Deliberate direct storage of input arrays
     protected val probability: LongArray,
     protected val alias: IntArray
@@ -102,17 +101,16 @@ open class AliasMethodDiscreteSampler private constructor(
         if (generator.nextLong() ushr 11 < probability[j]) j else alias[j]
     }
 
-    override fun toString(): String = "Alias method"
+    public override fun toString(): String = "Alias method"
 
-    companion object {
+    public companion object {
         private const val DEFAULT_ALPHA = 0
         private const val ZERO = 0.0
         private const val ONE_AS_NUMERATOR = 1L shl 53
         private const val CONVERT_TO_NUMERATOR: Double = ONE_AS_NUMERATOR.toDouble()
         private const val MAX_SMALL_POWER_2_SIZE = 1 shl 11
 
-        @JvmOverloads
-        fun of(
+        public fun of(
             probabilities: DoubleArray,
             alpha: Int = DEFAULT_ALPHA
         ): Sampler<Int> {

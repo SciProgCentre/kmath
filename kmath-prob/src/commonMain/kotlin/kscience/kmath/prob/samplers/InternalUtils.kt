@@ -1,4 +1,4 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
 import kotlin.math.ln
 import kotlin.math.min

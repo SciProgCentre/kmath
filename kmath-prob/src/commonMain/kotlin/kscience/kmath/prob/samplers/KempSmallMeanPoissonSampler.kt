@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.exp
 
 /**
@@ -18,11 +18,11 @@ import kotlin.math.exp
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/KempSmallMeanPoissonSampler.html
  */
-class KempSmallMeanPoissonSampler private constructor(
+public class KempSmallMeanPoissonSampler private constructor(
     private val p0: Double,
     private val mean: Double
 ) : Sampler<Int> {
-    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
+    public override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
         // Note on the algorithm:
         // - X is the unknown sample deviate (the output of the algorithm)
         // - x is the current value from the distribution
@@ -48,10 +48,10 @@ class KempSmallMeanPoissonSampler private constructor(
         x
     }
 
-    override fun toString(): String = "Kemp Small Mean Poisson deviate"
+    public override fun toString(): String = "Kemp Small Mean Poisson deviate"
 
-    companion object {
-        fun of(mean: Double): KempSmallMeanPoissonSampler {
+    public companion object {
+        public fun of(mean: Double): KempSmallMeanPoissonSampler {
             require(mean > 0) { "Mean is not strictly positive: $mean" }
             val p0 = exp(-mean)
             // Probability must be positive. As mean increases then p(0) decreases.

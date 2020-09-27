@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.ln
 import kotlin.math.sqrt
 
@@ -15,10 +15,10 @@ import kotlin.math.sqrt
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/MarsagliaNormalizedGaussianSampler.html
  */
-class MarsagliaNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
+public class MarsagliaNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian = Double.NaN
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
+    public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
         if (nextGaussian.isNaN()) {
             val alpha: Double
             var x: Double
@@ -53,9 +53,9 @@ class MarsagliaNormalizedGaussianSampler private constructor() : NormalizedGauss
         }
     }
 
-    override fun toString(): String = "Box-Muller (with rejection) normalized Gaussian deviate"
+    public override fun toString(): String = "Box-Muller (with rejection) normalized Gaussian deviate"
 
-    companion object {
-        fun of(): MarsagliaNormalizedGaussianSampler = MarsagliaNormalizedGaussianSampler()
+    public companion object {
+        public fun of(): MarsagliaNormalizedGaussianSampler = MarsagliaNormalizedGaussianSampler()
     }
 }

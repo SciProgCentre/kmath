@@ -1,9 +1,9 @@
-package scientifik.kmath.prob.samplers
+package kscience.kmath.prob.samplers
 
-import scientifik.kmath.chains.Chain
-import scientifik.kmath.prob.RandomGenerator
-import scientifik.kmath.prob.Sampler
-import scientifik.kmath.prob.chain
+import kscience.kmath.chains.Chain
+import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.prob.Sampler
+import kscience.kmath.prob.chain
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -13,8 +13,8 @@ import kotlin.math.pow
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterExponentialSampler.html
  */
-class AhrensDieterExponentialSampler private constructor(val mean: Double) : Sampler<Double> {
-    override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
+public class AhrensDieterExponentialSampler private constructor(public val mean: Double) : Sampler<Double> {
+    public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
         // Step 1:
         var a = 0.0
         var u = nextDouble()
@@ -47,7 +47,7 @@ class AhrensDieterExponentialSampler private constructor(val mean: Double) : Sam
 
     override fun toString(): String = "Ahrens-Dieter Exponential deviate"
 
-    companion object {
+    public companion object {
         private val EXPONENTIAL_SA_QI by lazy { DoubleArray(16) }
 
         init {
@@ -64,7 +64,7 @@ class AhrensDieterExponentialSampler private constructor(val mean: Double) : Sam
             }
         }
 
-        fun of(mean: Double): AhrensDieterExponentialSampler {
+        public fun of(mean: Double): AhrensDieterExponentialSampler {
             require(mean > 0) { "mean is not strictly positive: $mean" }
             return AhrensDieterExponentialSampler(mean)
         }

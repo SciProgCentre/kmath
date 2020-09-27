@@ -1,5 +1,6 @@
 package kscience.kmath.prob
 
+import kotlinx.coroutines.flow.first
 import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collect
 import kscience.kmath.structures.Buffer
@@ -70,7 +71,7 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
     }
 }
 
-suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator) = sample(generator).first()
+public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sample(generator).first()
 
 /**
  * Generate a bunch of samples from real distributions
