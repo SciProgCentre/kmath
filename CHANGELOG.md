@@ -12,6 +12,7 @@
 - Gradle version: 6.6 -> 6.6.1
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
 - `Polynomial` secondary constructor made function.
+- Kotlin version: 1.3.72 -> 1.4.20-M1
 
 ### Deprecated
 
