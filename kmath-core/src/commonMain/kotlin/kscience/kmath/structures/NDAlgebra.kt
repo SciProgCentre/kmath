@@ -4,6 +4,7 @@ import kscience.kmath.operations.Complex
 import kscience.kmath.operations.Field
 import kscience.kmath.operations.Ring
 import kscience.kmath.operations.Space
+import kotlin.native.concurrent.ThreadLocal
 
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs.
@@ -226,6 +227,7 @@ public interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing
      */
     public operator fun T.div(arg: N): N = map(arg) { divide(it, this@div) }
 
+    @ThreadLocal
     public companion object {
         private val realNDFieldCache: MutableMap<IntArray, RealNDField> = hashMapOf()
 

@@ -2,6 +2,7 @@ package kscience.kmath.operations
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 internal class ComplexTest {
     @Test
@@ -13,7 +14,7 @@ internal class ComplexTest {
 
     @Test
     fun reciprocal() {
-        assertEquals(Complex(0.5, -0.0), 2.toComplex().reciprocal)
+        assertTrue { (Complex(0.5, -0.0) - 2.toComplex().reciprocal).r < 1e-10}
     }
 
     @Test

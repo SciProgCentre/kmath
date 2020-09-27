@@ -1,6 +1,7 @@
 package kscience.kmath.structures
 
 import kotlin.jvm.JvmName
+import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
 /**
@@ -224,6 +225,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 
     override fun hashCode(): Int = shape.contentHashCode()
 
+    @ThreadLocal
     public companion object {
         private val defaultStridesCache = HashMap<IntArray, Strides>()
 

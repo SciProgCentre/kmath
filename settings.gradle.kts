@@ -1,15 +1,4 @@
 pluginManagement {
-    val toolsVersion = "0.6.0"
-
-    plugins {
-        id("kotlinx.benchmark") version "0.2.0-dev-20"
-        id("ru.mipt.npm.base") version toolsVersion
-        id("ru.mipt.npm.mpp") version toolsVersion
-        id("ru.mipt.npm.jvm") version toolsVersion
-        id("ru.mipt.npm.publish") version toolsVersion
-        kotlin("plugin.allopen")
-    }
-
     repositories {
         mavenLocal()
         jcenter()
@@ -19,6 +8,19 @@ pluginManagement {
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
         maven("https://dl.bintray.com/kotlin/kotlin-dev/")
+    }
+
+    val toolsVersion = "0.6.1-dev-1.4.20-M1"
+    val kotlinVersion = "1.4.20-M1"
+
+    plugins {
+        id("kotlinx.benchmark") version "0.2.0-dev-20"
+        id("ru.mipt.npm.project") version toolsVersion
+        id("ru.mipt.npm.mpp") version toolsVersion
+        id("ru.mipt.npm.jvm") version toolsVersion
+        id("ru.mipt.npm.publish") version toolsVersion
+        kotlin("jvm")  version kotlinVersion
+        kotlin("plugin.allopen") version kotlinVersion
     }
 }
 
@@ -32,9 +34,7 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
-    ":kmath-koma",
     ":kmath-prob",
-    ":kmath-io",
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",

@@ -1,15 +1,15 @@
 plugins {
-    id("ru.mipt.npm.base")
-    id("org.jetbrains.changelog") version "0.4.0"
+    id("ru.mipt.npm.project")
 }
 
-val kmathVersion: String by extra("0.2.0-dev-1")
+val kmathVersion: String by extra("0.2.0-dev-2")
 val bintrayRepo: String by extra("kscience")
 val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
         jcenter()
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
         maven("https://dl.bintray.com/hotkeytlt/maven")
     }
@@ -18,4 +18,10 @@ allprojects {
     version = kmathVersion
 }
 
-subprojects { if (name.startsWith("kmath")) apply(plugin = "ru.mipt.npm.publish") }
+subprojects {
+    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishPlugin>()
+}
+
+readme {
+    readmeTemplate = file("docs/templates/README-TEMPLATE.md")
+}

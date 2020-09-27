@@ -1,4 +1,4 @@
-package kscience.memory
+package kscience.kmath.memory
 
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -100,8 +100,7 @@ public actual fun Memory.Companion.allocate(length: Int): Memory =
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
  * and could be mutated independently from the resulting [Memory].
  */
-public actual fun Memory.Companion.wrap(array: ByteArray): Memory =
-    ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
+public actual fun Memory.Companion.wrap(array: ByteArray): Memory = ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
 
 /**
  * Wraps this [ByteBuffer] to [Memory] object.

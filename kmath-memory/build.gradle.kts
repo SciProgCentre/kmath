@@ -1,1 +1,4 @@
-plugins { id("ru.mipt.npm.mpp") }
+plugins {
+    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.native")
+}

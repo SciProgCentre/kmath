@@ -1,6 +1,6 @@
 package kscience.kmath.structures
 
-import kscience.memory.*
+import kscience.kmath.memory.*
 
 /**
  * A non-boxing buffer over [Memory] object.
