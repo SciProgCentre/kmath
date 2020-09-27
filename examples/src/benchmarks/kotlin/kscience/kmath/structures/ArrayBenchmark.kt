@@ -6,7 +6,7 @@ import org.openjdk.jmh.annotations.State
 import java.nio.IntBuffer
 
 @State(Scope.Benchmark)
-class ArrayBenchmark {
+internal class ArrayBenchmark {
     @Benchmark
     fun benchmarkArrayRead() {
         var res = 0

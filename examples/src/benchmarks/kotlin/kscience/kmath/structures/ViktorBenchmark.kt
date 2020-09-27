@@ -9,7 +9,7 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 
 @State(Scope.Benchmark)
-class ViktorBenchmark {
+internal class ViktorBenchmark {
     final val dim: Int = 1000
     final val n: Int = 100
 
@@ -42,7 +42,7 @@ class ViktorBenchmark {
     }
 
     @Benchmark
-    fun realdFieldLog() {
+    fun realFieldLog() {
         realField {
             val fortyTwo = produce { 42.0 }
             var res = one

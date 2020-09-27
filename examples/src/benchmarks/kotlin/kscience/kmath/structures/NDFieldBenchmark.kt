@@ -7,7 +7,7 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 
 @State(Scope.Benchmark)
-class NDFieldBenchmark {
+internal class NDFieldBenchmark {
     @Benchmark
     fun autoFieldAdd() {
         bufferedField {

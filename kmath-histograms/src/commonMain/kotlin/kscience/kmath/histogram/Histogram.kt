@@ -10,9 +10,10 @@ import kscience.kmath.structures.RealBuffer
  */
 public interface Bin<T : Any> : Domain<T> {
     /**
-     * The value of this bin
+     * The value of this bin.
      */
     public val value: Number
+
     public val center: Point<T>
 }
 

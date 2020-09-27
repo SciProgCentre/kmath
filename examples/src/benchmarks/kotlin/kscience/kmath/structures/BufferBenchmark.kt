@@ -7,8 +7,7 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 
 @State(Scope.Benchmark)
-class BufferBenchmark {
-
+internal class BufferBenchmark {
     @Benchmark
     fun genericRealBufferReadWrite() {
         val buffer = RealBuffer(size) { it.toDouble() }

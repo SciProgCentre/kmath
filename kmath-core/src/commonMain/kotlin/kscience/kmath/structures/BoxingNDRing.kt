@@ -14,8 +14,9 @@ public class BoxingNDRing<T, R : Ring<T>>(
 
     public fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
 
-    override fun check(vararg elements: NDBuffer<T>) {
-        require(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
+    override fun check(vararg elements: NDBuffer<T>): Array<out NDBuffer<T>> {
+        if (!elements.all { it.strides == this.strides }) error("Element strides are not the same as context strides")
+        return elements
     }
 
     override fun produce(initializer: R.(IntArray) -> T): BufferedNDRingElement<T, R> =
