@@ -6,11 +6,8 @@ import kscience.kmath.asm.internal.buildAlgebraOperationCall
 import kscience.kmath.asm.internal.buildName
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExpression
-import kscience.kmath.ast.mstInSpace
 import kscience.kmath.expressions.Expression
-import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.Algebra
-import kscience.kmath.operations.RealField
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -73,9 +70,3 @@ public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<
  * @author Alexander Nozik.
  */
 public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class.java, algebra)
-
-public fun main() {
-    val x = RealField.mstInSpace { symbol("x") + number(2.0) }.compile()
-    println(x("x" to 1.0))
-}
-
