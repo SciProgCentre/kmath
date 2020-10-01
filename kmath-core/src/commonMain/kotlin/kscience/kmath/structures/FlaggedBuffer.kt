@@ -48,7 +48,8 @@ public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, Valu
 /**
  * A real buffer which supports flags for each value like NaN or Missing
  */
-public class FlaggedRealBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>, Buffer<Double?> {
+public class FlaggedRealBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>,
+    Buffer<Double?> {
     init {
         require(values.size == flags.size) { "Values and flags must have the same dimensions" }
     }

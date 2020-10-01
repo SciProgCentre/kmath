@@ -7,6 +7,7 @@
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
+- `kmath-ejml` to supply EJML SimpleMatrix wrapper.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
@@ -14,6 +15,7 @@
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
 - `Polynomial` secondary constructor made function.
 - Kotlin version: 1.3.72 -> 1.4.20-M1
+- `kmath-ast` doesn't depend on heavy `kotlin-reflect` library.
 
 ### Deprecated
 

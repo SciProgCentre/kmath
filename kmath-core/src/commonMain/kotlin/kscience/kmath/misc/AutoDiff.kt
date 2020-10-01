@@ -1,10 +1,7 @@
 package kscience.kmath.misc
 
 import kscience.kmath.linear.Point
-import kscience.kmath.operations.ExtendedField
-import kscience.kmath.operations.Field
-import kscience.kmath.operations.invoke
-import kscience.kmath.operations.sum
+import kscience.kmath.operations.*
 import kscience.kmath.structures.asBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -17,23 +14,37 @@ import kotlin.contracts.contract
 /**
  * Differentiable variable with value and derivative of differentiation ([deriv]) result
  * with respect to this variable.
+ *
+ * @param T the non-nullable type of value.
+ * @property value The value of this variable.
  */
 public open class Variable<T : Any>(public val value: T)
 
+/**
+ * Represents result of [deriv] call.
+ *
+ * @param T the non-nullable type of value.
+ * @param value the value of result.
+ * @property deriv The mapping of differentiated variables to their derivatives.
+ * @property context The field over [T].
+ */
 public class DerivationResult<T : Any>(
     value: T,
     public val deriv: Map<Variable<T>, T>,
     public val context: Field<T>
 ) : Variable<T>(value) {
+    /**
+     * Returns derivative of [variable] or returns [Ring.zero] in [context].
+     */
     public fun deriv(variable: Variable<T>): T = deriv[variable] ?: context.zero
 
     /**
-     * compute divergence
+     * Computes the divergence.
      */
     public fun div(): T = context { sum(deriv.values) }
 
     /**
-     * Compute a gradient for variables in given order
+     * Computes the gradient for variables in given order.
      */
     public fun grad(vararg variables: Variable<T>): Point<T> {
         check(variables.isNotEmpty()) { "Variable order is not provided for gradient construction" }
@@ -53,6 +64,9 @@ public class DerivationResult<T : Any>(
  * assertEquals(17.0, y.x) // the value of result (y)
  * assertEquals(9.0, x.d)  // dy/dx
  * ```
+ *
+ * @param body the action in [AutoDiffField] context returning [Variable] to differentiate with respect to.
+ * @return the result of differentiation.
  */
 public inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -> Variable<T>): DerivationResult<T> {
     contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
@@ -65,12 +79,15 @@ public inline fun <T : Any, F : Field<T>> F.deriv(body: AutoDiffField<T, F>.() -
     }
 }
 
+/**
+ * Represents field in context of which functions can be derived.
+ */
 public abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> {
     public abstract val context: F
 
     /**
      * A variable accessing inner state of derivatives.
-     * Use this function in inner builders to avoid creating additional derivative bindings
+     * Use this value in inner builders to avoid creating additional derivative bindings.
      */
     public abstract var Variable<T>.d: T
 
@@ -87,6 +104,9 @@ public abstract class AutoDiffField<T : Any, F : Field<T>> : Field<Variable<T>> 
      */
     public abstract fun <R> derive(value: R, block: F.(R) -> Unit): R
 
+    /**
+     *
+     */
     public abstract fun variable(value: T): Variable<T>
 
     public inline fun variable(block: F.() -> T): Variable<T> = variable(context.block())

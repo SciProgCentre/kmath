@@ -15,8 +15,9 @@ public class BoxingNDField<T, F : Field<T>>(
     public fun buildBuffer(size: Int, initializer: (Int) -> T): Buffer<T> =
         bufferFactory(size, initializer)
 
-    public override fun check(vararg elements: NDBuffer<T>) {
-        check(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
+    public override fun check(vararg elements: NDBuffer<T>): Array<out NDBuffer<T>> {
+        require(elements.all { it.strides == strides }) { "Element strides are not the same as context strides" }
+        return elements
     }
 
     public override fun produce(initializer: F.(IntArray) -> T): BufferedNDFieldElement<T, F> =
@@ -75,6 +76,6 @@ public inline fun <T : Any, F : Field<T>, R> F.nd(
     vararg shape: Int,
     action: NDField<T, F, *>.() -> R
 ): R {
-    val ndfield: BoxingNDField<T, F> = NDField.boxing(this, *shape, bufferFactory = bufferFactory)
+    val ndfield = NDField.boxing(this, *shape, bufferFactory = bufferFactory)
     return ndfield.action()
 }

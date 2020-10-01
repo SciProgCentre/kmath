@@ -2,9 +2,9 @@ plugins {
     id("ru.mipt.npm.project")
 }
 
-val kmathVersion by extra("0.2.0-dev-2")
-val bintrayRepo by extra("kscience")
-val githubProject by extra("kmath")
+val kmathVersion: String by extra("0.2.0-dev-2")
+val bintrayRepo: String by extra("kscience")
+val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
@@ -22,6 +22,6 @@ subprojects {
     if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishPlugin>()
 }
 
-readme{
+readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }

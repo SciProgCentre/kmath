@@ -7,6 +7,7 @@ import com.github.h0tk3y.betterParse.grammar.parser
 import com.github.h0tk3y.betterParse.grammar.tryParseToEnd
 import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
+import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
@@ -23,14 +24,14 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
     private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?")
     private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*")
-    private val lpar: Token by regexToken("\\(")
-    private val rpar: Token by regexToken("\\)")
-    private val comma: Token by regexToken(",")
-    private val mul: Token by regexToken("\\*")
-    private val pow: Token by regexToken("\\^")
-    private val div: Token by regexToken("/")
-    private val minus: Token by regexToken("-")
-    private val plus: Token by regexToken("\\+")
+    private val lpar: Token by literalToken("(")
+    private val rpar: Token by literalToken(")")
+    private val comma: Token by literalToken(",")
+    private val mul: Token by literalToken("*")
+    private val pow: Token by literalToken("^")
+    private val div: Token by literalToken("/")
+    private val minus: Token by literalToken("-")
+    private val plus: Token by literalToken("+")
     private val ws: Token by regexToken("\\s+", ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }

@@ -53,7 +53,7 @@ public class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) :
         public inline fun <T : Any> create(
             spec: MemorySpec<T>,
             size: Int,
-            crossinline initializer: (Int) -> T
+            initializer: (Int) -> T
         ): MutableMemoryBuffer<T> = MutableMemoryBuffer(Memory.allocate(size * spec.objectSize), spec).also { buffer ->
             (0 until size).forEach { buffer[it] = initializer(it) }
         }

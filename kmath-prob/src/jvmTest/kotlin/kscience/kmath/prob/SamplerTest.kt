@@ -6,7 +6,7 @@ import kotlin.test.Test
 class SamplerTest {
 
     @Test
-    fun bufferSamplerTest(){
+    fun bufferSamplerTest() {
         val sampler: Sampler<Double> =
             BasicSampler { it.chain { nextDouble() } }
         val data = sampler.sampleBuffer(RandomGenerator.default, 100)
