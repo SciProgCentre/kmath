@@ -14,6 +14,7 @@
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
 - `Polynomial` secondary constructor made function.
 - Kotlin version: 1.3.72 -> 1.4.20-M1
+- `kmath-ast` doesn't depend on heavy `kotlin-reflect` library.
 
 ### Deprecated
 

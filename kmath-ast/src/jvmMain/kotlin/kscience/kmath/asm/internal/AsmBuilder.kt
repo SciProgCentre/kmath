@@ -10,7 +10,6 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.commons.InstructionAdapter
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.reflect.KClass
 
 /**
  * ASM Builder is a structure that abstracts building a class designated to unwrap [MST] to plain Java expression.
@@ -23,7 +22,7 @@ import kotlin.reflect.KClass
  * @author Iaroslav Postovalov
  */
 internal class AsmBuilder<T> internal constructor(
-    private val classOfT: KClass<*>,
+    private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
     private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
@@ -43,7 +42,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * ASM Type for [algebra].
      */
-    private val tAlgebraType: Type = algebra::class.asm
+    private val tAlgebraType: Type = algebra.javaClass.asm
 
     /**
      * ASM type for [T].
@@ -56,16 +55,6 @@ internal class AsmBuilder<T> internal constructor(
     private val classType: Type = Type.getObjectType(className.replace(oldChar = '.', newChar = '/'))!!
 
     /**
-     * Index of `this` variable in invoke method of the built subclass.
-     */
-    private val invokeThisVar: Int = 0
-
-    /**
-     * Index of `arguments` variable in invoke method of the built subclass.
-     */
-    private val invokeArgumentsVar: Int = 1
-
-    /**
      * List of constants to provide to the subclass.
      */
     private val constants: MutableList<Any> = mutableListOf()
@@ -76,22 +65,22 @@ internal class AsmBuilder<T> internal constructor(
     private lateinit var invokeMethodVisitor: InstructionAdapter
 
     /**
-     * State if this [AsmBuilder] needs to generate constants field.
+     * States whether this [AsmBuilder] needs to generate constants field.
      */
     private var hasConstants: Boolean = true
 
     /**
-     * State if [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
+     * States whether [T] a primitive type, so [AsmBuilder] may generate direct primitive calls.
      */
     internal var primitiveMode: Boolean = false
 
     /**
-     * Primitive type to apple for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
+     * Primitive type to apply for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
      */
     internal var primitiveMask: Type = OBJECT_TYPE
 
     /**
-     * Boxed primitive type to apple for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
+     * Boxed primitive type to apply for specific primitive calls. Use [OBJECT_TYPE], if not in [primitiveMode].
      */
     internal var primitiveMaskBoxed: Type = OBJECT_TYPE
 
@@ -103,7 +92,7 @@ internal class AsmBuilder<T> internal constructor(
     /**
      * Stack of useful objects types on stack expected by algebra calls.
      */
-    internal val expectationStack: ArrayDeque<Type> = ArrayDeque(listOf(tType))
+    internal val expectationStack: ArrayDeque<Type> = ArrayDeque<Type>(1).also { it.push(tType) }
 
     /**
      * The cache for instance built by this builder.
@@ -361,7 +350,7 @@ internal class AsmBuilder<T> internal constructor(
      * from it).
      */
     private fun loadNumberConstant(value: Number, mustBeBoxed: Boolean) {
-        val boxed = value::class.asm
+        val boxed = value.javaClass.asm
         val primitive = BOXED_TO_PRIMITIVES[boxed]
 
         if (primitive != null) {
@@ -476,16 +465,26 @@ internal class AsmBuilder<T> internal constructor(
 
     internal companion object {
         /**
+         * Index of `this` variable in invoke method of the built subclass.
+         */
+        private const val invokeThisVar: Int = 0
+
+        /**
+         * Index of `arguments` variable in invoke method of the built subclass.
+         */
+        private const val invokeArgumentsVar: Int = 1
+
+        /**
          * Maps JVM primitive numbers boxed types to their primitive ASM types.
          */
-        private val SIGNATURE_LETTERS: Map<KClass<out Any>, Type> by lazy {
+        private val SIGNATURE_LETTERS: Map<Class<out Any>, Type> by lazy {
             hashMapOf(
-                java.lang.Byte::class to Type.BYTE_TYPE,
-                java.lang.Short::class to Type.SHORT_TYPE,
-                java.lang.Integer::class to Type.INT_TYPE,
-                java.lang.Long::class to Type.LONG_TYPE,
-                java.lang.Float::class to Type.FLOAT_TYPE,
-                java.lang.Double::class to Type.DOUBLE_TYPE
+                java.lang.Byte::class.java to Type.BYTE_TYPE,
+                java.lang.Short::class.java to Type.SHORT_TYPE,
+                java.lang.Integer::class.java to Type.INT_TYPE,
+                java.lang.Long::class.java to Type.LONG_TYPE,
+                java.lang.Float::class.java to Type.FLOAT_TYPE,
+                java.lang.Double::class.java to Type.DOUBLE_TYPE
             )
         }
 
@@ -523,43 +522,43 @@ internal class AsmBuilder<T> internal constructor(
         /**
          * Provides boxed number types values of which can be stored in JVM bytecode constant pool.
          */
-        private val INLINABLE_NUMBERS: Set<KClass<out Any>> by lazy { SIGNATURE_LETTERS.keys }
+        private val INLINABLE_NUMBERS: Set<Class<out Any>> by lazy { SIGNATURE_LETTERS.keys }
 
         /**
          * ASM type for [Expression].
          */
-        internal val EXPRESSION_TYPE: Type by lazy { Expression::class.asm }
+        internal val EXPRESSION_TYPE: Type by lazy { Type.getObjectType("kscience/kmath/expressions/Expression") }
 
         /**
          * ASM type for [java.lang.Number].
          */
-        internal val NUMBER_TYPE: Type by lazy { java.lang.Number::class.asm }
+        internal val NUMBER_TYPE: Type by lazy { Type.getObjectType("java/lang/Number") }
 
         /**
          * ASM type for [java.util.Map].
          */
-        internal val MAP_TYPE: Type by lazy { java.util.Map::class.asm }
+        internal val MAP_TYPE: Type by lazy { Type.getObjectType("java/util/Map") }
 
         /**
          * ASM type for [java.lang.Object].
          */
-        internal val OBJECT_TYPE: Type by lazy { java.lang.Object::class.asm }
+        internal val OBJECT_TYPE: Type by lazy { Type.getObjectType("java/lang/Object") }
 
         /**
          * ASM type for array of [java.lang.Object].
          */
         @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "RemoveRedundantQualifierName")
-        internal val OBJECT_ARRAY_TYPE: Type by lazy { Array<java.lang.Object>::class.asm }
+        internal val OBJECT_ARRAY_TYPE: Type by lazy { Type.getType("[Ljava/lang/Object;") }
 
         /**
          * ASM type for [Algebra].
          */
-        internal val ALGEBRA_TYPE: Type by lazy { Algebra::class.asm }
+        internal val ALGEBRA_TYPE: Type by lazy { Type.getObjectType("kscience/kmath/operations/Algebra") }
 
         /**
          * ASM type for [java.lang.String].
          */
-        internal val STRING_TYPE: Type by lazy { java.lang.String::class.asm }
+        internal val STRING_TYPE: Type by lazy { Type.getObjectType("java/lang/String") }
 
         /**
          * ASM type for MapIntrinsics.

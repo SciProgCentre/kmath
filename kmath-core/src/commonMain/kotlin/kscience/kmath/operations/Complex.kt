@@ -177,6 +177,11 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
 
     override fun compareTo(other: Complex): Int = r.compareTo(other.r)
 
+    override fun toString(): String {
+        return "($re + i*$im)"
+    }
+
+
     public companion object : MemorySpec<Complex> {
         override val objectSize: Int
             get() = 16

@@ -10,9 +10,9 @@ import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
 import org.objectweb.asm.commons.InstructionAdapter
 import java.lang.reflect.Method
+import java.util.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.reflect.KClass
 
 private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
     hashMapOf(
@@ -26,12 +26,12 @@ private val methodNameAdapters: Map<Pair<String, Int>, String> by lazy {
 }
 
 /**
- * Returns ASM [Type] for given [KClass].
+ * Returns ASM [Type] for given [Class].
  *
  * @author Iaroslav Postovalov
  */
-internal val KClass<*>.asm: Type
-    get() = Type.getType(java)
+internal inline val Class<*>.asm: Type
+    get() = Type.getType(this)
 
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
@@ -140,7 +140,7 @@ private fun <T> AsmBuilder<T>.buildExpectationStack(
     if (specific != null)
         mapTypes(specific, parameterTypes).reversed().forEach { expectationStack.push(it) }
     else
-        repeat(arity) { expectationStack.push(tType) }
+        expectationStack.addAll(Collections.nCopies(arity, tType))
 
     return specific != null
 }
@@ -169,7 +169,7 @@ private fun <T> AsmBuilder<T>.tryInvokeSpecific(
     val arity = parameterTypes.size
     val theName = methodNameAdapters[name to arity] ?: name
     val spec = findSpecific(context, theName, parameterTypes) ?: return false
-    val owner = context::class.asm
+    val owner = context.javaClass.asm
 
     invokeAlgebraOperation(
         owner = owner.internalName,
