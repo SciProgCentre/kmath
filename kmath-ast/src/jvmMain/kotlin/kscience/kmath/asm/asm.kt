@@ -8,7 +8,6 @@ import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.operations.Algebra
-import kotlin.reflect.KClass
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -18,7 +17,8 @@ import kotlin.reflect.KClass
  * @return the compiled expression.
  * @author Alexander Nozik
  */
-public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expression<T> {
+@PublishedApi
+internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
         is MST.Symbolic -> {
             val symbol = try {
@@ -61,11 +61,12 @@ public fun <T : Any> MST.compileWith(type: KClass<T>, algebra: Algebra<T>): Expr
  *
  * @author Alexander Nozik.
  */
-public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> = mst.compileWith(T::class, this)
+public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
+    mst.compileWith(T::class.java, this)
 
 /**
  * Optimizes performance of an [MstExpression] using ASM codegen.
  *
  * @author Alexander Nozik.
  */
-public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class, algebra)
+public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class.java, algebra)

@@ -29,7 +29,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-io:0.2.0-npm-dev-11")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
     implementation("org.slf4j:slf4j-simple:1.7.30")
-    implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
     "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
     "benchmarksImplementation"(sourceSets.main.get().output + sourceSets.main.get().runtimeClasspath)
 }

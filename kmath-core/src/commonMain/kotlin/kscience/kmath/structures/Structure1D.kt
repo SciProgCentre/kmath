@@ -17,7 +17,7 @@ public interface Structure1D<T> : NDStructure<T>, Buffer<T> {
 /**
  * A 1D wrapper for nd-structure
  */
-private inline class Structure1DWrapper<T>(public val structure: NDStructure<T>) : Structure1D<T> {
+private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Structure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 

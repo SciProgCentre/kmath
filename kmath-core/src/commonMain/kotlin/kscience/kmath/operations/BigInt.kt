@@ -299,7 +299,7 @@ public class BigInt internal constructor(
 
             for (i in mag.indices) {
                 val cur: ULong = carry + mag[i].toULong() * x.toULong()
-                result[i] = (cur and BASE.toULong()).toUInt()
+                result[i] = (cur and BASE).toUInt()
                 carry = cur shr BASE_SIZE
             }
             result[resultLength - 1] = (carry and BASE).toUInt()
@@ -316,7 +316,7 @@ public class BigInt internal constructor(
 
                 for (j in mag2.indices) {
                     val cur: ULong = result[i + j].toULong() + mag1[i].toULong() * mag2[j].toULong() + carry
-                    result[i + j] = (cur and BASE.toULong()).toUInt()
+                    result[i + j] = (cur and BASE).toUInt()
                     carry = cur shr BASE_SIZE
                 }
 

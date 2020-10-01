@@ -21,7 +21,8 @@ internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: s
 }
 
 public class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
-    override suspend fun collect(collector: FlowCollector<T>): Unit = deferredFlow.collect { collector.emit((it.await())) }
+    override suspend fun collect(collector: FlowCollector<T>): Unit =
+        deferredFlow.collect { collector.emit((it.await())) }
 }
 
 public fun <T, R> Flow<T>.async(

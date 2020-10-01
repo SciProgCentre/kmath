@@ -6,10 +6,10 @@ back-ends. The new operations added as extensions to contexts instead of being m
 
 Two major contexts used for linear algebra and hyper-geometry:
 
-* `VectorSpace` forms a mathematical space on top of array-like structure (`Buffer` and its typealias `Point` used for geometry). 
+* `VectorSpace` forms a mathematical space on top of array-like structure (`Buffer` and its type alias `Point` used for geometry). 
 
 * `MatrixContext` forms a space-like context for 2d-structures. It does not store matrix size and therefore does not implement
-`Space` interface (it is not possible to create zero element without knowing the matrix size). 
+`Space` interface (it is impossible to create zero element without knowing the matrix size). 
 
 ## Vector spaces
 

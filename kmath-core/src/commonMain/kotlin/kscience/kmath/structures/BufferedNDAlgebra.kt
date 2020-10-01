@@ -6,7 +6,7 @@ public interface BufferedNDAlgebra<T, C> : NDAlgebra<T, C, NDBuffer<T>> {
     public val strides: Strides
 
     public override fun check(vararg elements: NDBuffer<T>): Array<out NDBuffer<T>> {
-        require(elements.all { it.strides == strides }) { ("Strides mismatch") }
+        require(elements.all { it.strides == strides }) { "Strides mismatch" }
         return elements
     }
 
