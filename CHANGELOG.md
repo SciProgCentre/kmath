@@ -8,6 +8,7 @@
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
 - ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
+- `kmath-ejml` to supply EJML SimpleMatrix wrapper (https://github.com/mipt-npm/kmath/pull/136).
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.

@@ -40,5 +40,6 @@ include(
     ":kmath-for-real",
     ":kmath-geometry",
     ":kmath-ast",
-    ":examples"
+    ":examples",
+    ":kmath-ejml"
 )
