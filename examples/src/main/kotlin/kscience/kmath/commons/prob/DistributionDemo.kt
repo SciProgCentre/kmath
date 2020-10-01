@@ -7,9 +7,9 @@ import kscience.kmath.prob.Distribution
 import kscience.kmath.prob.RandomGenerator
 import kscience.kmath.prob.normal
 
-data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
+private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
-fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(), { it.copy() }) { chain ->
+private fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(), { it.copy() }) { chain ->
     val next = chain.next()
     num++
     value += next

@@ -46,35 +46,48 @@ public interface Buffer<T> {
         asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
 
     public companion object {
-        public inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer {
-            val array = DoubleArray(size) { initializer(it) }
-            return RealBuffer(array)
-        }
+        /**
+         * Creates a [RealBuffer] with the specified [size], where each element is calculated by calling the specified
+         * [initializer] function.
+         */
+        public inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer =
+            RealBuffer(size) { initializer(it) }
 
         /**
-         * Create a boxing buffer of given type
+         * Creates a [ListBuffer] of given type [T] with given [size]. Each element is calculated by calling the
+         * specified [initializer] function.
          */
         public inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> =
             ListBuffer(List(size, initializer))
 
+        // TODO add resolution based on Annotation or companion resolution
+
+        /**
+         * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([IntBuffer],
+         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         *
+         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+         */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <T : Any> auto(type: KClass<T>, size: Int, crossinline initializer: (Int) -> T): Buffer<T> {
-            //TODO add resolution based on Annotation or companion resolution
-            return when (type) {
-                Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as Buffer<T>
-                Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as Buffer<T>
-                Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as Buffer<T>
-                Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as Buffer<T>
+        public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
+            when (type) {
+                Double::class -> RealBuffer(size) { initializer(it) as Double } as Buffer<T>
+                Short::class -> ShortBuffer(size) { initializer(it) as Short } as Buffer<T>
+                Int::class -> IntBuffer(size) { initializer(it) as Int } as Buffer<T>
+                Long::class -> LongBuffer(size) { initializer(it) as Long } as Buffer<T>
+                Float::class -> FloatBuffer(size) { initializer(it) as Float } as Buffer<T>
                 Complex::class -> complex(size) { initializer(it) as Complex } as Buffer<T>
                 else -> boxing(size, initializer)
             }
-        }
 
         /**
-         * Create most appropriate immutable buffer for given type avoiding boxing wherever possible
+         * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([IntBuffer],
+         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         *
+         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Any> auto(size: Int, crossinline initializer: (Int) -> T): Buffer<T> =
+        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> =
             auto(T::class, size, initializer)
     }
 }
@@ -117,25 +130,40 @@ public interface MutableBuffer<T> : Buffer<T> {
         public inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             MutableListBuffer(MutableList(size, initializer))
 
+        /**
+         * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
+         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         *
+         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+         */
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             when (type) {
-                Double::class -> RealBuffer(DoubleArray(size) { initializer(it) as Double }) as MutableBuffer<T>
-                Short::class -> ShortBuffer(ShortArray(size) { initializer(it) as Short }) as MutableBuffer<T>
-                Int::class -> IntBuffer(IntArray(size) { initializer(it) as Int }) as MutableBuffer<T>
-                Long::class -> LongBuffer(LongArray(size) { initializer(it) as Long }) as MutableBuffer<T>
+                Double::class -> RealBuffer(size) { initializer(it) as Double } as MutableBuffer<T>
+                Short::class -> ShortBuffer(size) { initializer(it) as Short } as MutableBuffer<T>
+                Int::class -> IntBuffer(size) { initializer(it) as Int } as MutableBuffer<T>
+                Float::class -> FloatBuffer(size) { initializer(it) as Float } as MutableBuffer<T>
+                Long::class -> LongBuffer(size) { initializer(it) as Long } as MutableBuffer<T>
+                Complex::class -> complex(size) { initializer(it) as Complex } as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
 
         /**
-         * Create most appropriate mutable buffer for given type avoiding boxing wherever possible
+         * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
+         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         *
+         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             auto(T::class, size, initializer)
 
-        public val real: MutableBufferFactory<Double> =
-            { size, initializer -> RealBuffer(DoubleArray(size) { initializer(it) }) }
+        /**
+         * Creates a [RealBuffer] with the specified [size], where each element is calculated by calling the specified
+         * [initializer] function.
+         */
+        public inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer =
+            RealBuffer(size) { initializer(it) }
     }
 }
 

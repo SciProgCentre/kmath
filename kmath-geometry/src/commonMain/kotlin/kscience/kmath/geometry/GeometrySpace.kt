@@ -4,7 +4,7 @@ import kscience.kmath.operations.Space
 
 public interface Vector
 
-public interface GeometrySpace<V: Vector>: Space<V> {
+public interface GeometrySpace<V : Vector> : Space<V> {
     /**
      * L2 distance
      */

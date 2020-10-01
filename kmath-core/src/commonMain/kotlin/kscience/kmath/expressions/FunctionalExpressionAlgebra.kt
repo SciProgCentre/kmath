@@ -4,7 +4,7 @@ import kscience.kmath.operations.*
 
 internal class FunctionalUnaryOperation<T>(val context: Algebra<T>, val name: String, private val expr: Expression<T>) :
     Expression<T> {
-    public override operator fun invoke(arguments: Map<String, T>): T =
+    override operator fun invoke(arguments: Map<String, T>): T =
         context.unaryOperation(name, expr.invoke(arguments))
 }
 
@@ -14,17 +14,17 @@ internal class FunctionalBinaryOperation<T>(
     val first: Expression<T>,
     val second: Expression<T>
 ) : Expression<T> {
-    public override operator fun invoke(arguments: Map<String, T>): T =
+    override operator fun invoke(arguments: Map<String, T>): T =
         context.binaryOperation(name, first.invoke(arguments), second.invoke(arguments))
 }
 
 internal class FunctionalVariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
-    public override operator fun invoke(arguments: Map<String, T>): T =
+    override operator fun invoke(arguments: Map<String, T>): T =
         arguments[name] ?: default ?: error("Parameter not found: $name")
 }
 
 internal class FunctionalConstantExpression<T>(val value: T) : Expression<T> {
-    public override operator fun invoke(arguments: Map<String, T>): T = value
+    override operator fun invoke(arguments: Map<String, T>): T = value
 }
 
 internal class FunctionalConstProductExpression<T>(
@@ -32,7 +32,7 @@ internal class FunctionalConstProductExpression<T>(
     private val expr: Expression<T>,
     val const: Number
 ) : Expression<T> {
-    public override operator fun invoke(arguments: Map<String, T>): T = context.multiply(expr.invoke(arguments), const)
+    override operator fun invoke(arguments: Map<String, T>): T = context.multiply(expr.invoke(arguments), const)
 }
 
 /**
@@ -139,16 +139,27 @@ public open class FunctionalExpressionField<T, A>(algebra: A) :
 public open class FunctionalExpressionExtendedField<T, A>(algebra: A) :
     FunctionalExpressionField<T, A>(algebra),
     ExtendedField<Expression<T>> where A : ExtendedField<T>, A : NumericAlgebra<T> {
-    public override fun sin(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.SIN_OPERATION, arg)
-    public override fun cos(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.COS_OPERATION, arg)
-    public override fun asin(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ASIN_OPERATION, arg)
-    public override fun acos(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ACOS_OPERATION, arg)
-    public override fun atan(arg: Expression<T>): Expression<T> = unaryOperation(TrigonometricOperations.ATAN_OPERATION, arg)
+    public override fun sin(arg: Expression<T>): Expression<T> =
+        unaryOperation(TrigonometricOperations.SIN_OPERATION, arg)
+
+    public override fun cos(arg: Expression<T>): Expression<T> =
+        unaryOperation(TrigonometricOperations.COS_OPERATION, arg)
+
+    public override fun asin(arg: Expression<T>): Expression<T> =
+        unaryOperation(TrigonometricOperations.ASIN_OPERATION, arg)
+
+    public override fun acos(arg: Expression<T>): Expression<T> =
+        unaryOperation(TrigonometricOperations.ACOS_OPERATION, arg)
+
+    public override fun atan(arg: Expression<T>): Expression<T> =
+        unaryOperation(TrigonometricOperations.ATAN_OPERATION, arg)
 
     public override fun power(arg: Expression<T>, pow: Number): Expression<T> =
         binaryOperation(PowerOperations.POW_OPERATION, arg, number(pow))
 
-    public override fun exp(arg: Expression<T>): Expression<T> = unaryOperation(ExponentialOperations.EXP_OPERATION, arg)
+    public override fun exp(arg: Expression<T>): Expression<T> =
+        unaryOperation(ExponentialOperations.EXP_OPERATION, arg)
+
     public override fun ln(arg: Expression<T>): Expression<T> = unaryOperation(ExponentialOperations.LN_OPERATION, arg)
 
     public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =

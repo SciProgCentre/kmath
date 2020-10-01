@@ -28,7 +28,9 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation("org.jetbrains.kotlinx:kotlinx-io:0.2.0-npm-dev-11")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
-    "benchmarksCompile"(sourceSets.main.get().output + sourceSets.main.get().compileClasspath) //sourceSets.main.output + sourceSets.main.runtimeClasspath
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+    "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
+    "benchmarksImplementation"(sourceSets.main.get().output + sourceSets.main.get().runtimeClasspath)
 }
 
 // Configure benchmark

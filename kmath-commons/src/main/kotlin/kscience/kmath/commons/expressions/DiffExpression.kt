@@ -9,14 +9,17 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import kotlin.properties.ReadOnlyProperty
 
 /**
- * A field wrapping commons-math derivative structures
+ * A field over commons-math [DerivativeStructure].
+ *
+ * @property order The derivation order.
+ * @property parameters The map of free parameters.
  */
 public class DerivativeStructureField(
     public val order: Int,
     public val parameters: Map<String, Double>
 ) : ExtendedField<DerivativeStructure> {
-    public override val zero: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size) }
-    public override val one: DerivativeStructure by lazy { DerivativeStructure(order, parameters.size, 1.0) }
+    public override val zero: DerivativeStructure by lazy { DerivativeStructure(parameters.size, order) }
+    public override val one: DerivativeStructure by lazy { DerivativeStructure(parameters.size, order, 1.0) }
 
     private val variables: Map<String, DerivativeStructure> = parameters.mapValues { (key, value) ->
         DerivativeStructure(parameters.size, order, parameters.keys.indexOf(key), value)

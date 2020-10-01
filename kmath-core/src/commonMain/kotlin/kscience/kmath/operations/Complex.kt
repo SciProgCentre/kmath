@@ -6,6 +6,7 @@ import kscience.kmath.memory.MemoryWriter
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer
+import kscience.kmath.structures.MutableMemoryBuffer
 import kotlin.math.*
 
 /**
@@ -159,7 +160,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
 }
 
 /**
- * Represents complex number.
+ * Represents `double`-based complex number.
  *
  * @property re The real part.
  * @property im The imaginary part.
@@ -182,10 +183,10 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
 
 
     public companion object : MemorySpec<Complex> {
-        override val objectSize: Int = 16
+        override val objectSize: Int
+            get() = 16
 
-        override fun MemoryReader.read(offset: Int): Complex =
-            Complex(readDouble(offset), readDouble(offset + 8))
+        override fun MemoryReader.read(offset: Int): Complex = Complex(readDouble(offset), readDouble(offset + 8))
 
         override fun MemoryWriter.write(offset: Int, value: Complex) {
             writeDouble(offset, value.re)
@@ -202,8 +203,16 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
  */
 public fun Number.toComplex(): Complex = Complex(this, 0.0)
 
+/**
+ * Creates a new buffer of complex numbers with the specified [size], where each element is calculated by calling the
+ * specified [init] function.
+ */
 public inline fun Buffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> =
     MemoryBuffer.create(Complex, size, init)
 
-public inline fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> =
-    MemoryBuffer.create(Complex, size, init)
+/**
+ * Creates a new buffer of complex numbers with the specified [size], where each element is calculated by calling the
+ * specified [init] function.
+ */
+public inline fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): MutableBuffer<Complex> =
+    MutableMemoryBuffer.create(Complex, size, init)

@@ -38,9 +38,8 @@ public interface NDStructure<T> {
      */
     public fun elements(): Sequence<Pair<IntArray, T>>
 
-    override fun equals(other: Any?): Boolean
-
-    override fun hashCode(): Int
+    public override fun equals(other: Any?): Boolean
+    public override fun hashCode(): Int
 
     public companion object {
         /**
@@ -50,13 +49,8 @@ public interface NDStructure<T> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (
-                st1 is NDBuffer &&
-                st2 is NDBuffer &&
-                st1.strides == st2.strides
-            ) {
+            if (st1 is NDBuffer && st2 is NDBuffer && st1.strides == st2.strides)
                 return st1.buffer.contentEquals(st2.buffer)
-            }
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }
