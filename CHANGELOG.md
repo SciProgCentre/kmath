@@ -7,6 +7,7 @@
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
+- `kmath-ejml` to supply EJML SimpleMatrix wrapper.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
