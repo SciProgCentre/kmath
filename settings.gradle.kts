@@ -26,5 +26,6 @@ include(
     ":kmath-symja",
     ":kmath-jafama",
     ":examples",
+    ":kmath-ojalgo",
     ":benchmarks",
 )

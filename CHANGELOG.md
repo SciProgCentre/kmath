@@ -19,6 +19,7 @@
 - Complex power
 - Separate methods for UInt, Int and Number powers. NaN safety.
 - Tensorflow prototype
+- OjAlgo support
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
