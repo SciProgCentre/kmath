@@ -1,12 +1,12 @@
 package kscience.kmath.operations
 
+import kscience.kmath.memory.MemoryReader
+import kscience.kmath.memory.MemorySpec
+import kscience.kmath.memory.MemoryWriter
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer
 import kscience.kmath.structures.MutableMemoryBuffer
-import kscience.memory.MemoryReader
-import kscience.memory.MemorySpec
-import kscience.memory.MemoryWriter
 import kotlin.math.*
 
 /**
