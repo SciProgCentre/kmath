@@ -29,10 +29,10 @@ jobs:
           path: |
             ~/.konan/dependencies
             ~/.konan/kotlin-native-prebuilt-linux-1.4.20-eap-37
-          key: ${{ runner.os }}-konan-1.4.0
-          restore-keys: ${{ runner.os }}-konan-1.4.0
+          key: ${{ runner.os }}-konan-1.4.20-eap-37
+          restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
       - name: Build with Gradle
-        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
+        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslLinuxX64 build
   build-osx:
     runs-on: macos-latest
 
@@ -59,7 +59,7 @@ jobs:
           path: |
             ~/.konan/dependencies
             ~/.konan/kotlin-native-prebuilt-macos-1.4.20-eap-37
-          key: ${{ runner.os }}-konan-1.4.0
-          restore-keys: ${{ runner.os }}-konan-1.4.0
+          key: ${{ runner.os }}-konan-1.4.20-eap-37
+          restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
       - name: Build with Gradle
-        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
+        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslMacosX64 build

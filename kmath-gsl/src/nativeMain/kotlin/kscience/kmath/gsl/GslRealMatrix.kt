@@ -12,7 +12,11 @@ import org.gnu.gsl.gsl_matrix_equal
 import org.gnu.gsl.gsl_matrix_get
 
 public sealed class GslMatrix<T : Any> : FeaturedMatrix<T> {
-    public abstract val nativeHandle: CValues<out CStructVar>
+    protected abstract val nativeHandle: CValues<out CStructVar>
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    }
 
     public override fun hashCode(): Int {
         var result = nativeHandle.hashCode()
@@ -21,7 +25,7 @@ public sealed class GslMatrix<T : Any> : FeaturedMatrix<T> {
     }
 }
 
-public class GslRealMatrix(public override val nativeHandle: CValues<gsl_matrix>, features: Set<MatrixFeature>) :
+public class GslRealMatrix(protected override val nativeHandle: CValues<gsl_matrix>, features: Set<MatrixFeature>) :
     GslMatrix<Double>() {
 
     public override val rowNum: Int
@@ -42,6 +46,6 @@ public class GslRealMatrix(public override val nativeHandle: CValues<gsl_matrix>
 
     public override fun equals(other: Any?): Boolean {
         if (other is GslRealMatrix) gsl_matrix_equal(nativeHandle, other.nativeHandle)
-        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+        return super.equals(other)
     }
 }
