@@ -200,10 +200,10 @@ public class GslShortMatrix(
 
     public override val features: Set<MatrixFeature> = features
 
-    public override fun suggestFeature(vararg features: MatrixFeature): GslUShortMatrix =
+    public override fun suggestFeature(vararg features: MatrixFeature): GslShortMatrix =
         GslShortMatrix(nativeHandle, this.features + features)
 
-    public override fun get(i: Int, j: Int): UShort = gsl_matrix_short_get(nativeHandle, i.toULong(), j.toULong())
+    public override fun get(i: Int, j: Int): Short = gsl_matrix_short_get(nativeHandle, i.toULong(), j.toULong())
 
     public override fun equals(other: Any?): Boolean {
         if (other is GslShortMatrix) gsl_matrix_short_equal(nativeHandle, other.nativeHandle)
