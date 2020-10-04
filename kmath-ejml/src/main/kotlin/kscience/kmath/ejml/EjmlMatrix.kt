@@ -1,12 +1,12 @@
 package kscience.kmath.ejml
 
-import org.ejml.dense.row.factory.DecompositionFactory_DDRM
-import org.ejml.simple.SimpleMatrix
 import kscience.kmath.linear.DeterminantFeature
 import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.linear.LUPDecompositionFeature
 import kscience.kmath.linear.MatrixFeature
 import kscience.kmath.structures.NDStructure
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM
+import org.ejml.simple.SimpleMatrix
 
 /**
  * Represents featured matrix over EJML [SimpleMatrix].
@@ -14,7 +14,8 @@ import kscience.kmath.structures.NDStructure
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
+public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFeature>? = null) :
+    FeaturedMatrix<Double> {
     public override val rowNum: Int
         get() = origin.numRows()
 

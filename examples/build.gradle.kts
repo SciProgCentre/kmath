@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
     kotlin("jvm")
     kotlin("plugin.allopen")
     id("kotlinx.benchmark")
@@ -12,14 +11,14 @@ allOpen.annotation("org.openjdk.jmh.annotations.State")
 repositories {
     maven("https://dl.bintray.com/mipt-npm/kscience")
     maven("https://dl.bintray.com/mipt-npm/dev")
-    maven("https://dl.bintray.com/kotlin/kotlin-dev/")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
     mavenCentral()
 }
 
 sourceSets.register("benchmarks")
 
 dependencies {
-//    implementation(project(":kmath-ast"))
+    implementation(project(":kmath-ast"))
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))

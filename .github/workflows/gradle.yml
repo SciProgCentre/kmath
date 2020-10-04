@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -13,5 +12,24 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Install libgsl-dev
+      run: sudo apt install libgsl-dev
+    - name: Cache gradle
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: gradle_6_6_1
+        restore-keys: gradle_6_6_1
+
+    - name: Cache konan
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.konan/dependencies
+          ~/.konan/kotlin-native-macos-1.4.0
+        key: ${{ runner.os }}-konan-1.4.0
+        restore-keys: ${{ runner.os }}-konan-1.4.0
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew -Dorg.gradle.daemon=false build
