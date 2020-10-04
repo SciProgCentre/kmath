@@ -3,7 +3,7 @@ name: Gradle build
 on: [push]
 
 jobs:
-  build:
+  build-ubuntu:
     runs-on: ubuntu-latest
 
     steps:
