@@ -1,11 +1,11 @@
 package kscience.kmath.ejml
 
-import org.ejml.simple.SimpleMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
 import kscience.kmath.operations.Space
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
+import org.ejml.simple.SimpleMatrix
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
@@ -29,8 +29,8 @@ public class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
-            (0 until it.numRows()).forEach { row ->
-                (0 until it.numCols()).forEach { col -> it[row, col] = initializer(row, col) }
+            (0 until rows).forEach { row ->
+                (0 until columns).forEach { col -> it[row, col] = initializer(row, col) }
             }
         })
 
@@ -49,7 +49,8 @@ public class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext
     public override fun multiply(a: Matrix<Double>, k: Number): EjmlMatrix =
         produce(a.rowNum, a.colNum) { i, j -> space { a[i, j] * k } }
 
-    public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix = EjmlMatrix(toEjml().origin.scale(value))
+    public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
+        EjmlMatrix(toEjml().origin.scale(value))
 
     public companion object
 }

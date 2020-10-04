@@ -18,10 +18,11 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      */
     public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
 
-    public override fun binaryOperation(operation: String, left: Matrix<T>, right: Matrix<T>): Matrix<T> = when (operation) {
-        "dot" -> left dot right
-        else -> super.binaryOperation(operation, left, right)
-    }
+    public override fun binaryOperation(operation: String, left: Matrix<T>, right: Matrix<T>): Matrix<T> =
+        when (operation) {
+            "dot" -> left dot right
+            else -> super.binaryOperation(operation, left, right)
+        }
 
     /**
      * Computes the dot product of this matrix and another one.

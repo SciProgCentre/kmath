@@ -1,11 +1,14 @@
 package kscience.kmath.gsl
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.CStructVar
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.pointed
 import kscience.kmath.linear.Point
 import kscience.kmath.operations.Complex
 import org.gnu.gsl.*
 
-public sealed class GslVector<T> : StructHolder(), Point<T> {
+public sealed class GslVector<T, H : CStructVar> : GslMemoryHolder<H>(), Point<T> {
     public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor = 0
 
@@ -18,67 +21,81 @@ public sealed class GslVector<T> : StructHolder(), Point<T> {
     }
 }
 
-public class GslRealVector(override val nativeHandle: CValues<gsl_vector>) : GslVector<Double>() {
-    public override val size: Int
+internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>) : GslVector<Double, gsl_vector>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): Double = gsl_vector_get(nativeHandle, index.toULong())
+    override fun get(index: Int): Double = gsl_vector_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_free(nativeHandle)
 }
 
-public class GslFloatVector(override val nativeHandle: CValues<gsl_vector_float>) : GslVector<Float>() {
-    public override val size: Int
+internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_float>) :
+    GslVector<Float, gsl_vector_float>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): Float = gsl_vector_float_get(nativeHandle, index.toULong())
+    override fun get(index: Int): Float = gsl_vector_float_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_float_free(nativeHandle)
 }
 
-public class GslIntVector(override val nativeHandle: CValues<gsl_vector_int>) : GslVector<Int>() {
-    public override val size: Int
+internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>) : GslVector<Int, gsl_vector_int>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): Int = gsl_vector_int_get(nativeHandle, index.toULong())
+    override fun get(index: Int): Int = gsl_vector_int_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_int_free(nativeHandle)
 }
 
-public class GslUIntVector(override val nativeHandle: CValues<gsl_vector_uint>) : GslVector<UInt>() {
-    public override val size: Int
+internal class GslUIntVector(override val nativeHandle: CPointer<gsl_vector_uint>) :
+    GslVector<UInt, gsl_vector_uint>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): UInt = gsl_vector_uint_get(nativeHandle, index.toULong())
+    override fun get(index: Int): UInt = gsl_vector_uint_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_uint_free(nativeHandle)
 }
 
-public class GslLongVector(override val nativeHandle: CValues<gsl_vector_long>) : GslVector<Long>() {
-    public override val size: Int
+internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long>) :
+    GslVector<Long, gsl_vector_long>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): Long = gsl_vector_long_get(nativeHandle, index.toULong())
+    override fun get(index: Int): Long = gsl_vector_long_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_long_free(nativeHandle)
 }
 
-public class GslULongVector(override val nativeHandle: CValues<gsl_vector_ulong>) : GslVector<ULong>() {
+internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulong>) :
+    GslVector<ULong, gsl_vector_ulong>() {
     public override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
     public override fun get(index: Int): ULong = gsl_vector_ulong_get(nativeHandle, index.toULong())
+    public override fun close(): Unit = gsl_vector_ulong_free(nativeHandle)
 }
 
-public class GslShortVector(override val nativeHandle: CValues<gsl_vector_short>) : GslVector<Short>() {
+internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_short>) :
+    GslVector<Short, gsl_vector_short>() {
     public override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
     public override fun get(index: Int): Short = gsl_vector_short_get(nativeHandle, index.toULong())
+    public override fun close(): Unit = gsl_vector_short_free(nativeHandle)
 }
 
-public class GslUShortVector(override val nativeHandle: CValues<gsl_vector_ushort>) : GslVector<UShort>() {
-    public override val size: Int
+internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_ushort>) :
+    GslVector<UShort, gsl_vector_ushort>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): UShort = gsl_vector_ushort_get(nativeHandle, index.toULong())
+    override fun get(index: Int): UShort = gsl_vector_ushort_get(nativeHandle, index.toULong())
+    override fun close(): Unit = gsl_vector_ushort_free(nativeHandle)
 }
 
-public class GslComplexVector(override val nativeHandle: CValues<gsl_vector_complex>) : GslVector<Complex>() {
-    public override val size: Int
+internal class GslComplexVector(override val nativeHandle: CPointer<gsl_vector_complex>) :
+    GslVector<Complex, gsl_vector_complex>() {
+    override val size: Int
         get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
 
-    public override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandle, index.toULong()).useContents {
-        Complex(dat[0], dat[1])
-    }
+    override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandle, index.toULong()).toKMath()
+    override fun close(): Unit = gsl_vector_complex_free(nativeHandle)
 }

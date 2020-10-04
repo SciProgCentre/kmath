@@ -26,7 +26,6 @@ dependencies {
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
-    implementation("org.jetbrains.kotlinx:kotlinx-io:0.2.0-npm-dev-11")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
     implementation("org.slf4j:slf4j-simple:1.7.30")
     "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")

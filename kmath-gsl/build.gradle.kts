@@ -8,6 +8,7 @@ kotlin {
     val nativeTarget = when (System.getProperty("os.name")) {
         "Mac OS X" -> macosX64("native")
         "Linux" -> linuxX64("native")
+
         else -> {
             logger.warn("Current OS cannot build any of kmath-gsl targets.")
             return@kotlin
@@ -26,6 +27,7 @@ kotlin {
     sourceSets.commonMain {
         dependencies {
             api(project(":kmath-core"))
+            api("org.jetbrains.kotlinx:kotlinx-io:0.2.0-tvis-3")
         }
     }
 }
