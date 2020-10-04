@@ -22,9 +22,6 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
     public override val colNum: Int
         get() = origin.numCols()
 
-    public override val shape: IntArray
-        get() = intArrayOf(origin.numRows(), origin.numCols())
-
     public override val features: Set<MatrixFeature> = setOf(
         object : LUPDecompositionFeature<Double>, DeterminantFeature<Double> {
             override val determinant: Double
