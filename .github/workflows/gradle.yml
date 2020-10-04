@@ -28,7 +28,7 @@ jobs:
       with:
         path: |
           ~/.konan/dependencies
-          ~/.konan/kotlin-native-macos-1.4.0
+          ~/.konan/kotlin-native-prebuilt-linux-1.4.20-eap-37
         key: ${{ runner.os }}-konan-1.4.0
         restore-keys: ${{ runner.os }}-konan-1.4.0
     - name: Build with Gradle
