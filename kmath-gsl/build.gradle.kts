@@ -8,12 +8,10 @@ plugins {
 
 kotlin {
     targets.withType<KotlinNativeTarget> {
-        compilations["main"].apply {
-            cinterops {
-                val libgsl by creating {
-                    defFile("src/nativeInterop/cinterop/libgsl.def")
-                    includeDirs { allHeaders("./src/nativeMain/resources/") }
-                }
+        compilations["main"].cinterops {
+            val libgsl by creating {
+                defFile("src/nativeInterop/cinterop/libgsl.def")
+                includeDirs { allHeaders("./src/nativeMain/resources/") }
             }
         }
     }
