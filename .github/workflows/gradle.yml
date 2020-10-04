@@ -73,10 +73,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Install mingw-w64-x86_64-gsl
-        run: c:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-gsl
       - name: Add msys to path
-        # msys installed on default image but not in path
         run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
         uses: actions/cache@v2
@@ -96,4 +93,4 @@ jobs:
           key: ${{ runner.os }}-konan-1.4.20-eap-37
           restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
       - name: Build with Gradle
-        run: ./gradlew --build-cache :kmath-gsl:cinteropLibgslNative build
+        run: ./gradlew --build-cache build

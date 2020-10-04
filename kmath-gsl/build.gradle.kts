@@ -5,13 +5,13 @@ plugins {
 }
 
 kotlin {
-    val hostOs = System.getProperty("os.name")
-
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        hostOs.startsWith("Windows") -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    val nativeTarget = when (System.getProperty("os.name")) {
+        "Mac OS X" -> macosX64("native")
+        "Linux" -> linuxX64("native")
+        else -> {
+            logger.warn("Current OS cannot build any of kmath-gsl targets.")
+            return@kotlin
+        }
     }
 
     val main by nativeTarget.compilations.getting {
