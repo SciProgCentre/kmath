@@ -1,5 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE")
 
+import kscience.kmath.gsl.codegen.matricesCodegen
+
 plugins {
     id("ru.mipt.npm.mpp")
 }
@@ -24,10 +26,18 @@ kotlin {
         }
     }
 
-    sourceSets.commonMain {
-        dependencies {
-            api(project(":kmath-core"))
-            api("org.jetbrains.kotlinx:kotlinx-io:0.2.0-tvis-3")
+    sourceSets {
+        val nativeMain by getting {
+            dependencies {
+                api(project(":kmath-core"))
+                api("org.jetbrains.kotlinx:kotlinx-io:0.2.0-tvis-3")
+            }
         }
     }
 }
+
+internal val codegen: Task by tasks.creating {
+    matricesCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/generated/Matrices.kt")
+}
+
+kotlin.sourceSets["nativeMain"].kotlin.srcDirs(files().builtBy(codegen))

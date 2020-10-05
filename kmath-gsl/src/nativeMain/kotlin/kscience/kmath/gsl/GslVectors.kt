@@ -8,7 +8,7 @@ import kscience.kmath.linear.Point
 import kscience.kmath.operations.Complex
 import org.gnu.gsl.*
 
-public sealed class GslVector<T, H : CStructVar> : GslMemoryHolder<H>(), Point<T> {
+public abstract class GslVector<T, H : CStructVar> internal constructor(): GslMemoryHolder<H>(), Point<T> {
     public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor = 0
 
