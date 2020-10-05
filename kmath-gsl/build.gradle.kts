@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE")
 
 import kscience.kmath.gsl.codegen.matricesCodegen
+import kscience.kmath.gsl.codegen.vectorsCodegen
 
 plugins {
     id("ru.mipt.npm.mpp")
@@ -38,6 +39,7 @@ kotlin {
 
 internal val codegen: Task by tasks.creating {
     matricesCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/generated/Matrices.kt")
+    vectorsCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/generated/Vectors.kt")
 }
 
 kotlin.sourceSets["nativeMain"].kotlin.srcDirs(files().builtBy(codegen))

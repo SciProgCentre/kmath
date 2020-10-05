@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.psi.KtFile
 import sun.reflect.ReflectionFactory
 
 internal fun createProject(): MockProject {
@@ -58,4 +57,14 @@ internal fun createProject(): MockProject {
 
 internal operator fun PsiElement.plusAssign(e: PsiElement) {
     add(e)
+}
+
+internal fun fn(pattern: String, type: String): String {
+    if (type == "double") return pattern.replace("R", "_")
+    return pattern.replace("R", "_${type}_")
+}
+
+internal fun sn(pattern: String, type: String): String {
+    if (type == "double") return pattern.replace("R", "")
+    return pattern.replace("R", "_$type")
 }

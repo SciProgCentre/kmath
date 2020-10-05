@@ -1,8 +1,9 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kscience.kmath.gsl
 
 import kotlinx.cinterop.*
 import kscience.kmath.linear.*
-import kscience.kmath.operations.*
 import org.gnu.gsl.*
 
 internal class GslRealMatrix(
