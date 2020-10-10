@@ -5,5 +5,5 @@ plugins {
 repositories.jcenter()
 
 dependencies {
-    implementation(kotlin("compiler-embeddable"))
+    implementation(kotlin("compiler-embeddable", "1.4.10"))
 }
