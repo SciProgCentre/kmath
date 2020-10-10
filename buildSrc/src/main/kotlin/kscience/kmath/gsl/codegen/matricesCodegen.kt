@@ -22,10 +22,10 @@ private fun KtPsiFactory.createMatrixClass(
     features: Set<MatrixFeature> = emptySet()
 ) : GslMatrix<$kotlinTypeName, $structName>() {
     override val rowNum: Int
-        get() = memScoped { nativeHandle.getPointer(this).pointed.size1.toInt() }
+        get() = nativeHandle.pointed.size1.toInt()
 
     override val colNum: Int
-        get() = memScoped { nativeHandle.getPointer(this).pointed.size2.toInt() }
+        get() = nativeHandle.pointed.size2.toInt()
 
     override val features: Set<MatrixFeature> = features
 
@@ -39,30 +39,26 @@ private fun KtPsiFactory.createMatrixClass(
     override operator fun set(i: Int, j: Int, value: ${kotlinTypeName}): Unit =
         ${fn("gsl_matrixRset", cTypeName)}(nativeHandle, i.toULong(), j.toULong(), value)
 
-    override fun copy(): $className = memScoped {
+    override fun copy(): $className {
         val new = requireNotNull(${fn("gsl_matrixRalloc", cTypeName)}(rowNum.toULong(), colNum.toULong()))
         ${fn("gsl_matrixRmemcpy", cTypeName)}(new, nativeHandle)
-        $className(new, features)
+        return $className(new, features)
     }
 
     override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandle)
 
     override fun equals(other: Any?): Boolean {
-        if (other is $className) ${fn("gsl_matrixRequal", cTypeName)}(nativeHandle, other.nativeHandle)
+        if (other is $className) return ${fn("gsl_matrixRequal", cTypeName)}(nativeHandle, other.nativeHandle) == 1
         return super.equals(other)
     }
 }"""
-    f += createClass(
-        text
-    )
-
+    f += createClass(text)
     f += createNewLine(2)
 }
 
 fun matricesCodegen(outputFile: String, project: Project = createProject()) {
     val f = KtPsiFactory(project, true).run {
-        createFile("@file:Suppress(\"PackageDirectoryMismatch\")").also { f ->
-            f += createNewLine(2)
+        createFile("").also { f ->
             f += createPackageDirective(FqName("kscience.kmath.gsl"))
             f += createNewLine(2)
             f += createImportDirective(ImportPath.fromString("kotlinx.cinterop.*"))

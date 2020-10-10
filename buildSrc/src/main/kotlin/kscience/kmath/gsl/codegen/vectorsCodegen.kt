@@ -20,22 +20,34 @@ private fun KtPsiFactory.createVectorClass(
     @Language("kotlin") val text =
         """internal class $className(override val nativeHandle: CPointer<$structName>) : GslVector<$kotlinTypeName, $structName>() {
     override val size: Int
-        get() = memScoped { nativeHandle.getPointer(this).pointed.size.toInt() }
+        get() = nativeHandle.pointed.size.toInt()
 
     override fun get(index: Int): $kotlinTypeName = ${fn("gsl_vectorRget", cTypeName)}(nativeHandle, index.toULong())
+    override fun set(index: Int, value: $kotlinTypeName): Unit = ${
+            fn("gsl_vectorRset", cTypeName)
+        }(nativeHandle, index.toULong(), value)
+
+    override fun copy(): $className {
+        val new = requireNotNull(${fn("gsl_vectorRalloc", cTypeName)}(size.toULong()))
+        ${fn("gsl_vectorRmemcpy", cTypeName)}(new, nativeHandle)
+        return ${className}(new)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is $className) return ${fn("gsl_vectorRequal", cTypeName)}(nativeHandle, other.nativeHandle) == 1
+        return super.equals(other)
+    }
+
     override fun close(): Unit = ${fn("gsl_vectorRfree", cTypeName)}(nativeHandle)
 }"""
-    f += createClass(
-        text
-    )
 
+    f += createClass(text)
     f += createNewLine(2)
 }
 
 fun vectorsCodegen(outputFile: String, project: Project = createProject()) {
     val f = KtPsiFactory(project, true).run {
-        createFile("@file:Suppress(\"PackageDirectoryMismatch\")").also { f ->
-            f += createNewLine(2)
+        createFile("").also { f ->
             f += createPackageDirective(FqName("kscience.kmath.gsl"))
             f += createNewLine(2)
             f += createImportDirective(ImportPath.fromString("kotlinx.cinterop.*"))

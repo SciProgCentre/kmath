@@ -38,7 +38,7 @@ public object BigIntField : Field<BigInt> {
 public class BigInt internal constructor(
     private val sign: Byte,
     private val magnitude: Magnitude
-) : Comparable<BigInt> {
+    ) : Comparable<BigInt> {
     public override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1

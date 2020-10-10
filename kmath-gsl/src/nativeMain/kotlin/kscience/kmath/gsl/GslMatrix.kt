@@ -13,7 +13,7 @@ public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor():
         return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
-    public override fun hashCode(): Int {
+    public final override fun hashCode(): Int {
         var result = nativeHandle.hashCode()
         result = 31 * result + features.hashCode()
         return result

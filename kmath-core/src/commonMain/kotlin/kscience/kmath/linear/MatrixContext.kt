@@ -55,7 +55,7 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      * Multiplies an element by a matrix of it.
      *
      * @receiver the multiplicand.
-     * @param value the multiplier.
+     * @param m the multiplier.
      * @receiver the product.
      */
     public operator fun T.times(m: Matrix<T>): Matrix<T> = m * this

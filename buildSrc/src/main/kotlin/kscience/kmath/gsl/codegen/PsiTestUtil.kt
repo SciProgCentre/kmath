@@ -6,7 +6,11 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.DebugUtil
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.PsiFileImpl
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.psi.KtFile
+import java.util.regex.Pattern
 import kotlin.math.min
+
+private val EOL_SPLIT_DONT_TRIM_PATTERN: Pattern = Pattern.compile("(\r|\n|\r\n)+")
+internal fun splitByLinesDontTrim(string: String): Array<String> = EOL_SPLIT_DONT_TRIM_PATTERN.split(string)
 
 internal object PsiTestUtil {
     fun checkFileStructure(file: KtFile) {
