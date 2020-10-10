@@ -29,17 +29,17 @@ kotlin {
 
     sourceSets {
         val nativeMain by getting {
+            val codegen by tasks.creating {
+                matricesCodegen(kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Matrices.kt")
+                vectorsCodegen(kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Vectors.kt")
+            }
+
+            kotlin.srcDirs(files().builtBy(codegen))
+
             dependencies {
                 api(project(":kmath-core"))
                 api("org.jetbrains.kotlinx:kotlinx-io:0.2.0-tvis-3")
             }
         }
     }
-
-    val codegen: Task by tasks.creating {
-        matricesCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Matrices.kt")
-        vectorsCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Vectors.kt")
-    }
-
-    sourceSets["nativeMain"].kotlin.srcDirs(files().builtBy(codegen))
 }
