@@ -20,10 +20,7 @@ kotlin {
 
     val main by nativeTarget.compilations.getting {
         cinterops {
-            val libgsl by creating {
-                defFile("src/nativeInterop/cinterop/libgsl.def")
-                includeDirs { allHeaders("./src/nativeMain/resources/") }
-            }
+            val libgsl by creating { includeDirs { headerFilterOnly("/usr/include/") } }
         }
     }
 
