@@ -1,7 +1,6 @@
 package kscience.kmath.gsl
 
-import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.pointed
+import kotlinx.cinterop.*
 import org.gnu.gsl.*
 
 internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>) : GslVector<Double, gsl_vector>() {
