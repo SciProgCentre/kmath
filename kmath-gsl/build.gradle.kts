@@ -36,7 +36,7 @@ kotlin {
         }
     }
 
-    internal val codegen: Task by tasks.creating {
+    val codegen: Task by tasks.creating {
         matricesCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Matrices.kt")
         vectorsCodegen(kotlin.sourceSets["nativeMain"].kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Vectors.kt")
     }
