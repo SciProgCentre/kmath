@@ -18,7 +18,8 @@ private fun KtPsiFactory.createVectorClass(
     val structName = sn("gsl_vectorR", cTypeName)
 
     @Language("kotlin") val text =
-        """internal class $className(override val nativeHandle: CPointer<$structName>) : GslVector<$kotlinTypeName, $structName>() {
+        """internal class $className(override val nativeHandle: CPointer<$structName>, scope: DeferScope) 
+            : GslVector<$kotlinTypeName, $structName>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -30,7 +31,7 @@ private fun KtPsiFactory.createVectorClass(
     override fun copy(): $className {
         val new = requireNotNull(${fn("gsl_vectorRalloc", cTypeName)}(size.toULong()))
         ${fn("gsl_vectorRmemcpy", cTypeName)}(new, nativeHandle)
-        return ${className}(new)
+        return ${className}(new, scope)
     }
 
     override fun equals(other: Any?): Boolean {

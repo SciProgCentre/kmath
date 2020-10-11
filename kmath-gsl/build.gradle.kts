@@ -8,6 +8,8 @@ plugins {
 }
 
 kotlin {
+    explicitApiWarning()
+
     val nativeTarget = when (System.getProperty("os.name")) {
         "Mac OS X" -> macosX64("native")
         "Linux" -> linuxX64("native")
@@ -20,7 +22,11 @@ kotlin {
 
     val main by nativeTarget.compilations.getting {
         cinterops {
-            val libgsl by creating { includeDirs { headerFilterOnly("/usr/include/", "/usr/local/") } }
+            val libgsl by creating {
+                includeDirs {
+                    headerFilterOnly("/usr/include/", "/usr/local/")
+                }
+            }
         }
     }
 
@@ -35,7 +41,6 @@ kotlin {
 
             dependencies {
                 api(project(":kmath-core"))
-                api("org.jetbrains.kotlinx:kotlinx-io:0.2.0-tvis-3")
             }
         }
     }

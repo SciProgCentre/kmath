@@ -19,8 +19,9 @@ private fun KtPsiFactory.createMatrixClass(
 
     @Language("kotlin") val text = """internal class $className(
     override val nativeHandle: CPointer<$structName>,
-    features: Set<MatrixFeature> = emptySet()
-) : GslMatrix<$kotlinTypeName, $structName>() {
+    features: Set<MatrixFeature> = emptySet(),
+    scope: DeferScope
+) : GslMatrix<$kotlinTypeName, $structName>(scope) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -30,7 +31,7 @@ private fun KtPsiFactory.createMatrixClass(
     override val features: Set<MatrixFeature> = features
 
     override fun suggestFeature(vararg features: MatrixFeature): $className =
-        ${className}(nativeHandle, this.features + features)
+        ${className}(nativeHandle, this.features + features, scope)
 
     override operator fun get(i: Int, j: Int): $kotlinTypeName = ${
         fn("gsl_matrixRget", cTypeName)
@@ -42,7 +43,7 @@ private fun KtPsiFactory.createMatrixClass(
     override fun copy(): $className {
         val new = requireNotNull(${fn("gsl_matrixRalloc", cTypeName)}(rowNum.toULong(), colNum.toULong()))
         ${fn("gsl_matrixRmemcpy", cTypeName)}(new, nativeHandle)
-        return $className(new, features)
+        return $className(new, features, scope)
     }
 
     override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandle)

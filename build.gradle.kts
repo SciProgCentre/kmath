@@ -12,7 +12,6 @@ allprojects {
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
         maven("https://dl.bintray.com/hotkeytlt/maven")
-        maven("https://dl.bintray.com/commandertvis/kotlinx-io/")
     }
 
     group = "kscience.kmath"

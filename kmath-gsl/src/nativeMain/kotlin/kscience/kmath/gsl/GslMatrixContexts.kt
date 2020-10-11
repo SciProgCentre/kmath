@@ -1,6 +1,7 @@
 package kscience.kmath.gsl
 
 import kotlinx.cinterop.CStructVar
+import kotlinx.cinterop.DeferScope
 import kotlinx.cinterop.pointed
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
@@ -18,8 +19,9 @@ internal inline fun <T : Any, H : CStructVar> GslMatrix<T, H>.fill(initializer: 
 internal inline fun <T : Any, H : CStructVar> GslVector<T, H>.fill(initializer: (Int) -> T): GslVector<T, H> =
     apply { (0 until size).forEach { index -> this[index] = initializer(index) } }
 
-public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar> internal constructor() :
-    MatrixContext<T> {
+public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar> internal constructor(
+    internal val scope: DeferScope
+) : MatrixContext<T> {
     @Suppress("UNCHECKED_CAST")
     public fun Matrix<T>.toGsl(): GslMatrix<T, H1> = (if (this is GslMatrix<*, *>)
         this as GslMatrix<T, H1>
@@ -37,19 +39,19 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
         produceDirtyMatrix(rows, columns).fill(initializer)
 }
 
-public object GslRealMatrixContext : GslMatrixContext<Double, gsl_matrix, gsl_vector>() {
+public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, gsl_matrix, gsl_vector>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> =
-        GslRealMatrix(requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())))
+        GslRealMatrix(nativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())), scope = scope)
 
     override fun produceDirtyVector(size: Int): GslVector<Double, gsl_vector> =
-        GslRealVector(requireNotNull(gsl_vector_alloc(size.toULong())))
+        GslRealVector(nativeHandle = requireNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): GslMatrix<Double, gsl_matrix> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
         val result = requireNotNull(gsl_matrix_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, x, a, 1.0, result)
-        return GslRealMatrix(result)
+        return GslRealMatrix(result, scope = scope)
     }
 
     public override fun Matrix<Double>.dot(vector: Point<Double>): GslVector<Double, gsl_vector> {
@@ -57,7 +59,7 @@ public object GslRealMatrixContext : GslMatrixContext<Double, gsl_matrix, gsl_ve
         val a = vector.toGsl().nativeHandle
         val result = requireNotNull(gsl_vector_calloc(a.pointed.size))
         gsl_blas_dgemv(CblasNoTrans, 1.0, x, a, 1.0, result)
-        return GslRealVector(result)
+        return GslRealVector(result, scope = scope)
     }
 
     public override fun Matrix<Double>.times(value: Double): GslMatrix<Double, gsl_matrix> {
@@ -79,19 +81,20 @@ public object GslRealMatrixContext : GslMatrixContext<Double, gsl_matrix, gsl_ve
     }
 }
 
-public object GslFloatMatrixContext : GslMatrixContext<Float, gsl_matrix_float, gsl_vector_float>() {
+public class GslFloatMatrixContext(scope: DeferScope) :
+    GslMatrixContext<Float, gsl_matrix_float, gsl_vector_float>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> =
-        GslFloatMatrix(requireNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())))
+        GslFloatMatrix(requireNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())), scope = scope)
 
     override fun produceDirtyVector(size: Int): GslVector<Float, gsl_vector_float> =
-        GslFloatVector(requireNotNull(gsl_vector_float_alloc(size.toULong())))
+        GslFloatVector(requireNotNull(gsl_vector_float_alloc(size.toULong())), scope)
 
     public override fun Matrix<Float>.dot(other: Matrix<Float>): GslMatrix<Float, gsl_matrix_float> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
         val result = requireNotNull(gsl_matrix_float_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_sgemm(CblasNoTrans, CblasNoTrans, 1f, x, a, 1f, result)
-        return GslFloatMatrix(result)
+        return GslFloatMatrix(nativeHandle = result, scope = scope)
     }
 
     public override fun Matrix<Float>.dot(vector: Point<Float>): GslVector<Float, gsl_vector_float> {
@@ -99,7 +102,7 @@ public object GslFloatMatrixContext : GslMatrixContext<Float, gsl_matrix_float, 
         val a = vector.toGsl().nativeHandle
         val result = requireNotNull(gsl_vector_float_calloc(a.pointed.size))
         gsl_blas_sgemv(CblasNoTrans, 1f, x, a, 1f, result)
-        return GslFloatVector(result)
+        return GslFloatVector(nativeHandle = result, scope = scope)
     }
 
     public override fun Matrix<Float>.times(value: Float): GslMatrix<Float, gsl_matrix_float> {
@@ -121,19 +124,22 @@ public object GslFloatMatrixContext : GslMatrixContext<Float, gsl_matrix_float, 
     }
 }
 
-public object GslComplexMatrixContext : GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>() {
-    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> =
-        GslComplexMatrix(requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())))
+public class GslComplexMatrixContext(scope: DeferScope) :
+    GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>(scope) {
+    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> = GslComplexMatrix(
+        nativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
+        scope = scope
+    )
 
     override fun produceDirtyVector(size: Int): GslVector<Complex, gsl_vector_complex> =
-        GslComplexVector(requireNotNull(gsl_vector_complex_alloc(size.toULong())))
+        GslComplexVector(requireNotNull(gsl_vector_complex_alloc(size.toULong())), scope)
 
     public override fun Matrix<Complex>.dot(other: Matrix<Complex>): GslMatrix<Complex, gsl_matrix_complex> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
         val result = requireNotNull(gsl_matrix_complex_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, ComplexField.one.toGsl(), x, a, ComplexField.one.toGsl(), result)
-        return GslComplexMatrix(result)
+        return GslComplexMatrix(nativeHandle = result, scope = scope)
     }
 
     public override fun Matrix<Complex>.dot(vector: Point<Complex>): GslVector<Complex, gsl_vector_complex> {
@@ -141,7 +147,7 @@ public object GslComplexMatrixContext : GslMatrixContext<Complex, gsl_matrix_com
         val a = vector.toGsl().nativeHandle
         val result = requireNotNull(gsl_vector_complex_calloc(a.pointed.size))
         gsl_blas_zgemv(CblasNoTrans, ComplexField.one.toGsl(), x, a, ComplexField.one.toGsl(), result)
-        return GslComplexVector(result)
+        return GslComplexVector(result, scope)
     }
 
     public override fun Matrix<Complex>.times(value: Complex): GslMatrix<Complex, gsl_matrix_complex> {

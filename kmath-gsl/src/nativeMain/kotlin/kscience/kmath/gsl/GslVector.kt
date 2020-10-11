@@ -1,9 +1,11 @@
 package kscience.kmath.gsl
 
 import kotlinx.cinterop.CStructVar
+import kotlinx.cinterop.DeferScope
 import kscience.kmath.linear.Point
 
-public abstract class GslVector<T, H : CStructVar> internal constructor() : GslMemoryHolder<H>(), Point<T> {
+public abstract class GslVector<T, H : CStructVar> internal constructor(scope: DeferScope) :
+    GslMemoryHolder<H>(scope), Point<T> {
     internal abstract operator fun set(index: Int, value: T)
     internal abstract fun copy(): GslVector<T, H>
 

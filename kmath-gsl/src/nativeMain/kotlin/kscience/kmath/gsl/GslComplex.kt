@@ -14,8 +14,9 @@ internal fun Complex.toGsl(): CValue<gsl_complex> = cValue {
 
 internal class GslComplexMatrix(
     override val nativeHandle: CPointer<gsl_matrix_complex>,
-    features: Set<MatrixFeature> = emptySet()
-) : GslMatrix<Complex, gsl_matrix_complex>() {
+    features: Set<MatrixFeature> = emptySet(),
+    scope: DeferScope
+) : GslMatrix<Complex, gsl_matrix_complex>(scope) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -25,7 +26,7 @@ internal class GslComplexMatrix(
     override val features: Set<MatrixFeature> = features
 
     override fun suggestFeature(vararg features: MatrixFeature): GslComplexMatrix =
-        GslComplexMatrix(nativeHandle, this.features + features)
+        GslComplexMatrix(nativeHandle, this.features + features, scope)
 
     override operator fun get(i: Int, j: Int): Complex =
         gsl_matrix_complex_get(nativeHandle, i.toULong(), j.toULong()).toKMath()
@@ -36,7 +37,7 @@ internal class GslComplexMatrix(
     override fun copy(): GslComplexMatrix {
         val new = requireNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_complex_memcpy(new, nativeHandle)
-        return GslComplexMatrix(new, features)
+        return GslComplexMatrix(new, features, scope)
     }
 
     override fun close(): Unit = gsl_matrix_complex_free(nativeHandle)
@@ -47,18 +48,20 @@ internal class GslComplexMatrix(
     }
 }
 
-internal class GslComplexVector(override val nativeHandle: CPointer<gsl_vector_complex>) :
-    GslVector<Complex, gsl_vector_complex>() {
+internal class GslComplexVector(override val nativeHandle: CPointer<gsl_vector_complex>, scope: DeferScope) :
+    GslVector<Complex, gsl_vector_complex>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
     override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandle, index.toULong()).toKMath()
-    override fun set(index: Int, value: Complex): Unit = gsl_vector_complex_set(nativeHandle, index.toULong(), value.toGsl())
+
+    override fun set(index: Int, value: Complex): Unit =
+        gsl_vector_complex_set(nativeHandle, index.toULong(), value.toGsl())
 
     override fun copy(): GslComplexVector {
         val new = requireNotNull(gsl_vector_complex_alloc(size.toULong()))
         gsl_vector_complex_memcpy(new, nativeHandle)
-        return GslComplexVector(new)
+        return GslComplexVector(new, scope)
     }
 
     override fun equals(other: Any?): Boolean {
