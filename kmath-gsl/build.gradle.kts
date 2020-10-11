@@ -20,7 +20,7 @@ kotlin {
 
     val main by nativeTarget.compilations.getting {
         cinterops {
-            val libgsl by creating { includeDirs { headerFilterOnly("/usr/include/") } }
+            val libgsl by creating { includeDirs { headerFilterOnly("/usr/include/", "/usr/local/") } }
         }
     }
 
