@@ -36,7 +36,7 @@ public fun <X : SFun<X>> SFun<X>.mst(): MST = MstExtendedField {
         is SConst -> number(doubleValue)
         is Sum -> left.mst() + right.mst()
         is Prod -> left.mst() * right.mst()
-        is Power -> power(left.mst(), (right() as SConst<*>).doubleValue)
+        is Power -> power(left.mst(), (right as SConst<*>).doubleValue)
         is Negative -> -input.mst()
         is Log -> ln(left.mst()) / ln(right.mst())
         is Sine -> sin(input.mst())
