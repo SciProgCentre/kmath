@@ -7,7 +7,6 @@ pluginManagement {
         maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
-        maven("https://dl.bintray.com/kotlin/kotlin-dev/")
     }
 
     val toolsVersion = "0.6.1-dev-1.4.20-M1"
@@ -25,11 +24,11 @@ pluginManagement {
 }
 
 rootProject.name = "kmath"
+
 include(
     ":kmath-memory",
     ":kmath-core",
     ":kmath-functions",
-//    ":kmath-io",
     ":kmath-coroutines",
     ":kmath-histograms",
     ":kmath-commons",
@@ -40,5 +39,6 @@ include(
     ":kmath-geometry",
     ":kmath-ast",
     ":examples",
-    ":kmath-ejml"
+    ":kmath-ejml",
+    ":kmath-ast-kotlingrad"
 )
