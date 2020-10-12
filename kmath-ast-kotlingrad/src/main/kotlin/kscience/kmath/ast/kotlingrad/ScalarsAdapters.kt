@@ -8,8 +8,8 @@ import kscience.kmath.operations.*
 /**
  * Maps [SFun] objects to [MST]. Some unsupported operations like [Derivative] are bound and converted then.
  *
- * @receiver a scalar function.
- * @return the [MST].
+ * @receiver the scalar function.
+ * @return a node.
  */
 public fun <X : SFun<X>> SFun<X>.mst(): MST = MstExtendedField {
     when (this@mst) {
@@ -31,35 +31,51 @@ public fun <X : SFun<X>> SFun<X>.mst(): MST = MstExtendedField {
 }
 
 /**
+ * Maps [MST.Numeric] to [SConst] directly.
+ *
+ * @receiver the node.
+ * @return a new constant.
+ */
+public fun <X : SFun<X>> MST.Numeric.sconst(): SConst<X> = SConst(value)
+
+/**
+ * Maps [MST.Symbolic] to [SVar] directly.
+ *
+ * @receiver the node.
+ * @param proto the prototype instance.
+ * @return a new variable.
+ */
+public fun <X : SFun<X>> MST.Symbolic.svar(proto: X): SVar<X> = SVar(proto, value)
+
+/**
  * Maps [MST] objects to [SFun]. Unsupported operations throw [IllegalStateException].
  *
- * @receiver an [MST].
- * @return the scalar function.
+ * @receiver the node.
+ * @param proto the prototype instance.
+ * @return a scalar function.
  */
-public fun <X : SFun<X>> MST.sfun(proto: X): SFun<X> {
-    return when (this) {
-        is MST.Numeric -> SConst(value)
-        is MST.Symbolic -> SVar(proto, value)
+public fun <X : SFun<X>> MST.sfun(proto: X): SFun<X> = when (this) {
+    is MST.Numeric -> sconst()
+    is MST.Symbolic -> svar(proto)
 
-        is MST.Unary -> when (operation) {
-            SpaceOperations.PLUS_OPERATION -> value.sfun(proto)
-            SpaceOperations.MINUS_OPERATION -> Negative(value.sfun(proto))
-            TrigonometricOperations.SIN_OPERATION -> Sine(value.sfun(proto))
-            TrigonometricOperations.COS_OPERATION -> Cosine(value.sfun(proto))
-            TrigonometricOperations.TAN_OPERATION -> Tangent(value.sfun(proto))
-            PowerOperations.SQRT_OPERATION -> Power(value.sfun(proto), SConst(0.5))
-            ExponentialOperations.EXP_OPERATION -> Power(value.sfun(proto), E())
-            ExponentialOperations.LN_OPERATION -> Log(value.sfun(proto))
-            else -> error("Unary operation $operation not defined in $this")
-        }
+    is MST.Unary -> when (operation) {
+        SpaceOperations.PLUS_OPERATION -> value.sfun(proto)
+        SpaceOperations.MINUS_OPERATION -> Negative(value.sfun(proto))
+        TrigonometricOperations.SIN_OPERATION -> Sine(value.sfun(proto))
+        TrigonometricOperations.COS_OPERATION -> Cosine(value.sfun(proto))
+        TrigonometricOperations.TAN_OPERATION -> Tangent(value.sfun(proto))
+        PowerOperations.SQRT_OPERATION -> Power(value.sfun(proto), SConst(0.5))
+        ExponentialOperations.EXP_OPERATION -> Power(value.sfun(proto), E())
+        ExponentialOperations.LN_OPERATION -> Log(value.sfun(proto))
+        else -> error("Unary operation $operation not defined in $this")
+    }
 
-        is MST.Binary -> when (operation) {
-            SpaceOperations.PLUS_OPERATION -> Sum(left.sfun(proto), right.sfun(proto))
-            SpaceOperations.MINUS_OPERATION -> Sum(left.sfun(proto), Negative(right.sfun(proto)))
-            RingOperations.TIMES_OPERATION -> Prod(left.sfun(proto), right.sfun(proto))
-            FieldOperations.DIV_OPERATION -> Prod(left.sfun(proto), Power(right.sfun(proto), Negative(One())))
-            PowerOperations.POW_OPERATION -> Power(left.sfun(proto), SConst((right as MST.Numeric).value))
-            else -> error("Binary operation $operation not defined in $this")
-        }
+    is MST.Binary -> when (operation) {
+        SpaceOperations.PLUS_OPERATION -> Sum(left.sfun(proto), right.sfun(proto))
+        SpaceOperations.MINUS_OPERATION -> Sum(left.sfun(proto), Negative(right.sfun(proto)))
+        RingOperations.TIMES_OPERATION -> Prod(left.sfun(proto), right.sfun(proto))
+        FieldOperations.DIV_OPERATION -> Prod(left.sfun(proto), Power(right.sfun(proto), Negative(One())))
+        PowerOperations.POW_OPERATION -> Power(left.sfun(proto), SConst((right as MST.Numeric).value))
+        else -> error("Binary operation $operation not defined in $this")
     }
 }
