@@ -19,7 +19,8 @@ repositories {
 sourceSets.register("benchmarks")
 
 dependencies {
-//    implementation(project(":kmath-ast"))
+    implementation(project(":kmath-ast"))
+    implementation(project(":kmath-ast-kotlingrad"))
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
