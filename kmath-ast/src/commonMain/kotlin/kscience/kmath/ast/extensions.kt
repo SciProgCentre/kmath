@@ -1,22 +1,12 @@
 package kscience.kmath.ast
 
 import kscience.kmath.operations.Algebra
+import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 /**
- * Stores `provideDelegate` method returning property of [MST.Symbolic].
+ * Returns [PropertyDelegateProvider] providing [ReadOnlyProperty] of [MST.Symbolic] with its value equal to the name
+ * of the property.
  */
-public object MstSymbolDelegateProvider {
-    /**
-     * Returns [ReadOnlyProperty] of [MST.Symbolic] with its value equal to the name of the property.
-     */
-    public operator fun provideDelegate(thisRef: Any?, prop: KProperty<*>): ReadOnlyProperty<Any?, MST.Symbolic> =
-        ReadOnlyProperty { _, property -> MST.Symbolic(property.name) }
-}
-
-/**
- * Returns [MstSymbolDelegateProvider].
- */
-public val Algebra<MST>.symbol: MstSymbolDelegateProvider
-    get() = MstSymbolDelegateProvider
+public val Algebra<MST>.symbol: PropertyDelegateProvider<Algebra<MST>, ReadOnlyProperty<Algebra<MST>, MST.Symbolic>>
+    get() = PropertyDelegateProvider { _, _ -> ReadOnlyProperty { _, p -> MST.Symbolic(p.name) } }
