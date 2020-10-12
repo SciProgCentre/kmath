@@ -3,10 +3,29 @@ package kscience.kmath.ast.kotlingrad
 import edu.umontreal.kotlingrad.experimental.*
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExtendedField
+import kscience.kmath.ast.MstExtendedField.unaryMinus
 import kscience.kmath.operations.*
 
 /**
  * Maps [SFun] objects to [MST]. Some unsupported operations like [Derivative] are bound and converted then.
+ * [Power] operation is limited to constant right-hand side arguments.
+ *
+ * Detailed mapping is:
+ *
+ * - [SVar] -> [MstExtendedField.symbol];
+ * - [SConst] -> [MstExtendedField.number];
+ * - [Sum] -> [MstExtendedField.add];
+ * - [Prod] -> [MstExtendedField.multiply];
+ * - [Power] -> [MstExtendedField.power] (limited);
+ * - [Negative] -> [MstExtendedField.unaryMinus];
+ * - [Log] -> [MstExtendedField.ln] (left) / [MstExtendedField.ln] (right);
+ * - [Sine] -> [MstExtendedField.sin];
+ * - [Cosine] -> [MstExtendedField.cos];
+ * - [Tangent] -> [MstExtendedField.tan];
+ * - [DProd] is vector operation, and it is requested to be evaluated;
+ * - [SComposition] is also requested to be evaluated eagerly;
+ * - [VSumAll] is requested to be evaluated;
+ * - [Derivative] is requested to be evaluated.
  *
  * @receiver the scalar function.
  * @return a node.
@@ -49,6 +68,13 @@ public fun <X : SFun<X>> MST.Symbolic.svar(proto: X): SVar<X> = SVar(proto, valu
 
 /**
  * Maps [MST] objects to [SFun]. Unsupported operations throw [IllegalStateException].
+ *
+ * Detailed mapping is:
+ *
+ * - [MST.Numeric] -> [SConst];
+ * - [MST.Symbolic] -> [SVar];
+ * - [MST.Unary] -> [Negative], [Sine], [Cosine], [Tangent], [Power], [Log];
+ * - [MST.Binary] -> [Sum], [Prod], [Power].
  *
  * @receiver the node.
  * @param proto the prototype instance.
