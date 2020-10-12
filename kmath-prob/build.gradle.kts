@@ -1,6 +1,13 @@
 plugins { id("ru.mipt.npm.mpp") }
 
 kotlin.sourceSets {
+    all {
+        with(languageSettings) {
+            useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
+            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
+    }
+
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))

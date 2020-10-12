@@ -18,8 +18,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            **/.gradle
+            **/build
           key: gradle_6_6_1
           restore-keys: gradle_6_6_1
 
@@ -32,7 +32,7 @@ jobs:
           key: ${{ runner.os }}-konan-1.4.20-eap-37
           restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
       - name: Build with Gradle
-        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
+        run: sudo ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
   build-osx:
     runs-on: macos-latest
 
@@ -48,8 +48,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            **/.gradle
+            **/build
           key: gradle_6_6_1
           restore-keys: gradle_6_6_1
 
@@ -79,8 +79,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            **/.gradle
+            **/build
           key: gradle_6_6_1
           restore-keys: gradle_6_6_1
 
