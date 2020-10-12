@@ -58,6 +58,7 @@ public fun <X : SFun<X>> MST.sfun(proto: X): SFun<X> {
             SpaceOperations.MINUS_OPERATION -> Sum(left.sfun(proto), Negative(right.sfun(proto)))
             RingOperations.TIMES_OPERATION -> Prod(left.sfun(proto), right.sfun(proto))
             FieldOperations.DIV_OPERATION -> Prod(left.sfun(proto), Power(right.sfun(proto), Negative(One())))
+            PowerOperations.POW_OPERATION -> Power(left.sfun(proto), SConst((right as MST.Numeric).value))
             else -> error("Binary operation $operation not defined in $this")
         }
     }
