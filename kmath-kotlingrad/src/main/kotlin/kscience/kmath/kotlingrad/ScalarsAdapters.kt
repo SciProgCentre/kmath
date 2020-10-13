@@ -90,7 +90,7 @@ public fun <X : SFun<X>> MST.tSFun(proto: X): SFun<X> = when (this) {
         TrigonometricOperations.SIN_OPERATION -> sin(value.tSFun(proto))
         TrigonometricOperations.COS_OPERATION -> cos(value.tSFun(proto))
         TrigonometricOperations.TAN_OPERATION -> tan(value.tSFun(proto))
-        PowerOperations.SQRT_OPERATION -> value.tSFun(proto) pow SConst(0.5)
+        PowerOperations.SQRT_OPERATION -> value.tSFun(proto).sqrt()
         ExponentialOperations.EXP_OPERATION -> E<X>() pow value.tSFun(proto)
         ExponentialOperations.LN_OPERATION -> value.tSFun(proto).ln()
         else -> error("Unary operation $operation not defined in $this")
