@@ -1,4 +1,4 @@
-package kscience.kmath.ast.kotlingrad
+package kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.experimental.*
 import kscience.kmath.ast.MST
@@ -30,22 +30,22 @@ import kscience.kmath.operations.*
  * @receiver the scalar function.
  * @return a node.
  */
-public fun <X : SFun<X>> SFun<X>.mst(): MST = MstExtendedField {
-    when (this@mst) {
+public fun <X : SFun<X>> SFun<X>.toMst(): MST = MstExtendedField {
+    when (this@toMst) {
         is SVar -> symbol(name)
         is SConst -> number(doubleValue)
-        is Sum -> left.mst() + right.mst()
-        is Prod -> left.mst() * right.mst()
-        is Power -> power(left.mst(), (right as SConst<*>).doubleValue)
-        is Negative -> -input.mst()
-        is Log -> ln(left.mst()) / ln(right.mst())
-        is Sine -> sin(input.mst())
-        is Cosine -> cos(input.mst())
-        is Tangent -> tan(input.mst())
-        is DProd -> this@mst().mst()
-        is SComposition -> this@mst().mst()
-        is VSumAll<X, *> -> this@mst().mst()
-        is Derivative -> this@mst().mst()
+        is Sum -> left.toMst() + right.toMst()
+        is Prod -> left.toMst() * right.toMst()
+        is Power -> power(left.toMst(), (right as SConst<*>).doubleValue)
+        is Negative -> -input.toMst()
+        is Log -> ln(left.toMst()) / ln(right.toMst())
+        is Sine -> sin(input.toMst())
+        is Cosine -> cos(input.toMst())
+        is Tangent -> tan(input.toMst())
+        is DProd -> this@toMst().toMst()
+        is SComposition -> this@toMst().toMst()
+        is VSumAll<X, *> -> this@toMst().toMst()
+        is Derivative -> this@toMst().toMst()
     }
 }
 
@@ -55,7 +55,7 @@ public fun <X : SFun<X>> SFun<X>.mst(): MST = MstExtendedField {
  * @receiver the node.
  * @return a new constant.
  */
-public fun <X : SFun<X>> MST.Numeric.sConst(): SConst<X> = SConst(value)
+public fun <X : SFun<X>> MST.Numeric.toSConst(): SConst<X> = SConst(value)
 
 /**
  * Maps [MST.Symbolic] to [SVar] directly.
@@ -64,7 +64,7 @@ public fun <X : SFun<X>> MST.Numeric.sConst(): SConst<X> = SConst(value)
  * @param proto the prototype instance.
  * @return a new variable.
  */
-public fun <X : SFun<X>> MST.Symbolic.sVar(proto: X): SVar<X> = SVar(proto, value)
+public fun <X : SFun<X>> MST.Symbolic.toSVar(proto: X): SVar<X> = SVar(proto, value)
 
 /**
  * Maps [MST] objects to [SFun]. Unsupported operations throw [IllegalStateException].
@@ -80,28 +80,28 @@ public fun <X : SFun<X>> MST.Symbolic.sVar(proto: X): SVar<X> = SVar(proto, valu
  * @param proto the prototype instance.
  * @return a scalar function.
  */
-public fun <X : SFun<X>> MST.sFun(proto: X): SFun<X> = when (this) {
-    is MST.Numeric -> sConst()
-    is MST.Symbolic -> sVar(proto)
+public fun <X : SFun<X>> MST.tSFun(proto: X): SFun<X> = when (this) {
+    is MST.Numeric -> toSConst()
+    is MST.Symbolic -> toSVar(proto)
 
     is MST.Unary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> value.sFun(proto)
-        SpaceOperations.MINUS_OPERATION -> Negative(value.sFun(proto))
-        TrigonometricOperations.SIN_OPERATION -> Sine(value.sFun(proto))
-        TrigonometricOperations.COS_OPERATION -> Cosine(value.sFun(proto))
-        TrigonometricOperations.TAN_OPERATION -> Tangent(value.sFun(proto))
-        PowerOperations.SQRT_OPERATION -> Power(value.sFun(proto), SConst(0.5))
-        ExponentialOperations.EXP_OPERATION -> Power(value.sFun(proto), E())
-        ExponentialOperations.LN_OPERATION -> Log(value.sFun(proto))
+        SpaceOperations.PLUS_OPERATION -> value.tSFun(proto)
+        SpaceOperations.MINUS_OPERATION -> Negative(value.tSFun(proto))
+        TrigonometricOperations.SIN_OPERATION -> Sine(value.tSFun(proto))
+        TrigonometricOperations.COS_OPERATION -> Cosine(value.tSFun(proto))
+        TrigonometricOperations.TAN_OPERATION -> Tangent(value.tSFun(proto))
+        PowerOperations.SQRT_OPERATION -> Power(value.tSFun(proto), SConst(0.5))
+        ExponentialOperations.EXP_OPERATION -> Power(value.tSFun(proto), E())
+        ExponentialOperations.LN_OPERATION -> Log(value.tSFun(proto))
         else -> error("Unary operation $operation not defined in $this")
     }
 
     is MST.Binary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> Sum(left.sFun(proto), right.sFun(proto))
-        SpaceOperations.MINUS_OPERATION -> Sum(left.sFun(proto), Negative(right.sFun(proto)))
-        RingOperations.TIMES_OPERATION -> Prod(left.sFun(proto), right.sFun(proto))
-        FieldOperations.DIV_OPERATION -> Prod(left.sFun(proto), Power(right.sFun(proto), Negative(One())))
-        PowerOperations.POW_OPERATION -> Power(left.sFun(proto), SConst((right as MST.Numeric).value))
+        SpaceOperations.PLUS_OPERATION -> Sum(left.tSFun(proto), right.tSFun(proto))
+        SpaceOperations.MINUS_OPERATION -> Sum(left.tSFun(proto), Negative(right.tSFun(proto)))
+        RingOperations.TIMES_OPERATION -> Prod(left.tSFun(proto), right.tSFun(proto))
+        FieldOperations.DIV_OPERATION -> Prod(left.tSFun(proto), Power(right.tSFun(proto), Negative(One())))
+        PowerOperations.POW_OPERATION -> Power(left.tSFun(proto), SConst((right as MST.Numeric).value))
         else -> error("Binary operation $operation not defined in $this")
     }
 }

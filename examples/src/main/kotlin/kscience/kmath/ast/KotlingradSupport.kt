@@ -2,9 +2,9 @@ package kscience.kmath.ast
 
 import edu.umontreal.kotlingrad.experimental.DoublePrecision
 import kscience.kmath.asm.compile
-import kscience.kmath.ast.kotlingrad.mst
-import kscience.kmath.ast.kotlingrad.sFun
-import kscience.kmath.ast.kotlingrad.sVar
+import kscience.kmath.kotlingrad.toMst
+import kscience.kmath.kotlingrad.tSFun
+import kscience.kmath.kotlingrad.toSVar
 import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.RealField
 
@@ -14,9 +14,9 @@ import kscience.kmath.operations.RealField
  */
 fun main() {
     val proto = DoublePrecision.prototype
-    val x by MstAlgebra.symbol("x").sVar(proto)
-    val quadratic = "x^2-4*x-44".parseMath().sFun(proto)
-    val actualDerivative = MstExpression(RealField, quadratic.d(x).mst()).compile()
+    val x by MstAlgebra.symbol("x").toSVar(proto)
+    val quadratic = "x^2-4*x-44".parseMath().tSFun(proto)
+    val actualDerivative = MstExpression(RealField, quadratic.d(x).toMst()).compile()
     val expectedDerivative = MstExpression(RealField, "2*x-4".parseMath()).compile()
     assert(actualDerivative("x" to 123.0) == expectedDerivative("x" to 123.0))
 }
