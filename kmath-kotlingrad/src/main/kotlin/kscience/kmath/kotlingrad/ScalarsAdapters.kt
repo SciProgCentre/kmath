@@ -16,7 +16,7 @@ import kscience.kmath.operations.*
  * - [SConst] -> [MstExtendedField.number];
  * - [Sum] -> [MstExtendedField.add];
  * - [Prod] -> [MstExtendedField.multiply];
- * - [Power] -> [MstExtendedField.power] (limited);
+ * - [Power] -> [MstExtendedField.power] (limited to constant exponents only);
  * - [Negative] -> [MstExtendedField.unaryMinus];
  * - [Log] -> [MstExtendedField.ln] (left) / [MstExtendedField.ln] (right);
  * - [Sine] -> [MstExtendedField.sin];
@@ -36,7 +36,7 @@ public fun <X : SFun<X>> SFun<X>.toMst(): MST = MstExtendedField {
         is SConst -> number(doubleValue)
         is Sum -> left.toMst() + right.toMst()
         is Prod -> left.toMst() * right.toMst()
-        is Power -> power(left.toMst(), (right as SConst<*>).doubleValue)
+        is Power -> left.toMst() pow ((right as? SConst<*>)?.doubleValue ?: (right() as SConst<*>).doubleValue)
         is Negative -> -input.toMst()
         is Log -> ln(left.toMst()) / ln(right.toMst())
         is Sine -> sin(input.toMst())
@@ -86,22 +86,22 @@ public fun <X : SFun<X>> MST.tSFun(proto: X): SFun<X> = when (this) {
 
     is MST.Unary -> when (operation) {
         SpaceOperations.PLUS_OPERATION -> value.tSFun(proto)
-        SpaceOperations.MINUS_OPERATION -> Negative(value.tSFun(proto))
-        TrigonometricOperations.SIN_OPERATION -> Sine(value.tSFun(proto))
-        TrigonometricOperations.COS_OPERATION -> Cosine(value.tSFun(proto))
-        TrigonometricOperations.TAN_OPERATION -> Tangent(value.tSFun(proto))
-        PowerOperations.SQRT_OPERATION -> Power(value.tSFun(proto), SConst(0.5))
-        ExponentialOperations.EXP_OPERATION -> Power(value.tSFun(proto), E())
-        ExponentialOperations.LN_OPERATION -> Log(value.tSFun(proto))
+        SpaceOperations.MINUS_OPERATION -> -value.tSFun(proto)
+        TrigonometricOperations.SIN_OPERATION -> sin(value.tSFun(proto))
+        TrigonometricOperations.COS_OPERATION -> cos(value.tSFun(proto))
+        TrigonometricOperations.TAN_OPERATION -> tan(value.tSFun(proto))
+        PowerOperations.SQRT_OPERATION -> value.tSFun(proto) pow SConst(0.5)
+        ExponentialOperations.EXP_OPERATION -> E<X>() pow value.tSFun(proto)
+        ExponentialOperations.LN_OPERATION -> value.tSFun(proto).ln()
         else -> error("Unary operation $operation not defined in $this")
     }
 
     is MST.Binary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> Sum(left.tSFun(proto), right.tSFun(proto))
-        SpaceOperations.MINUS_OPERATION -> Sum(left.tSFun(proto), Negative(right.tSFun(proto)))
-        RingOperations.TIMES_OPERATION -> Prod(left.tSFun(proto), right.tSFun(proto))
-        FieldOperations.DIV_OPERATION -> Prod(left.tSFun(proto), Power(right.tSFun(proto), Negative(One())))
-        PowerOperations.POW_OPERATION -> Power(left.tSFun(proto), SConst((right as MST.Numeric).value))
+        SpaceOperations.PLUS_OPERATION -> left.tSFun(proto) + right.tSFun(proto)
+        SpaceOperations.MINUS_OPERATION -> left.tSFun(proto) - right.tSFun(proto)
+        RingOperations.TIMES_OPERATION -> left.tSFun(proto) * right.tSFun(proto)
+        FieldOperations.DIV_OPERATION -> left.tSFun(proto) / right.tSFun(proto)
+        PowerOperations.POW_OPERATION -> left.tSFun(proto) pow (right as MST.Numeric).toSConst()
         else -> error("Binary operation $operation not defined in $this")
     }
 }
