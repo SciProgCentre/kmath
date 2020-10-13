@@ -18,7 +18,7 @@ internal inline fun <R> diff(
 internal class AutoDiffTest {
     @Test
     fun derivativeStructureFieldTest() {
-        val res = diff(3, "x" to 1.0, "y" to 1.0) {
+        val res: Double = diff(3, "x" to 1.0, "y" to 1.0) {
             val x by variable
             val y = variable("y")
             val z = x * (-sin(x * y) + y)

@@ -16,7 +16,7 @@ import kotlin.properties.ReadOnlyProperty
  */
 public class DerivativeStructureField(
     public val order: Int,
-    public val parameters: Map<String, Double>
+    public val parameters: Map<String, Double>,
 ) : ExtendedField<DerivativeStructure> {
     public override val zero: DerivativeStructure by lazy { DerivativeStructure(parameters.size, order) }
     public override val one: DerivativeStructure by lazy { DerivativeStructure(parameters.size, order, 1.0) }
@@ -85,8 +85,9 @@ public class DerivativeStructureField(
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
-public class DiffExpression(public val function: DerivativeStructureField.() -> DerivativeStructure) :
-    Expression<Double> {
+public class DiffExpression(
+    public val function: DerivativeStructureField.() -> DerivativeStructure,
+) : Expression<Double> {
     public override operator fun invoke(arguments: Map<String, Double>): Double = DerivativeStructureField(
         0,
         arguments
