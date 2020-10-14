@@ -87,8 +87,8 @@ repositories{
 }
 
 dependencies{
-    api("scientifik:kmath-core:${kmathVersion}")
-    //api("scientifik:kmath-core-jvm:${kmathVersion}") for jvm-specific version
+    api("kscience.kmath:kmath-core:${kmathVersion}")
+    //api("scientifik:kmath-core:${kmathVersion}") for 0.1.3 and earlier
 }
 ```
 
