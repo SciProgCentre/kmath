@@ -5,9 +5,9 @@ plugins {
     id("ru.mipt.npm.publish") apply false
 }
 
-private val kmathVersion: String by extra("0.2.0-dev-2")
-private val bintrayRepo: String by extra("kscience")
-private val githubProject: String by extra("kmath")
+internal val kmathVersion: String by extra("0.2.0-dev-2")
+internal val bintrayRepo: String by extra("kscience")
+internal val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
@@ -22,15 +22,14 @@ allprojects {
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<KSciencePublishPlugin>()
-
-    ksciencePublish {
-        spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
-        spaceUser = System.getenv("SPACE_USER")
-        spaceToken = System.getenv("SPACE_TOKEN")
-    }
+    if (!name.startsWith("kmath")) return@subprojects
+    apply<KSciencePublishPlugin>()
 }
 
-readme {
-    readmeTemplate = file("docs/templates/README-TEMPLATE.md")
+ksciencePublish {
+    spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
+    spaceUser = System.getenv("SPACE_USER")
+    spaceToken = System.getenv("SPACE_TOKEN")
 }
+
+readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")

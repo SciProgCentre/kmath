@@ -10,10 +10,11 @@ plugins {
 allOpen.annotation("org.openjdk.jmh.annotations.State")
 
 repositories {
-    maven("https://dl.bintray.com/mipt-npm/kscience")
+    jcenter()
+    maven("https://dl.bintray.com/kotlin/kotlin-eap/")
+    maven("https://dl.bintray.com/kotlin/kotlinx")
     maven("https://dl.bintray.com/mipt-npm/dev")
-    maven("https://dl.bintray.com/kotlin/kotlin-dev/")
-    mavenCentral()
+    maven("https://dl.bintray.com/mipt-npm/kscience")
 }
 
 sourceSets.register("benchmarks")
