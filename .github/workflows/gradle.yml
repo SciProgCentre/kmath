@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}-konan-1.4.20-eap-37
           restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
       - name: Build with Gradle
-        run: sudo ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
+        run: ./gradlew -Dorg.gradle.daemon=false --build-cache :kmath-gsl:cinteropLibgslNative build
   build-osx:
     runs-on: macos-latest
 
