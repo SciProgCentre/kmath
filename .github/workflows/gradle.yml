@@ -13,7 +13,13 @@ jobs:
         with:
           java-version: 11
       - name: Install libgsl-dev
-        run: sudo apt install libgsl-dev
+        run: sudo apt install -y libgsl-dev
+      - name: Install Chrome
+        run: |
+          sudo apt install -y libappindicator1 fonts-liberation
+          cd /temp
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome*.deb
       - name: Cache gradle
         uses: actions/cache@v2
         with:
