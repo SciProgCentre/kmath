@@ -1,7 +1,6 @@
 package=org.gnu.gsl
-headers=gsl/gsl_blas.h
 headerFilter=gsl/**
-compilerOpts=-I/usr/include/gsl
-linkerOpts=-lgsl
-linkerOpts.linux=-L/usr/lib64 -L/usr/lib/x86_64-linux-gnu
-linkerOpts.osx=-L/opt/local/lib -L/usr/local/lib
+compilerOpts.linux=-I/usr/include/
+compilerOpts.osx=-I/usr/local/
+linkerOpts.linux=-L/usr/lib64 -L/usr/lib/x86_64-linux-gnu -lgsl
+linkerOpts.osx=-L/opt/local/lib -L/usr/local/lib -lgsl
