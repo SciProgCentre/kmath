@@ -13,7 +13,7 @@ jobs:
         with:
           java-version: 11
       - name: Install libgsl-dev
-        run: sudo apt install -y libgsl-dev
+        run: sudo apt install -y libgsl-dev gcc-multilib
       - name: Install Chrome
         run: |
           sudo apt install -y libappindicator1 fonts-liberation
