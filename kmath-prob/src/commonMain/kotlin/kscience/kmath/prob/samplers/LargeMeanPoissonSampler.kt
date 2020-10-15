@@ -5,6 +5,7 @@ import kscience.kmath.chains.ConstantChain
 import kscience.kmath.prob.RandomGenerator
 import kscience.kmath.prob.Sampler
 import kscience.kmath.prob.chain
+import kscience.kmath.prob.internal.InternalUtils
 import kscience.kmath.prob.next
 import kotlin.math.*
 
@@ -111,16 +112,13 @@ public class LargeMeanPoissonSampler private constructor(public val mean: Double
     }
 
     private fun getFactorialLog(n: Int): Double = factorialLog.value(n)
-
-    override fun toString(): String = "Large Mean Poisson deviate"
+    public override fun toString(): String = "Large Mean Poisson deviate"
 
     public companion object {
         private const val MAX_MEAN: Double = 0.5 * Int.MAX_VALUE
         private val NO_CACHE_FACTORIAL_LOG: InternalUtils.FactorialLog = InternalUtils.FactorialLog.create()
 
-        private val NO_SMALL_MEAN_POISSON_SAMPLER: Sampler<Int> = object : Sampler<Int> {
-            override fun sample(generator: RandomGenerator): Chain<Int> = ConstantChain(0)
-        }
+        private val NO_SMALL_MEAN_POISSON_SAMPLER: Sampler<Int> = Sampler { ConstantChain(0) }
 
         public fun of(mean: Double): LargeMeanPoissonSampler {
             require(mean >= 1) { "mean is not >= 1: $mean" }

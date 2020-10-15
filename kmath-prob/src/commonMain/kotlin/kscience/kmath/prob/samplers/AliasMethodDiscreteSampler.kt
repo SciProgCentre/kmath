@@ -4,6 +4,7 @@ import kscience.kmath.chains.Chain
 import kscience.kmath.prob.RandomGenerator
 import kscience.kmath.prob.Sampler
 import kscience.kmath.prob.chain
+import kscience.kmath.prob.internal.InternalUtils
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min

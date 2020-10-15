@@ -33,10 +33,7 @@ public class DerivativeStructureField(
         variables[name] ?: default ?: error("A variable with name $name does not exist")
 
     public fun Number.const(): DerivativeStructure = DerivativeStructure(order, parameters.size, toDouble())
-
-    public fun DerivativeStructure.deriv(parName: String, order: Int = 1): Double {
-        return deriv(mapOf(parName to order))
-    }
+    public fun DerivativeStructure.deriv(parName: String, order: Int = 1): Double = deriv(mapOf(parName to order))
 
     public fun DerivativeStructure.deriv(orders: Map<String, Int>): Double {
         return getPartialDerivative(*parameters.keys.map { orders[it] ?: 0 }.toIntArray())
@@ -75,7 +72,6 @@ public class DerivativeStructureField(
     public fun power(arg: DerivativeStructure, pow: DerivativeStructure): DerivativeStructure = arg.pow(pow)
     public override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
     public override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
-
     public override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
     public override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
     public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this

@@ -10,10 +10,13 @@ import kscience.kmath.prob.Sampler
  *
  * Based on Commons RNG implementation.
  * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/GaussianSampler.html
+ *
+ * @property mean the mean of the distribution.
+ * @property standardDeviation the variance of the distribution.
  */
 public class GaussianSampler private constructor(
-    private val mean: Double,
-    private val standardDeviation: Double,
+    public val mean: Double,
+    public val standardDeviation: Double,
     private val normalized: NormalizedGaussianSampler
 ) : Sampler<Double> {
     public override fun sample(generator: RandomGenerator): Chain<Double> = normalized

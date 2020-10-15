@@ -6,7 +6,7 @@ import kscience.kmath.chains.collect
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
 
-public interface Sampler<T : Any> {
+public fun interface Sampler<T : Any> {
     public fun sample(generator: RandomGenerator): Chain<T>
 }
 
@@ -20,11 +20,7 @@ public interface Distribution<T : Any> : Sampler<T> {
      */
     public fun probability(arg: T): Double
 
-    /**
-     * Create a chain of samples from this distribution.
-     * The chain is not guaranteed to be stateless, but different sample chains should be independent.
-     */
-    override fun sample(generator: RandomGenerator): Chain<T>
+    public override fun sample(generator: RandomGenerator): Chain<T>
 
     /**
      * An empty companion. Distribution factories should be written as its extensions
@@ -63,9 +59,7 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
         //clear list from previous run
         tmp.clear()
         //Fill list
-        repeat(size) {
-            tmp.add(chain.next())
-        }
+        repeat(size) { tmp.add(chain.next()) }
         //return new buffer with elements from tmp
         bufferFactory(size) { tmp[it] }
     }

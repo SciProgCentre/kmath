@@ -26,10 +26,7 @@ public class RandomSourceGenerator(public val source: RandomSource, seed: Long?)
 public inline class RandomGeneratorProvider(public val generator: RandomGenerator) : UniformRandomProvider {
     public override fun nextBoolean(): Boolean = generator.nextBoolean()
     public override fun nextFloat(): Float = generator.nextDouble().toFloat()
-
-    public override fun nextBytes(bytes: ByteArray) {
-        generator.fillBytes(bytes)
-    }
+    public override fun nextBytes(bytes: ByteArray): Unit = generator.fillBytes(bytes)
 
     public override fun nextBytes(bytes: ByteArray, start: Int, len: Int) {
         generator.fillBytes(bytes, start, start + len)
