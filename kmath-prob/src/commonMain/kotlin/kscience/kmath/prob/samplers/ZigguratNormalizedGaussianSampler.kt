@@ -26,35 +26,24 @@ public class ZigguratNormalizedGaussianSampler private constructor() :
     public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain { sampleOne(this) }
     public override fun toString(): String = "Ziggurat normalized Gaussian deviate"
 
-    private fun fix(
-        generator: RandomGenerator,
-        hz: Long,
-        iz: Int
-    ): Double {
-        var x: Double
-        var y: Double
-        x = hz * W[iz]
+    private fun fix(generator: RandomGenerator, hz: Long, iz: Int): Double {
+        var x = hz * W[iz]
 
-        return if (iz == 0) {
-            // Base strip.
-            // This branch is called about 5.7624515E-4 times per sample.
-            do {
-                y = -ln(generator.nextDouble())
-                x = -ln(generator.nextDouble()) * ONE_OVER_R
-            } while (y + y < x * x)
+        return when {
+            iz == 0 -> {
+                var y: Double
 
-            val out = R + x
-            if (hz > 0) out else -out
-        } else {
-            // Wedge of other strips.
-            // This branch is called about 0.027323 times per sample.
-            // else
-            // Try again.
-            // This branch is called about 0.012362 times per sample.
-            if (F[iz] + generator.nextDouble() * (F[iz - 1] - F[iz]) < gauss(
-                    x
-                )
-            ) x else sampleOne(generator)
+                do {
+                    y = -ln(generator.nextDouble())
+                    x = -ln(generator.nextDouble()) * ONE_OVER_R
+                } while (y + y < x * x)
+
+                val out = R + x
+                if (hz > 0) out else -out
+            }
+
+            F[iz] + generator.nextDouble() * (F[iz - 1] - F[iz]) < gauss(x) -> x
+            else -> sampleOne(generator)
         }
     }
 

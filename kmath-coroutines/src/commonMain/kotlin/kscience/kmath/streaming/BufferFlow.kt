@@ -28,7 +28,7 @@ public fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>)
     var counter = 0
 
     this@chunked.collect { element ->
-        list.add(element)
+        list += element
         counter++
 
         if (counter == bufferSize) {

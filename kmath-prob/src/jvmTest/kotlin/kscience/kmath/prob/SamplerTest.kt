@@ -7,11 +7,8 @@ class SamplerTest {
 
     @Test
     fun bufferSamplerTest() {
-        val sampler: Sampler<Double> =
-            BasicSampler { it.chain { nextDouble() } }
+        val sampler = Sampler { it.chain { nextDouble() } }
         val data = sampler.sampleBuffer(RandomGenerator.default, 100)
-        runBlocking {
-            println(data.next())
-        }
+        runBlocking { println(data.next()) }
     }
 }

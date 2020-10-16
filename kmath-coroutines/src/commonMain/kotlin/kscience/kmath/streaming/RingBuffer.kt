@@ -48,11 +48,9 @@ public class RingBuffer<T>(
     /**
      * A safe snapshot operation
      */
-    public suspend fun snapshot(): Buffer<T> {
-        mutex.withLock {
-            val copy = buffer.copy()
-            return VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
-        }
+    public suspend fun snapshot(): Buffer<T> = mutex.withLock {
+        val copy = buffer.copy()
+        VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
     }
 
     public suspend fun push(element: T) {

@@ -23,8 +23,8 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
      */
     public fun putRight(right: T, piece: Polynomial<T>) {
         require(right > delimiters.last()) { "New delimiter should be to the right of old one" }
-        delimiters.add(right)
-        pieces.add(piece)
+        delimiters += right
+        pieces += piece
     }
 
     public fun putLeft(left: T, piece: Polynomial<T>) {

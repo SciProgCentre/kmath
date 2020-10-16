@@ -22,7 +22,7 @@ public interface Structure2D<T> : NDStructure<T> {
 
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
         for (i in (0 until rowNum))
-            for (j in (0 until colNum)) yield(intArrayOf(i, j) to get(i, j))
+            for (j in (0 until colNum)) yield(intArrayOf(i, j) to this@Structure2D[i, j])
     }
 
     public companion object
@@ -35,7 +35,6 @@ private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Stru
     override val shape: IntArray get() = structure.shape
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
-
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
 

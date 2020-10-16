@@ -42,7 +42,7 @@ public open class AliasMethodDiscreteSampler private constructor(
     protected val alias: IntArray
 ) : Sampler<Int> {
 
-    private class SmallTableAliasMethodDiscreteSampler internal constructor(
+    private class SmallTableAliasMethodDiscreteSampler(
         probability: LongArray,
         alias: IntArray
     ) : AliasMethodDiscreteSampler(probability, alias) {
@@ -71,7 +71,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         }
     }
 
-    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
+    public override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
         // This implements the algorithm as per Vose (1991):
         // v = uniform()  in [0, 1)
         // j = uniform(n) in [0, n)

@@ -98,28 +98,21 @@ internal object InternalGamma {
     private const val INV_GAMMA1P_M1_C12 = .113302723198169588237412962033074E-05
     private const val INV_GAMMA1P_M1_C13 = -.205633841697760710345015413002057E-06
 
-    fun logGamma(x: Double): Double {
-        val ret: Double
+    fun logGamma(x: Double): Double = when {
+        x.isNaN() || x <= 0.0 -> Double.NaN
+        x < 0.5 -> logGamma1p(x) - ln(x)
+        x <= 2.5 -> logGamma1p(x - 0.5 - 0.5)
 
-        when {
-            x.isNaN() || x <= 0.0 -> ret = Double.NaN
-            x < 0.5 -> return logGamma1p(x) - ln(x)
-            x <= 2.5 -> return logGamma1p(x - 0.5 - 0.5)
-
-            x <= 8.0 -> {
-                val n = floor(x - 1.5).toInt()
-                var prod = 1.0
-                (1..n).forEach { i -> prod *= x - i }
-                return logGamma1p(x - (n + 1)) + ln(prod)
-            }
-
-            else -> {
-                val tmp = x + LANCZOS_G + .5
-                ret = (x + .5) * ln(tmp) - tmp + HALF_LOG_2_PI + ln(lanczos(x) / x)
-            }
+        x <= 8.0 -> {
+            val n = floor(x - 1.5).toInt()
+            val prod = (1..n).fold(1.0, { prod, i -> prod * (x - i) })
+            logGamma1p(x - (n + 1)) + ln(prod)
         }
 
-        return ret
+        else -> {
+            val tmp = x + LANCZOS_G + .5
+            (x + .5) * ln(tmp) - tmp + HALF_LOG_2_PI + ln(lanczos(x) / x)
+        }
     }
 
     private fun regularizedGammaP(

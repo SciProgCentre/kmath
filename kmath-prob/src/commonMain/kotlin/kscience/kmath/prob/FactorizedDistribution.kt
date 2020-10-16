@@ -38,6 +38,6 @@ public class DistributionBuilder<T : Any> {
     private val distributions = ArrayList<NamedDistribution<T>>()
 
     public infix fun String.to(distribution: Distribution<T>) {
-        distributions.add(NamedDistributionWrapper(this, distribution))
+        distributions += NamedDistributionWrapper(this, distribution)
     }
 }

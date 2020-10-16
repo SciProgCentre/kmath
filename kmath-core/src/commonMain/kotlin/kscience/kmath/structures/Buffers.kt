@@ -71,7 +71,7 @@ public interface Buffer<T> {
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
             when (type) {
-                Double::class -> RealBuffer(size) { initializer(it) as Double } as Buffer<T>
+                Double::class -> real(size) { initializer(it) as Double } as Buffer<T>
                 Short::class -> ShortBuffer(size) { initializer(it) as Short } as Buffer<T>
                 Int::class -> IntBuffer(size) { initializer(it) as Int } as Buffer<T>
                 Long::class -> LongBuffer(size) { initializer(it) as Long } as Buffer<T>

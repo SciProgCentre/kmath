@@ -82,6 +82,8 @@ public interface RandomGenerator {
 
 /**
  * Implements [RandomGenerator] by delegating all operations to [Random].
+ *
+ * @property random the underlying [Random] object.
  */
 public inline class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
     public override fun nextBoolean(): Boolean = random.nextBoolean()

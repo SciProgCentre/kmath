@@ -5,8 +5,18 @@ import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collect
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
+import kscience.kmath.structures.IntBuffer
 
+/**
+ * Sampler that generates chains of values of type [T].
+ */
 public fun interface Sampler<T : Any> {
+    /**
+     * Generates a chain of samples.
+     *
+     * @param generator the randomness provider.
+     * @return the new chain.
+     */
     public fun sample(generator: RandomGenerator): Chain<T>
 }
 
@@ -59,16 +69,25 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
         //clear list from previous run
         tmp.clear()
         //Fill list
-        repeat(size) { tmp.add(chain.next()) }
+        repeat(size) { tmp += chain.next() }
         //return new buffer with elements from tmp
         bufferFactory(size) { tmp[it] }
     }
 }
 
+/**
+ * Samples one value from this [Sampler].
+ */
 public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sample(generator).first()
 
 /**
- * Generate a bunch of samples from real distributions
+ * Generates [size] real samples and chunks them into some buffers.
  */
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
     sampleBuffer(generator, size, Buffer.Companion::real)
+
+/**
+ * Generates [size] integer samples and chunks them into some buffers.
+ */
+public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
+    sampleBuffer(generator, size, ::IntBuffer)
