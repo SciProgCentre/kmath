@@ -41,6 +41,6 @@ readme {
     feature(
         id = "autodif",
         description = "Automatic differentiation",
-        ref = "src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt"
+        ref = "src/commonMain/kotlin/kscience/kmath/misc/SimpleAutoDiff.kt"
     )
 }

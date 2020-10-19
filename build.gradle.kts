@@ -25,3 +25,7 @@ subprojects {
 readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }
+
+apiValidation{
+    validationDisabled = true
+}

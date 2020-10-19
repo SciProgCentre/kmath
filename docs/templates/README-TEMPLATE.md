@@ -107,4 +107,4 @@ with the same artifact names.
 
 ## Contributing
 
-The project requires a lot of additional work. Please feel free to contribute in any way and propose new features.
+The project requires a lot of additional work. The most important thing we need is a feedback about what features are required the most. Feel free to open feature issues with requests. We are also welcome to code contributions, especially in issues marked as [waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero).

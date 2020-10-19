@@ -12,7 +12,7 @@ The core features of KMath:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-1`.
+> This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-2`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
 >
@@ -22,25 +22,28 @@ The core features of KMath:
 >
 > ```gradle
 > repositories {
+>     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
 >     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-core:0.2.0-dev-1'
+>     implementation 'kscience.kmath:kmath-core:0.2.0-dev-2'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
+>     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 >     maven("https://dl.bintray.com/mipt-npm/kscience")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
 >     maven("https://dl.bintray.com/hotkeytlt/maven")
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-core:0.2.0-dev-1")
+>     implementation("kscience.kmath:kmath-core:0.2.0-dev-2")
 > }
 > ```

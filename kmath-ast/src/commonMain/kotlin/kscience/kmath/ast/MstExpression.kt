@@ -14,8 +14,8 @@ import kotlin.contracts.contract
  * @author Alexander Nozik
  */
 public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MST) : Expression<T> {
-    private inner class InnerAlgebra(val arguments: Map<String, T>) : NumericAlgebra<T> {
-        override fun symbol(value: String): T = arguments[value] ?: algebra.symbol(value)
+    private inner class InnerAlgebra(val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
+        override fun symbol(value: String): T = arguments[StringSymbol(value)] ?: algebra.symbol(value)
         override fun unaryOperation(operation: String, arg: T): T = algebra.unaryOperation(operation, arg)
 
         override fun binaryOperation(operation: String, left: T, right: T): T =
@@ -27,7 +27,7 @@ public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MS
             error("Numeric nodes are not supported by $this")
     }
 
-    override operator fun invoke(arguments: Map<String, T>): T = InnerAlgebra(arguments).evaluate(mst)
+    override operator fun invoke(arguments: Map<Symbol, T>): T = InnerAlgebra(arguments).evaluate(mst)
 }
 
 /**
@@ -37,7 +37,7 @@ public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MS
  */
 public inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
     mstAlgebra: E,
-    block: E.() -> MST
+    block: E.() -> MST,
 ): MstExpression<T> = MstExpression(this, mstAlgebra.block())
 
 /**
@@ -116,7 +116,7 @@ public inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A
  * @author Iaroslav Postovalov
  */
 public inline fun <reified T : Any, A : ExtendedField<T>> FunctionalExpressionExtendedField<T, A>.mstInExtendedField(
-    block: MstExtendedField.() -> MST
+    block: MstExtendedField.() -> MST,
 ): MstExpression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInExtendedField(block)
