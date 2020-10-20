@@ -1,4 +1,4 @@
-package scietifik.kmath.asm
+package kscience.kmath.asm
 
 import kscience.kmath.asm.compile
 import kscience.kmath.ast.mstInField

@@ -1,4 +1,4 @@
-package scietifik.kmath.ast
+package kscience.kmath.ast
 
 import kscience.kmath.ast.evaluate
 import kscience.kmath.ast.mstInField

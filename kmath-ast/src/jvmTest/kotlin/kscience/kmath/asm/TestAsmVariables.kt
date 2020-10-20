@@ -1,4 +1,4 @@
-package scietifik.kmath.asm
+package kscience.kmath.asm
 
 import kscience.kmath.ast.mstInRing
 import kscience.kmath.expressions.invoke
