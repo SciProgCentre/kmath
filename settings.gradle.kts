@@ -10,8 +10,8 @@ pluginManagement {
         maven("https://dl.bintray.com/kotlin/kotlin-dev/")
     }
 
-    val toolsVersion = "0.6.3-dev-1.4.20-M1"
-    val kotlinVersion = "1.4.20-M1"
+    val toolsVersion = "0.6.4-dev-1.4.20-M2"
+    val kotlinVersion = "1.4.20-M2"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"
@@ -39,6 +39,6 @@ include(
     ":kmath-for-real",
     ":kmath-geometry",
     ":kmath-ast",
-    ":examples",
-    ":kmath-ejml"
+    ":kmath-ejml",
+    ":examples"
 )
