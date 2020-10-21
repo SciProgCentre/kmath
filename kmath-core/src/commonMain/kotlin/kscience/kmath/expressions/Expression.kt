@@ -12,7 +12,7 @@ public interface Symbol {
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
      * By default uses object identity
      */
-    public val identity: Any get() = this
+    public val identity: String
 }
 
 /**

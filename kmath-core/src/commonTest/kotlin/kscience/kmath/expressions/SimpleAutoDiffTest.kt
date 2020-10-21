@@ -12,23 +12,23 @@ import kotlin.test.assertTrue
 class SimpleAutoDiffTest {
     fun d(
         vararg bindings: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.() -> BoundSymbol<Double>,
+        body: AutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>,
     ): DerivationResult<Double> = RealField.withAutoDiff(bindings = bindings, body)
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.(x: BoundSymbol<Double>) -> BoundSymbol<Double>,
+        body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
     ): DerivationResult<Double> = RealField.withAutoDiff(xBinding) { body(bind(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.(x: BoundSymbol<Double>, y: BoundSymbol<Double>) -> BoundSymbol<Double>,
+        body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
     ): DerivationResult<Double> = RealField.withAutoDiff(xBinding, yBinding) {
         body(bind(xBinding.first), bind(yBinding.first))
     }
 
-    fun diff(block: AutoDiffField<Double, RealField>.() -> BoundSymbol<Double>): SimpleAutoDiffExpression<Double, RealField> {
+    fun diff(block: AutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, RealField> {
         return SimpleAutoDiffExpression(RealField, block)
     }
 

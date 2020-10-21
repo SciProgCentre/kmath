@@ -25,13 +25,13 @@ public class DerivativeStructureField(
      */
     public inner class DerivativeStructureSymbol(symbol: Symbol, value: Double) :
         DerivativeStructure(bindings.size, order, bindings.keys.indexOf(symbol), value), Symbol {
-        override val identity: Any = symbol.identity
+        override val identity: String = symbol.identity
     }
 
     /**
      * Identity-based symbol bindings map
      */
-    private val variables: Map<Any?, DerivativeStructureSymbol> = bindings.entries.associate { (key, value) ->
+    private val variables: Map<String, DerivativeStructureSymbol> = bindings.entries.associate { (key, value) ->
         key.identity to DerivativeStructureSymbol(key, value)
     }
 
