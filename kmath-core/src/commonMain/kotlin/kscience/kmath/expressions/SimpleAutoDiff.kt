@@ -15,11 +15,11 @@ import kotlin.contracts.contract
 public open class AutoDiffValue<out T>(public val value: T)
 
 /**
- * Represents result of [withAutoDiff] call.
+ * Represents result of [simpleAutoDiff] call.
  *
  * @param T the non-nullable type of value.
  * @param value the value of result.
- * @property withAutoDiff The mapping of differentiated variables to their derivatives.
+ * @property simpleAutoDiff The mapping of differentiated variables to their derivatives.
  * @property context The field over [T].
  */
 public class DerivationResult<T : Any>(
@@ -62,7 +62,7 @@ public fun <T : Any> DerivationResult<T>.grad(vararg variables: Symbol): Point<T
  * @param body the action in [AutoDiffField] context returning [AutoDiffVariable] to differentiate with respect to.
  * @return the result of differentiation.
  */
-public fun <T : Any, F : Field<T>> F.withAutoDiff(
+public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     bindings: Map<Symbol, T>,
     body: AutoDiffField<T, F>.() -> AutoDiffValue<T>,
 ): DerivationResult<T> {
@@ -71,10 +71,10 @@ public fun <T : Any, F : Field<T>> F.withAutoDiff(
     return AutoDiffContext(this, bindings).derivate(body)
 }
 
-public fun <T : Any, F : Field<T>> F.withAutoDiff(
+public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     vararg bindings: Pair<Symbol, T>,
     body: AutoDiffField<T, F>.() -> AutoDiffValue<T>,
-): DerivationResult<T> = withAutoDiff(bindings.toMap(), body)
+): DerivationResult<T> = simpleAutoDiff(bindings.toMap(), body)
 
 /**
  * Represents field in context of which functions can be derived.
@@ -136,7 +136,7 @@ private class AutoDiffContext<T : Any, F : Field<T>>(
     override val one: AutoDiffValue<T> get() = const(context.one)
 
     /**
-     * Differentiable variable with value and derivative of differentiation ([withAutoDiff]) result
+     * Differentiable variable with value and derivative of differentiation ([simpleAutoDiff]) result
      * with respect to this variable.
      *
      * @param T the non-nullable type of value.
@@ -148,6 +148,8 @@ private class AutoDiffContext<T : Any, F : Field<T>>(
         var d: T,
     ) : AutoDiffValue<T>(value), Symbol{
         override fun toString(): String = identity
+        override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
+        override fun hashCode(): Int = identity.hashCode()
     }
 
     private val bindings: Map<String, AutoDiffVariableWithDeriv<T>> = bindings.entries.associate {

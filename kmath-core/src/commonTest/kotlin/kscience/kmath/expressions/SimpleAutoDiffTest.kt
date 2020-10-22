@@ -10,21 +10,17 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SimpleAutoDiffTest {
-    fun d(
-        vararg bindings: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = RealField.withAutoDiff(bindings = bindings, body)
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
         body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = RealField.withAutoDiff(xBinding) { body(bind(xBinding.first)) }
+    ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding) { body(bind(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
         body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = RealField.withAutoDiff(xBinding, yBinding) {
+    ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding, yBinding) {
         body(bind(xBinding.first), bind(yBinding.first))
     }
 
@@ -38,7 +34,7 @@ class SimpleAutoDiffTest {
 
     @Test
     fun testPlusX2() {
-        val y = d(x to 3.0) {
+        val y = RealField.simpleAutoDiff(x to 3.0) {
             // diff w.r.t this x at 3
             val x = bind(x)
             x + x
@@ -48,9 +44,20 @@ class SimpleAutoDiffTest {
     }
 
     @Test
+    fun testPlusX2Expr() {
+        val expr = diff{
+            val x = bind(x)
+            x + x
+        }
+        assertEquals(6.0, expr(x to 3.0)) //    y  = x + x = 6
+        assertEquals(2.0, expr.derivative(x)(x to 3.0)) // dy/dx = 2
+    }
+
+
+    @Test
     fun testPlus() {
         // two variables
-        val z = d(x to 2.0, y to 3.0) {
+        val z = RealField.simpleAutoDiff(x to 2.0, y to 3.0) {
             val x = bind(x)
             val y = bind(y)
             x + y
@@ -63,7 +70,7 @@ class SimpleAutoDiffTest {
     @Test
     fun testMinus() {
         // two variables
-        val z = d(x to 7.0, y to 3.0) {
+        val z = RealField.simpleAutoDiff(x to 7.0, y to 3.0) {
             val x = bind(x)
             val y = bind(y)
 

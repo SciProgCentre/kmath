@@ -26,6 +26,9 @@ public class DerivativeStructureField(
     public inner class DerivativeStructureSymbol(symbol: Symbol, value: Double) :
         DerivativeStructure(bindings.size, order, bindings.keys.indexOf(symbol), value), Symbol {
         override val identity: String = symbol.identity
+        override fun toString(): String = identity
+        override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
+        override fun hashCode(): Int = identity.hashCode()
     }
 
     /**

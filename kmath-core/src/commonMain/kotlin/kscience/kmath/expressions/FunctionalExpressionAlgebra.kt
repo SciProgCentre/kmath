@@ -7,8 +7,9 @@ import kscience.kmath.operations.*
  *
  * @param algebra The algebra to provide for Expressions built.
  */
-public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(public val algebra: A) :
-    ExpressionAlgebra<T, Expression<T>> {
+public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
+    public val algebra: A,
+) : ExpressionAlgebra<T, Expression<T>> {
     /**
      * Builds an Expression of constant expression which does not depend on arguments.
      */
