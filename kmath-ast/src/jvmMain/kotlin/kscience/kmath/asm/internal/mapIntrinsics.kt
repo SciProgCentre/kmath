@@ -3,12 +3,11 @@
 package kscience.kmath.asm.internal
 
 import kscience.kmath.expressions.StringSymbol
+import kscience.kmath.expressions.Symbol
 
 /**
- * Gets value with given [key] or throws [IllegalStateException] whenever it is not present.
+ * Gets value with given [key] or throws [NoSuchElementException] whenever it is not present.
  *
  * @author Iaroslav Postovalov
  */
-@JvmOverloads
-internal fun <K, V> Map<K, V>.getOrFail(key: K, default: V? = null): V =
-    this[StringSymbol(key.toString())] ?: default ?: error("Parameter not found: $key")
+internal fun <V> Map<Symbol, V>.getOrFail(key: String): V = getValue(StringSymbol(key))

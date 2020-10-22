@@ -146,7 +146,9 @@ private class AutoDiffContext<T : Any, F : Field<T>>(
         override val identity: String,
         value: T,
         var d: T,
-    ) : AutoDiffValue<T>(value), Symbol
+    ) : AutoDiffValue<T>(value), Symbol{
+        override fun toString(): String = identity
+    }
 
     private val bindings: Map<String, AutoDiffVariableWithDeriv<T>> = bindings.entries.associate {
         it.key.identity to AutoDiffVariableWithDeriv(it.key.identity, it.value, context.zero)
