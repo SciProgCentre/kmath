@@ -6,6 +6,7 @@ import kscience.kmath.chains.collect
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
 import kscience.kmath.structures.IntBuffer
+import kotlin.jvm.JvmName
 
 /**
  * Sampler that generates chains of values of type [T].
@@ -83,11 +84,13 @@ public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sa
 /**
  * Generates [size] real samples and chunks them into some buffers.
  */
+@JvmName("sampleRealBuffer")
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
     sampleBuffer(generator, size, Buffer.Companion::real)
 
 /**
  * Generates [size] integer samples and chunks them into some buffers.
  */
+@JvmName("sampleIntBuffer")
 public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
     sampleBuffer(generator, size, ::IntBuffer)
