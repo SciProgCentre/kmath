@@ -10,7 +10,6 @@ import kotlin.properties.ReadOnlyProperty
 public interface Symbol {
     /**
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
-     * By default uses object identity
      */
     public val identity: String
 }
@@ -33,8 +32,6 @@ public fun interface Expression<T> {
      * @return the value.
      */
     public operator fun invoke(arguments: Map<Symbol, T>): T
-
-    public companion object
 }
 
 /**
@@ -81,17 +78,13 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
     public fun const(value: T): E
 }
 
-//public interface ExpressionBuilder<T, E, A : ExpressionAlgebra<T, E>> {
-//    public fun expression(block: A.() -> E): Expression<T>
-//}
-
 /**
  * Bind a given [Symbol] to this context variable and produce context-specific object.
  */
 public fun <T, E> ExpressionAlgebra<T, E>.bind(symbol: Symbol): E =
     bindOrNull(symbol) ?: error("Symbol $symbol could not be bound to $this")
 
-public val symbol: ReadOnlyProperty<Any?, Symbol> = ReadOnlyProperty { _, property ->
+public val symbol: ReadOnlyProperty<Any?, StringSymbol> = ReadOnlyProperty { _, property ->
     StringSymbol(property.name)
 }
 

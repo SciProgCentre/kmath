@@ -7,6 +7,12 @@ import kscience.kmath.operations.Space
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+
+//public interface ExpressionBuilder<T, E, A : ExpressionAlgebra<T, E>> {
+//    public fun expression(block: A.() -> E): Expression<T>
+//}
+
+
 /**
  * Creates a functional expression with this [Space].
  */
