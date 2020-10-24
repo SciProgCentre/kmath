@@ -8,6 +8,9 @@
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
 - `kmath-ejml` to supply EJML SimpleMatrix wrapper.
+- A separate `Symbol` entity, which is used for global unbound symbol.
+- A `Symbol` indexing scope.
+- Basic optimization API for Commons-math.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
@@ -16,6 +19,7 @@
 - `Polynomial` secondary constructor made function.
 - Kotlin version: 1.3.72 -> 1.4.20-M1
 - `kmath-ast` doesn't depend on heavy `kotlin-reflect` library.
+- Full autodiff refactoring based on `Symbol`
 
 ### Deprecated
 

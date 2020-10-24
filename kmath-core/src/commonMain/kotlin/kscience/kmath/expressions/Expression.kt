@@ -35,7 +35,7 @@ public fun interface Expression<T> {
 }
 
 /**
- * Invlode an expression without parameters
+ * Invoke an expression without parameters
  */
 public operator fun <T> Expression<T>.invoke(): T = invoke(emptyMap())
 //This method exists to avoid resolution ambiguity of vararg methods
