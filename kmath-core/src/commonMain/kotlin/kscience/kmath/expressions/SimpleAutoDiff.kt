@@ -221,23 +221,16 @@ private class AutoDiffContext<T : Any, F : Field<T>>(
 public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
     public val field: F,
     public val function: AutoDiffField<T, F>.() -> AutoDiffValue<T>,
-) : DifferentiableExpression<T> {
+) : FirstDerivativeExpression<T>() {
     public override operator fun invoke(arguments: Map<Symbol, T>): T {
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         return AutoDiffContext(field, arguments).function().value
     }
 
-    /**
-     * Get the derivative expression with given orders
-     */
-    public override fun derivative(orders: Map<Symbol, Int>): Expression<T> {
-        val dSymbol = orders.entries.singleOrNull { it.value == 1 }
-            ?: error("SimpleAutoDiff supports only first order derivatives")
-        return Expression { arguments ->
-            //val bindings = arguments.entries.map { it.key.bind(it.value) }
-            val derivationResult = AutoDiffContext(field, arguments).derivate(function)
-            derivationResult.derivative(dSymbol.key)
-        }
+    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression { arguments ->
+        //val bindings = arguments.entries.map { it.key.bind(it.value) }
+        val derivationResult = AutoDiffContext(field, arguments).derivate(function)
+        derivationResult.derivative(symbol)
     }
 }
 

@@ -106,7 +106,7 @@ public class DerivativeStructureExpression(
     /**
      * Get the derivative expression with given orders
      */
-    public override fun derivative(orders: Map<Symbol, Int>): Expression<Double> = Expression { arguments ->
+    public override fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<Double> = Expression { arguments ->
         with(DerivativeStructureField(orders.values.maxOrNull() ?: 0, arguments)) { function().derivative(orders) }
     }
 }

@@ -1,7 +1,12 @@
 package kscience.kmath.expressions
 
+import kscience.kmath.linear.Point
+import kscience.kmath.structures.BufferFactory
+import kscience.kmath.structures.Structure2D
+
 /**
  * An environment to easy transform indexed variables to symbols and back.
+ * TODO requires multi-receivers to be beutiful
  */
 public interface SymbolIndexer {
     public val symbols: List<Symbol>
@@ -22,15 +27,26 @@ public interface SymbolIndexer {
         return get(this@SymbolIndexer.indexOf(symbol))
     }
 
+    public operator fun <T> Point<T>.get(symbol: Symbol): T {
+        require(size == symbols.size) { "The input buffer size for indexer should be ${symbols.size} but $size found" }
+        return get(this@SymbolIndexer.indexOf(symbol))
+    }
+
     public fun DoubleArray.toMap(): Map<Symbol, Double> {
         require(size == symbols.size) { "The input array size for indexer should be ${symbols.size} but $size found" }
         return symbols.indices.associate { symbols[it] to get(it) }
     }
 
+    public operator fun <T> Structure2D<T>.get(rowSymbol: Symbol, columnSymbol: Symbol): T =
+        get(indexOf(rowSymbol), indexOf(columnSymbol))
+
 
     public fun <T> Map<Symbol, T>.toList(): List<T> = symbols.map { getValue(it) }
 
-    public fun Map<Symbol, Double>.toArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }
+    public fun <T> Map<Symbol, T>.toPoint(bufferFactory: BufferFactory<T>): Point<T> =
+        bufferFactory(symbols.size) { getValue(symbols[it]) }
+
+    public fun Map<Symbol, Double>.toDoubleArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }
 }
 
 public inline class SimpleSymbolIndexer(override val symbols: List<Symbol>) : SymbolIndexer

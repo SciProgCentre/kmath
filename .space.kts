@@ -1,1 +1,3 @@
-job("Build") { gradlew("openjdk:11", "build") }
+job("Build") {
+    gradlew("openjdk:11", "build")
+}
