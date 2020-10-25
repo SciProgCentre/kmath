@@ -36,7 +36,7 @@ public class CMOptimizationProblem(
         addOptimizationData(InitialGuess(map.toDoubleArray()))
     }
 
-    public fun expression(expression: Expression<Double>): Unit {
+    public override fun expression(expression: Expression<Double>): Unit {
         val objectiveFunction = ObjectiveFunction {
             val args = it.toMap()
             expression(args)
@@ -44,7 +44,7 @@ public class CMOptimizationProblem(
         addOptimizationData(objectiveFunction)
     }
 
-    public fun derivatives(expression: DifferentiableExpression<Double>): Unit {
+    public override fun diffExpression(expression: DifferentiableExpression<Double>): Unit {
         expression(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()
@@ -81,6 +81,10 @@ public class CMOptimizationProblem(
 
     public fun optimizer(block: () -> MultivariateOptimizer) {
         optimizatorBuilder = block
+    }
+
+    override fun update(result: OptimizationResult<Double>) {
+        initialGuess(result.point)
     }
 
     override fun optimize(): OptimizationResult<Double> {

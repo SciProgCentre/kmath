@@ -13,7 +13,7 @@ public fun Expression<Double>.optimize(
     configuration: CMOptimizationProblem.() -> Unit,
 ): OptimizationResult<Double> {
     require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration).apply(configuration)
+    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration)
     problem.expression(this)
     return problem.optimize()
 }
@@ -26,7 +26,7 @@ public fun DifferentiableExpression<Double>.optimize(
     configuration: CMOptimizationProblem.() -> Unit,
 ): OptimizationResult<Double> {
     require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration).apply(configuration)
-    problem.derivatives(this)
+    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration)
+    problem.diffExpression(this)
     return problem.optimize()
 }

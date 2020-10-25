@@ -9,16 +9,14 @@ internal class OptimizeTest {
     val y by symbol
 
     val normal = DerivativeStructureExpression {
-        val x = bind(x)
-        val y = bind(y)
-        exp(-x.pow(2) / 2) + exp(-y.pow(2) / 2)
+        exp(-bind(x).pow(2) / 2) + exp(- bind(y).pow(2) / 2)
     }
 
     @Test
     fun testOptimization() {
         val result = normal.optimize(x, y) {
             initialGuess(x to 1.0, y to 1.0)
-            //no need to select optimizer. Gradient optimizer is used by default
+            //no need to select optimizer. Gradient optimizer is used by default because gradients are provided by function
         }
         println(result.point)
         println(result.value)
