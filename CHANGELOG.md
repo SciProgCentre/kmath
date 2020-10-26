@@ -11,6 +11,7 @@
 - A separate `Symbol` entity, which is used for global unbound symbol.
 - A `Symbol` indexing scope.
 - Basic optimization API for Commons-math.
+- Chi squared optimization for array-like data in CM
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.

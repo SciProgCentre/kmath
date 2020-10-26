@@ -13,7 +13,7 @@ internal class OptimizeTest {
     }
 
     @Test
-    fun testOptimization() {
+    fun testGradientOptimization() {
         val result = normal.optimize(x, y) {
             initialGuess(x to 1.0, y to 1.0)
             //no need to select optimizer. Gradient optimizer is used by default because gradients are provided by function
