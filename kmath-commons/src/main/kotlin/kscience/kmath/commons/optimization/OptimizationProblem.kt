@@ -4,14 +4,19 @@ import kscience.kmath.expressions.DifferentiableExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.Symbol
 
-public interface OptimizationResultFeature
+public interface OptimizationFeature
 
+//TODO move to prob/stat
 
 public class OptimizationResult<T>(
     public val point: Map<Symbol, T>,
     public val value: T,
-    public val features: Set<OptimizationResultFeature> = emptySet(),
-)
+    public val features: Set<OptimizationFeature> = emptySet(),
+){
+    override fun toString(): String {
+        return "OptimizationResult(point=$point, value=$value)"
+    }
+}
 
 /**
  * A configuration builder for optimization problem

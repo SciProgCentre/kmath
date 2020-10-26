@@ -38,13 +38,13 @@ public class DerivativeStructureField(
         key.identity to DerivativeStructureSymbol(key, value)
     }
 
-    override fun const(value: Double): DerivativeStructure = DerivativeStructure(order, bindings.size, value)
+    override fun const(value: Double): DerivativeStructure = DerivativeStructure(bindings.size, order,  value)
 
     public override fun bindOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
 
     public fun bind(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
 
-    public fun Number.const(): DerivativeStructure = const(toDouble())
+    //public fun Number.const(): DerivativeStructure = const(toDouble())
 
     public fun DerivativeStructure.derivative(parameter: Symbol, order: Int = 1): Double {
         return derivative(mapOf(parameter to order))

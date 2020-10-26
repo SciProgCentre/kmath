@@ -17,9 +17,9 @@ public object CMFit {
 
     /**
      * Generate a chi squared expression from given x-y-sigma model represented by an expression. Does not provide derivatives
-     * TODO move to core/separate module
+     * TODO move to prob/stat
      */
-    public fun chiSquaredExpression(
+    public fun chiSquared(
         x: Buffer<Double>,
         y: Buffer<Double>,
         yErr: Buffer<Double>,
@@ -35,7 +35,7 @@ public object CMFit {
                 val yErrValue = yErr[it]
                 val modifiedArgs = arguments + (xSymbol to xValue)
                 val modelValue = model(modifiedArgs)
-                ((yValue - modelValue) / yErrValue).pow(2) / 2
+                ((yValue - modelValue) / yErrValue).pow(2)
             }
         }
     }
@@ -43,7 +43,7 @@ public object CMFit {
     /**
      * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
      */
-    public fun chiSquaredExpression(
+    public fun chiSquared(
         x: Buffer<Double>,
         y: Buffer<Double>,
         yErr: Buffer<Double>,
@@ -58,7 +58,7 @@ public object CMFit {
                 val yValue = y[it]
                 val yErrValue = yErr[it]
                 val modelValue = model(const(xValue))
-                sum += ((yValue - modelValue) / yErrValue).pow(2) / 2
+                sum += ((yValue - modelValue) / yErrValue).pow(2)
             }
             sum
         }
@@ -92,12 +92,13 @@ public fun DifferentiableExpression<Double>.optimize(
 }
 
 public fun DifferentiableExpression<Double>.minimize(
-    vararg symbols: Symbol,
-    configuration: CMOptimizationProblem.() -> Unit,
+    vararg startPoint: Pair<Symbol, Double>,
+    configuration: CMOptimizationProblem.() -> Unit = {},
 ): OptimizationResult<Double> {
-    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration)
+    require(startPoint.isNotEmpty()) { "Must provide a list of symbols for optimization" }
+    val problem = CMOptimizationProblem(startPoint.map { it.first }).apply(configuration)
     problem.diffExpression(this)
+    problem.initialGuess(startPoint.toMap())
     problem.goal(GoalType.MINIMIZE)
     return problem.optimize()
 }

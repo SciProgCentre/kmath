@@ -17,20 +17,21 @@ public operator fun PointValuePair.component2(): Double = value
 
 public class CMOptimizationProblem(
     override val symbols: List<Symbol>,
-) : OptimizationProblem<Double>, SymbolIndexer {
-    protected val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
+) : OptimizationProblem<Double>, SymbolIndexer, OptimizationFeature {
+    private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
     private var optimizatorBuilder: (() -> MultivariateOptimizer)? = null
-
     public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(DEFAULT_RELATIVE_TOLERANCE,
         DEFAULT_ABSOLUTE_TOLERANCE, DEFAULT_MAX_ITER)
 
-    private fun addOptimizationData(data: OptimizationData) {
+    public fun addOptimizationData(data: OptimizationData) {
         optimizationData[data::class] = data
     }
 
     init {
         addOptimizationData(MaxEval.unlimited())
     }
+
+    public fun exportOptimizationData(): List<OptimizationData> = optimizationData.values.toList()
 
     public fun initialGuess(map: Map<Symbol, Double>): Unit {
         addOptimizationData(InitialGuess(map.toDoubleArray()))
@@ -90,7 +91,7 @@ public class CMOptimizationProblem(
     override fun optimize(): OptimizationResult<Double> {
         val optimizer = optimizatorBuilder?.invoke() ?: error("Optimizer not defined")
         val (point, value) = optimizer.optimize(*optimizationData.values.toTypedArray())
-        return OptimizationResult(point.toMap(), value)
+        return OptimizationResult(point.toMap(), value, setOf(this))
     }
 
     public companion object {
