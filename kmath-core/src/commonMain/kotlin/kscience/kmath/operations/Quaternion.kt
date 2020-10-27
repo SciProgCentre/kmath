@@ -169,47 +169,48 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
      * Adds quaternion to real one.
      *
      * @receiver the addend.
-     * @param c the augend.
+     * @param b the augend.
      * @return the sum.
      */
-    public operator fun Double.plus(c: Quaternion): Quaternion = Quaternion(this + c.w, c.x, c.y, c.z)
+    public override operator fun Number.plus(b: Quaternion): Quaternion = Quaternion(toDouble() + b.w, b.x, b.y, b.z)
 
     /**
      * Subtracts quaternion from real one.
      *
      * @receiver the minuend.
-     * @param c the subtrahend.
+     * @param b the subtrahend.
      * @return the difference.
      */
-    public operator fun Double.minus(c: Quaternion): Quaternion = Quaternion(this - c.w, -c.x, -c.y, -c.z)
+    public override operator fun Number.minus(b: Quaternion): Quaternion =
+        Quaternion(toDouble() - b.w, -b.x, -b.y, -b.z)
 
     /**
      * Adds real number to quaternion.
      *
      * @receiver the addend.
-     * @param d the augend.
+     * @param b the augend.
      * @return the sum.
      */
-    public operator fun Quaternion.plus(d: Double): Quaternion = Quaternion(w + d, x, y, z)
+    public override operator fun Quaternion.plus(b: Number): Quaternion = Quaternion(w + b.toDouble(), x, y, z)
 
     /**
      * Subtracts real number from quaternion.
      *
      * @receiver the minuend.
-     * @param d the subtrahend.
+     * @param b the subtrahend.
      * @return the difference.
      */
-    public operator fun Quaternion.minus(d: Double): Quaternion = Quaternion(w - d, x, y, z)
+    public override operator fun Quaternion.minus(b: Number): Quaternion = Quaternion(w - b.toDouble(), x, y, z)
 
     /**
      * Multiplies real number by quaternion.
      *
      * @receiver the multiplier.
-     * @param c the multiplicand.
+     * @param b the multiplicand.
      * @receiver the product.
      */
-    public operator fun Double.times(c: Quaternion): Quaternion =
-        Quaternion(this * c.w, this * c.x, this * c.y, this * c.z)
+    public override operator fun Number.times(b: Quaternion): Quaternion =
+        Quaternion(toDouble() * b.w, toDouble() * b.x, toDouble() * b.y, toDouble() * b.z)
 
     public override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
     public override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)

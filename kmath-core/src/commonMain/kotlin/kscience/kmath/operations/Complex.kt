@@ -112,46 +112,46 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
      * Adds complex number to real one.
      *
      * @receiver the addend.
-     * @param c the augend.
+     * @param b the augend.
      * @return the sum.
      */
-    public operator fun Double.plus(c: Complex): Complex = add(toComplex(), c)
+    public override operator fun Number.plus(b: Complex): Complex = add(toComplex(), b)
 
     /**
      * Subtracts complex number from real one.
      *
      * @receiver the minuend.
-     * @param c the subtrahend.
+     * @param b the subtrahend.
      * @return the difference.
      */
-    public operator fun Double.minus(c: Complex): Complex = add(toComplex(), -c)
+    public override operator fun Number.minus(b: Complex): Complex = add(toComplex(), -b)
 
     /**
      * Adds real number to complex one.
      *
      * @receiver the addend.
-     * @param d the augend.
+     * @param b the augend.
      * @return the sum.
      */
-    public operator fun Complex.plus(d: Double): Complex = d + this
+    public override operator fun Complex.plus(b: Number): Complex = b + this
 
     /**
      * Subtracts real number from complex one.
      *
      * @receiver the minuend.
-     * @param d the subtrahend.
+     * @param b the subtrahend.
      * @return the difference.
      */
-    public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
+    public override operator fun Complex.minus(b: Number): Complex = add(this, -b.toComplex())
 
     /**
      * Multiplies real number by complex one.
      *
      * @receiver the multiplier.
-     * @param c the multiplicand.
+     * @param b the multiplicand.
      * @receiver the product.
      */
-    public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+    public override operator fun Number.times(b: Complex): Complex = Complex(b.re * toDouble(), b.im * toDouble())
 
     public override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
     public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
