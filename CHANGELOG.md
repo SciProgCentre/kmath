@@ -8,6 +8,7 @@
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
 - `kmath-ejml` to supply EJML SimpleMatrix wrapper.
+- Basic Quaternion vector support.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
