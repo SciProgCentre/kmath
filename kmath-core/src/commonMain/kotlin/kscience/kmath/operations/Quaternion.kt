@@ -68,7 +68,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
     )
 
-    override fun divide(a: Quaternion, b: Quaternion): Quaternion {
+    public override fun divide(a: Quaternion, b: Quaternion): Quaternion {
         val s = b.w * b.w + b.x * b.x + b.y * b.y + b.z * b.z
 
         return Quaternion(
@@ -196,8 +196,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
  * @property z The fourth component.
  */
 public data class Quaternion(val w: Double, val x: Double, val y: Double, val z: Double) :
-    FieldElement<Quaternion, Quaternion, QuaternionField>,
-    Comparable<Quaternion> {
+    FieldElement<Quaternion, Quaternion, QuaternionField>, Comparable<Quaternion> {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),
@@ -240,9 +239,18 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
  * Creates a quaternion with real part equal to this real.
  *
  * @receiver the real part.
- * @return the new quaternion.
+ * @return a new quaternion.
  */
 public fun Number.toQuaternion(): Quaternion = Quaternion(this, 0, 0, 0)
+
+/**
+ * Creates a quaternion with `w`-component equal to `re`-component of given complex and `x`-component equal to
+ * `im`-component of given complex.
+ *
+ * @receiver the complex number.
+ * @return a new quaternion.
+ */
+public fun Complex.toQuaternion(): Quaternion = Quaternion(re, im, 0, 0)
 
 /**
  * Creates a new buffer of quaternions with the specified [size], where each element is calculated by calling the
