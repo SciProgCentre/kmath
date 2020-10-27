@@ -33,7 +33,7 @@ public class CMOptimizationProblem(
 
     public fun exportOptimizationData(): List<OptimizationData> = optimizationData.values.toList()
 
-    public fun initialGuess(map: Map<Symbol, Double>): Unit {
+    public override fun initialGuess(map: Map<Symbol, Double>): Unit {
         addOptimizationData(InitialGuess(map.toDoubleArray()))
     }
 
@@ -94,10 +94,12 @@ public class CMOptimizationProblem(
         return OptimizationResult(point.toMap(), value, setOf(this))
     }
 
-    public companion object {
+    public companion object : OptimizationProblemFactory<Double, CMOptimizationProblem> {
         public const val DEFAULT_RELATIVE_TOLERANCE: Double = 1e-4
         public const val DEFAULT_ABSOLUTE_TOLERANCE: Double = 1e-4
         public const val DEFAULT_MAX_ITER: Int = 1000
+
+        override fun build(symbols: List<Symbol>): CMOptimizationProblem = CMOptimizationProblem(symbols)
     }
 }
 

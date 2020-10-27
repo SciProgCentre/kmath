@@ -23,10 +23,9 @@ public fun <T> DifferentiableExpression<T>.derivative(symbol: Symbol): Expressio
 public fun <T> DifferentiableExpression<T>.derivative(name: String): Expression<T> =
     derivative(StringSymbol(name) to 1)
 
-//public interface DifferentiableExpressionBuilder<T, E, A : ExpressionAlgebra<T, E>>: ExpressionBuilder<T,E,A> {
-//    public override fun expression(block: A.() -> E): DifferentiableExpression<T>
-//}
-
+/**
+ * A [DifferentiableExpression] that defines only first derivatives
+ */
 public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T> {
 
     public abstract fun derivativeOrNull(symbol: Symbol): Expression<T>?
@@ -35,4 +34,11 @@ public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T>
         val dSymbol = orders.entries.singleOrNull { it.value == 1 }?.key ?: return null
         return derivativeOrNull(dSymbol)
     }
+}
+
+/**
+ * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
+ */
+public interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>> {
+    public fun process(function: A.() -> I): DifferentiableExpression<T>
 }

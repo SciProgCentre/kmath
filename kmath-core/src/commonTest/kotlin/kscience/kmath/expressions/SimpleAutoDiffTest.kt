@@ -2,6 +2,7 @@ package kscience.kmath.expressions
 
 import kscience.kmath.operations.RealField
 import kscience.kmath.structures.asBuffer
+import kotlin.math.E
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -13,18 +14,18 @@ class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+        body: SimpleAutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
     ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding) { body(bind(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
-        body: AutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+        body: SimpleAutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
     ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding, yBinding) {
         body(bind(xBinding.first), bind(yBinding.first))
     }
 
-    fun diff(block: AutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, RealField> {
+    fun diff(block: SimpleAutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, RealField> {
         return SimpleAutoDiffExpression(RealField, block)
     }
 
@@ -45,7 +46,7 @@ class SimpleAutoDiffTest {
 
     @Test
     fun testPlusX2Expr() {
-        val expr = diff{
+        val expr = diff {
             val x = bind(x)
             x + x
         }
@@ -245,9 +246,9 @@ class SimpleAutoDiffTest {
 
     @Test
     fun testTanh() {
-        val y = dx(x to PI / 6) { x -> tanh(x) }
-        assertApprox(1.0 / sqrt(3.0), y.value) // y = tanh(pi/6)
-        assertApprox(1.0 / kotlin.math.cosh(PI / 6.0).pow(2), y.derivative(x)) // dy/dx = sech(pi/6)^2
+        val y = dx(x to 1.0) { x -> tanh(x) }
+        assertApprox((E * E - 1) / (E * E + 1), y.value) // y = tanh(pi/6)
+        assertApprox(1.0 / kotlin.math.cosh(1.0).pow(2), y.derivative(x)) // dy/dx = sech(pi/6)^2
     }
 
     @Test

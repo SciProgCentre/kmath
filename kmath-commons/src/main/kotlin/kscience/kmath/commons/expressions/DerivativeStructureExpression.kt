@@ -1,9 +1,6 @@
 package kscience.kmath.commons.expressions
 
-import kscience.kmath.expressions.DifferentiableExpression
-import kscience.kmath.expressions.Expression
-import kscience.kmath.expressions.ExpressionAlgebra
-import kscience.kmath.expressions.Symbol
+import kscience.kmath.expressions.*
 import kscience.kmath.operations.ExtendedField
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 
@@ -92,6 +89,12 @@ public class DerivativeStructureField(
     public override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
     public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
     public override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
+
+    public companion object : AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField> {
+        override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double> {
+            return DerivativeStructureExpression(function)
+        }
+    }
 }
 
 /**

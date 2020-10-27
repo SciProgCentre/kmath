@@ -71,12 +71,8 @@ public object CMFit {
 public fun Expression<Double>.optimize(
     vararg symbols: Symbol,
     configuration: CMOptimizationProblem.() -> Unit,
-): OptimizationResult<Double> {
-    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration)
-    problem.expression(this)
-    return problem.optimize()
-}
+): OptimizationResult<Double> = optimizeWith(CMOptimizationProblem, symbols = symbols, configuration)
+
 
 /**
  * Optimize differentiable expression
@@ -84,12 +80,7 @@ public fun Expression<Double>.optimize(
 public fun DifferentiableExpression<Double>.optimize(
     vararg symbols: Symbol,
     configuration: CMOptimizationProblem.() -> Unit,
-): OptimizationResult<Double> {
-    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = CMOptimizationProblem(symbols.toList()).apply(configuration)
-    problem.diffExpression(this)
-    return problem.optimize()
-}
+): OptimizationResult<Double> = optimizeWith(CMOptimizationProblem, symbols = symbols, configuration)
 
 public fun DifferentiableExpression<Double>.minimize(
     vararg startPoint: Pair<Symbol, Double>,
