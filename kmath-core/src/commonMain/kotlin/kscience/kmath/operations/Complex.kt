@@ -105,54 +105,12 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
         exp(pow * ln(arg))
 
     public override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
-
     public override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
-
-    /**
-     * Adds complex number to real one.
-     *
-     * @receiver the addend.
-     * @param b the augend.
-     * @return the sum.
-     */
     public override operator fun Number.plus(b: Complex): Complex = add(toComplex(), b)
-
-    /**
-     * Subtracts complex number from real one.
-     *
-     * @receiver the minuend.
-     * @param b the subtrahend.
-     * @return the difference.
-     */
     public override operator fun Number.minus(b: Complex): Complex = add(toComplex(), -b)
-
-    /**
-     * Adds real number to complex one.
-     *
-     * @receiver the addend.
-     * @param b the augend.
-     * @return the sum.
-     */
     public override operator fun Complex.plus(b: Number): Complex = b + this
-
-    /**
-     * Subtracts real number from complex one.
-     *
-     * @receiver the minuend.
-     * @param b the subtrahend.
-     * @return the difference.
-     */
     public override operator fun Complex.minus(b: Number): Complex = add(this, -b.toComplex())
-
-    /**
-     * Multiplies real number by complex one.
-     *
-     * @receiver the multiplier.
-     * @param b the multiplicand.
-     * @receiver the product.
-     */
     public override operator fun Number.times(b: Complex): Complex = Complex(b.re * toDouble(), b.im * toDouble())
-
     public override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
     public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
     public override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)

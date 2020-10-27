@@ -165,50 +165,14 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(ln(n), th * arg.x, th * arg.y, th * arg.z)
     }
 
-    /**
-     * Adds quaternion to real one.
-     *
-     * @receiver the addend.
-     * @param b the augend.
-     * @return the sum.
-     */
     public override operator fun Number.plus(b: Quaternion): Quaternion = Quaternion(toDouble() + b.w, b.x, b.y, b.z)
 
-    /**
-     * Subtracts quaternion from real one.
-     *
-     * @receiver the minuend.
-     * @param b the subtrahend.
-     * @return the difference.
-     */
     public override operator fun Number.minus(b: Quaternion): Quaternion =
         Quaternion(toDouble() - b.w, -b.x, -b.y, -b.z)
 
-    /**
-     * Adds real number to quaternion.
-     *
-     * @receiver the addend.
-     * @param b the augend.
-     * @return the sum.
-     */
     public override operator fun Quaternion.plus(b: Number): Quaternion = Quaternion(w + b.toDouble(), x, y, z)
-
-    /**
-     * Subtracts real number from quaternion.
-     *
-     * @receiver the minuend.
-     * @param b the subtrahend.
-     * @return the difference.
-     */
     public override operator fun Quaternion.minus(b: Number): Quaternion = Quaternion(w - b.toDouble(), x, y, z)
 
-    /**
-     * Multiplies real number by quaternion.
-     *
-     * @receiver the multiplier.
-     * @param b the multiplicand.
-     * @receiver the product.
-     */
     public override operator fun Number.times(b: Quaternion): Quaternion =
         Quaternion(toDouble() * b.w, toDouble() * b.x, toDouble() * b.y, toDouble() * b.z)
 
