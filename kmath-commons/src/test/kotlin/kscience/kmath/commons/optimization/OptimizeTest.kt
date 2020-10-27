@@ -46,7 +46,7 @@ internal class OptimizeTest {
 
         val sigma = 1.0
         val generator = Distribution.normal(0.0, sigma)
-        val chain = generator.sample(RandomGenerator.default(1126))
+        val chain = generator.sample(RandomGenerator.default(112667))
         val x = (1..100).map { it.toDouble() }
         val y = x.map { it ->
             it.pow(2) + it + 1 + chain.nextDouble()
@@ -54,7 +54,8 @@ internal class OptimizeTest {
         val yErr = x.map { sigma }
         with(CMFit) {
             val chi2 = chiSquared(x.asBuffer(), y.asBuffer(), yErr.asBuffer()) { x ->
-                bind(a) * x.pow(2) + bind(b) * x + bind(c)
+                val cWithDefault = bindOrNull(c)?: one
+                bind(a) * x.pow(2) + bind(b) * x + cWithDefault
             }
 
             val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
