@@ -85,20 +85,23 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return exp(pow * ln(arg))
     }
 
-    private fun pwr(x: Quaternion, a: Int): Quaternion {
-        if (a < 0) return -(pwr(x, -a))
-        if (a == 0) return one
-        if (a == 1) return x
-        if (a == 2) return pwr2(x)
-        if (a == 3) return pwr3(x)
-        if (a == 4) return pwr4(x)
-        val x4 = pwr4(x)
-        var y = x4
-        repeat((1 until a / 4).count()) { y *= x4 }
-        if (a % 4 == 3) y *= pwr3(x)
-        if (a % 4 == 2) y *= pwr2(x)
-        if (a % 4 == 1) y *= x
-        return y
+    private fun pwr(x: Quaternion, a: Int): Quaternion = when {
+        a < 0 -> -(pwr(x, -a))
+        a == 0 -> one
+        a == 1 -> x
+        a == 2 -> pwr2(x)
+        a == 3 -> pwr3(x)
+        a == 4 -> pwr4(x)
+
+        else -> {
+            val x4 = pwr4(x)
+            var y = x4
+            repeat((1 until a / 4).count()) { y *= x4 }
+            if (a % 4 == 3) y *= pwr3(x)
+            if (a % 4 == 2) y *= pwr2(x)
+            if (a % 4 == 1) y *= x
+            y
+        }
     }
 
     private inline fun pwr2(x: Quaternion): Quaternion {
@@ -204,7 +207,11 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
         z.toDouble()
     )
 
+    public constructor(w: Number, x: Number, y: Number) : this(w.toDouble(), x.toDouble(), y.toDouble(), 0.0)
+    public constructor(w: Number, x: Number) : this(w.toDouble(), x.toDouble(), 0.0, 0.0)
+    public constructor(w: Number) : this(w.toDouble(), 0.0, 0.0, 0.0)
     public constructor(wx: Complex, yz: Complex) : this(wx.re, wx.im, yz.re, yz.im)
+    public constructor(wx: Complex) : this(wx.re, wx.im, 0, 0)
 
     public override val context: QuaternionField
         get() = QuaternionField
@@ -241,7 +248,7 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
  * @receiver the real part.
  * @return a new quaternion.
  */
-public fun Number.toQuaternion(): Quaternion = Quaternion(this, 0, 0, 0)
+public fun Number.toQuaternion(): Quaternion = Quaternion(this)
 
 /**
  * Creates a quaternion with `w`-component equal to `re`-component of given complex and `x`-component equal to
@@ -250,7 +257,7 @@ public fun Number.toQuaternion(): Quaternion = Quaternion(this, 0, 0, 0)
  * @receiver the complex number.
  * @return a new quaternion.
  */
-public fun Complex.toQuaternion(): Quaternion = Quaternion(re, im, 0, 0)
+public fun Complex.toQuaternion(): Quaternion = Quaternion(this)
 
 /**
  * Creates a new buffer of quaternions with the specified [size], where each element is calculated by calling the

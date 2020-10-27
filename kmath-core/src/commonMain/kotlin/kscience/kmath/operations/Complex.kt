@@ -59,7 +59,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
     public override fun divide(a: Complex, b: Complex): Complex = when {
         b.re.isNaN() || b.im.isNaN() -> Complex(Double.NaN, Double.NaN)
 
-        (if (b.im < 0) -b.im else +b.im) < (if (b.re < 0) -b.re else +b.re) -> {
+        abs(b.im) < abs(b.re) -> {
             val wr = b.im / b.re
             val wd = b.re + wr * b.im
 
@@ -91,8 +91,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
         return i * (e1 - e2) / (e1 + e2)
     }
 
-    public override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg * arg)) + i * arg)
-    public override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
+    public override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - (arg * arg)) + i * arg)
+    public override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - (arg * arg)) + i * arg)
 
     public override fun atan(arg: Complex): Complex {
         val iArg = i * arg
@@ -125,6 +125,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
 public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>,
     Comparable<Complex> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
+    public constructor(re: Number) : this(re.toDouble(), 0.0)
 
     public override val context: ComplexField
         get() = ComplexField
@@ -155,7 +156,7 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
  * @receiver the real part.
  * @return the new complex number.
  */
-public fun Number.toComplex(): Complex = Complex(this, 0)
+public fun Number.toComplex(): Complex = Complex(this)
 
 /**
  * Creates a new buffer of complex numbers with the specified [size], where each element is calculated by calling the
