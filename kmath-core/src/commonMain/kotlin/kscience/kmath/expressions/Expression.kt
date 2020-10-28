@@ -3,6 +3,7 @@ package kscience.kmath.expressions
 import kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * A marker interface for a symbol. A symbol mus have an identity
@@ -84,8 +85,8 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 public fun <T, E> ExpressionAlgebra<T, E>.bind(symbol: Symbol): E =
     bindOrNull(symbol) ?: error("Symbol $symbol could not be bound to $this")
 
-public val symbol: ReadOnlyProperty<Any?, StringSymbol> = ReadOnlyProperty { _, property ->
-    StringSymbol(property.name)
+public val symbol: ReadOnlyProperty<Any?, StringSymbol> = object : ReadOnlyProperty<Any?, StringSymbol> {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): StringSymbol = StringSymbol(property.name)
 }
 
 public fun <T, E> ExpressionAlgebra<T, E>.binding(): ReadOnlyProperty<Any?, E> =

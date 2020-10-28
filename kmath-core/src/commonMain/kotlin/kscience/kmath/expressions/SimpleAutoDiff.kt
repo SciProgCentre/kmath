@@ -244,7 +244,6 @@ public fun <T : Any, F : Field<T>> simpleAutoDiff(field: F): AutoDiffProcessor<T
     }
 }
 
-
 // Extensions for differentiation of various basic mathematical functions
 
 // x ^ 2
