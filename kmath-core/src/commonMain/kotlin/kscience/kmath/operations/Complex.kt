@@ -195,6 +195,7 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
     }
 }
 
+
 /**
  * Creates a complex number with real part equal to this real.
  *
