@@ -1,19 +1,14 @@
 package kscience.kmath.expressions
 
 /**
- * And object that could be differentiated
+ * An expression that provides derivatives
  */
-public interface Differentiable<T> {
-    public fun derivativeOrNull(orders: Map<Symbol, Int>): T?
+public interface DifferentiableExpression<T> : Expression<T>{
+    public fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<T>?
 }
 
-public fun <T> Differentiable<T>.derivative(orders: Map<Symbol, Int>): T =
+public fun <T> DifferentiableExpression<T>.derivative(orders: Map<Symbol, Int>): Expression<T> =
     derivativeOrNull(orders) ?: error("Derivative with orders $orders not provided")
-
-/**
- * An expression that provid
- */
-public interface DifferentiableExpression<T> : Differentiable<Expression<T>>, Expression<T>
 
 public fun <T> DifferentiableExpression<T>.derivative(vararg orders: Pair<Symbol, Int>): Expression<T> =
     derivative(mapOf(*orders))
