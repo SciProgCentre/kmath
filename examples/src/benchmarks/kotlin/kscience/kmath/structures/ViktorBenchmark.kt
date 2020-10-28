@@ -36,7 +36,7 @@ internal class ViktorBenchmark {
 
     @Benchmark
     fun rawViktor() {
-        val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
+        val one = F64Array.full(init = 1.0, shape = intArrayOf(dim, dim))
         var res = one
         repeat(n) { res = res + one }
     }

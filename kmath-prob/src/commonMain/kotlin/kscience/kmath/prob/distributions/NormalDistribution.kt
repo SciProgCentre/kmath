@@ -5,9 +5,17 @@ import kscience.kmath.prob.RandomGenerator
 import kscience.kmath.prob.UnivariateDistribution
 import kscience.kmath.prob.internal.InternalErf
 import kscience.kmath.prob.samplers.GaussianSampler
+import kscience.kmath.prob.samplers.NormalizedGaussianSampler
+import kscience.kmath.prob.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
 public inline class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
+    public constructor(
+        mean: Double,
+        standardDeviation: Double,
+        normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler.of(),
+    ) : this(GaussianSampler.of(mean, standardDeviation, normalized))
+
     public override fun probability(arg: Double): Double {
         val x1 = (arg - sampler.mean) / sampler.standardDeviation
         return exp(-0.5 * x1 * x1 - (ln(sampler.standardDeviation) + 0.5 * ln(2 * PI)))
