@@ -2,8 +2,13 @@ package kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.experimental.*
 import kscience.kmath.ast.MST
+import kscience.kmath.ast.MstAlgebra
+import kscience.kmath.ast.MstExpression
 import kscience.kmath.ast.MstExtendedField
 import kscience.kmath.ast.MstExtendedField.unaryMinus
+import kscience.kmath.expressions.DifferentiableExpression
+import kscience.kmath.expressions.Expression
+import kscience.kmath.expressions.Symbol
 import kscience.kmath.operations.*
 
 /**
@@ -80,28 +85,52 @@ public fun <X : SFun<X>> MST.Symbolic.toSVar(proto: X): SVar<X> = SVar(proto, va
  * @param proto the prototype instance.
  * @return a scalar function.
  */
-public fun <X : SFun<X>> MST.tSFun(proto: X): SFun<X> = when (this) {
+public fun <X : SFun<X>> MST.toSFun(proto: X): SFun<X> = when (this) {
     is MST.Numeric -> toSConst()
     is MST.Symbolic -> toSVar(proto)
 
     is MST.Unary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> value.tSFun(proto)
-        SpaceOperations.MINUS_OPERATION -> -value.tSFun(proto)
-        TrigonometricOperations.SIN_OPERATION -> sin(value.tSFun(proto))
-        TrigonometricOperations.COS_OPERATION -> cos(value.tSFun(proto))
-        TrigonometricOperations.TAN_OPERATION -> tan(value.tSFun(proto))
-        PowerOperations.SQRT_OPERATION -> value.tSFun(proto).sqrt()
-        ExponentialOperations.EXP_OPERATION -> E<X>() pow value.tSFun(proto)
-        ExponentialOperations.LN_OPERATION -> value.tSFun(proto).ln()
+        SpaceOperations.PLUS_OPERATION -> value.toSFun(proto)
+        SpaceOperations.MINUS_OPERATION -> -value.toSFun(proto)
+        TrigonometricOperations.SIN_OPERATION -> sin(value.toSFun(proto))
+        TrigonometricOperations.COS_OPERATION -> cos(value.toSFun(proto))
+        TrigonometricOperations.TAN_OPERATION -> tan(value.toSFun(proto))
+        PowerOperations.SQRT_OPERATION -> value.toSFun(proto).sqrt()
+        ExponentialOperations.EXP_OPERATION -> E<X>() pow value.toSFun(proto)
+        ExponentialOperations.LN_OPERATION -> value.toSFun(proto).ln()
         else -> error("Unary operation $operation not defined in $this")
     }
 
     is MST.Binary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left.tSFun(proto) + right.tSFun(proto)
-        SpaceOperations.MINUS_OPERATION -> left.tSFun(proto) - right.tSFun(proto)
-        RingOperations.TIMES_OPERATION -> left.tSFun(proto) * right.tSFun(proto)
-        FieldOperations.DIV_OPERATION -> left.tSFun(proto) / right.tSFun(proto)
-        PowerOperations.POW_OPERATION -> left.tSFun(proto) pow (right as MST.Numeric).toSConst()
+        SpaceOperations.PLUS_OPERATION -> left.toSFun(proto) + right.toSFun(proto)
+        SpaceOperations.MINUS_OPERATION -> left.toSFun(proto) - right.toSFun(proto)
+        RingOperations.TIMES_OPERATION -> left.toSFun(proto) * right.toSFun(proto)
+        FieldOperations.DIV_OPERATION -> left.toSFun(proto) / right.toSFun(proto)
+        PowerOperations.POW_OPERATION -> left.toSFun(proto) pow (right as MST.Numeric).toSConst()
         else -> error("Binary operation $operation not defined in $this")
+    }
+}
+
+public class KMathNumber<T, A>(public val algebra: A, value: T) :
+    RealNumber<KMathNumber<T, A>, T>(value) where T : Number, A : NumericAlgebra<T> {
+    public override fun wrap(number: Number): SConst<KMathNumber<T, A>> = SConst(algebra.number(number))
+    override val proto: KMathNumber<T, A> by lazy { KMathNumber(algebra, algebra.number(Double.NaN)) }
+}
+
+public class KMathProtocol<T, A>(algebra: A) :
+    Protocol<KMathNumber<T, A>>(KMathNumber(algebra, algebra.number(Double.NaN)))
+        where T : Number, A : NumericAlgebra<T>
+
+public class DifferentiableMstExpression<T, A>(public val algebra: A, public val mst: MST) :
+    DifferentiableExpression<T> where A : NumericAlgebra<T>, T : Number {
+    public val proto by lazy { KMathProtocol(algebra).prototype }
+    public val expr by lazy { MstExpression(algebra, mst) }
+
+    public override fun invoke(arguments: Map<Symbol, T>): T = expr(arguments)  
+
+    public override fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<T> {
+        val sfun = mst.toSFun(proto)
+        val orders2 = orders.mapKeys { (k, _) -> MstAlgebra.symbol(k.identity).toSVar(proto) }
+        TODO()
     }
 }
