@@ -1,13 +1,12 @@
 package kscience.kmath.prob
 
-import kscience.kmath.expressions.AutoDiffProcessor
-import kscience.kmath.expressions.DifferentiableExpression
-import kscience.kmath.expressions.ExpressionAlgebra
+import kscience.kmath.expressions.*
 import kscience.kmath.operations.ExtendedField
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.indices
+import kotlin.math.pow
 
-public object Fit {
+public object Fitting {
 
     /**
      * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
@@ -31,6 +30,30 @@ public object Fit {
                 sum += ((yValue - modelValue) / yErrValue).pow(2)
             }
             sum
+        }
+    }
+
+    /**
+     * Generate a chi squared expression from given x-y-sigma model represented by an expression. Does not provide derivatives
+     */
+    public fun chiSquared(
+        x: Buffer<Double>,
+        y: Buffer<Double>,
+        yErr: Buffer<Double>,
+        model: Expression<Double>,
+        xSymbol: Symbol = StringSymbol("x"),
+    ): Expression<Double> {
+        require(x.size == y.size) { "X and y buffers should be of the same size" }
+        require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
+        return Expression { arguments ->
+            x.indices.sumByDouble {
+                val xValue = x[it]
+                val yValue = y[it]
+                val yErrValue = yErr[it]
+                val modifiedArgs = arguments + (xSymbol to xValue)
+                val modelValue = model(modifiedArgs)
+                ((yValue - modelValue) / yErrValue).pow(2)
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package kscience.kmath.commons.optimization
 import kscience.kmath.commons.expressions.DerivativeStructureExpression
 import kscience.kmath.expressions.symbol
 import kscience.kmath.prob.Distribution
+import kscience.kmath.prob.Fitting
 import kscience.kmath.prob.RandomGenerator
 import kscience.kmath.prob.normal
 import kscience.kmath.structures.asBuffer
@@ -39,7 +40,7 @@ internal class OptimizeTest {
     }
 
     @Test
-    fun testFit() {
+    fun testCmFit() {
         val a by symbol
         val b by symbol
         val c by symbol
@@ -52,15 +53,14 @@ internal class OptimizeTest {
             it.pow(2) + it + 1 + chain.nextDouble()
         }
         val yErr = x.map { sigma }
-        with(CMFit) {
-            val chi2 = chiSquared(x.asBuffer(), y.asBuffer(), yErr.asBuffer()) { x ->
-                val cWithDefault = bindOrNull(c)?: one
-                bind(a) * x.pow(2) + bind(b) * x + cWithDefault
-            }
-
-            val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
-            println(result)
-            println("Chi2/dof = ${result.value / (x.size - 3)}")
+        val chi2 = Fitting.chiSquared(x.asBuffer(), y.asBuffer(), yErr.asBuffer()) { x ->
+            val cWithDefault = bindOrNull(c) ?: one
+            bind(a) * x.pow(2) + bind(b) * x + cWithDefault
         }
+
+        val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
+        println(result)
+        println("Chi2/dof = ${result.value / (x.size - 3)}")
     }
+
 }
