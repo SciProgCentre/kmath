@@ -3,9 +3,9 @@ package kscience.kmath.commons.prob
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collectWithState
-import kscience.kmath.prob.Distribution
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.normal
+import kscience.kmath.stat.Distribution
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.normal
 
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
