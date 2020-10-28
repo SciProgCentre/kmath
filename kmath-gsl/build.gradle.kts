@@ -12,7 +12,7 @@ kotlin {
 
     val nativeTarget = when (System.getProperty("os.name")) {
         "Mac OS X" -> macosX64()
-        "Linux" -> linuxX64()
+        "Linux" -> linuxX64("native")
 
         else -> {
             logger.warn("Current OS cannot build any of kmath-gsl targets.")
@@ -29,7 +29,7 @@ kotlin {
     val test by nativeTarget.compilations.getting
 
     sourceSets {
-        val nativeMain by creating {
+        val nativeMain by getting {
             val codegen by tasks.creating {
                 matricesCodegen(kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Matrices.kt")
                 vectorsCodegen(kotlin.srcDirs.first().absolutePath + "/kscience/kmath/gsl/_Vectors.kt")
@@ -42,11 +42,11 @@ kotlin {
             }
         }
 
-        val nativeTest by creating {
+        val nativeTest by getting {
             dependsOn(nativeMain)
         }
 
-        main.defaultSourceSet.dependsOn(nativeMain)
-        test.defaultSourceSet.dependsOn(nativeTest)
+//        main.defaultSourceSet.dependsOn(nativeMain)
+//        test.defaultSourceSet.dependsOn(nativeTest)
     }
 }

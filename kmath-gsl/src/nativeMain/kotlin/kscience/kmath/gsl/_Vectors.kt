@@ -1,10 +1,12 @@
 package kscience.kmath.gsl
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.DeferScope
+import kotlinx.cinterop.pointed
 import org.gnu.gsl.*
 
-internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>, scope: DeferScope) 
-            : GslVector<Double, gsl_vector>(scope) {
+internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>, scope: DeferScope) : 
+    GslVector<Double, gsl_vector>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -25,8 +27,8 @@ internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>, sc
     override fun close(): Unit = gsl_vector_free(nativeHandle)
 }
 
-internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_float>, scope: DeferScope) 
-            : GslVector<Float, gsl_vector_float>(scope) {
+internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_float>, scope: DeferScope) : 
+    GslVector<Float, gsl_vector_float>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -47,8 +49,8 @@ internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_flo
     override fun close(): Unit = gsl_vector_float_free(nativeHandle)
 }
 
-internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_short>, scope: DeferScope) 
-            : GslVector<Short, gsl_vector_short>(scope) {
+internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_short>, scope: DeferScope) : 
+    GslVector<Short, gsl_vector_short>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -69,8 +71,8 @@ internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_sho
     override fun close(): Unit = gsl_vector_short_free(nativeHandle)
 }
 
-internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_ushort>, scope: DeferScope) 
-            : GslVector<UShort, gsl_vector_ushort>(scope) {
+internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_ushort>, scope: DeferScope) : 
+    GslVector<UShort, gsl_vector_ushort>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -91,8 +93,8 @@ internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_us
     override fun close(): Unit = gsl_vector_ushort_free(nativeHandle)
 }
 
-internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long>, scope: DeferScope) 
-            : GslVector<Long, gsl_vector_long>(scope) {
+internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long>, scope: DeferScope) : 
+    GslVector<Long, gsl_vector_long>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -113,8 +115,8 @@ internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long
     override fun close(): Unit = gsl_vector_long_free(nativeHandle)
 }
 
-internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulong>, scope: DeferScope) 
-            : GslVector<ULong, gsl_vector_ulong>(scope) {
+internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulong>, scope: DeferScope) : 
+    GslVector<ULong, gsl_vector_ulong>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -135,8 +137,8 @@ internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulo
     override fun close(): Unit = gsl_vector_ulong_free(nativeHandle)
 }
 
-internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>, scope: DeferScope) 
-            : GslVector<Int, gsl_vector_int>(scope) {
+internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>, scope: DeferScope) : 
+    GslVector<Int, gsl_vector_int>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 
@@ -157,8 +159,8 @@ internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>,
     override fun close(): Unit = gsl_vector_int_free(nativeHandle)
 }
 
-internal class GslUIntVector(override val nativeHandle: CPointer<gsl_vector_uint>, scope: DeferScope) 
-            : GslVector<UInt, gsl_vector_uint>(scope) {
+internal class GslUIntVector(override val nativeHandle: CPointer<gsl_vector_uint>, scope: DeferScope) : 
+    GslVector<UInt, gsl_vector_uint>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 

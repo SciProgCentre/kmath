@@ -18,8 +18,8 @@ private fun KtPsiFactory.createVectorClass(
     val structName = sn("gsl_vectorR", cTypeName)
 
     @Language("kotlin") val text =
-        """internal class $className(override val nativeHandle: CPointer<$structName>, scope: DeferScope) 
-            : GslVector<$kotlinTypeName, $structName>(scope) {
+        """internal class $className(override val nativeHandle: CPointer<$structName>, scope: DeferScope) : 
+    GslVector<$kotlinTypeName, $structName>(scope) {
     override val size: Int
         get() = nativeHandle.pointed.size.toInt()
 

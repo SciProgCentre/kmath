@@ -8,6 +8,7 @@ public abstract class GslMemoryHolder<H : CStructVar> internal constructor(inter
     internal abstract val nativeHandle: CPointer<H>
 
     init {
+        ensureHasGslErrorHandler()
         scope.defer(::close)
     }
 
