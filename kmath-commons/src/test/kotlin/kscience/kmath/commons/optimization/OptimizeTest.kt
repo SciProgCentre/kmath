@@ -2,10 +2,10 @@ package kscience.kmath.commons.optimization
 
 import kscience.kmath.commons.expressions.DerivativeStructureExpression
 import kscience.kmath.expressions.symbol
-import kscience.kmath.prob.Distribution
-import kscience.kmath.prob.Fitting
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.normal
+import kscience.kmath.stat.Distribution
+import kscience.kmath.stat.Fitting
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.normal
 import kscience.kmath.structures.asBuffer
 import org.junit.jupiter.api.Test
 import kotlin.math.pow

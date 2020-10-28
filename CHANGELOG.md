@@ -12,6 +12,7 @@
 - A `Symbol` indexing scope.
 - Basic optimization API for Commons-math.
 - Chi squared optimization for array-like data in CM
+- `Fitting` utility object in prob/stat
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
@@ -21,6 +22,7 @@
 - Kotlin version: 1.3.72 -> 1.4.20-M1
 - `kmath-ast` doesn't depend on heavy `kotlin-reflect` library.
 - Full autodiff refactoring based on `Symbol`
+- `kmath-prob` renamed to `kmath-stat`
 
 ### Deprecated
 

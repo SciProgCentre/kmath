@@ -4,7 +4,9 @@ import kscience.kmath.commons.expressions.DerivativeStructureField
 import kscience.kmath.expressions.DifferentiableExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.Symbol
-import kscience.kmath.prob.Fitting
+import kscience.kmath.stat.Fitting
+import kscience.kmath.stat.OptimizationResult
+import kscience.kmath.stat.optimizeWith
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.asBuffer
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure

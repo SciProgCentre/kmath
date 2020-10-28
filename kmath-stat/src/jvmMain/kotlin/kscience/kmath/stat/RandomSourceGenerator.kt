@@ -1,4 +1,4 @@
-package kscience.kmath.prob
+package kscience.kmath.stat
 
 import org.apache.commons.rng.UniformRandomProvider
 import org.apache.commons.rng.simple.RandomSource

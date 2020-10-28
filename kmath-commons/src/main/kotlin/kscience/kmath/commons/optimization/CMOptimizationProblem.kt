@@ -1,6 +1,10 @@
 package kscience.kmath.commons.optimization
 
 import kscience.kmath.expressions.*
+import kscience.kmath.stat.OptimizationFeature
+import kscience.kmath.stat.OptimizationProblem
+import kscience.kmath.stat.OptimizationProblemFactory
+import kscience.kmath.stat.OptimizationResult
 import org.apache.commons.math3.optim.*
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer

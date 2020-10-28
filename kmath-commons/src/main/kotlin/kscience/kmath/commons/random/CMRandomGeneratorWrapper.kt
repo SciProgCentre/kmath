@@ -1,6 +1,6 @@
 package kscience.kmath.commons.random
 
-import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.stat.RandomGenerator
 
 public class CMRandomGeneratorWrapper(
     public val factory: (IntArray) -> RandomGenerator,

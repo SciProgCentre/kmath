@@ -1,4 +1,4 @@
-package kscience.kmath.prob
+package kscience.kmath.stat
 
 import kscience.kmath.expressions.*
 import kscience.kmath.operations.ExtendedField

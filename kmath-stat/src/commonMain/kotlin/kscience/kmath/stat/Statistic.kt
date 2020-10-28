@@ -1,4 +1,4 @@
-package kscience.kmath.prob
+package kscience.kmath.stat
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

@@ -99,7 +99,7 @@ can be used for a wide variety of purposes from high performance calculations to
 > - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
 > - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
 > - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
-> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 <hr/>
 
@@ -151,7 +151,7 @@ can be used for a wide variety of purposes from high performance calculations to
 > **Maturity**: EXPERIMENTAL
 <hr/>
 
-* ### [kmath-prob](kmath-prob)
+* ### [kmath-stat](kmath-stat)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -201,4 +201,4 @@ with the same artifact names.
 
 ## Contributing
 
-The project requires a lot of additional work. Please feel free to contribute in any way and propose new features.
+The project requires a lot of additional work. The most important thing we need is a feedback about what features are required the most. Feel free to open feature issues with requests. We are also welcome to code contributions, especially in issues marked as [waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero).

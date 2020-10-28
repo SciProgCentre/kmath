@@ -34,7 +34,7 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
-    ":kmath-prob",
+    ":kmath-stat",
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",

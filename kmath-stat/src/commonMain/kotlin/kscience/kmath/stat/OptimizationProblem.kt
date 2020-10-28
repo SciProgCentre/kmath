@@ -1,4 +1,4 @@
-package kscience.kmath.commons.optimization
+package kscience.kmath.stat
 
 import kscience.kmath.expressions.DifferentiableExpression
 import kscience.kmath.expressions.Expression

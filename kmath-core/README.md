@@ -7,7 +7,7 @@ The core features of KMath:
  - [buffers](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
  - [expressions](src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
  - [domains](src/commonMain/kotlin/kscience/kmath/domains) : Domains
- - [autodif](src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+ - [autodif](src/commonMain/kotlin/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 
 > #### Artifact:
