@@ -14,8 +14,10 @@ public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure> {
-    public override val zero: DerivativeStructure by lazy { DerivativeStructure(bindings.size, 0) }
-    public override val one: DerivativeStructure by lazy { DerivativeStructure(bindings.size, 0, 1.0) }
+    public val numberOfVariables: Int = bindings.size
+
+    public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
+    public override val one: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order, 1.0) }
 
     /**
      * A class that implements both [DerivativeStructure] and a [Symbol]
@@ -32,8 +34,6 @@ public class DerivativeStructureField(
         override fun hashCode(): Int = identity.hashCode()
     }
 
-    public val numberOfVariables: Int = bindings.size
-
     /**
      * Identity-based symbol bindings map
      */
@@ -41,7 +41,7 @@ public class DerivativeStructureField(
         key.identity to DerivativeStructureSymbol(numberOfVariables, index, key, value)
     }.toMap()
 
-    override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, 0, value)
+    override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
 
     public override fun bindOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
 
