@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api("com.github.breandan:kotlingrad:0.3.2")
+    api("com.github.breandan:kotlingrad:0.3.7")
     api(project(":kmath-ast"))
 }
