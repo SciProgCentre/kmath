@@ -74,9 +74,9 @@ public interface SpaceElement<T, I : SpaceElement<T, I, S>, S : Space<T>> : Math
 /**
  * The element of [Ring].
  *
- * @param T the type of space operation results.
+ * @param T the type of ring operation results.
  * @param I self type of the element. Needed for static type checking.
- * @param R the type of space.
+ * @param R the type of ring.
  */
 public interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceElement<T, I, R> {
     /**
@@ -91,7 +91,7 @@ public interface RingElement<T, I : RingElement<T, I, R>, R : Ring<T>> : SpaceEl
 /**
  * The element of [Field].
  *
- * @param T the type of space operation results.
+ * @param T the type of field operation results.
  * @param I self type of the element. Needed for static type checking.
  * @param F the type of field.
  */

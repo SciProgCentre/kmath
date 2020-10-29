@@ -6,7 +6,6 @@ import kscience.kmath.stat.Distribution
 import kscience.kmath.stat.Fitting
 import kscience.kmath.stat.RandomGenerator
 import kscience.kmath.stat.normal
-import kscience.kmath.structures.asBuffer
 import org.junit.jupiter.api.Test
 import kotlin.math.pow
 
@@ -53,7 +52,7 @@ internal class OptimizeTest {
             it.pow(2) + it + 1 + chain.nextDouble()
         }
         val yErr = x.map { sigma }
-        val chi2 = Fitting.chiSquared(x.asBuffer(), y.asBuffer(), yErr.asBuffer()) { x ->
+        val chi2 = Fitting.chiSquared(x, y, yErr) { x ->
             val cWithDefault = bindOrNull(c) ?: one
             bind(a) * x.pow(2) + bind(b) * x + cWithDefault
         }
