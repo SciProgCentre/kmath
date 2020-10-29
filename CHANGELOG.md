@@ -7,12 +7,13 @@
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140).
 - Automatic README generation for features (#139)
 - Native support for `memory`, `core` and `dimensions`
-- `kmath-ejml` to supply EJML SimpleMatrix wrapper.
+- `kmath-ejml` to supply EJML SimpleMatrix wrapper (https://github.com/mipt-npm/kmath/pull/136).
 - A separate `Symbol` entity, which is used for global unbound symbol.
 - A `Symbol` indexing scope.
 - Basic optimization API for Commons-math.
 - Chi squared optimization for array-like data in CM
 - `Fitting` utility object in prob/stat
+- ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.

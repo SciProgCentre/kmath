@@ -25,16 +25,17 @@ pluginManagement {
 }
 
 rootProject.name = "kmath"
+
 include(
     ":kmath-memory",
     ":kmath-core",
     ":kmath-functions",
-//    ":kmath-io",
     ":kmath-coroutines",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
     ":kmath-stat",
+    ":kmath-nd4j",
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
