@@ -126,6 +126,36 @@ public interface Nd4jArrayRing<T, R> : NDRing<T, R, Nd4jArrayStructure<T>>, Nd4j
         check(b)
         return b.ndArray.rsub(this).wrap()
     }
+
+    public companion object {
+        private val intNd4jArrayRingCache: ThreadLocal<MutableMap<IntArray, IntNd4jArrayRing>> =
+            ThreadLocal.withInitial { hashMapOf() }
+
+        private val longNd4jArrayRingCache: ThreadLocal<MutableMap<IntArray, LongNd4jArrayRing>> =
+            ThreadLocal.withInitial { hashMapOf() }
+
+        /**
+         * Creates an [NDRing] for [Int] values or pull it from cache if it was created previously.
+         */
+        public fun int(vararg shape: Int): Nd4jArrayRing<Int, IntRing> =
+            intNd4jArrayRingCache.get().getOrPut(shape) { IntNd4jArrayRing(shape) }
+
+        /**
+         * Creates an [NDRing] for [Long] values or pull it from cache if it was created previously.
+         */
+        public fun long(vararg shape: Int): Nd4jArrayRing<Long, LongRing> =
+            longNd4jArrayRingCache.get().getOrPut(shape) { LongNd4jArrayRing(shape) }
+
+        /**
+         * Creates a most suitable implementation of [NDRing] using reified class.
+         */
+        @Suppress("UNCHECKED_CAST")
+        public inline fun <reified T : Any> auto(vararg shape: Int): Nd4jArrayRing<T, out Ring<T>> = when {
+            T::class == Int::class -> int(*shape) as Nd4jArrayRing<T, out Ring<T>>
+            T::class == Long::class -> long(*shape) as Nd4jArrayRing<T, out Ring<T>>
+            else -> throw UnsupportedOperationException("This factory method only supports Int and Long types.")
+        }
+    }
 }
 
 /**
@@ -144,6 +174,37 @@ public interface Nd4jArrayField<T, F> : NDField<T, F, Nd4jArrayStructure<T>>, Nd
     public override operator fun Number.div(b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
         check(b)
         return b.ndArray.rdiv(this).wrap()
+    }
+
+
+    public companion object {
+        private val floatNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, FloatNd4jArrayField>> =
+            ThreadLocal.withInitial { hashMapOf() }
+
+        private val realNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, RealNd4jArrayField>> =
+            ThreadLocal.withInitial { hashMapOf() }
+
+        /**
+         * Creates an [NDField] for [Float] values or pull it from cache if it was created previously.
+         */
+        public fun float(vararg shape: Int): Nd4jArrayRing<Float, FloatField> =
+            floatNd4jArrayFieldCache.get().getOrPut(shape) { FloatNd4jArrayField(shape) }
+
+        /**
+         * Creates an [NDField] for [Double] values or pull it from cache if it was created previously.
+         */
+        public fun real(vararg shape: Int): Nd4jArrayRing<Double, RealField> =
+            realNd4jArrayFieldCache.get().getOrPut(shape) { RealNd4jArrayField(shape) }
+
+        /**
+         * Creates a most suitable implementation of [NDRing] using reified class.
+         */
+        @Suppress("UNCHECKED_CAST")
+        public inline fun <reified T : Any> auto(vararg shape: Int): Nd4jArrayField<T, out Field<T>> = when {
+            T::class == Float::class -> float(*shape) as Nd4jArrayField<T, out Field<T>>
+            T::class == Double::class -> real(*shape) as Nd4jArrayField<T, out Field<T>>
+            else -> throw UnsupportedOperationException("This factory method only supports Float and Double types.")
+        }
     }
 }
 
