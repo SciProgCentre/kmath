@@ -1,6 +1,5 @@
 package kscience.kmath.asm
 
-import kscience.kmath.asm.compile
 import kscience.kmath.ast.mstInField
 import kscience.kmath.ast.mstInRing
 import kscience.kmath.ast.mstInSpace
@@ -11,6 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class TestAsmAlgebras {
+
     @Test
     fun space() {
         val res1 = ByteRing.mstInSpace {

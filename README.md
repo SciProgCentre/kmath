@@ -53,9 +53,7 @@ can be used for a wide variety of purposes from high performance calculations to
 * **Commons-math wrapper** It is planned to gradually wrap most parts of [Apache commons-math](http://commons.apache.org/proper/commons-math/)
                            library in Kotlin code and maybe rewrite some parts to better suit the Kotlin programming paradigm, however there is no fixed roadmap for that. Feel free
                            to submit a feature request if you want something to be done first.
-
-* **EJML wrapper** Provides EJML `SimpleMatrix` wrapper consistent with the core matrix structures.
-
+                           
 ## Planned features
 
 * **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.
@@ -101,7 +99,7 @@ can be used for a wide variety of purposes from high performance calculations to
 > - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
 > - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
 > - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
-> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/misc/AutoDiff.kt) : Automatic differentiation
+> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 <hr/>
 
@@ -112,6 +110,12 @@ can be used for a wide variety of purposes from high performance calculations to
 <hr/>
 
 * ### [kmath-dimensions](kmath-dimensions)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-ejml](kmath-ejml)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -147,7 +151,7 @@ can be used for a wide variety of purposes from high performance calculations to
 > **Maturity**: EXPERIMENTAL
 <hr/>
 
-* ### [kmath-prob](kmath-prob)
+* ### [kmath-stat](kmath-stat)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -178,8 +182,8 @@ repositories{
 }
 
 dependencies{
-    api("kscience.kmath:kmath-core:${kmathVersion}")
-    //api("scientifik:kmath-core:${kmathVersion}") for 0.1.3 and earlier
+    api("kscience.kmath:kmath-core:0.2.0-dev-2")
+    //api("kscience.kmath:kmath-core-jvm:0.2.0-dev-2") for jvm-specific version
 }
 ```
 
@@ -197,4 +201,4 @@ with the same artifact names.
 
 ## Contributing
 
-The project requires a lot of additional work. Please feel free to contribute in any way and propose new features.
+The project requires a lot of additional work. The most important thing we need is a feedback about what features are required the most. Feel free to open feature issues with requests. We are also welcome to code contributions, especially in issues marked as [waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero).
