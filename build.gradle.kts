@@ -2,16 +2,15 @@ plugins {
     id("ru.mipt.npm.project")
 }
 
-val kmathVersion: String by extra("0.2.0-dev-3")
-val bintrayRepo: String by extra("kscience")
-val githubProject: String by extra("kmath")
+internal val kmathVersion: String by extra("0.2.0-dev-3")
+internal val bintrayRepo: String by extra("kscience")
+internal val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
-        mavenCentral()
         maven("https://dl.bintray.com/hotkeytlt/maven")
     }
 
@@ -27,6 +26,6 @@ readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }
 
-apiValidation{
+apiValidation {
     validationDisabled = true
 }

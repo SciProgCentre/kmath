@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.fail
 
-internal class INDArrayStructureTest {
+internal class Nd4jArrayStructureTest {
     @Test
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
