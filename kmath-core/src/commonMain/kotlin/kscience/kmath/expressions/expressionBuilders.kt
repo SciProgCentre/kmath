@@ -7,6 +7,7 @@ import kscience.kmath.operations.Space
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+
 /**
  * Creates a functional expression with this [Space].
  */

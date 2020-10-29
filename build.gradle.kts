@@ -2,7 +2,7 @@ plugins {
     id("ru.mipt.npm.project")
 }
 
-internal val kmathVersion: String by extra("0.2.0-dev-2")
+internal val kmathVersion: String by extra("0.2.0-dev-3")
 internal val bintrayRepo: String by extra("kscience")
 internal val githubProject: String by extra("kmath")
 
@@ -24,4 +24,8 @@ subprojects {
 
 readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
+}
+
+apiValidation {
+    validationDisabled = true
 }

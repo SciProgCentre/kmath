@@ -8,13 +8,13 @@ import kotlin.contracts.contract
 import kotlin.math.max
 import kotlin.math.pow
 
-// TODO make `inline`, when KT-41771 gets fixed
 /**
  * Polynomial coefficients without fixation on specific context they are applied to
  * @param coefficients constant is the leftmost coefficient
  */
 public inline class Polynomial<T : Any>(public val coefficients: List<T>)
 
+@Suppress("FunctionName")
 public fun <T : Any> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
 
 public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { index, acc, d -> acc + d.pow(index) }
@@ -34,14 +34,6 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring
 }
 
 /**
- * Represent a polynomial as a context-dependent function
- */
-public fun <T : Any, C : Ring<T>> Polynomial<T>.asMathFunction(): MathFunction<T, C, T> =
-    object : MathFunction<T, C, T> {
-        override fun C.invoke(arg: T): T = value(this, arg)
-    }
-
-/**
  * Represent the polynomial as a regular context-less function
  */
 public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = { value(ring, it) }
@@ -49,7 +41,7 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
 /**
  * An algebra for polynomials
  */
-public class PolynomialSpace<T : Any, C : Ring<T>>(public val ring: C) : Space<Polynomial<T>> {
+public class PolynomialSpace<T : Any, C : Ring<T>>(private val ring: C) : Space<Polynomial<T>> {
     public override val zero: Polynomial<T> = Polynomial(emptyList())
 
     public override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {

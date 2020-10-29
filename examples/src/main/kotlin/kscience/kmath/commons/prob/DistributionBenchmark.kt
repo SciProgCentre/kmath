@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.BlockingRealChain
-import kscience.kmath.prob.*
+import kscience.kmath.stat.*
 import org.apache.commons.rng.sampling.distribution.ZigguratNormalizedGaussianSampler
 import org.apache.commons.rng.simple.RandomSource
 import java.time.Duration

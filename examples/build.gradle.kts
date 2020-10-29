@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
-    implementation(project(":kmath-prob"))
+    implementation(project(":kmath-stat"))
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
