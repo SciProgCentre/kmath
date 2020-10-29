@@ -6,8 +6,8 @@ import kscience.kmath.structures.complex
 
 fun main() {
     // 2d element
-    val element = NDElement.complex(2, 2) { index: IntArray ->
-        Complex(index[0].toDouble() - index[1].toDouble(), index[0].toDouble() + index[1].toDouble())
+    val element = NDElement.complex(2, 2) { (i,j) ->
+        Complex(i.toDouble() - j.toDouble(), i.toDouble() + j.toDouble())
     }
     println(element)
 

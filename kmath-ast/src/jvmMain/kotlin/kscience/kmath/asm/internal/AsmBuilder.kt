@@ -25,7 +25,7 @@ internal class AsmBuilder<T> internal constructor(
     private val classOfT: Class<*>,
     private val algebra: Algebra<T>,
     private val className: String,
-    private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit
+    private val invokeLabel0Visitor: AsmBuilder<T>.() -> Unit,
 ) {
     /**
      * Internal classloader of [AsmBuilder] with alias to define class from byte array.
@@ -379,22 +379,14 @@ internal class AsmBuilder<T> internal constructor(
      * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke]. The [defaultValue] may be
      * provided.
      */
-    internal fun loadVariable(name: String, defaultValue: T? = null): Unit = invokeMethodVisitor.run {
+    internal fun loadVariable(name: String): Unit = invokeMethodVisitor.run {
         load(invokeArgumentsVar, MAP_TYPE)
         aconst(name)
-
-        if (defaultValue != null)
-            loadTConstant(defaultValue)
 
         invokestatic(
             MAP_INTRINSICS_TYPE.internalName,
             "getOrFail",
-
-            Type.getMethodDescriptor(
-                OBJECT_TYPE,
-                MAP_TYPE,
-                OBJECT_TYPE,
-                *OBJECT_TYPE.wrapToArrayIf { defaultValue != null }),
+            Type.getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, STRING_TYPE),
             false
         )
 
@@ -429,7 +421,7 @@ internal class AsmBuilder<T> internal constructor(
         method: String,
         descriptor: String,
         expectedArity: Int,
-        opcode: Int = INVOKEINTERFACE
+        opcode: Int = INVOKEINTERFACE,
     ) {
         run loop@{
             repeat(expectedArity) {
