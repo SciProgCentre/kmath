@@ -9,10 +9,15 @@ internal val githubProject: String by extra("kmath")
 allprojects {
     repositories {
         jcenter()
+        maven("https://clojars.org/repo")
+        maven("https://dl.bintray.com/egor-bogomolov/astminer/")
+        maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
-        maven("https://dl.bintray.com/hotkeytlt/maven")
+        maven("https://dl.bintray.com/mipt-npm/dev")
+        maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://jitpack.io")
+        mavenCentral()
     }
 
     group = "kscience.kmath"

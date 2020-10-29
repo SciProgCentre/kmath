@@ -13,7 +13,7 @@ internal class ExpressionsInterpretersBenchmark {
     private val algebra: Field<Double> = RealField
     fun functionalExpression() {
         val expr = algebra.expressionInField {
-            variable("x") * const(2.0) + const(2.0) / variable("x") - const(16.0)
+            symbol("x") * const(2.0) + const(2.0) / symbol("x") - const(16.0)
         }
 
         invokeAndSum(expr)

@@ -8,14 +8,6 @@ plugins {
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
-
-repositories {
-    maven("https://dl.bintray.com/mipt-npm/kscience")
-    maven("https://dl.bintray.com/mipt-npm/dev")
-    maven("https://dl.bintray.com/kotlin/kotlin-dev/")
-    mavenCentral()
-}
-
 sourceSets.register("benchmarks")
 
 dependencies {
