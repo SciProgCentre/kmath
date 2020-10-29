@@ -111,7 +111,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
     public override operator fun Complex.plus(b: Number): Complex = b + this
     public override operator fun Complex.minus(b: Number): Complex = add(this, -b.toComplex())
     public override operator fun Number.times(b: Complex): Complex = Complex(b.re * toDouble(), b.im * toDouble())
-    public override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
+    public override operator fun Complex.unaryMinus(): Complex = Complex(-re, -im)
     public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
     public override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
 }

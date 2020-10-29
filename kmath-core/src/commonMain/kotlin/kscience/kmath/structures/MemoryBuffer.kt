@@ -43,8 +43,8 @@ public class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) :
 
     private val writer: MemoryWriter = memory.writer()
 
-    override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
-    override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
+    public override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
+    public override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MutableMemoryBuffer<T> =
