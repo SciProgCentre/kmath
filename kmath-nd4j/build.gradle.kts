@@ -18,7 +18,7 @@ readme {
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
-        id = "nd4jarraystrucure",
+        id = "nd4jarraystructure",
         description = "NDStructure wrapper for INDArray",
         ref = "src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt"
     )

@@ -2,45 +2,48 @@
 
 This subproject implements the following features:
 
-- NDStructure wrapper for INDArray.
-- Optimized NDRing implementations for INDArray storing Ints and Longs.
-- Optimized NDField implementations for INDArray storing Floats and Doubles.
+ - [nd4jarraystrucure](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
+ - [nd4jarrayrings](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
+ - [nd4jarrayfields](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
+
 
 > #### Artifact:
-> This module is distributed in the artifact `scientifik:kmath-nd4j:0.1.4-dev-8`.
-> 
+>
+> This module artifact: `kscience.kmath:kmath-nd4j:0.2.0-dev-3`.
+>
+> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-nd4j/_latestVersion)
+>
+> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-nd4j/_latestVersion)
+>
 > **Gradle:**
 >
 > ```gradle
 > repositories {
->     mavenCentral()
->     maven { url 'https://dl.bintray.com/mipt-npm/scientifik' }
+>     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
+>     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+>     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+
 > }
 > 
 > dependencies {
->     implementation 'scientifik:kmath-nd4j:0.1.4-dev-8'
->     implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7'
+>     implementation 'kscience.kmath:kmath-nd4j:0.2.0-dev-3'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
->     mavenCentral()
->     maven("https://dl.bintray.com/mipt-npm/scientifik")
+>     maven("https://dl.bintray.com/kotlin/kotlin-eap")
+>     maven("https://dl.bintray.com/mipt-npm/kscience")
 >     maven("https://dl.bintray.com/mipt-npm/dev")
+>     maven("https://dl.bintray.com/hotkeytlt/maven")
 > }
 > 
 > dependencies {
->     implementation("scientifik:kmath-nd4j:0.1.4-dev-8")
->     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
+>     implementation("kscience.kmath:kmath-nd4j:0.2.0-dev-3")
 > }
 > ```
-> 
-> This distribution also needs an implementation of ND4J API. The ND4J Native Platform is usually the fastest one, so 
-> it is included to the snippet.
->
 
 ## Examples
 
@@ -64,7 +67,7 @@ import org.nd4j.linalg.factory.*
 import scientifik.kmath.nd4j.*
 import scientifik.kmath.operations.*
 
-val field = RealINDArrayField(intArrayOf(2, 2))
+val field = RealNd4jArrayField(intArrayOf(2, 2))
 val array = Nd4j.rand(2, 2).asRealStructure()
 
 val res = field {
@@ -75,6 +78,5 @@ println(res.ndArray)
 // [[  250.6449,  428.5840], 
 //  [  269.7913,  202.2077]]
 ```
-
 
 Contributed by [Iaroslav Postovalov](https://github.com/CommanderTvis).
