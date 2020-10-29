@@ -87,7 +87,7 @@ public fun <T, E> ExpressionAlgebra<T, E>.bind(symbol: Symbol): E =
 /**
  * A delegate to create a symbol with a string identity in this scope
  */
-public val symbol: ReadOnlyProperty<Any?, StringSymbol> =    ReadOnlyProperty { thisRef, property ->
+public val symbol: ReadOnlyProperty<Any?, StringSymbol> =    ReadOnlyProperty { _, property ->
     StringSymbol(property.name)
 }
 
