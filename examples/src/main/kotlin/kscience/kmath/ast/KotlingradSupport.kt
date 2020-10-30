@@ -5,6 +5,7 @@ import kscience.kmath.expressions.invoke
 import kscience.kmath.expressions.symbol
 import kscience.kmath.kotlingrad.DifferentiableMstExpression
 import kscience.kmath.kotlingrad.derivative
+import kscience.kmath.kotlingrad.differentiable
 import kscience.kmath.operations.RealField
 
 /**
@@ -14,7 +15,8 @@ import kscience.kmath.operations.RealField
 fun main() {
     val x by symbol
 
-    val actualDerivative = DifferentiableMstExpression(RealField, "x^2-4*x-44".parseMath())
+    val actualDerivative = MstExpression(RealField, "x^2-4*x-44".parseMath())
+        .differentiable()
         .derivative(x)
         .compile()
 
