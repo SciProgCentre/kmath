@@ -1,8 +1,10 @@
 package kscience.kmath.structures
 
 import kotlinx.coroutines.GlobalScope
+import kscience.kmath.nd4j.Nd4jArrayField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
+import org.nd4j.linalg.factory.Nd4j
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis
@@ -14,6 +16,8 @@ internal inline fun measureAndPrint(title: String, block: () -> Unit) {
 }
 
 fun main() {
+    // initializing Nd4j
+    Nd4j.zeros(0)
     val dim = 1000
     val n = 1000
 
@@ -23,6 +27,8 @@ fun main() {
     val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.boxing(RealField, dim, dim)
+    // Nd4j specialized field.
+    val nd4jField = Nd4jArrayField.real(dim, dim)
 
     measureAndPrint("Automatic field addition") {
         autoField {
@@ -40,6 +46,13 @@ fun main() {
         specializedField {
             var res: NDBuffer<Double> = one
             repeat(n) { res += 1.0 }
+        }
+    }
+
+    measureAndPrint("Nd4j specialized addition") {
+        nd4jField {
+            var res = one
+            repeat(n) { res += 1.0 as Number }
         }
     }
 
