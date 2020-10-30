@@ -5,7 +5,6 @@ import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstAlgebra
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.expressions.DifferentiableExpression
-import kscience.kmath.expressions.StringSymbol
 import kscience.kmath.expressions.Symbol
 import kscience.kmath.operations.NumericAlgebra
 
@@ -20,7 +19,7 @@ import kscience.kmath.operations.NumericAlgebra
  * @property expr the underlying [MstExpression].
  */
 public inline class DifferentiableMstExpression<T, A>(public val expr: MstExpression<T, A>) :
-    DifferentiableExpression<T> where A : NumericAlgebra<T>, T : Number {
+    DifferentiableExpression<T, MstExpression<T, A>> where A : NumericAlgebra<T>, T : Number {
     public constructor(algebra: A, mst: MST) : this(MstExpression(algebra, mst))
 
     /**
@@ -46,15 +45,6 @@ public inline class DifferentiableMstExpression<T, A>(public val expr: MstExpres
             .toMst(),
     )
 }
-
-public fun <T : Number, A : NumericAlgebra<T>> DifferentiableMstExpression<T, A>.derivative(symbols: List<Symbol>): MstExpression<T, A> =
-    derivativeOrNull(symbols)
-
-public fun <T : Number, A : NumericAlgebra<T>> DifferentiableMstExpression<T, A>.derivative(vararg symbols: Symbol): MstExpression<T, A> =
-    derivative(symbols.toList())
-
-public fun <T : Number, A : NumericAlgebra<T>> DifferentiableMstExpression<T, A>.derivative(name: String): MstExpression<T, A> =
-    derivative(StringSymbol(name))
 
 /**
  * Wraps this [MstExpression] into [DifferentiableMstExpression].

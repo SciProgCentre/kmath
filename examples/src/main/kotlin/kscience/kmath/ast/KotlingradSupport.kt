@@ -3,7 +3,6 @@ package kscience.kmath.ast
 import kscience.kmath.asm.compile
 import kscience.kmath.expressions.invoke
 import kscience.kmath.expressions.symbol
-import kscience.kmath.kotlingrad.DifferentiableMstExpression
 import kscience.kmath.kotlingrad.derivative
 import kscience.kmath.kotlingrad.differentiable
 import kscience.kmath.operations.RealField
