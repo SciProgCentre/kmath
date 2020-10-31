@@ -9,6 +9,9 @@ package kscience.kmath.expressions
 public interface DifferentiableExpression<T, R : Expression<T>> : Expression<T> {
     /**
      * Differentiates this expression by ordered collection of [symbols].
+     *
+     * @param symbols the symbols.
+     * @return the derivative or `null`.
      */
     public fun derivativeOrNull(symbols: List<Symbol>): R?
 }
