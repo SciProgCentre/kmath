@@ -1,9 +1,10 @@
 package kscience.kmath.commons.random
 
-import kscience.kmath.prob.RandomGenerator
+import kscience.kmath.stat.RandomGenerator
 
-public class CMRandomGeneratorWrapper(public val factory: (IntArray) -> RandomGenerator) :
-    org.apache.commons.math3.random.RandomGenerator {
+public class CMRandomGeneratorWrapper(
+    public val factory: (IntArray) -> RandomGenerator,
+) : org.apache.commons.math3.random.RandomGenerator {
     private var generator: RandomGenerator = factory(intArrayOf())
 
     public override fun nextBoolean(): Boolean = generator.nextBoolean()

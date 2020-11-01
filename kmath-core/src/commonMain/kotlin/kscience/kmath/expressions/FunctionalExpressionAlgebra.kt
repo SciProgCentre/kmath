@@ -2,67 +2,43 @@ package kscience.kmath.expressions
 
 import kscience.kmath.operations.*
 
-internal class FunctionalUnaryOperation<T>(val context: Algebra<T>, val name: String, private val expr: Expression<T>) :
-    Expression<T> {
-    override operator fun invoke(arguments: Map<String, T>): T =
-        context.unaryOperation(name, expr.invoke(arguments))
-}
-
-internal class FunctionalBinaryOperation<T>(
-    val context: Algebra<T>,
-    val name: String,
-    val first: Expression<T>,
-    val second: Expression<T>
-) : Expression<T> {
-    override operator fun invoke(arguments: Map<String, T>): T =
-        context.binaryOperation(name, first.invoke(arguments), second.invoke(arguments))
-}
-
-internal class FunctionalVariableExpression<T>(val name: String, val default: T? = null) : Expression<T> {
-    override operator fun invoke(arguments: Map<String, T>): T =
-        arguments[name] ?: default ?: error("Parameter not found: $name")
-}
-
-internal class FunctionalConstantExpression<T>(val value: T) : Expression<T> {
-    override operator fun invoke(arguments: Map<String, T>): T = value
-}
-
-internal class FunctionalConstProductExpression<T>(
-    val context: Space<T>,
-    private val expr: Expression<T>,
-    val const: Number
-) : Expression<T> {
-    override operator fun invoke(arguments: Map<String, T>): T = context.multiply(expr.invoke(arguments), const)
-}
-
 /**
  * A context class for [Expression] construction.
  *
  * @param algebra The algebra to provide for Expressions built.
  */
-public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(public val algebra: A) :
-    ExpressionAlgebra<T, Expression<T>> {
+public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
+    public val algebra: A,
+) : ExpressionAlgebra<T, Expression<T>> {
     /**
      * Builds an Expression of constant expression which does not depend on arguments.
      */
-    public override fun const(value: T): Expression<T> = FunctionalConstantExpression(value)
+    public override fun const(value: T): Expression<T> = Expression { value }
 
     /**
      * Builds an Expression to access a variable.
      */
-    public override fun variable(name: String, default: T?): Expression<T> = FunctionalVariableExpression(name, default)
+    public override fun bindOrNull(symbol: Symbol): Expression<T>? = Expression { arguments ->
+        arguments[symbol] ?: error("Argument not found: $symbol")
+    }
 
     /**
      * Builds an Expression of dynamic call of binary operation [operation] on [left] and [right].
      */
-    public override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        FunctionalBinaryOperation(algebra, operation, left, right)
+    public override fun binaryOperation(
+        operation: String,
+        left: Expression<T>,
+        right: Expression<T>,
+    ): Expression<T> = Expression { arguments ->
+        algebra.binaryOperation(operation, left.invoke(arguments), right.invoke(arguments))
+    }
 
     /**
      * Builds an Expression of dynamic call of unary operation with name [operation] on [arg].
      */
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        FunctionalUnaryOperation(algebra, operation, arg)
+    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> = Expression { arguments ->
+        algebra.unaryOperation(operation, arg.invoke(arguments))
+    }
 }
 
 /**
@@ -81,8 +57,9 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
     /**
      * Builds an Expression of multiplication of expression by number.
      */
-    public override fun multiply(a: Expression<T>, k: Number): Expression<T> =
-        FunctionalConstProductExpression(algebra, a, k)
+    public override fun multiply(a: Expression<T>, k: Number): Expression<T> = Expression { arguments ->
+        algebra.multiply(a.invoke(arguments), k)
+    }
 
     public operator fun Expression<T>.plus(arg: T): Expression<T> = this + const(arg)
     public operator fun Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
@@ -118,8 +95,8 @@ public open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpress
 }
 
 public open class FunctionalExpressionField<T, A>(algebra: A) :
-    FunctionalExpressionRing<T, A>(algebra),
-    Field<Expression<T>> where A : Field<T>, A : NumericAlgebra<T> {
+    FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>
+        where A : Field<T>, A : NumericAlgebra<T> {
     /**
      * Builds an Expression of division an expression by another one.
      */
