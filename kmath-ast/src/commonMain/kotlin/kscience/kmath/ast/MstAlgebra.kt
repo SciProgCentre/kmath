@@ -6,14 +6,13 @@ import kscience.kmath.operations.*
  * [Algebra] over [MST] nodes.
  */
 public object MstAlgebra : NumericAlgebra<MST> {
-    override fun number(value: Number): MST.Numeric = MST.Numeric(value)
+    public override fun number(value: Number): MST.Numeric = MST.Numeric(value)
+    public override fun symbol(value: String): MST.Symbolic = MST.Symbolic(value)
 
-    override fun symbol(value: String): MST.Symbolic = MST.Symbolic(value)
-
-    override fun unaryOperation(operation: String, arg: MST): MST.Unary =
+    public override fun unaryOperation(operation: String, arg: MST): MST.Unary =
         MST.Unary(operation, arg)
 
-    override fun binaryOperation(operation: String, left: MST, right: MST): MST.Binary =
+    public override fun binaryOperation(operation: String, left: MST, right: MST): MST.Binary =
         MST.Binary(operation, left, right)
 }
 
@@ -33,7 +32,8 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
     public override fun binaryOperation(operation: String, left: MST, right: MST): MST.Binary =
         MstAlgebra.binaryOperation(operation, left, right)
 
-    public override fun unaryOperation(operation: String, arg: MST): MST.Unary = MstAlgebra.unaryOperation(operation, arg)
+    public override fun unaryOperation(operation: String, arg: MST): MST.Unary =
+        MstAlgebra.unaryOperation(operation, arg)
 }
 
 /**

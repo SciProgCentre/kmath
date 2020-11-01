@@ -6,7 +6,6 @@ import kscience.kmath.stat.Distribution
 import kscience.kmath.stat.Fitting
 import kscience.kmath.stat.RandomGenerator
 import kscience.kmath.stat.normal
-import kscience.kmath.structures.asBuffer
 import org.junit.jupiter.api.Test
 import kotlin.math.pow
 
@@ -48,14 +47,17 @@ internal class OptimizeTest {
         val sigma = 1.0
         val generator = Distribution.normal(0.0, sigma)
         val chain = generator.sample(RandomGenerator.default(112667))
-        val x = (1..100).map { it.toDouble() }
-        val y = x.map { it ->
+        val x = (1..100).map(Int::toDouble)
+
+        val y = x.map {
             it.pow(2) + it + 1 + chain.nextDouble()
         }
-        val yErr = x.map { sigma }
-        val chi2 = Fitting.chiSquared(x.asBuffer(), y.asBuffer(), yErr.asBuffer()) { x ->
+
+        val yErr = List(x.size) { sigma }
+
+        val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
             val cWithDefault = bindOrNull(c) ?: one
-            bind(a) * x.pow(2) + bind(b) * x + cWithDefault
+            bind(a) * x1.pow(2) + bind(b) * x1 + cWithDefault
         }
 
         val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)

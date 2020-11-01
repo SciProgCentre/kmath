@@ -12,16 +12,22 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
  */
 public class DerivativeStructureField(
     public val order: Int,
-    private val bindings: Map<Symbol, Double>
+    bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure> {
-    public override val zero: DerivativeStructure by lazy { DerivativeStructure(bindings.size, order) }
-    public override val one: DerivativeStructure by lazy { DerivativeStructure(bindings.size, order, 1.0) }
+    public val numberOfVariables: Int = bindings.size
+
+    public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
+    public override val one: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order, 1.0) }
 
     /**
      * A class that implements both [DerivativeStructure] and a [Symbol]
      */
-    public inner class DerivativeStructureSymbol(symbol: Symbol, value: Double) :
-        DerivativeStructure(bindings.size, order, bindings.keys.indexOf(symbol), value), Symbol {
+    public inner class DerivativeStructureSymbol(
+        size: Int,
+        index: Int,
+        symbol: Symbol,
+        value: Double,
+    ) : DerivativeStructure(size, order, index, value), Symbol {
         override val identity: String = symbol.identity
         override fun toString(): String = identity
         override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
@@ -31,27 +37,26 @@ public class DerivativeStructureField(
     /**
      * Identity-based symbol bindings map
      */
-    private val variables: Map<String, DerivativeStructureSymbol> = bindings.entries.associate { (key, value) ->
-        key.identity to DerivativeStructureSymbol(key, value)
-    }
+    private val variables: Map<String, DerivativeStructureSymbol> = bindings.entries.mapIndexed { index, (key, value) ->
+        key.identity to DerivativeStructureSymbol(numberOfVariables, index, key, value)
+    }.toMap()
 
-    override fun const(value: Double): DerivativeStructure = DerivativeStructure(bindings.size, order,  value)
+    override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
 
     public override fun bindOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
 
     public fun bind(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
 
-    //public fun Number.const(): DerivativeStructure = const(toDouble())
+    override fun symbol(value: String): DerivativeStructureSymbol = bind(StringSymbol(value))
 
-    public fun DerivativeStructure.derivative(parameter: Symbol, order: Int = 1): Double {
-        return derivative(mapOf(parameter to order))
+    public fun DerivativeStructure.derivative(symbols: List<Symbol>): Double {
+        require(symbols.size <= order) { "The order of derivative ${symbols.size} exceeds computed order $order" }
+        val ordersCount = symbols.map { it.identity }.groupBy { it }.mapValues { it.value.size }
+        return getPartialDerivative(*variables.keys.map { ordersCount[it] ?: 0 }.toIntArray())
     }
 
-    public fun DerivativeStructure.derivative(orders: Map<Symbol, Int>): Double {
-        return getPartialDerivative(*bindings.keys.map { orders[it] ?: 0 }.toIntArray())
-    }
+    public fun DerivativeStructure.derivative(vararg symbols: Symbol): Double = derivative(symbols.toList())
 
-    public fun DerivativeStructure.derivative(vararg orders: Pair<Symbol, Int>): Double = derivative(mapOf(*orders))
     public override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
 
     public override fun multiply(a: DerivativeStructure, k: Number): DerivativeStructure = when (k) {
@@ -90,26 +95,27 @@ public class DerivativeStructureField(
     public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
     public override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
 
-    public companion object : AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField> {
-        override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double> {
-            return DerivativeStructureExpression(function)
-        }
+    public companion object :
+        AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField, Expression<Double>> {
+        public override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double, Expression<Double>> =
+            DerivativeStructureExpression(function)
     }
 }
+
 
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
 public class DerivativeStructureExpression(
     public val function: DerivativeStructureField.() -> DerivativeStructure,
-) : DifferentiableExpression<Double> {
+) : DifferentiableExpression<Double, Expression<Double>> {
     public override operator fun invoke(arguments: Map<Symbol, Double>): Double =
         DerivativeStructureField(0, arguments).function().value
 
     /**
      * Get the derivative expression with given orders
      */
-    public override fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<Double> = Expression { arguments ->
-        with(DerivativeStructureField(orders.values.maxOrNull() ?: 0, arguments)) { function().derivative(orders) }
+    public override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression { arguments ->
+        with(DerivativeStructureField(symbols.size, arguments)) { function().derivative(symbols) }
     }
 }

@@ -73,7 +73,7 @@ public interface NDAlgebra<T, C, N : NDStructure<T>> {
     public fun check(vararg elements: N): Array<out N> = elements
         .map(NDStructure<T>::shape)
         .singleOrNull { !shape.contentEquals(it) }
-        ?.let { throw ShapeMismatchException(shape, it) }
+        ?.let<IntArray, Array<out N>> { throw ShapeMismatchException(shape, it) }
         ?: elements
 
     /**
