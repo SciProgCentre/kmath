@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.KSciencePublishPlugin
+
 plugins {
     id("ru.mipt.npm.project")
 }
@@ -17,6 +19,7 @@ allprojects {
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://jitpack.io")
+        maven("http://logicrunch.research.it.uu.se/maven/")
         mavenCentral()
     }
 
@@ -25,7 +28,7 @@ allprojects {
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishPlugin>()
+    if (name.startsWith("kmath")) apply<KSciencePublishPlugin>()
 }
 
 readme {

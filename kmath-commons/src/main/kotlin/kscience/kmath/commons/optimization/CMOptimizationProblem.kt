@@ -19,9 +19,8 @@ import kotlin.reflect.KClass
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
-public class CMOptimizationProblem(
-    override val symbols: List<Symbol>,
-) : OptimizationProblem<Double>, SymbolIndexer, OptimizationFeature {
+public class CMOptimizationProblem(override val symbols: List<Symbol>, ) :
+    OptimizationProblem<Double>, SymbolIndexer, OptimizationFeature {
     private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
     private var optimizatorBuilder: (() -> MultivariateOptimizer)? = null
     public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(DEFAULT_RELATIVE_TOLERANCE,
@@ -49,7 +48,7 @@ public class CMOptimizationProblem(
         addOptimizationData(objectiveFunction)
     }
 
-    public override fun diffExpression(expression: DifferentiableExpression<Double>): Unit {
+    public override fun diffExpression(expression: DifferentiableExpression<Double, Expression<Double>>) {
         expression(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()

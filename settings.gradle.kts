@@ -1,8 +1,7 @@
 pluginManagement {
     repositories {
-        mavenLocal()
-        jcenter()
         gradlePluginPortal()
+        jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://dl.bintray.com/mipt-npm/dev")

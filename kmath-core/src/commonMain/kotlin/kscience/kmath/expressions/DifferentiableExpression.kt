@@ -6,7 +6,7 @@ package kscience.kmath.expressions
  * @param T the type this expression takes as argument and returns.
  * @param R the type of expression this expression can be differentiated to.
  */
-public interface DifferentiableExpression<T, R : Expression<T>> : Expression<T> {
+public interface DifferentiableExpression<T, out R : Expression<T>> : Expression<T> {
     /**
      * Differentiates this expression by ordered collection of [symbols].
      *
@@ -43,6 +43,6 @@ public abstract class FirstDerivativeExpression<T, R : Expression<T>> : Differen
 /**
  * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
  */
-public fun interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>, R : Expression<T>> {
+public fun interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
     public fun process(function: A.() -> I): DifferentiableExpression<T, R>
 }
