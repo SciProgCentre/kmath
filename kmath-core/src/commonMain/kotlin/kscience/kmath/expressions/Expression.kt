@@ -22,7 +22,9 @@ public inline class StringSymbol(override val identity: String) : Symbol {
 }
 
 /**
- * An elementary function that could be invoked on a map of arguments
+ * An elementary function that could be invoked on a map of arguments.
+ *
+ * @param T the type this expression takes as argument and returns.
  */
 public fun interface Expression<T> {
     /**

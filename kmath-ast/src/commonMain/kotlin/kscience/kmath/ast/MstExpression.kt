@@ -13,7 +13,7 @@ import kotlin.contracts.contract
  * @property mst the [MST] node.
  * @author Alexander Nozik
  */
-public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MST) : Expression<T> {
+public class MstExpression<T, out A : Algebra<T>>(public val algebra: A, public val mst: MST) : Expression<T> {
     private inner class InnerAlgebra(val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
         override fun symbol(value: String): T = arguments[StringSymbol(value)] ?: algebra.symbol(value)
         override fun unaryOperation(operation: String, arg: T): T = algebra.unaryOperation(operation, arg)
@@ -21,8 +21,9 @@ public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MS
         override fun binaryOperation(operation: String, left: T, right: T): T =
             algebra.binaryOperation(operation, left, right)
 
-        override fun number(value: Number): T = if (algebra is NumericAlgebra)
-            algebra.number(value)
+        @Suppress("UNCHECKED_CAST")
+        override fun number(value: Number): T = if (algebra is NumericAlgebra<*>)
+            (algebra as NumericAlgebra<T>).number(value)
         else
             error("Numeric nodes are not supported by $this")
     }
@@ -38,14 +39,14 @@ public class MstExpression<T>(public val algebra: Algebra<T>, public val mst: MS
 public inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
     mstAlgebra: E,
     block: E.() -> MST,
-): MstExpression<T> = MstExpression(this, mstAlgebra.block())
+): MstExpression<T, A> = MstExpression(this, mstAlgebra.block())
 
 /**
  * Builds [MstExpression] over [Space].
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Space<T>> A.mstInSpace(block: MstSpace.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstSpace.block())
 }
@@ -55,7 +56,7 @@ public inline fun <reified T : Any> Space<T>.mstInSpace(block: MstSpace.() -> MS
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Ring<T>> A.mstInRing(block: MstRing.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstRing.block())
 }
@@ -65,7 +66,7 @@ public inline fun <reified T : Any> Ring<T>.mstInRing(block: MstRing.() -> MST):
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Field<T>> A.mstInField(block: MstField.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstField.block())
 }
@@ -75,7 +76,7 @@ public inline fun <reified T : Any> Field<T>.mstInField(block: MstField.() -> MS
  *
  * @author Iaroslav Postovalov
  */
-public inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : ExtendedField<T>> A.mstInExtendedField(block: MstExtendedField.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstExtendedField.block())
 }
@@ -85,7 +86,7 @@ public inline fun <reified T : Any> Field<T>.mstInExtendedField(block: MstExtend
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInSpace(block)
 }
@@ -95,7 +96,7 @@ public inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRing(block: MstRing.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.mstInRing(block: MstRing.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInRing(block)
 }
@@ -105,7 +106,7 @@ public inline fun <reified T : Any, A : Ring<T>> FunctionalExpressionRing<T, A>.
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstInField(block: MstField.() -> MST): MstExpression<T> {
+public inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A>.mstInField(block: MstField.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInField(block)
 }
@@ -117,7 +118,7 @@ public inline fun <reified T : Any, A : Field<T>> FunctionalExpressionField<T, A
  */
 public inline fun <reified T : Any, A : ExtendedField<T>> FunctionalExpressionExtendedField<T, A>.mstInExtendedField(
     block: MstExtendedField.() -> MST,
-): MstExpression<T> {
+): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return algebra.mstInExtendedField(block)
 }

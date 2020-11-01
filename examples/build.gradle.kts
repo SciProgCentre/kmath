@@ -8,18 +8,25 @@ plugins {
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
+sourceSets.register("benchmarks")
 
 repositories {
-    maven("https://dl.bintray.com/mipt-npm/kscience")
+    jcenter()
+    maven("https://clojars.org/repo")
+    maven("https://dl.bintray.com/egor-bogomolov/astminer/")
+    maven("https://dl.bintray.com/hotkeytlt/maven")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    maven("https://dl.bintray.com/kotlin/kotlinx")
     maven("https://dl.bintray.com/mipt-npm/dev")
-    maven("https://dl.bintray.com/kotlin/kotlin-dev/")
+    maven("https://dl.bintray.com/mipt-npm/kscience")
+    maven("https://jitpack.io")
+    maven("http://logicrunch.research.it.uu.se/maven/")
     mavenCentral()
 }
 
-sourceSets.register("benchmarks")
-
 dependencies {
     implementation(project(":kmath-ast"))
+    implementation(project(":kmath-kotlingrad"))
     implementation(project(":kmath-core"))
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))

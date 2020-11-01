@@ -12,16 +12,18 @@ public object Fitting {
      * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
      */
     public fun <T : Any, I : Any, A> chiSquared(
-        autoDiff: AutoDiffProcessor<T, I, A>,
+        autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
         x: Buffer<T>,
         y: Buffer<T>,
         yErr: Buffer<T>,
         model: A.(I) -> I,
-    ): DifferentiableExpression<T> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
+    ): DifferentiableExpression<T, Expression<T>> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
         require(x.size == y.size) { "X and y buffers should be of the same size" }
         require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
+
         return autoDiff.process {
             var sum = zero
+
             x.indices.forEach {
                 val xValue = const(x[it])
                 val yValue = const(y[it])
@@ -29,6 +31,7 @@ public object Fitting {
                 val modelValue = model(xValue)
                 sum += ((yValue - modelValue) / yErrValue).pow(2)
             }
+
             sum
         }
     }
@@ -45,6 +48,7 @@ public object Fitting {
     ): Expression<Double> {
         require(x.size == y.size) { "X and y buffers should be of the same size" }
         require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
+
         return Expression { arguments ->
             x.indices.sumByDouble {
                 val xValue = x[it]
