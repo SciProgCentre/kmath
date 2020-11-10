@@ -4,6 +4,8 @@ import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.StringSymbol
 import kscience.kmath.operations.*
 
+private val spreader = eval("(obj, args) => obj(...args)")
+
 public fun compileMstToWasmF64(mst: MST): Expression<Double> {
     val keys = mutableListOf<String>()
 
@@ -75,7 +77,6 @@ public fun compileMstToWasmF64(mst: MST): Expression<Double> {
 
     return Expression { args ->
         val params = keys.map { StringSymbol(it) }.map { args.getValue(it) }.toTypedArray()
-        val spreader = eval("(obj, args) => obj(...args)")
         spreader(i.exports.asDynamic().executable, params) as Double
     }
 }

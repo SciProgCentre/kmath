@@ -8,12 +8,11 @@
     "KDocMissingDocumentation",
     "PropertyName",
     "ClassName",
-    "SortModifiers",
-    "SpellCheckingInspection",
 )
 
 @file:JsModule("binaryen")
 @file:JsNonModule
+
 package binaryen
 
 import org.khronos.webgl.Uint8Array
@@ -1649,7 +1648,7 @@ external interface `T$27` {
     var sourceMap: String?
 }
 
-external open class Module {
+open external class Module {
     open var ptr: Number
     open fun block(label: String, children: Array<ExpressionRef>, resultType: Type = definedExternally): ExpressionRef
     open fun `if`(
@@ -2222,7 +2221,7 @@ external fun setOneCallerInlineMaxSize(size: Number)
 
 external fun exit(status: Number)
 
-external open class Relooper(module: Module) {
+open external class Relooper(module: Module) {
     open fun addBlock(expression: ExpressionRef): RelooperBlockRef
     open fun addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition: ExpressionRef, code: ExpressionRef)
     open fun addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): RelooperBlockRef

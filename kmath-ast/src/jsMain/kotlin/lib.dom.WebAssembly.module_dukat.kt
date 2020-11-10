@@ -1,8 +1,16 @@
 @file:JsQualifier("WebAssembly")
-@file:Suppress("INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "KDocMissingDocumentation", "PackageDirectoryMismatch", "PackageName",
-    "Reformat", "ClassName", "SortModifiers"
+
+@file:Suppress(
+    "INTERFACE_WITH_SUPERCLASS",
+    "OVERRIDING_FINAL_MEMBER",
+    "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
+    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING",
+    "KDocMissingDocumentation",
+    "PackageDirectoryMismatch",
+    "PackageName",
+    "ClassName",
 )
+
 package WebAssembly
 
 import org.khronos.webgl.ArrayBuffer
@@ -132,7 +140,10 @@ external fun compileStreaming(source: Response): Promise<Module>
 
 external fun compileStreaming(source: Promise<Response>): Promise<Module>
 
-external fun instantiate(bytes: ArrayBufferView, importObject: Imports = definedExternally): Promise<WebAssemblyInstantiatedSource>
+external fun instantiate(
+    bytes: ArrayBufferView,
+    importObject: Imports = definedExternally
+): Promise<WebAssemblyInstantiatedSource>
 
 external fun instantiate(bytes: ArrayBufferView): Promise<WebAssemblyInstantiatedSource>
 
@@ -144,11 +155,17 @@ external fun instantiate(moduleObject: Module, importObject: Imports = definedEx
 
 external fun instantiate(moduleObject: Module): Promise<Instance>
 
-external fun instantiateStreaming(response: Response, importObject: Imports = definedExternally): Promise<WebAssemblyInstantiatedSource>
+external fun instantiateStreaming(
+    response: Response,
+    importObject: Imports = definedExternally
+): Promise<WebAssemblyInstantiatedSource>
 
 external fun instantiateStreaming(response: Response): Promise<WebAssemblyInstantiatedSource>
 
-external fun instantiateStreaming(response: PromiseLike<Response>, importObject: Imports = definedExternally): Promise<WebAssemblyInstantiatedSource>
+external fun instantiateStreaming(
+    response: PromiseLike<Response>,
+    importObject: Imports = definedExternally
+): Promise<WebAssemblyInstantiatedSource>
 
 external fun instantiateStreaming(response: PromiseLike<Response>): Promise<WebAssemblyInstantiatedSource>
 
@@ -167,7 +184,7 @@ external interface `T$1` {
     var kind: String
 }
 
-external open class Module {
+open external class Module {
     constructor(bufferSource: ArrayBuffer)
     constructor(bufferSource: Uint8Array)
 
@@ -179,18 +196,18 @@ external open class Module {
 }
 
 @JsName("Instance")
-external open class Instance(module: Module, importObject: Any = definedExternally) {
+open external class Instance(module: Module, importObject: Any = definedExternally) {
     open var exports: Any
 }
 
 @JsName("Memory")
-external open class Memory1(memoryDescriptor: MemoryDescriptor) {
+open external class Memory1(memoryDescriptor: MemoryDescriptor) {
     open var buffer: ArrayBuffer
     open fun grow(numPages: Number): Number
 }
 
 @JsName("Table")
-external open class Table1(tableDescriptor: TableDescriptor) {
+open external class Table1(tableDescriptor: TableDescriptor) {
     open var length: Number
     open fun get(index: Number): Function<*>
     open fun grow(numElements: Number): Number
