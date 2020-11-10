@@ -37,8 +37,6 @@ internal class ComplexFieldTest {
         assertEquals(Complex(42, 42), ComplexField { Complex(0, 168) / Complex(2, 2) })
         assertEquals(Complex(42, 56), ComplexField { Complex(86, 56) - 44 })
         assertEquals(Complex(42, 56), ComplexField { 86 - Complex(44, -56) })
-        assertEquals(Complex(Double.NaN, Double.NaN), ComplexField { Complex(1, 1) / Complex(Double.NaN, Double.NaN) })
-        assertEquals(Complex(Double.NaN, Double.NaN), ComplexField { Complex(1, 1) / Complex(0, 0) })
     }
 
     @Test
