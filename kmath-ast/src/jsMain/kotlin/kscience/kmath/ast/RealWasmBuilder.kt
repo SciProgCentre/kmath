@@ -1,6 +1,5 @@
 package kscience.kmath.ast
 
-import binaryen.readBinary
 import kscience.kmath.operations.*
 
 private const val ARGS_PTR = 0
@@ -9,7 +8,7 @@ private const val ARGS_SIZE = 1
 public fun compileMstToWasmF64(mst: MST) {
     val keys = mutableListOf<String>()
 
-    val bin = with(readBinary(rt)) {
+    val bin = with(binaryen.parseText(INITIAL)) {
         fun MST.visit(): binaryen.ExpressionRef = when (this) {
             is MST.Symbolic -> {
                 var idx = keys.indexOf(value)
@@ -48,7 +47,7 @@ public fun compileMstToWasmF64(mst: MST) {
             mst.visit()
         )
 
-        setMemory(0, 10000)
+//        setMemory(0, 10000)
         addFunctionExport("executable", "executable")
         optimize()
 
@@ -58,4 +57,6 @@ public fun compileMstToWasmF64(mst: MST) {
         println(emitText())
         emitBinary()
     }
+
+
 }
