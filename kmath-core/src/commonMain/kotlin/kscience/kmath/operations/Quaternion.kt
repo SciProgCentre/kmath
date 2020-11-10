@@ -41,12 +41,12 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     /**
      * The `i` quaternion unit.
      */
-    public val i: Quaternion by lazy { Quaternion(0, 1, 0, 0) }
+    public val i: Quaternion by lazy { Quaternion(0, 1) }
 
     /**
      * The `j` quaternion unit.
      */
-    public val j: Quaternion by lazy { Quaternion(0, 0, 1, 0) }
+    public val j: Quaternion by lazy { Quaternion(0, 0, 1) }
 
     /**
      * The `k` quaternion unit.
@@ -104,41 +104,23 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         }
     }
 
-    private inline fun pwr2(x: Quaternion): Quaternion {
+    private fun pwr2(x: Quaternion): Quaternion {
         val aa = 2 * x.w
-
-        return Quaternion(
-            x.w * x.w - (x.x * x.x + x.y * x.y + x.z * x.z),
-            aa * x.x,
-            aa * x.y,
-            aa * x.z
-        )
+        return Quaternion(x.w * x.w - (x.x * x.x + x.y * x.y + x.z * x.z), aa * x.x, aa * x.y, aa * x.z)
     }
 
-    private inline fun pwr3(x: Quaternion): Quaternion {
+    private fun pwr3(x: Quaternion): Quaternion {
         val a2 = x.w * x.w
         val n1 = x.x * x.x + x.y * x.y + x.z * x.z
         val n2 = 3.0 * a2 - n1
-
-        return Quaternion(
-            x.w * (a2 - 3 * n1),
-            x.x * n2,
-            x.y * n2,
-            x.z * n2
-        )
+        return Quaternion(x.w * (a2 - 3 * n1), x.x * n2, x.y * n2, x.z * n2)
     }
 
-    private inline fun pwr4(x: Quaternion): Quaternion {
+    private fun pwr4(x: Quaternion): Quaternion {
         val a2 = x.w * x.w
         val n1 = x.x * x.x + x.y * x.y + x.z * x.z
         val n2 = 4 * x.w * (a2 - n1)
-
-        return Quaternion(
-            a2 * a2 - 6 * a2 * n1 + n1 * n1,
-            x.x * n2,
-            x.y * n2,
-            x.z * n2
-        )
+        return Quaternion(a2 * a2 - 6 * a2 * n1 + n1 * n1, x.x * n2, x.y * n2, x.z * n2)
     }
 
     public override fun exp(arg: Quaternion): Quaternion {
@@ -212,6 +194,13 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
     public constructor(w: Number) : this(w.toDouble(), 0.0, 0.0, 0.0)
     public constructor(wx: Complex, yz: Complex) : this(wx.re, wx.im, yz.re, yz.im)
     public constructor(wx: Complex) : this(wx.re, wx.im, 0, 0)
+
+    init {
+        require(!w.isNaN()) { "w-component of quaternion is not-a-number" }
+        require(!x.isNaN()) { "x-component of quaternion is not-a-number" }
+        require(!y.isNaN()) { "x-component of quaternion is not-a-number" }
+        require(!z.isNaN()) { "x-component of quaternion is not-a-number" }
+    }
 
     public override val context: QuaternionField
         get() = QuaternionField

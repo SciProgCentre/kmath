@@ -57,26 +57,24 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
         Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
 
     public override fun divide(a: Complex, b: Complex): Complex = when {
-        b.re.isNaN() || b.im.isNaN() -> Complex(Double.NaN, Double.NaN)
-
         abs(b.im) < abs(b.re) -> {
             val wr = b.im / b.re
             val wd = b.re + wr * b.im
 
             if (wd.isNaN() || wd == 0.0)
-                Complex(Double.NaN, Double.NaN)
+                throw ArithmeticException("Division by zero or infinity")
             else
                 Complex((a.re + a.im * wr) / wd, (a.im - a.re * wr) / wd)
         }
 
-        b.im == 0.0 -> Complex(Double.NaN, Double.NaN)
+        b.im == 0.0 -> throw ArithmeticException("Division by zero")
 
         else -> {
             val wr = b.re / b.im
             val wd = b.im + wr * b.re
 
             if (wd.isNaN() || wd == 0.0)
-                Complex(Double.NaN, Double.NaN)
+                throw ArithmeticException("Division by zero or infinity")
             else
                 Complex((a.re * wr + a.im) / wd, (a.im * wr - a.re) / wd)
         }
@@ -129,6 +127,11 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
 
     public override val context: ComplexField
         get() = ComplexField
+
+    init {
+        require(!re.isNaN()) { "Real component of complex is not-a-number" }
+        require(!im.isNaN()) { "Imaginary component of complex is not-a-number" }
+    }
 
     public override fun unwrap(): Complex = this
     public override fun Complex.wrap(): Complex = this

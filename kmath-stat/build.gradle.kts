@@ -3,6 +3,13 @@ plugins {
 }
 
 kotlin.sourceSets {
+    all {
+        languageSettings.apply {
+            useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
+            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
+    }
+
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
