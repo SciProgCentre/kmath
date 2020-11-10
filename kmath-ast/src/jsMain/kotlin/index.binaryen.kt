@@ -1,7 +1,15 @@
 @file:Suppress(
-    "INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "KDocMissingDocumentation", "SortModifiers", "SpellCheckingInspection",
-    "ClassName"
+    "INTERFACE_WITH_SUPERCLASS",
+    "OVERRIDING_FINAL_MEMBER",
+    "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
+    "CONFLICTING_OVERLOADS",
+    "PackageDirectoryMismatch",
+    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING",
+    "KDocMissingDocumentation",
+    "PropertyName",
+    "ClassName",
+    "SortModifiers",
+    "SpellCheckingInspection",
 )
 
 @file:JsModule("binaryen")
@@ -12,21 +20,35 @@ import org.khronos.webgl.Uint8Array
 import kotlin.js.Promise
 
 external var isReady: Boolean
+
 external var ready: Promise<Any>
+
 external var none: Type
+
 external var i32: Type
+
 external var i64: Type
+
 external var f32: Type
+
 external var f64: Type
+
 external var v128: Type
+
 external var funcref: Type
+
 external var anyref: Type
+
 external var nullref: Type
+
 external var exnref: Type
+
 external var unreachable: Type
+
 external var auto: Type
 
 external fun createType(types: Array<Type>): Type
+
 external fun expandType(type: Type): Array<Type>
 
 external enum class ExpressionIds {
@@ -1180,19 +1202,18 @@ external var WidenHighUVecI16x8ToVecI32x4: Operations
 
 external var SwizzleVec8x16: Operations
 
-
-external interface `T$0` {
+external interface `T$2` {
     fun get(index: Number, type: Type): ExpressionRef
     fun set(index: Number, value: ExpressionRef): ExpressionRef
     fun tee(index: Number, value: ExpressionRef, type: Type): ExpressionRef
 }
 
-external interface `T$1` {
+external interface `T$3` {
     fun get(name: String, type: Type): ExpressionRef
     fun set(name: String, value: ExpressionRef): ExpressionRef
 }
 
-external interface `T$2` {
+external interface `T$4` {
     fun size(): ExpressionRef
     fun grow(value: ExpressionRef): ExpressionRef
     fun init(segment: Number, dest: ExpressionRef, offset: ExpressionRef, size: ExpressionRef): ExpressionRef
@@ -1200,16 +1221,16 @@ external interface `T$2` {
     fun fill(dest: ExpressionRef, value: ExpressionRef, size: ExpressionRef): ExpressionRef
 }
 
-external interface `T$3` {
+external interface `T$5` {
     fun drop(segment: Number): ExpressionRef
 }
 
-external interface `T$4` {
+external interface `T$6` {
     fun f32(value: ExpressionRef): ExpressionRef
     fun f64(value: ExpressionRef): ExpressionRef
 }
 
-external interface `T$5` {
+external interface `T$7` {
     fun add(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun sub(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun and(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
@@ -1219,20 +1240,20 @@ external interface `T$5` {
     fun cmpxchg(offset: Number, ptr: ExpressionRef, expected: ExpressionRef, replacement: ExpressionRef): ExpressionRef
 }
 
-external interface `T$6` {
+external interface `T$8` {
     fun load(offset: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_u(offset: Number, ptr: ExpressionRef): ExpressionRef
     fun load16_u(offset: Number, ptr: ExpressionRef): ExpressionRef
     fun store(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun store8(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun store16(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
-    var rmw: `T$5`
-    var rmw8_u: `T$5`
-    var rmw16_u: `T$5`
+    var rmw: `T$7`
+    var rmw8_u: `T$7`
+    var rmw16_u: `T$7`
     fun wait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef): ExpressionRef
 }
 
-external interface `T$7` {
+external interface `T$9` {
     fun load(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_s(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_u(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
@@ -1246,10 +1267,10 @@ external interface `T$7` {
     fun ctz(value: ExpressionRef): ExpressionRef
     fun popcnt(value: ExpressionRef): ExpressionRef
     fun eqz(value: ExpressionRef): ExpressionRef
-    var trunc_s: `T$4`
-    var trunc_u: `T$4`
-    var trunc_s_sat: `T$4`
-    var trunc_u_sat: `T$4`
+    var trunc_s: `T$6`
+    var trunc_u: `T$6`
+    var trunc_s_sat: `T$6`
+    var trunc_u_sat: `T$6`
     fun reinterpret(value: ExpressionRef): ExpressionRef
     fun extend8_s(value: ExpressionRef): ExpressionRef
     fun extend16_s(value: ExpressionRef): ExpressionRef
@@ -1279,11 +1300,11 @@ external interface `T$7` {
     fun gt_u(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun ge_s(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun ge_u(left: ExpressionRef, right: ExpressionRef): ExpressionRef
-    var atomic: `T$6`
+    var atomic: `T$8`
     fun pop(): ExpressionRef
 }
 
-external interface `T$8` {
+external interface `T$10` {
     fun load(offset: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_u(offset: Number, ptr: ExpressionRef): ExpressionRef
     fun load16_u(offset: Number, ptr: ExpressionRef): ExpressionRef
@@ -1292,14 +1313,14 @@ external interface `T$8` {
     fun store8(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun store16(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun store32(offset: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
-    var rmw: `T$5`
-    var rmw8_u: `T$5`
-    var rmw16_u: `T$5`
-    var rmw32_u: `T$5`
+    var rmw: `T$7`
+    var rmw8_u: `T$7`
+    var rmw16_u: `T$7`
+    var rmw32_u: `T$7`
     fun wait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef): ExpressionRef
 }
 
-external interface `T$9` {
+external interface `T$11` {
     fun load(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_s(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun load8_u(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
@@ -1316,10 +1337,10 @@ external interface `T$9` {
     fun ctz(value: ExpressionRef): ExpressionRef
     fun popcnt(value: ExpressionRef): ExpressionRef
     fun eqz(value: ExpressionRef): ExpressionRef
-    var trunc_s: `T$4`
-    var trunc_u: `T$4`
-    var trunc_s_sat: `T$4`
-    var trunc_u_sat: `T$4`
+    var trunc_s: `T$6`
+    var trunc_u: `T$6`
+    var trunc_s_sat: `T$6`
+    var trunc_u_sat: `T$6`
     fun reinterpret(value: ExpressionRef): ExpressionRef
     fun extend8_s(value: ExpressionRef): ExpressionRef
     fun extend16_s(value: ExpressionRef): ExpressionRef
@@ -1351,11 +1372,11 @@ external interface `T$9` {
     fun gt_u(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun ge_s(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun ge_u(left: ExpressionRef, right: ExpressionRef): ExpressionRef
-    var atomic: `T$8`
+    var atomic: `T$10`
     fun pop(): ExpressionRef
 }
 
-external interface `T$10` {
+external interface `T$12` {
     fun load(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun store(offset: Number, align: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun const(value: Number): ExpressionRef
@@ -1368,8 +1389,8 @@ external interface `T$10` {
     fun nearest(value: ExpressionRef): ExpressionRef
     fun sqrt(value: ExpressionRef): ExpressionRef
     fun reinterpret(value: ExpressionRef): ExpressionRef
-    var convert_s: `T$4`
-    var convert_u: `T$4`
+    var convert_s: `T$6`
+    var convert_u: `T$6`
     fun demote(value: ExpressionRef): ExpressionRef
     fun add(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun sub(left: ExpressionRef, right: ExpressionRef): ExpressionRef
@@ -1387,7 +1408,7 @@ external interface `T$10` {
     fun pop(): ExpressionRef
 }
 
-external interface `T$11` {
+external interface `T$13` {
     fun load(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun store(offset: Number, align: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun const(value: Number): ExpressionRef
@@ -1400,8 +1421,8 @@ external interface `T$11` {
     fun nearest(value: ExpressionRef): ExpressionRef
     fun sqrt(value: ExpressionRef): ExpressionRef
     fun reinterpret(value: ExpressionRef): ExpressionRef
-    var convert_s: `T$4`
-    var convert_u: `T$4`
+    var convert_s: `T$6`
+    var convert_u: `T$6`
     fun promote(value: ExpressionRef): ExpressionRef
     fun add(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun sub(left: ExpressionRef, right: ExpressionRef): ExpressionRef
@@ -1419,7 +1440,7 @@ external interface `T$11` {
     fun pop(): ExpressionRef
 }
 
-external interface `T$12` {
+external interface `T$14` {
     fun load(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
     fun store(offset: Number, align: Number, ptr: ExpressionRef, value: ExpressionRef): ExpressionRef
     fun const(value: Number): ExpressionRef
@@ -1432,7 +1453,7 @@ external interface `T$12` {
     fun pop(): ExpressionRef
 }
 
-external interface `T$13` {
+external interface `T$15` {
     fun splat(value: ExpressionRef): ExpressionRef
     fun extract_lane_s(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
     fun extract_lane_u(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
@@ -1469,7 +1490,7 @@ external interface `T$13` {
     fun narrow_i16x8_u(left: ExpressionRef, right: ExpressionRef): ExpressionRef
 }
 
-external interface `T$14` {
+external interface `T$16` {
     fun splat(value: ExpressionRef): ExpressionRef
     fun extract_lane_s(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
     fun extract_lane_u(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
@@ -1512,7 +1533,7 @@ external interface `T$14` {
     fun load8x8_u(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
 }
 
-external interface `T$15` {
+external interface `T$17` {
     fun splat(value: ExpressionRef): ExpressionRef
     fun extract_lane(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
     fun replace_lane(vec: ExpressionRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef
@@ -1545,7 +1566,7 @@ external interface `T$15` {
     fun load16x4_u(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
 }
 
-external interface `T$16` {
+external interface `T$18` {
     fun splat(value: ExpressionRef): ExpressionRef
     fun extract_lane(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
     fun replace_lane(vec: ExpressionRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef
@@ -1563,7 +1584,7 @@ external interface `T$16` {
     fun load32x2_u(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
 }
 
-external interface `T$17` {
+external interface `T$19` {
     fun splat(value: ExpressionRef): ExpressionRef
     fun extract_lane(vec: ExpressionRef, index: ExpressionRef): ExpressionRef
     fun replace_lane(vec: ExpressionRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef
@@ -1588,42 +1609,42 @@ external interface `T$17` {
     fun convert_i32x4_u(value: ExpressionRef): ExpressionRef
 }
 
-external interface `T$18` {
+external interface `T$20` {
     fun shuffle(left: ExpressionRef, right: ExpressionRef, mask: Array<Number>): ExpressionRef
     fun swizzle(left: ExpressionRef, right: ExpressionRef): ExpressionRef
     fun load_splat(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
 }
 
-external interface `T$19` {
+external interface `T$21` {
     fun load_splat(offset: Number, align: Number, ptr: ExpressionRef): ExpressionRef
 }
 
-external interface `T$20` {
+external interface `T$22` {
     fun pop(): ExpressionRef
 }
 
-external interface `T$21` {
+external interface `T$23` {
     fun `null`(): ExpressionRef
     fun is_null(value: ExpressionRef): ExpressionRef
     fun func(name: String): ExpressionRef
 }
 
-external interface `T$22` {
+external interface `T$24` {
     fun notify(ptr: ExpressionRef, notifyCount: ExpressionRef): ExpressionRef
     fun fence(): ExpressionRef
 }
 
-external interface `T$23` {
+external interface `T$25` {
     fun make(elements: Array<ExportRef>): ExpressionRef
     fun extract(tuple: ExpressionRef, index: Number): ExpressionRef
 }
 
-external interface `T$24` {
+external interface `T$26` {
     var imported: Boolean
     var segments: Array<TableElement>
 }
 
-external interface `T$25` {
+external interface `T$27` {
     var binary: Uint8Array
     var sourceMap: String?
 }
@@ -1673,32 +1694,32 @@ external open class Module {
         results: Type
     ): ExpressionRef
 
-    open var local: `T$0`
-    open var global: `T$1`
-    open var memory: `T$2`
-    open var data: `T$3`
-    open var i32: `T$7`
-    open var i64: `T$9`
-    open var f32: `T$10`
-    open var f64: `T$11`
-    open var v128: `T$12`
-    open var i8x16: `T$13`
-    open var i16x8: `T$14`
-    open var i32x4: `T$15`
-    open var i64x2: `T$16`
-    open var f32x4: `T$17`
-    open var f64x2: `T$17`
-    open var v8x16: `T$18`
-    open var v16x8: `T$19`
-    open var v32x4: `T$19`
-    open var v64x2: `T$19`
-    open var funcref: `T$20`
-    open var anyref: `T$20`
-    open var nullref: `T$20`
-    open var exnref: `T$20`
-    open var ref: `T$21`
-    open var atomic: `T$22`
-    open var tuple: `T$23`
+    open var local: `T$2`
+    open var global: `T$3`
+    open var memory: `T$4`
+    open var data: `T$5`
+    open var i32: `T$9`
+    open var i64: `T$11`
+    open var f32: `T$12`
+    open var f64: `T$13`
+    open var v128: `T$14`
+    open var i8x16: `T$15`
+    open var i16x8: `T$16`
+    open var i32x4: `T$17`
+    open var i64x2: `T$18`
+    open var f32x4: `T$19`
+    open var f64x2: `T$19`
+    open var v8x16: `T$20`
+    open var v16x8: `T$21`
+    open var v32x4: `T$21`
+    open var v64x2: `T$21`
+    open var funcref: `T$22`
+    open var anyref: `T$22`
+    open var nullref: `T$22`
+    open var exnref: `T$22`
+    open var ref: `T$23`
+    open var atomic: `T$24`
+    open var tuple: `T$25`
     open fun `try`(body: ExpressionRef, catchBody: ExpressionRef): ExpressionRef
     open fun `throw`(event: String, operands: Array<ExpressionRef>): ExpressionRef
     open fun rethrow(exnref: ExpressionRef): ExpressionRef
@@ -1767,7 +1788,7 @@ external open class Module {
         offset: ExpressionRef = definedExternally
     )
 
-    open fun getFunctionTable(): `T$24`
+    open fun getFunctionTable(): `T$26`
     open fun setMemory(
         initial: Number,
         maximum: Number,
@@ -1796,7 +1817,7 @@ external open class Module {
     open fun autoDrop()
     open fun dispose()
     open fun emitBinary(): Uint8Array
-    open fun emitBinary(sourceMapUrl: String?): `T$25`
+    open fun emitBinary(sourceMapUrl: String?): `T$27`
     open fun interpret()
     open fun addDebugInfoFileName(filename: String): Number
     open fun getDebugInfoFileName(index: Number): String?
@@ -1921,13 +1942,13 @@ external interface StoreInfo : ExpressionInfo {
     var value: ExpressionRef
 }
 
-external interface `T$26` {
+external interface `T$28` {
     var low: Number
     var high: Number
 }
 
 external interface ConstInfo : ExpressionInfo {
-    var value: dynamic /* Number | `T$26` */
+    var value: dynamic /* Number | `T$28` */
         get() = definedExternally
         set(value) = definedExternally
 }
