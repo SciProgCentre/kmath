@@ -63,7 +63,7 @@ internal sealed class WasmBuilder<T>(val binaryenType: Type, val kmathAlgebra: A
             )
 
             setOptimizeLevel(3)
-//          optimizeFunction("executable")
+            optimizeFunction("executable")
             addFunctionExport("executable", "executable")
             val res = emitBinary()
             dispose()
@@ -74,7 +74,7 @@ internal sealed class WasmBuilder<T>(val binaryenType: Type, val kmathAlgebra: A
         val i = Instance(c, js("{}") as Any)
 
         return Expression { args ->
-            val params = keys.map { StringSymbol(it) }.map { args.getValue(it) }.toTypedArray()
+            val params = keys.map(::StringSymbol).map(args::getValue).toTypedArray()
             keys.clear()
             spreader(i.exports.asDynamic().executable, params) as T
         }
