@@ -5,17 +5,13 @@ plugins {
 kotlin.js {
     nodejs { // or `browser`
         testTask {
-            useMocha {
-                timeout = "0"// mochaTimeout here as string
-            }
+            useMocha().timeout = "0"
         }
     }
 
-    browser { // or `browser`
+    browser {
         testTask {
-            useMocha {
-                timeout = "0"// mochaTimeout here as string
-            }
+            useMocha().timeout = "0"
         }
     }
 }
@@ -37,7 +33,7 @@ kotlin.sourceSets {
 
     jsMain {
         dependencies {
-            implementation(npm("binaryen", "98.0.0"))
+            implementation(npm("binaryen", "98.0.0-nightly.20201113"))
             implementation(npm("js-base64", "3.6.0"))
             implementation(npm("webassembly", "0.11.0"))
         }

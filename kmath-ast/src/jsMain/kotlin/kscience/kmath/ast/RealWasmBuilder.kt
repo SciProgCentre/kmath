@@ -11,7 +11,11 @@ import binaryen.Module as BinaryenModule
 private val spreader = eval("(obj, args) => obj(...args)")
 
 @Suppress("UnsafeCastFromDynamic")
-internal sealed class WasmBuilder<T>(val binaryenType: Type, val kmathAlgebra: Algebra<T>) where T : Number {
+internal sealed class WasmBuilder<T>(
+    val binaryenType: Type,
+    val kmathAlgebra: Algebra<T>,
+    val target: MST
+) where T : Number {
     val keys: MutableList<String> = mutableListOf()
     lateinit var ctx: BinaryenModule
 
@@ -49,10 +53,10 @@ internal sealed class WasmBuilder<T>(val binaryenType: Type, val kmathAlgebra: A
         is MST.Binary -> visitBinary(mst)
     }
 
-    fun compile(mst: MST): Expression<T> {
-        val bin = with(createModule()) {
+    val instance by lazy {
+        val c = WasmModule(with(createModule()) {
             ctx = this
-            val expr = visit(mst)
+            val expr = visit(target)
 
             addFunction(
                 "executable",
@@ -68,20 +72,20 @@ internal sealed class WasmBuilder<T>(val binaryenType: Type, val kmathAlgebra: A
             val res = emitBinary()
             dispose()
             res
-        }
+        })
 
-        val c = WasmModule(bin)
         val i = Instance(c, js("{}") as Any)
+        val symbols = keys.map(::StringSymbol)
+        keys.clear()
 
-        return Expression { args ->
-            val params = keys.map(::StringSymbol).map(args::getValue).toTypedArray()
-            keys.clear()
+        Expression<T> { args ->
+            val params = symbols.map(args::getValue).toTypedArray()
             spreader(i.exports.asDynamic().executable, params) as T
         }
     }
 }
 
-internal class RealWasmBuilder : WasmBuilder<Double>(f64, RealField) {
+internal class RealWasmBuilder(target: MST) : WasmBuilder<Double>(f64, RealField, target) {
     override fun createModule(): BinaryenModule = readBinary(f64StandardFunctions)
 
     override fun visitNumeric(mst: MST.Numeric): ExpressionRef = ctx.f64.const(mst.value)
@@ -117,7 +121,7 @@ internal class RealWasmBuilder : WasmBuilder<Double>(f64, RealField) {
     }
 }
 
-internal class IntWasmBuilder : WasmBuilder<Int>(i32, IntRing) {
+internal class IntWasmBuilder(target: MST) : WasmBuilder<Int>(i32, IntRing, target) {
     override fun visitNumeric(mst: MST.Numeric): ExpressionRef = ctx.i32.const(mst.value)
 
     override fun visitUnary(mst: MST.Unary): ExpressionRef = when (mst.operation) {

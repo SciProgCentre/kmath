@@ -49,7 +49,7 @@ public interface NumericAlgebra<T> : Algebra<T> {
      * Dynamic call of binary operation [operation] on [left] and [right] where right element is [Number].
      */
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
-        leftSideNumberOperation(operation, right, left)
+        binaryOperation(operation, left, number(right))
 }
 
 /**
