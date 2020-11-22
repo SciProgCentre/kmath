@@ -14,6 +14,7 @@
 - Chi squared optimization for array-like data in CM
 - `Fitting` utility object in prob/stat
 - ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
+- Coroutine-deterministic Monte-Carlo scope with a random number generator.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
