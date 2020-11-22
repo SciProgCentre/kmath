@@ -27,17 +27,17 @@ public interface OptimizationProblem<T : Any> {
     /**
      * Define the initial guess for the optimization problem
      */
-    public fun initialGuess(map: Map<Symbol, T>): Unit
+    public fun initialGuess(map: Map<Symbol, T>)
 
     /**
      * Set an objective function expression
      */
-    public fun expression(expression: Expression<T>): Unit
+    public fun expression(expression: Expression<T>)
 
     /**
      * Set a differentiable expression as objective function as function and gradient provider
      */
-    public fun diffExpression(expression: DifferentiableExpression<T>): Unit
+    public fun diffExpression(expression: DifferentiableExpression<T, Expression<T>>)
 
     /**
      * Update the problem from previous optimization run
@@ -50,16 +50,14 @@ public interface OptimizationProblem<T : Any> {
     public fun optimize(): OptimizationResult<T>
 }
 
-public interface OptimizationProblemFactory<T : Any, out P : OptimizationProblem<T>> {
+public fun interface OptimizationProblemFactory<T : Any, out P : OptimizationProblem<T>> {
     public fun build(symbols: List<Symbol>): P
-
 }
 
 public operator fun <T : Any, P : OptimizationProblem<T>> OptimizationProblemFactory<T, P>.invoke(
     symbols: List<Symbol>,
     block: P.() -> Unit,
 ): P = build(symbols).apply(block)
-
 
 /**
  * Optimize expression without derivatives using specific [OptimizationProblemFactory]
@@ -78,7 +76,7 @@ public fun <T : Any, F : OptimizationProblem<T>> Expression<T>.optimizeWith(
 /**
  * Optimize differentiable expression using specific [OptimizationProblemFactory]
  */
-public fun <T : Any, F : OptimizationProblem<T>>  DifferentiableExpression<T>.optimizeWith(
+public fun <T : Any, F : OptimizationProblem<T>>  DifferentiableExpression<T, Expression<T>>.optimizeWith(
     factory: OptimizationProblemFactory<T, F>,
     vararg symbols: Symbol,
     configuration: F.() -> Unit,
@@ -88,4 +86,3 @@ public fun <T : Any, F : OptimizationProblem<T>>  DifferentiableExpression<T>.op
     problem.diffExpression(this)
     return problem.optimize()
 }
-

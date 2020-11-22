@@ -95,10 +95,10 @@ public class DerivativeStructureField(
     public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
     public override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
 
-    public companion object : AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField> {
-        override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double> {
-            return DerivativeStructureExpression(function)
-        }
+    public companion object :
+        AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField, Expression<Double>> {
+        public override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double, Expression<Double>> =
+            DerivativeStructureExpression(function)
     }
 }
 
@@ -108,7 +108,7 @@ public class DerivativeStructureField(
  */
 public class DerivativeStructureExpression(
     public val function: DerivativeStructureField.() -> DerivativeStructure,
-) : DifferentiableExpression<Double> {
+) : DifferentiableExpression<Double, Expression<Double>> {
     public override operator fun invoke(arguments: Map<Symbol, Double>): Double =
         DerivativeStructureField(0, arguments).function().value
 

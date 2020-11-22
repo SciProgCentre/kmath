@@ -1,13 +1,11 @@
 pluginManagement {
     repositories {
-        mavenLocal()
-        jcenter()
         gradlePluginPortal()
+        jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
-        maven("https://dl.bintray.com/kotlin/kotlin-dev/")
     }
 
     val toolsVersion = "0.6.4-dev-1.4.20-M2"
@@ -41,5 +39,6 @@ include(
     ":kmath-geometry",
     ":kmath-ast",
     ":kmath-ejml",
+    ":kmath-kotlingrad",
     ":examples"
 )
