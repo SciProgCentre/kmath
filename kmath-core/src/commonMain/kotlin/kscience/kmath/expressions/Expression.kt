@@ -3,6 +3,7 @@ package kscience.kmath.expressions
 import kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * A marker interface for a symbol. A symbol mus have an identity
@@ -12,6 +13,13 @@ public interface Symbol {
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
      */
     public val identity: String
+
+    public companion object : ReadOnlyProperty<Any?, Symbol> {
+        //TODO deprecate and replace by top level function after fix of https://youtrack.jetbrains.com/issue/KT-40121
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Symbol {
+            return StringSymbol(property.name)
+        }
+    }
 }
 
 /**
@@ -22,7 +30,9 @@ public inline class StringSymbol(override val identity: String) : Symbol {
 }
 
 /**
- * An elementary function that could be invoked on a map of arguments
+ * An elementary function that could be invoked on a map of arguments.
+ *
+ * @param T the type this expression takes as argument and returns.
  */
 public fun interface Expression<T> {
     /**
@@ -35,20 +45,27 @@ public fun interface Expression<T> {
 }
 
 /**
- * Invoke an expression without parameters
+ * Calls this expression without providing any arguments.
+ *
+ * @return a value.
  */
 public operator fun <T> Expression<T>.invoke(): T = invoke(emptyMap())
-//This method exists to avoid resolution ambiguity of vararg methods
 
 /**
  * Calls this expression from arguments.
  *
- * @param pairs the pair of arguments' names to values.
- * @return the value.
+ * @param pairs the pairs of arguments to values.
+ * @return a value.
  */
 @JvmName("callBySymbol")
 public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T = invoke(mapOf(*pairs))
 
+/**
+ * Calls this expression from arguments.
+ *
+ * @param pairs the pairs of arguments' names to values.
+ * @return a value.
+ */
 @JvmName("callByString")
 public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
     invoke(mapOf(*pairs).mapKeys { StringSymbol(it.key) })
@@ -61,7 +78,6 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
  * @param E type of the actual expression state
  */
 public interface ExpressionAlgebra<in T, E> : Algebra<E> {
-
     /**
      * Bind a given [Symbol] to this context variable and produce context-specific object. Return null if symbol could not be bound in current context.
      */
@@ -87,9 +103,9 @@ public fun <T, E> ExpressionAlgebra<T, E>.bind(symbol: Symbol): E =
 /**
  * A delegate to create a symbol with a string identity in this scope
  */
-public val symbol: ReadOnlyProperty<Any?, StringSymbol> =    ReadOnlyProperty { thisRef, property ->
-    StringSymbol(property.name)
-}
+public val symbol: ReadOnlyProperty<Any?, Symbol> get() = Symbol
+//TODO does not work directly on native due to https://youtrack.jetbrains.com/issue/KT-40121
+
 
 /**
  * Bind a symbol by name inside the [ExpressionAlgebra]

@@ -5,19 +5,19 @@ package kscience.kmath.structures
  *
  * @property array the underlying array.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 public inline class RealBuffer(public val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
-    override operator fun get(index: Int): Double = array[index]
+    override inline operator fun get(index: Int): Double = array[index]
 
-    override operator fun set(index: Int, value: Double) {
+    override inline operator fun set(index: Int, value: Double) {
         array[index] = value
     }
 
     override operator fun iterator(): DoubleIterator = array.iterator()
 
-    override fun copy(): MutableBuffer<Double> =
-        RealBuffer(array.copyOf())
+    override fun copy(): RealBuffer = RealBuffer(array.copyOf())
 }
 
 /**
@@ -33,6 +33,11 @@ public inline fun RealBuffer(size: Int, init: (Int) -> Double): RealBuffer = Rea
  * Returns a new [RealBuffer] of given elements.
  */
 public fun RealBuffer(vararg doubles: Double): RealBuffer = RealBuffer(doubles)
+
+/**
+ * Simplified [RealBuffer] to array comparison
+ */
+public fun RealBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 /**
  * Returns a [DoubleArray] containing all of the elements of this [MutableBuffer].

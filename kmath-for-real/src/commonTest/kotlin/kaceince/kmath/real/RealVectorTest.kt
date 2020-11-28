@@ -1,11 +1,14 @@
-package kscience.kmath.linear
+package kaceince.kmath.real
 
+import kscience.kmath.linear.MatrixContext
+import kscience.kmath.linear.asMatrix
+import kscience.kmath.linear.transpose
 import kscience.kmath.operations.invoke
 import kscience.kmath.real.RealVector
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class VectorTest {
+internal class RealVectorTest {
     @Test
     fun testSum() {
         val vector1 = RealVector(5) { it.toDouble() }

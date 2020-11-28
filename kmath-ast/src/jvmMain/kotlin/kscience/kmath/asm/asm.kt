@@ -69,4 +69,5 @@ public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<
  *
  * @author Alexander Nozik.
  */
-public inline fun <reified T : Any> MstExpression<T>.compile(): Expression<T> = mst.compileWith(T::class.java, algebra)
+public inline fun <reified T : Any> MstExpression<T, Algebra<T>>.compile(): Expression<T> =
+    mst.compileWith(T::class.java, algebra)

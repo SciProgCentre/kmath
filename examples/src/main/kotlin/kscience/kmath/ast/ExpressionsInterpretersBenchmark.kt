@@ -9,11 +9,11 @@ import kscience.kmath.operations.RealField
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class ExpressionsInterpretersBenchmark {
+internal class ExpressionsInterpretersBenchmark {
     private val algebra: Field<Double> = RealField
     fun functionalExpression() {
         val expr = algebra.expressionInField {
-            variable("x") * const(2.0) + const(2.0) / variable("x") - const(16.0)
+            symbol("x") * const(2.0) + const(2.0) / symbol("x") - const(16.0)
         }
 
         invokeAndSum(expr)
@@ -47,6 +47,16 @@ class ExpressionsInterpretersBenchmark {
     }
 }
 
+/**
+ * This benchmark compares basically evaluation of simple function with MstExpression interpreter, ASM backend and
+ * core FunctionalExpressions API.
+ *
+ * The expected rating is:
+ *
+ * 1. ASM.
+ * 2. MST.
+ * 3. FE.
+ */
 fun main() {
     val benchmark = ExpressionsInterpretersBenchmark()
 

@@ -1,4 +1,6 @@
-plugins { id("ru.mipt.npm.mpp") }
+plugins {
+    id("ru.mipt.npm.mpp")
+}
 
 kotlin.sourceSets {
     all {

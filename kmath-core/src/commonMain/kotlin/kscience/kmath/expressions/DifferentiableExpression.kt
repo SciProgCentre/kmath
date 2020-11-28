@@ -1,32 +1,41 @@
 package kscience.kmath.expressions
 
 /**
- * An expression that provides derivatives
+ * Represents expression which structure can be differentiated.
+ *
+ * @param T the type this expression takes as argument and returns.
+ * @param R the type of expression this expression can be differentiated to.
  */
-public interface DifferentiableExpression<T> : Expression<T>{
-    public fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<T>?
+public interface DifferentiableExpression<T, out R : Expression<T>> : Expression<T> {
+    /**
+     * Differentiates this expression by ordered collection of [symbols].
+     *
+     * @param symbols the symbols.
+     * @return the derivative or `null`.
+     */
+    public fun derivativeOrNull(symbols: List<Symbol>): R?
 }
 
-public fun <T> DifferentiableExpression<T>.derivative(orders: Map<Symbol, Int>): Expression<T> =
-    derivativeOrNull(orders) ?: error("Derivative with orders $orders not provided")
+public fun <T, R : Expression<T>> DifferentiableExpression<T, R>.derivative(symbols: List<Symbol>): R =
+    derivativeOrNull(symbols) ?: error("Derivative by symbols $symbols not provided")
 
-public fun <T> DifferentiableExpression<T>.derivative(vararg orders: Pair<Symbol, Int>): Expression<T> =
-    derivative(mapOf(*orders))
+public fun <T, R : Expression<T>> DifferentiableExpression<T, R>.derivative(vararg symbols: Symbol): R =
+    derivative(symbols.toList())
 
-public fun <T> DifferentiableExpression<T>.derivative(symbol: Symbol): Expression<T> = derivative(symbol to 1)
-
-public fun <T> DifferentiableExpression<T>.derivative(name: String): Expression<T> =
-    derivative(StringSymbol(name) to 1)
+public fun <T, R : Expression<T>> DifferentiableExpression<T, R>.derivative(name: String): R =
+    derivative(StringSymbol(name))
 
 /**
  * A [DifferentiableExpression] that defines only first derivatives
  */
-public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T> {
+public abstract class FirstDerivativeExpression<T, R : Expression<T>> : DifferentiableExpression<T,R> {
+    /**
+     * Returns first derivative of this expression by given [symbol].
+     */
+    public abstract fun derivativeOrNull(symbol: Symbol): R?
 
-    public abstract fun derivativeOrNull(symbol: Symbol): Expression<T>?
-
-    public override fun derivativeOrNull(orders: Map<Symbol, Int>): Expression<T>? {
-        val dSymbol = orders.entries.singleOrNull { it.value == 1 }?.key ?: return null
+    public final override fun derivativeOrNull(symbols: List<Symbol>): R? {
+        val dSymbol = symbols.firstOrNull() ?: return null
         return derivativeOrNull(dSymbol)
     }
 }
@@ -34,6 +43,6 @@ public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T>
 /**
  * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
  */
-public interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>> {
-    public fun process(function: A.() -> I): DifferentiableExpression<T>
+public fun interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
+    public fun process(function: A.() -> I): DifferentiableExpression<T, R>
 }
