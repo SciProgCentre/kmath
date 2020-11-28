@@ -3,6 +3,7 @@ package kscience.kmath.expressions
 import kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * A marker interface for a symbol. A symbol mus have an identity
@@ -12,6 +13,13 @@ public interface Symbol {
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
      */
     public val identity: String
+
+    public companion object : ReadOnlyProperty<Any?, Symbol> {
+        //TODO deprecate and replace by top level function after fix of https://youtrack.jetbrains.com/issue/KT-40121
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Symbol {
+            return StringSymbol(property.name)
+        }
+    }
 }
 
 /**
@@ -95,9 +103,9 @@ public fun <T, E> ExpressionAlgebra<T, E>.bind(symbol: Symbol): E =
 /**
  * A delegate to create a symbol with a string identity in this scope
  */
-public val symbol: ReadOnlyProperty<Any?, StringSymbol> = ReadOnlyProperty { _, property ->
-    StringSymbol(property.name)
-}
+public val symbol: ReadOnlyProperty<Any?, Symbol> get() = Symbol
+//TODO does not work directly on native due to https://youtrack.jetbrains.com/issue/KT-40121
+
 
 /**
  * Bind a symbol by name inside the [ExpressionAlgebra]

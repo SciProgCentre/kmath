@@ -14,6 +14,8 @@
 - Chi squared optimization for array-like data in CM
 - `Fitting` utility object in prob/stat
 - ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
+- Coroutine-deterministic Monte-Carlo scope with a random number generator.
+- Some minor utilities to `kmath-for-real`.
 - Basic Quaternion vector support.
 
 ### Changed
@@ -25,12 +27,14 @@
 - `kmath-ast` doesn't depend on heavy `kotlin-reflect` library.
 - Full autodiff refactoring based on `Symbol`
 - `kmath-prob` renamed to `kmath-stat`
+- Grid generators moved to `kmath-for-real`
 
 ### Deprecated
 
 ### Removed
 - `kmath-koma` module because it doesn't support Kotlin 1.4.
 - Support of `legacy` JS backend (we will support only IR)
+- `toGrid` method.
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
