@@ -1,9 +1,10 @@
-package scientific.kmath.real
+package kaceince.kmath.real
 
 import kscience.kmath.linear.VirtualMatrix
 import kscience.kmath.linear.build
 import kscience.kmath.real.*
 import kscience.kmath.structures.Matrix
+import kscience.kmath.structures.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
