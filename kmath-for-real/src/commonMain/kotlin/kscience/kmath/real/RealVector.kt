@@ -14,8 +14,9 @@ import kotlin.math.sqrt
 
 public typealias RealPoint = Point<Double>
 
-public fun DoubleArray.asVector(): RealVector = RealVector(asBuffer())
-public fun List<Double>.asVector(): RealVector = RealVector(asBuffer())
+public fun RealPoint.asVector(): RealVector = RealVector(this)
+public fun DoubleArray.asVector(): RealVector = asBuffer().asVector()
+public fun List<Double>.asVector(): RealVector = asBuffer().asVector()
 
 public object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble(Number::toDouble))

@@ -1,5 +1,7 @@
-package kscience.kmath.misc
+package kscience.kmath.real
 
+import kscience.kmath.linear.Point
+import kscience.kmath.structures.asBuffer
 import kotlin.math.abs
 
 /**
@@ -32,19 +34,13 @@ public fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Se
     }
 }
 
+public infix fun ClosedFloatingPointRange<Double>.step(step: Double): Point<Double> =
+    toSequenceWithStep(step).toList().asBuffer()
+
 /**
  * Convert double range to sequence with the fixed number of points
  */
 public fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Sequence<Double> {
     require(numPoints > 1) { "The number of points should be more than 2" }
     return toSequenceWithStep(abs(endInclusive - start) / (numPoints - 1))
-}
-
-/**
- * Convert double range to array of evenly spaced doubles, where the size of array equals [numPoints]
- */
-@Deprecated("Replace by 'toSequenceWithPoints'")
-public fun ClosedFloatingPointRange<Double>.toGrid(numPoints: Int): DoubleArray {
-    require(numPoints >= 2) { "Can't create generic grid with less than two points" }
-    return DoubleArray(numPoints) { i -> start + (endInclusive - start) / (numPoints - 1) * i }
 }
