@@ -42,9 +42,4 @@ internal class QuaternionFieldTest {
             QuaternionField { i * 8 }.let { it.x.toInt() to it.w.toInt() },
             QuaternionField { Quaternion(2, 2) pow 2 }.let { it.x.toInt() to it.w.toInt() })
     }
-
-    @Test
-    fun testNorm() {
-        assertEquals(2.toQuaternion(), QuaternionField { norm(2 * i) })
-    }
 }
