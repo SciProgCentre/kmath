@@ -10,6 +10,7 @@
     "PackageDirectoryMismatch",
     "PackageName",
 )
+@file:JsNonModule
 @file:JsModule("js-base64")
 
 package Base64
