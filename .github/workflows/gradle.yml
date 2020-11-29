@@ -33,9 +33,9 @@ jobs:
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-linux-1.4.20-eap-37
-          key: ${{ runner.os }}-konan-1.4.20-eap-37
-          restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
+            ~/.konan/kotlin-native-prebuilt-linux-1.4.20
+          key: ${{ runner.os }}-konan-1.4.20
+          restore-keys: ${{ runner.os }}-konan-1.4.20
       - name: Build with Gradle
         run: ./gradlew -Dorg.gradle.daemon=false --build-cache build
   build-osx:
@@ -63,9 +63,9 @@ jobs:
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-macos-1.4.20-eap-37
-          key: ${{ runner.os }}-konan-1.4.20-eap-37
-          restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
+            ~/.konan/kotlin-native-prebuilt-macos-1.4.20
+          key: ${{ runner.os }}-konan-1.4.20
+          restore-keys: ${{ runner.os }}-konan-1.4.20
       - name: Build with Gradle
         run: sudo ./gradlew -Dorg.gradle.daemon=false --build-cache build
 
@@ -94,8 +94,8 @@ jobs:
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-mingw-1.4.20-eap-37
-          key: ${{ runner.os }}-konan-1.4.20-eap-37
-          restore-keys: ${{ runner.os }}-konan-1.4.20-eap-37
+            ~/.konan/kotlin-native-prebuilt-mingw-1.4.20
+          key: ${{ runner.os }}-konan-1.4.20
+          restore-keys: ${{ runner.os }}-konan-1.4.20
       - name: Build with Gradle
         run: ./gradlew --build-cache build
