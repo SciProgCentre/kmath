@@ -34,7 +34,7 @@ import kotlin.math.min
  * that exploit the power of 2.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AliasMethodDiscreteSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AliasMethodDiscreteSampler.html].
  */
 public open class AliasMethodDiscreteSampler private constructor(
     // Deliberate direct storage of input arrays

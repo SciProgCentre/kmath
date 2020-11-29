@@ -15,7 +15,8 @@ import kotlin.math.*
  *    Marsaglia and Tsang, A Simple Method for Generating Gamma Variables. ACM Transactions on Mathematical Software, Volume 26 Issue 3, September, 2000.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterMarsagliaTsangGammaSampler.html
+ *
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterMarsagliaTsangGammaSampler.html].
  */
 public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     alpha: Double,

@@ -1,4 +1,4 @@
-package kscience.kmath.commons.prob
+package kscience.kmath.stat
 
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.Chain

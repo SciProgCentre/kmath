@@ -18,7 +18,7 @@ import kotlin.math.*
  * This sampler is suitable for mean >= 40.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/LargeMeanPoissonSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/LargeMeanPoissonSampler.html].
  */
 public class LargeMeanPoissonSampler private constructor(public val mean: Double) : Sampler<Int> {
     private val exponential: Sampler<Double> = AhrensDieterExponentialSampler.of(1.0)

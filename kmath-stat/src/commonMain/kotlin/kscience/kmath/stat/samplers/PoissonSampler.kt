@@ -14,7 +14,7 @@ import kscience.kmath.stat.Sampler
  *   Devroye, Luc. (1981). The Computer Generation of Poisson Random Variables Computing vol. 26 pp. 197-207.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/PoissonSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/PoissonSampler.html].
  */
 public class PoissonSampler private constructor(mean: Double) : Sampler<Int> {
     private val poissonSamplerDelegate: Sampler<Int> = of(mean)

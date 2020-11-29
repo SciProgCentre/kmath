@@ -12,7 +12,7 @@ import kotlin.math.*
  * implementation has been adapted from the C code provided therein.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/ZigguratNormalizedGaussianSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/ZigguratNormalizedGaussianSampler.html].
  */
 public class ZigguratNormalizedGaussianSampler private constructor() :
     NormalizedGaussianSampler, Sampler<Double> {

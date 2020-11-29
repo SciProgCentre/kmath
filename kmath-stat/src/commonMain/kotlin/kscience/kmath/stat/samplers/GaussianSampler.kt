@@ -9,7 +9,7 @@ import kscience.kmath.stat.Sampler
  * Sampling from a Gaussian distribution with given mean and standard deviation.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/GaussianSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/GaussianSampler.html].
  *
  * @property mean the mean of the distribution.
  * @property standardDeviation the variance of the distribution.

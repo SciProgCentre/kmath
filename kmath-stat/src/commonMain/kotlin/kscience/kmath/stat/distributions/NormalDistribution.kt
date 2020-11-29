@@ -9,6 +9,9 @@ import kscience.kmath.stat.samplers.NormalizedGaussianSampler
 import kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
+/**
+ * Implements [UnivariateDistribution] for the normal (gaussian) distribution.
+ */
 public inline class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
     public constructor(
         mean: Double,

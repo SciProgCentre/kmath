@@ -16,7 +16,7 @@ import kotlin.math.exp
  * Sampling uses 1 call to UniformRandomProvider.nextDouble(). This method provides an alternative to the SmallMeanPoissonSampler for slow generators of double.
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/KempSmallMeanPoissonSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/KempSmallMeanPoissonSampler.html].
  */
 public class KempSmallMeanPoissonSampler private constructor(
     private val p0: Double,

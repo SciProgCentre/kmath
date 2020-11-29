@@ -12,7 +12,7 @@ import kotlin.math.pow
  * Sampling from an [exponential distribution](http://mathworld.wolfram.com/ExponentialDistribution.html).
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterExponentialSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterExponentialSampler.html].
  */
 public class AhrensDieterExponentialSampler private constructor(public val mean: Double) : Sampler<Double> {
     public override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {

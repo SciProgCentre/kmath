@@ -17,7 +17,7 @@ import kotlin.math.exp
  *
  * Based on Commons RNG implementation.
  *
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/SmallMeanPoissonSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/SmallMeanPoissonSampler.html].
  */
 public class SmallMeanPoissonSampler private constructor(mean: Double) : Sampler<Int> {
     private val p0: Double = exp(-mean)

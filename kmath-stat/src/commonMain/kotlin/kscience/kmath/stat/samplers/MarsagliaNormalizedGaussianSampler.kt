@@ -13,7 +13,7 @@ import kotlin.math.sqrt
  * [BoxMullerNormalizedGaussianSampler].
  *
  * Based on Commons RNG implementation.
- * See https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/MarsagliaNormalizedGaussianSampler.html
+ * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/MarsagliaNormalizedGaussianSampler.html]
  */
 public class MarsagliaNormalizedGaussianSampler private constructor() : NormalizedGaussianSampler, Sampler<Double> {
     private var nextGaussian = Double.NaN
