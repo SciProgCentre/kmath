@@ -35,6 +35,9 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
     implementation(project(":kmath-nd4j"))
+
+    implementation(project(":kmath-for-real"))
+
     implementation("org.deeplearning4j:deeplearning4j-core:1.0.0-beta7")
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
 
@@ -51,7 +54,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-io:0.2.0-npm-dev-11")
     implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
     implementation("org.slf4j:slf4j-simple:1.7.30")
-    "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
+
+    // plotting
+    implementation("kscience.plotlykt:plotlykt-server:0.3.1-dev")
+
+    "benchmarksImplementation"("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-20")
     "benchmarksImplementation"(sourceSets.main.get().output + sourceSets.main.get().runtimeClasspath)
 }
 
