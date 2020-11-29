@@ -69,7 +69,7 @@ benchmark {
     // This one matches sourceSet name above
 
     configurations.register("fast") {
-        warmups = 5 // number of warmup iterations
+        warmups = 1 // number of warmup iterations
         iterations = 3 // number of iterations
         iterationTime = 500 // time in seconds per iteration
         iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds

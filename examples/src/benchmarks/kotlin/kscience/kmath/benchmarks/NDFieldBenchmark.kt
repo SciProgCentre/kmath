@@ -1,7 +1,8 @@
-package kscience.kmath.structures
+package kscience.kmath.benchmarks
 
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
+import kscience.kmath.structures.*
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
