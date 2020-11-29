@@ -51,7 +51,7 @@ private fun normalSampler(method: NormalSamplerMethod, provider: UniformRandomPr
 
 public fun Distribution.Companion.normal(
     method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
-): Distribution<Double> = object : ContinuousSamplerDistribution() {
+): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider = generator.asUniformRandomProvider()
         return normalSampler(method, provider)
@@ -60,6 +60,9 @@ public fun Distribution.Companion.normal(
     override fun probability(arg: Double): Double = exp(-arg.pow(2) / 2) / sqrt(PI * 2)
 }
 
+/**
+ * A univariate normal distribution with given [mean] and [sigma]. [method] defines commons-rng generation method
+ */
 public fun Distribution.Companion.normal(
     mean: Double,
     sigma: Double,
