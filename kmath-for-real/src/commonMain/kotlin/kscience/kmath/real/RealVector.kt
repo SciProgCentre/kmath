@@ -3,15 +3,25 @@ package kscience.kmath.real
 import kscience.kmath.linear.Point
 import kscience.kmath.operations.Norm
 import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.RealBuffer
+import kscience.kmath.structures.asBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 public typealias RealVector = Point<Double>
 
+public inline fun RealVector(size: Int, init: (Int) -> Double): RealVector = RealBuffer(size, init)
+public fun RealVector(vararg doubles: Double): RealVector = RealBuffer(doubles)
+
+public fun DoubleArray.asVector(): RealVector = asBuffer()
+public fun List<Double>.asVector(): RealVector = asBuffer()
+
+
 public object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble(Number::toDouble))
 }
+
 
 /**
  * Fill the vector of given [size] with given [value]

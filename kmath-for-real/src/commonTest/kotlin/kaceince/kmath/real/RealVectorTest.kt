@@ -5,6 +5,7 @@ import kscience.kmath.linear.asMatrix
 import kscience.kmath.linear.transpose
 import kscience.kmath.operations.invoke
 import kscience.kmath.real.RealVector
+import kscience.kmath.real.plus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
