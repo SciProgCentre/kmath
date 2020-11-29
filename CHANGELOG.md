@@ -27,6 +27,7 @@
 - Full autodiff refactoring based on `Symbol`
 - `kmath-prob` renamed to `kmath-stat`
 - Grid generators moved to `kmath-for-real`
+- Use `Point<Double>` instead of specialized type in `kmath-for-real`
 
 ### Deprecated
 

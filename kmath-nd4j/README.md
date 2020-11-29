@@ -2,14 +2,14 @@
 
 This subproject implements the following features:
 
- - [nd4jarraystrucure](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
+ - [nd4jarraystructure](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
  - [nd4jarrayrings](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
  - [nd4jarrayfields](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
 
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-nd4j:0.2.0-dev-3`.
+> This module artifact: `kscience.kmath:kmath-nd4j:0.2.0-dev-4`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-nd4j/_latestVersion)
 >
@@ -27,7 +27,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-nd4j:0.2.0-dev-3'
+>     implementation 'kscience.kmath:kmath-nd4j:0.2.0-dev-4'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -41,7 +41,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-nd4j:0.2.0-dev-3")
+>     implementation("kscience.kmath:kmath-nd4j:0.2.0-dev-4")
 > }
 > ```
 

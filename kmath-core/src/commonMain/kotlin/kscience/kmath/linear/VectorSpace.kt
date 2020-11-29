@@ -15,7 +15,7 @@ public interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
     public val space: S
     override val zero: Point<T> get() = produce { space.zero }
 
-    public fun produce(initializer: (Int) -> T): Point<T>
+    public fun produce(initializer: S.(Int) -> T): Point<T>
 
     /**
      * Produce a space-element of this vector space for expressions
@@ -48,7 +48,7 @@ public interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
         public fun <T : Any, S : Space<T>> buffered(
             size: Int,
             space: S,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): BufferVectorSpace<T, S> = BufferVectorSpace(size, space, bufferFactory)
 
         /**
@@ -63,8 +63,8 @@ public interface VectorSpace<T : Any, S : Space<T>> : Space<Point<T>> {
 public class BufferVectorSpace<T : Any, S : Space<T>>(
     override val size: Int,
     override val space: S,
-    public val bufferFactory: BufferFactory<T>
+    public val bufferFactory: BufferFactory<T>,
 ) : VectorSpace<T, S> {
-    override fun produce(initializer: (Int) -> T): Buffer<T> = bufferFactory(size, initializer)
+    override fun produce(initializer: S.(Int) -> T): Buffer<T> = bufferFactory(size) { space.initializer(it) }
     //override fun produceElement(initializer: (Int) -> T): Vector<T, S> = BufferVector(this, produce(initializer))
 }
