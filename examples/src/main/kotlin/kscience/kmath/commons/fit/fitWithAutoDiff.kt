@@ -70,6 +70,7 @@ fun main() {
     //minimize the chi^2 in given starting point. Derivatives are not required, they are already included.
     val result: OptimizationResult<Double> = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
 
+    //display a page with plot and numerical results
     val page = Plotly.page {
         plot {
             scatter {

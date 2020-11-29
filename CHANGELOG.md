@@ -28,6 +28,8 @@
 - `kmath-prob` renamed to `kmath-stat`
 - Grid generators moved to `kmath-for-real`
 - Use `Point<Double>` instead of specialized type in `kmath-for-real`
+- Optimized dot product for buffer matrices moved to `kmath-for-real`
+- EjmlMatrix context is an object
 
 ### Deprecated
 

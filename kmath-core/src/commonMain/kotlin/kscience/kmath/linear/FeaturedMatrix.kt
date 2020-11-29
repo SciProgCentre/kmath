@@ -27,9 +27,8 @@ public interface FeaturedMatrix<T : Any> : Matrix<T> {
 public inline fun Structure2D.Companion.real(
     rows: Int,
     columns: Int,
-    initializer: (Int, Int) -> Double
-): Matrix<Double> =
-    MatrixContext.real.produce(rows, columns, initializer)
+    initializer: (Int, Int) -> Double,
+): BufferMatrix<Double> = MatrixContext.real.produce(rows, columns, initializer)
 
 /**
  * Build a square matrix from given elements.
@@ -82,5 +81,3 @@ public fun <T : Any> Matrix<T>.transpose(): Matrix<T> {
         setOf(TransposedFeature(this))
     ) { i, j -> get(j, i) }
 }
-
-public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = with(MatrixContext.real) { dot(other) }

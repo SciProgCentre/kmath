@@ -3,7 +3,6 @@ package kscience.kmath.histogram
 import kscience.kmath.linear.Point
 import kscience.kmath.operations.SpaceOperations
 import kscience.kmath.operations.invoke
-import kscience.kmath.real.asVector
 import kscience.kmath.structures.*
 import kotlin.math.floor
 
@@ -123,8 +122,8 @@ public class RealHistogram(
          *```
          */
         public fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogram = RealHistogram(
-            ranges.map(ClosedFloatingPointRange<Double>::start).asVector(),
-            ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asVector()
+            ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
+            ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asBuffer()
         )
 
         /**

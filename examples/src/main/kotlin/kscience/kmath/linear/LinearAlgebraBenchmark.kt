@@ -1,10 +1,12 @@
 package kscience.kmath.linear
 
 import kscience.kmath.commons.linear.CMMatrixContext
+import kscience.kmath.commons.linear.CMMatrixContext.dot
 import kscience.kmath.commons.linear.inverse
 import kscience.kmath.commons.linear.toCM
 import kscience.kmath.ejml.EjmlMatrixContext
 import kscience.kmath.ejml.inverse
+import kscience.kmath.ejml.toEjml
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
@@ -40,7 +42,7 @@ fun main() {
     println("[commons-math] Inversion of $n matrices $dim x $dim finished in $commonsTime millis")
 
     val ejmlTime = measureTimeMillis {
-        (EjmlMatrixContext(RealField)) {
+        EjmlMatrixContext {
             val km = matrix.toEjml()      //avoid overhead on conversion
             repeat(n) { inverse(km) }
         }

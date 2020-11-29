@@ -1,8 +1,8 @@
 package kscience.kmath.histogram
 
 import kscience.kmath.real.RealVector
-import kscience.kmath.real.asVector
 import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.asBuffer
 import java.util.*
 import kotlin.math.floor
 
@@ -16,7 +16,7 @@ public class UnivariateBin(
     //TODO add weighting
     public override val value: Number get() = counter.sum()
 
-    public override val center: RealVector get() = doubleArrayOf(position).asVector()
+    public override val center: RealVector get() = doubleArrayOf(position).asBuffer()
     public override val dimension: Int get() = 1
 
     public operator fun contains(value: Double): Boolean = value in (position - size / 2)..(position + size / 2)
