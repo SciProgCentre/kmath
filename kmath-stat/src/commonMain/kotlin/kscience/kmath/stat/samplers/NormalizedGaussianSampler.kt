@@ -1,6 +1,6 @@
-package kscience.kmath.prob.samplers
+package kscience.kmath.stat.samplers
 
-import kscience.kmath.prob.Sampler
+import kscience.kmath.stat.Sampler
 
 /**
  * Marker interface for a sampler that generates values from an N(0,1)

@@ -3,10 +3,10 @@ package kscience.kmath.commons.prob
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.blocking
-import kscience.kmath.prob.fromSource
-import kscience.kmath.prob.samplers.GaussianSampler
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.blocking
+import kscience.kmath.stat.fromSource
+import kscience.kmath.stat.samplers.GaussianSampler
 import org.apache.commons.rng.simple.RandomSource
 import java.time.Duration
 import java.time.Instant

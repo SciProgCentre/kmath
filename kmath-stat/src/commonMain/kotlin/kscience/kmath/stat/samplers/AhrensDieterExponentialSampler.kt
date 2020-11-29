@@ -1,10 +1,10 @@
-package kscience.kmath.prob.samplers
+package kscience.kmath.stat.samplers
 
 import kscience.kmath.chains.Chain
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.Sampler
-import kscience.kmath.prob.chain
-import kscience.kmath.prob.internal.InternalUtils
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.Sampler
+import kscience.kmath.stat.chain
+import kscience.kmath.stat.internal.InternalUtils
 import kotlin.math.ln
 import kotlin.math.pow
 

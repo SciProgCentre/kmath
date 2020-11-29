@@ -1,11 +1,11 @@
 package kscience.kmath.commons.optimization
 
+import kotlinx.coroutines.runBlocking
 import kscience.kmath.commons.expressions.DerivativeStructureExpression
 import kscience.kmath.expressions.symbol
-import kscience.kmath.stat.Distribution
 import kscience.kmath.stat.Fitting
 import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.normal
+import kscience.kmath.stat.distributions.NormalDistribution
 import org.junit.jupiter.api.Test
 import kotlin.math.pow
 
@@ -39,20 +39,15 @@ internal class OptimizeTest {
     }
 
     @Test
-    fun testCmFit() {
+    fun testCmFit() = runBlocking {
         val a by symbol
         val b by symbol
         val c by symbol
-
         val sigma = 1.0
-        val generator = Distribution.normal(0.0, sigma)
+        val generator = NormalDistribution(0.0, sigma)
         val chain = generator.sample(RandomGenerator.default(112667))
         val x = (1..100).map(Int::toDouble)
-
-        val y = x.map {
-            it.pow(2) + it + 1 + chain.nextDouble()
-        }
-
+        val y = x.map { it.pow(2) + it + 1.0 + chain.next() }
         val yErr = List(x.size) { sigma }
 
         val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->

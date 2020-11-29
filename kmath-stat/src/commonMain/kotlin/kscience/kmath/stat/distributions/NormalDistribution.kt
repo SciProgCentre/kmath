@@ -1,12 +1,12 @@
-package kscience.kmath.prob.distributions
+package kscience.kmath.stat.distributions
 
 import kscience.kmath.chains.Chain
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.UnivariateDistribution
-import kscience.kmath.prob.internal.InternalErf
-import kscience.kmath.prob.samplers.GaussianSampler
-import kscience.kmath.prob.samplers.NormalizedGaussianSampler
-import kscience.kmath.prob.samplers.ZigguratNormalizedGaussianSampler
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.UnivariateDistribution
+import kscience.kmath.stat.internal.InternalErf
+import kscience.kmath.stat.samplers.GaussianSampler
+import kscience.kmath.stat.samplers.NormalizedGaussianSampler
+import kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
 public inline class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {

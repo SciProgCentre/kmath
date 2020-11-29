@@ -3,7 +3,7 @@ package kscience.kmath.stat
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.prob.samplers.GaussianSampler
+import kscience.kmath.stat.samplers.GaussianSampler
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

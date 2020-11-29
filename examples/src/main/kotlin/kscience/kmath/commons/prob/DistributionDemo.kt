@@ -3,8 +3,8 @@ package kscience.kmath.commons.prob
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collectWithState
-import kscience.kmath.prob.RandomGenerator
-import kscience.kmath.prob.samplers.ZigguratNormalizedGaussianSampler
+import kscience.kmath.stat.RandomGenerator
+import kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
