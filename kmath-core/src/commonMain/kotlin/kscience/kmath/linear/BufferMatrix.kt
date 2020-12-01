@@ -10,7 +10,7 @@ import kscience.kmath.structures.*
 public class BufferMatrixContext<T : Any, R : Ring<T>>(
     public override val elementContext: R,
     private val bufferFactory: BufferFactory<T>,
-) : GenericMatrixContext<T, R> {
+) : GenericMatrixContext<T, R, BufferMatrix<T>> {
     public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): BufferMatrix<T> {
         val buffer = bufferFactory(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
         return BufferMatrix(rows, columns, buffer)
@@ -22,7 +22,7 @@ public class BufferMatrixContext<T : Any, R : Ring<T>>(
 }
 
 @Suppress("OVERRIDE_BY_INLINE")
-public object RealMatrixContext : GenericMatrixContext<Double, RealField> {
+public object RealMatrixContext : GenericMatrixContext<Double, RealField, BufferMatrix<Double>> {
     public override val elementContext: RealField
         get() = RealField
 

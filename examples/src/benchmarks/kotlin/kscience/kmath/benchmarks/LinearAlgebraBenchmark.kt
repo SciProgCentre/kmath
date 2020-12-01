@@ -29,7 +29,7 @@ class LinearAlgebraBenchmark {
 
     @Benchmark
     fun kmathLUPInversion() {
-        MatrixContext.real.inverse(matrix)
+        MatrixContext.real.inverseWithLUP(matrix)
     }
 
     @Benchmark

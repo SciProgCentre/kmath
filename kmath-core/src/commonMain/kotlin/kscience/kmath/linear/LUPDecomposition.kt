@@ -1,25 +1,18 @@
 package kscience.kmath.linear
 
-import kscience.kmath.operations.Field
-import kscience.kmath.operations.RealField
-import kscience.kmath.operations.Ring
-import kscience.kmath.operations.invoke
-import kscience.kmath.structures.BufferAccessor2D
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.Structure2D
-import kotlin.reflect.KClass
+import kscience.kmath.operations.*
+import kscience.kmath.structures.*
 
 /**
  * Common implementation of [LUPDecompositionFeature]
  */
 public class LUPDecomposition<T : Any>(
-    public val context: GenericMatrixContext<T, out Field<T>>,
+    public val context: MatrixContext<T, FeaturedMatrix<T>>,
+    public val elementContext: Field<T>,
     public val lu: Structure2D<T>,
     public val pivot: IntArray,
-    private val even: Boolean
+    private val even: Boolean,
 ) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
-    public val elementContext: Field<T>
-        get() = context.elementContext
 
     /**
      * Returns the matrix L of the decomposition.
@@ -64,23 +57,25 @@ public class LUPDecomposition<T : Any>(
 
 }
 
-public fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.abs(value: T): T =
+@PublishedApi
+internal fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F, *>.abs(value: T): T =
     if (value > elementContext.zero) value else elementContext { -value }
 
 /**
- * Create a lup decomposition of generic matrix
+ * Create a lup decomposition of generic matrix.
  */
-public inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
-    type: KClass<T>,
+public fun <T : Comparable<T>> MatrixContext<T, FeaturedMatrix<T>>.lup(
+    factory: MutableBufferFactory<T>,
+    elementContext: Field<T>,
     matrix: Matrix<T>,
-    checkSingular: (T) -> Boolean
+    checkSingular: (T) -> Boolean,
 ): LUPDecomposition<T> {
     require(matrix.rowNum == matrix.colNum) { "LU decomposition supports only square matrices" }
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
 
     //TODO just waits for KEEP-176
-    BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
+    BufferAccessor2D(matrix.rowNum, matrix.colNum, factory).run {
         elementContext {
             val lu = create(matrix)
 
@@ -112,14 +107,14 @@ public inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.l
                     luRow[col] = sum
 
                     // maintain best permutation choice
-                    if (this@lup.abs(sum) > largest) {
-                        largest = this@lup.abs(sum)
+                    if (abs(sum) > largest) {
+                        largest = abs(sum)
                         max = row
                     }
                 }
 
                 // Singularity check
-                check(!checkSingular(this@lup.abs(lu[max, col]))) { "The matrix is singular" }
+                check(!checkSingular(abs(lu[max, col]))) { "The matrix is singular" }
 
                 // Pivot if necessary
                 if (max != col) {
@@ -143,23 +138,23 @@ public inline fun <T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.l
                 for (row in col + 1 until m) lu[row, col] /= luDiag
             }
 
-            return LUPDecomposition(this@lup, lu.collect(), pivot, even)
+            return LUPDecomposition(this@lup, elementContext, lu.collect(), pivot, even)
         }
     }
 }
 
-public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.lup(
+public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F, FeaturedMatrix<T>>.lup(
     matrix: Matrix<T>,
-    checkSingular: (T) -> Boolean
-): LUPDecomposition<T> = lup(T::class, matrix, checkSingular)
+    noinline checkSingular: (T) -> Boolean,
+): LUPDecomposition<T> = lup(MutableBuffer.Companion::auto, elementContext, matrix, checkSingular)
 
-public fun GenericMatrixContext<Double, RealField>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
-    lup(Double::class, matrix) { it < 1e-11 }
+public fun MatrixContext<Double, FeaturedMatrix<Double>>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
+    lup(Buffer.Companion::real, RealField, matrix) { it < 1e-11 }
 
-public fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T>): Matrix<T> {
+public fun <T : Any> LUPDecomposition<T>.solveWithLUP(factory: MutableBufferFactory<T>, matrix: Matrix<T>): FeaturedMatrix<T> {
     require(matrix.rowNum == pivot.size) { "Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}" }
 
-    BufferAccessor2D(type, matrix.rowNum, matrix.colNum).run {
+    BufferAccessor2D(matrix.rowNum, matrix.colNum, factory).run {
         elementContext {
             // Apply permutations to b
             val bp = create { _, _ -> zero }
@@ -201,27 +196,34 @@ public fun <T : Any> LUPDecomposition<T>.solve(type: KClass<T>, matrix: Matrix<T
     }
 }
 
-public inline fun <reified T : Any> LUPDecomposition<T>.solve(matrix: Matrix<T>): Matrix<T> = solve(T::class, matrix)
+public inline fun <reified T : Any> LUPDecomposition<T>.solveWithLUP(matrix: Matrix<T>): Matrix<T> =
+    solveWithLUP(MutableBuffer.Companion::auto, matrix)
 
 /**
- * Solve a linear equation **a*x = b**
+ * Solve a linear equation **a*x = b** using LUP decomposition
  */
-public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.solve(
+public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F, FeaturedMatrix<T>>.solveWithLUP(
     a: Matrix<T>,
     b: Matrix<T>,
-    checkSingular: (T) -> Boolean
-): Matrix<T> {
+    noinline bufferFactory: MutableBufferFactory<T> = MutableBuffer.Companion::auto,
+    noinline checkSingular: (T) -> Boolean,
+): FeaturedMatrix<T> {
     // Use existing decomposition if it is provided by matrix
-    val decomposition = a.getFeature() ?: lup(T::class, a, checkSingular)
-    return decomposition.solve(T::class, b)
+    val decomposition = a.getFeature() ?: lup(bufferFactory, elementContext, a, checkSingular)
+    return decomposition.solveWithLUP(bufferFactory, b)
 }
 
-public fun RealMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solve(a, b) { it < 1e-11 }
+public fun RealMatrixContext.solveWithLUP(a: Matrix<Double>, b: Matrix<Double>): FeaturedMatrix<Double> =
+    solveWithLUP(a, b) { it < 1e-11 }
 
-public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F>.inverse(
+public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F, FeaturedMatrix<T>>.inverseWithLUP(
     matrix: Matrix<T>,
-    checkSingular: (T) -> Boolean
-): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum), checkSingular)
+    noinline bufferFactory: MutableBufferFactory<T> = MutableBuffer.Companion::auto,
+    noinline checkSingular: (T) -> Boolean,
+): FeaturedMatrix<T> = solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum), bufferFactory, checkSingular)
 
-public fun RealMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> =
-    solve(matrix, one(matrix.rowNum, matrix.colNum)) { it < 1e-11 }
+/**
+ * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
+ */
+public fun RealMatrixContext.inverseWithLUP(matrix: Matrix<Double>): FeaturedMatrix<Double> =
+    solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum), Buffer.Companion::real) { it < 1e-11 }

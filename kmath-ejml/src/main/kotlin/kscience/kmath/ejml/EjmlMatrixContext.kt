@@ -1,11 +1,9 @@
 package kscience.kmath.ejml
 
-import org.ejml.simple.SimpleMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
-import kscience.kmath.operations.Space
-import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
+import org.ejml.simple.SimpleMatrix
 
 /**
  * Converts this matrix to EJML one.
@@ -18,7 +16,7 @@ public fun Matrix<Double>.toEjml(): EjmlMatrix =
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlMatrixContext : MatrixContext<Double> {
+public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
 
     /**
      * Converts this vector to EJML one.

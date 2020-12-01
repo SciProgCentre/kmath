@@ -1,12 +1,16 @@
 package kscience.kmath.real
 
+import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.RealMatrixContext.elementContext
 import kscience.kmath.linear.VirtualMatrix
+import kscience.kmath.linear.inverseWithLUP
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.invoke
 import kscience.kmath.operations.sum
-import kscience.kmath.structures.*
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.RealBuffer
+import kscience.kmath.structures.asIterable
 import kotlin.math.pow
 
 /*
@@ -21,7 +25,7 @@ import kotlin.math.pow
  *  Functions that help create a real (Double) matrix
  */
 
-public typealias RealMatrix = Matrix<Double>
+public typealias RealMatrix = FeaturedMatrix<Double>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
@@ -147,6 +151,11 @@ public inline fun RealMatrix.map(transform: (Double) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { i, j ->
         transform(get(i, j))
     }
+
+/**
+ * Inverse a square real matrix using LUP decomposition
+ */
+public fun RealMatrix.inverseWithLUP(): RealMatrix = MatrixContext.real.inverseWithLUP(this)
 
 //extended operations
 
