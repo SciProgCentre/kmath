@@ -7,6 +7,7 @@ kotlin.sourceSets {
         with(languageSettings) {
             useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
             useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            useExperimentalAnnotation("kotlinx.coroutines.ObsoleteCoroutinesApi")
         }
     }
 
