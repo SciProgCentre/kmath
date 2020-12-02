@@ -19,10 +19,9 @@ internal inline fun <T : Any, H : CStructVar> GslMatrix<T, H>.fill(initializer: 
 internal inline fun <T : Any, H : CStructVar> GslVector<T, H>.fill(initializer: (Int) -> T): GslVector<T, H> =
     apply { (0 until size).forEach { index -> this[index] = initializer(index) } }
 
-public abstract class GslMatrixContext<
-        T : Any,
-        H1 : CStructVar,
-        H2 : CStructVar> internal constructor(internal val scope: DeferScope) : MatrixContext<T> {
+public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar> internal constructor(
+    internal val scope: DeferScope
+) : MatrixContext<T, GslMatrix<T, H1>> {
     init {
         ensureHasGslErrorHandler()
     }
@@ -46,7 +45,10 @@ public abstract class GslMatrixContext<
 
 public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, gsl_matrix, gsl_vector>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> =
-        GslRealMatrix(nativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())), scope = scope)
+        GslRealMatrix(
+            nativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())),
+            scope = scope
+        )
 
     override fun produceDirtyVector(size: Int): GslVector<Double, gsl_vector> =
         GslRealVector(nativeHandle = requireNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
@@ -131,10 +133,11 @@ public class GslFloatMatrixContext(scope: DeferScope) :
 
 public class GslComplexMatrixContext(scope: DeferScope) :
     GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>(scope) {
-    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> = GslComplexMatrix(
-        nativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
-        scope = scope
-    )
+    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> =
+        GslComplexMatrix(
+            nativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
+            scope = scope
+        )
 
     override fun produceDirtyVector(size: Int): GslVector<Complex, gsl_vector_complex> =
         GslComplexVector(requireNotNull(gsl_vector_complex_alloc(size.toULong())), scope)
