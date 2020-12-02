@@ -1,13 +1,14 @@
 package kscience.kmath.real
 
+import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.RealMatrixContext.elementContext
 import kscience.kmath.linear.VirtualMatrix
+import kscience.kmath.linear.inverseWithLUP
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.invoke
 import kscience.kmath.operations.sum
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow
@@ -24,7 +25,7 @@ import kotlin.math.pow
  *  Functions that help create a real (Double) matrix
  */
 
-public typealias RealMatrix = Matrix<Double>
+public typealias RealMatrix = FeaturedMatrix<Double>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
@@ -87,18 +88,6 @@ public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
 //}
 
 /*
- *  Per-element (!) square and power operations
- */
-
-public fun RealMatrix.square(): RealMatrix = MatrixContext.real.produce(rowNum, colNum) { row, col ->
-    this[row, col].pow(2)
-}
-
-public fun RealMatrix.pow(n: Int): RealMatrix = MatrixContext.real.produce(rowNum, colNum) { i, j ->
-    this[i, j].pow(n)
-}
-
-/*
  * Operations on two matrices (per-element!)
  */
 
@@ -157,3 +146,35 @@ public fun RealMatrix.sum(): Double = elements().map { (_, value) -> value }.sum
 public fun RealMatrix.min(): Double? = elements().map { (_, value) -> value }.minOrNull()
 public fun RealMatrix.max(): Double? = elements().map { (_, value) -> value }.maxOrNull()
 public fun RealMatrix.average(): Double = elements().map { (_, value) -> value }.average()
+
+public inline fun RealMatrix.map(transform: (Double) -> Double): RealMatrix =
+    MatrixContext.real.produce(rowNum, colNum) { i, j ->
+        transform(get(i, j))
+    }
+
+/**
+ * Inverse a square real matrix using LUP decomposition
+ */
+public fun RealMatrix.inverseWithLUP(): RealMatrix = MatrixContext.real.inverseWithLUP(this)
+
+//extended operations
+
+public fun RealMatrix.pow(p: Double): RealMatrix = map { it.pow(p) }
+
+public fun RealMatrix.pow(p: Int): RealMatrix = map { it.pow(p) }
+
+public fun exp(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.exp(it) }
+
+public fun sqrt(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.sqrt(it) }
+
+public fun RealMatrix.square(): RealMatrix = map { it.pow(2) }
+
+public fun sin(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.sin(it) }
+
+public fun cos(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.cos(it) }
+
+public fun tan(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.tan(it) }
+
+public fun ln(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.ln(it) }
+
+public fun log10(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.log10(it) }

@@ -5,8 +5,7 @@ import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.NDStructure
 import org.apache.commons.math3.linear.*
 
-public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature>? = null) :
-    FeaturedMatrix<Double> {
+public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
@@ -55,7 +54,7 @@ public fun Point<Double>.toCM(): CMVector = if (this is CMVector) this else {
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)
 
-public object CMMatrixContext : MatrixContext<Double> {
+public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
     public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
         val array = Array(rows) { i -> DoubleArray(columns) { j -> initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
@@ -79,7 +78,7 @@ public object CMMatrixContext : MatrixContext<Double> {
     public override fun multiply(a: Matrix<Double>, k: Number): CMMatrix =
         CMMatrix(a.toCM().origin.scalarMultiply(k.toDouble()))
 
-    public override operator fun Matrix<Double>.times(value: Double): Matrix<Double> =
+    public override operator fun Matrix<Double>.times(value: Double): CMMatrix =
         produce(rowNum, colNum) { i, j -> get(i, j) * value }
 }
 
