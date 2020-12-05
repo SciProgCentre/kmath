@@ -57,6 +57,9 @@ private fun KtPsiFactory.createMatrixClass(
     f += createNewLine(2)
 }
 
+/**
+ * Generates matrices source code for kmath-gsl.
+ */
 fun matricesCodegen(outputFile: String, project: Project = createProject()) {
     val f = KtPsiFactory(project, true).run {
         createFile("").also { f ->

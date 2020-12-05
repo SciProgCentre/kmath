@@ -46,6 +46,9 @@ private fun KtPsiFactory.createVectorClass(
     f += createNewLine(2)
 }
 
+/**
+ * Generates vectors source code for kmath-gsl.
+ */
 fun vectorsCodegen(outputFile: String, project: Project = createProject()) {
     val f = KtPsiFactory(project, true).run {
         createFile("").also { f ->
