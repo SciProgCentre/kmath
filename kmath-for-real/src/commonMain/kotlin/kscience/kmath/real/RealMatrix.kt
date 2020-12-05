@@ -1,12 +1,14 @@
 package kscience.kmath.real
 
+import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.RealMatrixContext.elementContext
 import kscience.kmath.linear.VirtualMatrix
+import kscience.kmath.linear.inverseWithLUP
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.invoke
 import kscience.kmath.operations.sum
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow
@@ -23,7 +25,7 @@ import kotlin.math.pow
  *  Functions that help create a real (Double) matrix
  */
 
-public typealias RealMatrix = Matrix<Double>
+public typealias RealMatrix = FeaturedMatrix<Double>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
@@ -36,7 +38,7 @@ public fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
     MatrixContext.real.produce(it.size, it[0].size) { row, col -> it[row][col] }
 }
 
-public fun Matrix<Double>.repeatStackVertical(n: Int): RealMatrix =
+public fun RealMatrix.repeatStackVertical(n: Int): RealMatrix =
     VirtualMatrix(rowNum * n, colNum) { row, col ->
         get(if (row == 0) 0 else row % rowNum, col)
     }
@@ -45,76 +47,65 @@ public fun Matrix<Double>.repeatStackVertical(n: Int): RealMatrix =
  *  Operations for matrix and real number
  */
 
-public operator fun Matrix<Double>.times(double: Double): RealMatrix =
+public operator fun RealMatrix.times(double: Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col ->
         this[row, col] * double
     }
 
-public operator fun Matrix<Double>.plus(double: Double): RealMatrix =
+public operator fun RealMatrix.plus(double: Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col ->
         this[row, col] + double
     }
 
-public operator fun Matrix<Double>.minus(double: Double): RealMatrix =
+public operator fun RealMatrix.minus(double: Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col ->
         this[row, col] - double
     }
 
-public operator fun Matrix<Double>.div(double: Double): RealMatrix =
+public operator fun RealMatrix.div(double: Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col ->
         this[row, col] / double
     }
 
-public operator fun Double.times(matrix: Matrix<Double>): RealMatrix =
+public operator fun Double.times(matrix: RealMatrix): RealMatrix =
     MatrixContext.real.produce(matrix.rowNum, matrix.colNum) { row, col ->
         this * matrix[row, col]
     }
 
-public operator fun Double.plus(matrix: Matrix<Double>): RealMatrix =
+public operator fun Double.plus(matrix: RealMatrix): RealMatrix =
     MatrixContext.real.produce(matrix.rowNum, matrix.colNum) { row, col ->
         this + matrix[row, col]
     }
 
-public operator fun Double.minus(matrix: Matrix<Double>): RealMatrix =
+public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
     MatrixContext.real.produce(matrix.rowNum, matrix.colNum) { row, col ->
         this - matrix[row, col]
     }
 
 // TODO: does this operation make sense? Should it be 'this/matrix[row, col]'?
-//operator fun Double.div(matrix: Matrix<Double>) = MatrixContext.real.produce(matrix.rowNum, matrix.colNum) {
+//operator fun Double.div(matrix: RealMatrix) = MatrixContext.real.produce(matrix.rowNum, matrix.colNum) {
 //    row, col -> matrix[row, col] / this
 //}
-
-/*
- *  Per-element (!) square and power operations
- */
-
-public fun Matrix<Double>.square(): RealMatrix = MatrixContext.real.produce(rowNum, colNum) { row, col ->
-    this[row, col].pow(2)
-}
-
-public fun Matrix<Double>.pow(n: Int): RealMatrix = MatrixContext.real.produce(rowNum, colNum) { i, j ->
-    this[i, j].pow(n)
-}
 
 /*
  * Operations on two matrices (per-element!)
  */
 
-public operator fun Matrix<Double>.times(other: Matrix<Double>): RealMatrix =
+@UnstableKMathAPI
+public operator fun RealMatrix.times(other: RealMatrix): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col -> this[row, col] * other[row, col] }
 
-public operator fun Matrix<Double>.plus(other: Matrix<Double>): RealMatrix =
+public operator fun RealMatrix.plus(other: RealMatrix): RealMatrix =
     MatrixContext.real.add(this, other)
 
-public operator fun Matrix<Double>.minus(other: Matrix<Double>): RealMatrix =
+public operator fun RealMatrix.minus(other: RealMatrix): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { row, col -> this[row, col] - other[row, col] }
 
 /*
  *  Operations on columns
  */
 
-public inline fun Matrix<Double>.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): Matrix<Double> =
+public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum + 1) { row, col ->
         if (col < colNum)
             this[row, col]
@@ -122,28 +113,28 @@ public inline fun Matrix<Double>.appendColumn(crossinline mapper: (Buffer<Double
             mapper(rows[row])
     }
 
-public fun Matrix<Double>.extractColumns(columnRange: IntRange): RealMatrix =
+public fun RealMatrix.extractColumns(columnRange: IntRange): RealMatrix =
     MatrixContext.real.produce(rowNum, columnRange.count()) { row, col ->
         this[row, columnRange.first + col]
     }
 
-public fun Matrix<Double>.extractColumn(columnIndex: Int): RealMatrix =
+public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
-public fun Matrix<Double>.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     val column = columns[j]
     elementContext { sum(column.asIterable()) }
 }
 
-public fun Matrix<Double>.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().minOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun Matrix<Double>.maxByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.maxByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().maxOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun Matrix<Double>.averageByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.averageByColumn(): RealBuffer = RealBuffer(colNum) { j ->
     columns[j].asIterable().average()
 }
 
@@ -151,7 +142,39 @@ public fun Matrix<Double>.averageByColumn(): RealBuffer = RealBuffer(colNum) { j
  * Operations processing all elements
  */
 
-public fun Matrix<Double>.sum(): Double = elements().map { (_, value) -> value }.sum()
-public fun Matrix<Double>.min(): Double? = elements().map { (_, value) -> value }.minOrNull()
-public fun Matrix<Double>.max(): Double? = elements().map { (_, value) -> value }.maxOrNull()
-public fun Matrix<Double>.average(): Double = elements().map { (_, value) -> value }.average()
+public fun RealMatrix.sum(): Double = elements().map { (_, value) -> value }.sum()
+public fun RealMatrix.min(): Double? = elements().map { (_, value) -> value }.minOrNull()
+public fun RealMatrix.max(): Double? = elements().map { (_, value) -> value }.maxOrNull()
+public fun RealMatrix.average(): Double = elements().map { (_, value) -> value }.average()
+
+public inline fun RealMatrix.map(transform: (Double) -> Double): RealMatrix =
+    MatrixContext.real.produce(rowNum, colNum) { i, j ->
+        transform(get(i, j))
+    }
+
+/**
+ * Inverse a square real matrix using LUP decomposition
+ */
+public fun RealMatrix.inverseWithLUP(): RealMatrix = MatrixContext.real.inverseWithLUP(this)
+
+//extended operations
+
+public fun RealMatrix.pow(p: Double): RealMatrix = map { it.pow(p) }
+
+public fun RealMatrix.pow(p: Int): RealMatrix = map { it.pow(p) }
+
+public fun exp(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.exp(it) }
+
+public fun sqrt(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.sqrt(it) }
+
+public fun RealMatrix.square(): RealMatrix = map { it.pow(2) }
+
+public fun sin(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.sin(it) }
+
+public fun cos(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.cos(it) }
+
+public fun tan(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.tan(it) }
+
+public fun ln(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.ln(it) }
+
+public fun log10(arg: RealMatrix): RealMatrix = arg.map { kotlin.math.log10(it) }

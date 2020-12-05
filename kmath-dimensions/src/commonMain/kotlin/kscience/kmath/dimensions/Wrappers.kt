@@ -42,7 +42,7 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
  * An inline wrapper for a Matrix
  */
 public inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
-    public val structure: Structure2D<T>
+    private val structure: Structure2D<T>
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
     override operator fun get(i: Int, j: Int): T = structure[i, j]
@@ -81,7 +81,7 @@ public inline class DPointWrapper<T, D : Dimension>(public val point: Point<T>) 
 /**
  * Basic operations on dimension-safe matrices. Operates on [Matrix]
  */
-public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: GenericMatrixContext<T, Ri>) {
+public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: GenericMatrixContext<T, Ri, Matrix<T>>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
         require(rowNum == Dimension.dim<R>().toInt()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"

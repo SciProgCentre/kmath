@@ -1,7 +1,10 @@
-package kscience.kmath.structures
+package kscience.kmath.benchmarks
 
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
+import kscience.kmath.structures.BufferedNDField
+import kscience.kmath.structures.NDField
+import kscience.kmath.structures.RealNDField
 import kscience.kmath.viktor.ViktorNDField
 import org.jetbrains.bio.viktor.F64Array
 import org.openjdk.jmh.annotations.Benchmark
@@ -36,7 +39,7 @@ internal class ViktorBenchmark {
 
     @Benchmark
     fun rawViktor() {
-        val one = F64Array.full(init = 1.0, shape = *intArrayOf(dim, dim))
+        val one = F64Array.full(init = 1.0, shape = intArrayOf(dim, dim))
         var res = one
         repeat(n) { res = res + one }
     }

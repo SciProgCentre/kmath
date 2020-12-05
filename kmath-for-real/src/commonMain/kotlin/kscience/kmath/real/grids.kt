@@ -1,6 +1,5 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.Point
 import kscience.kmath.structures.asBuffer
 import kotlin.math.abs
 
@@ -34,7 +33,7 @@ public fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Se
     }
 }
 
-public infix fun ClosedFloatingPointRange<Double>.step(step: Double): Point<Double> =
+public infix fun ClosedFloatingPointRange<Double>.step(step: Double): RealVector =
     toSequenceWithStep(step).toList().asBuffer()
 
 /**

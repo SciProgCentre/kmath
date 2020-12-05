@@ -47,7 +47,7 @@ public fun <T> Iterator<T>.asChain(): Chain<T> = SimpleChain { next() }
 public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
 
 /**
- * A simple chain of independent tokens
+ * A simple chain of independent tokens. [fork] returns the same chain.
  */
 public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
     public override suspend fun next(): R = gen()

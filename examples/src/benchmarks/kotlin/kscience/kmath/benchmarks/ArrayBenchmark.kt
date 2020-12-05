@@ -1,4 +1,4 @@
-package kscience.kmath.structures
+package kscience.kmath.benchmarks
 
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
