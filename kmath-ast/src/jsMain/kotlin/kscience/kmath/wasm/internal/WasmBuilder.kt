@@ -2,6 +2,7 @@ package kscience.kmath.wasm.internal
 
 import WebAssembly.Instance
 import binaryen.*
+import kscience.kmath.ast.MST
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.StringSymbol
 import kscience.kmath.operations.*
