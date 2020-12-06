@@ -213,6 +213,10 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
     public override fun unwrap(): Quaternion = this
     public override fun Quaternion.wrap(): Quaternion = this
     public override fun compareTo(other: Quaternion): Int = r.compareTo(other.r)
+
+    /**
+     * Returns a string representation of this quaternion.
+     */
     public override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
 
     public companion object : MemorySpec<Quaternion> {
