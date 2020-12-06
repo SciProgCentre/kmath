@@ -1,9 +1,12 @@
 package kscience.kmath.ast
 
+import kscience.kmath.expressions.Expression
+import kscience.kmath.expressions.StringSymbol
 import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.IntRing
 import kscience.kmath.operations.RealField
 import kscience.kmath.wasm.compile
+import kotlin.math.pow
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -44,12 +47,18 @@ internal class Test {
         var rng = Random(0)
         var sum1 = 0.0
         var sum2 = 0.0
+        var sum3 = 0.0
         val e2 = RealField.mstInExtendedField { symbol("x").pow(1.0 / 6.0) }
         val e1 = e2.compile()
         measureTime { repeat(times) { sum1 += e1("x" to rng.nextDouble()) } }.also(::println)
         println("MST")
         rng = Random(0)
         measureTime { repeat(times) { sum2 += e2("x" to rng.nextDouble()) } }.also(::println)
+        val e3 = Expression<Double> { args -> args.getValue(StringSymbol("x")).pow(1.0 / 6.0) }
+        println("JS Math")
+        rng = Random(0)
+        measureTime { repeat(times) { sum3 += e3("x" to rng.nextDouble()) } }.also(::println)
         assertEquals(sum1, sum2)
+        assertEquals(sum1, sum3)
     }
 }
