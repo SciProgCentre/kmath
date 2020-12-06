@@ -1,4 +1,4 @@
-package kscience.kmath.ast
+package kscience.kmath.wasm.internal
 
 import WebAssembly.Instance
 import binaryen.*

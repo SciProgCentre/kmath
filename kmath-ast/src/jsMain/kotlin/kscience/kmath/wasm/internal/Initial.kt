@@ -1,4 +1,4 @@
-package kscience.kmath.ast
+package kscience.kmath.wasm.internal
 
 internal val f64StandardFunctions by lazy { Base64.toUint8Array(B) }
 
