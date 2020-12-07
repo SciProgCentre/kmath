@@ -21,19 +21,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            **/.gradle
-            **/build
-          key: gradle_6_6_1
-          restore-keys: gradle_6_6_1
+            .gradle
+            build
+            ~/.gradle
+          key: gradle
+          restore-keys: gradle
 
       - name: Cache konan
         uses: actions/cache@v2
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-linux-1.4.20
-          key: ${{ runner.os }}-konan-1.4.20
-          restore-keys: ${{ runner.os }}-konan-1.4.20
+            ~/.konan/kotlin-native-prebuilt-linux-*
+          key: ${{ runner.os }}-konan
+          restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: ./gradlew -Dorg.gradle.daemon=false --build-cache build
 
@@ -50,19 +51,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            **/.gradle
-            **/build
-          key: gradle_6_6_1
-          restore-keys: gradle_6_6_1
+            .gradle
+            build
+            ~/.gradle
+          key: gradle
+          restore-keys: gradle
 
       - name: Cache konan
         uses: actions/cache@v2
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-macos-1.4.20
-          key: ${{ runner.os }}-konan-1.4.20
-          restore-keys: ${{ runner.os }}-konan-1.4.20
+            ~/.konan/kotlin-native-prebuilt-macos-*
+          key: ${{ runner.os }}-konan
+          restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: sudo ./gradlew -Dorg.gradle.daemon=false --build-cache build
 
@@ -81,18 +83,19 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            **/.gradle
-            **/build
-          key: gradle_6_6_1
-          restore-keys: gradle_6_6_1
+            .gradle
+            build
+            ~/.gradle
+          key: {{ runner.os }}-gradle
+          restore-keys: {{ runner.os }}-gradle
 
       - name: Cache konan
         uses: actions/cache@v2
         with:
           path: |
             ~/.konan/dependencies
-            ~/.konan/kotlin-native-prebuilt-mingw-1.4.20
-          key: ${{ runner.os }}-konan-1.4.20
-          restore-keys: ${{ runner.os }}-konan-1.4.20
+            ~/.konan/kotlin-native-prebuilt-mingw-*
+          key: ${{ runner.os }}-konan
+          restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: ./gradlew --build-cache build
