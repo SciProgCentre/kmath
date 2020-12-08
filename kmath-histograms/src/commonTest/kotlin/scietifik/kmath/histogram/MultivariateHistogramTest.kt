@@ -4,6 +4,8 @@ import kscience.kmath.histogram.RealHistogram
 import kscience.kmath.histogram.fill
 import kscience.kmath.histogram.put
 import kscience.kmath.real.RealVector
+import kscience.kmath.real.invoke
+import kscience.kmath.structures.Buffer
 import kotlin.random.Random
 import kotlin.test.*
 

@@ -1,23 +1,22 @@
 package kscience.kmath.ejml
 
-import org.ejml.simple.SimpleMatrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
-import kscience.kmath.operations.Space
-import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
+import org.ejml.simple.SimpleMatrix
+
+/**
+ * Converts this matrix to EJML one.
+ */
+public fun Matrix<Double>.toEjml(): EjmlMatrix =
+    if (this is EjmlMatrix) this else EjmlMatrixContext.produce(rowNum, colNum) { i, j -> get(i, j) }
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
  *
  * @author Iaroslav Postovalov
  */
-public class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext<Double> {
-    /**
-     * Converts this matrix to EJML one.
-     */
-    public fun Matrix<Double>.toEjml(): EjmlMatrix =
-        if (this is EjmlMatrix) this else produce(rowNum, colNum) { i, j -> get(i, j) }
+public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
 
     /**
      * Converts this vector to EJML one.
@@ -47,11 +46,10 @@ public class EjmlMatrixContext(private val space: Space<Double>) : MatrixContext
         EjmlMatrix(toEjml().origin - b.toEjml().origin)
 
     public override fun multiply(a: Matrix<Double>, k: Number): EjmlMatrix =
-        produce(a.rowNum, a.colNum) { i, j -> space { a[i, j] * k } }
+        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * k.toDouble() }
 
-    public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix = EjmlMatrix(toEjml().origin.scale(value))
-
-    public companion object
+    public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
+        EjmlMatrix(toEjml().origin.scale(value))
 }
 
 /**

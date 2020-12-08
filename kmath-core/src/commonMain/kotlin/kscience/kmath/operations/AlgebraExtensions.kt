@@ -39,6 +39,11 @@ public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
 public fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
 
 /**
+ * Absolute of the comparable [value]
+ */
+public fun <T : Comparable<T>> Space<T>.abs(value: T): T = if (value > zero) value else -value
+
+/**
  * Returns the sum of all elements in the iterable in provided space.
  *
  * @receiver the collection to sum up.

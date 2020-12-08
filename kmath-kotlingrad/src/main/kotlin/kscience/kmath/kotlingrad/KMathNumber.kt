@@ -1,7 +1,7 @@
 package kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.experimental.RealNumber
-import edu.umontreal.kotlingrad.experimental.SConst
+import edu.umontreal.kotlingrad.api.RealNumber
+import edu.umontreal.kotlingrad.api.SConst
 import kscience.kmath.operations.NumericAlgebra
 
 /**

@@ -27,9 +27,8 @@ public interface FeaturedMatrix<T : Any> : Matrix<T> {
 public inline fun Structure2D.Companion.real(
     rows: Int,
     columns: Int,
-    initializer: (Int, Int) -> Double
-): Matrix<Double> =
-    MatrixContext.real.produce(rows, columns, initializer)
+    initializer: (Int, Int) -> Double,
+): BufferMatrix<Double> = MatrixContext.real.produce(rows, columns, initializer)
 
 /**
  * Build a square matrix from given elements.
@@ -58,7 +57,7 @@ public inline fun <reified T : Any> Matrix<*>.getFeature(): T? =
 /**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, columns: Int): FeaturedMatrix<T> =
+public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.one(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix(rows, columns, DiagonalFeature) { i, j ->
         if (i == j) elementContext.one else elementContext.zero
     }
@@ -67,7 +66,7 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.one(rows: Int, colu
 /**
  * A virtual matrix of zeroes
  */
-public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
+public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
 
 public class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
@@ -82,5 +81,3 @@ public fun <T : Any> Matrix<T>.transpose(): Matrix<T> {
         setOf(TransposedFeature(this))
     ) { i, j -> get(j, i) }
 }
-
-public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = with(MatrixContext.real) { dot(other) }

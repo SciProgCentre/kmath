@@ -9,7 +9,7 @@ class RealLUSolverTest {
     @Test
     fun testInvertOne() {
         val matrix = MatrixContext.real.one(2, 2)
-        val inverted = MatrixContext.real.inverse(matrix)
+        val inverted = MatrixContext.real.inverseWithLUP(matrix)
         assertEquals(matrix, inverted)
     }
 
@@ -37,7 +37,7 @@ class RealLUSolverTest {
             1.0, 3.0
         )
 
-        val inverted = MatrixContext.real.inverse(matrix)
+        val inverted = MatrixContext.real.inverseWithLUP(matrix)
 
         val expected = Matrix.square(
             0.375, -0.125,

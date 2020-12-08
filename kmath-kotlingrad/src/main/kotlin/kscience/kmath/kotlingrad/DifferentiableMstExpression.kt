@@ -1,6 +1,6 @@
 package kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.experimental.SFun
+import edu.umontreal.kotlingrad.api.SFun
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstAlgebra
 import kscience.kmath.ast.MstExpression

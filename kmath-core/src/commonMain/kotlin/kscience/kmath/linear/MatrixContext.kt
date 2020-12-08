@@ -12,16 +12,17 @@ import kscience.kmath.structures.asSequence
 /**
  * Basic operations on matrices. Operates on [Matrix]
  */
-public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
+public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Matrix<T>> {
     /**
      * Produce a matrix with this context and given dimensions
      */
-    public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): Matrix<T>
+    public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): M
 
-    public override fun binaryOperation(operation: String): (left: Matrix<T>, right: Matrix<T>) -> Matrix<T> =
+    @Suppress("UNCHECKED_CAST")
+    public override fun binaryOperation(operation: String): (left: Matrix<T>, right: Matrix<T>) -> M =
         when (operation) {
             "dot" -> { left, right -> left dot right }
-            else -> super.binaryOperation(operation)
+            else -> super.binaryOperation(operation) as (Matrix<T>, Matrix<T>) -> M
         }
 
     /**
@@ -31,7 +32,7 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      * @param other the multiplier.
      * @return the dot product.
      */
-    public infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T>
+    public infix fun Matrix<T>.dot(other: Matrix<T>): M
 
     /**
      * Computes the dot product of this matrix and a vector.
@@ -49,7 +50,7 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      * @param value the multiplier.
      * @receiver the product.
      */
-    public operator fun Matrix<T>.times(value: T): Matrix<T>
+    public operator fun Matrix<T>.times(value: T): M
 
     /**
      * Multiplies an element by a matrix of it.
@@ -58,7 +59,7 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
      * @param value the multiplier.
      * @receiver the product.
      */
-    public operator fun T.times(m: Matrix<T>): Matrix<T> = m * this
+    public operator fun T.times(m: Matrix<T>): M = m * this
 
     public companion object {
         /**
@@ -71,18 +72,18 @@ public interface MatrixContext<T : Any> : SpaceOperations<Matrix<T>> {
          */
         public fun <T : Any, R : Ring<T>> buffered(
             ring: R,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
-        ): GenericMatrixContext<T, R> = BufferMatrixContext(ring, bufferFactory)
+            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+        ): GenericMatrixContext<T, R, BufferMatrix<T>> = BufferMatrixContext(ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        public inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R> =
+        public inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R, BufferMatrix<T>> =
             buffered(ring, Buffer.Companion::auto)
     }
 }
 
-public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
+public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> : MatrixContext<T, M> {
     /**
      * The ring context for matrix elements
      */
@@ -93,7 +94,7 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
      */
     public fun point(size: Int, initializer: (Int) -> T): Point<T>
 
-    public override infix fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
+    public override infix fun Matrix<T>.dot(other: Matrix<T>): M {
         //TODO add typed error
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
 
@@ -114,10 +115,10 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
         }
     }
 
-    public override operator fun Matrix<T>.unaryMinus(): Matrix<T> =
+    public override operator fun Matrix<T>.unaryMinus(): M =
         produce(rowNum, colNum) { i, j -> elementContext { -get(i, j) } }
 
-    public override fun add(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
+    public override fun add(a: Matrix<T>, b: Matrix<T>): M {
         require(a.rowNum == b.rowNum && a.colNum == b.colNum) {
             "Matrix operation dimension mismatch. [${a.rowNum},${a.colNum}] + [${b.rowNum},${b.colNum}]"
         }
@@ -125,7 +126,7 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
         return produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] + b[i, j] } }
     }
 
-    public override operator fun Matrix<T>.minus(b: Matrix<T>): Matrix<T> {
+    public override operator fun Matrix<T>.minus(b: Matrix<T>): M {
         require(rowNum == b.rowNum && colNum == b.colNum) {
             "Matrix operation dimension mismatch. [$rowNum,$colNum] - [${b.rowNum},${b.colNum}]"
         }
@@ -133,11 +134,11 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>> : MatrixContext<T> {
         return produce(rowNum, colNum) { i, j -> elementContext { get(i, j) + b[i, j] } }
     }
 
-    public override fun multiply(a: Matrix<T>, k: Number): Matrix<T> =
+    public override fun multiply(a: Matrix<T>, k: Number): M =
         produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
 
-    public operator fun Number.times(matrix: FeaturedMatrix<T>): Matrix<T> = matrix * this
+    public operator fun Number.times(matrix: FeaturedMatrix<T>): M = multiply(matrix, this)
 
-    public override operator fun Matrix<T>.times(value: T): Matrix<T> =
+    public override operator fun Matrix<T>.times(value: T): M =
         produce(rowNum, colNum) { i, j -> elementContext { get(i, j) * value } }
 }

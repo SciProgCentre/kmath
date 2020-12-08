@@ -83,11 +83,10 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
 }
 
 /**
- * Tries to parse the string into [MST].
+ * Tries to parse the string into [MST]. Returns [ParseResult] representing expression or error.
  *
  * @receiver the string to parse.
  * @return the [MST] node.
- * @author Alexander Nozik
  */
 public fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
 
@@ -96,6 +95,5 @@ public fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryPar
  *
  * @receiver the string to parse.
  * @return the [MST] node.
- * @author Alexander Nozik
  */
 public fun String.parseMath(): MST = ArithmeticsEvaluator.parseToEnd(this)

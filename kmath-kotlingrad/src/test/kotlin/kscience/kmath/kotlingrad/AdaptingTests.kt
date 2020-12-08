@@ -1,6 +1,6 @@
 package kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.experimental.*
+import edu.umontreal.kotlingrad.api.*
 import kscience.kmath.asm.compile
 import kscience.kmath.ast.MstAlgebra
 import kscience.kmath.ast.MstExpression
