@@ -91,5 +91,3 @@ internal inline fun ClassWriter.visitField(
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return visitField(access, name, descriptor, signature, value).apply(block)
 }
-
-
