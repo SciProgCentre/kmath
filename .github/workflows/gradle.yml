@@ -86,8 +86,8 @@ jobs:
             .gradle
             build
             ~/.gradle
-          key: {{ runner.os }}-gradle
-          restore-keys: {{ runner.os }}-gradle
+          key: ${{ runner.os }}-gradle
+          restore-keys: ${{ runner.os }}-gradle
 
       - name: Cache konan
         uses: actions/cache@v2
