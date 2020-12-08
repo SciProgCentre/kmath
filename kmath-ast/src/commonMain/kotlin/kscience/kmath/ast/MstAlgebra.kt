@@ -24,13 +24,17 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
 
     public override fun number(value: Number): MST.Numeric = MstAlgebra.number(value)
     public override fun symbol(value: String): MST.Symbolic = MstAlgebra.symbol(value)
-    override fun add(a: MST, b: MST): MST.Binary = binaryOperation(SpaceOperations.PLUS_OPERATION)(a, b)
-    override fun multiply(a: MST, k: Number): MST.Binary = binaryOperation(RingOperations.TIMES_OPERATION)(a, number(k))
+    public override fun add(a: MST, b: MST): MST.Binary = binaryOperation(SpaceOperations.PLUS_OPERATION)(a, b)
+    public override fun MST.unaryMinus(): MST = unaryOperation(SpaceOperations.MINUS_OPERATION)(this)
 
-    override fun binaryOperation(operation: String): (left: MST, right: MST) -> MST.Binary =
+    public override fun multiply(a: MST, k: Number): MST.Binary =
+        binaryOperation(RingOperations.TIMES_OPERATION)(a, number(k))
+
+    public override fun binaryOperation(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstAlgebra.binaryOperation(operation)
 
-    override fun unaryOperation(operation: String): (arg: MST) -> MST.Unary = MstAlgebra.unaryOperation(operation)
+    public override fun unaryOperation(operation: String): (arg: MST) -> MST.Unary =
+        MstAlgebra.unaryOperation(operation)
 }
 
 /**
@@ -47,6 +51,7 @@ public object MstRing : Ring<MST>, NumericAlgebra<MST> {
     public override fun add(a: MST, b: MST): MST.Binary = MstSpace.add(a, b)
     public override fun multiply(a: MST, k: Number): MST.Binary = MstSpace.multiply(a, k)
     public override fun multiply(a: MST, b: MST): MST.Binary = binaryOperation(RingOperations.TIMES_OPERATION)(a, b)
+    public override fun MST.unaryMinus(): MST = MstSpace.unaryOperation(SpaceOperations.MINUS_OPERATION)(this)
 
     public override fun binaryOperation(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstSpace.binaryOperation(operation)
@@ -71,6 +76,7 @@ public object MstField : Field<MST> {
     public override fun multiply(a: MST, k: Number): MST.Binary = MstRing.multiply(a, k)
     public override fun multiply(a: MST, b: MST): MST.Binary = MstRing.multiply(a, b)
     public override fun divide(a: MST, b: MST): MST.Binary = binaryOperation(FieldOperations.DIV_OPERATION)(a, b)
+    public override fun MST.unaryMinus(): MST = MstSpace.unaryOperation(SpaceOperations.MINUS_OPERATION)(this)
 
     public override fun binaryOperation(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstRing.binaryOperation(operation)
@@ -105,6 +111,7 @@ public object MstExtendedField : ExtendedField<MST> {
     public override fun multiply(a: MST, k: Number): MST.Binary = MstField.multiply(a, k)
     public override fun multiply(a: MST, b: MST): MST.Binary = MstField.multiply(a, b)
     public override fun divide(a: MST, b: MST): MST.Binary = MstField.divide(a, b)
+    public override fun MST.unaryMinus(): MST = MstSpace.unaryOperation(SpaceOperations.MINUS_OPERATION)(this)
 
     public override fun power(arg: MST, pow: Number): MST.Binary =
         binaryOperation(PowerOperations.POW_OPERATION)(arg, number(pow))

@@ -17,6 +17,6 @@ internal class TestAsmVariables {
     @Test
     fun testVariableWithoutDefaultFails() {
         val expr = ByteRing.mstInRing { symbol("x") }
-        assertFailsWith<IllegalStateException> { expr() }
+        assertFailsWith<NoSuchElementException> { expr() }
     }
 }

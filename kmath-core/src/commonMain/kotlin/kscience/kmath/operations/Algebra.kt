@@ -20,12 +20,14 @@ public interface Algebra<T> {
     /**
      * Dynamically dispatches an unary operation with name [operation].
      */
-    public fun unaryOperation(operation: String): (arg: T) -> T
+    public fun unaryOperation(operation: String): (arg: T) -> T =
+        error("Unary operation $operation not defined in $this")
 
     /**
      * Dynamically dispatches a binary operation with name [operation].
      */
-    public fun binaryOperation(operation: String): (left: T, right: T) -> T
+    public fun binaryOperation(operation: String): (left: T, right: T) -> T =
+        error("Binary operation $operation not defined in $this")
 }
 
 /**
@@ -161,13 +163,13 @@ public interface SpaceOperations<T> : Algebra<T> {
     override fun unaryOperation(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> arg }
         MINUS_OPERATION -> { arg -> -arg }
-        else -> error("Unary operation $operation not defined in $this")
+        else -> super.unaryOperation(operation)
     }
 
     override fun binaryOperation(operation: String): (left: T, right: T) -> T = when (operation) {
         PLUS_OPERATION -> ::add
         MINUS_OPERATION -> { left, right -> left - right }
-        else -> error("Binary operation $operation not defined in $this")
+        else -> super.binaryOperation(operation)
     }
 
     public companion object {

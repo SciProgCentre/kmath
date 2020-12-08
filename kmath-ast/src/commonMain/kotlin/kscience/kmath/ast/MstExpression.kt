@@ -15,7 +15,12 @@ import kotlin.contracts.contract
  */
 public class MstExpression<T, out A : Algebra<T>>(public val algebra: A, public val mst: MST) : Expression<T> {
     private inner class InnerAlgebra(val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
-        override fun symbol(value: String): T = arguments[StringSymbol(value)] ?: algebra.symbol(value)
+        override fun symbol(value: String): T = try {
+            algebra.symbol(value)
+        } catch (ignored: IllegalStateException) {
+            null
+        } ?: arguments.getValue(StringSymbol(value))
+
         override fun unaryOperation(operation: String): (arg: T) -> T = algebra.unaryOperation(operation)
         override fun binaryOperation(operation: String): (left: T, right: T) -> T = algebra.binaryOperation(operation)
 

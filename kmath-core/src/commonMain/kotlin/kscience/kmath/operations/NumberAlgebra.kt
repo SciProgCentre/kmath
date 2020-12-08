@@ -31,7 +31,7 @@ public interface ExtendedFieldOperations<T> :
         PowerOperations.SQRT_OPERATION -> ::sqrt
         ExponentialOperations.EXP_OPERATION -> ::exp
         ExponentialOperations.LN_OPERATION -> ::ln
-        else -> super.unaryOperation(operation)
+        else -> super<FieldOperations>.unaryOperation(operation)
     }
 }
 

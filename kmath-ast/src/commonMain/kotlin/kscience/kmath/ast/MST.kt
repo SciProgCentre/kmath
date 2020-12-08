@@ -64,7 +64,8 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
 
         node.left is MST.Numeric && node.right is MST.Numeric -> {
             val number = RealField
-                .binaryOperation(node.operation)(node.left.value.toDouble(), node.right.value.toDouble())
+                .binaryOperation(node.operation)
+                .invoke(node.left.value.toDouble(), node.right.value.toDouble())
 
             number(number)
         }

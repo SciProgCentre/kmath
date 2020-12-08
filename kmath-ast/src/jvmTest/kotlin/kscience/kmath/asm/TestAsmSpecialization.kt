@@ -46,7 +46,7 @@ internal class TestAsmSpecialization {
     @Test
     fun testPower() {
         val expr = RealField
-            .mstInField { binaryOperation("power")(symbol("x"), number(2)) }
+            .mstInField { binaryOperation("pow")(symbol("x"), number(2)) }
             .compile()
 
         assertEquals(4.0, expr("x" to 2.0))
