@@ -42,7 +42,7 @@ internal class NativeMemory(
         override fun readLong(offset: Int) = array.getLongAt(position(offset))
 
         override fun release() {
-            // does nothing on JVM
+            // does nothing on Native
         }
     }
 
@@ -60,7 +60,7 @@ internal class NativeMemory(
         }
 
         override fun writeByte(offset: Int, value: Byte) {
-            array.set(position(offset), value)
+            array[position(offset)] = value
         }
 
         override fun writeShort(offset: Int, value: Short) {
@@ -76,7 +76,7 @@ internal class NativeMemory(
         }
 
         override fun release() {
-            // does nothing on JVM
+            // does nothing on Native
         }
     }
 

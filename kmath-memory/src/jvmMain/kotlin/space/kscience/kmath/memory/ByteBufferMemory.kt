@@ -7,6 +7,7 @@ package space.kscience.kmath.memory
 
 import java.io.IOException
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 import java.nio.file.Files
 import java.nio.file.Path
@@ -31,7 +32,7 @@ internal class ByteBufferMemory(
     }
 
     override fun copy(): Memory {
-        val copy = ByteBuffer.allocate(buffer.capacity())
+        val copy = ByteBuffer.allocate(buffer.capacity()).order(ByteOrder.LITTLE_ENDIAN)
         buffer.rewind()
         copy.put(buffer)
         copy.flip()
@@ -99,7 +100,7 @@ internal class ByteBufferMemory(
  * Allocates memory based on a [ByteBuffer].
  */
 public actual fun Memory.Companion.allocate(length: Int): Memory =
-    ByteBufferMemory(checkNotNull(ByteBuffer.allocate(length)))
+    ByteBufferMemory(checkNotNull(ByteBuffer.allocate(length).order(ByteOrder.LITTLE_ENDIAN)))
 
 /**
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied

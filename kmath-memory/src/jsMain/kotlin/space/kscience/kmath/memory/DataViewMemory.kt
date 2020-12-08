@@ -28,18 +28,18 @@ private class DataViewMemory(val view: DataView) : Memory {
     private val reader: MemoryReader = object : MemoryReader {
         override val memory: Memory get() = this@DataViewMemory
 
-        override fun readDouble(offset: Int): Double = view.getFloat64(offset, false)
+        override fun readDouble(offset: Int): Double = view.getFloat64(offset, true)
 
-        override fun readFloat(offset: Int): Float = view.getFloat32(offset, false)
+        override fun readFloat(offset: Int): Float = view.getFloat32(offset, true)
 
         override fun readByte(offset: Int): Byte = view.getInt8(offset)
 
-        override fun readShort(offset: Int): Short = view.getInt16(offset, false)
+        override fun readShort(offset: Int): Short = view.getInt16(offset, true)
 
-        override fun readInt(offset: Int): Int = view.getInt32(offset, false)
+        override fun readInt(offset: Int): Int = view.getInt32(offset, true)
 
         override fun readLong(offset: Int): Long =
-            view.getInt32(offset, false).toLong() shl 32 or view.getInt32(offset + 4, false).toLong()
+            view.getInt32(offset, true).toLong() shl 32 or view.getInt32(offset + 4, true).toLong()
 
         override fun release() {
             // does nothing on JS
@@ -52,11 +52,11 @@ private class DataViewMemory(val view: DataView) : Memory {
         override val memory: Memory get() = this@DataViewMemory
 
         override fun writeDouble(offset: Int, value: Double) {
-            view.setFloat64(offset, value, false)
+            view.setFloat64(offset, value, true)
         }
 
         override fun writeFloat(offset: Int, value: Float) {
-            view.setFloat32(offset, value, false)
+            view.setFloat32(offset, value, true)
         }
 
         override fun writeByte(offset: Int, value: Byte) {
@@ -64,16 +64,16 @@ private class DataViewMemory(val view: DataView) : Memory {
         }
 
         override fun writeShort(offset: Int, value: Short) {
-            view.setUint16(offset, value, false)
+            view.setUint16(offset, value, true)
         }
 
         override fun writeInt(offset: Int, value: Int) {
-            view.setInt32(offset, value, false)
+            view.setInt32(offset, value, true)
         }
 
         override fun writeLong(offset: Int, value: Long) {
-            view.setInt32(offset, (value shr 32).toInt(), littleEndian = false)
-            view.setInt32(offset + 4, (value and 0xffffffffL).toInt(), littleEndian = false)
+            view.setInt32(offset, (value shr 32).toInt(), littleEndian = true)
+            view.setInt32(offset + 4, (value and 0xffffffffL).toInt(), littleEndian = true)
         }
 
         override fun release() {
@@ -82,7 +82,6 @@ private class DataViewMemory(val view: DataView) : Memory {
     }
 
     override fun writer(): MemoryWriter = writer
-
 }
 
 /**
@@ -98,6 +97,6 @@ public actual fun Memory.Companion.allocate(length: Int): Memory {
  * and could be mutated independently from the resulting [Memory].
  */
 public actual fun Memory.Companion.wrap(array: ByteArray): Memory {
-    @Suppress("CAST_NEVER_SUCCEEDS") val int8Array = array as Int8Array
+    val int8Array = array.unsafeCast<Int8Array>()
     return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))
 }
