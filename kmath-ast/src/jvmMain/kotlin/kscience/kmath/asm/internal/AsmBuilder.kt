@@ -3,7 +3,6 @@ package kscience.kmath.asm.internal
 import kscience.kmath.asm.internal.AsmBuilder.ClassLoader
 import kscience.kmath.ast.MST
 import kscience.kmath.expressions.Expression
-import kscience.kmath.operations.Algebra
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
@@ -74,7 +73,7 @@ internal class AsmBuilder<T>(
                 classType.internalName,
                 "${OBJECT_TYPE.descriptor}L${EXPRESSION_TYPE.internalName}<${tType.descriptor}>;",
                 OBJECT_TYPE.internalName,
-                arrayOf(EXPRESSION_TYPE.internalName)
+                arrayOf(EXPRESSION_TYPE.internalName),
             )
 
             visitMethod(
@@ -82,7 +81,7 @@ internal class AsmBuilder<T>(
                 "invoke",
                 getMethodDescriptor(tType, MAP_TYPE),
                 "(L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
-                null
+                null,
             ).instructionAdapter {
                 invokeMethodVisitor = this
                 visitCode()
@@ -97,7 +96,7 @@ internal class AsmBuilder<T>(
                     null,
                     l0,
                     l1,
-                    0
+                    0,
                 )
 
                 visitLocalVariable(
@@ -106,7 +105,7 @@ internal class AsmBuilder<T>(
                     "L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;",
                     l0,
                     l1,
-                    1
+                    1,
                 )
 
                 visitMaxs(0, 2)
@@ -118,14 +117,12 @@ internal class AsmBuilder<T>(
                 "invoke",
                 getMethodDescriptor(OBJECT_TYPE, MAP_TYPE),
                 null,
-                null
+                null,
             ).instructionAdapter {
-                val thisVar = 0
-                val argumentsVar = 1
                 visitCode()
                 val l0 = label()
-                load(thisVar, OBJECT_TYPE)
-                load(argumentsVar, MAP_TYPE)
+                load(0, OBJECT_TYPE)
+                load(1, MAP_TYPE)
                 invokevirtual(classType.internalName, "invoke", getMethodDescriptor(tType, MAP_TYPE), false)
                 areturn(tType)
                 val l1 = label()
@@ -136,7 +133,7 @@ internal class AsmBuilder<T>(
                     null,
                     l0,
                     l1,
-                    thisVar
+                    0,
                 )
 
                 visitMaxs(0, 2)
@@ -152,7 +149,7 @@ internal class AsmBuilder<T>(
                     descriptor = OBJECT_ARRAY_TYPE.descriptor,
                     signature = null,
                     value = null,
-                    block = FieldVisitor::visitEnd
+                    block = FieldVisitor::visitEnd,
                 )
 
             visitMethod(
@@ -208,7 +205,7 @@ internal class AsmBuilder<T>(
         getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
         iconst(idx)
         visitInsn(AALOAD)
-        checkcast(type)
+        if (type != OBJECT_TYPE) checkcast(type)
     }
 
     /**
@@ -266,7 +263,7 @@ internal class AsmBuilder<T>(
             MAP_INTRINSICS_TYPE.internalName,
             "getOrFail",
             getMethodDescriptor(OBJECT_TYPE, MAP_TYPE, STRING_TYPE),
-            false
+            false,
         )
 
         checkcast(tType)
@@ -322,11 +319,6 @@ internal class AsmBuilder<T>(
         val EXPRESSION_TYPE: Type by lazy { getObjectType("kscience/kmath/expressions/Expression") }
 
         /**
-         * ASM type for [java.lang.Number].
-         */
-        val NUMBER_TYPE: Type by lazy { getObjectType("java/lang/Number") }
-
-        /**
          * ASM type for [java.util.Map].
          */
         val MAP_TYPE: Type by lazy { getObjectType("java/util/Map") }
@@ -340,11 +332,6 @@ internal class AsmBuilder<T>(
          * ASM type for array of [java.lang.Object].
          */
         val OBJECT_ARRAY_TYPE: Type by lazy { getType("[Ljava/lang/Object;") }
-
-        /**
-         * ASM type for [Algebra].
-         */
-        val ALGEBRA_TYPE: Type by lazy { getObjectType("kscience/kmath/operations/Algebra") }
 
         /**
          * ASM type for [java.lang.String].
