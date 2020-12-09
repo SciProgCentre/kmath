@@ -7,6 +7,8 @@ import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
 import java.util.stream.Collectors.toMap
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -187,13 +189,14 @@ internal class AsmBuilder<T>(
             visitEnd()
         }
 
-//        java.io.File("dump.class").writeBytes(classWriter.toByteArray())
+        val cls = classLoader.defineClass(className, classWriter.toByteArray())
+        val l = MethodHandles.publicLookup()
 
-        classLoader
-            .defineClass(className, classWriter.toByteArray())
-            .constructors
-            .first()
-            .newInstance(*(constants.toTypedArray().wrapToArrayIf { hasConstants })) as Expression<T>
+        if (hasConstants)
+            l.findConstructor(cls, MethodType.methodType(Void.TYPE, Array<Any>::class.java))
+                .invoke(constants.toTypedArray()) as Expression<T>
+        else
+            l.findConstructor(cls, MethodType.methodType(Void.TYPE)).invoke() as Expression<T>
     }
 
     /**
@@ -248,7 +251,7 @@ internal class AsmBuilder<T>(
             r.internalName,
             "valueOf",
             getMethodDescriptor(r, primitive),
-            false
+            false,
         )
     }
 
