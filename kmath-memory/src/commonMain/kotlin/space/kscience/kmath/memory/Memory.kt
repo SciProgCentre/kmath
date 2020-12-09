@@ -57,7 +57,6 @@ public interface MemoryReader {
     /**
      * Reads [Float] at certain [offset].
      */
-    @Deprecated("readFloat and writeFloat functions work unexpectedly on JS platform, since because their results are widened when used. Consider using readDouble and writeDouble.")
     public fun readFloat(offset: Int): Float
 
     /**
@@ -114,7 +113,6 @@ public interface MemoryWriter {
     /**
      * Writes [Float] at certain [offset].
      */
-    @Deprecated("readFloat and writeFloat functions work unexpectedly on JS platform, since because their results are widened when used. Consider using readDouble and writeDouble.")
     public fun writeFloat(offset: Int, value: Float)
 
     /**

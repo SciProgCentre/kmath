@@ -50,7 +50,6 @@ internal class MemoryTest {
         assertEquals(-50000333595959L, mem.read { readLong(16) })
     }
 
-    @Suppress("DEPRECATION")
     @Test
     fun rwFloat() {
         val mem = Memory.allocate(64)
