@@ -31,7 +31,7 @@ internal class NativeMemory(
 
         override fun readDouble(offset: Int) = array.getDoubleAt(position(offset))
 
-        override fun readFloat(offset: Int) = array.getFloatAt(position(offset))
+        override fun readFloat(offset: Int) = array.getDoubleAt(position(offset)).toFloat()
 
         override fun readByte(offset: Int) = array[position(offset)]
 
@@ -56,7 +56,7 @@ internal class NativeMemory(
         }
 
         override fun writeFloat(offset: Int, value: Float) {
-            array.setFloatAt(position(offset), value)
+            array.setDoubleAt(position(offset), value.toDouble())
         }
 
         override fun writeByte(offset: Int, value: Byte) {

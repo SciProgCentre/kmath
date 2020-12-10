@@ -54,20 +54,15 @@ internal class MemoryTest {
     fun rwFloat() {
         val mem = Memory.allocate(64)
         mem.write { writeFloat(0, 12.12345f) }
-        println(1)
-        assertEquals(12.12345027923584, mem.read { readFloat(0) }.toDouble())
-        mem.write { writeFloat(4, -313.13f) }
-        println(2)
-        assertEquals(-313.1300048828125, mem.read { readFloat(4) }.toDouble())
-        mem.write { writeFloat(8, Float.NaN) }
-        println(3)
-        assertEquals(Float.NaN, mem.read { readFloat(8) })
-        mem.write { writeFloat(12, Float.POSITIVE_INFINITY) }
-        println(4)
-        assertEquals(Float.POSITIVE_INFINITY, mem.read { readFloat(12) })
-        mem.write { writeFloat(12, Float.NEGATIVE_INFINITY) }
-        println(5)
-        assertEquals(Float.NEGATIVE_INFINITY, mem.read { readFloat(12) })
+        assertEquals(12.12345f, mem.read { readFloat(0) })
+        mem.write { writeFloat(8, -313.13f) }
+        assertEquals(-313.13f, mem.read { readFloat(8) })
+        mem.write { writeFloat(16, Float.NaN) }
+        assertEquals(Float.NaN, mem.read { readFloat(16) })
+        mem.write { writeFloat(24, Float.POSITIVE_INFINITY) }
+        assertEquals(Float.POSITIVE_INFINITY, mem.read { readFloat(24) })
+        mem.write { writeFloat(32, Float.NEGATIVE_INFINITY) }
+        assertEquals(Float.NEGATIVE_INFINITY, mem.read { readFloat(32) })
     }
 
     @Test

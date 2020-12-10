@@ -30,7 +30,7 @@ private class DataViewMemory(val view: DataView) : Memory {
 
         override fun readDouble(offset: Int): Double = view.getFloat64(offset, true)
 
-        override fun readFloat(offset: Int): Float = view.getFloat32(offset, true)
+        override fun readFloat(offset: Int): Float = view.getFloat64(offset, true).toFloat()
 
         override fun readByte(offset: Int): Byte = view.getInt8(offset)
 
@@ -56,7 +56,7 @@ private class DataViewMemory(val view: DataView) : Memory {
         }
 
         override fun writeFloat(offset: Int, value: Float) {
-            view.setFloat32(offset, value, true)
+            view.setFloat64(offset, value.toDouble(), true)
         }
 
         override fun writeByte(offset: Int, value: Byte) {

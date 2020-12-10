@@ -44,7 +44,7 @@ internal class ByteBufferMemory(
 
         override fun readDouble(offset: Int) = buffer.getDouble(position(offset))
 
-        override fun readFloat(offset: Int) = buffer.getFloat(position(offset))
+        override fun readFloat(offset: Int) = buffer.getDouble(position(offset)).toFloat()
 
         override fun readByte(offset: Int) = buffer.get(position(offset))
 
@@ -69,7 +69,7 @@ internal class ByteBufferMemory(
         }
 
         override fun writeFloat(offset: Int, value: Float) {
-            buffer.putFloat(position(offset), value)
+            buffer.putDouble(position(offset), value.toDouble())
         }
 
         override fun writeByte(offset: Int, value: Byte) {
