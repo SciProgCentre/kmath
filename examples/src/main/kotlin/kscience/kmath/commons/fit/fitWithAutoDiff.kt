@@ -9,6 +9,7 @@ import kscience.kmath.real.RealVector
 import kscience.kmath.real.map
 import kscience.kmath.real.step
 import kscience.kmath.stat.*
+import kscience.kmath.stat.distributions.NormalDistribution
 import kscience.kmath.structures.asIterable
 import kscience.kmath.structures.toList
 import kscience.plotly.*
@@ -33,10 +34,9 @@ operator fun TraceValues.invoke(vector: RealVector) {
 /**
  * Least squares fie with auto-differentiation. Uses `kmath-commons` and `kmath-for-real` modules.
  */
-fun main() {
-
+suspend fun main() {
     //A generator for a normally distributed values
-    val generator = Distribution.normal()
+    val generator = NormalDistribution(2.0, 7.0)
 
     //A chain/flow of random values with the given seed
     val chain = generator.sample(RandomGenerator.default(112667))
@@ -49,7 +49,7 @@ fun main() {
     //Perform an operation on each x value (much more effective, than numpy)
     val y = x.map {
         val value = it.pow(2) + it + 1
-        value + chain.nextDouble() * sqrt(value)
+        value + chain.next() * sqrt(value)
     }
     // this will also work, but less effective:
     // val y = x.pow(2)+ x + 1 + chain.nextDouble()
