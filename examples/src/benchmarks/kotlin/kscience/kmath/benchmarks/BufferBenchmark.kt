@@ -1,7 +1,9 @@
-package kscience.kmath.structures
+package kscience.kmath.benchmarks
 
 import kscience.kmath.operations.Complex
 import kscience.kmath.operations.complex
+import kscience.kmath.structures.MutableBuffer
+import kscience.kmath.structures.RealBuffer
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State

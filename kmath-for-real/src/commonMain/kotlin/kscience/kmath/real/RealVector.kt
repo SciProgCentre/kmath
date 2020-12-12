@@ -1,47 +1,82 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.BufferVectorSpace
 import kscience.kmath.linear.Point
-import kscience.kmath.linear.VectorSpace
 import kscience.kmath.operations.Norm
-import kscience.kmath.operations.RealField
-import kscience.kmath.operations.SpaceElement
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asBuffer
 import kscience.kmath.structures.asIterable
+import kotlin.math.pow
 import kotlin.math.sqrt
 
-public typealias RealPoint = Point<Double>
-
-public fun RealPoint.asVector(): RealVector = RealVector(this)
-public fun DoubleArray.asVector(): RealVector = asBuffer().asVector()
-public fun List<Double>.asVector(): RealVector = asBuffer().asVector()
+public typealias RealVector = Point<Double>
 
 public object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble(Number::toDouble))
 }
 
-public inline class RealVector(private val point: Point<Double>) :
-    SpaceElement<RealPoint, RealVector, VectorSpace<Double, RealField>>, RealPoint {
-    public override val size: Int get() = point.size
-    public override val context: VectorSpace<Double, RealField> get() = space(point.size)
+public operator fun Buffer.Companion.invoke(vararg doubles: Double): RealVector = doubles.asBuffer()
 
-    public override fun unwrap(): RealPoint = point
-    public override fun RealPoint.wrap(): RealVector = RealVector(this)
-    public override operator fun get(index: Int): Double = point[index]
-    public override operator fun iterator(): Iterator<Double> = point.iterator()
+/**
+ * Fill the vector of given [size] with given [value]
+ */
+public fun Buffer.Companion.same(size: Int, value: Number): RealVector = real(size) { value.toDouble() }
 
-    public companion object {
-        private val spaceCache: MutableMap<Int, BufferVectorSpace<Double, RealField>> = hashMapOf()
+// Transformation methods
 
-        public inline operator fun invoke(dim: Int, initializer: (Int) -> Double): RealVector =
-            RealVector(RealBuffer(dim, initializer))
+public inline fun RealVector.map(transform: (Double) -> Double): RealVector =
+    Buffer.real(size) { transform(get(it)) }
 
-        public operator fun invoke(vararg values: Double): RealVector = values.asVector()
+public inline fun RealVector.mapIndexed(transform: (index: Int, value: Double) -> Double): RealVector =
+    Buffer.real(size) { transform(it, get(it)) }
 
-        public fun space(dim: Int): BufferVectorSpace<Double, RealField> = spaceCache.getOrPut(dim) {
-            BufferVectorSpace(dim, RealField) { size, init -> Buffer.real(size, init) }
-        }
-    }
-}
+public operator fun RealVector.plus(other: RealVector): RealVector =
+    mapIndexed { index, value -> value + other[index] }
+
+public operator fun RealVector.plus(number: Number): RealVector = map { it + number.toDouble() }
+
+public operator fun Number.plus(vector: RealVector): RealVector = vector + this
+
+public operator fun RealVector.unaryMinus(): Buffer<Double> = map { -it }
+
+public operator fun RealVector.minus(other: RealVector): RealVector =
+    mapIndexed { index, value -> value - other[index] }
+
+public operator fun RealVector.minus(number: Number): RealVector = map { it - number.toDouble() }
+
+public operator fun Number.minus(vector: RealVector): RealVector = vector.map { toDouble() - it }
+
+public operator fun RealVector.times(other: RealVector): RealVector =
+    mapIndexed { index, value -> value * other[index] }
+
+public operator fun RealVector.times(number: Number): RealVector = map { it * number.toDouble() }
+
+public operator fun Number.times(vector: RealVector): RealVector = vector * this
+
+public operator fun RealVector.div(other: RealVector): RealVector =
+    mapIndexed { index, value -> value / other[index] }
+
+public operator fun RealVector.div(number: Number): RealVector = map { it / number.toDouble() }
+
+public operator fun Number.div(vector: RealVector): RealVector = vector.map { toDouble() / it }
+
+//extended operations
+
+public fun RealVector.pow(p: Double): RealVector = map { it.pow(p) }
+
+public fun RealVector.pow(p: Int): RealVector = map { it.pow(p) }
+
+public fun exp(vector: RealVector): RealVector = vector.map { kotlin.math.exp(it) }
+
+public fun sqrt(vector: RealVector): RealVector = vector.map { kotlin.math.sqrt(it) }
+
+public fun RealVector.square(): RealVector = map { it.pow(2) }
+
+public fun sin(vector: RealVector): RealVector = vector.map { kotlin.math.sin(it) }
+
+public fun cos(vector: RealVector): RealVector = vector.map { kotlin.math.cos(it) }
+
+public fun tan(vector: RealVector): RealVector = vector.map { kotlin.math.tan(it) }
+
+public fun ln(vector: RealVector): RealVector = vector.map { kotlin.math.ln(it) }
+
+public fun log10(vector: RealVector): RealVector = vector.map { kotlin.math.log10(it) }

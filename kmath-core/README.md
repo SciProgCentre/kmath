@@ -12,7 +12,7 @@ The core features of KMath:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-3`.
+> This module artifact: `kscience.kmath:kmath-core:0.2.0-dev-4`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
 >
@@ -30,7 +30,7 @@ The core features of KMath:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-core:0.2.0-dev-3'
+>     implementation 'kscience.kmath:kmath-core:0.2.0-dev-4'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -44,6 +44,6 @@ The core features of KMath:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-core:0.2.0-dev-3")
+>     implementation("kscience.kmath:kmath-core:0.2.0-dev-4")
 > }
 > ```

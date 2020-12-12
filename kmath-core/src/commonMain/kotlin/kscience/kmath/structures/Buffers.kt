@@ -103,6 +103,11 @@ public fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 public fun <T> Buffer<T>.asIterable(): Iterable<T> = Iterable(::iterator)
 
 /**
+ * Converts this [Buffer] to a new [List]
+ */
+public fun <T> Buffer<T>.toList(): List<T> = asSequence().toList()
+
+/**
  * Returns an [IntRange] of the valid indices for this [Buffer].
  */
 public val Buffer<*>.indices: IntRange get() = 0 until size

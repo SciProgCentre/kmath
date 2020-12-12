@@ -3,11 +3,15 @@ package kscience.kmath.stat
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collectWithState
-import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 
+/**
+ * The state of distribution averager.
+ */
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
+/**
+ * Averaging.
+ */
 private fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(), { it.copy() }) { chain ->
     val next = chain.next()
     num++
@@ -17,7 +21,7 @@ private fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChai
 
 
 fun main() {
-    val normal = ZigguratNormalizedGaussianSampler.of()
+    val normal = NormalDistribution()
     val chain = normal.sample(RandomGenerator.default).mean()
 
     runBlocking {

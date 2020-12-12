@@ -1,7 +1,10 @@
-package kscience.kmath.structures
+package kscience.kmath.benchmarks
 
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
+import kscience.kmath.structures.BufferedNDField
+import kscience.kmath.structures.NDField
+import kscience.kmath.structures.RealNDField
 import kscience.kmath.viktor.ViktorNDField
 import org.jetbrains.bio.viktor.F64Array
 import org.openjdk.jmh.annotations.Benchmark

@@ -1,5 +1,6 @@
 package kscience.kmath.linear
 
+import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.NDStructure
 import kscience.kmath.structures.as2D
@@ -38,7 +39,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res = res dot this
+                res = RealMatrixContext.invoke { res dot this@pow }
             }
             return res
         }
