@@ -3,6 +3,7 @@ package kscience.kmath.stat
 import kotlinx.coroutines.runBlocking
 import kscience.kmath.chains.Chain
 import kscience.kmath.chains.collectWithState
+import kscience.kmath.stat.distributions.NormalDistribution
 
 /**
  * The state of distribution averager.
@@ -21,7 +22,7 @@ private fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChai
 
 
 fun main() {
-    val normal = NormalDistribution()
+    val normal = NormalDistribution(0.0, 2.0)
     val chain = normal.sample(RandomGenerator.default).mean()
 
     runBlocking {
