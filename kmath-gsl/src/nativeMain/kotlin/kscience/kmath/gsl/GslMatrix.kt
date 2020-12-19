@@ -5,6 +5,9 @@ import kotlinx.cinterop.DeferScope
 import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.structures.NDStructure
 
+/**
+ * Wraps gsl_matrix_* objects from GSL.
+ */
 public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(scope: DeferScope) :
     GslMemoryHolder<H>(scope),
     FeaturedMatrix<T> {
@@ -15,9 +18,17 @@ public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(sc
         return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
-    public final override fun hashCode(): Int {
-        var result = nativeHandle.hashCode()
-        result = 31 * result + features.hashCode()
-        return result
+    public override fun hashCode(): Int {
+        var ret = 7
+        val nRows = rowNum
+        val nCols = colNum
+        ret = ret * 31 + nRows
+        ret = ret * 31 + nCols
+
+        for (row in 0 until nRows)
+            for (col in 0 until nCols)
+                ret = ret * 31 + (11 * (row + 1) + 17 * (col + 1)) * this[row, col].hashCode()
+
+        return ret
     }
 }

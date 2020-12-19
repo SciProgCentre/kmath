@@ -19,6 +19,9 @@ internal inline fun <T : Any, H : CStructVar> GslMatrix<T, H>.fill(initializer: 
 internal inline fun <T : Any, H : CStructVar> GslVector<T, H>.fill(initializer: (Int) -> T): GslVector<T, H> =
     apply { (0 until size).forEach { index -> this[index] = initializer(index) } }
 
+/**
+ * Represents matrix context implementing where all the operations are delegated to GSL.
+ */
 public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar> internal constructor(
     internal val scope: DeferScope
 ) : MatrixContext<T, GslMatrix<T, H1>> {
@@ -26,12 +29,18 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
         ensureHasGslErrorHandler()
     }
 
+    /**
+     * Converts this matrix to GSL one.
+     */
     @Suppress("UNCHECKED_CAST")
     public fun Matrix<T>.toGsl(): GslMatrix<T, H1> = (if (this is GslMatrix<*, *>)
         this as GslMatrix<T, H1>
     else
         produce(rowNum, colNum) { i, j -> this[i, j] }).copy()
 
+    /**
+     * Converts this point to GSL one.
+     */
     @Suppress("UNCHECKED_CAST")
     public fun Point<T>.toGsl(): GslVector<T, H2> =
         (if (this is GslVector<*, *>) this as GslVector<T, H2> else produceDirtyVector(size).fill { this[it] }).copy()
@@ -43,6 +52,9 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
         produceDirtyMatrix(rows, columns).fill(initializer)
 }
 
+/**
+ * Represents [Double] matrix context implementing where all the operations are delegated to GSL.
+ */
 public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, gsl_matrix, gsl_vector>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> =
         GslRealMatrix(
@@ -88,6 +100,9 @@ public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, 
     }
 }
 
+/**
+ * Represents [Float] matrix context implementing where all the operations are delegated to GSL.
+ */
 public class GslFloatMatrixContext(scope: DeferScope) :
     GslMatrixContext<Float, gsl_matrix_float, gsl_vector_float>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> =
@@ -131,6 +146,9 @@ public class GslFloatMatrixContext(scope: DeferScope) :
     }
 }
 
+/**
+ * Represents [Complex] matrix context implementing where all the operations are delegated to GSL.
+ */
 public class GslComplexMatrixContext(scope: DeferScope) :
     GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> =

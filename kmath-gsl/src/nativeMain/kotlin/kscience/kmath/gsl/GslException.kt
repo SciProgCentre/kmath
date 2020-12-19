@@ -29,7 +29,7 @@ internal enum class GslErrnoValue(val code: Int, val text: String) {
     GSL_EBADTOL(org.gnu.gsl.GSL_EBADTOL, "user specified an invalid tolerance"),
     GSL_ETOL(org.gnu.gsl.GSL_ETOL, "failed to reach the specified tolerance"),
     GSL_EUNDRFLW(org.gnu.gsl.GSL_EUNDRFLW, "underflow"),
-    GSL_EOVRFLW(org.gnu.gsl.GSL_EOVRFLW, "overflow "),
+    GSL_EOVRFLW(org.gnu.gsl.GSL_EOVRFLW, "overflow"),
     GSL_ELOSS(org.gnu.gsl.GSL_ELOSS, "loss of accuracy"),
     GSL_EROUND(org.gnu.gsl.GSL_EROUND, "failed because of roundoff error"),
     GSL_EBADLEN(org.gnu.gsl.GSL_EBADLEN, "matrix, vector lengths are not conformant"),
@@ -54,7 +54,10 @@ internal enum class GslErrnoValue(val code: Int, val text: String) {
     }
 }
 
-internal class GslException internal constructor(file: String, line: Int, reason: String, errno: Int) :
+/**
+ * Wraps all the errors reported by GSL.
+ */
+public class GslException internal constructor(file: String, line: Int, reason: String, errno: Int) :
     RuntimeException("$file:$line: $reason. errno - $errno, ${GslErrnoValue.valueOf(errno)}") {
 }
 

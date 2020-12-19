@@ -4,6 +4,9 @@ import kotlinx.cinterop.CStructVar
 import kotlinx.cinterop.DeferScope
 import kscience.kmath.linear.Point
 
+/**
+ * Wraps gsl_vector_* objects from GSL.
+ */
 public abstract class GslVector<T, H : CStructVar> internal constructor(scope: DeferScope) :
     GslMemoryHolder<H>(scope), Point<T> {
     internal abstract operator fun set(index: Int, value: T)
