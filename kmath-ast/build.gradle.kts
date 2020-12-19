@@ -9,6 +9,12 @@ kotlin.sourceSets {
         }
     }
 
+    jsMain {
+        dependencies {
+            implementation(npm("astring", "1.4.3"))
+        }
+    }
+
     jvmMain {
         dependencies {
             api("com.github.h0tk3y.betterParse:better-parse:0.4.0")
