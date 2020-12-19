@@ -13,19 +13,21 @@ public annotation class KMathContext
  */
 public interface Algebra<T> {
     /**
-     * Wrap raw string or variable
+     * Wraps raw string or variable.
      */
     public fun symbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
 
     /**
-     * Dynamic call of unary operation with name [operation] on [arg]
+     * Dynamically dispatches an unary operation with name [operation].
      */
-    public fun unaryOperation(operation: String, arg: T): T
+    public fun unaryOperation(operation: String): (arg: T) -> T =
+        error("Unary operation $operation not defined in $this")
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right]
+     * Dynamically dispatches a binary operation with name [operation].
      */
-    public fun binaryOperation(operation: String, left: T, right: T): T
+    public fun binaryOperation(operation: String): (left: T, right: T) -> T =
+        error("Binary operation $operation not defined in $this")
 }
 
 /**
@@ -40,16 +42,28 @@ public interface NumericAlgebra<T> : Algebra<T> {
     public fun number(value: Number): T
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right] where left element is [Number].
+     * Dynamically dispatches a binary operation with name [operation] where the left argument is [Number].
      */
-    public fun leftSideNumberOperation(operation: String, left: Number, right: T): T =
-        binaryOperation(operation, number(left), right)
+    public fun leftSideNumberOperation(operation: String): (left: Number, right: T) -> T =
+        { l, r -> binaryOperation(operation)(number(l), r) }
+
+//    /**
+//     * Dynamically calls a binary operation with name [operation] where the left argument is [Number].
+//     */
+//    public fun leftSideNumberOperation(operation: String, left: Number, right: T): T =
+//        leftSideNumberOperation(operation)(left, right)
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right] where right element is [Number].
+     * Dynamically dispatches a binary operation with name [operation] where the right argument is [Number].
      */
-    public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
-        leftSideNumberOperation(operation, right, left)
+    public fun rightSideNumberOperation(operation: String): (left: T, right: Number) -> T =
+        { l, r -> binaryOperation(operation)(l, number(r)) }
+
+//    /**
+//     * Dynamically calls a binary operation with name [operation] where the right argument is [Number].
+//     */
+//    public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
+//        rightSideNumberOperation(operation)(left, right)
 }
 
 /**
@@ -146,16 +160,16 @@ public interface SpaceOperations<T> : Algebra<T> {
      */
     public operator fun Number.times(b: T): T = b * this
 
-    override fun unaryOperation(operation: String, arg: T): T = when (operation) {
-        PLUS_OPERATION -> arg
-        MINUS_OPERATION -> -arg
-        else -> error("Unary operation $operation not defined in $this")
+    override fun unaryOperation(operation: String): (arg: T) -> T = when (operation) {
+        PLUS_OPERATION -> { arg -> arg }
+        MINUS_OPERATION -> { arg -> -arg }
+        else -> super.unaryOperation(operation)
     }
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        PLUS_OPERATION -> add(left, right)
-        MINUS_OPERATION -> left - right
-        else -> error("Binary operation $operation not defined in $this")
+    override fun binaryOperation(operation: String): (left: T, right: T) -> T = when (operation) {
+        PLUS_OPERATION -> ::add
+        MINUS_OPERATION -> { left, right -> left - right }
+        else -> super.binaryOperation(operation)
     }
 
     public companion object {
@@ -207,9 +221,9 @@ public interface RingOperations<T> : SpaceOperations<T> {
      */
     public operator fun T.times(b: T): T = multiply(this, b)
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        TIMES_OPERATION -> multiply(left, right)
-        else -> super.binaryOperation(operation, left, right)
+    override fun binaryOperation(operation: String): (left: T, right: T) -> T = when (operation) {
+        TIMES_OPERATION -> ::multiply
+        else -> super.binaryOperation(operation)
     }
 
     public companion object {
@@ -233,20 +247,6 @@ public interface Ring<T> : Space<T>, RingOperations<T>, NumericAlgebra<T> {
     public val one: T
 
     override fun number(value: Number): T = one * value.toDouble()
-
-    override fun leftSideNumberOperation(operation: String, left: Number, right: T): T = when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left + right
-        SpaceOperations.MINUS_OPERATION -> left - right
-        RingOperations.TIMES_OPERATION -> left * right
-        else -> super.leftSideNumberOperation(operation, left, right)
-    }
-
-    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left + right
-        SpaceOperations.MINUS_OPERATION -> left - right
-        RingOperations.TIMES_OPERATION -> left * right
-        else -> super.rightSideNumberOperation(operation, left, right)
-    }
 
     /**
      * Addition of element and scalar.
@@ -308,9 +308,9 @@ public interface FieldOperations<T> : RingOperations<T> {
      */
     public operator fun T.div(b: T): T = divide(this, b)
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        DIV_OPERATION -> divide(left, right)
-        else -> super.binaryOperation(operation, left, right)
+    override fun binaryOperation(operation: String): (left: T, right: T) -> T = when (operation) {
+        DIV_OPERATION -> ::divide
+        else -> super.binaryOperation(operation)
     }
 
     public companion object {

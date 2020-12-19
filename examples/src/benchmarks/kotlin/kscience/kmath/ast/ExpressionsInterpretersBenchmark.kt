@@ -4,13 +4,19 @@ import kscience.kmath.asm.compile
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.expressionInField
 import kscience.kmath.expressions.invoke
+import kscience.kmath.expressions.symbol
 import kscience.kmath.operations.Field
 import kscience.kmath.operations.RealField
+import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.Scope
+import org.openjdk.jmh.annotations.State
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
+@State(Scope.Benchmark)
 internal class ExpressionsInterpretersBenchmark {
     private val algebra: Field<Double> = RealField
+
+    @Benchmark
     fun functionalExpression() {
         val expr = algebra.expressionInField {
             symbol("x") * const(2.0) + const(2.0) / symbol("x") - const(16.0)
@@ -19,6 +25,7 @@ internal class ExpressionsInterpretersBenchmark {
         invokeAndSum(expr)
     }
 
+    @Benchmark
     fun mstExpression() {
         val expr = algebra.mstInField {
             symbol("x") * number(2.0) + number(2.0) / symbol("x") - number(16.0)
@@ -27,11 +34,19 @@ internal class ExpressionsInterpretersBenchmark {
         invokeAndSum(expr)
     }
 
+    @Benchmark
     fun asmExpression() {
         val expr = algebra.mstInField {
             symbol("x") * number(2.0) + number(2.0) / symbol("x") - number(16.0)
         }.compile()
 
+        invokeAndSum(expr)
+    }
+
+    @Benchmark
+    fun rawExpression() {
+        val x by symbol
+        val expr = Expression<Double> { args -> args.getValue(x) * 2.0 + 2.0 / args.getValue(x) - 16.0 }
         invokeAndSum(expr)
     }
 
@@ -45,36 +60,4 @@ internal class ExpressionsInterpretersBenchmark {
 
         println(sum)
     }
-}
-
-/**
- * This benchmark compares basically evaluation of simple function with MstExpression interpreter, ASM backend and
- * core FunctionalExpressions API.
- *
- * The expected rating is:
- *
- * 1. ASM.
- * 2. MST.
- * 3. FE.
- */
-fun main() {
-    val benchmark = ExpressionsInterpretersBenchmark()
-
-    val fe = measureTimeMillis {
-        benchmark.functionalExpression()
-    }
-
-    println("fe=$fe")
-
-    val mst = measureTimeMillis {
-        benchmark.mstExpression()
-    }
-
-    println("mst=$mst")
-
-    val asm = measureTimeMillis {
-        benchmark.asmExpression()
-    }
-
-    println("asm=$asm")
 }
