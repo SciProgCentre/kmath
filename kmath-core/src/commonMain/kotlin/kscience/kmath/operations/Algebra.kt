@@ -297,11 +297,6 @@ public interface Space<T> : SpaceOperations<T> {
      * The neutral element of addition.
      */
     public val zero: T
-
-    public override fun symbol(value: String): T = when (value) {
-        "zero" -> zero
-        else -> super.symbol(value)
-    }
 }
 
 /**
@@ -353,11 +348,6 @@ public interface Ring<T> : Space<T>, RingOperations<T>, NumericAlgebra<T> {
     public val one: T
 
     public override fun number(value: Number): T = one * value.toDouble()
-
-    public override fun symbol(value: String): T = when (value) {
-        "one" -> one
-        else -> super<Space>.symbol(value)
-    }
 
     /**
      * Addition of element and scalar.
