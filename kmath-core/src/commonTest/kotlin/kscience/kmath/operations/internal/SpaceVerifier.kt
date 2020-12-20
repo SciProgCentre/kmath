@@ -15,7 +15,6 @@ internal open class SpaceVerifier<T>(
     AlgebraicVerifier<T, Space<T>> {
     override fun verify() {
         algebra {
-            assertEquals(a + b, b + a, "Addition in $algebra is not commutative.")
             assertEquals(a + b + c, a + (b + c), "Addition in $algebra is not associative.")
             assertEquals(x * (a + b), x * a + x * b, "Addition in $algebra is not distributive.")
             assertEquals((a + b) * x, a * x + b * x, "Addition in $algebra is not distributive.")
