@@ -50,7 +50,7 @@ internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression)
             MemberExpression(
                 computed = true,
                 optional = false,
-                `object` = Identifier("constants"),я
+                `object` = Identifier("constants"),
                 property = SimpleLiteral(idx),
             )
         }
