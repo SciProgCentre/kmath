@@ -70,9 +70,8 @@ internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression)
             val k = key
             val o = `object`
 
-            if (!(js("k in o") as Boolean)) {
-                throw NoSuchElementException()
-            }
+            if (!(js("k in o") as Boolean))
+                throw NoSuchElementException("Key $key is missing in the map.")
 
             js("o[k]")
         }
