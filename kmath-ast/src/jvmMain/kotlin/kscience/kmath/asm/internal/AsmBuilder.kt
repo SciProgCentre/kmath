@@ -204,17 +204,12 @@ internal class AsmBuilder<T>(
      */
     fun loadObjectConstant(value: Any, type: Type = tType): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.also { it += value }.lastIndex
-        loadThis()
+        invokeMethodVisitor.load(0, classType)
         getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
         iconst(idx)
         visitInsn(AALOAD)
         if (type != OBJECT_TYPE) checkcast(type)
     }
-
-    /**
-     * Loads `this` variable.
-     */
-    private fun loadThis(): Unit = invokeMethodVisitor.load(0, classType)
 
     /**
      * Either loads a numeric constant [value] from the class's constants field or boxes a primitive
@@ -234,25 +229,19 @@ internal class AsmBuilder<T>(
                 SHORT_TYPE -> invokeMethodVisitor.iconst(value.toInt())
             }
 
-            box(primitive)
+            val r = PRIMITIVES_TO_BOXED.getValue(primitive)
+
+            invokeMethodVisitor.invokestatic(
+                r.internalName,
+                "valueOf",
+                getMethodDescriptor(r, primitive),
+                false,
+            )
+
             return
         }
 
         loadObjectConstant(value, boxed)
-    }
-
-    /**
-     * Boxes the current value and pushes it.
-     */
-    private fun box(primitive: Type) {
-        val r = PRIMITIVES_TO_BOXED.getValue(primitive)
-
-        invokeMethodVisitor.invokestatic(
-            r.internalName,
-            "valueOf",
-            getMethodDescriptor(r, primitive),
-            false,
-        )
     }
 
     /**
