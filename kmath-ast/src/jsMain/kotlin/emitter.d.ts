@@ -14,6 +14,3 @@ export class Emitter {
 
     hasListeners(event: string): boolean
 }
-
-
-function mixin(obj: any): any

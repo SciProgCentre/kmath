@@ -2,6 +2,20 @@ plugins {
     id("ru.mipt.npm.mpp")
 }
 
+kotlin.js {
+    nodejs {
+        testTask {
+            useMocha().timeout = "0"
+        }
+    }
+
+    browser {
+        testTask {
+            useMocha().timeout = "0"
+        }
+    }
+}
+
 kotlin.sourceSets {
     commonMain {
         dependencies {

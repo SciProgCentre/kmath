@@ -1,6 +1,14 @@
-@file:Suppress("INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "KDocMissingDocumentation"
+@file:Suppress(
+    "INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS",
+    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "KDocMissingDocumentation", "PackageDirectoryMismatch"
 )
+
+@file:JsModule("astring")
+@file:JsNonModule
+package astring
+
+import Generator
+import estree.BaseNode
 
 external interface Options {
     var indent: String?
@@ -26,7 +34,5 @@ external interface Options {
 external fun generate(node: BaseNode, options: Options /* Options & `T$0` */ = definedExternally): String
 
 external fun generate(node: BaseNode): String
-
-typealias Generator = Any
 
 external var baseGenerator: Generator

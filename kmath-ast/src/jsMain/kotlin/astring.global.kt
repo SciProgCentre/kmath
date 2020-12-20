@@ -10,7 +10,7 @@ import Generator
 
 @Suppress("EXTERNAL_DELEGATION", "NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 external interface astring {
-    var generate: Any
+    var generate: (dynamic, dynamic) -> dynamic
     var baseGenerator: Generator
 
     companion object : astring by definedExternally

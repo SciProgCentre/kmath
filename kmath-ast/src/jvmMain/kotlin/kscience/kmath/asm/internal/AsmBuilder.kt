@@ -274,7 +274,7 @@ internal class AsmBuilder<T>(
 
     inline fun buildCall(function: Function<T>, parameters: AsmBuilder<T>.() -> Unit) {
         contract { callsInPlace(parameters, InvocationKind.EXACTLY_ONCE) }
-        val `interface` = function.javaClass.interfaces.first { it.interfaces.contains(Function::class.java) }
+        val `interface` = function.javaClass.interfaces.first { Function::class.java in it.interfaces }
 
         val arity = `interface`.methods.find { it.name == "invoke" }?.parameterCount
             ?: error("Provided function object doesn't contain invoke method")
