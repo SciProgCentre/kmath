@@ -1,18 +1,7 @@
 package kscience.kmath.estree.internal
 
 import kscience.kmath.estree.internal.astring.generate
-import estree.*
 import kscience.kmath.estree.internal.estree.*
-import kscience.kmath.estree.internal.estree.BlockStatement
-import kscience.kmath.estree.internal.estree.FunctionExpression
-import kscience.kmath.estree.internal.estree.Identifier
-import kscience.kmath.estree.internal.estree.MemberExpression
-import kscience.kmath.estree.internal.estree.Program
-import kscience.kmath.estree.internal.estree.ReturnStatement
-import kscience.kmath.estree.internal.estree.SimpleCallExpression
-import kscience.kmath.estree.internal.estree.SimpleLiteral
-import kscience.kmath.estree.internal.estree.VariableDeclaration
-import kscience.kmath.estree.internal.estree.VariableDeclarator
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.Symbol
 

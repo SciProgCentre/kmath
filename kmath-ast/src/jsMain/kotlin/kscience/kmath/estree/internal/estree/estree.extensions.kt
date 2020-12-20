@@ -1,17 +1,5 @@
 package kscience.kmath.estree.internal.estree
 
-import estree.*
-import estree.BlockStatement
-import estree.FunctionExpression
-import estree.Identifier
-import estree.MemberExpression
-import estree.Program
-import estree.ReturnStatement
-import estree.SimpleCallExpression
-import estree.SimpleLiteral
-import estree.VariableDeclaration
-import estree.VariableDeclarator
-
 internal fun Program(sourceType: String, vararg body: dynamic) = object : Program {
     override var type = "Program"
     override var sourceType = sourceType

@@ -1,4 +1,4 @@
-package estree
+package kscience.kmath.estree.internal.estree
 
 import kotlin.js.RegExp
 

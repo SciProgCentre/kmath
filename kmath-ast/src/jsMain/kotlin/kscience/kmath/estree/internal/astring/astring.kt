@@ -3,7 +3,7 @@
 
 package kscience.kmath.estree.internal.astring
 
-import estree.BaseNode
+import kscience.kmath.estree.internal.estree.BaseNode
 
 internal external interface Options {
     var indent: String?
