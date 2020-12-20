@@ -1,18 +1,29 @@
 package kscience.kmath.estree.internal
 
-import astring.generate
+import kscience.kmath.estree.internal.astring.generate
 import estree.*
+import kscience.kmath.estree.internal.estree.*
+import kscience.kmath.estree.internal.estree.BlockStatement
+import kscience.kmath.estree.internal.estree.FunctionExpression
+import kscience.kmath.estree.internal.estree.Identifier
+import kscience.kmath.estree.internal.estree.MemberExpression
+import kscience.kmath.estree.internal.estree.Program
+import kscience.kmath.estree.internal.estree.ReturnStatement
+import kscience.kmath.estree.internal.estree.SimpleCallExpression
+import kscience.kmath.estree.internal.estree.SimpleLiteral
+import kscience.kmath.estree.internal.estree.VariableDeclaration
+import kscience.kmath.estree.internal.estree.VariableDeclarator
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.Symbol
 
 internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression) {
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
         @Suppress("UNUSED_VARIABLE", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
-        override fun invoke(map: Map<Symbol, T>): T {
+        override fun invoke(arguments: Map<Symbol, T>): T {
             val e = executable
             val c = constants
             val a = js("{}")
-            map.forEach { (key, value) -> a[key.identity] = value }
+            arguments.forEach { (key, value) -> a[key.identity] = value }
             return js("e(c, a)").unsafeCast<T>()
         }
     }

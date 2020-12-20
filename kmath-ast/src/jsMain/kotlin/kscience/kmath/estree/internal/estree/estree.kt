@@ -1,13 +1,8 @@
-@file:Suppress(
-    "INTERFACE_WITH_SUPERCLASS", "OVERRIDING_FINAL_MEMBER", "RETURN_TYPE_MISMATCH_ON_OVERRIDE", "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "KDocMissingDocumentation", "ClassName", "PackageDirectoryMismatch",
-)
-
 package estree
 
 import kotlin.js.RegExp
 
-external interface BaseNodeWithoutComments {
+internal external interface BaseNodeWithoutComments {
     var type: String
     var loc: SourceLocation?
         get() = definedExternally
@@ -17,7 +12,7 @@ external interface BaseNodeWithoutComments {
         set(value) = definedExternally
 }
 
-external interface BaseNode : BaseNodeWithoutComments {
+internal external interface BaseNode : BaseNodeWithoutComments {
     var leadingComments: Array<Comment>?
         get() = definedExternally
         set(value) = definedExternally
@@ -26,12 +21,12 @@ external interface BaseNode : BaseNodeWithoutComments {
         set(value) = definedExternally
 }
 
-external interface Comment : BaseNodeWithoutComments {
+internal external interface Comment : BaseNodeWithoutComments {
     override var type: String /* "Line" | "Block" */
     var value: String
 }
 
-external interface SourceLocation {
+internal external interface SourceLocation {
     var source: String?
         get() = definedExternally
         set(value) = definedExternally
@@ -39,12 +34,12 @@ external interface SourceLocation {
     var end: Position
 }
 
-external interface Position {
+internal external interface Position {
     var line: Number
     var column: Number
 }
 
-external interface Program : BaseNode {
+internal external interface Program : BaseNode {
     override var type: String /* "Program" */
     var sourceType: String /* "script" | "module" */
     var body: Array<dynamic /* Directive | ExpressionStatement | BlockStatement | EmptyStatement | DebuggerStatement | WithStatement | ReturnStatement | LabeledStatement | BreakStatement | ContinueStatement | IfStatement | SwitchStatement | ThrowStatement | TryStatement | WhileStatement | DoWhileStatement | ForStatement | ForInStatement | ForOfStatement | FunctionDeclaration | VariableDeclaration | ClassDeclaration | ImportDeclaration | ExportNamedDeclaration | ExportDefaultDeclaration | ExportAllDeclaration */>
@@ -53,7 +48,7 @@ external interface Program : BaseNode {
         set(value) = definedExternally
 }
 
-external interface Directive : BaseNode {
+internal external interface Directive : BaseNode {
     override var type: String /* "ExpressionStatement" */
     var expression: dynamic /* SimpleLiteral | RegExpLiteral */
         get() = definedExternally
@@ -61,7 +56,7 @@ external interface Directive : BaseNode {
     var directive: String
 }
 
-external interface BaseFunction : BaseNode {
+internal external interface BaseFunction : BaseNode {
     var params: Array<dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */>
     var generator: Boolean?
         get() = definedExternally
@@ -74,13 +69,13 @@ external interface BaseFunction : BaseNode {
         set(value) = definedExternally
 }
 
-external interface BaseStatement : BaseNode
+internal external interface BaseStatement : BaseNode
 
-external interface EmptyStatement : BaseStatement {
+internal external interface EmptyStatement : BaseStatement {
     override var type: String /* "EmptyStatement" */
 }
 
-external interface BlockStatement : BaseStatement {
+internal external interface BlockStatement : BaseStatement {
     override var type: String /* "BlockStatement" */
     var body: Array<dynamic /* ExpressionStatement | BlockStatement | EmptyStatement | DebuggerStatement | WithStatement | ReturnStatement | LabeledStatement | BreakStatement | ContinueStatement | IfStatement | SwitchStatement | ThrowStatement | TryStatement | WhileStatement | DoWhileStatement | ForStatement | ForInStatement | ForOfStatement | FunctionDeclaration | VariableDeclaration | ClassDeclaration */>
     var innerComments: Array<Comment>?
@@ -88,14 +83,14 @@ external interface BlockStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface ExpressionStatement : BaseStatement {
+internal external interface ExpressionStatement : BaseStatement {
     override var type: String /* "ExpressionStatement" */
     var expression: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface IfStatement : BaseStatement {
+internal external interface IfStatement : BaseStatement {
     override var type: String /* "IfStatement" */
     var test: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -108,7 +103,7 @@ external interface IfStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface LabeledStatement : BaseStatement {
+internal external interface LabeledStatement : BaseStatement {
     override var type: String /* "LabeledStatement" */
     var label: Identifier
     var body: dynamic /* ExpressionStatement | BlockStatement | EmptyStatement | DebuggerStatement | WithStatement | ReturnStatement | LabeledStatement | BreakStatement | ContinueStatement | IfStatement | SwitchStatement | ThrowStatement | TryStatement | WhileStatement | DoWhileStatement | ForStatement | ForInStatement | ForOfStatement | FunctionDeclaration | VariableDeclaration | ClassDeclaration */
@@ -116,21 +111,21 @@ external interface LabeledStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface BreakStatement : BaseStatement {
+internal external interface BreakStatement : BaseStatement {
     override var type: String /* "BreakStatement" */
     var label: Identifier?
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ContinueStatement : BaseStatement {
+internal external interface ContinueStatement : BaseStatement {
     override var type: String /* "ContinueStatement" */
     var label: Identifier?
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface WithStatement : BaseStatement {
+internal external interface WithStatement : BaseStatement {
     override var type: String /* "WithStatement" */
     var `object`: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -140,7 +135,7 @@ external interface WithStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface SwitchStatement : BaseStatement {
+internal external interface SwitchStatement : BaseStatement {
     override var type: String /* "SwitchStatement" */
     var discriminant: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -148,21 +143,21 @@ external interface SwitchStatement : BaseStatement {
     var cases: Array<SwitchCase>
 }
 
-external interface ReturnStatement : BaseStatement {
+internal external interface ReturnStatement : BaseStatement {
     override var type: String /* "ReturnStatement" */
     var argument: dynamic /* ThisExpression? | ArrayExpression? | ObjectExpression? | FunctionExpression? | ArrowFunctionExpression? | YieldExpression? | SimpleLiteral? | RegExpLiteral? | UnaryExpression? | UpdateExpression? | BinaryExpression? | AssignmentExpression? | LogicalExpression? | MemberExpression? | ConditionalExpression? | SimpleCallExpression? | NewExpression? | SequenceExpression? | TemplateLiteral? | TaggedTemplateExpression? | ClassExpression? | MetaProperty? | Identifier? | AwaitExpression? | ImportExpression? | ChainExpression? */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ThrowStatement : BaseStatement {
+internal external interface ThrowStatement : BaseStatement {
     override var type: String /* "ThrowStatement" */
     var argument: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface TryStatement : BaseStatement {
+internal external interface TryStatement : BaseStatement {
     override var type: String /* "TryStatement" */
     var block: BlockStatement
     var handler: CatchClause?
@@ -173,7 +168,7 @@ external interface TryStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface WhileStatement : BaseStatement {
+internal external interface WhileStatement : BaseStatement {
     override var type: String /* "WhileStatement" */
     var test: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -183,7 +178,7 @@ external interface WhileStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface DoWhileStatement : BaseStatement {
+internal external interface DoWhileStatement : BaseStatement {
     override var type: String /* "DoWhileStatement" */
     var body: dynamic /* ExpressionStatement | BlockStatement | EmptyStatement | DebuggerStatement | WithStatement | ReturnStatement | LabeledStatement | BreakStatement | ContinueStatement | IfStatement | SwitchStatement | ThrowStatement | TryStatement | WhileStatement | DoWhileStatement | ForStatement | ForInStatement | ForOfStatement | FunctionDeclaration | VariableDeclaration | ClassDeclaration */
         get() = definedExternally
@@ -193,7 +188,7 @@ external interface DoWhileStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface ForStatement : BaseStatement {
+internal external interface ForStatement : BaseStatement {
     override var type: String /* "ForStatement" */
     var init: dynamic /* VariableDeclaration? | ThisExpression? | ArrayExpression? | ObjectExpression? | FunctionExpression? | ArrowFunctionExpression? | YieldExpression? | SimpleLiteral? | RegExpLiteral? | UnaryExpression? | UpdateExpression? | BinaryExpression? | AssignmentExpression? | LogicalExpression? | MemberExpression? | ConditionalExpression? | SimpleCallExpression? | NewExpression? | SequenceExpression? | TemplateLiteral? | TaggedTemplateExpression? | ClassExpression? | MetaProperty? | Identifier? | AwaitExpression? | ImportExpression? | ChainExpression? */
         get() = definedExternally
@@ -209,7 +204,7 @@ external interface ForStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface BaseForXStatement : BaseStatement {
+internal external interface BaseForXStatement : BaseStatement {
     var left: dynamic /* VariableDeclaration | Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
         get() = definedExternally
         set(value) = definedExternally
@@ -221,29 +216,29 @@ external interface BaseForXStatement : BaseStatement {
         set(value) = definedExternally
 }
 
-external interface ForInStatement : BaseForXStatement {
+internal external interface ForInStatement : BaseForXStatement {
     override var type: String /* "ForInStatement" */
 }
 
-external interface DebuggerStatement : BaseStatement {
+internal external interface DebuggerStatement : BaseStatement {
     override var type: String /* "DebuggerStatement" */
 }
 
-external interface BaseDeclaration : BaseStatement
+internal external interface BaseDeclaration : BaseStatement
 
-external interface FunctionDeclaration : BaseFunction, BaseDeclaration {
+internal external interface FunctionDeclaration : BaseFunction, BaseDeclaration {
     override var type: String /* "FunctionDeclaration" */
     var id: Identifier?
     override var body: BlockStatement
 }
 
-external interface VariableDeclaration : BaseDeclaration {
+internal external interface VariableDeclaration : BaseDeclaration {
     override var type: String /* "VariableDeclaration" */
     var declarations: Array<VariableDeclarator>
     var kind: String /* "var" | "let" | "const" */
 }
 
-external interface VariableDeclarator : BaseNode {
+internal external interface VariableDeclarator : BaseNode {
     override var type: String /* "VariableDeclarator" */
     var id: dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
         get() = definedExternally
@@ -253,30 +248,30 @@ external interface VariableDeclarator : BaseNode {
         set(value) = definedExternally
 }
 
-external interface BaseExpression : BaseNode
+internal external interface BaseExpression : BaseNode
 
-external interface ChainExpression : BaseExpression {
+internal external interface ChainExpression : BaseExpression {
     override var type: String /* "ChainExpression" */
     var expression: dynamic /* SimpleCallExpression | MemberExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ThisExpression : BaseExpression {
+internal external interface ThisExpression : BaseExpression {
     override var type: String /* "ThisExpression" */
 }
 
-external interface ArrayExpression : BaseExpression {
+internal external interface ArrayExpression : BaseExpression {
     override var type: String /* "ArrayExpression" */
     var elements: Array<dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression | SpreadElement */>
 }
 
-external interface ObjectExpression : BaseExpression {
+internal external interface ObjectExpression : BaseExpression {
     override var type: String /* "ObjectExpression" */
     var properties: Array<dynamic /* Property | SpreadElement */>
 }
 
-external interface Property : BaseNode {
+internal external interface Property : BaseNode {
     override var type: String /* "Property" */
     var key: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -290,7 +285,7 @@ external interface Property : BaseNode {
     var computed: Boolean
 }
 
-external interface FunctionExpression : BaseFunction, BaseExpression {
+internal external interface FunctionExpression : BaseFunction, BaseExpression {
     var id: Identifier?
         get() = definedExternally
         set(value) = definedExternally
@@ -298,12 +293,12 @@ external interface FunctionExpression : BaseFunction, BaseExpression {
     override var body: BlockStatement
 }
 
-external interface SequenceExpression : BaseExpression {
+internal external interface SequenceExpression : BaseExpression {
     override var type: String /* "SequenceExpression" */
     var expressions: Array<dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */>
 }
 
-external interface UnaryExpression : BaseExpression {
+internal external interface UnaryExpression : BaseExpression {
     override var type: String /* "UnaryExpression" */
     var operator: String /* "-" | "+" | "!" | "~" | "typeof" | "void" | "delete" */
     var prefix: Boolean
@@ -312,7 +307,7 @@ external interface UnaryExpression : BaseExpression {
         set(value) = definedExternally
 }
 
-external interface BinaryExpression : BaseExpression {
+internal external interface BinaryExpression : BaseExpression {
     override var type: String /* "BinaryExpression" */
     var operator: String /* "==" | "!=" | "===" | "!==" | "<" | "<=" | ">" | ">=" | "<<" | ">>" | ">>>" | "+" | "-" | "*" | "/" | "%" | "**" | "|" | "^" | "&" | "in" | "instanceof" */
     var left: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
@@ -323,7 +318,7 @@ external interface BinaryExpression : BaseExpression {
         set(value) = definedExternally
 }
 
-external interface AssignmentExpression : BaseExpression {
+internal external interface AssignmentExpression : BaseExpression {
     override var type: String /* "AssignmentExpression" */
     var operator: String /* "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "**=" | "<<=" | ">>=" | ">>>=" | "|=" | "^=" | "&=" */
     var left: dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
@@ -334,7 +329,7 @@ external interface AssignmentExpression : BaseExpression {
         set(value) = definedExternally
 }
 
-external interface UpdateExpression : BaseExpression {
+internal external interface UpdateExpression : BaseExpression {
     override var type: String /* "UpdateExpression" */
     var operator: String /* "++" | "--" */
     var argument: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
@@ -343,7 +338,7 @@ external interface UpdateExpression : BaseExpression {
     var prefix: Boolean
 }
 
-external interface LogicalExpression : BaseExpression {
+internal external interface LogicalExpression : BaseExpression {
     override var type: String /* "LogicalExpression" */
     var operator: String /* "||" | "&&" | "??" */
     var left: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
@@ -354,7 +349,7 @@ external interface LogicalExpression : BaseExpression {
         set(value) = definedExternally
 }
 
-external interface ConditionalExpression : BaseExpression {
+internal external interface ConditionalExpression : BaseExpression {
     override var type: String /* "ConditionalExpression" */
     var test: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -367,23 +362,23 @@ external interface ConditionalExpression : BaseExpression {
         set(value) = definedExternally
 }
 
-external interface BaseCallExpression : BaseExpression {
+internal external interface BaseCallExpression : BaseExpression {
     var callee: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression | Super */
         get() = definedExternally
         set(value) = definedExternally
     var arguments: Array<dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression | SpreadElement */>
 }
 
-external interface SimpleCallExpression : BaseCallExpression {
+internal external interface SimpleCallExpression : BaseCallExpression {
     override var type: String /* "CallExpression" */
     var optional: Boolean
 }
 
-external interface NewExpression : BaseCallExpression {
+internal external interface NewExpression : BaseCallExpression {
     override var type: String /* "NewExpression" */
 }
 
-external interface MemberExpression : BaseExpression, BasePattern {
+internal external interface MemberExpression : BaseExpression, BasePattern {
     override var type: String /* "MemberExpression" */
     var `object`: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression | Super */
         get() = definedExternally
@@ -395,9 +390,9 @@ external interface MemberExpression : BaseExpression, BasePattern {
     var optional: Boolean
 }
 
-external interface BasePattern : BaseNode
+internal external interface BasePattern : BaseNode
 
-external interface SwitchCase : BaseNode {
+internal external interface SwitchCase : BaseNode {
     override var type: String /* "SwitchCase" */
     var test: dynamic /* ThisExpression? | ArrayExpression? | ObjectExpression? | FunctionExpression? | ArrowFunctionExpression? | YieldExpression? | SimpleLiteral? | RegExpLiteral? | UnaryExpression? | UpdateExpression? | BinaryExpression? | AssignmentExpression? | LogicalExpression? | MemberExpression? | ConditionalExpression? | SimpleCallExpression? | NewExpression? | SequenceExpression? | TemplateLiteral? | TaggedTemplateExpression? | ClassExpression? | MetaProperty? | Identifier? | AwaitExpression? | ImportExpression? | ChainExpression? */
         get() = definedExternally
@@ -405,7 +400,7 @@ external interface SwitchCase : BaseNode {
     var consequent: Array<dynamic /* ExpressionStatement | BlockStatement | EmptyStatement | DebuggerStatement | WithStatement | ReturnStatement | LabeledStatement | BreakStatement | ContinueStatement | IfStatement | SwitchStatement | ThrowStatement | TryStatement | WhileStatement | DoWhileStatement | ForStatement | ForInStatement | ForOfStatement | FunctionDeclaration | VariableDeclaration | ClassDeclaration */>
 }
 
-external interface CatchClause : BaseNode {
+internal external interface CatchClause : BaseNode {
     override var type: String /* "CatchClause" */
     var param: dynamic /* Identifier? | ObjectPattern? | ArrayPattern? | RestElement? | AssignmentPattern? | MemberExpression? */
         get() = definedExternally
@@ -413,12 +408,12 @@ external interface CatchClause : BaseNode {
     var body: BlockStatement
 }
 
-external interface Identifier : BaseNode, BaseExpression, BasePattern {
+internal external interface Identifier : BaseNode, BaseExpression, BasePattern {
     override var type: String /* "Identifier" */
     var name: String
 }
 
-external interface SimpleLiteral : BaseNode, BaseExpression {
+internal external interface SimpleLiteral : BaseNode, BaseExpression {
     override var type: String /* "Literal" */
     var value: dynamic /* String? | Boolean? | Number? */
         get() = definedExternally
@@ -428,12 +423,12 @@ external interface SimpleLiteral : BaseNode, BaseExpression {
         set(value) = definedExternally
 }
 
-external interface `T$1` {
+internal external interface `T$1` {
     var pattern: String
     var flags: String
 }
 
-external interface RegExpLiteral : BaseNode, BaseExpression {
+internal external interface RegExpLiteral : BaseNode, BaseExpression {
     override var type: String /* "Literal" */
     var value: RegExp?
         get() = definedExternally
@@ -444,23 +439,23 @@ external interface RegExpLiteral : BaseNode, BaseExpression {
         set(value) = definedExternally
 }
 
-external interface ForOfStatement : BaseForXStatement {
+internal external interface ForOfStatement : BaseForXStatement {
     override var type: String /* "ForOfStatement" */
     var await: Boolean
 }
 
-external interface Super : BaseNode {
+internal external interface Super : BaseNode {
     override var type: String /* "Super" */
 }
 
-external interface SpreadElement : BaseNode {
+internal external interface SpreadElement : BaseNode {
     override var type: String /* "SpreadElement" */
     var argument: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ArrowFunctionExpression : BaseExpression, BaseFunction {
+internal external interface ArrowFunctionExpression : BaseExpression, BaseFunction {
     override var type: String /* "ArrowFunctionExpression" */
     var expression: Boolean
     override var body: dynamic /* BlockStatement | ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
@@ -468,7 +463,7 @@ external interface ArrowFunctionExpression : BaseExpression, BaseFunction {
         set(value) = definedExternally
 }
 
-external interface YieldExpression : BaseExpression {
+internal external interface YieldExpression : BaseExpression {
     override var type: String /* "YieldExpression" */
     var argument: dynamic /* ThisExpression? | ArrayExpression? | ObjectExpression? | FunctionExpression? | ArrowFunctionExpression? | YieldExpression? | SimpleLiteral? | RegExpLiteral? | UnaryExpression? | UpdateExpression? | BinaryExpression? | AssignmentExpression? | LogicalExpression? | MemberExpression? | ConditionalExpression? | SimpleCallExpression? | NewExpression? | SequenceExpression? | TemplateLiteral? | TaggedTemplateExpression? | ClassExpression? | MetaProperty? | Identifier? | AwaitExpression? | ImportExpression? | ChainExpression? */
         get() = definedExternally
@@ -476,13 +471,13 @@ external interface YieldExpression : BaseExpression {
     var delegate: Boolean
 }
 
-external interface TemplateLiteral : BaseExpression {
+internal external interface TemplateLiteral : BaseExpression {
     override var type: String /* "TemplateLiteral" */
     var quasis: Array<TemplateElement>
     var expressions: Array<dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */>
 }
 
-external interface TaggedTemplateExpression : BaseExpression {
+internal external interface TaggedTemplateExpression : BaseExpression {
     override var type: String /* "TaggedTemplateExpression" */
     var tag: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -490,18 +485,18 @@ external interface TaggedTemplateExpression : BaseExpression {
     var quasi: TemplateLiteral
 }
 
-external interface `T$2` {
+internal external interface `T$2` {
     var cooked: String
     var raw: String
 }
 
-external interface TemplateElement : BaseNode {
+internal external interface TemplateElement : BaseNode {
     override var type: String /* "TemplateElement" */
     var tail: Boolean
     var value: `T$2`
 }
 
-external interface AssignmentProperty : Property {
+internal external interface AssignmentProperty : Property {
     override var value: dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
         get() = definedExternally
         set(value) = definedExternally
@@ -509,24 +504,24 @@ external interface AssignmentProperty : Property {
     override var method: Boolean
 }
 
-external interface ObjectPattern : BasePattern {
+internal external interface ObjectPattern : BasePattern {
     override var type: String /* "ObjectPattern" */
     var properties: Array<dynamic /* AssignmentProperty | RestElement */>
 }
 
-external interface ArrayPattern : BasePattern {
+internal external interface ArrayPattern : BasePattern {
     override var type: String /* "ArrayPattern" */
     var elements: Array<dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */>
 }
 
-external interface RestElement : BasePattern {
+internal external interface RestElement : BasePattern {
     override var type: String /* "RestElement" */
     var argument: dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface AssignmentPattern : BasePattern {
+internal external interface AssignmentPattern : BasePattern {
     override var type: String /* "AssignmentPattern" */
     var left: dynamic /* Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression */
         get() = definedExternally
@@ -536,19 +531,19 @@ external interface AssignmentPattern : BasePattern {
         set(value) = definedExternally
 }
 
-external interface BaseClass : BaseNode {
+internal external interface BaseClass : BaseNode {
     var superClass: dynamic /* ThisExpression? | ArrayExpression? | ObjectExpression? | FunctionExpression? | ArrowFunctionExpression? | YieldExpression? | SimpleLiteral? | RegExpLiteral? | UnaryExpression? | UpdateExpression? | BinaryExpression? | AssignmentExpression? | LogicalExpression? | MemberExpression? | ConditionalExpression? | SimpleCallExpression? | NewExpression? | SequenceExpression? | TemplateLiteral? | TaggedTemplateExpression? | ClassExpression? | MetaProperty? | Identifier? | AwaitExpression? | ImportExpression? | ChainExpression? */
         get() = definedExternally
         set(value) = definedExternally
     var body: ClassBody
 }
 
-external interface ClassBody : BaseNode {
+internal external interface ClassBody : BaseNode {
     override var type: String /* "ClassBody" */
     var body: Array<MethodDefinition>
 }
 
-external interface MethodDefinition : BaseNode {
+internal external interface MethodDefinition : BaseNode {
     override var type: String /* "MethodDefinition" */
     var key: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
@@ -559,31 +554,31 @@ external interface MethodDefinition : BaseNode {
     var static: Boolean
 }
 
-external interface ClassDeclaration : BaseClass, BaseDeclaration {
+internal external interface ClassDeclaration : BaseClass, BaseDeclaration {
     override var type: String /* "ClassDeclaration" */
     var id: Identifier?
 }
 
-external interface ClassExpression : BaseClass, BaseExpression {
+internal external interface ClassExpression : BaseClass, BaseExpression {
     override var type: String /* "ClassExpression" */
     var id: Identifier?
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface MetaProperty : BaseExpression {
+internal external interface MetaProperty : BaseExpression {
     override var type: String /* "MetaProperty" */
     var meta: Identifier
     var property: Identifier
 }
 
-external interface BaseModuleDeclaration : BaseNode
+internal external interface BaseModuleDeclaration : BaseNode
 
-external interface BaseModuleSpecifier : BaseNode {
+internal external interface BaseModuleSpecifier : BaseNode {
     var local: Identifier
 }
 
-external interface ImportDeclaration : BaseModuleDeclaration {
+internal external interface ImportDeclaration : BaseModuleDeclaration {
     override var type: String /* "ImportDeclaration" */
     var specifiers: Array<dynamic /* ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier */>
     var source: dynamic /* SimpleLiteral | RegExpLiteral */
@@ -591,27 +586,27 @@ external interface ImportDeclaration : BaseModuleDeclaration {
         set(value) = definedExternally
 }
 
-external interface ImportSpecifier : BaseModuleSpecifier {
+internal external interface ImportSpecifier : BaseModuleSpecifier {
     override var type: String /* "ImportSpecifier" */
     var imported: Identifier
 }
 
-external interface ImportExpression : BaseExpression {
+internal external interface ImportExpression : BaseExpression {
     override var type: String /* "ImportExpression" */
     var source: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ImportDefaultSpecifier : BaseModuleSpecifier {
+internal external interface ImportDefaultSpecifier : BaseModuleSpecifier {
     override var type: String /* "ImportDefaultSpecifier" */
 }
 
-external interface ImportNamespaceSpecifier : BaseModuleSpecifier {
+internal external interface ImportNamespaceSpecifier : BaseModuleSpecifier {
     override var type: String /* "ImportNamespaceSpecifier" */
 }
 
-external interface ExportNamedDeclaration : BaseModuleDeclaration {
+internal external interface ExportNamedDeclaration : BaseModuleDeclaration {
     override var type: String /* "ExportNamedDeclaration" */
     var declaration: dynamic /* FunctionDeclaration? | VariableDeclaration? | ClassDeclaration? */
         get() = definedExternally
@@ -622,26 +617,26 @@ external interface ExportNamedDeclaration : BaseModuleDeclaration {
         set(value) = definedExternally
 }
 
-external interface ExportSpecifier : BaseModuleSpecifier {
+internal external interface ExportSpecifier : BaseModuleSpecifier {
     override var type: String /* "ExportSpecifier" */
     var exported: Identifier
 }
 
-external interface ExportDefaultDeclaration : BaseModuleDeclaration {
+internal external interface ExportDefaultDeclaration : BaseModuleDeclaration {
     override var type: String /* "ExportDefaultDeclaration" */
     var declaration: dynamic /* FunctionDeclaration | VariableDeclaration | ClassDeclaration | ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface ExportAllDeclaration : BaseModuleDeclaration {
+internal external interface ExportAllDeclaration : BaseModuleDeclaration {
     override var type: String /* "ExportAllDeclaration" */
     var source: dynamic /* SimpleLiteral | RegExpLiteral */
         get() = definedExternally
         set(value) = definedExternally
 }
 
-external interface AwaitExpression : BaseExpression {
+internal external interface AwaitExpression : BaseExpression {
     override var type: String /* "AwaitExpression" */
     var argument: dynamic /* ThisExpression | ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | YieldExpression | SimpleLiteral | RegExpLiteral | UnaryExpression | UpdateExpression | BinaryExpression | AssignmentExpression | LogicalExpression | MemberExpression | ConditionalExpression | SimpleCallExpression | NewExpression | SequenceExpression | TemplateLiteral | TaggedTemplateExpression | ClassExpression | MetaProperty | Identifier | AwaitExpression | ImportExpression | ChainExpression */
         get() = definedExternally
