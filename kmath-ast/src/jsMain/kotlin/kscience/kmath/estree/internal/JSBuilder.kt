@@ -7,7 +7,7 @@ import kscience.kmath.expressions.Symbol
 
 internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression) {
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
-        @Suppress("UNUSED_VARIABLE", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+        @Suppress("UNUSED_VARIABLE")
         override fun invoke(arguments: Map<Symbol, T>): T {
             val e = executable
             val c = constants
