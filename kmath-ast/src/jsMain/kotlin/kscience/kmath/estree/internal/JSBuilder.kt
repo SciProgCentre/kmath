@@ -56,18 +56,25 @@ internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression)
         }
     }
 
-    fun variable(name: String): BaseExpression {
-        return MemberExpression(
-            computed = true,
-            optional = false,
-            `object` = Identifier("arguments"),
-            property = SimpleLiteral(name),
-        )
-    }
+    fun variable(name: String): BaseExpression = call(getOrFail, Identifier("arguments"), SimpleLiteral(name))
 
     fun call(function: Function<T>, vararg args: BaseExpression): BaseExpression = SimpleCallExpression(
         optional = false,
         callee = constant(function),
         *args,
     )
+
+    private companion object {
+        @Suppress("UNUSED_VARIABLE")
+        val getOrFail: (`object`: dynamic, key: String) -> dynamic = { `object`, key ->
+            val k = key
+            val o = `object`
+
+            if (!(js("k in o") as Boolean)) {
+                throw NoSuchElementException()
+            }
+
+            js("o[k]")
+        }
+    }
 }
