@@ -1,6 +1,5 @@
 package kscience.kmath.estree
 
-import estree.*
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.estree.internal.JSBuilder
