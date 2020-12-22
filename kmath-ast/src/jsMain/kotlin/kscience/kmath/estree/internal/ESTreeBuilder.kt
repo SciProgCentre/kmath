@@ -37,7 +37,6 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
     }
 
     private val constants = mutableListOf<Any>()
-    private val keys = mutableListOf<String>()
 
     fun constant(value: Any?) = when {
         value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" ->
