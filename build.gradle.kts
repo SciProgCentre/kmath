@@ -38,3 +38,7 @@ readme {
 apiValidation {
     validationDisabled = true
 }
+
+ksciencePublish {
+    spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
+}
