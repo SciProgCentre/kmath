@@ -1,6 +1,5 @@
 package kscience.kmath.operations
 
-import kotlin.math.abs
 import kotlin.math.pow as kpow
 
 /**
@@ -249,10 +248,10 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object LongRing : Ring<Long>, Norm<Long, Long> {
     public override val zero: Long
-        get() = 0
+        get() = 0L
 
     public override val one: Long
-        get() = 1
+        get() = 1L
 
     public override inline fun add(a: Long, b: Long): Long = a + b
     public override inline fun multiply(a: Long, k: Number): Long = a * k.toLong()

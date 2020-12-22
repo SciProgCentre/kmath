@@ -275,12 +275,12 @@ public interface SpaceOperations<T> : Algebra<T> {
 
     public companion object {
         /**
-         * The identifier of addition.
+         * The identifier of addition and unary positive.
          */
         public const val PLUS_OPERATION: String = "+"
 
         /**
-         * The identifier of subtraction (and negation).
+         * The identifier of subtraction and unary negation.
          */
         public const val MINUS_OPERATION: String = "-"
     }
