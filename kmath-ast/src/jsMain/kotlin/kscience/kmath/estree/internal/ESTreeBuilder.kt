@@ -40,9 +40,10 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
     private val keys = mutableListOf<String>()
 
     fun constant(value: Any?) = when {
-        value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" -> {
+        value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" ->
             SimpleLiteral(value)
-        }
+
+        jsType(value) == "undefined" -> Identifier("undefined")
 
         else -> {
             val idx = if (value in constants) constants.indexOf(value) else constants.also { it += value }.lastIndex
