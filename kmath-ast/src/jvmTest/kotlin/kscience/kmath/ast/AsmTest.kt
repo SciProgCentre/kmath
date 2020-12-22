@@ -2,8 +2,6 @@ package kscience.kmath.ast
 
 import kscience.kmath.asm.compile
 import kscience.kmath.asm.expression
-import kscience.kmath.ast.mstInField
-import kscience.kmath.ast.parseMath
 import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.Complex
 import kscience.kmath.operations.ComplexField

@@ -2,13 +2,16 @@ package kscience.kmath.asm.internal
 
 import kscience.kmath.asm.internal.AsmBuilder.ClassLoader
 import kscience.kmath.ast.MST
+import kscience.kmath.ast.mstInField
 import kscience.kmath.expressions.Expression
+import kscience.kmath.operations.RealField
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
+import java.lang.reflect.Modifier
 import java.util.stream.Collectors.toMap
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -82,7 +85,7 @@ internal class AsmBuilder<T>(
                 ACC_PUBLIC or ACC_FINAL,
                 "invoke",
                 getMethodDescriptor(tType, MAP_TYPE),
-                "(L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
+                "(L${MAP_TYPE.internalName}<${SYMBOL_TYPE.descriptor}${if (Modifier.isFinal(classOfT.modifiers)) "" else "+"}${tType.descriptor}>;)${tType.descriptor}",
                 null,
             ).instructionAdapter {
                 invokeMethodVisitor = this
@@ -159,7 +162,7 @@ internal class AsmBuilder<T>(
                 "<init>",
                 getMethodDescriptor(VOID_TYPE, *OBJECT_ARRAY_TYPE.wrapToArrayIf { hasConstants }),
                 null,
-                null
+                null,
             ).instructionAdapter {
                 val l0 = label()
                 load(0, classType)
@@ -190,6 +193,7 @@ internal class AsmBuilder<T>(
         }
 
         val cls = classLoader.defineClass(className, classWriter.toByteArray())
+        java.io.File("dump.class").writeBytes(classWriter.toByteArray())
         val l = MethodHandles.publicLookup()
 
         if (hasConstants)
@@ -334,5 +338,10 @@ internal class AsmBuilder<T>(
          * ASM type for MapIntrinsics.
          */
         val MAP_INTRINSICS_TYPE: Type by lazy { getObjectType("kscience/kmath/asm/internal/MapIntrinsics") }
+
+        /**
+         * ASM Type for [kscience.kmath.expressions.Symbol].
+         */
+        val SYMBOL_TYPE: Type by lazy { getObjectType("kscience/kmath/expressions/Symbol") }
     }
 }

@@ -27,7 +27,9 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
     public override fun add(a: MST, b: MST): MST.Binary = binaryOperation(SpaceOperations.PLUS_OPERATION)(a, b)
     public override operator fun MST.unaryPlus(): MST.Unary = unaryOperation(SpaceOperations.PLUS_OPERATION)(this)
     public override operator fun MST.unaryMinus(): MST.Unary = unaryOperation(SpaceOperations.MINUS_OPERATION)(this)
-    public override operator fun MST.minus(b: MST): MST.Binary = binaryOperation(SpaceOperations.MINUS_OPERATION)(this, b)
+
+    public override operator fun MST.minus(b: MST): MST.Binary =
+        binaryOperation(SpaceOperations.MINUS_OPERATION)(this, b)
 
     public override fun multiply(a: MST, k: Number): MST.Binary =
         binaryOperation(RingOperations.TIMES_OPERATION)(a, number(k))
