@@ -2,9 +2,7 @@ package kscience.kmath.asm.internal
 
 import kscience.kmath.asm.internal.AsmBuilder.ClassLoader
 import kscience.kmath.ast.MST
-import kscience.kmath.ast.mstInField
 import kscience.kmath.expressions.Expression
-import kscience.kmath.operations.RealField
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*

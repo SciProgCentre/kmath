@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.Maturity
+
 plugins {
     id("ru.mipt.npm.mpp")
 }
@@ -38,6 +40,6 @@ kotlin.sourceSets {
     }
 }
 
-readme{
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+readme {
+    maturity = Maturity.PROTOTYPE
 }
