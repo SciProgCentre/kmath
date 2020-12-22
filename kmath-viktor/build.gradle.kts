@@ -1,4 +1,6 @@
-plugins { id("ru.mipt.npm.jvm") }
+plugins {
+    id("ru.mipt.npm.jvm")
+}
 
 description = "Binding for https://github.com/JetBrains-Research/viktor"
 

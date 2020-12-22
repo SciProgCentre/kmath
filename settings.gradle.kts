@@ -1,16 +1,15 @@
 pluginManagement {
     repositories {
-        mavenLocal()
-        jcenter()
         gradlePluginPortal()
+        jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.6.1-dev-1.4.20-M1"
-    val kotlinVersion = "1.4.20-M1"
+    val toolsVersion = "0.7.1"
+    val kotlinVersion = "1.4.21"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"
@@ -18,7 +17,7 @@ pluginManagement {
         id("ru.mipt.npm.mpp") version toolsVersion
         id("ru.mipt.npm.jvm") version toolsVersion
         id("ru.mipt.npm.publish") version toolsVersion
-        kotlin("jvm")  version kotlinVersion
+        kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
 }
@@ -33,11 +32,13 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
-    ":kmath-prob",
+    ":kmath-stat",
+    ":kmath-nd4j",
     ":kmath-dimensions",
     ":kmath-for-real",
     ":kmath-geometry",
     ":kmath-ast",
-    ":examples",
-    ":kmath-ejml"
+    ":kmath-ejml",
+    ":kmath-kotlingrad",
+    ":examples"
 )

@@ -23,9 +23,21 @@ public interface Algebra<T> {
     public fun unaryOperation(operation: String, arg: T): T
 
     /**
+     * Currying version of [unaryOperation]
+     */
+    public fun unaryOperationFunction(operation: String): (T) -> T = { unaryOperation(operation, it) }
+
+    /**
      * Dynamic call of binary operation [operation] on [left] and [right]
      */
     public fun binaryOperation(operation: String, left: T, right: T): T
+
+    /**
+     * Curring version of [binaryOperation]
+     */
+    public fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = { left, right ->
+        binaryOperation(operation, left, right)
+    }
 }
 
 /**
@@ -46,10 +58,26 @@ public interface NumericAlgebra<T> : Algebra<T> {
         binaryOperation(operation, number(left), right)
 
     /**
+     * Curring version of [leftSideNumberOperation]
+     */
+    public fun leftSideNumberOperationFunction(operation: String): (left: Number, right: T) -> T =
+        { left: Number, right: T ->
+            leftSideNumberOperation(operation, left, right)
+        }
+
+    /**
      * Dynamic call of binary operation [operation] on [left] and [right] where right element is [Number].
      */
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
         leftSideNumberOperation(operation, right, left)
+
+    /**
+     * Curring version of [rightSideNumberOperation]
+     */
+    public fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
+        { left: T, right: Number ->
+            rightSideNumberOperation(operation, left, right)
+        }
 }
 
 /**
