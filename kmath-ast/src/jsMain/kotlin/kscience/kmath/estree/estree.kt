@@ -62,7 +62,7 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
 
 
 /**
- * Compiles an [MST] to ASM using given algebra.
+ * Compiles an [MST] to ESTree generated expression using given algebra.
  *
  * @author Alexander Nozik.
  */
@@ -70,7 +70,7 @@ public fun <T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
     mst.compileWith(this)
 
 /**
- * Optimizes performance of an [MstExpression] using ASM codegen.
+ * Optimizes performance of an [MstExpression] by compiling it into ESTree generated expression.
  *
  * @author Alexander Nozik.
  */
