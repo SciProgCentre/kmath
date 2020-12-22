@@ -9,13 +9,13 @@ import kotlin.test.assertFailsWith
 
 internal class TestESTreeVariables {
     @Test
-    fun testVariableWithoutDefault() {
+    fun testVariable() {
         val expr = ByteRing.mstInRing { symbol("x") }.compile()
         assertEquals(1.toByte(), expr("x" to 1.toByte()))
     }
 
     @Test
-    fun testVariableWithoutDefaultFails() {
+    fun testUndefinedVariableFails() {
         val expr = ByteRing.mstInRing { symbol("x") }.compile()
         assertFailsWith<NoSuchElementException> { expr() }
     }

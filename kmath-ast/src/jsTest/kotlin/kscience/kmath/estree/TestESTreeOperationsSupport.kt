@@ -1,4 +1,4 @@
-package kscience.kmath.asm
+package kscience.kmath.estree
 
 import kscience.kmath.ast.mstInExtendedField
 import kscience.kmath.ast.mstInField
@@ -9,7 +9,7 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class TestAsmExpressions {
+internal class TestESTreeOperationsSupport {
     @Test
     fun testUnaryOperationInvocation() {
         val expression = RealField.mstInSpace { -symbol("x") }.compile()
