@@ -5,7 +5,7 @@ import kscience.kmath.estree.internal.estree.*
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.Symbol
 
-internal class JSBuilder<T>(val bodyCallback: JSBuilder<T>.() -> BaseExpression) {
+internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExpression) {
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
         @Suppress("UNUSED_VARIABLE")
         override fun invoke(arguments: Map<Symbol, T>): T {

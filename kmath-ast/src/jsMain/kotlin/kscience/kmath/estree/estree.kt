@@ -2,7 +2,7 @@ package kscience.kmath.estree
 
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExpression
-import kscience.kmath.estree.internal.JSBuilder
+import kscience.kmath.estree.internal.ESTreeBuilder
 import kscience.kmath.estree.internal.estree.BaseExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.operations.Algebra
@@ -11,7 +11,7 @@ import kscience.kmath.operations.RealField
 
 @PublishedApi
 internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
-    fun JSBuilder<T>.visit(node: MST): BaseExpression = when (node) {
+    fun ESTreeBuilder<T>.visit(node: MST): BaseExpression = when (node) {
         is MST.Symbolic -> {
             val symbol = try {
                 algebra.symbol(node.value)
@@ -57,7 +57,7 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
         }
     }
 
-    return JSBuilder<T> { visit(this@compileWith) }.instance
+    return ESTreeBuilder<T> { visit(this@compileWith) }.instance
 }
 
 
