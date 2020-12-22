@@ -42,7 +42,7 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" ->
             SimpleLiteral(value)
 
-        jsType(value) == "undefined" -> Identifier("undefined")
+        jsTypeOf(value) == "undefined" -> Identifier("undefined")
 
         else -> {
             val idx = if (value in constants) constants.indexOf(value) else constants.also { it += value }.lastIndex
