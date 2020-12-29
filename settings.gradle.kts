@@ -42,3 +42,7 @@ include(
     ":kmath-kotlingrad",
     ":examples"
 )
+
+if(System.getProperty("os.name") == "Linux"){
+    include(":kmath-torch")
+}

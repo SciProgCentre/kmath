@@ -148,22 +148,27 @@ public interface Strides {
     /**
      * Array strides
      */
-    public val strides: List<Int>
-
-    /**
-     * Get linear index from multidimensional index
-     */
-    public fun offset(index: IntArray): Int
-
-    /**
-     * Get multidimensional from linear
-     */
-    public fun index(offset: Int): IntArray
+    public val strides: IntArray
 
     /**
      * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
      */
     public val linearSize: Int
+
+    /**
+     * Get linear index from multidimensional index
+     */
+    public fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
+        if (value < 0 || value >= this.shape[i])
+            throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
+
+        value * strides[i]
+    }.sum()
+
+    /**
+     * Get multidimensional from linear
+     */
+    public fun index(offset: Int): IntArray
 
     // TODO introduce a fast way to calculate index of the next element?
 
@@ -183,7 +188,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     /**
      * Strides for memory access
      */
-    override val strides: List<Int> by lazy {
+    override val strides: IntArray by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -192,15 +197,8 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
                 current *= it
                 yield(current)
             }
-        }.toList()
+        }.toList().toIntArray()
     }
-
-    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= this.shape[i])
-            throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-
-        value * strides[i]
-    }.sum()
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)
@@ -238,20 +236,22 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 }
 
 /**
- * Represents [NDStructure] over [Buffer].
+ * Trait for [NDStructure] over [Buffer].
  *
- * @param T the type of items.
+ * @param T the type of items
+ * @param BufferImpl implementation of [Buffer].
  */
-public abstract class NDBuffer<T> : NDStructure<T> {
+public abstract class NDBufferTrait<T, out BufferImpl : Buffer<T>, out StridesImpl: Strides> :
+    NDStructure<T> {
     /**
      * The underlying buffer.
      */
-    public abstract val buffer: Buffer<T>
+    public abstract val buffer: BufferImpl
 
     /**
      * The strides to access elements of [Buffer] by linear indices.
      */
-    public abstract val strides: Strides
+    public abstract val strides: StridesImpl
 
     override operator fun get(index: IntArray): T = buffer[strides.offset(index)]
 
@@ -259,14 +259,18 @@ public abstract class NDBuffer<T> : NDStructure<T> {
 
     override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map { it to this[it] }
 
-    override fun equals(other: Any?): Boolean {
-        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+    public fun checkStridesBufferCompatibility(): Unit = require(strides.linearSize == buffer.size) {
+        "Expected buffer side of ${strides.linearSize}, but found ${buffer.size}"
     }
 
     override fun hashCode(): Int {
         var result = strides.hashCode()
         result = 31 * result + buffer.hashCode()
         return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
     override fun toString(): String {
@@ -282,9 +286,35 @@ public abstract class NDBuffer<T> : NDStructure<T> {
         }
         return "NDBuffer(shape=${shape.contentToString()}, buffer=$bufferRepr)"
     }
-
-
 }
+
+/**
+ * Trait for [MutableNDStructure] over [MutableBuffer].
+ *
+ * @param T the type of items
+ * @param MutableBufferImpl implementation of [MutableBuffer].
+ */
+public abstract class MutableNDBufferTrait<T, out MutableBufferImpl : MutableBuffer<T>, out StridesImpl: Strides> :
+    NDBufferTrait<T, MutableBufferImpl, StridesImpl>(), MutableNDStructure<T> {
+    override fun hashCode(): Int = 0
+    override fun equals(other: Any?): Boolean = false
+    override operator fun set(index: IntArray, value: T): Unit =
+        buffer.set(strides.offset(index), value)
+}
+
+/**
+ * Default representation of [NDStructure] over [Buffer].
+ *
+ * @param T the type of items.
+ */
+public abstract class NDBuffer<T> : NDBufferTrait<T, Buffer<T>, Strides>()
+
+/**
+ * Default representation of [MutableNDStructure] over [MutableBuffer].
+ *
+ * @param T the type of items.
+ */
+public abstract class MutableNDBuffer<T> : MutableNDBufferTrait<T, MutableBuffer<T>, Strides>()
 
 /**
  * Boxing generic [NDStructure]
@@ -294,9 +324,7 @@ public class BufferNDStructure<T>(
     override val buffer: Buffer<T>,
 ) : NDBuffer<T>() {
     init {
-        if (strides.linearSize != buffer.size) {
-            error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
-        }
+        checkStridesBufferCompatibility()
     }
 }
 
@@ -316,20 +344,15 @@ public inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 }
 
 /**
- * Mutable ND buffer based on linear [MutableBuffer].
+ * Boxing generic [MutableNDStructure].
  */
 public class MutableBufferNDStructure<T>(
     override val strides: Strides,
     override val buffer: MutableBuffer<T>,
-) : NDBuffer<T>(), MutableNDStructure<T> {
-
+) : MutableNDBuffer<T>() {
     init {
-        require(strides.linearSize == buffer.size) {
-            "Expected buffer side of ${strides.linearSize}, but found ${buffer.size}"
-        }
+        checkStridesBufferCompatibility()
     }
-
-    override operator fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
 }
 
 public inline fun <reified T : Any> NDStructure<T>.combine(
