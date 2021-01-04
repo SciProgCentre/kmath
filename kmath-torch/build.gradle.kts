@@ -12,6 +12,10 @@ val home = System.getProperty("user.home")
 val thirdPartyDir = "$home/.konan/third-party/kmath-torch-${project.property("version")}"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
 
+val cudaHome: String? = System.getenv("CUDA_HOME")
+val cudaDefault = file("/usr/local/cuda").exists()
+val cudaFound = cudaHome?.isNotEmpty() ?: false or cudaDefault
+
 val cmakeArchive = "cmake-3.19.2-Linux-x86_64"
 val torchArchive = "libtorch"
 
@@ -32,8 +36,11 @@ val downloadNinja by tasks.registering(Download::class) {
 }
 
 val downloadTorch by tasks.registering(Download::class) {
-    val zipFile = "$torchArchive-cxx11-abi-shared-with-deps-1.7.1%2Bcu110.zip"
-    src("https://download.pytorch.org/libtorch/cu110/$zipFile")
+    val abiMeta = "$torchArchive-cxx11-abi-shared-with-deps-1.7.1%2B"
+    val cudaUrl = "https://download.pytorch.org/libtorch/cu110/${abiMeta}cu110.zip"
+    val cpuUrl = "https://download.pytorch.org/libtorch/cpu/${abiMeta}cpu.zip"
+    val url = if (cudaFound) cudaUrl else cpuUrl
+    src(url)
     dest(File(thirdPartyDir, "$torchArchive.zip"))
     overwrite(false)
 }

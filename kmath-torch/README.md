@@ -89,7 +89,7 @@ memScoped {
         scope = this,
         array = floatArrayOf(7f,8.9f,2.6f,5.6f),
         shape = intArrayOf(4))
-    println(intTensor)
+    println(floatTensor)
 }
 ```
 
