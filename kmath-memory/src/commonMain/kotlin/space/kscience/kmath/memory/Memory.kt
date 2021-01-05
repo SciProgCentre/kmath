@@ -157,9 +157,3 @@ public inline fun Memory.write(block: MemoryWriter.() -> Unit) {
  * Allocates the most effective platform-specific memory.
  */
 public expect fun Memory.Companion.allocate(length: Int): Memory
-
-/**
- * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
- * and could be mutated independently from the resulting [Memory].
- */
-public expect fun Memory.Companion.wrap(array: ByteArray): Memory

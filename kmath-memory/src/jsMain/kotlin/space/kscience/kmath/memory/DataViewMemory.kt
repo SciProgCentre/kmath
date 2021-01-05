@@ -7,7 +7,6 @@ package space.kscience.kmath.memory
 
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView
-import org.khronos.webgl.Int8Array
 
 private class DataViewMemory(val view: DataView) : Memory {
     override val size: Int get() = view.byteLength
@@ -90,13 +89,4 @@ private class DataViewMemory(val view: DataView) : Memory {
 public actual fun Memory.Companion.allocate(length: Int): Memory {
     val buffer = ArrayBuffer(length)
     return DataViewMemory(DataView(buffer, 0, length))
-}
-
-/**
- * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
- * and could be mutated independently from the resulting [Memory].
- */
-public actual fun Memory.Companion.wrap(array: ByteArray): Memory {
-    val int8Array = array.unsafeCast<Int8Array>()
-    return DataViewMemory(DataView(int8Array.buffer, int8Array.byteOffset, int8Array.length))
 }
