@@ -1,6 +1,5 @@
 package kscience.kmath.operations
 
-import kotlin.math.abs
 import kotlin.math.pow as kpow
 
 /**
@@ -15,23 +14,23 @@ public interface ExtendedFieldOperations<T> :
     public override fun tan(arg: T): T = sin(arg) / cos(arg)
     public override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
-    public override fun unaryOperation(operation: String, arg: T): T = when (operation) {
-        TrigonometricOperations.COS_OPERATION -> cos(arg)
-        TrigonometricOperations.SIN_OPERATION -> sin(arg)
-        TrigonometricOperations.TAN_OPERATION -> tan(arg)
-        TrigonometricOperations.ACOS_OPERATION -> acos(arg)
-        TrigonometricOperations.ASIN_OPERATION -> asin(arg)
-        TrigonometricOperations.ATAN_OPERATION -> atan(arg)
-        HyperbolicOperations.COSH_OPERATION -> cosh(arg)
-        HyperbolicOperations.SINH_OPERATION -> sinh(arg)
-        HyperbolicOperations.TANH_OPERATION -> tanh(arg)
-        HyperbolicOperations.ACOSH_OPERATION -> acosh(arg)
-        HyperbolicOperations.ASINH_OPERATION -> asinh(arg)
-        HyperbolicOperations.ATANH_OPERATION -> atanh(arg)
-        PowerOperations.SQRT_OPERATION -> sqrt(arg)
-        ExponentialOperations.EXP_OPERATION -> exp(arg)
-        ExponentialOperations.LN_OPERATION -> ln(arg)
-        else -> super.unaryOperation(operation, arg)
+    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
+        TrigonometricOperations.COS_OPERATION -> ::cos
+        TrigonometricOperations.SIN_OPERATION -> ::sin
+        TrigonometricOperations.TAN_OPERATION -> ::tan
+        TrigonometricOperations.ACOS_OPERATION -> ::acos
+        TrigonometricOperations.ASIN_OPERATION -> ::asin
+        TrigonometricOperations.ATAN_OPERATION -> ::atan
+        HyperbolicOperations.COSH_OPERATION -> ::cosh
+        HyperbolicOperations.SINH_OPERATION -> ::sinh
+        HyperbolicOperations.TANH_OPERATION -> ::tanh
+        HyperbolicOperations.ACOSH_OPERATION -> ::acosh
+        HyperbolicOperations.ASINH_OPERATION -> ::asinh
+        HyperbolicOperations.ATANH_OPERATION -> ::atanh
+        PowerOperations.SQRT_OPERATION -> ::sqrt
+        ExponentialOperations.EXP_OPERATION -> ::exp
+        ExponentialOperations.LN_OPERATION -> ::ln
+        else -> super<FieldOperations>.unaryOperationFunction(operation)
     }
 }
 
@@ -46,10 +45,11 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     public override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
     public override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2
 
-    public override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
-        PowerOperations.POW_OPERATION -> power(left, right)
-        else -> super.rightSideNumberOperation(operation, left, right)
-    }
+    public override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
+        when (operation) {
+            PowerOperations.POW_OPERATION -> ::power
+            else -> super.rightSideNumberOperationFunction(operation)
+        }
 }
 
 /**
@@ -80,10 +80,11 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double> {
     public override val one: Double
         get() = 1.0
 
-    public override fun binaryOperation(operation: String, left: Double, right: Double): Double = when (operation) {
-        PowerOperations.POW_OPERATION -> left pow right
-        else -> super.binaryOperation(operation, left, right)
-    }
+    public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
+        when (operation) {
+            PowerOperations.POW_OPERATION -> ::power
+            else -> super.binaryOperationFunction(operation)
+        }
 
     public override inline fun add(a: Double, b: Double): Double = a + b
     public override inline fun multiply(a: Double, k: Number): Double = a * k.toDouble()
@@ -130,9 +131,9 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     public override val one: Float
         get() = 1.0f
 
-    public override fun binaryOperation(operation: String, left: Float, right: Float): Float = when (operation) {
-        PowerOperations.POW_OPERATION -> left pow right
-        else -> super.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float = when (operation) {
+        PowerOperations.POW_OPERATION -> ::power
+        else -> super.binaryOperationFunction(operation)
     }
 
     public override inline fun add(a: Float, b: Float): Float = a + b
@@ -247,10 +248,10 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object LongRing : Ring<Long>, Norm<Long, Long> {
     public override val zero: Long
-        get() = 0
+        get() = 0L
 
     public override val one: Long
-        get() = 1
+        get() = 1L
 
     public override inline fun add(a: Long, b: Long): Long = a + b
     public override inline fun multiply(a: Long, k: Number): Long = a * k.toLong()

@@ -1,3 +1,5 @@
+// TODO move to common when https://github.com/h0tk3y/better-parse/pull/33 is merged
+
 package kscience.kmath.ast
 
 import com.github.h0tk3y.betterParse.combinators.*
@@ -17,7 +19,8 @@ import kscience.kmath.operations.RingOperations
 import kscience.kmath.operations.SpaceOperations
 
 /**
- * TODO move to common after IR version is released
+ * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
+ *
  * @author Alexander Nozik and Iaroslav Postovalov
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
@@ -83,7 +86,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
 }
 
 /**
- * Tries to parse the string into [MST]. Returns [ParseResult] representing expression or error.
+ * Tries to parse the string into [MST] using [ArithmeticsEvaluator]. Returns [ParseResult] representing expression or error.
  *
  * @receiver the string to parse.
  * @return the [MST] node.
@@ -91,7 +94,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
 public fun String.tryParseMath(): ParseResult<MST> = ArithmeticsEvaluator.tryParseToEnd(this)
 
 /**
- * Parses the string into [MST].
+ * Parses the string into [MST] using [ArithmeticsEvaluator].
  *
  * @receiver the string to parse.
  * @return the [MST] node.

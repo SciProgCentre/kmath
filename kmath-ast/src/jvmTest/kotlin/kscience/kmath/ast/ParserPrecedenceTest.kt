@@ -1,7 +1,5 @@
 package kscience.kmath.ast
 
-import kscience.kmath.ast.evaluate
-import kscience.kmath.ast.parseMath
 import kscience.kmath.operations.Field
 import kscience.kmath.operations.RealField
 import kotlin.test.Test

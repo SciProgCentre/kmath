@@ -1,10 +1,16 @@
 package kscience.kmath.structures
 
+import kscience.kmath.operations.internal.FieldVerifier
+import kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+internal class NDFieldTest {
+    @Test
+    fun verify() {
+        (NDField.real(12, 32)) { FieldVerifier(this, one + 3, one - 23, one * 12, 6.66) }
+    }
 
-class NDFieldTest {
     @Test
     fun testStrides() {
         val ndArray = NDElement.real(intArrayOf(10, 10)) { (it[0] + it[1]).toDouble() }

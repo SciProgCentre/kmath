@@ -14,7 +14,7 @@
 >     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
 >     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-
+> 
 > }
 > 
 > dependencies {
