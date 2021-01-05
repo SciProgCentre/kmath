@@ -21,8 +21,8 @@ public class MstExpression<T, out A : Algebra<T>>(public val algebra: A, public 
             null
         } ?: arguments.getValue(StringSymbol(value))
 
-        override fun unaryOperation(operation: String): (arg: T) -> T = algebra.unaryOperation(operation)
-        override fun binaryOperation(operation: String): (left: T, right: T) -> T = algebra.binaryOperation(operation)
+        override fun unaryOperationFunction(operation: String): (arg: T) -> T = algebra.unaryOperationFunction(operation)
+        override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = algebra.binaryOperationFunction(operation)
 
         @Suppress("UNCHECKED_CAST")
         override fun number(value: Number): T = if (algebra is NumericAlgebra<*>)

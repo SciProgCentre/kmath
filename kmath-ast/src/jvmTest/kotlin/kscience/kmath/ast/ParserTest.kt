@@ -42,11 +42,11 @@ internal class ParserTest {
         val magicalAlgebra = object : Algebra<String> {
             override fun symbol(value: String): String = value
 
-            override fun unaryOperation(operation: String): (arg: String) -> String {
+            override fun unaryOperationFunction(operation: String): (arg: String) -> String {
                 throw NotImplementedError()
             }
 
-            override fun binaryOperation(operation: String): (left: String, right: String) -> String =
+            override fun binaryOperationFunction(operation: String): (left: String, right: String) -> String =
                 when (operation) {
                     "magic" -> { left, right -> "$left ★ $right" }
                     else -> throw NotImplementedError()

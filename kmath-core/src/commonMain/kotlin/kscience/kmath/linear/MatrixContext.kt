@@ -19,10 +19,10 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): M
 
     @Suppress("UNCHECKED_CAST")
-    public override fun binaryOperation(operation: String): (left: Matrix<T>, right: Matrix<T>) -> M =
+    public override fun binaryOperationFunction(operation: String): (left: Matrix<T>, right: Matrix<T>) -> M =
         when (operation) {
             "dot" -> { left, right -> left dot right }
-            else -> super.binaryOperation(operation) as (Matrix<T>, Matrix<T>) -> M
+            else -> super.binaryOperationFunction(operation) as (Matrix<T>, Matrix<T>) -> M
         }
 
     /**

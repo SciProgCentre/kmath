@@ -13,8 +13,8 @@ internal class TestAsmConsistencyWithInterpreter {
     @Test
     fun mstSpace() {
         val res1 = MstSpace.mstInSpace {
-            binaryOperation("+")(
-                unaryOperation("+")(
+            binaryOperationFunction("+")(
+                unaryOperationFunction("+")(
                     number(3.toByte()) - (number(2.toByte()) + (multiply(
                         add(number(1), number(1)),
                         2
@@ -26,8 +26,8 @@ internal class TestAsmConsistencyWithInterpreter {
         }("x" to MST.Numeric(2))
 
         val res2 = MstSpace.mstInSpace {
-            binaryOperation("+")(
-                unaryOperation("+")(
+            binaryOperationFunction("+")(
+                unaryOperationFunction("+")(
                     number(3.toByte()) - (number(2.toByte()) + (multiply(
                         add(number(1), number(1)),
                         2
@@ -44,8 +44,8 @@ internal class TestAsmConsistencyWithInterpreter {
     @Test
     fun byteRing() {
         val res1 = ByteRing.mstInRing {
-            binaryOperation("+")(
-                unaryOperation("+")(
+            binaryOperationFunction("+")(
+                unaryOperationFunction("+")(
                     (symbol("x") - (2.toByte() + (multiply(
                         add(number(1), number(1)),
                         2
@@ -57,8 +57,8 @@ internal class TestAsmConsistencyWithInterpreter {
         }("x" to 3.toByte())
 
         val res2 = ByteRing.mstInRing {
-            binaryOperation("+")(
-                unaryOperation("+")(
+            binaryOperationFunction("+")(
+                unaryOperationFunction("+")(
                     (symbol("x") - (2.toByte() + (multiply(
                         add(number(1), number(1)),
                         2
@@ -74,7 +74,7 @@ internal class TestAsmConsistencyWithInterpreter {
     @Test
     fun realField() {
         val res1 = RealField.mstInField {
-            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation("+")(
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one
@@ -82,7 +82,7 @@ internal class TestAsmConsistencyWithInterpreter {
         }("x" to 2.0)
 
         val res2 = RealField.mstInField {
-            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation("+")(
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one
@@ -95,7 +95,7 @@ internal class TestAsmConsistencyWithInterpreter {
     @Test
     fun complexField() {
         val res1 = ComplexField.mstInField {
-            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation("+")(
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one
@@ -103,7 +103,7 @@ internal class TestAsmConsistencyWithInterpreter {
         }("x" to 2.0.toComplex())
 
         val res2 = ComplexField.mstInField {
-            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperation("+")(
+            +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (symbol("x") + (multiply(add(number(1.0), number(1.0)), 2) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one

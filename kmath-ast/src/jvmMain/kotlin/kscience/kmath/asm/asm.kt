@@ -34,28 +34,28 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
         }
 
         is MST.Numeric -> loadNumberConstant(node.value)
-        is MST.Unary -> buildCall(algebra.unaryOperation(node.operation)) { visit(node.value) }
+        is MST.Unary -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
 
         is MST.Binary -> when {
             algebra is NumericAlgebra<T> && node.left is MST.Numeric && node.right is MST.Numeric -> loadObjectConstant(
                 algebra.number(
                     RealField
-                        .binaryOperation(node.operation)
+                        .binaryOperationFunction(node.operation)
                         .invoke(node.left.value.toDouble(), node.right.value.toDouble())
                 )
             )
 
-            algebra is NumericAlgebra<T> && node.left is MST.Numeric -> buildCall(algebra.leftSideNumberOperation(node.operation)) {
+            algebra is NumericAlgebra<T> && node.left is MST.Numeric -> buildCall(algebra.leftSideNumberOperationFunction(node.operation)) {
                 visit(node.left)
                 visit(node.right)
             }
 
-            algebra is NumericAlgebra<T> && node.right is MST.Numeric -> buildCall(algebra.rightSideNumberOperation(node.operation)) {
+            algebra is NumericAlgebra<T> && node.right is MST.Numeric -> buildCall(algebra.rightSideNumberOperationFunction(node.operation)) {
                 visit(node.left)
                 visit(node.right)
             }
 
-            else -> buildCall(algebra.binaryOperation(node.operation)) {
+            else -> buildCall(algebra.binaryOperationFunction(node.operation)) {
                 visit(node.left)
                 visit(node.right)
             }

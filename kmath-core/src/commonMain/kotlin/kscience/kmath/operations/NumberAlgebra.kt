@@ -14,7 +14,7 @@ public interface ExtendedFieldOperations<T> :
     public override fun tan(arg: T): T = sin(arg) / cos(arg)
     public override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
-    public override fun unaryOperation(operation: String): (arg: T) -> T = when (operation) {
+    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         TrigonometricOperations.COS_OPERATION -> ::cos
         TrigonometricOperations.SIN_OPERATION -> ::sin
         TrigonometricOperations.TAN_OPERATION -> ::tan
@@ -30,7 +30,7 @@ public interface ExtendedFieldOperations<T> :
         PowerOperations.SQRT_OPERATION -> ::sqrt
         ExponentialOperations.EXP_OPERATION -> ::exp
         ExponentialOperations.LN_OPERATION -> ::ln
-        else -> super<FieldOperations>.unaryOperation(operation)
+        else -> super<FieldOperations>.unaryOperationFunction(operation)
     }
 }
 
@@ -45,10 +45,10 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
     public override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
     public override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2
 
-    public override fun rightSideNumberOperation(operation: String): (left: T, right: Number) -> T =
+    public override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
-            else -> super.rightSideNumberOperation(operation)
+            else -> super.rightSideNumberOperationFunction(operation)
         }
 }
 
@@ -80,10 +80,10 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double> {
     public override val one: Double
         get() = 1.0
 
-    public override fun binaryOperation(operation: String): (left: Double, right: Double) -> Double =
+    public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
-            else -> super.binaryOperation(operation)
+            else -> super.binaryOperationFunction(operation)
         }
 
     public override inline fun add(a: Double, b: Double): Double = a + b
@@ -131,9 +131,9 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     public override val one: Float
         get() = 1.0f
 
-    public override fun binaryOperation(operation: String): (left: Float, right: Float) -> Float = when (operation) {
+    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float = when (operation) {
         PowerOperations.POW_OPERATION -> ::power
-        else -> super.binaryOperation(operation)
+        else -> super.binaryOperationFunction(operation)
     }
 
     public override inline fun add(a: Float, b: Float): Float = a + b
