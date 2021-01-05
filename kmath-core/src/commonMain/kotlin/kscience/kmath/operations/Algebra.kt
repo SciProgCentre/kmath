@@ -13,19 +13,79 @@ public annotation class KMathContext
  */
 public interface Algebra<T> {
     /**
-     * Wrap raw string or variable
+     * Wraps a raw string to [T] object. This method is designed for three purposes:
+     *
+     * 1. Mathematical constants (`e`, `pi`).
+     * 2. Variables for expression-like contexts (`a`, `b`, `c`...).
+     * 3. Literals (`{1, 2}`, (`(3; 4)`)).
+     *
+     * In case if algebra can't parse the string, this method must throw [kotlin.IllegalStateException].
+     *
+     * @param value the raw string.
+     * @return an object.
      */
     public fun symbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
 
     /**
-     * Dynamic call of unary operation with name [operation] on [arg]
+     * Dynamically dispatches an unary operation with the certain name.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with second `unaryOperation` overload:
+     * i.e. `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
+     *
+     * @param operation the name of operation.
+     * @return an operation.
      */
-    public fun unaryOperation(operation: String, arg: T): T
+    public fun unaryOperationFunction(operation: String): (arg: T) -> T =
+        error("Unary operation $operation not defined in $this")
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right]
+     * Dynamically invokes an unary operation with the certain name.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with second [unaryOperationFunction] overload:
+     * i.e. `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
+     *
+     * @param operation the name of operation.
+     * @param arg the argument of operation.
+     * @return a result of operation.
      */
-    public fun binaryOperation(operation: String, left: T, right: T): T
+    public fun unaryOperation(operation: String, arg: T): T = unaryOperationFunction(operation)(arg)
+
+    /**
+     * Dynamically dispatches a binary operation with the certain name.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with second [binaryOperationFunction] overload:
+     * i.e. `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
+     *
+     * @param operation the name of operation.
+     * @return an operation.
+     */
+    public fun binaryOperationFunction(operation: String): (left: T, right: T) -> T =
+        error("Binary operation $operation not defined in $this")
+
+    /**
+     * Dynamically invokes a binary operation with the certain name.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with second [binaryOperationFunction] overload:
+     * i.e. `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
+     *
+     * @param operation the name of operation.
+     * @param left the first argument of operation.
+     * @param right the second argument of operation.
+     * @return a result of operation.
+     */
+    public fun binaryOperation(operation: String, left: T, right: T): T = binaryOperationFunction(operation)(left, right)
 }
 
 /**
@@ -35,21 +95,76 @@ public interface Algebra<T> {
  */
 public interface NumericAlgebra<T> : Algebra<T> {
     /**
-     * Wraps a number.
+     * Wraps a number to [T] object.
+     *
+     * @param value the number to wrap.
+     * @return an object.
      */
     public fun number(value: Number): T
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right] where left element is [Number].
+     * Dynamically dispatches a binary operation with the certain name with numeric first argument.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with the other [leftSideNumberOperation] overload:
+     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b)`.
+     *
+     * @param operation the name of operation.
+     * @return an operation.
      */
-    public fun leftSideNumberOperation(operation: String, left: Number, right: T): T =
-        binaryOperation(operation, number(left), right)
+    public fun leftSideNumberOperationFunction(operation: String): (left: Number, right: T) -> T =
+        { l, r -> binaryOperationFunction(operation)(number(l), r) }
 
     /**
-     * Dynamic call of binary operation [operation] on [left] and [right] where right element is [Number].
+     * Dynamically invokes a binary operation with the certain name with numeric first argument.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with second [leftSideNumberOperation] overload:
+     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     *
+     * @param operation the name of operation.
+     * @param left the first argument of operation.
+     * @param right the second argument of operation.
+     * @return a result of operation.
+     */
+    public fun leftSideNumberOperation(operation: String, left: Number, right: T): T =
+        leftSideNumberOperationFunction(operation)(left, right)
+
+    /**
+     * Dynamically dispatches a binary operation with the certain name with numeric first argument.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
+     * i.e. `rightSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     *
+     * @param operation the name of operation.
+     * @return an operation.
+     */
+    public fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
+        { l, r -> binaryOperationFunction(operation)(l, number(r)) }
+
+    /**
+     * Dynamically invokes a binary operation with the certain name with numeric second argument.
+     *
+     * This function must follow two properties:
+     *
+     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
+     * i.e. `rightSideNumberOperationFunction(a)(b, c) == rightSideNumberOperation(a, b, c)`.
+     *
+     * @param operation the name of operation.
+     * @param left the first argument of operation.
+     * @param right the second argument of operation.
+     * @return a result of operation.
      */
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
-        leftSideNumberOperation(operation, right, left)
+        rightSideNumberOperationFunction(operation)(left, right)
 }
 
 /**
@@ -146,26 +261,26 @@ public interface SpaceOperations<T> : Algebra<T> {
      */
     public operator fun Number.times(b: T): T = b * this
 
-    override fun unaryOperation(operation: String, arg: T): T = when (operation) {
-        PLUS_OPERATION -> arg
-        MINUS_OPERATION -> -arg
-        else -> error("Unary operation $operation not defined in $this")
+    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
+        PLUS_OPERATION -> { arg -> arg }
+        MINUS_OPERATION -> { arg -> -arg }
+        else -> super.unaryOperationFunction(operation)
     }
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        PLUS_OPERATION -> add(left, right)
-        MINUS_OPERATION -> left - right
-        else -> error("Binary operation $operation not defined in $this")
+    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+        PLUS_OPERATION -> ::add
+        MINUS_OPERATION -> { left, right -> left - right }
+        else -> super.binaryOperationFunction(operation)
     }
 
     public companion object {
         /**
-         * The identifier of addition.
+         * The identifier of addition and unary positive operator.
          */
         public const val PLUS_OPERATION: String = "+"
 
         /**
-         * The identifier of subtraction (and negation).
+         * The identifier of subtraction and unary negative operator.
          */
         public const val MINUS_OPERATION: String = "-"
     }
@@ -207,9 +322,9 @@ public interface RingOperations<T> : SpaceOperations<T> {
      */
     public operator fun T.times(b: T): T = multiply(this, b)
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        TIMES_OPERATION -> multiply(left, right)
-        else -> super.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+        TIMES_OPERATION -> ::multiply
+        else -> super.binaryOperationFunction(operation)
     }
 
     public companion object {
@@ -232,21 +347,7 @@ public interface Ring<T> : Space<T>, RingOperations<T>, NumericAlgebra<T> {
      */
     public val one: T
 
-    override fun number(value: Number): T = one * value.toDouble()
-
-    override fun leftSideNumberOperation(operation: String, left: Number, right: T): T = when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left + right
-        SpaceOperations.MINUS_OPERATION -> left - right
-        RingOperations.TIMES_OPERATION -> left * right
-        else -> super.leftSideNumberOperation(operation, left, right)
-    }
-
-    override fun rightSideNumberOperation(operation: String, left: T, right: Number): T = when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left + right
-        SpaceOperations.MINUS_OPERATION -> left - right
-        RingOperations.TIMES_OPERATION -> left * right
-        else -> super.rightSideNumberOperation(operation, left, right)
-    }
+    public override fun number(value: Number): T = one * value.toDouble()
 
     /**
      * Addition of element and scalar.
@@ -308,9 +409,9 @@ public interface FieldOperations<T> : RingOperations<T> {
      */
     public operator fun T.div(b: T): T = divide(this, b)
 
-    override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
-        DIV_OPERATION -> divide(left, right)
-        else -> super.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+        DIV_OPERATION -> ::divide
+        else -> super.binaryOperationFunction(operation)
     }
 
     public companion object {
