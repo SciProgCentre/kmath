@@ -191,7 +191,7 @@ internal class AsmBuilder<T>(
         }
 
         val cls = classLoader.defineClass(className, classWriter.toByteArray())
-        java.io.File("dump.class").writeBytes(classWriter.toByteArray())
+        // java.io.File("dump.class").writeBytes(classWriter.toByteArray())
         val l = MethodHandles.publicLookup()
 
         if (hasConstants)
