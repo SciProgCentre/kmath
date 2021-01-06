@@ -1,13 +1,13 @@
 package kscience.kmath.asm
 
 import kscience.kmath.asm.internal.AsmBuilder
-import kscience.kmath.asm.internal.MstType
-import kscience.kmath.asm.internal.buildAlgebraOperationCall
 import kscience.kmath.asm.internal.buildName
 import kscience.kmath.ast.MST
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.operations.Algebra
+import kscience.kmath.operations.NumericAlgebra
+import kscience.kmath.operations.RealField
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -23,37 +23,46 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
         is MST.Symbolic -> {
             val symbol = try {
                 algebra.symbol(node.value)
-            } catch (ignored: Throwable) {
+            } catch (ignored: IllegalStateException) {
                 null
             }
 
             if (symbol != null)
-                loadTConstant(symbol)
+                loadObjectConstant(symbol as Any)
             else
                 loadVariable(node.value)
         }
 
-        is MST.Numeric -> loadNumeric(node.value)
+        is MST.Numeric -> loadNumberConstant(node.value)
+        is MST.Unary -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
 
-        is MST.Unary -> buildAlgebraOperationCall(
-            context = algebra,
-            name = node.operation,
-            fallbackMethodName = "unaryOperation",
-            parameterTypes = arrayOf(MstType.fromMst(node.value))
-        ) { visit(node.value) }
+        is MST.Binary -> when {
+            algebra is NumericAlgebra<T> && node.left is MST.Numeric && node.right is MST.Numeric -> loadObjectConstant(
+                algebra.number(
+                    RealField
+                        .binaryOperationFunction(node.operation)
+                        .invoke(node.left.value.toDouble(), node.right.value.toDouble())
+                )
+            )
 
-        is MST.Binary -> buildAlgebraOperationCall(
-            context = algebra,
-            name = node.operation,
-            fallbackMethodName = "binaryOperation",
-            parameterTypes = arrayOf(MstType.fromMst(node.left), MstType.fromMst(node.right))
-        ) {
-            visit(node.left)
-            visit(node.right)
+            algebra is NumericAlgebra<T> && node.left is MST.Numeric -> buildCall(algebra.leftSideNumberOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
+
+            algebra is NumericAlgebra<T> && node.right is MST.Numeric -> buildCall(algebra.rightSideNumberOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
+
+            else -> buildCall(algebra.binaryOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
         }
     }
 
-    return AsmBuilder(type, algebra, buildName(this)) { visit(this@compileWith) }.getInstance()
+    return AsmBuilder<T>(type, buildName(this)) { visit(this@compileWith) }.instance
 }
 
 /**

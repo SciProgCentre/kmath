@@ -89,7 +89,16 @@ submit a feature request if you want something to be implemented first.
 * ### [kmath-ast](kmath-ast)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [expression-language](kmath-ast/src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
+> - [mst](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+> - [mst-building](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
+> - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+> - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+
 <hr/>
 
 * ### [kmath-commons](kmath-commons)
@@ -122,7 +131,7 @@ submit a feature request if you want something to be implemented first.
 * ### [kmath-dimensions](kmath-dimensions)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: PROTOTYPE
 <hr/>
 
 * ### [kmath-ejml](kmath-ejml)

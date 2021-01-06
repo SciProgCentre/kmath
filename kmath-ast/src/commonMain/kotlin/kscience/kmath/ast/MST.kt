@@ -55,24 +55,24 @@ public sealed class MST {
 public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
+
     is MST.Symbolic -> symbol(node.value)
-    is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
+    is MST.Unary -> unaryOperationFunction(node.operation)(evaluate(node.value))
+
     is MST.Binary -> when {
-        this !is NumericAlgebra -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
+        this !is NumericAlgebra -> binaryOperationFunction(node.operation)(evaluate(node.left), evaluate(node.right))
 
         node.left is MST.Numeric && node.right is MST.Numeric -> {
-            val number = RealField.binaryOperation(
-                node.operation,
-                node.left.value.toDouble(),
-                node.right.value.toDouble()
-            )
+            val number = RealField
+                .binaryOperationFunction(node.operation)
+                .invoke(node.left.value.toDouble(), node.right.value.toDouble())
 
             number(number)
         }
 
-        node.left is MST.Numeric -> leftSideNumberOperation(node.operation, node.left.value, evaluate(node.right))
-        node.right is MST.Numeric -> rightSideNumberOperation(node.operation, evaluate(node.left), node.right.value)
-        else -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
+        node.left is MST.Numeric -> leftSideNumberOperationFunction(node.operation)(node.left.value, evaluate(node.right))
+        node.right is MST.Numeric -> rightSideNumberOperationFunction(node.operation)(evaluate(node.left), node.right.value)
+        else -> binaryOperationFunction(node.operation)(evaluate(node.left), evaluate(node.right))
     }
 }
 
