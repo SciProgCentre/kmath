@@ -1,6 +1,6 @@
 package kscience.kmath.operations
 
-import kscience.kmath.operations.internal.RingVerifier
+import kscience.kmath.testutils.RingVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

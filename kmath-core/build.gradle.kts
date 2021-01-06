@@ -3,9 +3,17 @@ plugins {
     id("ru.mipt.npm.native")
 }
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-memory"))
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-memory"))
+        }
+    }
+
+    commonTest {
+        dependencies {
+            api(project(":kmath-complex"))
+        }
     }
 }
 

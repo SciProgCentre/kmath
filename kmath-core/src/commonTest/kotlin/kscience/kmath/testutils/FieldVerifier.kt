@@ -1,4 +1,4 @@
-package kscience.kmath.operations.internal
+package kscience.kmath.testutils
 
 import kscience.kmath.operations.Field
 import kscience.kmath.operations.invoke

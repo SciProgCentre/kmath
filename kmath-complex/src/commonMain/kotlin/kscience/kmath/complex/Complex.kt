@@ -1,8 +1,11 @@
-package kscience.kmath.operations
+package kscience.kmath.complex
 
 import kscience.kmath.memory.MemoryReader
 import kscience.kmath.memory.MemorySpec
 import kscience.kmath.memory.MemoryWriter
+import kscience.kmath.operations.ExtendedField
+import kscience.kmath.operations.FieldElement
+import kscience.kmath.operations.Norm
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer

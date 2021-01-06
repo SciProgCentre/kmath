@@ -1,7 +1,7 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.complex
+import kscience.kmath.complex.Complex
+import kscience.kmath.complex.complex
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

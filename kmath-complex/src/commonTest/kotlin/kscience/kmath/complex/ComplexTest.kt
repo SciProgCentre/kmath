@@ -1,4 +1,4 @@
-package kscience.kmath.operations
+package kscience.kmath.complex
 
 import kotlin.math.sqrt
 import kotlin.test.Test

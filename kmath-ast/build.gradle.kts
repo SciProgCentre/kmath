@@ -25,6 +25,12 @@ kotlin.sourceSets {
         }
     }
 
+    commonTest {
+        dependencies {
+            implementation(project(":kmath-complex"))
+        }
+    }
+
     jsMain {
         dependencies {
             implementation(npm("astring", "1.4.3"))

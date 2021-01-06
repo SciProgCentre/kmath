@@ -1,6 +1,5 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.Complex
 import kscience.kmath.operations.Field
 import kscience.kmath.operations.Ring
 import kscience.kmath.operations.Space
@@ -252,7 +251,6 @@ public interface NDField<T, F : Field<T>, N : NDStructure<T>> : Field<N>, NDRing
         public inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): BufferedNDField<T, F> =
             when {
                 T::class == Double::class -> real(*shape) as BufferedNDField<T, F>
-                T::class == Complex::class -> complex(*shape) as BufferedNDField<T, F>
                 else -> BoxingNDField(shape, field, Buffer.Companion::auto)
             }
     }

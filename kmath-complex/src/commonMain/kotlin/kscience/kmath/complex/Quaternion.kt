@@ -1,8 +1,9 @@
-package kscience.kmath.operations
+package kscience.kmath.complex
 
 import kscience.kmath.memory.MemoryReader
 import kscience.kmath.memory.MemorySpec
 import kscience.kmath.memory.MemoryWriter
+import kscience.kmath.operations.*
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer
@@ -13,14 +14,14 @@ import kotlin.math.*
  * This quaternion's conjugate.
  */
 public val Quaternion.conjugate: Quaternion
-    get() = QuaternionField { z - x * i - y * j - z * k }
+    get() = QuaternionField { z - x * QuaternionField.i - y * QuaternionField.j - z * QuaternionField.k }
 
 /**
  * This quaternion's reciprocal.
  */
 public val Quaternion.reciprocal: Quaternion
     get() {
-        val n = QuaternionField { norm(this@reciprocal) }
+        val n = QuaternionField { QuaternionField.norm(this@reciprocal) }
         return conjugate / (n * n)
     }
 
@@ -139,7 +140,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
             return if (arg.w > 0)
                 Quaternion(ln(arg.w), 0, 0, 0)
             else {
-                val l = ComplexField { ln(arg.w.toComplex()) }
+                val l = ComplexField { ComplexField.ln(arg.w.toComplex()) }
                 Quaternion(l.re, l.im, 0, 0)
             }
 

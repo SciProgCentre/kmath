@@ -1,12 +1,13 @@
 package kscience.kmath.operations
 
+import kscience.kmath.complex.Complex
+import kscience.kmath.complex.complex
 import kscience.kmath.structures.NDElement
 import kscience.kmath.structures.NDField
-import kscience.kmath.structures.complex
 
 fun main() {
     // 2d element
-    val element = NDElement.complex(2, 2) { (i,j) ->
+    val element = NDElement.complex(2, 2) { (i, j) ->
         Complex(i.toDouble() - j.toDouble(), i.toDouble() + j.toDouble())
     }
     println(element)

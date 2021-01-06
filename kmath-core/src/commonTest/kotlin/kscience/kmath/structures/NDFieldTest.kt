@@ -1,6 +1,6 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.internal.FieldVerifier
+import kscience.kmath.testutils.FieldVerifier
 import kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals

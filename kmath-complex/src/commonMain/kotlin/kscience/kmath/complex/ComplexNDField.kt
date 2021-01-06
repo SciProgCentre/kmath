@@ -1,12 +1,13 @@
-package kscience.kmath.structures
+package kscience.kmath.complex
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.FieldElement
-import kscience.kmath.operations.complex
+import kscience.kmath.structures.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+/**
+ * Convenience alias for [BufferedNDFieldElement] of [Complex].
+ */
 public typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
 /**

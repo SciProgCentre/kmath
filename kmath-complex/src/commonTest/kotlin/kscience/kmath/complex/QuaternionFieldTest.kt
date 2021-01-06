@@ -1,5 +1,6 @@
-package kscience.kmath.operations
+package kscience.kmath.complex
 
+import kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

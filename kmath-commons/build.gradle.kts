@@ -5,6 +5,7 @@ description = "Commons math binding for kmath"
 
 dependencies {
     api(project(":kmath-core"))
+    api(project(":kmath-complex"))
     api(project(":kmath-coroutines"))
     api(project(":kmath-stat"))
     api(project(":kmath-functions"))
