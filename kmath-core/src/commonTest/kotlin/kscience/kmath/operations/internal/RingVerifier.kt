@@ -10,7 +10,7 @@ internal open class RingVerifier<T>(override val algebra: Ring<T>, a: T, b: T, c
         super.verify()
 
         algebra {
-            assertEquals(a * b, a * b, "Multiplication in $algebra is not commutative.")
+            assertEquals(a + b, b + a, "Addition in $algebra is not commutative.")
             assertEquals(a * b * c, a * (b * c), "Multiplication in $algebra is not associative.")
             assertEquals(c * (a + b), (c * a) + (c * b), "Multiplication in $algebra is not distributive.")
             assertEquals(a * one, one * a, "$one in $algebra is not a neutral multiplication element.")

@@ -2,51 +2,9 @@
 
 This subproject implements the following features:
 
- - [expression-language](src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
- - [mst-jvm-codegen](src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
- - [mst-js-codegen](src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+${features}
 
-
-> #### Artifact:
->
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-4`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-ast/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
->     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-> 
-> }
-> 
-> dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-4'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://dl.bintray.com/kotlin/kotlin-eap")
->     maven("https://dl.bintray.com/mipt-npm/kscience")
->     maven("https://dl.bintray.com/mipt-npm/dev")
->     maven("https://dl.bintray.com/hotkeytlt/maven")
-> }
-> 
-> dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-4")
-> }
-> ```
+${artifact}
 
 ## Dynamic expression code generation
 

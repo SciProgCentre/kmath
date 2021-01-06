@@ -1,4 +1,4 @@
-package kscience.kmath.asm
+package kscience.kmath.estree
 
 import kscience.kmath.ast.mstInRing
 import kscience.kmath.expressions.invoke
@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-internal class TestAsmVariables {
+internal class TestESTreeVariables {
     @Test
     fun testVariable() {
         val expr = ByteRing.mstInRing { symbol("x") }.compile()
