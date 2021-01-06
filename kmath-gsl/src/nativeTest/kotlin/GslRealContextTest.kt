@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.time.measureTime
 
-internal class RealTest {
+internal class GslRealContextTest {
     @Test
     fun testScale() = GslRealMatrixContext {
         val ma = produce(10, 10) { _, _ -> 0.1 }
