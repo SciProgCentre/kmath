@@ -107,6 +107,17 @@ submit a feature request if you want something to be implemented first.
 > **Maturity**: EXPERIMENTAL
 <hr/>
 
+* ### [kmath-complex](kmath-complex)
+> Complex numbers and quaternions.
+>
+> **Maturity**: DEVELOPMENT
+>
+> **Features:**
+> - [complex](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Complex.kt) : Complex Numbers
+> - [quaternion](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Quaternion.kt) : Quaternions
+
+<hr/>
+
 * ### [kmath-core](kmath-core)
 > Core classes, algebra definitions, basic linear algebra
 >

@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.Maturity
+
 plugins {
     id("ru.mipt.npm.mpp")
     id("ru.mipt.npm.native")
@@ -19,7 +21,7 @@ kotlin.sourceSets {
 
 readme {
     description = "Core classes, algebra definitions, basic linear algebra"
-    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
+    maturity = Maturity.DEVELOPMENT
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
