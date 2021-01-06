@@ -2,7 +2,11 @@ package kscience.kmath.gsl
 
 import kscience.kmath.linear.RealMatrixContext
 import kscience.kmath.operations.invoke
-import kscience.kmath.structures.*
+import kscience.kmath.structures.Matrix
+import kscience.kmath.structures.NDStructure
+import kscience.kmath.structures.RealBuffer
+import kscience.kmath.structures.asSequence
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -33,39 +37,23 @@ internal class RealTest {
         val mb = produce(2, 2) { _, _ -> 100.0 }
         val res1: Matrix<Double> = ma dot mb
         val res2: Matrix<Double> = RealMatrixContext { ma dot mb }
-        println(res1.rows.asIterable().map { it.asSequence() }.flatMap(Sequence<*>::toList))
-        println(res2.rows.asIterable().map { it.asSequence() }.flatMap(Sequence<*>::toList))
         assertEquals(res1, res2)
     }
 
     @Test
-    fun testManyCalls() {
-        val r1 = GslRealMatrixContext {
-            var prod = produce(20, 20) { _, _ -> 100.0 }
-            val mult = produce(20, 20) { _, _ -> 3.0 }
-
-            measureTime {
-                repeat(100) {
-                    prod = prod dot mult
-                }
-            }.also(::println)
-
+    fun testManyCalls() = GslRealMatrixContext {
+        val expected = RealMatrixContext {
+            val rng = Random(0)
+            var prod = produce(20, 20) { _, _ -> rng.nextDouble() }
+            val mult = produce(20, 20) { _, _ -> rng.nextDouble() }
+            measureTime { repeat(100) { prod = prod dot mult } }.also(::println)
             prod
         }
 
-        val r2 = RealMatrixContext {
-            var prod = produce(20, 20) { _, _ -> 100.0 }
-            val mult = produce(20, 20) { _, _ -> 3.0 }
-
-            measureTime {
-                repeat(100) {
-                    prod = prod dot mult
-                }
-            }.also(::println)
-
-            prod
-        }
-
-        assertTrue(NDStructure.equals(r1, r2))
+        val rng = Random(0)
+        var prod = produce(20, 20) { _, _ -> rng.nextDouble() }
+        val mult = produce(20, 20) { _, _ -> rng.nextDouble() }
+        measureTime { repeat(100) { prod = prod dot mult } }.also(::println)
+        assertTrue(NDStructure.equals(expected, prod))
     }
 }
