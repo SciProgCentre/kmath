@@ -2,6 +2,7 @@ package kscience.kmath.gsl
 
 import kotlinx.cinterop.CStructVar
 import kotlinx.cinterop.DeferScope
+import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.pointed
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
@@ -23,7 +24,7 @@ internal inline fun <T : Any, H : CStructVar> GslVector<T, H>.fill(initializer: 
  * Represents matrix context implementing where all the operations are delegated to GSL.
  */
 public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar> internal constructor(
-    internal val scope: DeferScope
+    internal val scope: DeferScope,
 ) : MatrixContext<T, GslMatrix<T, H1>> {
     init {
         ensureHasGslErrorHandler()
@@ -101,6 +102,12 @@ public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, 
 }
 
 /**
+ * Invokes [block] inside newly created [GslRealMatrixContext] which is disposed when the block is invoked.
+ */
+public fun <R> GslRealMatrixContext(block: GslRealMatrixContext.() -> R): R =
+    memScoped { GslRealMatrixContext(this).block() }
+
+/**
  * Represents [Float] matrix context implementing where all the operations are delegated to GSL.
  */
 public class GslFloatMatrixContext(scope: DeferScope) :
@@ -145,6 +152,12 @@ public class GslFloatMatrixContext(scope: DeferScope) :
         return g1
     }
 }
+
+/**
+ * Invokes [block] inside newly created [GslFloatMatrixContext] which is disposed when the block is invoked.
+ */
+public fun <R> GslFloatMatrixContext(block: GslFloatMatrixContext.() -> R): R =
+    memScoped { GslFloatMatrixContext(this).block() }
 
 /**
  * Represents [Complex] matrix context implementing where all the operations are delegated to GSL.
@@ -194,3 +207,9 @@ public class GslComplexMatrixContext(scope: DeferScope) :
         return g1
     }
 }
+
+/**
+ * Invokes [block] inside newly created [GslComplexMatrixContext] which is disposed when the block is invoked.
+ */
+public fun <R> GslComplexMatrixContext(block: GslComplexMatrixContext.() -> R): R =
+    memScoped { GslComplexMatrixContext(this).block() }
