@@ -81,15 +81,25 @@ Tensors implement the buffer protocol over `MutableNDStructure`. They can only b
 memScoped {
     val intTensor: TorchTensorInt = TorchTensor.copyFromIntArray(
         scope = this,
-        array = intArrayOf(7,8,9,2,6,5), 
-        shape = intArrayOf(3,2))
+        array = (1..24).toList().toIntArray(),
+        shape = intArrayOf(3, 2, 4)
+    )
     println(intTensor)
-    
+
     val floatTensor: TorchTensorFloat = TorchTensor.copyFromFloatArray(
         scope = this,
-        array = floatArrayOf(7f,8.9f,2.6f,5.6f),
-        shape = intArrayOf(4))
+        array = (1..10).map { it + 50f }.toList().toFloatArray(),
+        shape = intArrayOf(10)
+    )
     println(floatTensor)
+
+    val gpuFloatTensor: TorchTensorFloatGPU = TorchTensor.copyFromFloatArrayToGPU(
+        scope = this,
+        array = (1..8).map { it * 2f }.toList().toFloatArray(),
+        shape = intArrayOf(2, 2, 2),
+        device = 0
+    )
+    println(gpuFloatTensor)
 }
 ```
 

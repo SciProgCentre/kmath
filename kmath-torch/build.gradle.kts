@@ -133,6 +133,7 @@ kotlin {
 
     val test by nativeTarget.compilations.getting
 
+
     sourceSets {
         val nativeMain by creating {
             dependencies {
@@ -142,9 +143,17 @@ kotlin {
         val nativeTest by creating {
             dependsOn(nativeMain)
         }
+        val nativeGPUTest by creating {
+            dependsOn(nativeMain)
+        }
+
 
         main.defaultSourceSet.dependsOn(nativeMain)
         test.defaultSourceSet.dependsOn(nativeTest)
+        if(cudaFound) {
+            test.defaultSourceSet.dependsOn(nativeGPUTest)
+        }
+
     }
 }
 

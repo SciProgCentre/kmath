@@ -22,6 +22,10 @@ extern "C"
     TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim);
     TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim);
     TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim);
+    TorchTensorHandle copy_from_blob_to_gpu_double(double *data, int *shape, int dim, int device);
+    TorchTensorHandle copy_from_blob_to_gpu_float(float *data, int *shape, int dim, int device);
+    TorchTensorHandle copy_from_blob_to_gpu_long(long *data, int *shape, int dim, int device);
+    TorchTensorHandle copy_from_blob_to_gpu_int(int *data, int *shape, int dim, int device);
 
     TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle);
 
@@ -40,6 +44,19 @@ extern "C"
     void dispose_int_array(int *ptr);
     void dispose_char(char *ptr);
     void dispose_tensor(TorchTensorHandle tensor_handle);
+
+    // Workaround for GPU tensors
+    double get_at_offset_double(TorchTensorHandle tensor_handle, int offset);
+    float get_at_offset_float(TorchTensorHandle tensor_handle, int offset);
+    long get_at_offset_long(TorchTensorHandle tensor_handle, int offset);
+    int get_at_offset_int(TorchTensorHandle tensor_handle, int offset);
+    void set_at_offset_double(TorchTensorHandle tensor_handle, int offset, double value);
+    void set_at_offset_float(TorchTensorHandle tensor_handle, int offset, float value);
+    void set_at_offset_long(TorchTensorHandle tensor_handle, int offset, long value);
+    void set_at_offset_int(TorchTensorHandle tensor_handle, int offset, int value);
+
+    TorchTensorHandle copy_to_cpu(TorchTensorHandle tensor_handle);
+    TorchTensorHandle copy_to_gpu(TorchTensorHandle tensor_handle, int device);
 
 #ifdef __cplusplus
 }

@@ -5,31 +5,35 @@ import kscience.kmath.structures.MutableBuffer
 import kotlinx.cinterop.*
 import ctorch.*
 
-public abstract class TorchTensorBuffer<T, TVar : CPrimitiveVar> internal constructor(
+public abstract class TorchTensorBuffer<T> internal constructor(
     internal val scope: DeferScope,
     internal val tensorHandle: COpaquePointer
 ) : MutableBuffer<T> {
+
+    override val size: Int = get_numel(tensorHandle)
+
     init {
         scope.defer(::close)
     }
 
-    internal fun close() {
+    protected fun close() {
         dispose_tensor(tensorHandle)
     }
 
-    protected abstract val tensorData: CPointer<TVar>
+    internal abstract fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer): TorchTensorBuffer<T>
 
-    override val size: Int
-        get() = get_numel(tensorHandle)
-
+    override fun copy(): TorchTensorBuffer<T> = wrap(
+        outScope = scope,
+        outTensorHandle = copy_tensor(tensorHandle)!!
+    )
 }
-
 
 public class TorchTensorBufferFloat internal constructor(
     scope: DeferScope,
     tensorHandle: COpaquePointer
-) : TorchTensorBuffer<Float, FloatVar>(scope, tensorHandle) {
-    override val tensorData: CPointer<FloatVar> = get_data_float(tensorHandle)!!
+) : TorchTensorBuffer<Float>(scope, tensorHandle) {
+
+    private val tensorData: CPointer<FloatVar> = get_data_float(tensorHandle)!!
 
     override operator fun get(index: Int): Float = tensorData[index]
 
@@ -39,17 +43,19 @@ public class TorchTensorBufferFloat internal constructor(
 
     override operator fun iterator(): Iterator<Float> = (1..size).map { tensorData[it - 1] }.iterator()
 
-    override fun copy(): TorchTensorBufferFloat = TorchTensorBufferFloat(
-        scope = scope,
-        tensorHandle = copy_tensor(tensorHandle)!!
+    override fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer) = TorchTensorBufferFloat(
+        scope = outScope,
+        tensorHandle = outTensorHandle
     )
 }
+
 
 public class TorchTensorBufferInt internal constructor(
     scope: DeferScope,
     tensorHandle: COpaquePointer
-) : TorchTensorBuffer<Int, IntVar>(scope, tensorHandle) {
-    override val tensorData: CPointer<IntVar> = get_data_int(tensorHandle)!!
+) : TorchTensorBuffer<Int>(scope, tensorHandle) {
+
+    private val tensorData: CPointer<IntVar> = get_data_int(tensorHandle)!!
 
     override operator fun get(index: Int): Int = tensorData[index]
 
@@ -59,9 +65,33 @@ public class TorchTensorBufferInt internal constructor(
 
     override operator fun iterator(): Iterator<Int> = (1..size).map { tensorData[it - 1] }.iterator()
 
-    override fun copy(): TorchTensorBufferInt = TorchTensorBufferInt(
-        scope = scope,
-        tensorHandle = copy_tensor(tensorHandle)!!
+    override fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer) = TorchTensorBufferInt(
+        scope = outScope,
+        tensorHandle = outTensorHandle
     )
 }
 
+public class TorchTensorBufferFloatGPU internal constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer
+) : TorchTensorBuffer<Float>(scope, tensorHandle) {
+
+    override operator fun get(index: Int): Float = get_at_offset_float(tensorHandle, index)
+
+    override operator fun set(index: Int, value: Float) {
+        set_at_offset_float(tensorHandle, index, value)
+    }
+
+    override operator fun iterator(): Iterator<Float> {
+        val cpuCopy = copy_to_cpu(tensorHandle)!!
+        val tensorCpuData = get_data_float(cpuCopy)!!
+        val iteratorResult = (1..size).map { tensorCpuData[it - 1] }.iterator()
+        dispose_tensor(cpuCopy)
+        return iteratorResult
+    }
+
+    override fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer) = TorchTensorBufferFloatGPU(
+        scope = outScope,
+        tensorHandle = outTensorHandle
+    )
+}
