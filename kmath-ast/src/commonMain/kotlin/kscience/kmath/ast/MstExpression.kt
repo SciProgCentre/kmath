@@ -15,11 +15,14 @@ import kotlin.contracts.contract
  */
 public class MstExpression<T, out A : Algebra<T>>(public val algebra: A, public val mst: MST) : Expression<T> {
     private inner class InnerAlgebra(val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
-        override fun symbol(value: String): T = arguments[StringSymbol(value)] ?: algebra.symbol(value)
-        override fun unaryOperation(operation: String, arg: T): T = algebra.unaryOperation(operation, arg)
+        override fun symbol(value: String): T = try {
+            algebra.symbol(value)
+        } catch (ignored: IllegalStateException) {
+            null
+        } ?: arguments.getValue(StringSymbol(value))
 
-        override fun binaryOperation(operation: String, left: T, right: T): T =
-            algebra.binaryOperation(operation, left, right)
+        override fun unaryOperationFunction(operation: String): (arg: T) -> T = algebra.unaryOperationFunction(operation)
+        override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = algebra.binaryOperationFunction(operation)
 
         @Suppress("UNCHECKED_CAST")
         override fun number(value: Number): T = if (algebra is NumericAlgebra<*>)

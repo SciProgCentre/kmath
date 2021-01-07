@@ -24,10 +24,11 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     public fun point(size: Int, initializer: (Int) -> T): Point<T> = Buffer.boxing(size, initializer)
 
     @Suppress("UNCHECKED_CAST")
-    public override fun binaryOperation(operation: String, left: Matrix<T>, right: Matrix<T>): M = when (operation) {
-        "dot" -> left dot right
-        else -> super.binaryOperation(operation, left, right) as M
-    }
+    public override fun binaryOperationFunction(operation: String): (left: Matrix<T>, right: Matrix<T>) -> M =
+        when (operation) {
+            "dot" -> { left, right -> left dot right }
+            else -> super.binaryOperationFunction(operation) as (Matrix<T>, Matrix<T>) -> M
+        }
 
     /**
      * Computes the dot product of this matrix and another one.

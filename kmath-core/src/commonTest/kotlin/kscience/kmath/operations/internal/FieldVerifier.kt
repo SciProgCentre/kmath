@@ -12,6 +12,8 @@ internal class FieldVerifier<T>(override val algebra: Field<T>, a: T, b: T, c: T
         super.verify()
 
         algebra {
+            assertEquals(a + b, b + a, "Addition in $algebra is not commutative.")
+            assertEquals(a * b, b * a, "Multiplication in $algebra is not commutative.")
             assertNotEquals(a / b, b / a, "Division in $algebra is not anti-commutative.")
             assertNotEquals((a / b) / c, a / (b / c), "Division in $algebra is associative.")
             assertEquals((a + b) / c, (a / c) + (b / c), "Division in $algebra is not right-distributive.")

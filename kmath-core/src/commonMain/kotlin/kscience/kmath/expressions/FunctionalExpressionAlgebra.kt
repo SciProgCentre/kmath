@@ -7,9 +7,8 @@ import kscience.kmath.operations.*
  *
  * @param algebra The algebra to provide for Expressions built.
  */
-public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
-    public val algebra: A,
-) : ExpressionAlgebra<T, Expression<T>> {
+public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(public val algebra: A) :
+    ExpressionAlgebra<T, Expression<T>> {
     /**
      * Builds an Expression of constant expression which does not depend on arguments.
      */
@@ -25,19 +24,18 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
     /**
      * Builds an Expression of dynamic call of binary operation [operation] on [left] and [right].
      */
-    public override fun binaryOperation(
-        operation: String,
-        left: Expression<T>,
-        right: Expression<T>,
-    ): Expression<T> = Expression { arguments ->
-        algebra.binaryOperation(operation, left.invoke(arguments), right.invoke(arguments))
-    }
+    public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
+        { left, right ->
+            Expression { arguments ->
+                algebra.binaryOperationFunction(operation)(left.invoke(arguments), right.invoke(arguments))
+            }
+        }
 
     /**
      * Builds an Expression of dynamic call of unary operation with name [operation] on [arg].
      */
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> = Expression { arguments ->
-        algebra.unaryOperation(operation, arg.invoke(arguments))
+    public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
+        Expression { arguments -> algebra.unaryOperationFunction(operation)(arg.invoke(arguments)) }
     }
 }
 
@@ -52,7 +50,7 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
      * Builds an Expression of addition of two another expressions.
      */
     public override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(SpaceOperations.PLUS_OPERATION, a, b)
+        binaryOperationFunction(SpaceOperations.PLUS_OPERATION)(a, b)
 
     /**
      * Builds an Expression of multiplication of expression by number.
@@ -66,11 +64,11 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
     public operator fun T.plus(arg: Expression<T>): Expression<T> = arg + this
     public operator fun T.minus(arg: Expression<T>): Expression<T> = arg - this
 
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        super<FunctionalExpressionAlgebra>.unaryOperation(operation, arg)
+    public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionAlgebra>.unaryOperationFunction(operation)
 
-    public override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        super<FunctionalExpressionAlgebra>.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionAlgebra>.binaryOperationFunction(operation)
 }
 
 public open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpressionSpace<T, A>(algebra),
@@ -82,16 +80,16 @@ public open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpress
      * Builds an Expression of multiplication of two expressions.
      */
     public override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(RingOperations.TIMES_OPERATION, a, b)
+        binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, b)
 
     public operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
     public operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
 
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        super<FunctionalExpressionSpace>.unaryOperation(operation, arg)
+    public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionSpace>.unaryOperationFunction(operation)
 
-    public override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        super<FunctionalExpressionSpace>.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionSpace>.binaryOperationFunction(operation)
 }
 
 public open class FunctionalExpressionField<T, A>(algebra: A) :
@@ -101,49 +99,49 @@ public open class FunctionalExpressionField<T, A>(algebra: A) :
      * Builds an Expression of division an expression by another one.
      */
     public override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(FieldOperations.DIV_OPERATION, a, b)
+        binaryOperationFunction(FieldOperations.DIV_OPERATION)(a, b)
 
     public operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
     public operator fun T.div(arg: Expression<T>): Expression<T> = arg / this
 
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        super<FunctionalExpressionRing>.unaryOperation(operation, arg)
+    public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionRing>.unaryOperationFunction(operation)
 
-    public override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        super<FunctionalExpressionRing>.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionRing>.binaryOperationFunction(operation)
 }
 
 public open class FunctionalExpressionExtendedField<T, A>(algebra: A) :
     FunctionalExpressionField<T, A>(algebra),
     ExtendedField<Expression<T>> where A : ExtendedField<T>, A : NumericAlgebra<T> {
     public override fun sin(arg: Expression<T>): Expression<T> =
-        unaryOperation(TrigonometricOperations.SIN_OPERATION, arg)
+        unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
 
     public override fun cos(arg: Expression<T>): Expression<T> =
-        unaryOperation(TrigonometricOperations.COS_OPERATION, arg)
+        unaryOperationFunction(TrigonometricOperations.COS_OPERATION)(arg)
 
     public override fun asin(arg: Expression<T>): Expression<T> =
-        unaryOperation(TrigonometricOperations.ASIN_OPERATION, arg)
+        unaryOperationFunction(TrigonometricOperations.ASIN_OPERATION)(arg)
 
     public override fun acos(arg: Expression<T>): Expression<T> =
-        unaryOperation(TrigonometricOperations.ACOS_OPERATION, arg)
+        unaryOperationFunction(TrigonometricOperations.ACOS_OPERATION)(arg)
 
     public override fun atan(arg: Expression<T>): Expression<T> =
-        unaryOperation(TrigonometricOperations.ATAN_OPERATION, arg)
+        unaryOperationFunction(TrigonometricOperations.ATAN_OPERATION)(arg)
 
     public override fun power(arg: Expression<T>, pow: Number): Expression<T> =
-        binaryOperation(PowerOperations.POW_OPERATION, arg, number(pow))
+        binaryOperationFunction(PowerOperations.POW_OPERATION)(arg, number(pow))
 
     public override fun exp(arg: Expression<T>): Expression<T> =
-        unaryOperation(ExponentialOperations.EXP_OPERATION, arg)
+        unaryOperationFunction(ExponentialOperations.EXP_OPERATION)(arg)
 
-    public override fun ln(arg: Expression<T>): Expression<T> = unaryOperation(ExponentialOperations.LN_OPERATION, arg)
+    public override fun ln(arg: Expression<T>): Expression<T> = unaryOperationFunction(ExponentialOperations.LN_OPERATION)(arg)
 
-    public override fun unaryOperation(operation: String, arg: Expression<T>): Expression<T> =
-        super<FunctionalExpressionField>.unaryOperation(operation, arg)
+    public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionField>.unaryOperationFunction(operation)
 
-    public override fun binaryOperation(operation: String, left: Expression<T>, right: Expression<T>): Expression<T> =
-        super<FunctionalExpressionField>.binaryOperation(operation, left, right)
+    public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
+        super<FunctionalExpressionField>.binaryOperationFunction(operation)
 }
 
 public inline fun <T, A : Space<T>> A.expressionInSpace(block: FunctionalExpressionSpace<T, A>.() -> Expression<T>): Expression<T> =
