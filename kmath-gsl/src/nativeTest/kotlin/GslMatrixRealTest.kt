@@ -1,5 +1,9 @@
 package kscience.kmath.gsl
 
+import kscience.kmath.linear.RealMatrixContext
+import kscience.kmath.operations.invoke
+import kscience.kmath.structures.Matrix
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -15,5 +19,24 @@ internal class GslMatrixRealTest {
     fun get() = GslRealMatrixContext {
         val mat = produce(1, 1) { _, _ -> 42.0 }
         assertEquals(42.0, mat[0, 0])
+    }
+
+    @Test
+    fun copy() = GslRealMatrixContext {
+        val mat = produce(1, 1) { _, _ -> 42.0 }
+        assertEquals(mat, mat.copy())
+    }
+
+    @Test
+    fun equals() = GslRealMatrixContext {
+        var rng = Random(0)
+        val mat: Matrix<Double> = produce(2, 2) { _, _ -> rng.nextDouble() }
+        rng = Random(0)
+        val mat2: Matrix<Double> = RealMatrixContext { produce(2, 2) { _, _ -> rng.nextDouble() } }
+        rng = Random(0)
+        val mat3: Matrix<Double> = produce(2, 2) { _, _ -> rng.nextDouble() }
+        assertEquals(mat, mat2)
+        assertEquals(mat, mat3)
+        assertEquals(mat2, mat3)
     }
 }

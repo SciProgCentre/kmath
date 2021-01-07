@@ -3,7 +3,6 @@ package kscience.kmath.gsl
 import kscience.kmath.linear.RealMatrixContext
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.NDStructure
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asSequence
 import kotlin.random.Random
@@ -12,11 +11,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.time.measureTime
 
-internal class GslRealContextTest {
+internal class GslRealMatrixContextTest {
     @Test
     fun testScale() = GslRealMatrixContext {
         val ma = produce(10, 10) { _, _ -> 0.1 }
-        val mb = (ma * 20.0)
+        val mb = ma * 20.0
         assertEquals(mb[0, 1], 2.0)
     }
 
@@ -42,7 +41,7 @@ internal class GslRealContextTest {
 
     @Test
     fun testManyCalls() = GslRealMatrixContext {
-        val expected = RealMatrixContext {
+        val expected: Matrix<Double> = RealMatrixContext {
             val rng = Random(0)
             var prod = produce(20, 20) { _, _ -> rng.nextDouble() }
             val mult = produce(20, 20) { _, _ -> rng.nextDouble() }
@@ -51,9 +50,9 @@ internal class GslRealContextTest {
         }
 
         val rng = Random(0)
-        var prod = produce(20, 20) { _, _ -> rng.nextDouble() }
+        var prod: Matrix<Double> = produce(20, 20) { _, _ -> rng.nextDouble() }
         val mult = produce(20, 20) { _, _ -> rng.nextDouble() }
         measureTime { repeat(100) { prod = prod dot mult } }.also(::println)
-        assertTrue(NDStructure.equals(expected, prod))
+        assertEquals(expected, prod)
     }
 }

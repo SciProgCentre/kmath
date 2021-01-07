@@ -23,33 +23,35 @@ private fun KtPsiFactory.createMatrixClass(
     scope: DeferScope
 ) : GslMatrix<$kotlinTypeName, $structName>(scope) {
     override val rowNum: Int
-        get() = nativeHandle.pointed.size1.toInt()
+        get() = nativeHandleChecked().pointed.size1.toInt()
 
     override val colNum: Int
-        get() = nativeHandle.pointed.size2.toInt()
+        get() = nativeHandleChecked().pointed.size2.toInt()
 
     override val features: Set<MatrixFeature> = features
 
     override fun suggestFeature(vararg features: MatrixFeature): $className =
-        ${className}(nativeHandle, this.features + features, scope)
+        ${className}(nativeHandleChecked(), this.features + features, scope)
 
     override operator fun get(i: Int, j: Int): $kotlinTypeName = ${
         fn("gsl_matrixRget", cTypeName)
-    }(nativeHandle, i.toULong(), j.toULong())
+    }(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: ${kotlinTypeName}): Unit =
-        ${fn("gsl_matrixRset", cTypeName)}(nativeHandle, i.toULong(), j.toULong(), value)
+        ${fn("gsl_matrixRset", cTypeName)}(nativeHandleChecked(), i.toULong(), j.toULong(), value)
 
     override fun copy(): $className {
         val new = requireNotNull(${fn("gsl_matrixRalloc", cTypeName)}(rowNum.toULong(), colNum.toULong()))
-        ${fn("gsl_matrixRmemcpy", cTypeName)}(new, nativeHandle)
+        ${fn("gsl_matrixRmemcpy", cTypeName)}(new, nativeHandleChecked())
         return $className(new, features, scope)
     }
 
-    override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandle)
+    override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is $className) return ${fn("gsl_matrixRequal", cTypeName)}(nativeHandle, other.nativeHandle) == 1
+        if (other is $className) return ${
+        fn("gsl_matrixRequal", cTypeName)
+    }(nativeHandleChecked(), other.nativeHandleChecked()) == 1
         return super.equals(other)
     }
 }"""
