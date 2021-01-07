@@ -11,7 +11,7 @@ kotlin {
     explicitApiWarning()
 
     val nativeTarget = when (System.getProperty("os.name")) {
-        "Mac OS X" -> macosX64()
+//        "Mac OS X" -> macosX64()
         "Linux" -> linuxX64()
 
         else -> {
