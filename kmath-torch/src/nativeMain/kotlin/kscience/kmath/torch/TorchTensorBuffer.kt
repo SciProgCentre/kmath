@@ -7,10 +7,13 @@ import ctorch.*
 
 public abstract class TorchTensorBuffer<T> internal constructor(
     internal val scope: DeferScope,
-    internal val tensorHandle: COpaquePointer
+    internal var tensorHandle: COpaquePointer?
 ) : MutableBuffer<T> {
 
-    override val size: Int = get_numel(tensorHandle)
+    override val size: Int
+        get(){
+            return get_numel(tensorHandle!!)
+        }
 
     init {
         scope.defer(::close)
@@ -18,13 +21,14 @@ public abstract class TorchTensorBuffer<T> internal constructor(
 
     protected fun close() {
         dispose_tensor(tensorHandle)
+        tensorHandle = null
     }
 
     internal abstract fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer): TorchTensorBuffer<T>
 
     override fun copy(): TorchTensorBuffer<T> = wrap(
         outScope = scope,
-        outTensorHandle = copy_tensor(tensorHandle)!!
+        outTensorHandle = copy_tensor(tensorHandle!!)!!
     )
 }
 
@@ -33,7 +37,10 @@ public class TorchTensorBufferFloat internal constructor(
     tensorHandle: COpaquePointer
 ) : TorchTensorBuffer<Float>(scope, tensorHandle) {
 
-    private val tensorData: CPointer<FloatVar> = get_data_float(tensorHandle)!!
+    private val tensorData: CPointer<FloatVar>
+        get(){
+            return get_data_float(tensorHandle!!)!!
+        }
 
     override operator fun get(index: Int): Float = tensorData[index]
 
@@ -55,7 +62,10 @@ public class TorchTensorBufferInt internal constructor(
     tensorHandle: COpaquePointer
 ) : TorchTensorBuffer<Int>(scope, tensorHandle) {
 
-    private val tensorData: CPointer<IntVar> = get_data_int(tensorHandle)!!
+    private val tensorData: CPointer<IntVar>
+        get(){
+            return get_data_int(tensorHandle!!)!!
+        }
 
     override operator fun get(index: Int): Int = tensorData[index]
 
@@ -76,14 +86,14 @@ public class TorchTensorBufferFloatGPU internal constructor(
     tensorHandle: COpaquePointer
 ) : TorchTensorBuffer<Float>(scope, tensorHandle) {
 
-    override operator fun get(index: Int): Float = get_at_offset_float(tensorHandle, index)
+    override operator fun get(index: Int): Float = get_at_offset_float(tensorHandle!!, index)
 
     override operator fun set(index: Int, value: Float) {
-        set_at_offset_float(tensorHandle, index, value)
+        set_at_offset_float(tensorHandle!!, index, value)
     }
 
     override operator fun iterator(): Iterator<Float> {
-        val cpuCopy = copy_to_cpu(tensorHandle)!!
+        val cpuCopy = copy_to_cpu(tensorHandle!!)!!
         val tensorCpuData = get_data_float(cpuCopy)!!
         val iteratorResult = (1..size).map { tensorCpuData[it - 1] }.iterator()
         dispose_tensor(cpuCopy)
