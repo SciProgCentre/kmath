@@ -18,32 +18,32 @@ internal class GslComplexMatrix(
     scope: DeferScope
 ) : GslMatrix<Complex, gsl_matrix_complex>(scope) {
     override val rowNum: Int
-        get() = nativeHandle.pointed.size1.toInt()
+        get() = nativeHandleChecked().pointed.size1.toInt()
 
     override val colNum: Int
-        get() = nativeHandle.pointed.size2.toInt()
+        get() = nativeHandleChecked().pointed.size2.toInt()
 
     override val features: Set<MatrixFeature> = features
 
     override fun suggestFeature(vararg features: MatrixFeature): GslComplexMatrix =
-        GslComplexMatrix(nativeHandle, this.features + features, scope)
+        GslComplexMatrix(nativeHandleChecked(), this.features + features, scope)
 
     override operator fun get(i: Int, j: Int): Complex =
-        gsl_matrix_complex_get(nativeHandle, i.toULong(), j.toULong()).toKMath()
+        gsl_matrix_complex_get(nativeHandleChecked(), i.toULong(), j.toULong()).toKMath()
 
     override operator fun set(i: Int, j: Int, value: Complex): Unit =
-        gsl_matrix_complex_set(nativeHandle, i.toULong(), j.toULong(), value.toGsl())
+        gsl_matrix_complex_set(nativeHandleChecked(), i.toULong(), j.toULong(), value.toGsl())
 
     override fun copy(): GslComplexMatrix {
         val new = requireNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
-        gsl_matrix_complex_memcpy(new, nativeHandle)
+        gsl_matrix_complex_memcpy(new, nativeHandleChecked())
         return GslComplexMatrix(new, features, scope)
     }
 
-    override fun close(): Unit = gsl_matrix_complex_free(nativeHandle)
+    override fun close(): Unit = gsl_matrix_complex_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslComplexMatrix) return gsl_matrix_complex_equal(nativeHandle, other.nativeHandle) == 1
+        if (other is GslComplexMatrix) return gsl_matrix_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
         return super.equals(other)
     }
 }
@@ -51,23 +51,23 @@ internal class GslComplexMatrix(
 internal class GslComplexVector(override val nativeHandle: CPointer<gsl_vector_complex>, scope: DeferScope) :
     GslVector<Complex, gsl_vector_complex>(scope) {
     override val size: Int
-        get() = nativeHandle.pointed.size.toInt()
+        get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandle, index.toULong()).toKMath()
+    override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandleChecked(), index.toULong()).toKMath()
 
     override fun set(index: Int, value: Complex): Unit =
-        gsl_vector_complex_set(nativeHandle, index.toULong(), value.toGsl())
+        gsl_vector_complex_set(nativeHandleChecked(), index.toULong(), value.toGsl())
 
     override fun copy(): GslComplexVector {
         val new = requireNotNull(gsl_vector_complex_alloc(size.toULong()))
-        gsl_vector_complex_memcpy(new, nativeHandle)
+        gsl_vector_complex_memcpy(new, nativeHandleChecked())
         return GslComplexVector(new, scope)
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslComplexVector) return gsl_vector_complex_equal(nativeHandle, other.nativeHandle) == 1
+        if (other is GslComplexVector) return gsl_vector_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
         return super.equals(other)
     }
 
-    override fun close(): Unit = gsl_vector_complex_free(nativeHandle)
+    override fun close(): Unit = gsl_vector_complex_free(nativeHandleChecked())
 }
