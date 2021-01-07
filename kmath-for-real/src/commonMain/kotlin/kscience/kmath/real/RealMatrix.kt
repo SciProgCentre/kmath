@@ -1,13 +1,7 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.FeaturedMatrix
-import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.RealMatrixContext.elementContext
-import kscience.kmath.linear.VirtualMatrix
-import kscience.kmath.linear.inverseWithLUP
+import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.operations.invoke
-import kscience.kmath.operations.sum
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
@@ -122,8 +116,7 @@ public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
 public fun RealMatrix.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
-    val column = columns[j]
-    elementContext { sum(column.asIterable()) }
+    columns[j].asIterable().sum()
 }
 
 public fun RealMatrix.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->

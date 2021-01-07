@@ -29,6 +29,7 @@ public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature
     }
 }
 
+//TODO move inside context
 public fun Matrix<Double>.toCM(): CMMatrix = if (this is CMMatrix) {
     this
 } else {

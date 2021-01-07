@@ -18,6 +18,11 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
      */
     public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): M
 
+    /**
+     * Produce a point compatible with matrix space (and possibly optimized for it)
+     */
+    public fun point(size: Int, initializer: (Int) -> T): Point<T> = Buffer.boxing(size, initializer)
+
     @Suppress("UNCHECKED_CAST")
     public override fun binaryOperation(operation: String, left: Matrix<T>, right: Matrix<T>): M = when (operation) {
         "dot" -> left dot right
@@ -61,10 +66,6 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     public operator fun T.times(m: Matrix<T>): M = m * this
 
     public companion object {
-        /**
-         * Non-boxing double matrix
-         */
-        public val real: RealMatrixContext = RealMatrixContext
 
         /**
          * A structured matrix with custom buffer
@@ -87,11 +88,6 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> :
      * The ring context for matrix elements
      */
     public val elementContext: R
-
-    /**
-     * Produce a point compatible with matrix space
-     */
-    public fun point(size: Int, initializer: (Int) -> T): Point<T>
 
     public override infix fun Matrix<T>.dot(other: Matrix<T>): M {
         //TODO add typed error
