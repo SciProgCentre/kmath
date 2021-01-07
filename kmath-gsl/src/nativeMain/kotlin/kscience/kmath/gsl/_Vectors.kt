@@ -8,8 +8,11 @@ internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>, sc
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Double = gsl_vector_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: Double): Unit = gsl_vector_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): Double = 
+        gsl_vector_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: Double): Unit = 
+        gsl_vector_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslRealVector {
         val new = requireNotNull(gsl_vector_alloc(size.toULong()))
@@ -32,8 +35,11 @@ internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_flo
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Float = gsl_vector_float_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: Float): Unit = gsl_vector_float_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): Float = 
+        gsl_vector_float_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: Float): Unit = 
+        gsl_vector_float_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslFloatVector {
         val new = requireNotNull(gsl_vector_float_alloc(size.toULong()))
@@ -56,8 +62,11 @@ internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_sho
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Short = gsl_vector_short_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: Short): Unit = gsl_vector_short_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): Short = 
+        gsl_vector_short_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: Short): Unit = 
+        gsl_vector_short_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslShortVector {
         val new = requireNotNull(gsl_vector_short_alloc(size.toULong()))
@@ -80,8 +89,11 @@ internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_us
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): UShort = gsl_vector_ushort_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: UShort): Unit = gsl_vector_ushort_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): UShort = 
+        gsl_vector_ushort_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: UShort): Unit = 
+        gsl_vector_ushort_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslUShortVector {
         val new = requireNotNull(gsl_vector_ushort_alloc(size.toULong()))
@@ -104,8 +116,11 @@ internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Long = gsl_vector_long_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: Long): Unit = gsl_vector_long_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): Long = 
+        gsl_vector_long_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: Long): Unit = 
+        gsl_vector_long_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslLongVector {
         val new = requireNotNull(gsl_vector_long_alloc(size.toULong()))
@@ -128,8 +143,11 @@ internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulo
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): ULong = gsl_vector_ulong_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: ULong): Unit = gsl_vector_ulong_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): ULong = 
+        gsl_vector_ulong_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: ULong): Unit = 
+        gsl_vector_ulong_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslULongVector {
         val new = requireNotNull(gsl_vector_ulong_alloc(size.toULong()))
@@ -152,8 +170,11 @@ internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>,
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): Int = gsl_vector_int_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: Int): Unit = gsl_vector_int_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): Int = 
+        gsl_vector_int_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: Int): Unit = 
+        gsl_vector_int_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslIntVector {
         val new = requireNotNull(gsl_vector_int_alloc(size.toULong()))
@@ -176,8 +197,11 @@ internal class GslUIntVector(override val nativeHandle: CPointer<gsl_vector_uint
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): UInt = gsl_vector_uint_get(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: UInt): Unit = gsl_vector_uint_set(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): UInt = 
+        gsl_vector_uint_get(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: UInt): Unit = 
+        gsl_vector_uint_set(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): GslUIntVector {
         val new = requireNotNull(gsl_vector_uint_alloc(size.toULong()))

@@ -23,13 +23,11 @@ private fun KtPsiFactory.createVectorClass(
     override val size: Int
         get() = nativeHandleChecked().pointed.size.toInt()
 
-    override fun get(index: Int): $kotlinTypeName = ${
-            fn("gsl_vectorRget",
-                cTypeName)
-        }(nativeHandleChecked(), index.toULong())
-    override fun set(index: Int, value: $kotlinTypeName): Unit = ${
-            fn("gsl_vectorRset", cTypeName)
-        }(nativeHandleChecked(), index.toULong(), value)
+    override operator fun get(index: Int): $kotlinTypeName = 
+        ${fn("gsl_vectorRget", cTypeName)}(nativeHandleChecked(), index.toULong())
+
+    override operator fun set(index: Int, value: $kotlinTypeName): Unit = 
+        ${fn("gsl_vectorRset", cTypeName)}(nativeHandleChecked(), index.toULong(), value)
 
     override fun copy(): $className {
         val new = requireNotNull(${fn("gsl_vectorRalloc", cTypeName)}(size.toULong()))
