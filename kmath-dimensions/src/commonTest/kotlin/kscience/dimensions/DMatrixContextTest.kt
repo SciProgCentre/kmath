@@ -3,6 +3,7 @@ package kscience.dimensions
 import kscience.kmath.dimensions.D2
 import kscience.kmath.dimensions.D3
 import kscience.kmath.dimensions.DMatrixContext
+import kscience.kmath.dimensions.one
 import kotlin.test.Test
 
 internal class DMatrixContextTest {

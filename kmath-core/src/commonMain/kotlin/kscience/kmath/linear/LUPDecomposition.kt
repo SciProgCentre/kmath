@@ -213,17 +213,8 @@ public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext
     return decomposition.solveWithLUP(bufferFactory, b)
 }
 
-public fun RealMatrixContext.solveWithLUP(a: Matrix<Double>, b: Matrix<Double>): FeaturedMatrix<Double> =
-    solveWithLUP(a, b) { it < 1e-11 }
-
 public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext<T, F, FeaturedMatrix<T>>.inverseWithLUP(
     matrix: Matrix<T>,
     noinline bufferFactory: MutableBufferFactory<T> = MutableBuffer.Companion::auto,
     noinline checkSingular: (T) -> Boolean,
 ): FeaturedMatrix<T> = solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum), bufferFactory, checkSingular)
-
-/**
- * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
- */
-public fun RealMatrixContext.inverseWithLUP(matrix: Matrix<Double>): FeaturedMatrix<Double> =
-    solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum), Buffer.Companion::real) { it < 1e-11 }

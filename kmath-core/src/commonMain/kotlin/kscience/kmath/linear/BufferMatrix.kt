@@ -1,8 +1,10 @@
 package kscience.kmath.linear
 
-import kscience.kmath.operations.RealField
 import kscience.kmath.operations.Ring
-import kscience.kmath.structures.*
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.BufferFactory
+import kscience.kmath.structures.NDStructure
+import kscience.kmath.structures.asSequence
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -19,24 +21,6 @@ public class BufferMatrixContext<T : Any, R : Ring<T>>(
     public override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
 
     public companion object
-}
-
-@Suppress("OVERRIDE_BY_INLINE")
-public object RealMatrixContext : GenericMatrixContext<Double, RealField, BufferMatrix<Double>> {
-    public override val elementContext: RealField
-        get() = RealField
-
-    public override inline fun produce(
-        rows: Int,
-        columns: Int,
-        initializer: (i: Int, j: Int) -> Double,
-    ): BufferMatrix<Double> {
-        val buffer = RealBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
-        return BufferMatrix(rows, columns, buffer)
-    }
-
-    public override inline fun point(size: Int, initializer: (Int) -> Double): Point<Double> =
-        RealBuffer(size, initializer)
 }
 
 public class BufferMatrix<T : Any>(
