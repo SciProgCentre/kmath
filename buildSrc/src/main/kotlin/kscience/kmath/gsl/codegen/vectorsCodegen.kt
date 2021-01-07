@@ -38,10 +38,12 @@ private fun KtPsiFactory.createVectorClass(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is $className) return ${
+        if (other is $className)
+            return ${
             fn("gsl_vectorRequal",
                 cTypeName)
         }(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 

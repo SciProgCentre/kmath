@@ -33,9 +33,8 @@ private fun KtPsiFactory.createMatrixClass(
     override fun suggestFeature(vararg features: MatrixFeature): $className =
         ${className}(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): $kotlinTypeName = ${
-        fn("gsl_matrixRget", cTypeName)
-    }(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): $kotlinTypeName = 
+        ${fn("gsl_matrixRget", cTypeName)}(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: ${kotlinTypeName}): Unit =
         ${fn("gsl_matrixRset", cTypeName)}(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -49,9 +48,11 @@ private fun KtPsiFactory.createMatrixClass(
     override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is $className) return ${
+        if (other is $className)
+            return ${
         fn("gsl_matrixRequal", cTypeName)
     }(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }"""

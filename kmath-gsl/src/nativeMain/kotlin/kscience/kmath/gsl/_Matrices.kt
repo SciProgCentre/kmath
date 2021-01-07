@@ -20,7 +20,8 @@ internal class GslRealMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslRealMatrix =
         GslRealMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): Double = gsl_matrix_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): Double = 
+        gsl_matrix_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: Double): Unit =
         gsl_matrix_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -34,7 +35,9 @@ internal class GslRealMatrix(
     override fun close(): Unit = gsl_matrix_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslRealMatrix) return gsl_matrix_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslRealMatrix)
+            return gsl_matrix_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -55,7 +58,8 @@ internal class GslFloatMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslFloatMatrix =
         GslFloatMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): Float = gsl_matrix_float_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): Float = 
+        gsl_matrix_float_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: Float): Unit =
         gsl_matrix_float_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -69,7 +73,9 @@ internal class GslFloatMatrix(
     override fun close(): Unit = gsl_matrix_float_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslFloatMatrix) return gsl_matrix_float_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslFloatMatrix)
+            return gsl_matrix_float_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -90,7 +96,8 @@ internal class GslShortMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslShortMatrix =
         GslShortMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): Short = gsl_matrix_short_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): Short = 
+        gsl_matrix_short_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: Short): Unit =
         gsl_matrix_short_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -104,7 +111,9 @@ internal class GslShortMatrix(
     override fun close(): Unit = gsl_matrix_short_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslShortMatrix) return gsl_matrix_short_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslShortMatrix)
+            return gsl_matrix_short_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -125,7 +134,8 @@ internal class GslUShortMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslUShortMatrix =
         GslUShortMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): UShort = gsl_matrix_ushort_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): UShort = 
+        gsl_matrix_ushort_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: UShort): Unit =
         gsl_matrix_ushort_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -139,7 +149,9 @@ internal class GslUShortMatrix(
     override fun close(): Unit = gsl_matrix_ushort_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslUShortMatrix) return gsl_matrix_ushort_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslUShortMatrix)
+            return gsl_matrix_ushort_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -160,7 +172,8 @@ internal class GslLongMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslLongMatrix =
         GslLongMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): Long = gsl_matrix_long_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): Long = 
+        gsl_matrix_long_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: Long): Unit =
         gsl_matrix_long_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -174,7 +187,9 @@ internal class GslLongMatrix(
     override fun close(): Unit = gsl_matrix_long_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslLongMatrix) return gsl_matrix_long_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslLongMatrix)
+            return gsl_matrix_long_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -195,7 +210,8 @@ internal class GslULongMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslULongMatrix =
         GslULongMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): ULong = gsl_matrix_ulong_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): ULong = 
+        gsl_matrix_ulong_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: ULong): Unit =
         gsl_matrix_ulong_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -209,7 +225,9 @@ internal class GslULongMatrix(
     override fun close(): Unit = gsl_matrix_ulong_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslULongMatrix) return gsl_matrix_ulong_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslULongMatrix)
+            return gsl_matrix_ulong_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -230,7 +248,8 @@ internal class GslIntMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslIntMatrix =
         GslIntMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): Int = gsl_matrix_int_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): Int = 
+        gsl_matrix_int_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: Int): Unit =
         gsl_matrix_int_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -244,7 +263,9 @@ internal class GslIntMatrix(
     override fun close(): Unit = gsl_matrix_int_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslIntMatrix) return gsl_matrix_int_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslIntMatrix)
+            return gsl_matrix_int_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -265,7 +286,8 @@ internal class GslUIntMatrix(
     override fun suggestFeature(vararg features: MatrixFeature): GslUIntMatrix =
         GslUIntMatrix(nativeHandleChecked(), this.features + features, scope)
 
-    override operator fun get(i: Int, j: Int): UInt = gsl_matrix_uint_get(nativeHandleChecked(), i.toULong(), j.toULong())
+    override operator fun get(i: Int, j: Int): UInt = 
+        gsl_matrix_uint_get(nativeHandleChecked(), i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: UInt): Unit =
         gsl_matrix_uint_set(nativeHandleChecked(), i.toULong(), j.toULong(), value)
@@ -279,7 +301,9 @@ internal class GslUIntMatrix(
     override fun close(): Unit = gsl_matrix_uint_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslUIntMatrix) return gsl_matrix_uint_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslUIntMatrix)
+            return gsl_matrix_uint_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }

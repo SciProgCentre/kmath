@@ -15,7 +15,7 @@ internal fun Complex.toGsl(): CValue<gsl_complex> = cValue {
 internal class GslComplexMatrix(
     override val nativeHandle: CPointer<gsl_matrix_complex>,
     features: Set<MatrixFeature> = emptySet(),
-    scope: DeferScope
+    scope: DeferScope,
 ) : GslMatrix<Complex, gsl_matrix_complex>(scope) {
     override val rowNum: Int
         get() = nativeHandleChecked().pointed.size1.toInt()
@@ -43,7 +43,9 @@ internal class GslComplexMatrix(
     override fun close(): Unit = gsl_matrix_complex_free(nativeHandleChecked())
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslComplexMatrix) return gsl_matrix_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslComplexMatrix)
+            return gsl_matrix_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 }
@@ -65,7 +67,9 @@ internal class GslComplexVector(override val nativeHandle: CPointer<gsl_vector_c
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslComplexVector) return gsl_vector_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslComplexVector)
+            return gsl_vector_complex_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 

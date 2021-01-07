@@ -18,7 +18,9 @@ internal class GslRealVector(override val nativeHandle: CPointer<gsl_vector>, sc
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslRealVector) return gsl_vector_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslRealVector)
+            return gsl_vector_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -40,7 +42,9 @@ internal class GslFloatVector(override val nativeHandle: CPointer<gsl_vector_flo
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslFloatVector) return gsl_vector_float_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslFloatVector)
+            return gsl_vector_float_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -62,7 +66,9 @@ internal class GslShortVector(override val nativeHandle: CPointer<gsl_vector_sho
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslShortVector) return gsl_vector_short_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslShortVector)
+            return gsl_vector_short_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -84,7 +90,9 @@ internal class GslUShortVector(override val nativeHandle: CPointer<gsl_vector_us
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslUShortVector) return gsl_vector_ushort_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslUShortVector)
+            return gsl_vector_ushort_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -106,7 +114,9 @@ internal class GslLongVector(override val nativeHandle: CPointer<gsl_vector_long
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslLongVector) return gsl_vector_long_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslLongVector)
+            return gsl_vector_long_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -128,7 +138,9 @@ internal class GslULongVector(override val nativeHandle: CPointer<gsl_vector_ulo
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslULongVector) return gsl_vector_ulong_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslULongVector)
+            return gsl_vector_ulong_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -150,7 +162,9 @@ internal class GslIntVector(override val nativeHandle: CPointer<gsl_vector_int>,
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslIntVector) return gsl_vector_int_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslIntVector)
+            return gsl_vector_int_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
@@ -172,7 +186,9 @@ internal class GslUIntVector(override val nativeHandle: CPointer<gsl_vector_uint
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is GslUIntVector) return gsl_vector_uint_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+        if (other is GslUIntVector)
+            return gsl_vector_uint_equal(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+
         return super.equals(other)
     }
 
