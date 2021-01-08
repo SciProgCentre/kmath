@@ -20,6 +20,6 @@ class TestTorchTensorGPU {
         tensor.elements().forEach {
             assertEquals(tensor[it.first], it.second)
         }
-        assertTrue(tensor.buffer.contentEquals(array.asBuffer()))
+        assertTrue(tensor.asBuffer().contentEquals(array.asBuffer()))
     }
 }

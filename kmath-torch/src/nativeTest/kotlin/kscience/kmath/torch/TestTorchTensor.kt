@@ -16,7 +16,7 @@ internal class TestTorchTensor {
         tensor.elements().forEach {
             assertEquals(tensor[it.first], it.second)
         }
-        assertTrue(tensor.buffer.contentEquals(array.asBuffer()))
+        assertTrue(tensor.asBuffer().contentEquals(array.asBuffer()))
     }
 
     @Test
@@ -27,7 +27,7 @@ internal class TestTorchTensor {
         tensor.elements().forEach {
             assertEquals(tensor[it.first], it.second)
         }
-        assertTrue(tensor.buffer.contentEquals(array.asBuffer()))
+        assertTrue(tensor.asBuffer().contentEquals(array.asBuffer()))
     }
 
     @Test

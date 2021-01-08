@@ -5,22 +5,32 @@ import kscience.kmath.structures.*
 import kotlinx.cinterop.*
 import ctorch.*
 
-public abstract class TorchTensor<T, out TorchTensorBufferImpl : TorchTensorBuffer<T>> :
+public sealed class TorchTensor<T, out TorchTensorBufferImpl : TorchTensorBuffer<T>> :
     MutableNDBufferTrait<T, TorchTensorBufferImpl, TorchTensorStrides>() {
+
+    public fun asBuffer(): MutableBuffer<T> = buffer
 
     public companion object {
         public fun copyFromFloatArray(scope: DeferScope, array: FloatArray, shape: IntArray): TorchTensorFloat {
             val tensorHandle: COpaquePointer = copy_from_blob_float(
                 array.toCValues(), shape.toCValues(), shape.size
             )!!
-            return TorchTensorFloat(populateStridesFromNative(tensorHandle, rawShape = shape), scope, tensorHandle)
+            return TorchTensorFloat(
+                scope = scope,
+                tensorHandle = tensorHandle,
+                strides = populateStridesFromNative(tensorHandle, rawShape = shape)
+            )
         }
 
         public fun copyFromIntArray(scope: DeferScope, array: IntArray, shape: IntArray): TorchTensorInt {
             val tensorHandle: COpaquePointer = copy_from_blob_int(
                 array.toCValues(), shape.toCValues(), shape.size
             )!!
-            return TorchTensorInt(populateStridesFromNative(tensorHandle, rawShape = shape), scope, tensorHandle)
+            return TorchTensorInt(
+                scope = scope,
+                tensorHandle = tensorHandle,
+                strides = populateStridesFromNative(tensorHandle, rawShape = shape)
+            )
         }
 
         public fun copyFromFloatArrayToGPU(
@@ -32,7 +42,11 @@ public abstract class TorchTensor<T, out TorchTensorBufferImpl : TorchTensorBuff
             val tensorHandle: COpaquePointer = copy_from_blob_to_gpu_float(
                 array.toCValues(), shape.toCValues(), shape.size, device
             )!!
-            return TorchTensorFloatGPU(populateStridesFromNative(tensorHandle, rawShape = shape), scope, tensorHandle)
+            return TorchTensorFloatGPU(
+                scope = scope,
+                tensorHandle = tensorHandle,
+                strides = populateStridesFromNative(tensorHandle, rawShape = shape)
+            )
         }
     }
 
@@ -43,53 +57,63 @@ public abstract class TorchTensor<T, out TorchTensorBufferImpl : TorchTensorBuff
         return stringRepresentation
     }
 
-    internal abstract fun wrap(
-        outStrides: TorchTensorStrides,
+    protected abstract fun wrap(
         outScope: DeferScope,
-        outTensorHandle: COpaquePointer
+        outTensorHandle: COpaquePointer,
+        outStrides: TorchTensorStrides
     ): TorchTensor<T, TorchTensorBufferImpl>
 
     public fun copy(): TorchTensor<T, TorchTensorBufferImpl> = wrap(
-        outStrides = strides,
         outScope = buffer.scope,
-        outTensorHandle = copy_tensor(buffer.tensorHandle!!)!!
+        outTensorHandle = copy_tensor(buffer.tensorHandle!!)!!,
+        outStrides = strides
     )
 
 }
 
 public class TorchTensorFloat internal constructor(
-    override val strides: TorchTensorStrides,
     scope: DeferScope,
-    tensorHandle: COpaquePointer
+    tensorHandle: COpaquePointer,
+    override val strides: TorchTensorStrides
 ) : TorchTensor<Float, TorchTensorBufferFloat>() {
     override val buffer: TorchTensorBufferFloat = TorchTensorBufferFloat(scope, tensorHandle)
-    override fun wrap(outStrides: TorchTensorStrides, outScope: DeferScope, outTensorHandle: COpaquePointer) =
-        TorchTensorFloat(
-            strides = outStrides, scope = outScope, tensorHandle = outTensorHandle
-        )
+    override fun wrap(
+        outScope: DeferScope,
+        outTensorHandle: COpaquePointer,
+        outStrides: TorchTensorStrides
+    ): TorchTensorFloat = TorchTensorFloat(
+        scope = outScope, tensorHandle = outTensorHandle, strides = outStrides
+    )
 }
 
 public class TorchTensorInt internal constructor(
-    override val strides: TorchTensorStrides,
     scope: DeferScope,
-    tensorHandle: COpaquePointer
+    tensorHandle: COpaquePointer,
+    override val strides: TorchTensorStrides
 ) : TorchTensor<Int, TorchTensorBufferInt>() {
     override val buffer: TorchTensorBufferInt = TorchTensorBufferInt(scope, tensorHandle)
-    override fun wrap(outStrides: TorchTensorStrides, outScope: DeferScope, outTensorHandle: COpaquePointer) =
-        TorchTensorInt(
-            strides = outStrides, scope = outScope, tensorHandle = outTensorHandle
-        )
+    override fun wrap(
+        outScope: DeferScope,
+        outTensorHandle: COpaquePointer,
+        outStrides: TorchTensorStrides
+    ): TorchTensorInt = TorchTensorInt(
+        scope = outScope, tensorHandle = outTensorHandle, strides = outStrides
+    )
 }
 
 public class TorchTensorFloatGPU internal constructor(
-    override val strides: TorchTensorStrides,
     scope: DeferScope,
-    tensorHandle: COpaquePointer
+    tensorHandle: COpaquePointer,
+    override val strides: TorchTensorStrides
 ) : TorchTensor<Float, TorchTensorBufferFloatGPU>() {
     override val buffer: TorchTensorBufferFloatGPU = TorchTensorBufferFloatGPU(scope, tensorHandle)
-    override fun wrap(outStrides: TorchTensorStrides, outScope: DeferScope, outTensorHandle: COpaquePointer) =
+    override fun wrap(
+        outScope: DeferScope,
+        outTensorHandle: COpaquePointer,
+        outStrides: TorchTensorStrides
+    ): TorchTensorFloatGPU =
         TorchTensorFloatGPU(
-            strides = outStrides, scope = outScope, tensorHandle = outTensorHandle
+            scope = outScope, tensorHandle = outTensorHandle, strides = outStrides
         )
 }
 

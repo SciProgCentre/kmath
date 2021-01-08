@@ -1,7 +1,6 @@
 package kscience.kmath.torch
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 
 internal class TestUtils {
@@ -10,5 +9,13 @@ internal class TestUtils {
         val numThreads = 2
         setNumThreads(numThreads)
         assertEquals(numThreads, getNumThreads())
+    }
+    @Test
+    fun seedSetting() = TorchTensorFloatAlgebra {
+        setSeed(987654)
+        val tensorA = randn(intArrayOf(2,3))
+        setSeed(987654)
+        val tensorB = randn(intArrayOf(2,3))
+        assertTrue(tensorA.asBuffer().contentEquals(tensorB.asBuffer()))
     }
 }

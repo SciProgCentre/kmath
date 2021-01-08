@@ -27,36 +27,36 @@ void set_seed(int seed)
 
 TorchTensorHandle copy_from_blob_double(double *data, int *shape, int dim)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<double>(data, shape, dim, torch::kCPU));
+  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
 }
 TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<float>(data, shape, dim, torch::kCPU));
+  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
 }
 TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<long>(data, shape, dim, torch::kCPU));
+  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
 }
 TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<int>(data, shape, dim, torch::kCPU));
+  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
 }
 
 TorchTensorHandle copy_from_blob_to_gpu_double(double *data, int *shape, int dim, int device)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<double>(data, shape, dim, torch::Device(torch::kCUDA, device)));
+  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
 }
 TorchTensorHandle copy_from_blob_to_gpu_float(float *data, int *shape, int dim, int device)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<float>(data, shape, dim, torch::Device(torch::kCUDA, device)));
+  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
 }
 TorchTensorHandle copy_from_blob_to_gpu_long(long *data, int *shape, int dim, int device)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<long>(data, shape, dim, torch::Device(torch::kCUDA, device)));
+  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
 }
 TorchTensorHandle copy_from_blob_to_gpu_int(int *data, int *shape, int dim, int device)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<int>(data, shape, dim, torch::Device(torch::kCUDA, device)));
+  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
 }
 
 TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle)
@@ -166,4 +166,12 @@ TorchTensorHandle copy_to_cpu(TorchTensorHandle tensor_handle)
 TorchTensorHandle copy_to_gpu(TorchTensorHandle tensor_handle, int device)
 {
   return new torch::Tensor(ctorch::cast(tensor_handle).to(torch::Device(torch::kCUDA, device),false, true));
+}
+
+TorchTensorHandle randn_float(int* shape, int shape_size){
+    return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), torch::kCPU));
+}
+
+TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs){
+  return new torch::Tensor(torch::matmul(ctorch::cast(lhs), ctorch::cast(rhs)));
 }

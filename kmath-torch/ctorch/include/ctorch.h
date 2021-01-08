@@ -58,6 +58,10 @@ extern "C"
     TorchTensorHandle copy_to_cpu(TorchTensorHandle tensor_handle);
     TorchTensorHandle copy_to_gpu(TorchTensorHandle tensor_handle, int device);
 
+    TorchTensorHandle randn_float(int* shape, int shape_size);
+
+    TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    
 #ifdef __cplusplus
 }
 #endif

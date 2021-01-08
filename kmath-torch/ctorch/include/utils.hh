@@ -33,13 +33,17 @@ namespace ctorch
         return *static_cast<torch::Tensor *>(tensor_handle);
     }
 
-    template <typename Dtype>
-    inline torch::Tensor copy_from_blob(Dtype *data, int *shape, int dim, torch::Device device)
+    inline std::vector<int64_t> to_vec_int(int *arr, int arr_size)
     {
-        auto shape_vec = std::vector<int64_t>(dim);
-        shape_vec.assign(shape, shape + dim);
-        return torch::from_blob(data, shape_vec, dtype<Dtype>()).to(
-            torch::TensorOptions().layout(torch::kStrided).device(device), false, true);
+        auto vec = std::vector<int64_t>(arr_size);
+        vec.assign(arr, arr + arr_size);
+        return vec;
+    }
+
+    template <typename Dtype>
+    inline torch::Tensor copy_from_blob(Dtype *data, std::vector<int64_t> shape, torch::Device device)
+    {
+        return torch::from_blob(data, shape, dtype<Dtype>()).to(torch::TensorOptions().layout(torch::kStrided).device(device), false, true);
     }
 
     inline int *to_dynamic_ints(const c10::IntArrayRef &arr)
@@ -76,6 +80,12 @@ namespace ctorch
     {
         auto ten = ctorch::cast(tensor_handle);
         ten.index(offset_to_index(offset, ten.strides())) = value;
+    }
+
+    template <typename Dtype>
+    inline torch::Tensor randn(std::vector<int64_t> shape, torch::Device device)
+    {
+        return torch::randn(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
 } // namespace ctorch

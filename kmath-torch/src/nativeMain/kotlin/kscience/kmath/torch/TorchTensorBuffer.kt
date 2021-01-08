@@ -5,24 +5,15 @@ import kscience.kmath.structures.MutableBuffer
 import kotlinx.cinterop.*
 import ctorch.*
 
-public abstract class TorchTensorBuffer<T> internal constructor(
-    internal val scope: DeferScope,
-    internal var tensorHandle: COpaquePointer?
-) : MutableBuffer<T> {
+public sealed class TorchTensorBuffer<T> constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer?
+) : MutableBuffer<T>, TorchMemoryHolder(scope, tensorHandle) {
 
     override val size: Int
         get(){
             return get_numel(tensorHandle!!)
         }
-
-    init {
-        scope.defer(::close)
-    }
-
-    protected fun close() {
-        dispose_tensor(tensorHandle)
-        tensorHandle = null
-    }
 
     internal abstract fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer): TorchTensorBuffer<T>
 
