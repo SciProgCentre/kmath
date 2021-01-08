@@ -3,11 +3,11 @@ package kscience.kmath.asm
 import kscience.kmath.asm.internal.AsmBuilder
 import kscience.kmath.asm.internal.buildName
 import kscience.kmath.ast.MST
+import kscience.kmath.ast.MST.*
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.operations.Algebra
 import kscience.kmath.operations.NumericAlgebra
-import kscience.kmath.operations.RealField
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -20,7 +20,7 @@ import kscience.kmath.operations.RealField
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
-        is MST.Symbolic -> {
+        is Symbolic -> {
             val symbol = try {
                 algebra.symbol(node.value)
             } catch (ignored: IllegalStateException) {
@@ -33,24 +33,29 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
                 loadVariable(node.value)
         }
 
-        is MST.Numeric -> loadNumberConstant(node.value)
-        is MST.Unary -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
+        is Numeric -> loadNumberConstant(node.value)
 
-        is MST.Binary -> when {
-            algebra is NumericAlgebra<T> && node.left is MST.Numeric && node.right is MST.Numeric -> loadObjectConstant(
-                algebra.number(
-                    RealField
-                        .binaryOperationFunction(node.operation)
-                        .invoke(node.left.value.toDouble(), node.right.value.toDouble())
-                )
+        is Unary -> when {
+            algebra is NumericAlgebra && node.value is Numeric -> loadObjectConstant(
+                algebra.unaryOperationFunction(node.operation)(algebra.number(node.value.value)))
+
+            else -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
+        }
+
+        is Binary -> when {
+            algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> loadObjectConstant(
+                algebra.binaryOperationFunction(node.operation)
+                    .invoke(algebra.number(node.left.value), algebra.number(node.right.value))
             )
 
-            algebra is NumericAlgebra<T> && node.left is MST.Numeric -> buildCall(algebra.leftSideNumberOperationFunction(node.operation)) {
+            algebra is NumericAlgebra && node.left is Numeric -> buildCall(
+                algebra.leftSideNumberOperationFunction(node.operation)) {
                 visit(node.left)
                 visit(node.right)
             }
 
-            algebra is NumericAlgebra<T> && node.right is MST.Numeric -> buildCall(algebra.rightSideNumberOperationFunction(node.operation)) {
+            algebra is NumericAlgebra && node.right is Numeric -> buildCall(
+                algebra.rightSideNumberOperationFunction(node.operation)) {
                 visit(node.left)
                 visit(node.right)
             }
