@@ -25,80 +25,50 @@ void set_seed(int seed)
   torch::manual_seed(seed);
 }
 
-TorchTensorHandle copy_from_blob_double(double *data, int *shape, int dim)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
-}
-TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
-}
-TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
-}
-TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), torch::kCPU));
-}
-
-TorchTensorHandle copy_from_blob_to_gpu_double(double *data, int *shape, int dim, int device)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
-}
-TorchTensorHandle copy_from_blob_to_gpu_float(float *data, int *shape, int dim, int device)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
-}
-TorchTensorHandle copy_from_blob_to_gpu_long(long *data, int *shape, int dim, int device)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
-}
-TorchTensorHandle copy_from_blob_to_gpu_int(int *data, int *shape, int dim, int device)
-{
-  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), torch::Device(torch::kCUDA, device)));
-}
-
-TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle)
-{
-  return new torch::Tensor(ctorch::cast(tensor_handle).clone());
-}
-
-double *get_data_double(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<double>();
-}
-float *get_data_float(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<float>();
-}
-long *get_data_long(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<long>();
-}
-int *get_data_int(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<int>();
-}
-
-int get_numel(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).numel();
-}
-
 int get_dim(TorchTensorHandle tensor_handle)
 {
   return ctorch::cast(tensor_handle).dim();
 }
-
-int *get_shape(TorchTensorHandle tensor_handle)
+int get_numel(TorchTensorHandle tensor_handle)
 {
-  return ctorch::to_dynamic_ints(ctorch::cast(tensor_handle).sizes());
+  return ctorch::cast(tensor_handle).numel();
+}
+int get_shape_at(TorchTensorHandle tensor_handle, int d)
+{
+  return ctorch::cast(tensor_handle).size(d);
+}
+int get_stride_at(TorchTensorHandle tensor_handle, int d)
+{
+  return ctorch::cast(tensor_handle).stride(d);
+}
+int get_device(TorchTensorHandle tensor_handle)
+{
+  return ctorch::device_to_int(ctorch::cast(tensor_handle));
 }
 
-int *get_strides(TorchTensorHandle tensor_handle)
+TorchTensorHandle copy_from_blob_double(double *data, int *shape, int dim, int device)
 {
-  return ctorch::to_dynamic_ints(ctorch::cast(tensor_handle).strides());
+  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+}
+TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim, int device)
+{
+  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+}
+TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim, int device)
+{
+  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+}
+TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim, int device)
+{
+  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+}
+TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).clone());
+}
+TorchTensorHandle copy_to_device(TorchTensorHandle tensor_handle, int device)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::int_to_device(device), false, true));
 }
 
 char *tensor_to_string(TorchTensorHandle tensor_handle)
@@ -110,68 +80,89 @@ char *tensor_to_string(TorchTensorHandle tensor_handle)
   std::strcpy(crep, rep.c_str());
   return crep;
 }
-
-void dispose_int_array(int *ptr)
-{
-  free(ptr);
-}
-
 void dispose_char(char *ptr)
 {
   free(ptr);
 }
-
 void dispose_tensor(TorchTensorHandle tensor_handle)
 {
   delete static_cast<torch::Tensor *>(tensor_handle);
 }
 
-double get_at_offset_double(TorchTensorHandle tensor_handle, int offset)
+double get_double(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get_at_offset<double>(tensor_handle, offset);
+  return ctorch::get<double>(tensor_handle, index);
 }
-float get_at_offset_float(TorchTensorHandle tensor_handle, int offset)
+float get_float(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get_at_offset<float>(tensor_handle, offset);
+  return ctorch::get<float>(tensor_handle, index);
 }
-long get_at_offset_long(TorchTensorHandle tensor_handle, int offset)
+long get_long(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get_at_offset<long>(tensor_handle, offset);
+  return ctorch::get<long>(tensor_handle, index);
 }
-int get_at_offset_int(TorchTensorHandle tensor_handle, int offset)
+int get_int(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get_at_offset<int>(tensor_handle, offset);
+  return ctorch::get<int>(tensor_handle, index);
 }
-void set_at_offset_double(TorchTensorHandle tensor_handle, int offset, double value)
+void set_double(TorchTensorHandle tensor_handle, int *index, double value)
 {
-  ctorch::set_at_offset<double>(tensor_handle, offset, value);
+  ctorch::set<double>(tensor_handle, index, value);
 }
-void set_at_offset_float(TorchTensorHandle tensor_handle, int offset, float value)
+void set_float(TorchTensorHandle tensor_handle, int *index, float value)
 {
-  ctorch::set_at_offset<float>(tensor_handle, offset, value);
+  ctorch::set<float>(tensor_handle, index, value);
 }
-void set_at_offset_long(TorchTensorHandle tensor_handle, int offset, long value)
+void set_long(TorchTensorHandle tensor_handle, int *index, long value)
 {
-  ctorch::set_at_offset<long>(tensor_handle, offset, value);
+  ctorch::set<long>(tensor_handle, index, value);
 }
-void set_at_offset_int(TorchTensorHandle tensor_handle, int offset, int value)
+void set_int(TorchTensorHandle tensor_handle, int *index, int value)
 {
-  ctorch::set_at_offset<int>(tensor_handle, offset, value);
+  ctorch::set<int>(tensor_handle, index, value);
 }
 
-TorchTensorHandle copy_to_cpu(TorchTensorHandle tensor_handle)
+double get_item_double(TorchTensorHandle tensor_handle)
 {
-  return new torch::Tensor(ctorch::cast(tensor_handle).to(torch::kCPU,false, true));
+  return ctorch::cast(tensor_handle).item<double>();
 }
-TorchTensorHandle copy_to_gpu(TorchTensorHandle tensor_handle, int device)
+float get_item_float(TorchTensorHandle tensor_handle)
 {
-  return new torch::Tensor(ctorch::cast(tensor_handle).to(torch::Device(torch::kCUDA, device),false, true));
+  return ctorch::cast(tensor_handle).item<float>();
+}
+long get_item_long(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<long>();
+}
+int get_item_int(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<int>();
 }
 
-TorchTensorHandle randn_float(int* shape, int shape_size){
-    return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), torch::kCPU));
+TorchTensorHandle randn_double(int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randn<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle rand_double(int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::rand<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle randn_float(int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle rand_float(int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::rand<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 
-TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs){
+TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
   return new torch::Tensor(torch::matmul(ctorch::cast(lhs), ctorch::cast(rhs)));
+}
+
+void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  auto lhs_tensor = ctorch::cast(lhs);
+  lhs_tensor = lhs_tensor.matmul(ctorch::cast(rhs));
 }

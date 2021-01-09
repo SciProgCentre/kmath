@@ -33,11 +33,31 @@ namespace ctorch
         return *static_cast<torch::Tensor *>(tensor_handle);
     }
 
+    inline int device_to_int(const torch::Tensor &tensor)
+    {
+        return (tensor.device().type() == torch::kCPU) ? 0 : 1 + tensor.device().index();
+    }
+
+    inline torch::Device int_to_device(int device_int)
+    {
+        return (device_int == 0) ? torch::kCPU : torch::Device(torch::kCUDA, device_int - 1);
+    }
+
     inline std::vector<int64_t> to_vec_int(int *arr, int arr_size)
     {
         auto vec = std::vector<int64_t>(arr_size);
         vec.assign(arr, arr + arr_size);
         return vec;
+    }
+
+    inline std::vector<at::indexing::TensorIndex> to_index(int *arr, int arr_size)
+    {
+        std::vector<at::indexing::TensorIndex> index;
+        for (int i = 0; i < arr_size; i++)
+        {
+            index.emplace_back(arr[i]);
+        }
+        return index;
     }
 
     template <typename Dtype>
@@ -46,46 +66,30 @@ namespace ctorch
         return torch::from_blob(data, shape, dtype<Dtype>()).to(torch::TensorOptions().layout(torch::kStrided).device(device), false, true);
     }
 
-    inline int *to_dynamic_ints(const c10::IntArrayRef &arr)
+    template <typename NumType>
+    inline NumType get(const TorchTensorHandle &tensor_handle, int *index)
     {
-        size_t n = arr.size();
-        int *res = (int *)malloc(sizeof(int) * n);
-        for (size_t i = 0; i < n; i++)
-        {
-            res[i] = arr[i];
-        }
-        return res;
-    }
-
-    inline std::vector<at::indexing::TensorIndex> offset_to_index(int offset, const c10::IntArrayRef &strides)
-    {
-        std::vector<at::indexing::TensorIndex> index;
-        for (const auto &stride : strides)
-        {
-            index.emplace_back(offset / stride);
-            offset %= stride;
-        }
-        return index;
+        auto ten = ctorch::cast(tensor_handle);
+        return ten.index(to_index(index, ten.dim())).item<NumType>();
     }
 
     template <typename NumType>
-    inline NumType get_at_offset(const TorchTensorHandle &tensor_handle, int offset)
+    inline void set(TorchTensorHandle &tensor_handle, int *index, NumType value)
     {
         auto ten = ctorch::cast(tensor_handle);
-        return ten.index(ctorch::offset_to_index(offset, ten.strides())).item<NumType>();
-    }
-
-    template <typename NumType>
-    inline void set_at_offset(TorchTensorHandle &tensor_handle, int offset, NumType value)
-    {
-        auto ten = ctorch::cast(tensor_handle);
-        ten.index(offset_to_index(offset, ten.strides())) = value;
+        ten.index(to_index(index, ten.dim())) = value;
     }
 
     template <typename Dtype>
     inline torch::Tensor randn(std::vector<int64_t> shape, torch::Device device)
     {
         return torch::randn(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
+    }
+
+    template <typename Dtype>
+    inline torch::Tensor rand(std::vector<int64_t> shape, torch::Device device)
+    {
+        return torch::rand(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
 } // namespace ctorch

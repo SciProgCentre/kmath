@@ -145,6 +145,7 @@ kotlin {
         }
         val nativeGPUTest by creating {
             dependsOn(nativeMain)
+            dependsOn(nativeTest)
         }
 
 

@@ -78,28 +78,20 @@ pluginManagement {
 
 Tensors implement the buffer protocol over `MutableNDStructure`. They can only be instantiated through provided factory methods and require scoping:
 ```kotlin
-memScoped {
-    val intTensor: TorchTensorInt = TorchTensor.copyFromIntArray(
-        scope = this,
-        array = (1..24).toList().toIntArray(),
-        shape = intArrayOf(3, 2, 4)
-    )
-    println(intTensor)
+TorchTensorRealAlgebra {
 
-    val floatTensor: TorchTensorFloat = TorchTensor.copyFromFloatArray(
-        scope = this,
-        array = (1..10).map { it + 50f }.toList().toFloatArray(),
-        shape = intArrayOf(10)
+    val realTensor: TorchTensorReal = copyFromArray(
+        array = (1..10).map { it + 50.0 }.toList().toDoubleArray(),
+        shape = intArrayOf(2,5)
     )
-    println(floatTensor)
+    println(realTensor)
 
-    val gpuFloatTensor: TorchTensorFloatGPU = TorchTensor.copyFromFloatArrayToGPU(
-        scope = this,
-        array = (1..8).map { it * 2f }.toList().toFloatArray(),
+    val gpuRealTensor: TorchTensorReal = copyFromArray(
+        array = (1..8).map { it * 2.5 }.toList().toDoubleArray(),
         shape = intArrayOf(2, 2, 2),
-        device = 0
+        device = TorchDevice.TorchCUDA(0)
     )
-    println(gpuFloatTensor)
+    println(gpuRealTensor)
 }
 ```
 

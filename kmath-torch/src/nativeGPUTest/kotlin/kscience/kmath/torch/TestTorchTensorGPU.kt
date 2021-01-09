@@ -1,25 +1,22 @@
 package kscience.kmath.torch
 
-import kscience.kmath.structures.asBuffer
-
-import kotlinx.cinterop.memScoped
 import kotlin.test.*
 
 class TestTorchTensorGPU {
 
     @Test
-    fun cudaAvailability() {
-        assertTrue(cudaAvailable())
-    }
+    fun testCopyFromArray() = testingCopyFromArray(TorchDevice.TorchCUDA(0))
 
     @Test
-    fun floatGPUTensorLayout() = memScoped {
-        val array = (1..8).map { it * 2f }.toList().toFloatArray()
-        val shape = intArrayOf(2, 2, 2)
-        val tensor = TorchTensor.copyFromFloatArrayToGPU(this, array, shape, 0)
-        tensor.elements().forEach {
-            assertEquals(tensor[it.first], it.second)
-        }
-        assertTrue(tensor.asBuffer().contentEquals(array.asBuffer()))
+    fun testCopyToDevice() = TorchTensorRealAlgebra {
+        setSeed(SEED)
+        val normalCpu = randNormal(intArrayOf(2, 3))
+        val normalGpu = normalCpu.copyToDevice(TorchDevice.TorchCUDA(0))
+        assertTrue(normalCpu.copyToArray() contentEquals normalGpu.copyToArray())
+
+        val uniformGpu = randUniform(intArrayOf(3,2),TorchDevice.TorchCUDA(0))
+        val uniformCpu = uniformGpu.copyToDevice(TorchDevice.TorchCPU)
+        assertTrue(uniformGpu.copyToArray() contentEquals uniformCpu.copyToArray())
     }
+
 }

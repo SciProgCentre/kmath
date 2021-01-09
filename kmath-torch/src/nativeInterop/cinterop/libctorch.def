@@ -1,2 +1,2 @@
-package=ctorch
+package=kscience.kmath.ctorch
 headers=ctorch.h

@@ -1,7 +1,7 @@
 package kscience.kmath.torch
 
 import kotlinx.cinterop.*
-import ctorch.*
+import kscience.kmath.ctorch.*
 
 public fun getNumThreads(): Int {
     return get_num_threads()

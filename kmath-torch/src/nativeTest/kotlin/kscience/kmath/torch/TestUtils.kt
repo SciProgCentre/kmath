@@ -3,19 +3,31 @@ package kscience.kmath.torch
 import kotlin.test.*
 
 
+internal val SEED = 987654
+internal val TOLERANCE = 1e-6
+
+internal fun testingSetSeed(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+    TorchTensorRealAlgebra {
+        setSeed(SEED)
+        val normal = randNormal(IntArray(0), device = device).value()
+        val uniform = randUniform(IntArray(0), device = device).value()
+        setSeed(SEED)
+        val nextNormal = randNormal(IntArray(0), device = device).value()
+        val nextUniform = randUniform(IntArray(0), device = device).value()
+        assertEquals(normal, nextNormal)
+        assertEquals(uniform, nextUniform)
+    }
+}
+
+
 internal class TestUtils {
     @Test
-    fun settingTorchThreadsCount() {
+    fun testSetNumThreads() {
         val numThreads = 2
         setNumThreads(numThreads)
         assertEquals(numThreads, getNumThreads())
     }
+
     @Test
-    fun seedSetting() = TorchTensorFloatAlgebra {
-        setSeed(987654)
-        val tensorA = randn(intArrayOf(2,3))
-        setSeed(987654)
-        val tensorB = randn(intArrayOf(2,3))
-        assertTrue(tensorA.asBuffer().contentEquals(tensorB.asBuffer()))
-    }
+    fun testSetSeed() = testingSetSeed()
 }
