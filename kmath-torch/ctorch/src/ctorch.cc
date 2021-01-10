@@ -163,6 +163,5 @@ TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs)
 
 void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
-  auto lhs_tensor = ctorch::cast(lhs);
-  lhs_tensor = lhs_tensor.matmul(ctorch::cast(rhs));
+  ctorch::cast(lhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
 }

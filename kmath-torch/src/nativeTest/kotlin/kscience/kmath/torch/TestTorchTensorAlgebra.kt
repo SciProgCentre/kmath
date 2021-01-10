@@ -33,9 +33,12 @@ internal fun testingMatrixMultiplication(device: TorchDevice = TorchDevice.Torch
             lhs dot rhs
         }
 
+        lhsTensor dotAssign rhsTensor
+
         var error: Double = 0.0
         product.elements().forEach {
-            error += abs(expected[it.first] - it.second)
+            error += abs(expected[it.first] - it.second) +
+                    abs(expected[it.first] - lhsTensor[it.first])
         }
         assertTrue(error < TOLERANCE)
     }
