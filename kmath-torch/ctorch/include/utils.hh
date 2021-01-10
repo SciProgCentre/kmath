@@ -92,4 +92,10 @@ namespace ctorch
         return torch::rand(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
+    template <typename Dtype>
+    inline torch::Tensor full(Dtype value, std::vector<int64_t> shape, torch::Device device)
+    {
+        return torch::full(shape, value, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
+    }
+
 } // namespace ctorch

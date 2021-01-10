@@ -76,7 +76,7 @@ pluginManagement {
 
 ## Usage
 
-Tensors implement the buffer protocol over `MutableNDStructure`. They can only be instantiated through provided factory methods and require scoping:
+Tensors are implemented over the `MutableNDStructure`. They can only be instantiated through provided factory methods and require scoping:
 ```kotlin
 TorchTensorRealAlgebra {
 
@@ -92,6 +92,26 @@ TorchTensorRealAlgebra {
         device = TorchDevice.TorchCUDA(0)
     )
     println(gpuRealTensor)
+}
+```
+Enjoy a high performance automatic differentiation engine:
+```kotlin
+TorchTensorRealAlgebra {
+    val dim = 10
+    val device = TorchDevice.TorchCPU //or TorchDevice.TorchCUDA(0)
+    val x = randNormal(shape = intArrayOf(dim), device = device)
+    // x is the variable
+    x.requiresGrad = true
+    
+    val X = randNormal(shape = intArrayOf(dim,dim), device = device)
+    val Q = X + X.transpose(0,1)
+    val mu = randNormal(shape = intArrayOf(dim), device = device)
+    val c = randNormal(shape = IntArray(0), device = device)
+    
+    // expression to differentiate w.r.t. x
+    val f = 0.5 * (x dot (Q dot x)) + (mu dot x) + c
+    // value of the gradient at x
+    val gradf = f grad x
 }
 ```
 

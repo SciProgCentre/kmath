@@ -62,6 +62,13 @@ public sealed class TorchTensor<T> constructor(
             outTensorHandle = copy_to_device(tensorHandle, device.toInt())!!
         )
 
+    public var requiresGrad: Boolean
+        get() = requires_grad(tensorHandle)
+        set(value) = requires_grad_(tensorHandle, value)
+
+    public fun detachFromGraph(): Unit {
+        detach_from_graph(tensorHandle)
+    }
 }
 
 public class TorchTensorReal internal constructor(

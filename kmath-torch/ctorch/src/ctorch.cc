@@ -156,12 +156,111 @@ TorchTensorHandle rand_float(int *shape, int shape_size, int device)
   return new torch::Tensor(ctorch::rand<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 
+TorchTensorHandle full_double(double value, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::full<double>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle full_float(float value, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::full<float>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle full_long(long value, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::full<long>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle full_int(int value, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::full<int>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+
 TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   return new torch::Tensor(torch::matmul(ctorch::cast(lhs), ctorch::cast(rhs)));
 }
-
 void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   ctorch::cast(lhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
+}
+void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(rhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
+}
+
+TorchTensorHandle times_double(double value, TorchTensorHandle other)
+{
+  return new torch::Tensor(value * ctorch::cast(other));
+}
+TorchTensorHandle times_float(float value, TorchTensorHandle other)
+{
+  return new torch::Tensor(value * ctorch::cast(other));
+}
+TorchTensorHandle times_long(long value, TorchTensorHandle other)
+{
+  return new torch::Tensor(value * ctorch::cast(other));
+}
+TorchTensorHandle times_int(int value, TorchTensorHandle other)
+{
+  return new torch::Tensor(value * ctorch::cast(other));
+}
+void times_assign_double(double value, TorchTensorHandle other)
+{
+  ctorch::cast(other) *= value;
+}
+void times_assign_float(float value, TorchTensorHandle other)
+{
+  ctorch::cast(other) *= value;
+}
+void times_assign_long(long value, TorchTensorHandle other)
+{
+  ctorch::cast(other) *= value;
+}
+void times_assign_int(int value, TorchTensorHandle other)
+{
+  ctorch::cast(other) *= value;
+}
+
+TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) + ctorch::cast(rhs));
+}
+void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) += ctorch::cast(rhs);
+}
+TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) - ctorch::cast(rhs));
+}
+void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) -= ctorch::cast(rhs);
+}
+TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).abs());
+}
+TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).sum());
+}
+TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).transpose(i,j));
+}
+
+bool requires_grad(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).requires_grad();
+}
+void requires_grad_(TorchTensorHandle tensor_handle, bool status)
+{
+  ctorch::cast(tensor_handle).requires_grad_(status);
+}
+void detach_from_graph(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle).detach();
+}
+TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable)
+{
+  return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)})[0]);
 }

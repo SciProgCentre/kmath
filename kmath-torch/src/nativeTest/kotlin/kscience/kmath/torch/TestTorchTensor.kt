@@ -19,4 +19,14 @@ class TestTorchTensor {
 
     @Test
     fun testCopyFromArray() = testingCopyFromArray()
+
+    @Test
+    fun testRequiresGrad() =  TorchTensorRealAlgebra {
+        val tensor = randNormal(intArrayOf(3))
+        assertTrue(!tensor.requiresGrad)
+        tensor.requiresGrad = true
+        assertTrue(tensor.requiresGrad)
+        tensor.requiresGrad = false
+        assertTrue(!tensor.requiresGrad)
+    }
 }
