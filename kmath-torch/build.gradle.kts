@@ -119,6 +119,8 @@ kotlin {
                     "-Wl,-rpath=$cppBuildDir",
                     "-lctorch"
                 )
+                optimized = true
+                debuggable = false
             }
         }
     }
