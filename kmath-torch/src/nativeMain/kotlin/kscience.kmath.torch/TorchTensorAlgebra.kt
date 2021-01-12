@@ -3,17 +3,21 @@ package kscience.kmath.torch
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
 
-public sealed class TorchTensorAlgebra<T, PrimitiveArrayType> constructor(
+public sealed class TorchTensorAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayType> constructor(
     internal val scope: DeferScope
 ) {
     internal abstract fun wrap(tensorHandle: COpaquePointer): TorchTensor<T>
+
     public abstract fun copyFromArray(
         array: PrimitiveArrayType,
         shape: IntArray,
         device: TorchDevice = TorchDevice.TorchCPU
     ): TorchTensor<T>
-
     public abstract fun TorchTensor<T>.copyToArray(): PrimitiveArrayType
+
+    public abstract fun fromBlob(arrayBlob: CPointer<TVar>, shape: IntArray): TorchTensor<T>
+    public abstract fun TorchTensor<T>.getData(): CPointer<TVar>
+
     public abstract fun full(value: T, shape: IntArray, device: TorchDevice): TorchTensor<T>
 
     public abstract operator fun T.times(other: TorchTensor<T>): TorchTensor<T>
@@ -56,13 +60,13 @@ public sealed class TorchTensorAlgebra<T, PrimitiveArrayType> constructor(
         wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle)!!)
 }
 
-public sealed class TorchTensorFieldAlgebra<T, PrimitiveArrayType>(scope: DeferScope) :
-    TorchTensorAlgebra<T, PrimitiveArrayType>(scope) {
+public sealed class TorchTensorFieldAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayType>(scope: DeferScope) :
+    TorchTensorAlgebra<T, TVar, PrimitiveArrayType>(scope) {
     public abstract fun randNormal(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensor<T>
     public abstract fun randUniform(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensor<T>
 }
 
-public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra<Double, DoubleArray>(scope) {
+public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra<Double, DoubleVar, DoubleArray>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorReal =
         TorchTensorReal(scope = scope, tensorHandle = tensorHandle)
 
@@ -76,13 +80,33 @@ public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra
     ): TorchTensorReal =
         TorchTensorReal(
             scope = scope,
-            tensorHandle = copy_from_blob_double(
+            tensorHandle = from_blob_double(
                 array.toCValues(),
                 shape.toCValues(),
                 shape.size,
-                device.toInt()
+                device.toInt(),
+                true
             )!!
         )
+
+    override fun fromBlob(arrayBlob: CPointer<DoubleVar>, shape: IntArray): TorchTensorReal =
+        TorchTensorReal(
+            scope = scope,
+            tensorHandle = from_blob_double(
+                arrayBlob,
+                shape.toCValues(),
+                shape.size,
+                TorchDevice.TorchCPU.toInt(),
+                false
+            )!!
+        )
+
+    override fun TorchTensor<Double>.getData(): CPointer<DoubleVar> {
+        require(this.device is TorchDevice.TorchCPU){
+            "This tensor is not on available on CPU"
+        }
+        return get_data_double(this.tensorHandle)!!
+    }
 
     override fun randNormal(shape: IntArray, device: TorchDevice): TorchTensorReal = TorchTensorReal(
         scope = scope,
@@ -116,5 +140,5 @@ public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra
 
 }
 
-public fun <R> TorchTensorRealAlgebra(block: TorchTensorRealAlgebra.() -> R): R =
+public inline fun <R> TorchTensorRealAlgebra(block: TorchTensorRealAlgebra.() -> R): R =
     memScoped { TorchTensorRealAlgebra(this).block() }

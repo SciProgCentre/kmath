@@ -18,10 +18,15 @@ extern "C"
 
     void set_seed(int seed);
 
-    TorchTensorHandle copy_from_blob_double(double *data, int *shape, int dim, int device);
-    TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim, int device);
-    TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim, int device);
-    TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim, int device);
+    double *get_data_double(TorchTensorHandle tensor_handle);
+    float *get_data_float(TorchTensorHandle tensor_handle);
+    long *get_data_long(TorchTensorHandle tensor_handle);
+    int *get_data_int(TorchTensorHandle tensor_handle);
+
+    TorchTensorHandle from_blob_double(double *data, int *shape, int dim, int device, bool copy);
+    TorchTensorHandle from_blob_float(float *data, int *shape, int dim, int device, bool copy);
+    TorchTensorHandle from_blob_long(long *data, int *shape, int dim, int device, bool copy);
+    TorchTensorHandle from_blob_int(int *data, int *shape, int dim, int device, bool copy);
     TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle);
     TorchTensorHandle copy_to_device(TorchTensorHandle tensor_handle, int device);
 

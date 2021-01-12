@@ -25,6 +25,23 @@ void set_seed(int seed)
   torch::manual_seed(seed);
 }
 
+double *get_data_double(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<double>();
+}
+float *get_data_float(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<float>();
+}
+long *get_data_long(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<long>();
+}
+int *get_data_int(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<int>();
+}
+
 int get_dim(TorchTensorHandle tensor_handle)
 {
   return ctorch::cast(tensor_handle).dim();
@@ -46,21 +63,21 @@ int get_device(TorchTensorHandle tensor_handle)
   return ctorch::device_to_int(ctorch::cast(tensor_handle));
 }
 
-TorchTensorHandle copy_from_blob_double(double *data, int *shape, int dim, int device)
+TorchTensorHandle from_blob_double(double *data, int *shape, int dim, int device, bool copy)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<double>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+  return new torch::Tensor(ctorch::from_blob<double>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device), copy));
 }
-TorchTensorHandle copy_from_blob_float(float *data, int *shape, int dim, int device)
+TorchTensorHandle from_blob_float(float *data, int *shape, int dim, int device, bool copy)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<float>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+  return new torch::Tensor(ctorch::from_blob<float>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device), copy));
 }
-TorchTensorHandle copy_from_blob_long(long *data, int *shape, int dim, int device)
+TorchTensorHandle from_blob_long(long *data, int *shape, int dim, int device, bool copy)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<long>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+  return new torch::Tensor(ctorch::from_blob<long>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device), copy));
 }
-TorchTensorHandle copy_from_blob_int(int *data, int *shape, int dim, int device)
+TorchTensorHandle from_blob_int(int *data, int *shape, int dim, int device, bool copy)
 {
-  return new torch::Tensor(ctorch::copy_from_blob<int>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device)));
+  return new torch::Tensor(ctorch::from_blob<int>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device), copy));
 }
 TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle)
 {
@@ -245,7 +262,7 @@ TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle)
 }
 TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j)
 {
-  return new torch::Tensor(ctorch::cast(tensor_handle).transpose(i,j));
+  return new torch::Tensor(ctorch::cast(tensor_handle).transpose(i, j));
 }
 
 bool requires_grad(TorchTensorHandle tensor_handle)
