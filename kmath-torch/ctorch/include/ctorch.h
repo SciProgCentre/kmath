@@ -78,10 +78,25 @@ extern "C"
     void times_assign_long(long value, TorchTensorHandle other);
     void times_assign_int(int value, TorchTensorHandle other);
 
+    TorchTensorHandle plus_double(double value, TorchTensorHandle other);
+    TorchTensorHandle plus_float(float value, TorchTensorHandle other);
+    TorchTensorHandle plus_long(long value, TorchTensorHandle other);
+    TorchTensorHandle plus_int(int value, TorchTensorHandle other);
+
+    void plus_assign_double(double value, TorchTensorHandle other);
+    void plus_assign_float(float value, TorchTensorHandle other);
+    void plus_assign_long(long value, TorchTensorHandle other);
+    void plus_assign_int(int value, TorchTensorHandle other);
+
     TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
     TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    TorchTensorHandle times_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void times_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    TorchTensorHandle div_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    TorchTensorHandle unary_minus(TorchTensorHandle tensor);
     TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle);
     TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle);
     TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j);

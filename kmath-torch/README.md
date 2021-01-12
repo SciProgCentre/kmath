@@ -106,10 +106,9 @@ TorchTensorRealAlgebra {
     val X = randNormal(shape = intArrayOf(dim,dim), device = device)
     val Q = X + X.transpose(0,1)
     val mu = randNormal(shape = intArrayOf(dim), device = device)
-    val c = randNormal(shape = IntArray(0), device = device)
     
     // expression to differentiate w.r.t. x
-    val f = 0.5 * (x dot (Q dot x)) + (mu dot x) + c
+    val f = 0.5 * (x dot (Q dot x)) + (mu dot x) + 25.3
     // value of the gradient at x
     val gradf = f grad x
 }

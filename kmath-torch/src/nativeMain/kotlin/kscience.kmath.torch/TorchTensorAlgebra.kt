@@ -20,9 +20,26 @@ public sealed class TorchTensorAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayTyp
 
     public abstract fun full(value: T, shape: IntArray, device: TorchDevice): TorchTensor<T>
 
+    public abstract operator fun T.plus(other: TorchTensor<T>): TorchTensor<T>
+    public abstract operator fun TorchTensor<T>.plus(value: T): TorchTensor<T>
+    public abstract operator fun TorchTensor<T>.plusAssign(value: T): Unit
+    public abstract operator fun T.minus(other: TorchTensor<T>): TorchTensor<T>
+    public abstract operator fun TorchTensor<T>.minus(value: T): TorchTensor<T>
+    public abstract operator fun TorchTensor<T>.minusAssign(value: T): Unit
     public abstract operator fun T.times(other: TorchTensor<T>): TorchTensor<T>
     public abstract operator fun TorchTensor<T>.times(value: T): TorchTensor<T>
     public abstract operator fun TorchTensor<T>.timesAssign(value: T): Unit
+
+    public operator fun TorchTensor<T>.times(other: TorchTensor<T>): TorchTensor<T> =
+        wrap(times_tensor(this.tensorHandle, other.tensorHandle)!!)
+    public operator fun TorchTensor<T>.timesAssign(other: TorchTensor<T>): Unit {
+        times_tensor_assign(this.tensorHandle, other.tensorHandle)
+    }
+    public operator fun TorchTensor<T>.div(other: TorchTensor<T>): TorchTensor<T> =
+        wrap(div_tensor(this.tensorHandle, other.tensorHandle)!!)
+    public operator fun TorchTensor<T>.divAssign(other: TorchTensor<T>): Unit {
+        div_tensor_assign(this.tensorHandle, other.tensorHandle)
+    }
 
     public infix fun TorchTensor<T>.dot(other: TorchTensor<T>): TorchTensor<T> =
         wrap(matmul(this.tensorHandle, other.tensorHandle)!!)
@@ -48,6 +65,8 @@ public sealed class TorchTensorAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayTyp
     public operator fun TorchTensor<T>.minusAssign(other: TorchTensor<T>): Unit {
         minus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
+    public operator fun TorchTensor<T>.unaryMinus(): TorchTensor<T> =
+        wrap(unary_minus(this.tensorHandle)!!)
 
     public fun TorchTensor<T>.abs(): TorchTensor<T> = wrap(abs_tensor(tensorHandle)!!)
 
@@ -117,6 +136,34 @@ public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra
         scope = scope,
         tensorHandle = rand_double(shape.toCValues(), shape.size, device.toInt())!!
     )
+
+    override operator fun Double.plus(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
+        scope = scope,
+        tensorHandle = plus_double(this, other.tensorHandle)!!
+    )
+
+    override fun TorchTensor<Double>.plus(value: Double): TorchTensorReal = TorchTensorReal(
+        scope = scope,
+        tensorHandle = plus_double(value, this.tensorHandle)!!
+    )
+
+    override fun TorchTensor<Double>.plusAssign(value: Double): Unit {
+        plus_assign_double(value, this.tensorHandle)
+    }
+
+    override operator fun Double.minus(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
+        scope = scope,
+        tensorHandle = plus_double(-this, other.tensorHandle)!!
+    )
+
+    override fun TorchTensor<Double>.minus(value: Double): TorchTensorReal = TorchTensorReal(
+        scope = scope,
+        tensorHandle = plus_double(-value, this.tensorHandle)!!
+    )
+
+    override fun TorchTensor<Double>.minusAssign(value: Double): Unit {
+        plus_assign_double(-value, this.tensorHandle)
+    }
 
     override operator fun Double.times(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
         scope = scope,

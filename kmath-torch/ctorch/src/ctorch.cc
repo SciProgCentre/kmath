@@ -203,6 +203,39 @@ void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
   ctorch::cast(rhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
 }
 
+TorchTensorHandle plus_double(double value, TorchTensorHandle other)
+{
+  return new torch::Tensor(ctorch::cast(other) + value);
+}
+TorchTensorHandle plus_float(float value, TorchTensorHandle other)
+{
+  return new torch::Tensor(ctorch::cast(other) + value);
+}
+TorchTensorHandle plus_long(long value, TorchTensorHandle other)
+{
+  return new torch::Tensor(ctorch::cast(other) + value);
+}
+TorchTensorHandle plus_int(int value, TorchTensorHandle other)
+{
+  return new torch::Tensor(ctorch::cast(other) + value);
+}
+void plus_assign_double(double value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_assign_float(float value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_assign_long(long value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_assign_int(int value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+
 TorchTensorHandle times_double(double value, TorchTensorHandle other)
 {
   return new torch::Tensor(value * ctorch::cast(other));
@@ -251,6 +284,26 @@ TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
 void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   ctorch::cast(lhs) -= ctorch::cast(rhs);
+}
+TorchTensorHandle times_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) * ctorch::cast(rhs));
+}
+void times_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) *= ctorch::cast(rhs);
+}
+TorchTensorHandle div_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) / ctorch::cast(rhs));
+}
+void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) /= ctorch::cast(rhs);
+}
+TorchTensorHandle unary_minus(TorchTensorHandle tensor)
+{
+  return new torch::Tensor(-ctorch::cast(tensor));
 }
 TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle)
 {
