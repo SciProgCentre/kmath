@@ -53,6 +53,23 @@ public sealed class TorchTensor<T> constructor(
         get() = requires_grad(tensorHandle)
         set(value) = requires_grad_(tensorHandle, value)
 
+    public fun copyToDouble(): TorchTensorReal = TorchTensorReal(
+        scope = scope,
+        tensorHandle = copy_to_double(this.tensorHandle)!!
+    )
+    public fun copyToFloat(): TorchTensorFloat = TorchTensorFloat(
+        scope = scope,
+        tensorHandle = copy_to_float(this.tensorHandle)!!
+    )
+    public fun copyToLong(): TorchTensorLong = TorchTensorLong(
+        scope = scope,
+        tensorHandle = copy_to_long(this.tensorHandle)!!
+    )
+    public fun copyToInt(): TorchTensorInt = TorchTensorInt(
+        scope = scope,
+        tensorHandle = copy_to_int(this.tensorHandle)!!
+    )
+
 }
 
 public class TorchTensorReal internal constructor(
@@ -63,6 +80,39 @@ public class TorchTensorReal internal constructor(
     override fun get(index: IntArray): Double = get_double(tensorHandle, index.toCValues())
     override fun set(index: IntArray, value: Double) {
         set_double(tensorHandle, index.toCValues(), value)
+    }
+}
+
+public class TorchTensorFloat internal constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer
+) : TorchTensor<Float>(scope, tensorHandle) {
+    override fun item(): Float = get_item_float(tensorHandle)
+    override fun get(index: IntArray): Float = get_float(tensorHandle, index.toCValues())
+    override fun set(index: IntArray, value: Float) {
+        set_float(tensorHandle, index.toCValues(), value)
+    }
+}
+
+public class TorchTensorLong internal constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer
+) : TorchTensor<Long>(scope, tensorHandle) {
+    override fun item(): Long = get_item_long(tensorHandle)
+    override fun get(index: IntArray): Long = get_long(tensorHandle, index.toCValues())
+    override fun set(index: IntArray, value: Long) {
+        set_long(tensorHandle, index.toCValues(), value)
+    }
+}
+
+public class TorchTensorInt internal constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer
+) : TorchTensor<Int>(scope, tensorHandle) {
+    override fun item(): Int = get_item_int(tensorHandle)
+    override fun get(index: IntArray): Int = get_int(tensorHandle, index.toCValues())
+    override fun set(index: IntArray, value: Int) {
+        set_int(tensorHandle, index.toCValues(), value)
     }
 }
 

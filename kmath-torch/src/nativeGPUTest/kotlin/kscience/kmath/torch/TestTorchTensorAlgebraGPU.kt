@@ -29,5 +29,4 @@ class TestTorchTensorAlgebraGPU {
     fun testBatchedSymEig() =
         testingBatchedSymEig(device = TorchDevice.TorchCUDA(0))
 
-
 }

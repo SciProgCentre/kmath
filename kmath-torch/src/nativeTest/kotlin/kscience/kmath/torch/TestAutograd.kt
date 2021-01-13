@@ -44,7 +44,6 @@ internal fun testingBatchedAutoGrad(bath: IntArray,
 
         val error = (gradientAtX - expectedGradientAtX).abs().sum().value()
         assertTrue(error < TOLERANCE)
-
     }
 }
 

@@ -2,7 +2,11 @@ package kscience.kmath.torch
 
 
 public sealed class TorchDevice {
-    public object TorchCPU: TorchDevice()
+    public object TorchCPU: TorchDevice() {
+        override fun toString(): String {
+            return "TorchCPU"
+        }
+    }
     public data class TorchCUDA(val index: Int): TorchDevice()
     public fun toInt(): Int {
         when(this) {

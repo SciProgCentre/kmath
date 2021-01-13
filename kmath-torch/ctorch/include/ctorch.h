@@ -20,22 +20,21 @@ extern "C"
 
     TorchTensorHandle empty_tensor();
 
-    double *get_data_double(TorchTensorHandle tensor_handle);
-    float *get_data_float(TorchTensorHandle tensor_handle);
-    long *get_data_long(TorchTensorHandle tensor_handle);
-    int *get_data_int(TorchTensorHandle tensor_handle);
-
     TorchTensorHandle from_blob_double(double *data, int *shape, int dim, int device, bool copy);
     TorchTensorHandle from_blob_float(float *data, int *shape, int dim, int device, bool copy);
     TorchTensorHandle from_blob_long(long *data, int *shape, int dim, int device, bool copy);
     TorchTensorHandle from_blob_int(int *data, int *shape, int dim, int device, bool copy);
     TorchTensorHandle copy_tensor(TorchTensorHandle tensor_handle);
     TorchTensorHandle copy_to_device(TorchTensorHandle tensor_handle, int device);
+    TorchTensorHandle copy_to_double(TorchTensorHandle tensor_handle);
+    TorchTensorHandle copy_to_float(TorchTensorHandle tensor_handle);
+    TorchTensorHandle copy_to_long(TorchTensorHandle tensor_handle);
+    TorchTensorHandle copy_to_int(TorchTensorHandle tensor_handle);
+    void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle);
 
-    double get_item_double(TorchTensorHandle tensor_handle);
-    float get_item_float(TorchTensorHandle tensor_handle);
-    long get_item_long(TorchTensorHandle tensor_handle);
-    int get_item_int(TorchTensorHandle tensor_handle);
+    char *tensor_to_string(TorchTensorHandle tensor_handle);
+    void dispose_char(char *ptr);
+    void dispose_tensor(TorchTensorHandle tensor_handle);
 
     int get_dim(TorchTensorHandle tensor_handle);
     int get_numel(TorchTensorHandle tensor_handle);
@@ -43,9 +42,15 @@ extern "C"
     int get_stride_at(TorchTensorHandle tensor_handle, int d);
     int get_device(TorchTensorHandle tensor_handle);
 
-    char *tensor_to_string(TorchTensorHandle tensor_handle);
-    void dispose_char(char *ptr);
-    void dispose_tensor(TorchTensorHandle tensor_handle);
+    double *get_data_double(TorchTensorHandle tensor_handle);
+    float *get_data_float(TorchTensorHandle tensor_handle);
+    long *get_data_long(TorchTensorHandle tensor_handle);
+    int *get_data_int(TorchTensorHandle tensor_handle);
+
+    double get_item_double(TorchTensorHandle tensor_handle);
+    float get_item_float(TorchTensorHandle tensor_handle);
+    long get_item_long(TorchTensorHandle tensor_handle);
+    int get_item_int(TorchTensorHandle tensor_handle);
 
     double get_double(TorchTensorHandle tensor_handle, int *index);
     float get_float(TorchTensorHandle tensor_handle, int *index);
@@ -61,14 +66,13 @@ extern "C"
     TorchTensorHandle randn_float(int *shape, int shape_size, int device);
     TorchTensorHandle rand_float(int *shape, int shape_size, int device);
 
+    TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device);
+    TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device);
+
     TorchTensorHandle full_double(double value, int *shape, int shape_size, int device);
     TorchTensorHandle full_float(float value, int *shape, int shape_size, int device);
     TorchTensorHandle full_long(long value, int *shape, int shape_size, int device);
     TorchTensorHandle full_int(int value, int *shape, int shape_size, int device);
-
-    TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
 
     TorchTensorHandle times_double(double value, TorchTensorHandle other);
     TorchTensorHandle times_float(float value, TorchTensorHandle other);
@@ -115,10 +119,9 @@ extern "C"
     TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle);
     void sum_tensor_assign(TorchTensorHandle tensor_handle);
 
-    bool requires_grad(TorchTensorHandle tensor_handle);
-    void requires_grad_(TorchTensorHandle tensor_handle, bool status);
-    TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle);
-    TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable);
+    TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
 
     TorchTensorHandle diag_embed(TorchTensorHandle diags_handle, int offset, int dim1, int dim2);
 
@@ -131,6 +134,11 @@ extern "C"
                        TorchTensorHandle S_handle,
                        TorchTensorHandle V_handle,
                        bool eigenvectors);
+
+    bool requires_grad(TorchTensorHandle tensor_handle);
+    void requires_grad_(TorchTensorHandle tensor_handle, bool status);
+    TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle);
+    TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable);
 
 #ifdef __cplusplus
 }

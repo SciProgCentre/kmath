@@ -30,44 +30,6 @@ TorchTensorHandle empty_tensor()
   return new torch::Tensor;
 }
 
-double *get_data_double(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<double>();
-}
-float *get_data_float(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<float>();
-}
-long *get_data_long(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<long>();
-}
-int *get_data_int(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).data_ptr<int>();
-}
-
-int get_dim(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).dim();
-}
-int get_numel(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).numel();
-}
-int get_shape_at(TorchTensorHandle tensor_handle, int d)
-{
-  return ctorch::cast(tensor_handle).size(d);
-}
-int get_stride_at(TorchTensorHandle tensor_handle, int d)
-{
-  return ctorch::cast(tensor_handle).stride(d);
-}
-int get_device(TorchTensorHandle tensor_handle)
-{
-  return ctorch::device_to_int(ctorch::cast(tensor_handle));
-}
-
 TorchTensorHandle from_blob_double(double *data, int *shape, int dim, int device, bool copy)
 {
   return new torch::Tensor(ctorch::from_blob<double>(data, ctorch::to_vec_int(shape, dim), ctorch::int_to_device(device), copy));
@@ -92,6 +54,26 @@ TorchTensorHandle copy_to_device(TorchTensorHandle tensor_handle, int device)
 {
   return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::int_to_device(device), false, true));
 }
+TorchTensorHandle copy_to_double(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::dtype<double>(), false, true));
+}
+TorchTensorHandle copy_to_float(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::dtype<float>(), false, true));
+}
+TorchTensorHandle copy_to_long(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::dtype<long>(), false, true));
+}
+TorchTensorHandle copy_to_int(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).to(ctorch::dtype<int>(), false, true));
+}
+void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle)
+{
+  std::swap(ctorch::cast(lhs_handle), ctorch::cast(rhs_handle));
+}
 
 char *tensor_to_string(TorchTensorHandle tensor_handle)
 {
@@ -109,6 +91,61 @@ void dispose_char(char *ptr)
 void dispose_tensor(TorchTensorHandle tensor_handle)
 {
   delete static_cast<torch::Tensor *>(tensor_handle);
+}
+
+int get_dim(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).dim();
+}
+int get_numel(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).numel();
+}
+int get_shape_at(TorchTensorHandle tensor_handle, int d)
+{
+  return ctorch::cast(tensor_handle).size(d);
+}
+int get_stride_at(TorchTensorHandle tensor_handle, int d)
+{
+  return ctorch::cast(tensor_handle).stride(d);
+}
+int get_device(TorchTensorHandle tensor_handle)
+{
+  return ctorch::device_to_int(ctorch::cast(tensor_handle));
+}
+
+double *get_data_double(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<double>();
+}
+float *get_data_float(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<float>();
+}
+long *get_data_long(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<long>();
+}
+int *get_data_int(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).data_ptr<int>();
+}
+
+double get_item_double(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<double>();
+}
+float get_item_float(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<float>();
+}
+long get_item_long(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<long>();
+}
+int get_item_int(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).item<int>();
 }
 
 double get_double(TorchTensorHandle tensor_handle, int *index)
@@ -144,23 +181,6 @@ void set_int(TorchTensorHandle tensor_handle, int *index, int value)
   ctorch::set<int>(tensor_handle, index, value);
 }
 
-double get_item_double(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).item<double>();
-}
-float get_item_float(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).item<float>();
-}
-long get_item_long(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).item<long>();
-}
-int get_item_int(TorchTensorHandle tensor_handle)
-{
-  return ctorch::cast(tensor_handle).item<int>();
-}
-
 TorchTensorHandle randn_double(int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::randn<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
@@ -178,6 +198,15 @@ TorchTensorHandle rand_float(int *shape, int shape_size, int device)
   return new torch::Tensor(ctorch::rand<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 
+TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randint<long>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randint<int>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+
 TorchTensorHandle full_double(double value, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::full<double>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
@@ -193,19 +222,6 @@ TorchTensorHandle full_long(long value, int *shape, int shape_size, int device)
 TorchTensorHandle full_int(int value, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::full<int>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
-}
-
-TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs)
-{
-  return new torch::Tensor(torch::matmul(ctorch::cast(lhs), ctorch::cast(rhs)));
-}
-void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
-{
-  ctorch::cast(lhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
-}
-void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
-{
-  ctorch::cast(rhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
 }
 
 TorchTensorHandle plus_double(double value, TorchTensorHandle other)
@@ -356,21 +372,17 @@ void sum_tensor_assign(TorchTensorHandle tensor_handle)
   ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).sum();
 }
 
-bool requires_grad(TorchTensorHandle tensor_handle)
+TorchTensorHandle matmul(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
-  return ctorch::cast(tensor_handle).requires_grad();
+  return new torch::Tensor(torch::matmul(ctorch::cast(lhs), ctorch::cast(rhs)));
 }
-void requires_grad_(TorchTensorHandle tensor_handle, bool status)
+void matmul_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
-  ctorch::cast(tensor_handle).requires_grad_(status);
+  ctorch::cast(lhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
 }
-TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle)
+void matmul_right_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
-  return new torch::Tensor(ctorch::cast(tensor_handle).detach());
-}
-TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable)
-{
-  return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)})[0]);
+  ctorch::cast(rhs) = ctorch::cast(lhs).matmul(ctorch::cast(rhs));
 }
 
 TorchTensorHandle diag_embed(TorchTensorHandle diags_handle, int offset, int dim1, int dim2)
@@ -390,11 +402,28 @@ void svd_tensor(TorchTensorHandle tensor_handle,
 }
 
 void symeig_tensor(TorchTensorHandle tensor_handle,
-                TorchTensorHandle S_handle,
-                TorchTensorHandle V_handle,
-                bool eigenvectors)
+                   TorchTensorHandle S_handle,
+                   TorchTensorHandle V_handle,
+                   bool eigenvectors)
 {
   auto [S, V] = torch::symeig(ctorch::cast(tensor_handle), eigenvectors);
   ctorch::cast(S_handle) = S;
   ctorch::cast(V_handle) = V;
+}
+
+bool requires_grad(TorchTensorHandle tensor_handle)
+{
+  return ctorch::cast(tensor_handle).requires_grad();
+}
+void requires_grad_(TorchTensorHandle tensor_handle, bool status)
+{
+  ctorch::cast(tensor_handle).requires_grad_(status);
+}
+TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).detach());
+}
+TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable)
+{
+  return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)})[0]);
 }

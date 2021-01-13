@@ -93,6 +93,12 @@ namespace ctorch
     }
 
     template <typename Dtype>
+    inline torch::Tensor randint(Dtype low, Dtype high, std::vector<int64_t> shape, torch::Device device)
+    {
+        return torch::randint(low, high, shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
+    }
+
+    template <typename Dtype>
     inline torch::Tensor full(Dtype value, std::vector<int64_t> shape, torch::Device device)
     {
         return torch::full(shape, value, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
