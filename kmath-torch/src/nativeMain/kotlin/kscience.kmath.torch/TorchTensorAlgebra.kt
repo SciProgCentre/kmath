@@ -3,93 +3,129 @@ package kscience.kmath.torch
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
 
-public sealed class TorchTensorAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayType> constructor(
+public sealed class TorchTensorAlgebra<
+        T,
+        TVar : CPrimitiveVar,
+        PrimitiveArrayType,
+        TorchTensorType : TorchTensor<T>> constructor(
     internal val scope: DeferScope
 ) {
-    internal abstract fun wrap(tensorHandle: COpaquePointer): TorchTensor<T>
+    internal abstract fun wrap(tensorHandle: COpaquePointer): TorchTensorType
 
     public abstract fun copyFromArray(
         array: PrimitiveArrayType,
         shape: IntArray,
         device: TorchDevice = TorchDevice.TorchCPU
-    ): TorchTensor<T>
-    public abstract fun TorchTensor<T>.copyToArray(): PrimitiveArrayType
+    ): TorchTensorType
 
-    public abstract fun fromBlob(arrayBlob: CPointer<TVar>, shape: IntArray): TorchTensor<T>
-    public abstract fun TorchTensor<T>.getData(): CPointer<TVar>
+    public abstract fun TorchTensorType.copyToArray(): PrimitiveArrayType
 
-    public abstract fun full(value: T, shape: IntArray, device: TorchDevice): TorchTensor<T>
+    public abstract fun fromBlob(arrayBlob: CPointer<TVar>, shape: IntArray): TorchTensorType
+    public abstract fun TorchTensorType.getData(): CPointer<TVar>
 
-    public abstract operator fun T.plus(other: TorchTensor<T>): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.plus(value: T): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.plusAssign(value: T): Unit
-    public abstract operator fun T.minus(other: TorchTensor<T>): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.minus(value: T): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.minusAssign(value: T): Unit
-    public abstract operator fun T.times(other: TorchTensor<T>): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.times(value: T): TorchTensor<T>
-    public abstract operator fun TorchTensor<T>.timesAssign(value: T): Unit
+    public abstract fun full(value: T, shape: IntArray, device: TorchDevice): TorchTensorType
 
-    public operator fun TorchTensor<T>.times(other: TorchTensor<T>): TorchTensor<T> =
+    public abstract operator fun T.plus(other: TorchTensorType): TorchTensorType
+    public abstract operator fun TorchTensorType.plus(value: T): TorchTensorType
+    public abstract operator fun TorchTensorType.plusAssign(value: T): Unit
+    public abstract operator fun T.minus(other: TorchTensorType): TorchTensorType
+    public abstract operator fun TorchTensorType.minus(value: T): TorchTensorType
+    public abstract operator fun TorchTensorType.minusAssign(value: T): Unit
+    public abstract operator fun T.times(other: TorchTensorType): TorchTensorType
+    public abstract operator fun TorchTensorType.times(value: T): TorchTensorType
+    public abstract operator fun TorchTensorType.timesAssign(value: T): Unit
+
+    public operator fun TorchTensorType.times(other: TorchTensorType): TorchTensorType =
         wrap(times_tensor(this.tensorHandle, other.tensorHandle)!!)
-    public operator fun TorchTensor<T>.timesAssign(other: TorchTensor<T>): Unit {
+
+    public operator fun TorchTensorType.timesAssign(other: TorchTensorType): Unit {
         times_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
-    public operator fun TorchTensor<T>.div(other: TorchTensor<T>): TorchTensor<T> =
+
+    public operator fun TorchTensorType.div(other: TorchTensorType): TorchTensorType =
         wrap(div_tensor(this.tensorHandle, other.tensorHandle)!!)
-    public operator fun TorchTensor<T>.divAssign(other: TorchTensor<T>): Unit {
+
+    public operator fun TorchTensorType.divAssign(other: TorchTensorType): Unit {
         div_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    public infix fun TorchTensor<T>.dot(other: TorchTensor<T>): TorchTensor<T> =
+    public infix fun TorchTensorType.dot(other: TorchTensorType): TorchTensorType =
         wrap(matmul(this.tensorHandle, other.tensorHandle)!!)
 
-    public infix fun TorchTensor<T>.dotAssign(other: TorchTensor<T>): Unit {
+    public infix fun TorchTensorType.dotAssign(other: TorchTensorType): Unit {
         matmul_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    public infix fun TorchTensor<T>.dotRightAssign(other: TorchTensor<T>): Unit {
+    public infix fun TorchTensorType.dotRightAssign(other: TorchTensorType): Unit {
         matmul_right_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    public operator fun TorchTensor<T>.plus(other: TorchTensor<T>): TorchTensor<T> =
+    public operator fun TorchTensorType.plus(other: TorchTensorType): TorchTensorType =
         wrap(plus_tensor(this.tensorHandle, other.tensorHandle)!!)
 
-    public operator fun TorchTensor<T>.plusAssign(other: TorchTensor<T>): Unit {
+    public operator fun TorchTensorType.plusAssign(other: TorchTensorType): Unit {
         plus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    public operator fun TorchTensor<T>.minus(other: TorchTensor<T>): TorchTensor<T> =
+    public operator fun TorchTensorType.minus(other: TorchTensorType): TorchTensorType =
         wrap(minus_tensor(this.tensorHandle, other.tensorHandle)!!)
 
-    public operator fun TorchTensor<T>.minusAssign(other: TorchTensor<T>): Unit {
+    public operator fun TorchTensorType.minusAssign(other: TorchTensorType): Unit {
         minus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
-    public operator fun TorchTensor<T>.unaryMinus(): TorchTensor<T> =
+
+    public operator fun TorchTensorType.unaryMinus(): TorchTensorType =
         wrap(unary_minus(this.tensorHandle)!!)
 
-    public fun TorchTensor<T>.abs(): TorchTensor<T> = wrap(abs_tensor(tensorHandle)!!)
+    public fun TorchTensorType.abs(): TorchTensorType = wrap(abs_tensor(tensorHandle)!!)
+    public fun TorchTensorType.absAssign(): Unit {
+        abs_tensor_assign(tensorHandle)
+    }
 
-    public fun TorchTensor<T>.sum(): TorchTensor<T> = wrap(sum_tensor(tensorHandle)!!)
+    public fun TorchTensorType.transpose(i: Int, j: Int): TorchTensorType =
+        wrap(transpose_tensor(tensorHandle, i, j)!!)
+    public fun TorchTensorType.transposeAssign(i: Int, j: Int): Unit {
+        transpose_tensor_assign(tensorHandle, i, j)
+    }
 
-    public fun TorchTensor<T>.transpose(i: Int, j: Int): TorchTensor<T> =
-        wrap(transpose_tensor(tensorHandle, i , j)!!)
+    public fun TorchTensorType.sum(): TorchTensorType = wrap(sum_tensor(tensorHandle)!!)
+    public fun TorchTensorType.sumAssign(): Unit {
+        sum_tensor_assign(tensorHandle)
+    }
 
-    public infix fun TorchTensor<T>.grad(variable: TorchTensor<T>): TorchTensor<T> =
+    public infix fun TorchTensorType.grad(variable: TorchTensorType): TorchTensorType =
         wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle)!!)
+
+    public fun TorchTensorType.copy(): TorchTensorType =
+        wrap(tensorHandle = copy_tensor(this.tensorHandle)!!)
+    public fun TorchTensorType.copyToDevice(device: TorchDevice): TorchTensorType =
+        wrap(tensorHandle = copy_to_device(this.tensorHandle, device.toInt())!!)
 }
 
-public sealed class TorchTensorFieldAlgebra<T, TVar: CPrimitiveVar, PrimitiveArrayType>(scope: DeferScope) :
-    TorchTensorAlgebra<T, TVar, PrimitiveArrayType>(scope) {
-    public abstract fun randNormal(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensor<T>
-    public abstract fun randUniform(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensor<T>
+public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
+        PrimitiveArrayType, TorchTensorType : TorchTensor<T>>(scope: DeferScope) :
+    TorchTensorAlgebra<T, TVar, PrimitiveArrayType, TorchTensorType>(scope) {
+    public abstract fun randNormal(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensorType
+    public abstract fun randUniform(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensorType
+
+    public fun TorchTensorType.exp(): TorchTensorType = wrap(exp_tensor(tensorHandle)!!)
+    public fun TorchTensorType.expAssign(): Unit {
+        exp_tensor_assign(tensorHandle)
+    }
+
+    public fun TorchTensorType.log(): TorchTensorType = wrap(log_tensor(tensorHandle)!!)
+    public fun TorchTensorType.logAssign(): Unit {
+        log_tensor_assign(tensorHandle)
+    }
+
 }
 
-public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra<Double, DoubleVar, DoubleArray>(scope) {
+public class TorchTensorRealAlgebra(scope: DeferScope) :
+    TorchTensorFieldAlgebra<Double, DoubleVar, DoubleArray, TorchTensorReal>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorReal =
         TorchTensorReal(scope = scope, tensorHandle = tensorHandle)
 
-    override fun TorchTensor<Double>.copyToArray(): DoubleArray =
+    override fun TorchTensorReal.copyToArray(): DoubleArray =
         this.elements().map { it.second }.toList().toDoubleArray()
 
     override fun copyFromArray(
@@ -120,8 +156,8 @@ public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra
             )!!
         )
 
-    override fun TorchTensor<Double>.getData(): CPointer<DoubleVar> {
-        require(this.device is TorchDevice.TorchCPU){
+    override fun TorchTensorReal.getData(): CPointer<DoubleVar> {
+        require(this.device is TorchDevice.TorchCPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_double(this.tensorHandle)!!
@@ -137,50 +173,50 @@ public class TorchTensorRealAlgebra(scope: DeferScope) : TorchTensorFieldAlgebra
         tensorHandle = rand_double(shape.toCValues(), shape.size, device.toInt())!!
     )
 
-    override operator fun Double.plus(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
+    override operator fun Double.plus(other: TorchTensorReal): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = plus_double(this, other.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.plus(value: Double): TorchTensorReal = TorchTensorReal(
+    override fun TorchTensorReal.plus(value: Double): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = plus_double(value, this.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.plusAssign(value: Double): Unit {
-        plus_assign_double(value, this.tensorHandle)
+    override fun TorchTensorReal.plusAssign(value: Double): Unit {
+        plus_double_assign(value, this.tensorHandle)
     }
 
-    override operator fun Double.minus(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
+    override operator fun Double.minus(other: TorchTensorReal): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = plus_double(-this, other.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.minus(value: Double): TorchTensorReal = TorchTensorReal(
+    override fun TorchTensorReal.minus(value: Double): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = plus_double(-value, this.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.minusAssign(value: Double): Unit {
-        plus_assign_double(-value, this.tensorHandle)
+    override fun TorchTensorReal.minusAssign(value: Double): Unit {
+        plus_double_assign(-value, this.tensorHandle)
     }
 
-    override operator fun Double.times(other: TorchTensor<Double>): TorchTensorReal = TorchTensorReal(
+    override operator fun Double.times(other: TorchTensorReal): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = times_double(this, other.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.times(value: Double): TorchTensorReal = TorchTensorReal(
+    override fun TorchTensorReal.times(value: Double): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = times_double(value, this.tensorHandle)!!
     )
 
-    override fun TorchTensor<Double>.timesAssign(value: Double): Unit {
-        times_assign_double(value, this.tensorHandle)
+    override fun TorchTensorReal.timesAssign(value: Double): Unit {
+        times_double_assign(value, this.tensorHandle)
     }
 
 
-    override fun full(value: Double, shape: IntArray, device: TorchDevice):  TorchTensorReal = TorchTensorReal(
+    override fun full(value: Double, shape: IntArray, device: TorchDevice): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = full_double(value, shape.toCValues(), shape.size, device.toInt())!!
     )

@@ -73,20 +73,20 @@ extern "C"
     TorchTensorHandle times_long(long value, TorchTensorHandle other);
     TorchTensorHandle times_int(int value, TorchTensorHandle other);
 
-    void times_assign_double(double value, TorchTensorHandle other);
-    void times_assign_float(float value, TorchTensorHandle other);
-    void times_assign_long(long value, TorchTensorHandle other);
-    void times_assign_int(int value, TorchTensorHandle other);
+    void times_double_assign(double value, TorchTensorHandle other);
+    void times_float_assign(float value, TorchTensorHandle other);
+    void times_long_assign(long value, TorchTensorHandle other);
+    void times_int_assign(int value, TorchTensorHandle other);
 
     TorchTensorHandle plus_double(double value, TorchTensorHandle other);
     TorchTensorHandle plus_float(float value, TorchTensorHandle other);
     TorchTensorHandle plus_long(long value, TorchTensorHandle other);
     TorchTensorHandle plus_int(int value, TorchTensorHandle other);
 
-    void plus_assign_double(double value, TorchTensorHandle other);
-    void plus_assign_float(float value, TorchTensorHandle other);
-    void plus_assign_long(long value, TorchTensorHandle other);
-    void plus_assign_int(int value, TorchTensorHandle other);
+    void plus_double_assign(double value, TorchTensorHandle other);
+    void plus_float_assign(float value, TorchTensorHandle other);
+    void plus_long_assign(long value, TorchTensorHandle other);
+    void plus_int_assign(int value, TorchTensorHandle other);
 
     TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
@@ -96,10 +96,22 @@ extern "C"
     void times_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
     TorchTensorHandle div_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    TorchTensorHandle unary_minus(TorchTensorHandle tensor);
+    TorchTensorHandle unary_minus(TorchTensorHandle tensor_handle);
+
     TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle);
-    TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle);
+    void abs_tensor_assign(TorchTensorHandle tensor_handle);
+
     TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j);
+    void transpose_tensor_assign(TorchTensorHandle tensor_handle, int i, int j);
+
+    TorchTensorHandle exp_tensor(TorchTensorHandle tensor_handle);
+    void exp_tensor_assign(TorchTensorHandle tensor_handle);
+
+    TorchTensorHandle log_tensor(TorchTensorHandle tensor_handle);
+    void log_tensor_assign(TorchTensorHandle tensor_handle);
+
+    TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle);
+    void sum_tensor_assign(TorchTensorHandle tensor_handle);
 
     bool requires_grad(TorchTensorHandle tensor_handle);
     void requires_grad_(TorchTensorHandle tensor_handle, bool status);

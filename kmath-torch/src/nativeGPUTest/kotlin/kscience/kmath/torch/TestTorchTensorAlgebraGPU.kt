@@ -18,5 +18,7 @@ class TestTorchTensorAlgebraGPU {
         testingLinearStructure(device = TorchDevice.TorchCUDA(0))
 
     @Test
-    fun testAutoGrad() = testingAutoGrad(dim = 3, device = TorchDevice.TorchCUDA(0))
+    fun testTensorTransformations() =
+        testingTensorTransformations(device = TorchDevice.TorchCUDA(0))
+
 }

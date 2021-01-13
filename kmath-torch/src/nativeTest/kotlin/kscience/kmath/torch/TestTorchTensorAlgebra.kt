@@ -3,8 +3,7 @@ package kscience.kmath.torch
 import kscience.kmath.linear.RealMatrixContext
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
-import kotlin.math.abs
-import kotlin.math.exp
+import kotlin.math.*
 import kotlin.test.*
 
 internal fun testingScalarProduct(device: TorchDevice = TorchDevice.TorchCPU): Unit {
@@ -40,7 +39,7 @@ internal fun testingMatrixMultiplication(device: TorchDevice = TorchDevice.Torch
         lhsTensorCopy dotAssign rhsTensor
         lhsTensor dotRightAssign rhsTensorCopy
 
-        var error: Double = 0.0
+        var error = 0.0
         product.elements().forEach {
             error += abs(expected[it.first] - it.second) +
                     abs(expected[it.first] - lhsTensorCopy[it.first]) +
@@ -85,26 +84,23 @@ internal fun testingLinearStructure(device: TorchDevice = TorchDevice.TorchCPU):
     }
 }
 
-internal fun testingAutoGrad(dim: Int, device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingTensorTransformations(device: TorchDevice = TorchDevice.TorchCPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
-        val tensorX = randNormal(shape = intArrayOf(dim), device = device)
-        tensorX.requiresGrad = true
-        val randFeatures = randNormal(shape = intArrayOf(dim, dim), device = device)
-        val tensorSigma = randFeatures + randFeatures.transpose(0,1)
-        val tensorMu = randNormal(shape = intArrayOf(dim), device = device)
-
-        val expressionAtX =
-            0.5 * (tensorX dot (tensorSigma dot tensorX)) + (tensorMu dot tensorX) + 25.9
-
-        val gradientAtX = expressionAtX grad tensorX
-        val expectedGradientAtX = (tensorSigma dot tensorX) + tensorMu
-
-        val error = (gradientAtX - expectedGradientAtX).abs().sum().value()
-        assertTrue(error < TOLERANCE)
+        val tensor = randNormal(shape = intArrayOf(3, 3), device = device)
+        val result = tensor.exp().log()
+        val assignResult = tensor.copy()
+        assignResult.transposeAssign(0,1)
+        assignResult.expAssign()
+        assignResult.logAssign()
+        assignResult.transposeAssign(0,1)
+        val error = tensor - result
+        error.absAssign()
+        error.sumAssign()
+        error += (tensor - assignResult).abs().sum()
+        assertTrue (error.value()< TOLERANCE)
     }
 }
-
 
 internal class TestTorchTensorAlgebra {
 
@@ -118,6 +114,6 @@ internal class TestTorchTensorAlgebra {
     fun testLinearStructure() = testingLinearStructure()
 
     @Test
-    fun testAutoGrad() = testingAutoGrad(dim = 100)
+    fun testTensorTransformations() = testingTensorTransformations()
 
 }

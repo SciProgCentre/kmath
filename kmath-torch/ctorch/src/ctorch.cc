@@ -219,19 +219,19 @@ TorchTensorHandle plus_int(int value, TorchTensorHandle other)
 {
   return new torch::Tensor(ctorch::cast(other) + value);
 }
-void plus_assign_double(double value, TorchTensorHandle other)
+void plus_double_assign(double value, TorchTensorHandle other)
 {
   ctorch::cast(other) += value;
 }
-void plus_assign_float(float value, TorchTensorHandle other)
+void plus_float_assign(float value, TorchTensorHandle other)
 {
   ctorch::cast(other) += value;
 }
-void plus_assign_long(long value, TorchTensorHandle other)
+void plus_long_assign(long value, TorchTensorHandle other)
 {
   ctorch::cast(other) += value;
 }
-void plus_assign_int(int value, TorchTensorHandle other)
+void plus_int_assign(int value, TorchTensorHandle other)
 {
   ctorch::cast(other) += value;
 }
@@ -252,19 +252,19 @@ TorchTensorHandle times_int(int value, TorchTensorHandle other)
 {
   return new torch::Tensor(value * ctorch::cast(other));
 }
-void times_assign_double(double value, TorchTensorHandle other)
+void times_double_assign(double value, TorchTensorHandle other)
 {
   ctorch::cast(other) *= value;
 }
-void times_assign_float(float value, TorchTensorHandle other)
+void times_float_assign(float value, TorchTensorHandle other)
 {
   ctorch::cast(other) *= value;
 }
-void times_assign_long(long value, TorchTensorHandle other)
+void times_long_assign(long value, TorchTensorHandle other)
 {
   ctorch::cast(other) *= value;
 }
-void times_assign_int(int value, TorchTensorHandle other)
+void times_int_assign(int value, TorchTensorHandle other)
 {
   ctorch::cast(other) *= value;
 }
@@ -301,21 +301,54 @@ void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   ctorch::cast(lhs) /= ctorch::cast(rhs);
 }
-TorchTensorHandle unary_minus(TorchTensorHandle tensor)
+TorchTensorHandle unary_minus(TorchTensorHandle tensor_handle)
 {
-  return new torch::Tensor(-ctorch::cast(tensor));
+  return new torch::Tensor(-ctorch::cast(tensor_handle));
 }
+
 TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle)
 {
   return new torch::Tensor(ctorch::cast(tensor_handle).abs());
 }
+void abs_tensor_assign(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).abs();
+}
+
+TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).transpose(i, j));
+}
+void transpose_tensor_assign(TorchTensorHandle tensor_handle, int i, int j)
+{
+  ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).transpose(i, j);
+}
+
+TorchTensorHandle exp_tensor(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).exp());
+}
+void exp_tensor_assign(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).exp();
+}
+
+TorchTensorHandle log_tensor(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(ctorch::cast(tensor_handle).log());
+}
+void log_tensor_assign(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).log();
+}
+
 TorchTensorHandle sum_tensor(TorchTensorHandle tensor_handle)
 {
   return new torch::Tensor(ctorch::cast(tensor_handle).sum());
 }
-TorchTensorHandle transpose_tensor(TorchTensorHandle tensor_handle, int i, int j)
+void sum_tensor_assign(TorchTensorHandle tensor_handle)
 {
-  return new torch::Tensor(ctorch::cast(tensor_handle).transpose(i, j));
+  ctorch::cast(tensor_handle) = ctorch::cast(tensor_handle).sum();
 }
 
 bool requires_grad(TorchTensorHandle tensor_handle)

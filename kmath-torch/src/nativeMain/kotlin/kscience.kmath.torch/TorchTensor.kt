@@ -16,7 +16,6 @@ public sealed class TorchTensor<T> constructor(
     private fun close(): Unit = dispose_tensor(tensorHandle)
 
     protected abstract fun item(): T
-    internal abstract fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer): TorchTensor<T>
 
     override val dimension: Int get() = get_dim(tensorHandle)
     override val shape: IntArray
@@ -50,18 +49,6 @@ public sealed class TorchTensor<T> constructor(
         return item()
     }
 
-    public fun copy(): TorchTensor<T> =
-        wrap(
-            outScope = scope,
-            outTensorHandle = copy_tensor(tensorHandle)!!
-        )
-
-    public fun copyToDevice(device: TorchDevice): TorchTensor<T> =
-        wrap(
-            outScope = scope,
-            outTensorHandle = copy_to_device(tensorHandle, device.toInt())!!
-        )
-
     public var requiresGrad: Boolean
         get() = requires_grad(tensorHandle)
         set(value) = requires_grad_(tensorHandle, value)
@@ -76,9 +63,6 @@ public class TorchTensorReal internal constructor(
     tensorHandle: COpaquePointer
 ) : TorchTensor<Double>(scope, tensorHandle) {
     override fun item(): Double = get_item_double(tensorHandle)
-    override fun wrap(outScope: DeferScope, outTensorHandle: COpaquePointer
-    ): TorchTensorReal = TorchTensorReal(scope = outScope, tensorHandle = outTensorHandle)
-
     override fun get(index: IntArray): Double = get_double(tensorHandle, index.toCValues())
     override fun set(index: IntArray, value: Double) {
         set_double(tensorHandle, index.toCValues(), value)
