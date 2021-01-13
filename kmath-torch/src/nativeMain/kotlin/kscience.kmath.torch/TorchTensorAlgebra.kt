@@ -84,6 +84,7 @@ public sealed class TorchTensorAlgebra<
 
     public fun TorchTensorType.transpose(i: Int, j: Int): TorchTensorType =
         wrap(transpose_tensor(tensorHandle, i, j)!!)
+
     public fun TorchTensorType.transposeAssign(i: Int, j: Int): Unit {
         transpose_tensor_assign(tensorHandle, i, j)
     }
@@ -93,13 +94,37 @@ public sealed class TorchTensorAlgebra<
         sum_tensor_assign(tensorHandle)
     }
 
+    public fun diagEmbed(diagonalEntries: TorchTensorType,
+                         offset: Int = 0, dim1: Int = -2, dim2: Int = -1): TorchTensorType =
+        wrap(diag_embed(diagonalEntries.tensorHandle, offset, dim1, dim2)!!)
+
+    public fun TorchTensorType.svd(): Triple<TorchTensorType,TorchTensorType,TorchTensorType> {
+        val U = empty_tensor()!!
+        val V = empty_tensor()!!
+        val S = empty_tensor()!!
+        svd_tensor(this.tensorHandle, U, S, V)
+        return Triple(wrap(U), wrap(S), wrap(V))
+    }
+
+    public fun TorchTensorType.symEig(eigenvectors: Boolean = true): Pair<TorchTensorType, TorchTensorType> {
+        val V = empty_tensor()!!
+        val S = empty_tensor()!!
+        symeig_tensor(this.tensorHandle, S,  V, eigenvectors)
+        return Pair(wrap(S), wrap(V))
+    }
+
     public infix fun TorchTensorType.grad(variable: TorchTensorType): TorchTensorType =
         wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle)!!)
 
     public fun TorchTensorType.copy(): TorchTensorType =
         wrap(tensorHandle = copy_tensor(this.tensorHandle)!!)
+
     public fun TorchTensorType.copyToDevice(device: TorchDevice): TorchTensorType =
         wrap(tensorHandle = copy_to_device(this.tensorHandle, device.toInt())!!)
+
+    public fun TorchTensorType.detachFromGraph(): TorchTensorType =
+        wrap(tensorHandle = detach_from_graph(this.tensorHandle)!!)
+
 }
 
 public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,

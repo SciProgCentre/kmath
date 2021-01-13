@@ -90,15 +90,34 @@ internal fun testingTensorTransformations(device: TorchDevice = TorchDevice.Torc
         val tensor = randNormal(shape = intArrayOf(3, 3), device = device)
         val result = tensor.exp().log()
         val assignResult = tensor.copy()
-        assignResult.transposeAssign(0,1)
+        assignResult.transposeAssign(0, 1)
         assignResult.expAssign()
         assignResult.logAssign()
-        assignResult.transposeAssign(0,1)
+        assignResult.transposeAssign(0, 1)
         val error = tensor - result
         error.absAssign()
         error.sumAssign()
         error += (tensor - assignResult).abs().sum()
-        assertTrue (error.value()< TOLERANCE)
+        assertTrue(error.value() < TOLERANCE)
+    }
+}
+
+internal fun testingBatchedSVD(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+    TorchTensorRealAlgebra {
+        val tensor = randNormal(shape = intArrayOf(7, 5, 3), device = device)
+        val (tensorU, tensorS, tensorV) = tensor.svd()
+        val error = tensor - (tensorU dot (diagEmbed(tensorS) dot tensorV.transpose(-2,-1)))
+        assertTrue(error.abs().sum().value() < TOLERANCE)
+    }
+}
+
+internal fun testingBatchedSymEig(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+    TorchTensorRealAlgebra {
+        val tensor = randNormal(shape = intArrayOf(5,5), device = device)
+        val tensorSigma = tensor + tensor.transpose(-2,-1)
+        val (tensorS, tensorV) = tensorSigma.symEig()
+        val error = tensorSigma - (tensorV dot (diagEmbed(tensorS) dot tensorV.transpose(-2,-1)))
+        assertTrue(error.abs().sum().value() < TOLERANCE)
     }
 }
 
@@ -115,5 +134,11 @@ internal class TestTorchTensorAlgebra {
 
     @Test
     fun testTensorTransformations() = testingTensorTransformations()
+
+    @Test
+    fun testBatchedSVD() = testingBatchedSVD()
+
+    @Test
+    fun testBatchedSymEig() = testingBatchedSymEig()
 
 }

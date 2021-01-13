@@ -18,6 +18,8 @@ extern "C"
 
     void set_seed(int seed);
 
+    TorchTensorHandle empty_tensor();
+
     double *get_data_double(TorchTensorHandle tensor_handle);
     float *get_data_float(TorchTensorHandle tensor_handle);
     long *get_data_long(TorchTensorHandle tensor_handle);
@@ -115,8 +117,20 @@ extern "C"
 
     bool requires_grad(TorchTensorHandle tensor_handle);
     void requires_grad_(TorchTensorHandle tensor_handle, bool status);
-    void detach_from_graph(TorchTensorHandle tensor_handle);
+    TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle);
     TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable);
+
+    TorchTensorHandle diag_embed(TorchTensorHandle diags_handle, int offset, int dim1, int dim2);
+
+    void svd_tensor(TorchTensorHandle tensor_handle,
+                    TorchTensorHandle U_handle,
+                    TorchTensorHandle S_handle,
+                    TorchTensorHandle V_handle);
+
+    void symeig_tensor(TorchTensorHandle tensor_handle,
+                       TorchTensorHandle S_handle,
+                       TorchTensorHandle V_handle,
+                       bool eigenvectors);
 
 #ifdef __cplusplus
 }

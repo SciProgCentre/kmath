@@ -25,6 +25,11 @@ void set_seed(int seed)
   torch::manual_seed(seed);
 }
 
+TorchTensorHandle empty_tensor()
+{
+  return new torch::Tensor;
+}
+
 double *get_data_double(TorchTensorHandle tensor_handle)
 {
   return ctorch::cast(tensor_handle).data_ptr<double>();
@@ -359,11 +364,37 @@ void requires_grad_(TorchTensorHandle tensor_handle, bool status)
 {
   ctorch::cast(tensor_handle).requires_grad_(status);
 }
-void detach_from_graph(TorchTensorHandle tensor_handle)
+TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle)
 {
-  ctorch::cast(tensor_handle).detach();
+  return new torch::Tensor(ctorch::cast(tensor_handle).detach());
 }
 TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable)
 {
   return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)})[0]);
+}
+
+TorchTensorHandle diag_embed(TorchTensorHandle diags_handle, int offset, int dim1, int dim2)
+{
+  return new torch::Tensor(torch::diag_embed(ctorch::cast(diags_handle), offset, dim1, dim2));
+}
+
+void svd_tensor(TorchTensorHandle tensor_handle,
+                TorchTensorHandle U_handle,
+                TorchTensorHandle S_handle,
+                TorchTensorHandle V_handle)
+{
+  auto [U, S, V] = torch::svd(ctorch::cast(tensor_handle));
+  ctorch::cast(U_handle) = U;
+  ctorch::cast(S_handle) = S;
+  ctorch::cast(V_handle) = V;
+}
+
+void symeig_tensor(TorchTensorHandle tensor_handle,
+                TorchTensorHandle S_handle,
+                TorchTensorHandle V_handle,
+                bool eigenvectors)
+{
+  auto [S, V] = torch::symeig(ctorch::cast(tensor_handle), eigenvectors);
+  ctorch::cast(S_handle) = S;
+  ctorch::cast(V_handle) = V;
 }

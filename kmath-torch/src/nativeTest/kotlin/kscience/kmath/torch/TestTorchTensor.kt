@@ -45,5 +45,8 @@ class TestTorchTensor {
         assertTrue(tensor.requiresGrad)
         tensor.requiresGrad = false
         assertTrue(!tensor.requiresGrad)
+        tensor.requiresGrad = true
+        val detachedTensor = tensor.detachFromGraph()
+        assertTrue(!detachedTensor.requiresGrad)
     }
 }
