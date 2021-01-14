@@ -42,10 +42,12 @@ public sealed class TorchTensor<T> constructor(
         return indices.map { it to get(it) }
     }
 
+    internal inline fun isValue() = check(dimension == 0) {
+        "This tensor has shape ${shape.toList()}"
+    }
+
     public fun value(): T {
-        check(dimension == 0) {
-            "This tensor has shape ${shape.toList()}"
-        }
+        isValue()
         return item()
     }
 

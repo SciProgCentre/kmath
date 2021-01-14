@@ -14,10 +14,12 @@ internal fun testingAutoGrad(dim: Int, device: TorchDevice = TorchDevice.TorchCP
         val expressionAtX =
             0.5 * (tensorX dot (tensorSigma dot tensorX)) + (tensorMu dot tensorX) + 25.9
 
-        val gradientAtX = expressionAtX grad tensorX
+        val gradientAtX = expressionAtX.grad(tensorX, retainGraph = true)
+        val hessianAtX = expressionAtX hess tensorX
         val expectedGradientAtX = (tensorSigma dot tensorX) + tensorMu
 
-        val error = (gradientAtX - expectedGradientAtX).abs().sum().value()
+        val error = (gradientAtX - expectedGradientAtX).abs().sum().value() +
+                (hessianAtX - tensorSigma).abs().sum().value()
         assertTrue(error < TOLERANCE)
     }
 }
@@ -46,6 +48,7 @@ internal fun testingBatchedAutoGrad(bath: IntArray,
         assertTrue(error < TOLERANCE)
     }
 }
+
 
 internal class TestAutograd {
     @Test

@@ -77,12 +77,7 @@ void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle)
 
 char *tensor_to_string(TorchTensorHandle tensor_handle)
 {
-  std::stringstream bufrep;
-  bufrep << ctorch::cast(tensor_handle);
-  auto rep = bufrep.str();
-  char *crep = (char *)malloc(rep.length() + 1);
-  std::strcpy(crep, rep.c_str());
-  return crep;
+  return ctorch::tensor_to_char(ctorch::cast(tensor_handle));
 }
 void dispose_char(char *ptr)
 {
@@ -456,7 +451,11 @@ TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle)
 {
   return new torch::Tensor(ctorch::cast(tensor_handle).detach());
 }
-TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable)
+TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable, bool retain_graph)
 {
-  return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)})[0]);
+  return new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)}, {}, retain_graph)[0]);
+}
+TorchTensorHandle autohess_tensor(TorchTensorHandle value, TorchTensorHandle variable)
+{
+  return new torch::Tensor(ctorch::hessian(ctorch::cast(value), ctorch::cast(variable)));
 }

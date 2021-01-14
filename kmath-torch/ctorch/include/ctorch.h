@@ -147,7 +147,8 @@ extern "C"
     bool requires_grad(TorchTensorHandle tensor_handle);
     void requires_grad_(TorchTensorHandle tensor_handle, bool status);
     TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle);
-    TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable);
+    TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable, bool retain_graph);
+    TorchTensorHandle autohess_tensor(TorchTensorHandle value, TorchTensorHandle variable);
 
 #ifdef __cplusplus
 }

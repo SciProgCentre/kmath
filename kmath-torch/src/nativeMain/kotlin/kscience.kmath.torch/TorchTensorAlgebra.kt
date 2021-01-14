@@ -157,8 +157,16 @@ public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
         return Pair(wrap(S), wrap(V))
     }
 
+    public fun TorchTensorType.grad(variable: TorchTensorType, retainGraph: Boolean=false): TorchTensorType {
+        this.isValue()
+        return wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle, retainGraph)!!)
+    }
     public infix fun TorchTensorType.grad(variable: TorchTensorType): TorchTensorType =
-        wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle)!!)
+        this.grad(variable, false)
+    public infix fun TorchTensorType.hess(variable: TorchTensorType): TorchTensorType {
+        this.isValue()
+        return wrap(autohess_tensor(this.tensorHandle, variable.tensorHandle)!!)
+    }
 
     public fun TorchTensorType.detachFromGraph(): TorchTensorType =
         wrap(tensorHandle = detach_from_graph(this.tensorHandle)!!)
@@ -312,7 +320,7 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
         wrap(from_blob_long(arrayBlob, shape.toCValues(), shape.size, TorchDevice.TorchCPU.toInt(), false)!!)
 
     override fun TorchTensorLong.getData(): CPointer<LongVar> {
-        require(this.device is TorchDevice.TorchCPU) {
+        check(this.device is TorchDevice.TorchCPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_long(this.tensorHandle)!!

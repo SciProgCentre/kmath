@@ -33,6 +33,16 @@ namespace ctorch
         return *static_cast<torch::Tensor *>(tensor_handle);
     }
 
+    inline char *tensor_to_char(const torch::Tensor &tensor)
+    {
+        std::stringstream bufrep;
+        bufrep << tensor;
+        auto rep = bufrep.str();
+        char *crep = (char *)malloc(rep.length() + 1);
+        std::strcpy(crep, rep.c_str());
+        return crep;
+    }
+
     inline int device_to_int(const torch::Tensor &tensor)
     {
         return (tensor.device().type() == torch::kCPU) ? 0 : 1 + tensor.device().index();
@@ -102,6 +112,29 @@ namespace ctorch
     inline torch::Tensor full(Dtype value, std::vector<int64_t> shape, torch::Device device)
     {
         return torch::full(shape, value, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
+    }
+
+    inline torch::Tensor hessian(const torch::Tensor &value, const torch::Tensor &variable)
+    {
+        auto nelem = variable.numel();
+        auto hess = value.new_zeros({nelem, nelem});
+        auto grad = torch::autograd::grad({value}, {variable}, {}, torch::nullopt, true)[0].view(nelem);
+        int i = 0;
+        for (int j = 0; j < nelem; j++)
+        {
+            auto row = grad[j].requires_grad()
+                           ? torch::autograd::grad({grad[i]}, {variable}, {}, true, true, true)[0].view(nelem).slice(0, j, nelem)
+                           : grad[j].new_zeros(nelem - j);
+            hess[i].slice(0, i, nelem).add_(row.type_as(hess));
+            i++;
+        }
+        auto ndim = variable.dim();
+        auto sizes = variable.sizes().data();
+        auto shape = std::vector<int64_t>(ndim);
+        shape.assign(sizes, sizes + ndim);
+        shape.reserve(2 * ndim);
+        std::copy_n(shape.begin(), ndim, std::back_inserter(shape));
+        return (hess + torch::triu(hess, 1).t()).view(shape);
     }
 
 } // namespace ctorch
