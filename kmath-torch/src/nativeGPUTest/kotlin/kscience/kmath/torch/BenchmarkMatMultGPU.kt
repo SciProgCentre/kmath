@@ -2,19 +2,19 @@ package kscience.kmath.torch
 
 import kotlin.test.Test
 
-class BenchmarkMatMultFloatGPU {
+class BenchmarkMatMultGPU {
     @Test
-    fun benchmarkMatMult20() =
+    fun benchmarkMatMultFloat20() =
         benchmarkingMatMultFloat(20, 10, 100000,
             device = TorchDevice.TorchCUDA(0))
 
     @Test
-    fun benchmarkMatMult200() =
+    fun benchmarkMatMultFloat200() =
         benchmarkingMatMultFloat(200, 10, 10000,
             device = TorchDevice.TorchCUDA(0))
 
     @Test
-    fun benchmarkMatMult2000() =
+    fun benchmarkMatMultFloat2000() =
         benchmarkingMatMultFloat(2000, 10, 1000,
             device = TorchDevice.TorchCUDA(0))
 }

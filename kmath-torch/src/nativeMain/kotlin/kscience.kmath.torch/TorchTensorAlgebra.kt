@@ -108,8 +108,22 @@ public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
         PrimitiveArrayType, TorchTensorType : TorchTensor<T>>(scope: DeferScope) :
     TorchTensorAlgebra<T, TVar, PrimitiveArrayType, TorchTensorType>(scope) {
 
-    public abstract fun randNormal(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensorType
     public abstract fun randUniform(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensorType
+    public abstract fun randNormal(shape: IntArray, device: TorchDevice = TorchDevice.TorchCPU): TorchTensorType
+
+    public fun TorchTensorType.randUniform(): TorchTensorType =
+        wrap(rand_like(this.tensorHandle)!!)
+
+    public fun TorchTensorType.randUniformAssign(): Unit {
+        rand_like_assign(this.tensorHandle)
+    }
+
+    public fun TorchTensorType.randNormal(): TorchTensorType =
+        wrap(randn_like(this.tensorHandle)!!)
+
+    public fun TorchTensorType.randNormalAssign(): Unit {
+        randn_like_assign(this.tensorHandle)
+    }
 
     public operator fun TorchTensorType.div(other: TorchTensorType): TorchTensorType =
         wrap(div_tensor(this.tensorHandle, other.tensorHandle)!!)
@@ -157,6 +171,8 @@ public sealed class TorchTensorRingAlgebra<T, TVar : CPrimitiveVar,
         low: T, high: T, shape: IntArray,
         device: TorchDevice = TorchDevice.TorchCPU
     ): TorchTensorType
+    public abstract fun TorchTensorType.randIntegral(low: T, high: T): TorchTensorType
+    public abstract fun TorchTensorType.randIntegralAssign(low: T, high: T): Unit
 }
 
 public class TorchTensorRealAlgebra(scope: DeferScope) :
@@ -305,6 +321,12 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
     override fun randIntegral(low: Long, high: Long, shape: IntArray, device: TorchDevice): TorchTensorLong =
         wrap(randint_long(low, high, shape.toCValues(), shape.size, device.toInt())!!)
 
+    override fun TorchTensorLong.randIntegral(low: Long, high: Long): TorchTensorLong =
+        wrap(randint_long_like(this.tensorHandle, low, high)!!)
+    override fun TorchTensorLong.randIntegralAssign(low: Long, high: Long): Unit {
+        randint_long_like_assign(this.tensorHandle, low, high)
+    }
+
     override operator fun Long.plus(other: TorchTensorLong): TorchTensorLong =
         wrap(plus_long(this, other.tensorHandle)!!)
 
@@ -362,6 +384,13 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
 
     override fun randIntegral(low: Int, high: Int, shape: IntArray, device: TorchDevice): TorchTensorInt =
         wrap(randint_int(low, high, shape.toCValues(), shape.size, device.toInt())!!)
+
+    override fun TorchTensorInt.randIntegral(low: Int, high: Int): TorchTensorInt =
+        wrap(randint_int_like(this.tensorHandle, low, high)!!)
+
+    override fun TorchTensorInt.randIntegralAssign(low: Int, high: Int): Unit {
+        randint_int_like_assign(this.tensorHandle, low, high)
+    }
 
     override operator fun Int.plus(other: TorchTensorInt): TorchTensorInt =
         wrap(plus_int(this, other.tensorHandle)!!)

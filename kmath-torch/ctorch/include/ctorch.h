@@ -61,13 +61,22 @@ extern "C"
     void set_long(TorchTensorHandle tensor_handle, int *index, long value);
     void set_int(TorchTensorHandle tensor_handle, int *index, int value);
 
-    TorchTensorHandle randn_double(int *shape, int shape_size, int device);
     TorchTensorHandle rand_double(int *shape, int shape_size, int device);
-    TorchTensorHandle randn_float(int *shape, int shape_size, int device);
+    TorchTensorHandle randn_double(int *shape, int shape_size, int device);
     TorchTensorHandle rand_float(int *shape, int shape_size, int device);
+    TorchTensorHandle randn_float(int *shape, int shape_size, int device);
 
     TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device);
     TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device);
+
+    TorchTensorHandle rand_like(TorchTensorHandle tensor_handle);
+    void rand_like_assign(TorchTensorHandle tensor_handle);
+    TorchTensorHandle randn_like(TorchTensorHandle tensor_handle);
+    void randn_like_assign(TorchTensorHandle tensor_handle);
+    TorchTensorHandle randint_long_like(TorchTensorHandle tensor_handle, long low, long high);
+    void randint_long_like_assign(TorchTensorHandle tensor_handle, long low, long high);
+    TorchTensorHandle randint_int_like(TorchTensorHandle tensor_handle, int low, int high);
+    void randint_int_like_assign(TorchTensorHandle tensor_handle, int low, int high);
 
     TorchTensorHandle full_double(double value, int *shape, int shape_size, int device);
     TorchTensorHandle full_float(float value, int *shape, int shape_size, int device);

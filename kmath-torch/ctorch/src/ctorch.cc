@@ -181,21 +181,21 @@ void set_int(TorchTensorHandle tensor_handle, int *index, int value)
   ctorch::set<int>(tensor_handle, index, value);
 }
 
-TorchTensorHandle randn_double(int *shape, int shape_size, int device)
-{
-  return new torch::Tensor(ctorch::randn<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
-}
 TorchTensorHandle rand_double(int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::rand<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
-TorchTensorHandle randn_float(int *shape, int shape_size, int device)
+TorchTensorHandle randn_double(int *shape, int shape_size, int device)
 {
-  return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+  return new torch::Tensor(ctorch::randn<double>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 TorchTensorHandle rand_float(int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::rand<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle randn_float(int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 
 TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device)
@@ -205,6 +205,39 @@ TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, 
 TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::randint<int>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+
+TorchTensorHandle rand_like(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(torch::rand_like(ctorch::cast(tensor_handle)));
+}
+void rand_like_assign(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle) = torch::rand_like(ctorch::cast(tensor_handle));
+}
+TorchTensorHandle randn_like(TorchTensorHandle tensor_handle)
+{
+  return new torch::Tensor(torch::randn_like(ctorch::cast(tensor_handle)));
+}
+void randn_like_assign(TorchTensorHandle tensor_handle)
+{
+  ctorch::cast(tensor_handle) = torch::randn_like(ctorch::cast(tensor_handle));
+}
+TorchTensorHandle randint_long_like(TorchTensorHandle tensor_handle, long low, long high)
+{
+  return new torch::Tensor(torch::randint_like(ctorch::cast(tensor_handle), low, high));
+}
+void randint_long_like_assign(TorchTensorHandle tensor_handle, long low, long high)
+{
+  ctorch::cast(tensor_handle) = torch::randint_like(ctorch::cast(tensor_handle), low, high);
+}
+TorchTensorHandle randint_int_like(TorchTensorHandle tensor_handle, int low, int high)
+{
+  return new torch::Tensor(torch::randint_like(ctorch::cast(tensor_handle), low, high));
+}
+void randint_int_like_assign(TorchTensorHandle tensor_handle, int low, int high)
+{
+  ctorch::cast(tensor_handle) = torch::randint_like(ctorch::cast(tensor_handle), low, high);
 }
 
 TorchTensorHandle full_double(double value, int *shape, int shape_size, int device)

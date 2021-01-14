@@ -19,7 +19,6 @@ internal fun testingSetSeed(device: TorchDevice = TorchDevice.TorchCPU): Unit {
     }
 }
 
-
 internal class TestUtils {
     @Test
     fun testSetNumThreads() {

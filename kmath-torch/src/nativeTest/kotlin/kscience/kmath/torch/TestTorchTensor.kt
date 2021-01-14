@@ -32,7 +32,7 @@ class TestTorchTensor {
             assertEquals(tensor[intArrayOf(0)], 2.0)
             val tensorData = tensor.getData()
             tensorData[0] = 3.0
-            println(assertEquals(tensor[intArrayOf(0)], 3.0))
+            assertEquals(tensor[intArrayOf(0)], 3.0)
         }
         assertEquals(data[0], 3.0)
     }
