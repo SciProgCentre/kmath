@@ -51,6 +51,9 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
 
     public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): GslMatrix<T, H1> =
         produceDirtyMatrix(rows, columns).fill(initializer)
+
+    public override fun point(size: Int, initializer: (Int) -> T): Point<T> =
+        produceDirtyVector(size).fill(initializer)
 }
 
 /**
