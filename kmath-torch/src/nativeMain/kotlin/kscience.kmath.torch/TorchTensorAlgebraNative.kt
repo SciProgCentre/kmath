@@ -1,163 +1,90 @@
 package kscience.kmath.torch
 
 
-import kscience.kmath.structures.*
 import kscience.kmath.memory.DeferScope
 import kscience.kmath.memory.withDeferScope
 
 import kotlinx.cinterop.*
-import kscience.kmath.ctorch.*
+import kscience.kmath.torch.ctorch.*
 
-public sealed class TorchTensorAlgebra<
+public sealed class TorchTensorAlgebraNative<
         T,
         TVar : CPrimitiveVar,
         PrimitiveArrayType,
-        TorchTensorType : TorchTensor<T>> constructor(
+        TorchTensorType : TorchTensorNative<T>> constructor(
     internal val scope: DeferScope
-) :
-    TensorAlgebra<T, TorchTensorType> {
+) : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType> {
+
+    override fun getNumThreads(): Int {
+        return get_num_threads()
+    }
+
+    override fun setNumThreads(numThreads: Int): Unit {
+        set_num_threads(numThreads)
+    }
+
+    override fun cudaAvailable(): Boolean {
+        return cuda_is_available()
+    }
+
+    override fun setSeed(seed: Int): Unit {
+        set_seed(seed)
+    }
+
+
+    override var checks: Boolean = false
 
     internal abstract fun wrap(tensorHandle: COpaquePointer): TorchTensorType
-
-    public abstract fun copyFromArray(
-        array: PrimitiveArrayType,
-        shape: IntArray,
-        device: Device = Device.CPU
-    ): TorchTensorType
-
-    public abstract fun TorchTensorType.copyToArray(): PrimitiveArrayType
 
     public abstract fun fromBlob(arrayBlob: CPointer<TVar>, shape: IntArray): TorchTensorType
     public abstract fun TorchTensorType.getData(): CPointer<TVar>
 
-    public abstract fun full(value: T, shape: IntArray, device: Device): TorchTensorType
-
-    public abstract fun randIntegral(
-        low: T, high: T, shape: IntArray,
-        device: Device = Device.CPU
-    ): TorchTensorType
-
-    public abstract fun TorchTensorType.randIntegral(low: T, high: T): TorchTensorType
-    public abstract fun TorchTensorType.randIntegralAssign(low: T, high: T): Unit
-
-    override val zero: TorchTensorType
-        get() = number(0)
-    override val one: TorchTensorType
-        get() = number(1)
-
-    protected inline fun checkDeviceCompatible(a: TorchTensorType, b: TorchTensorType): Unit =
-        check(a.device == b.device) {
-            "Tensors must be on the same device"
-        }
-
-    protected inline fun checkShapeCompatible(a: TorchTensorType, b: TorchTensorType): Unit =
-        check(a.shape contentEquals b.shape) {
-            "Tensors must be of identical shape"
-        }
-
-    protected inline fun checkLinearOperation(a: TorchTensorType, b: TorchTensorType) {
-        if (a.isNotValue() and b.isNotValue()) {
-            checkDeviceCompatible(a, b)
-            checkShapeCompatible(a, b)
-        }
+    override operator fun TorchTensorType.times(other: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, other)
+        return wrap(times_tensor(this.tensorHandle, other.tensorHandle)!!)
     }
 
-    override operator fun TorchTensorType.times(b: TorchTensorType): TorchTensorType =
-        this.times(b, safe = true)
-
-    public fun TorchTensorType.times(b: TorchTensorType, safe: Boolean): TorchTensorType {
-        if (safe) checkLinearOperation(this, b)
-        return wrap(times_tensor(this.tensorHandle, b.tensorHandle)!!)
+    override operator fun TorchTensorType.timesAssign(other: TorchTensorType): Unit {
+        if (checks) checkLinearOperation(this, other)
+        times_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.timesAssign(b: TorchTensorType): Unit =
-        this.timesAssign(b, safe = true)
-
-    public fun TorchTensorType.timesAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkLinearOperation(this, b)
-        times_tensor_assign(this.tensorHandle, b.tensorHandle)
+    override operator fun TorchTensorType.plus(other: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, other)
+        return wrap(plus_tensor(this.tensorHandle, other.tensorHandle)!!)
     }
 
-    override fun multiply(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a * b
-
-    override operator fun TorchTensorType.plus(b: TorchTensorType): TorchTensorType =
-        this.plus(b, safe = true)
-
-    public fun TorchTensorType.plus(b: TorchTensorType, safe: Boolean): TorchTensorType {
-        if (safe) checkLinearOperation(this, b)
-        return wrap(plus_tensor(this.tensorHandle, b.tensorHandle)!!)
+    override operator fun TorchTensorType.plusAssign(other: TorchTensorType): Unit {
+        if (checks) checkLinearOperation(this, other)
+        plus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.plusAssign(b: TorchTensorType): Unit =
-        this.plusAssign(b, false)
-
-    public fun TorchTensorType.plusAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkLinearOperation(this, b)
-        plus_tensor_assign(this.tensorHandle, b.tensorHandle)
+    override operator fun TorchTensorType.minus(other: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, other)
+        return wrap(minus_tensor(this.tensorHandle, other.tensorHandle)!!)
     }
 
-    override fun add(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a + b
-
-    override operator fun TorchTensorType.minus(b: TorchTensorType): TorchTensorType =
-        this.minus(b, safe = true)
-
-    public fun TorchTensorType.minus(b: TorchTensorType, safe: Boolean): TorchTensorType {
-        if (safe) checkLinearOperation(this, b)
-        return wrap(minus_tensor(this.tensorHandle, b.tensorHandle)!!)
-    }
-
-    override operator fun TorchTensorType.minusAssign(b: TorchTensorType): Unit =
-        this.minusAssign(b, safe = true)
-
-    public fun TorchTensorType.minusAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkLinearOperation(this, b)
-        minus_tensor_assign(this.tensorHandle, b.tensorHandle)
+    override operator fun TorchTensorType.minusAssign(other: TorchTensorType): Unit {
+        if (checks) checkLinearOperation(this, other)
+        minus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
     override operator fun TorchTensorType.unaryMinus(): TorchTensorType =
         wrap(unary_minus(this.tensorHandle)!!)
 
-    private inline fun checkDotOperation(a: TorchTensorType, b: TorchTensorType): Unit {
-        checkDeviceCompatible(a, b)
-        val sa = a.shape
-        val sb = b.shape
-        val na = sa.size
-        val nb = sb.size
-        var status: Boolean
-        if (nb == 1) {
-            status = sa.last() == sb[0]
-        } else {
-            status = sa.last() == sb[nb - 2]
-            if ((na > 2) and (nb > 2)) {
-                status = status and
-                        (sa.take(nb - 2).toIntArray() contentEquals sb.take(nb - 2).toIntArray())
-            }
-        }
-        check(status) { "Incompatible shapes $sa and $sb for dot product" }
+    override infix fun TorchTensorType.dot(other: TorchTensorType): TorchTensorType {
+        if (checks) checkDotOperation(this, other)
+        return wrap(matmul(this.tensorHandle, other.tensorHandle)!!)
     }
 
-    override infix fun TorchTensorType.dot(b: TorchTensorType): TorchTensorType =
-        this.dot(b, safe = true)
-
-    public fun TorchTensorType.dot(b: TorchTensorType, safe: Boolean): TorchTensorType {
-        if (safe) checkDotOperation(this, b)
-        return wrap(matmul(this.tensorHandle, b.tensorHandle)!!)
+    override infix fun TorchTensorType.dotAssign(other: TorchTensorType): Unit {
+        if (checks) checkDotOperation(this, other)
+        matmul_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    public infix fun TorchTensorType.dotAssign(b: TorchTensorType): Unit =
-        this.dotAssign(b, safe = true)
-
-    public fun TorchTensorType.dotAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkDotOperation(this, b)
-        matmul_assign(this.tensorHandle, b.tensorHandle)
-    }
-
-    public infix fun TorchTensorType.dotRightAssign(b: TorchTensorType): Unit =
-        this.dotRightAssign(b, safe = true)
-
-    public fun TorchTensorType.dotRightAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkDotOperation(this, b)
-        matmul_right_assign(this.tensorHandle, b.tensorHandle)
+    override infix fun TorchTensorType.dotRightAssign(other: TorchTensorType): Unit {
+        if (checks) checkDotOperation(this, other)
+        matmul_right_assign(this.tensorHandle, other.tensorHandle)
     }
 
     override fun diagonalEmbedding(
@@ -165,106 +92,78 @@ public sealed class TorchTensorAlgebra<
     ): TorchTensorType =
         wrap(diag_embed(diagonalEntries.tensorHandle, offset, dim1, dim2)!!)
 
-    private inline fun checkTranspose(dim: Int, i: Int, j: Int): Unit =
-        check((i < dim) and (j < dim)) {
-            "Cannot transpose $i to $j for a tensor of dim $dim"
-        }
-
-    override fun TorchTensorType.transpose(i: Int, j: Int): TorchTensorType =
-        this.transpose(i, j, safe = true)
-
-    public fun TorchTensorType.transpose(i: Int, j: Int, safe: Boolean): TorchTensorType {
-        if (safe) checkTranspose(this.dimension, i, j)
+    override fun TorchTensorType.transpose(i: Int, j: Int): TorchTensorType {
+        if (checks) checkTranspose(this.dimension, i, j)
         return wrap(transpose_tensor(tensorHandle, i, j)!!)
     }
 
-    public fun TorchTensorType.transposeAssign(i: Int, j: Int): Unit =
-        this.transposeAssign(i, j, safe = true)
-
-    public fun TorchTensorType.transposeAssign(i: Int, j: Int, safe: Boolean): Unit {
-        if (safe) checkTranspose(this.dimension, i, j)
+    override fun TorchTensorType.transposeAssign(i: Int, j: Int): Unit {
+        if (checks) checkTranspose(this.dimension, i, j)
         transpose_tensor_assign(tensorHandle, i, j)
     }
 
-    private inline fun checkView(a: TorchTensorType, shape: IntArray): Unit =
-        check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
-
-    override fun TorchTensorType.view(shape: IntArray): TorchTensorType =
-        this.view(shape, safe = true)
-
-    public fun TorchTensorType.view(shape: IntArray, safe: Boolean): TorchTensorType {
-        if (safe) checkView(this, shape)
+    override fun TorchTensorType.view(shape: IntArray): TorchTensorType {
+        if (checks) checkView(this, shape)
         return wrap(view_tensor(this.tensorHandle, shape.toCValues(), shape.size)!!)
     }
 
     override fun TorchTensorType.abs(): TorchTensorType = wrap(abs_tensor(tensorHandle)!!)
-    public fun TorchTensorType.absAssign(): Unit {
+    override fun TorchTensorType.absAssign(): Unit {
         abs_tensor_assign(tensorHandle)
     }
 
     override fun TorchTensorType.sum(): TorchTensorType = wrap(sum_tensor(tensorHandle)!!)
-    public fun TorchTensorType.sumAssign(): Unit {
+    override fun TorchTensorType.sumAssign(): Unit {
         sum_tensor_assign(tensorHandle)
     }
 
-    public fun TorchTensorType.copy(): TorchTensorType =
+    override fun TorchTensorType.copy(): TorchTensorType =
         wrap(copy_tensor(this.tensorHandle)!!)
 
-    public fun TorchTensorType.copyToDevice(device: Device): TorchTensorType =
+    override fun TorchTensorType.copyToDevice(device: Device): TorchTensorType =
         wrap(copy_to_device(this.tensorHandle, device.toInt())!!)
 
-    public infix fun TorchTensorType.swap(otherTensor: TorchTensorType): Unit {
-        swap_tensors(this.tensorHandle, otherTensor.tensorHandle)
+    override infix fun TorchTensorType.swap(other: TorchTensorType): Unit {
+        swap_tensors(this.tensorHandle, other.tensorHandle)
     }
 }
 
-public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
-        PrimitiveArrayType, TorchTensorType : TorchTensorOverField<T>>(scope: DeferScope) :
-    TorchTensorAlgebra<T, TVar, PrimitiveArrayType, TorchTensorType>(scope),
-    TensorFieldAlgebra<T, TorchTensorType> {
+public sealed class TorchTensorPartialDivisionAlgebraNative<T, TVar : CPrimitiveVar,
+        PrimitiveArrayType, TorchTensorType : TorchTensorOverFieldNative<T>>(scope: DeferScope) :
+    TorchTensorAlgebraNative<T, TVar, PrimitiveArrayType, TorchTensorType>(scope),
+    TorchTensorPartialDivisionAlgebra<T, PrimitiveArrayType, TorchTensorType> {
 
-    override operator fun TorchTensorType.div(b: TorchTensorType): TorchTensorType =
-        this.div(b, safe = true)
-
-    public fun TorchTensorType.div(b: TorchTensorType, safe: Boolean): TorchTensorType {
-        if (safe) checkLinearOperation(this, b)
+    override operator fun TorchTensorType.div(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
         return wrap(div_tensor(this.tensorHandle, b.tensorHandle)!!)
     }
 
-    override operator fun TorchTensorType.divAssign(b: TorchTensorType): Unit =
-        this.divAssign(b, safe = true)
-
-    public fun TorchTensorType.divAssign(b: TorchTensorType, safe: Boolean): Unit {
-        if (safe) checkLinearOperation(this, b)
-        div_tensor_assign(this.tensorHandle, b.tensorHandle)
+    override operator fun TorchTensorType.divAssign(other: TorchTensorType): Unit {
+        if (checks) checkLinearOperation(this, other)
+        div_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    override fun divide(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a / b
-
-    public abstract fun randUniform(shape: IntArray, device: Device = Device.CPU): TorchTensorType
-    public abstract fun randNormal(shape: IntArray, device: Device = Device.CPU): TorchTensorType
-
-    public fun TorchTensorType.randUniform(): TorchTensorType =
+    override fun TorchTensorType.randUniform(): TorchTensorType =
         wrap(rand_like(this.tensorHandle)!!)
 
-    public fun TorchTensorType.randUniformAssign(): Unit {
+    override fun TorchTensorType.randUniformAssign(): Unit {
         rand_like_assign(this.tensorHandle)
     }
 
-    public fun TorchTensorType.randNormal(): TorchTensorType =
+    override fun TorchTensorType.randNormal(): TorchTensorType =
         wrap(randn_like(this.tensorHandle)!!)
 
-    public fun TorchTensorType.randNormalAssign(): Unit {
+    override fun TorchTensorType.randNormalAssign(): Unit {
         randn_like_assign(this.tensorHandle)
     }
 
     override fun TorchTensorType.exp(): TorchTensorType = wrap(exp_tensor(tensorHandle)!!)
-    public fun TorchTensorType.expAssign(): Unit {
+    override fun TorchTensorType.expAssign(): Unit {
         exp_tensor_assign(tensorHandle)
     }
 
     override fun TorchTensorType.log(): TorchTensorType = wrap(log_tensor(tensorHandle)!!)
-    public fun TorchTensorType.logAssign(): Unit {
+    override fun TorchTensorType.logAssign(): Unit {
         log_tensor_assign(tensorHandle)
     }
 
@@ -283,30 +182,25 @@ public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
         return Pair(wrap(S), wrap(V))
     }
 
-    public fun TorchTensorType.grad(variable: TorchTensorType, retainGraph: Boolean = false): TorchTensorType {
-        this.checkIsValue()
+    override fun TorchTensorType.grad(variable: TorchTensorType, retainGraph: Boolean): TorchTensorType {
+        if (checks) this.checkIsValue()
         return wrap(autograd_tensor(this.tensorHandle, variable.tensorHandle, retainGraph)!!)
     }
 
-    public infix fun TorchTensorType.grad(variable: TorchTensorType): TorchTensorType =
-        this.grad(variable, false)
-
-    public infix fun TorchTensorType.hess(variable: TorchTensorType): TorchTensorType {
-        this.checkIsValue()
+    override infix fun TorchTensorType.hess(variable: TorchTensorType): TorchTensorType {
+        if (checks) this.checkIsValue()
         return wrap(autohess_tensor(this.tensorHandle, variable.tensorHandle)!!)
     }
 
-    public fun TorchTensorType.detachFromGraph(): TorchTensorType =
+    override fun TorchTensorType.detachFromGraph(): TorchTensorType =
         wrap(tensorHandle = detach_from_graph(this.tensorHandle)!!)
+
 }
 
 public class TorchTensorRealAlgebra(scope: DeferScope) :
-    TorchTensorFieldAlgebra<Double, DoubleVar, DoubleArray, TorchTensorReal>(scope) {
+    TorchTensorPartialDivisionAlgebraNative<Double, DoubleVar, DoubleArray, TorchTensorReal>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorReal =
         TorchTensorReal(scope = scope, tensorHandle = tensorHandle)
-
-    override fun number(value: Number): TorchTensorReal =
-        full(value.toDouble(), intArrayOf(1), Device.CPU).sum()
 
     override fun TorchTensorReal.copyToArray(): DoubleArray =
         this.elements().map { it.second }.toList().toDoubleArray()
@@ -360,8 +254,6 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
         times_double_assign(value, this.tensorHandle)
     }
 
-    override fun multiply(a: TorchTensorReal, k: Number): TorchTensorReal = a * k.toDouble()
-
     override fun full(value: Double, shape: IntArray, device: Device): TorchTensorReal =
         wrap(full_double(value, shape.toCValues(), shape.size, device.toInt())!!)
 
@@ -377,12 +269,9 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
 }
 
 public class TorchTensorFloatAlgebra(scope: DeferScope) :
-    TorchTensorFieldAlgebra<Float, FloatVar, FloatArray, TorchTensorFloat>(scope) {
+    TorchTensorPartialDivisionAlgebraNative<Float, FloatVar, FloatArray, TorchTensorFloat>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorFloat =
         TorchTensorFloat(scope = scope, tensorHandle = tensorHandle)
-
-    override fun number(value: Number): TorchTensorFloat =
-        full(value.toFloat(), intArrayOf(1), Device.CPU).sum()
 
     override fun TorchTensorFloat.copyToArray(): FloatArray =
         this.elements().map { it.second }.toList().toFloatArray()
@@ -436,8 +325,6 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
         times_float_assign(value, this.tensorHandle)
     }
 
-    override fun multiply(a: TorchTensorFloat, k: Number): TorchTensorFloat = a * k.toFloat()
-
     override fun full(value: Float, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(full_float(value, shape.toCValues(), shape.size, device.toInt())!!)
 
@@ -453,12 +340,9 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
 }
 
 public class TorchTensorLongAlgebra(scope: DeferScope) :
-    TorchTensorAlgebra<Long, LongVar, LongArray, TorchTensorLong>(scope) {
+    TorchTensorAlgebraNative<Long, LongVar, LongArray, TorchTensorLong>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorLong =
         TorchTensorLong(scope = scope, tensorHandle = tensorHandle)
-
-    override fun number(value: Number): TorchTensorLong =
-        full(value.toLong(), intArrayOf(1), Device.CPU).sum()
 
     override fun TorchTensorLong.copyToArray(): LongArray =
         this.elements().map { it.second }.toList().toLongArray()
@@ -516,19 +400,14 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
         times_long_assign(value, this.tensorHandle)
     }
 
-    override fun multiply(a: TorchTensorLong, k: Number): TorchTensorLong = a * k.toLong()
-
     override fun full(value: Long, shape: IntArray, device: Device): TorchTensorLong =
         wrap(full_long(value, shape.toCValues(), shape.size, device.toInt())!!)
 }
 
 public class TorchTensorIntAlgebra(scope: DeferScope) :
-    TorchTensorAlgebra<Int, IntVar, IntArray, TorchTensorInt>(scope) {
+    TorchTensorAlgebraNative<Int, IntVar, IntArray, TorchTensorInt>(scope) {
     override fun wrap(tensorHandle: COpaquePointer): TorchTensorInt =
         TorchTensorInt(scope = scope, tensorHandle = tensorHandle)
-
-    override fun number(value: Number): TorchTensorInt =
-        full(value.toInt(), intArrayOf(1), Device.CPU).sum()
 
     override fun TorchTensorInt.copyToArray(): IntArray =
         this.elements().map { it.second }.toList().toIntArray()
@@ -586,11 +465,10 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
         times_int_assign(value, this.tensorHandle)
     }
 
-    override fun multiply(a: TorchTensorInt, k: Number): TorchTensorInt = a * k.toInt()
-
     override fun full(value: Int, shape: IntArray, device: Device): TorchTensorInt =
         wrap(full_int(value, shape.toCValues(), shape.size, device.toInt())!!)
 }
+
 
 public inline fun <R> TorchTensorRealAlgebra(block: TorchTensorRealAlgebra.() -> R): R =
     withDeferScope { TorchTensorRealAlgebra(this).block() }
@@ -604,12 +482,3 @@ public inline fun <R> TorchTensorLongAlgebra(block: TorchTensorLongAlgebra.() ->
 public inline fun <R> TorchTensorIntAlgebra(block: TorchTensorIntAlgebra.() -> R): R =
     withDeferScope { TorchTensorIntAlgebra(this).block() }
 
-public inline fun TorchTensorReal.withGrad(block: TorchTensorRealAlgebra.() -> TorchTensorReal): TorchTensorReal {
-    this.requiresGrad = true
-    return TorchTensorRealAlgebra(this.scope).block()
-}
-
-public inline fun TorchTensorFloat.withGrad(block: TorchTensorFloatAlgebra.() -> TorchTensorFloat): TorchTensorFloat {
-    this.requiresGrad = true
-    return TorchTensorFloatAlgebra(this.scope).block()
-}

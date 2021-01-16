@@ -1,9 +1,10 @@
 #include <torch/torch.h>
 
-#include "ctorch.h"
-
 namespace ctorch
 {
+
+    using TorchTensorHandle = void*;
+
     template <typename Dtype>
     inline c10::ScalarType dtype()
     {

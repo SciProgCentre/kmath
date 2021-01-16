@@ -69,4 +69,5 @@ class TestTorchTensor {
         viewTensor[intArrayOf(0, 0)] = 10
         assertEquals(tensor[intArrayOf(0)], 10)
     }
+
 }

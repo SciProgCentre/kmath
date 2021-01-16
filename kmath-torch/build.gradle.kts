@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.gradle.api.JavaVersion.VERSION_11
 
 
 plugins {
@@ -7,10 +8,16 @@ plugins {
     id("de.undercouch.download")
 }
 
+java {
+    sourceCompatibility = VERSION_11
+    targetCompatibility = VERSION_11
+}
 
 val home = System.getProperty("user.home")
+val javaHome = System.getProperty("java.home")
 val thirdPartyDir = "$home/.konan/third-party/kmath-torch-${project.property("version")}"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
+val cppSources = projectDir.resolve("src/cppMain")
 
 val cudaHome: String? = System.getenv("CUDA_HOME")
 val cudaDefault = file("/usr/local/cuda").exists()
@@ -77,10 +84,11 @@ val configureCpp by tasks.registering {
             workingDir(cppBuildDir)
             commandLine(
                 cmakeCmd,
-                projectDir.resolve("ctorch"),
+                cppSources,
                 "-GNinja",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/$torchArchive",
+                "-DJAVA_HOME=$javaHome",
                 "-DCMAKE_BUILD_TYPE=Release"
             )
         }
@@ -107,10 +115,23 @@ val buildCpp by tasks.registering {
     }
 }
 
+val generateJNIHeader by tasks.registering {
+    doLast {
+        exec {
+            workingDir(projectDir.resolve("src/jvmMain/java/kscience/kmath/torch"))
+            commandLine("$javaHome/bin/javac", "-h", cppSources.resolve("include") , "JTorch.java")
+        }
+    }
+}
+
 kotlin {
     explicitApiWarning()
 
-    val nativeTarget = linuxX64("torch")
+    jvm {
+        withJava()
+    }
+
+    val nativeTarget = linuxX64("native")
     nativeTarget.apply {
         binaries {
             all {
@@ -128,38 +149,38 @@ kotlin {
     val main by nativeTarget.compilations.getting {
         cinterops {
             val libctorch by creating {
-                includeDirs(projectDir.resolve("ctorch/include"))
+                includeDirs(cppSources.resolve("include"))
             }
         }
     }
 
     val test by nativeTarget.compilations.getting
 
-
     sourceSets {
-        val nativeMain by creating {
+
+        val commonMain by getting {
             dependencies {
                 api(project(":kmath-core"))
             }
         }
-        val nativeTest by creating {
-            dependsOn(nativeMain)
-        }
-        val nativeGPUTest by creating {
-            dependsOn(nativeMain)
-            dependsOn(nativeTest)
-        }
 
-
-        main.defaultSourceSet.dependsOn(nativeMain)
-        test.defaultSourceSet.dependsOn(nativeTest)
-        if(cudaFound) {
-            test.defaultSourceSet.dependsOn(nativeGPUTest)
+        val nativeMain by getting {
+            dependencies {
+                api(project(":kmath-core"))
+            }
         }
 
     }
 }
 
-val torch: KotlinNativeTarget by kotlin.targets
-tasks[torch.compilations["main"].cinterops["libctorch"].interopProcessingTaskName]
+val native: KotlinNativeTarget by kotlin.targets
+tasks[native.compilations["main"].cinterops["libctorch"].interopProcessingTaskName]
     .dependsOn(buildCpp)
+
+tasks["jvmProcessResources"].dependsOn(buildCpp)
+
+tasks {
+    withType<Test>{
+        systemProperty("java.library.path", cppBuildDir.toString())
+    }
+}

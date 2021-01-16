@@ -3,9 +3,6 @@ package kscience.kmath.torch
 import kotlin.test.*
 
 
-internal val SEED = 987654
-internal val TOLERANCE = 1e-6
-
 internal fun testingSetSeed(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
@@ -22,9 +19,11 @@ internal fun testingSetSeed(device: Device = Device.CPU): Unit {
 internal class TestUtils {
     @Test
     fun testSetNumThreads() {
-        val numThreads = 2
-        setNumThreads(numThreads)
-        assertEquals(numThreads, getNumThreads())
+        TorchTensorRealAlgebra {
+            val numThreads = 2
+            setNumThreads(numThreads)
+            assertEquals(numThreads, getNumThreads())
+        }
     }
 
     @Test

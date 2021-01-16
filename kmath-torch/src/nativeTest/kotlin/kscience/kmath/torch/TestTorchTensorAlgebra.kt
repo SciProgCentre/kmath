@@ -51,6 +51,7 @@ internal fun testingMatrixMultiplication(device: Device = Device.CPU): Unit {
 
 internal fun testingLinearStructure(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
+        withChecks {
         val shape = intArrayOf(3)
         val tensorA = full(value = -4.5, shape = shape, device = device)
         val tensorB = full(value = 10.9, shape = shape, device = device)
@@ -81,7 +82,8 @@ internal fun testingLinearStructure(device: Device = Device.CPU): Unit {
         val error = (expected - result).abs().sum().value() +
                 (expected - assignResult).abs().sum().value()
         assertTrue(error < TOLERANCE)
-    }
+        println(expected)
+    }}
 }
 
 internal fun testingTensorTransformations(device: Device = Device.CPU): Unit {

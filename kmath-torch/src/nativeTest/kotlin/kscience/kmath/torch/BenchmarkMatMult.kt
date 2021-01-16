@@ -14,8 +14,8 @@ internal fun benchmarkingMatMultDouble(
         setSeed(SEED)
         val lhs = randNormal(shape = intArrayOf(scale, scale), device = device)
         val rhs = randNormal(shape = intArrayOf(scale, scale), device = device)
-        repeat(numWarmUp) { lhs.dotAssign(rhs, false) }
-        val measuredTime = measureTime { repeat(numIter) { lhs.dotAssign(rhs, false) } }
+        repeat(numWarmUp) { lhs dotAssign rhs }
+        val measuredTime = measureTime { repeat(numIter) { lhs dotAssign rhs } }
         println("   ${measuredTime / numIter} p.o. with $numIter iterations")
     }
 }
@@ -31,8 +31,8 @@ internal fun benchmarkingMatMultFloat(
         setSeed(SEED)
         val lhs = randNormal(shape = intArrayOf(scale, scale), device = device)
         val rhs = randNormal(shape = intArrayOf(scale, scale), device = device)
-        repeat(numWarmUp) { lhs.dotAssign(rhs, false) }
-        val measuredTime = measureTime { repeat(numIter) { lhs.dotAssign(rhs, false) } }
+        repeat(numWarmUp) { lhs dotAssign rhs }
+        val measuredTime = measureTime { repeat(numIter) { lhs dotAssign rhs } }
         println("   ${measuredTime / numIter} p.o. with $numIter iterations")
     }
 }
