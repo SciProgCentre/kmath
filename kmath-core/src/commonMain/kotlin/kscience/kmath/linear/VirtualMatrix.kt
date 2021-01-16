@@ -2,17 +2,22 @@ package kscience.kmath.linear
 
 import kscience.kmath.structures.Matrix
 
+/**
+ * The matrix where each element is evaluated each time when is being accessed.
+ *
+ * @property generator the function that provides elements.
+ */
 public class VirtualMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
     override val features: Set<MatrixFeature> = emptySet(),
-    public val generator: (i: Int, j: Int) -> T
+    public val generator: (i: Int, j: Int) -> T,
 ) : FeaturedMatrix<T> {
     public constructor(
         rowNum: Int,
         colNum: Int,
         vararg features: MatrixFeature,
-        generator: (i: Int, j: Int) -> T
+        generator: (i: Int, j: Int) -> T,
     ) : this(
         rowNum,
         colNum,

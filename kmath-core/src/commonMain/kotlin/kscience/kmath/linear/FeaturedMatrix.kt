@@ -1,6 +1,8 @@
 package kscience.kmath.linear
 
+import kscience.kmath.operations.Complex
 import kscience.kmath.operations.Ring
+import kscience.kmath.operations.conjugate
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.Structure2D
 import kscience.kmath.structures.asBuffer
@@ -70,7 +72,7 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.one(rows: Int, c
 
 
 /**
- * A virtual matrix of zeroes
+ * Returns virtual matrix of zeroes.
  */
 public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
@@ -78,12 +80,27 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, 
 public class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
 
 /**
- * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
+ * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`.
  */
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> {
-    return getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
-        colNum,
-        rowNum,
-        setOf(TransposedFeature(this))
-    ) { i, j -> get(j, i) }
+public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
+    colNum,
+    rowNum,
+    setOf(TransposedFeature(this)),
+) { i, j -> get(j, i) }
+
+/**
+ * Returns Hermitian conjugate of this matrix (i.e., just transposes it).
+ *
+ *
+ */
+public fun Matrix<Double>.transposeConjugate(): Matrix<Double> = transpose()
+
+/**
+ * Returns Hermitian conjugate of this matrix (i.e., transposes it and replaces each element with its conjugate).
+ *
+ * @return the Hermitian conjugate of this matrix.
+ */
+public fun Matrix<Complex>.transposeConjugate(): Matrix<Complex> {
+    val t = transpose()
+    return VirtualMatrix(t.rowNum, t.colNum) { i, j -> t[i,j].conjugate }
 }

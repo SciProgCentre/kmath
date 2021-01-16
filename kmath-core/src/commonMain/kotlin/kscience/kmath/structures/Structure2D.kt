@@ -72,6 +72,6 @@ else
 /**
  * Alias for [Structure2D] with more familiar name.
  *
- * @param T the type of items.
+ * @param T the type of items in the matrix.
  */
 public typealias Matrix<T> = Structure2D<T>
