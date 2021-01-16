@@ -6,7 +6,7 @@ import kscience.kmath.structures.Matrix
 import kotlin.math.*
 import kotlin.test.*
 
-internal fun testingScalarProduct(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingScalarProduct(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         val lhs = randUniform(shape = intArrayOf(3), device = device)
         val rhs = randUniform(shape = intArrayOf(3), device = device)
@@ -19,7 +19,7 @@ internal fun testingScalarProduct(device: TorchDevice = TorchDevice.TorchCPU): U
     }
 }
 
-internal fun testingMatrixMultiplication(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingMatrixMultiplication(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
 
@@ -49,7 +49,7 @@ internal fun testingMatrixMultiplication(device: TorchDevice = TorchDevice.Torch
     }
 }
 
-internal fun testingLinearStructure(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingLinearStructure(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         val shape = intArrayOf(3)
         val tensorA = full(value = -4.5, shape = shape, device = device)
@@ -84,7 +84,7 @@ internal fun testingLinearStructure(device: TorchDevice = TorchDevice.TorchCPU):
     }
 }
 
-internal fun testingTensorTransformations(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingTensorTransformations(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
         val tensor = randNormal(shape = intArrayOf(3, 3), device = device)
@@ -102,21 +102,21 @@ internal fun testingTensorTransformations(device: TorchDevice = TorchDevice.Torc
     }
 }
 
-internal fun testingBatchedSVD(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingBatchedSVD(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         val tensor = randNormal(shape = intArrayOf(7, 5, 3), device = device)
         val (tensorU, tensorS, tensorV) = tensor.svd()
-        val error = tensor - (tensorU dot (diagEmbed(tensorS) dot tensorV.transpose(-2,-1)))
+        val error = tensor - (tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose(-2,-1)))
         assertTrue(error.abs().sum().value() < TOLERANCE)
     }
 }
 
-internal fun testingBatchedSymEig(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingBatchedSymEig(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         val tensor = randNormal(shape = intArrayOf(5,5), device = device)
         val tensorSigma = tensor + tensor.transpose(-2,-1)
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val error = tensorSigma - (tensorV dot (diagEmbed(tensorS) dot tensorV.transpose(-2,-1)))
+        val error = tensorSigma - (tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose(-2,-1)))
         assertTrue(error.abs().sum().value() < TOLERANCE)
     }
 }

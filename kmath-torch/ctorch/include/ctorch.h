@@ -67,6 +67,8 @@ extern "C"
     TorchTensorHandle rand_float(int *shape, int shape_size, int device);
     TorchTensorHandle randn_float(int *shape, int shape_size, int device);
 
+    TorchTensorHandle randint_double(long low, long high, int *shape, int shape_size, int device);
+    TorchTensorHandle randint_float(long low, long high, int *shape, int shape_size, int device);
     TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device);
     TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device);
 

@@ -1,6 +1,5 @@
 package kscience.kmath.torch
 
-import kscience.kmath.structures.MutableNDStructure
 
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
@@ -9,7 +8,7 @@ import kscience.kmath.ctorch.*
 public sealed class TorchTensor<T> constructor(
     internal val scope: DeferScope,
     internal val tensorHandle: COpaquePointer
-) : MutableNDStructure<T> {
+) : TensorStructure<T>() {
     init {
         scope.defer(::close)
     }
@@ -23,10 +22,8 @@ public sealed class TorchTensor<T> constructor(
     public val strides: IntArray
         get() = (1..dimension).map{get_stride_at(tensorHandle, it-1)}.toIntArray()
     public val size: Int get() = get_numel(tensorHandle)
-    public val device: TorchDevice get() = TorchDevice.fromInt(get_device(tensorHandle))
+    public val device: Device get() = Device.fromInt(get_device(tensorHandle))
 
-    override fun equals(other: Any?): Boolean = false
-    override fun hashCode(): Int = 0
     override fun toString(): String {
         val nativeStringRepresentation: CPointer<ByteVar> = tensor_to_string(tensorHandle)!!
         val stringRepresentation = nativeStringRepresentation.toKString()
@@ -42,12 +39,13 @@ public sealed class TorchTensor<T> constructor(
         return indices.map { it to get(it) }
     }
 
-    internal inline fun isValue() = check(dimension == 0) {
+    public inline fun isValue(): Boolean = dimension == 0
+    public inline fun isNotValue(): Boolean = !isValue()
+    internal inline fun checkIsValue() = check(isValue()) {
         "This tensor has shape ${shape.toList()}"
     }
-
-    public fun value(): T {
-        isValue()
+    override fun value(): T {
+        checkIsValue()
         return item()
     }
 

@@ -7,15 +7,15 @@ internal fun benchmarkingMatMultDouble(
     scale: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: TorchDevice = TorchDevice.TorchCPU
+    device: Device = Device.CPU
 ): Unit {
     TorchTensorRealAlgebra {
         println("Benchmarking $scale x $scale matrices over Double's on $device: ")
         setSeed(SEED)
         val lhs = randNormal(shape = intArrayOf(scale, scale), device = device)
         val rhs = randNormal(shape = intArrayOf(scale, scale), device = device)
-        repeat(numWarmUp) { lhs dotAssign rhs }
-        val measuredTime = measureTime { repeat(numIter) { lhs dotAssign rhs } }
+        repeat(numWarmUp) { lhs.dotAssign(rhs, false) }
+        val measuredTime = measureTime { repeat(numIter) { lhs.dotAssign(rhs, false) } }
         println("   ${measuredTime / numIter} p.o. with $numIter iterations")
     }
 }
@@ -24,15 +24,15 @@ internal fun benchmarkingMatMultFloat(
     scale: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: TorchDevice = TorchDevice.TorchCPU
+    device: Device = Device.CPU
 ): Unit {
     TorchTensorFloatAlgebra {
         println("Benchmarking $scale x $scale matrices over Float's on $device: ")
         setSeed(SEED)
         val lhs = randNormal(shape = intArrayOf(scale, scale), device = device)
         val rhs = randNormal(shape = intArrayOf(scale, scale), device = device)
-        repeat(numWarmUp) { lhs dotAssign rhs }
-        val measuredTime = measureTime { repeat(numIter) { lhs dotAssign rhs } }
+        repeat(numWarmUp) { lhs.dotAssign(rhs, false) }
+        val measuredTime = measureTime { repeat(numIter) { lhs.dotAssign(rhs, false) } }
         println("   ${measuredTime / numIter} p.o. with $numIter iterations")
     }
 }

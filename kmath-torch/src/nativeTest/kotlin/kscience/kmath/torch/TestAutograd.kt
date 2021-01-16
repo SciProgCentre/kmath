@@ -2,7 +2,7 @@ package kscience.kmath.torch
 
 import kotlin.test.*
 
-internal fun testingAutoGrad(dim: Int, device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingAutoGrad(dim: Int, device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
         val tensorX = randNormal(shape = intArrayOf(dim), device = device)
@@ -26,7 +26,7 @@ internal fun testingAutoGrad(dim: Int, device: TorchDevice = TorchDevice.TorchCP
 
 internal fun testingBatchedAutoGrad(bath: IntArray,
                                     dim: Int,
-                                    device: TorchDevice = TorchDevice.TorchCPU): Unit {
+                                    device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
 

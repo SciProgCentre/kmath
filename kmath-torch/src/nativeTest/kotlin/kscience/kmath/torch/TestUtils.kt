@@ -6,7 +6,7 @@ import kotlin.test.*
 internal val SEED = 987654
 internal val TOLERANCE = 1e-6
 
-internal fun testingSetSeed(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingSetSeed(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         setSeed(SEED)
         val normal = randNormal(IntArray(0), device = device).value()

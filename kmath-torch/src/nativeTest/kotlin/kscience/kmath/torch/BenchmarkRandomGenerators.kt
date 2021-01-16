@@ -7,7 +7,7 @@ internal fun benchmarkingRandNormal(
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: TorchDevice = TorchDevice.TorchCPU): Unit
+    device: Device = Device.CPU): Unit
 {
     TorchTensorFloatAlgebra{
         println("Benchmarking generation of $samples Normal samples on $device: ")
@@ -23,7 +23,7 @@ internal fun benchmarkingRandUniform(
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: TorchDevice = TorchDevice.TorchCPU): Unit
+    device: Device = Device.CPU): Unit
 {
     TorchTensorFloatAlgebra{
         println("Benchmarking generation of $samples Uniform samples on $device: ")
@@ -40,7 +40,7 @@ internal fun benchmarkingRandIntegral(
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: TorchDevice = TorchDevice.TorchCPU): Unit
+    device: Device = Device.CPU): Unit
 {
     TorchTensorIntAlgebra {
         println("Benchmarking generation of $samples integer [0,100] samples on $device: ")

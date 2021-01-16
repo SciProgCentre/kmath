@@ -197,6 +197,14 @@ TorchTensorHandle randn_float(int *shape, int shape_size, int device)
   return new torch::Tensor(ctorch::randn<float>(ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
 
+TorchTensorHandle randint_double(long low, long high, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randint<double>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
+TorchTensorHandle randint_float(long low, long high, int *shape, int shape_size, int device)
+{
+  return new torch::Tensor(ctorch::randint<float>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
+}
 TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::randint<long>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));

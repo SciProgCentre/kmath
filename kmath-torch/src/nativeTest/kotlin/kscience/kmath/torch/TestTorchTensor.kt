@@ -3,7 +3,7 @@ package kscience.kmath.torch
 import kotlinx.cinterop.*
 import kotlin.test.*
 
-internal fun testingCopyFromArray(device: TorchDevice = TorchDevice.TorchCPU): Unit {
+internal fun testingCopyFromArray(device: Device = Device.CPU): Unit {
     TorchTensorRealAlgebra {
         val array = (1..24).map { 10.0 * it * it }.toDoubleArray()
         val shape = intArrayOf(2, 3, 4)
@@ -52,21 +52,21 @@ class TestTorchTensor {
 
     @Test
     fun testTypeMoving() = TorchTensorFloatAlgebra {
-        val tensorInt = copyFromArray(floatArrayOf(1f,2f,3f), intArrayOf(3)).copyToInt()
+        val tensorInt = copyFromArray(floatArrayOf(1f, 2f, 3f), intArrayOf(3)).copyToInt()
         TorchTensorIntAlgebra {
-            val temporalTensor = copyFromArray(intArrayOf(4,5,6),intArrayOf(3))
+            val temporalTensor = copyFromArray(intArrayOf(4, 5, 6), intArrayOf(3))
             tensorInt swap temporalTensor
-            assertTrue(temporalTensor.copyToArray() contentEquals intArrayOf(1,2,3))
+            assertTrue(temporalTensor.copyToArray() contentEquals intArrayOf(1, 2, 3))
         }
-        assertTrue(tensorInt.copyToFloat().copyToArray() contentEquals floatArrayOf(4f,5f,6f))
+        assertTrue(tensorInt.copyToFloat().copyToArray() contentEquals floatArrayOf(4f, 5f, 6f))
     }
 
     @Test
-    fun testViewWithNoCopy() = TorchTensorIntAlgebra{
-        val tensor = copyFromArray(intArrayOf(1,2,3,4,5,6), shape = intArrayOf(6))
-        val viewTensor = tensor.view(intArrayOf(2,3))
-        assertTrue(viewTensor.shape contentEquals intArrayOf(2,3))
-        viewTensor[intArrayOf(0,0)] = 10
+    fun testViewWithNoCopy() = TorchTensorIntAlgebra {
+        val tensor = copyFromArray(intArrayOf(1, 2, 3, 4, 5, 6), shape = intArrayOf(6))
+        val viewTensor = tensor.view(intArrayOf(2, 3))
+        assertTrue(viewTensor.shape contentEquals intArrayOf(2, 3))
+        viewTensor[intArrayOf(0, 0)] = 10
         assertEquals(tensor[intArrayOf(0)], 10)
     }
 }

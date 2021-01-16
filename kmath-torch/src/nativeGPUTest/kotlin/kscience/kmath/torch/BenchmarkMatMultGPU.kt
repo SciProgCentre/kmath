@@ -6,15 +6,15 @@ class BenchmarkMatMultGPU {
     @Test
     fun benchmarkMatMultFloat20() =
         benchmarkingMatMultFloat(20, 10, 100000,
-            device = TorchDevice.TorchCUDA(0))
+            device = Device.CUDA(0))
 
     @Test
     fun benchmarkMatMultFloat200() =
         benchmarkingMatMultFloat(200, 10, 10000,
-            device = TorchDevice.TorchCUDA(0))
+            device = Device.CUDA(0))
 
     @Test
     fun benchmarkMatMultFloat2000() =
         benchmarkingMatMultFloat(2000, 10, 1000,
-            device = TorchDevice.TorchCUDA(0))
+            device = Device.CUDA(0))
 }

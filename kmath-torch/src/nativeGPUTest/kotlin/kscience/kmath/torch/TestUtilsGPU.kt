@@ -11,6 +11,6 @@ internal class TestUtilsGPU {
     }
 
     @Test
-    fun testSetSeed() = testingSetSeed(TorchDevice.TorchCUDA(0))
+    fun testSetSeed() = testingSetSeed(Device.CUDA(0))
 
 }
