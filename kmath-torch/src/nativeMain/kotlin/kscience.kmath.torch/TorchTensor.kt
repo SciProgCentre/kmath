@@ -2,13 +2,14 @@ package kscience.kmath.torch
 
 
 import kscience.kmath.structures.TensorStructure
+import kscience.kmath.memory.DeferScope
 
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
 
 
 public sealed class TorchTensor<T> constructor(
-    internal val scope: DeferScope,
+    public val scope: DeferScope,
     internal val tensorHandle: COpaquePointer
 ) : TensorStructure<T>() {
     init {
@@ -79,7 +80,7 @@ public sealed class TorchTensorOverField<T> constructor(
     scope: DeferScope,
     tensorHandle: COpaquePointer
 ) : TorchTensor<T>(scope, tensorHandle) {
-    internal var requiresGrad: Boolean
+    public var requiresGrad: Boolean
         get() = requires_grad(tensorHandle)
         set(value) = requires_grad_(tensorHandle, value)
 }

@@ -2,6 +2,8 @@ package kscience.kmath.torch
 
 
 import kscience.kmath.structures.*
+import kscience.kmath.memory.DeferScope
+import kscience.kmath.memory.withDeferScope
 
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
@@ -591,23 +593,23 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
 }
 
 public inline fun <R> TorchTensorRealAlgebra(block: TorchTensorRealAlgebra.() -> R): R =
-    memScoped { TorchTensorRealAlgebra(this).block() }
+    withDeferScope { TorchTensorRealAlgebra(this).block() }
 
 public inline fun <R> TorchTensorFloatAlgebra(block: TorchTensorFloatAlgebra.() -> R): R =
-    memScoped { TorchTensorFloatAlgebra(this).block() }
+    withDeferScope { TorchTensorFloatAlgebra(this).block() }
 
 public inline fun <R> TorchTensorLongAlgebra(block: TorchTensorLongAlgebra.() -> R): R =
-    memScoped { TorchTensorLongAlgebra(this).block() }
+    withDeferScope { TorchTensorLongAlgebra(this).block() }
 
 public inline fun <R> TorchTensorIntAlgebra(block: TorchTensorIntAlgebra.() -> R): R =
-    memScoped { TorchTensorIntAlgebra(this).block() }
+    withDeferScope { TorchTensorIntAlgebra(this).block() }
 
-public fun TorchTensorReal.withGrad(block: TorchTensorRealAlgebra.() -> TorchTensorReal): TorchTensorReal {
+public inline fun TorchTensorReal.withGrad(block: TorchTensorRealAlgebra.() -> TorchTensorReal): TorchTensorReal {
     this.requiresGrad = true
     return TorchTensorRealAlgebra(this.scope).block()
 }
 
-public fun TorchTensorFloat.withGrad(block: TorchTensorFloatAlgebra.() -> TorchTensorFloat): TorchTensorFloat {
+public inline fun TorchTensorFloat.withGrad(block: TorchTensorFloatAlgebra.() -> TorchTensorFloat): TorchTensorFloat {
     this.requiresGrad = true
     return TorchTensorFloatAlgebra(this.scope).block()
 }
