@@ -60,4 +60,13 @@ class TestTorchTensor {
         }
         assertTrue(tensorInt.copyToFloat().copyToArray() contentEquals floatArrayOf(4f,5f,6f))
     }
+
+    @Test
+    fun testViewWithNoCopy() = TorchTensorIntAlgebra{
+        val tensor = copyFromArray(intArrayOf(1,2,3,4,5,6), shape = intArrayOf(6))
+        val viewTensor = tensor.view(intArrayOf(2,3))
+        assertTrue(viewTensor.shape contentEquals intArrayOf(2,3))
+        viewTensor[intArrayOf(0,0)] = 10
+        assertEquals(tensor[intArrayOf(0)], 10)
+    }
 }

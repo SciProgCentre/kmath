@@ -102,6 +102,9 @@ public sealed class TorchTensorAlgebra<
     public infix fun TorchTensorType.swap(otherTensor: TorchTensorType): Unit {
         swap_tensors(this.tensorHandle, otherTensor.tensorHandle)
     }
+
+    public fun TorchTensorType.view(shape: IntArray): TorchTensorType =
+        wrap(view_tensor(this.tensorHandle, shape.toCValues(), shape.size)!!)
 }
 
 public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,

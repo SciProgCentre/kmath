@@ -31,6 +31,7 @@ extern "C"
     TorchTensorHandle copy_to_long(TorchTensorHandle tensor_handle);
     TorchTensorHandle copy_to_int(TorchTensorHandle tensor_handle);
     void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle);
+    TorchTensorHandle view_tensor(TorchTensorHandle tensor_handle, int *shape, int dim);
 
     char *tensor_to_string(TorchTensorHandle tensor_handle);
     void dispose_char(char *ptr);

@@ -74,6 +74,10 @@ void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle)
 {
   std::swap(ctorch::cast(lhs_handle), ctorch::cast(rhs_handle));
 }
+TorchTensorHandle view_tensor(TorchTensorHandle tensor_handle, int *shape, int dim) 
+{
+   return new torch::Tensor(ctorch::cast(tensor_handle).view(ctorch::to_vec_int(shape, dim)));
+}
 
 char *tensor_to_string(TorchTensorHandle tensor_handle)
 {
