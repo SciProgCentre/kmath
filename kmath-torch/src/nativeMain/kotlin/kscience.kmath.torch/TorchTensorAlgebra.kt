@@ -1,5 +1,8 @@
 package kscience.kmath.torch
 
+
+import kscience.kmath.structures.*
+
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
 
@@ -40,12 +43,12 @@ public sealed class TorchTensorAlgebra<
     override val one: TorchTensorType
         get() = number(1)
 
-    protected inline fun checkDeviceCompatible(a: TorchTensorType, b: TorchTensorType) =
+    protected inline fun checkDeviceCompatible(a: TorchTensorType, b: TorchTensorType): Unit =
         check(a.device == b.device) {
             "Tensors must be on the same device"
         }
 
-    protected inline fun checkShapeCompatible(a: TorchTensorType, b: TorchTensorType) =
+    protected inline fun checkShapeCompatible(a: TorchTensorType, b: TorchTensorType): Unit =
         check(a.shape contentEquals b.shape) {
             "Tensors must be of identical shape"
         }
@@ -214,7 +217,7 @@ public sealed class TorchTensorAlgebra<
 }
 
 public sealed class TorchTensorFieldAlgebra<T, TVar : CPrimitiveVar,
-        PrimitiveArrayType, TorchTensorType : TorchTensor<T>>(scope: DeferScope) :
+        PrimitiveArrayType, TorchTensorType : TorchTensorOverField<T>>(scope: DeferScope) :
     TorchTensorAlgebra<T, TVar, PrimitiveArrayType, TorchTensorType>(scope),
     TensorFieldAlgebra<T, TorchTensorType> {
 
@@ -598,3 +601,13 @@ public inline fun <R> TorchTensorLongAlgebra(block: TorchTensorLongAlgebra.() ->
 
 public inline fun <R> TorchTensorIntAlgebra(block: TorchTensorIntAlgebra.() -> R): R =
     memScoped { TorchTensorIntAlgebra(this).block() }
+
+public fun TorchTensorReal.withGrad(block: TorchTensorRealAlgebra.() -> TorchTensorReal): TorchTensorReal {
+    this.requiresGrad = true
+    return TorchTensorRealAlgebra(this.scope).block()
+}
+
+public fun TorchTensorFloat.withGrad(block: TorchTensorFloatAlgebra.() -> TorchTensorFloat): TorchTensorFloat {
+    this.requiresGrad = true
+    return TorchTensorFloatAlgebra(this.scope).block()
+}

@@ -1,6 +1,8 @@
 package kscience.kmath.torch
 
 
+import kscience.kmath.structures.TensorStructure
+
 import kotlinx.cinterop.*
 import kscience.kmath.ctorch.*
 
@@ -12,15 +14,16 @@ public sealed class TorchTensor<T> constructor(
     init {
         scope.defer(::close)
     }
+
     private fun close(): Unit = dispose_tensor(tensorHandle)
 
     protected abstract fun item(): T
 
     override val dimension: Int get() = get_dim(tensorHandle)
     override val shape: IntArray
-        get() = (1..dimension).map{get_shape_at(tensorHandle, it-1)}.toIntArray()
+        get() = (1..dimension).map { get_shape_at(tensorHandle, it - 1) }.toIntArray()
     public val strides: IntArray
-        get() = (1..dimension).map{get_stride_at(tensorHandle, it-1)}.toIntArray()
+        get() = (1..dimension).map { get_stride_at(tensorHandle, it - 1) }.toIntArray()
     public val size: Int get() = get_numel(tensorHandle)
     public val device: Device get() = Device.fromInt(get_device(tensorHandle))
 
@@ -44,27 +47,27 @@ public sealed class TorchTensor<T> constructor(
     internal inline fun checkIsValue() = check(isValue()) {
         "This tensor has shape ${shape.toList()}"
     }
+
     override fun value(): T {
         checkIsValue()
         return item()
     }
 
-    public var requiresGrad: Boolean
-        get() = requires_grad(tensorHandle)
-        set(value) = requires_grad_(tensorHandle, value)
-
     public fun copyToDouble(): TorchTensorReal = TorchTensorReal(
         scope = scope,
         tensorHandle = copy_to_double(this.tensorHandle)!!
     )
+
     public fun copyToFloat(): TorchTensorFloat = TorchTensorFloat(
         scope = scope,
         tensorHandle = copy_to_float(this.tensorHandle)!!
     )
+
     public fun copyToLong(): TorchTensorLong = TorchTensorLong(
         scope = scope,
         tensorHandle = copy_to_long(this.tensorHandle)!!
     )
+
     public fun copyToInt(): TorchTensorInt = TorchTensorInt(
         scope = scope,
         tensorHandle = copy_to_int(this.tensorHandle)!!
@@ -72,10 +75,20 @@ public sealed class TorchTensor<T> constructor(
 
 }
 
+public sealed class TorchTensorOverField<T> constructor(
+    scope: DeferScope,
+    tensorHandle: COpaquePointer
+) : TorchTensor<T>(scope, tensorHandle) {
+    internal var requiresGrad: Boolean
+        get() = requires_grad(tensorHandle)
+        set(value) = requires_grad_(tensorHandle, value)
+}
+
+
 public class TorchTensorReal internal constructor(
     scope: DeferScope,
     tensorHandle: COpaquePointer
-) : TorchTensor<Double>(scope, tensorHandle) {
+) : TorchTensorOverField<Double>(scope, tensorHandle) {
     override fun item(): Double = get_item_double(tensorHandle)
     override fun get(index: IntArray): Double = get_double(tensorHandle, index.toCValues())
     override fun set(index: IntArray, value: Double) {
@@ -86,7 +99,7 @@ public class TorchTensorReal internal constructor(
 public class TorchTensorFloat internal constructor(
     scope: DeferScope,
     tensorHandle: COpaquePointer
-) : TorchTensor<Float>(scope, tensorHandle) {
+) : TorchTensorOverField<Float>(scope, tensorHandle) {
     override fun item(): Float = get_item_float(tensorHandle)
     override fun get(index: IntArray): Float = get_float(tensorHandle, index.toCValues())
     override fun set(index: IntArray, value: Float) {
