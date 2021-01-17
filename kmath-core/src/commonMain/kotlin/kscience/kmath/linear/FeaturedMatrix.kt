@@ -93,6 +93,7 @@ public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFea
  *
  *
  */
+@JvmName("transposeConjugateDouble")
 public fun Matrix<Double>.transposeConjugate(): Matrix<Double> = transpose()
 
 /**
@@ -100,6 +101,7 @@ public fun Matrix<Double>.transposeConjugate(): Matrix<Double> = transpose()
  *
  * @return the Hermitian conjugate of this matrix.
  */
+@JvmName("transposeConjugateComplex")
 public fun Matrix<Complex>.transposeConjugate(): Matrix<Complex> {
     val t = transpose()
     return VirtualMatrix(t.rowNum, t.colNum) { i, j -> t[i,j].conjugate }
