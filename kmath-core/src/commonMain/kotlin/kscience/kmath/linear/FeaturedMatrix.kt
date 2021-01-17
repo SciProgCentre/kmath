@@ -6,6 +6,7 @@ import kscience.kmath.operations.conjugate
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.Structure2D
 import kscience.kmath.structures.asBuffer
+import kotlin.jvm.JvmName
 import kotlin.math.sqrt
 
 /**
