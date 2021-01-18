@@ -80,7 +80,7 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, 
     VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
 
 /**
- * Matrices with this feature were transposed previosly and hold the reference to their original.
+ * Matrices with this feature were transposed previously and hold the reference to their original.
  *
  * @property original the matrix before transposition.
  */
