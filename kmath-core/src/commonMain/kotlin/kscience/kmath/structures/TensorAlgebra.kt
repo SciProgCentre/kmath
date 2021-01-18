@@ -1,49 +1,68 @@
 package kscience.kmath.structures
 
-
-import kscience.kmath.operations.*
-
-public interface TensorAlgebra<T, TorchTensorType : TensorStructure<T>> : Ring<TorchTensorType> {
-
-    public operator fun T.plus(other: TorchTensorType): TorchTensorType
-    public operator fun TorchTensorType.plus(value: T): TorchTensorType
-    public operator fun TorchTensorType.plusAssign(value: T): Unit
-    public operator fun TorchTensorType.plusAssign(b: TorchTensorType): Unit
-
-    public operator fun T.minus(other: TorchTensorType): TorchTensorType
-    public operator fun TorchTensorType.minus(value: T): TorchTensorType
-    public operator fun TorchTensorType.minusAssign(value: T): Unit
-    public operator fun TorchTensorType.minusAssign(b: TorchTensorType): Unit
-
-    public operator fun T.times(other: TorchTensorType): TorchTensorType
-    public operator fun TorchTensorType.times(value: T): TorchTensorType
-    public operator fun TorchTensorType.timesAssign(value: T): Unit
-    public operator fun TorchTensorType.timesAssign(b: TorchTensorType): Unit
-
-    public infix fun TorchTensorType.dot(b: TorchTensorType): TorchTensorType
-
-    public fun diagonalEmbedding(
-        diagonalEntries: TorchTensorType,
-        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
-    ): TorchTensorType
-
-    public fun TorchTensorType.transpose(i: Int, j: Int): TorchTensorType
-    public fun TorchTensorType.view(shape: IntArray): TorchTensorType
-
-    public fun TorchTensorType.abs(): TorchTensorType
-    public fun TorchTensorType.sum(): TorchTensorType
-
+public interface TensorStructure<T> : MutableNDStructure<T> {
+    // A tensor can have empty shape, in which case it represents just a value
+    public abstract fun value(): T
 }
 
-public interface TensorFieldAlgebra<T, TorchTensorType : TensorStructure<T>> :
-    TensorAlgebra<T, TorchTensorType>, Field<TorchTensorType> {
+// https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 
-    public operator fun TorchTensorType.divAssign(b: TorchTensorType)
+public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
-    public fun TorchTensorType.exp(): TorchTensorType
-    public fun TorchTensorType.log(): TorchTensorType
+    public operator fun T.plus(other: TensorType): TensorType
+    public operator fun TensorType.plus(value: T): TensorType
+    public operator fun TensorType.plus(other: TensorType): TensorType
+    public operator fun TensorType.plusAssign(value: T): Unit
+    public operator fun TensorType.plusAssign(other: TensorType): Unit
 
-    public fun TorchTensorType.svd(): Triple<TorchTensorType, TorchTensorType, TorchTensorType>
-    public fun TorchTensorType.symEig(eigenvectors: Boolean = true): Pair<TorchTensorType, TorchTensorType>
+    public operator fun T.minus(other: TensorType): TensorType
+    public operator fun TensorType.minus(value: T): TensorType
+    public operator fun TensorType.minus(other: TensorType): TensorType
+    public operator fun TensorType.minusAssign(value: T): Unit
+    public operator fun TensorType.minusAssign(other: TensorType): Unit
+
+    public operator fun T.times(other: TensorType): TensorType
+    public operator fun TensorType.times(value: T): TensorType
+    public operator fun TensorType.times(other: TensorType): TensorType
+    public operator fun TensorType.timesAssign(value: T): Unit
+    public operator fun TensorType.timesAssign(other: TensorType): Unit
+    public operator fun TensorType.unaryMinus(): TensorType
+
+
+    public infix fun TensorType.dot(other: TensorType): TensorType
+    public infix fun TensorType.dotAssign(other: TensorType): Unit
+    public infix fun TensorType.dotRightAssign(other: TensorType): Unit
+
+    public fun diagonalEmbedding(
+        diagonalEntries: TensorType,
+        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
+    ): TensorType
+
+    public fun TensorType.transpose(i: Int, j: Int): TensorType
+    public fun TensorType.transposeAssign(i: Int, j: Int): Unit
+
+    public fun TensorType.view(shape: IntArray): TensorType
+
+    public fun TensorType.abs(): TensorType
+    public fun TensorType.absAssign(): Unit
+    public fun TensorType.sum(): TensorType
+    public fun TensorType.sumAssign(): Unit
+}
+
+// https://proofwiki.org/wiki/Definition:Division_Algebra
+
+public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>> :
+    TensorAlgebra<T, TensorType> {
+
+    public operator fun TensorType.div(other: TensorType): TensorType
+    public operator fun TensorType.divAssign(other: TensorType)
+
+    public fun TensorType.exp(): TensorType
+    public fun TensorType.expAssign(): Unit
+    public fun TensorType.log(): TensorType
+    public fun TensorType.logAssign(): Unit
+
+    public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
+    public fun TensorType.symEig(eigenvectors: Boolean = true): Pair<TensorType, TensorType>
 
 }
