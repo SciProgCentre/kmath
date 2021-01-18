@@ -60,8 +60,9 @@ public inline fun <reified T : Any> Matrix<*>.hasFeature(): Boolean =
 /**
  * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
  */
+@Suppress("UNCHECKED_CAST")
 public inline fun <reified T : Any> Matrix<*>.getFeature(): T? =
-    features.filterIsInstance<T>().firstOrNull()
+    features.find { it is T }?.let { it as T }
 
 /**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
@@ -78,7 +79,12 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.one(rows: Int, c
 public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
 
-public class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
+/**
+ * Matrices with this feature were transposed previosly and hold the reference to their original.
+ *
+ * @property original the matrix before transposition.
+ */
+public inline class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
 
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`.
@@ -105,5 +111,5 @@ public fun Matrix<Double>.transposeConjugate(): Matrix<Double> = transpose()
 @JvmName("transposeConjugateComplex")
 public fun Matrix<Complex>.transposeConjugate(): Matrix<Complex> {
     val t = transpose()
-    return VirtualMatrix(t.rowNum, t.colNum) { i, j -> t[i,j].conjugate }
+    return VirtualMatrix(t.rowNum, t.colNum) { i, j -> t[i, j].conjugate }
 }
