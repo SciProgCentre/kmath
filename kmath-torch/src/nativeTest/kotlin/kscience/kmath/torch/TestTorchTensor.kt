@@ -3,26 +3,18 @@ package kscience.kmath.torch
 import kotlinx.cinterop.*
 import kotlin.test.*
 
-internal fun testingCopyFromArray(device: Device = Device.CPU): Unit {
-    TorchTensorRealAlgebra {
-        val array = (1..24).map { 10.0 * it * it }.toDoubleArray()
-        val shape = intArrayOf(2, 3, 4)
-        val tensor = copyFromArray(array, shape = shape, device = device)
-        val copyOfTensor = tensor.copy()
-        tensor[intArrayOf(0, 0)] = 0.1
-        assertTrue(copyOfTensor.copyToArray() contentEquals array)
-        assertEquals(0.1, tensor[intArrayOf(0, 0)])
-    }
-}
-
 
 class TestTorchTensor {
 
     @Test
-    fun testCopyFromArray() = testingCopyFromArray()
+    fun testCopying() = TorchTensorFloatAlgebra {
+        withCuda {
+            device -> testingCopying(device)
+        }
+    }
 
     @Test
-    fun testCopyLessDataTransferOnCPU() = memScoped {
+    fun testNativeNoCopyDataTransferOnCPU() = memScoped {
         val data = allocArray<DoubleVar>(1)
         data[0] = 1.0
         TorchTensorRealAlgebra {
@@ -39,15 +31,7 @@ class TestTorchTensor {
 
     @Test
     fun testRequiresGrad() = TorchTensorRealAlgebra {
-        val tensor = randNormal(intArrayOf(3))
-        assertTrue(!tensor.requiresGrad)
-        tensor.requiresGrad = true
-        assertTrue(tensor.requiresGrad)
-        tensor.requiresGrad = false
-        assertTrue(!tensor.requiresGrad)
-        tensor.requiresGrad = true
-        val detachedTensor = tensor.detachFromGraph()
-        assertTrue(!detachedTensor.requiresGrad)
+        testingRequiresGrad()
     }
 
     @Test
@@ -63,11 +47,9 @@ class TestTorchTensor {
 
     @Test
     fun testViewWithNoCopy() = TorchTensorIntAlgebra {
-        val tensor = copyFromArray(intArrayOf(1, 2, 3, 4, 5, 6), shape = intArrayOf(6))
-        val viewTensor = tensor.view(intArrayOf(2, 3))
-        assertTrue(viewTensor.shape contentEquals intArrayOf(2, 3))
-        viewTensor[intArrayOf(0, 0)] = 10
-        assertEquals(tensor[intArrayOf(0)], 10)
+        withCuda {
+            device ->  testingViewWithNoCopy(device)
+        }
     }
 
 }

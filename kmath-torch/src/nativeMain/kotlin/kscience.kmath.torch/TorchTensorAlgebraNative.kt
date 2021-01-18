@@ -133,9 +133,9 @@ public sealed class TorchTensorPartialDivisionAlgebraNative<T, TVar : CPrimitive
     TorchTensorAlgebraNative<T, TVar, PrimitiveArrayType, TorchTensorType>(scope),
     TorchTensorPartialDivisionAlgebra<T, PrimitiveArrayType, TorchTensorType> {
 
-    override operator fun TorchTensorType.div(b: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, b)
-        return wrap(div_tensor(this.tensorHandle, b.tensorHandle)!!)
+    override operator fun TorchTensorType.div(other: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, other)
+        return wrap(div_tensor(this.tensorHandle, other.tensorHandle)!!)
     }
 
     override operator fun TorchTensorType.divAssign(other: TorchTensorType): Unit {

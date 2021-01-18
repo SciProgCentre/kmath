@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package kscience.kmath.torch
 
 import kscience.kmath.structures.*

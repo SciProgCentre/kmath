@@ -1,8 +1,8 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package kscience.kmath.torch
 
 import kscience.kmath.structures.TensorStructure
-
-
 
 public interface TorchTensor<T> : TensorStructure<T> {
     public fun item(): T
