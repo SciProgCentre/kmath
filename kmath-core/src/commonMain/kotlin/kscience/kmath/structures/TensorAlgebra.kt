@@ -1,7 +1,5 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.*
-
 public interface TensorStructure<T> : MutableNDStructure<T> {
     // A tensor can have empty shape, in which case it represents just a value
     public abstract fun value(): T
