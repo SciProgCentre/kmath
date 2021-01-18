@@ -61,7 +61,7 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
 
 
     override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> =
-        produce(a.rowNum, a.colNum) { i, j -> a.get(i, j) * k.toDouble() }
+        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * k.toDouble() }
 }
 
 

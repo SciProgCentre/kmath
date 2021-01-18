@@ -45,14 +45,14 @@ fun main() {
     measureAndPrint("Specialized addition") {
         specializedField {
             var res: NDBuffer<Double> = one
-            repeat(n) { res += 1.0 }
+            repeat(n) { res += one }
         }
     }
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
             var res = one
-            repeat(n) { res += 1.0 as Number }
+            repeat(n) { res += one }
         }
     }
 
