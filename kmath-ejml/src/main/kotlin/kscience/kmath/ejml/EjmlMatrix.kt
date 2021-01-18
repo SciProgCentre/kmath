@@ -48,8 +48,12 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
                 DecompositionFactory_DDRM.qr().apply { decompose(origin.ddrm.copy()) }
             }
 
-            override val q: FeaturedMatrix<Double> by lazy { EjmlMatrix(SimpleMatrix(qr.getQ(null, false))) }
-            override val r: FeaturedMatrix<Double> by lazy { EjmlMatrix(SimpleMatrix(qr.getR(null, false))) }
+            override val q: FeaturedMatrix<Double> by lazy {
+                EjmlMatrix(SimpleMatrix(qr.getQ(null, false)), setOf(OrthogonalFeature))
+            }
+            override val r: FeaturedMatrix<Double> by lazy {
+                EjmlMatrix(SimpleMatrix(qr.getR(null, false)), setOf(UFeature))
+            }
         },
 
         object : CholeskyDecompositionFeature<Double> {

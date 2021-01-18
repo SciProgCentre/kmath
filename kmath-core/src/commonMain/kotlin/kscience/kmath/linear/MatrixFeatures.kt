@@ -35,6 +35,8 @@ public interface InverseMatrixFeature<T : Any> : MatrixFeature {
 
 /**
  * Matrices with this feature can compute their determinant.
+ *
+ * @param T the type of matrices' items.
  */
 public interface DeterminantFeature<T : Any> : MatrixFeature {
     /**

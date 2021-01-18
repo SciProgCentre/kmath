@@ -3,15 +3,45 @@ package kscience.kmath.commons.linear
 import kscience.kmath.linear.*
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.NDStructure
+import kscience.kmath.structures.RealBuffer
 import org.apache.commons.math3.linear.*
 
-public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
+public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature> = emptySet()) :
+    FeaturedMatrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
-    public override val features: Set<MatrixFeature> = features ?: sequence<MatrixFeature> {
-        if (origin is DiagonalMatrix) yield(DiagonalFeature)
-    }.toHashSet()
+    public override val features: Set<MatrixFeature> = features union hashSetOf(
+        *if (origin is DiagonalMatrix) arrayOf(DiagonalFeature) else emptyArray(),
+        object : DeterminantFeature<Double>, LupDecompositionFeature<Double> {
+            private val lup by lazy { LUDecomposition(origin) }
+            override val determinant: Double by lazy { lup.determinant }
+            override val l: FeaturedMatrix<Double> by lazy { CMMatrix(lup.l, setOf(LFeature)) }
+            override val u: FeaturedMatrix<Double> by lazy { CMMatrix(lup.u, setOf(UFeature)) }
+            override val p: FeaturedMatrix<Double> by lazy { CMMatrix(lup.p) }
+        },
+
+        object : CholeskyDecompositionFeature<Double> {
+            override val l: FeaturedMatrix<Double> by lazy {
+                val cholesky = CholeskyDecomposition(origin)
+                CMMatrix(cholesky.l, setOf(LFeature))
+            }
+        },
+
+        object : QRDecompositionFeature<Double> {
+            private val qr by lazy { QRDecomposition(origin) }
+            override val q: FeaturedMatrix<Double> by lazy { CMMatrix(qr.q, setOf(OrthogonalFeature)) }
+            override val r: FeaturedMatrix<Double> by lazy { CMMatrix(qr.r, setOf(UFeature)) }
+        },
+
+        object : SingularValueDecompositionFeature<Double> {
+            private val sv by lazy { SingularValueDecomposition(origin) }
+            override val u: FeaturedMatrix<Double> by lazy { CMMatrix(sv.u) }
+            override val s: FeaturedMatrix<Double> by lazy { CMMatrix(sv.s) }
+            override val v: FeaturedMatrix<Double> by lazy { CMMatrix(sv.v) }
+            override val singularValues: Point<Double> by lazy { RealBuffer(sv.singularValues) }
+        },
+    )
 
     public override fun suggestFeature(vararg features: MatrixFeature): CMMatrix =
         CMMatrix(origin, this.features + features)
