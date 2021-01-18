@@ -13,6 +13,7 @@ public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature
 
     public override val features: Set<MatrixFeature> = features union hashSetOf(
         *if (origin is DiagonalMatrix) arrayOf(DiagonalFeature) else emptyArray(),
+
         object : DeterminantFeature<Double>, LupDecompositionFeature<Double> {
             private val lup by lazy { LUDecomposition(origin) }
             override val determinant: Double by lazy { lup.determinant }
