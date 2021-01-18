@@ -74,7 +74,14 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.one(rows: Int, c
 
 
 /**
- * Returns virtual matrix of zeroes.
+ * Returns a [VirtualMatrix] of zeroes.
+ *
+ * @param T the type of matrix's items.
+ * @param R the type of ring over the matrix's items.
+ * @receiver the matrix context to provide the [R] ring.
+ * @param rows the count of rows.
+ * @param columns the count of columns.
+ * @return a new virtual matrix.
  */
 public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, columns: Int): FeaturedMatrix<T> =
     VirtualMatrix(rows, columns) { _, _ -> elementContext.zero }
@@ -82,6 +89,7 @@ public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, 
 /**
  * Matrices with this feature were transposed previously and hold the reference to their original.
  *
+ * @param T the type of matrices' items.
  * @property original the matrix before transposition.
  */
 public inline class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
