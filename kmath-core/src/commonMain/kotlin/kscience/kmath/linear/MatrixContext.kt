@@ -133,8 +133,6 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> :
     public override fun multiply(a: Matrix<T>, k: Number): M =
         produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
 
-    public operator fun Number.times(matrix: FeaturedMatrix<T>): M = multiply(matrix, this)
-
     public override operator fun Matrix<T>.times(value: T): M =
         produce(rowNum, colNum) { i, j -> elementContext { get(i, j) * value } }
 }
