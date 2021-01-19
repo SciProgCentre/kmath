@@ -25,12 +25,11 @@ public interface TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType : Tor
     public fun full(value: T, shape: IntArray, device: Device): TorchTensorType
 
     public fun randIntegral(
-        low: T, high: T, shape: IntArray,
+        low: Long, high: Long, shape: IntArray,
         device: Device = Device.CPU
     ): TorchTensorType
-
-    public fun TorchTensorType.randIntegral(low: T, high: T): TorchTensorType
-    public fun TorchTensorType.randIntegralAssign(low: T, high: T): Unit
+    public fun TorchTensorType.randIntegral(low: Long, high: Long): TorchTensorType
+    public fun TorchTensorType.randIntegralAssign(low: Long, high: Long): Unit
 
     public fun TorchTensorType.copy(): TorchTensorType
     public fun TorchTensorType.copyToDevice(device: Device): TorchTensorType

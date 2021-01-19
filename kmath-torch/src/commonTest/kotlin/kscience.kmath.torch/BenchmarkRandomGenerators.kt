@@ -73,8 +73,8 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
         numIter,
         device,
         "integer [0,100]",
-        {sh, dc -> randIntegral(0f, 100f, shape = sh, device = dc)},
-        {ten -> ten.randIntegralAssign(0f, 100f) }
+        {sh, dc -> randIntegral(0, 100, shape = sh, device = dc)},
+        {ten -> ten.randIntegralAssign(0, 100) }
     )
 }
 

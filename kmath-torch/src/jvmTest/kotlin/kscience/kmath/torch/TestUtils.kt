@@ -6,14 +6,10 @@ import kotlin.test.*
 class TestUtils {
 
     @Test
-    fun testSetNumThreads() {
-        val numThreads = 2
-        setNumThreads(numThreads)
-        assertEquals(numThreads, getNumThreads())
+    fun testJTorch() {
+        val tensor = JTorch.fullInt(54, intArrayOf(3), 0)
+        println(JTorch.tensorToString(tensor))
+        JTorch.disposeTensor(tensor)
     }
 
-    @Test
-    fun testCPD() {
-        runCPD()
-    }
 }

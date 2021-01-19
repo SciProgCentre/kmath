@@ -3,7 +3,7 @@
 namespace ctorch
 {
 
-    using TorchTensorHandle = void*;
+    using TorchTensorHandle = void *;
 
     template <typename Dtype>
     inline c10::ScalarType dtype()
@@ -29,16 +29,28 @@ namespace ctorch
         return torch::kInt32;
     }
 
-    inline torch::Tensor &cast(const TorchTensorHandle &tensor_handle)
+    template <typename Handle>
+    inline torch::Tensor &cast(const Handle &tensor_handle)
     {
-        return *static_cast<torch::Tensor *>(tensor_handle);
+        return *static_cast<torch::Tensor *>((TorchTensorHandle)tensor_handle);
+    }
+
+    template <typename Handle>
+    inline void dispose_tensor(const Handle &tensor_handle)
+    {
+        delete static_cast<torch::Tensor *>((TorchTensorHandle)tensor_handle);
+    }
+
+    inline std::string tensor_to_string(const torch::Tensor &tensor)
+    {
+        std::stringstream bufrep;
+        bufrep << tensor;
+        return bufrep.str();
     }
 
     inline char *tensor_to_char(const torch::Tensor &tensor)
     {
-        std::stringstream bufrep;
-        bufrep << tensor;
-        auto rep = bufrep.str();
+        auto rep = tensor_to_string(tensor);
         char *crep = (char *)malloc(rep.length() + 1);
         std::strcpy(crep, rep.c_str());
         return crep;
@@ -72,45 +84,43 @@ namespace ctorch
     }
 
     template <typename Dtype>
-    inline torch::Tensor from_blob(Dtype *data, std::vector<int64_t> shape, torch::Device device, bool copy)
+    inline torch::Tensor from_blob(Dtype *data, const std::vector<int64_t> &shape, torch::Device device, bool copy)
     {
         return torch::from_blob(data, shape, dtype<Dtype>()).to(torch::TensorOptions().layout(torch::kStrided).device(device), false, copy);
     }
 
     template <typename NumType>
-    inline NumType get(const TorchTensorHandle &tensor_handle, int *index)
+    inline NumType get(const torch::Tensor &tensor, int *index)
     {
-        auto ten = ctorch::cast(tensor_handle);
-        return ten.index(to_index(index, ten.dim())).item<NumType>();
+        return tensor.index(to_index(index, tensor.dim())).item<NumType>();
     }
 
     template <typename NumType>
-    inline void set(TorchTensorHandle &tensor_handle, int *index, NumType value)
+    inline void set(const torch::Tensor &tensor, int *index, NumType value)
     {
-        auto ten = ctorch::cast(tensor_handle);
-        ten.index(to_index(index, ten.dim())) = value;
+        tensor.index(to_index(index, tensor.dim())) = value;
     }
 
     template <typename Dtype>
-    inline torch::Tensor randn(std::vector<int64_t> shape, torch::Device device)
+    inline torch::Tensor randn(const std::vector<int64_t> &shape, torch::Device device)
     {
         return torch::randn(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
     template <typename Dtype>
-    inline torch::Tensor rand(std::vector<int64_t> shape, torch::Device device)
+    inline torch::Tensor rand(const std::vector<int64_t> &shape, torch::Device device)
     {
         return torch::rand(shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
     template <typename Dtype>
-    inline torch::Tensor randint(long low, long high, std::vector<int64_t> shape, torch::Device device)
+    inline torch::Tensor randint(long low, long high, const std::vector<int64_t> &shape, torch::Device device)
     {
         return torch::randint(low, high, shape, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }
 
     template <typename Dtype>
-    inline torch::Tensor full(Dtype value, std::vector<int64_t> shape, torch::Device device)
+    inline torch::Tensor full(Dtype value, const std::vector<int64_t> &shape, torch::Device device)
     {
         return torch::full(shape, value, torch::TensorOptions().dtype(dtype<Dtype>()).layout(torch::kStrided).device(device));
     }

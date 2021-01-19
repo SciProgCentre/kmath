@@ -1,6 +1,6 @@
 # LibTorch extension (`kmath-torch`)
 
-This is a `Kotlin/Native` module, with only `linuxX64` supported so far. This library wraps some of
+This is a `Kotlin/Native` & `JVM` module, with only `linuxX64` supported so far. The library wraps some of
 the [PyTorch C++ API](https://pytorch.org/cppdocs), focusing on integrating `Aten` & `Autograd` with `KMath`.
 
 ## Installation
@@ -11,7 +11,7 @@ To install the library, you have to build & publish locally `kmath-core`, `kmath
 ./gradlew -q :kmath-core:publishToMavenLocal :kmath-memory:publishToMavenLocal :kmath-torch:publishToMavenLocal
 ```
 
-This builds `ctorch`, a C wrapper for `LibTorch` placed inside:
+This builds `ctorch` a C wrapper and `jtorch` a JNI wrapper for `LibTorch`, placed inside:
 
 `~/.konan/third-party/kmath-torch-0.2.0-dev-4/cpp-build`
 
@@ -19,8 +19,8 @@ You will have to link against it in your own project.
 
 ## Usage
 
-Tensors are implemented over the `MutableNDStructure`. They can only be instantiated through provided factory methods
-and require scoping:
+Tensors are implemented over the `MutableNDStructure`. They can only be created through provided factory methods
+and require scoping within a `TensorAlgebra` instance:
 
 ```kotlin
 TorchTensorRealAlgebra {
@@ -63,4 +63,4 @@ TorchTensorRealAlgebra {
     val hessianAtX = expressionAtX hess tensorX
 }
 ```
-
+Contributed by [Roland Grinis](https://github.com/rgrit91)

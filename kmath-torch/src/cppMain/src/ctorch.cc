@@ -74,9 +74,9 @@ void swap_tensors(TorchTensorHandle lhs_handle, TorchTensorHandle rhs_handle)
 {
   std::swap(ctorch::cast(lhs_handle), ctorch::cast(rhs_handle));
 }
-TorchTensorHandle view_tensor(TorchTensorHandle tensor_handle, int *shape, int dim) 
+TorchTensorHandle view_tensor(TorchTensorHandle tensor_handle, int *shape, int dim)
 {
-   return new torch::Tensor(ctorch::cast(tensor_handle).view(ctorch::to_vec_int(shape, dim)));
+  return new torch::Tensor(ctorch::cast(tensor_handle).view(ctorch::to_vec_int(shape, dim)));
 }
 
 char *tensor_to_string(TorchTensorHandle tensor_handle)
@@ -89,7 +89,7 @@ void dispose_char(char *ptr)
 }
 void dispose_tensor(TorchTensorHandle tensor_handle)
 {
-  delete static_cast<torch::Tensor *>(tensor_handle);
+  ctorch::dispose_tensor(tensor_handle);
 }
 
 int get_dim(TorchTensorHandle tensor_handle)
@@ -149,35 +149,35 @@ int get_item_int(TorchTensorHandle tensor_handle)
 
 double get_double(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get<double>(tensor_handle, index);
+  return ctorch::get<double>(ctorch::cast(tensor_handle), index);
 }
 float get_float(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get<float>(tensor_handle, index);
+  return ctorch::get<float>(ctorch::cast(tensor_handle), index);
 }
 long get_long(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get<long>(tensor_handle, index);
+  return ctorch::get<long>(ctorch::cast(tensor_handle), index);
 }
 int get_int(TorchTensorHandle tensor_handle, int *index)
 {
-  return ctorch::get<int>(tensor_handle, index);
+  return ctorch::get<int>(ctorch::cast(tensor_handle), index);
 }
 void set_double(TorchTensorHandle tensor_handle, int *index, double value)
 {
-  ctorch::set<double>(tensor_handle, index, value);
+  ctorch::set<double>(ctorch::cast(tensor_handle), index, value);
 }
 void set_float(TorchTensorHandle tensor_handle, int *index, float value)
 {
-  ctorch::set<float>(tensor_handle, index, value);
+  ctorch::set<float>(ctorch::cast(tensor_handle), index, value);
 }
 void set_long(TorchTensorHandle tensor_handle, int *index, long value)
 {
-  ctorch::set<long>(tensor_handle, index, value);
+  ctorch::set<long>(ctorch::cast(tensor_handle), index, value);
 }
 void set_int(TorchTensorHandle tensor_handle, int *index, int value)
 {
-  ctorch::set<int>(tensor_handle, index, value);
+  ctorch::set<int>(ctorch::cast(tensor_handle), index, value);
 }
 
 TorchTensorHandle rand_double(int *shape, int shape_size, int device)
@@ -209,7 +209,7 @@ TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, 
 {
   return new torch::Tensor(ctorch::randint<long>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
-TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device)
+TorchTensorHandle randint_int(long low, long high, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::randint<int>(low, high, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
 }
@@ -230,19 +230,11 @@ void randn_like_assign(TorchTensorHandle tensor_handle)
 {
   ctorch::cast(tensor_handle) = torch::randn_like(ctorch::cast(tensor_handle));
 }
-TorchTensorHandle randint_long_like(TorchTensorHandle tensor_handle, long low, long high)
+TorchTensorHandle randint_like(TorchTensorHandle tensor_handle, long low, long high)
 {
   return new torch::Tensor(torch::randint_like(ctorch::cast(tensor_handle), low, high));
 }
-void randint_long_like_assign(TorchTensorHandle tensor_handle, long low, long high)
-{
-  ctorch::cast(tensor_handle) = torch::randint_like(ctorch::cast(tensor_handle), low, high);
-}
-TorchTensorHandle randint_int_like(TorchTensorHandle tensor_handle, int low, int high)
-{
-  return new torch::Tensor(torch::randint_like(ctorch::cast(tensor_handle), low, high));
-}
-void randint_int_like_assign(TorchTensorHandle tensor_handle, int low, int high)
+void randint_like_assign(TorchTensorHandle tensor_handle, long low, long high)
 {
   ctorch::cast(tensor_handle) = torch::randint_like(ctorch::cast(tensor_handle), low, high);
 }
@@ -262,39 +254,6 @@ TorchTensorHandle full_long(long value, int *shape, int shape_size, int device)
 TorchTensorHandle full_int(int value, int *shape, int shape_size, int device)
 {
   return new torch::Tensor(ctorch::full<int>(value, ctorch::to_vec_int(shape, shape_size), ctorch::int_to_device(device)));
-}
-
-TorchTensorHandle plus_double(double value, TorchTensorHandle other)
-{
-  return new torch::Tensor(ctorch::cast(other) + value);
-}
-TorchTensorHandle plus_float(float value, TorchTensorHandle other)
-{
-  return new torch::Tensor(ctorch::cast(other) + value);
-}
-TorchTensorHandle plus_long(long value, TorchTensorHandle other)
-{
-  return new torch::Tensor(ctorch::cast(other) + value);
-}
-TorchTensorHandle plus_int(int value, TorchTensorHandle other)
-{
-  return new torch::Tensor(ctorch::cast(other) + value);
-}
-void plus_double_assign(double value, TorchTensorHandle other)
-{
-  ctorch::cast(other) += value;
-}
-void plus_float_assign(float value, TorchTensorHandle other)
-{
-  ctorch::cast(other) += value;
-}
-void plus_long_assign(long value, TorchTensorHandle other)
-{
-  ctorch::cast(other) += value;
-}
-void plus_int_assign(int value, TorchTensorHandle other)
-{
-  ctorch::cast(other) += value;
 }
 
 TorchTensorHandle times_double(double value, TorchTensorHandle other)
@@ -330,22 +289,39 @@ void times_int_assign(int value, TorchTensorHandle other)
   ctorch::cast(other) *= value;
 }
 
-TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+TorchTensorHandle plus_double(double value, TorchTensorHandle other)
 {
-  return new torch::Tensor(ctorch::cast(lhs) + ctorch::cast(rhs));
+  return new torch::Tensor(ctorch::cast(other) + value);
 }
-void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+TorchTensorHandle plus_float(float value, TorchTensorHandle other)
 {
-  ctorch::cast(lhs) += ctorch::cast(rhs);
+  return new torch::Tensor(ctorch::cast(other) + value);
 }
-TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+TorchTensorHandle plus_long(long value, TorchTensorHandle other)
 {
-  return new torch::Tensor(ctorch::cast(lhs) - ctorch::cast(rhs));
+  return new torch::Tensor(ctorch::cast(other) + value);
 }
-void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+TorchTensorHandle plus_int(int value, TorchTensorHandle other)
 {
-  ctorch::cast(lhs) -= ctorch::cast(rhs);
+  return new torch::Tensor(ctorch::cast(other) + value);
 }
+void plus_double_assign(double value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_float_assign(float value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_long_assign(long value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+void plus_int_assign(int value, TorchTensorHandle other)
+{
+  ctorch::cast(other) += value;
+}
+
 TorchTensorHandle times_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   return new torch::Tensor(ctorch::cast(lhs) * ctorch::cast(rhs));
@@ -361,6 +337,22 @@ TorchTensorHandle div_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
 void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
 {
   ctorch::cast(lhs) /= ctorch::cast(rhs);
+}
+TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) + ctorch::cast(rhs));
+}
+void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) += ctorch::cast(rhs);
+}
+TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  return new torch::Tensor(ctorch::cast(lhs) - ctorch::cast(rhs));
+}
+void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs)
+{
+  ctorch::cast(lhs) -= ctorch::cast(rhs);
 }
 TorchTensorHandle unary_minus(TorchTensorHandle tensor_handle)
 {

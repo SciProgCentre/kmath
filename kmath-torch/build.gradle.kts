@@ -127,7 +127,6 @@ val generateJNIHeader by tasks.registering {
 kotlin {
     explicitApiWarning()
 
-
     jvm {
         withJava()
     }
@@ -158,7 +157,6 @@ kotlin {
     val test by nativeTarget.compilations.getting
 
     sourceSets {
-
         val commonMain by getting {
             dependencies {
                 api(project(":kmath-core"))
@@ -171,6 +169,11 @@ kotlin {
             }
         }
 
+        val jvmMain by getting {
+            dependencies {
+                api(project(":kmath-core"))
+            }
+        }
     }
 }
 

@@ -43,7 +43,7 @@ internal inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensorOverFie
 internal inline fun <TorchTensorType : TorchTensor<Int>,
         TorchTensorAlgebraType : TorchTensorAlgebra<Int, IntArray, TorchTensorType>>
         TorchTensorAlgebraType.testingViewWithNoCopy(device: Device = Device.CPU) {
-    val tensor = copyFromArray(intArrayOf(1, 2, 3, 4, 5, 6), shape = intArrayOf(6))
+    val tensor = copyFromArray(intArrayOf(1, 2, 3, 4, 5, 6), shape = intArrayOf(6), device)
     val viewTensor = tensor.view(intArrayOf(2, 3))
     assertTrue(viewTensor.shape contentEquals intArrayOf(2, 3))
     viewTensor[intArrayOf(0, 0)] = 10

@@ -6,7 +6,7 @@ import kotlin.test.*
 internal class TestUtils {
     @Test
     fun testSetNumThreads() {
-        TorchTensorIntAlgebra {
+        TorchTensorLongAlgebra {
             testingSetNumThreads()
         }
     }

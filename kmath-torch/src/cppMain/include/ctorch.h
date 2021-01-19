@@ -70,16 +70,15 @@ extern "C"
     TorchTensorHandle randint_double(long low, long high, int *shape, int shape_size, int device);
     TorchTensorHandle randint_float(long low, long high, int *shape, int shape_size, int device);
     TorchTensorHandle randint_long(long low, long high, int *shape, int shape_size, int device);
-    TorchTensorHandle randint_int(int low, int high, int *shape, int shape_size, int device);
+    TorchTensorHandle randint_int(long low, long high, int *shape, int shape_size, int device);
 
     TorchTensorHandle rand_like(TorchTensorHandle tensor_handle);
     void rand_like_assign(TorchTensorHandle tensor_handle);
     TorchTensorHandle randn_like(TorchTensorHandle tensor_handle);
     void randn_like_assign(TorchTensorHandle tensor_handle);
-    TorchTensorHandle randint_long_like(TorchTensorHandle tensor_handle, long low, long high);
-    void randint_long_like_assign(TorchTensorHandle tensor_handle, long low, long high);
-    TorchTensorHandle randint_int_like(TorchTensorHandle tensor_handle, int low, int high);
-    void randint_int_like_assign(TorchTensorHandle tensor_handle, int low, int high);
+    TorchTensorHandle randint_like(TorchTensorHandle tensor_handle, long low, long high);
+    void randint_like_assign(TorchTensorHandle tensor_handle, long low, long high);
+  
 
     TorchTensorHandle full_double(double value, int *shape, int shape_size, int device);
     TorchTensorHandle full_float(float value, int *shape, int shape_size, int device);
@@ -106,14 +105,14 @@ extern "C"
     void plus_long_assign(long value, TorchTensorHandle other);
     void plus_int_assign(int value, TorchTensorHandle other);
 
-    TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
-    void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
     TorchTensorHandle times_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void times_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
     TorchTensorHandle div_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
     void div_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    TorchTensorHandle plus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void plus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    TorchTensorHandle minus_tensor(TorchTensorHandle lhs, TorchTensorHandle rhs);
+    void minus_tensor_assign(TorchTensorHandle lhs, TorchTensorHandle rhs);
     TorchTensorHandle unary_minus(TorchTensorHandle tensor_handle);
 
     TorchTensorHandle abs_tensor(TorchTensorHandle tensor_handle);

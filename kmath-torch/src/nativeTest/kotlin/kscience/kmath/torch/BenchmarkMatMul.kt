@@ -22,6 +22,4 @@ internal class BenchmarkMatMul {
             benchmarkMatMul(2000, 10, 1000, "Float", Device.CUDA(0))
         }
     }
-
-
 }
