@@ -1,11 +1,6 @@
 package kscience.kmath.dimensions
 
-import kscience.kmath.linear.GenericMatrixContext
-import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.Point
-import kscience.kmath.linear.transpose
-import kscience.kmath.operations.RealField
-import kscience.kmath.operations.Ring
+import kscience.kmath.linear.*
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.Structure2D
@@ -42,9 +37,11 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
  * An inline wrapper for a Matrix
  */
 public inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
-    private val structure: Structure2D<T>
+    private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
+    override val rowNum: Int get() = shape[0]
+    override val colNum: Int get() = shape[1]
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 }
 
@@ -81,7 +78,7 @@ public inline class DPointWrapper<T, D : Dimension>(public val point: Point<T>) 
 /**
  * Basic operations on dimension-safe matrices. Operates on [Matrix]
  */
-public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: GenericMatrixContext<T, Ri, Matrix<T>>) {
+public inline class DMatrixContext<T : Any>(public val context: MatrixContext<T, Matrix<T>>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
         require(rowNum == Dimension.dim<R>().toInt()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"
@@ -115,7 +112,7 @@ public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: Ge
     }
 
     public inline infix fun <reified R1 : Dimension, reified C1 : Dimension, reified C2 : Dimension> DMatrix<T, R1, C1>.dot(
-        other: DMatrix<T, C1, C2>
+        other: DMatrix<T, C1, C2>,
     ): DMatrix<T, R1, C2> = context { this@dot dot other }.coerce()
 
     public inline infix fun <reified R : Dimension, reified C : Dimension> DMatrix<T, R, C>.dot(vector: DPoint<T, C>): DPoint<T, R> =
@@ -139,18 +136,20 @@ public inline class DMatrixContext<T : Any, Ri : Ring<T>>(public val context: Ge
     public inline fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.transpose(): DMatrix<T, R, C> =
         context { (this@transpose as Matrix<T>).transpose() }.coerce()
 
-    /**
-     * A square unit matrix
-     */
-    public inline fun <reified D : Dimension> one(): DMatrix<T, D, D> = produce { i, j ->
-        if (i == j) context.elementContext.one else context.elementContext.zero
-    }
-
-    public inline fun <reified R : Dimension, reified C : Dimension> zero(): DMatrix<T, R, C> = produce { _, _ ->
-        context.elementContext.zero
-    }
-
     public companion object {
-        public val real: DMatrixContext<Double, RealField> = DMatrixContext(MatrixContext.real)
+        public val real: DMatrixContext<Double> = DMatrixContext(MatrixContext.real)
     }
 }
+
+
+/**
+ * A square unit matrix
+ */
+public inline fun <reified D : Dimension> DMatrixContext<Double>.one(): DMatrix<Double, D, D> = produce { i, j ->
+    if (i == j) 1.0 else 0.0
+}
+
+public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double>.zero(): DMatrix<Double, R, C> =
+    produce { _, _ ->
+        0.0
+    }

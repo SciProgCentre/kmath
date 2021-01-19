@@ -37,7 +37,7 @@ public interface ExtendedFieldOperations<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T> {
     public override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2
     public override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2
     public override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
@@ -79,6 +79,8 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double> {
 
     public override val one: Double
         get() = 1.0
+
+    override fun number(value: Number): Double = value.toDouble()
 
     public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
@@ -131,10 +133,13 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     public override val one: Float
         get() = 1.0f
 
-    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float = when (operation) {
-        PowerOperations.POW_OPERATION -> ::power
-        else -> super.binaryOperationFunction(operation)
-    }
+    override fun number(value: Number): Float = value.toFloat()
+
+    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
+        when (operation) {
+            PowerOperations.POW_OPERATION -> ::power
+            else -> super.binaryOperationFunction(operation)
+        }
 
     public override inline fun add(a: Float, b: Float): Float = a + b
     public override inline fun multiply(a: Float, k: Number): Float = a * k.toFloat()
@@ -174,12 +179,14 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
  * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object IntRing : Ring<Int>, Norm<Int, Int> {
+public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
     public override val zero: Int
         get() = 0
 
     public override val one: Int
         get() = 1
+
+    override fun number(value: Number): Int = value.toInt()
 
     public override inline fun add(a: Int, b: Int): Int = a + b
     public override inline fun multiply(a: Int, k: Number): Int = k.toInt() * a
@@ -198,12 +205,14 @@ public object IntRing : Ring<Int>, Norm<Int, Int> {
  * A field for [Short] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object ShortRing : Ring<Short>, Norm<Short, Short> {
+public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
     public override val zero: Short
         get() = 0
 
     public override val one: Short
         get() = 1
+
+    override fun number(value: Number): Short = value.toShort()
 
     public override inline fun add(a: Short, b: Short): Short = (a + b).toShort()
     public override inline fun multiply(a: Short, k: Number): Short = (a * k.toShort()).toShort()
@@ -222,12 +231,14 @@ public object ShortRing : Ring<Short>, Norm<Short, Short> {
  * A field for [Byte] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
+public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
     public override val zero: Byte
         get() = 0
 
     public override val one: Byte
         get() = 1
+
+    override fun number(value: Number): Byte = value.toByte()
 
     public override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
     public override inline fun multiply(a: Byte, k: Number): Byte = (a * k.toByte()).toByte()
@@ -246,12 +257,14 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte> {
  * A field for [Double] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object LongRing : Ring<Long>, Norm<Long, Long> {
+public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
     public override val zero: Long
         get() = 0L
 
     public override val one: Long
         get() = 1L
+
+    override fun number(value: Number): Long = value.toLong()
 
     public override inline fun add(a: Long, b: Long): Long = a + b
     public override inline fun multiply(a: Long, k: Number): Long = a * k.toLong()
