@@ -34,10 +34,10 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
      * Converts this matrix to GSL one.
      */
     @Suppress("UNCHECKED_CAST")
-    public fun Matrix<T>.toGsl(): GslMatrix<T, H1> = (if (this is GslMatrix<*, *>)
+    public fun Matrix<T>.toGsl(): GslMatrix<T, H1> = if (this is GslMatrix<*, *>)
         this as GslMatrix<T, H1>
     else
-        produce(rowNum, colNum) { i, j -> this[i, j] }).copy()
+        produce(rowNum, colNum) { i, j -> this[i, j] }
 
     /**
      * Converts this point to GSL one.
@@ -61,10 +61,7 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
  */
 public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, gsl_matrix, gsl_vector>(scope) {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> =
-        GslRealMatrix(
-            nativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())),
-            scope = scope
-        )
+        GslRealMatrix(nativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())), scope = scope)
 
     override fun produceDirtyVector(size: Int): GslVector<Double, gsl_vector> =
         GslRealVector(nativeHandle = requireNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
@@ -86,20 +83,26 @@ public class GslRealMatrixContext(scope: DeferScope) : GslMatrixContext<Double, 
     }
 
     public override fun Matrix<Double>.times(value: Double): GslMatrix<Double, gsl_matrix> {
-        val g1 = toGsl()
+        val g1 = toGsl().copy()
         gsl_matrix_scale(g1.nativeHandle, value)
         return g1
     }
 
     public override fun add(a: Matrix<Double>, b: Matrix<Double>): GslMatrix<Double, gsl_matrix> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_add(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 
     public override fun multiply(a: Matrix<Double>, k: Number): GslMatrix<Double, gsl_matrix> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_scale(g1.nativeHandle, k.toDouble())
+        return g1
+    }
+
+    public override fun Matrix<Double>.minus(b: Matrix<Double>): Matrix<Double> {
+        val g1 = toGsl().copy()
+        gsl_matrix_sub(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 }
@@ -115,11 +118,13 @@ public fun <R> GslRealMatrixContext(block: GslRealMatrixContext.() -> R): R =
  */
 public class GslFloatMatrixContext(scope: DeferScope) :
     GslMatrixContext<Float, gsl_matrix_float, gsl_vector_float>(scope) {
-    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> =
-        GslFloatMatrix(requireNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())), scope = scope)
+    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> = GslFloatMatrix(
+        nativeHandle = requireNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())),
+        scope = scope,
+    )
 
     override fun produceDirtyVector(size: Int): GslVector<Float, gsl_vector_float> =
-        GslFloatVector(requireNotNull(gsl_vector_float_alloc(size.toULong())), scope)
+        GslFloatVector(nativeHandle = requireNotNull(value = gsl_vector_float_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Float>.dot(other: Matrix<Float>): GslMatrix<Float, gsl_matrix_float> {
         val x = toGsl().nativeHandle
@@ -138,20 +143,26 @@ public class GslFloatMatrixContext(scope: DeferScope) :
     }
 
     public override fun Matrix<Float>.times(value: Float): GslMatrix<Float, gsl_matrix_float> {
-        val g1 = toGsl()
+        val g1 = toGsl().copy()
         gsl_matrix_float_scale(g1.nativeHandle, value.toDouble())
         return g1
     }
 
     public override fun add(a: Matrix<Float>, b: Matrix<Float>): GslMatrix<Float, gsl_matrix_float> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_float_add(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 
     public override fun multiply(a: Matrix<Float>, k: Number): GslMatrix<Float, gsl_matrix_float> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_float_scale(g1.nativeHandle, k.toDouble())
+        return g1
+    }
+
+    public override fun Matrix<Float>.minus(b: Matrix<Float>): Matrix<Float> {
+        val g1 = toGsl().copy()
+        gsl_matrix_float_sub(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 }
@@ -167,14 +178,13 @@ public fun <R> GslFloatMatrixContext(block: GslFloatMatrixContext.() -> R): R =
  */
 public class GslComplexMatrixContext(scope: DeferScope) :
     GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>(scope) {
-    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> =
-        GslComplexMatrix(
-            nativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
-            scope = scope
-        )
+    override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> = GslComplexMatrix(
+        nativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
+        scope = scope,
+    )
 
     override fun produceDirtyVector(size: Int): GslVector<Complex, gsl_vector_complex> =
-        GslComplexVector(requireNotNull(gsl_vector_complex_alloc(size.toULong())), scope)
+        GslComplexVector(nativeHandle = requireNotNull(gsl_vector_complex_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Complex>.dot(other: Matrix<Complex>): GslMatrix<Complex, gsl_matrix_complex> {
         val x = toGsl().nativeHandle
@@ -193,20 +203,26 @@ public class GslComplexMatrixContext(scope: DeferScope) :
     }
 
     public override fun Matrix<Complex>.times(value: Complex): GslMatrix<Complex, gsl_matrix_complex> {
-        val g1 = toGsl()
+        val g1 = toGsl().copy()
         gsl_matrix_complex_scale(g1.nativeHandle, value.toGsl())
         return g1
     }
 
     public override fun add(a: Matrix<Complex>, b: Matrix<Complex>): GslMatrix<Complex, gsl_matrix_complex> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_complex_add(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 
     public override fun multiply(a: Matrix<Complex>, k: Number): GslMatrix<Complex, gsl_matrix_complex> {
-        val g1 = a.toGsl()
+        val g1 = a.toGsl().copy()
         gsl_matrix_complex_scale(g1.nativeHandle, k.toComplex().toGsl())
+        return g1
+    }
+
+    public override fun Matrix<Complex>.minus(b: Matrix<Complex>): Matrix<Complex> {
+        val g1 = toGsl().copy()
+        gsl_matrix_complex_sub(g1.nativeHandle, b.toGsl().nativeHandle)
         return g1
     }
 }

@@ -2,15 +2,14 @@ package kscience.kmath.gsl
 
 import kotlinx.cinterop.CStructVar
 import kotlinx.cinterop.DeferScope
-import kscience.kmath.linear.FeaturedMatrix
+import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.NDStructure
 
 /**
  * Wraps gsl_matrix_* objects from GSL.
  */
 public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(scope: DeferScope) :
-    GslMemoryHolder<H>(scope),
-    FeaturedMatrix<T> {
+    GslMemoryHolder<H>(scope), Matrix<T> {
     internal abstract operator fun set(i: Int, j: Int, value: T)
     internal abstract fun copy(): GslMatrix<T, H>
 

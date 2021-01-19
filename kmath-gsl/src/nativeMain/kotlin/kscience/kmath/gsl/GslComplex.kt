@@ -1,7 +1,6 @@
 package kscience.kmath.gsl
 
 import kotlinx.cinterop.*
-import kscience.kmath.linear.MatrixFeature
 import kscience.kmath.operations.Complex
 import org.gnu.gsl.*
 
@@ -12,21 +11,13 @@ internal fun Complex.toGsl(): CValue<gsl_complex> = cValue {
     dat[1] = im
 }
 
-internal class GslComplexMatrix(
-    override val nativeHandle: CPointer<gsl_matrix_complex>,
-    features: Set<MatrixFeature> = emptySet(),
-    scope: DeferScope,
-) : GslMatrix<Complex, gsl_matrix_complex>(scope) {
+internal class GslComplexMatrix(override val nativeHandle: CPointer<gsl_matrix_complex>, scope: DeferScope) :
+    GslMatrix<Complex, gsl_matrix_complex>(scope) {
     override val rowNum: Int
         get() = nativeHandleChecked().pointed.size1.toInt()
 
     override val colNum: Int
         get() = nativeHandleChecked().pointed.size2.toInt()
-
-    override val features: Set<MatrixFeature> = features
-
-    override fun suggestFeature(vararg features: MatrixFeature): GslComplexMatrix =
-        GslComplexMatrix(nativeHandleChecked(), this.features + features, scope)
 
     override operator fun get(i: Int, j: Int): Complex =
         gsl_matrix_complex_get(nativeHandleChecked(), i.toULong(), j.toULong()).toKMath()
@@ -37,7 +28,7 @@ internal class GslComplexMatrix(
     override fun copy(): GslComplexMatrix {
         val new = requireNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_complex_memcpy(new, nativeHandleChecked())
-        return GslComplexMatrix(new, features, scope)
+        return GslComplexMatrix(new, scope)
     }
 
     override fun close(): Unit = gsl_matrix_complex_free(nativeHandleChecked())
