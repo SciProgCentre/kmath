@@ -5,10 +5,8 @@ import kotlinx.benchmark.Benchmark
 import kscience.kmath.commons.linear.CMMatrixContext
 import kscience.kmath.commons.linear.CMMatrixContext.dot
 import kscience.kmath.commons.linear.inverse
-import kscience.kmath.commons.linear.toCM
 import kscience.kmath.ejml.EjmlMatrixContext
 import kscience.kmath.ejml.inverse
-import kscience.kmath.ejml.toEjml
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Matrix
 import org.openjdk.jmh.annotations.Scope
@@ -35,16 +33,14 @@ class LinearAlgebraBenchmark {
     @Benchmark
     fun cmLUPInversion() {
         CMMatrixContext {
-            val cm = matrix.toCM()             //avoid overhead on conversion
-            inverse(cm)
+            inverse(matrix)
         }
     }
 
     @Benchmark
     fun ejmlInverse() {
         EjmlMatrixContext {
-            val km = matrix.toEjml()      //avoid overhead on conversion
-            inverse(km)
+            inverse(matrix)
         }
     }
 }
