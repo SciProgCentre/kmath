@@ -28,7 +28,7 @@ internal class ExpressionsInterpretersBenchmark {
     @Benchmark
     fun mstExpression() {
         val expr = algebra.mstInField {
-            symbol("x") * number(2.0) + number(2.0) / symbol("x") - number(16.0)
+            symbol("x") * 2.0 + 2.0 / symbol("x") - 16.0
         }
 
         invokeAndSum(expr)
@@ -37,7 +37,7 @@ internal class ExpressionsInterpretersBenchmark {
     @Benchmark
     fun asmExpression() {
         val expr = algebra.mstInField {
-            symbol("x") * number(2.0) + number(2.0) / symbol("x") - number(16.0)
+            symbol("x") * 2.0 + 2.0 / symbol("x") - 16.0
         }.compile()
 
         invokeAndSum(expr)

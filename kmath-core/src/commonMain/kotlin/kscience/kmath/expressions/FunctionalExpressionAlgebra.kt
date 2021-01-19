@@ -95,8 +95,9 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
         super<FunctionalExpressionSpace>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionField<T, A : Field<T>>(algebra: A) :
-    FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>> {
+public open class FunctionalExpressionField<T, A : Field<T>>(
+    algebra: A,
+) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>> {
     /**
      * Builds an Expression of division an expression by another one.
      */
