@@ -1,6 +1,7 @@
 package kscience.kmath.expressions
 
 import kscience.kmath.linear.Point
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.*
 import kscience.kmath.structures.asBuffer
 import kotlin.contracts.InvocationKind
@@ -79,10 +80,11 @@ public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
 /**
  * Represents field in context of which functions can be derived.
  */
+@OptIn(UnstableKMathAPI::class)
 public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     public val context: F,
     bindings: Map<Symbol, T>,
-) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>> {
+) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, RingWithNumbers<AutoDiffValue<T>> {
     public override val zero: AutoDiffValue<T>
         get() = const(context.zero)
 

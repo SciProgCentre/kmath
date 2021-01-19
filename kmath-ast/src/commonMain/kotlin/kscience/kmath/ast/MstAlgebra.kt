@@ -1,5 +1,6 @@
 package kscience.kmath.ast
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.*
 
 /**
@@ -25,8 +26,11 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
     public override fun number(value: Number): MST.Numeric = MstAlgebra.number(value)
     public override fun symbol(value: String): MST.Symbolic = MstAlgebra.symbol(value)
     public override fun add(a: MST, b: MST): MST.Binary = binaryOperationFunction(SpaceOperations.PLUS_OPERATION)(a, b)
-    public override operator fun MST.unaryPlus(): MST.Unary = unaryOperationFunction(SpaceOperations.PLUS_OPERATION)(this)
-    public override operator fun MST.unaryMinus(): MST.Unary = unaryOperationFunction(SpaceOperations.MINUS_OPERATION)(this)
+    public override operator fun MST.unaryPlus(): MST.Unary =
+        unaryOperationFunction(SpaceOperations.PLUS_OPERATION)(this)
+
+    public override operator fun MST.unaryMinus(): MST.Unary =
+        unaryOperationFunction(SpaceOperations.MINUS_OPERATION)(this)
 
     public override operator fun MST.minus(b: MST): MST.Binary =
         binaryOperationFunction(SpaceOperations.MINUS_OPERATION)(this, b)
@@ -44,7 +48,8 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST> {
 /**
  * [Ring] over [MST] nodes.
  */
-public object MstRing : Ring<MST>, NumericAlgebra<MST> {
+@OptIn(UnstableKMathAPI::class)
+public object MstRing : Ring<MST>, RingWithNumbers<MST> {
     public override val zero: MST.Numeric
         get() = MstSpace.zero
 
@@ -54,7 +59,9 @@ public object MstRing : Ring<MST>, NumericAlgebra<MST> {
     public override fun symbol(value: String): MST.Symbolic = MstSpace.symbol(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstSpace.add(a, b)
     public override fun multiply(a: MST, k: Number): MST.Binary = MstSpace.multiply(a, k)
-    public override fun multiply(a: MST, b: MST): MST.Binary = binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, b)
+    public override fun multiply(a: MST, b: MST): MST.Binary =
+        binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, b)
+
     public override operator fun MST.unaryPlus(): MST.Unary = MstSpace { +this@unaryPlus }
     public override operator fun MST.unaryMinus(): MST.Unary = MstSpace { -this@unaryMinus }
     public override operator fun MST.minus(b: MST): MST.Binary = MstSpace { this@minus - b }
@@ -69,7 +76,8 @@ public object MstRing : Ring<MST>, NumericAlgebra<MST> {
 /**
  * [Field] over [MST] nodes.
  */
-public object MstField : Field<MST> {
+@OptIn(UnstableKMathAPI::class)
+public object MstField : Field<MST>, RingWithNumbers<MST> {
     public override val zero: MST.Numeric
         get() = MstRing.zero
 
@@ -81,7 +89,9 @@ public object MstField : Field<MST> {
     public override fun add(a: MST, b: MST): MST.Binary = MstRing.add(a, b)
     public override fun multiply(a: MST, k: Number): MST.Binary = MstRing.multiply(a, k)
     public override fun multiply(a: MST, b: MST): MST.Binary = MstRing.multiply(a, b)
-    public override fun divide(a: MST, b: MST): MST.Binary = binaryOperationFunction(FieldOperations.DIV_OPERATION)(a, b)
+    public override fun divide(a: MST, b: MST): MST.Binary =
+        binaryOperationFunction(FieldOperations.DIV_OPERATION)(a, b)
+
     public override operator fun MST.unaryPlus(): MST.Unary = MstRing { +this@unaryPlus }
     public override operator fun MST.unaryMinus(): MST.Unary = MstRing { -this@unaryMinus }
     public override operator fun MST.minus(b: MST): MST.Binary = MstRing { this@minus - b }
@@ -89,13 +99,14 @@ public object MstField : Field<MST> {
     public override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstRing.binaryOperationFunction(operation)
 
-    public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary = MstRing.unaryOperationFunction(operation)
+    public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
+        MstRing.unaryOperationFunction(operation)
 }
 
 /**
  * [ExtendedField] over [MST] nodes.
  */
-public object MstExtendedField : ExtendedField<MST> {
+public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     public override val zero: MST.Numeric
         get() = MstField.zero
 
@@ -103,6 +114,7 @@ public object MstExtendedField : ExtendedField<MST> {
         get() = MstField.one
 
     public override fun symbol(value: String): MST.Symbolic = MstField.symbol(value)
+    public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun sin(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
     public override fun cos(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.COS_OPERATION)(arg)
     public override fun tan(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.TAN_OPERATION)(arg)
@@ -132,5 +144,6 @@ public object MstExtendedField : ExtendedField<MST> {
     public override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstField.binaryOperationFunction(operation)
 
-    public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary = MstField.unaryOperationFunction(operation)
+    public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
+        MstField.unaryOperationFunction(operation)
 }

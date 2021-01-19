@@ -1,5 +1,6 @@
 package kscience.kmath.operations
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.BigInt.Companion.BASE
 import kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import kscience.kmath.structures.*
@@ -16,7 +17,8 @@ public typealias TBase = ULong
  *
  * @author Robert Drynkin (https://github.com/robdrynkin) and Peter Klimai (https://github.com/pklimai)
  */
-public object BigIntField : Field<BigInt> {
+@OptIn(UnstableKMathAPI::class)
+public object BigIntField : Field<BigInt>, RingWithNumbers<BigInt> {
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 

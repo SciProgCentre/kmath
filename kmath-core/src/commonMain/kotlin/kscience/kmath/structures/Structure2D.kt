@@ -9,12 +9,14 @@ public interface Structure2D<T> : NDStructure<T> {
     /**
      * The number of rows in this structure.
      */
-    public val rowNum: Int get() = shape[0]
+    public val rowNum: Int
 
     /**
      * The number of columns in this structure.
      */
-    public val colNum: Int get() = shape[1]
+    public val colNum: Int
+
+    public override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
@@ -55,6 +57,9 @@ public interface Structure2D<T> : NDStructure<T> {
  */
 private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
+
+    override val rowNum: Int get() = shape[0]
+    override val colNum: Int get() = shape[1]
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 

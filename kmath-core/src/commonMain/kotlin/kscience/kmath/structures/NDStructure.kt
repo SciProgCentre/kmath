@@ -1,5 +1,6 @@
 package kscience.kmath.structures
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kotlin.jvm.JvmName
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
@@ -38,8 +39,16 @@ public interface NDStructure<T> {
      */
     public fun elements(): Sequence<Pair<IntArray, T>>
 
+    //force override equality and hash code
     public override fun equals(other: Any?): Boolean
     public override fun hashCode(): Int
+
+    /**
+     * Feature is additional property or hint that does not directly affect the structure, but could in some cases help
+     * optimize operations and performance. If the feature is not present, null is defined.
+     */
+    @UnstableKMathAPI
+    public fun <T : Any> getFeature(type: KClass<T>): T? = null
 
     public companion object {
         /**
@@ -120,6 +129,9 @@ public interface NDStructure<T> {
  */
 public operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
 
+@UnstableKMathAPI
+public inline fun <reified T : Any> NDStructure<*>.getFeature(): T? = getFeature(T::class)
+
 /**
  * Represents mutable [NDStructure].
  */
@@ -133,6 +145,9 @@ public interface MutableNDStructure<T> : NDStructure<T> {
     public operator fun set(index: IntArray, value: T)
 }
 
+/**
+ * Transform a structure element-by element in place.
+ */
 public inline fun <T> MutableNDStructure<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 

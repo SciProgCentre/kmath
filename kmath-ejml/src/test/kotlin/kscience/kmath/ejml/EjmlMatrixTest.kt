@@ -3,7 +3,8 @@ package kscience.kmath.ejml
 import kscience.kmath.linear.DeterminantFeature
 import kscience.kmath.linear.LupDecompositionFeature
 import kscience.kmath.linear.MatrixFeature
-import kscience.kmath.linear.getFeature
+import kscience.kmath.linear.plus
+import kscience.kmath.structures.getFeature
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
 import kotlin.random.Random
@@ -58,7 +59,7 @@ internal class EjmlMatrixTest {
 
     @Test
     fun suggestFeature() {
-        assertNotNull(EjmlMatrix(randomMatrix).suggestFeature(SomeFeature).getFeature<SomeFeature>())
+        assertNotNull((EjmlMatrix(randomMatrix) + SomeFeature).getFeature<SomeFeature>())
     }
 
     @Test
