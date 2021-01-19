@@ -54,7 +54,7 @@ public interface NDStructure<T> {
         /**
          * Indicates whether some [NDStructure] is equal to another one.
          */
-        public fun equals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
+        public fun contentEquals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
@@ -275,7 +275,7 @@ public abstract class NDBuffer<T> : NDStructure<T> {
     override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map { it to this[it] }
 
     override fun equals(other: Any?): Boolean {
-        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+        return NDStructure.contentEquals(this, other as? NDStructure<*> ?: return false)
     }
 
     override fun hashCode(): Int {

@@ -43,7 +43,7 @@ public class BufferMatrix<T : Any>(
         if (this === other) return true
 
         return when (other) {
-            is NDStructure<*> -> NDStructure.equals(this, other)
+            is NDStructure<*> -> NDStructure.contentEquals(this, other)
             else -> false
         }
     }
