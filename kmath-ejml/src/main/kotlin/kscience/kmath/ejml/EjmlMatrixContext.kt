@@ -1,7 +1,9 @@
 package kscience.kmath.ejml
 
+import kscience.kmath.linear.InverseMatrixFeature
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
+import kscience.kmath.linear.getFeature
 import kscience.kmath.structures.Matrix
 import org.ejml.simple.SimpleMatrix
 
@@ -77,3 +79,7 @@ public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMa
  */
 public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
+
+public fun EjmlMatrix.inverted(): EjmlMatrix = getFeature<InverseMatrixFeature<Double>>()!!.inverse as EjmlMatrix
+
+public fun EjmlMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> = matrix.toEjml().inverted()

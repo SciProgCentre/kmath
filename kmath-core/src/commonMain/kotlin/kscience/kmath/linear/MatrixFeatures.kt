@@ -1,5 +1,7 @@
 package kscience.kmath.linear
 
+import kscience.kmath.structures.Matrix
+
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
@@ -30,7 +32,7 @@ public interface InverseMatrixFeature<T : Any> : MatrixFeature {
     /**
      * The inverse matrix of the matrix that owns this feature.
      */
-    public val inverse: FeaturedMatrix<T>
+    public val inverse: Matrix<T>
 }
 
 /**

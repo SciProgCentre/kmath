@@ -1,5 +1,6 @@
 package kscience.kmath.nd4j
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.*
 import kscience.kmath.structures.NDAlgebra
 import kscience.kmath.structures.NDField
@@ -35,7 +36,7 @@ public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C, Nd4jArrayStructure<T>>
 
     public override fun mapIndexed(
         arg: Nd4jArrayStructure<T>,
-        transform: C.(index: IntArray, T) -> T
+        transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
         check(arg)
         val new = Nd4j.create(*shape).wrap()
@@ -46,7 +47,7 @@ public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C, Nd4jArrayStructure<T>>
     public override fun combine(
         a: Nd4jArrayStructure<T>,
         b: Nd4jArrayStructure<T>,
-        transform: C.(T, T) -> T
+        transform: C.(T, T) -> T,
     ): Nd4jArrayStructure<T> {
         check(a, b)
         val new = Nd4j.create(*shape).wrap()
@@ -61,8 +62,8 @@ public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C, Nd4jArrayStructure<T>>
  * @param T the type of the element contained in ND structure.
  * @param S the type of space of structure elements.
  */
-public interface Nd4jArraySpace<T, S> : NDSpace<T, S, Nd4jArrayStructure<T>>,
-    Nd4jArrayAlgebra<T, S> where S : Space<T> {
+public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S, Nd4jArrayStructure<T>>, Nd4jArrayAlgebra<T, S> {
+
     public override val zero: Nd4jArrayStructure<T>
         get() = Nd4j.zeros(*shape).wrap()
 
@@ -103,7 +104,9 @@ public interface Nd4jArraySpace<T, S> : NDSpace<T, S, Nd4jArrayStructure<T>>,
  * @param T the type of the element contained in ND structure.
  * @param R the type of ring of structure elements.
  */
-public interface Nd4jArrayRing<T, R> : NDRing<T, R, Nd4jArrayStructure<T>>, Nd4jArraySpace<T, R> where R : Ring<T> {
+@OptIn(UnstableKMathAPI::class)
+public interface Nd4jArrayRing<T, R : Ring<T>> : NDRing<T, R, Nd4jArrayStructure<T>>, Nd4jArraySpace<T, R> {
+
     public override val one: Nd4jArrayStructure<T>
         get() = Nd4j.ones(*shape).wrap()
 
@@ -111,21 +114,21 @@ public interface Nd4jArrayRing<T, R> : NDRing<T, R, Nd4jArrayStructure<T>>, Nd4j
         check(a, b)
         return a.ndArray.mul(b.ndArray).wrap()
     }
-
-    public override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
-        check(this)
-        return ndArray.sub(b).wrap()
-    }
-
-    public override operator fun Nd4jArrayStructure<T>.plus(b: Number): Nd4jArrayStructure<T> {
-        check(this)
-        return ndArray.add(b).wrap()
-    }
-
-    public override operator fun Number.minus(b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
-        check(b)
-        return b.ndArray.rsub(this).wrap()
-    }
+//
+//    public override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
+//        check(this)
+//        return ndArray.sub(b).wrap()
+//    }
+//
+//    public override operator fun Nd4jArrayStructure<T>.plus(b: Number): Nd4jArrayStructure<T> {
+//        check(this)
+//        return ndArray.add(b).wrap()
+//    }
+//
+//    public override operator fun Number.minus(b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
+//        check(b)
+//        return b.ndArray.rsub(this).wrap()
+//    }
 
     public companion object {
         private val intNd4jArrayRingCache: ThreadLocal<MutableMap<IntArray, IntNd4jArrayRing>> =
@@ -165,7 +168,8 @@ public interface Nd4jArrayRing<T, R> : NDRing<T, R, Nd4jArrayStructure<T>>, Nd4j
  * @param N the type of ND structure.
  * @param F the type field of structure elements.
  */
-public interface Nd4jArrayField<T, F> : NDField<T, F, Nd4jArrayStructure<T>>, Nd4jArrayRing<T, F> where F : Field<T> {
+public interface Nd4jArrayField<T, F : Field<T>> : NDField<T, F, Nd4jArrayStructure<T>>, Nd4jArrayRing<T, F> {
+
     public override fun divide(a: Nd4jArrayStructure<T>, b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
         check(a, b)
         return a.ndArray.div(b.ndArray).wrap()

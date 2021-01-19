@@ -37,7 +37,7 @@ public interface ExtendedFieldOperations<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T> {
+public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T> {
     public override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2
     public override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2
     public override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
@@ -79,6 +79,8 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double> {
 
     public override val one: Double
         get() = 1.0
+
+    override fun number(value: Number): Double = value.toDouble()
 
     public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
@@ -131,10 +133,13 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     public override val one: Float
         get() = 1.0f
 
-    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float = when (operation) {
-        PowerOperations.POW_OPERATION -> ::power
-        else -> super.binaryOperationFunction(operation)
-    }
+    override fun number(value: Number): Float = value.toFloat()
+
+    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
+        when (operation) {
+            PowerOperations.POW_OPERATION -> ::power
+            else -> super.binaryOperationFunction(operation)
+        }
 
     public override inline fun add(a: Float, b: Float): Float = a + b
     public override inline fun multiply(a: Float, k: Number): Float = a * k.toFloat()

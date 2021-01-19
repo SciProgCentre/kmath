@@ -12,8 +12,10 @@ import org.ejml.simple.SimpleMatrix
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFeature> = emptySet()) :
-    FeaturedMatrix<Double> {
+public class EjmlMatrix(
+    public val origin: SimpleMatrix,
+    features: Set<MatrixFeature> = emptySet()
+) :    FeaturedMatrix<Double> {
     public override val rowNum: Int
         get() = origin.numRows()
 
@@ -88,11 +90,7 @@ public class EjmlMatrix(public val origin: SimpleMatrix, features: Set<MatrixFea
         return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
     }
 
-    public override fun hashCode(): Int {
-        var result = origin.hashCode()
-        result = 31 * result + features.hashCode()
-        return result
-    }
+    public override fun hashCode(): Int = origin.hashCode()
 
-    public override fun toString(): String = "EjmlMatrix(origin=$origin, features=$features)"
+    public override fun toString(): String = "EjmlMatrix($origin)"
 }

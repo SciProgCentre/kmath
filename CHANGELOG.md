@@ -32,6 +32,7 @@
 - Optimized dot product for buffer matrices moved to `kmath-for-real`
 - EjmlMatrix context is an object
 - Matrix LUP `inverse` renamed to `inverseWithLUP`
+- `NumericAlgebra` moved outside of regular algebra chain (`Ring` no longer implements it).
 
 ### Deprecated
 

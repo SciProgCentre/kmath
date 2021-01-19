@@ -1,13 +1,17 @@
 package kscience.kmath.structures
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.FieldElement
 import kscience.kmath.operations.RealField
+import kscience.kmath.operations.RingWithNumbers
 
 public typealias RealNDElement = BufferedNDFieldElement<Double, RealField>
 
+@OptIn(UnstableKMathAPI::class)
 public class RealNDField(override val shape: IntArray) :
     BufferedNDField<Double, RealField>,
-    ExtendedNDField<Double, RealField, NDBuffer<Double>> {
+    ExtendedNDField<Double, RealField, NDBuffer<Double>>,
+    RingWithNumbers<NDBuffer<Double>>{
 
     override val strides: Strides = DefaultStrides(shape)
 
@@ -15,7 +19,12 @@ public class RealNDField(override val shape: IntArray) :
     override val zero: RealNDElement by lazy { produce { zero } }
     override val one: RealNDElement by lazy { produce { one } }
 
-    public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
+    override fun number(value: Number): NDBuffer<Double> {
+        val d = value.toDouble()
+        return produce { d }
+    }
+
+    private inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
         RealBuffer(DoubleArray(size) { initializer(it) })
 
     /**
@@ -59,7 +68,8 @@ public class RealNDField(override val shape: IntArray) :
         check(a, b)
         return BufferedNDFieldElement(
             this,
-            buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
+            buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) }
+        )
     }
 
     override fun NDBuffer<Double>.toElement(): FieldElement<NDBuffer<Double>, *, out BufferedNDField<Double, RealField>> =

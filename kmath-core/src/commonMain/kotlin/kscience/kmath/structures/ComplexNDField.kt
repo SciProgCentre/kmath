@@ -1,9 +1,7 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
-import kscience.kmath.operations.FieldElement
-import kscience.kmath.operations.complex
+import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -12,14 +10,21 @@ public typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField
 /**
  * An optimized nd-field for complex numbers
  */
+@OptIn(UnstableKMathAPI::class)
 public class ComplexNDField(override val shape: IntArray) :
     BufferedNDField<Complex, ComplexField>,
-    ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>> {
+    ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>>,
+    RingWithNumbers<NDBuffer<Complex>>{
 
     override val strides: Strides = DefaultStrides(shape)
     override val elementContext: ComplexField get() = ComplexField
     override val zero: ComplexNDElement by lazy { produce { zero } }
     override val one: ComplexNDElement by lazy { produce { one } }
+
+    override fun number(value: Number): NDBuffer<Complex> {
+        val c = value.toComplex()
+        return produce { c }
+    }
 
     public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Complex): Buffer<Complex> =
         Buffer.complex(size) { initializer(it) }
@@ -29,7 +34,7 @@ public class ComplexNDField(override val shape: IntArray) :
      */
     override fun map(
         arg: NDBuffer<Complex>,
-        transform: ComplexField.(Complex) -> Complex
+        transform: ComplexField.(Complex) -> Complex,
     ): ComplexNDElement {
         check(arg)
         val array = buildBuffer(arg.strides.linearSize) { offset -> ComplexField.transform(arg.buffer[offset]) }
@@ -43,7 +48,7 @@ public class ComplexNDField(override val shape: IntArray) :
 
     override fun mapIndexed(
         arg: NDBuffer<Complex>,
-        transform: ComplexField.(index: IntArray, Complex) -> Complex
+        transform: ComplexField.(index: IntArray, Complex) -> Complex,
     ): ComplexNDElement {
         check(arg)
 
@@ -60,7 +65,7 @@ public class ComplexNDField(override val shape: IntArray) :
     override fun combine(
         a: NDBuffer<Complex>,
         b: NDBuffer<Complex>,
-        transform: ComplexField.(Complex, Complex) -> Complex
+        transform: ComplexField.(Complex, Complex) -> Complex,
     ): ComplexNDElement {
         check(a, b)
 
@@ -141,7 +146,7 @@ public fun NDField.Companion.complex(vararg shape: Int): ComplexNDField = Comple
 
 public fun NDElement.Companion.complex(
     vararg shape: Int,
-    initializer: ComplexField.(IntArray) -> Complex
+    initializer: ComplexField.(IntArray) -> Complex,
 ): ComplexNDElement = NDField.complex(*shape).produce(initializer)
 
 /**
