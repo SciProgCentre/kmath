@@ -16,7 +16,7 @@
 - ND4J support module submitting `NDStructure` and `NDAlgebra` over `INDArray`.
 - Coroutine-deterministic Monte-Carlo scope with a random number generator.
 - Some minor utilities to `kmath-for-real`.
-- Basic Quaternion vector support.
+- Basic Quaternion vector support in `kmath-complex`.
 - Generic operation result parameter to `MatrixContext`
 
 ### Changed
@@ -33,6 +33,7 @@
 - Optimized dot product for buffer matrices moved to `kmath-for-real`
 - EjmlMatrix context is an object
 - Matrix LUP `inverse` renamed to `inverseWithLUP`
+- `Complex` and related features moved to a separate module `kmath-complex`
 
 ### Deprecated
 
