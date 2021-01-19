@@ -17,6 +17,7 @@
 - Coroutine-deterministic Monte-Carlo scope with a random number generator.
 - Some minor utilities to `kmath-for-real`.
 - Generic operation result parameter to `MatrixContext`
+- Integration with GNU Scientific Library with `kmath-gsl` for Kotlin/Native Linux x64 target.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`.
