@@ -33,6 +33,7 @@
 - EjmlMatrix context is an object
 - Matrix LUP `inverse` renamed to `inverseWithLUP`
 - `NumericAlgebra` moved outside of regular algebra chain (`Ring` no longer implements it).
+- Features moved to NDStructure and became transparent.
 
 ### Deprecated
 

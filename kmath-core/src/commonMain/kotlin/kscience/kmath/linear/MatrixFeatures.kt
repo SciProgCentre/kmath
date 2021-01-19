@@ -11,17 +11,19 @@ public interface MatrixFeature
 /**
  * Matrices with this feature are considered to have only diagonal non-null elements.
  */
-public object DiagonalFeature : MatrixFeature
+public interface DiagonalFeature : MatrixFeature{
+    public companion object: DiagonalFeature
+}
 
 /**
  * Matrices with this feature have all zero elements.
  */
-public object ZeroFeature : MatrixFeature
+public object ZeroFeature : DiagonalFeature
 
 /**
  * Matrices with this feature have unit elements on diagonal and zero elements in all other places.
  */
-public object UnitFeature : MatrixFeature
+public object UnitFeature : DiagonalFeature
 
 /**
  * Matrices with this feature can be inverted: [inverse] = `a`<sup>-1</sup> where `a` is the owning matrix.
@@ -76,17 +78,17 @@ public interface LupDecompositionFeature<T : Any> : MatrixFeature {
     /**
      * The lower triangular matrix in this decomposition. It may have [LFeature].
      */
-    public val l: FeaturedMatrix<T>
+    public val l: Matrix<T>
 
     /**
      * The upper triangular matrix in this decomposition. It may have [UFeature].
      */
-    public val u: FeaturedMatrix<T>
+    public val u: Matrix<T>
 
     /**
      * The permutation matrix in this decomposition.
      */
-    public val p: FeaturedMatrix<T>
+    public val p: Matrix<T>
 }
 
 /**
@@ -104,12 +106,12 @@ public interface QRDecompositionFeature<T : Any> : MatrixFeature {
     /**
      * The orthogonal matrix in this decomposition. It may have [OrthogonalFeature].
      */
-    public val q: FeaturedMatrix<T>
+    public val q: Matrix<T>
 
     /**
      * The upper triangular matrix in this decomposition. It may have [UFeature].
      */
-    public val r: FeaturedMatrix<T>
+    public val r: Matrix<T>
 }
 
 /**
@@ -122,7 +124,7 @@ public interface CholeskyDecompositionFeature<T : Any> : MatrixFeature {
     /**
      * The triangular matrix in this decomposition. It may have either [UFeature] or [LFeature].
      */
-    public val l: FeaturedMatrix<T>
+    public val l: Matrix<T>
 }
 
 /**
@@ -135,17 +137,17 @@ public interface SingularValueDecompositionFeature<T : Any> : MatrixFeature {
     /**
      * The matrix in this decomposition. It is unitary, and it consists from left singular vectors.
      */
-    public val u: FeaturedMatrix<T>
+    public val u: Matrix<T>
 
     /**
      * The matrix in this decomposition. Its main diagonal elements are singular values.
      */
-    public val s: FeaturedMatrix<T>
+    public val s: Matrix<T>
 
     /**
      * The matrix in this decomposition. It is unitary, and it consists from right singular vectors.
      */
-    public val v: FeaturedMatrix<T>
+    public val v: Matrix<T>
 
     /**
      * The buffer of singular values of this SVD.
