@@ -17,7 +17,6 @@ public fun Matrix<Double>.toEjml(): EjmlMatrix =
  * @author Iaroslav Postovalov
  */
 public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
-
     /**
      * Converts this vector to EJML one.
      */
@@ -31,6 +30,11 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
             (0 until rows).forEach { row ->
                 (0 until columns).forEach { col -> it[row, col] = initializer(row, col) }
             }
+        })
+
+    override fun point(size: Int, initializer: (Int) -> Double): Point<Double> =
+        EjmlVector(SimpleMatrix(size, 1).also {
+            (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
         })
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
@@ -73,12 +77,3 @@ public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMa
  */
 public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
-
-/**
- * Returns the inverse of given matrix: b = a^(-1).
- *
- * @param a the matrix.
- * @return the inverse of this matrix.
- * @author Iaroslav Postovalov
- */
-public fun EjmlMatrixContext.inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())

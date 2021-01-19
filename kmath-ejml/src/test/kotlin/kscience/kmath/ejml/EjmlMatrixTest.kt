@@ -1,7 +1,7 @@
 package kscience.kmath.ejml
 
 import kscience.kmath.linear.DeterminantFeature
-import kscience.kmath.linear.LUPDecompositionFeature
+import kscience.kmath.linear.LupDecompositionFeature
 import kscience.kmath.linear.MatrixFeature
 import kscience.kmath.linear.getFeature
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
@@ -44,7 +44,7 @@ internal class EjmlMatrixTest {
         val w = EjmlMatrix(m)
         val det = w.getFeature<DeterminantFeature<Double>>() ?: fail()
         assertEquals(m.determinant(), det.determinant)
-        val lup = w.getFeature<LUPDecompositionFeature<Double>>() ?: fail()
+        val lup = w.getFeature<LupDecompositionFeature<Double>>() ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows(), m.numCols())
             .also { it.decompose(m.ddrm.copy()) }

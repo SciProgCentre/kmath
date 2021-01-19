@@ -7,10 +7,16 @@ import kscience.kmath.structures.asBuffer
 import kotlin.math.sqrt
 
 /**
- * A 2d structure plus optional matrix-specific features
+ * A [Matrix] that holds [MatrixFeature] objects.
+ *
+ * @param T the type of items.
  */
 public interface FeaturedMatrix<T : Any> : Matrix<T> {
-    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    public override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+
+    /**
+     * The set of features this matrix possesses.
+     */
     public val features: Set<MatrixFeature>
 
     /**

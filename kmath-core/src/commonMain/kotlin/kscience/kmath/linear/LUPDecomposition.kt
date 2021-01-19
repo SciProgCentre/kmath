@@ -4,16 +4,15 @@ import kscience.kmath.operations.*
 import kscience.kmath.structures.*
 
 /**
- * Common implementation of [LUPDecompositionFeature]
+ * Common implementation of [LupDecompositionFeature].
  */
 public class LUPDecomposition<T : Any>(
     public val context: MatrixContext<T, FeaturedMatrix<T>>,
     public val elementContext: Field<T>,
-    public val lu: Structure2D<T>,
+    public val lu: Matrix<T>,
     public val pivot: IntArray,
     private val even: Boolean,
-) : LUPDecompositionFeature<T>, DeterminantFeature<T> {
-
+) : LupDecompositionFeature<T>, DeterminantFeature<T> {
     /**
      * Returns the matrix L of the decomposition.
      *
@@ -151,7 +150,10 @@ public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext
 public fun MatrixContext<Double, FeaturedMatrix<Double>>.lup(matrix: Matrix<Double>): LUPDecomposition<Double> =
     lup(Buffer.Companion::real, RealField, matrix) { it < 1e-11 }
 
-public fun <T : Any> LUPDecomposition<T>.solveWithLUP(factory: MutableBufferFactory<T>, matrix: Matrix<T>): FeaturedMatrix<T> {
+public fun <T : Any> LUPDecomposition<T>.solveWithLUP(
+    factory: MutableBufferFactory<T>,
+    matrix: Matrix<T>
+): FeaturedMatrix<T> {
     require(matrix.rowNum == pivot.size) { "Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}" }
 
     BufferAccessor2D(matrix.rowNum, matrix.colNum, factory).run {
