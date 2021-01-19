@@ -41,7 +41,7 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
+public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()
 
@@ -156,7 +156,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
 
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
-    override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
+    override fun symbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.symbol(value)
 }
 
 /**

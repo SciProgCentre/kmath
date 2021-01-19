@@ -11,7 +11,7 @@ fun main() {
     val n = 1000
 
     val realField = NDField.real(dim, dim)
-    val complexField = NDField.complex(dim, dim)
+    val complexField: ComplexNDField = NDField.complex(dim, dim)
 
     val realTime = measureTimeMillis {
         realField {

@@ -40,6 +40,8 @@ public inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
+    override val rowNum: Int get() = shape[0]
+    override val colNum: Int get() = shape[1]
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 }
 
@@ -147,6 +149,7 @@ public inline fun <reified D : Dimension> DMatrixContext<Double>.one(): DMatrix<
     if (i == j) 1.0 else 0.0
 }
 
-public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double>.zero(): DMatrix<Double, R, C> = produce { _, _ ->
-    0.0
-}
+public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double>.zero(): DMatrix<Double, R, C> =
+    produce { _, _ ->
+        0.0
+    }
