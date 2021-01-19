@@ -11,8 +11,8 @@ public interface MatrixFeature
 /**
  * Matrices with this feature are considered to have only diagonal non-null elements.
  */
-public interface DiagonalFeature : MatrixFeature{
-    public companion object: DiagonalFeature
+public interface DiagonalFeature : MatrixFeature {
+    public companion object : DiagonalFeature
 }
 
 /**

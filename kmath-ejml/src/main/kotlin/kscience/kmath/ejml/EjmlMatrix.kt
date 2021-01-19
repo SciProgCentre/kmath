@@ -15,21 +15,20 @@ import kotlin.reflect.cast
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public inline class EjmlMatrix(
-    public val origin: SimpleMatrix,
-) : Matrix<Double> {
+public inline class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.numRows()
-
     public override val colNum: Int get() = origin.numCols()
 
     @UnstableKMathAPI
-    override fun <T : Any> getFeature(type: KClass<T>): T? = when (type) {
+    public override fun <T : Any> getFeature(type: KClass<T>): T? = when (type) {
         InverseMatrixFeature::class -> object : InverseMatrixFeature<Double> {
             override val inverse: Matrix<Double> by lazy { EjmlMatrix(origin.invert()) }
         }
+
         DeterminantFeature::class -> object : DeterminantFeature<Double> {
             override val determinant: Double by lazy(origin::determinant)
         }
+
         SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {
             private val svd by lazy {
                 DecompositionFactory_DDRM.svd(origin.numRows(), origin.numCols(), true, true, false)
@@ -41,15 +40,20 @@ public inline class EjmlMatrix(
             override val v: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(svd.getV(null, false))) }
             override val singularValues: Point<Double> by lazy { RealBuffer(svd.singularValues) }
         }
+
         QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
             private val qr by lazy {
                 DecompositionFactory_DDRM.qr().apply { decompose(origin.ddrm.copy()) }
             }
 
-            override val q: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(qr.getQ(null, false))) }
-            override val r: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(qr.getR(null, false))) }
+            override val q: Matrix<Double> by lazy {
+                EjmlMatrix(SimpleMatrix(qr.getQ(null, false))) + OrthogonalFeature
+            }
+
+            override val r: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(qr.getR(null, false))) + UFeature }
         }
-        CholeskyDecompositionFeature::class ->         object : CholeskyDecompositionFeature<Double> {
+
+        CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
             override val l: Matrix<Double> by lazy {
                 val cholesky =
                     DecompositionFactory_DDRM.chol(rowNum, true).apply { decompose(origin.ddrm.copy()) }
@@ -57,7 +61,8 @@ public inline class EjmlMatrix(
                 EjmlMatrix(SimpleMatrix(cholesky.getT(null))) + LFeature
             }
         }
-        LupDecompositionFeature::class ->         object : LupDecompositionFeature<Double> {
+
+        LupDecompositionFeature::class -> object : LupDecompositionFeature<Double> {
             private val lup by lazy {
                 DecompositionFactory_DDRM.lu(origin.numRows(), origin.numCols()).apply { decompose(origin.ddrm.copy()) }
             }
@@ -72,8 +77,9 @@ public inline class EjmlMatrix(
 
             override val p: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(lup.getRowPivot(null))) }
         }
+
         else -> null
-    }?.let{type.cast(it)}
+    }?.let(type::cast)
 
     public override operator fun get(i: Int, j: Int): Double = origin[i, j]
 }
