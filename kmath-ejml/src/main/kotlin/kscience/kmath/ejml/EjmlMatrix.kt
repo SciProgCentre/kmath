@@ -16,11 +16,8 @@ import kotlin.reflect.cast
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public class EjmlMatrix(
-    public val origin: SimpleMatrix,
-) : Matrix<Double> {
+public class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.numRows()
-
     public override val colNum: Int get() = origin.numCols()
 
     @UnstableKMathAPI
