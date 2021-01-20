@@ -3,6 +3,7 @@ package kscience.kmath.operations
 import kscience.kmath.memory.MemoryReader
 import kscience.kmath.memory.MemorySpec
 import kscience.kmath.memory.MemoryWriter
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer
@@ -41,7 +42,8 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
+@OptIn(UnstableKMathAPI::class)
+public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()
 
@@ -156,7 +158,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
 
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
-    override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
+    override fun symbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.symbol(value)
 }
 
 /**

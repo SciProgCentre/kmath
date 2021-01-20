@@ -150,6 +150,8 @@ public class RealBufferField(public val size: Int) : ExtendedField<Buffer<Double
     public override val zero: Buffer<Double> by lazy { RealBuffer(size) { 0.0 } }
     public override val one: Buffer<Double> by lazy { RealBuffer(size) { 1.0 } }
 
+    override fun number(value: Number): Buffer<Double> = RealBuffer(size) { value.toDouble() }
+
     public override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
         require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
         return RealBufferFieldOperations.add(a, b)

@@ -1,10 +1,7 @@
 package kscience.kmath.linear
 
 import kscience.kmath.operations.Ring
-import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.BufferFactory
-import kscience.kmath.structures.NDStructure
-import kscience.kmath.structures.asSequence
+import kscience.kmath.structures.*
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]
@@ -27,17 +24,13 @@ public class BufferMatrix<T : Any>(
     public override val rowNum: Int,
     public override val colNum: Int,
     public val buffer: Buffer<out T>,
-    public override val features: Set<MatrixFeature> = emptySet(),
-) : FeaturedMatrix<T> {
+) : Matrix<T> {
 
     init {
         require(buffer.size == rowNum * colNum) { "Dimension mismatch for matrix structure" }
     }
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
-
-    public override fun suggestFeature(vararg features: MatrixFeature): BufferMatrix<T> =
-        BufferMatrix(rowNum, colNum, buffer, this.features + features)
 
     public override operator fun get(index: IntArray): T = get(index[0], index[1])
     public override operator fun get(i: Int, j: Int): T = buffer[i * colNum + j]
@@ -50,23 +43,26 @@ public class BufferMatrix<T : Any>(
         if (this === other) return true
 
         return when (other) {
-            is NDStructure<*> -> return NDStructure.equals(this, other)
+            is NDStructure<*> -> NDStructure.contentEquals(this, other)
             else -> false
         }
     }
 
-    public override fun hashCode(): Int {
-        var result = buffer.hashCode()
-        result = 31 * result + features.hashCode()
+    override fun hashCode(): Int {
+        var result = rowNum
+        result = 31 * result + colNum
+        result = 31 * result + buffer.hashCode()
         return result
     }
 
     public override fun toString(): String {
         return if (rowNum <= 5 && colNum <= 5)
-            "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)\n" +
+            "Matrix(rowsNum = $rowNum, colNum = $colNum)\n" +
                     rows.asSequence().joinToString(prefix = "(", postfix = ")", separator = "\n ") { buffer ->
                         buffer.asSequence().joinToString(separator = "\t") { it.toString() }
                     }
-        else "Matrix(rowsNum = $rowNum, colNum = $colNum, features=$features)"
+        else "Matrix(rowsNum = $rowNum, colNum = $colNum)"
     }
+
+
 }

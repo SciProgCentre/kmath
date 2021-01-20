@@ -7,8 +7,9 @@ import kscience.kmath.operations.*
  *
  * @param algebra The algebra to provide for Expressions built.
  */
-public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(public val algebra: A) :
-    ExpressionAlgebra<T, Expression<T>> {
+public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
+    public val algebra: A,
+) : ExpressionAlgebra<T, Expression<T>> {
     /**
      * Builds an Expression of constant expression which does not depend on arguments.
      */
@@ -42,8 +43,9 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(public val 
 /**
  * A context class for [Expression] construction for [Space] algebras.
  */
-public open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
-    FunctionalExpressionAlgebra<T, A>(algebra), Space<Expression<T>> {
+public open class FunctionalExpressionSpace<T, A : Space<T>>(
+    algebra: A,
+) : FunctionalExpressionAlgebra<T, A>(algebra), Space<Expression<T>> {
     public override val zero: Expression<T> get() = const(algebra.zero)
 
     /**
@@ -71,8 +73,9 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(algebra: A) :
         super<FunctionalExpressionAlgebra>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpressionSpace<T, A>(algebra),
-    Ring<Expression<T>> where  A : Ring<T>, A : NumericAlgebra<T> {
+public open class FunctionalExpressionRing<T, A : Ring<T>>(
+    algebra: A,
+) : FunctionalExpressionSpace<T, A>(algebra), Ring<Expression<T>> {
     public override val one: Expression<T>
         get() = const(algebra.one)
 
@@ -92,9 +95,9 @@ public open class FunctionalExpressionRing<T, A>(algebra: A) : FunctionalExpress
         super<FunctionalExpressionSpace>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionField<T, A>(algebra: A) :
-    FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>
-        where A : Field<T>, A : NumericAlgebra<T> {
+public open class FunctionalExpressionField<T, A : Field<T>>(
+    algebra: A,
+) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>> {
     /**
      * Builds an Expression of division an expression by another one.
      */
@@ -111,9 +114,12 @@ public open class FunctionalExpressionField<T, A>(algebra: A) :
         super<FunctionalExpressionRing>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionExtendedField<T, A>(algebra: A) :
-    FunctionalExpressionField<T, A>(algebra),
-    ExtendedField<Expression<T>> where A : ExtendedField<T>, A : NumericAlgebra<T> {
+public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
+    algebra: A,
+) : FunctionalExpressionField<T, A>(algebra), ExtendedField<Expression<T>> {
+
+    override fun number(value: Number): Expression<T> = const(algebra.number(value))
+
     public override fun sin(arg: Expression<T>): Expression<T> =
         unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
 
@@ -135,7 +141,8 @@ public open class FunctionalExpressionExtendedField<T, A>(algebra: A) :
     public override fun exp(arg: Expression<T>): Expression<T> =
         unaryOperationFunction(ExponentialOperations.EXP_OPERATION)(arg)
 
-    public override fun ln(arg: Expression<T>): Expression<T> = unaryOperationFunction(ExponentialOperations.LN_OPERATION)(arg)
+    public override fun ln(arg: Expression<T>): Expression<T> =
+        unaryOperationFunction(ExponentialOperations.LN_OPERATION)(arg)
 
     public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionField>.unaryOperationFunction(operation)

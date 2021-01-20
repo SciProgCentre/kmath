@@ -1,13 +1,17 @@
 package kscience.kmath.structures
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.FieldElement
 import kscience.kmath.operations.RealField
+import kscience.kmath.operations.RingWithNumbers
 
 public typealias RealNDElement = BufferedNDFieldElement<Double, RealField>
 
+@OptIn(UnstableKMathAPI::class)
 public class RealNDField(override val shape: IntArray) :
     BufferedNDField<Double, RealField>,
-    ExtendedNDField<Double, RealField, NDBuffer<Double>> {
+    ExtendedNDField<Double, RealField, NDBuffer<Double>>,
+    RingWithNumbers<NDBuffer<Double>> {
 
     override val strides: Strides = DefaultStrides(shape)
 
@@ -15,35 +19,36 @@ public class RealNDField(override val shape: IntArray) :
     override val zero: RealNDElement by lazy { produce { zero } }
     override val one: RealNDElement by lazy { produce { one } }
 
-    public inline fun buildBuffer(size: Int, crossinline initializer: (Int) -> Double): Buffer<Double> =
-        RealBuffer(DoubleArray(size) { initializer(it) })
+    override fun number(value: Number): NDBuffer<Double> {
+        val d = value.toDouble()
+        return produce { d }
+    }
 
-    /**
-     * Inline transform an NDStructure to
-     */
-    override fun map(
+    @Suppress("OVERRIDE_BY_INLINE")
+    override inline fun map(
         arg: NDBuffer<Double>,
-        transform: RealField.(Double) -> Double
+        transform: RealField.(Double) -> Double,
     ): RealNDElement {
         check(arg)
-        val array = buildBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
+        val array = RealBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
         return BufferedNDFieldElement(this, array)
     }
 
-    override fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
-        val array = buildBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) }
+    @Suppress("OVERRIDE_BY_INLINE")
+    override inline fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
+        val array = RealBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) }
         return BufferedNDFieldElement(this, array)
     }
 
-    override fun mapIndexed(
+    @Suppress("OVERRIDE_BY_INLINE")
+    override inline fun mapIndexed(
         arg: NDBuffer<Double>,
-        transform: RealField.(index: IntArray, Double) -> Double
+        transform: RealField.(index: IntArray, Double) -> Double,
     ): RealNDElement {
         check(arg)
-
         return BufferedNDFieldElement(
             this,
-            buildBuffer(arg.strides.linearSize) { offset ->
+            RealBuffer(arg.strides.linearSize) { offset ->
                 elementContext.transform(
                     arg.strides.index(offset),
                     arg.buffer[offset]
@@ -51,15 +56,17 @@ public class RealNDField(override val shape: IntArray) :
             })
     }
 
-    override fun combine(
+    @Suppress("OVERRIDE_BY_INLINE")
+    override inline fun combine(
         a: NDBuffer<Double>,
         b: NDBuffer<Double>,
-        transform: RealField.(Double, Double) -> Double
+        transform: RealField.(Double, Double) -> Double,
     ): RealNDElement {
         check(a, b)
-        return BufferedNDFieldElement(
-            this,
-            buildBuffer(strides.linearSize) { offset -> elementContext.transform(a.buffer[offset], b.buffer[offset]) })
+        val buffer = RealBuffer(strides.linearSize) { offset ->
+            elementContext.transform(a.buffer[offset], b.buffer[offset])
+        }
+        return BufferedNDFieldElement(this, buffer)
     }
 
     override fun NDBuffer<Double>.toElement(): FieldElement<NDBuffer<Double>, *, out BufferedNDField<Double, RealField>> =

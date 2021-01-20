@@ -1,9 +1,6 @@
 package kscience.kmath.linear
 
-import kscience.kmath.operations.RealField
 import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.MutableBuffer
-import kscience.kmath.structures.MutableBufferFactory
 import kscience.kmath.structures.RealBuffer
 
 @Suppress("OVERRIDE_BY_INLINE")
@@ -22,9 +19,9 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
         produce(rowNum, colNum) { i, j -> get(i, j) }
     }
 
-    public fun one(rows: Int, columns: Int): FeaturedMatrix<Double> = VirtualMatrix(rows, columns, DiagonalFeature) { i, j ->
+    public fun one(rows: Int, columns: Int): Matrix<Double> = VirtualMatrix(rows, columns) { i, j ->
         if (i == j) 1.0 else 0.0
-    }
+    } + DiagonalFeature
 
     public override infix fun Matrix<Double>.dot(other: Matrix<Double>): BufferMatrix<Double> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
@@ -61,7 +58,7 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
 
 
     override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> =
-        produce(a.rowNum, a.colNum) { i, j -> a.get(i, j) * k.toDouble() }
+        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * k.toDouble() }
 }
 
 
@@ -69,16 +66,3 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
  * Partially optimized real-valued matrix
  */
 public val MatrixContext.Companion.real: RealMatrixContext get() = RealMatrixContext
-
-public fun RealMatrixContext.solveWithLUP(a: Matrix<Double>, b: Matrix<Double>): FeaturedMatrix<Double> {
-    // Use existing decomposition if it is provided by matrix
-    val bufferFactory: MutableBufferFactory<Double> = MutableBuffer.Companion::real
-    val decomposition = a.getFeature() ?: lup(bufferFactory, RealField, a) { it < 1e-11 }
-    return decomposition.solveWithLUP(bufferFactory, b)
-}
-
-/**
- * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
- */
-public fun RealMatrixContext.inverseWithLUP(matrix: Matrix<Double>): FeaturedMatrix<Double> =
-    solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum))
