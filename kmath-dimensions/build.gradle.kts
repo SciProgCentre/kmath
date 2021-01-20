@@ -1,8 +1,9 @@
 plugins {
-    id("scientifik.mpp")
+    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.native")
 }
 
-description = "A proof of concept module for adding typ-safe dimensions to structures"
+description = "A proof of concept module for adding type-safe dimensions to structures"
 
 kotlin.sourceSets {
     commonMain {
@@ -11,9 +12,13 @@ kotlin.sourceSets {
         }
     }
 
-    jvmMain{
-        dependencies{
+    jvmMain {
+        dependencies {
             api(kotlin("reflect"))
         }
     }
+}
+
+readme{
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

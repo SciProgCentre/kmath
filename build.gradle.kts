@@ -1,36 +1,44 @@
+import ru.mipt.npm.gradle.KSciencePublishPlugin
+
 plugins {
-    id("scientifik.publish") apply false
-    id("org.jetbrains.changelog") version "0.4.0"
+    id("ru.mipt.npm.project")
 }
 
-val kmathVersion by extra("0.1.4")
-
-val bintrayRepo by extra("scientifik")
-val githubProject by extra("kmath")
+internal val kmathVersion: String by extra("0.2.0-dev-5")
+internal val bintrayRepo: String by extra("kscience")
+internal val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
         jcenter()
-        maven("https://dl.bintray.com/kotlin/kotlinx")
+        maven("https://clojars.org/repo")
+        maven("https://dl.bintray.com/egor-bogomolov/astminer/")
         maven("https://dl.bintray.com/hotkeytlt/maven")
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        maven("https://dl.bintray.com/kotlin/kotlinx")
+        maven("https://dl.bintray.com/mipt-npm/dev")
+        maven("https://dl.bintray.com/mipt-npm/kscience")
+        maven("https://jitpack.io")
+        maven("http://logicrunch.research.it.uu.se/maven/")
+        mavenCentral()
     }
 
     group = "kscience.kmath"
     version = kmathVersion
-
-    afterEvaluate {
-        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.run {
-            targets.all {
-                sourceSets.all {
-                    languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-                }
-            }
-        }
-    }
 }
 
 subprojects {
-    if (name.startsWith("kmath")) {
-        apply(plugin = "scientifik.publish")
-    }
+    if (name.startsWith("kmath")) apply<KSciencePublishPlugin>()
+}
+
+readme {
+    readmeTemplate = file("docs/templates/README-TEMPLATE.md")
+}
+
+apiValidation {
+    validationDisabled = true
+}
+
+ksciencePublish {
+    spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
 }

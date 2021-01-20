@@ -1,16 +1,15 @@
 package scietifik.kmath.histogram
 
-import scientifik.kmath.histogram.RealHistogram
-import scientifik.kmath.histogram.fill
-import scientifik.kmath.histogram.put
-import scientifik.kmath.real.RealVector
+import kscience.kmath.histogram.RealHistogram
+import kscience.kmath.histogram.fill
+import kscience.kmath.histogram.put
+import kscience.kmath.real.RealVector
+import kscience.kmath.real.invoke
+import kscience.kmath.structures.Buffer
 import kotlin.random.Random
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
-class MultivariateHistogramTest {
+internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
         val histogram = RealHistogram.fromRanges(
@@ -18,7 +17,7 @@ class MultivariateHistogramTest {
             (-1.0..1.0)
         )
         histogram.put(0.55, 0.55)
-        val bin = histogram.find { it.value.toInt() > 0 }!!
+        val bin = histogram.find { it.value.toInt() > 0 } ?: fail()
         assertTrue { bin.contains(RealVector(0.55, 0.55)) }
         assertTrue { bin.contains(RealVector(0.6, 0.5)) }
         assertFalse { bin.contains(RealVector(-0.55, 0.55)) }

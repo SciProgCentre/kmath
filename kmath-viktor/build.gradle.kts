@@ -1,5 +1,5 @@
 plugins {
-    id("scientifik.jvm")
+    id("ru.mipt.npm.jvm")
 }
 
 description = "Binding for https://github.com/JetBrains-Research/viktor"
