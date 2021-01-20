@@ -2,8 +2,8 @@ package kscience.kmath.ejml
 
 import kscience.kmath.linear.InverseMatrixFeature
 import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.MatrixWrapper
 import kscience.kmath.linear.Point
+import kscience.kmath.linear.origin
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.getFeature
@@ -19,9 +19,9 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
     /**
      * Converts this matrix to EJML one.
      */
-    public fun Matrix<Double>.toEjml(): EjmlMatrix = when {
-        this is EjmlMatrix -> this
-        this is MatrixWrapper && matrix is EjmlMatrix -> matrix as EjmlMatrix
+    @OptIn(UnstableKMathAPI::class)
+    public fun Matrix<Double>.toEjml(): EjmlMatrix = when (val matrix = origin) {
+        is EjmlMatrix -> matrix
         else -> produce(rowNum, colNum) { i, j -> get(i, j) }
     }
 
