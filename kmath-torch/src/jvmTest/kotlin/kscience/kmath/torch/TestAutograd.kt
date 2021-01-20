@@ -3,7 +3,7 @@ package kscience.kmath.torch
 import kotlin.test.Test
 
 
-internal class TestAutograd {
+class TestAutograd {
     @Test
     fun testAutoGrad() = TorchTensorFloatAlgebra {
         withChecks {

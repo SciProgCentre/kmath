@@ -12,9 +12,9 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     val shape = intArrayOf(2, 3, 4)
     val tensor = copyFromArray(array, shape = shape, device = device)
     val copyOfTensor = tensor.copy()
-    tensor[intArrayOf(0, 0)] = 0.1f
+    tensor[intArrayOf(1, 2, 3)] = 0.1f
     assertTrue(copyOfTensor.copyToArray() contentEquals array)
-    assertEquals(0.1f, tensor[intArrayOf(0, 0)])
+    assertEquals(0.1f, tensor[intArrayOf(1, 2, 3)])
     if(device != Device.CPU){
         val normalCpu = randNormal(intArrayOf(2, 3))
         val normalGpu = normalCpu.copyToDevice(device)

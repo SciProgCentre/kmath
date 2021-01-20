@@ -47,7 +47,6 @@ public sealed class TorchTensorNative<T> constructor(
         scope = scope,
         tensorHandle = copy_to_int(this.tensorHandle)!!
     )
-
 }
 
 public sealed class TorchTensorOverFieldNative<T> constructor(

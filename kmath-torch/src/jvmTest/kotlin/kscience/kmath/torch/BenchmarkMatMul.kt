@@ -3,7 +3,7 @@ package kscience.kmath.torch
 import kotlin.test.Test
 
 
-internal class BenchmarkMatMul {
+class BenchmarkMatMul {
 
     @Test
     fun benchmarkMatMulDouble() = TorchTensorRealAlgebra {

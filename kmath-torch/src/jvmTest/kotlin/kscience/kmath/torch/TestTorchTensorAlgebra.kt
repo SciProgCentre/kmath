@@ -3,7 +3,7 @@ package kscience.kmath.torch
 import kotlin.test.Test
 
 
-internal class TestTorchTensorAlgebra {
+class TestTorchTensorAlgebra {
 
     @Test
     fun testScalarProduct() = TorchTensorRealAlgebra {
@@ -58,5 +58,6 @@ internal class TestTorchTensorAlgebra {
             }
         }
     }
+
 
 }
