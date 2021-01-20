@@ -92,7 +92,7 @@ public interface Algebra<T> {
  * Call a block with an [Algebra] as receiver.
  */
 // TODO add contract when KT-32313 is fixed
-public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = block()
+public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
  * Represents "semispace", i.e. algebraic structure with associative binary operation called "addition" as well as
