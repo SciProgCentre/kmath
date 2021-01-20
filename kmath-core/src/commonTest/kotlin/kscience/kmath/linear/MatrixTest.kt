@@ -7,6 +7,7 @@ import kscience.kmath.structures.as2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("UNUSED_VARIABLE")
 class MatrixTest {
     @Test
     fun testTranspose() {

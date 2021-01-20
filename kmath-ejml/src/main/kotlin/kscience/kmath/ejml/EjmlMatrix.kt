@@ -3,6 +3,7 @@ package kscience.kmath.ejml
 import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Matrix
+import kscience.kmath.structures.NDStructure
 import kscience.kmath.structures.RealBuffer
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
@@ -15,8 +16,11 @@ import kotlin.reflect.cast
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public inline class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double> {
+public class EjmlMatrix(
+    public val origin: SimpleMatrix,
+) : Matrix<Double> {
     public override val rowNum: Int get() = origin.numRows()
+
     public override val colNum: Int get() = origin.numCols()
 
     @UnstableKMathAPI
@@ -82,4 +86,14 @@ public inline class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double>
     }?.let(type::cast)
 
     public override operator fun get(i: Int, j: Int): Double = origin[i, j]
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Matrix<*>) return false
+        return NDStructure.contentEquals(this, other)
+    }
+
+    override fun hashCode(): Int = origin.hashCode()
+
+
 }

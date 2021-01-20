@@ -2,9 +2,8 @@ package kscience.kmath.benchmarks
 
 import kotlinx.benchmark.Benchmark
 import kscience.kmath.commons.linear.CMMatrixContext
-import kscience.kmath.commons.linear.toCM
 import kscience.kmath.ejml.EjmlMatrixContext
-import kscience.kmath.ejml.toEjml
+
 import kscience.kmath.linear.BufferMatrixContext
 import kscience.kmath.linear.RealMatrixContext
 import kscience.kmath.linear.real
@@ -26,11 +25,11 @@ class DotBenchmark {
         val matrix1 = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
         val matrix2 = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
 
-        val cmMatrix1 = matrix1.toCM()
-        val cmMatrix2 = matrix2.toCM()
+        val cmMatrix1 = CMMatrixContext { matrix1.toCM() }
+        val cmMatrix2 = CMMatrixContext { matrix2.toCM() }
 
-        val ejmlMatrix1 = matrix1.toEjml()
-        val ejmlMatrix2 = matrix2.toEjml()
+        val ejmlMatrix1 = EjmlMatrixContext { matrix1.toEjml() }
+        val ejmlMatrix2 = EjmlMatrixContext { matrix2.toEjml() }
     }
 
     @Benchmark
@@ -49,22 +48,23 @@ class DotBenchmark {
 
     @Benchmark
     fun ejmlMultiplicationwithConversion() {
-        val ejmlMatrix1 = matrix1.toEjml()
-        val ejmlMatrix2 = matrix2.toEjml()
         EjmlMatrixContext {
+            val ejmlMatrix1 = matrix1.toEjml()
+            val ejmlMatrix2 = matrix2.toEjml()
+
             ejmlMatrix1 dot ejmlMatrix2
         }
     }
 
     @Benchmark
     fun bufferedMultiplication() {
-        BufferMatrixContext(RealField, Buffer.Companion::real).invoke{
+        BufferMatrixContext(RealField, Buffer.Companion::real).invoke {
             matrix1 dot matrix2
         }
     }
 
     @Benchmark
-    fun realMultiplication(){
+    fun realMultiplication() {
         RealMatrixContext {
             matrix1 dot matrix2
         }

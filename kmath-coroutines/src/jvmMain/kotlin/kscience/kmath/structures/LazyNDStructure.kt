@@ -24,7 +24,7 @@ public class LazyNDStructure<T>(
     }
 
     public override fun equals(other: Any?): Boolean {
-        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
+        return NDStructure.contentEquals(this, other as? NDStructure<*> ?: return false)
     }
 
     public override fun hashCode(): Int {
