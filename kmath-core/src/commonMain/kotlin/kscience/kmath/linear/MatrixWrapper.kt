@@ -25,6 +25,7 @@ public class MatrixWrapper<T : Any>(
      */
     @UnstableKMathAPI
     override fun <T : Any> getFeature(type: KClass<T>): T? = type.safeCast(features.find { type.isInstance(it) })
+        ?: matrix.getFeature(type)
 
     override fun equals(other: Any?): Boolean = matrix == other
     override fun hashCode(): Int = matrix.hashCode()
