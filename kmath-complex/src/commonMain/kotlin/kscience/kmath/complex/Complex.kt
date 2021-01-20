@@ -6,6 +6,7 @@ import kscience.kmath.memory.MemoryWriter
 import kscience.kmath.operations.ExtendedField
 import kscience.kmath.operations.FieldElement
 import kscience.kmath.operations.Norm
+import kscience.kmath.operations.RingWithNumbers
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.MemoryBuffer
 import kscience.kmath.structures.MutableBuffer
@@ -44,14 +45,14 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
-    override val zero: Complex by lazy { 0.toComplex() }
-    override val one: Complex by lazy { 1.toComplex() }
+public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
+    public override val zero: Complex by lazy { 0.0.toComplex() }
+    public override val one: Complex by lazy { 1.0.toComplex() }
 
     /**
      * The imaginary unit.
      */
-    public val i: Complex by lazy { Complex(0, 1) }
+    public val i: Complex by lazy { Complex(0.0, 1.0) }
 
     public override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
     public override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
@@ -92,29 +93,71 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
         return i * (e1 - e2) / (e1 + e2)
     }
 
-    public override fun asin(arg: Complex): Complex = -i * ln(sqrt(one - (arg * arg)) + i * arg)
-    public override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(one - (arg * arg)) + i * arg)
+    public override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg * arg)) + i * arg)
+    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
 
-    public override fun atan(arg: Complex): Complex {
+    override fun atan(arg: Complex): Complex {
         val iArg = i * arg
         return i * (ln(1 - iArg) - ln(1 + iArg)) / 2
     }
 
-    public override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
+    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
         arg.re.pow(pow.toDouble()).toComplex()
     else
         exp(pow * ln(arg))
 
-    public override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
-    public override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
-    public override operator fun Number.plus(b: Complex): Complex = add(toComplex(), b)
-    public override operator fun Number.minus(b: Complex): Complex = add(toComplex(), -b)
-    public override operator fun Complex.plus(b: Number): Complex = b + this
-    public override operator fun Complex.minus(b: Number): Complex = add(this, -b.toComplex())
-    public override operator fun Number.times(b: Complex): Complex = Complex(b.re * toDouble(), b.im * toDouble())
-    public override operator fun Complex.unaryMinus(): Complex = Complex(-re, -im)
-    public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
-    public override fun symbol(value: String): Complex = if (value == "i") i else super.symbol(value)
+    override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
+
+    override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
+
+    /**
+     * Adds complex number to real one.
+     *
+     * @receiver the addend.
+     * @param c the augend.
+     * @return the sum.
+     */
+    public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
+
+    /**
+     * Subtracts complex number from real one.
+     *
+     * @receiver the minuend.
+     * @param c the subtrahend.
+     * @return the difference.
+     */
+    public operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
+
+    /**
+     * Adds real number to complex one.
+     *
+     * @receiver the addend.
+     * @param d the augend.
+     * @return the sum.
+     */
+    public operator fun Complex.plus(d: Double): Complex = d + this
+
+    /**
+     * Subtracts real number from complex one.
+     *
+     * @receiver the minuend.
+     * @param d the subtrahend.
+     * @return the difference.
+     */
+    public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
+
+    /**
+     * Multiplies real number by complex one.
+     *
+     * @receiver the multiplier.
+     * @param c the multiplicand.
+     * @receiver the product.
+     */
+    public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+
+    override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
+
+    override fun symbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.symbol(value)
 }
 
 /**
@@ -123,33 +166,23 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex> {
  * @property re The real part.
  * @property im The imaginary part.
  */
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>,
-    Comparable<Complex> {
+public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)
 
-    public override val context: ComplexField
-        get() = ComplexField
-
-    init {
-        require(!re.isNaN()) { "Real component of complex is not-a-number" }
-        require(!im.isNaN()) { "Imaginary component of complex is not-a-number" }
-    }
+    public override val context: ComplexField get() = ComplexField
 
     public override fun unwrap(): Complex = this
     public override fun Complex.wrap(): Complex = this
-    public override fun compareTo(other: Complex): Int = r.compareTo(other.r)
-    public override fun toString(): String = "($re + $im * i)"
-    public override fun minus(b: Complex): Complex = Complex(re - b.re, im - b.im)
+    public override fun toString(): String = "($re + i*$im)"
 
     public companion object : MemorySpec<Complex> {
-        public override val objectSize: Int
+        override val objectSize: Int
             get() = 16
 
-        public override fun MemoryReader.read(offset: Int): Complex =
-            Complex(readDouble(offset), readDouble(offset + 8))
+        override fun MemoryReader.read(offset: Int): Complex = Complex(readDouble(offset), readDouble(offset + 8))
 
-        public override fun MemoryWriter.write(offset: Int, value: Complex) {
+        override fun MemoryWriter.write(offset: Int, value: Complex) {
             writeDouble(offset, value.re)
             writeDouble(offset + 8, value.im)
         }

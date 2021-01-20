@@ -5,15 +5,21 @@ plugins {
     id("ru.mipt.npm.native")
 }
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kotlin.sourceSets {
+    all {
+        languageSettings.useExperimentalAnnotation("kscience.kmath.misc.UnstableKMathAPI")
+    }
+
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
     }
 }
 
 readme {
     description = "Complex numbers and quaternions."
-    maturity = Maturity.DEVELOPMENT
+    maturity = Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

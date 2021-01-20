@@ -1,7 +1,8 @@
-package kscience.kmath.structures
+package kscience.kmath.complex
 
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.*
+import kscience.kmath.structures.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -16,12 +17,12 @@ public class ComplexNDField(override val shape: IntArray) :
     ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>>,
     RingWithNumbers<NDBuffer<Complex>>{
 
-    override val strides: Strides = DefaultStrides(shape)
-    override val elementContext: ComplexField get() = ComplexField
-    override val zero: ComplexNDElement by lazy { produce { zero } }
-    override val one: ComplexNDElement by lazy { produce { one } }
+    public override val strides: Strides = DefaultStrides(shape)
+    public override val elementContext: ComplexField get() = ComplexField
+    public override val zero: ComplexNDElement by lazy { produce { zero } }
+    public override val one: ComplexNDElement by lazy { produce { one } }
 
-    override fun number(value: Number): NDBuffer<Complex> {
+    public override fun number(value: Number): NDBuffer<Complex> {
         val c = value.toComplex()
         return produce { c }
     }

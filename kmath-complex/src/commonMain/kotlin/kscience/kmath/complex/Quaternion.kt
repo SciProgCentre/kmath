@@ -14,14 +14,14 @@ import kotlin.math.*
  * This quaternion's conjugate.
  */
 public val Quaternion.conjugate: Quaternion
-    get() = QuaternionField { z - x * QuaternionField.i - y * QuaternionField.j - z * QuaternionField.k }
+    get() = QuaternionField { z - x * i - y * j - z * k }
 
 /**
  * This quaternion's reciprocal.
  */
 public val Quaternion.reciprocal: Quaternion
     get() {
-        val n = QuaternionField { QuaternionField.norm(this@reciprocal) }
+        val n = QuaternionField { norm(this@reciprocal) }
         return conjugate / (n * n)
     }
 
@@ -35,7 +35,7 @@ public val Quaternion.r: Double
  * A field of [Quaternion].
  */
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
-    ExponentialOperations<Quaternion> {
+    ExponentialOperations<Quaternion>, RingWithNumbers<Quaternion> {
     override val zero: Quaternion by lazy { 0.toQuaternion() }
     override val one: Quaternion by lazy { 1.toQuaternion() }
 
@@ -182,7 +182,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
  * @property z The fourth component.
  */
 public data class Quaternion(val w: Double, val x: Double, val y: Double, val z: Double) :
-    FieldElement<Quaternion, Quaternion, QuaternionField>, Comparable<Quaternion> {
+    FieldElement<Quaternion, Quaternion, QuaternionField> {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),
@@ -213,7 +213,6 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
 
     public override fun unwrap(): Quaternion = this
     public override fun Quaternion.wrap(): Quaternion = this
-    public override fun compareTo(other: Quaternion): Int = r.compareTo(other.r)
 
     /**
      * Returns a string representation of this quaternion.
