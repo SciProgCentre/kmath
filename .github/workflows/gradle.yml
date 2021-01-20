@@ -12,6 +12,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Install build-essential
+        run: |
+          sudo apt install -y build-essential
       - name: Install Chrome
         run: |
           sudo apt install -y libappindicator1 fonts-liberation
