@@ -188,3 +188,7 @@ tasks {
         systemProperty("java.library.path", cppBuildDir.toString())
     }
 }
+
+// No JS implementation
+project.gradle.startParameter.excludedTaskNames.add("jsTest")
+project.gradle.startParameter.excludedTaskNames.add("jsBrowserTest")

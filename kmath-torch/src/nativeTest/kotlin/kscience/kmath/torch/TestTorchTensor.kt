@@ -47,8 +47,10 @@ class TestTorchTensor {
 
     @Test
     fun testViewWithNoCopy() = TorchTensorIntAlgebra {
-        withCuda {
-            device ->  testingViewWithNoCopy(device)
+        withChecks {
+            withCuda {
+                    device ->  testingViewWithNoCopy(device)
+            }
         }
     }
 
