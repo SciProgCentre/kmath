@@ -224,6 +224,7 @@ public inline fun <reified T : Comparable<T>, F : Field<T>> GenericMatrixContext
 ): Matrix<T> = solveWithLUP(matrix, one(matrix.rowNum, matrix.colNum), bufferFactory, checkSingular)
 
 
+@OptIn(UnstableKMathAPI::class)
 public fun RealMatrixContext.solveWithLUP(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
     // Use existing decomposition if it is provided by matrix
     val bufferFactory: MutableBufferFactory<Double> = MutableBuffer.Companion::real
