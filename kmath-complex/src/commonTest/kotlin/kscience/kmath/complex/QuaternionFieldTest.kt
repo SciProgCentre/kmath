@@ -3,7 +3,6 @@ package kscience.kmath.complex
 import kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class QuaternionFieldTest {
     @Test
@@ -17,7 +16,7 @@ internal class QuaternionFieldTest {
     fun testSubtraction() {
         assertEquals(Quaternion(42, 42), QuaternionField { Quaternion(86, 55) - Quaternion(44, 13) })
         assertEquals(Quaternion(42, 56), QuaternionField { Quaternion(86, 56) - 44 })
-        assertTrue(Quaternion(42, 56) - QuaternionField { 86 - Quaternion(44, -56) } < 1e-10.toQuaternion())
+        assertEquals(Quaternion(42, 56), QuaternionField { 86 - Quaternion(44, -56) })
     }
 
     @Test
@@ -31,7 +30,7 @@ internal class QuaternionFieldTest {
     fun testDivision() {
         assertEquals(Quaternion(42, 42), QuaternionField { Quaternion(0, 168) / Quaternion(2, 2) })
         assertEquals(Quaternion(42, 56), QuaternionField { Quaternion(86, 56) - 44 })
-        assertTrue(Quaternion(42, 56) - QuaternionField { 86 - Quaternion(44, -56) } < 1e-10.toQuaternion())
+        assertEquals(Quaternion(42, 56) , QuaternionField { 86 - Quaternion(44, -56) })
     }
 
     @Test

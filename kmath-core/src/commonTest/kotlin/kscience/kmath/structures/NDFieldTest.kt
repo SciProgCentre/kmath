@@ -1,13 +1,14 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.internal.FieldVerifier
+import kscience.kmath.operations.invoke
+import kscience.kmath.testutils.FieldVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class NDFieldTest {
     @Test
     fun verify() {
-        NDField.real(12, 32).run { FieldVerifier(this, one + 3, one - 23, one * 12, 6.66) }
+        (NDField.real(12, 32)) { FieldVerifier(this, one + 3, one - 23, one * 12, 6.66) }
     }
 
     @Test

@@ -6,16 +6,19 @@ import kscience.kmath.structures.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+/**
+ * Convenience alias for [BufferedNDFieldElement] of [Complex].
+ */
 public typealias ComplexNDElement = BufferedNDFieldElement<Complex, ComplexField>
 
 /**
- * An optimized nd-field for complex numbers
+ * An optimized ND field for complex numbers.
  */
 @OptIn(UnstableKMathAPI::class)
 public class ComplexNDField(override val shape: IntArray) :
     BufferedNDField<Complex, ComplexField>,
     ExtendedNDField<Complex, ComplexField, NDBuffer<Complex>>,
-    RingWithNumbers<NDBuffer<Complex>>{
+    RingWithNumbers<NDBuffer<Complex>> {
 
     public override val strides: Strides = DefaultStrides(shape)
     public override val elementContext: ComplexField get() = ComplexField
