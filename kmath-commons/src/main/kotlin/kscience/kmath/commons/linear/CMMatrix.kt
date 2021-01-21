@@ -77,9 +77,9 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
         return CMMatrix(Array2DRowRealMatrix(array))
     }
 
-    public fun Matrix<Double>.toCM(): CMMatrix = when {
-        this is CMMatrix -> this
-        this is MatrixWrapper && matrix is CMMatrix -> matrix as CMMatrix
+    @OptIn(UnstableKMathAPI::class)
+    public fun Matrix<Double>.toCM(): CMMatrix = when (val matrix = origin) {
+        is CMMatrix -> matrix
         else -> {
             //TODO add feature analysis
             val array = Array(rowNum) { i -> DoubleArray(colNum) { j -> get(i, j) } }
