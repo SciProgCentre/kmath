@@ -235,11 +235,12 @@ Release artifacts are accessible from bintray with following configuration (see 
 ```kotlin
 repositories {
     maven("https://dl.bintray.com/mipt-npm/kscience")
+    // maven("https://dl.bintray.com/mipt-npm/dev") for dev versions
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:0.2.0-dev-4")
-    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-4") for jvm-specific version
+    api("kscience.kmath:kmath-core:0.2.0-dev-5")
+    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-5") for jvm-specific version
 }
 ```
 
