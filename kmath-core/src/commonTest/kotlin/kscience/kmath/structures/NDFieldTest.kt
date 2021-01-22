@@ -1,5 +1,6 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.NDField
 import kscience.kmath.operations.internal.FieldVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals

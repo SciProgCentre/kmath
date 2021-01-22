@@ -1,7 +1,18 @@
 package kscience.kmath.linear
 
+import kscience.kmath.nd.NDStructure
+import kscience.kmath.nd.Structure2D
 import kscience.kmath.operations.Ring
-import kscience.kmath.structures.*
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.BufferFactory
+import kscience.kmath.structures.asSequence
+
+/**
+ * Alias for [Structure2D] with more familiar name.
+ *
+ * @param T the type of items.
+ */
+public typealias Matrix<T> = Structure2D<T>
 
 /**
  * Basic implementation of Matrix space based on [NDStructure]

@@ -1,15 +1,11 @@
 package kscience.kmath.real
 
 import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.VirtualMatrix
-import kscience.kmath.linear.inverseWithLUP
 import kscience.kmath.linear.real
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.Matrix
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
-import kscience.kmath.structures.asIterable
-import kotlin.math.pow
 
 /*
  *  Functions for convenient "numpy-like" operations with Double matrices.

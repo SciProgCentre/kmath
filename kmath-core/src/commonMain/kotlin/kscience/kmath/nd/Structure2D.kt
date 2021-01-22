@@ -1,4 +1,7 @@
-package kscience.kmath.structures
+package kscience.kmath.nd
+
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.VirtualBuffer
 
 /**
  * A structure that is guaranteed to be two-dimensional.
@@ -73,10 +76,3 @@ public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2)
     Structure2DWrapper(this)
 else
     error("Can't create 2d-structure from ${shape.size}d-structure")
-
-/**
- * Alias for [Structure2D] with more familiar name.
- *
- * @param T the type of items.
- */
-public typealias Matrix<T> = Structure2D<T>

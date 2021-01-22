@@ -1,5 +1,8 @@
 package kscience.kmath.benchmarks
 
+import kscience.kmath.nd.AbstractNDBuffer
+import kscience.kmath.nd.NDField
+import kscience.kmath.nd.RealNDField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.*
@@ -12,7 +15,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun autoFieldAdd() {
         bufferedField {
-            var res: NDBuffer<Double> = one
+            var res: AbstractNDBuffer<Double> = one
             repeat(n) { res += one }
         }
     }
@@ -26,7 +29,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun specializedFieldAdd() {
         specializedField {
-            var res: NDBuffer<Double> = one
+            var res: AbstractNDBuffer<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
@@ -35,7 +38,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun boxingFieldAdd() {
         genericField {
-            var res: NDBuffer<Double> = one
+            var res: AbstractNDBuffer<Double> = one
             repeat(n) { res += one }
         }
     }

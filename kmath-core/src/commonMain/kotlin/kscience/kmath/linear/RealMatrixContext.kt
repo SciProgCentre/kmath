@@ -1,6 +1,5 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 
 @Suppress("OVERRIDE_BY_INLINE")

@@ -2,6 +2,8 @@ package kscience.kmath.structures
 
 import kotlinx.coroutines.*
 import kscience.kmath.coroutines.Math
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDStructure
 
 public class LazyNDStructure<T>(
     public val scope: CoroutineScope,
@@ -19,7 +21,7 @@ public class LazyNDStructure<T>(
 
     public override fun elements(): Sequence<Pair<IntArray, T>> {
         val strides = DefaultStrides(shape)
-        val res = runBlocking { strides.indices().toList().map { index -> index to await(index) } }
+        val res = runBlocking { kscience.kmath.nd.map { index -> index to await(index) } }
         return res.asSequence()
     }
 

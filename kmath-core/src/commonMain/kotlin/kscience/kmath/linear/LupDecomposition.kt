@@ -1,6 +1,7 @@
 package kscience.kmath.linear
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.getFeature
 import kscience.kmath.operations.*
 import kscience.kmath.structures.*
 

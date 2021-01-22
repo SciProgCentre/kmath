@@ -1,8 +1,7 @@
 package kscience.kmath.operations
 
+import kscience.kmath.nd.NDField
 import kscience.kmath.structures.NDElement
-import kscience.kmath.structures.NDField
-import kscience.kmath.structures.complex
 
 fun main() {
     // 2d element

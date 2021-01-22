@@ -60,7 +60,7 @@ public class FlaggedRealBuffer(public val values: DoubleArray, public val flags:
 
     override operator fun get(index: Int): Double? = if (isValid(index)) values[index] else null
 
-    override operator fun iterator(): Iterator<Double?> = values.indices.asSequence().map {
+    override operator fun iterator(): Iterator<Double?> = kscience.kmath.nd.map {
         if (isValid(it)) values[it] else null
     }.iterator()
 }

@@ -1,7 +1,8 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.NDField
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.operations.Norm
-import kscience.kmath.operations.invoke
 import kscience.kmath.structures.NDElement.Companion.real2D
 import kotlin.math.abs
 import kotlin.math.pow

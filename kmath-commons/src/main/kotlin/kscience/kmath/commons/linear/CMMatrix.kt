@@ -3,9 +3,8 @@ package kscience.kmath.commons.linear
 import kscience.kmath.linear.DiagonalFeature
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
-import kscience.kmath.linear.origin
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.structures.Matrix
+import kscience.kmath.nd.Matrix
 import org.apache.commons.math3.linear.*
 import kotlin.reflect.KClass
 import kotlin.reflect.cast

@@ -2,8 +2,7 @@ package kscience.kmath.ejml
 
 import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.NDStructure
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.structures.RealBuffer
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix

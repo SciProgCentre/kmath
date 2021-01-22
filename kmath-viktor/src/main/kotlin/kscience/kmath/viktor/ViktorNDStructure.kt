@@ -1,10 +1,10 @@
 package kscience.kmath.viktor
 
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.MutableNDStructure
+import kscience.kmath.nd.NDField
+import kscience.kmath.nd.Strides
 import kscience.kmath.operations.RealField
-import kscience.kmath.structures.DefaultStrides
-import kscience.kmath.structures.MutableNDStructure
-import kscience.kmath.structures.NDField
-import kscience.kmath.structures.Strides
 import org.jetbrains.bio.viktor.F64Array
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")

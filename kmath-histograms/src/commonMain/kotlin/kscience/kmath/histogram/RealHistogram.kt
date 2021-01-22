@@ -1,6 +1,8 @@
 package kscience.kmath.histogram
 
 import kscience.kmath.linear.Point
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.operations.SpaceOperations
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.*
@@ -15,7 +17,7 @@ public data class BinDef<T : Comparable<T>>(
         require(vector.size == center.size) { "Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}" }
         val upper = space { center + sizes / 2.0 }
         val lower = space { center - sizes / 2.0 }
-        return vector.asSequence().mapIndexed { i, value -> value in lower[i]..upper[i] }.all { it }
+        return kscience.kmath.nd.mapIndexed { i, value -> value in lower[i]..upper[i] }.all { it }
     }
 }
 
@@ -68,7 +70,7 @@ public class RealHistogram(
     public fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
 
     private fun getDef(index: IntArray): BinDef<Double> {
-        val center = index.mapIndexed { axis, i ->
+        val center = kscience.kmath.nd.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
                 strides.shape[axis] - 1 -> Double.POSITIVE_INFINITY
@@ -98,7 +100,7 @@ public class RealHistogram(
     }
 
     public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
-        weights.elements().map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
+        kscience.kmath.nd.map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
             .iterator()
 
     /**

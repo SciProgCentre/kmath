@@ -43,7 +43,7 @@ public interface Buffer<T> {
      * Checks content equality with another buffer.
      */
     public fun contentEquals(other: Buffer<*>): Boolean =
-        asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
+        kscience.kmath.nd.mapIndexed { index, value -> value == other[index] }.all { it }
 
     public companion object {
         /**

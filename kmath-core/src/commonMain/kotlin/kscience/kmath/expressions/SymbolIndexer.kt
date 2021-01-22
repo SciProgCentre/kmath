@@ -1,8 +1,8 @@
 package kscience.kmath.expressions
 
 import kscience.kmath.linear.Point
+import kscience.kmath.nd.Structure2D
 import kscience.kmath.structures.BufferFactory
-import kscience.kmath.structures.Structure2D
 
 /**
  * An environment to easy transform indexed variables to symbols and back.

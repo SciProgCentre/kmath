@@ -1,6 +1,7 @@
 package kscience.kmath.structures
 
 import kotlinx.coroutines.GlobalScope
+import kscience.kmath.nd.*
 import kscience.kmath.nd4j.Nd4jArrayField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
@@ -22,29 +23,29 @@ fun main() {
     val n = 1000
 
     // automatically build context most suited for given type.
-    val autoField = NDField.auto(RealField, dim, dim)
+    val autoField = NDAlgebra.field(RealField, Buffer.Companion::auto, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
-    val specializedField = NDField.real(dim, dim)
+    val specializedField = NDAlgebra.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val genericField = NDField.boxing(RealField, dim, dim)
+    val boxingField =  NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
 
     measureAndPrint("Automatic field addition") {
         autoField {
-            var res: NDBuffer<Double> = one
+            var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Element addition") {
-        var res = genericField.one
+        var res: NDStructure<Double> = boxingField.one
         repeat(n) { res += 1.0 }
     }
 
     measureAndPrint("Specialized addition") {
         specializedField {
-            var res: NDBuffer<Double> = one
+            var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
@@ -70,8 +71,8 @@ fun main() {
 
     measureAndPrint("Generic addition") {
         //genericField.run(action)
-        genericField {
-            var res: NDBuffer<Double> = one
+        boxingField {
+            var res: NDStructure<Double> = one
             repeat(n) {
                 res += 1.0 // couldn't avoid using `one` due to resolution ambiguity }
             }

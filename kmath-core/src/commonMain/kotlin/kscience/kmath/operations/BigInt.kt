@@ -1,6 +1,7 @@
 package kscience.kmath.operations
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.NDAlgebra
 import kscience.kmath.operations.BigInt.Companion.BASE
 import kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import kscience.kmath.structures.*
