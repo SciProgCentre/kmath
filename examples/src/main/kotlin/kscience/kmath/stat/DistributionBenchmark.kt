@@ -63,6 +63,4 @@ fun main(): Unit = runBlocking(Dispatchers.Default) {
     val directJob = async { runApacheDirect() }
     println("KMath Chained: ${chainJob.await()}")
     println("Apache Direct: ${directJob.await()}")
-    val normal = GaussianSampler.of(7.0, 2.0)
-    val chain = normal.sample(generator).blocking()
 }
