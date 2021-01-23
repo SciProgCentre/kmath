@@ -17,7 +17,7 @@ public data class BinDef<T : Comparable<T>>(
         require(vector.size == center.size) { "Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}" }
         val upper = space { center + sizes / 2.0 }
         val lower = space { center - sizes / 2.0 }
-        return kscience.kmath.nd.mapIndexed { i, value -> value in lower[i]..upper[i] }.all { it }
+        return vector.asSequence().mapIndexed { i, value -> value in lower[i]..upper[i] }.all { it }
     }
 }
 
@@ -70,7 +70,7 @@ public class RealHistogram(
     public fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
 
     private fun getDef(index: IntArray): BinDef<Double> {
-        val center = kscience.kmath.nd.mapIndexed { axis, i ->
+        val center = index.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
                 strides.shape[axis] - 1 -> Double.POSITIVE_INFINITY
@@ -100,7 +100,7 @@ public class RealHistogram(
     }
 
     public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
-        kscience.kmath.nd.map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
+        weights.elements().map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
             .iterator()
 
     /**

@@ -94,9 +94,12 @@ public open class RealNDField(
 /**
  * Fast element production using function inlining
  */
-public inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(Int) -> Double): NDBuffer<Double> {
+public inline fun BufferedNDField<Double, RealField>.produceInline(crossinline initializer: RealField.(IntArray) -> Double): NDBuffer<Double> {
     contract { callsInPlace(initializer, InvocationKind.EXACTLY_ONCE) }
-    val array = DoubleArray(strides.linearSize) { offset -> RealField.initializer(offset) }
+    val array = DoubleArray(strides.linearSize) { offset ->
+        val index = strides.index(offset)
+        RealField.initializer(index)
+    }
     return NDBuffer(strides, RealBuffer(array))
 }
 

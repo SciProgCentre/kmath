@@ -52,7 +52,15 @@ public interface Structure2D<T> : NDStructure<T> {
             for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
     }
 
-    public companion object
+    public companion object {
+        public inline fun real(
+            rows: Int,
+            columns: Int,
+            crossinline init: (i: Int, j: Int) -> Double,
+        ): NDBuffer<Double> = NDAlgebra.real(rows, columns).produceInline { (i, j) ->
+            init(i, j)
+        }
+    }
 }
 
 /**

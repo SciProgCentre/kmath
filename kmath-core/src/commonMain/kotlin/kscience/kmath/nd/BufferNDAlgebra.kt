@@ -86,7 +86,7 @@ public fun <T, A : Space<T>> NDAlgebra.Companion.space(
     vararg shape: Int,
 ): BufferedNDSpace<T, A> = BufferedNDSpace(shape, space, bufferFactory)
 
-public inline fun <T, A : Space<T>, R> A.nd(
+public inline fun <T, A : Space<T>, R> A.ndSpace(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedNDSpace<T, A>.() -> R,
@@ -102,7 +102,7 @@ public fun <T, A : Ring<T>> NDAlgebra.Companion.ring(
     vararg shape: Int,
 ): BufferedNDRing<T, A> = BufferedNDRing(shape, ring, bufferFactory)
 
-public inline fun <T, A : Ring<T>, R> A.nd(
+public inline fun <T, A : Ring<T>, R> A.ndRing(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedNDRing<T, A>.() -> R,
@@ -118,7 +118,7 @@ public fun <T, A : Field<T>> NDAlgebra.Companion.field(
     vararg shape: Int,
 ): BufferedNDField<T, A> = BufferedNDField(shape, field, bufferFactory)
 
-public inline fun <T, A : Field<T>, R> A.nd(
+public inline fun <T, A : Field<T>, R> A.ndField(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedNDField<T, A>.() -> R,

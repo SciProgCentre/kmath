@@ -1,7 +1,9 @@
 package kaceince.kmath.real
 
-import kscience.kmath.nd.Matrix
+import kscience.kmath.linear.Matrix
+import kscience.kmath.linear.build
 import kscience.kmath.real.*
+import kscience.kmath.structures.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

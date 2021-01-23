@@ -7,6 +7,13 @@ import kscience.kmath.structures.*
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 
+internal fun NDAlgebra<*, *>.checkShape(array: INDArray): INDArray {
+    val arrayShape = array.shape().toIntArray()
+    if (!shape.contentEquals(arrayShape)) throw ShapeMismatchException(shape, arrayShape)
+    return array
+}
+
+
 /**
  * Represents [NDAlgebra] over [Nd4jArrayAlgebra].
  *
@@ -18,8 +25,9 @@ public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C> {
      * Wraps [INDArray] to [N].
      */
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
+
     public val NDStructure<T>.ndArray: INDArray
-        get() = when  {
+        get() = when {
             !shape.contentEquals(this@Nd4jArrayAlgebra.shape) -> throw ShapeMismatchException(
                 this@Nd4jArrayAlgebra.shape,
                 shape
@@ -213,7 +221,7 @@ public class RealNd4jArrayField(public override val shape: IntArray) : Nd4jArray
     public override val elementContext: RealField
         get() = RealField
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(asRealStructure())
+    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(this).asRealStructure()
 
     public override operator fun NDStructure<Double>.div(arg: Double): Nd4jArrayStructure<Double> {
         return ndArray.div(arg).wrap()
@@ -247,7 +255,7 @@ public class FloatNd4jArrayField(public override val shape: IntArray) : Nd4jArra
     public override val elementContext: FloatField
         get() = FloatField
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Float> = checkShape(asFloatStructure())
+    public override fun INDArray.wrap(): Nd4jArrayStructure<Float> = checkShape(this).asFloatStructure()
 
     public override operator fun NDStructure<Float>.div(arg: Float): Nd4jArrayStructure<Float> {
         return ndArray.div(arg).wrap()
@@ -281,7 +289,7 @@ public class IntNd4jArrayRing(public override val shape: IntArray) : Nd4jArrayRi
     public override val elementContext: IntRing
         get() = IntRing
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Int> = check(asIntStructure())
+    public override fun INDArray.wrap(): Nd4jArrayStructure<Int> = checkShape(this).asIntStructure()
 
     public override operator fun NDStructure<Int>.plus(arg: Int): Nd4jArrayStructure<Int> {
         return ndArray.add(arg).wrap()
@@ -307,7 +315,7 @@ public class LongNd4jArrayRing(public override val shape: IntArray) : Nd4jArrayR
     public override val elementContext: LongRing
         get() = LongRing
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Long> = check(asLongStructure())
+    public override fun INDArray.wrap(): Nd4jArrayStructure<Long> = checkShape(this).asLongStructure()
 
     public override operator fun NDStructure<Long>.plus(arg: Long): Nd4jArrayStructure<Long> {
         return ndArray.add(arg).wrap()

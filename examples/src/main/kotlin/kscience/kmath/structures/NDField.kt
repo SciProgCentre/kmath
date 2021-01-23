@@ -1,7 +1,10 @@
 package kscience.kmath.structures
 
 import kotlinx.coroutines.GlobalScope
-import kscience.kmath.nd.*
+import kscience.kmath.nd.NDAlgebra
+import kscience.kmath.nd.NDStructure
+import kscience.kmath.nd.field
+import kscience.kmath.nd.real
 import kscience.kmath.nd4j.Nd4jArrayField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
@@ -39,8 +42,10 @@ fun main() {
     }
 
     measureAndPrint("Element addition") {
-        var res: NDStructure<Double> = boxingField.one
-        repeat(n) { res += 1.0 }
+        boxingField {
+        var res: NDStructure<Double> = one
+            repeat(n) { res += 1.0 }
+        }
     }
 
     measureAndPrint("Specialized addition") {
@@ -52,7 +57,7 @@ fun main() {
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
-            var res = one
+            var res:NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
     }

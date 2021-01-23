@@ -15,7 +15,7 @@ public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected 
     private val reader: MemoryReader = memory.reader()
 
     override operator fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
-    override operator fun iterator(): Iterator<T> = kscience.kmath.nd.map { get(it) }.iterator()
+    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MemoryBuffer<T> =
