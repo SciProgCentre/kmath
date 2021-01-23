@@ -1,42 +1,28 @@
 package kscience.kmath.commons.linear
 
-import kscience.kmath.linear.*
+import kscience.kmath.linear.DiagonalFeature
+import kscience.kmath.linear.MatrixContext
+import kscience.kmath.linear.Point
+import kscience.kmath.linear.origin
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.NDStructure
 import org.apache.commons.math3.linear.*
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
-public class CMMatrix(public val origin: RealMatrix, features: Set<MatrixFeature>? = null) : FeaturedMatrix<Double> {
+public inline class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
-    public override val features: Set<MatrixFeature> = features ?: sequence<MatrixFeature> {
-        if (origin is DiagonalMatrix) yield(DiagonalFeature)
-    }.toHashSet()
-
-    public override fun suggestFeature(vararg features: MatrixFeature): CMMatrix =
-        CMMatrix(origin, this.features + features)
+    @UnstableKMathAPI
+    override fun <T : Any> getFeature(type: KClass<T>): T? = when (type) {
+        DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
+        else -> null
+    }?.let { type.cast(it) }
 
     public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
-
-    public override fun equals(other: Any?): Boolean {
-        return NDStructure.equals(this, other as? NDStructure<*> ?: return false)
-    }
-
-    public override fun hashCode(): Int {
-        var result = origin.hashCode()
-        result = 31 * result + features.hashCode()
-        return result
-    }
 }
 
-//TODO move inside context
-public fun Matrix<Double>.toCM(): CMMatrix = if (this is CMMatrix) {
-    this
-} else {
-    //TODO add feature analysis
-    val array = Array(rowNum) { i -> DoubleArray(colNum) { j -> get(i, j) } }
-    CMMatrix(Array2DRowRealMatrix(array))
-}
 
 public fun RealMatrix.asMatrix(): CMMatrix = CMMatrix(this)
 
@@ -59,6 +45,16 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
     public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
         val array = Array(rows) { i -> DoubleArray(columns) { j -> initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
+    }
+
+    @OptIn(UnstableKMathAPI::class)
+    public fun Matrix<Double>.toCM(): CMMatrix = when (val matrix = origin) {
+        is CMMatrix -> matrix
+        else -> {
+            //TODO add feature analysis
+            val array = Array(rowNum) { i -> DoubleArray(colNum) { j -> get(i, j) } }
+            CMMatrix(Array2DRowRealMatrix(array))
+        }
     }
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =

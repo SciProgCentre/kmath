@@ -4,7 +4,7 @@ plugins {
     id("ru.mipt.npm.project")
 }
 
-internal val kmathVersion: String by extra("0.2.0-dev-4")
+internal val kmathVersion: String by extra("0.2.0-dev-5")
 internal val bintrayRepo: String by extra("kscience")
 internal val githubProject: String by extra("kmath")
 

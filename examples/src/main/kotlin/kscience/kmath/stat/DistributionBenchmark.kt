@@ -3,7 +3,6 @@ package kscience.kmath.commons.prob
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.chains.BlockingRealChain
 import kscience.kmath.stat.*
 import org.apache.commons.rng.sampling.distribution.ZigguratNormalizedGaussianSampler
 import org.apache.commons.rng.simple.RandomSource
@@ -13,7 +12,7 @@ import java.time.Instant
 private fun runChain(): Duration {
     val generator = RandomGenerator.fromSource(RandomSource.MT, 123L)
     val normal = Distribution.normal(NormalSamplerMethod.Ziggurat)
-    val chain = normal.sample(generator) as BlockingRealChain
+    val chain = normal.sample(generator)
     val startTime = Instant.now()
     var sum = 0.0
 
