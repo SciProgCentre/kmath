@@ -1,6 +1,5 @@
 package kaceince.kmath.real
 
-import kscience.kmath.linear.VirtualMatrix
 import kscience.kmath.linear.build
 import kscience.kmath.real.*
 import kscience.kmath.structures.Matrix
@@ -42,7 +41,7 @@ internal class RealMatrixTest {
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
-        assertEquals(VirtualMatrix.wrap(matrix2), matrix1.repeatStackVertical(3))
+        assertEquals(matrix2, matrix1.repeatStackVertical(3))
     }
 
     @Test

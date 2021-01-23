@@ -1,7 +1,9 @@
 package kscience.kmath.commons.expressions
 
 import kscience.kmath.expressions.*
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.ExtendedField
+import kscience.kmath.operations.RingWithNumbers
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 
 /**
@@ -10,14 +12,17 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
  * @property order The derivation order.
  * @property bindings The map of bindings values. All bindings are considered free parameters
  */
+@OptIn(UnstableKMathAPI::class)
 public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
-) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure> {
+) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>, RingWithNumbers<DerivativeStructure> {
     public val numberOfVariables: Int = bindings.size
 
     public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
     public override val one: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order, 1.0) }
+
+    override fun number(value: Number): DerivativeStructure = const(value.toDouble())
 
     /**
      * A class that implements both [DerivativeStructure] and a [Symbol]

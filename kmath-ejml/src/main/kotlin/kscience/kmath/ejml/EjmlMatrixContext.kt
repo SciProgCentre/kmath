@@ -1,15 +1,13 @@
 package kscience.kmath.ejml
 
+import kscience.kmath.linear.InverseMatrixFeature
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.Point
+import kscience.kmath.linear.origin
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Matrix
+import kscience.kmath.structures.getFeature
 import org.ejml.simple.SimpleMatrix
-
-/**
- * Converts this matrix to EJML one.
- */
-public fun Matrix<Double>.toEjml(): EjmlMatrix =
-    if (this is EjmlMatrix) this else EjmlMatrixContext.produce(rowNum, colNum) { i, j -> get(i, j) }
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
@@ -17,6 +15,15 @@ public fun Matrix<Double>.toEjml(): EjmlMatrix =
  * @author Iaroslav Postovalov
  */
 public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
+
+    /**
+     * Converts this matrix to EJML one.
+     */
+    @OptIn(UnstableKMathAPI::class)
+    public fun Matrix<Double>.toEjml(): EjmlMatrix = when (val matrix = origin) {
+        is EjmlMatrix -> matrix
+        else -> produce(rowNum, colNum) { i, j -> get(i, j) }
+    }
 
     /**
      * Converts this vector to EJML one.
@@ -31,6 +38,11 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
             (0 until it.numRows()).forEach { row ->
                 (0 until it.numCols()).forEach { col -> it[row, col] = initializer(row, col) }
             }
+        })
+
+    override fun point(size: Int, initializer: (Int) -> Double): Point<Double> =
+        EjmlVector(SimpleMatrix(size, 1).also {
+            (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
         })
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
@@ -74,11 +86,7 @@ public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMa
 public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
 
-/**
- * Returns the inverse of given matrix: b = a^(-1).
- *
- * @param a the matrix.
- * @return the inverse of this matrix.
- * @author Iaroslav Postovalov
- */
-public fun EjmlMatrixContext.inverse(a: Matrix<Double>): EjmlMatrix = EjmlMatrix(a.toEjml().origin.invert())
+@OptIn(UnstableKMathAPI::class)
+public fun EjmlMatrix.inverted(): EjmlMatrix = getFeature<InverseMatrixFeature<Double>>()!!.inverse as EjmlMatrix
+
+public fun EjmlMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> = matrix.toEjml().inverted()

@@ -1,13 +1,13 @@
 package kscience.kmath.asm
 
 import kscience.kmath.asm.internal.AsmBuilder
-import kscience.kmath.asm.internal.MstType
-import kscience.kmath.asm.internal.buildAlgebraOperationCall
 import kscience.kmath.asm.internal.buildName
 import kscience.kmath.ast.MST
+import kscience.kmath.ast.MST.*
 import kscience.kmath.ast.MstExpression
 import kscience.kmath.expressions.Expression
 import kscience.kmath.operations.Algebra
+import kscience.kmath.operations.NumericAlgebra
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -20,40 +20,54 @@ import kscience.kmath.operations.Algebra
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
-        is MST.Symbolic -> {
+        is Symbolic -> {
             val symbol = try {
                 algebra.symbol(node.value)
-            } catch (ignored: Throwable) {
+            } catch (ignored: IllegalStateException) {
                 null
             }
 
             if (symbol != null)
-                loadTConstant(symbol)
+                loadObjectConstant(symbol as Any)
             else
                 loadVariable(node.value)
         }
 
-        is MST.Numeric -> loadNumeric(node.value)
+        is Numeric -> loadNumberConstant(node.value)
 
-        is MST.Unary -> buildAlgebraOperationCall(
-            context = algebra,
-            name = node.operation,
-            fallbackMethodName = "unaryOperation",
-            parameterTypes = arrayOf(MstType.fromMst(node.value))
-        ) { visit(node.value) }
+        is Unary -> when {
+            algebra is NumericAlgebra && node.value is Numeric -> loadObjectConstant(
+                algebra.unaryOperationFunction(node.operation)(algebra.number(node.value.value)))
 
-        is MST.Binary -> buildAlgebraOperationCall(
-            context = algebra,
-            name = node.operation,
-            fallbackMethodName = "binaryOperation",
-            parameterTypes = arrayOf(MstType.fromMst(node.left), MstType.fromMst(node.right))
-        ) {
-            visit(node.left)
-            visit(node.right)
+            else -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
+        }
+
+        is Binary -> when {
+            algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> loadObjectConstant(
+                algebra.binaryOperationFunction(node.operation)
+                    .invoke(algebra.number(node.left.value), algebra.number(node.right.value))
+            )
+
+            algebra is NumericAlgebra && node.left is Numeric -> buildCall(
+                algebra.leftSideNumberOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
+
+            algebra is NumericAlgebra && node.right is Numeric -> buildCall(
+                algebra.rightSideNumberOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
+
+            else -> buildCall(algebra.binaryOperationFunction(node.operation)) {
+                visit(node.left)
+                visit(node.right)
+            }
         }
     }
 
-    return AsmBuilder(type, algebra, buildName(this)) { visit(this@compileWith) }.getInstance()
+    return AsmBuilder<T>(type, buildName(this)) { visit(this@compileWith) }.instance
 }
 
 /**

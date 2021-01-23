@@ -3,8 +3,10 @@ package kscience.dimensions
 import kscience.kmath.dimensions.D2
 import kscience.kmath.dimensions.D3
 import kscience.kmath.dimensions.DMatrixContext
+import kscience.kmath.dimensions.one
 import kotlin.test.Test
 
+@Suppress("UNUSED_VARIABLE")
 internal class DMatrixContextTest {
     @Test
     fun testDimensionSafeMatrix() {

@@ -33,7 +33,7 @@ fun main() {
     measureAndPrint("Automatic field addition") {
         autoField {
             var res: NDBuffer<Double> = one
-            repeat(n) { res += number(1.0) }
+            repeat(n) { res += 1.0 }
         }
     }
 
@@ -52,7 +52,7 @@ fun main() {
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
             var res = one
-            repeat(n) { res += 1.0 as Number }
+            repeat(n) { res += 1.0 }
         }
     }
 
@@ -73,7 +73,7 @@ fun main() {
         genericField {
             var res: NDBuffer<Double> = one
             repeat(n) {
-                res += one // couldn't avoid using `one` due to resolution ambiguity }
+                res += 1.0 // couldn't avoid using `one` due to resolution ambiguity }
             }
         }
     }

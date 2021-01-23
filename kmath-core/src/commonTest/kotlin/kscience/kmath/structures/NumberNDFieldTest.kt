@@ -8,6 +8,7 @@ import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
     val array1: RealNDElement = real2D(3, 3) { i, j -> (i + j).toDouble() }
     val array2: RealNDElement = real2D(3, 3) { i, j -> (i - j).toDouble() }

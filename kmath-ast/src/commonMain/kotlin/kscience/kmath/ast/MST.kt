@@ -2,10 +2,9 @@ package kscience.kmath.ast
 
 import kscience.kmath.operations.Algebra
 import kscience.kmath.operations.NumericAlgebra
-import kscience.kmath.operations.RealField
 
 /**
- * A Mathematical Syntax Tree node for mathematical expressions.
+ * A Mathematical Syntax Tree (MST) node for mathematical expressions.
  *
  * @author Alexander Nozik
  */
@@ -55,24 +54,25 @@ public sealed class MST {
 public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
+
     is MST.Symbolic -> symbol(node.value)
-    is MST.Unary -> unaryOperation(node.operation, evaluate(node.value))
+
+    is MST.Unary -> when {
+        this is NumericAlgebra && node.value is MST.Numeric -> unaryOperationFunction(node.operation)(number(node.value.value))
+        else -> unaryOperationFunction(node.operation)(evaluate(node.value))
+    }
+
     is MST.Binary -> when {
-        this !is NumericAlgebra -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
+        this is NumericAlgebra && node.left is MST.Numeric && node.right is MST.Numeric ->
+            binaryOperationFunction(node.operation)(number(node.left.value), number(node.right.value))
 
-        node.left is MST.Numeric && node.right is MST.Numeric -> {
-            val number = RealField.binaryOperation(
-                node.operation,
-                node.left.value.toDouble(),
-                node.right.value.toDouble()
-            )
+        this is NumericAlgebra && node.left is MST.Numeric ->
+            leftSideNumberOperationFunction(node.operation)(node.left.value, evaluate(node.right))
 
-            number(number)
-        }
+        this is NumericAlgebra && node.right is MST.Numeric ->
+            rightSideNumberOperationFunction(node.operation)(evaluate(node.left), node.right.value)
 
-        node.left is MST.Numeric -> leftSideNumberOperation(node.operation, node.left.value, evaluate(node.right))
-        node.right is MST.Numeric -> rightSideNumberOperation(node.operation, evaluate(node.left), node.right.value)
-        else -> binaryOperation(node.operation, evaluate(node.left), evaluate(node.right))
+        else -> binaryOperationFunction(node.operation)(evaluate(node.left), evaluate(node.right))
     }
 }
 

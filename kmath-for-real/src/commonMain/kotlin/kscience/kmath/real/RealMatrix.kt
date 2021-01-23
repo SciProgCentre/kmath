@@ -1,14 +1,12 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.FeaturedMatrix
 import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.RealMatrixContext.elementContext
 import kscience.kmath.linear.VirtualMatrix
 import kscience.kmath.linear.inverseWithLUP
+import kscience.kmath.linear.real
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.operations.invoke
-import kscience.kmath.operations.sum
 import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow
@@ -25,7 +23,7 @@ import kotlin.math.pow
  *  Functions that help create a real (Double) matrix
  */
 
-public typealias RealMatrix = FeaturedMatrix<Double>
+public typealias RealMatrix = Matrix<Double>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum, initializer)
@@ -122,8 +120,7 @@ public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
 public fun RealMatrix.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
-    val column = columns[j]
-    elementContext { sum(column.asIterable()) }
+    columns[j].asIterable().sum()
 }
 
 public fun RealMatrix.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
