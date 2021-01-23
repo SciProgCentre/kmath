@@ -50,7 +50,7 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
         val aBuffer = a.ndBuffer
         val bBuffer = b.ndBuffer
         val buffer = bufferFactory(strides.linearSize) { offset ->
-            elementContext.transform(aBuffer.buffer[offset], bBuffer[offset])
+            elementContext.transform(aBuffer.buffer[offset], bBuffer.buffer[offset])
         }
         return NDBuffer(strides, buffer)
     }

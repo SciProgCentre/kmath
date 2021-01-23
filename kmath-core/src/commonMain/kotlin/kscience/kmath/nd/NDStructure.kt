@@ -217,9 +217,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     }
 
     override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i])
-            throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-
+        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
         value * strides[i]
     }.sum()
 
@@ -332,7 +330,7 @@ public inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 public class MutableNDBuffer<T>(
     strides: Strides,
     buffer: MutableBuffer<T>,
-) : NDBuffer<T>(strides,buffer), MutableNDStructure<T> {
+) : NDBuffer<T>(strides, buffer), MutableNDStructure<T> {
 
     init {
         require(strides.linearSize == buffer.size) {
