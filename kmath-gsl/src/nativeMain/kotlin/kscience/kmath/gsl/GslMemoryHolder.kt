@@ -1,5 +1,6 @@
 package kscience.kmath.gsl
 
+import kotlinx.cinterop.AutofreeScope
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CStructVar
 import kotlinx.cinterop.DeferScope
@@ -12,22 +13,25 @@ import kotlinx.cinterop.DeferScope
  *
  * @param scope the scope where this object is declared.
  */
-public abstract class GslMemoryHolder<H : CStructVar> internal constructor(internal val scope: DeferScope) {
-    internal abstract val nativeHandle: CPointer<H>
+public abstract class GslMemoryHolder<H : CStructVar> internal constructor(internal val scope: AutofreeScope) {
+    internal abstract val rawNativeHandle: CPointer<H>
     private var isClosed: Boolean = false
+
+    internal val nativeHandle: CPointer<H>
+        get() {
+            check(!isClosed) { "The use of GSL object that is closed." }
+            return rawNativeHandle
+        }
+
+    internal var shouldBeFreed = true
 
     init {
         ensureHasGslErrorHandler()
 
         scope.defer {
-            close()
+            if (shouldBeFreed) close()
             isClosed = true
         }
-    }
-
-    internal fun nativeHandleChecked(): CPointer<H> {
-        check(!isClosed) { "The use of GSL object that is closed." }
-        return nativeHandle
     }
 
     internal abstract fun close()

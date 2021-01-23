@@ -14,38 +14,36 @@ private fun KtPsiFactory.createVectorClass(
     kotlinTypeName: String,
     kotlinTypeAlias: String = kotlinTypeName
 ) {
+    fun fn(pattern: String) = fn(pattern, cTypeName)
     val className = "Gsl${kotlinTypeAlias}Vector"
     val structName = sn("gsl_vectorR", cTypeName)
 
     @Language("kotlin") val text =
-        """internal class $className(override val nativeHandle: CPointer<$structName>, scope: DeferScope) : 
+        """internal class $className(override val rawNativeHandle: CPointer<$structName>, scope: AutofreeScope) : 
     GslVector<$kotlinTypeName, $structName>(scope) {
     override val size: Int
-        get() = nativeHandleChecked().pointed.size.toInt()
+        get() = nativeHandle.pointed.size.toInt()
 
     override operator fun get(index: Int): $kotlinTypeName = 
-        ${fn("gsl_vectorRget", cTypeName)}(nativeHandleChecked(), index.toULong())
+        ${fn("gsl_vectorRget")}(nativeHandle, index.toULong())
 
     override operator fun set(index: Int, value: $kotlinTypeName): Unit = 
-        ${fn("gsl_vectorRset", cTypeName)}(nativeHandleChecked(), index.toULong(), value)
+        ${fn("gsl_vectorRset")}(nativeHandle, index.toULong(), value)
 
     override fun copy(): $className {
-        val new = requireNotNull(${fn("gsl_vectorRalloc", cTypeName)}(size.toULong()))
-        ${fn("gsl_vectorRmemcpy", cTypeName)}(new, nativeHandleChecked())
+        val new = requireNotNull(${fn("gsl_vectorRalloc")}(size.toULong()))
+        ${fn("gsl_vectorRmemcpy")}(new, nativeHandle)
         return ${className}(new, scope)
     }
 
     override fun equals(other: Any?): Boolean {
         if (other is $className)
-            return ${
-            fn("gsl_vectorRequal",
-                cTypeName)
-        }(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+            return ${fn("gsl_vectorRequal")}(nativeHandle, other.nativeHandle) == 1
 
         return super.equals(other)
     }
 
-    override fun close(): Unit = ${fn("gsl_vectorRfree", cTypeName)}(nativeHandleChecked())
+    override fun close(): Unit = ${fn("gsl_vectorRfree")}(nativeHandle)
 }"""
 
     f += createClass(text)

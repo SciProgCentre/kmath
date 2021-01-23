@@ -1,5 +1,6 @@
 package kscience.kmath.linear
 
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.Ring
 import kscience.kmath.operations.SpaceOperations
 import kscience.kmath.operations.invoke
@@ -8,18 +9,22 @@ import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
 import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.asSequence
+import kotlin.reflect.KClass
 
 /**
- * Basic operations on matrices. Operates on [Matrix]
+ * Basic operations on matrices. Operates on [Matrix].
+ *
+ * @param T the type of items in the matrices.
+ * @param M the type of operated matrices.
  */
 public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Matrix<T>> {
     /**
-     * Produce a matrix with this context and given dimensions
+     * Produces a matrix with this context and given dimensions.
      */
     public fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): M
 
     /**
-     * Produce a point compatible with matrix space (and possibly optimized for it)
+     * Produces a point compatible with matrix space (and possibly optimized for it).
      */
     public fun point(size: Int, initializer: (Int) -> T): Point<T> = Buffer.boxing(size, initializer)
 
@@ -66,8 +71,19 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
      */
     public operator fun T.times(m: Matrix<T>): M = m * this
 
-    public companion object {
+    /**
+     * Gets a feature from the matrix. This function may return some additional features than
+     * [kscience.kmath.structures.NDStructure.getFeature].
+     *
+     * @param F the type of feature.
+     * @param m the matrix.
+     * @param type the [KClass] instance of [F].
+     * @return a feature object or `null` if it isn't present.
+     */
+    @UnstableKMathAPI
+    public fun <F : Any> getFeature(m: Matrix<T>, type: KClass<F>): F? = m.getFeature(type)
 
+    public companion object {
         /**
          * A structured matrix with custom buffer
          */
@@ -84,9 +100,31 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     }
 }
 
+/**
+ * Gets a feature from the matrix. This function may return some additional features than
+ * [kscience.kmath.structures.NDStructure.getFeature].
+ *
+ * @param T the type of items in the matrices.
+ * @param M the type of operated matrices.
+ * @param F the type of feature.
+ * @receiver the [MatrixContext] of [T].
+ * @param m the matrix.
+ * @return a feature object or `null` if it isn't present.
+ */
+@UnstableKMathAPI
+public inline fun <T : Any, reified F : Any> MatrixContext<T, *>.getFeature(m: Matrix<T>): F? =
+    getFeature(m, F::class)
+
+/**
+ * Partial implementation of [MatrixContext] for matrices of [Ring].
+ *
+ * @param T the type of items in the matrices.
+ * @param R the type of ring of matrix elements.
+ * @param M the type of operated matrices.
+ */
 public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> : MatrixContext<T, M> {
     /**
-     * The ring context for matrix elements
+     * The ring instance of [T].
      */
     public val elementContext: R
 

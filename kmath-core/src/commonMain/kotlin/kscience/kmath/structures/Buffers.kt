@@ -241,10 +241,21 @@ public class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 }
 
+
 /**
  * Returns an [ArrayBuffer] that wraps the original array.
  */
 public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
+
+/**
+ * Creates a new [ArrayBuffer] with the specified [size], where each element is calculated by calling the specified
+ * [init] function.
+ *
+ * The function [init] is called for each array element sequentially starting from the first one.
+ * It should return the value for an array element given its index.
+ */
+public inline fun <reified T> ArrayBuffer(size: Int, init: (Int) -> T): ArrayBuffer<T> =
+    Array(size) { i -> init(i) }.asBuffer()
 
 /**
  * Immutable wrapper for [MutableBuffer].

@@ -14,38 +14,53 @@ private fun KtPsiFactory.createMatrixClass(
     kotlinTypeName: String,
     kotlinTypeAlias: String = kotlinTypeName
 ) {
+    fun fn(pattern: String) = fn(pattern, cTypeName)
     val className = "Gsl${kotlinTypeAlias}Matrix"
     val structName = sn("gsl_matrixR", cTypeName)
 
     @Language("kotlin") val text = """internal class $className(
-    override val nativeHandle: CPointer<$structName>,
-    scope: DeferScope
+    override val rawNativeHandle: CPointer<$structName>,
+    scope: AutofreeScope,
 ) : GslMatrix<$kotlinTypeName, $structName>(scope) {
     override val rowNum: Int
-        get() = nativeHandleChecked().pointed.size1.toInt()
+        get() = nativeHandle.pointed.size1.toInt()
 
     override val colNum: Int
-        get() = nativeHandleChecked().pointed.size2.toInt()
+        get() = nativeHandle.pointed.size2.toInt()
+
+    override val rows: Buffer<Buffer<$kotlinTypeName>>
+        get() = VirtualBuffer(rowNum) { r ->
+            Gsl${kotlinTypeAlias}Vector(
+                ${fn("gsl_matrixRrow")}(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
+                scope,
+            ).apply { shouldBeFreed = false }
+        }
+
+    override val columns: Buffer<Buffer<$kotlinTypeName>>
+        get() = VirtualBuffer(rowNum) { c ->
+            Gsl${kotlinTypeAlias}Vector(
+                ${fn("gsl_matrixRcolumn")}(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
+                scope,
+            ).apply { shouldBeFreed = false }
+        }
 
     override operator fun get(i: Int, j: Int): $kotlinTypeName = 
-        ${fn("gsl_matrixRget", cTypeName)}(nativeHandleChecked(), i.toULong(), j.toULong())
+        ${fn("gsl_matrixRget")}(nativeHandle, i.toULong(), j.toULong())
 
     override operator fun set(i: Int, j: Int, value: ${kotlinTypeName}): Unit =
-        ${fn("gsl_matrixRset", cTypeName)}(nativeHandleChecked(), i.toULong(), j.toULong(), value)
+        ${fn("gsl_matrixRset")}(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): $className {
-        val new = requireNotNull(${fn("gsl_matrixRalloc", cTypeName)}(rowNum.toULong(), colNum.toULong()))
-        ${fn("gsl_matrixRmemcpy", cTypeName)}(new, nativeHandleChecked())
+        val new = requireNotNull(${fn("gsl_matrixRalloc")}(rowNum.toULong(), colNum.toULong()))
+        ${fn("gsl_matrixRmemcpy")}(new, nativeHandle)
         return $className(new, scope)
     }
 
-    override fun close(): Unit = ${fn("gsl_matrixRfree", cTypeName)}(nativeHandleChecked())
+    override fun close(): Unit = ${fn("gsl_matrixRfree")}(nativeHandle)
 
     override fun equals(other: Any?): Boolean {
         if (other is $className)
-            return ${
-        fn("gsl_matrixRequal", cTypeName)
-    }(nativeHandleChecked(), other.nativeHandleChecked()) == 1
+            return ${fn("gsl_matrixRequal")}(nativeHandle, other.nativeHandle) == 1
 
         return super.equals(other)
     }
@@ -64,7 +79,7 @@ fun matricesCodegen(outputFile: String, project: Project = createProject()) {
             f += createNewLine(2)
             f += createImportDirective(ImportPath.fromString("kotlinx.cinterop.*"))
             f += createNewLine(1)
-            f += createImportDirective(ImportPath.fromString("kscience.kmath.linear.*"))
+            f += createImportDirective(ImportPath.fromString("kscience.kmath.structures.*"))
             f += createNewLine(1)
             f += createImportDirective(ImportPath.fromString("org.gnu.gsl.*"))
             f += createNewLine(2)
