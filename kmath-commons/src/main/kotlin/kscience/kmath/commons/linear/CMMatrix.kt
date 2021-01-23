@@ -2,8 +2,8 @@ package kscience.kmath.commons.linear
 
 import kscience.kmath.linear.DiagonalFeature
 import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.MatrixWrapper
 import kscience.kmath.linear.Point
+import kscience.kmath.linear.origin
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Matrix
 import org.apache.commons.math3.linear.*
@@ -47,9 +47,9 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
         return CMMatrix(Array2DRowRealMatrix(array))
     }
 
-    public fun Matrix<Double>.toCM(): CMMatrix = when {
-        this is CMMatrix -> this
-        this is MatrixWrapper && matrix is CMMatrix -> matrix as CMMatrix
+    @OptIn(UnstableKMathAPI::class)
+    public fun Matrix<Double>.toCM(): CMMatrix = when (val matrix = origin) {
+        is CMMatrix -> matrix
         else -> {
             //TODO add feature analysis
             val array = Array(rowNum) { i -> DoubleArray(colNum) { j -> get(i, j) } }
