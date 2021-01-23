@@ -1,10 +1,8 @@
 package kscience.kmath.benchmarks
 
-import kscience.kmath.nd.NDField
-import kscience.kmath.nd.RealNDField
+import kscience.kmath.nd.*
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
-import kscience.kmath.structures.BufferedNDField
 import kscience.kmath.viktor.ViktorNDField
 import org.jetbrains.bio.viktor.F64Array
 import org.openjdk.jmh.annotations.Benchmark
@@ -17,14 +15,14 @@ internal class ViktorBenchmark {
     final val n: Int = 100
 
     // automatically build context most suited for given type.
-    final val autoField: BufferedNDField<Double, RealField> = NDField.auto(RealField, dim, dim)
-    final val realField: RealNDField = NDField.real(dim, dim)
+    final val autoField: BufferedNDField<Double, RealField> = NDAlgebra.auto(RealField, dim, dim)
+    final val realField: RealNDField = NDAlgebra.real(dim, dim)
     final val viktorField: ViktorNDField = ViktorNDField(intArrayOf(dim, dim))
 
     @Benchmark
     fun automaticFieldAddition() {
         autoField {
-            var res = one
+            var res: NDStructure<Double> = one
             repeat(n) { res += one }
         }
     }

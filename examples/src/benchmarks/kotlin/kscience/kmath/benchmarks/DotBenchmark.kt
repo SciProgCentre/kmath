@@ -4,8 +4,8 @@ import kotlinx.benchmark.Benchmark
 import kscience.kmath.commons.linear.CMMatrixContext
 import kscience.kmath.ejml.EjmlMatrixContext
 import kscience.kmath.linear.BufferMatrixContext
+import kscience.kmath.linear.Matrix
 import kscience.kmath.linear.RealMatrixContext
-import kscience.kmath.nd.Matrix
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Buffer

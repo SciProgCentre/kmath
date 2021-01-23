@@ -1,10 +1,7 @@
 package kscience.kmath.structures
 
 import kotlinx.coroutines.GlobalScope
-import kscience.kmath.nd.NDAlgebra
-import kscience.kmath.nd.NDStructure
-import kscience.kmath.nd.field
-import kscience.kmath.nd.real
+import kscience.kmath.nd.*
 import kscience.kmath.nd4j.Nd4jArrayField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
@@ -26,11 +23,11 @@ fun main() {
     val n = 1000
 
     // automatically build context most suited for given type.
-    val autoField = NDAlgebra.field(RealField, Buffer.Companion::auto, dim, dim)
+    val autoField = NDAlgebra.auto(RealField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDAlgebra.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val boxingField =  NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
+    val boxingField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
 
@@ -41,9 +38,9 @@ fun main() {
         }
     }
 
-    measureAndPrint("Element addition") {
+    measureAndPrint("Boxing addition") {
         boxingField {
-        var res: NDStructure<Double> = one
+            var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
@@ -57,7 +54,7 @@ fun main() {
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
-            var res:NDStructure<Double> = one
+            var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
@@ -72,15 +69,5 @@ fun main() {
         }
 
         res.elements().forEach { it.second }
-    }
-
-    measureAndPrint("Generic addition") {
-        //genericField.run(action)
-        boxingField {
-            var res: NDStructure<Double> = one
-            repeat(n) {
-                res += 1.0 // couldn't avoid using `one` due to resolution ambiguity }
-            }
-        }
     }
 }

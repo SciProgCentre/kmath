@@ -2,6 +2,7 @@ package kscience.kmath.nd
 
 import kscience.kmath.nd.*
 import kscience.kmath.operations.*
+import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -117,6 +118,11 @@ public fun <T, A : Field<T>> NDAlgebra.Companion.field(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedNDField<T, A> = BufferedNDField(shape, field, bufferFactory)
+
+public inline fun <reified T : Any, A : Field<T>> NDAlgebra.Companion.auto(
+    field: A,
+    vararg shape: Int,
+): BufferedNDField<T, A> = BufferedNDField(shape, field, Buffer.Companion::auto)
 
 public inline fun <T, A : Field<T>, R> A.ndField(
     noinline bufferFactory: BufferFactory<T>,

@@ -1,5 +1,6 @@
 package kscience.kmath.nd
 
+import kscience.kmath.linear.Matrix
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.VirtualBuffer
 
@@ -57,9 +58,9 @@ public interface Structure2D<T> : NDStructure<T> {
             rows: Int,
             columns: Int,
             crossinline init: (i: Int, j: Int) -> Double,
-        ): NDBuffer<Double> = NDAlgebra.real(rows, columns).produceInline { (i, j) ->
+        ): Matrix<Double> = NDAlgebra.real(rows, columns).produceInline { (i, j) ->
             init(i, j)
-        }
+        }.as2D()
     }
 }
 
