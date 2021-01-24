@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package kscience.kmath.structures
 
 import kscience.kmath.linear.transpose
