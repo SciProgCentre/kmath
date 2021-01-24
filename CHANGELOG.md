@@ -35,6 +35,7 @@
 - Matrix LUP `inverse` renamed to `inverseWithLup`
 - `NumericAlgebra` moved outside of regular algebra chain (`Ring` no longer implements it).
 - Features moved to NDStructure and became transparent.
+- Capitalization of LUP in many names changed to Lup.
 
 ### Deprecated
 
