@@ -11,7 +11,7 @@ import kotlin.contracts.contract
  * An optimized nd-field for complex numbers
  */
 @OptIn(UnstableKMathAPI::class)
-public open class ComplexNDField(
+public class ComplexNDField(
     shape: IntArray,
 ) : BufferedNDField<Complex, ComplexField>(shape, ComplexField, Buffer.Companion::complex),
     RingWithNumbers<NDStructure<Complex>>,

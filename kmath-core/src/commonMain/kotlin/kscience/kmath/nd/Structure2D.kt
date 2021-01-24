@@ -58,7 +58,7 @@ public interface Structure2D<T> : NDStructure<T> {
             rows: Int,
             columns: Int,
             crossinline init: (i: Int, j: Int) -> Double,
-        ): Matrix<Double> = NDAlgebra.real(rows, columns).produceInline { (i, j) ->
+        ): Matrix<Double> = NDAlgebra.real(rows, columns).produce { (i, j) ->
             init(i, j)
         }.as2D()
     }

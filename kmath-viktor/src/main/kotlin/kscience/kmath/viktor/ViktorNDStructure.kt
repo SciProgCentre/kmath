@@ -94,3 +94,5 @@ public class ViktorNDField(public override val shape: IntArray) : NDField<Double
     public override inline fun NDStructure<Double>.plus(arg: Double): ViktorNDStructure =
         (f64Buffer.plus(arg)).asStructure()
 }
+
+public fun ViktorNDField(vararg shape: Int): ViktorNDField = ViktorNDField(shape)

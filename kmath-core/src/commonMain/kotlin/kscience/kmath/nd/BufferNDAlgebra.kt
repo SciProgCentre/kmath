@@ -18,40 +18,36 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
         }
     )
 
-    public val NDStructure<T>.ndBuffer: NDBuffer<T>
+    public val NDStructure<T>.buffer: Buffer<T>
         get() = when {
             !shape.contentEquals(this@BufferNDAlgebra.shape) -> throw ShapeMismatchException(
                 this@BufferNDAlgebra.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@BufferNDAlgebra.strides -> this
-            else -> produce { this@ndBuffer[it] }
+            this is NDBuffer && this.strides == this@BufferNDAlgebra.strides -> this.buffer
+            else -> bufferFactory(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
     override fun map(arg: NDStructure<T>, transform: C.(T) -> T): NDBuffer<T> {
-        val argAsBuffer = arg.ndBuffer
         val buffer = bufferFactory(strides.linearSize) { offset ->
-            elementContext.transform(argAsBuffer.buffer[offset])
+            elementContext.transform(arg.buffer[offset])
         }
         return NDBuffer(strides, buffer)
     }
 
     override fun mapIndexed(arg: NDStructure<T>, transform: C.(index: IntArray, T) -> T): NDStructure<T> {
-        val argAsBuffer = arg.ndBuffer
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(
                 strides.index(offset),
-                argAsBuffer[offset]
+                arg.buffer[offset]
             )
         }
         return NDBuffer(strides, buffer)
     }
 
     override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: C.(T, T) -> T): NDStructure<T> {
-        val aBuffer = a.ndBuffer
-        val bBuffer = b.ndBuffer
         val buffer = bufferFactory(strides.linearSize) { offset ->
-            elementContext.transform(aBuffer.buffer[offset], bBuffer.buffer[offset])
+            elementContext.transform(a.buffer[offset], b.buffer[offset])
         }
         return NDBuffer(strides, buffer)
     }
@@ -119,10 +115,14 @@ public fun <T, A : Field<T>> NDAlgebra.Companion.field(
     vararg shape: Int,
 ): BufferedNDField<T, A> = BufferedNDField(shape, field, bufferFactory)
 
+@Suppress("UNCHECKED_CAST")
 public inline fun <reified T : Any, A : Field<T>> NDAlgebra.Companion.auto(
     field: A,
     vararg shape: Int,
-): BufferedNDField<T, A> = BufferedNDField(shape, field, Buffer.Companion::auto)
+): NDField<T, A> = when (field) {
+    RealField -> RealNDField(shape) as NDField<T, A>
+    else -> BufferedNDField(shape, field, Buffer.Companion::auto)
+}
 
 public inline fun <T, A : Field<T>, R> A.ndField(
     noinline bufferFactory: BufferFactory<T>,

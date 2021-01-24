@@ -5,6 +5,7 @@ import kscience.kmath.nd.*
 import kscience.kmath.nd4j.Nd4jArrayField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
+import kscience.kmath.viktor.ViktorNDField
 import org.nd4j.linalg.factory.Nd4j
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -25,18 +26,15 @@ fun main() {
     // automatically build context most suited for given type.
     val autoField = NDAlgebra.auto(RealField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
-    val specializedField = NDAlgebra.real(dim, dim)
+    val realField = NDAlgebra.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
     val boxingField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
-
-    measureAndPrint("Automatic field addition") {
-        autoField {
-            var res: NDStructure<Double> = one
-            repeat(n) { res += 1.0 }
-        }
-    }
+    //viktor field
+    val viktorField = ViktorNDField(dim,dim)
+    //parallel processing based on Java Streams
+    val parallelField = NDAlgebra.realWithStream(dim,dim)
 
     measureAndPrint("Boxing addition") {
         boxingField {
@@ -46,7 +44,7 @@ fun main() {
     }
 
     measureAndPrint("Specialized addition") {
-        specializedField {
+        realField {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
@@ -59,8 +57,29 @@ fun main() {
         }
     }
 
+    measureAndPrint("Viktor addition") {
+        viktorField {
+            var res: NDStructure<Double> = one
+            repeat(n) { res += 1.0 }
+        }
+    }
+
+    measureAndPrint("Parallel stream addition") {
+        parallelField {
+            var res: NDStructure<Double> = one
+            repeat(n) { res += 1.0 }
+        }
+    }
+
+    measureAndPrint("Automatic field addition") {
+        autoField {
+            var res: NDStructure<Double> = one
+            repeat(n) { res += 1.0 }
+        }
+    }
+
     measureAndPrint("Lazy addition") {
-        val res = specializedField.one.mapAsync(GlobalScope) {
+        val res = realField.one.mapAsync(GlobalScope) {
             var c = 0.0
             repeat(n) {
                 c += 1.0

@@ -9,7 +9,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(UnstableKMathAPI::class)
-public open class ShortNDRing(
+public class ShortNDRing(
     shape: IntArray,
 ) : BufferedNDRing<Short, ShortRing>(shape, ShortRing, Buffer.Companion::auto),
     RingWithNumbers<NDStructure<Short>> {

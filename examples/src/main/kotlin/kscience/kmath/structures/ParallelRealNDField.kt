@@ -1,16 +1,18 @@
-package kscience.kmath.nd
+package kscience.kmath.structures
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.*
 import kscience.kmath.operations.ExtendedField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.RingWithNumbers
-import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.RealBuffer
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
+import java.util.*
+import java.util.stream.IntStream
 
+/**
+ * A demonstration implementation of NDField over Real using Java [DoubleStream] for parallel execution
+ */
 @OptIn(UnstableKMathAPI::class)
-public class RealNDField(
+public class StreamRealNDField(
     shape: IntArray,
 ) : BufferedNDField<Double, RealField>(shape, RealField, Buffer.Companion::real),
     RingWithNumbers<NDStructure<Double>>,
@@ -26,55 +28,55 @@ public class RealNDField(
 
     override val NDStructure<Double>.buffer: RealBuffer
         get() = when {
-            !shape.contentEquals(this@RealNDField.shape) -> throw ShapeMismatchException(
-                this@RealNDField.shape,
+            !shape.contentEquals(this@StreamRealNDField.shape) -> throw ShapeMismatchException(
+                this@StreamRealNDField.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@RealNDField.strides -> this.buffer as RealBuffer
+            this is NDBuffer && this.strides == this@StreamRealNDField.strides -> this.buffer as RealBuffer
             else -> RealBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun map(
+
+    override fun produce(initializer: RealField.(IntArray) -> Double): NDBuffer<Double> {
+        val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
+            val index = strides.index(offset)
+            RealField.initializer(index)
+        }.toArray()
+
+        return NDBuffer(strides, array.asBuffer())
+    }
+
+    override fun map(
         arg: NDStructure<Double>,
         transform: RealField.(Double) -> Double,
     ): NDBuffer<Double> {
-        val buffer = RealBuffer(strides.linearSize) { offset -> RealField.transform(arg.buffer.array[offset]) }
-        return NDBuffer(strides, buffer)
+        val array = Arrays.stream(arg.buffer.array).parallel().map { RealField.transform(it) }.toArray()
+        return NDBuffer(strides, array.asBuffer())
     }
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun produce(initializer: RealField.(IntArray) -> Double): NDBuffer<Double>  {
-        val array = DoubleArray(strides.linearSize) { offset ->
-            val index = strides.index(offset)
-            RealField.initializer(index)
-        }
-        return NDBuffer(strides, RealBuffer(array))
-    }
-
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun mapIndexed(
+    override fun mapIndexed(
         arg: NDStructure<Double>,
         transform: RealField.(index: IntArray, Double) -> Double,
-    ): NDBuffer<Double> = NDBuffer(
-        strides,
-        buffer = RealBuffer(strides.linearSize) { offset ->
+    ): NDBuffer<Double> {
+        val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             RealField.transform(
                 strides.index(offset),
                 arg.buffer.array[offset]
             )
-        })
+        }.toArray()
 
-    @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun combine(
+        return NDBuffer(strides, array.asBuffer())
+    }
+
+    override fun combine(
         a: NDStructure<Double>,
         b: NDStructure<Double>,
         transform: RealField.(Double, Double) -> Double,
-    ): NDBuffer<Double>  {
-        val buffer = RealBuffer(strides.linearSize) { offset ->
+    ): NDBuffer<Double> {
+        val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             RealField.transform(a.buffer.array[offset], b.buffer.array[offset])
-        }
-        return  NDBuffer(strides, buffer)
+        }.toArray()
+        return NDBuffer(strides, array.asBuffer())
     }
 
     override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = map(arg) { power(it, pow) }
@@ -98,12 +100,4 @@ public class RealNDField(
     override fun atanh(arg: NDStructure<Double>): NDBuffer<Double> = map(arg) { atanh(it) }
 }
 
-public fun NDAlgebra.Companion.real(vararg shape: Int): RealNDField = RealNDField(shape)
-
-/**
- * Produce a context for n-dimensional operations inside this real field
- */
-public inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R {
-    contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return RealNDField(shape).run(action)
-}
+fun NDAlgebra.Companion.realWithStream(vararg shape: Int): StreamRealNDField = StreamRealNDField(shape)
