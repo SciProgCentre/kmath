@@ -28,24 +28,24 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
             else -> bufferFactory(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun map(arg: NDStructure<T>, transform: C.(T) -> T): NDBuffer<T> {
+    override fun NDStructure<T>.map(transform: C.(T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
-            elementContext.transform(arg.buffer[offset])
+            elementContext.transform(buffer[offset])
         }
         return NDBuffer(strides, buffer)
     }
 
-    override fun mapIndexed(arg: NDStructure<T>, transform: C.(index: IntArray, T) -> T): NDStructure<T> {
+    override fun NDStructure<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(
                 strides.index(offset),
-                arg.buffer[offset]
+                buffer[offset]
             )
         }
         return NDBuffer(strides, buffer)
     }
 
-    override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: C.(T, T) -> T): NDStructure<T> {
+    override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: C.(T, T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(a.buffer[offset], b.buffer[offset])
         }

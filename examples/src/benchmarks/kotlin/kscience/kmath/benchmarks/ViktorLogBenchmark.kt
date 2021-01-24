@@ -15,7 +15,7 @@ internal class ViktorLogBenchmark {
     final val n: Int = 100
 
     // automatically build context most suited for given type.
-    final val autoField: BufferedNDField<Double, RealField> = NDAlgebra.auto(RealField, dim, dim)
+    final val autoField: NDField<Double, RealField> = NDAlgebra.auto(RealField, dim, dim)
     final val realField: RealNDField = NDAlgebra.real(dim, dim)
     final val viktorField: ViktorNDField = ViktorNDField(intArrayOf(dim, dim))
 
@@ -23,6 +23,15 @@ internal class ViktorLogBenchmark {
     @Benchmark
     fun realFieldLog() {
         realField {
+            val fortyTwo = produce { 42.0 }
+            var res = one
+            repeat(n) { res = ln(fortyTwo) }
+        }
+    }
+
+    @Benchmark
+    fun viktorFieldLog() {
+        viktorField {
             val fortyTwo = produce { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }

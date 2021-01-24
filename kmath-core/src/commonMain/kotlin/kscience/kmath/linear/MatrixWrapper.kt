@@ -60,12 +60,6 @@ public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeatu
         MatrixWrapper(this, newFeatures.toSet())
     }
 
-public inline fun Structure2D.Companion.real(
-    rows: Int,
-    columns: Int,
-    initializer: (Int, Int) -> Double,
-): BufferMatrix<Double> = MatrixContext.real.produce(rows, columns, initializer)
-
 /**
  * Build a square matrix from given elements.
  */

@@ -23,7 +23,7 @@ internal class ViktorBenchmark {
     fun automaticFieldAddition() {
         autoField {
             var res: NDStructure<Double> = one
-            repeat(n) { res += one }
+            repeat(n) { res += 1.0 }
         }
     }
 
@@ -31,7 +31,7 @@ internal class ViktorBenchmark {
     fun realFieldAddition() {
         realField {
             var res: NDStructure<Double> = one
-            repeat(n) { res += one }
+            repeat(n) { res += 1.0 }
         }
     }
 
@@ -39,7 +39,7 @@ internal class ViktorBenchmark {
     fun viktorFieldAddition() {
         viktorField {
             var res = one
-            repeat(n) { res += one }
+            repeat(n) { res += 1.0 }
         }
     }
 

@@ -140,7 +140,7 @@ public fun RealMatrix.min(): Double? = elements().map { (_, value) -> value }.mi
 public fun RealMatrix.max(): Double? = elements().map { (_, value) -> value }.maxOrNull()
 public fun RealMatrix.average(): Double = elements().map { (_, value) -> value }.average()
 
-public inline fun RealMatrix.map(transform: (Double) -> Double): RealMatrix =
+public inline fun RealMatrix.map(crossinline transform: (Double) -> Double): RealMatrix =
     MatrixContext.real.produce(rowNum, colNum) { i, j ->
         transform(get(i, j))
     }

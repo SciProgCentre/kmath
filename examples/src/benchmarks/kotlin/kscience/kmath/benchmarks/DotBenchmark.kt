@@ -31,38 +31,35 @@ class DotBenchmark {
     }
 
     @Benchmark
-    fun commonsMathMultiplication() {
+    fun cmDot() {
         CMMatrixContext {
             cmMatrix1 dot cmMatrix2
         }
     }
 
     @Benchmark
-    fun ejmlMultiplication() {
+    fun ejmlDot() {
         EjmlMatrixContext {
             ejmlMatrix1 dot ejmlMatrix2
         }
     }
 
     @Benchmark
-    fun ejmlMultiplicationwithConversion() {
+    fun ejmlDotWithConversion() {
         EjmlMatrixContext {
-            val ejmlMatrix1 = matrix1.toEjml()
-            val ejmlMatrix2 = matrix2.toEjml()
-
-            ejmlMatrix1 dot ejmlMatrix2
+            matrix1 dot matrix2
         }
     }
 
     @Benchmark
-    fun bufferedMultiplication() {
+    fun bufferedDot() {
         BufferMatrixContext(RealField, Buffer.Companion::real).invoke {
             matrix1 dot matrix2
         }
     }
 
     @Benchmark
-    fun realMultiplication() {
+    fun realDot() {
         RealMatrixContext {
             matrix1 dot matrix2
         }

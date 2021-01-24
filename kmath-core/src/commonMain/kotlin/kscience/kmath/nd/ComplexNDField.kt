@@ -70,25 +70,25 @@ public class ComplexNDField(
 //        return BufferedNDFieldElement(this, buffer)
 //    }
 
-    override fun power(arg: NDStructure<Complex>, pow: Number): NDBuffer<Complex> = map(arg) { power(it, pow) }
+    override fun power(arg: NDStructure<Complex>, pow: Number): NDBuffer<Complex> = arg.map() { power(it, pow) }
 
-    override fun exp(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { exp(it) }
+    override fun exp(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { exp(it) }
 
-    override fun ln(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { ln(it) }
+    override fun ln(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { ln(it) }
 
-    override fun sin(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { sin(it) }
-    override fun cos(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { cos(it) }
-    override fun tan(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { tan(it) }
-    override fun asin(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { asin(it) }
-    override fun acos(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { acos(it) }
-    override fun atan(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { atan(it) }
+    override fun sin(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { sin(it) }
+    override fun cos(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { cos(it) }
+    override fun tan(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { tan(it) }
+    override fun asin(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { asin(it) }
+    override fun acos(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { acos(it) }
+    override fun atan(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { atan(it) }
 
-    override fun sinh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { sinh(it) }
-    override fun cosh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { cosh(it) }
-    override fun tanh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { tanh(it) }
-    override fun asinh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { asinh(it) }
-    override fun acosh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { acosh(it) }
-    override fun atanh(arg: NDStructure<Complex>): NDBuffer<Complex> = map(arg) { atanh(it) }
+    override fun sinh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { sinh(it) }
+    override fun cosh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { cosh(it) }
+    override fun tanh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { tanh(it) }
+    override fun asinh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { asinh(it) }
+    override fun acosh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { acosh(it) }
+    override fun atanh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map() { atanh(it) }
 }
 
 

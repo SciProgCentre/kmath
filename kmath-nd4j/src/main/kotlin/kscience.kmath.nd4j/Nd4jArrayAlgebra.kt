@@ -44,18 +44,17 @@ public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C> {
         return struct
     }
 
-    public override fun map(arg: NDStructure<T>, transform: C.(T) -> T): Nd4jArrayStructure<T> {
-        val newStruct = arg.ndArray.dup().wrap()
+    public override fun NDStructure<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
+        val newStruct = ndArray.dup().wrap()
         newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementContext.transform(value) }
         return newStruct
     }
 
-    public override fun mapIndexed(
-        arg: NDStructure<T>,
+    public override fun NDStructure<T>.mapIndexed(
         transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
-        val new = Nd4j.create(*shape).wrap()
-        new.indicesIterator().forEach { idx -> new[idx] = elementContext.transform(idx, arg[idx]) }
+        val new = Nd4j.create(*this@Nd4jArrayAlgebra.shape).wrap()
+        new.indicesIterator().forEach { idx -> new[idx] = elementContext.transform(idx, this[idx]) }
         return new
     }
 
