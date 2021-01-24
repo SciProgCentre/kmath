@@ -7,7 +7,6 @@ import kscience.kmath.operations.Complex
 import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.toComplex
 import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.toList
 import org.gnu.gsl.*
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
@@ -114,37 +113,41 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
     @Suppress("IMPLICIT_CAST_TO_ANY")
     @UnstableKMathAPI
     public override fun <F : Any> getFeature(m: Matrix<Double>, type: KClass<F>): F? = when (type) {
-        LupDecompositionFeature::class -> object : LupDecompositionFeature<Double> {
-            private val lup by lazy {
+        LupDecompositionFeature::class, DeterminantFeature::class -> object : LupDecompositionFeature<Double>,
+            DeterminantFeature<Double>, InverseMatrixFeature<Double> {
+            private val lups by lazy {
                 val lu = m.toGsl().copy()
-                val n = lu.rowNum
+                val n = m.rowNum
                 val perm = gsl_permutation_alloc(n.toULong())
+                scope.defer { gsl_permutation_free(perm) }
 
-                memScoped {
+                val signum = memScoped {
                     val i = alloc<IntVar>()
                     gsl_linalg_LU_decomp(lu.nativeHandle, perm, i.ptr)
+                    i.value
                 }
 
+                Triple(lu, perm, signum)
+            }
+
+            override val p by lazy {
+                val n = m.rowNum
                 val one = produce(n, n) { i, j -> if (i == j) 1.0 else 0.0 }
-                val p = produce(n, n) { _, _ -> 0.0 }
+                val perm = produce(n, n) { _, _ -> 0.0 }
 
-                for (j in 0 until perm!!.pointed.size.toInt()) {
-                    println("7 $j")
-                    val k = gsl_permutation_get(perm, j.toULong()).toInt()
+                for (j in 0 until lups.second!!.pointed.size.toInt()) {
+                    val k = gsl_permutation_get(lups.second!!, j.toULong()).toInt()
                     val col = one.columns[k]
-                    println(p.toGsl())
-                    println(col.toList())
-                    gsl_matrix_set_col(p.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
+                    gsl_matrix_set_col(perm.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
                 }
 
-                gsl_permutation_free(perm)
-                lu to p
+                perm
             }
 
             override val l by lazy {
-                VirtualMatrix(lup.first.shape[0], lup.first.shape[1]) { i, j ->
+                VirtualMatrix(lups.first.shape[0], lups.first.shape[1]) { i, j ->
                     when {
-                        j < i -> lup.first[i, j]
+                        j < i -> lups.first[i, j]
                         j == i -> 1.0
                         else -> 0.0
                     }
@@ -153,13 +156,28 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
 
             override val u by lazy {
                 VirtualMatrix(
-                    lup.first.shape[0],
-                    lup.first.shape[1],
-                ) { i, j -> if (j >= i) lup.first[i, j] else 0.0 } + UFeature
+                    lups.first.shape[0],
+                    lups.first.shape[1],
+                ) { i, j -> if (j >= i) lups.first[i, j] else 0.0 } + UFeature
             }
 
-            override val p by lazy(lup::second)
+            override val determinant by lazy { gsl_linalg_LU_det(lups.first.nativeHandle, lups.third) }
+
+            override val inverse by lazy {
+                val inv = lups.first.copy()
+                gsl_linalg_LU_invx(inv.nativeHandle, lups.second)
+                inv
+            }
         }
+
+        CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
+            override val l: Matrix<Double> by lazy {
+                val chol = m.toGsl().copy()
+                gsl_linalg_cholesky_decomp(chol.nativeHandle)
+                chol
+            }
+        }
+
         else -> super.getFeature(m, type)
     }?.let(type::cast)
 }
@@ -286,37 +304,41 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
     @Suppress("IMPLICIT_CAST_TO_ANY")
     @UnstableKMathAPI
     public override fun <F : Any> getFeature(m: Matrix<Complex>, type: KClass<F>): F? = when (type) {
-        LupDecompositionFeature::class -> object : LupDecompositionFeature<Complex> {
-            private val lup by lazy {
+        LupDecompositionFeature::class, DeterminantFeature::class -> object : LupDecompositionFeature<Complex>,
+            DeterminantFeature<Complex>, InverseMatrixFeature<Complex> {
+            private val lups by lazy {
                 val lu = m.toGsl().copy()
-                val n = lu.rowNum
+                val n = m.rowNum
                 val perm = gsl_permutation_alloc(n.toULong())
+                scope.defer { gsl_permutation_free(perm) }
 
-                memScoped {
+                val signum = memScoped {
                     val i = alloc<IntVar>()
                     gsl_linalg_complex_LU_decomp(lu.nativeHandle, perm, i.ptr)
+                    i.value
                 }
 
+                Triple(lu, perm, signum)
+            }
+
+            override val p by lazy {
+                val n = m.rowNum
                 val one = produce(n, n) { i, j -> if (i == j) 1.0.toComplex() else 0.0.toComplex() }
-                val p = produce(n, n) { _, _ -> 0.0.toComplex() }
+                val perm = produce(n, n) { _, _ -> 0.0.toComplex() }
 
-                for (j in 0 until perm!!.pointed.size.toInt()) {
-                    println("7 $j")
-                    val k = gsl_permutation_get(perm, j.toULong()).toInt()
+                for (j in 0 until lups.second!!.pointed.size.toInt()) {
+                    val k = gsl_permutation_get(lups.second!!, j.toULong()).toInt()
                     val col = one.columns[k]
-                    println(p.toGsl())
-                    println(col.toList())
-                    gsl_matrix_complex_set_col(p.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
+                    gsl_matrix_complex_set_col(perm.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
                 }
 
-                gsl_permutation_free(perm)
-                lu to p
+                perm
             }
 
             override val l by lazy {
-                VirtualMatrix(lup.first.shape[0], lup.first.shape[1]) { i, j ->
+                VirtualMatrix(lups.first.shape[0], lups.first.shape[1]) { i, j ->
                     when {
-                        j < i -> lup.first[i, j]
+                        j < i -> lups.first[i, j]
                         j == i -> 1.0.toComplex()
                         else -> 0.0.toComplex()
                     }
@@ -325,13 +347,30 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
 
             override val u by lazy {
                 VirtualMatrix(
-                    lup.first.shape[0],
-                    lup.first.shape[1],
-                ) { i, j -> if (j >= i) lup.first[i, j] else 0.0.toComplex() } + UFeature
+                    lups.first.shape[0],
+                    lups.first.shape[1],
+                ) { i, j -> if (j >= i) lups.first[i, j] else 0.0.toComplex() } + UFeature
             }
 
-            override val p by lazy(lup::second)
+            override val determinant by lazy {
+                gsl_linalg_complex_LU_det(lups.first.nativeHandle, lups.third).toKMath()
+            }
+
+            override val inverse by lazy {
+                val inv = lups.first.copy()
+                gsl_linalg_complex_LU_invx(inv.nativeHandle, lups.second)
+                inv
+            }
         }
+
+        CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Complex> {
+            override val l by lazy {
+                val chol = m.toGsl().copy()
+                gsl_linalg_complex_cholesky_decomp(chol.nativeHandle)
+                chol
+            }
+        }
+
         else -> super.getFeature(m, type)
     }?.let(type::cast)
 }
