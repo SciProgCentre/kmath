@@ -2,7 +2,7 @@ package kscience.kmath.real
 
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.VirtualMatrix
-import kscience.kmath.linear.inverseWithLUP
+import kscience.kmath.linear.inverseWithLup
 import kscience.kmath.linear.real
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Buffer
@@ -152,7 +152,7 @@ public inline fun RealMatrix.map(transform: (Double) -> Double): RealMatrix =
 /**
  * Inverse a square real matrix using LUP decomposition
  */
-public fun RealMatrix.inverseWithLUP(): RealMatrix = MatrixContext.real.inverseWithLUP(this)
+public fun RealMatrix.inverseWithLup(): RealMatrix = MatrixContext.real.inverseWithLup(this)
 
 //extended operations
 
