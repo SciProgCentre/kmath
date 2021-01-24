@@ -10,7 +10,7 @@ import kscience.kmath.structures.asSequence
  * Wraps gsl_matrix_* objects from GSL.
  */
 public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(scope: AutofreeScope) :
-    GslMemoryHolder<H>(scope), Matrix<T> {
+    GslObject<H>(scope), Matrix<T> {
     internal abstract operator fun set(i: Int, j: Int, value: T)
     internal abstract fun copy(): GslMatrix<T, H>
 

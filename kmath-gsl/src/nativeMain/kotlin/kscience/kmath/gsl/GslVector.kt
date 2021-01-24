@@ -8,7 +8,7 @@ import kscience.kmath.linear.Point
  * Wraps gsl_vector_* objects from GSL.
  */
 public abstract class GslVector<T, H : CStructVar> internal constructor(scope: AutofreeScope) :
-    GslMemoryHolder<H>(scope), Point<T> {
+    GslObject<H>(scope), Point<T> {
     internal abstract operator fun set(index: Int, value: T)
     internal abstract fun copy(): GslVector<T, H>
 

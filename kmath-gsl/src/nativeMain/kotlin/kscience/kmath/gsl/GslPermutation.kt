@@ -8,7 +8,7 @@ import org.gnu.gsl.gsl_permutation_free
 import org.gnu.gsl.gsl_permutation_get
 
 internal class GslPermutation(override val rawNativeHandle: CPointer<gsl_permutation>, scope: AutofreeScope) :
-    GslMemoryHolder<gsl_permutation>(scope) {
+    GslObject<gsl_permutation>(scope) {
     val size get() = nativeHandle.pointed.size.toInt()
 
     operator fun get(i: Int) = gsl_permutation_get(nativeHandle, i.toULong()).toInt()
