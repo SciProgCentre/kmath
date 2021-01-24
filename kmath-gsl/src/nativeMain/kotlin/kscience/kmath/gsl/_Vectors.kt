@@ -15,7 +15,7 @@ internal class GslRealVector(override val rawNativeHandle: CPointer<gsl_vector>,
         gsl_vector_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslRealVector {
-        val new = requireNotNull(gsl_vector_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_alloc(size.toULong()))
         gsl_vector_memcpy(new, nativeHandle)
         return GslRealVector(new, scope)
     }
@@ -42,7 +42,7 @@ internal class GslFloatVector(override val rawNativeHandle: CPointer<gsl_vector_
         gsl_vector_float_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslFloatVector {
-        val new = requireNotNull(gsl_vector_float_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_float_alloc(size.toULong()))
         gsl_vector_float_memcpy(new, nativeHandle)
         return GslFloatVector(new, scope)
     }
@@ -69,7 +69,7 @@ internal class GslShortVector(override val rawNativeHandle: CPointer<gsl_vector_
         gsl_vector_short_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslShortVector {
-        val new = requireNotNull(gsl_vector_short_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_short_alloc(size.toULong()))
         gsl_vector_short_memcpy(new, nativeHandle)
         return GslShortVector(new, scope)
     }
@@ -96,7 +96,7 @@ internal class GslUShortVector(override val rawNativeHandle: CPointer<gsl_vector
         gsl_vector_ushort_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslUShortVector {
-        val new = requireNotNull(gsl_vector_ushort_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_ushort_alloc(size.toULong()))
         gsl_vector_ushort_memcpy(new, nativeHandle)
         return GslUShortVector(new, scope)
     }
@@ -123,7 +123,7 @@ internal class GslLongVector(override val rawNativeHandle: CPointer<gsl_vector_l
         gsl_vector_long_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslLongVector {
-        val new = requireNotNull(gsl_vector_long_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_long_alloc(size.toULong()))
         gsl_vector_long_memcpy(new, nativeHandle)
         return GslLongVector(new, scope)
     }
@@ -150,7 +150,7 @@ internal class GslULongVector(override val rawNativeHandle: CPointer<gsl_vector_
         gsl_vector_ulong_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslULongVector {
-        val new = requireNotNull(gsl_vector_ulong_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_ulong_alloc(size.toULong()))
         gsl_vector_ulong_memcpy(new, nativeHandle)
         return GslULongVector(new, scope)
     }
@@ -177,7 +177,7 @@ internal class GslIntVector(override val rawNativeHandle: CPointer<gsl_vector_in
         gsl_vector_int_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslIntVector {
-        val new = requireNotNull(gsl_vector_int_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_int_alloc(size.toULong()))
         gsl_vector_int_memcpy(new, nativeHandle)
         return GslIntVector(new, scope)
     }
@@ -204,7 +204,7 @@ internal class GslUIntVector(override val rawNativeHandle: CPointer<gsl_vector_u
         gsl_vector_uint_set(nativeHandle, index.toULong(), value)
 
     override fun copy(): GslUIntVector {
-        val new = requireNotNull(gsl_vector_uint_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_uint_alloc(size.toULong()))
         gsl_vector_uint_memcpy(new, nativeHandle)
         return GslUIntVector(new, scope)
     }

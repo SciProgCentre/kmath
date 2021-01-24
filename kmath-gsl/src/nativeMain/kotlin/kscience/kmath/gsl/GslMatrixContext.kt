@@ -63,17 +63,17 @@ public abstract class GslMatrixContext<T : Any, H1 : CStructVar, H2 : CStructVar
 public class GslRealMatrixContext(internal val scope: AutofreeScope) :
     GslMatrixContext<Double, gsl_matrix, gsl_vector>() {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> = GslRealMatrix(
-        rawNativeHandle = requireNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())),
+        rawNativeHandle = checkNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())),
         scope = scope,
     )
 
     override fun produceDirtyVector(size: Int): GslVector<Double, gsl_vector> =
-        GslRealVector(rawNativeHandle = requireNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
+        GslRealVector(rawNativeHandle = checkNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): GslMatrix<Double, gsl_matrix> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
-        val result = requireNotNull(gsl_matrix_calloc(a.pointed.size1, a.pointed.size2))
+        val result = checkNotNull(gsl_matrix_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, x, a, 1.0, result)
         return GslRealMatrix(result, scope = scope)
     }
@@ -81,7 +81,7 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
     public override fun Matrix<Double>.dot(vector: Point<Double>): GslVector<Double, gsl_vector> {
         val x = toGsl().nativeHandle
         val a = vector.toGsl().nativeHandle
-        val result = requireNotNull(gsl_vector_calloc(a.pointed.size))
+        val result = checkNotNull(gsl_vector_calloc(a.pointed.size))
         gsl_blas_dgemv(CblasNoTrans, 1.0, x, a, 1.0, result)
         return GslRealVector(result, scope = scope)
     }
@@ -118,12 +118,11 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
             private val lups by lazy {
                 val lu = m.toGsl().copy()
                 val n = m.rowNum
-                val perm = gsl_permutation_alloc(n.toULong())
-                scope.defer { gsl_permutation_free(perm) }
+                val perm = GslPermutation(checkNotNull(gsl_permutation_alloc(n.toULong())), scope)
 
                 val signum = memScoped {
                     val i = alloc<IntVar>()
-                    gsl_linalg_LU_decomp(lu.nativeHandle, perm, i.ptr)
+                    gsl_linalg_LU_decomp(lu.nativeHandle, perm.nativeHandle, i.ptr)
                     i.value
                 }
 
@@ -135,11 +134,8 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
                 val one = produce(n, n) { i, j -> if (i == j) 1.0 else 0.0 }
                 val perm = produce(n, n) { _, _ -> 0.0 }
 
-                for (j in 0 until lups.second!!.pointed.size.toInt()) {
-                    val k = gsl_permutation_get(lups.second!!, j.toULong()).toInt()
-                    val col = one.columns[k]
-                    gsl_matrix_set_col(perm.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
-                }
+                for (j in 0 until lups.second.size)
+                    gsl_matrix_set_col(perm.nativeHandle, j.toULong(), one.columns[lups.second[j]].toGsl().nativeHandle)
 
                 perm
             }
@@ -165,7 +161,7 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
 
             override val inverse by lazy {
                 val inv = lups.first.copy()
-                gsl_linalg_LU_invx(inv.nativeHandle, lups.second)
+                gsl_linalg_LU_invx(inv.nativeHandle, lups.second.nativeHandle)
                 inv
             }
         }
@@ -194,17 +190,17 @@ public fun <R> GslRealMatrixContext(block: GslRealMatrixContext.() -> R): R =
 public class GslFloatMatrixContext(internal val scope: AutofreeScope) :
     GslMatrixContext<Float, gsl_matrix_float, gsl_vector_float>() {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> = GslFloatMatrix(
-        rawNativeHandle = requireNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())),
+        rawNativeHandle = checkNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())),
         scope = scope,
     )
 
     override fun produceDirtyVector(size: Int): GslVector<Float, gsl_vector_float> =
-        GslFloatVector(rawNativeHandle = requireNotNull(value = gsl_vector_float_alloc(size.toULong())), scope = scope)
+        GslFloatVector(rawNativeHandle = checkNotNull(value = gsl_vector_float_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Float>.dot(other: Matrix<Float>): GslMatrix<Float, gsl_matrix_float> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
-        val result = requireNotNull(gsl_matrix_float_calloc(a.pointed.size1, a.pointed.size2))
+        val result = checkNotNull(gsl_matrix_float_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_sgemm(CblasNoTrans, CblasNoTrans, 1f, x, a, 1f, result)
         return GslFloatMatrix(rawNativeHandle = result, scope = scope)
     }
@@ -212,7 +208,7 @@ public class GslFloatMatrixContext(internal val scope: AutofreeScope) :
     public override fun Matrix<Float>.dot(vector: Point<Float>): GslVector<Float, gsl_vector_float> {
         val x = toGsl().nativeHandle
         val a = vector.toGsl().nativeHandle
-        val result = requireNotNull(gsl_vector_float_calloc(a.pointed.size))
+        val result = checkNotNull(gsl_vector_float_calloc(a.pointed.size))
         gsl_blas_sgemv(CblasNoTrans, 1f, x, a, 1f, result)
         return GslFloatVector(rawNativeHandle = result, scope = scope)
     }
@@ -254,17 +250,17 @@ public fun <R> GslFloatMatrixContext(block: GslFloatMatrixContext.() -> R): R =
 public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
     GslMatrixContext<Complex, gsl_matrix_complex, gsl_vector_complex>() {
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Complex, gsl_matrix_complex> = GslComplexMatrix(
-        rawNativeHandle = requireNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
+        rawNativeHandle = checkNotNull(gsl_matrix_complex_alloc(rows.toULong(), columns.toULong())),
         scope = scope,
     )
 
     override fun produceDirtyVector(size: Int): GslVector<Complex, gsl_vector_complex> =
-        GslComplexVector(rawNativeHandle = requireNotNull(gsl_vector_complex_alloc(size.toULong())), scope = scope)
+        GslComplexVector(rawNativeHandle = checkNotNull(gsl_vector_complex_alloc(size.toULong())), scope = scope)
 
     public override fun Matrix<Complex>.dot(other: Matrix<Complex>): GslMatrix<Complex, gsl_matrix_complex> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
-        val result = requireNotNull(gsl_matrix_complex_calloc(a.pointed.size1, a.pointed.size2))
+        val result = checkNotNull(gsl_matrix_complex_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, ComplexField.one.toGsl(), x, a, ComplexField.one.toGsl(), result)
         return GslComplexMatrix(rawNativeHandle = result, scope = scope)
     }
@@ -272,7 +268,7 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
     public override fun Matrix<Complex>.dot(vector: Point<Complex>): GslVector<Complex, gsl_vector_complex> {
         val x = toGsl().nativeHandle
         val a = vector.toGsl().nativeHandle
-        val result = requireNotNull(gsl_vector_complex_calloc(a.pointed.size))
+        val result = checkNotNull(gsl_vector_complex_calloc(a.pointed.size))
         gsl_blas_zgemv(CblasNoTrans, ComplexField.one.toGsl(), x, a, ComplexField.one.toGsl(), result)
         return GslComplexVector(result, scope)
     }
@@ -309,12 +305,11 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
             private val lups by lazy {
                 val lu = m.toGsl().copy()
                 val n = m.rowNum
-                val perm = gsl_permutation_alloc(n.toULong())
-                scope.defer { gsl_permutation_free(perm) }
+                val perm = GslPermutation(checkNotNull(gsl_permutation_alloc(n.toULong())), scope)
 
                 val signum = memScoped {
                     val i = alloc<IntVar>()
-                    gsl_linalg_complex_LU_decomp(lu.nativeHandle, perm, i.ptr)
+                    gsl_linalg_complex_LU_decomp(lu.nativeHandle, perm.nativeHandle, i.ptr)
                     i.value
                 }
 
@@ -326,11 +321,8 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
                 val one = produce(n, n) { i, j -> if (i == j) 1.0.toComplex() else 0.0.toComplex() }
                 val perm = produce(n, n) { _, _ -> 0.0.toComplex() }
 
-                for (j in 0 until lups.second!!.pointed.size.toInt()) {
-                    val k = gsl_permutation_get(lups.second!!, j.toULong()).toInt()
-                    val col = one.columns[k]
-                    gsl_matrix_complex_set_col(perm.nativeHandle, j.toULong(), col.toGsl().nativeHandle)
-                }
+                for (j in 0 until lups.second.size)
+                    gsl_matrix_complex_set_col(perm.nativeHandle, j.toULong(), one.columns[lups.second[j]].toGsl().nativeHandle)
 
                 perm
             }
@@ -352,13 +344,11 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
                 ) { i, j -> if (j >= i) lups.first[i, j] else 0.0.toComplex() } + UFeature
             }
 
-            override val determinant by lazy {
-                gsl_linalg_complex_LU_det(lups.first.nativeHandle, lups.third).toKMath()
-            }
+            override val determinant by lazy { gsl_linalg_complex_LU_det(lups.first.nativeHandle, lups.third).toKMath() }
 
             override val inverse by lazy {
                 val inv = lups.first.copy()
-                gsl_linalg_complex_LU_invx(inv.nativeHandle, lups.second)
+                gsl_linalg_complex_LU_invx(inv.nativeHandle, lups.second.nativeHandle)
                 inv
             }
         }

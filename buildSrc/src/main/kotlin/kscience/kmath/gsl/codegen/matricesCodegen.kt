@@ -51,7 +51,7 @@ private fun KtPsiFactory.createMatrixClass(
         ${fn("gsl_matrixRset")}(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): $className {
-        val new = requireNotNull(${fn("gsl_matrixRalloc")}(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(${fn("gsl_matrixRalloc")}(rowNum.toULong(), colNum.toULong()))
         ${fn("gsl_matrixRmemcpy")}(new, nativeHandle)
         return $className(new, scope)
     }

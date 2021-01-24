@@ -31,7 +31,7 @@ private fun KtPsiFactory.createVectorClass(
         ${fn("gsl_vectorRset")}(nativeHandle, index.toULong(), value)
 
     override fun copy(): $className {
-        val new = requireNotNull(${fn("gsl_vectorRalloc")}(size.toULong()))
+        val new = checkNotNull(${fn("gsl_vectorRalloc")}(size.toULong()))
         ${fn("gsl_vectorRmemcpy")}(new, nativeHandle)
         return ${className}(new, scope)
     }

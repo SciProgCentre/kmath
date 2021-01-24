@@ -44,7 +44,7 @@ internal class GslComplexMatrix(override val rawNativeHandle: CPointer<gsl_matri
         gsl_matrix_complex_set(nativeHandle, i.toULong(), j.toULong(), value.toGsl())
 
     override fun copy(): GslComplexMatrix {
-        val new = requireNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_complex_memcpy(new, nativeHandle)
         return GslComplexMatrix(new, scope)
     }
@@ -70,7 +70,7 @@ internal class GslComplexVector(override val rawNativeHandle: CPointer<gsl_vecto
         gsl_vector_complex_set(nativeHandle, index.toULong(), value.toGsl())
 
     override fun copy(): GslComplexVector {
-        val new = requireNotNull(gsl_vector_complex_alloc(size.toULong()))
+        val new = checkNotNull(gsl_vector_complex_alloc(size.toULong()))
         gsl_vector_complex_memcpy(new, nativeHandle)
         return GslComplexVector(new, scope)
     }

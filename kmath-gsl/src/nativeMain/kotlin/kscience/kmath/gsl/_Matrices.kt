@@ -37,7 +37,7 @@ internal class GslRealMatrix(
         gsl_matrix_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslRealMatrix {
-        val new = requireNotNull(gsl_matrix_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_memcpy(new, nativeHandle)
         return GslRealMatrix(new, scope)
     }
@@ -85,7 +85,7 @@ internal class GslFloatMatrix(
         gsl_matrix_float_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslFloatMatrix {
-        val new = requireNotNull(gsl_matrix_float_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_float_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_float_memcpy(new, nativeHandle)
         return GslFloatMatrix(new, scope)
     }
@@ -133,7 +133,7 @@ internal class GslShortMatrix(
         gsl_matrix_short_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslShortMatrix {
-        val new = requireNotNull(gsl_matrix_short_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_short_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_short_memcpy(new, nativeHandle)
         return GslShortMatrix(new, scope)
     }
@@ -181,7 +181,7 @@ internal class GslUShortMatrix(
         gsl_matrix_ushort_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslUShortMatrix {
-        val new = requireNotNull(gsl_matrix_ushort_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_ushort_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_ushort_memcpy(new, nativeHandle)
         return GslUShortMatrix(new, scope)
     }
@@ -229,7 +229,7 @@ internal class GslLongMatrix(
         gsl_matrix_long_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslLongMatrix {
-        val new = requireNotNull(gsl_matrix_long_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_long_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_long_memcpy(new, nativeHandle)
         return GslLongMatrix(new, scope)
     }
@@ -277,7 +277,7 @@ internal class GslULongMatrix(
         gsl_matrix_ulong_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslULongMatrix {
-        val new = requireNotNull(gsl_matrix_ulong_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_ulong_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_ulong_memcpy(new, nativeHandle)
         return GslULongMatrix(new, scope)
     }
@@ -325,7 +325,7 @@ internal class GslIntMatrix(
         gsl_matrix_int_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslIntMatrix {
-        val new = requireNotNull(gsl_matrix_int_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_int_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_int_memcpy(new, nativeHandle)
         return GslIntMatrix(new, scope)
     }
@@ -373,7 +373,7 @@ internal class GslUIntMatrix(
         gsl_matrix_uint_set(nativeHandle, i.toULong(), j.toULong(), value)
 
     override fun copy(): GslUIntMatrix {
-        val new = requireNotNull(gsl_matrix_uint_alloc(rowNum.toULong(), colNum.toULong()))
+        val new = checkNotNull(gsl_matrix_uint_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_uint_memcpy(new, nativeHandle)
         return GslUIntMatrix(new, scope)
     }
