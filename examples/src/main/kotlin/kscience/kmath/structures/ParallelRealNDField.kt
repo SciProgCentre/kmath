@@ -12,12 +12,14 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [DoubleStream] for parallel execution
  */
 @OptIn(UnstableKMathAPI::class)
-public class StreamRealNDField(
-    shape: IntArray,
-) : BufferedNDField<Double, RealField>(shape, RealField, Buffer.Companion::real),
+class StreamRealNDField(
+    override val shape: IntArray,
+) : NDField<Double, RealField>,
     RingWithNumbers<NDStructure<Double>>,
     ExtendedField<NDStructure<Double>> {
 
+    private val strides = DefaultStrides(shape)
+    override val elementContext: RealField get() = RealField
     override val zero: NDBuffer<Double> by lazy { produce { zero } }
     override val one: NDBuffer<Double> by lazy { produce { one } }
 
@@ -26,7 +28,7 @@ public class StreamRealNDField(
         return produce { d }
     }
 
-    override val NDStructure<Double>.buffer: RealBuffer
+    private val NDStructure<Double>.buffer: RealBuffer
         get() = when {
             !shape.contentEquals(this@StreamRealNDField.shape) -> throw ShapeMismatchException(
                 this@StreamRealNDField.shape,
