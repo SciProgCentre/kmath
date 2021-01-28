@@ -10,43 +10,40 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 
 @State(Scope.Benchmark)
-internal class ViktorBenchmark {
+internal class ViktorLogBenchmark {
     final val dim: Int = 1000
     final val n: Int = 100
 
     // automatically build context most suited for given type.
     final val autoField: NDField<Double, RealField> = NDAlgebra.auto(RealField, dim, dim)
     final val realField: RealNDField = NDAlgebra.real(dim, dim)
-    final val viktorField: ViktorNDField = ViktorNDField(dim, dim)
+    final val viktorField: ViktorNDField = ViktorNDField(intArrayOf(dim, dim))
+
 
     @Benchmark
-    fun automaticFieldAddition() {
-        autoField {
-            var res: NDStructure<Double> = one
-            repeat(n) { res += 1.0 }
-        }
-    }
-
-    @Benchmark
-    fun realFieldAddition() {
+    fun realFieldLog() {
         realField {
-            var res: NDStructure<Double> = one
-            repeat(n) { res += 1.0 }
-        }
-    }
-
-    @Benchmark
-    fun viktorFieldAddition() {
-        viktorField {
+            val fortyTwo = produce { 42.0 }
             var res = one
-            repeat(n) { res += 1.0 }
+            repeat(n) { res = ln(fortyTwo) }
         }
     }
 
     @Benchmark
-    fun rawViktor() {
-        val one = F64Array.full(init = 1.0, shape = intArrayOf(dim, dim))
-        var res = one
-        repeat(n) { res = res + one }
+    fun viktorFieldLog() {
+        viktorField {
+            val fortyTwo = produce { 42.0 }
+            var res = one
+            repeat(n) { res = ln(fortyTwo) }
+        }
+    }
+
+    @Benchmark
+    fun rawViktorLog() {
+        val fortyTwo = F64Array.full(dim, dim, init = 42.0)
+        var res: F64Array
+        repeat(n) {
+            res = fortyTwo.log()
+        }
     }
 }

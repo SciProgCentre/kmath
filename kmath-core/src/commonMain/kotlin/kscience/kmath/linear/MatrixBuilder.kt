@@ -1,6 +1,9 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.*
+import kscience.kmath.nd.Structure2D
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.BufferFactory
+import kscience.kmath.structures.asBuffer
 
 public class MatrixBuilder(public val rows: Int, public val columns: Int) {
     public operator fun <T : Any> invoke(vararg elements: T): Matrix<T> {
@@ -22,7 +25,7 @@ public fun <T : Any> Structure2D.Companion.row(vararg values: T): Matrix<T> {
 public inline fun <reified T : Any> Structure2D.Companion.row(
     size: Int,
     factory: BufferFactory<T> = Buffer.Companion::auto,
-    noinline builder: (Int) -> T
+    noinline builder: (Int) -> T,
 ): Matrix<T> {
     val buffer = factory(size, builder)
     return BufferMatrix(1, size, buffer)
@@ -36,7 +39,7 @@ public fun <T : Any> Structure2D.Companion.column(vararg values: T): Matrix<T> {
 public inline fun <reified T : Any> Structure2D.Companion.column(
     size: Int,
     factory: BufferFactory<T> = Buffer.Companion::auto,
-    noinline builder: (Int) -> T
+    noinline builder: (Int) -> T,
 ): Matrix<T> {
     val buffer = factory(size, builder)
     return BufferMatrix(size, 1, buffer)

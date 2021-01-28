@@ -1,7 +1,7 @@
 package kscience.kmath.nd4j
 
-import kscience.kmath.structures.MutableNDStructure
-import kscience.kmath.structures.NDStructure
+import kscience.kmath.nd.MutableNDStructure
+import kscience.kmath.nd.NDStructure
 import org.nd4j.linalg.api.ndarray.INDArray
 
 /**

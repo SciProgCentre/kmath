@@ -1,6 +1,5 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.Matrix
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

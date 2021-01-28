@@ -1,7 +1,7 @@
 package kscience.kmath.commons.linear
 
+import kscience.kmath.linear.Matrix
 import kscience.kmath.linear.Point
-import kscience.kmath.structures.Matrix
 import org.apache.commons.math3.linear.*
 
 public enum class CMDecomposition {
