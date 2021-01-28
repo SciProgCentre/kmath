@@ -1,8 +1,12 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.*
+import kscience.kmath.linear.MatrixContext
+import kscience.kmath.linear.VirtualMatrix
+import kscience.kmath.linear.inverseWithLup
+import kscience.kmath.linear.real
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow
@@ -148,7 +152,7 @@ public inline fun RealMatrix.map(crossinline transform: (Double) -> Double): Rea
 /**
  * Inverse a square real matrix using LUP decomposition
  */
-public fun RealMatrix.inverseWithLUP(): RealMatrix = MatrixContext.real.inverseWithLUP(this)
+public fun RealMatrix.inverseWithLup(): RealMatrix = MatrixContext.real.inverseWithLup(this)
 
 //extended operations
 

@@ -9,8 +9,8 @@ public interface MatrixFeature
 /**
  * Matrices with this feature are considered to have only diagonal non-null elements.
  */
-public interface DiagonalFeature : MatrixFeature{
-    public companion object: DiagonalFeature
+public interface DiagonalFeature : MatrixFeature {
+    public companion object : DiagonalFeature
 }
 
 /**
@@ -37,6 +37,8 @@ public interface InverseMatrixFeature<T : Any> : MatrixFeature {
 
 /**
  * Matrices with this feature can compute their determinant.
+ *
+ * @param T the type of matrices' items.
  */
 public interface DeterminantFeature<T : Any> : MatrixFeature {
     /**

@@ -8,6 +8,7 @@ import kscience.kmath.commons.linear.inverse
 import kscience.kmath.ejml.EjmlMatrixContext
 import kscience.kmath.ejml.inverse
 import kscience.kmath.operations.invoke
+import kscience.kmath.structures.Matrix
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import kotlin.random.Random
@@ -25,10 +26,8 @@ class LinearAlgebraBenchmark {
     }
 
     @Benchmark
-    fun kmathLUPInversion() {
-        MatrixContext.real{
-            inverseWithLUP(matrix)
-        }
+    fun kmathLupInversion() {
+        MatrixContext.real.inverseWithLup(matrix)
     }
 
     @Benchmark
