@@ -1,12 +1,8 @@
 package kscience.kmath.real
 
-import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.VirtualMatrix
-import kscience.kmath.linear.inverseWithLup
-import kscience.kmath.linear.real
+import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asIterable
 import kotlin.math.pow

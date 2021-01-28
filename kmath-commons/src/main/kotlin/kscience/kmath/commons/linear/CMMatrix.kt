@@ -2,7 +2,6 @@ package kscience.kmath.commons.linear
 
 import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import org.apache.commons.math3.linear.*
 import kotlin.reflect.KClass
