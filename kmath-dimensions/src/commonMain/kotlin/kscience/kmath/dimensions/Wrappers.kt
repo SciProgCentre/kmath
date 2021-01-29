@@ -1,9 +1,8 @@
 package kscience.kmath.dimensions
 
 import kscience.kmath.linear.*
+import kscience.kmath.nd.Structure2D
 import kscience.kmath.operations.invoke
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.Structure2D
 
 /**
  * A matrix with compile-time controlled dimension

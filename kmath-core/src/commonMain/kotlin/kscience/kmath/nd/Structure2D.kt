@@ -1,4 +1,9 @@
-package kscience.kmath.structures
+package kscience.kmath.nd
+
+import kscience.kmath.linear.BufferMatrix
+import kscience.kmath.linear.RealMatrixContext
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.VirtualBuffer
 
 /**
  * A structure that is guaranteed to be two-dimensional.
@@ -49,7 +54,15 @@ public interface Structure2D<T> : NDStructure<T> {
             for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
     }
 
-    public companion object
+    public companion object {
+        public inline fun real(
+            rows: Int,
+            columns: Int,
+            crossinline init: (i: Int, j: Int) -> Double,
+        ): BufferMatrix<Double> = RealMatrixContext.produce(rows,columns) { i, j ->
+            init(i, j)
+        }
+    }
 }
 
 /**

@@ -1,5 +1,7 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDBuffer
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -7,7 +9,7 @@ fun main() {
     val array = DoubleArray(n * n) { 1.0 }
     val buffer = RealBuffer(array)
     val strides = DefaultStrides(intArrayOf(n, n))
-    val structure = BufferNDStructure(strides, buffer)
+    val structure = NDBuffer(strides, buffer)
 
     measureTimeMillis {
         var res = 0.0

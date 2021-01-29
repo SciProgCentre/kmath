@@ -1,7 +1,5 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.Matrix
-
 /**
  * The matrix where each element is evaluated each time when is being accessed.
  *

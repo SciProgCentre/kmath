@@ -1,6 +1,9 @@
+@file:Suppress("unused")
+
 package kscience.kmath.structures
 
 import kscience.kmath.linear.transpose
+import kscience.kmath.nd.*
 import kscience.kmath.operations.Complex
 import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.invoke
@@ -10,12 +13,12 @@ fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = NDField.real(dim, dim)
-    val complexField: ComplexNDField = NDField.complex(dim, dim)
+    val realField = NDAlgebra.real(dim, dim)
+    val complexField: ComplexNDField = NDAlgebra.complex(dim, dim)
 
     val realTime = measureTimeMillis {
         realField {
-            var res: NDBuffer<Double> = one
+            var res: NDStructure<Double> = one
             repeat(n) {
                 res += 1.0
             }
@@ -26,8 +29,10 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField {
-            var res: NDBuffer<Complex> = one
-            repeat(n) { res += 1.0 }
+            var res: NDStructure<Complex> = one
+            repeat(n) {
+                res += 1.0
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 package kscience.kmath.histogram
 
 import kscience.kmath.linear.Point
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.operations.SpaceOperations
 import kscience.kmath.operations.invoke
 import kscience.kmath.structures.*
