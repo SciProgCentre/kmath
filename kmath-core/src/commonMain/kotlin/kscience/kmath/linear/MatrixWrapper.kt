@@ -1,11 +1,10 @@
 package kscience.kmath.linear
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.Structure2D
+import kscience.kmath.nd.getFeature
 import kscience.kmath.operations.Ring
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.Structure2D
 import kscience.kmath.structures.asBuffer
-import kscience.kmath.structures.getFeature
 import kotlin.math.sqrt
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
@@ -39,7 +38,8 @@ public class MatrixWrapper<T : Any> internal  constructor(
  * Origin does not necessary store all features.
  */
 @UnstableKMathAPI
-public val <T : Any> Matrix<T>.origin: Matrix<T> get() = (this as? MatrixWrapper)?.origin ?: this
+public val <T : Any> Matrix<T>.origin: Matrix<T>
+    get() = (this as? MatrixWrapper)?.origin ?: this
 
 /**
  * Add a single feature to a [Matrix]
@@ -59,12 +59,6 @@ public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeatu
     } else {
         MatrixWrapper(this, newFeatures.toSet())
     }
-
-public inline fun Structure2D.Companion.real(
-    rows: Int,
-    columns: Int,
-    initializer: (Int, Int) -> Double,
-): BufferMatrix<Double> = MatrixContext.real.produce(rows, columns, initializer)
 
 /**
  * Build a square matrix from given elements.

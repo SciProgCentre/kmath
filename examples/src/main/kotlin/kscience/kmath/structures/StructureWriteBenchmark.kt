@@ -1,5 +1,7 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.NDStructure
+import kscience.kmath.nd.mapToBuffer
 import kotlin.system.measureTimeMillis
 
 fun main() {

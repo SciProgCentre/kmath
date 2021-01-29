@@ -3,7 +3,7 @@
 The core features of KMath:
 
  - [algebras](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
- - [nd](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
+ - [nd](src/commonMain/kotlin/kscience/kmath/nd/NDStructure.kt) : Many-dimensional structures
  - [buffers](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
  - [expressions](src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
  - [domains](src/commonMain/kotlin/kscience/kmath/domains) : Domains

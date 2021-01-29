@@ -1,24 +1,25 @@
+@file:Suppress("unused")
+
 package kscience.kmath.structures
 
-import kscience.kmath.complex.Complex
-import kscience.kmath.complex.ComplexField
-import kscience.kmath.complex.complex
-import kscience.kmath.complex.nd
 import kscience.kmath.linear.transpose
-import kscience.kmath.operations.invoke
+import kscience.kmath.nd.*
+import kscience.kmath.complex.*
 import kotlin.system.measureTimeMillis
 
 fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = NDField.real(dim, dim)
-    val complexField = NDField.complex(dim, dim)
+    val realField = NDAlgebra.real(dim, dim)
+    val complexField: ComplexNDField = NDAlgebra.complex(dim, dim)
 
     val realTime = measureTimeMillis {
         realField {
-            var res: NDBuffer<Double> = one
-            repeat(n) { res += 1.0 }
+            var res: NDStructure<Double> = one
+            repeat(n) {
+                res += 1.0
+            }
         }
     }
 
@@ -26,8 +27,10 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField {
-            var res: NDBuffer<Complex> = one
-            repeat(n) { res += 1.0 }
+            var res: NDStructure<Complex> = one
+            repeat(n) {
+                res += 1.0
+            }
         }
     }
 
@@ -40,6 +43,7 @@ fun complexExample() {
         nd(4, 8) {
             //a constant real-valued structure
             val x = one * 2.5
+            operator fun Number.plus(other: Complex) = Complex(this.toDouble() + other.re, other.im)
             //a structure generator specific to this context
             val matrix = produce { (k, l) -> k + l * i }
             //Perform sum

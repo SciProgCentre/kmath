@@ -2,6 +2,8 @@ package kscience.kmath.structures
 
 import kotlinx.coroutines.*
 import kscience.kmath.coroutines.Math
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDStructure
 
 public class LazyNDStructure<T>(
     public val scope: CoroutineScope,

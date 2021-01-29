@@ -1,6 +1,6 @@
 package kscience.kmath.nd4j
 
-import kscience.kmath.structures.get
+import kscience.kmath.nd.get
 import org.nd4j.linalg.factory.Nd4j
 import kotlin.test.Test
 import kotlin.test.assertEquals

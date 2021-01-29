@@ -1,7 +1,7 @@
 package kscience.kmath.interpolation
 
+import kscience.kmath.nd.Structure2D
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Structure2D
 
 public interface XYPointSet<X, Y> {
     public val size: Int

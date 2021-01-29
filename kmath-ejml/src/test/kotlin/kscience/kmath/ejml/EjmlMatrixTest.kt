@@ -5,7 +5,7 @@ import kscience.kmath.linear.LupDecompositionFeature
 import kscience.kmath.linear.MatrixFeature
 import kscience.kmath.linear.plus
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.structures.getFeature
+import kscience.kmath.nd.getFeature
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
 import kotlin.random.Random

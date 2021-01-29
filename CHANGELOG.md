@@ -33,9 +33,11 @@
 - Use `Point<Double>` instead of specialized type in `kmath-for-real`
 - Optimized dot product for buffer matrices moved to `kmath-for-real`
 - EjmlMatrix context is an object
-- Matrix LUP `inverse` renamed to `inverseWithLUP`
+- Matrix LUP `inverse` renamed to `inverseWithLup`
 - `NumericAlgebra` moved outside of regular algebra chain (`Ring` no longer implements it).
 - Features moved to NDStructure and became transparent.
+- Capitalization of LUP in many names changed to Lup.
+- Refactored `NDStructure` algebra to be more simple, preferring under-the-hood conversion to explicit NDStructure types
 - `Complex` and related features moved to a separate module `kmath-complex`
 
 ### Deprecated

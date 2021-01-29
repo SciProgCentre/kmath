@@ -1,6 +1,6 @@
 package kscience.kmath.histogram
 
-import kscience.kmath.real.RealVector
+import kscience.kmath.linear.Point
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.asBuffer
 import java.util.*
@@ -11,12 +11,12 @@ import kotlin.math.floor
 public class UnivariateBin(
     public val position: Double,
     public val size: Double,
-    public val counter: LongCounter = LongCounter()
+    public val counter: LongCounter = LongCounter(),
 ) : Bin<Double> {
     //TODO add weighting
     public override val value: Number get() = counter.sum()
 
-    public override val center: RealVector get() = doubleArrayOf(position).asBuffer()
+    public override val center: Point<Double> get() = doubleArrayOf(position).asBuffer()
     public override val dimension: Int get() = 1
 
     public operator fun contains(value: Double): Boolean = value in (position - size / 2)..(position + size / 2)
@@ -27,8 +27,9 @@ public class UnivariateBin(
 /**
  * Univariate histogram with log(n) bin search speed
  */
-public class UnivariateHistogram private constructor(private val factory: (Double) -> UnivariateBin) :
-    MutableHistogram<Double, UnivariateBin> {
+public class UnivariateHistogram private constructor(
+    private val factory: (Double) -> UnivariateBin,
+) : MutableHistogram<Double, UnivariateBin> {
 
     private val bins: TreeMap<Double, UnivariateBin> = TreeMap()
 
