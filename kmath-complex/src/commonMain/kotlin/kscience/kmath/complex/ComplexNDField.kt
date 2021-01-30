@@ -1,6 +1,10 @@
-package kscience.kmath.nd
+package kscience.kmath.complex
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.BufferedNDField
+import kscience.kmath.nd.NDAlgebra
+import kscience.kmath.nd.NDBuffer
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.operations.*
 import kscience.kmath.structures.Buffer
 import kotlin.contracts.InvocationKind
