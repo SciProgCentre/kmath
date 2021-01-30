@@ -7,7 +7,6 @@ import kscience.kmath.operations.invoke
 import kscience.kmath.operations.sum
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.BufferFactory
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.asSequence
 import kotlin.reflect.KClass
 

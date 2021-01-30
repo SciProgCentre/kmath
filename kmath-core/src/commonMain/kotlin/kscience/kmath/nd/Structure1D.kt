@@ -1,4 +1,7 @@
-package kscience.kmath.structures
+package kscience.kmath.nd
+
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.asSequence
 
 /**
  * A structure that is guaranteed to be one-dimensional
@@ -34,7 +37,7 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
     override val size: Int get() = buffer.size
 
     override fun elements(): Sequence<Pair<IntArray, T>> =
-        asSequence().mapIndexed { index, value -> intArrayOf(index) to value }
+        buffer.asSequence().mapIndexed { index, value -> intArrayOf(index) to value }
 
     override operator fun get(index: Int): T = buffer[index]
 }

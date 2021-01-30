@@ -1,6 +1,5 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.Matrix
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -9,7 +8,7 @@ class RealLUSolverTest {
     @Test
     fun testInvertOne() {
         val matrix = MatrixContext.real.one(2, 2)
-        val inverted = MatrixContext.real.inverseWithLUP(matrix)
+        val inverted = MatrixContext.real.inverseWithLup(matrix)
         assertEquals(matrix, inverted)
     }
 
@@ -37,7 +36,7 @@ class RealLUSolverTest {
             1.0, 3.0
         )
 
-        val inverted = MatrixContext.real.inverseWithLUP(matrix)
+        val inverted = MatrixContext.real.inverseWithLup(matrix)
 
         val expected = Matrix.square(
             0.375, -0.125,

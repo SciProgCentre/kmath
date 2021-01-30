@@ -1,7 +1,6 @@
 package kscience.kmath.linear
 
 import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.VirtualBuffer
 
 public typealias Point<T> = Buffer<T>

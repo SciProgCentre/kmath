@@ -1,12 +1,8 @@
 package kscience.kmath.ejml
 
-import kscience.kmath.linear.InverseMatrixFeature
-import kscience.kmath.linear.MatrixContext
-import kscience.kmath.linear.Point
-import kscience.kmath.linear.origin
+import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.getFeature
+import kscience.kmath.nd.getFeature
 import org.ejml.simple.SimpleMatrix
 
 /**

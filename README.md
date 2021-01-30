@@ -114,7 +114,7 @@ submit a feature request if you want something to be implemented first.
 >
 > **Features:**
 > - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures: contexts and elements
-> - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures
+> - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/nd/NDStructure.kt) : Many-dimensional structures
 > - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
 > - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : Functional Expressions
 > - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
