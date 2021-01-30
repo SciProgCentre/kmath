@@ -137,7 +137,7 @@ performance calculations to code generation.
 * ### [kmath-ejml](kmath-ejml)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: PROTOTYPE
 <hr/>
 
 * ### [kmath-for-real](kmath-for-real)
@@ -160,17 +160,17 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [piecewise](kmath-functions/src/commonMain/kotlin/kscience/kmath/functions/Piecewise.kt) : Piecewise functions.
-> - [polynomials](kmath-functions/src/commonMain/kotlin/kscience/kmath/functions/Polynomial.kt) : Polynomial functions.
-> - [linear interpolation](kmath-functions/src/commonMain/kotlin/kscience/kmath/interpolation/LinearInterpolator.kt) : Linear XY interpolator.
-> - [spline interpolation](kmath-functions/src/commonMain/kotlin/kscience/kmath/interpolation/SplineInterpolator.kt) : Cubic spline XY interpolator.
+> - [piecewise](kmath-functions/Piecewise functions.) : src/commonMain/kotlin/kscience/kmath/functions/Piecewise.kt
+> - [polynomials](kmath-functions/Polynomial functions.) : src/commonMain/kotlin/kscience/kmath/functions/Polynomial.kt
+> - [linear interpolation](kmath-functions/Linear XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/LinearInterpolator.kt
+> - [spline interpolation](kmath-functions/Cubic spline XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/SplineInterpolator.kt
 
 <hr/>
 
 * ### [kmath-geometry](kmath-geometry)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: PROTOTYPE
 <hr/>
 
 * ### [kmath-histograms](kmath-histograms)
@@ -182,13 +182,13 @@ One can still use generic algebras though.
 * ### [kmath-kotlingrad](kmath-kotlingrad)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: PROTOTYPE
 <hr/>
 
 * ### [kmath-memory](kmath-memory)
-> 
+> An API and basic implementation for arranging objects in a continous memory block.
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: DEVELOPMENT
 <hr/>
 
 * ### [kmath-nd4j](kmath-nd4j)
@@ -212,7 +212,7 @@ One can still use generic algebras though.
 * ### [kmath-viktor](kmath-viktor)
 > 
 >
-> **Maturity**: EXPERIMENTAL
+> **Maturity**: DEVELOPMENT
 <hr/>
 
 
@@ -242,6 +242,7 @@ Release artifacts are accessible from bintray with following configuration (see 
 ```kotlin
 repositories {
     maven("https://dl.bintray.com/mipt-npm/kscience")
+    // maven("https://dl.bintray.com/mipt-npm/dev") for dev versions
 }
 
 dependencies {

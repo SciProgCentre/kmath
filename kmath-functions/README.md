@@ -2,10 +2,10 @@
 
 Functions and interpolations:
 
- - [piecewise](src/commonMain/kotlin/kscience/kmath/functions/Piecewise.kt) : Piecewise functions.
- - [polynomials](src/commonMain/kotlin/kscience/kmath/functions/Polynomial.kt) : Polynomial functions.
- - [linear interpolation](src/commonMain/kotlin/kscience/kmath/interpolation/LinearInterpolator.kt) : Linear XY interpolator.
- - [spline interpolation](src/commonMain/kotlin/kscience/kmath/interpolation/SplineInterpolator.kt) : Cubic spline XY interpolator.
+ - [piecewise](Piecewise functions.) : src/commonMain/kotlin/kscience/kmath/functions/Piecewise.kt
+ - [polynomials](Polynomial functions.) : src/commonMain/kotlin/kscience/kmath/functions/Polynomial.kt
+ - [linear interpolation](Linear XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/LinearInterpolator.kt
+ - [spline interpolation](Cubic spline XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/SplineInterpolator.kt
 
 
 > #### Artifact:

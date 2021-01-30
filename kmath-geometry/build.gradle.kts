@@ -5,3 +5,7 @@ kotlin.sourceSets.commonMain {
         api(project(":kmath-core"))
     }
 }
+
+readme{
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+}
