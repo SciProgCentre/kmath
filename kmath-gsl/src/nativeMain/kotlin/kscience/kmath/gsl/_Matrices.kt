@@ -7,7 +7,8 @@ import org.gnu.gsl.*
 internal class GslRealMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix>,
     scope: AutofreeScope,
-) : GslMatrix<Double, gsl_matrix>(scope) {
+    owned: Boolean,
+) : GslMatrix<Double, gsl_matrix>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -19,7 +20,8 @@ internal class GslRealMatrix(
             GslRealVector(
                 gsl_matrix_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Double>>
@@ -27,7 +29,8 @@ internal class GslRealMatrix(
             GslRealVector(
                 gsl_matrix_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Double = 
@@ -39,7 +42,7 @@ internal class GslRealMatrix(
     override fun copy(): GslRealMatrix {
         val new = checkNotNull(gsl_matrix_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_memcpy(new, nativeHandle)
-        return GslRealMatrix(new, scope)
+        return GslRealMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_free(nativeHandle)
@@ -55,7 +58,8 @@ internal class GslRealMatrix(
 internal class GslFloatMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_float>,
     scope: AutofreeScope,
-) : GslMatrix<Float, gsl_matrix_float>(scope) {
+    owned: Boolean,
+) : GslMatrix<Float, gsl_matrix_float>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -67,7 +71,8 @@ internal class GslFloatMatrix(
             GslFloatVector(
                 gsl_matrix_float_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Float>>
@@ -75,7 +80,8 @@ internal class GslFloatMatrix(
             GslFloatVector(
                 gsl_matrix_float_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Float = 
@@ -87,7 +93,7 @@ internal class GslFloatMatrix(
     override fun copy(): GslFloatMatrix {
         val new = checkNotNull(gsl_matrix_float_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_float_memcpy(new, nativeHandle)
-        return GslFloatMatrix(new, scope)
+        return GslFloatMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_float_free(nativeHandle)
@@ -103,7 +109,8 @@ internal class GslFloatMatrix(
 internal class GslShortMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_short>,
     scope: AutofreeScope,
-) : GslMatrix<Short, gsl_matrix_short>(scope) {
+    owned: Boolean,
+) : GslMatrix<Short, gsl_matrix_short>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -115,7 +122,8 @@ internal class GslShortMatrix(
             GslShortVector(
                 gsl_matrix_short_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Short>>
@@ -123,7 +131,8 @@ internal class GslShortMatrix(
             GslShortVector(
                 gsl_matrix_short_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Short = 
@@ -135,7 +144,7 @@ internal class GslShortMatrix(
     override fun copy(): GslShortMatrix {
         val new = checkNotNull(gsl_matrix_short_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_short_memcpy(new, nativeHandle)
-        return GslShortMatrix(new, scope)
+        return GslShortMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_short_free(nativeHandle)
@@ -151,7 +160,8 @@ internal class GslShortMatrix(
 internal class GslUShortMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_ushort>,
     scope: AutofreeScope,
-) : GslMatrix<UShort, gsl_matrix_ushort>(scope) {
+    owned: Boolean,
+) : GslMatrix<UShort, gsl_matrix_ushort>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -163,7 +173,8 @@ internal class GslUShortMatrix(
             GslUShortVector(
                 gsl_matrix_ushort_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<UShort>>
@@ -171,7 +182,8 @@ internal class GslUShortMatrix(
             GslUShortVector(
                 gsl_matrix_ushort_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): UShort = 
@@ -183,7 +195,7 @@ internal class GslUShortMatrix(
     override fun copy(): GslUShortMatrix {
         val new = checkNotNull(gsl_matrix_ushort_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_ushort_memcpy(new, nativeHandle)
-        return GslUShortMatrix(new, scope)
+        return GslUShortMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_ushort_free(nativeHandle)
@@ -199,7 +211,8 @@ internal class GslUShortMatrix(
 internal class GslLongMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_long>,
     scope: AutofreeScope,
-) : GslMatrix<Long, gsl_matrix_long>(scope) {
+    owned: Boolean,
+) : GslMatrix<Long, gsl_matrix_long>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -211,7 +224,8 @@ internal class GslLongMatrix(
             GslLongVector(
                 gsl_matrix_long_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Long>>
@@ -219,7 +233,8 @@ internal class GslLongMatrix(
             GslLongVector(
                 gsl_matrix_long_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Long = 
@@ -231,7 +246,7 @@ internal class GslLongMatrix(
     override fun copy(): GslLongMatrix {
         val new = checkNotNull(gsl_matrix_long_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_long_memcpy(new, nativeHandle)
-        return GslLongMatrix(new, scope)
+        return GslLongMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_long_free(nativeHandle)
@@ -247,7 +262,8 @@ internal class GslLongMatrix(
 internal class GslULongMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_ulong>,
     scope: AutofreeScope,
-) : GslMatrix<ULong, gsl_matrix_ulong>(scope) {
+    owned: Boolean,
+) : GslMatrix<ULong, gsl_matrix_ulong>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -259,7 +275,8 @@ internal class GslULongMatrix(
             GslULongVector(
                 gsl_matrix_ulong_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<ULong>>
@@ -267,7 +284,8 @@ internal class GslULongMatrix(
             GslULongVector(
                 gsl_matrix_ulong_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): ULong = 
@@ -279,7 +297,7 @@ internal class GslULongMatrix(
     override fun copy(): GslULongMatrix {
         val new = checkNotNull(gsl_matrix_ulong_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_ulong_memcpy(new, nativeHandle)
-        return GslULongMatrix(new, scope)
+        return GslULongMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_ulong_free(nativeHandle)
@@ -295,7 +313,8 @@ internal class GslULongMatrix(
 internal class GslIntMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_int>,
     scope: AutofreeScope,
-) : GslMatrix<Int, gsl_matrix_int>(scope) {
+    owned: Boolean,
+) : GslMatrix<Int, gsl_matrix_int>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -307,7 +326,8 @@ internal class GslIntMatrix(
             GslIntVector(
                 gsl_matrix_int_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Int>>
@@ -315,7 +335,8 @@ internal class GslIntMatrix(
             GslIntVector(
                 gsl_matrix_int_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Int = 
@@ -327,7 +348,7 @@ internal class GslIntMatrix(
     override fun copy(): GslIntMatrix {
         val new = checkNotNull(gsl_matrix_int_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_int_memcpy(new, nativeHandle)
-        return GslIntMatrix(new, scope)
+        return GslIntMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_int_free(nativeHandle)
@@ -343,7 +364,8 @@ internal class GslIntMatrix(
 internal class GslUIntMatrix(
     override val rawNativeHandle: CPointer<gsl_matrix_uint>,
     scope: AutofreeScope,
-) : GslMatrix<UInt, gsl_matrix_uint>(scope) {
+    owned: Boolean,
+) : GslMatrix<UInt, gsl_matrix_uint>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -355,7 +377,8 @@ internal class GslUIntMatrix(
             GslUIntVector(
                 gsl_matrix_uint_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<UInt>>
@@ -363,7 +386,8 @@ internal class GslUIntMatrix(
             GslUIntVector(
                 gsl_matrix_uint_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): UInt = 
@@ -375,7 +399,7 @@ internal class GslUIntMatrix(
     override fun copy(): GslUIntMatrix {
         val new = checkNotNull(gsl_matrix_uint_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_uint_memcpy(new, nativeHandle)
-        return GslUIntMatrix(new, scope)
+        return GslUIntMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_uint_free(nativeHandle)

@@ -1,8 +1,8 @@
 package kscience.kmath.gsl
 
+import kscience.kmath.linear.Matrix
 import kscience.kmath.linear.RealMatrixContext
 import kscience.kmath.operations.invoke
-import kscience.kmath.structures.Matrix
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.asSequence
 import kotlin.random.Random

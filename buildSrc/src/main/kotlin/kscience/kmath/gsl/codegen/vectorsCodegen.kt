@@ -19,21 +19,19 @@ private fun KtPsiFactory.createVectorClass(
     val structName = sn("gsl_vectorR", cTypeName)
 
     @Language("kotlin") val text =
-        """internal class $className(override val rawNativeHandle: CPointer<$structName>, scope: AutofreeScope) : 
-    GslVector<$kotlinTypeName, $structName>(scope) {
-    override val size: Int
-        get() = nativeHandle.pointed.size.toInt()
-
-    override operator fun get(index: Int): $kotlinTypeName = 
-        ${fn("gsl_vectorRget")}(nativeHandle, index.toULong())
-
-    override operator fun set(index: Int, value: $kotlinTypeName): Unit = 
-        ${fn("gsl_vectorRset")}(nativeHandle, index.toULong(), value)
+        """internal class $className(
+    override val rawNativeHandle: CPointer<$structName>, 
+    scope: AutofreeScope, 
+    owned: Boolean,
+) : GslVector<$kotlinTypeName, $structName>(scope, owned) {
+    override val size: Int get() = nativeHandle.pointed.size.toInt()
+    override operator fun get(index: Int): $kotlinTypeName = ${fn("gsl_vectorRget")}(nativeHandle, index.toULong())
+    override operator fun set(index: Int, value: $kotlinTypeName): Unit = ${fn("gsl_vectorRset")}(nativeHandle, index.toULong(), value)
 
     override fun copy(): $className {
         val new = checkNotNull(${fn("gsl_vectorRalloc")}(size.toULong()))
         ${fn("gsl_vectorRmemcpy")}(new, nativeHandle)
-        return ${className}(new, scope)
+        return ${className}(new, scope, true)
     }
 
     override fun equals(other: Any?): Boolean {

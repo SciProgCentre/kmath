@@ -21,7 +21,8 @@ private fun KtPsiFactory.createMatrixClass(
     @Language("kotlin") val text = """internal class $className(
     override val rawNativeHandle: CPointer<$structName>,
     scope: AutofreeScope,
-) : GslMatrix<$kotlinTypeName, $structName>(scope) {
+    owned: Boolean,
+) : GslMatrix<$kotlinTypeName, $structName>(scope, owned) {
     override val rowNum: Int
         get() = nativeHandle.pointed.size1.toInt()
 
@@ -33,7 +34,8 @@ private fun KtPsiFactory.createMatrixClass(
             Gsl${kotlinTypeAlias}Vector(
                 ${fn("gsl_matrixRrow")}(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<$kotlinTypeName>>
@@ -41,7 +43,8 @@ private fun KtPsiFactory.createMatrixClass(
             Gsl${kotlinTypeAlias}Vector(
                 ${fn("gsl_matrixRcolumn")}(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): $kotlinTypeName = 
@@ -53,7 +56,7 @@ private fun KtPsiFactory.createMatrixClass(
     override fun copy(): $className {
         val new = checkNotNull(${fn("gsl_matrixRalloc")}(rowNum.toULong(), colNum.toULong()))
         ${fn("gsl_matrixRmemcpy")}(new, nativeHandle)
-        return $className(new, scope)
+        return $className(new, scope, true)
     }
 
     override fun close(): Unit = ${fn("gsl_matrixRfree")}(nativeHandle)

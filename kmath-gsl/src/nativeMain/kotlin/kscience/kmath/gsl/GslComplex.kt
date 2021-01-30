@@ -13,20 +13,21 @@ internal fun Complex.toGsl(): CValue<gsl_complex> = cValue {
     dat[1] = im
 }
 
-internal class GslComplexMatrix(override val rawNativeHandle: CPointer<gsl_matrix_complex>, scope: AutofreeScope) :
-    GslMatrix<Complex, gsl_matrix_complex>(scope) {
-    override val rowNum: Int
-        get() = nativeHandle.pointed.size1.toInt()
-
-    override val colNum: Int
-        get() = nativeHandle.pointed.size2.toInt()
+internal class GslComplexMatrix(
+    override val rawNativeHandle: CPointer<gsl_matrix_complex>,
+    scope: AutofreeScope,
+    owned: Boolean,
+) : GslMatrix<Complex, gsl_matrix_complex>(scope, owned) {
+    override val rowNum: Int get() = nativeHandle.pointed.size1.toInt()
+    override val colNum: Int get() = nativeHandle.pointed.size2.toInt()
 
     override val rows: Buffer<Buffer<Complex>>
         get() = VirtualBuffer(rowNum) { r ->
             GslComplexVector(
                 gsl_matrix_complex_row(nativeHandle, r.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override val columns: Buffer<Buffer<Complex>>
@@ -34,7 +35,8 @@ internal class GslComplexMatrix(override val rawNativeHandle: CPointer<gsl_matri
             GslComplexVector(
                 gsl_matrix_complex_column(nativeHandle, c.toULong()).placeTo(scope).pointed.vector.ptr,
                 scope,
-            ).apply { shouldBeFreed = false }
+                false,
+            )
         }
 
     override operator fun get(i: Int, j: Int): Complex =
@@ -46,7 +48,7 @@ internal class GslComplexMatrix(override val rawNativeHandle: CPointer<gsl_matri
     override fun copy(): GslComplexMatrix {
         val new = checkNotNull(gsl_matrix_complex_alloc(rowNum.toULong(), colNum.toULong()))
         gsl_matrix_complex_memcpy(new, nativeHandle)
-        return GslComplexMatrix(new, scope)
+        return GslComplexMatrix(new, scope, true)
     }
 
     override fun close(): Unit = gsl_matrix_complex_free(nativeHandle)
@@ -59,11 +61,12 @@ internal class GslComplexMatrix(override val rawNativeHandle: CPointer<gsl_matri
     }
 }
 
-internal class GslComplexVector(override val rawNativeHandle: CPointer<gsl_vector_complex>, scope: AutofreeScope) :
-    GslVector<Complex, gsl_vector_complex>(scope) {
-    override val size: Int
-        get() = nativeHandle.pointed.size.toInt()
-
+internal class GslComplexVector(
+    override val rawNativeHandle: CPointer<gsl_vector_complex>,
+    scope: AutofreeScope,
+    owned: Boolean,
+) : GslVector<Complex, gsl_vector_complex>(scope, owned) {
+    override val size: Int get() = nativeHandle.pointed.size.toInt()
     override fun get(index: Int): Complex = gsl_vector_complex_get(nativeHandle, index.toULong()).toKMath()
 
     override fun set(index: Int, value: Complex): Unit =
@@ -72,7 +75,7 @@ internal class GslComplexVector(override val rawNativeHandle: CPointer<gsl_vecto
     override fun copy(): GslComplexVector {
         val new = checkNotNull(gsl_vector_complex_alloc(size.toULong()))
         gsl_vector_complex_memcpy(new, nativeHandle)
-        return GslComplexVector(new, scope)
+        return GslComplexVector(new, scope, true)
     }
 
     override fun equals(other: Any?): Boolean {

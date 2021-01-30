@@ -2,15 +2,15 @@ package kscience.kmath.gsl
 
 import kotlinx.cinterop.AutofreeScope
 import kotlinx.cinterop.CStructVar
-import kscience.kmath.structures.Matrix
-import kscience.kmath.structures.NDStructure
+import kscience.kmath.linear.Matrix
+import kscience.kmath.nd.NDStructure
 import kscience.kmath.structures.asSequence
 
 /**
  * Wraps gsl_matrix_* objects from GSL.
  */
-public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(scope: AutofreeScope) :
-    GslObject<H>(scope), Matrix<T> {
+public abstract class GslMatrix<T : Any, H : CStructVar> internal constructor(scope: AutofreeScope, owned: Boolean) :
+    GslObject<H>(scope, owned), Matrix<T> {
     internal abstract operator fun set(i: Int, j: Int, value: T)
     internal abstract fun copy(): GslMatrix<T, H>
 

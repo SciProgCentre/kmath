@@ -6,7 +6,6 @@ import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.Complex
 import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.toComplex
-import kscience.kmath.structures.Matrix
 import org.gnu.gsl.*
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
@@ -65,17 +64,18 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Double, gsl_matrix> = GslRealMatrix(
         rawNativeHandle = checkNotNull(gsl_matrix_alloc(rows.toULong(), columns.toULong())),
         scope = scope,
+        owned = true,
     )
 
     override fun produceDirtyVector(size: Int): GslVector<Double, gsl_vector> =
-        GslRealVector(rawNativeHandle = checkNotNull(gsl_vector_alloc(size.toULong())), scope = scope)
+        GslRealVector(rawNativeHandle = checkNotNull(gsl_vector_alloc(size.toULong())), scope = scope, owned = true)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): GslMatrix<Double, gsl_matrix> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
         val result = checkNotNull(gsl_matrix_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, x, a, 1.0, result)
-        return GslRealMatrix(result, scope = scope)
+        return GslRealMatrix(rawNativeHandle = result, scope = scope, owned = true)
     }
 
     public override fun Matrix<Double>.dot(vector: Point<Double>): GslVector<Double, gsl_vector> {
@@ -83,7 +83,7 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
         val a = vector.toGsl().nativeHandle
         val result = checkNotNull(gsl_vector_calloc(a.pointed.size))
         gsl_blas_dgemv(CblasNoTrans, 1.0, x, a, 1.0, result)
-        return GslRealVector(result, scope = scope)
+        return GslRealVector(rawNativeHandle = result, scope = scope, owned = true)
     }
 
     public override fun Matrix<Double>.times(value: Double): GslMatrix<Double, gsl_matrix> {
@@ -118,7 +118,12 @@ public class GslRealMatrixContext(internal val scope: AutofreeScope) :
             private val lups by lazy {
                 val lu = m.toGsl().copy()
                 val n = m.rowNum
-                val perm = GslPermutation(checkNotNull(gsl_permutation_alloc(n.toULong())), scope)
+
+                val perm = GslPermutation(
+                    rawNativeHandle = checkNotNull(gsl_permutation_alloc(n.toULong())),
+                    scope = scope,
+                    owned = true,
+                )
 
                 val signum = memScoped {
                     val i = alloc<IntVar>()
@@ -192,17 +197,21 @@ public class GslFloatMatrixContext(internal val scope: AutofreeScope) :
     override fun produceDirtyMatrix(rows: Int, columns: Int): GslMatrix<Float, gsl_matrix_float> = GslFloatMatrix(
         rawNativeHandle = checkNotNull(gsl_matrix_float_alloc(rows.toULong(), columns.toULong())),
         scope = scope,
+        owned = true,
     )
 
-    override fun produceDirtyVector(size: Int): GslVector<Float, gsl_vector_float> =
-        GslFloatVector(rawNativeHandle = checkNotNull(value = gsl_vector_float_alloc(size.toULong())), scope = scope)
+    override fun produceDirtyVector(size: Int): GslVector<Float, gsl_vector_float> = GslFloatVector(
+        rawNativeHandle = checkNotNull(value = gsl_vector_float_alloc(size.toULong())),
+        scope = scope,
+        owned = true,
+    )
 
     public override fun Matrix<Float>.dot(other: Matrix<Float>): GslMatrix<Float, gsl_matrix_float> {
         val x = toGsl().nativeHandle
         val a = other.toGsl().nativeHandle
         val result = checkNotNull(gsl_matrix_float_calloc(a.pointed.size1, a.pointed.size2))
         gsl_blas_sgemm(CblasNoTrans, CblasNoTrans, 1f, x, a, 1f, result)
-        return GslFloatMatrix(rawNativeHandle = result, scope = scope)
+        return GslFloatMatrix(rawNativeHandle = result, scope = scope, owned = true)
     }
 
     public override fun Matrix<Float>.dot(vector: Point<Float>): GslVector<Float, gsl_vector_float> {
@@ -210,7 +219,7 @@ public class GslFloatMatrixContext(internal val scope: AutofreeScope) :
         val a = vector.toGsl().nativeHandle
         val result = checkNotNull(gsl_vector_float_calloc(a.pointed.size))
         gsl_blas_sgemv(CblasNoTrans, 1f, x, a, 1f, result)
-        return GslFloatVector(rawNativeHandle = result, scope = scope)
+        return GslFloatVector(rawNativeHandle = result, scope = scope, owned = true)
     }
 
     public override fun Matrix<Float>.times(value: Float): GslMatrix<Float, gsl_matrix_float> {
@@ -305,7 +314,10 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
             private val lups by lazy {
                 val lu = m.toGsl().copy()
                 val n = m.rowNum
-                val perm = GslPermutation(checkNotNull(gsl_permutation_alloc(n.toULong())), scope)
+
+                val perm = GslPermutation(rawNativeHandle = checkNotNull(gsl_permutation_alloc(n.toULong())),
+                    scope = scope,
+                    owned = true)
 
                 val signum = memScoped {
                     val i = alloc<IntVar>()
@@ -322,7 +334,9 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
                 val perm = produce(n, n) { _, _ -> 0.0.toComplex() }
 
                 for (j in 0 until lups.second.size)
-                    gsl_matrix_complex_set_col(perm.nativeHandle, j.toULong(), one.columns[lups.second[j]].toGsl().nativeHandle)
+                    gsl_matrix_complex_set_col(perm.nativeHandle,
+                        j.toULong(),
+                        one.columns[lups.second[j]].toGsl().nativeHandle)
 
                 perm
             }
@@ -344,7 +358,10 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
                 ) { i, j -> if (j >= i) lups.first[i, j] else 0.0.toComplex() } + UFeature
             }
 
-            override val determinant by lazy { gsl_linalg_complex_LU_det(lups.first.nativeHandle, lups.third).toKMath() }
+            override val determinant by lazy {
+                gsl_linalg_complex_LU_det(lups.first.nativeHandle,
+                    lups.third).toKMath()
+            }
 
             override val inverse by lazy {
                 val inv = lups.first.copy()
