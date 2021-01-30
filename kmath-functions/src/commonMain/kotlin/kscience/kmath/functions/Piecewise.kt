@@ -6,8 +6,7 @@ public fun interface Piecewise<T, R> {
     public fun findPiece(arg: T): R?
 }
 
-public fun interface PiecewisePolynomial<T : Any> :
-    Piecewise<T, Polynomial<T>>
+public fun interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
 
 /**
  * Ordered list of pieces in piecewise function

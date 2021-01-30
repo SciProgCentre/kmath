@@ -12,6 +12,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Install Chrome
         run: |
           sudo apt install -y libappindicator1 fonts-liberation
@@ -47,6 +49,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Cache gradle
         uses: actions/cache@v2
         with:
@@ -77,6 +81,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Add msys to path
         run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
