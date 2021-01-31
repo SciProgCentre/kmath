@@ -23,3 +23,7 @@ kotlin.sourceSets {
         }
     }
 }
+
+readme{
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+}
