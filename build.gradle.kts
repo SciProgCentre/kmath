@@ -35,10 +35,6 @@ readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }
 
-apiValidation {
-    validationDisabled = true
-}
-
 ksciencePublish {
     spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
 }

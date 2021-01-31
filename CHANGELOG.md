@@ -38,6 +38,7 @@
 - Features moved to NDStructure and became transparent.
 - Capitalization of LUP in many names changed to Lup.
 - Refactored `NDStructure` algebra to be more simple, preferring under-the-hood conversion to explicit NDStructure types
+- Refactor histograms. They are marked as prototype
 
 ### Deprecated
 
