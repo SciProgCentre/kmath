@@ -173,6 +173,16 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
+* ### [kmath-gsl](kmath-gsl)
+> Linear Algebra classes implemented with GNU Scientific Library
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [matrix-contexts](kmath-gsl/src/nativeMain/kotlin/kscience/kmath/gsl/GslMatrixContext.kt) : Matrix Contexts over Double, Float and Complex implemented with GSL
+
+<hr/>
+
 * ### [kmath-histograms](kmath-histograms)
 > 
 >

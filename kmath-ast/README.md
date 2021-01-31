@@ -61,7 +61,7 @@ For example, the following builder:
 RealField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
-â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
+… leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
 package kscience.kmath.asm.generated;

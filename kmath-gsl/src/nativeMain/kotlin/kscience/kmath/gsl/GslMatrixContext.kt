@@ -388,8 +388,7 @@ public class GslComplexMatrixContext(internal val scope: AutofreeScope) :
             }
 
             override val determinant by lazy {
-                gsl_linalg_complex_LU_det(lups.first.nativeHandle,
-                    lups.third).toKMath()
+                gsl_linalg_complex_LU_det(lups.first.nativeHandle, lups.third).toKMath()
             }
 
             override val inverse by lazy {
