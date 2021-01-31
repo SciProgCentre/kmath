@@ -12,7 +12,7 @@ This subproject implements the following features:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-4`.
+> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-6`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
 >
@@ -30,7 +30,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-4'
+>     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-6'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -44,7 +44,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-4")
+>     implementation("kscience.kmath:kmath-ast:0.2.0-dev-6")
 > }
 > ```
 
