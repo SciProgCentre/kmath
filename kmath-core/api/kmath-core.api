@@ -562,6 +562,7 @@ public final class kscience/kmath/linear/BufferMatrixContext : kscience/kmath/li
 	public synthetic fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/structures/Buffer;)Lkscience/kmath/structures/Buffer;
 	public fun getElementContext ()Lkscience/kmath/operations/Ring;
+	public fun getFeature (Lkscience/kmath/nd/Structure2D;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun minus (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/linear/BufferMatrix;
 	public synthetic fun minus (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
@@ -666,6 +667,7 @@ public final class kscience/kmath/linear/GenericMatrixContext$DefaultImpls {
 	public static fun div (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Ljava/lang/Number;)Lkscience/kmath/nd/Structure2D;
 	public static fun dot (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public static fun dot (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/structures/Buffer;)Lkscience/kmath/structures/Buffer;
+	public static fun getFeature (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public static fun minus (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public static fun multiply (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Ljava/lang/Number;)Lkscience/kmath/nd/Structure2D;
 	public static fun plus (Lkscience/kmath/linear/GenericMatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
@@ -749,6 +751,7 @@ public abstract interface class kscience/kmath/linear/MatrixContext : kscience/k
 	public abstract fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public abstract fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public abstract fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/structures/Buffer;)Lkscience/kmath/structures/Buffer;
+	public abstract fun getFeature (Lkscience/kmath/nd/Structure2D;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public abstract fun point (ILkotlin/jvm/functions/Function1;)Lkscience/kmath/structures/Buffer;
 	public abstract fun produce (IILkotlin/jvm/functions/Function2;)Lkscience/kmath/nd/Structure2D;
 	public abstract fun times (Ljava/lang/Object;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
@@ -764,6 +767,7 @@ public final class kscience/kmath/linear/MatrixContext$DefaultImpls {
 	public static fun binaryOperation (Lkscience/kmath/linear/MatrixContext;Ljava/lang/String;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public static fun binaryOperationFunction (Lkscience/kmath/linear/MatrixContext;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public static fun div (Lkscience/kmath/linear/MatrixContext;Lkscience/kmath/nd/Structure2D;Ljava/lang/Number;)Lkscience/kmath/nd/Structure2D;
+	public static fun getFeature (Lkscience/kmath/linear/MatrixContext;Lkscience/kmath/nd/Structure2D;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public static fun minus (Lkscience/kmath/linear/MatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public static fun plus (Lkscience/kmath/linear/MatrixContext;Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public static fun point (Lkscience/kmath/linear/MatrixContext;ILkotlin/jvm/functions/Function1;)Lkscience/kmath/structures/Buffer;
@@ -833,6 +837,7 @@ public final class kscience/kmath/linear/RealMatrixContext : kscience/kmath/line
 	public fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/linear/BufferMatrix;
 	public synthetic fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public fun dot (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/structures/Buffer;)Lkscience/kmath/structures/Buffer;
+	public fun getFeature (Lkscience/kmath/nd/Structure2D;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun minus (Lkscience/kmath/nd/Structure2D;Lkscience/kmath/nd/Structure2D;)Lkscience/kmath/nd/Structure2D;
 	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;

@@ -57,8 +57,8 @@ internal object PsiTestUtil {
                 i++
             }
 
-            psiTreeMutable = StringUtil.join(psiLines, "\n")
-            reparsedTreeMutable = StringUtil.join(reparsedLines, "\n")
+            psiTreeMutable = StringUtil.join(*psiLines, "\n")
+            reparsedTreeMutable = StringUtil.join(*reparsedLines, "\n")
             assert(reparsedTreeMutable == psiTreeMutable)
         }
     }
