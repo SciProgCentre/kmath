@@ -15,7 +15,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Install libgsl-dev
-        run: sudo apt install -y libgsl-dev gcc-multilib
+        run: |
+          sudo apt update
+          sudo apt install -y libgsl-dev gcc-multilib
       - name: Install Chrome
         run: |
           sudo apt install -y libappindicator1 fonts-liberation
