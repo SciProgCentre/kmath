@@ -2708,7 +2708,7 @@ public final class kscience/kmath/structures/Buffer$DefaultImpls {
 	public static fun contentEquals (Lkscience/kmath/structures/Buffer;Lkscience/kmath/structures/Buffer;)Z
 }
 
-public final class kscience/kmath/structures/BuffersKt {
+public final class kscience/kmath/structures/BufferKt {
 	public static final fun ListBuffer (ILkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public static final fun asBuffer (Ljava/util/List;)Ljava/util/List;
 	public static final fun asBuffer ([Ljava/lang/Object;)Lkscience/kmath/structures/ArrayBuffer;
