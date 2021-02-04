@@ -2,6 +2,7 @@ package kscience.kmath.histogram
 
 import kscience.kmath.linear.Point
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.operations.SpaceElement
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.asBuffer
 import kscience.kmath.structures.asSequence
@@ -38,9 +39,10 @@ public class UnivariateBin(
 /**
  * Univariate histogram with log(n) bin search speed
  */
-public abstract class UnivariateHistogram(
+@OptIn(UnstableKMathAPI::class)
+public abstract class UnivariateHistogram protected constructor(
     protected val bins: TreeMap<Double, UnivariateBin> = TreeMap(),
-) : Histogram<Double, UnivariateBin> {
+) : Histogram<Double, UnivariateBin>, SpaceElement<UnivariateHistogram, UnivariateHistogramSpace> {
 
     public operator fun get(value: Double): UnivariateBin? {
         // check ceiling entry and return it if it is what needed
@@ -64,10 +66,10 @@ public abstract class UnivariateHistogram(
          * Build a histogram with a uniform binning with a start at [start] and a bin size of [binSize]
          */
         public fun uniformBuilder(binSize: Double, start: Double = 0.0): UnivariateHistogramBuilder =
-            UnivariateHistogramBuilder { value ->
+            UnivariateHistogramSpace { value ->
                 val center = start + binSize * floor((value - start) / binSize + 0.5)
                 UnivariateBin(center, binSize)
-            }
+            }.builder()
 
         /**
          * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
@@ -84,7 +86,7 @@ public abstract class UnivariateHistogram(
         public fun customBuilder(borders: DoubleArray): UnivariateHistogramBuilder {
             val sorted = borders.sortedArray()
 
-            return UnivariateHistogramBuilder { value ->
+            return UnivariateHistogramSpace { value ->
                 when {
                     value < sorted.first() -> UnivariateBin(
                         Double.NEGATIVE_INFINITY,
@@ -103,7 +105,7 @@ public abstract class UnivariateHistogram(
                         UnivariateBin((left + right) / 2, (right - left))
                     }
                 }
-            }
+            }.builder()
         }
 
         /**
@@ -116,11 +118,11 @@ public abstract class UnivariateHistogram(
     }
 }
 
-public class UnivariateHistogramBuilder(
-    private val factory: (Double) -> UnivariateBin,
+public class UnivariateHistogramBuilder internal constructor(
+    override val context: UnivariateHistogramSpace,
 ) : UnivariateHistogram(), MutableHistogram<Double, UnivariateBin> {
 
-    private fun createBin(value: Double): UnivariateBin = factory(value).also {
+    private fun createBin(value: Double): UnivariateBin = context.binFactory(value).also {
         synchronized(this) { bins[it.position] = it }
     }
 
@@ -128,7 +130,7 @@ public class UnivariateHistogramBuilder(
      * Thread safe put operation
      */
     public fun put(value: Double, weight: Double = 1.0) {
-        (get(value) ?: createBin(value)).apply{
+        (get(value) ?: createBin(value)).apply {
             counter.increment()
             weightCounter.add(weight)
         }
@@ -141,8 +143,8 @@ public class UnivariateHistogramBuilder(
     /**
      * Put several items into a single bin
      */
-    public fun putMany(value: Double, count: Int, weight: Double = count.toDouble()){
-        (get(value) ?: createBin(value)).apply{
+    public fun putMany(value: Double, count: Int, weight: Double = count.toDouble()) {
+        (get(value) ?: createBin(value)).apply {
             counter.add(count.toLong())
             weightCounter.add(weight)
         }
