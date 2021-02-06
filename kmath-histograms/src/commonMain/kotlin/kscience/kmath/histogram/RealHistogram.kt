@@ -8,7 +8,7 @@ import kscience.kmath.operations.invoke
 import kscience.kmath.structures.*
 import kotlin.math.floor
 
-public data class BinDefinition<T : Comparable<T>>(
+public data class MultivariateBinDefinition<T : Comparable<T>>(
     public val space: SpaceOperations<Point<T>>,
     public val center: Point<T>,
     public val sizes: Point<T>,
@@ -23,8 +23,9 @@ public data class BinDefinition<T : Comparable<T>>(
 
 
 public class MultivariateBin<T : Comparable<T>>(
-    public val definition: BinDefinition<T>,
-    public override val value: Number,
+    public val definition: MultivariateBinDefinition<T>,
+    public val count: Long,
+    public override val value: Double,
 ) : Bin<T> {
     public override val dimension: Int
         get() = definition.center.size
@@ -56,7 +57,6 @@ public class RealHistogram(
         require(!(0 until dimension).any { upper[it] - lower[it] < 0 }) { "Range for one of axis is not strictly positive" }
     }
 
-
     /**
      * Get internal [NDStructure] bin index for given axis
      */
@@ -68,11 +68,15 @@ public class RealHistogram(
 
     private fun getIndex(point: Buffer<out Double>): IntArray = IntArray(dimension) { getIndex(it, point[it]) }
 
-    private fun getValue(index: IntArray): Long = counts[index].sum()
+    private fun getCount(index: IntArray): Long = counts[index].sum()
 
-    public fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
+    public fun getCount(point: Buffer<out Double>): Long = getCount(getIndex(point))
 
-    private fun getBinDefinition(index: IntArray): BinDefinition<Double> {
+    private fun getValue(index: IntArray): Double = values[index].sum()
+
+    public fun getValue(point: Buffer<out Double>): Double = getValue(getIndex(point))
+
+    private fun getBinDefinition(index: IntArray): MultivariateBinDefinition<Double> {
         val center = index.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
@@ -81,14 +85,14 @@ public class RealHistogram(
             }
         }.asBuffer()
 
-        return BinDefinition(RealBufferFieldOperations, center, binSize)
+        return MultivariateBinDefinition(RealBufferFieldOperations, center, binSize)
     }
 
-    public fun getBinDefinition(point: Buffer<out Double>): BinDefinition<Double> = getBinDefinition(getIndex(point))
+    public fun getBinDefinition(point: Buffer<out Double>): MultivariateBinDefinition<Double> = getBinDefinition(getIndex(point))
 
     public override operator fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
         val index = getIndex(point)
-        return MultivariateBin(getBinDefinition(index), getValue(index))
+        return MultivariateBin(getBinDefinition(index), getCount(index),getValue(index))
     }
 
 //    fun put(point: Point<out Double>){
@@ -103,8 +107,8 @@ public class RealHistogram(
     }
 
     public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
-        values.elements().map { (index, value) ->
-            MultivariateBin(getBinDefinition(index), value.sum())
+        strides.indices().map { index->
+            MultivariateBin(getBinDefinition(index), counts[index].sum(), values[index].sum())
         }.iterator()
 
     /**

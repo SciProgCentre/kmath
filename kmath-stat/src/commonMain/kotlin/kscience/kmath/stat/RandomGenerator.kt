@@ -85,7 +85,7 @@ public interface RandomGenerator {
  *
  * @property random the underlying [Random] object.
  */
-public inline class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
+public class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
     public override fun nextBoolean(): Boolean = random.nextBoolean()
     public override fun nextDouble(): Double = random.nextDouble()
     public override fun nextInt(): Int = random.nextInt()

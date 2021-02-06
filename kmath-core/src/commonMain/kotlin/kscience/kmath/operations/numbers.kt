@@ -53,23 +53,6 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
 }
 
 /**
- * Real field element wrapping double.
- *
- * @property value the [Double] value wrapped by this [Real].
- *
- * TODO inline does not work due to compiler bug. Waiting for fix for KT-27586
- */
-public inline class Real(public val value: Double) : FieldElement<Double, Real, RealField> {
-    public override val context: RealField
-        get() = RealField
-
-    public override fun unwrap(): Double = value
-    public override fun Double.wrap(): Real = Real(value)
-
-    public companion object
-}
-
-/**
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")

@@ -1,11 +1,13 @@
 package kscience.kmath.geometry
 
 import kscience.kmath.linear.Point
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.SpaceElement
 import kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
-public interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector3D, Euclidean3DSpace> {
+@OptIn(UnstableKMathAPI::class)
+public interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Euclidean3DSpace> {
     public val x: Double
     public val y: Double
     public val z: Double
@@ -20,8 +22,6 @@ public interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Vector
     }
 
     public override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
-    public override fun unwrap(): Vector3D = this
-    public override fun Vector3D.wrap(): Vector3D = this
 }
 
 @Suppress("FunctionName")

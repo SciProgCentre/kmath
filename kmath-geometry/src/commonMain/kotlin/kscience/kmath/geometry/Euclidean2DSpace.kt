@@ -1,11 +1,13 @@
 package kscience.kmath.geometry
 
 import kscience.kmath.linear.Point
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.operations.SpaceElement
 import kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
-public interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Vector2D, Euclidean2DSpace> {
+@OptIn(UnstableKMathAPI::class)
+public interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Euclidean2DSpace> {
     public val x: Double
     public val y: Double
     public override val context: Euclidean2DSpace get() = Euclidean2DSpace
@@ -18,8 +20,6 @@ public interface Vector2D : Point<Double>, Vector, SpaceElement<Vector2D, Vector
     }
 
     public override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
-    public override fun unwrap(): Vector2D = this
-    public override fun Vector2D.wrap(): Vector2D = this
 }
 
 public val Vector2D.r: Double
