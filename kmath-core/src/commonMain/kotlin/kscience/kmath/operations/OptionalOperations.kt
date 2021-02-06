@@ -1,5 +1,7 @@
 package kscience.kmath.operations
 
+import kscience.kmath.misc.UnstableKMathAPI
+
 /**
  * A container for trigonometric operations for specific type.
  *
@@ -72,32 +74,38 @@ public interface TrigonometricOperations<T> : Algebra<T> {
 /**
  * Computes the sine of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
 
 /**
  * Computes the cosine of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
 
 /**
  * Computes the tangent of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> tan(arg: T): T = arg.context.tan(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> tan(arg: T): T = arg.context.tan(arg)
 
 /**
  * Computes the inverse sine of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> asin(arg: T): T = arg.context.asin(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> asin(arg: T): T = arg.context.asin(arg)
 
 /**
  * Computes the inverse cosine of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> acos(arg: T): T = arg.context.acos(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> acos(arg: T): T = arg.context.acos(arg)
 
 /**
  * Computes the inverse tangent of [arg].
  */
-public fun <T : MathElement<out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
 
 /**
  * A container for hyperbolic trigonometric operations for specific type.
@@ -171,32 +179,38 @@ public interface HyperbolicOperations<T> : Algebra<T> {
 /**
  * Computes the hyperbolic sine of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
 
 /**
  * Computes the hyperbolic cosine of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
 
 /**
  * Computes the hyperbolic tangent of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
 
 /**
  * Computes the inverse hyperbolic sine of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
 
 /**
  * Computes the inverse hyperbolic cosine of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
 
 /**
  * Computes the inverse hyperbolic tangent of [arg].
  */
-public fun <T : MathElement<out HyperbolicOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
 
 /**
  * A context extension to include power operations based on exponentiation.
@@ -239,17 +253,20 @@ public interface PowerOperations<T> : Algebra<T> {
  * @param power the exponent.
  * @return the base raised to the power.
  */
-public infix fun <T : MathElement<out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
+@UnstableKMathAPI
+public infix fun <T : AlgebraElement<T, out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
 
 /**
  * Computes the square root of the value [arg].
  */
-public fun <T : MathElement<out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
 
 /**
  * Computes the square of the value [arg].
  */
-public fun <T : MathElement<out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /**
  * A container for operations related to `exp` and `ln` functions.
@@ -283,12 +300,14 @@ public interface ExponentialOperations<T> : Algebra<T> {
 /**
  * The identifier of exponential function.
  */
-public fun <T : MathElement<out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
 
 /**
  * The identifier of natural logarithm.
  */
-public fun <T : MathElement<out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
 
 /**
  * A container for norm functional on element.
@@ -306,4 +325,5 @@ public interface Norm<in T : Any, out R> {
 /**
  * Computes the norm of [arg] (i.e. absolute value or vector length).
  */
-public fun <T : MathElement<out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)

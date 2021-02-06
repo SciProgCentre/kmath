@@ -94,21 +94,21 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
     }
 
     public override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg * arg)) + i * arg)
-    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
+    public override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
 
-    override fun atan(arg: Complex): Complex {
+    public override fun atan(arg: Complex): Complex {
         val iArg = i * arg
         return i * (ln(1 - iArg) - ln(1 + iArg)) / 2
     }
 
-    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
+    public override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
         arg.re.pow(pow.toDouble()).toComplex()
     else
         exp(pow * ln(arg))
 
-    override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
+    public override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
 
-    override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
+    public override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
     /**
      * Adds complex number to real one.
@@ -155,9 +155,9 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
      */
     public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
-    override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
+    public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
-    override fun symbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.symbol(value)
+    public override fun symbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.symbol(value)
 }
 
 /**
@@ -166,7 +166,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
  * @property re The real part.
  * @property im The imaginary part.
  */
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField> {
+public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)
 
@@ -177,12 +177,12 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
     public override fun toString(): String = "($re + i*$im)"
 
     public companion object : MemorySpec<Complex> {
-        override val objectSize: Int
+        public override val objectSize: Int
             get() = 16
 
-        override fun MemoryReader.read(offset: Int): Complex = Complex(readDouble(offset), readDouble(offset + 8))
+        public override fun MemoryReader.read(offset: Int): Complex = Complex(readDouble(offset), readDouble(offset + 8))
 
-        override fun MemoryWriter.write(offset: Int, value: Complex) {
+        public override fun MemoryWriter.write(offset: Int, value: Complex) {
             writeDouble(offset, value.re)
             writeDouble(offset + 8, value.im)
         }

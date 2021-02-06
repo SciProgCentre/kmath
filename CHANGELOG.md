@@ -40,6 +40,7 @@
 - Refactored `NDStructure` algebra to be more simple, preferring under-the-hood conversion to explicit NDStructure types
 - Refactor histograms. They are marked as prototype
 - `Complex` and related features moved to a separate module `kmath-complex`
+- Refactor AlgebraElement
 
 ### Deprecated
 
@@ -48,6 +49,7 @@
 - Support of `legacy` JS backend (we will support only IR)
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
+- `Real` class
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
