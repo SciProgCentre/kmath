@@ -488,13 +488,7 @@ public final class kscience/kmath/expressions/StringSymbol : kscience/kmath/expr
 }
 
 public abstract interface class kscience/kmath/expressions/Symbol {
-	public static final field Companion Lkscience/kmath/expressions/Symbol$Companion;
 	public abstract fun getIdentity ()Ljava/lang/String;
-}
-
-public final class kscience/kmath/expressions/Symbol$Companion : kotlin/properties/ReadOnlyProperty {
-	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
-	public fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Lkscience/kmath/expressions/Symbol;
 }
 
 public abstract interface class kscience/kmath/expressions/SymbolIndexer {

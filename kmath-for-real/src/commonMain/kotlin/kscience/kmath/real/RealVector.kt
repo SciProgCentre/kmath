@@ -29,8 +29,10 @@ public inline fun RealVector.map(transform: (Double) -> Double): RealVector =
 public inline fun RealVector.mapIndexed(transform: (index: Int, value: Double) -> Double): RealVector =
     Buffer.real(size) { transform(it, get(it)) }
 
-public operator fun RealVector.plus(other: RealVector): RealVector =
-    mapIndexed { index, value -> value + other[index] }
+public operator fun RealVector.plus(other: RealVector): RealVector {
+    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    return mapIndexed { index, value -> value + other[index] }
+}
 
 public operator fun RealVector.plus(number: Number): RealVector = map { it + number.toDouble() }
 
@@ -38,22 +40,28 @@ public operator fun Number.plus(vector: RealVector): RealVector = vector + this
 
 public operator fun RealVector.unaryMinus(): Buffer<Double> = map { -it }
 
-public operator fun RealVector.minus(other: RealVector): RealVector =
-    mapIndexed { index, value -> value - other[index] }
+public operator fun RealVector.minus(other: RealVector): RealVector {
+    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    return mapIndexed { index, value -> value - other[index] }
+}
 
 public operator fun RealVector.minus(number: Number): RealVector = map { it - number.toDouble() }
 
 public operator fun Number.minus(vector: RealVector): RealVector = vector.map { toDouble() - it }
 
-public operator fun RealVector.times(other: RealVector): RealVector =
-    mapIndexed { index, value -> value * other[index] }
+public operator fun RealVector.times(other: RealVector): RealVector {
+    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    return mapIndexed { index, value -> value * other[index] }
+}
 
 public operator fun RealVector.times(number: Number): RealVector = map { it * number.toDouble() }
 
 public operator fun Number.times(vector: RealVector): RealVector = vector * this
 
-public operator fun RealVector.div(other: RealVector): RealVector =
-    mapIndexed { index, value -> value / other[index] }
+public operator fun RealVector.div(other: RealVector): RealVector {
+    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    return mapIndexed { index, value -> value / other[index] }
+}
 
 public operator fun RealVector.div(number: Number): RealVector = map { it / number.toDouble() }
 
