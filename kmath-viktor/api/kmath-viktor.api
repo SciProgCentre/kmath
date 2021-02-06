@@ -93,7 +93,6 @@ public final class kscience/kmath/viktor/ViktorNDField : kscience/kmath/nd/NDFie
 	public fun minus (Lkscience/kmath/nd/NDStructure;D)Lkscience/kmath/nd/NDStructure;
 	public fun minus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
 	public synthetic fun minus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
-	public synthetic fun minus (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
 	public fun minus-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
 	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -110,7 +109,6 @@ public final class kscience/kmath/viktor/ViktorNDField : kscience/kmath/nd/NDFie
 	public synthetic fun plus (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
 	public fun plus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
 	public synthetic fun plus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
-	public synthetic fun plus (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
 	public fun plus-frQ_39w (Lkscience/kmath/nd/NDStructure;D)Lorg/jetbrains/bio/viktor/F64Array;
 	public fun plus-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun pow (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
@@ -141,7 +139,6 @@ public final class kscience/kmath/viktor/ViktorNDField : kscience/kmath/nd/NDFie
 	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public synthetic fun times (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
 	public fun times (Lkscience/kmath/nd/NDStructure;D)Lkscience/kmath/nd/NDStructure;
-	public synthetic fun times (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
 	public synthetic fun times (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
 	public fun times (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
 	public fun times-frQ_39w (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lorg/jetbrains/bio/viktor/F64Array;

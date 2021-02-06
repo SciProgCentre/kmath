@@ -162,7 +162,7 @@ public interface SpaceOperations<T> : Algebra<T> {
      * @param k the multiplicand.
      * @return the product.
      */
-    public operator fun T.times(k: Number): T = multiply(this, k.toDouble())
+    public operator fun T.times(k: Number): T = multiply(this, k)
 
     /**
      * Division of this element by scalar.

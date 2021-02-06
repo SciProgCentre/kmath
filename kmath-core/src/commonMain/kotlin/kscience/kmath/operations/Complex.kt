@@ -167,15 +167,14 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
  * @property re The real part.
  * @property im The imaginary part.
  */
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, Complex, ComplexField>,
-    Comparable<Complex> {
+@OptIn(UnstableKMathAPI::class)
+public data class Complex(
+    val re: Double,
+    val im: Double,
+) : FieldElement<Complex, ComplexField>, Comparable<Complex> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
 
     override val context: ComplexField get() = ComplexField
-
-    override fun unwrap(): Complex = this
-
-    override fun Complex.wrap(): Complex = this
 
     override fun compareTo(other: Complex): Int = r.compareTo(other.r)
 
