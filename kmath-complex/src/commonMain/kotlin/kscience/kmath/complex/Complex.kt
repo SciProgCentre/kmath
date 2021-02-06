@@ -172,8 +172,6 @@ public data class Complex(val re: Double, val im: Double) : FieldElement<Complex
 
     public override val context: ComplexField get() = ComplexField
 
-    public override fun unwrap(): Complex = this
-    public override fun Complex.wrap(): Complex = this
     public override fun toString(): String = "($re + i*$im)"
 
     public companion object : MemorySpec<Complex> {

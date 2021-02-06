@@ -182,12 +182,12 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
  * @property z The fourth component.
  */
 public data class Quaternion(val w: Double, val x: Double, val y: Double, val z: Double) :
-    FieldElement<Quaternion, Quaternion, QuaternionField> {
+    FieldElement<Quaternion, QuaternionField> {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),
         y.toDouble(),
-        z.toDouble()
+        z.toDouble(),
     )
 
     public constructor(w: Number, x: Number, y: Number) : this(w.toDouble(), x.toDouble(), y.toDouble(), 0.0)
@@ -205,14 +205,6 @@ public data class Quaternion(val w: Double, val x: Double, val y: Double, val z:
 
     public override val context: QuaternionField
         get() = QuaternionField
-
-    public override fun div(k: Number): Quaternion {
-        val d = k.toDouble()
-        return Quaternion(w / d, x / d, y / d, z / d)
-    }
-
-    public override fun unwrap(): Quaternion = this
-    public override fun Quaternion.wrap(): Quaternion = this
 
     /**
      * Returns a string representation of this quaternion.
