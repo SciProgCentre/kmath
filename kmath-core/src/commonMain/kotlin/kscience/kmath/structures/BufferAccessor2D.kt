@@ -1,5 +1,10 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.DefaultStrides
+import kscience.kmath.nd.NDStructure
+import kscience.kmath.nd.Structure2D
+import kscience.kmath.nd.as2D
+
 /**
  * A context that allows to operate on a [MutableBuffer] as on 2d array
  */

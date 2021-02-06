@@ -68,11 +68,12 @@ benchmark {
     targets.register("benchmarks")
     // This one matches sourceSet name above
 
-    configurations.register("fast") {
+    configurations.register("dot") {
         warmups = 1 // number of warmup iterations
         iterations = 3 // number of iterations
         iterationTime = 500 // time in seconds per iteration
         iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
+        include("DotBenchmark")
     }
 }
 
@@ -85,4 +86,8 @@ kotlin.sourceSets.all {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+}
+
+readme{
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

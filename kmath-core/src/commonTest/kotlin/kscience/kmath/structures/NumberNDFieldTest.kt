@@ -1,8 +1,8 @@
 package kscience.kmath.structures
 
+import kscience.kmath.nd.*
 import kscience.kmath.operations.Norm
 import kscience.kmath.operations.invoke
-import kscience.kmath.structures.NDElement.Companion.real2D
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.Test
@@ -10,25 +10,30 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val array1: RealNDElement = real2D(3, 3) { i, j -> (i + j).toDouble() }
-    val array2: RealNDElement = real2D(3, 3) { i, j -> (i - j).toDouble() }
+    val algebra = NDAlgebra.real(3,3)
+    val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
+    val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 
     @Test
     fun testSum() {
-        val sum = array1 + array2
-        assertEquals(4.0, sum[2, 2])
+        algebra {
+            val sum = array1 + array2
+            assertEquals(4.0, sum[2, 2])
+        }
     }
 
     @Test
     fun testProduct() {
-        val product = array1 * array2
-        assertEquals(0.0, product[2, 2])
+        algebra {
+            val product = array1 * array2
+            assertEquals(0.0, product[2, 2])
+        }
     }
 
     @Test
     fun testGeneration() {
 
-        val array = real2D(3, 3) { i, j -> (i * 10 + j).toDouble() }
+        val array = Structure2D.real(3, 3) { i, j -> (i * 10 + j).toDouble() }
 
         for (i in 0..2)
             for (j in 0..2) {
@@ -39,16 +44,20 @@ class NumberNDFieldTest {
 
     @Test
     fun testExternalFunction() {
-        val function: (Double) -> Double = { x -> x.pow(2) + 2 * x + 1 }
-        val result = function(array1) + 1.0
-        assertEquals(10.0, result[1, 1])
+        algebra {
+            val function: (Double) -> Double = { x -> x.pow(2) + 2 * x + 1 }
+            val result = function(array1) + 1.0
+            assertEquals(10.0, result[1, 1])
+        }
     }
 
     @Test
     fun testLibraryFunction() {
-        val abs: (Double) -> Double = ::abs
-        val result = abs(array2)
-        assertEquals(2.0, result[0, 2])
+        algebra {
+            val abs: (Double) -> Double = ::abs
+            val result = abs(array2)
+            assertEquals(2.0, result[0, 2])
+        }
     }
 
     @Test
@@ -63,6 +72,8 @@ class NumberNDFieldTest {
 
     @Test
     fun testInternalContext() {
-        (NDField.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+        algebra {
+            (NDAlgebra.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+        }
     }
 }

@@ -1,9 +1,12 @@
 package kscience.kmath.operations
 
 import kscience.kmath.misc.UnstableKMathAPI
+import kscience.kmath.nd.BufferedNDRing
+import kscience.kmath.nd.NDAlgebra
 import kscience.kmath.operations.BigInt.Companion.BASE
 import kscience.kmath.operations.BigInt.Companion.BASE_SIZE
-import kscience.kmath.structures.*
+import kscience.kmath.structures.Buffer
+import kscience.kmath.structures.MutableBuffer
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
@@ -463,10 +466,5 @@ public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigIn
 public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
     boxing(size, initializer)
 
-public fun NDAlgebra.Companion.bigInt(vararg shape: Int): BoxingNDRing<BigInt, BigIntField> =
-    BoxingNDRing(shape, BigIntField, Buffer.Companion::bigInt)
-
-public fun NDElement.Companion.bigInt(
-    vararg shape: Int,
-    initializer: BigIntField.(IntArray) -> BigInt
-): BufferedNDRingElement<BigInt, BigIntField> = NDAlgebra.bigInt(*shape).produce(initializer)
+public fun NDAlgebra.Companion.bigInt(vararg shape: Int): BufferedNDRing<BigInt, BigIntField> =
+    BufferedNDRing(shape, BigIntField, Buffer.Companion::bigInt)

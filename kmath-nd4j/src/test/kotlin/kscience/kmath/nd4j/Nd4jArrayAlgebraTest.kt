@@ -1,7 +1,7 @@
 package kscience.kmath.nd4j
 
-import org.nd4j.linalg.factory.Nd4j
 import kscience.kmath.operations.invoke
+import org.nd4j.linalg.factory.Nd4j
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -20,7 +20,7 @@ internal class Nd4jArrayAlgebraTest {
 
     @Test
     fun testMap() {
-        val res = (IntNd4jArrayRing(intArrayOf(2, 2))) { map(one) { it + it * 2 } }
+        val res = (IntNd4jArrayRing(intArrayOf(2, 2))) { one.map() { it + it * 2 } }
         val expected = (Nd4j.create(2, 2) ?: fail()).asIntStructure()
         expected[intArrayOf(0, 0)] = 3
         expected[intArrayOf(0, 1)] = 3

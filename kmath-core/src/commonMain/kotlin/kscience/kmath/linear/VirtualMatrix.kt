@@ -1,7 +1,5 @@
 package kscience.kmath.linear
 
-import kscience.kmath.structures.Matrix
-
 public class VirtualMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,

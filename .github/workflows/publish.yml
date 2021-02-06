@@ -1,6 +1,9 @@
-name: Gradle build
+name: Bintray Publish
 
-on: [ push ]
+on:
+  release:
+    types:
+      - created
 
 jobs:
   build-ubuntu:
@@ -12,6 +15,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Install Chrome
         run: |
           sudo apt install -y libappindicator1 fonts-liberation
@@ -37,6 +42,8 @@ jobs:
           restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: ./gradlew -Dorg.gradle.daemon=false --build-cache build
+      - name: Run release task
+        run: ./gradlew release -PbintrayUser=${{ secrets.BINTRAY_USER }} -PbintrayApiKey=${{ secrets.BINTRAY_KEY }}
 
   build-osx:
     runs-on: macos-latest
@@ -47,6 +54,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Cache gradle
         uses: actions/cache@v2
         with:
@@ -67,6 +76,8 @@ jobs:
           restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: sudo ./gradlew -Dorg.gradle.daemon=false --build-cache build
+      - name: Run release task
+        run: ./gradlew release -PbintrayUser=${{ secrets.BINTRAY_USER }} -PbintrayApiKey=${{ secrets.BINTRAY_KEY }}
 
   build-windows:
     runs-on: windows-latest
@@ -77,6 +88,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Add msys to path
         run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
@@ -99,3 +112,6 @@ jobs:
           restore-keys: ${{ runner.os }}-konan
       - name: Build with Gradle
         run: ./gradlew --build-cache build
+      - name: Run release task
+        run: ./gradlew release -PbintrayUser=${{ secrets.BINTRAY_USER }} -PbintrayApiKey=${{ secrets.BINTRAY_KEY }}
+
