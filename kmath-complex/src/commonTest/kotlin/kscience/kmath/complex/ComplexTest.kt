@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 
 internal class ComplexTest {
     @Test
-    fun conjugate() = ComplexField { assertEquals(i * 42, (i * -42).conjugate) }
+    fun conjugate() = ComplexField { assertEquals(Complex(0, 42), Complex(0, -42).conjugate) }
 
     @Test
     fun reciprocal() = ComplexField { assertTrue((Complex(0.5, -0.0) - 2.toComplex().reciprocal).r < 1e-10) }
