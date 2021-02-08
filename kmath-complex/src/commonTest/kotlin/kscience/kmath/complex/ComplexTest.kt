@@ -1,14 +1,14 @@
 package kscience.kmath.complex
 
+import kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kscience.kmath.operations.invoke
 
 internal class ComplexTest {
     @Test
-    fun conjugate() = ComplexField { assertEquals(i * -42, (i * 42).conjugate) }
+    fun conjugate() = ComplexField { assertEquals(i * 42, (i * -42).conjugate) }
 
     @Test
     fun reciprocal() = ComplexField { assertTrue((Complex(0.5, -0.0) - 2.toComplex().reciprocal).r < 1e-10) }
