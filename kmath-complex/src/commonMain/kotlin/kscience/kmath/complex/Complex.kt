@@ -46,8 +46,8 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
  * A field of [Complex].
  */
 public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
-    public override val zero: Complex by lazy { 0.0.toComplex() }
-    public override val one: Complex by lazy { 1.0.toComplex() }
+    public override val zero: Complex = 0.0.toComplex()
+    public override val one: Complex = 1.0.toComplex()
 
     /**
      * The imaginary unit.

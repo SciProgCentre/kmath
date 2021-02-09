@@ -36,23 +36,23 @@ public val Quaternion.r: Double
  */
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
     ExponentialOperations<Quaternion>, RingWithNumbers<Quaternion> {
-    override val zero: Quaternion by lazy { 0.toQuaternion() }
-    override val one: Quaternion by lazy { 1.toQuaternion() }
+    override val zero: Quaternion = 0.toQuaternion()
+    override val one: Quaternion = 1.toQuaternion()
 
     /**
      * The `i` quaternion unit.
      */
-    public val i: Quaternion by lazy { Quaternion(0, 1) }
+    public val i: Quaternion = Quaternion(0, 1)
 
     /**
      * The `j` quaternion unit.
      */
-    public val j: Quaternion by lazy { Quaternion(0, 0, 1) }
+    public val j: Quaternion = Quaternion(0, 0, 1)
 
     /**
      * The `k` quaternion unit.
      */
-    public val k: Quaternion by lazy { Quaternion(0, 0, 0, 1) }
+    public val k: Quaternion = Quaternion(0, 0, 0, 1)
 
     public override fun add(a: Quaternion, b: Quaternion): Quaternion =
         Quaternion(a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z)

@@ -11,12 +11,6 @@ kotlin.sourceSets {
             api(project(":kmath-memory"))
         }
     }
-
-    commonTest {
-        dependencies {
-            api(project(":kmath-complex"))
-        }
-    }
 }
 
 readme {
