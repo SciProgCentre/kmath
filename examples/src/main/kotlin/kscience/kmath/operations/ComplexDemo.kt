@@ -12,7 +12,7 @@ fun main() {
     println(element)
 
     // 1d element operation
-    val result = (NDAlgebra.complex(8)) {
+    val result = with(NDAlgebra.complex(8)) {
         val a = produce { (it) -> i * it - it.toDouble() }
         val b = 3
         val c = Complex(1.0, 1.0)
