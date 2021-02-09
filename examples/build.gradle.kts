@@ -87,3 +87,7 @@ kotlin.sourceSets.all {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
+
+readme{
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+}

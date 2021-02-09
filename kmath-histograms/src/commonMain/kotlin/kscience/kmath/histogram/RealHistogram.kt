@@ -8,10 +8,10 @@ import kscience.kmath.operations.invoke
 import kscience.kmath.structures.*
 import kotlin.math.floor
 
-public data class BinDef<T : Comparable<T>>(
+public data class MultivariateBinDefinition<T : Comparable<T>>(
     public val space: SpaceOperations<Point<T>>,
     public val center: Point<T>,
-    public val sizes: Point<T>
+    public val sizes: Point<T>,
 ) {
     public fun contains(vector: Point<out T>): Boolean {
         require(vector.size == center.size) { "Dimension mismatch for input vector. Expected ${center.size}, but found ${vector.size}" }
@@ -22,14 +22,18 @@ public data class BinDef<T : Comparable<T>>(
 }
 
 
-public class MultivariateBin<T : Comparable<T>>(public val def: BinDef<T>, public override val value: Number) : Bin<T> {
+public class MultivariateBin<T : Comparable<T>>(
+    public val definition: MultivariateBinDefinition<T>,
+    public val count: Long,
+    public override val value: Double,
+) : Bin<T> {
     public override val dimension: Int
-        get() = def.center.size
+        get() = definition.center.size
 
     public override val center: Point<T>
-        get() = def.center
+        get() = definition.center
 
-    public override operator fun contains(point: Point<T>): Boolean = def.contains(point)
+    public override operator fun contains(point: Point<T>): Boolean = definition.contains(point)
 }
 
 /**
@@ -38,11 +42,11 @@ public class MultivariateBin<T : Comparable<T>>(public val def: BinDef<T>, publi
 public class RealHistogram(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
-    private val binNums: IntArray = IntArray(lower.size) { 20 }
+    private val binNums: IntArray = IntArray(lower.size) { 20 },
 ) : MutableHistogram<Double, MultivariateBin<Double>> {
     private val strides = DefaultStrides(IntArray(binNums.size) { binNums[it] + 2 })
-    private val values: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
-    private val weights: NDStructure<DoubleCounter> = NDStructure.auto(strides) { DoubleCounter() }
+    private val counts: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
+    private val values: NDStructure<DoubleCounter> = NDStructure.auto(strides) { DoubleCounter() }
     public override val dimension: Int get() = lower.size
     private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
@@ -52,7 +56,6 @@ public class RealHistogram(
         require(lower.size == binNums.size) { "Dimension mismatch in bin count." }
         require(!(0 until dimension).any { upper[it] - lower[it] < 0 }) { "Range for one of axis is not strictly positive" }
     }
-
 
     /**
      * Get internal [NDStructure] bin index for given axis
@@ -65,11 +68,15 @@ public class RealHistogram(
 
     private fun getIndex(point: Buffer<out Double>): IntArray = IntArray(dimension) { getIndex(it, point[it]) }
 
-    private fun getValue(index: IntArray): Long = values[index].sum()
+    private fun getCount(index: IntArray): Long = counts[index].sum()
 
-    public fun getValue(point: Buffer<out Double>): Long = getValue(getIndex(point))
+    public fun getCount(point: Buffer<out Double>): Long = getCount(getIndex(point))
 
-    private fun getDef(index: IntArray): BinDef<Double> {
+    private fun getValue(index: IntArray): Double = values[index].sum()
+
+    public fun getValue(point: Buffer<out Double>): Double = getValue(getIndex(point))
+
+    private fun getBinDefinition(index: IntArray): MultivariateBinDefinition<Double> {
         val center = index.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
@@ -78,14 +85,14 @@ public class RealHistogram(
             }
         }.asBuffer()
 
-        return BinDef(RealBufferFieldOperations, center, binSize)
+        return MultivariateBinDefinition(RealBufferFieldOperations, center, binSize)
     }
 
-    public fun getDef(point: Buffer<out Double>): BinDef<Double> = getDef(getIndex(point))
+    public fun getBinDefinition(point: Buffer<out Double>): MultivariateBinDefinition<Double> = getBinDefinition(getIndex(point))
 
     public override operator fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
         val index = getIndex(point)
-        return MultivariateBin(getDef(index), getValue(index))
+        return MultivariateBin(getBinDefinition(index), getCount(index),getValue(index))
     }
 
 //    fun put(point: Point<out Double>){
@@ -95,23 +102,24 @@ public class RealHistogram(
 
     public override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
         val index = getIndex(point)
-        values[index].increment()
-        weights[index].add(weight)
+        counts[index].increment()
+        values[index].add(weight)
     }
 
     public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
-        weights.elements().map { (index, value) -> MultivariateBin(getDef(index), value.sum()) }
-            .iterator()
+        strides.indices().map { index->
+            MultivariateBin(getBinDefinition(index), counts[index].sum(), values[index].sum())
+        }.iterator()
 
     /**
-     * Convert this histogram into NDStructure containing bin values but not bin descriptions
+     * NDStructure containing number of events in bins without weights
      */
-    public fun values(): NDStructure<Number> = NDStructure.auto(values.shape) { values[it].sum() }
+    public fun counts(): NDStructure<Long> = NDStructure.auto(counts.shape) { counts[it].sum() }
 
     /**
-     * Sum of weights
+     * NDStructure containing values of bins including weights
      */
-    public fun weights(): NDStructure<Double> = NDStructure.auto(weights.shape) { weights[it].sum() }
+    public fun values(): NDStructure<Double> = NDStructure.auto(values.shape) { values[it].sum() }
 
     public companion object {
         /**

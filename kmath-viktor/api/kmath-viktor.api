@@ -1,0 +1,186 @@
+public final class kscience/kmath/viktor/ViktorBuffer : kscience/kmath/structures/MutableBuffer {
+	public static final synthetic fun box-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lkscience/kmath/viktor/ViktorBuffer;
+	public static fun constructor-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lorg/jetbrains/bio/viktor/F64FlatArray;
+	public fun contentEquals (Lkscience/kmath/structures/Buffer;)Z
+	public static fun contentEquals-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;Lkscience/kmath/structures/Buffer;)Z
+	public fun copy ()Lkscience/kmath/structures/MutableBuffer;
+	public static fun copy-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lkscience/kmath/structures/MutableBuffer;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lorg/jetbrains/bio/viktor/F64FlatArray;Lorg/jetbrains/bio/viktor/F64FlatArray;)Z
+	public fun get (I)Ljava/lang/Double;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public static fun get-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;I)Ljava/lang/Double;
+	public final fun getFlatArray ()Lorg/jetbrains/bio/viktor/F64FlatArray;
+	public fun getSize ()I
+	public static fun getSize-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)I
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)I
+	public fun iterator ()Ljava/util/Iterator;
+	public static fun iterator-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Ljava/util/Iterator;
+	public fun set (ID)V
+	public synthetic fun set (ILjava/lang/Object;)V
+	public static fun set-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;ID)V
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lorg/jetbrains/bio/viktor/F64FlatArray;
+}
+
+public final class kscience/kmath/viktor/ViktorNDField : kscience/kmath/nd/NDField, kscience/kmath/operations/ExtendedField, kscience/kmath/operations/RingWithNumbers {
+	public fun <init> ([I)V
+	public synthetic fun acos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acos-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acosh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun add (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun add-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun asin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asin-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asinh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun atan (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atan-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atanh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun combine (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function3;)Lkscience/kmath/nd/NDStructure;
+	public fun combine-C8Lp-Ak (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function3;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cos-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cosh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun div (DLkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun div (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun div (Ljava/lang/Number;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun div (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun div (Lkscience/kmath/nd/NDStructure;D)Lkscience/kmath/nd/NDStructure;
+	public fun div (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun div (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
+	public fun div (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun divide (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun exp-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun getElementContext ()Ljava/lang/Object;
+	public fun getElementContext ()Lkscience/kmath/operations/RealField;
+	public final fun getF64Buffer (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne-hHuhEO0 ()Lorg/jetbrains/bio/viktor/F64Array;
+	public fun getShape ()[I
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public fun getZero-hHuhEO0 ()Lorg/jetbrains/bio/viktor/F64Array;
+	public fun invoke (Lkotlin/jvm/functions/Function1;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun ln-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun map (Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function2;)Lkscience/kmath/nd/NDStructure;
+	public fun map-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun mapIndexed (Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function3;)Lkscience/kmath/nd/NDStructure;
+	public fun mapIndexed-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkotlin/jvm/functions/Function3;)Lorg/jetbrains/bio/viktor/F64Array;
+	public fun minus (DLkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun minus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Ljava/lang/Number;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun minus (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun minus (Lkscience/kmath/nd/NDStructure;D)Lkscience/kmath/nd/NDStructure;
+	public fun minus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun minus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
+	public fun minus-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun multiply (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public fun multiply (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun multiply-frQ_39w (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number-02gLDOA (Ljava/lang/Number;)Lorg/jetbrains/bio/viktor/F64Array;
+	public fun plus (DLkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun plus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Ljava/lang/Number;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun plus (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun plus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun plus (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
+	public fun plus-frQ_39w (Lkscience/kmath/nd/NDStructure;D)Lorg/jetbrains/bio/viktor/F64Array;
+	public fun plus-frQ_39w (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun pow (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun pow (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power-frQ_39w (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun produce (Lkotlin/jvm/functions/Function2;)Lkscience/kmath/nd/NDStructure;
+	public fun produce-02gLDOA (Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lkscience/kmath/nd/NDStructure;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sin-02gLDOA (Lkscience/kmath/nd/NDStructure;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sinh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sqrt (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun symbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun symbol (Ljava/lang/String;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun tan (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun tanh (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun times (DLkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun times (Lkscience/kmath/nd/NDStructure;D)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun times (Lkscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lkscience/kmath/nd/NDStructure;
+	public fun times (Lkscience/kmath/nd/NDStructure;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun times-frQ_39w (Lkscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lorg/jetbrains/bio/viktor/F64Array;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryPlus (Lkscience/kmath/nd/NDStructure;)Lkscience/kmath/nd/NDStructure;
+}
+
+public final class kscience/kmath/viktor/ViktorNDStructure : kscience/kmath/nd/MutableNDStructure {
+	public static final synthetic fun box-impl (Lorg/jetbrains/bio/viktor/F64Array;)Lkscience/kmath/viktor/ViktorNDStructure;
+	public static fun constructor-impl (Lorg/jetbrains/bio/viktor/F64Array;)Lorg/jetbrains/bio/viktor/F64Array;
+	public fun elements ()Lkotlin/sequences/Sequence;
+	public static fun elements-impl (Lorg/jetbrains/bio/viktor/F64Array;)Lkotlin/sequences/Sequence;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lorg/jetbrains/bio/viktor/F64Array;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lorg/jetbrains/bio/viktor/F64Array;Lorg/jetbrains/bio/viktor/F64Array;)Z
+	public fun get ([I)Ljava/lang/Double;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public static fun get-impl (Lorg/jetbrains/bio/viktor/F64Array;[I)Ljava/lang/Double;
+	public fun getDimension ()I
+	public static fun getDimension-impl (Lorg/jetbrains/bio/viktor/F64Array;)I
+	public final fun getF64Buffer ()Lorg/jetbrains/bio/viktor/F64Array;
+	public fun getFeature (Lkotlin/reflect/KClass;)Ljava/lang/Object;
+	public static fun getFeature-impl (Lorg/jetbrains/bio/viktor/F64Array;Lkotlin/reflect/KClass;)Ljava/lang/Object;
+	public fun getShape ()[I
+	public static fun getShape-impl (Lorg/jetbrains/bio/viktor/F64Array;)[I
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lorg/jetbrains/bio/viktor/F64Array;)I
+	public fun set ([ID)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+	public static fun set-impl (Lorg/jetbrains/bio/viktor/F64Array;[ID)V
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lorg/jetbrains/bio/viktor/F64Array;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lorg/jetbrains/bio/viktor/F64Array;
+}
+
+public final class kscience/kmath/viktor/ViktorNDStructureKt {
+	public static final fun ViktorNDField ([I)Lkscience/kmath/viktor/ViktorNDField;
+	public static final fun asStructure (Lorg/jetbrains/bio/viktor/F64Array;)Lorg/jetbrains/bio/viktor/F64Array;
+}
+
