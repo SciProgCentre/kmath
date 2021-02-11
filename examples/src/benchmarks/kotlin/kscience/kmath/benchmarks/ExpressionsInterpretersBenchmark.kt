@@ -1,6 +1,8 @@
-package kscience.kmath.ast
+package kscience.kmath.benchmarks
 
 import kscience.kmath.asm.compile
+import kscience.kmath.ast.MstField
+import kscience.kmath.ast.mstInField
 import kscience.kmath.expressions.Expression
 import kscience.kmath.expressions.expressionInField
 import kscience.kmath.expressions.invoke
@@ -37,7 +39,7 @@ internal class ExpressionsInterpretersBenchmark {
     @Benchmark
     fun asmExpression() {
         val expr = algebra.mstInField {
-            symbol("x") * 2.0 + 2.0 / symbol("x") - 16.0
+            MstField.symbol("x") * 2.0 + 2.0 / MstField.symbol("x") - 16.0
         }.compile()
 
         invokeAndSum(expr)
