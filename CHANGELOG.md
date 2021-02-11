@@ -18,6 +18,7 @@
 - Some minor utilities to `kmath-for-real`
 - Generic operation result parameter to `MatrixContext`
 - New `MatrixFeature` interfaces for matrix decompositions
+- Basic Quaternion vector support in `kmath-complex`.
 - Integration with GNU Scientific Library with `kmath-gsl` for Kotlin/Native Linux x64 target.
 
 ### Changed
@@ -39,6 +40,7 @@
 - Capitalization of LUP in many names changed to Lup.
 - Refactored `NDStructure` algebra to be more simple, preferring under-the-hood conversion to explicit NDStructure types
 - Refactor histograms. They are marked as prototype
+- `Complex` and related features moved to a separate module `kmath-complex`
 - Refactor AlgebraElement
 
 ### Deprecated

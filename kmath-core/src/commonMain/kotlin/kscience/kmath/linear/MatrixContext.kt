@@ -83,6 +83,7 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     public fun <F : Any> getFeature(m: Matrix<T>, type: KClass<F>): F? = m.getFeature(type)
 
     public companion object {
+
         /**
          * A structured matrix with custom buffer
          */
@@ -123,7 +124,7 @@ public inline fun <T : Any, reified F : Any> MatrixContext<T, *>.getFeature(m: M
  */
 public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> : MatrixContext<T, M> {
     /**
-     * The ring instance of [T].
+     * The ring over matrix elements.
      */
     public val elementContext: R
 

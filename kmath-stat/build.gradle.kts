@@ -4,7 +4,7 @@ plugins {
 
 kotlin.sourceSets {
     all {
-        with(languageSettings) {
+        languageSettings.apply {
             useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
             useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             useExperimentalAnnotation("kotlinx.coroutines.ObsoleteCoroutinesApi")

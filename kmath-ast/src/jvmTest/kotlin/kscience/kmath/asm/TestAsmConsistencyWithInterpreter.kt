@@ -1,11 +1,10 @@
 package kscience.kmath.asm
 
 import kscience.kmath.ast.*
+import kscience.kmath.complex.*
 import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.ByteRing
-import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.RealField
-import kscience.kmath.operations.toComplex
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

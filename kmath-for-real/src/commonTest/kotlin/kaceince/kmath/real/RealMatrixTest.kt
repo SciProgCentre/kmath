@@ -2,6 +2,7 @@ package kaceince.kmath.real
 
 import kscience.kmath.linear.Matrix
 import kscience.kmath.linear.build
+import kscience.kmath.misc.UnstableKMathAPI
 import kscience.kmath.real.*
 import kscience.kmath.structures.contentEquals
 import kotlin.test.Test
@@ -91,6 +92,7 @@ internal class RealMatrixTest {
         assertEquals(matrix1.pow(3), matrix3)
     }
 
+    @OptIn(UnstableKMathAPI::class)
     @Test
     fun testTwoMatrixOperations() {
         val matrix1 = Matrix.build(2, 3)(

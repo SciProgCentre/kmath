@@ -1,9 +1,9 @@
 package kscience.kmath.ast
 
+import kscience.kmath.complex.Complex
+import kscience.kmath.complex.ComplexField
 import kscience.kmath.expressions.invoke
 import kscience.kmath.operations.Algebra
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals

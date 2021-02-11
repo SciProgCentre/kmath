@@ -1,7 +1,5 @@
 package kscience.kmath.structures
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.complex
 import kotlin.reflect.KClass
 
 /**
@@ -76,7 +74,6 @@ public interface Buffer<T> {
                 Int::class -> IntBuffer(size) { initializer(it) as Int } as Buffer<T>
                 Long::class -> LongBuffer(size) { initializer(it) as Long } as Buffer<T>
                 Float::class -> FloatBuffer(size) { initializer(it) as Float } as Buffer<T>
-                Complex::class -> complex(size) { initializer(it) as Complex } as Buffer<T>
                 else -> boxing(size, initializer)
             }
 
@@ -149,7 +146,6 @@ public interface MutableBuffer<T> : Buffer<T> {
                 Int::class -> IntBuffer(size) { initializer(it) as Int } as MutableBuffer<T>
                 Float::class -> FloatBuffer(size) { initializer(it) as Float } as MutableBuffer<T>
                 Long::class -> LongBuffer(size) { initializer(it) as Long } as MutableBuffer<T>
-                Complex::class -> complex(size) { initializer(it) as Complex } as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
 
