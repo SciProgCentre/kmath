@@ -14,7 +14,7 @@ import org.openjdk.jmh.annotations.State
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
-class DotBenchmark {
+internal class DotBenchmark {
     companion object {
         val random = Random(12224)
         val dim = 1000
