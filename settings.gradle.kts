@@ -26,9 +26,10 @@ rootProject.name = "kmath"
 
 include(
     ":kmath-memory",
+    ":kmath-complex",
     ":kmath-core",
-    ":kmath-functions",
     ":kmath-coroutines",
+    ":kmath-functions",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",

@@ -1,7 +1,5 @@
 package kscience.kmath.expressions
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
 import kscience.kmath.operations.RealField
 import kscience.kmath.operations.invoke
 import kotlin.test.Test
@@ -10,6 +8,7 @@ import kotlin.test.assertFails
 
 class ExpressionFieldTest {
     val x by symbol
+
     @Test
     fun testExpression() {
         val context = FunctionalExpressionField(RealField)
@@ -20,20 +19,7 @@ class ExpressionFieldTest {
         }
 
         assertEquals(expression(x to 1.0), 4.0)
-        assertFails {  expression()}
-    }
-
-    @Test
-    fun testComplex() {
-        val context = FunctionalExpressionField(ComplexField)
-
-        val expression = context {
-            val  x = bind(x)
-            x * x + 2 * x + one
-        }
-
-        assertEquals(expression(x to Complex(1.0, 0.0)), Complex(4.0, 0.0))
-        //assertEquals(expression(), Complex(9.0, 0.0))
+        assertFails { expression() }
     }
 
     @Test

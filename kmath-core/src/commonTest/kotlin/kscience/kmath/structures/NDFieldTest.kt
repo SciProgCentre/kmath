@@ -3,14 +3,15 @@ package kscience.kmath.structures
 import kscience.kmath.nd.NDAlgebra
 import kscience.kmath.nd.get
 import kscience.kmath.nd.real
-import kscience.kmath.operations.internal.FieldVerifier
+import kscience.kmath.testutils.FieldVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kscience.kmath.operations.invoke
 
 internal class NDFieldTest {
     @Test
     fun verify() {
-        NDAlgebra.real(12, 32).run { FieldVerifier(this, one + 3, one - 23, one * 12, 6.66) }
+        (NDAlgebra.real(12, 32)) { FieldVerifier(this, one + 3, one - 23, one * 12, 6.66) }
     }
 
     @Test
