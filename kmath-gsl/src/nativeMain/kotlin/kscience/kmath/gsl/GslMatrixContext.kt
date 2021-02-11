@@ -3,9 +3,9 @@ package kscience.kmath.gsl
 import kotlinx.cinterop.*
 import kscience.kmath.linear.*
 import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
-import kscience.kmath.operations.toComplex
+import kscience.kmath.complex.Complex
+import kscience.kmath.complex.ComplexField
+import kscience.kmath.complex.toComplex
 import org.gnu.gsl.*
 import kotlin.math.min
 import kotlin.reflect.KClass

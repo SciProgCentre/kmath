@@ -1,7 +1,7 @@
 package kscience.kmath.gsl
 
 import kotlinx.cinterop.*
-import kscience.kmath.operations.Complex
+import kscience.kmath.complex.Complex
 import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.VirtualBuffer
 import org.gnu.gsl.*
