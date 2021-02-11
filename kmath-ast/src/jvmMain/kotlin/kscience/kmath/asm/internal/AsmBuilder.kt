@@ -83,7 +83,7 @@ internal class AsmBuilder<T>(
                 ACC_PUBLIC or ACC_FINAL,
                 "invoke",
                 getMethodDescriptor(tType, MAP_TYPE),
-                "(L${MAP_TYPE.internalName}<${SYMBOL_TYPE.descriptor}${if (Modifier.isFinal(classOfT.modifiers)) "" else "+"}${tType.descriptor}>;)${tType.descriptor}",
+                "(L${MAP_TYPE.internalName}<${SYMBOL_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
                 null,
             ).instructionAdapter {
                 invokeMethodVisitor = this

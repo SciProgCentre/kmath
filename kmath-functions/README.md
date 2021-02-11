@@ -10,7 +10,7 @@ Functions and interpolations:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-functions:0.2.0-dev-6`.
+> This module artifact: `kscience.kmath:kmath-functions:0.2.0-dev-7`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-functions/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-functions/_latestVersion)
 >
@@ -28,7 +28,7 @@ Functions and interpolations:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-functions:0.2.0-dev-6'
+>     implementation 'kscience.kmath:kmath-functions:0.2.0-dev-7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -42,6 +42,6 @@ Functions and interpolations:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-functions:0.2.0-dev-6")
+>     implementation("kscience.kmath:kmath-functions:0.2.0-dev-7")
 > }
 > ```
