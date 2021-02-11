@@ -257,8 +257,8 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:0.2.0-dev-6")
-    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-6") for jvm-specific version
+    api("kscience.kmath:kmath-core:0.2.0-dev-7")
+    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-7") for jvm-specific version
 }
 ```
 

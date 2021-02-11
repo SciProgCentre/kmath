@@ -7,7 +7,7 @@
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-for-real:0.2.0-dev-6`.
+> This module artifact: `kscience.kmath:kmath-for-real:0.2.0-dev-7`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-for-real/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-for-real/_latestVersion)
 >
@@ -25,7 +25,7 @@
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-for-real:0.2.0-dev-6'
+>     implementation 'kscience.kmath:kmath-for-real:0.2.0-dev-7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -39,6 +39,6 @@
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-for-real:0.2.0-dev-6")
+>     implementation("kscience.kmath:kmath-for-real:0.2.0-dev-7")
 > }
 > ```
