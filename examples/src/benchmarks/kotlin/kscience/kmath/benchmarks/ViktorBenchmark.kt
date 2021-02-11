@@ -2,7 +2,6 @@ package kscience.kmath.benchmarks
 
 import kscience.kmath.nd.*
 import kscience.kmath.operations.RealField
-import kscience.kmath.operations.invoke
 import kscience.kmath.viktor.ViktorNDField
 import org.jetbrains.bio.viktor.F64Array
 import org.openjdk.jmh.annotations.Benchmark
@@ -21,7 +20,7 @@ internal class ViktorBenchmark {
 
     @Benchmark
     fun automaticFieldAddition() {
-        autoField {
+        with(autoField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
@@ -29,7 +28,7 @@ internal class ViktorBenchmark {
 
     @Benchmark
     fun realFieldAddition() {
-        realField {
+        with(realField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
@@ -37,7 +36,7 @@ internal class ViktorBenchmark {
 
     @Benchmark
     fun viktorFieldAddition() {
-        viktorField {
+        with(viktorField) {
             var res = one
             repeat(n) { res += 1.0 }
         }

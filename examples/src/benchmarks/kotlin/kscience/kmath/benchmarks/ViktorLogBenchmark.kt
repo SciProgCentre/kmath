@@ -2,7 +2,6 @@ package kscience.kmath.benchmarks
 
 import kscience.kmath.nd.*
 import kscience.kmath.operations.RealField
-import kscience.kmath.operations.invoke
 import kscience.kmath.viktor.ViktorNDField
 import org.jetbrains.bio.viktor.F64Array
 import org.openjdk.jmh.annotations.Benchmark
@@ -22,7 +21,7 @@ internal class ViktorLogBenchmark {
 
     @Benchmark
     fun realFieldLog() {
-        realField {
+        with(realField) {
             val fortyTwo = produce { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }
@@ -31,7 +30,7 @@ internal class ViktorLogBenchmark {
 
     @Benchmark
     fun viktorFieldLog() {
-        viktorField {
+        with(viktorField) {
             val fortyTwo = produce { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }

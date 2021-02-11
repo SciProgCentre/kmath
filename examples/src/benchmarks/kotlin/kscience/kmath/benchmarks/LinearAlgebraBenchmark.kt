@@ -10,7 +10,6 @@ import kscience.kmath.linear.Matrix
 import kscience.kmath.linear.MatrixContext
 import kscience.kmath.linear.inverseWithLup
 import kscience.kmath.linear.real
-import kscience.kmath.operations.invoke
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import kotlin.random.Random
@@ -34,14 +33,14 @@ internal class LinearAlgebraBenchmark {
 
     @Benchmark
     fun cmLUPInversion() {
-        CMMatrixContext {
+        with(CMMatrixContext) {
             inverse(matrix)
         }
     }
 
     @Benchmark
     fun ejmlInverse() {
-        EjmlMatrixContext {
+        with(EjmlMatrixContext) {
             inverse(matrix)
         }
     }

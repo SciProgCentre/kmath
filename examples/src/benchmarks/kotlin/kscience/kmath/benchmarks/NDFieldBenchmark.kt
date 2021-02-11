@@ -2,7 +2,6 @@ package kscience.kmath.benchmarks
 
 import kscience.kmath.nd.*
 import kscience.kmath.operations.RealField
-import kscience.kmath.operations.invoke
 import kscience.kmath.structures.Buffer
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
@@ -12,7 +11,7 @@ import org.openjdk.jmh.annotations.State
 internal class NDFieldBenchmark {
     @Benchmark
     fun autoFieldAdd() {
-        autoField {
+        with(autoField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += one }
         }
@@ -20,7 +19,7 @@ internal class NDFieldBenchmark {
 
     @Benchmark
     fun specializedFieldAdd() {
-        specializedField {
+        with(specializedField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
@@ -29,7 +28,7 @@ internal class NDFieldBenchmark {
 
     @Benchmark
     fun boxingFieldAdd() {
-        genericField {
+        with(genericField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
         }
