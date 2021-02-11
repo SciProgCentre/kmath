@@ -16,7 +16,7 @@ internal class MultivariateHistogramTest {
             (-1.0..1.0)
         )
         histogram.put(0.55, 0.55)
-        val bin = histogram.find { it.value.toInt() > 0 } ?: fail()
+        val bin = histogram.bins.find { it.value.toInt() > 0 } ?: fail()
         assertTrue { bin.contains(RealVector(0.55, 0.55)) }
         assertTrue { bin.contains(RealVector(0.6, 0.5)) }
         assertFalse { bin.contains(RealVector(-0.55, 0.55)) }
@@ -40,6 +40,6 @@ internal class MultivariateHistogramTest {
                 yield(RealVector(nextDouble(), nextDouble(), nextDouble()))
             }
         }
-        assertEquals(n, histogram.sumBy { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
     }
 }

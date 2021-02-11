@@ -43,7 +43,7 @@ public class RealHistogram(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 },
-) : MutableHistogram<Double, MultivariateBin<Double>> {
+) : HistogramBuilder<Double, MultivariateBin<Double>> {
     private val strides = DefaultStrides(IntArray(binNums.size) { binNums[it] + 2 })
     private val counts: NDStructure<LongCounter> = NDStructure.auto(strides) { LongCounter() }
     private val values: NDStructure<DoubleCounter> = NDStructure.auto(strides) { DoubleCounter() }
@@ -88,11 +88,12 @@ public class RealHistogram(
         return MultivariateBinDefinition(RealBufferFieldOperations, center, binSize)
     }
 
-    public fun getBinDefinition(point: Buffer<out Double>): MultivariateBinDefinition<Double> = getBinDefinition(getIndex(point))
+    public fun getBinDefinition(point: Buffer<out Double>): MultivariateBinDefinition<Double> =
+        getBinDefinition(getIndex(point))
 
     public override operator fun get(point: Buffer<out Double>): MultivariateBin<Double>? {
         val index = getIndex(point)
-        return MultivariateBin(getBinDefinition(index), getCount(index),getValue(index))
+        return MultivariateBin(getBinDefinition(index), getCount(index), getValue(index))
     }
 
 //    fun put(point: Point<out Double>){
@@ -106,10 +107,10 @@ public class RealHistogram(
         values[index].add(weight)
     }
 
-    public override operator fun iterator(): Iterator<MultivariateBin<Double>> =
-        strides.indices().map { index->
+    override val bins: Collection<MultivariateBin<Double>>
+        get() = strides.indices().map { index ->
             MultivariateBin(getBinDefinition(index), counts[index].sum(), values[index].sum())
-        }.iterator()
+        }.toList()
 
     /**
      * NDStructure containing number of events in bins without weights
