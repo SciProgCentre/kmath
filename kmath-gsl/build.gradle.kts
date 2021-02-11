@@ -39,6 +39,7 @@ kotlin {
             kotlin.srcDirs(files().builtBy(codegen))
 
             dependencies {
+                api(project(":kmath-complex"))
                 api(project(":kmath-core"))
             }
         }
