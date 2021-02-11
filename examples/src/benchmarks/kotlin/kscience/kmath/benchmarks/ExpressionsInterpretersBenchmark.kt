@@ -30,7 +30,7 @@ internal class ExpressionsInterpretersBenchmark {
     @Benchmark
     fun mstExpression() {
         val expr = algebra.mstInField {
-            MstField.symbol("x") * 2.0 + 2.0 / MstField.symbol("x") - 16.0
+            symbol("x") * 2.0 + 2.0 / symbol("x") - 16.0
         }
 
         invokeAndSum(expr)
