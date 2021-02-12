@@ -12,7 +12,7 @@ This subproject implements the following features:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-6`.
+> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-7`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
 >
@@ -30,7 +30,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-6'
+>     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -44,7 +44,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-6")
+>     implementation("kscience.kmath:kmath-ast:0.2.0-dev-7")
 > }
 > ```
 
@@ -61,7 +61,7 @@ For example, the following builder:
 RealField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
-â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
+… leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
 package kscience.kmath.asm.generated;
@@ -75,7 +75,7 @@ import kscience.kmath.expressions.Symbol;
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
 
-    public final Double invoke(Map<Symbol, Double> arguments) {
+    public final Double invoke(Map<Symbol, ? extends Double> arguments) {
         return (Double)((Function2)this.constants[0]).invoke((Double)MapIntrinsics.getOrFail(arguments, "x"), 2);
     }
 

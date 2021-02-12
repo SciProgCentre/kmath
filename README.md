@@ -104,6 +104,17 @@ KMath is a modular library. Different modules provide different features with di
 > **Maturity**: EXPERIMENTAL
 <hr/>
 
+* ### [kmath-complex](kmath-complex)
+> Complex numbers and quaternions.
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [complex](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Complex.kt) : Complex Numbers
+> - [quaternion](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Quaternion.kt) : Quaternions
+
+<hr/>
+
 * ### [kmath-core](kmath-core)
 > Core classes, algebra definitions, basic linear algebra
 >
@@ -246,8 +257,8 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:0.2.0-dev-6")
-    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-6") for jvm-specific version
+    api("kscience.kmath:kmath-core:0.2.0-dev-7")
+    // api("kscience.kmath:kmath-core-jvm:0.2.0-dev-7") for jvm-specific version
 }
 ```
 

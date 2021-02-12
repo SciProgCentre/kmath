@@ -2,10 +2,12 @@
 
 package kscience.kmath.structures
 
+import kscience.kmath.complex.*
 import kscience.kmath.linear.transpose
-import kscience.kmath.nd.*
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.ComplexField
+import kscience.kmath.nd.NDAlgebra
+import kscience.kmath.nd.NDStructure
+import kscience.kmath.nd.as2D
+import kscience.kmath.nd.real
 import kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis
 

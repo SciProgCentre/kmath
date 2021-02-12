@@ -9,7 +9,10 @@ import kscience.kmath.structures.BufferFactory
 import kscience.kmath.structures.asSequence
 
 /**
- * Basic operations on matrices. Operates on [Matrix]
+ * Basic operations on matrices. Operates on [Matrix].
+ *
+ * @param T the type of items in the matrices.
+ * @param M the type of operated matrices.
  */
 public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Matrix<T>> {
     /**
@@ -83,9 +86,16 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     }
 }
 
+/**
+ * Partial implementation of [MatrixContext] for matrices of [Ring].
+ *
+ * @param T the type of items in the matrices.
+ * @param R the type of ring of matrix elements.
+ * @param M the type of operated matrices.
+ */
 public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> : MatrixContext<T, M> {
     /**
-     * The ring context for matrix elements
+     * The ring over matrix elements.
      */
     public val elementContext: R
 

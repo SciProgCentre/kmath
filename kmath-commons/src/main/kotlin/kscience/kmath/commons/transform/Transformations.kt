@@ -3,7 +3,7 @@ package kscience.kmath.commons.transform
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kscience.kmath.operations.Complex
+import kscience.kmath.complex.*
 import kscience.kmath.streaming.chunked
 import kscience.kmath.streaming.spread
 import kscience.kmath.structures.*

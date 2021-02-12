@@ -86,3 +86,10 @@ public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2)
     Structure2DWrapper(this)
 else
     error("Can't create 2d-structure from ${shape.size}d-structure")
+
+/**
+ * Alias for [Structure2D] with more familiar name.
+ *
+ * @param T the type of items in the matrix.
+ */
+public typealias Matrix<T> = Structure2D<T>
