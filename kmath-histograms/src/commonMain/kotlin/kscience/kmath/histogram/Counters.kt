@@ -2,16 +2,18 @@ package kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
+import kscience.kmath.operations.RealField
 import kscience.kmath.operations.Space
 
-/*
+/**
  * Common representation for atomic counters
- * TODO replace with atomics
  */
-
 public interface Counter<T : Any> {
     public fun add(delta: T)
     public val value: T
+    public companion object{
+        public fun real(): ObjectCounter<Double> = ObjectCounter(RealField)
+    }
 }
 
 public class IntCounter : Counter<Int> {

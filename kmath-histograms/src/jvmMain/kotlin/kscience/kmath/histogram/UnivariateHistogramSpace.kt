@@ -31,19 +31,19 @@ private class UnivariateBinCounter(
     override val def: UnivariateHistogramBinDefinition,
 ) : UnivariateBin {
     val counter: LongCounter = LongCounter()
-    val valueCounter: DoubleCounter = DoubleCounter()
+    val valueCounter: ObjectCounter<Double> = Counter.real()
 
     /**
      * The precise number of events ignoring weighting
      */
-    val count: Long get() = counter.sum()
+    val count: Long get() = counter.value
 
     override val standardDeviation: Double get() = sqrt(count.toDouble()) / count * value
 
     /**
      * The value of histogram including weighting
      */
-    override val value: Double get() = valueCounter.sum()
+    override val value: Double get() = valueCounter.value
 
     public fun increment(count: Long, value: Double) {
         counter.add(count)
@@ -83,8 +83,8 @@ public class UnivariateHistogramSpace(
             }
         }
 
-        override fun putWithWeight(point: Buffer<out Double>, weight: Double) {
-            put(point[0], weight)
+        override fun putValue(point: Buffer<Double>, value: Number) {
+            put(point[0], value.toDouble())
         }
 
         /**

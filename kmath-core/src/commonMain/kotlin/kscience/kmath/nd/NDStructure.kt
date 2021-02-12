@@ -78,8 +78,7 @@ public interface NDStructure<T> {
             strides: Strides,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T,
-        ): NDBuffer<T> =
-            NDBuffer(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
+        ): NDBuffer<T> = NDBuffer(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
         /**
          * Inline create NDStructure with non-boxing buffer implementation if it is possible
@@ -87,15 +86,13 @@ public interface NDStructure<T> {
         public inline fun <reified T : Any> auto(
             strides: Strides,
             crossinline initializer: (IntArray) -> T,
-        ): NDBuffer<T> =
-            NDBuffer(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
+        ): NDBuffer<T> = NDBuffer(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
         public inline fun <T : Any> auto(
             type: KClass<T>,
             strides: Strides,
             crossinline initializer: (IntArray) -> T,
-        ): NDBuffer<T> =
-            NDBuffer(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
+        ): NDBuffer<T> = NDBuffer(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
         public fun <T> build(
             shape: IntArray,
@@ -106,8 +103,7 @@ public interface NDStructure<T> {
         public inline fun <reified T : Any> auto(
             shape: IntArray,
             crossinline initializer: (IntArray) -> T,
-        ): NDBuffer<T> =
-            auto(DefaultStrides(shape), initializer)
+        ): NDBuffer<T> = auto(DefaultStrides(shape), initializer)
 
         @JvmName("autoVarArg")
         public inline fun <reified T : Any> auto(
@@ -120,8 +116,7 @@ public interface NDStructure<T> {
             type: KClass<T>,
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
-        ): NDBuffer<T> =
-            auto(type, DefaultStrides(shape), initializer)
+        ): NDBuffer<T> = auto(type, DefaultStrides(shape), initializer)
     }
 }
 

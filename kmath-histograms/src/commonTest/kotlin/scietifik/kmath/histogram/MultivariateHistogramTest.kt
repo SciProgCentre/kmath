@@ -1,6 +1,6 @@
 package scietifik.kmath.histogram
 
-import kscience.kmath.histogram.RealHistogram
+import kscience.kmath.histogram.RealHistogramSpace
 import kscience.kmath.histogram.fill
 import kscience.kmath.histogram.put
 import kscience.kmath.real.RealVector
@@ -11,11 +11,13 @@ import kotlin.test.*
 internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val histogram = RealHistogram.fromRanges(
+        val hSpace = RealHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
-        histogram.put(0.55, 0.55)
+        val histogram = hSpace.produce {
+            put(0.55, 0.55)
+        }
         val bin = histogram.bins.find { it.value.toInt() > 0 } ?: fail()
         assertTrue { bin.contains(RealVector(0.55, 0.55)) }
         assertTrue { bin.contains(RealVector(0.6, 0.5)) }
@@ -24,7 +26,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testSequentialPut() {
-        val histogram = RealHistogram.fromRanges(
+        val hSpace = RealHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -34,10 +36,11 @@ internal class MultivariateHistogramTest {
         fun nextDouble() = random.nextDouble(-1.0, 1.0)
 
         val n = 10000
-
-        histogram.fill {
-            repeat(n) {
-                yield(RealVector(nextDouble(), nextDouble(), nextDouble()))
+        val histogram = hSpace.produce {
+            fill {
+                repeat(n) {
+                    yield(RealVector(nextDouble(), nextDouble(), nextDouble()))
+                }
             }
         }
         assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
