@@ -12,7 +12,7 @@ This subproject implements the following features:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-6`.
+> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-7`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
 >
@@ -30,7 +30,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-6'
+>     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -44,7 +44,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-6")
+>     implementation("kscience.kmath:kmath-ast:0.2.0-dev-7")
 > }
 > ```
 
@@ -75,7 +75,7 @@ import kscience.kmath.expressions.Symbol;
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
 
-    public final Double invoke(Map<Symbol, Double> arguments) {
+    public final Double invoke(Map<Symbol, ? extends Double> arguments) {
         return (Double)((Function2)this.constants[0]).invoke((Double)MapIntrinsics.getOrFail(arguments, "x"), 2);
     }
 

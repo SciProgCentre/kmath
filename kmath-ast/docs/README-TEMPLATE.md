@@ -33,7 +33,7 @@ import kscience.kmath.expressions.Symbol;
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
 
-    public final Double invoke(Map<Symbol, Double> arguments) {
+    public final Double invoke(Map<Symbol, ? extends Double> arguments) {
         return (Double)((Function2)this.constants[0]).invoke((Double)MapIntrinsics.getOrFail(arguments, "x"), 2);
     }
 
