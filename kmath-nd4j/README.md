@@ -9,7 +9,7 @@ This subproject implements the following features:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-nd4j:0.2.0-dev-6`.
+> This module artifact: `kscience.kmath:kmath-nd4j:0.2.0-dev-7`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-nd4j/_latestVersion)
 >
@@ -27,7 +27,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-nd4j:0.2.0-dev-6'
+>     implementation 'kscience.kmath:kmath-nd4j:0.2.0-dev-7'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -41,7 +41,7 @@ This subproject implements the following features:
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-nd4j:0.2.0-dev-6")
+>     implementation("kscience.kmath:kmath-nd4j:0.2.0-dev-7")
 > }
 > ```
 
