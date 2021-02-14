@@ -77,7 +77,7 @@ public class RealHistogramSpace(
         return IndexedHistogram(this, values)
     }
 
-    public companion object{
+    public companion object {
         /**
          * Use it like
          * ```

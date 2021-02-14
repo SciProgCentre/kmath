@@ -1,8 +1,8 @@
 package scietifik.kmath.histogram
 
 import kscience.kmath.histogram.RealHistogramSpace
-import kscience.kmath.histogram.fill
 import kscience.kmath.histogram.put
+import kscience.kmath.operations.invoke
 import kscience.kmath.real.RealVector
 import kscience.kmath.real.invoke
 import kotlin.random.Random
@@ -37,12 +37,44 @@ internal class MultivariateHistogramTest {
 
         val n = 10000
         val histogram = hSpace.produce {
-            fill {
-                repeat(n) {
-                    yield(RealVector(nextDouble(), nextDouble(), nextDouble()))
-                }
+            repeat(n) {
+                put(nextDouble(), nextDouble(), nextDouble())
             }
         }
         assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
+    }
+
+    @Test
+    fun testHistogramAlgebra() {
+        val hSpace = RealHistogramSpace.fromRanges(
+            (-1.0..1.0),
+            (-1.0..1.0),
+            (-1.0..1.0)
+        ).invoke {
+            val random = Random(1234)
+
+            fun nextDouble() = random.nextDouble(-1.0, 1.0)
+            val n = 10000
+            val histogram1 = produce {
+                repeat(n) {
+                    put(nextDouble(), nextDouble(), nextDouble())
+                }
+            }
+            val histogram2 = produce {
+                repeat(n) {
+                    put(nextDouble(), nextDouble(), nextDouble())
+                }
+            }
+            val res = histogram1 - histogram2
+            assertTrue {
+                strides.indices().all { index ->
+                    res.values[index] <= histogram1.values[index]
+                }
+            }
+            assertTrue {
+                res.bins.count() >= histogram1.bins.count()
+            }
+            assertEquals(0.0, res.bins.sumByDouble { it.value.toDouble() })
+        }
     }
 }
