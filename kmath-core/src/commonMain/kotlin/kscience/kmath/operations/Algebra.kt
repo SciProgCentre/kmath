@@ -95,8 +95,8 @@ public interface Algebra<T> {
 public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
- * Represents "semispace", i.e. algebraic structure with associative binary operation called "addition" as well as
- * multiplication by scalars.
+ * Represents linear space without neutral element, i.e. algebraic structure with associative, binary operation [add]
+ * and scalar multiplication [multiply].
  *
  * @param T the type of element of this semispace.
  */
@@ -208,10 +208,10 @@ public interface SpaceOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents linear space, i.e. algebraic structure with associative binary operation called "addition" and its neutral
- * element as well as multiplication by scalars.
+ * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add] and
+ * scalar multiplication [multiply].
  *
- * @param T the type of element of this group.
+ * @param T the type of element of this semispace.
  */
 public interface Space<T> : SpaceOperations<T> {
     /**
@@ -221,8 +221,8 @@ public interface Space<T> : SpaceOperations<T> {
 }
 
 /**
- * Represents semiring, i.e. algebraic structure with two associative binary operations called "addition" and
- * "multiplication".
+ * Represents rng, i.e. algebraic structure with associative, binary, commutative operation [add] and associative,
+ * operation [multiply] distributive over [add].
  *
  * @param T the type of element of this semiring.
  */
@@ -270,8 +270,8 @@ public interface Ring<T> : Space<T>, RingOperations<T> {
 }
 
 /**
- * Represents semifield, i.e. algebraic structure with three operations: associative "addition" and "multiplication",
- * and "division".
+ * Represents field without identity elements, i.e. algebraic structure with associative, binary, commutative operations
+ * [add] and [multiply]; binary operation [divide] as multiplication of left operand by reciprocal of right one.
  *
  * @param T the type of element of this semifield.
  */

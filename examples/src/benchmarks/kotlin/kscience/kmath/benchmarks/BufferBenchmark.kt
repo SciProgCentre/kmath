@@ -1,7 +1,7 @@
 package kscience.kmath.benchmarks
 
-import kscience.kmath.operations.Complex
-import kscience.kmath.operations.complex
+import kscience.kmath.complex.Complex
+import kscience.kmath.complex.complex
 import kscience.kmath.structures.MutableBuffer
 import kscience.kmath.structures.RealBuffer
 import org.openjdk.jmh.annotations.Benchmark
