@@ -10,26 +10,23 @@ import kscience.kmath.structures.asSequence
 
 public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2
 
-public interface UnivariateBin : Bin<Double>, ClosedFloatingPointRange<Double> {
-    public val domain: UnivariateDomain
-
-    /**
-     * The value of histogram including weighting
-     */
-    public override val value: Double
-
-    /**
-     * Standard deviation of the bin value. Zero if not applicable
-     */
-    public val standardDeviation: Double
+/**
+ * A univariate bin based an a range
+ * @param value The value of histogram including weighting
+ * @param standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
+ */
+public class UnivariateBin(
+    public val domain: UnivariateDomain,
+    override val value: Double,
+    public val standardDeviation: Double,
+) : Bin<Double>, ClosedFloatingPointRange<Double> by domain.range {
 
     public override val dimension: Int get() = 1
 
     public override fun contains(point: Buffer<Double>): Boolean = point.size == 1 && contains(point[0])
-
 }
 
-@UnstableKMathAPI
+@OptIn(UnstableKMathAPI::class)
 public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
     SpaceElement<UnivariateHistogram, Space<UnivariateHistogram>> {
     public operator fun get(value: Double): UnivariateBin?

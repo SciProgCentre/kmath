@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-internal fun <B: ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
+private fun <B : ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
     // check ceiling entry and return it if it is what needed
     val ceil = ceilingEntry(value)?.value
     if (ceil != null && value in ceil) return ceil
@@ -29,12 +29,9 @@ public class TreeHistogram(
     override val bins: Collection<UnivariateBin> get() = binMap.values
 }
 
-private class UnivariateBinValue(
-    override val domain: UnivariateDomain,
-    override val value: Double,
-    override val standardDeviation: Double,
-) : UnivariateBin, ClosedFloatingPointRange<Double> by domain.range
-
+/**
+ * A space for univariate histograms with variable bin borders based on a tree map
+ */
 @UnstableKMathAPI
 public class TreeHistogramSpace(
     public val binFactory: (Double) -> UnivariateDomain,
@@ -73,7 +70,7 @@ public class TreeHistogramSpace(
         val resBins = TreeMap<Double, UnivariateBin>()
         bins.forEach { key, binCounter ->
             val count = binCounter.counter.value
-            resBins[key] = UnivariateBinValue(binCounter.domain, count, sqrt(count))
+            resBins[key] = UnivariateBin(binCounter.domain, count, sqrt(count))
         }
         return TreeHistogram(this, resBins)
     }
@@ -86,11 +83,13 @@ public class TreeHistogramSpace(
         require(b.context == this) { "Histogram $b does not belong to this context" }
         val bins = TreeMap<Double, UnivariateBin>().apply {
             (a.bins.map { it.domain } union b.bins.map { it.domain }).forEach { def ->
-                val newBin = UnivariateBinValue(
-                    def,
-                    value = (a[def.center]?.value ?: 0.0) + (b[def.center]?.value ?: 0.0),
-                    standardDeviation = (a[def.center]?.standardDeviation
-                        ?: 0.0) + (b[def.center]?.standardDeviation ?: 0.0)
+                put(def.center,
+                    UnivariateBin(
+                        def,
+                        value = (a[def.center]?.value ?: 0.0) + (b[def.center]?.value ?: 0.0),
+                        standardDeviation = (a[def.center]?.standardDeviation
+                            ?: 0.0) + (b[def.center]?.standardDeviation ?: 0.0)
+                    )
                 )
             }
         }
@@ -101,7 +100,7 @@ public class TreeHistogramSpace(
         val bins = TreeMap<Double, UnivariateBin>().apply {
             a.bins.forEach { bin ->
                 put(bin.domain.center,
-                    UnivariateBinValue(
+                    UnivariateBin(
                         bin.domain,
                         value = bin.value * k.toDouble(),
                         standardDeviation = abs(bin.standardDeviation * k.toDouble())
