@@ -21,11 +21,11 @@
 - Basic Quaternion vector support in `kmath-complex`.
 
 ### Changed
-- Package changed from `scientifik` to `kscience.kmath`
-- Gradle version: 6.6 -> 6.8
+- Package changed from `scientifik` to `space.kscience`
+- Gradle version: 6.6 -> 6.8.2
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
 - `Polynomial` secondary constructor made function
-- Kotlin version: 1.3.72 -> 1.4.21
+- Kotlin version: 1.3.72 -> 1.4.30
 - `kmath-ast` doesn't depend on heavy `kotlin-reflect` library
 - Full autodiff refactoring based on `Symbol`
 - `kmath-prob` renamed to `kmath-stat`
@@ -41,6 +41,7 @@
 - Refactor histograms. They are marked as prototype
 - `Complex` and related features moved to a separate module `kmath-complex`
 - Refactor AlgebraElement
+- `symbol` method in `Algebra` renamed to `bindSymbol` to avoid ambiguity
 
 ### Deprecated
 

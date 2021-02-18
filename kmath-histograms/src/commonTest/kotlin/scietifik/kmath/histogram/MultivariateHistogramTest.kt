@@ -1,10 +1,10 @@
 package scietifik.kmath.histogram
 
-import kscience.kmath.histogram.RealHistogram
-import kscience.kmath.histogram.fill
-import kscience.kmath.histogram.put
-import kscience.kmath.real.RealVector
-import kscience.kmath.real.invoke
+import space.kscience.kmath.histogram.RealHistogram
+import space.kscience.kmath.histogram.fill
+import space.kscience.kmath.histogram.put
+import space.kscience.kmath.real.RealVector
+import space.kscience.kmath.real.invoke
 import kotlin.random.Random
 import kotlin.test.*
 

@@ -1,10 +1,10 @@
 package kaceince.kmath.real
 
-import kscience.kmath.linear.Matrix
-import kscience.kmath.linear.build
-import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.real.*
-import kscience.kmath.structures.contentEquals
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.linear.build
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.real.*
+import space.kscience.kmath.structures.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

@@ -5,8 +5,6 @@ plugins {
 }
 
 internal val kmathVersion: String by extra("0.2.0-dev-7")
-internal val bintrayRepo: String by extra("kscience")
-internal val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
@@ -23,7 +21,7 @@ allprojects {
         mavenCentral()
     }
 
-    group = "kscience.kmath"
+    group = "space.kscience"
     version = kmathVersion
 }
 
@@ -37,4 +35,6 @@ readme {
 
 ksciencePublish {
     spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
+    bintrayRepo = "kscience"
+    githubProject = "kmath"
 }

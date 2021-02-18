@@ -68,9 +68,9 @@ package kscience.kmath.asm.generated;
 
 import java.util.Map;
 import kotlin.jvm.functions.Function2;
-import kscience.kmath.asm.internal.MapIntrinsics;
-import kscience.kmath.expressions.Expression;
-import kscience.kmath.expressions.Symbol;
+import space.kscience.kmath.asm.internal.MapIntrinsics;
+import space.kscience.kmath.expressions.Expression;
+import space.kscience.kmath.expressions.Symbol;
 
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
