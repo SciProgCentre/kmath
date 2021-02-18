@@ -4,7 +4,7 @@ public abstract interface class kscience/kmath/domains/Domain {
 }
 
 public final class kscience/kmath/domains/HyperSquareDomain : kscience/kmath/domains/RealDomain {
-	public synthetic fun <init> ([D[DLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lkscience/kmath/structures/Buffer;Lkscience/kmath/structures/Buffer;)V
 	public fun contains (Lkscience/kmath/structures/Buffer;)Z
 	public fun getDimension ()I
 	public fun getLowerBound (I)Ljava/lang/Double;

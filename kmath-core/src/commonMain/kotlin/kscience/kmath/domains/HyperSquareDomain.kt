@@ -16,6 +16,7 @@
 package kscience.kmath.domains
 
 import kscience.kmath.linear.Point
+import kscience.kmath.structures.Buffer
 import kscience.kmath.structures.RealBuffer
 import kscience.kmath.structures.indices
 
@@ -25,20 +26,20 @@ import kscience.kmath.structures.indices
  *
  * @author Alexander Nozik
  */
-public class HyperSquareDomain(private val lower: RealBuffer, private val upper: RealBuffer) : RealDomain {
+public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : RealDomain {
     public override val dimension: Int get() = lower.size
 
     public override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]
     }
 
-    public override fun getLowerBound(num: Int, point: Point<Double>): Double? = lower[num]
+    public override fun getLowerBound(num: Int, point: Point<Double>): Double = lower[num]
 
-    public override fun getLowerBound(num: Int): Double? = lower[num]
+    public override fun getLowerBound(num: Int): Double = lower[num]
 
-    public override fun getUpperBound(num: Int, point: Point<Double>): Double? = upper[num]
+    public override fun getUpperBound(num: Int, point: Point<Double>): Double = upper[num]
 
-    public override fun getUpperBound(num: Int): Double? = upper[num]
+    public override fun getUpperBound(num: Int): Double = upper[num]
 
     public override fun nearestInDomain(point: Point<Double>): Point<Double> {
         val res = DoubleArray(point.size) { i ->

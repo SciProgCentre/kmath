@@ -41,6 +41,7 @@
 - Refactor histograms. They are marked as prototype
 - `Complex` and related features moved to a separate module `kmath-complex`
 - Refactor AlgebraElement
+- Add `out` projection to `Buffer` generic
 
 ### Deprecated
 
