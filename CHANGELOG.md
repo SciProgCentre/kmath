@@ -19,7 +19,6 @@
 - Generic operation result parameter to `MatrixContext`
 - New `MatrixFeature` interfaces for matrix decompositions
 - Basic Quaternion vector support in `kmath-complex`.
-- Integration with GNU Scientific Library with `kmath-gsl` for Kotlin/Native Linux x64 target.
 
 ### Changed
 - Package changed from `scientifik` to `kscience.kmath`
