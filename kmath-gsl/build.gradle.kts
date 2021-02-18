@@ -6,14 +6,21 @@ import ru.mipt.npm.gradle.Maturity
 
 plugins {
     id("ru.mipt.npm.mpp")
+    id("de.undercouch.download")
 }
 
 kotlin {
     explicitApiWarning()
+    data class DownloadLinks(val gsl: String)
+
+    lateinit var downloadLinks: DownloadLinks
 
     val nativeTarget = when (System.getProperty("os.name")) {
 //        "Mac OS X" -> macosX64()
-        "Linux" -> linuxX64()
+        "Linux" -> {
+            downloadLinks = DownloadLinks(gsl = "")
+            linuxX64()
+        }
 
         else -> {
             logger.warn("Current OS cannot build any of kmath-gsl targets.")
