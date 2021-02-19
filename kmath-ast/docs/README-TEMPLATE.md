@@ -22,7 +22,7 @@ RealField.mstInField { symbol("x") + 2 }.compile()
 … leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
-package kscience.kmath.asm.generated;
+package space.kscience.kmath.asm.generated;
 
 import java.util.Map;
 import kotlin.jvm.functions.Function2;

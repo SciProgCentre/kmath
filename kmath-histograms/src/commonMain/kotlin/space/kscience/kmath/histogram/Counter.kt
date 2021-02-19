@@ -2,8 +2,8 @@ package space.kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
-import kscience.kmath.operations.RealField
-import kscience.kmath.operations.Space
+import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.Space
 
 /**
  * Common representation for atomic counters

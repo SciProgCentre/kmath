@@ -1,14 +1,14 @@
-package kscience.kmath.histogram
+package space.kscience.kmath.histogram
 
-import kscience.kmath.domains.Domain
-import kscience.kmath.linear.Point
-import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.nd.NDSpace
-import kscience.kmath.nd.NDStructure
-import kscience.kmath.nd.Strides
-import kscience.kmath.operations.Space
-import kscience.kmath.operations.SpaceElement
-import kscience.kmath.operations.invoke
+import space.kscience.kmath.domains.Domain
+import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.NDSpace
+import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.Strides
+import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.SpaceElement
+import space.kscience.kmath.operations.invoke
 
 /**
  * A simple histogram bin based on domain

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kscience.kmath.domains
+package space.kscience.kmath.domains
 
-import kscience.kmath.linear.Point
-import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.RealBuffer
-import kscience.kmath.structures.indices
+import space.kscience.kmath.linear.Point
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.indices
 
 /**
  *

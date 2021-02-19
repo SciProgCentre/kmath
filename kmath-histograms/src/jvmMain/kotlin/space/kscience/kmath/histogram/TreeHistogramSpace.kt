@@ -1,11 +1,12 @@
-package kscience.kmath.histogram
+package space.kscience.kmath.histogram
 
-import kscience.kmath.domains.UnivariateDomain
-import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.operations.Space
-import kscience.kmath.structures.Buffer
+import space.kscience.kmath.domains.UnivariateDomain
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Space
+import space.kscience.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.sqrt
 
 private fun <B : ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
@@ -68,7 +69,7 @@ public class TreeHistogramSpace(
         }
         hBuilder.apply(builder)
         val resBins = TreeMap<Double, UnivariateBin>()
-        bins.forEach { key, binCounter ->
+        bins.forEach { (key, binCounter) ->
             val count = binCounter.counter.value
             resBins[key] = UnivariateBin(binCounter.domain, count, sqrt(count))
         }
@@ -122,7 +123,7 @@ public class TreeHistogramSpace(
             binSize: Double,
             start: Double = 0.0,
         ): TreeHistogramSpace = TreeHistogramSpace { value ->
-            val center = start + binSize * Math.floor((value - start) / binSize + 0.5)
+            val center = start + binSize * floor((value - start) / binSize + 0.5)
             UnivariateDomain((center - binSize / 2)..(center + binSize / 2))
         }
 

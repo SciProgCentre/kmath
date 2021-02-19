@@ -1,9 +1,9 @@
-package kscience.kmath.histogram
+package space.kscience.kmath.histogram
 
-import kscience.kmath.domains.Domain
-import kscience.kmath.domains.HyperSquareDomain
-import kscience.kmath.nd.*
-import kscience.kmath.structures.*
+import space.kscience.kmath.domains.Domain
+import space.kscience.kmath.domains.HyperSquareDomain
+import space.kscience.kmath.nd.*
+import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
 public class RealHistogramSpace(

@@ -1,11 +1,11 @@
-package kscience.kmath.histogram
+package space.kscience.kmath.histogram
 
-import kscience.kmath.domains.UnivariateDomain
-import kscience.kmath.misc.UnstableKMathAPI
-import kscience.kmath.operations.Space
-import kscience.kmath.operations.SpaceElement
-import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.asSequence
+import space.kscience.kmath.domains.UnivariateDomain
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.SpaceElement
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asSequence
 
 
 public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2

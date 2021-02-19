@@ -1,10 +1,8 @@
-package scietifik.kmath.histogram
+package space.kscience.kmath.histogram
 
-import kscience.kmath.histogram.RealHistogramSpace
-import kscience.kmath.histogram.put
-import kscience.kmath.operations.invoke
-import kscience.kmath.real.RealVector
-import kscience.kmath.real.invoke
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.real.RealVector
+import space.kscience.kmath.real.invoke
 import kotlin.random.Random
 import kotlin.test.*
 
@@ -46,7 +44,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testHistogramAlgebra() {
-        val hSpace = RealHistogramSpace.fromRanges(
+       RealHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
