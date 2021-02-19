@@ -42,6 +42,7 @@
 - `Complex` and related features moved to a separate module `kmath-complex`
 - Refactor AlgebraElement
 - `symbol` method in `Algebra` renamed to `bindSymbol` to avoid ambiguity
+- Add `out` projection to `Buffer` generic
 
 ### Deprecated
 

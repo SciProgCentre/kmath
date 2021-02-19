@@ -21,7 +21,7 @@ public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
  *
  * @param T the type of elements contained in the buffer.
  */
-public interface Buffer<T> {
+public interface Buffer<out T> {
     /**
      * The size of this buffer.
      */
