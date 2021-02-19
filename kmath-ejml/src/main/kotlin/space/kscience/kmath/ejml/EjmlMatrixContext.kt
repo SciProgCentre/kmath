@@ -31,8 +31,8 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
 
     override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
-            (0 until it.numRows()).forEach { row ->
-                (0 until it.numCols()).forEach { col -> it[row, col] = initializer(row, col) }
+            (0 until rows).forEach { row ->
+                (0 until columns).forEach { col -> it[row, col] = initializer(row, col) }
             }
         })
 
