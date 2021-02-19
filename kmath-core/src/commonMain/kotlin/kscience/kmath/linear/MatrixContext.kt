@@ -71,8 +71,8 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
     public operator fun T.times(m: Matrix<T>): M = m * this
 
     /**
-     * Gets a feature from the matrix. This function may return some additional features than
-     * [kscience.kmath.structures.NDStructure.getFeature].
+     * Gets a feature from the matrix. This function may return some additional features to
+     * [kscience.kmath.nd.NDStructure.getFeature].
      *
      * @param F the type of feature.
      * @param m the matrix.
@@ -101,8 +101,8 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Mat
 }
 
 /**
- * Gets a feature from the matrix. This function may return some additional features than
- * [kscience.kmath.structures.NDStructure.getFeature].
+ * Gets a feature from the matrix. This function may return some additional features to
+ * [kscience.kmath.nd.NDStructure.getFeature].
  *
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.
