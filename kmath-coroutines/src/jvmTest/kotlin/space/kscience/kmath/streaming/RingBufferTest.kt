@@ -28,7 +28,7 @@ internal class RingBufferTest {
         val windowed = flow.windowed(10)
 
         runBlocking {
-            val first = windowed.take(1).single()
+            @Suppress("UNUSED_VARIABLE") val first = windowed.take(1).single()
             val res = windowed.take(15).map { it.asSequence().average() }.toList()
             assertEquals(0.0, res[0])
             assertEquals(4.5, res[9])

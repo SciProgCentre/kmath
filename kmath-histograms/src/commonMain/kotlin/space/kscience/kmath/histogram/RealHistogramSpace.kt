@@ -70,7 +70,7 @@ public class RealHistogramSpace(
         val ndCounter = NDStructure.auto(strides) { Counter.real() }
         val hBuilder = HistogramBuilder<Double> { point, value ->
             val index = getIndex(point)
-            ndCounter[index].add(1.0)
+            ndCounter[index].add(value.toDouble())
         }
         hBuilder.apply(builder)
         val values: NDBuffer<Double> = ndCounter.mapToBuffer { it.value }

@@ -13,7 +13,7 @@ public infix fun BufferMatrix<Double>.dot(other: BufferMatrix<Double>): BufferMa
     val resultArray = DoubleArray(this.rowNum * other.colNum)
 
     //convert to array to insure there is no memory indirection
-    fun Buffer<out Double>.unsafeArray() = if (this is RealBuffer)
+    fun Buffer<Double>.unsafeArray() = if (this is RealBuffer)
         this.array
     else
         DoubleArray(size) { get(it) }

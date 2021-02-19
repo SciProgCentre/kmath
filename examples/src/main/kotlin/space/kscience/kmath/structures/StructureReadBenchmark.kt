@@ -4,6 +4,7 @@ import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.NDBuffer
 import kotlin.system.measureTimeMillis
 
+@Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
 fun main() {
     val n = 6000
     val array = DoubleArray(n * n) { 1.0 }

@@ -91,7 +91,7 @@ public class BufferMatrixContext<T : Any, R : Ring<T>>(
 public class BufferMatrix<T : Any>(
     public override val rowNum: Int,
     public override val colNum: Int,
-    public val buffer: Buffer<out T>,
+    public val buffer: Buffer<T>,
 ) : Matrix<T> {
 
     init {

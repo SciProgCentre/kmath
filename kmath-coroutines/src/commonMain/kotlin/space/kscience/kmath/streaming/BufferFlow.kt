@@ -17,7 +17,7 @@ public fun <T> Buffer<T>.asFlow(): Flow<T> = iterator().asFlow()
  * Flat map a [Flow] of [Buffer] into continuous [Flow] of elements
  */
 @FlowPreview
-public fun <T> Flow<Buffer<out T>>.spread(): Flow<T> = flatMapConcat { it.asFlow() }
+public fun <T> Flow<Buffer<T>>.spread(): Flow<T> = flatMapConcat { it.asFlow() }
 
 /**
  * Collect incoming flow into fixed size chunks

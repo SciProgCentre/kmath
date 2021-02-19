@@ -3,6 +3,7 @@ package space.kscience.kmath.complex
 import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.FieldElement
 import space.kscience.kmath.operations.Norm
@@ -45,6 +46,7 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 /**
  * A field of [Complex].
  */
+@OptIn(UnstableKMathAPI::class)
 public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
     public override val zero: Complex = 0.0.toComplex()
     public override val one: Complex = 1.0.toComplex()
@@ -166,6 +168,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
  * @property re The real part.
  * @property im The imaginary part.
  */
+@OptIn(UnstableKMathAPI::class)
 public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)

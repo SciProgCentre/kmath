@@ -3,6 +3,7 @@ package space.kscience.kmath.complex
 import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MemoryBuffer
@@ -34,6 +35,7 @@ public val Quaternion.r: Double
 /**
  * A field of [Quaternion].
  */
+@OptIn(UnstableKMathAPI::class)
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
     ExponentialOperations<Quaternion>, RingWithNumbers<Quaternion> {
     override val zero: Quaternion = 0.toQuaternion()

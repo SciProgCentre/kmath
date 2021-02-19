@@ -4,6 +4,7 @@ import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.mapToBuffer
 import kotlin.system.measureTimeMillis
 
+@Suppress("UNUSED_VARIABLE")
 fun main() {
     val n = 6000
     val structure = NDStructure.build(intArrayOf(n, n), Buffer.Companion::auto) { 1.0 }

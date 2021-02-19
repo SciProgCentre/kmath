@@ -9,9 +9,9 @@ package space.kscience.kmath.structures
 public inline class RealBuffer(public val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
-    override inline operator fun get(index: Int): Double = array[index]
+    override operator fun get(index: Int): Double = array[index]
 
-    override inline operator fun set(index: Int, value: Double) {
+    override operator fun set(index: Int, value: Double) {
         array[index] = value
     }
 

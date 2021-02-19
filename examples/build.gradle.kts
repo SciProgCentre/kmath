@@ -69,6 +69,14 @@ benchmark {
     targets.register("benchmarks")
     // This one matches sourceSet name above
 
+    configurations.register("buffer") {
+        warmups = 1 // number of warmup iterations
+        iterations = 3 // number of iterations
+        iterationTime = 500 // time in seconds per iteration
+        iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
+        include("BufferBenchmark")
+    }
+
     configurations.register("dot") {
         warmups = 1 // number of warmup iterations
         iterations = 3 // number of iterations
