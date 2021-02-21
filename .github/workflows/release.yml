@@ -1,4 +1,4 @@
-name: Bintray Publish
+name: Gradle release
 
 on:
   release:

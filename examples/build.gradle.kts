@@ -11,6 +11,7 @@ sourceSets.register("benchmarks")
 
 repositories {
     jcenter()
+    maven("https://repo.kotlin.link")
     maven("https://clojars.org/repo")
     maven("https://dl.bintray.com/egor-bogomolov/astminer/")
     maven("https://dl.bintray.com/hotkeytlt/maven")

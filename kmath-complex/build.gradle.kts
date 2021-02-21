@@ -1,8 +1,8 @@
 import ru.mipt.npm.gradle.Maturity
 
 plugins {
-    id("ru.mipt.npm.mpp")
-    id("ru.mipt.npm.native")
+    id("ru.mipt.npm.gradle.mpp")
+    id("ru.mipt.npm.gradle.native")
 }
 
 kotlin.sourceSets {

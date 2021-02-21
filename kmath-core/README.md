@@ -15,7 +15,7 @@ performance calculations to code generation.
 
 > #### Artifact:
 >
-> This module artifact: `space.kscience:kmath-core:0.2.0-dev-7`.
+> This module artifact: `space.kscience:kmath-core:0.2.0`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
 >
@@ -34,7 +34,7 @@ performance calculations to code generation.
 > }
 > 
 > dependencies {
->     implementation 'space.kscience:kmath-core:0.2.0-dev-7'
+>     implementation 'space.kscience:kmath-core:0.2.0'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -50,6 +50,6 @@ performance calculations to code generation.
 > }
 > 
 > dependencies {
->     implementation("space.kscience:kmath-core:0.2.0-dev-7")
+>     implementation("space.kscience:kmath-core:0.2.0")
 > }
 > ```

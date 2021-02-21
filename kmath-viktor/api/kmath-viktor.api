@@ -165,8 +165,6 @@ public final class space/kscience/kmath/viktor/ViktorNDStructure : space/kscienc
 	public fun getDimension ()I
 	public static fun getDimension-impl (Lorg/jetbrains/bio/viktor/F64Array;)I
 	public final fun getF64Buffer ()Lorg/jetbrains/bio/viktor/F64Array;
-	public fun getFeature (Lkotlin/reflect/KClass;)Ljava/lang/Object;
-	public static fun getFeature-impl (Lorg/jetbrains/bio/viktor/F64Array;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public fun getShape ()[I
 	public static fun getShape-impl (Lorg/jetbrains/bio/viktor/F64Array;)[I
 	public fun hashCode ()I

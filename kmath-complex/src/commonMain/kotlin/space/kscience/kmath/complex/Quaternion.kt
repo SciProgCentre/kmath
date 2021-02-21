@@ -183,8 +183,10 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
  * @property y The third component.
  * @property z The fourth component.
  */
-public data class Quaternion(val w: Double, val x: Double, val y: Double, val z: Double) :
-    FieldElement<Quaternion, QuaternionField> {
+@OptIn(UnstableKMathAPI::class)
+public data class Quaternion(
+    val w: Double, val x: Double, val y: Double, val z: Double,
+) : FieldElement<Quaternion, QuaternionField> {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),

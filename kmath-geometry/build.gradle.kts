@@ -1,4 +1,4 @@
-plugins { id("ru.mipt.npm.mpp") }
+plugins { id("ru.mipt.npm.gradle.mpp") }
 
 kotlin.sourceSets.commonMain {
     dependencies {
