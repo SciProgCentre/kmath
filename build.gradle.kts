@@ -1,9 +1,6 @@
-
 plugins {
     id("ru.mipt.npm.gradle.project")
 }
-
-internal val kmathVersion: String by extra("0.2.0")
 
 allprojects {
     repositories {
@@ -21,7 +18,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = kmathVersion
+    version = "0.2.0"
 }
 
 subprojects {

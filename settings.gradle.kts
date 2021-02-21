@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         gradlePluginPortal()
         jcenter()
         maven("https://repo.kotlin.link")
