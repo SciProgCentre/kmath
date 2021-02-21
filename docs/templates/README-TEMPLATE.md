@@ -97,13 +97,12 @@ better than SciPy.
 
 ### Repositories
 
-Release artifacts are accessible from bintray with following configuration (see documentation of 
-[Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) for more details):
+Release and development artifacts are accessible from mipt-npm [Space](https://www.jetbrains.com/space/) repository `https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven` (see documentation of
+[Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) for more details). The repository could be reached through [repo.kotlin.link](https://repo.kotlin.link) proxy:
 
 ```kotlin
 repositories {
-    maven("https://dl.bintray.com/mipt-npm/kscience")
-    // maven("https://dl.bintray.com/mipt-npm/dev") for dev versions
+    maven("https://repo.kotlin.link")
 }
 
 dependencies {
@@ -113,16 +112,6 @@ dependencies {
 ```
 
 Gradle `6.0+` is required for multiplatform artifacts.
-
-#### Development
-
-Development builds are uploaded to the separate repository:
-
-```kotlin
-repositories {
-    maven("https://dl.bintray.com/mipt-npm/dev")
-}
-```
 
 ## Contributing
 
