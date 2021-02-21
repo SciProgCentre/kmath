@@ -2,21 +2,20 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         jcenter()
+        maven("https://repo.kotlin.link")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
-        maven("https://dl.bintray.com/mipt-npm/kscience")
-        maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.7.3-1.4.30-RC"
-    val kotlinVersion = "1.4.30-RC"
+    val toolsVersion = "0.8.0"
+    val kotlinVersion = "1.4.30"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"
-        id("ru.mipt.npm.project") version toolsVersion
-        id("ru.mipt.npm.mpp") version toolsVersion
-        id("ru.mipt.npm.jvm") version toolsVersion
-        id("ru.mipt.npm.publish") version toolsVersion
+        id("ru.mipt.npm.gradle.project") version toolsVersion
+        id("ru.mipt.npm.gradle.mpp") version toolsVersion
+        id("ru.mipt.npm.gradle.jvm") version toolsVersion
+        id("ru.mipt.npm.gradle.publish") version toolsVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
@@ -26,9 +25,10 @@ rootProject.name = "kmath"
 
 include(
     ":kmath-memory",
+    ":kmath-complex",
     ":kmath-core",
-    ":kmath-functions",
     ":kmath-coroutines",
+    ":kmath-functions",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",

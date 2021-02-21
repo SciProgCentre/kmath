@@ -7,7 +7,7 @@
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-for-real:0.2.0-dev-5`.
+> This module artifact: `space.kscience:kmath-for-real:0.2.0`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-for-real/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-for-real/_latestVersion)
 >
@@ -17,28 +17,31 @@
 >
 > ```gradle
 > repositories {
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
->     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+>     maven { url 'https://repo.kotlin.link' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-> 
+>     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+>//     Uncomment if repo.kotlin.link is unavailable 
+>//     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
+>//     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-for-real:0.2.0-dev-5'
+>     implementation 'space.kscience:kmath-for-real:0.2.0'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
->     maven("https://dl.bintray.com/kotlin/kotlin-eap")
->     maven("https://dl.bintray.com/mipt-npm/kscience")
->     maven("https://dl.bintray.com/mipt-npm/dev")
->     maven("https://dl.bintray.com/hotkeytlt/maven")
+>     maven("https://repo.kotlin.link")
+>     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+>     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+>//     Uncomment if repo.kotlin.link is unavailable 
+>//     maven("https://dl.bintray.com/mipt-npm/kscience")
+>//     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-for-real:0.2.0-dev-5")
+>     implementation("space.kscience:kmath-for-real:0.2.0")
 > }
 > ```

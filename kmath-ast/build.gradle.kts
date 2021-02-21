@@ -1,7 +1,7 @@
 import ru.mipt.npm.gradle.Maturity
 
 plugins {
-    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.gradle.mpp")
 }
 
 kotlin.js {
@@ -25,6 +25,12 @@ kotlin.sourceSets {
         }
     }
 
+    commonTest {
+        dependencies {
+            implementation(project(":kmath-complex"))
+        }
+    }
+
     jsMain {
         dependencies {
             implementation(npm("astring", "1.4.3"))
@@ -39,6 +45,9 @@ kotlin.sourceSets {
         }
     }
 }
+
+//Workaround for https://github.com/Kotlin/dokka/issues/1455
+tasks.getByName("dokkaHtml").dependsOn(tasks.getByName("build"))
 
 readme {
     maturity = Maturity.PROTOTYPE

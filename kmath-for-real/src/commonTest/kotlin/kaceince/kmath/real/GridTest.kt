@@ -1,6 +1,6 @@
 package kaceince.kmath.real
 
-import kscience.kmath.real.step
+import space.kscience.kmath.real.step
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

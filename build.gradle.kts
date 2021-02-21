@@ -1,12 +1,6 @@
-import ru.mipt.npm.gradle.KSciencePublishPlugin
-
 plugins {
-    id("ru.mipt.npm.project")
+    id("ru.mipt.npm.gradle.project")
 }
-
-internal val kmathVersion: String by extra("0.2.0-dev-5")
-internal val bintrayRepo: String by extra("kscience")
-internal val githubProject: String by extra("kmath")
 
 allprojects {
     repositories {
@@ -23,22 +17,24 @@ allprojects {
         mavenCentral()
     }
 
-    group = "kscience.kmath"
-    version = kmathVersion
+    group = "space.kscience"
+    version = "0.2.0"
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<KSciencePublishPlugin>()
+    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishingPlugin>()
 }
 
 readme {
     readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 }
 
-apiValidation {
-    validationDisabled = true
-}
-
 ksciencePublish {
     spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
+    bintrayRepo = "kscience"
+    githubProject = "kmath"
+}
+
+apiValidation{
+    nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
 }

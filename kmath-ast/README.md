@@ -12,7 +12,7 @@ This subproject implements the following features:
 
 > #### Artifact:
 >
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-5`.
+> This module artifact: `space.kscience:kmath-ast:0.2.0`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
 >
@@ -22,29 +22,32 @@ This subproject implements the following features:
 >
 > ```gradle
 > repositories {
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
->     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
+>     maven { url 'https://repo.kotlin.link' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-> 
+>     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+>//     Uncomment if repo.kotlin.link is unavailable 
+>//     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
+>//     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
 > dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-5'
+>     implementation 'space.kscience:kmath-ast:0.2.0'
 > }
 > ```
 > **Gradle Kotlin DSL:**
 >
 > ```kotlin
 > repositories {
->     maven("https://dl.bintray.com/kotlin/kotlin-eap")
->     maven("https://dl.bintray.com/mipt-npm/kscience")
->     maven("https://dl.bintray.com/mipt-npm/dev")
->     maven("https://dl.bintray.com/hotkeytlt/maven")
+>     maven("https://repo.kotlin.link")
+>     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+>     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+>//     Uncomment if repo.kotlin.link is unavailable 
+>//     maven("https://dl.bintray.com/mipt-npm/kscience")
+>//     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
 > dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-5")
+>     implementation("space.kscience:kmath-ast:0.2.0")
 > }
 > ```
 
@@ -64,18 +67,18 @@ RealField.mstInField { symbol("x") + 2 }.compile()
 â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
-package kscience.kmath.asm.generated;
+package space.kscience.kmath.asm.generated;
 
 import java.util.Map;
 import kotlin.jvm.functions.Function2;
-import kscience.kmath.asm.internal.MapIntrinsics;
-import kscience.kmath.expressions.Expression;
-import kscience.kmath.expressions.Symbol;
+import space.kscience.kmath.asm.internal.MapIntrinsics;
+import space.kscience.kmath.expressions.Expression;
+import space.kscience.kmath.expressions.Symbol;
 
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
 
-    public final Double invoke(Map<Symbol, Double> arguments) {
+    public final Double invoke(Map<Symbol, ? extends Double> arguments) {
         return (Double)((Function2)this.constants[0]).invoke((Double)MapIntrinsics.getOrFail(arguments, "x"), 2);
     }
 

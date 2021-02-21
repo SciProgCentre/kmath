@@ -1,10 +1,12 @@
 package kaceince.kmath.real
 
-import kscience.kmath.linear.*
-import kscience.kmath.operations.invoke
-import kscience.kmath.real.RealVector
-import kscience.kmath.real.plus
-import kscience.kmath.structures.Buffer
+import space.kscience.kmath.linear.MatrixContext
+import space.kscience.kmath.linear.asMatrix
+import space.kscience.kmath.linear.real
+import space.kscience.kmath.linear.transpose
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.real.plus
+import space.kscience.kmath.structures.Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
