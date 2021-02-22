@@ -256,8 +256,8 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:0.2.0")
-    // api("kscience.kmath:kmath-core-jvm:0.2.0") for jvm-specific version
+    api("kscience.kmath:kmath-core:() -> kotlin.Any")
+    // api("kscience.kmath:kmath-core-jvm:() -> kotlin.Any") for jvm-specific version
 }
 ```
 
