@@ -1,4 +1,4 @@
-// TODO move to common when https://github.com/h0tk3y/better-parse/pull/33 is merged
+// TODO move to common when https://github.com/h0tk3y/better-parse/pull/37 is merged
 
 package space.kscience.kmath.ast
 
@@ -25,8 +25,8 @@ import space.kscience.kmath.operations.SpaceOperations
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
-    private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?")
-    private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*")
+    private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
+    private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by literalToken("(")
     private val rpar: Token by literalToken(")")
     private val comma: Token by literalToken(",")
@@ -35,7 +35,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val div: Token by literalToken("/")
     private val minus: Token by literalToken("-")
     private val plus: Token by literalToken("+")
-    private val ws: Token by regexToken("\\s+", ignore = true)
+    private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
     private val singular: Parser<MST> by id use { MST.Symbolic(text) }
