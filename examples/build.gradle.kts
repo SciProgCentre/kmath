@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":kmath-nd4j"))
     implementation(project(":kmath-tensors"))
     implementation(project(":kmath-symja"))
+    implementation(project(":kmath-units"))
     implementation(project(":kmath-for-real"))
     //jafama
     implementation(project(":kmath-jafama"))
@@ -54,6 +55,7 @@ kotlin.sourceSets.all {
     with(languageSettings) {
         optIn("kotlin.contracts.ExperimentalContracts")
         optIn("kotlin.ExperimentalUnsignedTypes")
+        optIn("kotlin.time.ExperimentalTime")
         optIn("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
