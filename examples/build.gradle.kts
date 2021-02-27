@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":kmath-nd4j"))
     implementation(project(":kmath-tensors"))
     implementation(project(":kmath-symja"))
+    implementation(project(":kmath-units"))
     implementation(project(":kmath-for-real"))
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
@@ -52,12 +53,13 @@ kotlin.sourceSets.all {
     with(languageSettings) {
         useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
         useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+        useExperimentalAnnotation("kotlin.time.ExperimentalTime")
         useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions{
+    kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn"
     }

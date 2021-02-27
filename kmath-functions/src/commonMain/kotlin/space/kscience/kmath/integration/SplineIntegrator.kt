@@ -10,6 +10,7 @@ import space.kscience.kmath.functions.integrate
 import space.kscience.kmath.interpolation.PolynomialInterpolator
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
@@ -23,6 +24,7 @@ import space.kscience.kmath.structures.map
 /**
  * Compute analytical indefinite integral of this [PiecewisePolynomial], keeping all intervals intact
  */
+@PerformancePitfall
 @UnstableKMathAPI
 public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(algebra: Field<T>): PiecewisePolynomial<T> =
     PiecewisePolynomial(pieces.map { it.first to it.second.integrate(algebra) })
