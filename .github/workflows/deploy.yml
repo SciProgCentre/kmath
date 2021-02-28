@@ -35,11 +35,11 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
-        run: ./gradlew publishAllPublicationsToSpaceRepository publishAllPublicationsToSonatypeRepository --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
+        run: ./gradlew publishAllPublicationsToSpaceRepository publishAllPublicationsToSonatypeRepository --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }} -PspaceUser=${{ secrets.SPACE_USERNAME }} -PspacePassword=${{ secrets.SPACE_PASSWORD }}
         env:
           signingKey: ${{ secrets.SIGNING_KEY }}
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
-        run: ./gradlew publishMingwX64PublicationToSpaceRepository publishMingwX64PublicationToSonatypeRepository --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
+        run: ./gradlew publishAllPublicationsToSpaceRepository publishAllPublicationsToSonatypeRepository --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }} -PspaceUser=${{ secrets.SPACE_USERNAME }} -PspacePassword=${{ secrets.SPACE_PASSWORD }}
         env:
           signingKey: ${{ secrets.SIGNING_KEY }}
