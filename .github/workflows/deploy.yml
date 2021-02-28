@@ -1,11 +1,11 @@
-name: build
-on: [ push ]
+name: deploy
+on: workflow_dispatch
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [ macOS-latest, windows-latest ]
+        os: [macOS-latest, windows-latest]
     runs-on: ${{matrix.os}}
     steps:
       - name: Checkout the repo
@@ -31,5 +31,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+      - name: Publish Mac Artifacts
+        if: matrix.os == 'macOS-latest'
+        run: ./gradlew publish --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
+        env:
+          signingKey: ${{ secrets.SIGNING_KEY }}
+      - name: Publish Windows Artifacts
+        if: matrix.os == 'windows-latest'
+        run: ./gradlew publish --no-daemon --stacktrace -PsonatypePublish=true -PsonatypeUser=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
+        env:
+          signingKey: ${{ secrets.SIGNING_KEY }}

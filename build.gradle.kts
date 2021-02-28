@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.KSciencePublishingPlugin
+
 plugins {
     id("ru.mipt.npm.gradle.project")
 }
@@ -22,7 +24,14 @@ allprojects {
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) {
+        apply<KSciencePublishingPlugin>()
+
+        val publishWindows by tasks.creating {
+            tasks.find { it.name == "publishMingwX64PublicationToSpaceRepository" }?.let { dependsOn(it) }
+            tasks.find { it.name == "publishMingwX64PublicationToSonatypeRepository" }?.let { dependsOn(it) }
+        }
+    }
 }
 
 readme {
@@ -35,6 +44,6 @@ ksciencePublish {
     githubProject = "kmath"
 }
 
-apiValidation{
+apiValidation {
     nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
 }
