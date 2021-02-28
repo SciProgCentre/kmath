@@ -24,14 +24,7 @@ allprojects {
 }
 
 subprojects {
-    if (name.startsWith("kmath")) {
-        apply<KSciencePublishingPlugin>()
-
-        val publishWindows by tasks.creating {
-            tasks.find { it.name == "publishMingwX64PublicationToSpaceRepository" }?.let { dependsOn(it) }
-            tasks.find { it.name == "publishMingwX64PublicationToSonatypeRepository" }?.let { dependsOn(it) }
-        }
-    }
+    if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
 }
 
 readme {
