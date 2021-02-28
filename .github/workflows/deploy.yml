@@ -1,3 +1,5 @@
+# Based on https://github.com/touchlab/Stately/blob/main/.github/workflows/deploy.yml
+
 name: deploy
 on: workflow_dispatch
 
