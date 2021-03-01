@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:HOME}/miniconda3/envs/ghmc/include", 
+                "${env:HOME}/miniconda3/envs/ghmc/include/python3.8", 
+                "${env:HOME}/miniconda3/envs/ghmc/include/torch/csrc/api/include",
+                "${env:HOME}/.jdks/openjdk-15.0.2/include",
+                "${env:HOME}/.jdks/openjdk-15.0.2/include/linux"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
