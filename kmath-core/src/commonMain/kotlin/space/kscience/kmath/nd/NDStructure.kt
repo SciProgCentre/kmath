@@ -162,7 +162,7 @@ public interface Strides {
     /**
      * Array strides
      */
-    public val strides: List<Int>
+    public val strides: IntArray
 
     /**
      * Get linear index from multidimensional index
@@ -189,6 +189,11 @@ public interface Strides {
     }
 }
 
+internal inline fun offsetFromIndex(index: IntArray, shape: IntArray, strides: IntArray): Int = index.mapIndexed { i, value ->
+    if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
+    value * strides[i]
+}.sum()
+
 /**
  * Simple implementation of [Strides].
  */
@@ -199,7 +204,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     /**
      * Strides for memory access
      */
-    override val strides: List<Int> by lazy {
+    override val strides: IntArray by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -208,13 +213,10 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
                 current *= it
                 yield(current)
             }
-        }.toList()
+        }.toList().toIntArray()
     }
 
-    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-        value * strides[i]
-    }.sum()
+    override fun offset(index: IntArray): Int = offsetFromIndex(index, shape, strides)
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)
@@ -322,7 +324,7 @@ public inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
 /**
  * Mutable ND buffer based on linear [MutableBuffer].
  */
-public class MutableNDBuffer<T>(
+public open class MutableNDBuffer<T>(
     strides: Strides,
     buffer: MutableBuffer<T>,
 ) : NDBuffer<T>(strides, buffer), MutableNDStructure<T> {

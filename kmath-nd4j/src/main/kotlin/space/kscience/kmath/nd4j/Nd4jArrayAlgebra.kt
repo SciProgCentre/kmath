@@ -96,6 +96,7 @@ public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S>, Nd4jArrayAlgeb
         return a.ndArray.mul(k).wrap()
     }
 
+    @Deprecated("Avoid using this method, underlying array get casted to Doubles")
     public override operator fun NDStructure<T>.div(k: Number): Nd4jArrayStructure<T> {
         return ndArray.div(k).wrap()
     }
