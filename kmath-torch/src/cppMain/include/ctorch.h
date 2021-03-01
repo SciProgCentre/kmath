@@ -151,6 +151,7 @@ extern "C"
     TorchTensorHandle detach_from_graph(TorchTensorHandle tensor_handle);
     TorchTensorHandle autograd_tensor(TorchTensorHandle value, TorchTensorHandle variable, bool retain_graph);
     TorchTensorHandle autohess_tensor(TorchTensorHandle value, TorchTensorHandle variable);
+    TorchTensorHandle autohess_tensor_given_grad(TorchTensorHandle value, TorchTensorHandle variable, TorchTensorHandle gradient);
 
 #ifdef __cplusplus
 }

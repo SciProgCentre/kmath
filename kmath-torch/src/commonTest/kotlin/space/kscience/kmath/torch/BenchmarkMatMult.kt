@@ -11,7 +11,7 @@ internal inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensorOverFie
     numWarmUp: Int,
     numIter: Int,
     fieldName: String,
-    device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU
+    device: Device = Device.CPU
 ): Unit {
     println("Benchmarking $scale x $scale $fieldName matrices on $device: ")
     setSeed(SEED)

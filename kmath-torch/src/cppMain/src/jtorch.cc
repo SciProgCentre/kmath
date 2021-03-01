@@ -560,7 +560,7 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_torch_JTorch_detachFromGraph(J
     return (long)new torch::Tensor(ctorch::cast(tensor_handle).detach());
 }
 
-JNIEXPORT jlong JNICALL 
+JNIEXPORT jlong JNICALL
 Java_space_kscience_kmath_torch_JTorch_autogradTensor(JNIEnv *, jclass, jlong value, jlong variable, jboolean retain_graph)
 {
     return (long)new torch::Tensor(torch::autograd::grad({ctorch::cast(value)}, {ctorch::cast(variable)}, {}, retain_graph)[0]);

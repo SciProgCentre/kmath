@@ -11,7 +11,7 @@ import kotlin.test.*
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingScalarProduct(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingScalarProduct(device: Device = Device.CPU): Unit {
     val lhs = randUniform(shape = intArrayOf(3), device = device)
     val rhs = randUniform(shape = intArrayOf(3), device = device)
     val product = lhs dot rhs
@@ -24,7 +24,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingMatrixMultiplication(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingMatrixMultiplication(device: Device = Device.CPU): Unit {
     setSeed(SEED)
 
     val lhsTensor = randNormal(shape = intArrayOf(3, 3), device = device)
@@ -54,7 +54,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingLinearStructure(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingLinearStructure(device: Device = Device.CPU): Unit {
 
     val shape = intArrayOf(3)
     val tensorA = full(value = -4.5, shape = shape, device = device)
@@ -91,7 +91,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingTensorTransformations(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingTensorTransformations(device: Device = Device.CPU): Unit {
     setSeed(SEED)
     val tensor = randNormal(shape = intArrayOf(3, 3), device = device)
     val result = tensor.exp().log()
@@ -110,7 +110,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingBatchedSVD(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingBatchedSVD(device: Device = Device.CPU): Unit {
     val tensor = randNormal(shape = intArrayOf(7, 5, 3), device = device)
     val (tensorU, tensorS, tensorV) = tensor.svd()
     val error = tensor - (tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose(-2, -1)))
@@ -119,7 +119,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Double>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Double, DoubleArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingBatchedSymEig(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingBatchedSymEig(device: Device = Device.CPU): Unit {
     val tensor = randNormal(shape = intArrayOf(5, 5), device = device)
     val tensorSigma = tensor + tensor.transpose(-2, -1)
     val (tensorS, tensorV) = tensorSigma.symEig()

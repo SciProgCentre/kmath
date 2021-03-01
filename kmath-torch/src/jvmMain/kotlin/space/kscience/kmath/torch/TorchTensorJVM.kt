@@ -7,36 +7,36 @@ public sealed class TorchTensorJVM<T> constructor(
     internal val tensorHandle: Long
 ) : TorchTensor<T>, TorchTensorMemoryHolder(scope)
 {
-    override fun close(): Unit = space.kscience.kmath.torch.JTorch.disposeTensor(tensorHandle)
+    override fun close(): Unit = JTorch.disposeTensor(tensorHandle)
 
-    override val dimension: Int get() = space.kscience.kmath.torch.JTorch.getDim(tensorHandle)
+    override val dimension: Int get() = JTorch.getDim(tensorHandle)
     override val shape: IntArray
-        get() = (1..dimension).map { space.kscience.kmath.torch.JTorch.getShapeAt(tensorHandle, it - 1) }.toIntArray()
+        get() = (1..dimension).map { JTorch.getShapeAt(tensorHandle, it - 1) }.toIntArray()
     override val strides: IntArray
-        get() = (1..dimension).map { space.kscience.kmath.torch.JTorch.getStrideAt(tensorHandle, it - 1) }.toIntArray()
-    override val size: Int get() = space.kscience.kmath.torch.JTorch.getNumel(tensorHandle)
-    override val device: space.kscience.kmath.torch.Device get() = space.kscience.kmath.torch.Device.fromInt(space.kscience.kmath.torch.JTorch.getDevice(tensorHandle))
+        get() = (1..dimension).map { JTorch.getStrideAt(tensorHandle, it - 1) }.toIntArray()
+    override val size: Int get() = JTorch.getNumel(tensorHandle)
+    override val device: Device get() = Device.fromInt(JTorch.getDevice(tensorHandle))
 
-    override fun toString(): String = space.kscience.kmath.torch.JTorch.tensorToString(tensorHandle)
+    override fun toString(): String = JTorch.tensorToString(tensorHandle)
 
     public fun copyToDouble(): TorchTensorReal = TorchTensorReal(
         scope = scope,
-        tensorHandle = space.kscience.kmath.torch.JTorch.copyToDouble(this.tensorHandle)
+        tensorHandle = JTorch.copyToDouble(this.tensorHandle)
     )
 
     public fun copyToFloat(): TorchTensorFloat = TorchTensorFloat(
         scope = scope,
-        tensorHandle = space.kscience.kmath.torch.JTorch.copyToFloat(this.tensorHandle)
+        tensorHandle = JTorch.copyToFloat(this.tensorHandle)
     )
 
     public fun copyToLong(): TorchTensorLong = TorchTensorLong(
         scope = scope,
-        tensorHandle = space.kscience.kmath.torch.JTorch.copyToLong(this.tensorHandle)
+        tensorHandle = JTorch.copyToLong(this.tensorHandle)
     )
 
     public fun copyToInt(): TorchTensorInt = TorchTensorInt(
         scope = scope,
-        tensorHandle = space.kscience.kmath.torch.JTorch.copyToInt(this.tensorHandle)
+        tensorHandle = JTorch.copyToInt(this.tensorHandle)
     )
 }
 
@@ -45,18 +45,18 @@ public sealed class TorchTensorOverFieldJVM<T> constructor(
     tensorHandle: Long
 ) : TorchTensorJVM<T>(scope, tensorHandle), TorchTensorOverField<T> {
     override var requiresGrad: Boolean
-        get() = space.kscience.kmath.torch.JTorch.requiresGrad(tensorHandle)
-        set(value) = space.kscience.kmath.torch.JTorch.setRequiresGrad(tensorHandle, value)
+        get() = JTorch.requiresGrad(tensorHandle)
+        set(value) = JTorch.setRequiresGrad(tensorHandle, value)
 }
 
 public class TorchTensorReal internal constructor(
     scope: DeferScope,
     tensorHandle: Long
 ) : TorchTensorOverFieldJVM<Double>(scope, tensorHandle) {
-    override fun item(): Double = space.kscience.kmath.torch.JTorch.getItemDouble(tensorHandle)
-    override fun get(index: IntArray): Double = space.kscience.kmath.torch.JTorch.getDouble(tensorHandle, index)
+    override fun item(): Double = JTorch.getItemDouble(tensorHandle)
+    override fun get(index: IntArray): Double = JTorch.getDouble(tensorHandle, index)
     override fun set(index: IntArray, value: Double) {
-        space.kscience.kmath.torch.JTorch.setDouble(tensorHandle, index, value)
+        JTorch.setDouble(tensorHandle, index, value)
     }
 }
 
@@ -64,10 +64,10 @@ public class TorchTensorFloat internal constructor(
     scope: DeferScope,
     tensorHandle: Long
 ) : TorchTensorOverFieldJVM<Float>(scope, tensorHandle) {
-    override fun item(): Float = space.kscience.kmath.torch.JTorch.getItemFloat(tensorHandle)
-    override fun get(index: IntArray): Float = space.kscience.kmath.torch.JTorch.getFloat(tensorHandle, index)
+    override fun item(): Float = JTorch.getItemFloat(tensorHandle)
+    override fun get(index: IntArray): Float = JTorch.getFloat(tensorHandle, index)
     override fun set(index: IntArray, value: Float) {
-        space.kscience.kmath.torch.JTorch.setFloat(tensorHandle, index, value)
+        JTorch.setFloat(tensorHandle, index, value)
     }
 }
 
@@ -75,10 +75,10 @@ public class TorchTensorLong internal constructor(
     scope: DeferScope,
     tensorHandle: Long
 ) : TorchTensorOverFieldJVM<Long>(scope, tensorHandle) {
-    override fun item(): Long = space.kscience.kmath.torch.JTorch.getItemLong(tensorHandle)
-    override fun get(index: IntArray): Long = space.kscience.kmath.torch.JTorch.getLong(tensorHandle, index)
+    override fun item(): Long = JTorch.getItemLong(tensorHandle)
+    override fun get(index: IntArray): Long = JTorch.getLong(tensorHandle, index)
     override fun set(index: IntArray, value: Long) {
-        space.kscience.kmath.torch.JTorch.setLong(tensorHandle, index, value)
+        JTorch.setLong(tensorHandle, index, value)
     }
 }
 
@@ -86,9 +86,9 @@ public class TorchTensorInt internal constructor(
     scope: DeferScope,
     tensorHandle: Long
 ) : TorchTensorOverFieldJVM<Int>(scope, tensorHandle) {
-    override fun item(): Int = space.kscience.kmath.torch.JTorch.getItemInt(tensorHandle)
-    override fun get(index: IntArray): Int = space.kscience.kmath.torch.JTorch.getInt(tensorHandle, index)
+    override fun item(): Int = JTorch.getItemInt(tensorHandle)
+    override fun get(index: IntArray): Int = JTorch.getInt(tensorHandle, index)
     override fun set(index: IntArray, value: Int) {
-        space.kscience.kmath.torch.JTorch.setInt(tensorHandle, index, value)
+        JTorch.setInt(tensorHandle, index, value)
     }
 }

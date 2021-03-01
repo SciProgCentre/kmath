@@ -8,7 +8,7 @@ public interface TorchTensor<T> : TensorStructure<T> {
     public fun item(): T
     public val strides: IntArray
     public val size: Int
-    public val device: space.kscience.kmath.torch.Device
+    public val device: Device
     override fun value(): T {
         checkIsValue()
         return item()

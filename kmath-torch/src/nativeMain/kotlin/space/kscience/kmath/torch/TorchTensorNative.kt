@@ -19,7 +19,7 @@ public sealed class TorchTensorNative<T> constructor(
     override val strides: IntArray
         get() = (1..dimension).map { get_stride_at(tensorHandle, it - 1) }.toIntArray()
     override val size: Int get() = get_numel(tensorHandle)
-    override val device: space.kscience.kmath.torch.Device get() = space.kscience.kmath.torch.Device.fromInt(get_device(tensorHandle))
+    override val device: Device get() = Device.fromInt(get_device(tensorHandle))
 
     override fun toString(): String {
         val nativeStringRepresentation: CPointer<ByteVar> = tensor_to_string(tensorHandle)!!

@@ -13,7 +13,7 @@ To install the library, you have to build & publish locally `kmath-core`, `kmath
 
 This builds `ctorch` a C wrapper and `jtorch` a JNI wrapper for `LibTorch`, placed inside:
 
-`~/.konan/third-party/kmath-torch-0.2.0-dev-4/cpp-build`
+`~/.konan/third-party/kmath-torch-0.2.0/cpp-build`
 
 You will have to link against it in your own project.
 

@@ -18,9 +18,9 @@ internal class BenchmarkMatMul {
         benchmarkMatMul(200, 10, 10000, "Float")
         benchmarkMatMul(2000, 3, 20, "Float")
         if (cudaAvailable()) {
-            benchmarkMatMul(20, 10, 100000, "Float", space.kscience.kmath.torch.Device.CUDA(0))
-            benchmarkMatMul(200, 10, 10000, "Float", space.kscience.kmath.torch.Device.CUDA(0))
-            benchmarkMatMul(2000, 10, 1000, "Float", space.kscience.kmath.torch.Device.CUDA(0))
+            benchmarkMatMul(20, 10, 100000, "Float", Device.CUDA(0))
+            benchmarkMatMul(200, 10, 10000, "Float", Device.CUDA(0))
+            benchmarkMatMul(2000, 10, 1000, "Float", Device.CUDA(0))
         }
     }
 }

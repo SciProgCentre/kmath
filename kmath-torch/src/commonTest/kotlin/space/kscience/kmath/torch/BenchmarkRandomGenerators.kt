@@ -10,9 +10,9 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: space.kscience.kmath.torch.Device,
+    device: Device,
     distName: String,
-    initBock: TorchTensorAlgebraType.(IntArray, space.kscience.kmath.torch.Device) -> TorchTensorType,
+    initBock: TorchTensorAlgebraType.(IntArray, Device) -> TorchTensorType,
     runBlock: TorchTensorAlgebraType.(TorchTensorType) -> Unit
 ): Unit{
     println("Benchmarking generation of $samples $distName samples on $device: ")
@@ -30,7 +30,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit{
+    device: Device = Device.CPU): Unit{
     benchmarkRand(
         samples,
         numWarmUp,
@@ -48,7 +48,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit{
+    device: Device = Device.CPU): Unit{
     benchmarkRand(
         samples,
         numWarmUp,
@@ -66,7 +66,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     samples: Int,
     numWarmUp: Int,
     numIter: Int,
-    device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit{
+    device: Device = Device.CPU): Unit{
     benchmarkRand(
         samples,
         numWarmUp,
@@ -85,9 +85,9 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     benchmarkRandUniform(10, 10, 100000)
     benchmarkRandIntegral(10, 10, 100000)
     if(cudaAvailable()) {
-        benchmarkRandNormal(10, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandUniform(10, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandIntegral(10, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
+        benchmarkRandNormal(10, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandUniform(10, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandIntegral(10, 10, 100000, device = Device.CUDA(0))
     }
 
 }
@@ -99,9 +99,9 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     benchmarkRandUniform(1000, 10, 10000)
     benchmarkRandIntegral(1000, 10, 10000)
     if(cudaAvailable()) {
-        benchmarkRandNormal(1000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandUniform(1000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandIntegral(1000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
+        benchmarkRandNormal(1000, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandUniform(1000, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandIntegral(1000, 10, 100000, device = Device.CUDA(0))
     }
 }
 
@@ -112,9 +112,9 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     benchmarkRandUniform(100000, 5, 100)
     benchmarkRandIntegral(100000, 5, 100)
     if(cudaAvailable()){
-        benchmarkRandNormal(100000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandUniform(100000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandIntegral(100000, 10, 100000, device = space.kscience.kmath.torch.Device.CUDA(0))
+        benchmarkRandNormal(100000, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandUniform(100000, 10, 100000, device = Device.CUDA(0))
+        benchmarkRandIntegral(100000, 10, 100000, device = Device.CUDA(0))
     }
 }
 
@@ -125,8 +125,8 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
     benchmarkRandUniform(10000000, 3, 20)
     benchmarkRandIntegral(10000000, 3, 20)
     if(cudaAvailable()){
-        benchmarkRandNormal(10000000, 10, 10000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandUniform(10000000, 10, 10000, device = space.kscience.kmath.torch.Device.CUDA(0))
-        benchmarkRandIntegral(10000000, 10, 10000, device = space.kscience.kmath.torch.Device.CUDA(0))
+        benchmarkRandNormal(10000000, 10, 10000, device = Device.CUDA(0))
+        benchmarkRandUniform(10000000, 10, 10000, device = Device.CUDA(0))
+        benchmarkRandIntegral(10000000, 10, 10000, device = Device.CUDA(0))
     }
 }

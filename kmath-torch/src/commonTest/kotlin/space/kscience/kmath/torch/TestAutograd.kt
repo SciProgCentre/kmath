@@ -6,7 +6,7 @@ import kotlin.test.assertTrue
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Float, FloatArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingAutoGrad(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingAutoGrad(device: Device = Device.CPU): Unit {
     setSeed(SEED)
     val dim = 3
     val tensorX = randNormal(shape = intArrayOf(dim), device = device)
@@ -29,7 +29,7 @@ internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
 
 internal inline fun <TorchTensorType : TorchTensorOverField<Float>,
         TorchTensorAlgebraType : TorchTensorPartialDivisionAlgebra<Float, FloatArray, TorchTensorType>>
-        TorchTensorAlgebraType.testingBatchedAutoGrad(device: space.kscience.kmath.torch.Device = space.kscience.kmath.torch.Device.CPU): Unit {
+        TorchTensorAlgebraType.testingBatchedAutoGrad(device: Device = Device.CPU): Unit {
     setSeed(SEED)
     val batch = intArrayOf(2)
     val dim = 2

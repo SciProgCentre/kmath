@@ -121,7 +121,7 @@ public sealed class TorchTensorAlgebraNative<
     override fun TorchTensorType.copy(): TorchTensorType =
         wrap(copy_tensor(this.tensorHandle)!!)
 
-    override fun TorchTensorType.copyToDevice(device: space.kscience.kmath.torch.Device): TorchTensorType =
+    override fun TorchTensorType.copyToDevice(device: Device): TorchTensorType =
         wrap(copy_to_device(this.tensorHandle, device.toInt())!!)
 
     override infix fun TorchTensorType.swap(other: TorchTensorType): Unit =
@@ -200,26 +200,26 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
     override fun TorchTensorReal.copyToArray(): DoubleArray =
         this.elements().map { it.second }.toList().toDoubleArray()
 
-    override fun copyFromArray(array: DoubleArray, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorReal =
+    override fun copyFromArray(array: DoubleArray, shape: IntArray, device: Device): TorchTensorReal =
         wrap(from_blob_double(array.toCValues(), shape.toCValues(), shape.size, device.toInt(), true)!!)
 
     override fun fromBlob(arrayBlob: CPointer<DoubleVar>, shape: IntArray): TorchTensorReal =
-        wrap(from_blob_double(arrayBlob, shape.toCValues(), shape.size, space.kscience.kmath.torch.Device.CPU.toInt(), false)!!)
+        wrap(from_blob_double(arrayBlob, shape.toCValues(), shape.size, Device.CPU.toInt(), false)!!)
 
     override fun TorchTensorReal.getData(): CPointer<DoubleVar> {
-        require(this.device is space.kscience.kmath.torch.Device.CPU) {
+        require(this.device is Device.CPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_double(this.tensorHandle)!!
     }
 
-    override fun randNormal(shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorReal =
+    override fun randNormal(shape: IntArray, device: Device): TorchTensorReal =
         wrap(randn_double(shape.toCValues(), shape.size, device.toInt())!!)
 
-    override fun randUniform(shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorReal =
+    override fun randUniform(shape: IntArray, device: Device): TorchTensorReal =
         wrap(rand_double(shape.toCValues(), shape.size, device.toInt())!!)
 
-    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorReal =
+    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: Device): TorchTensorReal =
         wrap(randint_double(low, high, shape.toCValues(), shape.size, device.toInt())!!)
 
     override operator fun Double.plus(other: TorchTensorReal): TorchTensorReal =
@@ -252,7 +252,7 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
         times_double_assign(value, this.tensorHandle)
     }
 
-    override fun full(value: Double, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorReal =
+    override fun full(value: Double, shape: IntArray, device: Device): TorchTensorReal =
         wrap(full_double(value, shape.toCValues(), shape.size, device.toInt())!!)
 }
 
@@ -265,26 +265,26 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
     override fun TorchTensorFloat.copyToArray(): FloatArray =
         this.elements().map { it.second }.toList().toFloatArray()
 
-    override fun copyFromArray(array: FloatArray, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorFloat =
+    override fun copyFromArray(array: FloatArray, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(from_blob_float(array.toCValues(), shape.toCValues(), shape.size, device.toInt(), true)!!)
 
     override fun fromBlob(arrayBlob: CPointer<FloatVar>, shape: IntArray): TorchTensorFloat =
-        wrap(from_blob_float(arrayBlob, shape.toCValues(), shape.size, space.kscience.kmath.torch.Device.CPU.toInt(), false)!!)
+        wrap(from_blob_float(arrayBlob, shape.toCValues(), shape.size, Device.CPU.toInt(), false)!!)
 
     override fun TorchTensorFloat.getData(): CPointer<FloatVar> {
-        require(this.device is space.kscience.kmath.torch.Device.CPU) {
+        require(this.device is Device.CPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_float(this.tensorHandle)!!
     }
 
-    override fun randNormal(shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorFloat =
+    override fun randNormal(shape: IntArray, device: Device): TorchTensorFloat =
         wrap(randn_float(shape.toCValues(), shape.size, device.toInt())!!)
 
-    override fun randUniform(shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorFloat =
+    override fun randUniform(shape: IntArray, device: Device): TorchTensorFloat =
         wrap(rand_float(shape.toCValues(), shape.size, device.toInt())!!)
 
-    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorFloat =
+    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(randint_float(low, high, shape.toCValues(), shape.size, device.toInt())!!)
 
     override operator fun Float.plus(other: TorchTensorFloat): TorchTensorFloat =
@@ -314,7 +314,7 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
     override fun TorchTensorFloat.timesAssign(value: Float): Unit =
         times_float_assign(value, this.tensorHandle)
 
-    override fun full(value: Float, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorFloat =
+    override fun full(value: Float, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(full_float(value, shape.toCValues(), shape.size, device.toInt())!!)
 
 }
@@ -327,20 +327,20 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
     override fun TorchTensorLong.copyToArray(): LongArray =
         this.elements().map { it.second }.toList().toLongArray()
 
-    override fun copyFromArray(array: LongArray, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorLong =
+    override fun copyFromArray(array: LongArray, shape: IntArray, device: Device): TorchTensorLong =
         wrap(from_blob_long(array.toCValues(), shape.toCValues(), shape.size, device.toInt(), true)!!)
 
     override fun fromBlob(arrayBlob: CPointer<LongVar>, shape: IntArray): TorchTensorLong =
-        wrap(from_blob_long(arrayBlob, shape.toCValues(), shape.size, space.kscience.kmath.torch.Device.CPU.toInt(), false)!!)
+        wrap(from_blob_long(arrayBlob, shape.toCValues(), shape.size, Device.CPU.toInt(), false)!!)
 
     override fun TorchTensorLong.getData(): CPointer<LongVar> {
-        check(this.device is space.kscience.kmath.torch.Device.CPU) {
+        check(this.device is Device.CPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_long(this.tensorHandle)!!
     }
 
-    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorLong =
+    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: Device): TorchTensorLong =
         wrap(randint_long(low, high, shape.toCValues(), shape.size, device.toInt())!!)
 
     override operator fun Long.plus(other: TorchTensorLong): TorchTensorLong =
@@ -370,7 +370,7 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
     override fun TorchTensorLong.timesAssign(value: Long): Unit =
         times_long_assign(value, this.tensorHandle)
 
-    override fun full(value: Long, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorLong =
+    override fun full(value: Long, shape: IntArray, device: Device): TorchTensorLong =
         wrap(full_long(value, shape.toCValues(), shape.size, device.toInt())!!)
 }
 
@@ -382,20 +382,20 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
     override fun TorchTensorInt.copyToArray(): IntArray =
         this.elements().map { it.second }.toList().toIntArray()
 
-    override fun copyFromArray(array: IntArray, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorInt =
+    override fun copyFromArray(array: IntArray, shape: IntArray, device: Device): TorchTensorInt =
         wrap(from_blob_int(array.toCValues(), shape.toCValues(), shape.size, device.toInt(), true)!!)
 
     override fun fromBlob(arrayBlob: CPointer<IntVar>, shape: IntArray): TorchTensorInt =
-        wrap(from_blob_int(arrayBlob, shape.toCValues(), shape.size, space.kscience.kmath.torch.Device.CPU.toInt(), false)!!)
+        wrap(from_blob_int(arrayBlob, shape.toCValues(), shape.size, Device.CPU.toInt(), false)!!)
 
     override fun TorchTensorInt.getData(): CPointer<IntVar> {
-        require(this.device is space.kscience.kmath.torch.Device.CPU) {
+        require(this.device is Device.CPU) {
             "This tensor is not on available on CPU"
         }
         return get_data_int(this.tensorHandle)!!
     }
 
-    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorInt =
+    override fun randIntegral(low: Long, high: Long, shape: IntArray, device: Device): TorchTensorInt =
         wrap(randint_int(low, high, shape.toCValues(), shape.size, device.toInt())!!)
 
     override operator fun Int.plus(other: TorchTensorInt): TorchTensorInt =
@@ -425,7 +425,7 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
     override fun TorchTensorInt.timesAssign(value: Int): Unit =
         times_int_assign(value, this.tensorHandle)
 
-    override fun full(value: Int, shape: IntArray, device: space.kscience.kmath.torch.Device): TorchTensorInt =
+    override fun full(value: Int, shape: IntArray, device: Device): TorchTensorInt =
         wrap(full_int(value, shape.toCValues(), shape.size, device.toInt())!!)
 }
 
