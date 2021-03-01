@@ -175,6 +175,7 @@ public interface SpaceOperations<T> : Algebra<T> {
      * @param k the divisor.
      * @return the quotient.
      */
+    @Deprecated("Dividing not allowed in a Ring")
     public operator fun T.div(k: Number): T = multiply(this, 1.0 / k.toDouble())
 
     /**
