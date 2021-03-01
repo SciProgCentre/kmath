@@ -259,7 +259,6 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
     override fun full(value: Double, shape: IntArray, device: Device): TorchTensorReal =
         wrap(full_double(value, shape.toCValues(), shape.size, device.toInt())!!)
 
-
     override fun multiply(a: TorchTensorReal, k: Number): TorchTensorReal = a * k.toDouble()
 
     override val zero: TorchTensorReal
@@ -335,7 +334,6 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
     override val zero: TorchTensorFloat
         get() = full(0f, IntArray(0), Device.CPU)
 
-
     override val one: TorchTensorFloat
         get() = full(1f, IntArray(0), Device.CPU)
 
@@ -400,7 +398,6 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
     override val zero: TorchTensorLong
         get() = full(0, IntArray(0), Device.CPU)
 
-
     override val one: TorchTensorLong
         get() = full(1, IntArray(0), Device.CPU)
 }
@@ -459,12 +456,10 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
     override fun full(value: Int, shape: IntArray, device: Device): TorchTensorInt =
         wrap(full_int(value, shape.toCValues(), shape.size, device.toInt())!!)
 
-
     override fun multiply(a: TorchTensorInt, k: Number): TorchTensorInt = a * k.toInt()
 
     override val zero: TorchTensorInt
         get() = full(0, IntArray(0), Device.CPU)
-
 
     override val one: TorchTensorInt
         get() = full(1, IntArray(0), Device.CPU)

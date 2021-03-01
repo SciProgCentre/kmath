@@ -2,6 +2,7 @@ package space.kscience.kmath.torch
 
 import space.kscience.kmath.memory.DeferScope
 import space.kscience.kmath.memory.withDeferScope
+import space.kscience.kmath.tensors.*
 
 public sealed class TorchTensorAlgebraJVM<
         T,
@@ -58,6 +59,10 @@ public sealed class TorchTensorAlgebraJVM<
         if (checks) checkLinearOperation(this, other)
         JTorch.minusTensorAssign(this.tensorHandle, other.tensorHandle)
     }
+
+    override fun add(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a + b
+
+    override fun multiply(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a * b
 
     override operator fun TorchTensorType.unaryMinus(): TorchTensorType =
         wrap(JTorch.unaryMinus(this.tensorHandle))
@@ -230,6 +235,14 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
 
     override fun full(value: Double, shape: IntArray, device: Device): TorchTensorReal =
         wrap(JTorch.fullDouble(value, shape, device.toInt()))
+
+    override fun multiply(a: TorchTensorReal, k: Number): TorchTensorReal = a * k.toDouble()
+
+    override val zero: TorchTensorReal
+        get() = full(0.0, IntArray(0), Device.CPU)
+
+    override val one: TorchTensorReal
+        get() = full(1.0, IntArray(0), Device.CPU)
 }
 
 public class TorchTensorFloatAlgebra(scope: DeferScope) :
@@ -281,6 +294,14 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
 
     override fun full(value: Float, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(JTorch.fullFloat(value, shape, device.toInt()))
+
+    override fun multiply(a: TorchTensorFloat, k: Number): TorchTensorFloat = a * k.toFloat()
+
+    override val zero: TorchTensorFloat
+        get() = full(0f, IntArray(0), Device.CPU)
+
+    override val one: TorchTensorFloat
+        get() = full(1f, IntArray(0), Device.CPU)
 }
 
 public class TorchTensorLongAlgebra(scope: DeferScope) :
@@ -326,6 +347,14 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
 
     override fun full(value: Long, shape: IntArray, device: Device): TorchTensorLong =
         wrap(JTorch.fullLong(value, shape, device.toInt()))
+
+    override fun multiply(a: TorchTensorLong, k: Number): TorchTensorLong = a * k.toLong()
+
+    override val zero: TorchTensorLong
+        get() = full(0, IntArray(0), Device.CPU)
+
+    override val one: TorchTensorLong
+        get() = full(1, IntArray(0), Device.CPU)
 }
 
 public class TorchTensorIntAlgebra(scope: DeferScope) :
@@ -371,6 +400,14 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
 
     override fun full(value: Int, shape: IntArray, device: Device): TorchTensorInt =
         wrap(JTorch.fullInt(value, shape, device.toInt()))
+
+    override fun multiply(a: TorchTensorInt, k: Number): TorchTensorInt = a * k.toInt()
+
+    override val zero: TorchTensorInt
+        get() = full(0, IntArray(0), Device.CPU)
+
+    override val one: TorchTensorInt
+        get() = full(1, IntArray(0), Device.CPU)
 }
 
 public inline fun <R> TorchTensorRealAlgebra(block: TorchTensorRealAlgebra.() -> R): R =
