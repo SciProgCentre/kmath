@@ -1,25 +1,26 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.RingWithNumbers
-
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
-public interface TensorAlgebra<T, TensorType : TensorStructure<T>>: RingWithNumbers<TensorType> {
+public interface TensorAlgebra<T, TensorType : TensorStructure<T>>{
 
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
+    public operator fun TensorType.plus(other: TensorType): TensorType
     public operator fun TensorType.plusAssign(value: T): Unit
     public operator fun TensorType.plusAssign(other: TensorType): Unit
 
     public operator fun T.minus(other: TensorType): TensorType
     public operator fun TensorType.minus(value: T): TensorType
+    public operator fun TensorType.minus(other: TensorType): TensorType
     public operator fun TensorType.minusAssign(value: T): Unit
     public operator fun TensorType.minusAssign(other: TensorType): Unit
 
     public operator fun T.times(other: TensorType): TensorType
     public operator fun TensorType.times(value: T): TensorType
+    public operator fun TensorType.times(other: TensorType): TensorType
     public operator fun TensorType.timesAssign(value: T): Unit
     public operator fun TensorType.timesAssign(other: TensorType): Unit
+    public operator fun TensorType.unaryMinus(): TensorType
 
 
     //https://pytorch.org/docs/stable/generated/torch.matmul.html

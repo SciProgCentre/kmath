@@ -19,25 +19,6 @@ public class RealTensor(
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
-    override fun add(a: RealTensor, b: RealTensor): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun multiply(a: RealTensor, k: Number): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override val zero: RealTensor
-        get() = TODO("Not yet implemented")
-
-    override fun multiply(a: RealTensor, b: RealTensor): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override val one: RealTensor
-        get() = TODO("Not yet implemented")
-
-
     override fun Double.plus(other: RealTensor): RealTensor {
         val n = other.buffer.size
         val arr = other.buffer.array
@@ -48,6 +29,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.plus(value: Double): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.plus(other: RealTensor): RealTensor {
         TODO("Not yet implemented")
     }
 
@@ -67,6 +52,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun RealTensor.minus(other: RealTensor): RealTensor {
+        TODO("Not yet implemented")
+    }
+
     override fun RealTensor.minusAssign(value: Double) {
         TODO("Not yet implemented")
     }
@@ -83,11 +72,19 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun RealTensor.times(other: RealTensor): RealTensor {
+        TODO("Not yet implemented")
+    }
+
     override fun RealTensor.timesAssign(value: Double) {
         TODO("Not yet implemented")
     }
 
     override fun RealTensor.timesAssign(other: RealTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.unaryMinus(): RealTensor {
         TODO("Not yet implemented")
     }
 
