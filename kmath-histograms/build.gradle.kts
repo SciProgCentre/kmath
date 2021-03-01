@@ -1,8 +1,24 @@
-plugins { id("ru.mipt.npm.mpp") }
+plugins {
+    id("ru.mipt.npm.gradle.mpp")
+}
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
-        api(project(":kmath-for-real"))
+kscience {
+    useAtomic()
+}
+
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
     }
+    commonTest {
+        dependencies {
+            implementation(project(":kmath-for-real"))
+        }
+    }
+}
+
+readme {
+    this.maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

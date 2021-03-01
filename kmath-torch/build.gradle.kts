@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion.VERSION_11
 
 
 plugins {
-    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.gradle.mpp")
     id("de.undercouch.download")
 }
 
@@ -118,7 +118,7 @@ val buildCpp by tasks.registering {
 val generateJNIHeader by tasks.registering {
     doLast {
         exec {
-            workingDir(projectDir.resolve("src/jvmMain/java/kscience/kmath/torch"))
+            workingDir(projectDir.resolve("src/jvmMain/java/space/kscience/kmath/torch"))
             commandLine("$javaHome/bin/javac", "-h", cppSources.resolve("include") , "JTorch.java")
         }
     }
@@ -185,7 +185,7 @@ tasks["jvmProcessResources"].dependsOn(buildCpp)
 
 tasks {
     withType<Test>{
-        systemProperty("java.library.path", cppBuildDir.toString())
+        systemProperty("java.library.path", cppBuildDir)
     }
 }
 

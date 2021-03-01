@@ -1,2 +1,2 @@
-package=kscience.kmath.torch.ctorch
+package=space.kscience.kmath.torch.ctorch
 headers=ctorch.h
