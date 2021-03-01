@@ -1,7 +1,7 @@
 import ru.mipt.npm.gradle.Maturity
 
 plugins {
-    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.gradle.mpp")
 }
 
 kotlin.js {
@@ -25,19 +25,30 @@ kotlin.sourceSets {
         }
     }
 
+    commonTest {
+        dependencies {
+            implementation(project(":kmath-complex"))
+        }
+    }
+
     jsMain {
         dependencies {
-            implementation(npm("astring", "1.4.3"))
+            implementation(npm("astring", "1.7.0"))
         }
     }
 
     jvmMain {
         dependencies {
-            api("com.github.h0tk3y.betterParse:better-parse:0.4.0")
-            implementation("org.ow2.asm:asm:9.0")
-            implementation("org.ow2.asm:asm-commons:9.0")
+            api("com.github.h0tk3y.betterParse:better-parse:0.4.1")
+            implementation("org.ow2.asm:asm:9.1")
+            implementation("org.ow2.asm:asm-commons:9.1")
         }
     }
+}
+
+//Workaround for https://github.com/Kotlin/dokka/issues/1455
+tasks.dokkaHtml {
+    dependsOn(tasks.build)
 }
 
 readme {

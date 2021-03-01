@@ -1,9 +1,9 @@
 package kscience.dimensions
 
-import kscience.kmath.dimensions.D2
-import kscience.kmath.dimensions.D3
-import kscience.kmath.dimensions.DMatrixContext
-import kscience.kmath.dimensions.one
+import space.kscience.kmath.dimensions.D2
+import space.kscience.kmath.dimensions.D3
+import space.kscience.kmath.dimensions.DMatrixContext
+import space.kscience.kmath.dimensions.one
 import kotlin.test.Test
 
 @Suppress("UNUSED_VARIABLE")
