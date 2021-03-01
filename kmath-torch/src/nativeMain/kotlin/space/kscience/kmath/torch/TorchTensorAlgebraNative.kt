@@ -1,10 +1,10 @@
 package space.kscience.kmath.torch
 
-
 import space.kscience.kmath.memory.DeferScope
 import space.kscience.kmath.memory.withDeferScope
 
 import kotlinx.cinterop.*
+import space.kscience.kmath.tensors.*
 import space.kscience.kmath.torch.ctorch.*
 
 public sealed class TorchTensorAlgebraNative<
@@ -38,9 +38,9 @@ public sealed class TorchTensorAlgebraNative<
     public abstract fun fromBlob(arrayBlob: CPointer<TVar>, shape: IntArray): TorchTensorType
     public abstract fun TorchTensorType.getData(): CPointer<TVar>
 
-    override operator fun TorchTensorType.times(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(times_tensor(this.tensorHandle, other.tensorHandle)!!)
+    override operator fun TorchTensorType.times(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(times_tensor(this.tensorHandle, b.tensorHandle)!!)
     }
 
     override operator fun TorchTensorType.timesAssign(other: TorchTensorType): Unit {
@@ -48,9 +48,9 @@ public sealed class TorchTensorAlgebraNative<
         times_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.plus(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(plus_tensor(this.tensorHandle, other.tensorHandle)!!)
+    override operator fun TorchTensorType.plus(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(plus_tensor(this.tensorHandle, b.tensorHandle)!!)
     }
 
     override operator fun TorchTensorType.plusAssign(other: TorchTensorType): Unit {
@@ -58,15 +58,19 @@ public sealed class TorchTensorAlgebraNative<
         plus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.minus(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(minus_tensor(this.tensorHandle, other.tensorHandle)!!)
+    override operator fun TorchTensorType.minus(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(minus_tensor(this.tensorHandle, b.tensorHandle)!!)
     }
 
     override operator fun TorchTensorType.minusAssign(other: TorchTensorType): Unit {
         if (checks) checkLinearOperation(this, other)
         minus_tensor_assign(this.tensorHandle, other.tensorHandle)
     }
+
+    override fun add(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a + b
+
+    override fun multiply(a: TorchTensorType, b: TorchTensorType): TorchTensorType = a * b
 
     override operator fun TorchTensorType.unaryMinus(): TorchTensorType =
         wrap(unary_minus(this.tensorHandle)!!)
@@ -254,6 +258,15 @@ public class TorchTensorRealAlgebra(scope: DeferScope) :
 
     override fun full(value: Double, shape: IntArray, device: Device): TorchTensorReal =
         wrap(full_double(value, shape.toCValues(), shape.size, device.toInt())!!)
+
+
+    override fun multiply(a: TorchTensorReal, k: Number): TorchTensorReal = a * k.toDouble()
+
+    override val zero: TorchTensorReal
+        get() = full(0.0, IntArray(0), Device.CPU)
+
+    override val one: TorchTensorReal
+        get() = full(1.0, IntArray(0), Device.CPU)
 }
 
 
@@ -317,6 +330,15 @@ public class TorchTensorFloatAlgebra(scope: DeferScope) :
     override fun full(value: Float, shape: IntArray, device: Device): TorchTensorFloat =
         wrap(full_float(value, shape.toCValues(), shape.size, device.toInt())!!)
 
+    override fun multiply(a: TorchTensorFloat, k: Number): TorchTensorFloat = a * k.toFloat()
+
+    override val zero: TorchTensorFloat
+        get() = full(0f, IntArray(0), Device.CPU)
+
+
+    override val one: TorchTensorFloat
+        get() = full(1f, IntArray(0), Device.CPU)
+
 }
 
 public class TorchTensorLongAlgebra(scope: DeferScope) :
@@ -372,6 +394,15 @@ public class TorchTensorLongAlgebra(scope: DeferScope) :
 
     override fun full(value: Long, shape: IntArray, device: Device): TorchTensorLong =
         wrap(full_long(value, shape.toCValues(), shape.size, device.toInt())!!)
+
+    override fun multiply(a: TorchTensorLong, k: Number): TorchTensorLong = a * k.toLong()
+
+    override val zero: TorchTensorLong
+        get() = full(0, IntArray(0), Device.CPU)
+
+
+    override val one: TorchTensorLong
+        get() = full(1, IntArray(0), Device.CPU)
 }
 
 public class TorchTensorIntAlgebra(scope: DeferScope) :
@@ -427,6 +458,16 @@ public class TorchTensorIntAlgebra(scope: DeferScope) :
 
     override fun full(value: Int, shape: IntArray, device: Device): TorchTensorInt =
         wrap(full_int(value, shape.toCValues(), shape.size, device.toInt())!!)
+
+
+    override fun multiply(a: TorchTensorInt, k: Number): TorchTensorInt = a * k.toInt()
+
+    override val zero: TorchTensorInt
+        get() = full(0, IntArray(0), Device.CPU)
+
+
+    override val one: TorchTensorInt
+        get() = full(1, IntArray(0), Device.CPU)
 }
 
 

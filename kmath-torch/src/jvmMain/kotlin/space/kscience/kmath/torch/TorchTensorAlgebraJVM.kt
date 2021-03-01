@@ -29,9 +29,9 @@ public sealed class TorchTensorAlgebraJVM<
 
     internal abstract fun wrap(tensorHandle: Long): TorchTensorType
 
-    override operator fun TorchTensorType.times(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(JTorch.timesTensor(this.tensorHandle, other.tensorHandle))
+    override operator fun TorchTensorType.times(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(JTorch.timesTensor(this.tensorHandle, b.tensorHandle))
     }
 
     override operator fun TorchTensorType.timesAssign(other: TorchTensorType): Unit {
@@ -39,9 +39,9 @@ public sealed class TorchTensorAlgebraJVM<
         JTorch.timesTensorAssign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.plus(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(JTorch.plusTensor(this.tensorHandle, other.tensorHandle))
+    override operator fun TorchTensorType.plus(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(JTorch.plusTensor(this.tensorHandle, b.tensorHandle))
     }
 
     override operator fun TorchTensorType.plusAssign(other: TorchTensorType): Unit {
@@ -49,9 +49,9 @@ public sealed class TorchTensorAlgebraJVM<
         JTorch.plusTensorAssign(this.tensorHandle, other.tensorHandle)
     }
 
-    override operator fun TorchTensorType.minus(other: TorchTensorType): TorchTensorType {
-        if (checks) checkLinearOperation(this, other)
-        return wrap(JTorch.minusTensor(this.tensorHandle, other.tensorHandle))
+    override operator fun TorchTensorType.minus(b: TorchTensorType): TorchTensorType {
+        if (checks) checkLinearOperation(this, b)
+        return wrap(JTorch.minusTensor(this.tensorHandle, b.tensorHandle))
     }
 
     override operator fun TorchTensorType.minusAssign(other: TorchTensorType): Unit {

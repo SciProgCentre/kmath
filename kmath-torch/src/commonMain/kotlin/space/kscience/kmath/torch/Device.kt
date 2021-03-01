@@ -10,13 +10,13 @@ public sealed class Device {
     public data class CUDA(val index: Int): Device()
     public fun toInt(): Int {
         when(this) {
-            is Device.CPU -> return 0
-            is Device.CUDA -> return this.index + 1
+            is CPU -> return 0
+            is CUDA -> return this.index + 1
         }
     }
     public companion object {
         public fun fromInt(deviceInt: Int): Device {
-            return if (deviceInt == 0) Device.CPU else Device.CUDA(
+            return if (deviceInt == 0) CPU else CUDA(
                 deviceInt - 1
             )
         }

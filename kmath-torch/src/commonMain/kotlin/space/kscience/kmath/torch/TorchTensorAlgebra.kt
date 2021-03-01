@@ -2,8 +2,7 @@
 
 package space.kscience.kmath.torch
 
-import space.kscience.kmath.tensors.TensorAlgebra
-import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
+import space.kscience.kmath.tensors.*
 
 public interface TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>> :
     TensorAlgebra<T, TorchTensorType> {
@@ -75,15 +74,6 @@ public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
         "Tensors must be on the same device"
     }
 
-public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
-        TorchTensorAlgebraType : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType>>
-        TorchTensorAlgebraType.checkShapeCompatible(
-    a: TorchTensorType,
-    b: TorchTensorType
-): Unit =
-    check(a.shape contentEquals b.shape) {
-        "Tensors must be of identical shape"
-    }
 
 public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
         TorchTensorAlgebraType : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType>>
@@ -92,8 +82,8 @@ public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
     b: TorchTensorType
 ) {
     if (a.isNotValue() and b.isNotValue()) {
-        this.checkDeviceCompatible(a, b)
-        this.checkShapeCompatible(a, b)
+        checkDeviceCompatible(a, b)
+        checkShapeCompatible(a, b)
     }
 }
 
@@ -101,35 +91,8 @@ public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
         TorchTensorAlgebraType : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType>>
         TorchTensorAlgebraType.checkDotOperation(a: TorchTensorType, b: TorchTensorType): Unit {
     checkDeviceCompatible(a, b)
-    val sa = a.shape
-    val sb = b.shape
-    val na = sa.size
-    val nb = sb.size
-    var status: Boolean
-    if (nb == 1) {
-        status = sa.last() == sb[0]
-    } else {
-        status = sa.last() == sb[nb - 2]
-        if ((na > 2) and (nb > 2)) {
-            status = status and
-                    (sa.take(nb - 2).toIntArray() contentEquals sb.take(nb - 2).toIntArray())
-        }
-    }
-    check(status) { "Incompatible shapes $sa and $sb for dot product" }
+    checkDot(a,b)
 }
-
-public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
-        TorchTensorAlgebraType : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType>>
-        TorchTensorAlgebraType.checkTranspose(dim: Int, i: Int, j: Int): Unit =
-    check((i < dim) and (j < dim)) {
-        "Cannot transpose $i to $j for a tensor of dim $dim"
-    }
-
-public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensor<T>,
-        TorchTensorAlgebraType : TorchTensorAlgebra<T, PrimitiveArrayType, TorchTensorType>>
-        TorchTensorAlgebraType.checkView(a: TorchTensorType, shape: IntArray): Unit =
-    check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
-
 
 public inline fun <T, PrimitiveArrayType, TorchTensorType : TorchTensorOverField<T>,
         TorchTensorDivisionAlgebraType : TorchTensorPartialDivisionAlgebra<T, PrimitiveArrayType, TorchTensorType>>
