@@ -40,6 +40,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>>{
 
     //https://pytorch.org/docs/stable/tensor_view.html
     public fun TensorType.view(shape: IntArray): TensorType
+    public fun TensorType.view_as(other: TensorType): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType

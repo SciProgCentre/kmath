@@ -14,8 +14,12 @@ public class RealTensor(
         TensorStrides(shape),
         RealBuffer(buffer)
     ) {
-    override fun item(): Double = buffer[0]
+    override fun item(): Double {
+        check(buffer.size > 0) { "The tensor is empty" }
+        return buffer[0]
+    }
 }
+
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
@@ -113,6 +117,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.view(shape: IntArray): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.view_as(other: RealTensor): RealTensor {
         TODO("Not yet implemented")
     }
 
