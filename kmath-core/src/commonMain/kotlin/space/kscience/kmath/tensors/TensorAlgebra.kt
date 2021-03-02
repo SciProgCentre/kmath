@@ -66,6 +66,9 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
     public fun TensorType.log(): TensorType
     public fun TensorType.logAssign(): Unit
 
+    //https://pytorch.org/docs/stable/generated/torch.lu.html
+    public fun TensorType.lu(): Pair<TensorType, TensorType>
+
     //https://pytorch.org/docs/stable/generated/torch.svd.html
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
 

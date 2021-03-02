@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.linear.LupDecompositionFeature
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
@@ -164,7 +165,19 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun RealTensor.lu(): Pair<RealTensor, RealTensor> {
+        /**
+         * Main first task for @AndreiKingsley
+         * Compare with the implementation of [LupDecomposition]
+         * and provide a common API
+         */
+        TODO("Not yet implemented")
+    }
+
     override fun RealTensor.svd(): Triple<RealTensor, RealTensor, RealTensor> {
+        /**
+         * Main first task for @AlyaNovikova
+         */
         TODO("Not yet implemented")
     }
 
