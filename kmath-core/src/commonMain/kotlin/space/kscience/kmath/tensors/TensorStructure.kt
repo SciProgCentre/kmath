@@ -3,6 +3,10 @@ package space.kscience.kmath.tensors
 import space.kscience.kmath.nd.MutableNDStructure
 
 public interface TensorStructure<T> : MutableNDStructure<T> {
+
+    /*
+    * TODO: Andrei remove item() and value()
+     */
     public fun item(): T
 
     // A tensor can have empty shape, in which case it represents just a value

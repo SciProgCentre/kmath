@@ -1,6 +1,5 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.linear.LupDecompositionFeature
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
@@ -15,6 +14,9 @@ public class RealTensor(
         TensorStrides(shape),
         RealBuffer(buffer)
     ) {
+    /*
+     * TODO: Andrei remove item()
+     */
     override fun item(): Double {
         check(buffer.size > 0) { "The tensor is empty" }
         return buffer[0]
@@ -23,6 +25,10 @@ public class RealTensor(
 
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
+
+    override fun RealTensor.value(): Double {
+        TODO("Andrei")
+    }
 
     override fun Double.plus(other: RealTensor): RealTensor {
         val n = other.buffer.size
@@ -34,95 +40,95 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.plus(value: Double): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.plus(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.plusAssign(value: Double) {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.plusAssign(other: RealTensor) {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun Double.minus(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.minus(value: Double): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.minus(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.minusAssign(value: Double) {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.minusAssign(other: RealTensor) {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun Double.times(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.times(value: Double): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.times(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.timesAssign(value: Double) {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.timesAssign(other: RealTensor) {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.unaryMinus(): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.dot(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.dotAssign(other: RealTensor) {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.dotRightAssign(other: RealTensor) {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun diagonalEmbedding(diagonalEntries: RealTensor, offset: Int, dim1: Int, dim2: Int): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.transpose(i: Int, j: Int): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.transposeAssign(i: Int, j: Int) {
-        TODO("Not yet implemented")
+        TODO("Alya")
     }
 
     override fun RealTensor.view(shape: IntArray): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.view_as(other: RealTensor): RealTensor {
-        TODO("Not yet implemented")
+        TODO("Andrei")
     }
 
     override fun RealTensor.abs(): RealTensor {
@@ -171,6 +177,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
          * Compare with the implementation of [LupDecomposition]
          * and provide a common API
          */
+        TODO("Not yet implemented")
+    }
+
+    override fun lu_unpack(A_LU: RealTensor, pivots: RealTensor): Triple<RealTensor, RealTensor, RealTensor> {
         TODO("Not yet implemented")
     }
 

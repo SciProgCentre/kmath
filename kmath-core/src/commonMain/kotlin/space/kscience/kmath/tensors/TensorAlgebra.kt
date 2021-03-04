@@ -1,7 +1,9 @@
 package space.kscience.kmath.tensors
 
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
-public interface TensorAlgebra<T, TensorType : TensorStructure<T>>{
+public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
+
+    public fun TensorType.value(): T
 
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
@@ -68,6 +70,9 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
     public fun TensorType.lu(): Pair<TensorType, TensorType>
+
+    //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
+    public fun lu_unpack(A_LU: TensorType, pivots: TensorType): Triple<TensorType, TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.svd.html
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
