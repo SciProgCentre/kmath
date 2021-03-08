@@ -26,7 +26,8 @@ public fun <T> Space<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, righ
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
+public fun <T, S> S.average(data: Iterable<T>): T where S : Space<T>, S : ScaleOperations<T> =
+    sum(data) / data.count()
 
 /**
  * Returns an average value of elements in the sequence in this [Space].
@@ -36,7 +37,8 @@ public fun <T> Space<T>.average(data: Iterable<T>): T = sum(data) / data.count()
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T> Space<T>.average(data: Sequence<T>): T = sum(data) / data.count()
+public fun <T, S> S.average(data: Sequence<T>): T where S : Space<T>, S : ScaleOperations<T> =
+    sum(data) / data.count()
 
 /**
  * Absolute of the comparable [value]
@@ -69,7 +71,8 @@ public fun <T> Sequence<T>.sumWith(space: Space<T>): T = space.sum(this)
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
+public fun <T, S> Iterable<T>.averageWith(space: S): T  where S : Space<T>, S : ScaleOperations<T>  =
+    space.average(this)
 
 /**
  * Returns an average value of elements in the sequence in this [Space].
@@ -79,7 +82,8 @@ public fun <T> Iterable<T>.averageWith(space: Space<T>): T = space.average(this)
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T> Sequence<T>.averageWith(space: Space<T>): T = space.average(this)
+public fun <T, S> Sequence<T>.averageWith(space: S): T  where S : Space<T>, S : ScaleOperations<T>  =
+    space.average(this)
 
 //TODO optimized power operation
 

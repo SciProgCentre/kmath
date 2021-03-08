@@ -4,8 +4,9 @@ import org.jetbrains.bio.viktor.F64Array
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.ExtendedField
+import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.RingWithNumbers
+import space.kscience.kmath.operations.ScaleOperations
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public inline class ViktorNDStructure(public val f64Buffer: F64Array) : MutableNDStructure<Double> {
@@ -26,7 +27,8 @@ public fun F64Array.asStructure(): ViktorNDStructure = ViktorNDStructure(this)
 @OptIn(UnstableKMathAPI::class)
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public class ViktorNDField(public override val shape: IntArray) : NDField<Double, RealField>,
-    RingWithNumbers<NDStructure<Double>>, ExtendedField<NDStructure<Double>> {
+    NumbersAddOperations<NDStructure<Double>>, ExtendedField<NDStructure<Double>>,
+    ScaleOperations<NDStructure<Double>> {
 
     public val NDStructure<Double>.f64Buffer: F64Array
         get() = when {
@@ -54,6 +56,8 @@ public class ViktorNDField(public override val shape: IntArray) : NDField<Double
                 set(value = RealField.initializer(index), indices = index)
             }
         }.asStructure()
+
+    override fun NDStructure<Double>.unaryMinus(): NDStructure<Double> = this * (-1)
 
     public override fun NDStructure<Double>.map(transform: RealField.(Double) -> Double): ViktorNDStructure =
         F64Array(*this@ViktorNDField.shape).apply {
@@ -83,8 +87,8 @@ public class ViktorNDField(public override val shape: IntArray) : NDField<Double
     public override fun add(a: NDStructure<Double>, b: NDStructure<Double>): ViktorNDStructure =
         (a.f64Buffer + b.f64Buffer).asStructure()
 
-    public override fun multiply(a: NDStructure<Double>, k: Number): ViktorNDStructure =
-        (a.f64Buffer * k.toDouble()).asStructure()
+    public override fun scale(a: NDStructure<Double>, value: Double): ViktorNDStructure =
+        (a.f64Buffer * value.toDouble()).asStructure()
 
     public override inline fun NDStructure<Double>.plus(b: NDStructure<Double>): ViktorNDStructure =
         (f64Buffer + b.f64Buffer).asStructure()

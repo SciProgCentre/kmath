@@ -20,7 +20,7 @@ internal fun NDAlgebra<*, *>.checkShape(array: INDArray): INDArray {
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
  */
-public interface Nd4jArrayAlgebra<T, C> : NDAlgebra<T, C> {
+public interface Nd4jArrayAlgebra<T, C : Algebra<T>> : NDAlgebra<T, C> {
     /**
      * Wraps [INDArray] to [N].
      */
@@ -92,17 +92,8 @@ public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S>, Nd4jArrayAlgeb
         return ndArray.neg().wrap()
     }
 
-    public override fun multiply(a: NDStructure<T>, k: Number): Nd4jArrayStructure<T> {
+    public fun multiply(a: NDStructure<T>, k: Number): Nd4jArrayStructure<T> {
         return a.ndArray.mul(k).wrap()
-    }
-
-    @Deprecated("Avoid using this method, underlying array get casted to Doubles")
-    public override operator fun NDStructure<T>.div(k: Number): Nd4jArrayStructure<T> {
-        return ndArray.div(k).wrap()
-    }
-
-    public override operator fun NDStructure<T>.times(k: Number): Nd4jArrayStructure<T> {
-        return ndArray.mul(k).wrap()
     }
 }
 
@@ -180,8 +171,7 @@ public interface Nd4jArrayField<T, F : Field<T>> : NDField<T, F>, Nd4jArrayRing<
     public override fun divide(a: NDStructure<T>, b: NDStructure<T>): Nd4jArrayStructure<T> =
         a.ndArray.div(b.ndArray).wrap()
 
-    public override operator fun Number.div(b: NDStructure<T>): Nd4jArrayStructure<T> = b.ndArray.rdiv(this).wrap()
-
+    public operator fun Number.div(b: NDStructure<T>): Nd4jArrayStructure<T> = b.ndArray.rdiv(this).wrap()
 
     public companion object {
         private val floatNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, FloatNd4jArrayField>> =
@@ -218,10 +208,13 @@ public interface Nd4jArrayField<T, F : Field<T>> : NDField<T, F>, Nd4jArrayRing<
  * Represents [NDField] over [Nd4jArrayRealStructure].
  */
 public class RealNd4jArrayField(public override val shape: IntArray) : Nd4jArrayField<Double, RealField> {
-    public override val elementContext: RealField
-        get() = RealField
+    public override val elementContext: RealField get() = RealField
 
     public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(this).asRealStructure()
+
+    override fun scale(a: NDStructure<Double>, value: Double): Nd4jArrayStructure<Double> {
+        return a.ndArray.mul(value).wrap()
+    }
 
     public override operator fun NDStructure<Double>.div(arg: Double): Nd4jArrayStructure<Double> {
         return ndArray.div(arg).wrap()
@@ -256,6 +249,10 @@ public class FloatNd4jArrayField(public override val shape: IntArray) : Nd4jArra
         get() = FloatField
 
     public override fun INDArray.wrap(): Nd4jArrayStructure<Float> = checkShape(this).asFloatStructure()
+
+    override fun scale(a: NDStructure<Float>, value: Double): NDStructure<Float> {
+        return a.ndArray.mul(value).wrap()
+    }
 
     public override operator fun NDStructure<Float>.div(arg: Float): Nd4jArrayStructure<Float> {
         return ndArray.div(arg).wrap()

@@ -21,6 +21,8 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
         if (i == j) 1.0 else 0.0
     } + DiagonalFeature
 
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = produce(rowNum, colNum) { i, j -> -get(i, j) }
+
     public override infix fun Matrix<Double>.dot(other: Matrix<Double>): BufferMatrix<Double> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         val bufferMatrix = toBufferMatrix()
@@ -60,12 +62,16 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
         val bufferMatrix = toBufferMatrix()
         return produce(rowNum, colNum) { i, j -> bufferMatrix[i, j] * value }
     }
-
-
-    override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
-        val aBufferMatrix = a.toBufferMatrix()
-        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
-    }
+//
+//    override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
+//    }
+//
+//    override fun divide(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] / k.toDouble() }
+//    }
 }
 
 

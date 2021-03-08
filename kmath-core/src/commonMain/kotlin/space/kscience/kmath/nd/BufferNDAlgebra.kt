@@ -1,19 +1,16 @@
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
+public interface BufferNDAlgebra<T, A : Algebra<T>> : NDAlgebra<T, A> {
     public val strides: Strides
     public val bufferFactory: BufferFactory<T>
 
-    override fun produce(initializer: C.(IntArray) -> T): NDBuffer<T> = NDBuffer(
+    override fun produce(initializer: A.(IntArray) -> T): NDBuffer<T> = NDBuffer(
         strides,
         bufferFactory(strides.linearSize) { offset ->
             elementContext.initializer(strides.index(offset))
@@ -30,14 +27,14 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
             else -> bufferFactory(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun NDStructure<T>.map(transform: C.(T) -> T): NDBuffer<T> {
+    override fun NDStructure<T>.map(transform: A.(T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(buffer[offset])
         }
         return NDBuffer(strides, buffer)
     }
 
-    override fun NDStructure<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDBuffer<T> {
+    override fun NDStructure<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(
                 strides.index(offset),
@@ -47,7 +44,7 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
         return NDBuffer(strides, buffer)
     }
 
-    override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: C.(T, T) -> T): NDBuffer<T> {
+    override fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: A.(T, T) -> T): NDBuffer<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(a.buffer[offset], b.buffer[offset])
         }
@@ -55,13 +52,14 @@ public interface BufferNDAlgebra<T, C> : NDAlgebra<T, C> {
     }
 }
 
-public open class BufferedNDSpace<T, R : Space<T>>(
+public open class BufferedNDSpace<T, A : Space<T>>(
     final override val shape: IntArray,
-    final override val elementContext: R,
+    final override val elementContext: A,
     final override val bufferFactory: BufferFactory<T>,
-) : NDSpace<T, R>, BufferNDAlgebra<T, R> {
+) : NDSpace<T, A>, BufferNDAlgebra<T, A> {
     override val strides: Strides = DefaultStrides(shape)
     override val zero: NDBuffer<T> by lazy { produce { zero } }
+    override fun NDStructure<T>.unaryMinus(): NDStructure<T> = produce { -get(it) }
 }
 
 public open class BufferedNDRing<T, R : Ring<T>>(
@@ -76,7 +74,10 @@ public open class BufferedNDField<T, R : Field<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,
-) : BufferedNDRing<T, R>(shape, elementContext, bufferFactory), NDField<T, R>
+) : BufferedNDRing<T, R>(shape, elementContext, bufferFactory), NDField<T, R> {
+
+    override fun scale(a: NDStructure<T>, value: Double): NDStructure<T> = a.map { it * value }
+}
 
 // space factories
 public fun <T, A : Space<T>> NDAlgebra.Companion.space(

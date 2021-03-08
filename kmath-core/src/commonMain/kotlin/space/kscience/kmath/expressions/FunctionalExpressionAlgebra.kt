@@ -48,18 +48,21 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Space<Expression<T>> {
     public override val zero: Expression<T> get() = const(algebra.zero)
 
+    override fun Expression<T>.unaryMinus(): Expression<T> =
+        unaryOperation(SpaceOperations.MINUS_OPERATION, this)
+
     /**
      * Builds an Expression of addition of two another expressions.
      */
     public override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperationFunction(SpaceOperations.PLUS_OPERATION)(a, b)
+        binaryOperation(SpaceOperations.PLUS_OPERATION, a, b)
 
-    /**
-     * Builds an Expression of multiplication of expression by number.
-     */
-    public override fun multiply(a: Expression<T>, k: Number): Expression<T> = Expression { arguments ->
-        algebra.multiply(a.invoke(arguments), k)
-    }
+//    /**
+//     * Builds an Expression of multiplication of expression by number.
+//     */
+//    public override fun multiply(a: Expression<T>, k: Number): Expression<T> = Expression { arguments ->
+//        algebra.multiply(a.invoke(arguments), k)
+//    }
 
     public operator fun Expression<T>.plus(arg: T): Expression<T> = this + const(arg)
     public operator fun Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
@@ -71,13 +74,13 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(
 
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionAlgebra>.binaryOperationFunction(operation)
+
 }
 
 public open class FunctionalExpressionRing<T, A : Ring<T>>(
     algebra: A,
 ) : FunctionalExpressionSpace<T, A>(algebra), Ring<Expression<T>> {
-    public override val one: Expression<T>
-        get() = const(algebra.one)
+    public override val one: Expression<T> get() = const(algebra.one)
 
     /**
      * Builds an Expression of multiplication of two expressions.
@@ -95,9 +98,10 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
         super<FunctionalExpressionSpace>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionField<T, A : Field<T>>(
+public open class FunctionalExpressionField<T, A:  Field<T>>(
     algebra: A,
-) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>> {
+) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>,
+    ScaleOperations<Expression<T>> {
     /**
      * Builds an Expression of division an expression by another one.
      */
@@ -112,6 +116,10 @@ public open class FunctionalExpressionField<T, A : Field<T>>(
 
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionRing>.binaryOperationFunction(operation)
+
+    override fun scale(a: Expression<T>, value: Double): Expression<T> = algebra {
+        Expression { args -> a(args) * value }
+    }
 }
 
 public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
@@ -160,5 +168,6 @@ public inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressio
 public inline fun <T, A : Field<T>> A.expressionInField(block: FunctionalExpressionField<T, A>.() -> Expression<T>): Expression<T> =
     FunctionalExpressionField(this).block()
 
-public inline fun <T, A : ExtendedField<T>> A.expressionInExtendedField(block: FunctionalExpressionExtendedField<T, A>.() -> Expression<T>): Expression<T> =
-    FunctionalExpressionExtendedField(this).block()
+public inline fun <T, A : ExtendedField<T>> A.expressionInExtendedField(
+    block: FunctionalExpressionExtendedField<T, A>.() -> Expression<T>,
+): Expression<T> = FunctionalExpressionExtendedField(this).block()

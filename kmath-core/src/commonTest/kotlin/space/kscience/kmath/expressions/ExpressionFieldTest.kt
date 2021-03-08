@@ -11,9 +11,7 @@ class ExpressionFieldTest {
 
     @Test
     fun testExpression() {
-        val context = FunctionalExpressionField(RealField)
-
-        val expression = context {
+        val expression = FunctionalExpressionField(RealField).invoke {
             val x by binding()
             x * x + 2 * x + one
         }

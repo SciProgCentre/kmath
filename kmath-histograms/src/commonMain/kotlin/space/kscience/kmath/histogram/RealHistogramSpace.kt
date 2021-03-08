@@ -2,6 +2,7 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.domains.HyperSquareDomain
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
@@ -40,6 +41,7 @@ public class RealHistogramSpace(
         getIndex(it, point[it])
     }
 
+    @OptIn(UnstableKMathAPI::class)
     override fun getDomain(index: IntArray): Domain<Double> {
         val lowerBoundary = index.mapIndexed { axis, i ->
             when (i) {
@@ -76,6 +78,8 @@ public class RealHistogramSpace(
         val values: NDBuffer<Double> = ndCounter.mapToBuffer { it.value }
         return IndexedHistogram(this, values)
     }
+
+    override fun IndexedHistogram<Double, Double>.unaryMinus(): IndexedHistogram<Double, Double> = this * (-1)
 
     public companion object {
         /**

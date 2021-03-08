@@ -108,111 +108,6 @@ public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> acos(arg: T):
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
 
 /**
- * A container for hyperbolic trigonometric operations for specific type.
- *
- * @param T the type of element of this structure.
- */
-public interface HyperbolicOperations<T> : Algebra<T> {
-    /**
-     * Computes the hyperbolic sine of [arg].
-     */
-    public fun sinh(arg: T): T
-
-    /**
-     * Computes the hyperbolic cosine of [arg].
-     */
-    public fun cosh(arg: T): T
-
-    /**
-     * Computes the hyperbolic tangent of [arg].
-     */
-    public fun tanh(arg: T): T
-
-    /**
-     * Computes the inverse hyperbolic sine of [arg].
-     */
-    public fun asinh(arg: T): T
-
-    /**
-     * Computes the inverse hyperbolic cosine of [arg].
-     */
-    public fun acosh(arg: T): T
-
-    /**
-     * Computes the inverse hyperbolic tangent of [arg].
-     */
-    public fun atanh(arg: T): T
-
-    public companion object {
-        /**
-         * The identifier of hyperbolic sine.
-         */
-        public const val SINH_OPERATION: String = "sinh"
-
-        /**
-         * The identifier of hyperbolic cosine.
-         */
-        public const val COSH_OPERATION: String = "cosh"
-
-        /**
-         * The identifier of hyperbolic tangent.
-         */
-        public const val TANH_OPERATION: String = "tanh"
-
-        /**
-         * The identifier of inverse hyperbolic sine.
-         */
-        public const val ASINH_OPERATION: String = "asinh"
-
-        /**
-         * The identifier of inverse hyperbolic cosine.
-         */
-        public const val ACOSH_OPERATION: String = "acosh"
-
-        /**
-         * The identifier of inverse hyperbolic tangent.
-         */
-        public const val ATANH_OPERATION: String = "atanh"
-    }
-}
-
-/**
- * Computes the hyperbolic sine of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
-
-/**
- * Computes the hyperbolic cosine of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
-
-/**
- * Computes the hyperbolic tangent of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
-
-/**
- * Computes the inverse hyperbolic sine of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
-
-/**
- * Computes the inverse hyperbolic cosine of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
-
-/**
- * Computes the inverse hyperbolic tangent of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out HyperbolicOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
-
-/**
  * A context extension to include power operations based on exponentiation.
  *
  * @param T the type of element of this structure.
@@ -284,6 +179,36 @@ public interface ExponentialOperations<T> : Algebra<T> {
      */
     public fun ln(arg: T): T
 
+    /**
+     * Computes the hyperbolic sine of [arg].
+     */
+    public fun sinh(arg: T): T
+
+    /**
+     * Computes the hyperbolic cosine of [arg].
+     */
+    public fun cosh(arg: T): T
+
+    /**
+     * Computes the hyperbolic tangent of [arg].
+     */
+    public fun tanh(arg: T): T
+
+    /**
+     * Computes the inverse hyperbolic sine of [arg].
+     */
+    public fun asinh(arg: T): T
+
+    /**
+     * Computes the inverse hyperbolic cosine of [arg].
+     */
+    public fun acosh(arg: T): T
+
+    /**
+     * Computes the inverse hyperbolic tangent of [arg].
+     */
+    public fun atanh(arg: T): T
+
     public companion object {
         /**
          * The identifier of exponential function.
@@ -294,6 +219,36 @@ public interface ExponentialOperations<T> : Algebra<T> {
          * The identifier of natural logarithm.
          */
         public const val LN_OPERATION: String = "ln"
+
+        /**
+         * The identifier of hyperbolic sine.
+         */
+        public const val SINH_OPERATION: String = "sinh"
+
+        /**
+         * The identifier of hyperbolic cosine.
+         */
+        public const val COSH_OPERATION: String = "cosh"
+
+        /**
+         * The identifier of hyperbolic tangent.
+         */
+        public const val TANH_OPERATION: String = "tanh"
+
+        /**
+         * The identifier of inverse hyperbolic sine.
+         */
+        public const val ASINH_OPERATION: String = "asinh"
+
+        /**
+         * The identifier of inverse hyperbolic cosine.
+         */
+        public const val ACOSH_OPERATION: String = "acosh"
+
+        /**
+         * The identifier of inverse hyperbolic tangent.
+         */
+        public const val ATANH_OPERATION: String = "atanh"
     }
 }
 
@@ -308,6 +263,43 @@ public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> exp(arg: T): T 
  */
 @UnstableKMathAPI
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
+
+
+/**
+ * Computes the hyperbolic sine of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
+
+/**
+ * Computes the hyperbolic cosine of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
+
+/**
+ * Computes the hyperbolic tangent of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
+
+/**
+ * Computes the inverse hyperbolic sine of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
+
+/**
+ * Computes the inverse hyperbolic cosine of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
+
+/**
+ * Computes the inverse hyperbolic tangent of [arg].
+ */
+@UnstableKMathAPI
+public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
 
 /**
  * A container for norm functional on element.

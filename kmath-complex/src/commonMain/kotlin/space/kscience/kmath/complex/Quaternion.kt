@@ -37,7 +37,7 @@ public val Quaternion.r: Double
  */
 @OptIn(UnstableKMathAPI::class)
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
-    ExponentialOperations<Quaternion>, RingWithNumbers<Quaternion> {
+    ExponentialOperations<Quaternion>, NumbersAddOperations<Quaternion>, ScaleOperations<Quaternion> {
     override val zero: Quaternion = 0.toQuaternion()
     override val one: Quaternion = 1.toQuaternion()
 
@@ -59,10 +59,8 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     public override fun add(a: Quaternion, b: Quaternion): Quaternion =
         Quaternion(a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z)
 
-    public override fun multiply(a: Quaternion, k: Number): Quaternion {
-        val d = k.toDouble()
-        return Quaternion(a.w * d, a.x * d, a.y * d, a.z * d)
-    }
+    public override fun scale(a: Quaternion, value: Double): Quaternion =
+        Quaternion(a.w * value, a.x * value, a.y * value, a.z * value)
 
     public override fun multiply(a: Quaternion, b: Quaternion): Quaternion = Quaternion(
         a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
@@ -173,6 +171,15 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         "k" -> k
         else -> super<Field>.bindSymbol(value)
     }
+
+    override fun number(value: Number): Quaternion =value.toQuaternion()
+
+    public override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
+    public override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0
+    public override fun tanh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
+    public override fun asinh(arg: Quaternion): Quaternion = ln(sqrt(arg * arg + one) + arg)
+    public override fun acosh(arg: Quaternion): Quaternion = ln(arg + sqrt((arg - one) * (arg + one)))
+    public override fun atanh(arg: Quaternion): Quaternion = (ln(arg + one) - ln(one - arg)) / 2.0
 }
 
 /**
@@ -207,8 +214,7 @@ public data class Quaternion(
         require(!z.isNaN()) { "x-component of quaternion is not-a-number" }
     }
 
-    public override val context: QuaternionField
-        get() = QuaternionField
+    public override val context: QuaternionField get() = QuaternionField
 
     /**
      * Returns a string representation of this quaternion.

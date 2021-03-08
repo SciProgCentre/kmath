@@ -2,12 +2,17 @@
 
 ## [Unreleased]
 ### Added
+- Intrinsic value `two` for ExtendedField to work with hyperbolic functions
+- ScaleOperations interface
 
 ### Changed
+- Exponential operations merged with hyperbolic functions
 
 ### Deprecated
 
 ### Removed
+- Nearest in Domain. To be implemented in geometry package.
+- Number multiplication and division in main Algebra chain
 
 ### Fixed
 

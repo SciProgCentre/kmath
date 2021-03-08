@@ -3,8 +3,8 @@ package space.kscience.kmath.structures
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.ExtendedField
+import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.RingWithNumbers
 import java.util.*
 import java.util.stream.IntStream
 
@@ -15,7 +15,7 @@ import java.util.stream.IntStream
 class StreamRealNDField(
     override val shape: IntArray,
 ) : NDField<Double, RealField>,
-    RingWithNumbers<NDStructure<Double>>,
+    NumbersAddOperations<NDStructure<Double>>,
     ExtendedField<NDStructure<Double>> {
 
     private val strides = DefaultStrides(shape)
@@ -79,25 +79,29 @@ class StreamRealNDField(
         return NDBuffer(strides, array.asBuffer())
     }
 
-    override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = arg.map() { power(it, pow) }
+    override fun NDStructure<Double>.unaryMinus(): NDStructure<Double> = map { -it }
 
-    override fun exp(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { exp(it) }
+    override fun scale(a: NDStructure<Double>, value: Double): NDStructure<Double> = a.map { it * value }
 
-    override fun ln(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { ln(it) }
+    override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
 
-    override fun sin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { sin(it) }
-    override fun cos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { cos(it) }
-    override fun tan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { tan(it) }
-    override fun asin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { asin(it) }
-    override fun acos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { acos(it) }
-    override fun atan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { atan(it) }
+    override fun exp(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { exp(it) }
 
-    override fun sinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { sinh(it) }
-    override fun cosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { cosh(it) }
-    override fun tanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { tanh(it) }
-    override fun asinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { asinh(it) }
-    override fun acosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { acosh(it) }
-    override fun atanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map() { atanh(it) }
+    override fun ln(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { ln(it) }
+
+    override fun sin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sin(it) }
+    override fun cos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cos(it) }
+    override fun tan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tan(it) }
+    override fun asin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asin(it) }
+    override fun acos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acos(it) }
+    override fun atan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atan(it) }
+
+    override fun sinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sinh(it) }
+    override fun cosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cosh(it) }
+    override fun tanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tanh(it) }
+    override fun asinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asinh(it) }
+    override fun acosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acosh(it) }
+    override fun atanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atanh(it) }
 }
 
 fun NDAlgebra.Companion.realWithStream(vararg shape: Int): StreamRealNDField = StreamRealNDField(shape)

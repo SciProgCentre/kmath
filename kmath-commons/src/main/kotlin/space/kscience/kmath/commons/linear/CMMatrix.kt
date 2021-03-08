@@ -101,8 +101,8 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
     public override operator fun Matrix<Double>.minus(b: Matrix<Double>): CMMatrix =
         CMMatrix(toCM().origin.subtract(b.toCM().origin))
 
-    public override fun multiply(a: Matrix<Double>, k: Number): CMMatrix =
-        CMMatrix(a.toCM().origin.scalarMultiply(k.toDouble()))
+//    public override fun multiply(a: Matrix<Double>, k: Number): CMMatrix =
+//        CMMatrix(a.toCM().origin.scalarMultiply(k.toDouble()))
 
     public override operator fun Matrix<Double>.times(value: Double): CMMatrix =
         produce(rowNum, colNum) { i, j -> get(i, j) * value }

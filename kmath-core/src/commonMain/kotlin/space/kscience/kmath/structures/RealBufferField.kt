@@ -8,6 +8,12 @@ import kotlin.math.*
  * [ExtendedFieldOperations] over [RealBuffer].
  */
 public object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
+    override fun Buffer<Double>.unaryMinus(): RealBuffer = if (this is RealBuffer) {
+        RealBuffer(size) { -array[it] }
+    } else {
+        RealBuffer(size) { -get(it) }
+    }
+
     public override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
         require(b.size == a.size) {
             "The size of the first buffer ${a.size} should be the same as for second one: ${b.size} "
@@ -19,15 +25,24 @@ public object RealBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>
             RealBuffer(DoubleArray(a.size) { aArray[it] + bArray[it] })
         } else RealBuffer(DoubleArray(a.size) { a[it] + b[it] })
     }
-
-    public override fun multiply(a: Buffer<Double>, k: Number): RealBuffer {
-        val kValue = k.toDouble()
-
-        return if (a is RealBuffer) {
-            val aArray = a.array
-            RealBuffer(DoubleArray(a.size) { aArray[it] * kValue })
-        } else RealBuffer(DoubleArray(a.size) { a[it] * kValue })
-    }
+//
+//    public override fun multiply(a: Buffer<Double>, k: Number): RealBuffer {
+//        val kValue = k.toDouble()
+//
+//        return if (a is RealBuffer) {
+//            val aArray = a.array
+//            RealBuffer(DoubleArray(a.size) { aArray[it] * kValue })
+//        } else RealBuffer(DoubleArray(a.size) { a[it] * kValue })
+//    }
+//
+//    public override fun divide(a: Buffer<Double>, k: Number): RealBuffer {
+//        val kValue = k.toDouble()
+//
+//        return if (a is RealBuffer) {
+//            val aArray = a.array
+//            RealBuffer(DoubleArray(a.size) { aArray[it] / kValue })
+//        } else RealBuffer(DoubleArray(a.size) { a[it] / kValue })
+//    }
 
     public override fun multiply(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
         require(b.size == a.size) {
@@ -152,14 +167,22 @@ public class RealBufferField(public val size: Int) : ExtendedField<Buffer<Double
 
     override fun number(value: Number): Buffer<Double> = RealBuffer(size) { value.toDouble() }
 
+    override fun Buffer<Double>.unaryMinus(): Buffer<Double> = RealBufferFieldOperations.run {
+        -this@unaryMinus
+    }
+
     public override fun add(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {
         require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
         return RealBufferFieldOperations.add(a, b)
     }
 
-    public override fun multiply(a: Buffer<Double>, k: Number): RealBuffer {
+    public override fun scale(a: Buffer<Double>, value: Double): RealBuffer {
         require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
-        return RealBufferFieldOperations.multiply(a, k)
+
+        return if (a is RealBuffer) {
+            val aArray = a.array
+            RealBuffer(DoubleArray(a.size) { aArray[it] * value })
+        } else RealBuffer(DoubleArray(a.size) { a[it] * value })
     }
 
     public override fun multiply(a: Buffer<Double>, b: Buffer<Double>): RealBuffer {

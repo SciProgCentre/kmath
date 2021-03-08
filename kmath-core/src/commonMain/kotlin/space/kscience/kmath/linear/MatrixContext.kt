@@ -1,10 +1,7 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.SpaceOperations
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.operations.sum
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.asSequence
@@ -167,9 +164,9 @@ public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> :
 
         return produce(rowNum, colNum) { i, j -> elementContext { get(i, j) + b[i, j] } }
     }
-
-    public override fun multiply(a: Matrix<T>, k: Number): M =
-        produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
+//
+//    public override fun multiply(a: Matrix<T>, k: Number): M =
+//        produce(a.rowNum, a.colNum) { i, j -> elementContext { a[i, j] * k } }
 
     public override operator fun Matrix<T>.times(value: T): M =
         produce(rowNum, colNum) { i, j -> elementContext { get(i, j) * value } }

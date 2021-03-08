@@ -1,8 +1,6 @@
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 
 /**
@@ -21,7 +19,7 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  * @param C the type of the element context.
  * @param N the type of the structure.
  */
-public interface NDAlgebra<T, C> {
+public interface NDAlgebra<T, C: Algebra<T>> {
     /**
      * The shape of ND-structures this algebra operates on.
      */
@@ -33,7 +31,7 @@ public interface NDAlgebra<T, C> {
     public val elementContext: C
 
     /**
-     * Produces a new [N] structure using given initializer function.
+     * Produces a new NDStructure using given initializer function.
      */
     public fun produce(initializer: C.(IntArray) -> T): NDStructure<T>
 
@@ -67,7 +65,7 @@ public interface NDAlgebra<T, C> {
  * @param structures the structures to check.
  * @return the array of valid structures.
  */
-internal fun <T, C> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> = structures
+internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> = structures
     .map(NDStructure<T>::shape)
     .singleOrNull { !shape.contentEquals(it) }
     ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
@@ -79,7 +77,7 @@ internal fun <T, C> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>
  * @param element the structure to check.
  * @return the valid structure.
  */
-internal fun <T, C> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
+internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
     if (!element.shape.contentEquals(shape)) throw ShapeMismatchException(shape, element.shape)
     return element
 }
@@ -102,14 +100,14 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
     public override fun add(a: NDStructure<T>, b: NDStructure<T>): NDStructure<T> =
         combine(a, b) { aValue, bValue -> add(aValue, bValue) }
 
-    /**
-     * Element-wise multiplication by scalar.
-     *
-     * @param a the multiplicand.
-     * @param k the multiplier.
-     * @return the product.
-     */
-    public override fun multiply(a: NDStructure<T>, k: Number): NDStructure<T> = a.map() { multiply(it, k) }
+//    /**
+//     * Element-wise multiplication by scalar.
+//     *
+//     * @param a the multiplicand.
+//     * @param k the multiplier.
+//     * @return the product.
+//     */
+//    public override fun multiply(a: NDStructure<T>, k: Number): NDStructure<T> =  a.map { multiply(it, k) }
 
     // TODO move to extensions after KEEP-176
 
@@ -120,7 +118,7 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the augend.
      * @return the sum.
      */
-    public operator fun NDStructure<T>.plus(arg: T): NDStructure<T> = this.map() { value -> add(arg, value) }
+    public operator fun NDStructure<T>.plus(arg: T): NDStructure<T> = this.map { value -> add(arg, value) }
 
     /**
      * Subtracts an element from ND structure of it.
@@ -200,7 +198,7 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDSpace<T, R> {
  * @param N the type of ND structure.
  * @param F the type field of structure elements.
  */
-public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F> {
+public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>, ScaleOperations<NDStructure<T>> {
     /**
      * Element-wise division.
      *

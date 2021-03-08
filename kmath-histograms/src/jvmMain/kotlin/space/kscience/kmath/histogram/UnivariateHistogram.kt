@@ -8,6 +8,7 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
 
+@UnstableKMathAPI
 public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2
 
 /**
@@ -15,6 +16,7 @@ public val UnivariateDomain.center: Double get() = (range.endInclusive - range.s
  * @param value The value of histogram including weighting
  * @param standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
  */
+@UnstableKMathAPI
 public class UnivariateBin(
     public val domain: UnivariateDomain,
     override val value: Double,

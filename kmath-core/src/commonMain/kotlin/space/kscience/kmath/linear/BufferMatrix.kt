@@ -78,12 +78,12 @@ public class BufferMatrixContext<T : Any, R : Ring<T>>(
         }
     }
 
-    override fun multiply(a: Matrix<T>, k: Number): BufferMatrix<T> {
-        val aBufferMatrix = a.toBufferMatrix()
-        return elementContext {
-            produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
-        }
-    }
+//    override fun multiply(a: Matrix<T>, k: Number): BufferMatrix<T> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return elementContext {
+//            produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
+//        }
+//    }
 
     public companion object
 }

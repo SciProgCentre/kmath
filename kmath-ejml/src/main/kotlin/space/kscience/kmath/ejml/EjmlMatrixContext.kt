@@ -4,13 +4,14 @@ import org.ejml.simple.SimpleMatrix
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
+import space.kscience.kmath.operations.ScaleOperations
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
+public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperations<Matrix<Double>> {
 
     /**
      * Converts this matrix to EJML one.
@@ -41,6 +42,9 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
             (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
         })
 
+
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double>  = this*(-1)
+
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin.mult(other.toEjml().origin))
 
@@ -53,8 +57,8 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix> {
     public override operator fun Matrix<Double>.minus(b: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin - b.toEjml().origin)
 
-    public override fun multiply(a: Matrix<Double>, k: Number): EjmlMatrix =
-        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * k.toDouble() }
+    public override fun scale(a: Matrix<Double>, value: Double): EjmlMatrix =
+        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * value }
 
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         EjmlMatrix(toEjml().origin.scale(value))
