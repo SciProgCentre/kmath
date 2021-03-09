@@ -5,7 +5,7 @@ import space.kscience.kmath.nd.offsetFromIndex
 import kotlin.math.max
 
 
-inline public fun stridesFromShape(shape: IntArray): IntArray {
+public inline fun stridesFromShape(shape: IntArray): IntArray {
     val nDim = shape.size
     val res = IntArray(nDim)
     if (nDim == 0)
@@ -22,7 +22,7 @@ inline public fun stridesFromShape(shape: IntArray): IntArray {
 
 }
 
-inline public fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): IntArray {
+public inline fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): IntArray {
     val res = IntArray(nDim)
     var current = offset
     var strideIndex = 0

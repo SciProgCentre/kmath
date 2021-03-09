@@ -3,6 +3,8 @@ package space.kscience.kmath.tensors
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
+import kotlin.js.JsName
+import kotlin.math.abs
 
 
 public class RealTensor(
@@ -13,46 +15,80 @@ public class RealTensor(
     MutableNDBuffer<Double>(
         TensorStrides(shape),
         RealBuffer(buffer)
-    ) {
-    /*
-     * TODO: Andrei remove item()
-     */
-    override fun item(): Double {
-        check(buffer.size > 0) { "The tensor is empty" }
-        return buffer[0]
-    }
-}
-
+    )
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
+    //rename to item?
     override fun RealTensor.value(): Double {
-        TODO("Andrei")
+        check(this.dimension == 0) {
+            // todo change message
+            "This tensor has shape ${shape.toList()}"
+        }
+        return this.buffer.array[0]
+    }
+
+    override fun eye(n: Int): RealTensor {
+        val shape = intArrayOf(n, n)
+        val buffer = DoubleArray(n * n) { 0.0 }
+        val res = RealTensor(shape, buffer)
+        for (i in 0 until n) {
+            res[intArrayOf(i, i)] = 1.0
+        }
+        return res
+    }
+
+    override fun zeros(shape: IntArray): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun zeroesLike(other: RealTensor): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun ones(shape: IntArray): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun onesLike(shape: IntArray): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.copy(): RealTensor {
+        TODO("Not yet implemented")
     }
 
     override fun Double.plus(other: RealTensor): RealTensor {
-        val n = other.buffer.size
-        val arr = other.buffer.array
-        val res = DoubleArray(n)
-        for (i in 1..n)
-            res[i - 1] = arr[i - 1] + this
-        return RealTensor(other.shape, res)
+        //todo should be change with broadcasting
+        val resBuffer = DoubleArray(other.buffer.size) { i ->
+            other.buffer.array[i] + this
+        }
+        return RealTensor(other.shape, resBuffer)
     }
 
-    override fun RealTensor.plus(value: Double): RealTensor {
-        TODO("Andrei")
-    }
+    //todo should be change with broadcasting
+    override fun RealTensor.plus(value: Double): RealTensor = value + this
 
     override fun RealTensor.plus(other: RealTensor): RealTensor {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        val resBuffer = DoubleArray(this.buffer.size) { i ->
+            this.buffer.array[i] + other.buffer.array[i]
+        }
+        return RealTensor(this.shape, resBuffer)
     }
 
     override fun RealTensor.plusAssign(value: Double) {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        for (i in this.buffer.array.indices) {
+            this.buffer.array[i] += value
+        }
     }
 
     override fun RealTensor.plusAssign(other: RealTensor) {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        for (i in this.buffer.array.indices) {
+            this.buffer.array[i] += other.buffer.array[i]
+        }
     }
 
     override fun Double.minus(other: RealTensor): RealTensor {
@@ -76,27 +112,43 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun Double.times(other: RealTensor): RealTensor {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        val resBuffer = DoubleArray(other.buffer.size) { i ->
+            other.buffer.array[i] * this
+        }
+        return RealTensor(other.shape, resBuffer)
     }
 
-    override fun RealTensor.times(value: Double): RealTensor {
-        TODO("Andrei")
-    }
+    //todo should be change with broadcasting
+    override fun RealTensor.times(value: Double): RealTensor = value * this
 
     override fun RealTensor.times(other: RealTensor): RealTensor {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        val resBuffer = DoubleArray(this.buffer.size) { i ->
+            this.buffer.array[i] * other.buffer.array[i]
+        }
+        return RealTensor(this.shape, resBuffer)
     }
 
     override fun RealTensor.timesAssign(value: Double) {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        for (i in this.buffer.array.indices) {
+            this.buffer.array[i] *= value
+        }
     }
 
     override fun RealTensor.timesAssign(other: RealTensor) {
-        TODO("Andrei")
+        //todo should be change with broadcasting
+        for (i in this.buffer.array.indices) {
+            this.buffer.array[i] *= other.buffer.array[i]
+        }
     }
 
     override fun RealTensor.unaryMinus(): RealTensor {
-        TODO("Andrei")
+        val resBuffer = DoubleArray(this.buffer.size) { i ->
+            this.buffer.array[i].unaryMinus()
+        }
+        return RealTensor(this.shape, resBuffer)
     }
 
     override fun RealTensor.dot(other: RealTensor): RealTensor {
@@ -124,11 +176,11 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.view(shape: IntArray): RealTensor {
-        TODO("Andrei")
+        return RealTensor(shape, this.buffer.array)
     }
 
-    override fun RealTensor.view_as(other: RealTensor): RealTensor {
-        TODO("Andrei")
+    override fun RealTensor.viewAs(other: RealTensor): RealTensor {
+        return this.view(other.shape)
     }
 
     override fun RealTensor.abs(): RealTensor {
@@ -147,7 +199,15 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun RealTensor.div(value: Double): RealTensor {
+        TODO("Not yet implemented")
+    }
+
     override fun RealTensor.div(other: RealTensor): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.divAssign(value: Double) {
         TODO("Not yet implemented")
     }
 
@@ -172,15 +232,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.lu(): Pair<RealTensor, RealTensor> {
-        /**
-         * Main first task for @AndreiKingsley
-         * Compare with the implementation of [LupDecomposition]
-         * and provide a common API
-         */
-        TODO("Not yet implemented")
+        TODO()
     }
 
-    override fun lu_unpack(A_LU: RealTensor, pivots: RealTensor): Triple<RealTensor, RealTensor, RealTensor> {
+    override fun luUnpack(A_LU: RealTensor, pivots: RealTensor): Triple<RealTensor, RealTensor, RealTensor> {
         TODO("Not yet implemented")
     }
 

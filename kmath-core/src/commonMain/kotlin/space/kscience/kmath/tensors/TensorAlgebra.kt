@@ -5,6 +5,14 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.value(): T
 
+    public fun eye(n: Int): TensorType
+    public fun zeros(shape: IntArray): TensorType
+    public fun zeroesLike(other: TensorType): TensorType
+    public fun ones(shape: IntArray): TensorType
+    public fun onesLike(shape: IntArray): TensorType
+
+    public fun TensorType.copy(): TensorType
+
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
     public operator fun TensorType.plus(other: TensorType): TensorType
@@ -42,7 +50,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     //https://pytorch.org/docs/stable/tensor_view.html
     public fun TensorType.view(shape: IntArray): TensorType
-    public fun TensorType.view_as(other: TensorType): TensorType
+    public fun TensorType.viewAs(other: TensorType): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType
@@ -57,7 +65,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>> :
     TensorAlgebra<T, TensorType> {
 
+    public operator fun TensorType.div(value: T): TensorType
     public operator fun TensorType.div(other: TensorType): TensorType
+    public operator fun TensorType.divAssign(value: T)
     public operator fun TensorType.divAssign(other: TensorType)
 
     //https://pytorch.org/docs/stable/generated/torch.exp.html
@@ -72,7 +82,7 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
     public fun TensorType.lu(): Pair<TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
-    public fun lu_unpack(A_LU: TensorType, pivots: TensorType): Triple<TensorType, TensorType, TensorType>
+    public fun luUnpack(A_LU: TensorType, pivots: TensorType): Triple<TensorType, TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.svd.html
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
