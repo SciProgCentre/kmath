@@ -48,5 +48,5 @@ public class TensorStrides(override val shape: IntArray): Strides
         indexFromOffset(offset, strides, shape.size)
 
     override val linearSize: Int
-        get() = shape.fold(1) { acc, i -> acc * i }
+        get() = shape.reduce(Int::times)
 }

@@ -3,8 +3,6 @@ package space.kscience.kmath.tensors
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
-import kotlin.js.JsName
-import kotlin.math.abs
 
 
 public class RealTensor(
@@ -19,11 +17,9 @@ public class RealTensor(
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
-    //rename to item?
     override fun RealTensor.value(): Double {
-        check(this.dimension == 0) {
-            // todo change message
-            "This tensor has shape ${shape.toList()}"
+        check(this.shape contentEquals  intArrayOf(1)) {
+            "Inconsistent value for tensor of shape ${shape.toList()}"
         }
         return this.buffer.array[0]
     }
