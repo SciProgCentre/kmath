@@ -1,3 +1,5 @@
+import ru.mipt.npm.gradle.KSciencePublishingPlugin
+
 plugins {
     id("ru.mipt.npm.gradle.project")
 }
@@ -22,7 +24,7 @@ allprojects {
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
 }
 
 readme {
@@ -35,6 +37,6 @@ ksciencePublish {
     githubProject = "kmath"
 }
 
-apiValidation{
+apiValidation {
     nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
 }
