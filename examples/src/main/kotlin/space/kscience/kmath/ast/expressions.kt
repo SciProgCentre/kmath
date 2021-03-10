@@ -1,12 +1,11 @@
 package space.kscience.kmath.ast
 
-import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.RealField
 
 fun main() {
     val expr = RealField.mstInField {
         val x = bindSymbol("x")
-        x * 2.0 + 2.0 * one / x - 16.0
+        x * 2.0 + number(2.0) / x - 16.0
     }
 
     repeat(10000000) {

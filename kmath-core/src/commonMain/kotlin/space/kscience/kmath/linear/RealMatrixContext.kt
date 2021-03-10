@@ -1,8 +1,9 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.RealBuffer
 
-public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
+public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>>, ScaleOperations<Matrix<Double>> {
 
     public override fun produce(
         rows: Int,
@@ -58,10 +59,13 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
         }
     }
 
-    override fun Matrix<Double>.times(value: Double): BufferMatrix<Double> {
-        val bufferMatrix = toBufferMatrix()
-        return produce(rowNum, colNum) { i, j -> bufferMatrix[i, j] * value }
+    override fun scale(a: Matrix<Double>, value: Double): BufferMatrix<Double> {
+        val bufferMatrix = a.toBufferMatrix()
+        return produce(a.rowNum, a.colNum) { i, j -> bufferMatrix[i, j] * value }
     }
+
+    override fun Matrix<Double>.times(value: Double): BufferMatrix<Double> = scale(this, value)
+
 //
 //    override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
 //        val aBufferMatrix = a.toBufferMatrix()

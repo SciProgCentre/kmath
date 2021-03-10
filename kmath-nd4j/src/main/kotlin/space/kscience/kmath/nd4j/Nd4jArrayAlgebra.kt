@@ -80,21 +80,17 @@ public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S>, Nd4jArrayAlgeb
     public override val zero: Nd4jArrayStructure<T>
         get() = Nd4j.zeros(*shape).wrap()
 
-    public override fun add(a: NDStructure<T>, b: NDStructure<T>): Nd4jArrayStructure<T> {
-        return a.ndArray.add(b.ndArray).wrap()
-    }
+    public override fun add(a: NDStructure<T>, b: NDStructure<T>): Nd4jArrayStructure<T> =
+        a.ndArray.add(b.ndArray).wrap()
 
-    public override operator fun NDStructure<T>.minus(b: NDStructure<T>): Nd4jArrayStructure<T> {
-        return ndArray.sub(b.ndArray).wrap()
-    }
+    public override operator fun NDStructure<T>.minus(b: NDStructure<T>): Nd4jArrayStructure<T> =
+        ndArray.sub(b.ndArray).wrap()
 
-    public override operator fun NDStructure<T>.unaryMinus(): Nd4jArrayStructure<T> {
-        return ndArray.neg().wrap()
-    }
+    public override operator fun NDStructure<T>.unaryMinus(): Nd4jArrayStructure<T> =
+        ndArray.neg().wrap()
 
-    public fun multiply(a: NDStructure<T>, k: Number): Nd4jArrayStructure<T> {
-        return a.ndArray.mul(k).wrap()
-    }
+    public fun multiply(a: NDStructure<T>, k: Number): Nd4jArrayStructure<T> =
+        a.ndArray.mul(k).wrap()
 }
 
 /**
@@ -109,9 +105,8 @@ public interface Nd4jArrayRing<T, R : Ring<T>> : NDRing<T, R>, Nd4jArraySpace<T,
     public override val one: Nd4jArrayStructure<T>
         get() = Nd4j.ones(*shape).wrap()
 
-    public override fun multiply(a: NDStructure<T>, b: NDStructure<T>): Nd4jArrayStructure<T> {
-        return a.ndArray.mul(b.ndArray).wrap()
-    }
+    public override fun multiply(a: NDStructure<T>, b: NDStructure<T>): Nd4jArrayStructure<T> =
+        a.ndArray.mul(b.ndArray).wrap()
 //
 //    public override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
 //        check(this)
@@ -250,33 +245,26 @@ public class FloatNd4jArrayField(public override val shape: IntArray) : Nd4jArra
 
     public override fun INDArray.wrap(): Nd4jArrayStructure<Float> = checkShape(this).asFloatStructure()
 
-    override fun scale(a: NDStructure<Float>, value: Double): NDStructure<Float> {
-        return a.ndArray.mul(value).wrap()
-    }
+    override fun scale(a: NDStructure<Float>, value: Double): NDStructure<Float> =
+        a.ndArray.mul(value).wrap()
 
-    public override operator fun NDStructure<Float>.div(arg: Float): Nd4jArrayStructure<Float> {
-        return ndArray.div(arg).wrap()
-    }
+    public override operator fun NDStructure<Float>.div(arg: Float): Nd4jArrayStructure<Float> =
+        ndArray.div(arg).wrap()
 
-    public override operator fun NDStructure<Float>.plus(arg: Float): Nd4jArrayStructure<Float> {
-        return ndArray.add(arg).wrap()
-    }
+    public override operator fun NDStructure<Float>.plus(arg: Float): Nd4jArrayStructure<Float> =
+        ndArray.add(arg).wrap()
 
-    public override operator fun NDStructure<Float>.minus(arg: Float): Nd4jArrayStructure<Float> {
-        return ndArray.sub(arg).wrap()
-    }
+    public override operator fun NDStructure<Float>.minus(arg: Float): Nd4jArrayStructure<Float> =
+        ndArray.sub(arg).wrap()
 
-    public override operator fun NDStructure<Float>.times(arg: Float): Nd4jArrayStructure<Float> {
-        return ndArray.mul(arg).wrap()
-    }
+    public override operator fun NDStructure<Float>.times(arg: Float): Nd4jArrayStructure<Float> =
+        ndArray.mul(arg).wrap()
 
-    public override operator fun Float.div(arg: NDStructure<Float>): Nd4jArrayStructure<Float> {
-        return arg.ndArray.rdiv(this).wrap()
-    }
+    public override operator fun Float.div(arg: NDStructure<Float>): Nd4jArrayStructure<Float> =
+        arg.ndArray.rdiv(this).wrap()
 
-    public override operator fun Float.minus(arg: NDStructure<Float>): Nd4jArrayStructure<Float> {
-        return arg.ndArray.rsub(this).wrap()
-    }
+    public override operator fun Float.minus(arg: NDStructure<Float>): Nd4jArrayStructure<Float> =
+        arg.ndArray.rsub(this).wrap()
 }
 
 /**
@@ -288,21 +276,17 @@ public class IntNd4jArrayRing(public override val shape: IntArray) : Nd4jArrayRi
 
     public override fun INDArray.wrap(): Nd4jArrayStructure<Int> = checkShape(this).asIntStructure()
 
-    public override operator fun NDStructure<Int>.plus(arg: Int): Nd4jArrayStructure<Int> {
-        return ndArray.add(arg).wrap()
-    }
+    public override operator fun NDStructure<Int>.plus(arg: Int): Nd4jArrayStructure<Int> =
+        ndArray.add(arg).wrap()
 
-    public override operator fun NDStructure<Int>.minus(arg: Int): Nd4jArrayStructure<Int> {
-        return ndArray.sub(arg).wrap()
-    }
+    public override operator fun NDStructure<Int>.minus(arg: Int): Nd4jArrayStructure<Int> =
+        ndArray.sub(arg).wrap()
 
-    public override operator fun NDStructure<Int>.times(arg: Int): Nd4jArrayStructure<Int> {
-        return ndArray.mul(arg).wrap()
-    }
+    public override operator fun NDStructure<Int>.times(arg: Int): Nd4jArrayStructure<Int> =
+        ndArray.mul(arg).wrap()
 
-    public override operator fun Int.minus(arg: NDStructure<Int>): Nd4jArrayStructure<Int> {
-        return arg.ndArray.rsub(this).wrap()
-    }
+    public override operator fun Int.minus(arg: NDStructure<Int>): Nd4jArrayStructure<Int> =
+        arg.ndArray.rsub(this).wrap()
 }
 
 /**
@@ -314,19 +298,15 @@ public class LongNd4jArrayRing(public override val shape: IntArray) : Nd4jArrayR
 
     public override fun INDArray.wrap(): Nd4jArrayStructure<Long> = checkShape(this).asLongStructure()
 
-    public override operator fun NDStructure<Long>.plus(arg: Long): Nd4jArrayStructure<Long> {
-        return ndArray.add(arg).wrap()
-    }
+    public override operator fun NDStructure<Long>.plus(arg: Long): Nd4jArrayStructure<Long> =
+        ndArray.add(arg).wrap()
 
-    public override operator fun NDStructure<Long>.minus(arg: Long): Nd4jArrayStructure<Long> {
-        return ndArray.sub(arg).wrap()
-    }
+    public override operator fun NDStructure<Long>.minus(arg: Long): Nd4jArrayStructure<Long> =
+        ndArray.sub(arg).wrap()
 
-    public override operator fun NDStructure<Long>.times(arg: Long): Nd4jArrayStructure<Long> {
-        return ndArray.mul(arg).wrap()
-    }
+    public override operator fun NDStructure<Long>.times(arg: Long): Nd4jArrayStructure<Long> =
+        ndArray.mul(arg).wrap()
 
-    public override operator fun Long.minus(arg: NDStructure<Long>): Nd4jArrayStructure<Long> {
-        return arg.ndArray.rsub(this).wrap()
-    }
+    public override operator fun Long.minus(arg: NDStructure<Long>): Nd4jArrayStructure<Long> =
+        arg.ndArray.rsub(this).wrap()
 }

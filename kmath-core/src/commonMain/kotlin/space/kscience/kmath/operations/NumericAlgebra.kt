@@ -86,7 +86,7 @@ public interface NumericAlgebra<T> : Algebra<T> {
  */
 public interface ScaleOperations<T> : Algebra<T> {
     /**
-     * Scaling of element by scalar.
+     * Scaling an element by a scalar.
      *
      * @param a the multiplier.
      * @param value the multiplicand.

@@ -57,7 +57,7 @@ public class ViktorNDField(public override val shape: IntArray) : NDField<Double
             }
         }.asStructure()
 
-    override fun NDStructure<Double>.unaryMinus(): NDStructure<Double> = this * (-1)
+    override fun NDStructure<Double>.unaryMinus(): NDStructure<Double> = -1 * this
 
     public override fun NDStructure<Double>.map(transform: RealField.(Double) -> Double): ViktorNDStructure =
         F64Array(*this@ViktorNDField.shape).apply {

@@ -42,9 +42,9 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
 /**
  * An algebra for polynomials
  */
-public class PolynomialSpace<T : Any, C >(
+public class PolynomialSpace<T : Any, C>(
     private val ring: C,
-) : Space<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C: Ring<T>, C: ScaleOperations<T>{
+) : Space<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
     public override val zero: Polynomial<T> = Polynomial(emptyList())
 
     override fun Polynomial<T>.unaryMinus(): Polynomial<T> = with(ring) {
@@ -67,7 +67,7 @@ public class PolynomialSpace<T : Any, C >(
     public operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)
 }
 
-public inline fun <T : Any, C, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R where C: Ring<T>, C: ScaleOperations<T>{
+public inline fun <T : Any, C, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R where C : Ring<T>, C : ScaleOperations<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return PolynomialSpace(this).block()
 }

@@ -11,8 +11,8 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * Generic spline interpolator. Not recommended for performance critical places, use platform-specific and type specific ones.
  * Based on https://github.com/apache/commons-math/blob/eb57d6d457002a0bb5336d789a3381a24599affe/src/main/java/org/apache/commons/math4/analysis/interpolation/SplineInterpolator.java
  */
-public class SplineInterpolator<T : Comparable<T>, F : Field<T>>(
-    public override val algebra: F,
+public class SplineInterpolator<T : Comparable<T>>(
+    public override val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>,
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers

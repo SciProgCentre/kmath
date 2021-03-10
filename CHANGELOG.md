@@ -2,8 +2,8 @@
 
 ## [Unreleased]
 ### Added
-- Intrinsic value `two` for ExtendedField to work with hyperbolic functions
 - ScaleOperations interface
+- Field extends ScaleOperations
 
 ### Changed
 - Exponential operations merged with hyperbolic functions

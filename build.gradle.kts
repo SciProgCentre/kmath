@@ -34,6 +34,7 @@ readme {
 ksciencePublish {
     github("kmath")
     space()
+    sonatype()
 }
 
 apiValidation {
