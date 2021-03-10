@@ -1,8 +1,9 @@
 package space.kscience.kmath.benchmarks
 
 import kotlinx.benchmark.Benchmark
-import org.openjdk.jmh.annotations.Scope
-import org.openjdk.jmh.annotations.State
+import kotlinx.benchmark.Blackhole
+import kotlinx.benchmark.Scope
+import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMMatrixContext
 import space.kscience.kmath.ejml.EjmlMatrixContext
 import space.kscience.kmath.linear.BufferMatrixContext
@@ -17,7 +18,7 @@ import kotlin.random.Random
 internal class DotBenchmark {
     companion object {
         val random = Random(12224)
-        val dim = 1000
+        const val dim = 1000
 
         //creating invertible matrix
         val matrix1 = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
@@ -31,37 +32,37 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun cmDot() {
+    fun cmDot(blackhole: Blackhole) {
         CMMatrixContext {
-            cmMatrix1 dot cmMatrix2
+            blackhole.consume(cmMatrix1 dot cmMatrix2)
         }
     }
 
     @Benchmark
-    fun ejmlDot() {
+    fun ejmlDot(blackhole: Blackhole) {
         EjmlMatrixContext {
-            ejmlMatrix1 dot ejmlMatrix2
+            blackhole.consume(ejmlMatrix1 dot ejmlMatrix2)
         }
     }
 
     @Benchmark
-    fun ejmlDotWithConversion() {
+    fun ejmlDotWithConversion(blackhole: Blackhole) {
         EjmlMatrixContext {
-            matrix1 dot matrix2
+            blackhole.consume(matrix1 dot matrix2)
         }
     }
 
     @Benchmark
-    fun bufferedDot() {
+    fun bufferedDot(blackhole: Blackhole) {
         BufferMatrixContext(RealField, Buffer.Companion::real).invoke {
-            matrix1 dot matrix2
+            blackhole.consume(matrix1 dot matrix2)
         }
     }
 
     @Benchmark
-    fun realDot() {
+    fun realDot(blackhole: Blackhole) {
         RealMatrixContext {
-            matrix1 dot matrix2
+            blackhole.consume(matrix1 dot matrix2)
         }
     }
 }

@@ -1,8 +1,9 @@
 package space.kscience.kmath.benchmarks
 
 import kotlinx.benchmark.Benchmark
-import org.openjdk.jmh.annotations.Scope
-import org.openjdk.jmh.annotations.State
+import kotlinx.benchmark.Blackhole
+import kotlinx.benchmark.Scope
+import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMMatrixContext
 import space.kscience.kmath.commons.linear.CMMatrixContext.dot
 import space.kscience.kmath.commons.linear.inverse
@@ -18,7 +19,7 @@ import kotlin.random.Random
 internal class LinearAlgebraBenchmark {
     companion object {
         val random = Random(1224)
-        val dim = 100
+        const val dim = 100
 
         //creating invertible matrix
         val u = Matrix.real(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
@@ -27,21 +28,21 @@ internal class LinearAlgebraBenchmark {
     }
 
     @Benchmark
-    fun kmathLupInversion() {
-        MatrixContext.real.inverseWithLup(matrix)
+    fun kmathLupInversion(blackhole: Blackhole) {
+        blackhole.consume(MatrixContext.real.inverseWithLup(matrix))
     }
 
     @Benchmark
-    fun cmLUPInversion() {
+    fun cmLUPInversion(blackhole: Blackhole) {
         with(CMMatrixContext) {
-            inverse(matrix)
+            blackhole.consume(inverse(matrix))
         }
     }
 
     @Benchmark
-    fun ejmlInverse() {
+    fun ejmlInverse(blackhole: Blackhole) {
         with(EjmlMatrixContext) {
-            inverse(matrix)
+            blackhole.consume(inverse(matrix))
         }
     }
 }
