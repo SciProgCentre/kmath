@@ -52,11 +52,11 @@ public interface BufferNDAlgebra<T, A : Algebra<T>> : NDAlgebra<T, A> {
     }
 }
 
-public open class BufferedNDSpace<T, A : Space<T>>(
+public open class BufferedNDGroup<T, A : Group<T>>(
     final override val shape: IntArray,
     final override val elementContext: A,
     final override val bufferFactory: BufferFactory<T>,
-) : NDSpace<T, A>, BufferNDAlgebra<T, A> {
+) : NDGroup<T, A>, BufferNDAlgebra<T, A> {
     override val strides: Strides = DefaultStrides(shape)
     override val zero: NDBuffer<T> by lazy { produce { zero } }
     override fun NDStructure<T>.unaryMinus(): NDStructure<T> = produce { -get(it) }
@@ -66,7 +66,7 @@ public open class BufferedNDRing<T, R : Ring<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,
-) : BufferedNDSpace<T, R>(shape, elementContext, bufferFactory), NDRing<T, R> {
+) : BufferedNDGroup<T, R>(shape, elementContext, bufferFactory), NDRing<T, R> {
     override val one: NDBuffer<T> by lazy { produce { one } }
 }
 
@@ -80,16 +80,16 @@ public open class BufferedNDField<T, R : Field<T>>(
 }
 
 // space factories
-public fun <T, A : Space<T>> NDAlgebra.Companion.space(
+public fun <T, A : Group<T>> NDAlgebra.Companion.space(
     space: A,
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
-): BufferedNDSpace<T, A> = BufferedNDSpace(shape, space, bufferFactory)
+): BufferedNDGroup<T, A> = BufferedNDGroup(shape, space, bufferFactory)
 
-public inline fun <T, A : Space<T>, R> A.ndSpace(
+public inline fun <T, A : Group<T>, R> A.ndSpace(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
-    action: BufferedNDSpace<T, A>.() -> R,
+    action: BufferedNDGroup<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return NDAlgebra.space(this, bufferFactory, *shape).run(action)

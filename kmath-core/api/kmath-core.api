@@ -52,7 +52,7 @@ public final class space/kscience/kmath/expressions/ExpressionBuildersKt {
 	public static final fun extendedFieldExpression (Lspace/kscience/kmath/operations/ExtendedField;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 	public static final fun fieldExpression (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 	public static final fun ringExpression (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-	public static final fun spaceExpression (Lspace/kscience/kmath/operations/Space;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
+	public static final fun spaceExpression (Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 }
 
 public final class space/kscience/kmath/expressions/ExpressionKt {
@@ -91,7 +91,7 @@ public final class space/kscience/kmath/expressions/FunctionalExpressionAlgebraK
 	public static final fun expressionInExtendedField (Lspace/kscience/kmath/operations/ExtendedField;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 	public static final fun expressionInField (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 	public static final fun expressionInRing (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-	public static final fun expressionInSpace (Lspace/kscience/kmath/operations/Space;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
+	public static final fun expressionInSpace (Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
 }
 
 public class space/kscience/kmath/expressions/FunctionalExpressionExtendedField : space/kscience/kmath/expressions/FunctionalExpressionField, space/kscience/kmath/operations/ExtendedField {
@@ -165,22 +165,8 @@ public class space/kscience/kmath/expressions/FunctionalExpressionField : space/
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
-public class space/kscience/kmath/expressions/FunctionalExpressionRing : space/kscience/kmath/expressions/FunctionalExpressionSpace, space/kscience/kmath/operations/Ring {
-	public fun <init> (Lspace/kscience/kmath/operations/Ring;)V
-	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public synthetic fun getOne ()Ljava/lang/Object;
-	public fun getOne ()Lspace/kscience/kmath/expressions/Expression;
-	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun multiply (Lspace/kscience/kmath/expressions/Expression;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
-	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public final fun times (Ljava/lang/Object;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
-	public final fun times (Lspace/kscience/kmath/expressions/Expression;Ljava/lang/Object;)Lspace/kscience/kmath/expressions/Expression;
-	public fun times (Lspace/kscience/kmath/expressions/Expression;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
-	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
-}
-
-public class space/kscience/kmath/expressions/FunctionalExpressionSpace : space/kscience/kmath/expressions/FunctionalExpressionAlgebra, space/kscience/kmath/operations/Space {
-	public fun <init> (Lspace/kscience/kmath/operations/Space;)V
+public class space/kscience/kmath/expressions/FunctionalExpressionGroup : space/kscience/kmath/expressions/FunctionalExpressionAlgebra, space/kscience/kmath/operations/Group {
+	public fun <init> (Lspace/kscience/kmath/operations/Group;)V
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (Lspace/kscience/kmath/expressions/Expression;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
@@ -199,6 +185,20 @@ public class space/kscience/kmath/expressions/FunctionalExpressionSpace : space/
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryPlus (Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
+}
+
+public class space/kscience/kmath/expressions/FunctionalExpressionRing : space/kscience/kmath/expressions/FunctionalExpressionGroup, space/kscience/kmath/operations/Ring {
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;)V
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne ()Lspace/kscience/kmath/expressions/Expression;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun multiply (Lspace/kscience/kmath/expressions/Expression;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun times (Ljava/lang/Object;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
+	public final fun times (Lspace/kscience/kmath/expressions/Expression;Ljava/lang/Object;)Lspace/kscience/kmath/expressions/Expression;
+	public fun times (Lspace/kscience/kmath/expressions/Expression;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
 public final class space/kscience/kmath/expressions/SimpleAutoDiffExpression : space/kscience/kmath/expressions/FirstDerivativeExpression {
@@ -490,7 +490,7 @@ public final class space/kscience/kmath/linear/BufferMatrixContext : space/kscie
 public final class space/kscience/kmath/linear/BufferMatrixContext$Companion {
 }
 
-public final class space/kscience/kmath/linear/BufferVectorSpace : space/kscience/kmath/linear/VectorSpace {
+public final class space/kscience/kmath/linear/BufferVectorGroup : space/kscience/kmath/linear/VectorSpace {
 	public fun <init> (ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
@@ -625,7 +625,7 @@ public final class space/kscience/kmath/linear/MatrixBuilderKt {
 	public static final fun row (Lspace/kscience/kmath/nd/Structure2D$Companion;[Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
 }
 
-public abstract interface class space/kscience/kmath/linear/MatrixContext : space/kscience/kmath/operations/SpaceOperations {
+public abstract interface class space/kscience/kmath/linear/MatrixContext : space/kscience/kmath/operations/GroupOperations {
 	public static final field Companion Lspace/kscience/kmath/linear/MatrixContext$Companion;
 	public abstract fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public abstract fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
@@ -763,7 +763,7 @@ public final class space/kscience/kmath/linear/UnitFeature : space/kscience/kmat
 	public static final field INSTANCE Lspace/kscience/kmath/linear/UnitFeature;
 }
 
-public abstract interface class space/kscience/kmath/linear/VectorSpace : space/kscience/kmath/operations/Space {
+public abstract interface class space/kscience/kmath/linear/VectorSpace : space/kscience/kmath/operations/Group {
 	public static final field Companion Lspace/kscience/kmath/linear/VectorSpace$Companion;
 	public abstract fun add (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public abstract fun getAlgebra ()Lspace/kscience/kmath/operations/Ring;
@@ -775,9 +775,9 @@ public abstract interface class space/kscience/kmath/linear/VectorSpace : space/
 }
 
 public final class space/kscience/kmath/linear/VectorSpace$Companion {
-	public final fun buffered (ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/linear/BufferVectorSpace;
-	public static synthetic fun buffered$default (Lspace/kscience/kmath/linear/VectorSpace$Companion;ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lspace/kscience/kmath/linear/BufferVectorSpace;
-	public final fun real (I)Lspace/kscience/kmath/linear/BufferVectorSpace;
+	public final fun buffered (ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/linear/BufferVectorGroup;
+	public static synthetic fun buffered$default (Lspace/kscience/kmath/linear/VectorSpace$Companion;ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lspace/kscience/kmath/linear/BufferVectorGroup;
+	public final fun real (I)Lspace/kscience/kmath/linear/BufferVectorGroup;
 }
 
 public final class space/kscience/kmath/linear/VectorSpace$DefaultImpls {
@@ -820,9 +820,9 @@ public final class space/kscience/kmath/misc/CumulativeKt {
 	public static final fun cumulative (Ljava/util/Iterator;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/util/Iterator;
 	public static final fun cumulative (Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/util/List;
 	public static final fun cumulative (Lkotlin/sequences/Sequence;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Lkotlin/sequences/Sequence;
-	public static final fun cumulativeSum (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Space;)Ljava/lang/Iterable;
-	public static final fun cumulativeSum (Ljava/util/List;Lspace/kscience/kmath/operations/Space;)Ljava/util/List;
-	public static final fun cumulativeSum (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Space;)Lkotlin/sequences/Sequence;
+	public static final fun cumulativeSum (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Iterable;
+	public static final fun cumulativeSum (Ljava/util/List;Lspace/kscience/kmath/operations/Group;)Ljava/util/List;
+	public static final fun cumulativeSum (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Group;)Lkotlin/sequences/Sequence;
 	public static final fun cumulativeSumOfDouble (Ljava/lang/Iterable;)Ljava/lang/Iterable;
 	public static final fun cumulativeSumOfDouble (Ljava/util/List;)Ljava/util/List;
 	public static final fun cumulativeSumOfDouble (Lkotlin/sequences/Sequence;)Lkotlin/sequences/Sequence;
@@ -860,9 +860,9 @@ public final class space/kscience/kmath/nd/BufferNDAlgebraKt {
 	public static final fun field (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDField;
 	public static final fun ndField (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun ndRing (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun ndSpace (Lspace/kscience/kmath/operations/Space;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun ndSpace (Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun ring (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDRing;
-	public static final fun space (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Space;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDSpace;
+	public static final fun space (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDGroup;
 }
 
 public class space/kscience/kmath/nd/BufferedNDField : space/kscience/kmath/nd/BufferedNDRing, space/kscience/kmath/nd/NDField {
@@ -892,21 +892,8 @@ public class space/kscience/kmath/nd/BufferedNDField : space/kscience/kmath/nd/B
 	public fun times (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Number;)Lspace/kscience/kmath/nd/NDStructure;
 }
 
-public class space/kscience/kmath/nd/BufferedNDRing : space/kscience/kmath/nd/BufferedNDSpace, space/kscience/kmath/nd/NDRing {
-	public fun <init> ([ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
-	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public synthetic fun getOne ()Ljava/lang/Object;
-	public fun getOne ()Lspace/kscience/kmath/nd/NDBuffer;
-	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun multiply (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public fun times (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
-	public fun times (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-}
-
-public class space/kscience/kmath/nd/BufferedNDSpace : space/kscience/kmath/nd/BufferNDAlgebra, space/kscience/kmath/nd/NDSpace {
-	public fun <init> ([ILspace/kscience/kmath/operations/Space;Lkotlin/jvm/functions/Function2;)V
+public class space/kscience/kmath/nd/BufferedNDGroup : space/kscience/kmath/nd/BufferNDAlgebra, space/kscience/kmath/nd/NDGroup {
+	public fun <init> ([ILspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;)V
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -919,7 +906,7 @@ public class space/kscience/kmath/nd/BufferedNDSpace : space/kscience/kmath/nd/B
 	public fun getBuffer (Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/structures/Buffer;
 	public final fun getBufferFactory ()Lkotlin/jvm/functions/Function2;
 	public synthetic fun getElementContext ()Lspace/kscience/kmath/operations/Algebra;
-	public final fun getElementContext ()Lspace/kscience/kmath/operations/Space;
+	public final fun getElementContext ()Lspace/kscience/kmath/operations/Group;
 	public final fun getShape ()[I
 	public fun getStrides ()Lspace/kscience/kmath/nd/Strides;
 	public synthetic fun getZero ()Ljava/lang/Object;
@@ -946,6 +933,19 @@ public class space/kscience/kmath/nd/BufferedNDSpace : space/kscience/kmath/nd/B
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryPlus (Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+}
+
+public class space/kscience/kmath/nd/BufferedNDRing : space/kscience/kmath/nd/BufferedNDGroup, space/kscience/kmath/nd/NDRing {
+	public fun <init> ([ILspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne ()Lspace/kscience/kmath/nd/NDBuffer;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun multiply (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public fun times (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
+	public fun times (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 }
 
 public final class space/kscience/kmath/nd/DefaultStrides : space/kscience/kmath/nd/Strides {
@@ -1050,7 +1050,36 @@ public final class space/kscience/kmath/nd/NDField$DefaultImpls {
 	public static fun unaryPlus (Lspace/kscience/kmath/nd/NDField;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 }
 
-public abstract interface class space/kscience/kmath/nd/NDRing : space/kscience/kmath/nd/NDSpace, space/kscience/kmath/operations/Ring {
+public abstract interface class space/kscience/kmath/nd/NDGroup : space/kscience/kmath/nd/NDAlgebra, space/kscience/kmath/operations/Group {
+	public static final field Companion Lspace/kscience/kmath/nd/NDGroup$Companion;
+	public abstract fun add (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public abstract fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public abstract fun minus (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
+	public abstract fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public abstract fun plus (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
+}
+
+public final class space/kscience/kmath/nd/NDGroup$Companion {
+}
+
+public final class space/kscience/kmath/nd/NDGroup$DefaultImpls {
+	public static fun add (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun binaryOperation (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/String;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun binaryOperationFunction (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public static fun bindSymbol (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/String;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun invoke (Lspace/kscience/kmath/nd/NDGroup;Lkotlin/jvm/functions/Function1;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun minus (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun minus (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun minus (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun plus (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun plus (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun plus (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun unaryOperation (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/String;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+	public static fun unaryOperationFunction (Lspace/kscience/kmath/nd/NDGroup;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public static fun unaryPlus (Lspace/kscience/kmath/nd/NDGroup;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
+}
+
+public abstract interface class space/kscience/kmath/nd/NDRing : space/kscience/kmath/nd/NDGroup, space/kscience/kmath/operations/Ring {
 	public static final field Companion Lspace/kscience/kmath/nd/NDRing$Companion;
 	public abstract fun multiply (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 	public abstract fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
@@ -1079,35 +1108,6 @@ public final class space/kscience/kmath/nd/NDRing$DefaultImpls {
 	public static fun unaryOperation (Lspace/kscience/kmath/nd/NDRing;Ljava/lang/String;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 	public static fun unaryOperationFunction (Lspace/kscience/kmath/nd/NDRing;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 	public static fun unaryPlus (Lspace/kscience/kmath/nd/NDRing;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-}
-
-public abstract interface class space/kscience/kmath/nd/NDSpace : space/kscience/kmath/nd/NDAlgebra, space/kscience/kmath/operations/Space {
-	public static final field Companion Lspace/kscience/kmath/nd/NDSpace$Companion;
-	public abstract fun add (Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public abstract fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public abstract fun minus (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
-	public abstract fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public abstract fun plus (Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
-}
-
-public final class space/kscience/kmath/nd/NDSpace$Companion {
-}
-
-public final class space/kscience/kmath/nd/NDSpace$DefaultImpls {
-	public static fun add (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun binaryOperation (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/String;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun binaryOperationFunction (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public static fun bindSymbol (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/String;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun invoke (Lspace/kscience/kmath/nd/NDSpace;Lkotlin/jvm/functions/Function1;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun minus (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun minus (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun minus (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun plus (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/Object;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun plus (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;Ljava/lang/Object;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun plus (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun unaryOperation (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/String;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
-	public static fun unaryOperationFunction (Lspace/kscience/kmath/nd/NDSpace;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
-	public static fun unaryPlus (Lspace/kscience/kmath/nd/NDSpace;Lspace/kscience/kmath/nd/NDStructure;)Lspace/kscience/kmath/nd/NDStructure;
 }
 
 public abstract interface class space/kscience/kmath/nd/NDStructure {
@@ -1333,17 +1333,17 @@ public final class space/kscience/kmath/operations/AlgebraElementsKt {
 }
 
 public final class space/kscience/kmath/operations/AlgebraExtensionsKt {
-	public static final fun abs (Lspace/kscience/kmath/operations/Space;Ljava/lang/Comparable;)Ljava/lang/Comparable;
-	public static final fun average (Lspace/kscience/kmath/operations/Space;Ljava/lang/Iterable;)Ljava/lang/Object;
-	public static final fun average (Lspace/kscience/kmath/operations/Space;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
-	public static final fun averageWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Space;)Ljava/lang/Object;
-	public static final fun averageWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Space;)Ljava/lang/Object;
+	public static final fun abs (Lspace/kscience/kmath/operations/Group;Ljava/lang/Comparable;)Ljava/lang/Comparable;
+	public static final fun average (Lspace/kscience/kmath/operations/Group;Ljava/lang/Iterable;)Ljava/lang/Object;
+	public static final fun average (Lspace/kscience/kmath/operations/Group;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
+	public static final fun averageWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
+	public static final fun averageWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
 	public static final fun power (Lspace/kscience/kmath/operations/Field;Ljava/lang/Object;I)Ljava/lang/Object;
 	public static final fun power (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;I)Ljava/lang/Object;
-	public static final fun sum (Lspace/kscience/kmath/operations/Space;Ljava/lang/Iterable;)Ljava/lang/Object;
-	public static final fun sum (Lspace/kscience/kmath/operations/Space;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
-	public static final fun sumWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Space;)Ljava/lang/Object;
-	public static final fun sumWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Space;)Ljava/lang/Object;
+	public static final fun sum (Lspace/kscience/kmath/operations/Group;Ljava/lang/Iterable;)Ljava/lang/Object;
+	public static final fun sum (Lspace/kscience/kmath/operations/Group;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
+	public static final fun sumWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
+	public static final fun sumWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
 }
 
 public final class space/kscience/kmath/operations/AlgebraKt {
@@ -1735,6 +1735,50 @@ public final class space/kscience/kmath/operations/FloatField : space/kscience/k
 	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
+public abstract interface class space/kscience/kmath/operations/Group : space/kscience/kmath/operations/GroupOperations {
+	public abstract fun getZero ()Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/operations/Group$DefaultImpls {
+	public static fun binaryOperation (Lspace/kscience/kmath/operations/Group;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun binaryOperationFunction (Lspace/kscience/kmath/operations/Group;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public static fun bindSymbol (Lspace/kscience/kmath/operations/Group;Ljava/lang/String;)Ljava/lang/Object;
+	public static fun minus (Lspace/kscience/kmath/operations/Group;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun plus (Lspace/kscience/kmath/operations/Group;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun unaryOperation (Lspace/kscience/kmath/operations/Group;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun unaryOperationFunction (Lspace/kscience/kmath/operations/Group;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public static fun unaryPlus (Lspace/kscience/kmath/operations/Group;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class space/kscience/kmath/operations/GroupOperations : space/kscience/kmath/operations/Algebra {
+	public static final field Companion Lspace/kscience/kmath/operations/GroupOperations$Companion;
+	public static final field MINUS_OPERATION Ljava/lang/String;
+	public static final field PLUS_OPERATION Ljava/lang/String;
+	public abstract fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public abstract fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public abstract fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/operations/GroupOperations$Companion {
+	public static final field MINUS_OPERATION Ljava/lang/String;
+	public static final field PLUS_OPERATION Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/operations/GroupOperations$DefaultImpls {
+	public static fun binaryOperation (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun binaryOperationFunction (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public static fun bindSymbol (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/String;)Ljava/lang/Object;
+	public static fun minus (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun plus (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun unaryOperation (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun unaryOperationFunction (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public static fun unaryPlus (Lspace/kscience/kmath/operations/GroupOperations;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class space/kscience/kmath/operations/IntRing : space/kscience/kmath/operations/Norm, space/kscience/kmath/operations/NumericAlgebra, space/kscience/kmath/operations/Ring {
 	public static final field INSTANCE Lspace/kscience/kmath/operations/IntRing;
 	public fun add (II)Ljava/lang/Integer;
@@ -2078,7 +2122,7 @@ public final class space/kscience/kmath/operations/RealField : space/kscience/km
 	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public abstract interface class space/kscience/kmath/operations/Ring : space/kscience/kmath/operations/RingOperations, space/kscience/kmath/operations/Space {
+public abstract interface class space/kscience/kmath/operations/Ring : space/kscience/kmath/operations/Group, space/kscience/kmath/operations/RingOperations {
 	public abstract fun getOne ()Ljava/lang/Object;
 }
 
@@ -2094,7 +2138,7 @@ public final class space/kscience/kmath/operations/Ring$DefaultImpls {
 	public static fun unaryPlus (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public abstract interface class space/kscience/kmath/operations/RingOperations : space/kscience/kmath/operations/SpaceOperations {
+public abstract interface class space/kscience/kmath/operations/RingOperations : space/kscience/kmath/operations/GroupOperations {
 	public static final field Companion Lspace/kscience/kmath/operations/RingOperations$Companion;
 	public static final field TIMES_OPERATION Ljava/lang/String;
 	public abstract fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
@@ -2174,50 +2218,6 @@ public final class space/kscience/kmath/operations/ShortRing : space/kscience/km
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryPlus (S)Ljava/lang/Short;
-}
-
-public abstract interface class space/kscience/kmath/operations/Space : space/kscience/kmath/operations/SpaceOperations {
-	public abstract fun getZero ()Ljava/lang/Object;
-}
-
-public final class space/kscience/kmath/operations/Space$DefaultImpls {
-	public static fun binaryOperation (Lspace/kscience/kmath/operations/Space;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun binaryOperationFunction (Lspace/kscience/kmath/operations/Space;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public static fun bindSymbol (Lspace/kscience/kmath/operations/Space;Ljava/lang/String;)Ljava/lang/Object;
-	public static fun minus (Lspace/kscience/kmath/operations/Space;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun plus (Lspace/kscience/kmath/operations/Space;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun unaryOperation (Lspace/kscience/kmath/operations/Space;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun unaryOperationFunction (Lspace/kscience/kmath/operations/Space;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
-	public static fun unaryPlus (Lspace/kscience/kmath/operations/Space;Ljava/lang/Object;)Ljava/lang/Object;
-}
-
-public abstract interface class space/kscience/kmath/operations/SpaceOperations : space/kscience/kmath/operations/Algebra {
-	public static final field Companion Lspace/kscience/kmath/operations/SpaceOperations$Companion;
-	public static final field MINUS_OPERATION Ljava/lang/String;
-	public static final field PLUS_OPERATION Ljava/lang/String;
-	public abstract fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public abstract fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
-	public abstract fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
-}
-
-public final class space/kscience/kmath/operations/SpaceOperations$Companion {
-	public static final field MINUS_OPERATION Ljava/lang/String;
-	public static final field PLUS_OPERATION Ljava/lang/String;
-}
-
-public final class space/kscience/kmath/operations/SpaceOperations$DefaultImpls {
-	public static fun binaryOperation (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun binaryOperationFunction (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public static fun bindSymbol (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/String;)Ljava/lang/Object;
-	public static fun minus (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun plus (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun unaryOperation (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun unaryOperationFunction (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
-	public static fun unaryPlus (Lspace/kscience/kmath/operations/SpaceOperations;Ljava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class space/kscience/kmath/operations/TrigonometricOperations : space/kscience/kmath/operations/Algebra {

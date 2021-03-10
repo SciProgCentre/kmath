@@ -102,8 +102,8 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     is MST.Symbolic -> toSVar()
 
     is MST.Unary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> +value.toSFun<X>()
-        SpaceOperations.MINUS_OPERATION -> -value.toSFun<X>()
+        GroupOperations.PLUS_OPERATION -> +value.toSFun<X>()
+        GroupOperations.MINUS_OPERATION -> -value.toSFun<X>()
         TrigonometricOperations.SIN_OPERATION -> sin(value.toSFun())
         TrigonometricOperations.COS_OPERATION -> cos(value.toSFun())
         TrigonometricOperations.TAN_OPERATION -> tan(value.toSFun())
@@ -114,8 +114,8 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     }
 
     is MST.Binary -> when (operation) {
-        SpaceOperations.PLUS_OPERATION -> left.toSFun<X>() + right.toSFun()
-        SpaceOperations.MINUS_OPERATION -> left.toSFun<X>() - right.toSFun()
+        GroupOperations.PLUS_OPERATION -> left.toSFun<X>() + right.toSFun()
+        GroupOperations.MINUS_OPERATION -> left.toSFun<X>() - right.toSFun()
         RingOperations.TIMES_OPERATION -> left.toSFun<X>() * right.toSFun()
         FieldOperations.DIV_OPERATION -> left.toSFun<X>() / right.toSFun()
         PowerOperations.POW_OPERATION -> left.toSFun<X>() pow (right as MST.Numeric).toSConst()

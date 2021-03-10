@@ -105,7 +105,7 @@ public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = r
  *
  * @param T the type of element of this semispace.
  */
-public interface SpaceOperations<T> : Algebra<T> {
+public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
@@ -177,12 +177,11 @@ public interface SpaceOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add] and
- * scalar multiplication [multiply].
+ * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
-public interface Space<T> : SpaceOperations<T> {
+public interface Group<T> : GroupOperations<T> {
     /**
      * The neutral element of addition.
      */
@@ -195,7 +194,7 @@ public interface Space<T> : SpaceOperations<T> {
  *
  * @param T the type of element of this semiring.
  */
-public interface RingOperations<T> : SpaceOperations<T> {
+public interface RingOperations<T> : GroupOperations<T> {
     /**
      * Multiplies two elements.
      *
@@ -231,7 +230,7 @@ public interface RingOperations<T> : SpaceOperations<T> {
  *
  * @param T the type of element of this ring.
  */
-public interface Ring<T> : Space<T>, RingOperations<T> {
+public interface Ring<T> : Group<T>, RingOperations<T> {
     /**
      * neutral operation for multiplication
      */

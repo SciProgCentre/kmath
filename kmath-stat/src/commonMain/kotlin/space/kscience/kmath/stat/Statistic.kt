@@ -66,7 +66,7 @@ public fun <T, I, R> ComposableStatistic<T, I, R>.flow(
  * Arithmetic mean
  */
 public class Mean<T>(
-    private val space: Space<T>,
+    private val space: Group<T>,
     private val division: (sum: T, count: Int) -> T,
 ) : ComposableStatistic<T, Pair<T, Int>, T> {
     public override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =

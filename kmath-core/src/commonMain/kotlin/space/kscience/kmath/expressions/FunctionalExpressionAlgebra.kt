@@ -41,21 +41,21 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
 }
 
 /**
- * A context class for [Expression] construction for [Space] algebras.
+ * A context class for [Expression] construction for [Group] algebras.
  */
-public open class FunctionalExpressionSpace<T, A : Space<T>>(
+public open class FunctionalExpressionGroup<T, A : Group<T>>(
     algebra: A,
-) : FunctionalExpressionAlgebra<T, A>(algebra), Space<Expression<T>> {
+) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
     public override val zero: Expression<T> get() = const(algebra.zero)
 
     override fun Expression<T>.unaryMinus(): Expression<T> =
-        unaryOperation(SpaceOperations.MINUS_OPERATION, this)
+        unaryOperation(GroupOperations.MINUS_OPERATION, this)
 
     /**
      * Builds an Expression of addition of two another expressions.
      */
     public override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(SpaceOperations.PLUS_OPERATION, a, b)
+        binaryOperation(GroupOperations.PLUS_OPERATION, a, b)
 
 //    /**
 //     * Builds an Expression of multiplication of expression by number.
@@ -79,7 +79,7 @@ public open class FunctionalExpressionSpace<T, A : Space<T>>(
 
 public open class FunctionalExpressionRing<T, A : Ring<T>>(
     algebra: A,
-) : FunctionalExpressionSpace<T, A>(algebra), Ring<Expression<T>> {
+) : FunctionalExpressionGroup<T, A>(algebra), Ring<Expression<T>> {
     public override val one: Expression<T> get() = const(algebra.one)
 
     /**
@@ -92,10 +92,10 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
     public operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
 
     public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
-        super<FunctionalExpressionSpace>.unaryOperationFunction(operation)
+        super<FunctionalExpressionGroup>.unaryOperationFunction(operation)
 
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
-        super<FunctionalExpressionSpace>.binaryOperationFunction(operation)
+        super<FunctionalExpressionGroup>.binaryOperationFunction(operation)
 }
 
 public open class FunctionalExpressionField<T, A:  Field<T>>(
@@ -159,8 +159,8 @@ public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
         super<FunctionalExpressionField>.binaryOperationFunction(operation)
 }
 
-public inline fun <T, A : Space<T>> A.expressionInSpace(block: FunctionalExpressionSpace<T, A>.() -> Expression<T>): Expression<T> =
-    FunctionalExpressionSpace(this).block()
+public inline fun <T, A : Group<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
+    FunctionalExpressionGroup(this).block()
 
 public inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressionRing<T, A>.() -> Expression<T>): Expression<T> =
     FunctionalExpressionRing(this).block()

@@ -54,7 +54,7 @@ public interface NDAlgebra<T, C: Algebra<T>> {
      * Element-wise invocation of function working on [T] on a [NDStructure].
      */
     public operator fun Function1<T, T>.invoke(structure: NDStructure<T>): NDStructure<T> =
-        structure.map() { value -> this@invoke(value) }
+        structure.map { value -> this@invoke(value) }
 
     public companion object
 }
@@ -89,7 +89,7 @@ internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<
  * @param N the type of ND structure.
  * @param S the type of space of structure elements.
  */
-public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, S> {
+public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, S> {
     /**
      * Element-wise addition.
      *
@@ -127,7 +127,7 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun NDStructure<T>.minus(arg: T): NDStructure<T> = this.map() { value -> add(arg, -value) }
+    public operator fun NDStructure<T>.minus(arg: T): NDStructure<T> = this.map { value -> add(arg, -value) }
 
     /**
      * Adds an element to ND structure of it.
@@ -136,7 +136,7 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the augend.
      * @return the sum.
      */
-    public operator fun T.plus(arg: NDStructure<T>): NDStructure<T> = arg.map() { value -> add(this@plus, value) }
+    public operator fun T.plus(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> add(this@plus, value) }
 
     /**
      * Subtracts an ND structure from an element of it.
@@ -145,7 +145,7 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.minus(arg: NDStructure<T>): NDStructure<T> = arg.map() { value -> add(-this@minus, value) }
+    public operator fun T.minus(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> add(-this@minus, value) }
 
     public companion object
 }
@@ -157,7 +157,7 @@ public interface NDSpace<T, S : Space<T>> : Space<NDStructure<T>>, NDAlgebra<T, 
  * @param N the type of ND structure.
  * @param R the type of ring of structure elements.
  */
-public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDSpace<T, R> {
+public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDGroup<T, R> {
     /**
      * Element-wise multiplication.
      *
@@ -177,7 +177,7 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDSpace<T, R> {
      * @param arg the multiplier.
      * @return the product.
      */
-    public operator fun NDStructure<T>.times(arg: T): NDStructure<T> = this.map() { value -> multiply(arg, value) }
+    public operator fun NDStructure<T>.times(arg: T): NDStructure<T> = this.map { value -> multiply(arg, value) }
 
     /**
      * Multiplies an element by a ND structure of it.
@@ -186,7 +186,7 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDSpace<T, R> {
      * @param arg the multiplier.
      * @return the product.
      */
-    public operator fun T.times(arg: NDStructure<T>): NDStructure<T> = arg.map() { value -> multiply(this@times, value) }
+    public operator fun T.times(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> multiply(this@times, value) }
 
     public companion object
 }
@@ -217,7 +217,7 @@ public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>,
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun NDStructure<T>.div(arg: T): NDStructure<T> = this.map() { value -> divide(arg, value) }
+    public operator fun NDStructure<T>.div(arg: T): NDStructure<T> = this.map { value -> divide(arg, value) }
 
     /**
      * Divides an element by an ND structure of it.
@@ -226,7 +226,7 @@ public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>,
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.div(arg: NDStructure<T>): NDStructure<T> = arg.map() { divide(it, this@div) }
+    public operator fun T.div(arg: NDStructure<T>): NDStructure<T> = arg.map { divide(it, this@div) }
 
 //    @ThreadLocal
 //    public companion object {

@@ -70,12 +70,12 @@ public interface Nd4jArrayAlgebra<T, C : Algebra<T>> : NDAlgebra<T, C> {
 }
 
 /**
- * Represents [NDSpace] over [Nd4jArrayStructure].
+ * Represents [NDGroup] over [Nd4jArrayStructure].
  *
  * @param T the type of the element contained in ND structure.
  * @param S the type of space of structure elements.
  */
-public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S>, Nd4jArrayAlgebra<T, S> {
+public interface Nd4JArrayGroup<T, S : Group<T>> : NDGroup<T, S>, Nd4jArrayAlgebra<T, S> {
 
     public override val zero: Nd4jArrayStructure<T>
         get() = Nd4j.zeros(*shape).wrap()
@@ -100,7 +100,7 @@ public interface Nd4jArraySpace<T, S : Space<T>> : NDSpace<T, S>, Nd4jArrayAlgeb
  * @param R the type of ring of structure elements.
  */
 @OptIn(UnstableKMathAPI::class)
-public interface Nd4jArrayRing<T, R : Ring<T>> : NDRing<T, R>, Nd4jArraySpace<T, R> {
+public interface Nd4jArrayRing<T, R : Ring<T>> : NDRing<T, R>, Nd4JArrayGroup<T, R> {
 
     public override val one: Nd4jArrayStructure<T>
         get() = Nd4j.ones(*shape).wrap()

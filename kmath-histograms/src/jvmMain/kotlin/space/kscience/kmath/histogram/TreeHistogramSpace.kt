@@ -2,8 +2,8 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.Space
 import space.kscience.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.abs
@@ -37,7 +37,7 @@ public class TreeHistogram(
 @UnstableKMathAPI
 public class TreeHistogramSpace(
     public val binFactory: (Double) -> UnivariateDomain,
-) : Space<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
+) : Group<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
 
     private class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
         ClosedFloatingPointRange<Double> by domain.range

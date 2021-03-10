@@ -1,10 +1,10 @@
 package space.kscience.kmath.geometry
 
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.Group
 
 public interface Vector
 
-public interface GeometrySpace<V : Vector> : Space<V> {
+public interface GeometrySpace<V : Vector> : Group<V> {
     /**
      * L2 distance
      */

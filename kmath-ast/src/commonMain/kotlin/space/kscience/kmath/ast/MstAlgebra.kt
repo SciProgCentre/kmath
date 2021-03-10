@@ -18,22 +18,22 @@ public object MstAlgebra : NumericAlgebra<MST> {
 }
 
 /**
- * [Space] over [MST] nodes.
+ * [Group] over [MST] nodes.
  */
-public object MstSpace : Space<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
+public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     public override val zero: MST.Numeric = number(0.0)
 
     public override fun number(value: Number): MST.Numeric = MstAlgebra.number(value)
     public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
-    public override fun add(a: MST, b: MST): MST.Binary = binaryOperationFunction(SpaceOperations.PLUS_OPERATION)(a, b)
+    public override fun add(a: MST, b: MST): MST.Binary = binaryOperationFunction(GroupOperations.PLUS_OPERATION)(a, b)
     public override operator fun MST.unaryPlus(): MST.Unary =
-        unaryOperationFunction(SpaceOperations.PLUS_OPERATION)(this)
+        unaryOperationFunction(GroupOperations.PLUS_OPERATION)(this)
 
     public override operator fun MST.unaryMinus(): MST.Unary =
-        unaryOperationFunction(SpaceOperations.MINUS_OPERATION)(this)
+        unaryOperationFunction(GroupOperations.MINUS_OPERATION)(this)
 
     public override operator fun MST.minus(b: MST): MST.Binary =
-        binaryOperationFunction(SpaceOperations.MINUS_OPERATION)(this, b)
+        binaryOperationFunction(GroupOperations.MINUS_OPERATION)(this, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
         binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, number(value))
@@ -50,25 +50,25 @@ public object MstSpace : Space<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
  */
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric = MstSpace.zero
+    public override val zero: MST.Numeric = MstGroup.zero
     public override val one: MST.Numeric = number(1.0)
 
-    public override fun number(value: Number): MST.Numeric = MstSpace.number(value)
-    public override fun bindSymbol(value: String): MST.Symbolic = MstSpace.bindSymbol(value)
-    public override fun add(a: MST, b: MST): MST.Binary = MstSpace.add(a, b)
+    public override fun number(value: Number): MST.Numeric = MstGroup.number(value)
+    public override fun bindSymbol(value: String): MST.Symbolic = MstGroup.bindSymbol(value)
+    public override fun add(a: MST, b: MST): MST.Binary = MstGroup.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
-        MstSpace.binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, MstSpace.number(value))
+        MstGroup.binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, MstGroup.number(value))
 
     public override fun multiply(a: MST, b: MST): MST.Binary =
         binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, b)
 
-    public override operator fun MST.unaryPlus(): MST.Unary = MstSpace { +this@unaryPlus }
-    public override operator fun MST.unaryMinus(): MST.Unary = MstSpace { -this@unaryMinus }
-    public override operator fun MST.minus(b: MST): MST.Binary = MstSpace { this@minus - b }
+    public override operator fun MST.unaryPlus(): MST.Unary = MstGroup { +this@unaryPlus }
+    public override operator fun MST.unaryMinus(): MST.Unary = MstGroup { -this@unaryMinus }
+    public override operator fun MST.minus(b: MST): MST.Binary = MstGroup { this@minus - b }
 
     public override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
-        MstSpace.binaryOperationFunction(operation)
+        MstGroup.binaryOperationFunction(operation)
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
         MstAlgebra.unaryOperationFunction(operation)
@@ -88,7 +88,7 @@ public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<
     public override fun add(a: MST, b: MST): MST.Binary = MstRing.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
-        MstSpace.binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, MstSpace.number(value))
+        MstGroup.binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, MstGroup.number(value))
 
     public override fun multiply(a: MST, b: MST): MST.Binary = MstRing.multiply(a, b)
     public override fun divide(a: MST, b: MST): MST.Binary =
@@ -129,7 +129,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     public override fun add(a: MST, b: MST): MST.Binary = MstField.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST =
-        binaryOperation(SpaceOperations.PLUS_OPERATION, a, number(value))
+        binaryOperation(GroupOperations.PLUS_OPERATION, a, number(value))
 
     public override fun multiply(a: MST, b: MST): MST.Binary = MstField.multiply(a, b)
     public override fun divide(a: MST, b: MST): MST.Binary = MstField.divide(a, b)

@@ -1,8 +1,8 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.Space
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -11,7 +11,7 @@ import space.kscience.kmath.structures.BufferFactory
  * A linear space for vectors.
  * Could be used on any point-like structure
  */
-public interface VectorSpace<T : Any, A : Ring<T>> : Space<Point<T>> {
+public interface VectorSpace<T : Any, A : Ring<T>> : Group<Point<T>> {
     public val size: Int
     public val algebra: A
     override val zero: Point<T> get() = produce { algebra.zero }
@@ -27,13 +27,13 @@ public interface VectorSpace<T : Any, A : Ring<T>> : Space<Point<T>> {
     //TODO add basis
 
     public companion object {
-        private val realSpaceCache: MutableMap<Int, BufferVectorSpace<Double, RealField>> = hashMapOf()
+        private val realSpaceCache: MutableMap<Int, BufferVectorGroup<Double, RealField>> = hashMapOf()
 
         /**
          * Non-boxing double vector space
          */
-        public fun real(size: Int): BufferVectorSpace<Double, RealField> = realSpaceCache.getOrPut(size) {
-            BufferVectorSpace(
+        public fun real(size: Int): BufferVectorGroup<Double, RealField> = realSpaceCache.getOrPut(size) {
+            BufferVectorGroup(
                 size,
                 RealField,
                 Buffer.Companion::auto
@@ -47,7 +47,7 @@ public interface VectorSpace<T : Any, A : Ring<T>> : Space<Point<T>> {
             size: Int,
             space: A,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): BufferVectorSpace<T, A> = BufferVectorSpace(size, space, bufferFactory)
+        ): BufferVectorGroup<T, A> = BufferVectorGroup(size, space, bufferFactory)
 
         /**
          * Automatic buffered vector, unboxed if it is possible
@@ -58,7 +58,7 @@ public interface VectorSpace<T : Any, A : Ring<T>> : Space<Point<T>> {
 }
 
 
-public class BufferVectorSpace<T : Any, A : Ring<T>>(
+public class BufferVectorGroup<T : Any, A : Ring<T>>(
     override val size: Int,
     override val algebra: A,
     public val bufferFactory: BufferFactory<T>,

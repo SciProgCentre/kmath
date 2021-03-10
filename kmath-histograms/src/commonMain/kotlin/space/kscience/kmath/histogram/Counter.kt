@@ -2,8 +2,8 @@ package space.kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.Space
 
 /**
  * Common representation for atomic counters
@@ -36,7 +36,7 @@ public class LongCounter : Counter<Long> {
     override val value: Long get() = innerValue.value
 }
 
-public class ObjectCounter<T : Any>(public val space: Space<T>) : Counter<T> {
+public class ObjectCounter<T : Any>(public val space: Group<T>) : Counter<T> {
     private val innerValue = atomic(space.zero)
 
     override fun add(delta: T) {

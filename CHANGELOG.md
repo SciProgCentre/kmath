@@ -7,6 +7,7 @@
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
+- Space is replaced by Group. Space is reserved for vector spaces.
 
 ### Deprecated
 

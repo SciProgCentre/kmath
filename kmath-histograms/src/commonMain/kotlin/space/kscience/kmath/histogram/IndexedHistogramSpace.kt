@@ -6,8 +6,8 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.NDField
 import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.Strides
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.Space
 import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 
@@ -43,7 +43,7 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
  * A space for producing histograms with values in a NDStructure
  */
 public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
-    : Space<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
+    : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
     //public val valueSpace: Space<V>
     public val strides: Strides
     public val histogramValueSpace: NDField<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),

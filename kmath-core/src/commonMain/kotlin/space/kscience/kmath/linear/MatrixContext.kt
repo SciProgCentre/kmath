@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.
  */
-public interface MatrixContext<T : Any, out M : Matrix<T>> : SpaceOperations<Matrix<T>> {
+public interface MatrixContext<T : Any, out M : Matrix<T>> : GroupOperations<Matrix<T>> {
     /**
      * Produces a matrix with this context and given dimensions.
      */

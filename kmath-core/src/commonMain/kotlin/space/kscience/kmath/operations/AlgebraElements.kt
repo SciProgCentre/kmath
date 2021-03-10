@@ -49,7 +49,7 @@ public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.mi
  * @param b the augend.
  * @return the sum.
  */
-public operator fun <T : AlgebraElement<T, S>, S : Space<T>> T.plus(b: T): T =
+public operator fun <T : AlgebraElement<T, S>, S : Group<T>> T.plus(b: T): T =
     context.add(this, b)
 
 ///**
@@ -80,14 +80,14 @@ public operator fun <T : AlgebraElement<T, F>, F : Field<T>> T.div(b: T): T =
 
 
 /**
- * The element of [Space].
+ * The element of [Group].
  *
  * @param T the type of space operation results.
  * @param I self type of the element. Needed for static type checking.
  * @param S the type of space.
  */
 @UnstableKMathAPI
-public interface SpaceElement<T : SpaceElement<T, S>, S : Space<T>> : AlgebraElement<T, S>
+public interface SpaceElement<T : SpaceElement<T, S>, S : Group<T>> : AlgebraElement<T, S>
 
 /**
  * The element of [Ring].

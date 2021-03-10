@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 internal class TestESTreeConsistencyWithInterpreter {
     @Test
     fun mstSpace() {
-        val res1 = MstSpace.mstInSpace {
+        val res1 = MstGroup.mstInSpace {
             binaryOperationFunction("+")(
                 unaryOperationFunction("+")(
                     number(3.toByte()) - (number(2.toByte()) + (scale(
@@ -25,7 +25,7 @@ internal class TestESTreeConsistencyWithInterpreter {
             ) + bindSymbol("x") + zero
         }("x" to MST.Numeric(2))
 
-        val res2 = MstSpace.mstInSpace {
+        val res2 = MstGroup.mstInSpace {
             binaryOperationFunction("+")(
                 unaryOperationFunction("+")(
                     number(3.toByte()) - (number(2.toByte()) + (scale(

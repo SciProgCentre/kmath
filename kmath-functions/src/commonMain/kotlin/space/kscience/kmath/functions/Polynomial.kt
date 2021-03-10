@@ -1,8 +1,8 @@
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.Space
 import space.kscience.kmath.operations.invoke
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -44,7 +44,7 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
  */
 public class PolynomialSpace<T : Any, C>(
     private val ring: C,
-) : Space<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
+) : Group<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
     public override val zero: Polynomial<T> = Polynomial(emptyList())
 
     override fun Polynomial<T>.unaryMinus(): Polynomial<T> = with(ring) {

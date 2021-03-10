@@ -4,8 +4,8 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.ConstantChain
 import space.kscience.kmath.chains.map
 import space.kscience.kmath.chains.zip
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.Space
 import space.kscience.kmath.operations.invoke
 
 public class BasicSampler<T : Any>(public val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
@@ -19,8 +19,8 @@ public class ConstantSampler<T : Any>(public val value: T) : Sampler<T> {
 /**
  * A space for samplers. Allows to perform simple operations on distributions
  */
-public class SamplerSpace<T : Any, S>(public val algebra: S) : Space<Sampler<T>>,
-    ScaleOperations<Sampler<T>> where S : Space<T>, S : ScaleOperations<T> {
+public class SamplerSpace<T : Any, S>(public val algebra: S) : Group<Sampler<T>>,
+    ScaleOperations<Sampler<T>> where S : Group<T>, S : ScaleOperations<T> {
 
     public override val zero: Sampler<T> = ConstantSampler(algebra.zero)
 
