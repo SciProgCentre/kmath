@@ -697,7 +697,7 @@ public abstract interface class space/kscience/kmath/linear/QRDecompositionFeatu
 	public abstract fun getR ()Lspace/kscience/kmath/nd/Structure2D;
 }
 
-public final class space/kscience/kmath/linear/RealMatrixContext : space/kscience/kmath/linear/MatrixContext {
+public final class space/kscience/kmath/linear/RealMatrixContext : space/kscience/kmath/linear/MatrixContext, space/kscience/kmath/operations/ScaleOperations {
 	public static final field INSTANCE Lspace/kscience/kmath/linear/RealMatrixContext;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/linear/BufferMatrix;
@@ -706,6 +706,8 @@ public final class space/kscience/kmath/linear/RealMatrixContext : space/kscienc
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
 	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/nd/Structure2D;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun div (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Number;)Lspace/kscience/kmath/nd/Structure2D;
 	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/linear/BufferMatrix;
 	public synthetic fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
@@ -717,9 +719,15 @@ public final class space/kscience/kmath/linear/RealMatrixContext : space/kscienc
 	public fun point (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public fun produce (IILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/linear/BufferMatrix;
 	public synthetic fun produce (IILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/Structure2D;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/nd/Structure2D;D)Lspace/kscience/kmath/linear/BufferMatrix;
 	public fun times (DLspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/linear/BufferMatrix;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
 	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public fun times (Lspace/kscience/kmath/nd/Structure2D;D)Lspace/kscience/kmath/linear/BufferMatrix;
+	public fun times (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Number;)Lspace/kscience/kmath/nd/Structure2D;
 	public synthetic fun times (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
 	public final fun toBufferMatrix (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/linear/BufferMatrix;
 	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
