@@ -188,7 +188,7 @@ public interface SpaceOperations<T> : Algebra<T> {
     public operator fun Number.times(b: T): T = b * this
 
     public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
-        PLUS_OPERATION -> { arg -> arg }
+        PLUS_OPERATION -> { arg -> +arg }
         MINUS_OPERATION -> { arg -> -arg }
         else -> super.unaryOperationFunction(operation)
     }
