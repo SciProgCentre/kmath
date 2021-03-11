@@ -175,6 +175,11 @@ public interface Strides {
     public fun index(offset: Int): IntArray
 
     /**
+     * Get next multidimensional index from the current multidimensional index
+     */
+    public fun nextIndex(index: IntArray): IntArray
+
+    /**
      * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
      */
     public val linearSize: Int
@@ -230,6 +235,10 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
         }
 
         return res
+    }
+
+    override fun nextIndex(index: IntArray): IntArray {
+        TODO("Not yet implemented")
     }
 
     override fun equals(other: Any?): Boolean {

@@ -164,11 +164,33 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.transpose(i: Int, j: Int): RealTensor {
-        TODO("Alya")
+        val n = this.buffer.size
+        val resBuffer = DoubleArray(n)
+
+        val resShape = this.shape.copyOf()
+        resShape[i] = resShape[j].also { resShape[j] = resShape[i] }
+
+        val resTensor = RealTensor(resShape, resBuffer)
+
+        for (offset in 0 until n) {
+            val oldMultiIndex = this.strides.index(offset)
+            val newMultiIndex = oldMultiIndex.copyOf()
+            newMultiIndex[i] = newMultiIndex[j].also { newMultiIndex[j] = newMultiIndex[i] }
+
+            val linearIndex = resTensor.strides.offset(newMultiIndex)
+            resTensor.buffer.array[linearIndex] = this.buffer.array[offset]
+        }
+        return resTensor
     }
 
     override fun RealTensor.transposeAssign(i: Int, j: Int) {
-        TODO("Alya")
+        val transposedTensor = this.transpose(i, j)
+        for (i in transposedTensor.shape.indices) {
+            this.shape[i] = transposedTensor.shape[i]
+        }
+        for (i in transposedTensor.buffer.array.indices) {
+            this.buffer.array[i] = transposedTensor.buffer.array[i]
+        }
     }
 
     override fun RealTensor.view(shape: IntArray): RealTensor {

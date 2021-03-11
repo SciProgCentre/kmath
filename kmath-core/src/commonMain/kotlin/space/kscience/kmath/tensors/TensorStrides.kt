@@ -35,6 +35,23 @@ public inline fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): In
     return res
 }
 
+public inline fun nextIndex(index: IntArray, shape: IntArray, nDim: Int): IntArray {
+    val res = index.copyOf()
+    var current = nDim - 1
+    var carry = 0
+
+    do {
+        res[current]++
+        if (res[current] >= shape[current]) {
+            carry = 1
+            res[current] = 0
+        }
+        current--
+    } while(carry != 0 && current >= 0)
+
+    return res
+}
+
 
 
 public class TensorStrides(override val shape: IntArray): Strides
@@ -46,6 +63,9 @@ public class TensorStrides(override val shape: IntArray): Strides
 
     override fun index(offset: Int): IntArray =
         indexFromOffset(offset, strides, shape.size)
+
+    override fun nextIndex(index: IntArray): IntArray =
+        nextIndex(index, shape, shape.size)
 
     override val linearSize: Int
         get() = shape.reduce(Int::times)
