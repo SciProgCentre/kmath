@@ -20,7 +20,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.2.0"
+    version = "0.3.0"
 }
 
 subprojects {
@@ -32,9 +32,9 @@ readme {
 }
 
 ksciencePublish {
-    spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
-    bintrayRepo = "kscience"
-    githubProject = "kmath"
+    github("kmath")
+    space()
+    sonatype()
 }
 
 apiValidation {

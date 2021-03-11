@@ -2,18 +2,18 @@ package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.Space
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 
 /**
- * Creates a functional expression with this [Space].
+ * Creates a functional expression with this [Group].
  */
-public inline fun <T> Space<T>.spaceExpression(block: FunctionalExpressionSpace<T, Space<T>>.() -> Expression<T>): Expression<T> {
+public inline fun <T> Group<T>.spaceExpression(block: FunctionalExpressionGroup<T, Group<T>>.() -> Expression<T>): Expression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return FunctionalExpressionSpace(this).block()
+    return FunctionalExpressionGroup(this).block()
 }
 
 /**

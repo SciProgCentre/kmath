@@ -3,6 +3,7 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -18,13 +19,20 @@ public typealias Matrix<T> = Structure2D<T>
 /**
  * Basic implementation of Matrix space based on [NDStructure]
  */
-public class BufferMatrixContext<T : Any, R : Ring<T>>(
-    public override val elementContext: R,
+public class BufferMatrixContext<T : Any, A>(
+    public override val elementContext: A,
     private val bufferFactory: BufferFactory<T>,
-) : GenericMatrixContext<T, R, BufferMatrix<T>> {
+) : GenericMatrixContext<T, A, BufferMatrix<T>> where A : Ring<T>, A : ScaleOperations<T> {
+
     public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> T): BufferMatrix<T> {
         val buffer = bufferFactory(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
         return BufferMatrix(rows, columns, buffer)
+    }
+
+    override fun scale(a: Matrix<T>, value: Double): Matrix<T> = elementContext {
+        produce(a.rowNum, a.colNum) { i, j ->
+            a[i, j] * value
+        }
     }
 
     public override fun point(size: Int, initializer: (Int) -> T): Point<T> = bufferFactory(size, initializer)
@@ -78,12 +86,12 @@ public class BufferMatrixContext<T : Any, R : Ring<T>>(
         }
     }
 
-    override fun multiply(a: Matrix<T>, k: Number): BufferMatrix<T> {
-        val aBufferMatrix = a.toBufferMatrix()
-        return elementContext {
-            produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
-        }
-    }
+//    override fun multiply(a: Matrix<T>, k: Number): BufferMatrix<T> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return elementContext {
+//            produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
+//        }
+//    }
 
     public companion object
 }

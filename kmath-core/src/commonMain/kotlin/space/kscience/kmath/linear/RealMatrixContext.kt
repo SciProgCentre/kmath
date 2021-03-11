@@ -1,8 +1,9 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.RealBuffer
 
-public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
+public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>>, ScaleOperations<Matrix<Double>> {
 
     public override fun produce(
         rows: Int,
@@ -20,6 +21,8 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
     public fun one(rows: Int, columns: Int): Matrix<Double> = VirtualMatrix(rows, columns) { i, j ->
         if (i == j) 1.0 else 0.0
     } + DiagonalFeature
+
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = produce(rowNum, colNum) { i, j -> -get(i, j) }
 
     public override infix fun Matrix<Double>.dot(other: Matrix<Double>): BufferMatrix<Double> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
@@ -56,16 +59,23 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>> {
         }
     }
 
-    override fun Matrix<Double>.times(value: Double): BufferMatrix<Double> {
-        val bufferMatrix = toBufferMatrix()
-        return produce(rowNum, colNum) { i, j -> bufferMatrix[i, j] * value }
+    override fun scale(a: Matrix<Double>, value: Double): BufferMatrix<Double> {
+        val bufferMatrix = a.toBufferMatrix()
+        return produce(a.rowNum, a.colNum) { i, j -> bufferMatrix[i, j] * value }
     }
 
+    override fun Matrix<Double>.times(value: Double): BufferMatrix<Double> = scale(this, value)
 
-    override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
-        val aBufferMatrix = a.toBufferMatrix()
-        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
-    }
+//
+//    override fun multiply(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] * k.toDouble() }
+//    }
+//
+//    override fun divide(a: Matrix<Double>, k: Number): BufferMatrix<Double> {
+//        val aBufferMatrix = a.toBufferMatrix()
+//        return produce(a.rowNum, a.colNum) { i, j -> aBufferMatrix[i, j] / k.toDouble() }
+//    }
 }
 
 

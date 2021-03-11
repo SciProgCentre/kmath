@@ -2,6 +2,7 @@ package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sqrt
@@ -32,21 +33,22 @@ public val Vector3D.r: Double get() = Euclidean3DSpace { sqrt(norm()) }
 private data class Vector3DImpl(
     override val x: Double,
     override val y: Double,
-    override val z: Double
+    override val z: Double,
 ) : Vector3D
 
-public object Euclidean3DSpace : GeometrySpace<Vector3D> {
+public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector3D> {
     public override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
 
     public fun Vector3D.norm(): Double = sqrt(x * x + y * y + z * z)
+    override fun Vector3D.unaryMinus(): Vector3D = Vector3D(-x, -y, -z)
 
     public override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
 
     public override fun add(a: Vector3D, b: Vector3D): Vector3D =
         Vector3D(a.x + b.x, a.y + b.y, a.z + b.z)
 
-    public override fun multiply(a: Vector3D, k: Number): Vector3D =
-        Vector3D(a.x * k.toDouble(), a.y * k.toDouble(), a.z * k.toDouble())
+    public override fun scale(a: Vector3D, value: Double): Vector3D =
+        Vector3D(a.x * value, a.y * value, a.z * value)
 
     public override fun Vector3D.dot(other: Vector3D): Double =
         x * other.x + y * other.y + z * other.z

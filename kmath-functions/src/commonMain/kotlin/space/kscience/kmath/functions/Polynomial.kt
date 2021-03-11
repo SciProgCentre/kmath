@@ -1,7 +1,8 @@
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -41,8 +42,14 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
 /**
  * An algebra for polynomials
  */
-public class PolynomialSpace<T : Any, C : Ring<T>>(private val ring: C) : Space<Polynomial<T>> {
+public class PolynomialSpace<T : Any, C>(
+    private val ring: C,
+) : Group<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
     public override val zero: Polynomial<T> = Polynomial(emptyList())
+
+    override fun Polynomial<T>.unaryMinus(): Polynomial<T> = with(ring) {
+        Polynomial(coefficients.map { -it })
+    }
 
     public override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
         val dim = max(a.coefficients.size, b.coefficients.size)
@@ -54,13 +61,13 @@ public class PolynomialSpace<T : Any, C : Ring<T>>(private val ring: C) : Space<
         }
     }
 
-    public override fun multiply(a: Polynomial<T>, k: Number): Polynomial<T> =
-        ring { Polynomial(List(a.coefficients.size) { index -> a.coefficients[index] * k }) }
+    public override fun scale(a: Polynomial<T>, value: Double): Polynomial<T> =
+        ring { Polynomial(List(a.coefficients.size) { index -> a.coefficients[index] * value }) }
 
     public operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)
 }
 
-public inline fun <T : Any, C : Ring<T>, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R {
+public inline fun <T : Any, C, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R where C : Ring<T>, C : ScaleOperations<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return PolynomialSpace(this).block()
 }

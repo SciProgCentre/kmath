@@ -4,7 +4,7 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.RingWithNumbers
+import space.kscience.kmath.operations.NumbersAddOperations
 
 /**
  * A field over commons-math [DerivativeStructure].
@@ -16,7 +16,8 @@ import space.kscience.kmath.operations.RingWithNumbers
 public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
-) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>, RingWithNumbers<DerivativeStructure> {
+) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
+    NumbersAddOperations<DerivativeStructure> {
     public val numberOfVariables: Int = bindings.size
 
     public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
@@ -62,13 +63,11 @@ public class DerivativeStructureField(
 
     public fun DerivativeStructure.derivative(vararg symbols: Symbol): Double = derivative(symbols.toList())
 
+    override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
+
     public override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
 
-    public override fun multiply(a: DerivativeStructure, k: Number): DerivativeStructure = when (k) {
-        is Double -> a.multiply(k)
-        is Int -> a.multiply(k)
-        else -> a.multiply(k.toDouble())
-    }
+    public override fun scale(a: DerivativeStructure, value: Double): DerivativeStructure = a.multiply(value)
 
     public override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
     public override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)

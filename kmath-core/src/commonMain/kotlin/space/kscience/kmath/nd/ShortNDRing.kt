@@ -1,7 +1,7 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.RingWithNumbers
+import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.ShortRing
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.ShortBuffer
@@ -12,7 +12,7 @@ import kotlin.contracts.contract
 public class ShortNDRing(
     shape: IntArray,
 ) : BufferedNDRing<Short, ShortRing>(shape, ShortRing, Buffer.Companion::auto),
-    RingWithNumbers<NDStructure<Short>> {
+    NumbersAddOperations<NDStructure<Short>> {
 
     override val zero: NDBuffer<Short> by lazy { produce { zero } }
     override val one: NDBuffer<Short> by lazy { produce { one } }
