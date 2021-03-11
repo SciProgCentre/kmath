@@ -86,6 +86,9 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
         }
     }
 
+    override fun scale(a: Matrix<Double>, value: Double): Matrix<Double> = a.toCM().times(value)
+
+
     public override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
         CMMatrix(toCM().origin.multiply(other.toCM().origin))
 

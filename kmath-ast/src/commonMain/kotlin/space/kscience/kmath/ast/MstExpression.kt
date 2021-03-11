@@ -58,7 +58,7 @@ public inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Group<T>> A.mstInSpace(block: MstGroup.() -> MST): MstExpression<T, A> {
+public inline fun <reified T : Any, A : Group<T>> A.mstInGroup(block: MstGroup.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return MstExpression(this, MstGroup.block())
 }
@@ -98,9 +98,9 @@ public inline fun <reified T : Any, A : ExtendedField<T>> A.mstInExtendedField(b
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Group<T>> FunctionalExpressionGroup<T, A>.mstInSpace(block: MstGroup.() -> MST): MstExpression<T, A> {
+public inline fun <reified T : Any, A : Group<T>> FunctionalExpressionGroup<T, A>.mstInGroup(block: MstGroup.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return algebra.mstInSpace(block)
+    return algebra.mstInGroup(block)
 }
 
 /**

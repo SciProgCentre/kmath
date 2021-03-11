@@ -2,7 +2,7 @@ package space.kscience.kmath.asm
 
 import space.kscience.kmath.ast.mstInExtendedField
 import space.kscience.kmath.ast.mstInField
-import space.kscience.kmath.ast.mstInSpace
+import space.kscience.kmath.ast.mstInGroup
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.RealField
 import kotlin.random.Random
@@ -12,14 +12,14 @@ import kotlin.test.assertEquals
 internal class TestAsmOperationsSupport {
     @Test
     fun testUnaryOperationInvocation() {
-        val expression = RealField.mstInSpace { -bindSymbol("x") }.compile()
+        val expression = RealField.mstInGroup { -bindSymbol("x") }.compile()
         val res = expression("x" to 2.0)
         assertEquals(-2.0, res)
     }
 
     @Test
     fun testBinaryOperationInvocation() {
-        val expression = RealField.mstInSpace { -bindSymbol("x") + number(1.0) }.compile()
+        val expression = RealField.mstInGroup { -bindSymbol("x") + number(1.0) }.compile()
         val res = expression("x" to 2.0)
         assertEquals(-1.0, res)
     }

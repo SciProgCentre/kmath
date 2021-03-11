@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.
  */
-public interface MatrixContext<T : Any, out M : Matrix<T>> : GroupOperations<Matrix<T>> {
+public interface MatrixContext<T : Any, out M : Matrix<T>> : GroupOperations<Matrix<T>>, ScaleOperations<Matrix<T>> {
     /**
      * Produces a matrix with this context and given dimensions.
      */
@@ -28,7 +28,7 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : GroupOperations<Mat
     public override fun binaryOperationFunction(operation: String): (left: Matrix<T>, right: Matrix<T>) -> M =
         when (operation) {
             "dot" -> { left, right -> left dot right }
-            else -> super.binaryOperationFunction(operation) as (Matrix<T>, Matrix<T>) -> M
+            else -> super<GroupOperations>.binaryOperationFunction(operation) as (Matrix<T>, Matrix<T>) -> M
         }
 
     /**
@@ -84,15 +84,15 @@ public interface MatrixContext<T : Any, out M : Matrix<T>> : GroupOperations<Mat
         /**
          * A structured matrix with custom buffer
          */
-        public fun <T : Any, R : Ring<T>> buffered(
-            ring: R,
+        public fun <T : Any, A> buffered(
+            ring: A,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): GenericMatrixContext<T, R, BufferMatrix<T>> = BufferMatrixContext(ring, bufferFactory)
+        ): GenericMatrixContext<T, A, BufferMatrix<T>> where A : Ring<T>, A: ScaleOperations<T> = BufferMatrixContext(ring, bufferFactory)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
          */
-        public inline fun <reified T : Any, R : Ring<T>> auto(ring: R): GenericMatrixContext<T, R, BufferMatrix<T>> =
+        public inline fun <reified T : Any, A> auto(ring: A): GenericMatrixContext<T, A, BufferMatrix<T>> where A : Ring<T>, A: ScaleOperations<T> =
             buffered(ring, Buffer.Companion::auto)
     }
 }
@@ -116,14 +116,14 @@ public inline fun <T : Any, reified F : Any> MatrixContext<T, *>.getFeature(m: M
  * Partial implementation of [MatrixContext] for matrices of [Ring].
  *
  * @param T the type of items in the matrices.
- * @param R the type of ring of matrix elements.
+ * @param A the type of ring of matrix elements.
  * @param M the type of operated matrices.
  */
-public interface GenericMatrixContext<T : Any, R : Ring<T>, out M : Matrix<T>> : MatrixContext<T, M> {
+public interface GenericMatrixContext<T : Any, A, out M : Matrix<T>> : MatrixContext<T, M> where A : Ring<T>, A : ScaleOperations<T>{
     /**
      * The ring over matrix elements.
      */
-    public val elementContext: R
+    public val elementContext: A
 
     public override infix fun Matrix<T>.dot(other: Matrix<T>): M {
         //TODO add typed error
