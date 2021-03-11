@@ -40,11 +40,9 @@ public class ViktorNDField(public override val shape: IntArray) : NDField<Double
             else -> produce { this@f64Buffer[it] }.f64Buffer
         }
 
-    public override val zero: ViktorNDStructure
-        get() = F64Array.full(init = 0.0, shape = shape).asStructure()
+    public override val zero: ViktorNDStructure by lazy { F64Array.full(init = 0.0, shape = shape).asStructure() }
 
-    public override val one: ViktorNDStructure
-        get() = F64Array.full(init = 1.0, shape = shape).asStructure()
+    public override val one: ViktorNDStructure by lazy { F64Array.full(init = 1.0, shape = shape).asStructure() }
 
     private val strides: Strides = DefaultStrides(shape)
 
