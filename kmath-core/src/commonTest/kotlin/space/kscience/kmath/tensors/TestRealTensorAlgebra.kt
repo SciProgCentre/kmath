@@ -46,22 +46,4 @@ class TestRealTensorAlgebra {
         assertTrue(res02.buffer.array contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
         assertTrue(res12.buffer.array contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
     }
-
-    @Test
-    fun transposeAssign1x2() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(1,2), doubleArrayOf(1.0, 2.0))
-        tensor.transposeAssign(0, 1)
-
-        assertTrue(tensor.buffer.array contentEquals doubleArrayOf(1.0, 2.0))
-        assertTrue(tensor.shape contentEquals intArrayOf(2, 1))
-    }
-
-    @Test
-    fun transposeAssign2x3() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        tensor.transposeAssign(1, 0)
-
-        assertTrue(tensor.buffer.array contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
-        assertTrue(tensor.shape contentEquals intArrayOf(3, 2))
-    }
 }

@@ -151,14 +151,6 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Alya")
     }
 
-    override fun RealTensor.dotAssign(other: RealTensor) {
-        TODO("Alya")
-    }
-
-    override fun RealTensor.dotRightAssign(other: RealTensor) {
-        TODO("Alya")
-    }
-
     override fun diagonalEmbedding(diagonalEntries: RealTensor, offset: Int, dim1: Int, dim2: Int): RealTensor {
         TODO("Alya")
     }
@@ -183,15 +175,6 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         return resTensor
     }
 
-    override fun RealTensor.transposeAssign(i: Int, j: Int) {
-        val transposedTensor = this.transpose(i, j)
-        for (i in transposedTensor.shape.indices) {
-            this.shape[i] = transposedTensor.shape[i]
-        }
-        for (i in transposedTensor.buffer.array.indices) {
-            this.buffer.array[i] = transposedTensor.buffer.array[i]
-        }
-    }
 
     override fun RealTensor.view(shape: IntArray): RealTensor {
         return RealTensor(shape, this.buffer.array)
@@ -205,17 +188,12 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.absAssign() {
-        TODO("Not yet implemented")
-    }
+
 
     override fun RealTensor.sum(): RealTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.sumAssign() {
-        TODO("Not yet implemented")
-    }
 
     override fun RealTensor.div(value: Double): RealTensor {
         TODO("Not yet implemented")
@@ -237,17 +215,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.expAssign() {
-        TODO("Not yet implemented")
-    }
-
     override fun RealTensor.log(): RealTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.logAssign() {
-        TODO("Not yet implemented")
-    }
 
     override fun RealTensor.lu(): Pair<RealTensor, RealTensor> {
         TODO()
