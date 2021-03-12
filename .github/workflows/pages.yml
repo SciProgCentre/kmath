@@ -23,7 +23,7 @@ jobs:
           restore-keys: |
             ubuntu-20.04-gradle-
       - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew dokkaHtmlMultiModule --no-daemon --stacktrace
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
