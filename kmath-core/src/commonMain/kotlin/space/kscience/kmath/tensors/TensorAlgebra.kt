@@ -13,6 +13,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.copy(): TensorType
 
+    public fun broadcastShapes(vararg shapes: IntArray): IntArray
+    public fun broadcastTensors(vararg tensors: RealTensor): List<TensorType>
+
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
     public operator fun TensorType.plus(other: TensorType): TensorType
