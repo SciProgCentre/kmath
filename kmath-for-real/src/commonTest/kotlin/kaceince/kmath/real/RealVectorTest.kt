@@ -1,6 +1,6 @@
 package kaceince.kmath.real
 
-import space.kscience.kmath.linear.MatrixContext
+import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.asMatrix
 import space.kscience.kmath.linear.real
 import space.kscience.kmath.linear.transpose
@@ -32,7 +32,7 @@ internal class RealVectorTest {
         val vector2 =  Buffer.real(5) { 5 - it.toDouble() }
         val matrix1 = vector1.asMatrix()
         val matrix2 = vector2.asMatrix().transpose()
-        val product = MatrixContext.real { matrix1 dot matrix2 }
+        val product = LinearSpace.real { matrix1 dot matrix2 }
         assertEquals(5.0, product[1, 0])
         assertEquals(6.0, product[2, 2])
     }

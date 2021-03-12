@@ -25,7 +25,7 @@ internal class BufferAccessor2D<T : Any>(
     public fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
     //TODO optimize wrapper
-    public fun MutableBuffer<T>.collect(): Structure2D<T> = NDStructure.build(
+    public fun MutableBuffer<T>.collect(): Structure2D<T> = NDStructure.buffered(
         DefaultStrides(intArrayOf(rowNum, colNum)),
         factory
     ) { (i, j) ->

@@ -74,7 +74,7 @@ public interface NDStructure<T> {
          *
          * Strides should be reused if possible.
          */
-        public fun <T> build(
+        public fun <T> buffered(
             strides: Strides,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T,
@@ -94,11 +94,11 @@ public interface NDStructure<T> {
             crossinline initializer: (IntArray) -> T,
         ): NDBuffer<T> = NDBuffer(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
-        public fun <T> build(
+        public fun <T> buffered(
             shape: IntArray,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T,
-        ): NDBuffer<T> = build(DefaultStrides(shape), bufferFactory, initializer)
+        ): NDBuffer<T> = buffered(DefaultStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
             shape: IntArray,

@@ -3,6 +3,7 @@ package space.kscience.kmath.commons.linear
 import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.structures.RealBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
@@ -55,7 +56,7 @@ public inline class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
 
 public fun RealMatrix.asMatrix(): CMMatrix = CMMatrix(this)
 
-public class CMVector(public val origin: RealVector) : Point<Double> {
+public class CMVector(public val origin: RealVector) : Vector<Double> {
     public override val size: Int get() = origin.dimension
 
     public override operator fun get(index: Int): Double = origin.getEntry(index)
@@ -70,8 +71,8 @@ public fun Point<Double>.toCM(): CMVector = if (this is CMVector) this else {
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)
 
-public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
-    public override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
+public object CMLinearSpace : LinearSpace<Double, RealField> {
+    public override fun buildMatrix(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): CMMatrix {
         val array = Array(rows) { i -> DoubleArray(columns) { j -> initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
     }
@@ -86,17 +87,15 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
         }
     }
 
-    override fun scale(a: Matrix<Double>, value: Double): Matrix<Double> = a.toCM().times(value)
-
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
         CMMatrix(toCM().origin.multiply(other.toCM().origin))
 
-    public override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
+    public override fun Matrix<Double>.dot(vector: Vector<Double>): CMVector =
         CMVector(toCM().origin.preMultiply(vector.toCM().origin))
 
     public override operator fun Matrix<Double>.unaryMinus(): CMMatrix =
-        produce(rowNum, colNum) { i, j -> -get(i, j) }
+        buildMatrix(rowNum, colNum) { i, j -> -get(i, j) }
 
     public override fun add(a: Matrix<Double>, b: Matrix<Double>): CMMatrix =
         CMMatrix(a.toCM().origin.multiply(b.toCM().origin))
@@ -108,7 +107,7 @@ public object CMMatrixContext : MatrixContext<Double, CMMatrix> {
 //        CMMatrix(a.toCM().origin.scalarMultiply(k.toDouble()))
 
     public override operator fun Matrix<Double>.times(value: Double): CMMatrix =
-        produce(rowNum, colNum) { i, j -> get(i, j) * value }
+        buildMatrix(rowNum, colNum) { i, j -> get(i, j) * value }
 }
 
 public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix =

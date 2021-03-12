@@ -4,13 +4,12 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
-import space.kscience.kmath.commons.linear.CMMatrixContext
-import space.kscience.kmath.commons.linear.CMMatrixContext.dot
+import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.commons.linear.inverse
-import space.kscience.kmath.ejml.EjmlMatrixContext
+import space.kscience.kmath.ejml.EjmlLinearSpace
 import space.kscience.kmath.ejml.inverse
+import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.MatrixContext
 import space.kscience.kmath.linear.inverseWithLup
 import space.kscience.kmath.linear.real
 import kotlin.random.Random
@@ -29,19 +28,19 @@ internal class LinearAlgebraBenchmark {
 
     @Benchmark
     fun kmathLupInversion(blackhole: Blackhole) {
-        blackhole.consume(MatrixContext.real.inverseWithLup(matrix))
+        blackhole.consume(LinearSpace.real.inverseWithLup(matrix))
     }
 
     @Benchmark
     fun cmLUPInversion(blackhole: Blackhole) {
-        with(CMMatrixContext) {
+        with(CMLinearSpace) {
             blackhole.consume(inverse(matrix))
         }
     }
 
     @Benchmark
     fun ejmlInverse(blackhole: Blackhole) {
-        with(EjmlMatrixContext) {
+        with(EjmlLinearSpace) {
             blackhole.consume(inverse(matrix))
         }
     }

@@ -1,34 +1,37 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.RealBuffer
 
-public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>>, ScaleOperations<Matrix<Double>> {
+public object RealLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<Matrix<Double>> {
 
-    public override fun produce(
+    override val elementAlgebra: RealField get() = RealField
+
+    public override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: (i: Int, j: Int) -> Double,
-    ): BufferMatrix<Double> {
+    ): Matrix<Double> {
         val buffer = RealBuffer(rows * columns) { offset -> initializer(offset / columns, offset % columns) }
-        return BufferMatrix(rows, columns, buffer)
+        return  BufferMatrix(rows, columns, buffer)
     }
 
     public fun Matrix<Double>.toBufferMatrix(): BufferMatrix<Double> = if (this is BufferMatrix) this else {
-        produce(rowNum, colNum) { i, j -> get(i, j) }
+        buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     public fun one(rows: Int, columns: Int): Matrix<Double> = VirtualMatrix(rows, columns) { i, j ->
         if (i == j) 1.0 else 0.0
     } + DiagonalFeature
 
-    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = produce(rowNum, colNum) { i, j -> -get(i, j) }
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = buildMatrix(rowNum, colNum) { i, j -> -get(i, j) }
 
     public override infix fun Matrix<Double>.dot(other: Matrix<Double>): BufferMatrix<Double> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         val bufferMatrix = toBufferMatrix()
         val otherBufferMatrix = other.toBufferMatrix()
-        return produce(rowNum, other.colNum) { i, j ->
+        return buildMatrix(rowNum, other.colNum) { i, j ->
             var res = 0.0
             for (l in 0 until colNum) {
                 res += bufferMatrix[i, l] * otherBufferMatrix[l, j]
@@ -54,14 +57,14 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>>, S
         require(a.colNum == b.colNum) { "Column number mismatch in matrix addition. Left side: ${a.colNum}, right side: ${b.colNum}" }
         val aBufferMatrix = a.toBufferMatrix()
         val bBufferMatrix = b.toBufferMatrix()
-        return produce(a.rowNum, a.colNum) { i, j ->
+        return buildMatrix(a.rowNum, a.colNum) { i, j ->
             aBufferMatrix[i, j] + bBufferMatrix[i, j]
         }
     }
 
     override fun scale(a: Matrix<Double>, value: Double): BufferMatrix<Double> {
         val bufferMatrix = a.toBufferMatrix()
-        return produce(a.rowNum, a.colNum) { i, j -> bufferMatrix[i, j] * value }
+        return buildMatrix(a.rowNum, a.colNum) { i, j -> bufferMatrix[i, j] * value }
     }
 
     override fun Matrix<Double>.times(value: Double): BufferMatrix<Double> = scale(this, value)
@@ -82,4 +85,4 @@ public object RealMatrixContext : MatrixContext<Double, BufferMatrix<Double>>, S
 /**
  * Partially optimized real-valued matrix
  */
-public val MatrixContext.Companion.real: RealMatrixContext get() = RealMatrixContext
+public val LinearSpace.Companion.real: RealLinearSpace get() = RealLinearSpace

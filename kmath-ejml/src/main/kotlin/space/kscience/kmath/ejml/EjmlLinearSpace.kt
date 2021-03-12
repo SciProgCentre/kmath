@@ -11,7 +11,7 @@ import space.kscience.kmath.operations.ScaleOperations
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperations<Matrix<Double>> {
+public object EjmlLinearSpace : LinearSpace<Double, EjmlMatrix>, ScaleOperations<Matrix<Double>> {
 
     /**
      * Converts this matrix to EJML one.
@@ -19,7 +19,7 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperat
     @OptIn(UnstableKMathAPI::class)
     public fun Matrix<Double>.toEjml(): EjmlMatrix = when (val matrix = origin) {
         is EjmlMatrix -> matrix
-        else -> produce(rowNum, colNum) { i, j -> get(i, j) }
+        else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     /**
@@ -30,14 +30,14 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperat
             (0 until it.numRows()).forEach { row -> it[row, 0] = get(row) }
         })
 
-    override fun produce(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
+    override fun buildMatrix(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
             (0 until rows).forEach { row ->
                 (0 until columns).forEach { col -> it[row, col] = initializer(row, col) }
             }
         })
 
-    override fun point(size: Int, initializer: (Int) -> Double): Point<Double> =
+    override fun buildVector(size: Int, initializer: (Int) -> Double): Point<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
         })
@@ -58,7 +58,7 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperat
         EjmlMatrix(toEjml().origin - b.toEjml().origin)
 
     public override fun scale(a: Matrix<Double>, value: Double): EjmlMatrix =
-        produce(a.rowNum, a.colNum) { i, j -> a[i, j] * value }
+        buildMatrix(a.rowNum, a.colNum) { i, j -> a[i, j] * value }
 
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         EjmlMatrix(toEjml().origin.scale(value))
@@ -72,7 +72,7 @@ public object EjmlMatrixContext : MatrixContext<Double, EjmlMatrix>, ScaleOperat
  * @return the solution for 'x' that is n by p.
  * @author Iaroslav Postovalov
  */
-public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
+public fun EjmlLinearSpace.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
     EjmlMatrix(a.toEjml().origin.solve(b.toEjml().origin))
 
 /**
@@ -83,10 +83,10 @@ public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMa
  * @return the solution for 'x' that is n by p.
  * @author Iaroslav Postovalov
  */
-public fun EjmlMatrixContext.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
+public fun EjmlLinearSpace.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
 
 @OptIn(UnstableKMathAPI::class)
 public fun EjmlMatrix.inverted(): EjmlMatrix = getFeature<InverseMatrixFeature<Double>>()!!.inverse as EjmlMatrix
 
-public fun EjmlMatrixContext.inverse(matrix: Matrix<Double>): Matrix<Double> = matrix.toEjml().inverted()
+public fun EjmlLinearSpace.inverse(matrix: Matrix<Double>): Matrix<Double> = matrix.toEjml().inverted()

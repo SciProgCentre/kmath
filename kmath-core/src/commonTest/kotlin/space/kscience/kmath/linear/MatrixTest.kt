@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 class MatrixTest {
     @Test
     fun testTranspose() {
-        val matrix = MatrixContext.real.one(3, 3)
+        val matrix = LinearSpace.real.one(3, 3)
         val transposed = matrix.transpose()
         assertEquals(matrix, transposed)
     }
@@ -39,7 +39,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res = RealMatrixContext.invoke { res dot this@pow }
+                res = RealLinearSpace.invoke { res dot this@pow }
             }
             return res
         }
@@ -52,7 +52,7 @@ class MatrixTest {
         val firstMatrix = NDStructure.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
         val secondMatrix = NDStructure.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
 
-        MatrixContext.real.run {
+        LinearSpace.real.run {
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }
             val result = firstMatrix dot secondMatrix

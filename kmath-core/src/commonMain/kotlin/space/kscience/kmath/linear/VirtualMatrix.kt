@@ -31,6 +31,4 @@ public class VirtualMatrix<T : Any>(
         result = 31 * result + generator.hashCode()
         return result
     }
-
-
 }

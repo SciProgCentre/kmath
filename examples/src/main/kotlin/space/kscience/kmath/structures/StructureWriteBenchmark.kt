@@ -7,7 +7,7 @@ import kotlin.system.measureTimeMillis
 @Suppress("UNUSED_VARIABLE")
 fun main() {
     val n = 6000
-    val structure = NDStructure.build(intArrayOf(n, n), Buffer.Companion::auto) { 1.0 }
+    val structure = NDStructure.buffered(intArrayOf(n, n), Buffer.Companion::auto) { 1.0 }
     structure.mapToBuffer { it + 1 } // warm-up
     val time1 = measureTimeMillis { val res = structure.mapToBuffer { it + 1 } }
     println("Structure mapping finished in $time1 millis")

@@ -77,7 +77,7 @@ public inline class DPointWrapper<T, D : Dimension>(public val point: Point<T>) 
 /**
  * Basic operations on dimension-safe matrices. Operates on [Matrix]
  */
-public inline class DMatrixContext<T : Any>(public val context: MatrixContext<T, Matrix<T>>) {
+public inline class DMatrixContext<T : Any>(public val context: LinearSpace<T, Matrix<T>>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
         require(rowNum == Dimension.dim<R>().toInt()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"
@@ -96,14 +96,14 @@ public inline class DMatrixContext<T : Any>(public val context: MatrixContext<T,
     public inline fun <reified R : Dimension, reified C : Dimension> produce(noinline initializer: (i: Int, j: Int) -> T): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
-        return context.produce(rows.toInt(), cols.toInt(), initializer).coerce<R, C>()
+        return context.buildMatrix(rows.toInt(), cols.toInt(), initializer).coerce<R, C>()
     }
 
     public inline fun <reified D : Dimension> point(noinline initializer: (Int) -> T): DPoint<T, D> {
         val size = Dimension.dim<D>()
 
         return DPoint.coerceUnsafe(
-            context.point(
+            context.buildVector(
                 size.toInt(),
                 initializer
             )
@@ -136,7 +136,7 @@ public inline class DMatrixContext<T : Any>(public val context: MatrixContext<T,
         context { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double> = DMatrixContext(MatrixContext.real)
+        public val real: DMatrixContext<Double> = DMatrixContext(LinearSpace.real)
     }
 }
 
