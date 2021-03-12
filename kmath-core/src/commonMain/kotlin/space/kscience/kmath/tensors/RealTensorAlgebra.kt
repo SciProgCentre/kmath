@@ -2,7 +2,6 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
-import space.kscience.kmath.structures.ValueFlag
 import space.kscience.kmath.structures.array
 import kotlin.math.max
 
