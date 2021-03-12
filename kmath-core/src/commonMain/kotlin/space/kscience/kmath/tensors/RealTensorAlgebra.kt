@@ -3,6 +3,7 @@ package space.kscience.kmath.tensors
 import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
+import kotlin.math.max
 
 
 public class RealTensor(
@@ -54,27 +55,85 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun broadcastShapes(vararg shapes: IntArray): IntArray {
+        var totalDim = 0
+        for (shape in shapes) {
+            totalDim = max(totalDim, shape.size)
+        }
+
+        val totalShape = IntArray(totalDim) {0}
+        for (shape in shapes) {
+            for (i in shape.indices) {
+                val curDim = shape[i]
+                val offset = totalDim - shape.size
+                totalShape[i + offset] = max(totalShape[i + offset], curDim)
+            }
+        }
+
+        for (shape in shapes) {
+            for (i in shape.indices) {
+                val curDim = shape[i]
+                val offset = totalDim - shape.size
+                if (curDim != 1 && totalShape[i + offset] != curDim) {
+                    throw RuntimeException("Shapes are not compatible and cannot be broadcast")
+                }
+            }
+        }
+
+        return totalShape
+    }
+
+    override fun broadcastTensors(vararg tensors: RealTensor): List<RealTensor> {
+        val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
+        val n = totalShape.reduce{ acc, i ->  acc * i }
+
+        val res = ArrayList<RealTensor>(0)
+        for (tensor in tensors) {
+            val resTensor = RealTensor(totalShape, DoubleArray(n))
+
+            for (linearIndex in 0 until n) {
+                val totalMultiIndex = resTensor.strides.index(linearIndex)
+                val curMultiIndex = tensor.shape.copyOf()
+
+                val offset = totalMultiIndex.size - curMultiIndex.size
+
+                for (i in curMultiIndex.indices) {
+                    if (curMultiIndex[i] != 1) {
+                        curMultiIndex[i] = totalMultiIndex[i + offset]
+                    } else {
+                        curMultiIndex[i] = 0
+                    }
+                }
+
+                val curLinearIndex = tensor.strides.offset(curMultiIndex)
+                resTensor.buffer.array[linearIndex] = tensor.buffer.array[curLinearIndex]
+            }
+            res.add(resTensor)
+        }
+
+        return res
+    }
+
     override fun Double.plus(other: RealTensor): RealTensor {
-        //todo should be change with broadcasting
         val resBuffer = DoubleArray(other.buffer.size) { i ->
             other.buffer.array[i] + this
         }
         return RealTensor(other.shape, resBuffer)
     }
 
-    //todo should be change with broadcasting
     override fun RealTensor.plus(value: Double): RealTensor = value + this
 
     override fun RealTensor.plus(other: RealTensor): RealTensor {
-        //todo should be change with broadcasting
-        val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.array[i] + other.buffer.array[i]
+        val broadcast = broadcastTensors(this, other)
+        val newThis = broadcast[0]
+        val newOther = broadcast[1]
+        val resBuffer = DoubleArray(newThis.buffer.size) { i ->
+            newThis.buffer.array[i] + newOther.buffer.array[i]
         }
-        return RealTensor(this.shape, resBuffer)
+        return RealTensor(newThis.shape, resBuffer)
     }
 
     override fun RealTensor.plusAssign(value: Double) {
-        //todo should be change with broadcasting
         for (i in this.buffer.array.indices) {
             this.buffer.array[i] += value
         }
@@ -88,19 +147,33 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun Double.minus(other: RealTensor): RealTensor {
-        TODO("Alya")
+        val resBuffer = DoubleArray(other.buffer.size) { i ->
+            this - other.buffer.array[i]
+        }
+        return RealTensor(other.shape, resBuffer)
     }
 
     override fun RealTensor.minus(value: Double): RealTensor {
-        TODO("Alya")
+        val resBuffer = DoubleArray(this.buffer.size) { i ->
+            this.buffer.array[i] - value
+        }
+        return RealTensor(this.shape, resBuffer)
     }
 
     override fun RealTensor.minus(other: RealTensor): RealTensor {
-        TODO("Alya")
+        val broadcast = broadcastTensors(this, other)
+        val newThis = broadcast[0]
+        val newOther = broadcast[1]
+        val resBuffer = DoubleArray(newThis.buffer.size) { i ->
+            newThis.buffer.array[i] - newOther.buffer.array[i]
+        }
+        return RealTensor(newThis.shape, resBuffer)
     }
 
     override fun RealTensor.minusAssign(value: Double) {
-        TODO("Alya")
+        for (i in this.buffer.array.indices) {
+            this.buffer.array[i] -= value
+        }
     }
 
     override fun RealTensor.minusAssign(other: RealTensor) {
@@ -156,6 +229,7 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
     }
 
     override fun RealTensor.transpose(i: Int, j: Int): RealTensor {
+        checkTranspose(this.dimension, i, j)
         val n = this.buffer.size
         val resBuffer = DoubleArray(n)
 
