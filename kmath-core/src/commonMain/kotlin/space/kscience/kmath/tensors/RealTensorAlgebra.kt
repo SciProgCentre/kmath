@@ -1,19 +1,19 @@
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.linear.BufferMatrix
+import space.kscience.kmath.linear.RealMatrixContext.toBufferMatrix
 import space.kscience.kmath.nd.MutableNDBuffer
+import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
+import space.kscience.kmath.structures.toList
 
 
 public class RealTensor(
-    override val shape: IntArray,
+    shape: IntArray,
     buffer: DoubleArray
-) :
-    TensorStructure<Double>,
-    MutableNDBuffer<Double>(
-        TensorStrides(shape),
-        RealBuffer(buffer)
-    )
+) : BufferTensor<Double>(shape, RealBuffer(buffer))
 
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
