@@ -40,10 +40,12 @@ public fun RealBuffer(vararg doubles: Double): RealBuffer = RealBuffer(doubles)
 public fun RealBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 /**
- * Returns a [DoubleArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [DoubleArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Double>.array: DoubleArray
-    get() = (if (this is RealBuffer) array else DoubleArray(size) { get(it) })
+public fun Buffer<Double>.toDoubleArray(): DoubleArray = when(this) {
+    is RealBuffer -> array.copyOf()
+    else -> DoubleArray(size, ::get)
+}
 
 /**
  * Returns [RealBuffer] over this array.

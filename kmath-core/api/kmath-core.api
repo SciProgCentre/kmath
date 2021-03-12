@@ -2314,6 +2314,7 @@ public final class space/kscience/kmath/structures/BufferKt {
 	public static final fun asSequence (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/sequences/Sequence;
 	public static final fun getIndices (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/ranges/IntRange;
 	public static final fun toList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
+	public static final fun toMutableList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
 }
 
 public abstract interface class space/kscience/kmath/structures/FlaggedBuffer : space/kscience/kmath/structures/Buffer {
@@ -2376,7 +2377,7 @@ public final class space/kscience/kmath/structures/FloatBufferKt {
 	public static final fun FloatBuffer (ILkotlin/jvm/functions/Function1;)[F
 	public static final fun FloatBuffer ([F)[F
 	public static final fun asBuffer ([F)[F
-	public static final fun getArray (Lspace/kscience/kmath/structures/MutableBuffer;)[F
+	public static final fun toFloatArray (Lspace/kscience/kmath/structures/Buffer;)[F
 }
 
 public final class space/kscience/kmath/structures/IntBuffer : space/kscience/kmath/structures/MutableBuffer {
@@ -2412,7 +2413,7 @@ public final class space/kscience/kmath/structures/IntBufferKt {
 	public static final fun IntBuffer (ILkotlin/jvm/functions/Function1;)[I
 	public static final fun IntBuffer ([I)[I
 	public static final fun asBuffer ([I)[I
-	public static final fun getArray (Lspace/kscience/kmath/structures/MutableBuffer;)[I
+	public static final fun toIntArray (Lspace/kscience/kmath/structures/Buffer;)[I
 }
 
 public final class space/kscience/kmath/structures/ListBuffer : space/kscience/kmath/structures/Buffer {
@@ -2470,7 +2471,7 @@ public final class space/kscience/kmath/structures/LongBufferKt {
 	public static final fun LongBuffer (ILkotlin/jvm/functions/Function1;)[J
 	public static final fun LongBuffer ([J)[J
 	public static final fun asBuffer ([J)[J
-	public static final fun getArray (Lspace/kscience/kmath/structures/MutableBuffer;)[J
+	public static final fun toLongArray (Lspace/kscience/kmath/structures/Buffer;)[J
 }
 
 public class space/kscience/kmath/structures/MemoryBuffer : space/kscience/kmath/structures/Buffer {
@@ -2749,7 +2750,7 @@ public final class space/kscience/kmath/structures/RealBufferKt {
 	public static final fun RealBuffer ([D)[D
 	public static final fun asBuffer ([D)[D
 	public static final fun contentEquals-2uVC2J0 ([D[D)Z
-	public static final fun getArray (Lspace/kscience/kmath/structures/MutableBuffer;)[D
+	public static final fun toDoubleArray (Lspace/kscience/kmath/structures/Buffer;)[D
 }
 
 public final class space/kscience/kmath/structures/ShortBuffer : space/kscience/kmath/structures/MutableBuffer {
@@ -2785,7 +2786,7 @@ public final class space/kscience/kmath/structures/ShortBufferKt {
 	public static final fun ShortBuffer (ILkotlin/jvm/functions/Function1;)[S
 	public static final fun ShortBuffer ([S)[S
 	public static final fun asBuffer ([S)[S
-	public static final fun getArray (Lspace/kscience/kmath/structures/MutableBuffer;)[S
+	public static final fun toShortArray (Lspace/kscience/kmath/structures/Buffer;)[S
 }
 
 public final class space/kscience/kmath/structures/ValueFlag : java/lang/Enum {
