@@ -11,7 +11,8 @@ import space.kscience.kmath.operations.RealField
 public interface Counter<T : Any> {
     public fun add(delta: T)
     public val value: T
-    public companion object{
+
+    public companion object {
         public fun real(): ObjectCounter<Double> = ObjectCounter(RealField)
     }
 }
@@ -36,11 +37,11 @@ public class LongCounter : Counter<Long> {
     override val value: Long get() = innerValue.value
 }
 
-public class ObjectCounter<T : Any>(public val space: Group<T>) : Counter<T> {
-    private val innerValue = atomic(space.zero)
+public class ObjectCounter<T : Any>(public val group: Group<T>) : Counter<T> {
+    private val innerValue = atomic(group.zero)
 
     override fun add(delta: T) {
-        innerValue.getAndUpdate { space.run { it + delta } }
+        innerValue.getAndUpdate { group.run { it + delta } }
     }
 
     override val value: T get() = innerValue.value

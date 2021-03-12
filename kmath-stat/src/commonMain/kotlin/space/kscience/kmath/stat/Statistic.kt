@@ -66,16 +66,16 @@ public fun <T, I, R> ComposableStatistic<T, I, R>.flow(
  * Arithmetic mean
  */
 public class Mean<T>(
-    private val space: Group<T>,
+    private val group: Group<T>,
     private val division: (sum: T, count: Int) -> T,
 ) : ComposableStatistic<T, Pair<T, Int>, T> {
     public override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =
-        space { sum(data.asIterable()) } to data.size
+        group { sum(data.asIterable()) } to data.size
 
     public override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
-        space { first.first + second.first } to (first.second + second.second)
+        group { first.first + second.first } to (first.second + second.second)
 
-    public override suspend fun toResult(intermediate: Pair<T, Int>): T = space {
+    public override suspend fun toResult(intermediate: Pair<T, Int>): T = group {
         division(intermediate.first, intermediate.second)
     }
 
