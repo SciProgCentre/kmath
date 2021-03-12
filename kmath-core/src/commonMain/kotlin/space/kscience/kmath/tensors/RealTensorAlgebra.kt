@@ -75,7 +75,7 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
                 val curDim = shape[i]
                 val offset = totalDim - shape.size
                 if (curDim != 1 && totalShape[i + offset] != curDim) {
-                    throw IllegalArgumentException("Shapes are not compatible and cannot be broadcast")
+                    throw RuntimeException("Shapes are not compatible and cannot be broadcast")
                 }
             }
         }
