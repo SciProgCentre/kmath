@@ -1,0 +1,7 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+space.kscience.kmath.asm
+space.kscience.kmath.ast
+space.kscience.kmath.estree
+

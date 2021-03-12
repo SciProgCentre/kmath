@@ -1,0 +1,9 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+space.kscience.kmath.commons.expressions
+space.kscience.kmath.commons.linear
+space.kscience.kmath.commons.optimization
+space.kscience.kmath.commons.random
+space.kscience.kmath.commons.transform
+

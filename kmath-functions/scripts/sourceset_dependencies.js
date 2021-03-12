@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":kmath-functions:dokkaHtml/commonMain": [], ":kmath-functions:dokkaHtml/jsMain": [":kmath-functions:dokkaHtml/commonMain"], ":kmath-functions:dokkaHtml/jvmMain": [":kmath-functions:dokkaHtml/commonMain"]}'

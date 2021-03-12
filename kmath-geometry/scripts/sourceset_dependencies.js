@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":kmath-geometry:dokkaHtml/commonMain": [], ":kmath-geometry:dokkaHtml/jsMain": [":kmath-geometry:dokkaHtml/commonMain"], ":kmath-geometry:dokkaHtml/jvmMain": [":kmath-geometry:dokkaHtml/commonMain"]}'

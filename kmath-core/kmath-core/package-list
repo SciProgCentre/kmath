@@ -1,0 +1,11 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+space.kscience.kmath.domains
+space.kscience.kmath.expressions
+space.kscience.kmath.linear
+space.kscience.kmath.misc
+space.kscience.kmath.nd
+space.kscience.kmath.operations
+space.kscience.kmath.structures
+
