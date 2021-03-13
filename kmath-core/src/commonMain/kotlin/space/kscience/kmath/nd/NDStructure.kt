@@ -52,7 +52,7 @@ public interface NDStructure<T> {
      * optimize operations and performance. If the feature is not present, null is defined.
      */
     @UnstableKMathAPI
-    public fun <T : Any> getFeature(type: KClass<T>): T? = null
+    public fun <F : Any> getFeature(type: KClass<F>): F? = null
 
     public companion object {
         /**

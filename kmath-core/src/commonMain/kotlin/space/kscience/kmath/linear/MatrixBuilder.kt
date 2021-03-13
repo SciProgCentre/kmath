@@ -12,7 +12,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.matrix(rows: Int, columns: Int, var
 
 @UnstableKMathAPI
 public fun <T : Any> LinearSpace<T, Ring<T>>.vector(vararg elements: T): Vector<T> {
-    return buildVector(elements.size, elements::get)
+    return buildVector(elements.size) { elements[it] }
 }
 
 public inline fun <T : Any> LinearSpace<T, Ring<T>>.row(

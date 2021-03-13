@@ -4,6 +4,7 @@ import org.ejml.simple.SimpleMatrix
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
+import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.ScaleOperations
 
 /**
@@ -11,7 +12,9 @@ import space.kscience.kmath.operations.ScaleOperations
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlLinearSpace : LinearSpace<Double, EjmlMatrix>, ScaleOperations<Matrix<Double>> {
+public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<Matrix<Double>> {
+
+    override val elementAlgebra: RealField get() = RealField
 
     /**
      * Converts this matrix to EJML one.
@@ -25,43 +28,74 @@ public object EjmlLinearSpace : LinearSpace<Double, EjmlMatrix>, ScaleOperations
     /**
      * Converts this vector to EJML one.
      */
-    public fun Point<Double>.toEjml(): EjmlVector =
-        if (this is EjmlVector) this else EjmlVector(SimpleMatrix(size, 1).also {
+    public fun Vector<Double>.toEjml(): EjmlVector = when (this) {
+        is EjmlVector -> this
+        else -> EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = get(row) }
         })
+    }
 
-    override fun buildMatrix(rows: Int, columns: Int, initializer: (i: Int, j: Int) -> Double): EjmlMatrix =
+    override fun buildMatrix(rows: Int, columns: Int, initializer: RealField.(i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
             (0 until rows).forEach { row ->
-                (0 until columns).forEach { col -> it[row, col] = initializer(row, col) }
+                (0 until columns).forEach { col -> it[row, col] = RealField.initializer(row, col) }
             }
         })
 
-    override fun buildVector(size: Int, initializer: (Int) -> Double): Point<Double> =
+    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Vector<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
         })
 
+    private fun SimpleMatrix.wrapMatrix() = EjmlMatrix(this)
+    private fun SimpleMatrix.wrapVector() = EjmlVector(this)
 
-    override fun Matrix<Double>.unaryMinus(): Matrix<Double>  = this*(-1)
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * (-1)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin.mult(other.toEjml().origin))
 
-    public override fun Matrix<Double>.dot(vector: Point<Double>): EjmlVector =
+    public override fun Matrix<Double>.dot(vector: Vector<Double>): EjmlVector =
         EjmlVector(toEjml().origin.mult(vector.toEjml().origin))
 
-    public override fun add(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
-        EjmlMatrix(a.toEjml().origin + b.toEjml().origin)
-
-    public override operator fun Matrix<Double>.minus(b: Matrix<Double>): EjmlMatrix =
-        EjmlMatrix(toEjml().origin - b.toEjml().origin)
+    public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlMatrix =
+        EjmlMatrix(toEjml().origin - other.toEjml().origin)
 
     public override fun scale(a: Matrix<Double>, value: Double): EjmlMatrix =
-        buildMatrix(a.rowNum, a.colNum) { i, j -> a[i, j] * value }
+        a.toEjml().origin.scale(value).wrapMatrix()
 
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         EjmlMatrix(toEjml().origin.scale(value))
+
+    override fun Vector<Double>.unaryMinus(): EjmlVector =
+        toEjml().origin.negative().wrapVector()
+
+    override fun Matrix<Double>.plus(other: Matrix<Double>): Matrix<Double> {
+        TODO("Not yet implemented")
+    }
+
+    override fun Vector<Double>.plus(other: Vector<Double>): Vector<Double> {
+        TODO("Not yet implemented")
+    }
+
+    override fun Vector<Double>.minus(other: Vector<Double>): Vector<Double> {
+        TODO("Not yet implemented")
+    }
+
+    override fun Double.times(m: Matrix<Double>): Matrix<Double> {
+        TODO("Not yet implemented")
+    }
+
+    override fun Vector<Double>.times(value: Double): Vector<Double> {
+        TODO("Not yet implemented")
+    }
+
+    override fun Double.times(v: Vector<Double>): Vector<Double> {
+        TODO("Not yet implemented")
+    }
+
+    public override fun add(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
+        EjmlMatrix(a.toEjml().origin + b.toEjml().origin)
 }
 
 /**

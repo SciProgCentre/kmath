@@ -14,12 +14,7 @@ import kotlin.reflect.KClass
  */
 public typealias Matrix<T> = Structure2D<T>
 
-/**
- * Alias for [Structure1D] with more familiar name.
- *
- * @param T the type of items.
- */
-public typealias Vector<T> = Structure1D<T>
+public typealias Vector<T> = Point<T>
 
 /**
  * Basic operations on matrices and vectors. Operates on [Matrix].
@@ -183,11 +178,12 @@ public interface LinearSpace<T : Any, A : Ring<T>> {
             override fun buildMatrix(
                 rows: Int, columns: Int,
                 initializer: A.(i: Int, j: Int) -> T,
-            ): Matrix<T> = NDStructure.buffered(intArrayOf(rows, columns)) { (i, j) ->
+            ): Matrix<T> = NDStructure.buffered(intArrayOf(rows, columns), bufferFactory) { (i, j) ->
                 algebra.initializer(i, j)
             }.as2D()
-
         }
+
+        public val real: LinearSpace<Double, RealField> = buffered(RealField, Buffer.Companion::real)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
