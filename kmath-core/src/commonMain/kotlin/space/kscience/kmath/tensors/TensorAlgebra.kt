@@ -13,9 +13,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.copy(): TensorType
 
-    public fun broadcastShapes(vararg shapes: IntArray): IntArray
-    public fun broadcastTensors(vararg tensors: RealTensor): List<TensorType>
-
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
     public operator fun TensorType.plus(other: TensorType): TensorType
@@ -88,44 +85,3 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
     public fun TensorType.symEig(eigenvectors: Boolean = true): Pair<TensorType, TensorType>
 
 }
-
-public inline fun <T, TensorType : TensorStructure<T>,
-        TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
-        TorchTensorAlgebraType.checkShapeCompatible(
-    a: TensorType, b: TensorType
-): Unit =
-    check(a.shape contentEquals b.shape) {
-        "Tensors must be of identical shape"
-    }
-
-public inline fun <T, TensorType : TensorStructure<T>,
-        TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
-        TorchTensorAlgebraType.checkDot(a: TensorType, b: TensorType): Unit {
-    val sa = a.shape
-    val sb = b.shape
-    val na = sa.size
-    val nb = sb.size
-    var status: Boolean
-    if (nb == 1) {
-        status = sa.last() == sb[0]
-    } else {
-        status = sa.last() == sb[nb - 2]
-        if ((na > 2) and (nb > 2)) {
-            status = status and
-                    (sa.take(nb - 2).toIntArray() contentEquals sb.take(nb - 2).toIntArray())
-        }
-    }
-    check(status) { "Incompatible shapes $sa and $sb for dot product" }
-}
-
-public inline fun <T, TensorType : TensorStructure<T>,
-        TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
-        TorchTensorAlgebraType.checkTranspose(dim: Int, i: Int, j: Int): Unit =
-    check((i < dim) and (j < dim)) {
-        "Cannot transpose $i to $j for a tensor of dim $dim"
-    }
-
-public inline fun <T, TensorType : TensorStructure<T>,
-        TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
-        TorchTensorAlgebraType.checkView(a: TensorType, shape: IntArray): Unit =
-    check(a.shape.reduce(Int::times) == shape.reduce(Int::times))

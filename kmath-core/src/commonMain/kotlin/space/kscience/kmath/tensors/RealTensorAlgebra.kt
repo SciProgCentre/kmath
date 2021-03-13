@@ -6,11 +6,6 @@ import kotlin.math.abs
 import kotlin.math.max
 
 
-public class RealTensor(
-    shape: IntArray,
-    buffer: DoubleArray
-) : BufferedTensor<Double>(shape, RealBuffer(buffer))
-
 public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
     override fun RealTensor.value(): Double {
@@ -54,64 +49,6 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         return RealTensor(this.shape, this.buffer.array.copyOf())
     }
 
-    override fun broadcastShapes(vararg shapes: IntArray): IntArray {
-        var totalDim = 0
-        for (shape in shapes) {
-            totalDim = max(totalDim, shape.size)
-        }
-
-        val totalShape = IntArray(totalDim) {0}
-        for (shape in shapes) {
-            for (i in shape.indices) {
-                val curDim = shape[i]
-                val offset = totalDim - shape.size
-                totalShape[i + offset] = max(totalShape[i + offset], curDim)
-            }
-        }
-
-        for (shape in shapes) {
-            for (i in shape.indices) {
-                val curDim = shape[i]
-                val offset = totalDim - shape.size
-                if (curDim != 1 && totalShape[i + offset] != curDim) {
-                    throw RuntimeException("Shapes are not compatible and cannot be broadcast")
-                }
-            }
-        }
-
-        return totalShape
-    }
-
-    override fun broadcastTensors(vararg tensors: RealTensor): List<RealTensor> {
-        val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
-        val n = totalShape.reduce{ acc, i ->  acc * i }
-
-        val res = ArrayList<RealTensor>(0)
-        for (tensor in tensors) {
-            val resTensor = RealTensor(totalShape, DoubleArray(n))
-
-            for (linearIndex in 0 until n) {
-                val totalMultiIndex = resTensor.strides.index(linearIndex)
-                val curMultiIndex = tensor.shape.copyOf()
-
-                val offset = totalMultiIndex.size - curMultiIndex.size
-
-                for (i in curMultiIndex.indices) {
-                    if (curMultiIndex[i] != 1) {
-                        curMultiIndex[i] = totalMultiIndex[i + offset]
-                    } else {
-                        curMultiIndex[i] = 0
-                    }
-                }
-
-                val curLinearIndex = tensor.strides.offset(curMultiIndex)
-                resTensor.buffer.array[linearIndex] = tensor.buffer.array[curLinearIndex]
-            }
-            res.add(resTensor)
-        }
-
-        return res
-    }
 
     override fun Double.plus(other: RealTensor): RealTensor {
         val resBuffer = DoubleArray(other.buffer.size) { i ->

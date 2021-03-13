@@ -2,8 +2,6 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.structures.array
 import kotlin.test.Test
-import kotlin.test.assertFails
-import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TestRealTensorAlgebra {
@@ -51,11 +49,11 @@ class TestRealTensorAlgebra {
 
     @Test
     fun broadcastShapes() = RealTensorAlgebra {
-        assertTrue(this.broadcastShapes(
+        assertTrue(broadcastShapes(
             intArrayOf(2, 3), intArrayOf(1, 3), intArrayOf(1, 1, 1)
         ) contentEquals intArrayOf(1, 2, 3))
 
-        assertTrue(this.broadcastShapes(
+        assertTrue(broadcastShapes(
             intArrayOf(6, 7), intArrayOf(5, 6, 1), intArrayOf(7,), intArrayOf(5, 1, 7)
         ) contentEquals intArrayOf(5, 6, 7))
     }
@@ -66,7 +64,7 @@ class TestRealTensorAlgebra {
         val tensor2 = RealTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = RealTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
 
-        val res = this.broadcastTensors(tensor1, tensor2, tensor3)
+        val res = broadcastTensors(tensor1, tensor2, tensor3)
 
         assertTrue(res[0].shape contentEquals intArrayOf(1, 2, 3))
         assertTrue(res[1].shape contentEquals intArrayOf(1, 2, 3))
