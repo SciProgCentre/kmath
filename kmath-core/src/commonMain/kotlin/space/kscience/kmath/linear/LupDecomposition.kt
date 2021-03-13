@@ -228,7 +228,7 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.inverseWi
 
 
 @OptIn(UnstableKMathAPI::class)
-public fun RealLinearSpace.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
+public fun LinearSpace<Double, RealField>.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
     // Use existing decomposition if it is provided by matrix
     val bufferFactory: MutableBufferFactory<Double> = MutableBuffer.Companion::real
     val decomposition: LupDecomposition<Double> = a.getFeature() ?: lup(bufferFactory, a) { it < 1e-11 }
@@ -238,5 +238,5 @@ public fun RealLinearSpace.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): M
 /**
  * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
  */
-public fun RealLinearSpace.inverseWithLup(matrix: Matrix<Double>): Matrix<Double> =
+public fun LinearSpace<Double, RealField>.inverseWithLup(matrix: Matrix<Double>): Matrix<Double> =
     solveWithLup(matrix, one(matrix.rowNum, matrix.colNum))

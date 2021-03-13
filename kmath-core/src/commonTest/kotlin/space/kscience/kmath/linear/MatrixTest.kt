@@ -2,7 +2,6 @@ package space.kscience.kmath.linear
 
 import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,7 +16,7 @@ class MatrixTest {
 
     @Test
     fun testBuilder() {
-        val matrix = Matrix.build(2, 3)(
+        val matrix = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )

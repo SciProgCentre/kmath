@@ -22,7 +22,7 @@ public typealias Vector<T> = Point<T>
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.
  */
-public interface LinearSpace<T : Any, A : Ring<T>> {
+public interface LinearSpace<T : Any, out A : Ring<T>> {
     public val elementAlgebra: A
 
     /**

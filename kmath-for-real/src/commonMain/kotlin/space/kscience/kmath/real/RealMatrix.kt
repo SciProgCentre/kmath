@@ -2,6 +2,7 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.asIterable
@@ -21,11 +22,11 @@ import kotlin.math.pow
 
 public typealias RealMatrix = Matrix<Double>
 
-public fun realMatrix(rowNum: Int, colNum: Int, initializer: (i: Int, j: Int) -> Double): RealMatrix =
+public fun realMatrix(rowNum: Int, colNum: Int, initializer: RealField.(i: Int, j: Int) -> Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum, initializer)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
-    return LinearSpace.real.buildMatrix(size, this[0].size) { row, col -> this[row][col] }
+    return LinearSpace.real.buildMatrix(size, this[0].size) { row, col -> this@toMatrix[row][col] }
 }
 
 public fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
@@ -43,37 +44,37 @@ public fun RealMatrix.repeatStackVertical(n: Int): RealMatrix =
 
 public operator fun RealMatrix.times(double: Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
-        this[row, col] * double
+        get(row, col) * double
     }
 
 public operator fun RealMatrix.plus(double: Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
-        this[row, col] + double
+        get(row, col) + double
     }
 
 public operator fun RealMatrix.minus(double: Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
-        this[row, col] - double
+        get(row, col) - double
     }
 
 public operator fun RealMatrix.div(double: Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
-        this[row, col] / double
+        get(row, col) / double
     }
 
 public operator fun Double.times(matrix: RealMatrix): RealMatrix =
     LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
-        this * matrix[row, col]
+        this@times * matrix[row, col]
     }
 
 public operator fun Double.plus(matrix: RealMatrix): RealMatrix =
     LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
-        this + matrix[row, col]
+        this@plus + matrix[row, col]
     }
 
 public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
     LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
-        this - matrix[row, col]
+        this@minus - matrix[row, col]
     }
 
 // TODO: does this operation make sense? Should it be 'this/matrix[row, col]'?
@@ -87,13 +88,13 @@ public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
 
 @UnstableKMathAPI
 public operator fun RealMatrix.times(other: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this[row, col] * other[row, col] }
+    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this@times[row, col] * other[row, col] }
 
 public operator fun RealMatrix.plus(other: RealMatrix): RealMatrix =
-    LinearSpace.real.add(this, other)
+    LinearSpace.real.run { this@plus + other }
 
 public operator fun RealMatrix.minus(other: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this[row, col] - other[row, col] }
+    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this@minus[row, col] - other[row, col] }
 
 /*
  *  Operations on columns
@@ -102,14 +103,14 @@ public operator fun RealMatrix.minus(other: RealMatrix): RealMatrix =
 public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum + 1) { row, col ->
         if (col < colNum)
-            this[row, col]
+            get(row, col)
         else
             mapper(rows[row])
     }
 
 public fun RealMatrix.extractColumns(columnRange: IntRange): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, columnRange.count()) { row, col ->
-        this[row, columnRange.first + col]
+        this@extractColumns[row, columnRange.first + col]
     }
 
 public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =

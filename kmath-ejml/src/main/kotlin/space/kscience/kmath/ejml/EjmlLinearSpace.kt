@@ -44,7 +44,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<
 
     override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Vector<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
-            (0 until it.numRows()).forEach { row -> it[row, 0] = initializer(row) }
+            (0 until it.numRows()).forEach { row -> it[row, 0] = RealField.initializer(row) }
         })
 
     private fun SimpleMatrix.wrapMatrix() = EjmlMatrix(this)
@@ -59,43 +59,34 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<
         EjmlVector(toEjml().origin.mult(vector.toEjml().origin))
 
     public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlMatrix =
-        EjmlMatrix(toEjml().origin - other.toEjml().origin)
+        (toEjml().origin - other.toEjml().origin).wrapMatrix()
 
     public override fun scale(a: Matrix<Double>, value: Double): EjmlMatrix =
         a.toEjml().origin.scale(value).wrapMatrix()
 
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
-        EjmlMatrix(toEjml().origin.scale(value))
+        toEjml().origin.scale(value).wrapMatrix()
 
     override fun Vector<Double>.unaryMinus(): EjmlVector =
         toEjml().origin.negative().wrapVector()
 
-    override fun Matrix<Double>.plus(other: Matrix<Double>): Matrix<Double> {
-        TODO("Not yet implemented")
-    }
+    override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlMatrix =
+        (toEjml().origin + other.toEjml().origin).wrapMatrix()
 
-    override fun Vector<Double>.plus(other: Vector<Double>): Vector<Double> {
-        TODO("Not yet implemented")
-    }
+    override fun Vector<Double>.plus(other: Vector<Double>): EjmlVector =
+        (toEjml().origin + other.toEjml().origin).wrapVector()
 
-    override fun Vector<Double>.minus(other: Vector<Double>): Vector<Double> {
-        TODO("Not yet implemented")
-    }
+    override fun Vector<Double>.minus(other: Vector<Double>): EjmlVector =
+        (toEjml().origin - other.toEjml().origin).wrapVector()
 
-    override fun Double.times(m: Matrix<Double>): Matrix<Double> {
-        TODO("Not yet implemented")
-    }
+    override fun Double.times(m: Matrix<Double>): EjmlMatrix =
+        m.toEjml().origin.scale(this).wrapMatrix()
 
-    override fun Vector<Double>.times(value: Double): Vector<Double> {
-        TODO("Not yet implemented")
-    }
+    override fun Vector<Double>.times(value: Double): EjmlVector =
+        toEjml().origin.scale(value).wrapVector()
 
-    override fun Double.times(v: Vector<Double>): Vector<Double> {
-        TODO("Not yet implemented")
-    }
-
-    public override fun add(a: Matrix<Double>, b: Matrix<Double>): EjmlMatrix =
-        EjmlMatrix(a.toEjml().origin + b.toEjml().origin)
+    override fun Double.times(v: Vector<Double>): EjmlVector =
+        v.toEjml().origin.scale(this).wrapVector()
 }
 
 /**
