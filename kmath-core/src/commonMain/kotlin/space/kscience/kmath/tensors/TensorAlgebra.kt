@@ -13,6 +13,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.copy(): TensorType
 
+    public fun broadcastShapes(vararg shapes: IntArray): IntArray
+    public fun broadcastTensors(vararg tensors: RealTensor): List<TensorType>
+
     public operator fun T.plus(other: TensorType): TensorType
     public operator fun TensorType.plus(value: T): TensorType
     public operator fun TensorType.plus(other: TensorType): TensorType
@@ -35,8 +38,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     //https://pytorch.org/docs/stable/generated/torch.matmul.html
     public infix fun TensorType.dot(other: TensorType): TensorType
-    public infix fun TensorType.dotAssign(other: TensorType): Unit
-    public infix fun TensorType.dotRightAssign(other: TensorType): Unit
 
     //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
     public fun diagonalEmbedding(
@@ -46,7 +47,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     //https://pytorch.org/docs/stable/generated/torch.transpose.html
     public fun TensorType.transpose(i: Int, j: Int): TensorType
-    public fun TensorType.transposeAssign(i: Int, j: Int): Unit
 
     //https://pytorch.org/docs/stable/tensor_view.html
     public fun TensorType.view(shape: IntArray): TensorType
@@ -54,11 +54,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType
-    public fun TensorType.absAssign(): Unit
 
     //https://pytorch.org/docs/stable/generated/torch.sum.html
     public fun TensorType.sum(): TensorType
-    public fun TensorType.sumAssign(): Unit
 }
 
 // https://proofwiki.org/wiki/Definition:Division_Algebra
@@ -72,11 +70,9 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun TensorType.exp(): TensorType
-    public fun TensorType.expAssign(): Unit
 
     //https://pytorch.org/docs/stable/generated/torch.log.html
     public fun TensorType.log(): TensorType
-    public fun TensorType.logAssign(): Unit
 
     // todo change type of pivots
     //https://pytorch.org/docs/stable/generated/torch.lu.html
