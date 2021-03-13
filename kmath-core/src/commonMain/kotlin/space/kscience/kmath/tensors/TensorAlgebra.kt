@@ -78,11 +78,12 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
     public fun TensorType.log(): TensorType
     public fun TensorType.logAssign(): Unit
 
+    // todo change type of pivots
     //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(): Pair<TensorType, TensorType>
+    public fun TensorType.lu(): Pair<TensorType, IntTensor>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
-    public fun luUnpack(A_LU: TensorType, pivots: TensorType): Triple<TensorType, TensorType, TensorType>
+    public fun luUnpack(A_LU: TensorType, pivots: IntTensor): Triple<TensorType, TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.svd.html
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
