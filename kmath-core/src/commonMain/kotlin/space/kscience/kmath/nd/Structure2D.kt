@@ -1,7 +1,9 @@
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
+import kotlin.reflect.KClass
 
 /**
  * A structure that is guaranteed to be two-dimensional.
@@ -58,7 +60,7 @@ public interface Structure2D<T> : NDStructure<T> {
 /**
  * A 2D wrapper for nd-structure
  */
-private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
+private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -66,7 +68,14 @@ private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Stru
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
+    @UnstableKMathAPI
+    override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
+
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
+
+    override fun equals(other: Any?): Boolean = structure == other
+
+    override fun hashCode(): Int  = structure.hashCode()
 }
 
 /**

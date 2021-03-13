@@ -1,10 +1,12 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.as2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@UnstableKMathAPI
 @Suppress("UNUSED_VARIABLE")
 class MatrixTest {
     @Test

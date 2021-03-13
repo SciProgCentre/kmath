@@ -9,6 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@UnstableKMathAPI
 internal class RealMatrixTest {
     @Test
     fun testSum() {
@@ -30,11 +31,11 @@ internal class RealMatrixTest {
 
     @Test
     fun testRepeatStackVertical() {
-        val matrix1 = LinearSpace.real.matrix(2, 3)(
+        val matrix1 = realMatrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
-        val matrix2 = LinearSpace.real.matrix(6, 3)(
+        val matrix2 = realMatrix(6, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0,
             1.0, 0.0, 0.0,
@@ -47,7 +48,7 @@ internal class RealMatrixTest {
 
     @Test
     fun testMatrixAndDouble() {
-        val matrix1 = LinearSpace.real.matrix(2, 3)(
+        val matrix1 = realMatrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
@@ -61,13 +62,13 @@ internal class RealMatrixTest {
 
     @Test
     fun testDoubleAndMatrix() {
-        val matrix1 = LinearSpace.real.matrix(2, 3)(
+        val matrix1 = realMatrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = 20.0 - (10.0 + (5.0 * matrix1))
         //val matrix2 = 10.0 + (5.0 * matrix1)
-        val expectedResult = LinearSpace.real.matrix(2, 3)(
+        val expectedResult = realMatrix(2, 3)(
             5.0, 10.0, -5.0,
             -10.0, -20.0, 0.0
         )
@@ -76,15 +77,15 @@ internal class RealMatrixTest {
 
     @Test
     fun testSquareAndPower() {
-        val matrix1 = LinearSpace.real.matrix(2, 3)(
+        val matrix1 = realMatrix(2, 3)(
             -1.0, 0.0, 3.0,
             4.0, -6.0, -2.0
         )
-        val matrix2 = LinearSpace.real.matrix(2, 3)(
+        val matrix2 = realMatrix(2, 3)(
             1.0, 0.0, 9.0,
             16.0, 36.0, 4.0
         )
-        val matrix3 = LinearSpace.real.matrix(2, 3)(
+        val matrix3 = realMatrix(2, 3)(
             -1.0, 0.0, 27.0,
             64.0, -216.0, -8.0
         )
@@ -95,16 +96,16 @@ internal class RealMatrixTest {
     @OptIn(UnstableKMathAPI::class)
     @Test
     fun testTwoMatrixOperations() {
-        val matrix1 = LinearSpace.real.matrix(2, 3)(
+        val matrix1 = realMatrix(2, 3)(
             -1.0, 0.0, 3.0,
             4.0, -6.0, 7.0
         )
-        val matrix2 = LinearSpace.real.matrix(2, 3)(
+        val matrix2 = realMatrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, -2.0
         )
         val result = matrix1 * matrix2 + matrix1 - matrix2
-        val expectedResult = LinearSpace.real.matrix(2, 3)(
+        val expectedResult = realMatrix(2, 3)(
             -3.0, 0.0, 9.0,
             16.0, -48.0, -5.0
         )
@@ -113,16 +114,16 @@ internal class RealMatrixTest {
 
     @Test
     fun testColumnOperations() {
-        val matrix1 = LinearSpace.real.matrix(2, 4)(
+        val matrix1 = realMatrix(2, 4)(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )
-        val matrix2 = LinearSpace.real.matrix(2, 5)(
+        val matrix2 = realMatrix(2, 5)(
             -1.0, 0.0, 3.0, 15.0, -1.0,
             4.0, -6.0, 7.0, -11.0, 4.0
         )
-        val col1 = LinearSpace.real.matrix(2, 1)(0.0, -6.0)
-        val cols1to2 = LinearSpace.real.matrix(2, 2)(
+        val col1 = realMatrix(2, 1)(0.0, -6.0)
+        val cols1to2 = realMatrix(2, 2)(
             0.0, 3.0,
             -6.0, 7.0
         )

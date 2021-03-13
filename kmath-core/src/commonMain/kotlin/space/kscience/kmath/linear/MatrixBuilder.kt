@@ -16,18 +16,12 @@ public class MatrixBuilder<T : Any, A : Ring<T>>(
     //TODO add specific matrix builder functions like diagonal, etc
 }
 
+/**
+ * Create a matrix builder with given number of rows and columns
+ */
 @UnstableKMathAPI
 public fun <T : Any, A : Ring<T>> LinearSpace<T, A>.matrix(rows: Int, columns: Int): MatrixBuilder<T, A> =
     MatrixBuilder(this, rows, columns)
-
-/**
- * Build a square matrix from given elements.
- */
-@UnstableKMathAPI
-public fun <T : Any> LinearSpace<T, Ring<T>>.square(vararg elements: T): Matrix<T> {
-    val size: Int = kotlin.math.sqrt(elements.size.toDouble()).toInt()
-    return matrix(size,size)(*elements)
-}
 
 @UnstableKMathAPI
 public fun <T : Any> LinearSpace<T, Ring<T>>.vector(vararg elements: T): Vector<T> {

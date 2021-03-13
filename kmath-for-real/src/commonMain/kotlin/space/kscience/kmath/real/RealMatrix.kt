@@ -25,6 +25,10 @@ public typealias RealMatrix = Matrix<Double>
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: RealField.(i: Int, j: Int) -> Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum, initializer)
 
+@OptIn(UnstableKMathAPI::class)
+public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, RealField> =
+    LinearSpace.real.matrix(rowNum, colNum)
+
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
     return LinearSpace.real.buildMatrix(size, this[0].size) { row, col -> this@toMatrix[row][col] }
 }
