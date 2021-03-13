@@ -1,7 +1,7 @@
 package kaceince.kmath.real
 
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.build
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.real.*
 import space.kscience.kmath.structures.contentEquals
@@ -30,11 +30,11 @@ internal class RealMatrixTest {
 
     @Test
     fun testRepeatStackVertical() {
-        val matrix1 = Matrix.build(2, 3)(
+        val matrix1 = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
-        val matrix2 = Matrix.build(6, 3)(
+        val matrix2 = LinearSpace.real.matrix(6, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0,
             1.0, 0.0, 0.0,
@@ -47,12 +47,12 @@ internal class RealMatrixTest {
 
     @Test
     fun testMatrixAndDouble() {
-        val matrix1 = Matrix.build(2, 3)(
+        val matrix1 = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = (matrix1 * 2.5 + 1.0 - 2.0) / 2.0
-        val expectedResult = Matrix.build(2, 3)(
+        val expectedResult = LinearSpace.real.matrix(2, 3)(
             0.75, -0.5, 3.25,
             4.5, 7.0, 2.0
         )
@@ -61,13 +61,13 @@ internal class RealMatrixTest {
 
     @Test
     fun testDoubleAndMatrix() {
-        val matrix1 = Matrix.build(2, 3)(
+        val matrix1 = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = 20.0 - (10.0 + (5.0 * matrix1))
         //val matrix2 = 10.0 + (5.0 * matrix1)
-        val expectedResult = Matrix.build(2, 3)(
+        val expectedResult = LinearSpace.real.matrix(2, 3)(
             5.0, 10.0, -5.0,
             -10.0, -20.0, 0.0
         )
@@ -76,15 +76,15 @@ internal class RealMatrixTest {
 
     @Test
     fun testSquareAndPower() {
-        val matrix1 = Matrix.build(2, 3)(
+        val matrix1 = LinearSpace.real.matrix(2, 3)(
             -1.0, 0.0, 3.0,
             4.0, -6.0, -2.0
         )
-        val matrix2 = Matrix.build(2, 3)(
+        val matrix2 = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 9.0,
             16.0, 36.0, 4.0
         )
-        val matrix3 = Matrix.build(2, 3)(
+        val matrix3 = LinearSpace.real.matrix(2, 3)(
             -1.0, 0.0, 27.0,
             64.0, -216.0, -8.0
         )
@@ -95,16 +95,16 @@ internal class RealMatrixTest {
     @OptIn(UnstableKMathAPI::class)
     @Test
     fun testTwoMatrixOperations() {
-        val matrix1 = Matrix.build(2, 3)(
+        val matrix1 = LinearSpace.real.matrix(2, 3)(
             -1.0, 0.0, 3.0,
             4.0, -6.0, 7.0
         )
-        val matrix2 = Matrix.build(2, 3)(
+        val matrix2 = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, -2.0
         )
         val result = matrix1 * matrix2 + matrix1 - matrix2
-        val expectedResult = Matrix.build(2, 3)(
+        val expectedResult = LinearSpace.real.matrix(2, 3)(
             -3.0, 0.0, 9.0,
             16.0, -48.0, -5.0
         )
@@ -113,16 +113,16 @@ internal class RealMatrixTest {
 
     @Test
     fun testColumnOperations() {
-        val matrix1 = Matrix.build(2, 4)(
+        val matrix1 = LinearSpace.real.matrix(2, 4)(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )
-        val matrix2 = Matrix.build(2, 5)(
+        val matrix2 = LinearSpace.real.matrix(2, 5)(
             -1.0, 0.0, 3.0, 15.0, -1.0,
             4.0, -6.0, 7.0, -11.0, 4.0
         )
-        val col1 = Matrix.build(2, 1)(0.0, -6.0)
-        val cols1to2 = Matrix.build(2, 2)(
+        val col1 = LinearSpace.real.matrix(2, 1)(0.0, -6.0)
+        val cols1to2 = LinearSpace.real.matrix(2, 2)(
             0.0, 3.0,
             -6.0, 7.0
         )
@@ -147,7 +147,7 @@ internal class RealMatrixTest {
 
     @Test
     fun testAllElementOperations() {
-        val matrix1 = Matrix.build(2, 4)(
+        val matrix1 = LinearSpace.real.matrix(2, 4)(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )

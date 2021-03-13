@@ -3,11 +3,30 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
+public class MatrixBuilder<T : Any, A : Ring<T>>(
+    public val linearSpace: LinearSpace<T, A>,
+    public val rows: Int,
+    public val columns: Int,
+) {
+    public operator fun invoke(vararg elements: T): Matrix<T> {
+        require(rows * columns == elements.size) { "The number of elements ${elements.size} is not equal $rows * $columns" }
+        return linearSpace.buildMatrix(rows, columns) { i, j -> elements[i * columns + j] }
+    }
+
+    //TODO add specific matrix builder functions like diagonal, etc
+}
 
 @UnstableKMathAPI
-public fun <T : Any> LinearSpace<T, Ring<T>>.matrix(rows: Int, columns: Int, vararg elements: T): Matrix<T> {
-    require(rows * columns == elements.size) { "The number of elements ${elements.size} is not equal $rows * $columns" }
-    return buildMatrix(rows, columns) { i, j -> elements[i * columns + j] }
+public fun <T : Any, A : Ring<T>> LinearSpace<T, A>.matrix(rows: Int, columns: Int): MatrixBuilder<T, A> =
+    MatrixBuilder(this, rows, columns)
+
+/**
+ * Build a square matrix from given elements.
+ */
+@UnstableKMathAPI
+public fun <T : Any> LinearSpace<T, Ring<T>>.square(vararg elements: T): Matrix<T> {
+    val size: Int = kotlin.math.sqrt(elements.size.toDouble()).toInt()
+    return matrix(size,size)(*elements)
 }
 
 @UnstableKMathAPI

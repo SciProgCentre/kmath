@@ -99,8 +99,8 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
         ArrayRealVector(array).wrap()
     }
 
-    private fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
-    private fun RealVector.wrap(): CMVector = CMVector(this)
+    internal fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
+    internal fun RealVector.wrap(): CMVector = CMVector(this)
 
     override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Vector<Double> =
         ArrayRealVector(DoubleArray(size) { RealField.initializer(it) }).wrap()

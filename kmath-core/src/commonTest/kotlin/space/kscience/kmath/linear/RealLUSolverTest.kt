@@ -14,12 +14,12 @@ class RealLUSolverTest {
 
     @Test
     fun testDecomposition() {
-        val matrix = Matrix.square(
-            3.0, 1.0,
-            1.0, 3.0
-        )
-
         LinearSpace.real.run {
+            val matrix = square(
+                3.0, 1.0,
+                1.0, 3.0
+            )
+
             val lup = lup(matrix)
 
             //Check determinant
@@ -31,14 +31,14 @@ class RealLUSolverTest {
 
     @Test
     fun testInvert() {
-        val matrix = Matrix.square(
+        val matrix = LinearSpace.real.square(
             3.0, 1.0,
             1.0, 3.0
         )
 
         val inverted = LinearSpace.real.inverseWithLup(matrix)
 
-        val expected = Matrix.square(
+        val expected = LinearSpace.real.square(
             0.375, -0.125,
             -0.125, 0.375
         )

@@ -38,7 +38,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res = RealLinearSpace.invoke { res dot this@pow }
+                res = LinearSpace.real.run { res dot this@pow }
             }
             return res
         }
