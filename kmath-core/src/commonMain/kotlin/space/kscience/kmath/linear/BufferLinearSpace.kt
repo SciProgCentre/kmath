@@ -22,7 +22,7 @@ public class BufferLinearSpace<T : Any, A : Ring<T>>(
     override fun buildMatrix(rows: Int, columns: Int, initializer: A.(i: Int, j: Int) -> T): Matrix<T> =
         ndRing(rows, columns).produce { (i, j) -> elementAlgebra.initializer(i, j) }.as2D()
 
-    override fun buildVector(size: Int, initializer: A.(Int) -> T): Vector<T> =
+    override fun buildVector(size: Int, initializer: A.(Int) -> T): Point<T> =
         bufferFactory(size) { elementAlgebra.initializer(it) }
 
     override fun Matrix<T>.unaryMinus(): Matrix<T> = ndRing(rowNum, colNum).run {
@@ -62,7 +62,7 @@ public class BufferLinearSpace<T : Any, A : Ring<T>>(
         }
     }
 
-    override fun Matrix<T>.dot(vector: Vector<T>): Vector<T> {
+    override fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         return elementAlgebra {
             val rows = this@dot.rows.map { it.linearize() }

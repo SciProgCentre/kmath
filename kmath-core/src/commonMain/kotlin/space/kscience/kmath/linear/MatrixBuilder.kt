@@ -24,7 +24,7 @@ public fun <T : Any, A : Ring<T>> LinearSpace<T, A>.matrix(rows: Int, columns: I
     MatrixBuilder(this, rows, columns)
 
 @UnstableKMathAPI
-public fun <T : Any> LinearSpace<T, Ring<T>>.vector(vararg elements: T): Vector<T> {
+public fun <T : Any> LinearSpace<T, Ring<T>>.vector(vararg elements: T): Point<T> {
     return buildVector(elements.size) { elements[it] }
 }
 

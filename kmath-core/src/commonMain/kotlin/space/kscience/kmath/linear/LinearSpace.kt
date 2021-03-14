@@ -14,7 +14,10 @@ import kotlin.reflect.KClass
  */
 public typealias Matrix<T> = Structure2D<T>
 
-public typealias Vector<T> = Point<T>
+/**
+ * Alias or using [Buffer] as a point/vector in a many-dimensional space.
+ */
+public typealias Point<T> = Buffer<T>
 
 /**
  * Basic operations on matrices and vectors. Operates on [Matrix].
@@ -33,13 +36,13 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     /**
      * Produces a point compatible with matrix space (and possibly optimized for it).
      */
-    public fun buildVector(size: Int, initializer: A.(Int) -> T): Vector<T>
+    public fun buildVector(size: Int, initializer: A.(Int) -> T): Point<T>
 
     public operator fun Matrix<T>.unaryMinus(): Matrix<T> = buildMatrix(rowNum, colNum) { i, j ->
         -get(i, j)
     }
 
-    public operator fun Vector<T>.unaryMinus(): Vector<T> = buildVector(size) {
+    public operator fun Point<T>.unaryMinus(): Point<T> = buildVector(size) {
         -get(it)
     }
 
@@ -54,7 +57,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     /**
      * Vector sum
      */
-    public operator fun Vector<T>.plus(other: Vector<T>): Vector<T> = buildVector(size) {
+    public operator fun Point<T>.plus(other: Point<T>): Point<T> = buildVector(size) {
         get(it) + other[it]
     }
 
@@ -68,7 +71,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     /**
      * Vector subtraction
      */
-    public operator fun Vector<T>.minus(other: Vector<T>): Vector<T> = buildVector(size) {
+    public operator fun Point<T>.minus(other: Point<T>): Point<T> = buildVector(size) {
         get(it) - other[it]
     }
 
@@ -100,7 +103,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @param vector the multiplier.
      * @return the dot product.
      */
-    public infix fun Matrix<T>.dot(vector: Vector<T>): Vector<T> {
+    public infix fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         return elementAlgebra {
             buildVector(rowNum) { i ->
@@ -139,7 +142,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @param value the multiplier.
      * @receiver the product.
      */
-    public operator fun Vector<T>.times(value: T): Vector<T> =
+    public operator fun Point<T>.times(value: T): Point<T> =
         buildVector(size) { i -> get(i) * value }
 
     /**
@@ -149,7 +152,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @param v the multiplier.
      * @receiver the product.
      */
-    public operator fun T.times(v: Vector<T>): Vector<T> = v * this
+    public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
      * Gets a feature from the matrix. This function may return some additional features to

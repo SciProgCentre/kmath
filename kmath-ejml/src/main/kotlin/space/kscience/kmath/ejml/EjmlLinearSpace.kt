@@ -27,7 +27,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
     /**
      * Converts this vector to EJML one.
      */
-    public fun Vector<Double>.toEjml(): EjmlVector = when (this) {
+    public fun Point<Double>.toEjml(): EjmlVector = when (this) {
         is EjmlVector -> this
         else -> EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = get(row) }
@@ -41,7 +41,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
             }
         })
 
-    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Vector<Double> =
+    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Point<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = RealField.initializer(row) }
         })
@@ -54,7 +54,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin.mult(other.toEjml().origin))
 
-    public override fun Matrix<Double>.dot(vector: Vector<Double>): EjmlVector =
+    public override fun Matrix<Double>.dot(vector: Point<Double>): EjmlVector =
         EjmlVector(toEjml().origin.mult(vector.toEjml().origin))
 
     public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlMatrix =
@@ -63,25 +63,25 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         toEjml().origin.scale(value).wrapMatrix()
 
-    override fun Vector<Double>.unaryMinus(): EjmlVector =
+    override fun Point<Double>.unaryMinus(): EjmlVector =
         toEjml().origin.negative().wrapVector()
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlMatrix =
         (toEjml().origin + other.toEjml().origin).wrapMatrix()
 
-    override fun Vector<Double>.plus(other: Vector<Double>): EjmlVector =
+    override fun Point<Double>.plus(other: Point<Double>): EjmlVector =
         (toEjml().origin + other.toEjml().origin).wrapVector()
 
-    override fun Vector<Double>.minus(other: Vector<Double>): EjmlVector =
+    override fun Point<Double>.minus(other: Point<Double>): EjmlVector =
         (toEjml().origin - other.toEjml().origin).wrapVector()
 
     override fun Double.times(m: Matrix<Double>): EjmlMatrix =
         m.toEjml().origin.scale(this).wrapMatrix()
 
-    override fun Vector<Double>.times(value: Double): EjmlVector =
+    override fun Point<Double>.times(value: Double): EjmlVector =
         toEjml().origin.scale(value).wrapVector()
 
-    override fun Double.times(v: Vector<Double>): EjmlVector =
+    override fun Double.times(v: Point<Double>): EjmlVector =
         v.toEjml().origin.scale(this).wrapVector()
 }
 

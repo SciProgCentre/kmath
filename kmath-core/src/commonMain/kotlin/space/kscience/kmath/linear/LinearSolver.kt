@@ -1,9 +1,6 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.structures.Buffer
-
-public typealias Point<T> = Buffer<T>
 
 /**
  * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
@@ -17,7 +14,7 @@ public interface LinearSolver<T : Any> {
 /**
  * Convert matrix to vector if it is possible
  */
-public fun <T : Any> Matrix<T>.asVector(): Vector<T> =
+public fun <T : Any> Matrix<T>.asVector(): Point<T> =
     if (this.colNum == 1)
         as1D()
     else

@@ -474,11 +474,6 @@ public final class space/kscience/kmath/linear/LFeature : space/kscience/kmath/l
 	public static final field INSTANCE Lspace/kscience/kmath/linear/LFeature;
 }
 
-public final class space/kscience/kmath/linear/LinearAlgebraKt {
-	public static final fun asMatrix (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/linear/VirtualMatrix;
-	public static final fun asVector (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/structures/Buffer;
-}
-
 public abstract interface class space/kscience/kmath/linear/LinearSolver {
 	public abstract fun inverse (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public abstract fun solve (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
@@ -487,6 +482,11 @@ public abstract interface class space/kscience/kmath/linear/LinearSolver {
 
 public final class space/kscience/kmath/linear/LinearSolver$DefaultImpls {
 	public static fun solve (Lspace/kscience/kmath/linear/LinearSolver;Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+}
+
+public final class space/kscience/kmath/linear/LinearSolverKt {
+	public static final fun asMatrix (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/linear/VirtualMatrix;
+	public static final fun asVector (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/structures/Buffer;
 }
 
 public abstract interface class space/kscience/kmath/linear/LinearSpace {

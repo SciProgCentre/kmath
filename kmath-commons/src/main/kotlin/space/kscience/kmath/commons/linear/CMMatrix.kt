@@ -62,7 +62,7 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     override fun hashCode(): Int = origin.hashCode()
 }
 
-public inline class CMVector(public val origin: RealVector) : Vector<Double> {
+public inline class CMVector(public val origin: RealVector) : Point<Double> {
     public override val size: Int get() = origin.dimension
 
     public override operator fun get(index: Int): Double = origin.getEntry(index)
@@ -94,7 +94,7 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
         }
     }
 
-    public fun Vector<Double>.toCM(): CMVector = if (this is CMVector) this else {
+    public fun Point<Double>.toCM(): CMVector = if (this is CMVector) this else {
         val array = DoubleArray(size) { this[it] }
         ArrayRealVector(array).wrap()
     }
@@ -102,22 +102,22 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
     internal fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
     internal fun RealVector.wrap(): CMVector = CMVector(this)
 
-    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Vector<Double> =
+    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Point<Double> =
         ArrayRealVector(DoubleArray(size) { RealField.initializer(it) }).wrap()
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): CMMatrix =
         toCM().origin.add(other.toCM().origin).wrap()
 
-    override fun Vector<Double>.plus(other: Vector<Double>): CMVector =
+    override fun Point<Double>.plus(other: Point<Double>): CMVector =
         toCM().origin.add(other.toCM().origin).wrap()
 
-    override fun Vector<Double>.minus(other: Vector<Double>): CMVector =
+    override fun Point<Double>.minus(other: Point<Double>): CMVector =
         toCM().origin.subtract(other.toCM().origin).wrap()
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
         toCM().origin.multiply(other.toCM().origin).wrap()
 
-    public override fun Matrix<Double>.dot(vector: Vector<Double>): CMVector =
+    public override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
         toCM().origin.preMultiply(vector.toCM().origin).wrap()
 
     public override operator fun Matrix<Double>.minus(other: Matrix<Double>): CMMatrix =
@@ -129,10 +129,10 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
     override fun Double.times(m: Matrix<Double>): CMMatrix =
         m * this
 
-    override fun Vector<Double>.times(value: Double): CMVector =
+    override fun Point<Double>.times(value: Double): CMVector =
         toCM().origin.mapMultiply(value).wrap()
 
-    override fun Double.times(v: Vector<Double>): CMVector =
+    override fun Double.times(v: Point<Double>): CMVector =
         v * this
 }
 
