@@ -9,6 +9,7 @@
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
+- 
 
 ### Deprecated
 

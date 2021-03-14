@@ -85,7 +85,7 @@ public class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double> {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Matrix<*>) return false
+        if (other !is NDStructure<*>) return false
         return NDStructure.contentEquals(this, other)
     }
 
