@@ -1,12 +1,9 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.RealBuffer
 import space.kscience.kmath.structures.array
-import kotlin.math.abs
-import kotlin.math.max
 
 
-public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
+public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 
     override fun RealTensor.value(): Double {
         check(this.shape contentEquals intArrayOf(1)) {
@@ -15,24 +12,13 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         return this.buffer.array[0]
     }
 
-    override fun eye(n: Int): RealTensor {
-        val shape = intArrayOf(n, n)
-        val buffer = DoubleArray(n * n) { 0.0 }
-        val res = RealTensor(shape, buffer)
-        for (i in 0 until n) {
-            res[intArrayOf(i, i)] = 1.0
-        }
-        return res
-    }
-
     override fun zeros(shape: IntArray): RealTensor {
         TODO("Not yet implemented")
     }
 
-    override fun zeroesLike(other: RealTensor): RealTensor {
-        // TODO refactor very bad!!!
-        val shape = other.shape
-        val buffer = DoubleArray(other.buffer.size) { 0.0 }
+    override fun RealTensor.zeroesLike(): RealTensor {
+        val shape = this.shape
+        val buffer = DoubleArray(this.buffer.size) { 0.0 }
         return RealTensor(shape, buffer)
     }
 
@@ -40,7 +26,7 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
-    override fun onesLike(shape: IntArray): RealTensor {
+    override fun RealTensor.onesLike(): RealTensor {
         TODO("Not yet implemented")
     }
 
@@ -156,14 +142,6 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         return RealTensor(this.shape, resBuffer)
     }
 
-    override fun RealTensor.dot(other: RealTensor): RealTensor {
-        TODO("Alya")
-    }
-
-    override fun diagonalEmbedding(diagonalEntries: RealTensor, offset: Int, dim1: Int, dim2: Int): RealTensor {
-        TODO("Alya")
-    }
-
     override fun RealTensor.transpose(i: Int, j: Int): RealTensor {
         checkTranspose(this.dimension, i, j)
         val n = this.buffer.size
@@ -198,9 +176,64 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun full(shape: IntArray, value: Double): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.fullLike(value: Double): RealTensor {
+        TODO("Not yet implemented")
+    }
 
 
-    override fun RealTensor.sum(): RealTensor {
+    override fun RealTensor.sum(dim: Int, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.cumsum(dim: Int): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.prod(dim: Int, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.cumprod(dim: Int): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.max(dim: Int, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.cummax(dim: Int): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.min(dim: Int, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.cummin(dim: Int): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.median(dim: Int, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun maximum(lhs: RealTensor, rhs: RealTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun minimum(lhs: RealTensor, rhs: RealTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.sort(dim: Int, keepDim: Boolean, descending: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun cat(tensors: List<RealTensor>, dim: Int): RealTensor {
         TODO("Not yet implemented")
     }
 
@@ -213,6 +246,10 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
+    override fun RealTensor.flatten(startDim: Int, endDim: Int): RealTensor {
+        TODO("Not yet implemented")
+    }
+
     override fun RealTensor.divAssign(value: Double) {
         TODO("Not yet implemented")
     }
@@ -221,99 +258,23 @@ public class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.exp(): RealTensor {
+    override fun RealTensor.mean(dim: Int, keepDim: Boolean): RealTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.log(): RealTensor {
+    override fun RealTensor.quantile(q: Double, dim: Int, keepDim: Boolean): RealTensor {
         TODO("Not yet implemented")
     }
 
-
-    override fun RealTensor.lu(): Pair<RealTensor, IntTensor> {
-        // todo checks
-        val lu = this.copy()
-        val m = this.shape[0]
-        val pivot = IntArray(m)
-
-
-        // Initialize permutation array and parity
-        for (row in 0 until m) pivot[row] = row
-        var even = true
-
-        for (i in 0 until m) {
-            var maxA = -1.0
-            var iMax = i
-
-            for (k in i until m) {
-                val absA = abs(lu[k, i])
-                if (absA > maxA) {
-                    maxA = absA
-                    iMax = k
-                }
-            }
-
-            //todo check singularity
-
-            if (iMax != i) {
-
-                val j = pivot[i]
-                pivot[i] = pivot[iMax]
-                pivot[iMax] = j
-                even != even
-
-                for (k in 0 until m) {
-                    val tmp = lu[i, k]
-                    lu[i, k] = lu[iMax, k]
-                    lu[iMax, k] = tmp
-                }
-
-            }
-
-            for (j in i + 1 until m) {
-                lu[j, i] /= lu[i, i]
-                for (k in i + 1 until m) {
-                    lu[j, k] -= lu[j, i] * lu[i, k]
-                }
-            }
-        }
-        return Pair(lu, IntTensor(intArrayOf(m), pivot))
-    }
-
-    override fun luUnpack(lu: RealTensor, pivots: IntTensor): Triple<RealTensor, RealTensor, RealTensor> {
-        // todo checks
-        val n = lu.shape[0]
-        val p = zeroesLike(lu)
-        pivots.buffer.array.forEachIndexed { i, pivot ->
-            p[i, pivot] = 1.0
-        }
-        val l = zeroesLike(lu)
-        val u = zeroesLike(lu)
-
-        for (i in 0 until n){
-            for (j in 0 until n){
-                if (i == j) {
-                    l[i, j] = 1.0
-                }
-                if (j < i) {
-                    l[i, j] = lu[i, j]
-                }
-                if (j >= i) {
-                    u[i, j] = lu[i, j]
-                }
-            }
-        }
-        return Triple(p, l, u)
-    }
-
-    override fun RealTensor.svd(): Triple<RealTensor, RealTensor, RealTensor> {
-        /**
-         * Main first task for @AlyaNovikova
-         */
+    override fun RealTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): RealTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.symEig(eigenvectors: Boolean): Pair<RealTensor, RealTensor> {
+    override fun RealTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): RealTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun RealTensor.histc(bins: Int, min: Double, max: Double): RealTensor {
         TODO("Not yet implemented")
     }
 

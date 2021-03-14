@@ -5,11 +5,17 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.value(): T
 
-    public fun eye(n: Int): TensorType
     public fun zeros(shape: IntArray): TensorType
-    public fun zeroesLike(other: TensorType): TensorType
+    public fun TensorType.zeroesLike(): TensorType
     public fun ones(shape: IntArray): TensorType
-    public fun onesLike(shape: IntArray): TensorType
+    public fun TensorType.onesLike(): TensorType
+
+
+    //https://pytorch.org/docs/stable/generated/torch.full.html
+    public fun full(shape: IntArray, value: T): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.full_like.html#torch.full_like
+    public fun TensorType.fullLike(value: T): TensorType
 
     public fun TensorType.copy(): TensorType
 
@@ -33,15 +39,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public operator fun TensorType.unaryMinus(): TensorType
 
 
-    //https://pytorch.org/docs/stable/generated/torch.matmul.html
-    public infix fun TensorType.dot(other: TensorType): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
-    public fun diagonalEmbedding(
-        diagonalEntries: TensorType,
-        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
-    ): TensorType
-
     //https://pytorch.org/docs/stable/generated/torch.transpose.html
     public fun TensorType.transpose(i: Int, j: Int): TensorType
 
@@ -53,35 +50,45 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public fun TensorType.abs(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.sum.html
-    public fun TensorType.sum(): TensorType
-}
+    public fun TensorType.sum(dim: Int, keepDim: Boolean): TensorType
 
-// https://proofwiki.org/wiki/Definition:Division_Algebra
-public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>> :
-    TensorAlgebra<T, TensorType> {
+    //https://pytorch.org/docs/stable/generated/torch.cumsum.html#torch.cumsum
+    public fun TensorType.cumsum(dim: Int): TensorType
 
-    public operator fun TensorType.div(value: T): TensorType
-    public operator fun TensorType.div(other: TensorType): TensorType
-    public operator fun TensorType.divAssign(value: T)
-    public operator fun TensorType.divAssign(other: TensorType)
+    //https://pytorch.org/docs/stable/generated/torch.prod.html#torch.prod
+    public fun TensorType.prod(dim: Int, keepDim: Boolean): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.exp.html
-    public fun TensorType.exp(): TensorType
+    //https://pytorch.org/docs/stable/generated/torch.cumprod.html#torch.cumprod
+    public fun TensorType.cumprod(dim: Int): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.log.html
-    public fun TensorType.log(): TensorType
+    //https://pytorch.org/docs/stable/generated/torch.max.html#torch.max
+    public fun TensorType.max(dim: Int, keepDim: Boolean): TensorType
 
-    // todo change type of pivots
-    //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(): Pair<TensorType, IntTensor>
+    //https://pytorch.org/docs/stable/generated/torch.cummax.html#torch.cummax
+    public fun TensorType.cummax(dim: Int): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
-    public fun luUnpack(A_LU: TensorType, pivots: IntTensor): Triple<TensorType, TensorType, TensorType>
+    //https://pytorch.org/docs/stable/generated/torch.min.html#torch.min
+    public fun TensorType.min(dim: Int, keepDim: Boolean): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.svd.html
-    public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
+    //https://pytorch.org/docs/stable/generated/torch.cummin.html#torch.cummin
+    public fun TensorType.cummin(dim: Int): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.symeig.html
-    public fun TensorType.symEig(eigenvectors: Boolean = true): Pair<TensorType, TensorType>
+    //https://pytorch.org/docs/stable/generated/torch.median.html#torch.median
+    public fun TensorType.median(dim: Int, keepDim: Boolean): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.maximum.html#torch.maximum
+    public fun maximum(lhs: TensorType, rhs: TensorType)
+
+    //https://pytorch.org/docs/stable/generated/torch.minimum.html#torch.minimum
+    public fun minimum(lhs: TensorType, rhs: TensorType)
+
+    //https://pytorch.org/docs/stable/generated/torch.sort.html#torch.sort
+    public fun TensorType.sort(dim: Int, keepDim: Boolean, descending: Boolean): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.cat.html#torch.cat
+    public fun cat(tensors: List<TensorType>, dim: Int): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.flatten.html#torch.flatten
+    public fun TensorType.flatten(startDim: Int, endDim: Int): TensorType
 
 }
