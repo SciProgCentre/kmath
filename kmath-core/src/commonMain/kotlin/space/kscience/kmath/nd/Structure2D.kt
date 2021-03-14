@@ -26,14 +26,14 @@ public interface Structure2D<T> : NDStructure<T> {
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
-    public val rows: Buffer<Buffer<T>>
-        get() = VirtualBuffer(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
+    public val rows: List<Buffer<T>>
+        get() = List(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
-    public val columns: Buffer<Buffer<T>>
-        get() = VirtualBuffer(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
+    public val columns: List<Buffer<T>>
+        get() = List(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
 
     /**
      * Retrieves an element from the structure by two indices.
@@ -75,20 +75,15 @@ private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D
 
     override fun equals(other: Any?): Boolean = structure == other
 
-    override fun hashCode(): Int  = structure.hashCode()
+    override fun hashCode(): Int = structure.hashCode()
 }
 
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2)
-    Structure2DWrapper(this)
-else
-    error("Can't create 2d-structure from ${shape.size}d-structure")
+public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
+    2 -> Structure2DWrapper(this)
+    else -> error("Can't create 2d-structure from ${shape.size}d-structure")
+}
 
-/**
- * Alias for [Structure2D] with more familiar name.
- *
- * @param T the type of items in the matrix.
- */
-public typealias Matrix<T> = Structure2D<T>
+internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> = if (this is Structure2DWrapper) structure else this

@@ -45,14 +45,12 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
 /**
  * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as1D(): Structure1D<T> = if (shape.size == 1) {
+public fun <T> NDStructure<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
     when (this) {
-        is Structure1DWrapper -> this
         is NDBuffer -> Buffer1DWrapper(this.buffer)
         else -> Structure1DWrapper(this)
     }
-} else
-    error("Can't create 1d-structure from ${shape.size}d-structure")
+} else error("Can't create 1d-structure from ${shape.size}d-structure")
 
 /**
  * Represent this buffer as 1D structure

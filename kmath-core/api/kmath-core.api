@@ -496,7 +496,6 @@ public final class space/kscience/kmath/linear/LinearSpace$Companion {
 }
 
 public final class space/kscience/kmath/linear/LinearSpace$DefaultImpls {
-	public static fun buildVector (Lspace/kscience/kmath/linear/LinearSpace;ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
 	public static fun dot (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public static fun dot (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public static fun minus (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
@@ -509,6 +508,29 @@ public final class space/kscience/kmath/linear/LinearSpace$DefaultImpls {
 	public static fun times (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;)Lspace/kscience/kmath/structures/Buffer;
 	public static fun unaryMinus (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public static fun unaryMinus (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+}
+
+public final class space/kscience/kmath/linear/LinearSpaceKt {
+	public static final fun invoke (Lspace/kscience/kmath/linear/LinearSpace;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/linear/LinearSpaceOverNd : space/kscience/kmath/linear/LinearSpace {
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
+	public fun buildMatrix (IILkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun buildVector (ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
+	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Ring;
+	public fun minus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun minus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun plus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun plus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun times (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun times (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;)Lspace/kscience/kmath/structures/Buffer;
+	public fun unaryMinus (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun unaryMinus (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 }
 
 public final class space/kscience/kmath/linear/LupDecomposition : space/kscience/kmath/linear/DeterminantFeature, space/kscience/kmath/linear/LupDecompositionFeature {
@@ -566,12 +588,12 @@ public final class space/kscience/kmath/linear/MatrixWrapper : space/kscience/km
 	public fun get (II)Ljava/lang/Object;
 	public fun get ([I)Ljava/lang/Object;
 	public fun getColNum ()I
-	public fun getColumns ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getColumns ()Ljava/util/List;
 	public fun getDimension ()I
 	public final fun getFeatures ()Ljava/util/Set;
 	public final fun getOrigin ()Lspace/kscience/kmath/nd/Structure2D;
 	public fun getRowNum ()I
-	public fun getRows ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getRows ()Ljava/util/List;
 	public fun getShape ()[I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -622,11 +644,11 @@ public final class space/kscience/kmath/linear/VirtualMatrix : space/kscience/km
 	public fun get (II)Ljava/lang/Object;
 	public fun get ([I)Ljava/lang/Object;
 	public fun getColNum ()I
-	public fun getColumns ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getColumns ()Ljava/util/List;
 	public fun getDimension ()I
 	public final fun getGenerator ()Lkotlin/jvm/functions/Function2;
 	public fun getRowNum ()I
-	public fun getRows ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getRows ()Ljava/util/List;
 	public fun getShape ()[I
 	public fun hashCode ()I
 }
@@ -678,11 +700,11 @@ public final class space/kscience/kmath/nd/BufferNDAlgebra$DefaultImpls {
 
 public final class space/kscience/kmath/nd/BufferNDAlgebraKt {
 	public static final fun field (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDField;
+	public static final fun group (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDGroup;
 	public static final fun ndField (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun ndGroup (Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun ndRing (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun ndSpace (Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun ring (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDRing;
-	public static final fun space (Lspace/kscience/kmath/nd/NDAlgebra$Companion;Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedNDGroup;
 }
 
 public class space/kscience/kmath/nd/BufferedNDField : space/kscience/kmath/nd/BufferedNDRing, space/kscience/kmath/nd/NDField {
@@ -1103,9 +1125,9 @@ public abstract interface class space/kscience/kmath/nd/Structure2D : space/ksci
 	public abstract fun get (II)Ljava/lang/Object;
 	public abstract fun get ([I)Ljava/lang/Object;
 	public abstract fun getColNum ()I
-	public abstract fun getColumns ()Lspace/kscience/kmath/structures/Buffer;
+	public abstract fun getColumns ()Ljava/util/List;
 	public abstract fun getRowNum ()I
-	public abstract fun getRows ()Lspace/kscience/kmath/structures/Buffer;
+	public abstract fun getRows ()Ljava/util/List;
 	public abstract fun getShape ()[I
 }
 
@@ -1115,9 +1137,9 @@ public final class space/kscience/kmath/nd/Structure2D$Companion {
 public final class space/kscience/kmath/nd/Structure2D$DefaultImpls {
 	public static fun elements (Lspace/kscience/kmath/nd/Structure2D;)Lkotlin/sequences/Sequence;
 	public static fun get (Lspace/kscience/kmath/nd/Structure2D;[I)Ljava/lang/Object;
-	public static fun getColumns (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/structures/Buffer;
+	public static fun getColumns (Lspace/kscience/kmath/nd/Structure2D;)Ljava/util/List;
 	public static fun getDimension (Lspace/kscience/kmath/nd/Structure2D;)I
-	public static fun getRows (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/structures/Buffer;
+	public static fun getRows (Lspace/kscience/kmath/nd/Structure2D;)Ljava/util/List;
 	public static fun getShape (Lspace/kscience/kmath/nd/Structure2D;)[I
 }
 

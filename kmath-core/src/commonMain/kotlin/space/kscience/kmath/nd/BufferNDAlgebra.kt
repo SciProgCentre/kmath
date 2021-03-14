@@ -79,20 +79,20 @@ public open class BufferedNDField<T, R : Field<T>>(
     override fun scale(a: NDStructure<T>, value: Double): NDStructure<T> = a.map { it * value }
 }
 
-// space factories
-public fun <T, A : Group<T>> NDAlgebra.Companion.space(
+// group factories
+public fun <T, A : Group<T>> NDAlgebra.Companion.group(
     space: A,
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedNDGroup<T, A> = BufferedNDGroup(shape, space, bufferFactory)
 
-public inline fun <T, A : Group<T>, R> A.ndSpace(
+public inline fun <T, A : Group<T>, R> A.ndGroup(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedNDGroup<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return NDAlgebra.space(this, bufferFactory, *shape).run(action)
+    return NDAlgebra.group(this, bufferFactory, *shape).run(action)
 }
 
 //ring factories

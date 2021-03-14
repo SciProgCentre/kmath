@@ -1,7 +1,7 @@
 package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.nd.Matrix
+import space.kscience.kmath.linear.Matrix
 
 
 /**

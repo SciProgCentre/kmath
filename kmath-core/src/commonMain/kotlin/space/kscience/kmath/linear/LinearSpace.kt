@@ -33,8 +33,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     /**
      * Produces a point compatible with matrix space (and possibly optimized for it).
      */
-    public fun buildVector(size: Int, initializer: A.(Int) -> T): Vector<T> =
-        buildMatrix(1, size) { _, j -> initializer(j) }.as1D()
+    public fun buildVector(size: Int, initializer: A.(Int) -> T): Vector<T>
 
     public operator fun Matrix<T>.unaryMinus(): Matrix<T> = buildMatrix(rowNum, colNum) { i, j ->
         -get(i, j)
@@ -154,7 +153,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
 
     /**
      * Gets a feature from the matrix. This function may return some additional features to
-     * [space.kscience.kmath.nd.NDStructure.getFeature].
+     * [group.kscience.kmath.nd.NDStructure.getFeature].
      *
      * @param F the type of feature.
      * @param m the matrix.
@@ -172,16 +171,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
         public fun <T : Any, A : Ring<T>> buffered(
             algebra: A,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): LinearSpace<T, A> = object : LinearSpace<T, A> {
-            override val elementAlgebra: A = algebra
-
-            override fun buildMatrix(
-                rows: Int, columns: Int,
-                initializer: A.(i: Int, j: Int) -> T,
-            ): Matrix<T> = NDStructure.buffered(intArrayOf(rows, columns), bufferFactory) { (i, j) ->
-                algebra.initializer(i, j)
-            }.as2D()
-        }
+        ): LinearSpace<T, A> = LinearSpaceOverNd(algebra,bufferFactory)
 
         public val real: LinearSpace<Double, RealField> = buffered(RealField, Buffer.Companion::real)
 
@@ -193,9 +183,11 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     }
 }
 
+public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
+
 /**
  * Gets a feature from the matrix. This function may return some additional features to
- * [space.kscience.kmath.nd.NDStructure.getFeature].
+ * [group.kscience.kmath.nd.NDStructure.getFeature].
  *
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.

@@ -19,13 +19,13 @@ class RealLUSolverTest {
         LinearSpace.real.run {
             val matrix = matrix(2,2)(
                 3.0, 1.0,
-                1.0, 3.0
+                2.0, 3.0
             )
 
             val lup = lup(matrix)
 
             //Check determinant
-            assertEquals(8.0, lup.determinant)
+            assertEquals(7.0, lup.determinant)
 
             assertEquals(lup.p dot matrix, lup.l dot lup.u)
         }

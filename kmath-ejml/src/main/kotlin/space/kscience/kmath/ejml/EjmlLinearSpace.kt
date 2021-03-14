@@ -5,14 +5,13 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.ScaleOperations
 
 /**
  * Represents context of basic operations operating with [EjmlMatrix].
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<Matrix<Double>> {
+public object EjmlLinearSpace : LinearSpace<Double, RealField> {
 
     override val elementAlgebra: RealField get() = RealField
 
@@ -50,7 +49,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<
     private fun SimpleMatrix.wrapMatrix() = EjmlMatrix(this)
     private fun SimpleMatrix.wrapVector() = EjmlVector(this)
 
-    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * (-1)
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * (-1.0)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin.mult(other.toEjml().origin))
@@ -60,9 +59,6 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField>, ScaleOperations<
 
     public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlMatrix =
         (toEjml().origin - other.toEjml().origin).wrapMatrix()
-
-    public override fun scale(a: Matrix<Double>, value: Double): EjmlMatrix =
-        a.toEjml().origin.scale(value).wrapMatrix()
 
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         toEjml().origin.scale(value).wrapMatrix()
