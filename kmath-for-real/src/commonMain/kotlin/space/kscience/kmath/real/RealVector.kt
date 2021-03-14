@@ -5,6 +5,7 @@ import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.asIterable
+import space.kscience.kmath.structures.indices
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -30,7 +31,7 @@ public inline fun RealVector.mapIndexed(transform: (index: Int, value: Double) -
     Buffer.real(size) { transform(it, get(it)) }
 
 public operator fun RealVector.plus(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value + other[index] }
 }
 
@@ -41,7 +42,7 @@ public operator fun Number.plus(vector: RealVector): RealVector = vector + this
 public operator fun RealVector.unaryMinus(): Buffer<Double> = map { -it }
 
 public operator fun RealVector.minus(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value - other[index] }
 }
 
@@ -50,7 +51,7 @@ public operator fun RealVector.minus(number: Number): RealVector = map { it - nu
 public operator fun Number.minus(vector: RealVector): RealVector = vector.map { toDouble() - it }
 
 public operator fun RealVector.times(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value * other[index] }
 }
 
@@ -59,7 +60,7 @@ public operator fun RealVector.times(number: Number): RealVector = map { it * nu
 public operator fun Number.times(vector: RealVector): RealVector = vector * this
 
 public operator fun RealVector.div(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value / other[index] }
 }
 
@@ -88,3 +89,13 @@ public fun tan(vector: RealVector): RealVector = vector.map { kotlin.math.tan(it
 public fun ln(vector: RealVector): RealVector = vector.map { kotlin.math.ln(it) }
 
 public fun log10(vector: RealVector): RealVector = vector.map { kotlin.math.log10(it) }
+
+// reductions methods
+
+public fun RealVector.sum(): Double {
+    var res = 0.0
+    for (i in indices) {
+        res += get(i)
+    }
+    return res
+}

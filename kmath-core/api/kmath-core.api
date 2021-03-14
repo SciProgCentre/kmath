@@ -432,6 +432,25 @@ public final class space/kscience/kmath/expressions/SymbolIndexerKt {
 	public static final fun withSymbols ([Lspace/kscience/kmath/expressions/Symbol;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
+public final class space/kscience/kmath/linear/BufferLinearSpace : space/kscience/kmath/linear/LinearSpace {
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
+	public fun buildMatrix (IILkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun buildVector (ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
+	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Ring;
+	public fun minus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun minus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun plus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun plus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public fun times (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun times (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;)Lspace/kscience/kmath/structures/Buffer;
+	public fun unaryMinus (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
+	public fun unaryMinus (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+}
+
 public abstract interface class space/kscience/kmath/linear/CholeskyDecompositionFeature : space/kscience/kmath/linear/MatrixFeature {
 	public abstract fun getL ()Lspace/kscience/kmath/nd/Structure2D;
 }
@@ -512,25 +531,6 @@ public final class space/kscience/kmath/linear/LinearSpace$DefaultImpls {
 
 public final class space/kscience/kmath/linear/LinearSpaceKt {
 	public static final fun invoke (Lspace/kscience/kmath/linear/LinearSpace;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-}
-
-public final class space/kscience/kmath/linear/LinearSpaceOverNd : space/kscience/kmath/linear/LinearSpace {
-	public fun <init> (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
-	public fun buildMatrix (IILkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun buildVector (ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
-	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun dot (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Ring;
-	public fun minus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun minus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public fun plus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun plus (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun times (Ljava/lang/Object;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public fun times (Lspace/kscience/kmath/nd/Structure2D;Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun times (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;)Lspace/kscience/kmath/structures/Buffer;
-	public fun unaryMinus (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
-	public fun unaryMinus (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 }
 
 public final class space/kscience/kmath/linear/LupDecomposition : space/kscience/kmath/linear/DeterminantFeature, space/kscience/kmath/linear/LupDecompositionFeature {
