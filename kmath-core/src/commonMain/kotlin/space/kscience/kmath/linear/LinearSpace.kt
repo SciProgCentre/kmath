@@ -156,7 +156,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
 
     /**
      * Gets a feature from the matrix. This function may return some additional features to
-     * [group.kscience.kmath.nd.NDStructure.getFeature].
+     * [space.kscience.kmath.nd.NDStructure.getFeature].
      *
      * @param F the type of feature.
      * @param m the matrix.
@@ -190,7 +190,7 @@ public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R 
 
 /**
  * Gets a feature from the matrix. This function may return some additional features to
- * [group.kscience.kmath.nd.NDStructure.getFeature].
+ * [space.kscience.kmath.nd.NDStructure.getFeature].
  *
  * @param T the type of items in the matrices.
  * @param M the type of operated matrices.
