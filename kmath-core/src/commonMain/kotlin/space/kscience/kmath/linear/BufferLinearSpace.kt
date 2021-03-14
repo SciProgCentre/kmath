@@ -65,7 +65,7 @@ public class BufferLinearSpace<T : Any, A : Ring<T>>(
     override fun Matrix<T>.dot(vector: Vector<T>): Vector<T> {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         return elementAlgebra {
-            val rows = this@dot.rows
+            val rows = this@dot.rows.map { it.linearize() }
             buildVector(rowNum) { i ->
                 val r = rows[i]
                 var res = zero
