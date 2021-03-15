@@ -1,9 +1,8 @@
 package space.kscience.kmath.tensors
 
-public class RealLinearOpsTensorAlgebra :
+public class DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, DoubleTensor>,
-    RealTensorAlgebra()
-{
+    RealTensorAlgebra() {
     override fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
         val buffer = DoubleArray(n * n) { 0.0 }
@@ -26,55 +25,70 @@ public class RealLinearOpsTensorAlgebra :
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
         // todo checks
-        val lu = this.copy()
-        val m = this.shape[0]
-        val pivot = IntArray(m)
-
-
-        // Initialize permutation array and parity
-        for (row in 0 until m) pivot[row] = row
-        var even = true
-
-        for (i in 0 until m) {
-            var maxA = -1.0
-            var iMax = i
-
-            for (k in i until m) {
-                val absA = kotlin.math.abs(lu[k, i])
-                if (absA > maxA) {
-                    maxA = absA
-                    iMax = k
-                }
-            }
-
-            //todo check singularity
-
-            if (iMax != i) {
-
-                val j = pivot[i]
-                pivot[i] = pivot[iMax]
-                pivot[iMax] = j
-                even != even
-
-                for (k in 0 until m) {
-                    val tmp = lu[i, k]
-                    lu[i, k] = lu[iMax, k]
-                    lu[iMax, k] = tmp
-                }
-
-            }
-
-            for (j in i + 1 until m) {
-                lu[j, i] /= lu[i, i]
-                for (k in i + 1 until m) {
-                    lu[j, k] -= lu[j, i] * lu[i, k]
-                }
-            }
+        val luTensor = this.copy()
+        val lu = InnerMatrix(luTensor)
+        //stride TODO!!! move to generator?
+        var matCnt = 1
+        for (i in 0 until this.shape.size - 2) {
+            matCnt *= this.shape[i]
         }
-        return Pair(lu, IntTensor(intArrayOf(m), pivot))
+        val n = this.shape.size
+        val m = this.shape[n - 1]
+        val pivotsShape = IntArray(n - 1) { i ->
+            this.shape[i]
+        }
+        val pivotsTensor = IntTensor(
+            pivotsShape,
+            IntArray(matCnt * m) { 0 }
+        )
+        val pivot = InnerVector(pivotsTensor)
+        for (i in 0 until matCnt) {
+            for (row in 0 until m) pivot[row] = row
+
+            for (i in 0 until m) {
+                var maxA = -1.0
+                var iMax = i
+
+                for (k in i until m) {
+                    val absA = kotlin.math.abs(lu[k, i])
+                    if (absA > maxA) {
+                        maxA = absA
+                        iMax = k
+                    }
+                }
+
+                //todo check singularity
+
+                if (iMax != i) {
+
+                    val j = pivot[i]
+                    pivot[i] = pivot[iMax]
+                    pivot[iMax] = j
+
+                    for (k in 0 until m) {
+                        val tmp = lu[i, k]
+                        lu[i, k] = lu[iMax, k]
+                        lu[iMax, k] = tmp
+                    }
+
+                }
+
+                for (j in i + 1 until m) {
+                    lu[j, i] /= lu[i, i]
+                    for (k in i + 1 until m) {
+                        lu[j, k] -= lu[j, i] * lu[i, k]
+                    }
+                }
+            }
+            lu.makeStep()
+            pivot.makeStep()
+        }
+
+        return Pair(luTensor, pivotsTensor)
     }
 
     override fun luPivot(lu: DoubleTensor, pivots: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+
         // todo checks
         val n = lu.shape[0]
         val p = lu.zeroesLike()
@@ -97,10 +111,12 @@ public class RealLinearOpsTensorAlgebra :
                 }
             }
         }
+
         return Triple(p, l, u)
     }
 
     override fun DoubleTensor.det(): DoubleTensor {
+
         TODO("Not yet implemented")
     }
 
@@ -127,5 +143,5 @@ public class RealLinearOpsTensorAlgebra :
 
 }
 
-public inline fun <R> RealLinearOpsTensorAlgebra(block: RealLinearOpsTensorAlgebra.() -> R): R =
-    RealLinearOpsTensorAlgebra().block()
+public inline fun <R> DoubleLinearOpsTensorAlgebra(block: DoubleLinearOpsTensorAlgebra.() -> R): R =
+    DoubleLinearOpsTensorAlgebra().block()
