@@ -2,8 +2,8 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.structures.ArrayBuffer
 import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.asBuffer
 
 /**
  * The binned data element. Could be a histogram bin with a number of counts or an artificial construct
@@ -40,7 +40,7 @@ public fun interface HistogramBuilder<T : Any>  {
 
 public fun <T : Any, B : Bin<T>> HistogramBuilder<T>.put(point: Point<out T>): Unit = putValue(point, 1.0)
 
-public fun <T : Any> HistogramBuilder<T>.put(vararg point: T): Unit = put(ArrayBuffer(point))
+public fun <T : Any> HistogramBuilder<T>.put(vararg point: T): Unit = put(point.asBuffer())
 
 public fun HistogramBuilder<Double>.put(vararg point: Number): Unit =
     put(RealBuffer(point.map { it.toDouble() }.toDoubleArray()))

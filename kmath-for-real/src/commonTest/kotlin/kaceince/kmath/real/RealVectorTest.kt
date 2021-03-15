@@ -4,30 +4,30 @@ import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.asMatrix
 import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.real.plus
-import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.RealBuffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class RealVectorTest {
     @Test
     fun testSum() {
-        val vector1 = Buffer.real(5) { it.toDouble() }
-        val vector2 =  Buffer.real(5) { 5 - it.toDouble() }
+        val vector1 = RealBuffer(5) { it.toDouble() }
+        val vector2 = RealBuffer(5) { 5 - it.toDouble() }
         val sum = vector1 + vector2
         assertEquals(5.0, sum[2])
     }
 
     @Test
     fun testVectorToMatrix() {
-        val vector =  Buffer.real(5) { it.toDouble() }
+        val vector = RealBuffer(5) { it.toDouble() }
         val matrix = vector.asMatrix()
         assertEquals(4.0, matrix[4, 0])
     }
 
     @Test
     fun testDot() {
-        val vector1 =  Buffer.real(5) { it.toDouble() }
-        val vector2 =  Buffer.real(5) { 5 - it.toDouble() }
+        val vector1 = RealBuffer(5) { it.toDouble() }
+        val vector2 = RealBuffer(5) { 5 - it.toDouble() }
         val matrix1 = vector1.asMatrix()
         val matrix2 = vector2.asMatrix().transpose()
         val product = LinearSpace.real.run { matrix1 dot matrix2 }

@@ -48,8 +48,8 @@ public interface NDStructure<T> {
     public override fun hashCode(): Int
 
     /**
-     * Feature is additional property or hint that does not directly affect the structure, but could in some cases help
-     * optimize operations and performance. If the feature is not present, null is defined.
+     * Feature is some additional strucure information which allows to access it special properties or hints.
+     * If the feature is not present, null is returned.
      */
     @UnstableKMathAPI
     public fun <F : Any> getFeature(type: KClass<F>): F? = null

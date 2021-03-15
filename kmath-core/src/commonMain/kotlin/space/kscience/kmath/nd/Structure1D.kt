@@ -56,3 +56,12 @@ public fun <T> NDStructure<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?
  * Represent this buffer as 1D structure
  */
 public fun <T> Buffer<T>.asND(): Structure1D<T> = Buffer1DWrapper(this)
+
+/**
+ * Expose inner buffer of this [Structure1D] if possible
+ */
+internal fun <T : Any> Structure1D<T>.unwrap(): Buffer<T> = when {
+    this is Buffer1DWrapper<T> -> buffer
+    this is Structure1DWrapper && structure is NDBuffer<T> -> structure.buffer
+    else -> this
+}

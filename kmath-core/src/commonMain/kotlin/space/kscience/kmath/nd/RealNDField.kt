@@ -5,7 +5,6 @@ import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.RealBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -13,7 +12,7 @@ import kotlin.contracts.contract
 @OptIn(UnstableKMathAPI::class)
 public class RealNDField(
     shape: IntArray,
-) : BufferedNDField<Double, RealField>(shape, RealField, Buffer.Companion::real),
+) : BufferedNDField<Double, RealField>(shape, RealField, ::RealBuffer),
     NumbersAddOperations<NDStructure<Double>>,
     ScaleOperations<NDStructure<Double>>,
     ExtendedField<NDStructure<Double>> {

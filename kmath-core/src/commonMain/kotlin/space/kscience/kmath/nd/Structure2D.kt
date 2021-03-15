@@ -86,4 +86,9 @@ public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
-internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> = if (this is Structure2DWrapper) structure else this
+/**
+ * Expose inner [NDStructure] if possible
+ */
+internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> =
+    if (this is Structure2DWrapper) structure
+    else this

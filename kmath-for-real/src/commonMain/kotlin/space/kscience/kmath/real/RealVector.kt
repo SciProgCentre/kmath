@@ -1,8 +1,10 @@
 package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer.Companion.real
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.indices
@@ -20,15 +22,16 @@ public operator fun Buffer.Companion.invoke(vararg doubles: Double): RealVector 
 /**
  * Fill the vector of given [size] with given [value]
  */
+@UnstableKMathAPI
 public fun Buffer.Companion.same(size: Int, value: Number): RealVector = real(size) { value.toDouble() }
 
 // Transformation methods
 
 public inline fun RealVector.map(transform: (Double) -> Double): RealVector =
-    Buffer.real(size) { transform(get(it)) }
+    real(size) { transform(get(it)) }
 
 public inline fun RealVector.mapIndexed(transform: (index: Int, value: Double) -> Double): RealVector =
-    Buffer.real(size) { transform(it, get(it)) }
+    real(size) { transform(it, get(it)) }
 
 public operator fun RealVector.plus(other: RealVector): RealVector {
     require(size == other.size) { "Vector size $size expected but ${other.size} found" }

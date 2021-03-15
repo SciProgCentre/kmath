@@ -3,10 +3,10 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferAccessor2D
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
+import space.kscience.kmath.structures.RealBuffer
 
 /**
  * Common implementation of [LupDecompositionFeature].
@@ -152,7 +152,7 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
 ): LupDecomposition<T> = lup(MutableBuffer.Companion::auto, matrix, checkSingular)
 
 public fun LinearSpace<Double, RealField>.lup(matrix: Matrix<Double>): LupDecomposition<Double> =
-    lup(Buffer.Companion::real, matrix) { it < 1e-11 }
+    lup(::RealBuffer, matrix) { it < 1e-11 }
 
 public fun <T : Any> LupDecomposition<T>.solveWithLup(
     factory: MutableBufferFactory<T>,
@@ -230,7 +230,7 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.inverseWi
 @OptIn(UnstableKMathAPI::class)
 public fun LinearSpace<Double, RealField>.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
     // Use existing decomposition if it is provided by matrix
-    val bufferFactory: MutableBufferFactory<Double> = MutableBuffer.Companion::real
+    val bufferFactory: MutableBufferFactory<Double> = ::RealBuffer
     val decomposition: LupDecomposition<Double> = a.getFeature() ?: lup(bufferFactory, a) { it < 1e-11 }
     return decomposition.solveWithLup(bufferFactory, b)
 }

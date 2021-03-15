@@ -432,7 +432,7 @@ public final class space/kscience/kmath/expressions/SymbolIndexerKt {
 	public static final fun withSymbols ([Lspace/kscience/kmath/expressions/Symbol;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
-public final class space/kscience/kmath/linear/BufferLinearSpace : space/kscience/kmath/linear/LinearSpace {
+public final class space/kscience/kmath/linear/BufferedLinearSpace : space/kscience/kmath/linear/LinearSpace {
 	public fun <init> (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
 	public fun buildMatrix (IILkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/Structure2D;
 	public fun buildVector (ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
@@ -2115,7 +2115,6 @@ public abstract interface class space/kscience/kmath/structures/Buffer {
 public final class space/kscience/kmath/structures/Buffer$Companion {
 	public final fun auto (Lkotlin/reflect/KClass;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public final fun boxing (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
-	public final fun real-8hrHhI4 (ILkotlin/jvm/functions/Function1;)[D
 }
 
 public final class space/kscience/kmath/structures/Buffer$DefaultImpls {
@@ -2123,15 +2122,17 @@ public final class space/kscience/kmath/structures/Buffer$DefaultImpls {
 }
 
 public final class space/kscience/kmath/structures/BufferKt {
-	public static final fun ListBuffer (ILkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public static final fun asBuffer (Ljava/util/List;)Ljava/util/List;
 	public static final fun asBuffer ([Ljava/lang/Object;)Lspace/kscience/kmath/structures/ArrayBuffer;
-	public static final fun asIterable (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Iterable;
+	public static final fun asMutableBuffer (Ljava/util/List;)Ljava/util/List;
 	public static final fun asReadOnly (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public static final fun asSequence (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/sequences/Sequence;
 	public static final fun getIndices (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/ranges/IntRange;
+}
+
+public final class space/kscience/kmath/structures/BufferOperationKt {
+	public static final fun asIterable (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Iterable;
+	public static final fun asSequence (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/sequences/Sequence;
 	public static final fun toList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
-	public static final fun toMutableList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
 }
 
 public abstract interface class space/kscience/kmath/structures/FlaggedBuffer : space/kscience/kmath/structures/Buffer {
@@ -2316,7 +2317,11 @@ public abstract interface class space/kscience/kmath/structures/MutableBuffer : 
 public final class space/kscience/kmath/structures/MutableBuffer$Companion {
 	public final fun auto (Lkotlin/reflect/KClass;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableBuffer;
 	public final fun boxing (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableBuffer;
+	public final fun float-YxruXGw (ILkotlin/jvm/functions/Function1;)[F
+	public final fun int-Ye6GY2U (ILkotlin/jvm/functions/Function1;)[I
+	public final fun long-BuQOeTY (ILkotlin/jvm/functions/Function1;)[J
 	public final fun real-8hrHhI4 (ILkotlin/jvm/functions/Function1;)[D
+	public final fun short-1yRgbGw (ILkotlin/jvm/functions/Function1;)[S
 }
 
 public final class space/kscience/kmath/structures/MutableBuffer$DefaultImpls {
