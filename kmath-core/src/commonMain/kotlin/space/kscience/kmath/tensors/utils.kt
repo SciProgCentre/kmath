@@ -55,7 +55,8 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
             }
 
             val curLinearIndex = tensor.strides.offset(curMultiIndex)
-            resTensor.buffer.unsafeToDoubleArray()[linearIndex] = tensor.buffer.unsafeToDoubleArray()[curLinearIndex]
+            resTensor.buffer.unsafeToDoubleArray()[linearIndex] =
+                tensor.buffer.unsafeToDoubleArray()[tensor.bufferStart + curLinearIndex]
         }
         res.add(resTensor)
     }

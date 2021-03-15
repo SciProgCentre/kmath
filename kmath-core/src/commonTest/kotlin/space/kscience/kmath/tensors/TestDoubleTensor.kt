@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class TestRealTensor {
+class TestDoubleTensor {
 
     @Test
     fun valueTest() = DoubleTensorAlgebra {

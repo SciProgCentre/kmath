@@ -1,32 +1,34 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.nd.MutableNDBuffer
 import space.kscience.kmath.structures.*
 
 
 public open class BufferedTensor<T>(
     override val shape: IntArray,
-    buffer: MutableBuffer<T>
-) :
-    TensorStructure<T>,
-    MutableNDBuffer<T>(
-        TensorStrides(shape),
-        buffer
-    ) {
+    public val buffer: MutableBuffer<T>,
+    internal val bufferStart: Int
+) : TensorStructure<T>
+{
+    public val strides: TensorStrides
+        get() = TensorStrides(shape)
 
+    override fun get(index: IntArray): T = buffer[bufferStart + strides.offset(index)]
 
-    public operator fun get(i: Int, j: Int): T {
-        check(this.dimension == 2) { "Not matrix" }
-        return this[intArrayOf(i, j)]
+    override fun set(index: IntArray, value: T) {
+        buffer[bufferStart + strides.offset(index)] = value
     }
 
-    public operator fun set(i: Int, j: Int, value: T): Unit {
-        check(this.dimension == 2) { "Not matrix" }
-        this[intArrayOf(i, j)] = value
+    override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
+        it to this[it]
     }
+
+    override fun equals(other: Any?): Boolean = false
+
+    override fun hashCode(): Int = 0
 
 }
 
+/*
 //todo make generator mb nextMatrixIndex?
 public class InnerMatrix<T>(private val tensor: BufferedTensor<T>){
     private var offset: Int = 0
@@ -75,25 +77,29 @@ public class InnerVector<T>(private val tensor: BufferedTensor<T>){
         offset += step
     }
 }
-
-
 //todo default buffer = arrayOf(0)???
+ */
+
 public class IntTensor(
     shape: IntArray,
-    buffer: IntArray
-) : BufferedTensor<Int>(shape, IntBuffer(buffer))
+    buffer: IntArray,
+    offset: Int = 0
+) : BufferedTensor<Int>(shape, IntBuffer(buffer), offset)
 
 public class LongTensor(
     shape: IntArray,
-    buffer: LongArray
-) : BufferedTensor<Long>(shape, LongBuffer(buffer))
+    buffer: LongArray,
+    offset: Int = 0
+) : BufferedTensor<Long>(shape, LongBuffer(buffer), offset)
 
 public class FloatTensor(
     shape: IntArray,
-    buffer: FloatArray
-) : BufferedTensor<Float>(shape, FloatBuffer(buffer))
+    buffer: FloatArray,
+    offset: Int = 0
+) : BufferedTensor<Float>(shape, FloatBuffer(buffer), offset)
 
 public class DoubleTensor(
     shape: IntArray,
-    buffer: DoubleArray
-) : BufferedTensor<Double>(shape, RealBuffer(buffer))
+    buffer: DoubleArray,
+    offset: Int = 0
+) : BufferedTensor<Double>(shape, RealBuffer(buffer), offset)

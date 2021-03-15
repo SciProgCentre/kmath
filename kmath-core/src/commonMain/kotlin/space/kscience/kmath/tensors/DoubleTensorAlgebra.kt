@@ -7,11 +7,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         check(this.shape contentEquals intArrayOf(1)) {
             "Inconsistent value for tensor of shape ${shape.toList()}"
         }
-        return this.buffer.unsafeToDoubleArray()[0]
+        return this.buffer.unsafeToDoubleArray()[this.bufferStart]
     }
 
     override fun DoubleTensor.get(i: Int): DoubleTensor {
-        TODO("Not yet implemented")
+        TODO("TOP PRIORITY")
     }
 
     override fun zeros(shape: IntArray): DoubleTensor {
@@ -20,7 +20,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun DoubleTensor.zeroesLike(): DoubleTensor {
         val shape = this.shape
-        val buffer = DoubleArray(this.buffer.size) { 0.0 }
+        val buffer = DoubleArray(this.strides.linearSize) { 0.0 }
         return DoubleTensor(shape, buffer)
     }
 
@@ -31,6 +31,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.onesLike(): DoubleTensor {
         TODO("Not yet implemented")
     }
+
     override fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
         val buffer = DoubleArray(n * n) { 0.0 }
@@ -42,14 +43,13 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.copy(): DoubleTensor {
-        // should be rework as soon as copy() method for NDBuffer will be available
-        return DoubleTensor(this.shape, this.buffer.unsafeToDoubleArray().copyOf())
+        return DoubleTensor(this.shape, this.buffer.unsafeToDoubleArray().copyOf(), this.bufferStart)
     }
 
 
     override fun Double.plus(other: DoubleTensor): DoubleTensor {
-        val resBuffer = DoubleArray(other.buffer.size) { i ->
-            other.buffer.unsafeToDoubleArray()[i] + this
+        val resBuffer = DoubleArray(other.strides.linearSize) { i ->
+            other.buffer.unsafeToDoubleArray()[other.bufferStart + i] + this
         }
         return DoubleTensor(other.shape, resBuffer)
     }
@@ -60,35 +60,36 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.buffer.size) { i ->
+        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
             newThis.buffer.unsafeToDoubleArray()[i] + newOther.buffer.unsafeToDoubleArray()[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
     override fun DoubleTensor.plusAssign(value: Double) {
-        for (i in this.buffer.unsafeToDoubleArray().indices) {
-            this.buffer.unsafeToDoubleArray()[i] += value
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] += value
         }
     }
 
     override fun DoubleTensor.plusAssign(other: DoubleTensor) {
         //todo should be change with broadcasting
-        for (i in this.buffer.unsafeToDoubleArray().indices) {
-            this.buffer.unsafeToDoubleArray()[i] += other.buffer.unsafeToDoubleArray()[i]
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] +=
+                other.buffer.unsafeToDoubleArray()[this.bufferStart + i]
         }
     }
 
     override fun Double.minus(other: DoubleTensor): DoubleTensor {
-        val resBuffer = DoubleArray(other.buffer.size) { i ->
-            this - other.buffer.unsafeToDoubleArray()[i]
+        val resBuffer = DoubleArray(other.strides.linearSize) { i ->
+            this - other.buffer.unsafeToDoubleArray()[other.bufferStart + i]
         }
         return DoubleTensor(other.shape, resBuffer)
     }
 
     override fun DoubleTensor.minus(value: Double): DoubleTensor {
-        val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.unsafeToDoubleArray()[i] - value
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] - value
         }
         return DoubleTensor(this.shape, resBuffer)
     }
@@ -97,15 +98,15 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.buffer.size) { i ->
+        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
             newThis.buffer.unsafeToDoubleArray()[i] - newOther.buffer.unsafeToDoubleArray()[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
     override fun DoubleTensor.minusAssign(value: Double) {
-        for (i in this.buffer.unsafeToDoubleArray().indices) {
-            this.buffer.unsafeToDoubleArray()[i] -= value
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] -= value
         }
     }
 
@@ -115,8 +116,8 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun Double.times(other: DoubleTensor): DoubleTensor {
         //todo should be change with broadcasting
-        val resBuffer = DoubleArray(other.buffer.size) { i ->
-            other.buffer.unsafeToDoubleArray()[i] * this
+        val resBuffer = DoubleArray(other.strides.linearSize) { i ->
+            other.buffer.unsafeToDoubleArray()[other.bufferStart + i] * this
         }
         return DoubleTensor(other.shape, resBuffer)
     }
@@ -126,36 +127,38 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
         //todo should be change with broadcasting
-        val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.unsafeToDoubleArray()[i] * other.buffer.unsafeToDoubleArray()[i]
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.unsafeToDoubleArray()[other.bufferStart + i] *
+                    other.buffer.unsafeToDoubleArray()[other.bufferStart + i]
         }
         return DoubleTensor(this.shape, resBuffer)
     }
 
     override fun DoubleTensor.timesAssign(value: Double) {
         //todo should be change with broadcasting
-        for (i in this.buffer.unsafeToDoubleArray().indices) {
-            this.buffer.unsafeToDoubleArray()[i] *= value
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] *= value
         }
     }
 
     override fun DoubleTensor.timesAssign(other: DoubleTensor) {
         //todo should be change with broadcasting
-        for (i in this.buffer.unsafeToDoubleArray().indices) {
-            this.buffer.unsafeToDoubleArray()[i] *= other.buffer.unsafeToDoubleArray()[i]
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i] *=
+                other.buffer.unsafeToDoubleArray()[this.bufferStart + i]
         }
     }
 
     override fun DoubleTensor.unaryMinus(): DoubleTensor {
-        val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.unsafeToDoubleArray()[i].unaryMinus()
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.unsafeToDoubleArray()[this.bufferStart + i].unaryMinus()
         }
         return DoubleTensor(this.shape, resBuffer)
     }
 
     override fun DoubleTensor.transpose(i: Int, j: Int): DoubleTensor {
         checkTranspose(this.dimension, i, j)
-        val n = this.buffer.size
+        val n = this.strides.linearSize
         val resBuffer = DoubleArray(n)
 
         val resShape = this.shape.copyOf()
@@ -169,14 +172,16 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
             newMultiIndex[i] = newMultiIndex[j].also { newMultiIndex[j] = newMultiIndex[i] }
 
             val linearIndex = resTensor.strides.offset(newMultiIndex)
-            resTensor.buffer.unsafeToDoubleArray()[linearIndex] = this.buffer.unsafeToDoubleArray()[offset]
+            resTensor.buffer.unsafeToDoubleArray()[linearIndex] =
+                this.buffer.unsafeToDoubleArray()[this.bufferStart + offset]
         }
         return resTensor
     }
 
 
     override fun DoubleTensor.view(shape: IntArray): DoubleTensor {
-        return DoubleTensor(shape, this.buffer.unsafeToDoubleArray())
+        checkView(this, shape)
+        return DoubleTensor(shape, this.buffer.unsafeToDoubleArray(), this.bufferStart)
     }
 
     override fun DoubleTensor.viewAs(other: DoubleTensor): DoubleTensor {

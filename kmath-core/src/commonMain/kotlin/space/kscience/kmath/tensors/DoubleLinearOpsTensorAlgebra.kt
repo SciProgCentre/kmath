@@ -9,6 +9,7 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
+        /*
         // todo checks
         val luTensor = this.copy()
         val lu = InnerMatrix(luTensor)
@@ -69,11 +70,13 @@ public class DoubleLinearOpsTensorAlgebra :
             pivot.makeStep()
         }
 
-        return Pair(luTensor, pivotsTensor)
+        return Pair(luTensor, pivotsTensor)*/
+
+        TODO("Andrei, first we need to view and get(Int)")
     }
 
     override fun luPivot(lu: DoubleTensor, pivots: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-
+        /*
         // todo checks
         val n = lu.shape[0]
         val p = lu.zeroesLike()
@@ -97,7 +100,8 @@ public class DoubleLinearOpsTensorAlgebra :
             }
         }
 
-        return Triple(p, l, u)
+        return Triple(p, l, u)*/
+        TODO("Andrei, first we need implement get(Int)")
     }
 
     override fun DoubleTensor.cholesky(): DoubleTensor {

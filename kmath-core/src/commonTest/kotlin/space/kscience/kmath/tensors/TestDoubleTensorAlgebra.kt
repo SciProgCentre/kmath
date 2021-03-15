@@ -4,7 +4,7 @@ package space.kscience.kmath.tensors
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class TestRealTensorAlgebra {
+class TestDoubleTensorAlgebra {
 
     @Test
     fun doublePlus() = DoubleTensorAlgebra {
