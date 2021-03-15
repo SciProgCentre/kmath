@@ -41,6 +41,8 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public operator fun TensorType.timesAssign(other: TensorType): Unit
     public operator fun TensorType.unaryMinus(): TensorType
 
+    //https://pytorch.org/cppdocs/notes/tensor_indexing.html
+    public fun TensorType.get(i: Int): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.transpose.html
     public fun TensorType.transpose(i: Int, j: Int): TensorType

@@ -58,6 +58,20 @@ public interface Structure2D<T> : NDStructure<T> {
 }
 
 /**
+ * Represents mutable [Structure2D].
+ */
+public interface MutableStructure2D<T> : Structure2D<T>, MutableNDStructure<T> {
+    /**
+     * Inserts an item at the specified indices.
+     *
+     * @param i the first index.
+     * @param j the second index.
+     * @param value the value.
+     */
+    public operator fun set(i: Int, j: Int, value: T)
+}
+
+/**
  * A 2D wrapper for nd-structure
  */
 private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
@@ -79,7 +93,34 @@ private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D
 }
 
 /**
- * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
+ * A 2D wrapper for a mutable nd-structure
+ */
+private class MutableStructure2DWrapper<T>(val structure: MutableNDStructure<T>): MutableStructure2D<T>
+{
+    override val shape: IntArray get() = structure.shape
+
+    override val rowNum: Int get() = shape[0]
+    override val colNum: Int get() = shape[1]
+
+    override operator fun get(i: Int, j: Int): T = structure[i, j]
+
+    override fun set(index: IntArray, value: T) {
+        structure[index] = value
+    }
+
+    override operator fun set(i: Int, j: Int, value: T){
+        structure[intArrayOf(i, j)] = value
+    }
+
+    override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
+
+    override fun equals(other: Any?): Boolean = false
+
+    override fun hashCode(): Int = 0
+}
+
+/**
+ * Represent a [NDStructure] as [Structure2D]. Throw error in case of dimension mismatch
  */
 public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
@@ -87,3 +128,11 @@ public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?
 }
 
 internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> = if (this is Structure2DWrapper) structure else this
+
+public fun <T> MutableNDStructure<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
+    2 -> MutableStructure2DWrapper(this)
+    else -> error("Can't create 2d-structure from ${shape.size}d-structure")
+}
+
+internal fun <T> MutableStructure2D<T>.unwrap(): MutableNDStructure<T> =
+    if (this is MutableStructure2DWrapper) structure else this

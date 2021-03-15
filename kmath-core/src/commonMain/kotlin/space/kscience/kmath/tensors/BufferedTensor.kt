@@ -25,7 +25,6 @@ public open class BufferedTensor<T>(
         this[intArrayOf(i, j)] = value
     }
 
-
 }
 
 //todo make generator mb nextMatrixIndex?

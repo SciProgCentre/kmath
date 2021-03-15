@@ -237,6 +237,11 @@ public inline class MutableListBuffer<T>(public val list: MutableList<T>) : Muta
 }
 
 /**
+ * Returns an [MutableListBuffer] that wraps the original list.
+ */
+public fun <T> MutableList<T>.asMutableBuffer(): MutableListBuffer<T> = MutableListBuffer(this)
+
+/**
  * [MutableBuffer] implementation over [Array].
  *
  * @param T the type of elements contained in the buffer.

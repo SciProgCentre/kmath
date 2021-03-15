@@ -10,6 +10,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.buffer.unsafeToDoubleArray()[0]
     }
 
+    override fun DoubleTensor.get(i: Int): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
     override fun zeros(shape: IntArray): DoubleTensor {
         TODO("Not yet implemented")
     }
