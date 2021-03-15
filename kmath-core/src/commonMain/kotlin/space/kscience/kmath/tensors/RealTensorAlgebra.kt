@@ -1,7 +1,5 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.unsafeToDoubleArray
-
 
 public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
 

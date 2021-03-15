@@ -1,6 +1,6 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.unsafeToDoubleArray
+import space.kscience.kmath.structures.*
 import kotlin.math.max
 
 
@@ -94,3 +94,35 @@ internal inline fun <T, TensorType : TensorStructure<T>,
         TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
         TorchTensorAlgebraType.checkView(a: TensorType, shape: IntArray): Unit =
     check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
+
+/**
+ * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
+ */
+internal fun Buffer<Int>.unsafeToIntArray(): IntArray = when(this) {
+    is IntBuffer -> array
+    else -> throw RuntimeException("Failed to cast Buffer to IntArray")
+}
+
+/**
+ * Returns a reference to [LongArray] containing all of the elements of this [Buffer].
+ */
+internal fun Buffer<Long>.unsafeToLongArray(): LongArray = when(this) {
+    is LongBuffer -> array
+    else -> throw RuntimeException("Failed to cast Buffer to LongArray")
+}
+
+/**
+ * Returns a reference to [FloatArray] containing all of the elements of this [Buffer].
+ */
+internal fun Buffer<Float>.unsafeToFloatArray(): FloatArray = when(this) {
+    is FloatBuffer -> array
+    else -> throw RuntimeException("Failed to cast Buffer to FloatArray")
+}
+
+/**
+ * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer].
+ */
+internal fun Buffer<Double>.unsafeToDoubleArray(): DoubleArray = when(this) {
+    is RealBuffer -> array
+    else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
+}

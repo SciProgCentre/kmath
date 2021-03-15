@@ -48,14 +48,6 @@ public fun Buffer<Double>.toDoubleArray(): DoubleArray = when(this) {
 }
 
 /**
- * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer].
- */
-public fun Buffer<Double>.unsafeToDoubleArray(): DoubleArray = when(this) {
-    is RealBuffer -> array
-    else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
-}
-
-/**
  * Returns [RealBuffer] over this array.
  *
  * @receiver the array.

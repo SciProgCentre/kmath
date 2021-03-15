@@ -44,14 +44,6 @@ public fun Buffer<Float>.toFloatArray(): FloatArray = when(this) {
 }
 
 /**
- * Returns a reference to [FloatArray] containing all of the elements of this [Buffer].
- */
-public fun Buffer<Float>.unsafeToFloatArray(): FloatArray = when(this) {
-    is FloatBuffer -> array
-    else -> throw RuntimeException("Failed to cast Buffer to FloatArray")
-}
-
-/**
  * Returns [FloatBuffer] over this array.
  *
  * @receiver the array.

@@ -1,7 +1,5 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.unsafeToIntArray
-
 public class RealLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, RealTensor>,
     RealTensorAlgebra()

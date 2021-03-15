@@ -43,14 +43,6 @@ public fun Buffer<Int>.toIntArray(): IntArray = when(this) {
 }
 
 /**
- * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
- */
-public fun Buffer<Int>.unsafeToIntArray(): IntArray = when(this) {
-    is IntBuffer -> array
-    else -> throw RuntimeException("Failed to cast Buffer to IntArray")
-}
-
-/**
  * Returns [IntBuffer] over this array.
  *
  * @receiver the array.
