@@ -10,7 +10,7 @@ class TestDoubleTensorAlgebra {
     fun doublePlus() = DoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(2), doubleArrayOf(1.0, 2.0))
         val res = 10.0 + tensor
-        assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(11.0,12.0))
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(11.0,12.0))
     }
 
     @Test
@@ -18,7 +18,7 @@ class TestDoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(1), doubleArrayOf(0.0))
         val res = tensor.transpose(0, 0)
 
-        assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(0.0))
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(0.0))
         assertTrue(res.shape contentEquals intArrayOf(1))
     }
 
@@ -27,7 +27,7 @@ class TestDoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res = tensor.transpose(1, 0)
 
-        assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 3.0, 5.0, 2.0, 4.0, 6.0))
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(1.0, 3.0, 5.0, 2.0, 4.0, 6.0))
         assertTrue(res.shape contentEquals intArrayOf(2, 3))
     }
 
@@ -42,9 +42,9 @@ class TestDoubleTensorAlgebra {
         assertTrue(res02.shape contentEquals intArrayOf(3, 2, 1))
         assertTrue(res12.shape contentEquals intArrayOf(1, 3, 2))
 
-        assertTrue(res01.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        assertTrue(res02.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
-        assertTrue(res12.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
+        assertTrue(res01.buffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        assertTrue(res02.buffer.array() contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
+        assertTrue(res12.buffer.array() contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
     }
 
     @Test
@@ -70,9 +70,9 @@ class TestDoubleTensorAlgebra {
         assertTrue(res[1].shape contentEquals intArrayOf(1, 2, 3))
         assertTrue(res[2].shape contentEquals intArrayOf(1, 2, 3))
 
-        assertTrue(res[0].buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        assertTrue(res[1].buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
-        assertTrue(res[2].buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(500.0, 500.0, 500.0, 500.0, 500.0, 500.0))
+        assertTrue(res[0].buffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        assertTrue(res[1].buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
+        assertTrue(res[2].buffer.array() contentEquals doubleArrayOf(500.0, 500.0, 500.0, 500.0, 500.0, 500.0))
     }
 
     @Test
@@ -82,14 +82,14 @@ class TestDoubleTensorAlgebra {
         val tensor3 = DoubleTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
 
         assertTrue((tensor2 - tensor1).shape contentEquals intArrayOf(2, 3))
-        assertTrue((tensor2 - tensor1).buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))
+        assertTrue((tensor2 - tensor1).buffer.array() contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))
 
         assertTrue((tensor3 - tensor1).shape contentEquals intArrayOf(1, 2, 3))
-        assertTrue((tensor3 - tensor1).buffer.unsafeToDoubleArray()
+        assertTrue((tensor3 - tensor1).buffer.array()
                 contentEquals doubleArrayOf(499.0, 498.0, 497.0, 496.0, 495.0, 494.0))
 
         assertTrue((tensor3 - tensor2).shape contentEquals intArrayOf(1, 1, 3))
-        assertTrue((tensor3 - tensor2).buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(490.0, 480.0, 470.0))
+        assertTrue((tensor3 - tensor2).buffer.array() contentEquals doubleArrayOf(490.0, 480.0, 470.0))
     }
 
 }

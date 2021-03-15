@@ -72,7 +72,7 @@ public class DoubleLinearOpsTensorAlgebra :
 
         return Pair(luTensor, pivotsTensor)*/
 
-        TODO("Andrei, first we need to view and get(Int)")
+        TODO("Andrei, use view, get, as2D, as1D")
     }
 
     override fun luPivot(lu: DoubleTensor, pivots: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {

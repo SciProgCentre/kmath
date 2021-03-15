@@ -21,4 +21,10 @@ class TestDoubleTensor {
         assertEquals(tensor[intArrayOf(0,1)], 5.8)
         assertTrue(tensor.elements().map{ it.second }.toList().toDoubleArray() contentEquals tensor.buffer.toDoubleArray())
     }
+
+    @Test
+    fun getTest() = DoubleTensorAlgebra {
+        val tensor = DoubleTensor(intArrayOf(2,2), doubleArrayOf(3.5,5.8,58.4,2.4))
+        assertTrue(tensor[0].elements().map{ it.second }.toList().toDoubleArray() contentEquals doubleArrayOf(3.5,5.8))
+    }
 }
