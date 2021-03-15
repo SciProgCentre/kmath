@@ -104,7 +104,7 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:$version")
+    api("${group}:kmath-core:$version")
     // api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
