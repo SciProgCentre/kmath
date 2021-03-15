@@ -12,6 +12,8 @@ Python's NumPy library. Later we found that kotlin is much more flexible languag
 designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like experience could 
 be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
+[Documentation site (**WIP**)](https://mipt-npm.github.io/kmath/)
+
 ## Publications and talks
 
 * [A conceptual article about context-oriented design](https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2)
@@ -255,7 +257,7 @@ repositories {
 
 dependencies {
     api("space.kscience:kmath-core:0.3.0-dev-2")
-    // api("kscience.kmath:kmath-core-jvm:0.3.0-dev-2") for jvm-specific version
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-2") for jvm-specific version
 }
 ```
 
