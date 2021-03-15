@@ -54,13 +54,13 @@ public inline fun <reified T : Any, A : Algebra<T>, E : Algebra<MST>> A.mst(
 ): MstExpression<T, A> = MstExpression(this, mstAlgebra.block())
 
 /**
- * Builds [MstExpression] over [Space].
+ * Builds [MstExpression] over [Group].
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Space<T>> A.mstInSpace(block: MstSpace.() -> MST): MstExpression<T, A> {
+public inline fun <reified T : Any, A : Group<T>> A.mstInGroup(block: MstGroup.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return MstExpression(this, MstSpace.block())
+    return MstExpression(this, MstGroup.block())
 }
 
 /**
@@ -94,13 +94,13 @@ public inline fun <reified T : Any, A : ExtendedField<T>> A.mstInExtendedField(b
 }
 
 /**
- * Builds [MstExpression] over [FunctionalExpressionSpace].
+ * Builds [MstExpression] over [FunctionalExpressionGroup].
  *
  * @author Alexander Nozik
  */
-public inline fun <reified T : Any, A : Space<T>> FunctionalExpressionSpace<T, A>.mstInSpace(block: MstSpace.() -> MST): MstExpression<T, A> {
+public inline fun <reified T : Any, A : Group<T>> FunctionalExpressionGroup<T, A>.mstInGroup(block: MstGroup.() -> MST): MstExpression<T, A> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return algebra.mstInSpace(block)
+    return algebra.mstInGroup(block)
 }
 
 /**

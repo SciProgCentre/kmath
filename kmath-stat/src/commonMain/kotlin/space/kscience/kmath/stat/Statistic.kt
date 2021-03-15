@@ -43,7 +43,7 @@ public interface ComposableStatistic<T, I, R> : Statistic<T, R> {
 @ExperimentalCoroutinesApi
 private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
     flow: Flow<Buffer<T>>,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ): Flow<I> = flow
     .mapParallel(dispatcher) { computeIntermediate(it) }
     .runningReduce(::composeIntermediate)
@@ -59,27 +59,31 @@ private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
 @ExperimentalCoroutinesApi
 public fun <T, I, R> ComposableStatistic<T, I, R>.flow(
     flow: Flow<Buffer<T>>,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ): Flow<R> = flowIntermediate(flow, dispatcher).map(::toResult)
 
 /**
  * Arithmetic mean
  */
-public class Mean<T>(public val space: Space<T>) : ComposableStatistic<T, Pair<T, Int>, T> {
+public class Mean<T>(
+    private val space: Group<T>,
+    private val division: (sum: T, count: Int) -> T,
+) : ComposableStatistic<T, Pair<T, Int>, T> {
     public override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =
         space { sum(data.asIterable()) } to data.size
 
     public override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
         space { first.first + second.first } to (first.second + second.second)
 
-    public override suspend fun toResult(intermediate: Pair<T, Int>): T =
-        space { intermediate.first / intermediate.second }
+    public override suspend fun toResult(intermediate: Pair<T, Int>): T = space {
+        division(intermediate.first, intermediate.second)
+    }
 
     public companion object {
         //TODO replace with optimized version which respects overflow
-        public val real: Mean<Double> = Mean(RealField)
-        public val int: Mean<Int> = Mean(IntRing)
-        public val long: Mean<Long> = Mean(LongRing)
+        public val real: Mean<Double> = Mean(RealField) { sum, count -> sum / count }
+        public val int: Mean<Int> = Mean(IntRing) { sum, count -> sum / count }
+        public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
     }
 }
 

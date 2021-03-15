@@ -1,34 +1,38 @@
 package space.kscience.kmath.benchmarks
 
-import org.openjdk.jmh.annotations.Benchmark
-import org.openjdk.jmh.annotations.Scope
-import org.openjdk.jmh.annotations.State
+import kotlinx.benchmark.Benchmark
+import kotlinx.benchmark.Blackhole
+import kotlinx.benchmark.Scope
+import kotlinx.benchmark.State
 import java.nio.IntBuffer
 
 @State(Scope.Benchmark)
 internal class ArrayBenchmark {
     @Benchmark
-    fun benchmarkArrayRead() {
+    fun benchmarkArrayRead(blackhole: Blackhole) {
         var res = 0
-        for (i in 1..space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size) res += space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.array[space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size - i]
+        for (i in 1..size) res += array[size - i]
+        blackhole.consume(res)
     }
 
     @Benchmark
-    fun benchmarkBufferRead() {
+    fun benchmarkBufferRead(blackhole: Blackhole) {
         var res = 0
-        for (i in 1..space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size) res += space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.arrayBuffer[space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size - i]
+        for (i in 1..size) res += arrayBuffer[size - i]
+        blackhole.consume(res)
     }
 
     @Benchmark
-    fun nativeBufferRead() {
+    fun nativeBufferRead(blackhole: Blackhole) {
         var res = 0
-        for (i in 1..space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size) res += space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.nativeBuffer[space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size - i]
+        for (i in 1..size) res += nativeBuffer[size - i]
+        blackhole.consume(res)
     }
 
-    companion object {
-        const val size: Int = 1000
-        val array: IntArray = IntArray(space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size) { it }
-        val arrayBuffer: IntBuffer = IntBuffer.wrap(space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.array)
-        val nativeBuffer: IntBuffer = IntBuffer.allocate(space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size).also { for (i in 0 until space.kscience.kmath.benchmarks.ArrayBenchmark.Companion.size) it.put(i, i) }
+    private companion object {
+        private const val size = 1000
+        private val array = IntArray(size) { it }
+        private val arrayBuffer = IntBuffer.wrap(array)
+        private val nativeBuffer = IntBuffer.allocate(size).also { for (i in 0 until size) it.put(i, i) }
     }
 }

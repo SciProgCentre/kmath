@@ -1,14 +1,15 @@
 pluginManagement {
     repositories {
+        maven("https://repo.kotlin.link")
+        mavenLocal()
         gradlePluginPortal()
         jcenter()
-        maven("https://repo.kotlin.link")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.8.0"
-    val kotlinVersion = "1.4.30"
+    val toolsVersion = "0.9.1"
+    val kotlinVersion = "1.4.31"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"

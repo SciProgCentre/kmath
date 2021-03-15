@@ -1,4 +1,4 @@
-// TODO move to common when https://github.com/h0tk3y/better-parse/pull/33 is merged
+// TODO move to common when https://github.com/h0tk3y/better-parse/pull/37 is merged
 
 package space.kscience.kmath.ast
 
@@ -14,9 +14,9 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import space.kscience.kmath.operations.FieldOperations
+import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
 import space.kscience.kmath.operations.RingOperations
-import space.kscience.kmath.operations.SpaceOperations
 
 /**
  * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
@@ -25,8 +25,8 @@ import space.kscience.kmath.operations.SpaceOperations
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
-    private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?")
-    private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*")
+    private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
+    private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by literalToken("(")
     private val rpar: Token by literalToken(")")
     private val comma: Token by literalToken(",")
@@ -35,7 +35,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val div: Token by literalToken("/")
     private val minus: Token by literalToken("-")
     private val plus: Token by literalToken("+")
-    private val ws: Token by regexToken("\\s+", ignore = true)
+    private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
     private val singular: Parser<MST> by id use { MST.Symbolic(text) }
@@ -55,7 +55,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
-        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
+        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(GroupOperations.MINUS_OPERATION, it) })
         .or(-lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
 
     private val powChain: Parser<MST> by leftAssociative(term = term, operator = pow) { a, _, b ->
@@ -77,9 +77,9 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         operator = plus or minus use TokenMatch::type
     ) { a, op, b ->
         if (op == plus)
-            MST.Binary(SpaceOperations.PLUS_OPERATION, a, b)
+            MST.Binary(GroupOperations.PLUS_OPERATION, a, b)
         else
-            MST.Binary(SpaceOperations.MINUS_OPERATION, a, b)
+            MST.Binary(GroupOperations.MINUS_OPERATION, a, b)
     }
 
     override val rootParser: Parser<MST> by subSumChain

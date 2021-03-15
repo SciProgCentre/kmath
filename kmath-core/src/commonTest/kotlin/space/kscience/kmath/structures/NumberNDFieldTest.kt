@@ -1,5 +1,6 @@
 package space.kscience.kmath.structures
 
+import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.invoke
@@ -10,7 +11,7 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = NDAlgebra.real(3,3)
+    val algebra = NDAlgebra.real(3, 3)
     val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 
@@ -33,7 +34,9 @@ class NumberNDFieldTest {
     @Test
     fun testGeneration() {
 
-        val array = Structure2D.real(3, 3) { i, j -> (i * 10 + j).toDouble() }
+        val array = LinearSpace.real.buildMatrix(3, 3) { i, j ->
+            (i * 10 + j).toDouble()
+        }
 
         for (i in 0..2) {
             for (j in 0..2) {

@@ -1,11 +1,13 @@
 package space.kscience.kmath.testutils
 
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import kotlin.test.assertEquals
 
-internal open class RingVerifier<T>(override val algebra: Ring<T>, a: T, b: T, c: T, x: Number) :
-    SpaceVerifier<T>(algebra, a, b, c, x) {
+internal open class RingVerifier<T, A>(algebra: A, a: T, b: T, c: T, x: Number) :
+    SpaceVerifier<T, A>(algebra, a, b, c, x) where A : Ring<T>, A : ScaleOperations<T> {
+
     override fun verify() {
         super.verify()
 

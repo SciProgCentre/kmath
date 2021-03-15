@@ -36,10 +36,12 @@ public inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer = Fl
 public fun FloatBuffer(vararg floats: Float): FloatBuffer = FloatBuffer(floats)
 
 /**
- * Returns a [FloatArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [FloatArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Float>.array: FloatArray
-    get() = (if (this is FloatBuffer) array else FloatArray(size) { get(it) })
+public fun Buffer<Float>.toFloatArray(): FloatArray = when (this) {
+    is FloatBuffer -> array.copyOf()
+    else -> FloatArray(size, ::get)
+}
 
 /**
  * Returns [FloatBuffer] over this array.

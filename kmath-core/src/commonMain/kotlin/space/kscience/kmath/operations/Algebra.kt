@@ -87,10 +87,11 @@ public interface Algebra<T> {
      * @param right the second argument of operation.
      * @return a result of operation.
      */
-    public fun binaryOperation(operation: String, left: T, right: T): T = binaryOperationFunction(operation)(left, right)
+    public fun binaryOperation(operation: String, left: T, right: T): T =
+        binaryOperationFunction(operation)(left, right)
 }
 
-public fun <T: Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
+public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
 
 /**
  * Call a block with an [Algebra] as receiver.
@@ -104,7 +105,7 @@ public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = r
  *
  * @param T the type of element of this semispace.
  */
-public interface SpaceOperations<T> : Algebra<T> {
+public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
@@ -114,15 +115,6 @@ public interface SpaceOperations<T> : Algebra<T> {
      */
     public fun add(a: T, b: T): T
 
-    /**
-     * Multiplication of element by scalar.
-     *
-     * @param a the multiplier.
-     * @param k the multiplicand.
-     * @return the produce.
-     */
-    public fun multiply(a: T, k: Number): T
-
     // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176
 
     /**
@@ -131,7 +123,7 @@ public interface SpaceOperations<T> : Algebra<T> {
      * @receiver this value.
      * @return the additive inverse of this value.
      */
-    public operator fun T.unaryMinus(): T = multiply(this, -1.0)
+    public operator fun T.unaryMinus(): T
 
     /**
      * Returns this value.
@@ -159,35 +151,8 @@ public interface SpaceOperations<T> : Algebra<T> {
      */
     public operator fun T.minus(b: T): T = add(this, -b)
 
-    /**
-     * Multiplication of this element by a scalar.
-     *
-     * @receiver the multiplier.
-     * @param k the multiplicand.
-     * @return the product.
-     */
-    public operator fun T.times(k: Number): T = multiply(this, k)
-
-    /**
-     * Division of this element by scalar.
-     *
-     * @receiver the dividend.
-     * @param k the divisor.
-     * @return the quotient.
-     */
-    public operator fun T.div(k: Number): T = multiply(this, 1.0 / k.toDouble())
-
-    /**
-     * Multiplication of this number by element.
-     *
-     * @receiver the multiplier.
-     * @param b the multiplicand.
-     * @return the product.
-     */
-    public operator fun Number.times(b: T): T = b * this
-
     public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
-        PLUS_OPERATION -> { arg -> arg }
+        PLUS_OPERATION -> { arg -> +arg }
         MINUS_OPERATION -> { arg -> -arg }
         else -> super.unaryOperationFunction(operation)
     }
@@ -212,12 +177,11 @@ public interface SpaceOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add] and
- * scalar multiplication [multiply].
+ * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
-public interface Space<T> : SpaceOperations<T> {
+public interface Group<T> : GroupOperations<T> {
     /**
      * The neutral element of addition.
      */
@@ -230,7 +194,7 @@ public interface Space<T> : SpaceOperations<T> {
  *
  * @param T the type of element of this semiring.
  */
-public interface RingOperations<T> : SpaceOperations<T> {
+public interface RingOperations<T> : GroupOperations<T> {
     /**
      * Multiplies two elements.
      *
@@ -266,7 +230,7 @@ public interface RingOperations<T> : SpaceOperations<T> {
  *
  * @param T the type of element of this ring.
  */
-public interface Ring<T> : Space<T>, RingOperations<T> {
+public interface Ring<T> : Group<T>, RingOperations<T> {
     /**
      * neutral operation for multiplication
      */
@@ -317,13 +281,6 @@ public interface FieldOperations<T> : RingOperations<T> {
  *
  * @param T the type of element of this semifield.
  */
-public interface Field<T> : Ring<T>, FieldOperations<T> {
-    /**
-     * Division of element by scalar.
-     *
-     * @receiver the dividend.
-     * @param b the divisor.
-     * @return the quotient.
-     */
-    public operator fun Number.div(b: T): T = this * divide(one, b)
+public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
+    override fun number(value: Number): T = scale(one, value.toDouble())
 }

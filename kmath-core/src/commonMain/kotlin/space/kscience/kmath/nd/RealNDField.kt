@@ -2,9 +2,9 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
+import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.operations.RingWithNumbers
-import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.RealBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -12,8 +12,9 @@ import kotlin.contracts.contract
 @OptIn(UnstableKMathAPI::class)
 public class RealNDField(
     shape: IntArray,
-) : BufferedNDField<Double, RealField>(shape, RealField, Buffer.Companion::real),
-    RingWithNumbers<NDStructure<Double>>,
+) : BufferedNDField<Double, RealField>(shape, RealField, ::RealBuffer),
+    NumbersAddOperations<NDStructure<Double>>,
+    ScaleOperations<NDStructure<Double>>,
     ExtendedField<NDStructure<Double>> {
 
     override val zero: NDBuffer<Double> by lazy { produce { zero } }
@@ -74,6 +75,8 @@ public class RealNDField(
         }
         return NDBuffer(strides, buffer)
     }
+
+    override fun scale(a: NDStructure<Double>, value: Double): NDStructure<Double> = a.map { it * value }
 
     override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
 

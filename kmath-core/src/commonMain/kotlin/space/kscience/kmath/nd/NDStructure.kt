@@ -48,11 +48,11 @@ public interface NDStructure<T> {
     public override fun hashCode(): Int
 
     /**
-     * Feature is additional property or hint that does not directly affect the structure, but could in some cases help
-     * optimize operations and performance. If the feature is not present, null is defined.
+     * Feature is some additional strucure information which allows to access it special properties or hints.
+     * If the feature is not present, null is returned.
      */
     @UnstableKMathAPI
-    public fun <T : Any> getFeature(type: KClass<T>): T? = null
+    public fun <F : Any> getFeature(type: KClass<F>): F? = null
 
     public companion object {
         /**
@@ -74,7 +74,7 @@ public interface NDStructure<T> {
          *
          * Strides should be reused if possible.
          */
-        public fun <T> build(
+        public fun <T> buffered(
             strides: Strides,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T,
@@ -94,11 +94,11 @@ public interface NDStructure<T> {
             crossinline initializer: (IntArray) -> T,
         ): NDBuffer<T> = NDBuffer(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
-        public fun <T> build(
+        public fun <T> buffered(
             shape: IntArray,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
             initializer: (IntArray) -> T,
-        ): NDBuffer<T> = build(DefaultStrides(shape), bufferFactory, initializer)
+        ): NDBuffer<T> = buffered(DefaultStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
             shape: IntArray,

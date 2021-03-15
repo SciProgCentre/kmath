@@ -21,29 +21,28 @@ public typealias TBase = ULong
  * @author Robert Drynkin (https://github.com/robdrynkin) and Peter Klimai (https://github.com/pklimai)
  */
 @OptIn(UnstableKMathAPI::class)
-public object BigIntField : Field<BigInt>, RingWithNumbers<BigInt> {
+public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOperations<BigInt> {
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
-    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
     override fun number(value: Number): BigInt = value.toLong().toBigInt()
 
-    override fun multiply(a: BigInt, k: Number): BigInt = a.times(number(k))
-
+    @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+    override fun BigInt.unaryMinus(): BigInt = -this
+    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
     override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
+    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
 
     public operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
-
     public operator fun String.unaryMinus(): BigInt =
         -(this.parseBigInteger() ?: error("Can't parse $this as big integer"))
-
-    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
 }
 
 public class BigInt internal constructor(
     private val sign: Byte,
-    private val magnitude: Magnitude
-    ) : Comparable<BigInt> {
+    private val magnitude: Magnitude,
+) : Comparable<BigInt> {
     public override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1
