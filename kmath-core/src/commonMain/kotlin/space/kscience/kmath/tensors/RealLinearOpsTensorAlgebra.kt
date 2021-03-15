@@ -1,7 +1,6 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.toDoubleArray
-import space.kscience.kmath.structures.toIntArray
+import space.kscience.kmath.structures.unsafeToIntArray
 
 public class RealLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, RealTensor>,
@@ -81,7 +80,7 @@ public class RealLinearOpsTensorAlgebra :
         // todo checks
         val n = lu.shape[0]
         val p = lu.zeroesLike()
-        pivots.buffer.toIntArray().forEachIndexed { i, pivot ->
+        pivots.buffer.unsafeToIntArray().forEachIndexed { i, pivot ->
             p[i, pivot] = 1.0
         }
         val l = lu.zeroesLike()

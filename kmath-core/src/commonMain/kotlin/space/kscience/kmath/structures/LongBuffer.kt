@@ -43,6 +43,14 @@ public fun Buffer<Long>.toLongArray(): LongArray = when(this) {
 }
 
 /**
+ * Returns a reference to [LongArray] containing all of the elements of this [Buffer].
+ */
+public fun Buffer<Long>.unsafeToLongArray(): LongArray = when(this) {
+    is LongBuffer -> array
+    else -> throw RuntimeException("Failed to cast Buffer to LongArray")
+}
+
+/**
  * Returns [LongBuffer] over this array.
  *
  * @receiver the array.
