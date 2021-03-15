@@ -1,8 +1,9 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
+
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
 
-[![Kotlin JS IR supported](https://img.shields.io/badge/Kotlin%2FJS-IR%20supported-yellow)](https://kotl.in/jsirsupported)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22%20AND%20a:%22kmath-core%22)
 
 # KMath
 
@@ -253,8 +254,8 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:() -> kotlin.Any")
-    // api("kscience.kmath:kmath-core-jvm:() -> kotlin.Any") for jvm-specific version
+    api("kscience.kmath:kmath-core:0.3.0-dev-2")
+    // api("kscience.kmath:kmath-core-jvm:0.3.0-dev-2") for jvm-specific version
 }
 ```
 
