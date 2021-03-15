@@ -1,8 +1,8 @@
 package space.kscience.kmath.tensors
 
-public class RealAnalyticTensorAlgebra:
+public class DoubleAnalyticTensorAlgebra:
     AnalyticTensorAlgebra<Double, DoubleTensor>,
-    RealTensorAlgebra()
+    DoubleTensorAlgebra()
 {
     override fun DoubleTensor.exp(): DoubleTensor {
         TODO("Not yet implemented")
@@ -146,5 +146,5 @@ public class RealAnalyticTensorAlgebra:
 
 }
 
-public inline fun <R> RealAnalyticTensorAlgebra(block: RealAnalyticTensorAlgebra.() -> R): R =
-    RealAnalyticTensorAlgebra().block()
+public inline fun <R> DoubleAnalyticTensorAlgebra(block: DoubleAnalyticTensorAlgebra.() -> R): R =
+    DoubleAnalyticTensorAlgebra().block()

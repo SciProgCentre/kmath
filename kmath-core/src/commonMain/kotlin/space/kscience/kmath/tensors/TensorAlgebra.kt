@@ -17,6 +17,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/generated/torch.full_like.html#torch.full_like
     public fun TensorType.fullLike(value: T): TensorType
 
+    //https://pytorch.org/docs/stable/generated/torch.eye.html
+    public fun eye(n: Int): TensorType
+
     public fun TensorType.copy(): TensorType
 
     public operator fun T.plus(other: TensorType): TensorType
@@ -46,6 +49,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public fun TensorType.view(shape: IntArray): TensorType
     public fun TensorType.viewAs(other: TensorType): TensorType
 
+    //https://pytorch.org/docs/stable/linalg.html#torch.linalg.det
+    public fun TensorType.det(): TensorType
+
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType
 
@@ -61,29 +67,14 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/generated/torch.cumprod.html#torch.cumprod
     public fun TensorType.cumprod(dim: Int): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.max.html#torch.max
-    public fun TensorType.max(dim: Int, keepDim: Boolean): TensorType
+    //https://pytorch.org/docs/stable/generated/torch.matmul.html
+    public infix fun TensorType.dot(other: TensorType): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.cummax.html#torch.cummax
-    public fun TensorType.cummax(dim: Int): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.min.html#torch.min
-    public fun TensorType.min(dim: Int, keepDim: Boolean): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.cummin.html#torch.cummin
-    public fun TensorType.cummin(dim: Int): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.median.html#torch.median
-    public fun TensorType.median(dim: Int, keepDim: Boolean): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.maximum.html#torch.maximum
-    public fun maximum(lhs: TensorType, rhs: TensorType)
-
-    //https://pytorch.org/docs/stable/generated/torch.minimum.html#torch.minimum
-    public fun minimum(lhs: TensorType, rhs: TensorType)
-
-    //https://pytorch.org/docs/stable/generated/torch.sort.html#torch.sort
-    public fun TensorType.sort(dim: Int, keepDim: Boolean, descending: Boolean): TensorType
+    //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
+    public fun diagonalEmbedding(
+        diagonalEntries: TensorType,
+        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
+    ): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.cat.html#torch.cat
     public fun cat(tensors: List<TensorType>, dim: Int): TensorType

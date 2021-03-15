@@ -2,26 +2,11 @@ package space.kscience.kmath.tensors
 
 public class DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, DoubleTensor>,
-    RealTensorAlgebra() {
-    override fun eye(n: Int): DoubleTensor {
-        val shape = intArrayOf(n, n)
-        val buffer = DoubleArray(n * n) { 0.0 }
-        val res = DoubleTensor(shape, buffer)
-        for (i in 0 until n) {
-            res[intArrayOf(i, i)] = 1.0
-        }
-        return res
+    DoubleTensorAlgebra() {
+
+    override fun DoubleTensor.inv(): DoubleTensor {
+        TODO("Not yet implemented")
     }
-
-
-    override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
-        TODO("Alya")
-    }
-
-    override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
-        TODO("Alya")
-    }
-
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
         // todo checks
@@ -113,15 +98,6 @@ public class DoubleLinearOpsTensorAlgebra :
         }
 
         return Triple(p, l, u)
-    }
-
-    override fun DoubleTensor.det(): DoubleTensor {
-
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.inv(): DoubleTensor {
-        TODO("Not yet implemented")
     }
 
     override fun DoubleTensor.cholesky(): DoubleTensor {

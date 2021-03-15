@@ -7,14 +7,14 @@ import kotlin.test.assertTrue
 class TestRealTensorAlgebra {
 
     @Test
-    fun doublePlus() = RealTensorAlgebra {
+    fun doublePlus() = DoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(2), doubleArrayOf(1.0, 2.0))
         val res = 10.0 + tensor
         assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(11.0,12.0))
     }
 
     @Test
-    fun transpose1x1() = RealTensorAlgebra {
+    fun transpose1x1() = DoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(1), doubleArrayOf(0.0))
         val res = tensor.transpose(0, 0)
 
@@ -23,7 +23,7 @@ class TestRealTensorAlgebra {
     }
 
     @Test
-    fun transpose3x2() = RealTensorAlgebra {
+    fun transpose3x2() = DoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res = tensor.transpose(1, 0)
 
@@ -32,7 +32,7 @@ class TestRealTensorAlgebra {
     }
 
     @Test
-    fun transpose1x2x3() = RealTensorAlgebra {
+    fun transpose1x2x3() = DoubleTensorAlgebra {
         val tensor = DoubleTensor(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res01 = tensor.transpose(0, 1)
         val res02 = tensor.transpose(0, 2)
@@ -48,7 +48,7 @@ class TestRealTensorAlgebra {
     }
 
     @Test
-    fun broadcastShapes() = RealTensorAlgebra {
+    fun broadcastShapes() = DoubleTensorAlgebra {
         assertTrue(broadcastShapes(
             intArrayOf(2, 3), intArrayOf(1, 3), intArrayOf(1, 1, 1)
         ) contentEquals intArrayOf(1, 2, 3))
@@ -59,7 +59,7 @@ class TestRealTensorAlgebra {
     }
 
     @Test
-    fun broadcastTensors() = RealTensorAlgebra {
+    fun broadcastTensors() = DoubleTensorAlgebra {
         val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = DoubleTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
@@ -76,7 +76,7 @@ class TestRealTensorAlgebra {
     }
 
     @Test
-    fun minusTensor() = RealTensorAlgebra {
+    fun minusTensor() = DoubleTensorAlgebra {
         val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = DoubleTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))

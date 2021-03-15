@@ -8,6 +8,12 @@ public interface ComplexTensorAlgebra<T,
     //https://pytorch.org/docs/stable/generated/torch.view_as_complex.html
     public fun RealTensorType.viewAsComplex(): ComplexTensorType
 
+    // Embed a real tensor as real + i * imaginary
+    public fun RealTensorType.cartesianEmbedding(imaginary: RealTensorType): ComplexTensorType
+
+    // Embed a real tensor as real * exp(i * angle)
+    public fun RealTensorType.polarEmbedding(angle: RealTensorType): ComplexTensorType
+
     //https://pytorch.org/docs/stable/generated/torch.angle.html
     public fun ComplexTensorType.angle(): RealTensorType
 

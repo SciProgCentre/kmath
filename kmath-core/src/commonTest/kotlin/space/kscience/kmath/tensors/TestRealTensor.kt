@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 class TestRealTensor {
 
     @Test
-    fun valueTest() = RealTensorAlgebra {
+    fun valueTest() = DoubleTensorAlgebra {
         val value = 12.5
         val tensor = DoubleTensor(intArrayOf(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)

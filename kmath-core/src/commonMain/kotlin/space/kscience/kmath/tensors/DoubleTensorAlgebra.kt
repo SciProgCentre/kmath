@@ -1,7 +1,7 @@
 package space.kscience.kmath.tensors
 
 
-public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
+public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
 
     override fun DoubleTensor.value(): Double {
         check(this.shape contentEquals intArrayOf(1)) {
@@ -26,6 +26,15 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, Doubl
 
     override fun DoubleTensor.onesLike(): DoubleTensor {
         TODO("Not yet implemented")
+    }
+    override fun eye(n: Int): DoubleTensor {
+        val shape = intArrayOf(n, n)
+        val buffer = DoubleArray(n * n) { 0.0 }
+        val res = DoubleTensor(shape, buffer)
+        for (i in 0 until n) {
+            res[intArrayOf(i, i)] = 1.0
+        }
+        return res
     }
 
     override fun DoubleTensor.copy(): DoubleTensor {
@@ -199,36 +208,12 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, Doubl
         TODO("Not yet implemented")
     }
 
-    override fun DoubleTensor.max(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
+    override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
+        TODO("Alya")
     }
 
-    override fun DoubleTensor.cummax(dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.min(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.cummin(dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.median(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun maximum(lhs: DoubleTensor, rhs: DoubleTensor) {
-        TODO("Not yet implemented")
-    }
-
-    override fun minimum(lhs: DoubleTensor, rhs: DoubleTensor) {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.sort(dim: Int, keepDim: Boolean, descending: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
+    override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
+        TODO("Alya")
     }
 
     override fun cat(tensors: List<DoubleTensor>, dim: Int): DoubleTensor {
@@ -276,7 +261,11 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, Doubl
         TODO("Not yet implemented")
     }
 
+    override fun DoubleTensor.det(): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
 }
 
-public inline fun <R> RealTensorAlgebra(block: RealTensorAlgebra.() -> R): R =
-    RealTensorAlgebra().block()
+public inline fun <R> DoubleTensorAlgebra(block: DoubleTensorAlgebra.() -> R): R =
+    DoubleTensorAlgebra().block()
