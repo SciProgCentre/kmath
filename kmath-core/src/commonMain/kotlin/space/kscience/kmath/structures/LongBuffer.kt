@@ -37,7 +37,7 @@ public fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
 /**
  * Returns a new [LongArray] containing all of the elements of this [Buffer].
  */
-public fun Buffer<Long>.toLongArray(): LongArray = when(this) {
+public fun Buffer<Long>.toLongArray(): LongArray = when (this) {
     is LongBuffer -> array.copyOf()
     else -> LongArray(size, ::get)
 }

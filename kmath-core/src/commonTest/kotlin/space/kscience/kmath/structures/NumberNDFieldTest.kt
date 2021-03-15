@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = NDAlgebra.real(3,3)
+    val algebra = NDAlgebra.real(3, 3)
     val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 

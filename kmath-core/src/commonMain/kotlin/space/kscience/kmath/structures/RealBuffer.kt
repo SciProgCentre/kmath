@@ -42,7 +42,7 @@ public fun RealBuffer.contentEquals(vararg doubles: Double): Boolean = array.con
 /**
  * Returns a new [DoubleArray] containing all of the elements of this [Buffer].
  */
-public fun Buffer<Double>.toDoubleArray(): DoubleArray = when(this) {
+public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
     is RealBuffer -> array.copyOf()
     else -> DoubleArray(size, ::get)
 }

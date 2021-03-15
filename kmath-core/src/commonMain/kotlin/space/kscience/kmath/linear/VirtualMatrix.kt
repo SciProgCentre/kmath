@@ -10,7 +10,7 @@ import space.kscience.kmath.nd.NDStructure
 public class VirtualMatrix<T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
-    public val generator: (i: Int, j: Int) -> T
+    public val generator: (i: Int, j: Int) -> T,
 ) : Matrix<T> {
 
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)

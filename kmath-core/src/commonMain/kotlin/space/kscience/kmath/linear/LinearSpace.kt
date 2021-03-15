@@ -175,7 +175,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
         public fun <T : Any, A : Ring<T>> buffered(
             algebra: A,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): LinearSpace<T, A> = BufferedLinearSpace(algebra,bufferFactory)
+        ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
         public val real: LinearSpace<Double, RealField> = buffered(RealField, ::RealBuffer)
 

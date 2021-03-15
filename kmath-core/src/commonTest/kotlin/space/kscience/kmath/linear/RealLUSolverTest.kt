@@ -17,7 +17,7 @@ class RealLUSolverTest {
     @Test
     fun testDecomposition() {
         LinearSpace.real.run {
-            val matrix = matrix(2,2)(
+            val matrix = matrix(2, 2)(
                 3.0, 1.0,
                 2.0, 3.0
             )
@@ -33,14 +33,14 @@ class RealLUSolverTest {
 
     @Test
     fun testInvert() {
-        val matrix = LinearSpace.real.matrix(2,2)(
+        val matrix = LinearSpace.real.matrix(2, 2)(
             3.0, 1.0,
             1.0, 3.0
         )
 
         val inverted = LinearSpace.real.inverseWithLup(matrix)
 
-        val expected = LinearSpace.real.matrix(2,2)(
+        val expected = LinearSpace.real.matrix(2, 2)(
             0.375, -0.125,
             -0.125, 0.375
         )

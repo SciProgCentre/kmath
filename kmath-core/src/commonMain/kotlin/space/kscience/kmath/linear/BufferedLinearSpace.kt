@@ -48,7 +48,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
     override fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         return elementAlgebra {
-            val rows = this@dot.rows.map{it.linearize()}
+            val rows = this@dot.rows.map { it.linearize() }
             val columns = other.columns.map { it.linearize() }
             buildMatrix(rowNum, other.colNum) { i, j ->
                 val r = rows[i]

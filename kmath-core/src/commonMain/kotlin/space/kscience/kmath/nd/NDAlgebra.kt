@@ -19,7 +19,7 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  * @param C the type of the element context.
  * @param N the type of the structure.
  */
-public interface NDAlgebra<T, C: Algebra<T>> {
+public interface NDAlgebra<T, C : Algebra<T>> {
     /**
      * The shape of ND-structures this algebra operates on.
      */
@@ -65,11 +65,12 @@ public interface NDAlgebra<T, C: Algebra<T>> {
  * @param structures the structures to check.
  * @return the array of valid structures.
  */
-internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> = structures
-    .map(NDStructure<T>::shape)
-    .singleOrNull { !shape.contentEquals(it) }
-    ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
-    ?: structures
+internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> =
+    structures
+        .map(NDStructure<T>::shape)
+        .singleOrNull { !shape.contentEquals(it) }
+        ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
+        ?: structures
 
 /**
  * Checks if given element is consistent with this context.
@@ -77,7 +78,7 @@ internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: ND
  * @param element the structure to check.
  * @return the valid structure.
  */
-internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
+internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
     if (!element.shape.contentEquals(shape)) throw ShapeMismatchException(shape, element.shape)
     return element
 }
