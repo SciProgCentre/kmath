@@ -2,7 +2,8 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.Buffer
 import java.util.*
 import kotlin.math.abs
@@ -36,7 +37,7 @@ public class TreeHistogram(
 @UnstableKMathAPI
 public class TreeHistogramSpace(
     public val binFactory: (Double) -> UnivariateDomain,
-) : Space<UnivariateHistogram> {
+) : Group<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
 
     private class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
         ClosedFloatingPointRange<Double> by domain.range
@@ -97,14 +98,14 @@ public class TreeHistogramSpace(
         return TreeHistogram(this, bins)
     }
 
-    override fun multiply(a: UnivariateHistogram, k: Number): UnivariateHistogram {
+    override fun scale(a: UnivariateHistogram, value: Double): UnivariateHistogram {
         val bins = TreeMap<Double, UnivariateBin>().apply {
             a.bins.forEach { bin ->
                 put(bin.domain.center,
                     UnivariateBin(
                         bin.domain,
-                        value = bin.value * k.toDouble(),
-                        standardDeviation = abs(bin.standardDeviation * k.toDouble())
+                        value = bin.value * value.toDouble(),
+                        standardDeviation = abs(bin.standardDeviation * value.toDouble())
                     )
                 )
             }
@@ -112,6 +113,8 @@ public class TreeHistogramSpace(
 
         return TreeHistogram(this, bins)
     }
+
+    override fun UnivariateHistogram.unaryMinus(): UnivariateHistogram = this * (-1)
 
     override val zero: UnivariateHistogram = produce { }
 

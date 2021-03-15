@@ -48,48 +48,15 @@ public fun <T : Any> DerivationResult<T>.grad(vararg variables: Symbol): Point<T
 }
 
 /**
- * Runs differentiation and establishes [SimpleAutoDiffField] context inside the block of code.
- *
- * The partial derivatives are placed in argument `d` variable
- *
- * Example:
- * ```
- * val x by symbol // define variable(s) and their values
- * val y = RealField.withAutoDiff() { sqr(x) + 5 * x + 3 } // write formulate in deriv context
- * assertEquals(17.0, y.x) // the value of result (y)
- * assertEquals(9.0, x.d)  // dy/dx
- * ```
- *
- * @param body the action in [SimpleAutoDiffField] context returning [AutoDiffVariable] to differentiate with respect to.
- * @return the result of differentiation.
- */
-public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
-    bindings: Map<Symbol, T>,
-    body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
-): DerivationResult<T> {
-    contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
-
-    return SimpleAutoDiffField(this, bindings).differentiate(body)
-}
-
-public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
-    vararg bindings: Pair<Symbol, T>,
-    body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
-): DerivationResult<T> = simpleAutoDiff(bindings.toMap(), body)
-
-/**
  * Represents field in context of which functions can be derived.
  */
 @OptIn(UnstableKMathAPI::class)
 public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     public val context: F,
     bindings: Map<Symbol, T>,
-) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, RingWithNumbers<AutoDiffValue<T>> {
-    public override val zero: AutoDiffValue<T>
-        get() = const(context.zero)
-
-    public override val one: AutoDiffValue<T>
-        get() = const(context.one)
+) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, NumbersAddOperations<AutoDiffValue<T>> {
+    public override val zero: AutoDiffValue<T> get() = const(context.zero)
+    public override val one: AutoDiffValue<T> get() = const(context.one)
 
     // this stack contains pairs of blocks and values to apply them to
     private var stack: Array<Any?> = arrayOfNulls<Any?>(8)
@@ -137,6 +104,8 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
     override fun const(value: T): AutoDiffValue<T> = AutoDiffValue(value)
 
+    override fun number(value: Number): AutoDiffValue<T> = const { one * value }
+
     /**
      * A variable accessing inner state of derivatives.
      * Use this value in inner builders to avoid creating additional derivative bindings.
@@ -175,21 +144,24 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         return DerivationResult(result.value, bindings.mapValues { it.value.d }, context)
     }
 
-    // Overloads for Double constants
+//    // Overloads for Double constants
+//
+//    public override operator fun Number.plus(b: AutoDiffValue<T>): AutoDiffValue<T> =
+//        derive(const { this@plus.toDouble() * one + b.value }) { z ->
+//            b.d += z.d
+//        }
+//
+//    public override operator fun AutoDiffValue<T>.plus(b: Number): AutoDiffValue<T> = b.plus(this)
+//
+//    public override operator fun Number.minus(b: AutoDiffValue<T>): AutoDiffValue<T> =
+//        derive(const { this@minus.toDouble() * one - b.value }) { z -> b.d -= z.d }
+//
+//    public override operator fun AutoDiffValue<T>.minus(b: Number): AutoDiffValue<T> =
+//        derive(const { this@minus.value - one * b.toDouble() }) { z -> d += z.d }
 
-    public override operator fun Number.plus(b: AutoDiffValue<T>): AutoDiffValue<T> =
-        derive(const { this@plus.toDouble() * one + b.value }) { z ->
-            b.d += z.d
-        }
 
-    public override operator fun AutoDiffValue<T>.plus(b: Number): AutoDiffValue<T> = b.plus(this)
-
-    public override operator fun Number.minus(b: AutoDiffValue<T>): AutoDiffValue<T> =
-        derive(const { this@minus.toDouble() * one - b.value }) { z -> b.d -= z.d }
-
-    public override operator fun AutoDiffValue<T>.minus(b: Number): AutoDiffValue<T> =
-        derive(const { this@minus.value - one * b.toDouble() }) { z -> this@minus.d += z.d }
-
+    override fun AutoDiffValue<T>.unaryMinus(): AutoDiffValue<T> =
+        derive(const { -value }) { z -> d -= z.d }
 
     // Basic math (+, -, *, /)
 
@@ -211,11 +183,43 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
             b.d -= z.d * a.value / (b.value * b.value)
         }
 
-    public override fun multiply(a: AutoDiffValue<T>, k: Number): AutoDiffValue<T> =
-        derive(const { k.toDouble() * a.value }) { z ->
-            a.d += z.d * k.toDouble()
+    public override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> =
+        derive(const { value * a.value }) { z ->
+            a.d += z.d * value
         }
 }
+
+
+/**
+ * Runs differentiation and establishes [SimpleAutoDiffField] context inside the block of code.
+ *
+ * The partial derivatives are placed in argument `d` variable
+ *
+ * Example:
+ * ```
+ * val x by symbol // define variable(s) and their values
+ * val y = RealField.withAutoDiff() { sqr(x) + 5 * x + 3 } // write formulate in deriv context
+ * assertEquals(17.0, y.x) // the value of result (y)
+ * assertEquals(9.0, x.d)  // dy/dx
+ * ```
+ *
+ * @param body the action in [SimpleAutoDiffField] context returning [AutoDiffVariable] to differentiate with respect to.
+ * @return the result of differentiation.
+ */
+public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
+    bindings: Map<Symbol, T>,
+    body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
+): DerivationResult<T> {
+    contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
+
+    return SimpleAutoDiffField(this, bindings).differentiate(body)
+}
+
+public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
+    vararg bindings: Pair<Symbol, T>,
+    body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
+): DerivationResult<T> = simpleAutoDiff(bindings.toMap(), body)
+
 
 /**
  * A constructs that creates a derivative structure with required order on-demand
@@ -247,19 +251,20 @@ public fun <T : Any, F : Field<T>> simpleAutoDiff(field: F): AutoDiffProcessor<T
 // Extensions for differentiation of various basic mathematical functions
 
 // x ^ 2
-public fun <T : Any, F : Field<T>> SimpleAutoDiffField<T, F>.sqr(x: AutoDiffValue<T>): AutoDiffValue<T> =
-    derive(const { x.value * x.value }) { z -> x.d += z.d * 2 * x.value }
+public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.sqr(x: AutoDiffValue<T>): AutoDiffValue<T> =
+    derive(const { x.value * x.value }) { z -> x.d += z.d * 2.0 * x.value }
 
 // x ^ 1/2
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.sqrt(x: AutoDiffValue<T>): AutoDiffValue<T> =
-    derive(const { sqrt(x.value) }) { z -> x.d += z.d * 0.5 / z.value }
+    derive(const { sqrt(x.value) }) { z -> x.d += z.d / 2.0 / z.value }
 
 // x ^ y (const)
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.pow(
     x: AutoDiffValue<T>,
     y: Double,
-): AutoDiffValue<T> =
-    derive(const { power(x.value, y) }) { z -> x.d += z.d * y * power(x.value, y - 1) }
+): AutoDiffValue<T> = derive(const { power(x.value, y) }) { z ->
+    x.d += z.d * y * power(x.value, y - 1)
+}
 
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.pow(
     x: AutoDiffValue<T>,
@@ -328,7 +333,13 @@ public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.atanh(x: Au
 public class SimpleAutoDiffExtendedField<T : Any, F : ExtendedField<T>>(
     context: F,
     bindings: Map<Symbol, T>,
-) : ExtendedField<AutoDiffValue<T>>, SimpleAutoDiffField<T, F>(context, bindings) {
+) : ExtendedField<AutoDiffValue<T>>, ScaleOperations<AutoDiffValue<T>>,
+    SimpleAutoDiffField<T, F>(context, bindings) {
+
+    override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
+
+    override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> = a * number(value)
+
     // x ^ 2
     public fun sqr(x: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).sqr(x)

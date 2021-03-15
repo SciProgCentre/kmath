@@ -14,9 +14,9 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import space.kscience.kmath.operations.FieldOperations
+import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
 import space.kscience.kmath.operations.RingOperations
-import space.kscience.kmath.operations.SpaceOperations
 
 /**
  * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
@@ -55,7 +55,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
-        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(SpaceOperations.MINUS_OPERATION, it) })
+        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(GroupOperations.MINUS_OPERATION, it) })
         .or(-lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
 
     private val powChain: Parser<MST> by leftAssociative(term = term, operator = pow) { a, _, b ->
@@ -77,9 +77,9 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         operator = plus or minus use TokenMatch::type
     ) { a, op, b ->
         if (op == plus)
-            MST.Binary(SpaceOperations.PLUS_OPERATION, a, b)
+            MST.Binary(GroupOperations.PLUS_OPERATION, a, b)
         else
-            MST.Binary(SpaceOperations.MINUS_OPERATION, a, b)
+            MST.Binary(GroupOperations.MINUS_OPERATION, a, b)
     }
 
     override val rootParser: Parser<MST> by subSumChain

@@ -1,8 +1,9 @@
 package space.kscience.kmath.benchmarks
 
-import org.openjdk.jmh.annotations.Benchmark
-import org.openjdk.jmh.annotations.Scope
-import org.openjdk.jmh.annotations.State
+import kotlinx.benchmark.Benchmark
+import kotlinx.benchmark.Blackhole
+import kotlinx.benchmark.Scope
+import kotlinx.benchmark.State
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.structures.Buffer
@@ -10,35 +11,38 @@ import space.kscience.kmath.structures.Buffer
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
     @Benchmark
-    fun autoFieldAdd() {
+    fun autoFieldAdd(blackhole: Blackhole) {
         with(autoField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += one }
+            blackhole.consume(res)
         }
     }
 
     @Benchmark
-    fun specializedFieldAdd() {
+    fun specializedFieldAdd(blackhole: Blackhole) {
         with(specializedField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
+            blackhole.consume(res)
         }
     }
 
 
     @Benchmark
-    fun boxingFieldAdd() {
+    fun boxingFieldAdd(blackhole: Blackhole) {
         with(genericField) {
             var res: NDStructure<Double> = one
             repeat(n) { res += 1.0 }
+            blackhole.consume(res)
         }
     }
 
-    companion object {
-        const val dim: Int = 1000
-        const val n: Int = 100
-        val autoField = NDAlgebra.auto(RealField, dim, dim)
-        val specializedField: RealNDField = NDAlgebra.real(dim, dim)
-        val genericField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
+    private companion object {
+        private const val dim = 1000
+        private const val n = 100
+        private val autoField = NDAlgebra.auto(RealField, dim, dim)
+        private val specializedField = NDAlgebra.real(dim, dim)
+        private val genericField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
     }
 }

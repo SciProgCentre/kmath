@@ -82,13 +82,52 @@ public interface NumericAlgebra<T> : Algebra<T> {
 }
 
 /**
+ * Scale by scalar operations
+ */
+public interface ScaleOperations<T> : Algebra<T> {
+    /**
+     * Scaling an element by a scalar.
+     *
+     * @param a the multiplier.
+     * @param value the multiplicand.
+     * @return the produce.
+     */
+    public fun scale(a: T, value: Double): T
+
+    /**
+     * Multiplication of this element by a scalar.
+     *
+     * @receiver the multiplier.
+     * @param k the multiplicand.
+     * @return the product.
+     */
+    public operator fun T.times(k: Number): T = scale(this, k.toDouble())
+
+    /**
+     * Division of this element by scalar.
+     *
+     * @receiver the dividend.
+     * @param k the divisor.
+     * @return the quotient.
+     */
+    public operator fun T.div(k: Number): T = scale(this, 1.0 / k.toDouble())
+
+    /**
+     * Multiplication of this number by element.
+     *
+     * @receiver the multiplier.
+     * @param b the multiplicand.
+     * @return the product.
+     */
+    public operator fun Number.times(b: T): T = b * this
+}
+
+/**
  * A combination of [NumericAlgebra] and [Ring] that adds intrinsic simple operations on numbers like `T+1`
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface RingWithNumbers<T>: Ring<T>, NumericAlgebra<T>{
-    public override fun number(value: Number): T = one * value
-
+public interface NumbersAddOperations<T> : Group<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *

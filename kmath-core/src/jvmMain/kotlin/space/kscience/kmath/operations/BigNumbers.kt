@@ -7,19 +7,16 @@ import java.math.MathContext
 /**
  * A field over [BigInteger].
  */
-public object JBigIntegerField : Field<BigInteger>, NumericAlgebra<BigInteger> {
-    public override val zero: BigInteger
-        get() = BigInteger.ZERO
+public object JBigIntegerField : Ring<BigInteger>, NumericAlgebra<BigInteger> {
+    public override val zero: BigInteger get() = BigInteger.ZERO
 
-    public override val one: BigInteger
-        get() = BigInteger.ONE
+    public override val one: BigInteger get() = BigInteger.ONE
 
     public override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
-    public override fun divide(a: BigInteger, b: BigInteger): BigInteger = a.div(b)
     public override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
     public override operator fun BigInteger.minus(b: BigInteger): BigInteger = subtract(b)
-    public override fun multiply(a: BigInteger, k: Number): BigInteger = a.multiply(k.toInt().toBigInteger())
     public override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
+
     public override operator fun BigInteger.unaryMinus(): BigInteger = negate()
 }
 
@@ -30,7 +27,7 @@ public object JBigIntegerField : Field<BigInteger>, NumericAlgebra<BigInteger> {
  */
 public abstract class JBigDecimalFieldBase internal constructor(
     private val mathContext: MathContext = MathContext.DECIMAL64,
-) : Field<BigDecimal>, PowerOperations<BigDecimal>, NumericAlgebra<BigDecimal> {
+) : Field<BigDecimal>, PowerOperations<BigDecimal>, NumericAlgebra<BigDecimal>, ScaleOperations<BigDecimal> {
     public override val zero: BigDecimal
         get() = BigDecimal.ZERO
 
@@ -41,8 +38,8 @@ public abstract class JBigDecimalFieldBase internal constructor(
     public override operator fun BigDecimal.minus(b: BigDecimal): BigDecimal = subtract(b)
     public override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
 
-    public override fun multiply(a: BigDecimal, k: Number): BigDecimal =
-        a.multiply(k.toDouble().toBigDecimal(mathContext), mathContext)
+    public override fun scale(a: BigDecimal, value: Double): BigDecimal =
+        a.multiply(value.toBigDecimal(mathContext), mathContext)
 
     public override fun multiply(a: BigDecimal, b: BigDecimal): BigDecimal = a.multiply(b, mathContext)
     public override fun divide(a: BigDecimal, b: BigDecimal): BigDecimal = a.divide(b, mathContext)

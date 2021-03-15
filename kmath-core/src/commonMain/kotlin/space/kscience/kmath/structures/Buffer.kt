@@ -100,9 +100,29 @@ public fun <T> Buffer<T>.asSequence(): Sequence<T> = Sequence(::iterator)
 public fun <T> Buffer<T>.asIterable(): Iterable<T> = Iterable(::iterator)
 
 /**
- * Converts this [Buffer] to a new [List]
+ * Returns a new [List] containing all elements of this buffer.
  */
-public fun <T> Buffer<T>.toList(): List<T> = asSequence().toList()
+public fun <T> Buffer<T>.toList(): List<T> = when (this) {
+    is ArrayBuffer<T> -> array.toList()
+    is ListBuffer<T> -> list.toList()
+    is MutableListBuffer<T> -> list.toList()
+    else -> asSequence().toList()
+}
+
+/**
+ * Returns a new [MutableList] filled with all elements of this buffer.
+ */
+public fun <T> Buffer<T>.toMutableList(): MutableList<T> = when (this) {
+    is ArrayBuffer<T> -> array.toMutableList()
+    is ListBuffer<T> -> list.toMutableList()
+    is MutableListBuffer<T> -> list.toMutableList()
+    else -> asSequence().toMutableList()
+}
+
+/**
+ * Returns a new [Array] containing all elements of this buffer.
+ */
+public inline fun <reified T> Buffer<T>.toTypedArray(): Array<T> = asSequence().toList().toTypedArray()
 
 /**
  * Returns an [IntRange] of the valid indices for this [Buffer].
@@ -222,7 +242,7 @@ public inline class MutableListBuffer<T>(public val list: MutableList<T>) : Muta
  * @param T the type of elements contained in the buffer.
  * @property array The underlying array.
  */
-public class ArrayBuffer<T>(private val array: Array<T>) : MutableBuffer<T> {
+public class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<T> {
     // Can't inline because array is invariant
     override val size: Int
         get() = array.size

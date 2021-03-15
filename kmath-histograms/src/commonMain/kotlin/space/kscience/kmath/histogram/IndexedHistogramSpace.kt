@@ -3,10 +3,11 @@ package space.kscience.kmath.histogram
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDSpace
+import space.kscience.kmath.nd.NDField
 import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.Strides
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 
@@ -41,10 +42,11 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
 /**
  * A space for producing histograms with values in a NDStructure
  */
-public interface IndexedHistogramSpace<T : Comparable<T>, V : Any> : Space<IndexedHistogram<T, V>> {
+public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
+    : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
     //public val valueSpace: Space<V>
     public val strides: Strides
-    public val histogramValueSpace: NDSpace<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
+    public val histogramValueSpace: NDField<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
      * Resolve index of the bin including given [point]
@@ -63,12 +65,12 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any> : Space<Index
     override fun add(a: IndexedHistogram<T, V>, b: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
         require(a.context == this) { "Can't operate on a histogram produced by external space" }
         require(b.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace.invoke { a.values + b.values })
+        return IndexedHistogram(this, histogramValueSpace { a.values + b.values })
     }
 
-    override fun multiply(a: IndexedHistogram<T, V>, k: Number): IndexedHistogram<T, V> {
+    override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {
         require(a.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace.invoke { a.values * k })
+        return IndexedHistogram(this, histogramValueSpace { a.values * value })
     }
 
     override val zero: IndexedHistogram<T, V> get() = produce { }

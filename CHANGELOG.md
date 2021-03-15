@@ -2,12 +2,20 @@
 
 ## [Unreleased]
 ### Added
+- ScaleOperations interface
+- Field extends ScaleOperations
 
 ### Changed
+- Exponential operations merged with hyperbolic functions
+- Space is replaced by Group. Space is reserved for vector spaces.
+- VectorSpace is now a vector space
+- 
 
 ### Deprecated
 
 ### Removed
+- Nearest in Domain. To be implemented in geometry package.
+- Number multiplication and division in main Algebra chain
 
 ### Fixed
 

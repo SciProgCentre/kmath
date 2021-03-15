@@ -1,6 +1,5 @@
-# Based on https://github.com/touchlab/Stately/blob/main/.github/workflows/build.yml
+name: Gradle build
 
-name: build
 on: [ push ]
 
 jobs:
