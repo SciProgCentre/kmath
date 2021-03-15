@@ -1,7 +1,9 @@
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
+import kotlin.reflect.KClass
 
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs.
@@ -56,8 +58,31 @@ public interface NDAlgebra<T, C : Algebra<T>> {
     public operator fun Function1<T, T>.invoke(structure: NDStructure<T>): NDStructure<T> =
         structure.map { value -> this@invoke(value) }
 
+    /**
+     * Get a feature of the structure in this scope. Structure features take precedence other context features
+     *
+     * @param F the type of feature.
+     * @param structure the structure.
+     * @param type the [KClass] instance of [F].
+     * @return a feature object or `null` if it isn't present.
+     */
+    @UnstableKMathAPI
+    public fun <F : Any> getFeature(structure: NDStructure<T>, type: KClass<F>): F? = structure.getFeature(type)
+
     public companion object
 }
+
+
+/**
+ * Get a feature of the structure in this scope. Structure features take precedence other context features
+ *
+ * @param T the type of items in the matrices.
+ * @param F the type of feature.
+ * @return a feature object or `null` if it isn't present.
+ */
+@UnstableKMathAPI
+public inline fun <T : Any, reified F : Any> NDAlgebra<T, *>.getFeature(structure: NDStructure<T>): F? =
+    getFeature(structure, F::class)
 
 /**
  * Checks if given elements are consistent with this context.

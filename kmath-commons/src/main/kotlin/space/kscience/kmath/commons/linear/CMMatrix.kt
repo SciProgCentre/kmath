@@ -13,44 +13,6 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
-    @UnstableKMathAPI
-    override fun <T : Any> getFeature(type: KClass<T>): T? = when (type) {
-        DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
-
-        DeterminantFeature::class, LupDecompositionFeature::class -> object :
-            DeterminantFeature<Double>,
-            LupDecompositionFeature<Double> {
-            private val lup by lazy { LUDecomposition(origin) }
-            override val determinant: Double by lazy { lup.determinant }
-            override val l: Matrix<Double> by lazy { CMMatrix(lup.l) + LFeature }
-            override val u: Matrix<Double> by lazy { CMMatrix(lup.u) + UFeature }
-            override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
-        }
-
-        CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
-            override val l: Matrix<Double> by lazy {
-                val cholesky = CholeskyDecomposition(origin)
-                CMMatrix(cholesky.l) + LFeature
-            }
-        }
-
-        QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
-            private val qr by lazy { QRDecomposition(origin) }
-            override val q: Matrix<Double> by lazy { CMMatrix(qr.q) + OrthogonalFeature }
-            override val r: Matrix<Double> by lazy { CMMatrix(qr.r) + UFeature }
-        }
-
-        SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {
-            private val sv by lazy { SingularValueDecomposition(origin) }
-            override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
-            override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
-            override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
-            override val singularValues: Point<Double> by lazy { RealBuffer(sv.singularValues) }
-        }
-
-        else -> null
-    }?.let(type::cast)
-
     public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
 
     override fun equals(other: Any?): Boolean {
@@ -134,6 +96,50 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
 
     override fun Double.times(v: Point<Double>): CMVector =
         v * this
+
+    @UnstableKMathAPI
+    override fun <F : Any> getFeature(structure: Matrix<Double>, type: KClass<F>): F? {
+        //Return the feature if it is intrinsic to the structure
+        structure.getFeature(type)?.let { return it }
+
+        val origin = structure.toCM().origin
+        
+        return when (type) {
+            DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
+
+            DeterminantFeature::class, LupDecompositionFeature::class -> object :
+                DeterminantFeature<Double>,
+                LupDecompositionFeature<Double> {
+                private val lup by lazy { LUDecomposition(origin) }
+                override val determinant: Double by lazy { lup.determinant }
+                override val l: Matrix<Double> by lazy { CMMatrix(lup.l) + LFeature }
+                override val u: Matrix<Double> by lazy { CMMatrix(lup.u) + UFeature }
+                override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
+            }
+
+            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
+                override val l: Matrix<Double> by lazy {
+                    val cholesky = CholeskyDecomposition(origin)
+                    CMMatrix(cholesky.l) + LFeature
+                }
+            }
+
+            QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
+                private val qr by lazy { QRDecomposition(origin) }
+                override val q: Matrix<Double> by lazy { CMMatrix(qr.q) + OrthogonalFeature }
+                override val r: Matrix<Double> by lazy { CMMatrix(qr.r) + UFeature }
+            }
+
+            SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {
+                private val sv by lazy { SingularValueDecomposition(origin) }
+                override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
+                override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
+                override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
+                override val singularValues: Point<Double> by lazy { RealBuffer(sv.singularValues) }
+            }
+            else -> null
+        }?.let(type::cast)
+    }
 }
 
 public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix =

@@ -2,10 +2,7 @@ package space.kscience.kmath.ejml
 
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
-import space.kscience.kmath.linear.DeterminantFeature
-import space.kscience.kmath.linear.LupDecompositionFeature
-import space.kscience.kmath.linear.MatrixFeature
-import space.kscience.kmath.linear.plus
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
 import kotlin.random.Random
@@ -45,9 +42,9 @@ internal class EjmlMatrixTest {
     fun features() {
         val m = randomMatrix
         val w = EjmlMatrix(m)
-        val det = w.getFeature<DeterminantFeature<Double>>() ?: fail()
+        val det: DeterminantFeature<Double> = EjmlLinearSpace.getFeature(w) ?: fail()
         assertEquals(m.determinant(), det.determinant)
-        val lup = w.getFeature<LupDecompositionFeature<Double>>() ?: fail()
+        val lup: LupDecompositionFeature<Double> = EjmlLinearSpace.getFeature(w) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows(), m.numCols())
             .also { it.decompose(m.ddrm.copy()) }

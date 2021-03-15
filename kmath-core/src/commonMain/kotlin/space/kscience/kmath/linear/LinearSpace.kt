@@ -156,16 +156,15 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Gets a feature from the matrix. This function may return some additional features to
-     * [space.kscience.kmath.nd.NDStructure.getFeature].
+     * Get a feature of the structure in this scope. Structure features take precedence other context features
      *
      * @param F the type of feature.
-     * @param m the matrix.
+     * @param structure the structure.
      * @param type the [KClass] instance of [F].
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(m: Matrix<T>, type: KClass<F>): F? = m.getFeature(type)
+    public fun <F : Any> getFeature(structure: Matrix<T>, type: KClass<F>): F? = structure.getFeature(type)
 
     public companion object {
 
@@ -187,19 +186,17 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     }
 }
 
-public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
-
 /**
- * Gets a feature from the matrix. This function may return some additional features to
- * [space.kscience.kmath.nd.NDStructure.getFeature].
+ * Get a feature of the structure in this scope. Structure features take precedence other context features
  *
  * @param T the type of items in the matrices.
- * @param M the type of operated matrices.
  * @param F the type of feature.
- * @receiver the [LinearSpace] of [T].
- * @param m the matrix.
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(m: Matrix<T>): F? = getFeature(m, F::class)
+public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
+    getFeature(structure, F::class)
+
+
+public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
 
