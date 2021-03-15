@@ -32,13 +32,13 @@ internal inline fun broadcastShapes(vararg shapes: IntArray): IntArray {
     return totalShape
 }
 
-internal inline fun broadcastTensors(vararg tensors: RealTensor): List<RealTensor> {
+internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
     val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
 
-    val res = ArrayList<RealTensor>(0)
+    val res = ArrayList<DoubleTensor>(0)
     for (tensor in tensors) {
-        val resTensor = RealTensor(totalShape, DoubleArray(n))
+        val resTensor = DoubleTensor(totalShape, DoubleArray(n))
 
         for (linearIndex in 0 until n) {
             val totalMultiIndex = resTensor.strides.index(linearIndex)

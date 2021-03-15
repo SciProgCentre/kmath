@@ -1,146 +1,146 @@
 package space.kscience.kmath.tensors
 
 
-public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
+public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
 
-    override fun RealTensor.value(): Double {
+    override fun DoubleTensor.value(): Double {
         check(this.shape contentEquals intArrayOf(1)) {
             "Inconsistent value for tensor of shape ${shape.toList()}"
         }
         return this.buffer.unsafeToDoubleArray()[0]
     }
 
-    override fun zeros(shape: IntArray): RealTensor {
+    override fun zeros(shape: IntArray): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.zeroesLike(): RealTensor {
+    override fun DoubleTensor.zeroesLike(): DoubleTensor {
         val shape = this.shape
         val buffer = DoubleArray(this.buffer.size) { 0.0 }
-        return RealTensor(shape, buffer)
+        return DoubleTensor(shape, buffer)
     }
 
-    override fun ones(shape: IntArray): RealTensor {
+    override fun ones(shape: IntArray): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.onesLike(): RealTensor {
+    override fun DoubleTensor.onesLike(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.copy(): RealTensor {
+    override fun DoubleTensor.copy(): DoubleTensor {
         // should be rework as soon as copy() method for NDBuffer will be available
-        return RealTensor(this.shape, this.buffer.unsafeToDoubleArray().copyOf())
+        return DoubleTensor(this.shape, this.buffer.unsafeToDoubleArray().copyOf())
     }
 
 
-    override fun Double.plus(other: RealTensor): RealTensor {
+    override fun Double.plus(other: DoubleTensor): DoubleTensor {
         val resBuffer = DoubleArray(other.buffer.size) { i ->
             other.buffer.unsafeToDoubleArray()[i] + this
         }
-        return RealTensor(other.shape, resBuffer)
+        return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun RealTensor.plus(value: Double): RealTensor = value + this
+    override fun DoubleTensor.plus(value: Double): DoubleTensor = value + this
 
-    override fun RealTensor.plus(other: RealTensor): RealTensor {
+    override fun DoubleTensor.plus(other: DoubleTensor): DoubleTensor {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.buffer.size) { i ->
             newThis.buffer.unsafeToDoubleArray()[i] + newOther.buffer.unsafeToDoubleArray()[i]
         }
-        return RealTensor(newThis.shape, resBuffer)
+        return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun RealTensor.plusAssign(value: Double) {
+    override fun DoubleTensor.plusAssign(value: Double) {
         for (i in this.buffer.unsafeToDoubleArray().indices) {
             this.buffer.unsafeToDoubleArray()[i] += value
         }
     }
 
-    override fun RealTensor.plusAssign(other: RealTensor) {
+    override fun DoubleTensor.plusAssign(other: DoubleTensor) {
         //todo should be change with broadcasting
         for (i in this.buffer.unsafeToDoubleArray().indices) {
             this.buffer.unsafeToDoubleArray()[i] += other.buffer.unsafeToDoubleArray()[i]
         }
     }
 
-    override fun Double.minus(other: RealTensor): RealTensor {
+    override fun Double.minus(other: DoubleTensor): DoubleTensor {
         val resBuffer = DoubleArray(other.buffer.size) { i ->
             this - other.buffer.unsafeToDoubleArray()[i]
         }
-        return RealTensor(other.shape, resBuffer)
+        return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun RealTensor.minus(value: Double): RealTensor {
+    override fun DoubleTensor.minus(value: Double): DoubleTensor {
         val resBuffer = DoubleArray(this.buffer.size) { i ->
             this.buffer.unsafeToDoubleArray()[i] - value
         }
-        return RealTensor(this.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
-    override fun RealTensor.minus(other: RealTensor): RealTensor {
+    override fun DoubleTensor.minus(other: DoubleTensor): DoubleTensor {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.buffer.size) { i ->
             newThis.buffer.unsafeToDoubleArray()[i] - newOther.buffer.unsafeToDoubleArray()[i]
         }
-        return RealTensor(newThis.shape, resBuffer)
+        return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun RealTensor.minusAssign(value: Double) {
+    override fun DoubleTensor.minusAssign(value: Double) {
         for (i in this.buffer.unsafeToDoubleArray().indices) {
             this.buffer.unsafeToDoubleArray()[i] -= value
         }
     }
 
-    override fun RealTensor.minusAssign(other: RealTensor) {
+    override fun DoubleTensor.minusAssign(other: DoubleTensor) {
         TODO("Alya")
     }
 
-    override fun Double.times(other: RealTensor): RealTensor {
+    override fun Double.times(other: DoubleTensor): DoubleTensor {
         //todo should be change with broadcasting
         val resBuffer = DoubleArray(other.buffer.size) { i ->
             other.buffer.unsafeToDoubleArray()[i] * this
         }
-        return RealTensor(other.shape, resBuffer)
+        return DoubleTensor(other.shape, resBuffer)
     }
 
     //todo should be change with broadcasting
-    override fun RealTensor.times(value: Double): RealTensor = value * this
+    override fun DoubleTensor.times(value: Double): DoubleTensor = value * this
 
-    override fun RealTensor.times(other: RealTensor): RealTensor {
+    override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
         //todo should be change with broadcasting
         val resBuffer = DoubleArray(this.buffer.size) { i ->
             this.buffer.unsafeToDoubleArray()[i] * other.buffer.unsafeToDoubleArray()[i]
         }
-        return RealTensor(this.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
-    override fun RealTensor.timesAssign(value: Double) {
+    override fun DoubleTensor.timesAssign(value: Double) {
         //todo should be change with broadcasting
         for (i in this.buffer.unsafeToDoubleArray().indices) {
             this.buffer.unsafeToDoubleArray()[i] *= value
         }
     }
 
-    override fun RealTensor.timesAssign(other: RealTensor) {
+    override fun DoubleTensor.timesAssign(other: DoubleTensor) {
         //todo should be change with broadcasting
         for (i in this.buffer.unsafeToDoubleArray().indices) {
             this.buffer.unsafeToDoubleArray()[i] *= other.buffer.unsafeToDoubleArray()[i]
         }
     }
 
-    override fun RealTensor.unaryMinus(): RealTensor {
+    override fun DoubleTensor.unaryMinus(): DoubleTensor {
         val resBuffer = DoubleArray(this.buffer.size) { i ->
             this.buffer.unsafeToDoubleArray()[i].unaryMinus()
         }
-        return RealTensor(this.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
-    override fun RealTensor.transpose(i: Int, j: Int): RealTensor {
+    override fun DoubleTensor.transpose(i: Int, j: Int): DoubleTensor {
         checkTranspose(this.dimension, i, j)
         val n = this.buffer.size
         val resBuffer = DoubleArray(n)
@@ -148,7 +148,7 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
         val resShape = this.shape.copyOf()
         resShape[i] = resShape[j].also { resShape[j] = resShape[i] }
 
-        val resTensor = RealTensor(resShape, resBuffer)
+        val resTensor = DoubleTensor(resShape, resBuffer)
 
         for (offset in 0 until n) {
             val oldMultiIndex = this.strides.index(offset)
@@ -162,117 +162,117 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
     }
 
 
-    override fun RealTensor.view(shape: IntArray): RealTensor {
-        return RealTensor(shape, this.buffer.unsafeToDoubleArray())
+    override fun DoubleTensor.view(shape: IntArray): DoubleTensor {
+        return DoubleTensor(shape, this.buffer.unsafeToDoubleArray())
     }
 
-    override fun RealTensor.viewAs(other: RealTensor): RealTensor {
+    override fun DoubleTensor.viewAs(other: DoubleTensor): DoubleTensor {
         return this.view(other.shape)
     }
 
-    override fun RealTensor.abs(): RealTensor {
+    override fun DoubleTensor.abs(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun full(shape: IntArray, value: Double): RealTensor {
+    override fun full(shape: IntArray, value: Double): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.fullLike(value: Double): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun RealTensor.sum(dim: Int, keepDim: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.cumsum(dim: Int): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.prod(dim: Int, keepDim: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.cumprod(dim: Int): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.max(dim: Int, keepDim: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.cummax(dim: Int): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.min(dim: Int, keepDim: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.cummin(dim: Int): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.median(dim: Int, keepDim: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun maximum(lhs: RealTensor, rhs: RealTensor) {
-        TODO("Not yet implemented")
-    }
-
-    override fun minimum(lhs: RealTensor, rhs: RealTensor) {
-        TODO("Not yet implemented")
-    }
-
-    override fun RealTensor.sort(dim: Int, keepDim: Boolean, descending: Boolean): RealTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun cat(tensors: List<RealTensor>, dim: Int): RealTensor {
+    override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
         TODO("Not yet implemented")
     }
 
 
-    override fun RealTensor.div(value: Double): RealTensor {
+    override fun DoubleTensor.sum(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.div(other: RealTensor): RealTensor {
+    override fun DoubleTensor.cumsum(dim: Int): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.flatten(startDim: Int, endDim: Int): RealTensor {
+    override fun DoubleTensor.prod(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.divAssign(value: Double) {
+    override fun DoubleTensor.cumprod(dim: Int): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.divAssign(other: RealTensor) {
+    override fun DoubleTensor.max(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.mean(dim: Int, keepDim: Boolean): RealTensor {
+    override fun DoubleTensor.cummax(dim: Int): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.quantile(q: Double, dim: Int, keepDim: Boolean): RealTensor {
+    override fun DoubleTensor.min(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): RealTensor {
+    override fun DoubleTensor.cummin(dim: Int): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): RealTensor {
+    override fun DoubleTensor.median(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.histc(bins: Int, min: Double, max: Double): RealTensor {
+    override fun maximum(lhs: DoubleTensor, rhs: DoubleTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun minimum(lhs: DoubleTensor, rhs: DoubleTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.sort(dim: Int, keepDim: Boolean, descending: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun cat(tensors: List<DoubleTensor>, dim: Int): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+
+    override fun DoubleTensor.div(value: Double): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.div(other: DoubleTensor): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.flatten(startDim: Int, endDim: Int): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.divAssign(value: Double) {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.divAssign(other: DoubleTensor) {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.mean(dim: Int, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.quantile(q: Double, dim: Int, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.histc(bins: Int, min: Double, max: Double): DoubleTensor {
         TODO("Not yet implemented")
     }
 

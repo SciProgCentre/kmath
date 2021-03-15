@@ -1,13 +1,13 @@
 package space.kscience.kmath.tensors
 
 public class RealLinearOpsTensorAlgebra :
-    LinearOpsTensorAlgebra<Double, RealTensor>,
+    LinearOpsTensorAlgebra<Double, DoubleTensor>,
     RealTensorAlgebra()
 {
-    override fun eye(n: Int): RealTensor {
+    override fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
         val buffer = DoubleArray(n * n) { 0.0 }
-        val res = RealTensor(shape, buffer)
+        val res = DoubleTensor(shape, buffer)
         for (i in 0 until n) {
             res[intArrayOf(i, i)] = 1.0
         }
@@ -15,16 +15,16 @@ public class RealLinearOpsTensorAlgebra :
     }
 
 
-    override fun RealTensor.dot(other: RealTensor): RealTensor {
+    override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
         TODO("Alya")
     }
 
-    override fun diagonalEmbedding(diagonalEntries: RealTensor, offset: Int, dim1: Int, dim2: Int): RealTensor {
+    override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
         TODO("Alya")
     }
 
 
-    override fun RealTensor.lu(): Pair<RealTensor, IntTensor> {
+    override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
         // todo checks
         val lu = this.copy()
         val m = this.shape[0]
@@ -74,7 +74,7 @@ public class RealLinearOpsTensorAlgebra :
         return Pair(lu, IntTensor(intArrayOf(m), pivot))
     }
 
-    override fun luPivot(lu: RealTensor, pivots: IntTensor): Triple<RealTensor, RealTensor, RealTensor> {
+    override fun luPivot(lu: DoubleTensor, pivots: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         // todo checks
         val n = lu.shape[0]
         val p = lu.zeroesLike()
@@ -100,28 +100,28 @@ public class RealLinearOpsTensorAlgebra :
         return Triple(p, l, u)
     }
 
-    override fun RealTensor.det(): RealTensor {
+    override fun DoubleTensor.det(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.inv(): RealTensor {
+    override fun DoubleTensor.inv(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.cholesky(): RealTensor {
+    override fun DoubleTensor.cholesky(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.qr(): RealTensor {
+    override fun DoubleTensor.qr(): DoubleTensor {
         TODO("Not yet implemented")
     }
 
 
-    override fun RealTensor.svd(): Triple<RealTensor, RealTensor, RealTensor> {
+    override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         TODO("Not yet implemented")
     }
 
-    override fun RealTensor.symEig(eigenvectors: Boolean): Pair<RealTensor, RealTensor> {
+    override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
         TODO("Not yet implemented")
     }
 

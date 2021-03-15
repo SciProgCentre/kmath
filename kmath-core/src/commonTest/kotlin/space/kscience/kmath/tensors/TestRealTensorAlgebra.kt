@@ -8,14 +8,14 @@ class TestRealTensorAlgebra {
 
     @Test
     fun doublePlus() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(2), doubleArrayOf(1.0, 2.0))
+        val tensor = DoubleTensor(intArrayOf(2), doubleArrayOf(1.0, 2.0))
         val res = 10.0 + tensor
         assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(11.0,12.0))
     }
 
     @Test
     fun transpose1x1() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(1), doubleArrayOf(0.0))
+        val tensor = DoubleTensor(intArrayOf(1), doubleArrayOf(0.0))
         val res = tensor.transpose(0, 0)
 
         assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(0.0))
@@ -24,7 +24,7 @@ class TestRealTensorAlgebra {
 
     @Test
     fun transpose3x2() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor = DoubleTensor(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res = tensor.transpose(1, 0)
 
         assertTrue(res.buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(1.0, 3.0, 5.0, 2.0, 4.0, 6.0))
@@ -33,7 +33,7 @@ class TestRealTensorAlgebra {
 
     @Test
     fun transpose1x2x3() = RealTensorAlgebra {
-        val tensor = RealTensor(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor = DoubleTensor(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res01 = tensor.transpose(0, 1)
         val res02 = tensor.transpose(0, 2)
         val res12 = tensor.transpose(1, 2)
@@ -60,9 +60,9 @@ class TestRealTensorAlgebra {
 
     @Test
     fun broadcastTensors() = RealTensorAlgebra {
-        val tensor1 = RealTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        val tensor2 = RealTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
-        val tensor3 = RealTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
+        val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
+        val tensor3 = DoubleTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
 
         val res = broadcastTensors(tensor1, tensor2, tensor3)
 
@@ -77,9 +77,9 @@ class TestRealTensorAlgebra {
 
     @Test
     fun minusTensor() = RealTensorAlgebra {
-        val tensor1 = RealTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        val tensor2 = RealTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
-        val tensor3 = RealTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
+        val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
+        val tensor3 = DoubleTensor(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
 
         assertTrue((tensor2 - tensor1).shape contentEquals intArrayOf(2, 3))
         assertTrue((tensor2 - tensor1).buffer.unsafeToDoubleArray() contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))

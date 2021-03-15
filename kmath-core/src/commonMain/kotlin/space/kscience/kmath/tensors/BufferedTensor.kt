@@ -41,7 +41,7 @@ public class FloatTensor(
     buffer: FloatArray
 ) : BufferedTensor<Float>(shape, FloatBuffer(buffer))
 
-public class RealTensor(
+public class DoubleTensor(
     shape: IntArray,
     buffer: DoubleArray
 ) : BufferedTensor<Double>(shape, RealBuffer(buffer))
