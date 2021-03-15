@@ -12,7 +12,7 @@ public interface ComplexTensorAlgebra<T,
     public fun ComplexTensorType.angle(): RealTensorType
 
     //https://pytorch.org/docs/stable/generated/torch.stft.html#torch.stft
-    public fun ComplexTensorType.stft(
+    public fun ComplexTensorType.shortTimeFourierTransform(
         nFFT: Int,
         hopLength: Int,
         winLength: Int,
@@ -22,7 +22,7 @@ public interface ComplexTensorAlgebra<T,
     )
 
     //https://pytorch.org/docs/stable/generated/torch.istft.html#torch.istft
-    public fun ComplexTensorType.istft(
+    public fun ComplexTensorType.inverseShortTimeFourierTransform(
         nFFT: Int,
         hopLength: Int,
         winLength: Int,
