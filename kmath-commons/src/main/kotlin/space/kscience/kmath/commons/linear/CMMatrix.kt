@@ -103,7 +103,7 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
         structure.getFeature(type)?.let { return it }
 
         val origin = structure.toCM().origin
-        
+
         return when (type) {
             DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
 
@@ -142,11 +142,8 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
     }
 }
 
-public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix =
-    CMMatrix(origin.add(other.origin))
+public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(origin.add(other.origin))
 
-public operator fun CMMatrix.minus(other: CMMatrix): CMMatrix =
-    CMMatrix(origin.subtract(other.origin))
+public operator fun CMMatrix.minus(other: CMMatrix): CMMatrix = CMMatrix(origin.subtract(other.origin))
 
-public infix fun CMMatrix.dot(other: CMMatrix): CMMatrix =
-    CMMatrix(origin.multiply(other.origin))
+public infix fun CMMatrix.dot(other: CMMatrix): CMMatrix = CMMatrix(origin.multiply(other.origin))
