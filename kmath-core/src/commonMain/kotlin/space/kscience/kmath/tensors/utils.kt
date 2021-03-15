@@ -1,6 +1,6 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.array
+import space.kscience.kmath.structures.toDoubleArray
 import kotlin.math.max
 
 
@@ -55,7 +55,7 @@ internal inline fun broadcastTensors(vararg tensors: RealTensor): List<RealTenso
             }
 
             val curLinearIndex = tensor.strides.offset(curMultiIndex)
-            resTensor.buffer.array[linearIndex] = tensor.buffer.array[curLinearIndex]
+            resTensor.buffer.toDoubleArray()[linearIndex] = tensor.buffer.toDoubleArray()[curLinearIndex]
         }
         res.add(resTensor)
     }

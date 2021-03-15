@@ -144,5 +144,7 @@ public class RealAnalyticTensorAlgebra:
         TODO("Not yet implemented")
     }
 
-
 }
+
+public inline fun <R> RealAnalyticTensorAlgebra(block: RealTensorAlgebra.() -> R): R =
+    RealAnalyticTensorAlgebra().block()

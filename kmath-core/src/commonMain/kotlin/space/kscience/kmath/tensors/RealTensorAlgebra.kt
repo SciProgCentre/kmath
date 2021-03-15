@@ -1,6 +1,6 @@
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.structures.array
+import space.kscience.kmath.structures.toDoubleArray
 
 
 public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealTensor> {
@@ -9,7 +9,7 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
         check(this.shape contentEquals intArrayOf(1)) {
             "Inconsistent value for tensor of shape ${shape.toList()}"
         }
-        return this.buffer.array[0]
+        return this.buffer.toDoubleArray()[0]
     }
 
     override fun zeros(shape: IntArray): RealTensor {
@@ -32,13 +32,13 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
 
     override fun RealTensor.copy(): RealTensor {
         // should be rework as soon as copy() method for NDBuffer will be available
-        return RealTensor(this.shape, this.buffer.array.copyOf())
+        return RealTensor(this.shape, this.buffer.toDoubleArray().copyOf())
     }
 
 
     override fun Double.plus(other: RealTensor): RealTensor {
         val resBuffer = DoubleArray(other.buffer.size) { i ->
-            other.buffer.array[i] + this
+            other.buffer.toDoubleArray()[i] + this
         }
         return RealTensor(other.shape, resBuffer)
     }
@@ -50,34 +50,34 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.buffer.size) { i ->
-            newThis.buffer.array[i] + newOther.buffer.array[i]
+            newThis.buffer.toDoubleArray()[i] + newOther.buffer.toDoubleArray()[i]
         }
         return RealTensor(newThis.shape, resBuffer)
     }
 
     override fun RealTensor.plusAssign(value: Double) {
-        for (i in this.buffer.array.indices) {
-            this.buffer.array[i] += value
+        for (i in this.buffer.toDoubleArray().indices) {
+            this.buffer.toDoubleArray()[i] += value
         }
     }
 
     override fun RealTensor.plusAssign(other: RealTensor) {
         //todo should be change with broadcasting
-        for (i in this.buffer.array.indices) {
-            this.buffer.array[i] += other.buffer.array[i]
+        for (i in this.buffer.toDoubleArray().indices) {
+            this.buffer.toDoubleArray()[i] += other.buffer.toDoubleArray()[i]
         }
     }
 
     override fun Double.minus(other: RealTensor): RealTensor {
         val resBuffer = DoubleArray(other.buffer.size) { i ->
-            this - other.buffer.array[i]
+            this - other.buffer.toDoubleArray()[i]
         }
         return RealTensor(other.shape, resBuffer)
     }
 
     override fun RealTensor.minus(value: Double): RealTensor {
         val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.array[i] - value
+            this.buffer.toDoubleArray()[i] - value
         }
         return RealTensor(this.shape, resBuffer)
     }
@@ -87,14 +87,14 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.buffer.size) { i ->
-            newThis.buffer.array[i] - newOther.buffer.array[i]
+            newThis.buffer.toDoubleArray()[i] - newOther.buffer.toDoubleArray()[i]
         }
         return RealTensor(newThis.shape, resBuffer)
     }
 
     override fun RealTensor.minusAssign(value: Double) {
-        for (i in this.buffer.array.indices) {
-            this.buffer.array[i] -= value
+        for (i in this.buffer.toDoubleArray().indices) {
+            this.buffer.toDoubleArray()[i] -= value
         }
     }
 
@@ -105,7 +105,7 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
     override fun Double.times(other: RealTensor): RealTensor {
         //todo should be change with broadcasting
         val resBuffer = DoubleArray(other.buffer.size) { i ->
-            other.buffer.array[i] * this
+            other.buffer.toDoubleArray()[i] * this
         }
         return RealTensor(other.shape, resBuffer)
     }
@@ -116,28 +116,28 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
     override fun RealTensor.times(other: RealTensor): RealTensor {
         //todo should be change with broadcasting
         val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.array[i] * other.buffer.array[i]
+            this.buffer.toDoubleArray()[i] * other.buffer.toDoubleArray()[i]
         }
         return RealTensor(this.shape, resBuffer)
     }
 
     override fun RealTensor.timesAssign(value: Double) {
         //todo should be change with broadcasting
-        for (i in this.buffer.array.indices) {
-            this.buffer.array[i] *= value
+        for (i in this.buffer.toDoubleArray().indices) {
+            this.buffer.toDoubleArray()[i] *= value
         }
     }
 
     override fun RealTensor.timesAssign(other: RealTensor) {
         //todo should be change with broadcasting
-        for (i in this.buffer.array.indices) {
-            this.buffer.array[i] *= other.buffer.array[i]
+        for (i in this.buffer.toDoubleArray().indices) {
+            this.buffer.toDoubleArray()[i] *= other.buffer.toDoubleArray()[i]
         }
     }
 
     override fun RealTensor.unaryMinus(): RealTensor {
         val resBuffer = DoubleArray(this.buffer.size) { i ->
-            this.buffer.array[i].unaryMinus()
+            this.buffer.toDoubleArray()[i].unaryMinus()
         }
         return RealTensor(this.shape, resBuffer)
     }
@@ -158,14 +158,14 @@ public open class RealTensorAlgebra : TensorPartialDivisionAlgebra<Double, RealT
             newMultiIndex[i] = newMultiIndex[j].also { newMultiIndex[j] = newMultiIndex[i] }
 
             val linearIndex = resTensor.strides.offset(newMultiIndex)
-            resTensor.buffer.array[linearIndex] = this.buffer.array[offset]
+            resTensor.buffer.toDoubleArray()[linearIndex] = this.buffer.toDoubleArray()[offset]
         }
         return resTensor
     }
 
 
     override fun RealTensor.view(shape: IntArray): RealTensor {
-        return RealTensor(shape, this.buffer.array)
+        return RealTensor(shape, this.buffer.toDoubleArray())
     }
 
     override fun RealTensor.viewAs(other: RealTensor): RealTensor {
