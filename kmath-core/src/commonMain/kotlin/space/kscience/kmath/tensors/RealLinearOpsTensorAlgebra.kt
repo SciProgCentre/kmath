@@ -127,5 +127,5 @@ public class RealLinearOpsTensorAlgebra :
 
 }
 
-public inline fun <R> RealLinearOpsTensorAlgebra(block: RealTensorAlgebra.() -> R): R =
+public inline fun <R> RealLinearOpsTensorAlgebra(block: RealLinearOpsTensorAlgebra.() -> R): R =
     RealLinearOpsTensorAlgebra().block()

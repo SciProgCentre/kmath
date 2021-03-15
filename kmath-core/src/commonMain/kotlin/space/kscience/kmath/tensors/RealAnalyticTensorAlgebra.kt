@@ -146,5 +146,5 @@ public class RealAnalyticTensorAlgebra:
 
 }
 
-public inline fun <R> RealAnalyticTensorAlgebra(block: RealTensorAlgebra.() -> R): R =
+public inline fun <R> RealAnalyticTensorAlgebra(block: RealAnalyticTensorAlgebra.() -> R): R =
     RealAnalyticTensorAlgebra().block()
