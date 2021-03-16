@@ -12,19 +12,19 @@ import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.nd.real
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.nd.double
+import space.kscience.kmath.operations.*
 import kotlin.system.measureTimeMillis
 
 fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = AlgebraND.real(dim, dim)
-    val complexField: ComplexFieldND = AlgebraND.complex(dim, dim)
+    val doubleField = AlgebraND.double(dim, dim)
+    val complexField = doubleField.complex()
 
     val realTime = measureTimeMillis {
-        realField {
+        doubleField {
             var res: StructureND<Double> = one
             repeat(n) {
                 res += 1.0
@@ -36,9 +36,9 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField {
-            var res: StructureND<Complex> = one
+            var res: StructureND<Complex<Double>> = one
             repeat(n) {
-                res += 1.0
+                res += Complex(1.0, 0.0)
             }
         }
     }
@@ -48,18 +48,16 @@ fun main() {
 
 fun complexExample() {
     //Create a context for 2-d structure with complex values
-    ComplexField {
-        nd(4, 8) {
-            //a constant real-valued structure
-            val x = one * 2.5
-            operator fun Number.plus(other: Complex) = Complex(this.toDouble() + other.re, other.im)
-            //a structure generator specific to this context
-            val matrix = produce { (k, l) -> k + l * i }
-            //Perform sum
-            val sum = matrix + x + 1.0
+    AlgebraND.double(4, 8).complex().run {
+        //a constant real-valued structure
+        val x = one * 2.5
+        operator fun Number.plus(other: Complex<Double>) = Complex(toDouble() + other.re, other.im)
+        //a structure generator specific to this context
+        val matrix = produce { (k, l) -> k + l * i }
+        //Perform sum
+        val sum = matrix + x + Complex(1.0,0.0)
 
-            //Represent the sum as 2d-structure and transpose
-            sum.as2D().transpose()
-        }
+        //Represent the sum as 2d-structure and transpose
+        sum.as2D().transpose()
     }
 }

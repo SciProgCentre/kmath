@@ -7,9 +7,7 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -17,10 +15,8 @@ import kotlin.contracts.contract
 @OptIn(UnstableKMathAPI::class)
 public class DoubleFieldND(
     shape: IntArray,
-) : BufferedFieldND<Double, DoubleField>(shape, DoubleField, ::DoubleBuffer),
-    NumbersAddOperations<StructureND<Double>>,
-    ScaleOperations<StructureND<Double>>,
-    ExtendedField<StructureND<Double>> {
+) : BufferedExtendedFieldND<Double, DoubleField>(shape, DoubleField, ::DoubleBuffer),
+    NumbersAddOperations<StructureND<Double>> {
 
     override val zero: BufferND<Double> by lazy { produce { zero } }
     override val one: BufferND<Double> by lazy { produce { one } }
@@ -103,7 +99,7 @@ public class DoubleFieldND(
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-public fun AlgebraND.Companion.real(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
+public fun AlgebraND.Companion.double(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field

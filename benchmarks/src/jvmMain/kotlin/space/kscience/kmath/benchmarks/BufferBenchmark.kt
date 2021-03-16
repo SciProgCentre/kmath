@@ -17,7 +17,7 @@ import space.kscience.kmath.structures.MutableBuffer
 internal class BufferBenchmark {
     @Benchmark
     fun genericDoubleBufferReadWrite() {
-        val buffer = DoubleBuffer(size) { it.toDouble() }
+        val buffer = DoubleBuffer(size, Int::toDouble)
 
         (0 until size).forEach {
             buffer[it]
@@ -26,7 +26,8 @@ internal class BufferBenchmark {
 
     @Benchmark
     fun complexBufferReadWrite() {
-        val buffer = MutableBuffer.complex(size / 2) { Complex(it.toDouble(), -it.toDouble()) }
+        val buffer =
+            MutableBuffer.complex(MutableBuffer.Companion::double, size / 2) { Complex(it.toDouble(), -it.toDouble()) }
 
         (0 until size / 2).forEach {
             buffer[it]

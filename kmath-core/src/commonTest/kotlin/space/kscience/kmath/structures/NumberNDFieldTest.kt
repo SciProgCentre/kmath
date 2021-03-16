@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = AlgebraND.real(3, 3)
+    val algebra = AlgebraND.double(3, 3)
     val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 
@@ -83,7 +83,7 @@ class NumberNDFieldTest {
     @Test
     fun testInternalContext() {
         algebra {
-            (AlgebraND.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (AlgebraND.double(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

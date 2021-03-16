@@ -28,7 +28,7 @@ public class DoubleHistogramSpace(
     public val dimension: Int get() = lower.size
 
     private val shape = IntArray(binNums.size) { binNums[it] + 2 }
-    override val histogramValueSpace: DoubleFieldND = AlgebraND.real(*shape)
+    override val histogramValueSpace: DoubleFieldND = AlgebraND.double(*shape)
 
     override val strides: Strides get() = histogramValueSpace.strides
     private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }

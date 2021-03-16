@@ -5,223 +5,248 @@
 
 package space.kscience.kmath.complex
 
-import space.kscience.kmath.memory.MemoryReader
-import space.kscience.kmath.memory.MemorySpec
-import space.kscience.kmath.memory.MemoryWriter
-import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.MemoryBuffer
-import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableMemoryBuffer
-import kotlin.math.*
+import space.kscience.kmath.operations.*
+import kotlin.js.JsName
+import kotlin.jvm.JvmName
 
 /**
- * This complex's conjugate.
+ * Represents generic complex value consisting of real and imaginary part.
+ *
+ * @param T the type of components.
+ * @property re The real component.
+ * @property im The imaginary component.
  */
-public val Complex.conjugate: Complex
-    get() = Complex(re, -im)
+public data class Complex<out T : Any>(public val re: T, public val im: T) {
+    /**
+     * Converts this complex number to string formatted like `[re] + i * [im]`.
+     */
+    override fun toString(): String = "$re + i * $im"
+}
 
 /**
- * This complex's reciprocal.
+ * The algebra of [Complex].
+ *
+ * @param T the type of components.
+ * @property algebra the algebra over [T].
  */
-public val Complex.reciprocal: Complex
-    get() {
-        val scale = re * re + im * im
-        return Complex(re / scale, -im / scale)
-    }
-
-/**
- * Absolute value of complex number.
- */
-public val Complex.r: Double
-    get() = sqrt(re * re + im * im)
-
-/**
- * An angle between vector represented by complex number and X axis.
- */
-public val Complex.theta: Double
-    get() = atan(im / re)
-
-private val PI_DIV_2 = Complex(PI / 2, 0)
-
-/**
- * A field of [Complex].
- */
-@OptIn(UnstableKMathAPI::class)
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, NumbersAddOperations<Complex>,
-    ScaleOperations<Complex> {
-    override val zero: Complex = 0.0.toComplex()
-    override val one: Complex = 1.0.toComplex()
-
+public open class ComplexAlgebra<T : Any>(public open val algebra: NumericAlgebra<T>) : NumericAlgebra<Complex<T>> {
     /**
      * The imaginary unit.
      */
-    public val i: Complex by lazy { Complex(0.0, 1.0) }
-
-    override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
-
-    override fun number(value: Number): Complex = Complex(value.toDouble(), 0.0)
-
-    override fun scale(a: Complex, value: Double): Complex = Complex(a.re * value, a.im * value)
-
-    override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
-//    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
-
-    override fun multiply(a: Complex, b: Complex): Complex =
-        Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
-
-    override fun divide(a: Complex, b: Complex): Complex = when {
-        abs(b.im) < abs(b.re) -> {
-            val wr = b.im / b.re
-            val wd = b.re + wr * b.im
-
-            if (wd.isNaN() || wd == 0.0)
-                throw ArithmeticException("Division by zero or infinity")
-            else
-                Complex((a.re + a.im * wr) / wd, (a.im - a.re * wr) / wd)
-        }
-
-        b.im == 0.0 -> throw ArithmeticException("Division by zero")
-
-        else -> {
-            val wr = b.re / b.im
-            val wd = b.im + wr * b.re
-
-            if (wd.isNaN() || wd == 0.0)
-                throw ArithmeticException("Division by zero or infinity")
-            else
-                Complex((a.re * wr + a.im) / wd, (a.im * wr - a.re) / wd)
-        }
+    public open val i: Complex<T> by lazy {
+        algebra { Complex(number(0), number(1)) }
     }
 
-    override operator fun Complex.div(k: Number): Complex = Complex(re / k.toDouble(), im / k.toDouble())
+    override fun number(value: Number): Complex<T> =
+        algebra { Complex(algebra.number(value), algebra.number(0)) }
 
-    override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2.0
-    override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2.0
+    override fun bindSymbol(value: String): Complex<T> = if (value == "i") i else super.bindSymbol(value)
+}
 
-    override fun tan(arg: Complex): Complex {
+/**
+ * The group of [Complex].
+ *
+ * @param T the type of components.
+ */
+public open class ComplexGroup<T : Any, out A>(override val algebra: A) : ComplexAlgebra<T>(algebra),
+    Group<Complex<T>> where A : NumericAlgebra<T>, A : Group<T> {
+    override val zero: Complex<T> by lazy {
+        algebra { Complex(zero, zero) }
+    }
+
+    /**
+     * This complex's conjugate.
+     */
+    public val Complex<T>.conjugate: Complex<T>
+        get() = Complex(re, algebra { -im })
+
+    override fun add(a: Complex<T>, b: Complex<T>): Complex<T> = algebra { Complex(a.re + b.re, a.im + b.im) }
+
+    override fun Complex<T>.unaryMinus(): Complex<T> = algebra { Complex(-re, -im) }
+
+    @JsName("unaryMinus_T")
+    public operator fun T.unaryMinus(): Complex<T> = algebra { Complex(-this@unaryMinus, zero) }
+
+    @JsName("unaryPlus_T")
+    public operator fun T.unaryPlus(): Complex<T> = algebra { Complex(this@unaryPlus, zero) }
+
+    public operator fun T.plus(b: Complex<T>): Complex<T> = add(+this, b)
+    public operator fun Complex<T>.plus(b: T): Complex<T> = add(this, +b)
+    public operator fun T.minus(b: Complex<T>): Complex<T> = add(+this, -b)
+    public operator fun Complex<T>.minus(b: T): Complex<T> = add(this, -b)
+}
+
+/**
+ * The ring of [Complex].
+ *
+ * @param T the type of components.
+ */
+public open class ComplexRing<T : Any, out A>(override val algebra: A) : ComplexGroup<T, A>(algebra),
+    Ring<Complex<T>> where A : NumericAlgebra<T>, A : Ring<T> {
+    override val one: Complex<T> by lazy {
+        algebra { Complex(one, zero) }
+    }
+
+    override val i: Complex<T> by lazy {
+        algebra { Complex(zero, one) }
+    }
+
+    override fun multiply(a: Complex<T>, b: Complex<T>): Complex<T> =
+        algebra { Complex(a.re * b.re - a.im * b.im, a.im * b.re + a.re * b.im) }
+
+    public operator fun T.times(b: Complex<T>): Complex<T> = multiply(+this, b)
+    public operator fun Complex<T>.times(b: T): Complex<T> = multiply(this, +b)
+}
+
+/**
+ * [ComplexRing] instance for [ByteRing].
+ */
+public val ComplexByteRing: ComplexRing<Byte, ByteRing> = ComplexRing(ByteRing)
+
+/**
+ * [ComplexRing] instance for [ShortRing].
+ */
+public val ComplexShortRing: ComplexRing<Short, ShortRing> = ComplexRing(ShortRing)
+
+/**
+ * [ComplexRing] instance for [IntRing].
+ */
+public val ComplexIntRing: ComplexRing<Int, IntRing> = ComplexRing(IntRing)
+
+/**
+ * [ComplexRing] instance for [LongRing].
+ */
+public val ComplexLongRing: ComplexRing<Long, LongRing> = ComplexRing(LongRing)
+
+/**
+ * The field of [Complex].
+ */
+public open class ComplexField<T : Any, out A>(override val algebra: A) : ComplexRing<T, A>(algebra),
+    Field<Complex<T>> where A : Field<T> {
+    /**
+     * This complex's reciprocal.
+     */
+    public val Complex<T>.reciprocal: Complex<T>
+        get() = algebra {
+            val scale = re * re + im * im
+            Complex(re / scale, -im / scale)
+        }
+
+    override fun divide(a: Complex<T>, b: Complex<T>): Complex<T> = a * b.reciprocal
+
+    override fun number(value: Number): Complex<T> = super<ComplexRing>.number(value)
+
+    override fun scale(a: Complex<T>, value: Double): Complex<T> =
+        algebra { Complex(a.re * value, a.im * value) }
+
+    override operator fun Complex<T>.div(k: Number): Complex<T> =
+        algebra { Complex(re / k.toDouble(), im / k.toDouble()) }
+
+    public operator fun T.div(b: Complex<T>): Complex<T> = divide(+this, b)
+    public operator fun Complex<T>.div(b: T): Complex<T> = divide(this, +b)
+
+    @JsName("scale_T")
+    public fun scale(a: T, value: Double): Complex<T> = scale(+a, value)
+}
+
+
+/**
+ * [ComplexRing] instance for [BigIntField].
+ */
+public val ComplexBigIntField: ComplexField<BigInt, BigIntField> = ComplexField(BigIntField)
+
+
+/**
+ * The extended field of Complex.
+ */
+public open class ComplexExtendedField<T : Any, out A>(override val algebra: A) : ComplexField<T, A>(algebra),
+    ExtendedField<Complex<T>>, Norm<Complex<T>, T> where A : ExtendedField<T> {
+    private val two by lazy { one + one }
+
+    /**
+     * The *r* component of the polar form of this number.
+     */
+    public val Complex<T>.r: T
+        get() = norm(this)
+
+    /**
+     * The *&theta;* component of the polar form of this number.
+     */
+    public val Complex<T>.theta: T
+        get() = algebra { atan(im / re) }
+
+    override fun bindSymbol(value: String): Complex<T> =
+        if (value == "i") i else super<ExtendedField>.bindSymbol(value)
+
+    override fun sin(arg: Complex<T>): Complex<T> = i * (exp(-i * arg) - exp(i * arg)) / two
+    override fun cos(arg: Complex<T>): Complex<T> = (exp(-i * arg) + exp(i * arg)) / two
+
+    override fun tan(arg: Complex<T>): Complex<T> {
         val e1 = exp(-i * arg)
         val e2 = exp(i * arg)
         return i * (e1 - e2) / (e1 + e2)
     }
 
-    override fun asin(arg: Complex): Complex = -i * ln(sqrt(1 - (arg * arg)) + i * arg)
-    override fun acos(arg: Complex): Complex = PI_DIV_2 + i * ln(sqrt(1 - (arg * arg)) + i * arg)
+    override fun asin(arg: Complex<T>): Complex<T> = -i * ln(sqrt(one - (arg * arg)) + i * arg)
+    override fun acos(arg: Complex<T>): Complex<T> =
+        (pi / two) + i * ln(sqrt(one - (arg * arg)) + i * arg)
 
-    override fun atan(arg: Complex): Complex {
+    override fun atan(arg: Complex<T>): Complex<T> = algebra {
         val iArg = i * arg
-        return i * (ln(1 - iArg) - ln(1 + iArg)) / 2
+        return i * (ln(this@ComplexExtendedField.one - iArg) - ln(this@ComplexExtendedField.one + iArg)) / 2
     }
 
-    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
-        arg.re.pow(pow.toDouble()).toComplex()
-    else
-        exp(pow * ln(arg))
+    override fun power(arg: Complex<T>, pow: Number): Complex<T> = algebra {
+        if (arg.im == 0.0)
+            Complex(arg.re.pow(pow.toDouble()), algebra.zero)
+        else
+            exp(pow * ln(arg))
+    }
 
-    override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
+    override fun exp(arg: Complex<T>): Complex<T> =
+        Complex(algebra.exp(arg.re), algebra.zero) * Complex(algebra.cos(arg.im), algebra.sin(arg.im))
 
-    override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
+    override fun ln(arg: Complex<T>): Complex<T> = algebra { Complex(ln(norm(arg)), atan(arg.im / arg.re)) }
+    override fun norm(arg: Complex<T>): T = algebra { sqrt(arg.re * arg.re + arg.im * arg.im) }
 
-    /**
-     * Adds complex number to real one.
-     *
-     * @receiver the augend.
-     * @param c the addend.
-     * @return the sum.
-     */
-    public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
+    @JsName("norm_T_3")
+    @JvmName("norm\$T")
+    public fun norm(arg: T): T = algebra { sqrt(arg * arg) }
 
-    /**
-     * Subtracts complex number from real one.
-     *
-     * @receiver the minuend.
-     * @param c the subtrahend.
-     * @return the difference.
-     */
-    public operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
+    @JsName("sin_T")
+    public fun sin(arg: T): Complex<T> = sin(+arg)
 
-    /**
-     * Adds real number to complex one.
-     *
-     * @receiver the augend.
-     * @param d the addend.
-     * @return the sum.
-     */
-    public operator fun Complex.plus(d: Double): Complex = d + this
+    @JsName("cos_T")
+    public fun cos(arg: T): Complex<T> = cos(+arg)
 
-    /**
-     * Subtracts real number from complex one.
-     *
-     * @receiver the minuend.
-     * @param d the subtrahend.
-     * @return the difference.
-     */
-    public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
+    @JsName("tan_T")
+    public fun tan(arg: T): Complex<T> = tan(+arg)
 
-    /**
-     * Multiplies real number by complex one.
-     *
-     * @receiver the multiplier.
-     * @param c the multiplicand.
-     * @receiver the product.
-     */
-    public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
+    @JsName("asin_T")
+    public fun asin(arg: T): Complex<T> = asin(+arg)
 
-    override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
+    @JsName("acos_T")
+    public fun acos(arg: T): Complex<T> = acos(+arg)
 
-    override fun bindSymbolOrNull(value: String): Complex? = if (value == "i") i else null
+    @JsName("atan_T")
+    public fun atan(arg: T): Complex<T> = atan(+arg)
+
+    @JsName("power_T")
+    public fun power(arg: T, pow: Number): Complex<T> = power(+arg, pow)
+
+    @JsName("exp_T")
+    public fun exp(arg: T): Complex<T> = exp(+arg)
+
+    @JsName("ln_T")
+    public fun ln(arg: T): Complex<T> = ln(+arg)
 }
 
 /**
- * Represents `double`-based complex number.
- *
- * @property re The real part.
- * @property im The imaginary part.
+ * [ComplexRing] instance for [DoubleField].
  */
-@OptIn(UnstableKMathAPI::class)
-public data class Complex(val re: Double, val im: Double) {
-    public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
-    public constructor(re: Number) : this(re.toDouble(), 0.0)
-
-    override fun toString(): String = "($re + i * $im)"
-
-    public companion object : MemorySpec<Complex> {
-        override val objectSize: Int
-            get() = 16
-
-        override fun MemoryReader.read(offset: Int): Complex =
-            Complex(readDouble(offset), readDouble(offset + 8))
-
-        override fun MemoryWriter.write(offset: Int, value: Complex) {
-            writeDouble(offset, value.re)
-            writeDouble(offset + 8, value.im)
-        }
-    }
-}
-
+public val ComplexDoubleField: ComplexExtendedField<Double, DoubleField> = ComplexExtendedField(DoubleField)
 
 /**
- * Creates a complex number with real part equal to this real.
- *
- * @receiver the real part.
- * @return the new complex number.
+ * [ComplexRing] instance for [FloatField].
  */
-public fun Number.toComplex(): Complex = Complex(this)
-
-/**
- * Creates a new buffer of complex numbers with the specified [size], where each element is calculated by calling the
- * specified [init] function.
- */
-public inline fun Buffer.Companion.complex(size: Int, init: (Int) -> Complex): Buffer<Complex> =
-    MemoryBuffer.create(Complex, size, init)
-
-/**
- * Creates a new buffer of complex numbers with the specified [size], where each element is calculated by calling the
- * specified [init] function.
- */
-public inline fun MutableBuffer.Companion.complex(size: Int, init: (Int) -> Complex): MutableBuffer<Complex> =
-    MutableMemoryBuffer.create(Complex, size, init)
+public val ComplexFloatField: ComplexExtendedField<Double, DoubleField> = ComplexExtendedField(DoubleField)
