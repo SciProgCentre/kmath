@@ -1,7 +1,7 @@
 package space.kscience.kmath.tensors
 
 public class DoubleLinearOpsTensorAlgebra :
-    LinearOpsTensorAlgebra<Double, DoubleTensor>,
+    LinearOpsTensorAlgebra<Double, DoubleTensor, IntTensor>,
     DoubleTensorAlgebra() {
 
     override fun DoubleTensor.inv(): DoubleTensor {

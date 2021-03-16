@@ -1,7 +1,7 @@
 package space.kscience.kmath.tensors
 
 
-public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>> :
+public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, IndexTensorType: TensorStructure<Int>> :
     TensorPartialDivisionAlgebra<T, TensorType> {
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.inv
@@ -14,7 +14,7 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>> :
     public fun TensorType.qr(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(): Pair<TensorType, IntTensor>
+    public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
     public fun luPivot(lu: TensorType, pivots: IntTensor): Triple<TensorType, TensorType, TensorType>

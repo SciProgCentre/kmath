@@ -12,6 +12,9 @@ public open class BufferedTensor<T>(
     public val strides: TensorStrides
         get() = TensorStrides(shape)
 
+    public val numel: Int
+        get() = strides.linearSize
+
     override fun get(index: IntArray): T = buffer[bufferStart + strides.offset(index)]
 
     override fun set(index: IntArray, value: T) {
