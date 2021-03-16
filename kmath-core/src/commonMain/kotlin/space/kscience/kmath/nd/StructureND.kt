@@ -56,12 +56,12 @@ public interface StructureND<T> {
         /**
          * Indicates whether some [StructureND] is equal to another one.
          */
-        public fun contentEquals(st1: StructureND<*>, st2: StructureND<*>): Boolean {
+        public fun <T: Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
             if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
-                return st1.buffer.contentEquals(st2.buffer)
+                return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }

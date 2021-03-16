@@ -1073,7 +1073,6 @@ public abstract interface class space/kscience/kmath/nd/Structure1D : space/ksci
 }
 
 public final class space/kscience/kmath/nd/Structure1D$DefaultImpls {
-	public static fun contentEquals (Lspace/kscience/kmath/nd/Structure1D;Lspace/kscience/kmath/structures/Buffer;)Z
 	public static fun get (Lspace/kscience/kmath/nd/Structure1D;[I)Ljava/lang/Object;
 	public static fun getDimension (Lspace/kscience/kmath/nd/Structure1D;)I
 	public static fun iterator (Lspace/kscience/kmath/nd/Structure1D;)Ljava/util/Iterator;
@@ -2088,7 +2087,6 @@ public final class space/kscience/kmath/operations/TrigonometricOperations$Defau
 
 public final class space/kscience/kmath/structures/ArrayBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public fun <init> ([Ljava/lang/Object;)V
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun get (I)Ljava/lang/Object;
 	public fun getSize ()I
@@ -2098,7 +2096,6 @@ public final class space/kscience/kmath/structures/ArrayBuffer : space/kscience/
 
 public abstract interface class space/kscience/kmath/structures/Buffer {
 	public static final field Companion Lspace/kscience/kmath/structures/Buffer$Companion;
-	public abstract fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
 	public abstract fun get (I)Ljava/lang/Object;
 	public abstract fun getSize ()I
 	public abstract fun iterator ()Ljava/util/Iterator;
@@ -2107,10 +2104,7 @@ public abstract interface class space/kscience/kmath/structures/Buffer {
 public final class space/kscience/kmath/structures/Buffer$Companion {
 	public final fun auto (Lkotlin/reflect/KClass;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public final fun boxing (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
-}
-
-public final class space/kscience/kmath/structures/Buffer$DefaultImpls {
-	public static fun contentEquals (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Z
+	public final fun contentEquals (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Z
 }
 
 public final class space/kscience/kmath/structures/BufferKt {
@@ -2130,8 +2124,6 @@ public final class space/kscience/kmath/structures/BufferOperationKt {
 public final class space/kscience/kmath/structures/DoubleBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([D)Lspace/kscience/kmath/structures/DoubleBuffer;
 	public static fun constructor-impl ([D)[D
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl ([DLspace/kscience/kmath/structures/Buffer;)Z
 	public synthetic fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun copy-Dv3HvWU ()[D
 	public static fun copy-Dv3HvWU ([D)[D
@@ -2318,10 +2310,6 @@ public abstract interface class space/kscience/kmath/structures/FlaggedBuffer : 
 	public abstract fun getFlag (I)B
 }
 
-public final class space/kscience/kmath/structures/FlaggedBuffer$DefaultImpls {
-	public static fun contentEquals (Lspace/kscience/kmath/structures/FlaggedBuffer;Lspace/kscience/kmath/structures/Buffer;)Z
-}
-
 public final class space/kscience/kmath/structures/FlaggedBufferKt {
 	public static final fun forEachValid (Lspace/kscience/kmath/structures/FlaggedDoubleBuffer;Lkotlin/jvm/functions/Function1;)V
 	public static final fun hasFlag (Lspace/kscience/kmath/structures/FlaggedBuffer;ILspace/kscience/kmath/structures/ValueFlag;)Z
@@ -2331,7 +2319,6 @@ public final class space/kscience/kmath/structures/FlaggedBufferKt {
 
 public final class space/kscience/kmath/structures/FlaggedDoubleBuffer : space/kscience/kmath/structures/Buffer, space/kscience/kmath/structures/FlaggedBuffer {
 	public fun <init> ([D[B)V
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun get (I)Ljava/lang/Double;
 	public synthetic fun get (I)Ljava/lang/Object;
 	public fun getFlag (I)B
@@ -2344,8 +2331,6 @@ public final class space/kscience/kmath/structures/FlaggedDoubleBuffer : space/k
 public final class space/kscience/kmath/structures/FloatBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([F)Lspace/kscience/kmath/structures/FloatBuffer;
 	public static fun constructor-impl ([F)[F
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl ([FLspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl ([F)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
@@ -2380,8 +2365,6 @@ public final class space/kscience/kmath/structures/FloatBufferKt {
 public final class space/kscience/kmath/structures/IntBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([I)Lspace/kscience/kmath/structures/IntBuffer;
 	public static fun constructor-impl ([I)[I
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl ([ILspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl ([I)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
@@ -2416,8 +2399,6 @@ public final class space/kscience/kmath/structures/IntBufferKt {
 public final class space/kscience/kmath/structures/ListBuffer : space/kscience/kmath/structures/Buffer {
 	public static final synthetic fun box-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/ListBuffer;
 	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl (Ljava/util/List;Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
@@ -2438,8 +2419,6 @@ public final class space/kscience/kmath/structures/ListBuffer : space/kscience/k
 public final class space/kscience/kmath/structures/LongBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([J)Lspace/kscience/kmath/structures/LongBuffer;
 	public static fun constructor-impl ([J)[J
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl ([JLspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl ([J)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
@@ -2474,7 +2453,6 @@ public final class space/kscience/kmath/structures/LongBufferKt {
 public class space/kscience/kmath/structures/MemoryBuffer : space/kscience/kmath/structures/Buffer {
 	public static final field Companion Lspace/kscience/kmath/structures/MemoryBuffer$Companion;
 	public fun <init> (Lspace/kscience/kmath/memory/Memory;Lspace/kscience/kmath/memory/MemorySpec;)V
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun get (I)Ljava/lang/Object;
 	protected final fun getMemory ()Lspace/kscience/kmath/memory/Memory;
 	public fun getSize ()I
@@ -2503,15 +2481,9 @@ public final class space/kscience/kmath/structures/MutableBuffer$Companion {
 	public final fun short-1yRgbGw (ILkotlin/jvm/functions/Function1;)[S
 }
 
-public final class space/kscience/kmath/structures/MutableBuffer$DefaultImpls {
-	public static fun contentEquals (Lspace/kscience/kmath/structures/MutableBuffer;Lspace/kscience/kmath/structures/Buffer;)Z
-}
-
 public final class space/kscience/kmath/structures/MutableListBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableListBuffer;
 	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl (Ljava/util/List;Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
@@ -2548,8 +2520,6 @@ public final class space/kscience/kmath/structures/MutableMemoryBuffer$Companion
 public final class space/kscience/kmath/structures/ReadOnlyBuffer : space/kscience/kmath/structures/Buffer {
 	public static final synthetic fun box-impl (Lspace/kscience/kmath/structures/MutableBuffer;)Lspace/kscience/kmath/structures/ReadOnlyBuffer;
 	public static fun constructor-impl (Lspace/kscience/kmath/structures/MutableBuffer;)Lspace/kscience/kmath/structures/MutableBuffer;
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl (Lspace/kscience/kmath/structures/MutableBuffer;Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Lspace/kscience/kmath/structures/MutableBuffer;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Lspace/kscience/kmath/structures/MutableBuffer;Lspace/kscience/kmath/structures/MutableBuffer;)Z
@@ -2570,8 +2540,6 @@ public final class space/kscience/kmath/structures/ReadOnlyBuffer : space/kscien
 public final class space/kscience/kmath/structures/ShortBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([S)Lspace/kscience/kmath/structures/ShortBuffer;
 	public static fun constructor-impl ([S)[S
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl ([SLspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl ([S)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
@@ -2615,7 +2583,6 @@ public final class space/kscience/kmath/structures/ValueFlag : java/lang/Enum {
 
 public final class space/kscience/kmath/structures/VirtualBuffer : space/kscience/kmath/structures/Buffer {
 	public fun <init> (ILkotlin/jvm/functions/Function1;)V
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun get (I)Ljava/lang/Object;
 	public fun getSize ()I
 	public fun iterator ()Ljava/util/Iterator;

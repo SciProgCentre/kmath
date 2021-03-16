@@ -1,8 +1,6 @@
 public final class space/kscience/kmath/viktor/ViktorBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lspace/kscience/kmath/viktor/ViktorBuffer;
 	public static fun constructor-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lorg/jetbrains/bio/viktor/F64FlatArray;
-	public fun contentEquals (Lspace/kscience/kmath/structures/Buffer;)Z
-	public static fun contentEquals-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;Lspace/kscience/kmath/structures/Buffer;)Z
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z

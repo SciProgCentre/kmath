@@ -1,6 +1,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.E
 import kotlin.math.PI
@@ -276,7 +277,7 @@ class SimpleAutoDiffTest {
     fun testDivGrad() {
         val res = dxy(x to 1.0, y to 2.0) { x, y -> x * x + y * y }
         assertEquals(6.0, res.div())
-        assertTrue(res.grad(x, y).contentEquals(doubleArrayOf(2.0, 4.0).asBuffer()))
+        assertTrue(Buffer.contentEquals(res.grad(x, y), doubleArrayOf(2.0, 4.0).asBuffer()))
     }
 
     private fun assertApprox(a: Double, b: Double) {

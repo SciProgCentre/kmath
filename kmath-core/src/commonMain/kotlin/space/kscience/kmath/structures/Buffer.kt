@@ -19,7 +19,7 @@ public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
 /**
  * A generic read-only random-access structure for both primitives and objects.
  *
- * [Buffer] is in general identity-free. [contentEquals] should be used for content equality checks
+ * [Buffer] is in general identity-free. [Buffer.contentEquals] should be used for content equality checks.
  *
  * @param T the type of elements contained in the buffer.
  */
@@ -39,18 +39,16 @@ public interface Buffer<out T> {
      */
     public operator fun iterator(): Iterator<T>
 
-    /**
-     * Checks content equality with another buffer.
-     */
-    public fun contentEquals(other: Buffer<*>): Boolean {
-        if (this.size != other.size) return false
-        for (i in indices) {
-            if (get(i) != other[i]) return false
-        }
-        return true
-    }
-
     public companion object {
+
+        public fun <T: Any> contentEquals(first: Buffer<T>, second: Buffer<T>): Boolean{
+            if (first.size != second.size) return false
+            for (i in first.indices) {
+                if (first[i] != second[i]) return false
+            }
+            return true
+        }
+
         /**
          * Creates a [ListBuffer] of given type [T] with given [size]. Each element is calculated by calling the
          * specified [initializer] function.
@@ -279,14 +277,6 @@ public class VirtualBuffer<T>(override val size: Int, private val generator: (In
     }
 
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
-
-    override fun contentEquals(other: Buffer<*>): Boolean {
-        return if (other is VirtualBuffer) {
-            this.size == other.size && this.generator == other.generator
-        } else {
-            super.contentEquals(other)
-        }
-    }
 }
 
 /**
