@@ -19,6 +19,7 @@
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
 - Number multiplication and division in main Algebra chain
+- `contentEquals` from Buffer. It moved to the companion.
 
 ### Fixed
 

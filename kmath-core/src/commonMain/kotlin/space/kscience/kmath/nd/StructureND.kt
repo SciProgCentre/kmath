@@ -3,8 +3,6 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.asSequence
 import kotlin.jvm.JvmName
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
@@ -56,7 +54,7 @@ public interface StructureND<T> {
         /**
          * Indicates whether some [StructureND] is equal to another one.
          */
-        public fun <T: Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
+        public fun <T : Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
@@ -65,6 +63,25 @@ public interface StructureND<T> {
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }
+        }
+
+        /**
+         * Debug output to string
+         */
+        public fun toString(structure: StructureND<*>): String {
+            val bufferRepr: String = when (structure.shape.size) {
+                1 -> (0 until structure.shape[0]).map { structure[it] }
+                    .joinToString(prefix = "[", postfix = "]", separator = ", ")
+                2 -> (0 until structure.shape[0]).joinToString(prefix = "[", postfix = "]", separator = ", ") { i ->
+                    (0 until structure.shape[1]).joinToString(prefix = "[", postfix = "]", separator = ", ") { j ->
+                        structure[i, j].toString()
+                    }
+                }
+                else -> "..."
+            }
+            val className = structure::class.simpleName ?: "StructureND"
+
+            return "$className(shape=${structure.shape.contentToString()}, buffer=$bufferRepr)"
         }
 
         /**
@@ -247,83 +264,6 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
         public operator fun invoke(shape: IntArray): Strides =
             defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
     }
-}
-
-/**
- * Represents [StructureND] over [Buffer].
- *
- * @param T the type of items.
- * @param strides The strides to access elements of [Buffer] by linear indices.
- * @param buffer The underlying buffer.
- */
-public open class BufferND<T>(
-    public val strides: Strides,
-    buffer: Buffer<T>,
-) : StructureND<T> {
-
-    init {
-        if (strides.linearSize != buffer.size) {
-            error("Expected buffer side of ${strides.linearSize}, but found ${buffer.size}")
-        }
-    }
-
-    public open val buffer: Buffer<T> = buffer
-
-    override operator fun get(index: IntArray): T = buffer[strides.offset(index)]
-
-    override val shape: IntArray get() = strides.shape
-
-    override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
-        it to this[it]
-    }
-
-    override fun toString(): String {
-        val bufferRepr: String = when (shape.size) {
-            1 -> buffer.asSequence().joinToString(prefix = "[", postfix = "]", separator = ", ")
-            2 -> (0 until shape[0]).joinToString(prefix = "[", postfix = "]", separator = ", ") { i ->
-                (0 until shape[1]).joinToString(prefix = "[", postfix = "]", separator = ", ") { j ->
-                    val offset = strides.offset(intArrayOf(i, j))
-                    buffer[offset].toString()
-                }
-            }
-            else -> "..."
-        }
-        return "NDBuffer(shape=${shape.contentToString()}, buffer=$bufferRepr)"
-    }
-}
-
-/**
- * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferND]
- */
-public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
-    factory: BufferFactory<R> = Buffer.Companion::auto,
-    crossinline transform: (T) -> R,
-): BufferND<R> {
-    return if (this is BufferND<T>)
-        BufferND(this.strides, factory.invoke(strides.linearSize) { transform(buffer[it]) })
-    else {
-        val strides = DefaultStrides(shape)
-        BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
-    }
-}
-
-/**
- * Mutable ND buffer based on linear [MutableBuffer].
- */
-public class MutableBufferND<T>(
-    strides: Strides,
-    buffer: MutableBuffer<T>,
-) : BufferND<T>(strides, buffer), MutableStructureND<T> {
-
-    init {
-        require(strides.linearSize == buffer.size) {
-            "Expected buffer side of ${strides.linearSize}, but found ${buffer.size}"
-        }
-    }
-
-    override val buffer: MutableBuffer<T> = super.buffer as MutableBuffer<T>
-
-    override operator fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
 }
 
 public inline fun <reified T : Any> StructureND<T>.combine(

@@ -41,6 +41,9 @@ public interface Buffer<out T> {
 
     public companion object {
 
+        /**
+         * Check the element-by-element match of content of two buffers.
+         */
         public fun <T: Any> contentEquals(first: Buffer<T>, second: Buffer<T>): Boolean{
             if (first.size != second.size) return false
             for (i in first.indices) {

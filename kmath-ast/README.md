@@ -2,17 +2,17 @@
 
 This subproject implements the following features:
 
- - [expression-language](src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
- - [mst-jvm-codegen](src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
- - [mst-js-codegen](src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+ - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
+ - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+ - [mst-building](src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+ - [mst-interpreter](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+ - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+ - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 
 > #### Artifact:
 >
-> This module artifact: `space.kscience:kmath-ast:0.3.0-dev-2`.
+> This module artifact: `space.kscience:kmath-ast:0.3.0-dev-3`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
 >
@@ -25,13 +25,10 @@ This subproject implements the following features:
 >     maven { url 'https://repo.kotlin.link' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
 >     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
->//     Uncomment if repo.kotlin.link is unavailable 
->//     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->//     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
 > dependencies {
->     implementation 'space.kscience:kmath-ast:0.3.0-dev-2'
+>     implementation 'space.kscience:kmath-ast:0.3.0-dev-3'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -41,13 +38,10 @@ This subproject implements the following features:
 >     maven("https://repo.kotlin.link")
 >     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
 >     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
->//     Uncomment if repo.kotlin.link is unavailable 
->//     maven("https://dl.bintray.com/mipt-npm/kscience")
->//     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
 > dependencies {
->     implementation("space.kscience:kmath-ast:0.3.0-dev-2")
+>     implementation("space.kscience:kmath-ast:0.3.0-dev-3")
 > }
 > ```
 

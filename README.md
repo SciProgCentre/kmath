@@ -87,12 +87,12 @@ KMath is a modular library. Different modules provide different features with di
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [expression-language](kmath-ast/src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
-> - [mst](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
-> - [mst-building](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
-> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
-> - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
-> - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+> - [expression-language](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
+> - [mst](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+> - [mst-building](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+> - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+> - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 <hr/>
 
@@ -108,8 +108,8 @@ KMath is a modular library. Different modules provide different features with di
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [complex](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Complex.kt) : Complex Numbers
-> - [quaternion](kmath-complex/src/commonMain/kotlin/kscience/kmath/complex/Quaternion.kt) : Quaternions
+> - [complex](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex Numbers
+> - [quaternion](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions
 
 <hr/>
 
@@ -119,15 +119,15 @@ KMath is a modular library. Different modules provide different features with di
 > **Maturity**: DEVELOPMENT
 >
 > **Features:**
-> - [algebras](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Algebraic structures like rings, spaces and fields.
-> - [nd](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Many-dimensional structures and operations on them.
-> - [linear](kmath-core/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
-> - [buffers](kmath-core/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
-> - [expressions](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of 
+> - [algebras](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Algebraic structures like rings, spaces and fields.
+> - [nd](kmath-core/src/commonMain/kotlin/space/kscience/kmath/nd/StructureND.kt) : Many-dimensional structures and operations on them.
+> - [linear](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
+> - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffer.kt) : One-dimensional structure
+> - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of
 objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
 performance calculations to code generation.
-> - [domains](kmath-core/src/commonMain/kotlin/kscience/kmath/domains) : Domains
-> - [autodif](kmath-core/src/commonMain/kotlin/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
+> - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
+> - [autodif](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 <hr/>
 
@@ -157,9 +157,9 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [RealVector](kmath-for-real/src/commonMain/kotlin/kscience/kmath/real/RealVector.kt) : Numpy-like operations for Buffers/Points
-> - [RealMatrix](kmath-for-real/src/commonMain/kotlin/kscience/kmath/real/RealMatrix.kt) : Numpy-like operations for 2d real structures
-> - [grids](kmath-for-real/src/commonMain/kotlin/kscience/kmath/structures/grids.kt) : Uniform grid generators
+> - [DoubleVector](kmath-for-real/src/commonMain/kotlin/space/kscience/kmath/real/DoubleVector.kt) : Numpy-like operations for Buffers/Points
+> - [DoubleMatrix](kmath-for-real/src/commonMain/kotlin/space/kscience/kmath/real/DoubleMatrix.kt) : Numpy-like operations for 2d real structures
+> - [grids](kmath-for-real/src/commonMain/kotlin/space/kscience/kmath/structures/grids.kt) : Uniform grid generators
 
 <hr/>
 
@@ -169,10 +169,10 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [piecewise](kmath-functions/Piecewise functions.) : src/commonMain/kotlin/kscience/kmath/functions/Piecewise.kt
-> - [polynomials](kmath-functions/Polynomial functions.) : src/commonMain/kotlin/kscience/kmath/functions/Polynomial.kt
-> - [linear interpolation](kmath-functions/Linear XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/LinearInterpolator.kt
-> - [spline interpolation](kmath-functions/Cubic spline XY interpolator.) : src/commonMain/kotlin/kscience/kmath/interpolation/SplineInterpolator.kt
+> - [piecewise](kmath-functions/Piecewise functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt
+> - [polynomials](kmath-functions/Polynomial functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt
+> - [linear interpolation](kmath-functions/Linear XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/LinearInterpolator.kt
+> - [spline interpolation](kmath-functions/Cubic spline XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt
 
 <hr/>
 
@@ -206,9 +206,9 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [nd4jarraystructure](kmath-nd4j/src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
-> - [nd4jarrayrings](kmath-nd4j/src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
-> - [nd4jarrayfields](kmath-nd4j/src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
+> - [nd4jarraystructure](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
+> - [nd4jarrayrings](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
+> - [nd4jarrayfields](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
 
 <hr/>
 
@@ -254,8 +254,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-2")
-    // api("kscience.kmath:kmath-core-jvm:0.3.0-dev-2") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-3")
+    // api("kscience.kmath:kmath-core-jvm:0.3.0-dev-3") for jvm-specific version
 }
 ```
 
