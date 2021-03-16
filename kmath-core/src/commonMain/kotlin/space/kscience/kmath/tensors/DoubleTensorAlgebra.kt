@@ -69,10 +69,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.plusAssign(other: DoubleTensor) {
-        //todo should be change with broadcasting
+        val newOther = broadcastTo(other, this.shape)
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] +=
-                other.buffer.array()[this.bufferStart + i]
+                newOther.buffer.array()[this.bufferStart + i]
         }
     }
 
@@ -107,41 +107,45 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.minusAssign(other: DoubleTensor) {
-        TODO("Alya")
+        val newOther = broadcastTo(other, this.shape)
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.array()[this.bufferStart + i] -=
+                newOther.buffer.array()[this.bufferStart + i]
+        }
     }
 
     override fun Double.times(other: DoubleTensor): DoubleTensor {
-        //todo should be change with broadcasting
         val resBuffer = DoubleArray(other.strides.linearSize) { i ->
             other.buffer.array()[other.bufferStart + i] * this
         }
         return DoubleTensor(other.shape, resBuffer)
     }
 
-    //todo should be change with broadcasting
     override fun DoubleTensor.times(value: Double): DoubleTensor = value * this
 
     override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
-        //todo should be change with broadcasting
-        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
-            this.buffer.array()[other.bufferStart + i] *
-                    other.buffer.array()[other.bufferStart + i]
+        val broadcast = broadcastTensors(this, other)
+        val newThis = broadcast[0]
+        val newOther = broadcast[1]
+
+        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
+            newThis.buffer.array()[newOther.bufferStart + i] *
+                    newOther.buffer.array()[newOther.bufferStart + i]
         }
-        return DoubleTensor(this.shape, resBuffer)
+        return DoubleTensor(newThis.shape, resBuffer)
     }
 
     override fun DoubleTensor.timesAssign(value: Double) {
-        //todo should be change with broadcasting
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] *= value
         }
     }
 
     override fun DoubleTensor.timesAssign(other: DoubleTensor) {
-        //todo should be change with broadcasting
+        val newOther = broadcastTo(other, this.shape)
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] *=
-                other.buffer.array()[this.bufferStart + i]
+                newOther.buffer.array()[this.bufferStart + i]
         }
     }
 

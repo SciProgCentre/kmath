@@ -32,6 +32,43 @@ internal inline fun broadcastShapes(vararg shapes: IntArray): IntArray {
     return totalShape
 }
 
+internal inline fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor {
+    if (tensor.shape.size > newShape.size) {
+        throw RuntimeException("Tensor is not compatible with the new shape")
+    }
+
+    val n = newShape.reduce { acc, i -> acc * i }
+    val resTensor = DoubleTensor(newShape, DoubleArray(n))
+
+    for (i in tensor.shape.indices) {
+        val curDim = tensor.shape[i]
+        val offset = newShape.size - tensor.shape.size
+        if (curDim != 1 && newShape[i + offset] != curDim) {
+            throw RuntimeException("Tensor is not compatible with the new shape and cannot be broadcast")
+        }
+    }
+
+    for (linearIndex in 0 until n) {
+        val totalMultiIndex = resTensor.strides.index(linearIndex)
+        val curMultiIndex = tensor.shape.copyOf()
+
+        val offset = totalMultiIndex.size - curMultiIndex.size
+
+        for (i in curMultiIndex.indices) {
+            if (curMultiIndex[i] != 1) {
+                curMultiIndex[i] = totalMultiIndex[i + offset]
+            } else {
+                curMultiIndex[i] = 0
+            }
+        }
+
+        val curLinearIndex = tensor.strides.offset(curMultiIndex)
+        resTensor.buffer.array()[linearIndex] =
+            tensor.buffer.array()[tensor.bufferStart + curLinearIndex]
+    }
+    return resTensor
+}
+
 internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
     val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
