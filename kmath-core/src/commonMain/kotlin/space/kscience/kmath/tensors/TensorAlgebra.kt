@@ -3,7 +3,6 @@ package space.kscience.kmath.tensors
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
-    public fun TensorType.value(): T
 
     public fun zeros(shape: IntArray): TensorType
     public fun TensorType.zeroesLike(): TensorType

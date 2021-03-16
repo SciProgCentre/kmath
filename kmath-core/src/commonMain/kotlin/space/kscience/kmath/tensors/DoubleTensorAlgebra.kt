@@ -3,13 +3,6 @@ package space.kscience.kmath.tensors
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
 
-    override fun DoubleTensor.value(): Double {
-        check(this.shape contentEquals intArrayOf(1)) {
-            "Inconsistent value for tensor of shape ${shape.toList()}"
-        }
-        return this.buffer.array()[this.bufferStart]
-    }
-
     override operator fun DoubleTensor.get(i: Int): DoubleTensor {
         val lastShape = this.shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
@@ -254,22 +247,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.mean(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.quantile(q: Double, dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.histc(bins: Int, min: Double, max: Double): DoubleTensor {
         TODO("Not yet implemented")
     }
 

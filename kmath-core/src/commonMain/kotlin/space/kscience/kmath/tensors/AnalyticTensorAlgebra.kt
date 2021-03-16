@@ -2,7 +2,17 @@ package space.kscience.kmath.tensors
 
 
 public interface AnalyticTensorAlgebra<T, TensorType : TensorStructure<T>> :
-    TensorPartialDivisionAlgebra<T, TensorType> {
+    TensorPartialDivisionAlgebra<T, TensorType>,
+    OrderedTensorAlgebra<T, TensorType>{
+
+    //https://pytorch.org/docs/stable/generated/torch.quantile.html#torch.quantile
+    public fun TensorType.quantile(q: T, dim: Int, keepDim: Boolean): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.std.html#torch.std
+    public fun TensorType.std(dim: Int, unbiased: Boolean, keepDim: Boolean): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.var.html#torch.var
+    public fun TensorType.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun TensorType.exp(): TensorType
@@ -108,5 +118,8 @@ public interface AnalyticTensorAlgebra<T, TensorType : TensorStructure<T>> :
 
     //https://pytorch.org/docs/stable/generated/torch.trapz.html#torch.trapz
     public fun TensorType.trapz(xValues: TensorType, dim: Int): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.histc.html#torch.histc
+    public fun TensorType.histc(bins: Int, min: T, max: T): TensorType
 
 }

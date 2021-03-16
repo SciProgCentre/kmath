@@ -1,6 +1,6 @@
 package space.kscience.kmath.tensors
 
-public class DoubleOrderedTensorAlgebra:
+public open class DoubleOrderedTensorAlgebra:
     OrderedTensorAlgebra<Double, DoubleTensor>,
     DoubleTensorAlgebra()
 {

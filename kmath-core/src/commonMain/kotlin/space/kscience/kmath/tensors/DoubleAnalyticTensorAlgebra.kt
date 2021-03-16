@@ -2,7 +2,7 @@ package space.kscience.kmath.tensors
 
 public class DoubleAnalyticTensorAlgebra:
     AnalyticTensorAlgebra<Double, DoubleTensor>,
-    DoubleTensorAlgebra()
+    DoubleOrderedTensorAlgebra()
 {
     override fun DoubleTensor.exp(): DoubleTensor {
         TODO("Not yet implemented")
@@ -141,6 +141,22 @@ public class DoubleAnalyticTensorAlgebra:
     }
 
     override fun DoubleTensor.trapz(xValues: DoubleTensor, dim: Int): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.quantile(q: Double, dim: Int, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.histc(bins: Int, min: Double, max: Double): DoubleTensor {
         TODO("Not yet implemented")
     }
 
