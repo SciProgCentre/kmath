@@ -44,7 +44,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testHistogramAlgebra() {
-       RealHistogramSpace.fromRanges(
+        RealHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)

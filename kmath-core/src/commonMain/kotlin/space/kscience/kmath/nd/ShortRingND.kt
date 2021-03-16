@@ -9,10 +9,10 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(UnstableKMathAPI::class)
-public class ShortNDRing(
+public class ShortRingND(
     shape: IntArray,
-) : BufferedNDRing<Short, ShortRing>(shape, ShortRing, Buffer.Companion::auto),
-    NumbersAddOperations<NDStructure<Short>> {
+) : BufferedRingND<Short, ShortRing>(shape, ShortRing, Buffer.Companion::auto),
+    NumbersAddOperations<StructureND<Short>> {
 
     override val zero: NDBuffer<Short> by lazy { produce { zero } }
     override val one: NDBuffer<Short> by lazy { produce { one } }
@@ -26,11 +26,11 @@ public class ShortNDRing(
 /**
  * Fast element production using function inlining.
  */
-public inline fun BufferedNDRing<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): NDBuffer<Short> {
+public inline fun BufferedRingND<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): NDBuffer<Short> {
     return NDBuffer(strides, ShortBuffer(ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }))
 }
 
-public inline fun <R> ShortRing.nd(vararg shape: Int, action: ShortNDRing.() -> R): R {
+public inline fun <R> ShortRing.nd(vararg shape: Int, action: ShortRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ShortNDRing(shape).run(action)
+    return ShortRingND(shape).run(action)
 }

@@ -11,7 +11,8 @@ import space.kscience.kmath.operations.RealField
 public interface Counter<T : Any> {
     public fun add(delta: T)
     public val value: T
-    public companion object{
+
+    public companion object {
         public fun real(): ObjectCounter<Double> = ObjectCounter(RealField)
     }
 }

@@ -32,7 +32,9 @@ internal class TestESTreeOperationsSupport {
 
     @Test
     fun testMultipleCalls() {
-        val e = RealField.mstInExtendedField { sin(bindSymbol("x")).pow(4) - 6 * bindSymbol("x") / tanh(bindSymbol("x")) }.compile()
+        val e =
+            RealField.mstInExtendedField { sin(bindSymbol("x")).pow(4) - 6 * bindSymbol("x") / tanh(bindSymbol("x")) }
+                .compile()
         val r = Random(0)
         var s = 0.0
         repeat(1000000) { s += e("x" to r.nextDouble()) }

@@ -3,13 +3,13 @@ package space.kscience.kmath.structures
 import kotlinx.coroutines.*
 import space.kscience.kmath.coroutines.Math
 import space.kscience.kmath.nd.DefaultStrides
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.StructureND
 
-public class LazyNDStructure<T>(
+public class LazyStructureND<T>(
     public val scope: CoroutineScope,
     public override val shape: IntArray,
-    public val function: suspend (IntArray) -> T
-) : NDStructure<T> {
+    public val function: suspend (IntArray) -> T,
+) : StructureND<T> {
     private val cache: MutableMap<IntArray, Deferred<T>> = hashMapOf()
 
     public fun deferred(index: IntArray): Deferred<T> = cache.getOrPut(index) {
@@ -26,7 +26,7 @@ public class LazyNDStructure<T>(
     }
 
     public override fun equals(other: Any?): Boolean {
-        return NDStructure.contentEquals(this, other as? NDStructure<*> ?: return false)
+        return StructureND.contentEquals(this, other as? StructureND<*> ?: return false)
     }
 
     public override fun hashCode(): Int {
@@ -38,21 +38,21 @@ public class LazyNDStructure<T>(
     }
 }
 
-public fun <T> NDStructure<T>.deferred(index: IntArray): Deferred<T> =
-    if (this is LazyNDStructure<T>) deferred(index) else CompletableDeferred(get(index))
+public fun <T> StructureND<T>.deferred(index: IntArray): Deferred<T> =
+    if (this is LazyStructureND<T>) deferred(index) else CompletableDeferred(get(index))
 
-public suspend fun <T> NDStructure<T>.await(index: IntArray): T =
-    if (this is LazyNDStructure<T>) await(index) else get(index)
+public suspend fun <T> StructureND<T>.await(index: IntArray): T =
+    if (this is LazyStructureND<T>) await(index) else get(index)
 
 /**
  * PENDING would benefit from KEEP-176
  */
-public inline fun <T, R> NDStructure<T>.mapAsyncIndexed(
+public inline fun <T, R> StructureND<T>.mapAsyncIndexed(
     scope: CoroutineScope,
-    crossinline function: suspend (T, index: IntArray) -> R
-): LazyNDStructure<R> = LazyNDStructure(scope, shape) { index -> function(get(index), index) }
+    crossinline function: suspend (T, index: IntArray) -> R,
+): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index), index) }
 
-public inline fun <T, R> NDStructure<T>.mapAsync(
+public inline fun <T, R> StructureND<T>.mapAsync(
     scope: CoroutineScope,
-    crossinline function: suspend (T) -> R
-): LazyNDStructure<R> = LazyNDStructure(scope, shape) { index -> function(get(index)) }
+    crossinline function: suspend (T) -> R,
+): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index)) }

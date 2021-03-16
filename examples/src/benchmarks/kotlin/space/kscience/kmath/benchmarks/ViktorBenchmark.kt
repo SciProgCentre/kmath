@@ -5,8 +5,8 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.nd.NDAlgebra
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.AlgebraND
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.auto
 import space.kscience.kmath.nd.real
 import space.kscience.kmath.operations.RealField
@@ -17,7 +17,7 @@ internal class ViktorBenchmark {
     @Benchmark
     fun automaticFieldAddition(blackhole: Blackhole) {
         with(autoField) {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -26,7 +26,7 @@ internal class ViktorBenchmark {
     @Benchmark
     fun realFieldAddition(blackhole: Blackhole) {
         with(realField) {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -54,8 +54,8 @@ internal class ViktorBenchmark {
         private const val n = 100
 
         // automatically build context most suited for given type.
-        private val autoField = NDAlgebra.auto(RealField, dim, dim)
-        private val realField = NDAlgebra.real(dim, dim)
+        private val autoField = AlgebraND.auto(RealField, dim, dim)
+        private val realField = AlgebraND.real(dim, dim)
         private val viktorField = ViktorNDField(dim, dim)
     }
 }

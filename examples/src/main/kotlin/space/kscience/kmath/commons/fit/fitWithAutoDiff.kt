@@ -90,10 +90,10 @@ fun main() {
             }
         }
         br()
-        h3{
+        h3 {
             +"Fit result: $result"
         }
-        h3{
+        h3 {
             +"Chi2/dof = ${result.value / (x.size - 3)}"
         }
     }

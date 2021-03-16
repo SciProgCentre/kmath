@@ -3,7 +3,7 @@ package space.kscience.kmath.commons.linear
 import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.structures.RealBuffer
 import kotlin.reflect.KClass
@@ -17,8 +17,8 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is NDStructure<*>) return false
-        return NDStructure.contentEquals(this, other)
+        if (other !is StructureND<*>) return false
+        return StructureND.contentEquals(this, other)
     }
 
     override fun hashCode(): Int = origin.hashCode()

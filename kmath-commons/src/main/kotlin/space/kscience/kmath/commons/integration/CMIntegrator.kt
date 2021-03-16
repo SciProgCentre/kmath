@@ -80,13 +80,13 @@ public class CMIntegrator(
 @UnstableKMathAPI
 public var MutableList<IntegrandFeature>.targetAbsoluteAccuracy: Double?
     get() = filterIsInstance<CMIntegrator.TargetAbsoluteAccuracy>().lastOrNull()?.value
-    set(value){
-        value?.let { add(CMIntegrator.TargetAbsoluteAccuracy(value))}
+    set(value) {
+        value?.let { add(CMIntegrator.TargetAbsoluteAccuracy(value)) }
     }
 
 @UnstableKMathAPI
 public var MutableList<IntegrandFeature>.targetRelativeAccuracy: Double?
     get() = filterIsInstance<CMIntegrator.TargetRelativeAccuracy>().lastOrNull()?.value
-    set(value){
-        value?.let { add(CMIntegrator.TargetRelativeAccuracy(value))}
+    set(value) {
+        value?.let { add(CMIntegrator.TargetRelativeAccuracy(value)) }
     }

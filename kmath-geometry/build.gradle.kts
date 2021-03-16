@@ -6,6 +6,6 @@ kotlin.sourceSets.commonMain {
     }
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

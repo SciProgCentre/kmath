@@ -17,7 +17,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
     private fun ndRing(
         rows: Int,
         cols: Int,
-    ): BufferedNDRing<T, A> = NDAlgebra.ring(elementAlgebra, bufferFactory, rows, cols)
+    ): BufferedRingND<T, A> = AlgebraND.ring(elementAlgebra, bufferFactory, rows, cols)
 
     override fun buildMatrix(rows: Int, columns: Int, initializer: A.(i: Int, j: Int) -> T): Matrix<T> =
         ndRing(rows, columns).produce { (i, j) -> elementAlgebra.initializer(i, j) }.as2D()

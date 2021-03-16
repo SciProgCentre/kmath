@@ -21,7 +21,7 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  * @param C the type of the element context.
  * @param N the type of the structure.
  */
-public interface NDAlgebra<T, C : Algebra<T>> {
+public interface AlgebraND<T, C : Algebra<T>> {
     /**
      * The shape of ND-structures this algebra operates on.
      */
@@ -35,27 +35,27 @@ public interface NDAlgebra<T, C : Algebra<T>> {
     /**
      * Produces a new NDStructure using given initializer function.
      */
-    public fun produce(initializer: C.(IntArray) -> T): NDStructure<T>
+    public fun produce(initializer: C.(IntArray) -> T): StructureND<T>
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.
      */
-    public fun NDStructure<T>.map(transform: C.(T) -> T): NDStructure<T>
+    public fun StructureND<T>.map(transform: C.(T) -> T): StructureND<T>
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them alongside with their indices.
      */
-    public fun NDStructure<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): NDStructure<T>
+    public fun StructureND<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): StructureND<T>
 
     /**
      * Combines two structures into one.
      */
-    public fun combine(a: NDStructure<T>, b: NDStructure<T>, transform: C.(T, T) -> T): NDStructure<T>
+    public fun combine(a: StructureND<T>, b: StructureND<T>, transform: C.(T, T) -> T): StructureND<T>
 
     /**
-     * Element-wise invocation of function working on [T] on a [NDStructure].
+     * Element-wise invocation of function working on [T] on a [StructureND].
      */
-    public operator fun Function1<T, T>.invoke(structure: NDStructure<T>): NDStructure<T> =
+    public operator fun Function1<T, T>.invoke(structure: StructureND<T>): StructureND<T> =
         structure.map { value -> this@invoke(value) }
 
     /**
@@ -67,7 +67,7 @@ public interface NDAlgebra<T, C : Algebra<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(structure: NDStructure<T>, type: KClass<F>): F? = structure.getFeature(type)
+    public fun <F : Any> getFeature(structure: StructureND<T>, type: KClass<F>): F? = structure.getFeature(type)
 
     public companion object
 }
@@ -81,7 +81,7 @@ public interface NDAlgebra<T, C : Algebra<T>> {
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> NDAlgebra<T, *>.getFeature(structure: NDStructure<T>): F? =
+public inline fun <T : Any, reified F : Any> AlgebraND<T, *>.getFeature(structure: StructureND<T>): F? =
     getFeature(structure, F::class)
 
 /**
@@ -90,11 +90,11 @@ public inline fun <T : Any, reified F : Any> NDAlgebra<T, *>.getFeature(structur
  * @param structures the structures to check.
  * @return the array of valid structures.
  */
-internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> =
+internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(vararg structures: StructureND<T>): Array<out StructureND<T>> =
     structures
-        .map(NDStructure<T>::shape)
+        .map(StructureND<T>::shape)
         .singleOrNull { !shape.contentEquals(it) }
-        ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
+        ?.let<IntArray, Array<out StructureND<T>>> { throw ShapeMismatchException(shape, it) }
         ?: structures
 
 /**
@@ -103,19 +103,19 @@ internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: N
  * @param element the structure to check.
  * @return the valid structure.
  */
-internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
+internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(element: StructureND<T>): StructureND<T> {
     if (!element.shape.contentEquals(shape)) throw ShapeMismatchException(shape, element.shape)
     return element
 }
 
 /**
- * Space of [NDStructure].
+ * Space of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
  * @param N the type of ND structure.
  * @param S the type of space of structure elements.
  */
-public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, S> {
+public interface GroupND<T, S : Group<T>> : Group<StructureND<T>>, AlgebraND<T, S> {
     /**
      * Element-wise addition.
      *
@@ -123,7 +123,7 @@ public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, 
      * @param b the augend.
      * @return the sum.
      */
-    public override fun add(a: NDStructure<T>, b: NDStructure<T>): NDStructure<T> =
+    public override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> add(aValue, bValue) }
 
 //    /**
@@ -144,7 +144,7 @@ public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the augend.
      * @return the sum.
      */
-    public operator fun NDStructure<T>.plus(arg: T): NDStructure<T> = this.map { value -> add(arg, value) }
+    public operator fun StructureND<T>.plus(arg: T): StructureND<T> = this.map { value -> add(arg, value) }
 
     /**
      * Subtracts an element from ND structure of it.
@@ -153,7 +153,7 @@ public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun NDStructure<T>.minus(arg: T): NDStructure<T> = this.map { value -> add(arg, -value) }
+    public operator fun StructureND<T>.minus(arg: T): StructureND<T> = this.map { value -> add(arg, -value) }
 
     /**
      * Adds an element to ND structure of it.
@@ -162,7 +162,7 @@ public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the augend.
      * @return the sum.
      */
-    public operator fun T.plus(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> add(this@plus, value) }
+    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
 
     /**
      * Subtracts an ND structure from an element of it.
@@ -171,19 +171,19 @@ public interface NDGroup<T, S : Group<T>> : Group<NDStructure<T>>, NDAlgebra<T, 
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.minus(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> add(-this@minus, value) }
+    public operator fun T.minus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(-this@minus, value) }
 
     public companion object
 }
 
 /**
- * Ring of [NDStructure].
+ * Ring of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
  * @param N the type of ND structure.
  * @param R the type of ring of structure elements.
  */
-public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDGroup<T, R> {
+public interface RingND<T, R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R> {
     /**
      * Element-wise multiplication.
      *
@@ -191,7 +191,7 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDGroup<T, R> {
      * @param b the multiplier.
      * @return the product.
      */
-    public override fun multiply(a: NDStructure<T>, b: NDStructure<T>): NDStructure<T> =
+    public override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
@@ -203,7 +203,7 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDGroup<T, R> {
      * @param arg the multiplier.
      * @return the product.
      */
-    public operator fun NDStructure<T>.times(arg: T): NDStructure<T> = this.map { value -> multiply(arg, value) }
+    public operator fun StructureND<T>.times(arg: T): StructureND<T> = this.map { value -> multiply(arg, value) }
 
     /**
      * Multiplies an element by a ND structure of it.
@@ -212,19 +212,19 @@ public interface NDRing<T, R : Ring<T>> : Ring<NDStructure<T>>, NDGroup<T, R> {
      * @param arg the multiplier.
      * @return the product.
      */
-    public operator fun T.times(arg: NDStructure<T>): NDStructure<T> = arg.map { value -> multiply(this@times, value) }
+    public operator fun T.times(arg: StructureND<T>): StructureND<T> = arg.map { value -> multiply(this@times, value) }
 
     public companion object
 }
 
 /**
- * Field of [NDStructure].
+ * Field of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
  * @param N the type of ND structure.
  * @param F the type field of structure elements.
  */
-public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>, ScaleOperations<NDStructure<T>> {
+public interface FieldND<T, F : Field<T>> : Field<StructureND<T>>, RingND<T, F>, ScaleOperations<StructureND<T>> {
     /**
      * Element-wise division.
      *
@@ -232,7 +232,7 @@ public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>,
      * @param b the divisor.
      * @return the quotient.
      */
-    public override fun divide(a: NDStructure<T>, b: NDStructure<T>): NDStructure<T> =
+    public override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
@@ -243,7 +243,7 @@ public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>,
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun NDStructure<T>.div(arg: T): NDStructure<T> = this.map { value -> divide(arg, value) }
+    public operator fun StructureND<T>.div(arg: T): StructureND<T> = this.map { value -> divide(arg, value) }
 
     /**
      * Divides an element by an ND structure of it.
@@ -252,7 +252,7 @@ public interface NDField<T, F : Field<T>> : Field<NDStructure<T>>, NDRing<T, F>,
      * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.div(arg: NDStructure<T>): NDStructure<T> = arg.map { divide(it, this@div) }
+    public operator fun T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
 
 //    @ThreadLocal
 //    public companion object {

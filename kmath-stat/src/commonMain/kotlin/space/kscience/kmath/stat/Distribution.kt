@@ -53,7 +53,7 @@ public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once

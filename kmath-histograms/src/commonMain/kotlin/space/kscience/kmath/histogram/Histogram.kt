@@ -29,7 +29,7 @@ public interface Histogram<T : Any, out B : Bin<T>> {
     public val bins: Iterable<B>
 }
 
-public fun interface HistogramBuilder<T : Any>  {
+public fun interface HistogramBuilder<T : Any> {
 
     /**
      * Increment appropriate bin

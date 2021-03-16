@@ -8,6 +8,6 @@ dependencies {
     api(project(":kmath-ast"))
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

@@ -7,6 +7,6 @@ dependencies {
     implementation(project(":kmath-core"))
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

@@ -4,7 +4,7 @@ package space.kscience.kmath.memory
 internal class NativeMemory(
     val array: ByteArray,
     val startOffset: Int = 0,
-    override val size: Int = array.size
+    override val size: Int = array.size,
 ) : Memory {
     @Suppress("NOTHING_TO_INLINE")
     private inline fun position(o: Int): Int = startOffset + o

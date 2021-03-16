@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class GridTest {
     @Test
-    fun testStepGrid(){
+    fun testStepGrid() {
         val grid = 0.0..1.0 step 0.2
         assertEquals(6, grid.size)
     }

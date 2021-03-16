@@ -12,11 +12,11 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [DoubleStream] for parallel execution
  */
 @OptIn(UnstableKMathAPI::class)
-class StreamRealNDField(
+class StreamRealFieldND(
     override val shape: IntArray,
-) : NDField<Double, RealField>,
-    NumbersAddOperations<NDStructure<Double>>,
-    ExtendedField<NDStructure<Double>> {
+) : FieldND<Double, RealField>,
+    NumbersAddOperations<StructureND<Double>>,
+    ExtendedField<StructureND<Double>> {
 
     private val strides = DefaultStrides(shape)
     override val elementContext: RealField get() = RealField
@@ -28,13 +28,13 @@ class StreamRealNDField(
         return produce { d }
     }
 
-    private val NDStructure<Double>.buffer: RealBuffer
+    private val StructureND<Double>.buffer: RealBuffer
         get() = when {
-            !shape.contentEquals(this@StreamRealNDField.shape) -> throw ShapeMismatchException(
-                this@StreamRealNDField.shape,
+            !shape.contentEquals(this@StreamRealFieldND.shape) -> throw ShapeMismatchException(
+                this@StreamRealFieldND.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@StreamRealNDField.strides -> this.buffer as RealBuffer
+            this is NDBuffer && this.strides == this@StreamRealFieldND.strides -> this.buffer as RealBuffer
             else -> RealBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
@@ -48,14 +48,14 @@ class StreamRealNDField(
         return NDBuffer(strides, array.asBuffer())
     }
 
-    override fun NDStructure<Double>.map(
+    override fun StructureND<Double>.map(
         transform: RealField.(Double) -> Double,
     ): NDBuffer<Double> {
         val array = Arrays.stream(buffer.array).parallel().map { RealField.transform(it) }.toArray()
         return NDBuffer(strides, array.asBuffer())
     }
 
-    override fun NDStructure<Double>.mapIndexed(
+    override fun StructureND<Double>.mapIndexed(
         transform: RealField.(index: IntArray, Double) -> Double,
     ): NDBuffer<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
@@ -69,8 +69,8 @@ class StreamRealNDField(
     }
 
     override fun combine(
-        a: NDStructure<Double>,
-        b: NDStructure<Double>,
+        a: StructureND<Double>,
+        b: StructureND<Double>,
         transform: RealField.(Double, Double) -> Double,
     ): NDBuffer<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
@@ -79,29 +79,29 @@ class StreamRealNDField(
         return NDBuffer(strides, array.asBuffer())
     }
 
-    override fun NDStructure<Double>.unaryMinus(): NDStructure<Double> = map { -it }
+    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = map { -it }
 
-    override fun scale(a: NDStructure<Double>, value: Double): NDStructure<Double> = a.map { it * value }
+    override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
 
-    override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
 
-    override fun exp(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { exp(it) }
+    override fun exp(arg: StructureND<Double>): NDBuffer<Double> = arg.map { exp(it) }
 
-    override fun ln(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { ln(it) }
+    override fun ln(arg: StructureND<Double>): NDBuffer<Double> = arg.map { ln(it) }
 
-    override fun sin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sin(it) }
-    override fun cos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cos(it) }
-    override fun tan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tan(it) }
-    override fun asin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asin(it) }
-    override fun acos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acos(it) }
-    override fun atan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Double>): NDBuffer<Double> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Double>): NDBuffer<Double> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Double>): NDBuffer<Double> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Double>): NDBuffer<Double> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Double>): NDBuffer<Double> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atan(it) }
 
-    override fun sinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sinh(it) }
-    override fun cosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cosh(it) }
-    override fun tanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tanh(it) }
-    override fun asinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asinh(it) }
-    override fun acosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acosh(it) }
-    override fun atanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atanh(it) }
 }
 
-fun NDAlgebra.Companion.realWithStream(vararg shape: Int): StreamRealNDField = StreamRealNDField(shape)
+fun AlgebraND.Companion.realWithStream(vararg shape: Int): StreamRealFieldND = StreamRealFieldND(shape)

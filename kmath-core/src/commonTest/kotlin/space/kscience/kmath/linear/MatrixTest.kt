@@ -1,7 +1,7 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -50,8 +50,8 @@ class MatrixTest {
 
     @Test
     fun test2DDot() {
-        val firstMatrix = NDStructure.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
-        val secondMatrix = NDStructure.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
+        val firstMatrix = StructureND.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
+        val secondMatrix = StructureND.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
 
         LinearSpace.real.run {
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }

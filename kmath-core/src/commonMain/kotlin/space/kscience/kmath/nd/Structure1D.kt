@@ -6,7 +6,7 @@ import space.kscience.kmath.structures.asSequence
 /**
  * A structure that is guaranteed to be one-dimensional
  */
-public interface Structure1D<T> : NDStructure<T>, Buffer<T> {
+public interface Structure1D<T> : StructureND<T>, Buffer<T> {
     public override val dimension: Int get() = 1
 
     public override operator fun get(index: IntArray): T {
@@ -20,7 +20,7 @@ public interface Structure1D<T> : NDStructure<T>, Buffer<T> {
 /**
  * A 1D wrapper for nd-structure
  */
-private inline class Structure1DWrapper<T>(val structure: NDStructure<T>) : Structure1D<T> {
+private inline class Structure1DWrapper<T>(val structure: StructureND<T>) : Structure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -43,9 +43,9 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
 }
 
 /**
- * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
+public fun <T> StructureND<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
     when (this) {
         is NDBuffer -> Buffer1DWrapper(this.buffer)
         else -> Structure1DWrapper(this)

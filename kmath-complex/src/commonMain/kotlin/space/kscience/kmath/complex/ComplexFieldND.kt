@@ -1,10 +1,10 @@
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.BufferedNDField
-import space.kscience.kmath.nd.NDAlgebra
+import space.kscience.kmath.nd.AlgebraND
+import space.kscience.kmath.nd.BufferedFieldND
 import space.kscience.kmath.nd.NDBuffer
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.structures.Buffer
@@ -16,11 +16,11 @@ import kotlin.contracts.contract
  * An optimized nd-field for complex numbers
  */
 @OptIn(UnstableKMathAPI::class)
-public class ComplexNDField(
+public class ComplexFieldND(
     shape: IntArray,
-) : BufferedNDField<Complex, ComplexField>(shape, ComplexField, Buffer.Companion::complex),
-    NumbersAddOperations<NDStructure<Complex>>,
-    ExtendedField<NDStructure<Complex>> {
+) : BufferedFieldND<Complex, ComplexField>(shape, ComplexField, Buffer.Companion::complex),
+    NumbersAddOperations<StructureND<Complex>>,
+    ExtendedField<StructureND<Complex>> {
 
     override val zero: NDBuffer<Complex> by lazy { produce { zero } }
     override val one: NDBuffer<Complex> by lazy { produce { one } }
@@ -76,44 +76,44 @@ public class ComplexNDField(
 //        return BufferedNDFieldElement(this, buffer)
 //    }
 
-    override fun power(arg: NDStructure<Complex>, pow: Number): NDBuffer<Complex> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Complex>, pow: Number): NDBuffer<Complex> = arg.map { power(it, pow) }
 
-    override fun exp(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { exp(it) }
+    override fun exp(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { exp(it) }
 
-    override fun ln(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { ln(it) }
+    override fun ln(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { ln(it) }
 
-    override fun sin(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { sin(it) }
-    override fun cos(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { cos(it) }
-    override fun tan(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { tan(it) }
-    override fun asin(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { asin(it) }
-    override fun acos(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { acos(it) }
-    override fun atan(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { atan(it) }
 
-    override fun sinh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { sinh(it) }
-    override fun cosh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { cosh(it) }
-    override fun tanh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { tanh(it) }
-    override fun asinh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { asinh(it) }
-    override fun acosh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { acosh(it) }
-    override fun atanh(arg: NDStructure<Complex>): NDBuffer<Complex> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Complex>): NDBuffer<Complex> = arg.map { atanh(it) }
 }
 
 
 /**
  * Fast element production using function inlining
  */
-public inline fun BufferedNDField<Complex, ComplexField>.produceInline(initializer: ComplexField.(Int) -> Complex): NDBuffer<Complex> {
+public inline fun BufferedFieldND<Complex, ComplexField>.produceInline(initializer: ComplexField.(Int) -> Complex): NDBuffer<Complex> {
     contract { callsInPlace(initializer, InvocationKind.EXACTLY_ONCE) }
     val buffer = Buffer.complex(strides.linearSize) { offset -> ComplexField.initializer(offset) }
     return NDBuffer(strides, buffer)
 }
 
 
-public fun NDAlgebra.Companion.complex(vararg shape: Int): ComplexNDField = ComplexNDField(shape)
+public fun AlgebraND.Companion.complex(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexNDField.() -> R): R {
+public inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ComplexNDField(shape).action()
+    return ComplexFieldND(shape).action()
 }

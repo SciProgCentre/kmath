@@ -1,6 +1,9 @@
 package space.kscience.kmath.dimensions
 
-import space.kscience.kmath.linear.*
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.linear.Point
+import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.Ring
@@ -95,7 +98,7 @@ public inline class DMatrixContext<T : Any, out A : Ring<T>>(public val context:
      * Produce a matrix with this context and given dimensions
      */
     public inline fun <reified R : Dimension, reified C : Dimension> produce(
-        noinline initializer: A.(i: Int, j: Int) -> T
+        noinline initializer: A.(i: Int, j: Int) -> T,
     ): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
@@ -147,9 +150,10 @@ public inline class DMatrixContext<T : Any, out A : Ring<T>>(public val context:
 /**
  * A square unit matrix
  */
-public inline fun <reified D : Dimension> DMatrixContext<Double, RealField>.one(): DMatrix<Double, D, D> = produce { i, j ->
-    if (i == j) 1.0 else 0.0
-}
+public inline fun <reified D : Dimension> DMatrixContext<Double, RealField>.one(): DMatrix<Double, D, D> =
+    produce { i, j ->
+        if (i == j) 1.0 else 0.0
+    }
 
 public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double, RealField>.zero(): DMatrix<Double, R, C> =
     produce { _, _ ->

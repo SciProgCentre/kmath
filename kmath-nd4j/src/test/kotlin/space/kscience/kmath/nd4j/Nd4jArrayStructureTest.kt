@@ -41,9 +41,9 @@ internal class Nd4jArrayStructureTest {
 
     @Test
     fun testHashCode() {
-        val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))?:fail()
+        val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
         val struct1 = nd1.asRealStructure()
-        val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))?:fail()
+        val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
         val struct2 = nd2.asRealStructure()
         assertEquals(struct1.hashCode(), struct2.hashCode())
     }
@@ -57,7 +57,7 @@ internal class Nd4jArrayStructureTest {
 
     @Test
     fun testGet() {
-        val nd = Nd4j.rand(10, 2, 3, 6)?:fail()
+        val nd = Nd4j.rand(10, 2, 3, 6) ?: fail()
         val struct = nd.asIntStructure()
         assertEquals(nd.getInt(0, 0, 0, 0), struct[0, 0, 0, 0])
     }

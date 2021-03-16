@@ -23,13 +23,13 @@ public class RealHistogramSpace(
     public val dimension: Int get() = lower.size
 
     private val shape = IntArray(binNums.size) { binNums[it] + 2 }
-    override val histogramValueSpace: RealNDField = NDAlgebra.real(*shape)
+    override val histogramValueSpace: RealFieldND = AlgebraND.real(*shape)
 
     override val strides: Strides get() = histogramValueSpace.strides
     private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     /**
-     * Get internal [NDStructure] bin index for given axis
+     * Get internal [StructureND] bin index for given axis
      */
     private fun getIndex(axis: Int, value: Double): Int = when {
         value >= upper[axis] -> binNums[axis] + 1 // overflow
@@ -69,7 +69,7 @@ public class RealHistogramSpace(
     }
 
     override fun produce(builder: HistogramBuilder<Double>.() -> Unit): IndexedHistogram<Double, Double> {
-        val ndCounter = NDStructure.auto(strides) { Counter.real() }
+        val ndCounter = StructureND.auto(strides) { Counter.real() }
         val hBuilder = HistogramBuilder<Double> { point, value ->
             val index = getIndex(point)
             ndCounter[index].add(value.toDouble())

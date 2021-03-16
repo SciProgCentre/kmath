@@ -50,7 +50,7 @@ private fun normalSampler(method: NormalSamplerMethod, provider: UniformRandomPr
     }
 
 public fun Distribution.Companion.normal(
-    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
+    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat,
 ): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider = generator.asUniformRandomProvider()
@@ -66,7 +66,7 @@ public fun Distribution.Companion.normal(
 public fun Distribution.Companion.normal(
     mean: Double,
     sigma: Double,
-    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
+    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat,
 ): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     private val sigma2 = sigma.pow(2)
     private val norm = sigma * sqrt(PI * 2)

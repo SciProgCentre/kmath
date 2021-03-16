@@ -2,10 +2,10 @@ package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
 import space.kscience.kmath.nd.MutableNDStructure
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.StructureND
 
 /**
- * Represents a [NDStructure] wrapping an [INDArray] object.
+ * Represents a [StructureND] wrapping an [INDArray] object.
  *
  * @param T the type of items.
  */

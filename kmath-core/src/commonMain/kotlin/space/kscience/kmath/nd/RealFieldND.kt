@@ -10,12 +10,12 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(UnstableKMathAPI::class)
-public class RealNDField(
+public class RealFieldND(
     shape: IntArray,
-) : BufferedNDField<Double, RealField>(shape, RealField, ::RealBuffer),
-    NumbersAddOperations<NDStructure<Double>>,
-    ScaleOperations<NDStructure<Double>>,
-    ExtendedField<NDStructure<Double>> {
+) : BufferedFieldND<Double, RealField>(shape, RealField, ::RealBuffer),
+    NumbersAddOperations<StructureND<Double>>,
+    ScaleOperations<StructureND<Double>>,
+    ExtendedField<StructureND<Double>> {
 
     override val zero: NDBuffer<Double> by lazy { produce { zero } }
     override val one: NDBuffer<Double> by lazy { produce { one } }
@@ -25,18 +25,18 @@ public class RealNDField(
         return produce { d }
     }
 
-    override val NDStructure<Double>.buffer: RealBuffer
+    override val StructureND<Double>.buffer: RealBuffer
         get() = when {
-            !shape.contentEquals(this@RealNDField.shape) -> throw ShapeMismatchException(
-                this@RealNDField.shape,
+            !shape.contentEquals(this@RealFieldND.shape) -> throw ShapeMismatchException(
+                this@RealFieldND.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@RealNDField.strides -> this.buffer as RealBuffer
+            this is NDBuffer && this.strides == this@RealFieldND.strides -> this.buffer as RealBuffer
             else -> RealBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDStructure<Double>.map(
+    override inline fun StructureND<Double>.map(
         transform: RealField.(Double) -> Double,
     ): NDBuffer<Double> {
         val buffer = RealBuffer(strides.linearSize) { offset -> RealField.transform(buffer.array[offset]) }
@@ -53,7 +53,7 @@ public class RealNDField(
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun NDStructure<Double>.mapIndexed(
+    override inline fun StructureND<Double>.mapIndexed(
         transform: RealField.(index: IntArray, Double) -> Double,
     ): NDBuffer<Double> = NDBuffer(
         strides,
@@ -66,8 +66,8 @@ public class RealNDField(
 
     @Suppress("OVERRIDE_BY_INLINE")
     override inline fun combine(
-        a: NDStructure<Double>,
-        b: NDStructure<Double>,
+        a: StructureND<Double>,
+        b: StructureND<Double>,
         transform: RealField.(Double, Double) -> Double,
     ): NDBuffer<Double> {
         val buffer = RealBuffer(strides.linearSize) { offset ->
@@ -76,35 +76,35 @@ public class RealNDField(
         return NDBuffer(strides, buffer)
     }
 
-    override fun scale(a: NDStructure<Double>, value: Double): NDStructure<Double> = a.map { it * value }
+    override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
 
-    override fun power(arg: NDStructure<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Double>, pow: Number): NDBuffer<Double> = arg.map { power(it, pow) }
 
-    override fun exp(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { exp(it) }
+    override fun exp(arg: StructureND<Double>): NDBuffer<Double> = arg.map { exp(it) }
 
-    override fun ln(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { ln(it) }
+    override fun ln(arg: StructureND<Double>): NDBuffer<Double> = arg.map { ln(it) }
 
-    override fun sin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sin(it) }
-    override fun cos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cos(it) }
-    override fun tan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tan(it) }
-    override fun asin(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asin(it) }
-    override fun acos(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acos(it) }
-    override fun atan(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Double>): NDBuffer<Double> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Double>): NDBuffer<Double> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Double>): NDBuffer<Double> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Double>): NDBuffer<Double> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Double>): NDBuffer<Double> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atan(it) }
 
-    override fun sinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { sinh(it) }
-    override fun cosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { cosh(it) }
-    override fun tanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { tanh(it) }
-    override fun asinh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { asinh(it) }
-    override fun acosh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { acosh(it) }
-    override fun atanh(arg: NDStructure<Double>): NDBuffer<Double> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atanh(it) }
 }
 
-public fun NDAlgebra.Companion.real(vararg shape: Int): RealNDField = RealNDField(shape)
+public fun AlgebraND.Companion.real(vararg shape: Int): RealFieldND = RealFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> RealField.nd(vararg shape: Int, action: RealNDField.() -> R): R {
+public inline fun <R> RealField.nd(vararg shape: Int, action: RealFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return RealNDField(shape).run(action)
+    return RealFieldND(shape).run(action)
 }

@@ -33,34 +33,34 @@ public object Transformations {
 
     public fun fourier(
         normalization: DftNormalization = DftNormalization.STANDARD,
-        direction: TransformType = TransformType.FORWARD
+        direction: TransformType = TransformType.FORWARD,
     ): SuspendBufferTransform<Complex, Complex> = {
         FastFourierTransformer(normalization).transform(it.toArray(), direction).asBuffer()
     }
 
     public fun realFourier(
         normalization: DftNormalization = DftNormalization.STANDARD,
-        direction: TransformType = TransformType.FORWARD
+        direction: TransformType = TransformType.FORWARD,
     ): SuspendBufferTransform<Double, Complex> = {
         FastFourierTransformer(normalization).transform(it.asArray(), direction).asBuffer()
     }
 
     public fun sine(
         normalization: DstNormalization = DstNormalization.STANDARD_DST_I,
-        direction: TransformType = TransformType.FORWARD
+        direction: TransformType = TransformType.FORWARD,
     ): SuspendBufferTransform<Double, Double> = {
         FastSineTransformer(normalization).transform(it.asArray(), direction).asBuffer()
     }
 
     public fun cosine(
         normalization: DctNormalization = DctNormalization.STANDARD_DCT_I,
-        direction: TransformType = TransformType.FORWARD
+        direction: TransformType = TransformType.FORWARD,
     ): SuspendBufferTransform<Double, Double> = {
         FastCosineTransformer(normalization).transform(it.asArray(), direction).asBuffer()
     }
 
     public fun hadamard(
-        direction: TransformType = TransformType.FORWARD
+        direction: TransformType = TransformType.FORWARD,
     ): SuspendBufferTransform<Double, Double> = {
         FastHadamardTransformer().transform(it.asArray(), direction).asBuffer()
     }
@@ -72,7 +72,7 @@ public object Transformations {
 @FlowPreview
 public fun Flow<Buffer<Complex>>.FFT(
     normalization: DftNormalization = DftNormalization.STANDARD,
-    direction: TransformType = TransformType.FORWARD
+    direction: TransformType = TransformType.FORWARD,
 ): Flow<Buffer<Complex>> {
     val transform = Transformations.fourier(normalization, direction)
     return map { transform(it) }
@@ -82,7 +82,7 @@ public fun Flow<Buffer<Complex>>.FFT(
 @JvmName("realFFT")
 public fun Flow<Buffer<Double>>.FFT(
     normalization: DftNormalization = DftNormalization.STANDARD,
-    direction: TransformType = TransformType.FORWARD
+    direction: TransformType = TransformType.FORWARD,
 ): Flow<Buffer<Complex>> {
     val transform = Transformations.realFourier(normalization, direction)
     return map(transform)
@@ -96,7 +96,7 @@ public fun Flow<Buffer<Double>>.FFT(
 public fun Flow<Double>.FFT(
     bufferSize: Int = Int.MAX_VALUE,
     normalization: DftNormalization = DftNormalization.STANDARD,
-    direction: TransformType = TransformType.FORWARD
+    direction: TransformType = TransformType.FORWARD,
 ): Flow<Complex> = chunked(bufferSize).FFT(normalization, direction).spread()
 
 /**

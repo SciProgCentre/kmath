@@ -83,7 +83,7 @@ public class StatefulChain<S, out R>(
     private val state: S,
     private val seed: S.() -> R,
     private val forkState: ((S) -> S),
-    private val gen: suspend S.(R) -> R
+    private val gen: suspend S.(R) -> R,
 ) : Chain<R> {
     private val mutex: Mutex = Mutex()
     private var value: R? = null
@@ -145,7 +145,7 @@ public fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = 
 public fun <T, S, R> Chain<T>.collectWithState(
     state: S,
     stateFork: (S) -> S,
-    mapper: suspend S.(Chain<T>) -> R
+    mapper: suspend S.(Chain<T>) -> R,
 ): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = state.mapper(this@collectWithState)
 

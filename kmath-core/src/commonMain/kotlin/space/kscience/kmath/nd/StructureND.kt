@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public interface NDStructure<T> {
+public interface StructureND<T> {
     /**
      * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
@@ -56,9 +56,9 @@ public interface NDStructure<T> {
 
     public companion object {
         /**
-         * Indicates whether some [NDStructure] is equal to another one.
+         * Indicates whether some [StructureND] is equal to another one.
          */
-        public fun contentEquals(st1: NDStructure<*>, st2: NDStructure<*>): Boolean {
+        public fun contentEquals(st1: StructureND<*>, st2: StructureND<*>): Boolean {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
@@ -126,15 +126,15 @@ public interface NDStructure<T> {
  * @param index the indices.
  * @return the value.
  */
-public operator fun <T> NDStructure<T>.get(vararg index: Int): T = get(index)
+public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
 @UnstableKMathAPI
-public inline fun <reified T : Any> NDStructure<*>.getFeature(): T? = getFeature(T::class)
+public inline fun <reified T : Any> StructureND<*>.getFeature(): T? = getFeature(T::class)
 
 /**
- * Represents mutable [NDStructure].
+ * Represents mutable [StructureND].
  */
-public interface MutableNDStructure<T> : NDStructure<T> {
+public interface MutableNDStructure<T> : StructureND<T> {
     /**
      * Inserts an item at the specified indices.
      *
@@ -252,7 +252,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 }
 
 /**
- * Represents [NDStructure] over [Buffer].
+ * Represents [StructureND] over [Buffer].
  *
  * @param T the type of items.
  * @param strides The strides to access elements of [Buffer] by linear indices.
@@ -261,7 +261,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 public open class NDBuffer<T>(
     public val strides: Strides,
     buffer: Buffer<T>,
-) : NDStructure<T> {
+) : StructureND<T> {
 
     init {
         if (strides.linearSize != buffer.size) {
@@ -280,7 +280,7 @@ public open class NDBuffer<T>(
     }
 
     override fun equals(other: Any?): Boolean {
-        return NDStructure.contentEquals(this, other as? NDStructure<*> ?: return false)
+        return StructureND.contentEquals(this, other as? StructureND<*> ?: return false)
     }
 
     override fun hashCode(): Int {
@@ -307,7 +307,7 @@ public open class NDBuffer<T>(
 /**
  * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [NDBuffer]
  */
-public inline fun <T, reified R : Any> NDStructure<T>.mapToBuffer(
+public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
     factory: BufferFactory<R> = Buffer.Companion::auto,
     crossinline transform: (T) -> R,
 ): NDBuffer<R> {
@@ -338,10 +338,10 @@ public class MutableNDBuffer<T>(
     override operator fun set(index: IntArray, value: T): Unit = buffer.set(strides.offset(index), value)
 }
 
-public inline fun <reified T : Any> NDStructure<T>.combine(
-    struct: NDStructure<T>,
+public inline fun <reified T : Any> StructureND<T>.combine(
+    struct: StructureND<T>,
     crossinline block: (T, T) -> T,
-): NDStructure<T> {
+): StructureND<T> {
     require(shape.contentEquals(struct.shape)) { "Shape mismatch in structure combination" }
-    return NDStructure.auto(shape) { block(this[it], struct[it]) }
+    return StructureND.auto(shape) { block(this[it], struct[it]) }
 }
