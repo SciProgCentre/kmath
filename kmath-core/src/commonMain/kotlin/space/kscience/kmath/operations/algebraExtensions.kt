@@ -71,7 +71,7 @@ public fun <T> Sequence<T>.sumWith(space: Group<T>): T = space.sum(this)
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T, S> Iterable<T>.averageWith(space: S): T  where S : Group<T>, S : ScaleOperations<T>  =
+public fun <T, S> Iterable<T>.averageWith(space: S): T where S : Group<T>, S : ScaleOperations<T> =
     space.average(this)
 
 /**
@@ -82,7 +82,7 @@ public fun <T, S> Iterable<T>.averageWith(space: S): T  where S : Group<T>, S : 
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T, S> Sequence<T>.averageWith(space: S): T  where S : Group<T>, S : ScaleOperations<T>  =
+public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Group<T>, S : ScaleOperations<T> =
     space.average(this)
 
 //TODO optimized power operation

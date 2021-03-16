@@ -1,7 +1,9 @@
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
+import kotlin.reflect.KClass
 
 /**
  * An exception is thrown when the expected ans actual shape of NDArray differs.
@@ -19,7 +21,7 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  * @param C the type of the element context.
  * @param N the type of the structure.
  */
-public interface NDAlgebra<T, C: Algebra<T>> {
+public interface NDAlgebra<T, C : Algebra<T>> {
     /**
      * The shape of ND-structures this algebra operates on.
      */
@@ -56,8 +58,31 @@ public interface NDAlgebra<T, C: Algebra<T>> {
     public operator fun Function1<T, T>.invoke(structure: NDStructure<T>): NDStructure<T> =
         structure.map { value -> this@invoke(value) }
 
+    /**
+     * Get a feature of the structure in this scope. Structure features take precedence other context features
+     *
+     * @param F the type of feature.
+     * @param structure the structure.
+     * @param type the [KClass] instance of [F].
+     * @return a feature object or `null` if it isn't present.
+     */
+    @UnstableKMathAPI
+    public fun <F : Any> getFeature(structure: NDStructure<T>, type: KClass<F>): F? = structure.getFeature(type)
+
     public companion object
 }
+
+
+/**
+ * Get a feature of the structure in this scope. Structure features take precedence other context features
+ *
+ * @param T the type of items in the matrices.
+ * @param F the type of feature.
+ * @return a feature object or `null` if it isn't present.
+ */
+@UnstableKMathAPI
+public inline fun <T : Any, reified F : Any> NDAlgebra<T, *>.getFeature(structure: NDStructure<T>): F? =
+    getFeature(structure, F::class)
 
 /**
  * Checks if given elements are consistent with this context.
@@ -65,11 +90,12 @@ public interface NDAlgebra<T, C: Algebra<T>> {
  * @param structures the structures to check.
  * @return the array of valid structures.
  */
-internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> = structures
-    .map(NDStructure<T>::shape)
-    .singleOrNull { !shape.contentEquals(it) }
-    ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
-    ?: structures
+internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: NDStructure<T>): Array<out NDStructure<T>> =
+    structures
+        .map(NDStructure<T>::shape)
+        .singleOrNull { !shape.contentEquals(it) }
+        ?.let<IntArray, Array<out NDStructure<T>>> { throw ShapeMismatchException(shape, it) }
+        ?: structures
 
 /**
  * Checks if given element is consistent with this context.
@@ -77,7 +103,7 @@ internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(vararg structures: ND
  * @param element the structure to check.
  * @return the valid structure.
  */
-internal fun <T, C: Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
+internal fun <T, C : Algebra<T>> NDAlgebra<T, C>.checkShape(element: NDStructure<T>): NDStructure<T> {
     if (!element.shape.contentEquals(shape)) throw ShapeMismatchException(shape, element.shape)
     return element
 }

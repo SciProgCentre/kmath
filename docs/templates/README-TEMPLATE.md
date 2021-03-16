@@ -3,9 +3,7 @@
 
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
 
-Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
-
-Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22%20AND%20a:%22kmath-core%22)
 
 # KMath
 
@@ -106,7 +104,7 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:$version")
+    api("${group}:kmath-core:$version")
     // api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
 }
 ```

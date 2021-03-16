@@ -30,7 +30,7 @@ internal class ExpressionsInterpretersBenchmark {
     fun mstExpression(blackhole: Blackhole) {
         val expr = algebra.mstInField {
             val x = bindSymbol(x)
-            x * 2.0 + 2.0 / x - 16.0
+            x * 2.0 + number(2.0) / x - 16.0
         }
 
         invokeAndSum(expr, blackhole)
@@ -40,7 +40,7 @@ internal class ExpressionsInterpretersBenchmark {
     fun asmExpression(blackhole: Blackhole) {
         val expr = algebra.mstInField {
             val x = bindSymbol(x)
-            x * 2.0 + 2.0 / x - 16.0
+            x * 2.0 + number(2.0) / x - 16.0
         }.compile()
 
         invokeAndSum(expr, blackhole)

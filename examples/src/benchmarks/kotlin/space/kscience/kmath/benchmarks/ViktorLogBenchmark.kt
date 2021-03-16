@@ -15,7 +15,7 @@ import space.kscience.kmath.viktor.ViktorNDField
 internal class ViktorLogBenchmark {
     @Benchmark
     fun realFieldLog(blackhole: Blackhole) {
-        with(realField) {
+        with(realNdField) {
             val fortyTwo = produce { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }
@@ -47,7 +47,7 @@ internal class ViktorLogBenchmark {
 
         // automatically build context most suited for given type.
         private val autoField = NDAlgebra.auto(RealField, dim, dim)
-        private val realField = NDAlgebra.real(dim, dim)
+        private val realNdField = NDAlgebra.real(dim, dim)
         private val viktorField = ViktorNDField(intArrayOf(dim, dim))
     }
 }

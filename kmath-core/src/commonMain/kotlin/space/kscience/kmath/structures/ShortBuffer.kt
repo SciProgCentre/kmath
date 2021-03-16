@@ -33,10 +33,12 @@ public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer = Sh
 public fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
 
 /**
- * Returns a [ShortArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [ShortArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Short>.array: ShortArray
-    get() = (if (this is ShortBuffer) array else ShortArray(size) { get(it) })
+public fun Buffer<Short>.toShortArray(): ShortArray = when (this) {
+    is ShortBuffer -> array.copyOf()
+    else -> ShortArray(size, ::get)
+}
 
 /**
  * Returns [ShortBuffer] over this array.

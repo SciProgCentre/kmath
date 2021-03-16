@@ -8,7 +8,7 @@ Complex and hypercomplex number systems in KMath:
 
 > #### Artifact:
 >
-> This module artifact: `space.kscience:kmath-complex:0.2.0`.
+> This module artifact: `space.kscience:kmath-complex:0.3.0-dev-2`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-complex/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-complex/_latestVersion)
 >
@@ -27,7 +27,7 @@ Complex and hypercomplex number systems in KMath:
 > }
 > 
 > dependencies {
->     implementation 'space.kscience:kmath-complex:0.2.0'
+>     implementation 'space.kscience:kmath-complex:0.3.0-dev-2'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -43,6 +43,6 @@ Complex and hypercomplex number systems in KMath:
 > }
 > 
 > dependencies {
->     implementation("space.kscience:kmath-complex:0.2.0")
+>     implementation("space.kscience:kmath-complex:0.3.0-dev-2")
 > }
 > ```

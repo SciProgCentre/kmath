@@ -1,29 +1,31 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@UnstableKMathAPI
 class RealLUSolverTest {
 
     @Test
     fun testInvertOne() {
-        val matrix = MatrixContext.real.one(2, 2)
-        val inverted = MatrixContext.real.inverseWithLup(matrix)
+        val matrix = LinearSpace.real.one(2, 2)
+        val inverted = LinearSpace.real.inverseWithLup(matrix)
         assertEquals(matrix, inverted)
     }
 
     @Test
     fun testDecomposition() {
-        val matrix = Matrix.square(
-            3.0, 1.0,
-            1.0, 3.0
-        )
+        LinearSpace.real.run {
+            val matrix = matrix(2, 2)(
+                3.0, 1.0,
+                2.0, 3.0
+            )
 
-        MatrixContext.real.run {
             val lup = lup(matrix)
 
             //Check determinant
-            assertEquals(8.0, lup.determinant)
+            assertEquals(7.0, lup.determinant)
 
             assertEquals(lup.p dot matrix, lup.l dot lup.u)
         }
@@ -31,14 +33,14 @@ class RealLUSolverTest {
 
     @Test
     fun testInvert() {
-        val matrix = Matrix.square(
+        val matrix = LinearSpace.real.matrix(2, 2)(
             3.0, 1.0,
             1.0, 3.0
         )
 
-        val inverted = MatrixContext.real.inverseWithLup(matrix)
+        val inverted = LinearSpace.real.inverseWithLup(matrix)
 
-        val expected = Matrix.square(
+        val expected = LinearSpace.real.matrix(2, 2)(
             0.375, -0.125,
             -0.125, 0.375
         )

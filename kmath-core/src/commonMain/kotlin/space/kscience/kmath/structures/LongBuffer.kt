@@ -35,10 +35,12 @@ public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongB
 public fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
 
 /**
- * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [LongArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Long>.array: LongArray
-    get() = (if (this is LongBuffer) array else LongArray(size) { get(it) })
+public fun Buffer<Long>.toLongArray(): LongArray = when (this) {
+    is LongBuffer -> array.copyOf()
+    else -> LongArray(size, ::get)
+}
 
 /**
  * Returns [LongBuffer] over this array.

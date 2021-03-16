@@ -28,7 +28,7 @@ public fun <T, R : Expression<T>> DifferentiableExpression<T, R>.derivative(name
 /**
  * A [DifferentiableExpression] that defines only first derivatives
  */
-public abstract class FirstDerivativeExpression<T, R : Expression<T>> : DifferentiableExpression<T,R> {
+public abstract class FirstDerivativeExpression<T, R : Expression<T>> : DifferentiableExpression<T, R> {
     /**
      * Returns first derivative of this expression by given [symbol].
      */
