@@ -3,11 +3,16 @@ package kaceince.kmath.real
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.real.*
 import space.kscience.kmath.structures.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
+fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
+    assertTrue { StructureND.contentEquals(expected, actual) }
+}
 
 @UnstableKMathAPI
 internal class DoubleMatrixTest {
@@ -43,7 +48,7 @@ internal class DoubleMatrixTest {
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
-        assertEquals(matrix2, matrix1.repeatStackVertical(3))
+        assertMatrixEquals(matrix2, matrix1.repeatStackVertical(3))
     }
 
     @Test
@@ -57,7 +62,7 @@ internal class DoubleMatrixTest {
             0.75, -0.5, 3.25,
             4.5, 7.0, 2.0
         )
-        assertEquals(matrix2, expectedResult)
+        assertMatrixEquals(matrix2, expectedResult)
     }
 
     @Test
@@ -72,7 +77,7 @@ internal class DoubleMatrixTest {
             5.0, 10.0, -5.0,
             -10.0, -20.0, 0.0
         )
-        assertEquals(matrix2, expectedResult)
+        assertMatrixEquals(matrix2, expectedResult)
     }
 
     @Test
@@ -89,8 +94,8 @@ internal class DoubleMatrixTest {
             -1.0, 0.0, 27.0,
             64.0, -216.0, -8.0
         )
-        assertEquals(matrix1.square(), matrix2)
-        assertEquals(matrix1.pow(3), matrix3)
+        assertMatrixEquals(matrix1.square(), matrix2)
+        assertMatrixEquals(matrix1.pow(3), matrix3)
     }
 
     @OptIn(UnstableKMathAPI::class)
@@ -109,7 +114,7 @@ internal class DoubleMatrixTest {
             -3.0, 0.0, 9.0,
             16.0, -48.0, -5.0
         )
-        assertEquals(result, expectedResult)
+        assertMatrixEquals(result, expectedResult)
     }
 
     @Test
@@ -128,9 +133,9 @@ internal class DoubleMatrixTest {
             -6.0, 7.0
         )
 
-        assertEquals(matrix1.appendColumn { it[0] }, matrix2)
-        assertEquals(matrix1.extractColumn(1), col1)
-        assertEquals(matrix1.extractColumns(1..2), cols1to2)
+        assertMatrixEquals(matrix1.appendColumn { it[0] }, matrix2)
+        assertMatrixEquals(matrix1.extractColumn(1), col1)
+        assertMatrixEquals(matrix1.extractColumns(1..2), cols1to2)
         //equals should never be called on buffers
         assertTrue {
             matrix1.sumByColumn().contentEquals(3.0, -6.0, 10.0, 4.0)

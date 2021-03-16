@@ -1,8 +1,14 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureND
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
+fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
+    assertTrue { StructureND.contentEquals(expected, actual) }
+}
 
 @UnstableKMathAPI
 class DoubleLUSolverTest {
@@ -11,7 +17,7 @@ class DoubleLUSolverTest {
     fun testInvertOne() {
         val matrix = LinearSpace.real.one(2, 2)
         val inverted = LinearSpace.real.inverseWithLup(matrix)
-        assertEquals(matrix, inverted)
+        assertMatrixEquals(matrix, inverted)
     }
 
     @Test
@@ -27,7 +33,7 @@ class DoubleLUSolverTest {
             //Check determinant
             assertEquals(7.0, lup.determinant)
 
-            assertEquals(lup.p dot matrix, lup.l dot lup.u)
+            assertMatrixEquals(lup.p dot matrix, lup.l dot lup.u)
         }
     }
 
@@ -45,6 +51,6 @@ class DoubleLUSolverTest {
             -0.125, 0.375
         )
 
-        assertEquals(expected, inverted)
+        assertMatrixEquals(expected, inverted)
     }
 }

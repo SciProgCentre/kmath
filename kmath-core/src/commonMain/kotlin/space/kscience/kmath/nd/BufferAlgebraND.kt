@@ -10,7 +10,7 @@ public interface BufferAlgebraND<T, A : Algebra<T>> : AlgebraND<T, A> {
     public val strides: Strides
     public val bufferFactory: BufferFactory<T>
 
-    override fun produce(initializer: A.(IntArray) -> T): NDBuffer<T> = NDBuffer(
+    override fun produce(initializer: A.(IntArray) -> T): BufferND<T> = BufferND(
         strides,
         bufferFactory(strides.linearSize) { offset ->
             elementContext.initializer(strides.index(offset))
@@ -23,32 +23,32 @@ public interface BufferAlgebraND<T, A : Algebra<T>> : AlgebraND<T, A> {
                 this@BufferAlgebraND.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@BufferAlgebraND.strides -> this.buffer
+            this is BufferND && this.strides == this@BufferAlgebraND.strides -> this.buffer
             else -> bufferFactory(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun StructureND<T>.map(transform: A.(T) -> T): NDBuffer<T> {
+    override fun StructureND<T>.map(transform: A.(T) -> T): BufferND<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(buffer[offset])
         }
-        return NDBuffer(strides, buffer)
+        return BufferND(strides, buffer)
     }
 
-    override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): NDBuffer<T> {
+    override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): BufferND<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(
                 strides.index(offset),
                 buffer[offset]
             )
         }
-        return NDBuffer(strides, buffer)
+        return BufferND(strides, buffer)
     }
 
-    override fun combine(a: StructureND<T>, b: StructureND<T>, transform: A.(T, T) -> T): NDBuffer<T> {
+    override fun combine(a: StructureND<T>, b: StructureND<T>, transform: A.(T, T) -> T): BufferND<T> {
         val buffer = bufferFactory(strides.linearSize) { offset ->
             elementContext.transform(a.buffer[offset], b.buffer[offset])
         }
-        return NDBuffer(strides, buffer)
+        return BufferND(strides, buffer)
     }
 }
 
@@ -58,7 +58,7 @@ public open class BufferedGroupND<T, A : Group<T>>(
     final override val bufferFactory: BufferFactory<T>,
 ) : GroupND<T, A>, BufferAlgebraND<T, A> {
     override val strides: Strides = DefaultStrides(shape)
-    override val zero: NDBuffer<T> by lazy { produce { zero } }
+    override val zero: BufferND<T> by lazy { produce { zero } }
     override fun StructureND<T>.unaryMinus(): StructureND<T> = produce { -get(it) }
 }
 
@@ -67,7 +67,7 @@ public open class BufferedRingND<T, R : Ring<T>>(
     elementContext: R,
     bufferFactory: BufferFactory<T>,
 ) : BufferedGroupND<T, R>(shape, elementContext, bufferFactory), RingND<T, R> {
-    override val one: NDBuffer<T> by lazy { produce { one } }
+    override val one: BufferND<T> by lazy { produce { one } }
 }
 
 public open class BufferedFieldND<T, R : Field<T>>(

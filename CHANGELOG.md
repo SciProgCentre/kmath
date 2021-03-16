@@ -76,6 +76,7 @@
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
 - `Real` class
+- StructureND identity and equals
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)

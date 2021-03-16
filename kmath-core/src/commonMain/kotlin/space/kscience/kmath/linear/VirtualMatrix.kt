@@ -1,7 +1,5 @@
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.nd.StructureND
-
 /**
  * The matrix where each element is evaluated each time when is being accessed.
  *
@@ -16,17 +14,4 @@ public class VirtualMatrix<T : Any>(
     override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     override operator fun get(i: Int, j: Int): T = generator(i, j)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is StructureND<*>) return false
-        return StructureND.contentEquals(this, other)
-    }
-
-    override fun hashCode(): Int {
-        var result = rowNum
-        result = 31 * result + colNum
-        result = 31 * result + generator.hashCode()
-        return result
-    }
 }

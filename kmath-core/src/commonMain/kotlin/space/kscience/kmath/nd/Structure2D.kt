@@ -60,7 +60,7 @@ public interface Structure2D<T> : StructureND<T> {
 /**
  * A 2D wrapper for nd-structure
  */
-private class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
+private inline class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -72,10 +72,6 @@ private class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D
     override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
-
-    override fun equals(other: Any?): Boolean = structure == other
-
-    override fun hashCode(): Int = structure.hashCode()
 }
 
 /**

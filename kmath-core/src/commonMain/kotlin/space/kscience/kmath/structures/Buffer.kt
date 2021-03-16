@@ -17,7 +17,9 @@ public typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
 public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
 
 /**
- * A generic immutable random-access structure for both primitives and objects.
+ * A generic read-only random-access structure for both primitives and objects.
+ *
+ * [Buffer] is in general identity-free. [contentEquals] should be used for content equality checks
  *
  * @param T the type of elements contained in the buffer.
  */
@@ -40,8 +42,13 @@ public interface Buffer<out T> {
     /**
      * Checks content equality with another buffer.
      */
-    public fun contentEquals(other: Buffer<*>): Boolean =
-        asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
+    public fun contentEquals(other: Buffer<*>): Boolean {
+        if (this.size != other.size) return false
+        for (i in indices) {
+            if (get(i) != other[i]) return false
+        }
+        return true
+    }
 
     public companion object {
         /**

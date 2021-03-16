@@ -148,7 +148,7 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public fun unaryPlus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 }
 
-public final class space/kscience/kmath/viktor/ViktorStructureND : space/kscience/kmath/nd/MutableNDStructure {
+public final class space/kscience/kmath/viktor/ViktorStructureND : space/kscience/kmath/nd/MutableStructureND {
 	public static final synthetic fun box-impl (Lorg/jetbrains/bio/viktor/F64Array;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public static fun constructor-impl (Lorg/jetbrains/bio/viktor/F64Array;)Lorg/jetbrains/bio/viktor/F64Array;
 	public fun elements ()Lkotlin/sequences/Sequence;

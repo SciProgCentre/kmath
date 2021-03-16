@@ -1,7 +1,7 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
-import space.kscience.kmath.nd.MutableNDStructure
+import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.StructureND
 
 /**
@@ -9,7 +9,7 @@ import space.kscience.kmath.nd.StructureND
  *
  * @param T the type of items.
  */
-public sealed class Nd4jArrayStructure<T> : MutableNDStructure<T> {
+public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
     /**
      * The wrapped [INDArray].
      */

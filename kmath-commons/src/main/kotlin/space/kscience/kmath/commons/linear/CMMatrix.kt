@@ -3,25 +3,16 @@ package space.kscience.kmath.commons.linear
 import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
-public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
+public inline class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
     public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is StructureND<*>) return false
-        return StructureND.contentEquals(this, other)
-    }
-
-    override fun hashCode(): Int = origin.hashCode()
 }
 
 public inline class CMVector(public val origin: RealVector) : Point<Double> {

@@ -5,6 +5,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @UnstableKMathAPI
 @Suppress("UNUSED_VARIABLE")
@@ -13,7 +14,7 @@ class MatrixTest {
     fun testTranspose() {
         val matrix = LinearSpace.real.one(3, 3)
         val transposed = matrix.transpose()
-        assertEquals(matrix, transposed)
+        assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
     @Test

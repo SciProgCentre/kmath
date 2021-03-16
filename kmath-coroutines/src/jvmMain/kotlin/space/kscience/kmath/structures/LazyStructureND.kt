@@ -24,18 +24,6 @@ public class LazyStructureND<T>(
         val res = runBlocking { strides.indices().toList().map { index -> index to await(index) } }
         return res.asSequence()
     }
-
-    public override fun equals(other: Any?): Boolean {
-        return StructureND.contentEquals(this, other as? StructureND<*> ?: return false)
-    }
-
-    public override fun hashCode(): Int {
-        var result = scope.hashCode()
-        result = 31 * result + shape.contentHashCode()
-        result = 31 * result + function.hashCode()
-        result = 31 * result + cache.hashCode()
-        return result
-    }
 }
 
 public fun <T> StructureND<T>.deferred(index: IntArray): Deferred<T> =

@@ -47,7 +47,7 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
  */
 public fun <T> StructureND<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
     when (this) {
-        is NDBuffer -> Buffer1DWrapper(this.buffer)
+        is BufferND -> Buffer1DWrapper(this.buffer)
         else -> Structure1DWrapper(this)
     }
 } else error("Can't create 1d-structure from ${shape.size}d-structure")
@@ -62,6 +62,6 @@ public fun <T> Buffer<T>.asND(): Structure1D<T> = Buffer1DWrapper(this)
  */
 internal fun <T : Any> Structure1D<T>.unwrap(): Buffer<T> = when {
     this is Buffer1DWrapper<T> -> buffer
-    this is Structure1DWrapper && structure is NDBuffer<T> -> structure.buffer
+    this is Structure1DWrapper && structure is BufferND<T> -> structure.buffer
     else -> this
 }

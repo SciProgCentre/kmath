@@ -75,7 +75,7 @@ public class DoubleHistogramSpace(
             ndCounter[index].add(value.toDouble())
         }
         hBuilder.apply(builder)
-        val values: NDBuffer<Double> = ndCounter.mapToBuffer { it.value }
+        val values: BufferND<Double> = ndCounter.mapToBuffer { it.value }
         return IndexedHistogram(this, values)
     }
 
