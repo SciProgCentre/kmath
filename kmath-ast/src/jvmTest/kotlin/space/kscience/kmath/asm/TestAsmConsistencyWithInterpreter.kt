@@ -5,7 +5,7 @@ import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.toComplex
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.ByteRing
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -73,7 +73,7 @@ internal class TestAsmConsistencyWithInterpreter {
 
     @Test
     fun realField() {
-        val res1 = RealField.mstInField {
+        val res1 = DoubleField.mstInField {
             +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (bindSymbol("x") + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
                         + number(1),
@@ -81,7 +81,7 @@ internal class TestAsmConsistencyWithInterpreter {
             ) + zero
         }("x" to 2.0)
 
-        val res2 = RealField.mstInField {
+        val res2 = DoubleField.mstInField {
             +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
                 (3.0 - (bindSymbol("x") + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
                         + number(1),

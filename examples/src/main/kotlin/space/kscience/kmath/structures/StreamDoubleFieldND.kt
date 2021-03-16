@@ -2,9 +2,9 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.RealField
 import java.util.*
 import java.util.stream.IntStream
 
@@ -12,14 +12,14 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [DoubleStream] for parallel execution
  */
 @OptIn(UnstableKMathAPI::class)
-class StreamRealFieldND(
+class StreamDoubleFieldND(
     override val shape: IntArray,
-) : FieldND<Double, RealField>,
+) : FieldND<Double, DoubleField>,
     NumbersAddOperations<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
     private val strides = DefaultStrides(shape)
-    override val elementContext: RealField get() = RealField
+    override val elementContext: DoubleField get() = DoubleField
     override val zero: NDBuffer<Double> by lazy { produce { zero } }
     override val one: NDBuffer<Double> by lazy { produce { one } }
 
@@ -28,38 +28,38 @@ class StreamRealFieldND(
         return produce { d }
     }
 
-    private val StructureND<Double>.buffer: RealBuffer
+    private val StructureND<Double>.buffer: DoubleBuffer
         get() = when {
-            !shape.contentEquals(this@StreamRealFieldND.shape) -> throw ShapeMismatchException(
-                this@StreamRealFieldND.shape,
+            !shape.contentEquals(this@StreamDoubleFieldND.shape) -> throw ShapeMismatchException(
+                this@StreamDoubleFieldND.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@StreamRealFieldND.strides -> this.buffer as RealBuffer
-            else -> RealBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
+            this is NDBuffer && this.strides == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
+            else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
 
-    override fun produce(initializer: RealField.(IntArray) -> Double): NDBuffer<Double> {
+    override fun produce(initializer: DoubleField.(IntArray) -> Double): NDBuffer<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
-            RealField.initializer(index)
+            DoubleField.initializer(index)
         }.toArray()
 
         return NDBuffer(strides, array.asBuffer())
     }
 
     override fun StructureND<Double>.map(
-        transform: RealField.(Double) -> Double,
+        transform: DoubleField.(Double) -> Double,
     ): NDBuffer<Double> {
-        val array = Arrays.stream(buffer.array).parallel().map { RealField.transform(it) }.toArray()
+        val array = Arrays.stream(buffer.array).parallel().map { DoubleField.transform(it) }.toArray()
         return NDBuffer(strides, array.asBuffer())
     }
 
     override fun StructureND<Double>.mapIndexed(
-        transform: RealField.(index: IntArray, Double) -> Double,
+        transform: DoubleField.(index: IntArray, Double) -> Double,
     ): NDBuffer<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            RealField.transform(
+            DoubleField.transform(
                 strides.index(offset),
                 buffer.array[offset]
             )
@@ -71,10 +71,10 @@ class StreamRealFieldND(
     override fun combine(
         a: StructureND<Double>,
         b: StructureND<Double>,
-        transform: RealField.(Double, Double) -> Double,
+        transform: DoubleField.(Double, Double) -> Double,
     ): NDBuffer<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            RealField.transform(a.buffer.array[offset], b.buffer.array[offset])
+            DoubleField.transform(a.buffer.array[offset], b.buffer.array[offset])
         }.toArray()
         return NDBuffer(strides, array.asBuffer())
     }
@@ -104,4 +104,4 @@ class StreamRealFieldND(
     override fun atanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atanh(it) }
 }
 
-fun AlgebraND.Companion.realWithStream(vararg shape: Int): StreamRealFieldND = StreamRealFieldND(shape)
+fun AlgebraND.Companion.realWithStream(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)

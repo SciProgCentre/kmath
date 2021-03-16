@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @UnstableKMathAPI
-class RealLUSolverTest {
+class DoubleLUSolverTest {
 
     @Test
     fun testInvertOne() {

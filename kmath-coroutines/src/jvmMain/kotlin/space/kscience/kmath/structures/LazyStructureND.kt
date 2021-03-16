@@ -10,7 +10,7 @@ public class LazyStructureND<T>(
     public override val shape: IntArray,
     public val function: suspend (IntArray) -> T,
 ) : StructureND<T> {
-    private val cache: MutableMap<IntArray, Deferred<T>> = hashMapOf()
+    private val cache: MutableMap<IntArray, Deferred<T>> = HashMap()
 
     public fun deferred(index: IntArray): Deferred<T> = cache.getOrPut(index) {
         scope.async(context = Dispatchers.Math) { function(index) }

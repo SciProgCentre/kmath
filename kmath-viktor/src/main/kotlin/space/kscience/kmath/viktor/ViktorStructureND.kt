@@ -3,9 +3,9 @@ package space.kscience.kmath.viktor
 import org.jetbrains.bio.viktor.F64Array
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.ScaleOperations
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
@@ -26,7 +26,7 @@ public fun F64Array.asStructure(): ViktorStructureND = ViktorStructureND(this)
 
 @OptIn(UnstableKMathAPI::class)
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double, RealField>,
+public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double, DoubleField>,
     NumbersAddOperations<StructureND<Double>>, ExtendedField<StructureND<Double>>,
     ScaleOperations<StructureND<Double>> {
 
@@ -46,39 +46,39 @@ public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double
 
     private val strides: Strides = DefaultStrides(shape)
 
-    public override val elementContext: RealField get() = RealField
+    public override val elementContext: DoubleField get() = DoubleField
 
-    public override fun produce(initializer: RealField.(IntArray) -> Double): ViktorStructureND =
+    public override fun produce(initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
             this@ViktorFieldND.strides.indices().forEach { index ->
-                set(value = RealField.initializer(index), indices = index)
+                set(value = DoubleField.initializer(index), indices = index)
             }
         }.asStructure()
 
     override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
 
-    public override fun StructureND<Double>.map(transform: RealField.(Double) -> Double): ViktorStructureND =
+    public override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*this@ViktorFieldND.shape).apply {
             this@ViktorFieldND.strides.indices().forEach { index ->
-                set(value = RealField.transform(this@map[index]), indices = index)
+                set(value = DoubleField.transform(this@map[index]), indices = index)
             }
         }.asStructure()
 
     public override fun StructureND<Double>.mapIndexed(
-        transform: RealField.(index: IntArray, Double) -> Double,
+        transform: DoubleField.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*this@ViktorFieldND.shape).apply {
         this@ViktorFieldND.strides.indices().forEach { index ->
-            set(value = RealField.transform(index, this@mapIndexed[index]), indices = index)
+            set(value = DoubleField.transform(index, this@mapIndexed[index]), indices = index)
         }
     }.asStructure()
 
     public override fun combine(
         a: StructureND<Double>,
         b: StructureND<Double>,
-        transform: RealField.(Double, Double) -> Double,
+        transform: DoubleField.(Double, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape).apply {
         this@ViktorFieldND.strides.indices().forEach { index ->
-            set(value = RealField.transform(a[index], b[index]), indices = index)
+            set(value = DoubleField.transform(a[index], b[index]), indices = index)
         }
     }.asStructure()
 

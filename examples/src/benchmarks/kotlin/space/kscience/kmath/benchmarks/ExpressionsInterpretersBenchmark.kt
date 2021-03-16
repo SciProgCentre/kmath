@@ -10,7 +10,7 @@ import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.expressionInField
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import kotlin.random.Random
 
@@ -68,7 +68,7 @@ internal class ExpressionsInterpretersBenchmark {
     }
 
     private companion object {
-        private val algebra = RealField
+        private val algebra = DoubleField
         private val x by symbol
     }
 }

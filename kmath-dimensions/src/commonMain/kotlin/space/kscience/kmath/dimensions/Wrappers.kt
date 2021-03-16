@@ -5,7 +5,7 @@ import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
 
 /**
@@ -142,7 +142,7 @@ public inline class DMatrixContext<T : Any, out A : Ring<T>>(public val context:
         context.run { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double, RealField> = DMatrixContext(LinearSpace.real)
+        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(LinearSpace.real)
     }
 }
 
@@ -150,12 +150,12 @@ public inline class DMatrixContext<T : Any, out A : Ring<T>>(public val context:
 /**
  * A square unit matrix
  */
-public inline fun <reified D : Dimension> DMatrixContext<Double, RealField>.one(): DMatrix<Double, D, D> =
+public inline fun <reified D : Dimension> DMatrixContext<Double, DoubleField>.one(): DMatrix<Double, D, D> =
     produce { i, j ->
         if (i == j) 1.0 else 0.0
     }
 
-public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double, RealField>.zero(): DMatrix<Double, R, C> =
+public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double, DoubleField>.zero(): DMatrix<Double, R, C> =
     produce { _, _ ->
         0.0
     }

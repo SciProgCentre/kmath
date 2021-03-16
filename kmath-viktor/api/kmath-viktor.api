@@ -67,7 +67,7 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun exp-8UOKELU (Lspace/kscience/kmath/nd/StructureND;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun getElementContext ()Lspace/kscience/kmath/operations/Algebra;
-	public fun getElementContext ()Lspace/kscience/kmath/operations/RealField;
+	public fun getElementContext ()Lspace/kscience/kmath/operations/DoubleField;
 	public final fun getF64Buffer (Lspace/kscience/kmath/nd/StructureND;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getOne-6kW2wQc ()Lorg/jetbrains/bio/viktor/F64Array;

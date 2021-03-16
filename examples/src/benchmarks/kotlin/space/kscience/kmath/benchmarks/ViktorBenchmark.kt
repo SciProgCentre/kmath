@@ -9,7 +9,7 @@ import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.auto
 import space.kscience.kmath.nd.real
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.viktor.ViktorNDField
 
 @State(Scope.Benchmark)
@@ -54,7 +54,7 @@ internal class ViktorBenchmark {
         private const val n = 100
 
         // automatically build context most suited for given type.
-        private val autoField = AlgebraND.auto(RealField, dim, dim)
+        private val autoField = AlgebraND.auto(DoubleField, dim, dim)
         private val realField = AlgebraND.real(dim, dim)
         private val viktorField = ViktorNDField(dim, dim)
     }

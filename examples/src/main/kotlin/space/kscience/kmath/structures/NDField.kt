@@ -4,7 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.Nd4jArrayField
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.viktor.ViktorNDField
 import kotlin.contracts.InvocationKind
@@ -24,11 +24,11 @@ fun main() {
     val n = 1000
 
     // automatically build context most suited for given type.
-    val autoField = AlgebraND.auto(RealField, dim, dim)
+    val autoField = AlgebraND.auto(DoubleField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
     val realField = AlgebraND.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val boxingField = AlgebraND.field(RealField, Buffer.Companion::boxing, dim, dim)
+    val boxingField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
     //viktor field

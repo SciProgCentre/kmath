@@ -34,15 +34,15 @@ public class ComplexFieldND(
 //    @Suppress("OVERRIDE_BY_INLINE")
 //    override inline fun map(
 //        arg: AbstractNDBuffer<Double>,
-//        transform: RealField.(Double) -> Double,
+//        transform: DoubleField.(Double) -> Double,
 //    ): RealNDElement {
 //        check(arg)
-//        val array = RealBuffer(arg.strides.linearSize) { offset -> RealField.transform(arg.buffer[offset]) }
+//        val array = RealBuffer(arg.strides.linearSize) { offset -> DoubleField.transform(arg.buffer[offset]) }
 //        return BufferedNDFieldElement(this, array)
 //    }
 //
 //    @Suppress("OVERRIDE_BY_INLINE")
-//    override inline fun produce(initializer: RealField.(IntArray) -> Double): RealNDElement {
+//    override inline fun produce(initializer: DoubleField.(IntArray) -> Double): RealNDElement {
 //        val array = RealBuffer(strides.linearSize) { offset -> elementContext.initializer(strides.index(offset)) }
 //        return BufferedNDFieldElement(this, array)
 //    }
@@ -50,7 +50,7 @@ public class ComplexFieldND(
 //    @Suppress("OVERRIDE_BY_INLINE")
 //    override inline fun mapIndexed(
 //        arg: AbstractNDBuffer<Double>,
-//        transform: RealField.(index: IntArray, Double) -> Double,
+//        transform: DoubleField.(index: IntArray, Double) -> Double,
 //    ): RealNDElement {
 //        check(arg)
 //        return BufferedNDFieldElement(
@@ -67,7 +67,7 @@ public class ComplexFieldND(
 //    override inline fun combine(
 //        a: AbstractNDBuffer<Double>,
 //        b: AbstractNDBuffer<Double>,
-//        transform: RealField.(Double, Double) -> Double,
+//        transform: DoubleField.(Double, Double) -> Double,
 //    ): RealNDElement {
 //        check(a, b)
 //        val buffer = RealBuffer(strides.linearSize) { offset ->

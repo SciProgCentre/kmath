@@ -33,7 +33,7 @@ public fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Se
     }
 }
 
-public infix fun ClosedFloatingPointRange<Double>.step(step: Double): RealVector =
+public infix fun ClosedFloatingPointRange<Double>.step(step: Double): DoubleVector =
     toSequenceWithStep(step).toList().asBuffer()
 
 /**

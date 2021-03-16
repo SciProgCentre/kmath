@@ -123,7 +123,7 @@ public inline fun <reified T : Any, A : Field<T>> AlgebraND.Companion.auto(
     field: A,
     vararg shape: Int,
 ): FieldND<T, A> = when (field) {
-    RealField -> RealFieldND(shape) as FieldND<T, A>
+    DoubleField -> DoubleFieldND(shape) as FieldND<T, A>
     else -> BufferedFieldND(shape, field, Buffer.Companion::auto)
 }
 

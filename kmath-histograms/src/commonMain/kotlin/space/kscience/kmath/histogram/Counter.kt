@@ -2,8 +2,8 @@ package space.kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.RealField
 
 /**
  * Common representation for atomic counters
@@ -13,7 +13,7 @@ public interface Counter<T : Any> {
     public val value: T
 
     public companion object {
-        public fun real(): ObjectCounter<Double> = ObjectCounter(RealField)
+        public fun real(): ObjectCounter<Double> = ObjectCounter(DoubleField)
     }
 }
 

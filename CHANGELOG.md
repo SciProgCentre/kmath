@@ -12,6 +12,7 @@
 - VectorSpace is now a vector space
 - Buffer factories for primitives moved to MutableBuffer.Companion
 - NDStructure and NDAlgebra to StructureND and AlgebraND respectively
+- Real -> Double
 
 ### Deprecated
 

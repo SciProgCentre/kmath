@@ -198,7 +198,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
  * Example:
  * ```
  * val x by symbol // define variable(s) and their values
- * val y = RealField.withAutoDiff() { sqr(x) + 5 * x + 3 } // write formulate in deriv context
+ * val y = DoubleField.withAutoDiff() { sqr(x) + 5 * x + 3 } // write formulate in deriv context
  * assertEquals(17.0, y.x) // the value of result (y)
  * assertEquals(9.0, x.d)  // dy/dx
  * ```

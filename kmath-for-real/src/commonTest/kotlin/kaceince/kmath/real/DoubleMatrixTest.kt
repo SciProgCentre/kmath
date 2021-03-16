@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @UnstableKMathAPI
-internal class RealMatrixTest {
+internal class DoubleMatrixTest {
     @Test
     fun testSum() {
         val m = realMatrix(10, 10) { i, j -> (i + j).toDouble() }

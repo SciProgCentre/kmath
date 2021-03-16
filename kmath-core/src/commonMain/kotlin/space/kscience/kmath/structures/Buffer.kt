@@ -53,14 +53,14 @@ public interface Buffer<out T> {
 
         /**
          * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
             when (type) {
-                Double::class -> MutableBuffer.real(size) { initializer(it) as Double } as Buffer<T>
+                Double::class -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
                 Short::class -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
                 Int::class -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
                 Long::class -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
@@ -70,7 +70,7 @@ public interface Buffer<out T> {
 
         /**
          * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
@@ -104,11 +104,11 @@ public interface MutableBuffer<T> : Buffer<T> {
     public companion object {
 
         /**
-         * Creates a [RealBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer =
-            RealBuffer(size, initializer)
+        public inline fun double(size: Int, initializer: (Int) -> Double): DoubleBuffer =
+            DoubleBuffer(size, initializer)
 
         /**
          * Creates a [ShortBuffer] with the specified [size], where each element is calculated by calling the specified
@@ -148,14 +148,14 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             when (type) {
-                Double::class -> real(size) { initializer(it) as Double } as MutableBuffer<T>
+                Double::class -> double(size) { initializer(it) as Double } as MutableBuffer<T>
                 Short::class -> short(size) { initializer(it) as Short } as MutableBuffer<T>
                 Int::class -> int(size) { initializer(it) as Int } as MutableBuffer<T>
                 Float::class -> float(size) { initializer(it) as Float } as MutableBuffer<T>
@@ -165,7 +165,7 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */

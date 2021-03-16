@@ -5,8 +5,8 @@ import org.ejml.simple.SimpleMatrix
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
-import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
@@ -15,9 +15,9 @@ import kotlin.reflect.cast
  *
  * @author Iaroslav Postovalov
  */
-public object EjmlLinearSpace : LinearSpace<Double, RealField> {
+public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
 
-    override val elementAlgebra: RealField get() = RealField
+    override val elementAlgebra: DoubleField get() = DoubleField
 
     /**
      * Converts this matrix to EJML one.
@@ -38,16 +38,16 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
         })
     }
 
-    override fun buildMatrix(rows: Int, columns: Int, initializer: RealField.(i: Int, j: Int) -> Double): EjmlMatrix =
+    override fun buildMatrix(rows: Int, columns: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): EjmlMatrix =
         EjmlMatrix(SimpleMatrix(rows, columns).also {
             (0 until rows).forEach { row ->
-                (0 until columns).forEach { col -> it[row, col] = RealField.initializer(row, col) }
+                (0 until columns).forEach { col -> it[row, col] = DoubleField.initializer(row, col) }
             }
         })
 
-    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Point<Double> =
+    override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): Point<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
-            (0 until it.numRows()).forEach { row -> it[row, 0] = RealField.initializer(row) }
+            (0 until it.numRows()).forEach { row -> it[row, 0] = DoubleField.initializer(row) }
         })
 
     private fun SimpleMatrix.wrapMatrix() = EjmlMatrix(this)
@@ -113,7 +113,7 @@ public object EjmlLinearSpace : LinearSpace<Double, RealField> {
                 override val u: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(svd.getU(null, false))) }
                 override val s: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(svd.getW(null))) }
                 override val v: Matrix<Double> by lazy { EjmlMatrix(SimpleMatrix(svd.getV(null, false))) }
-                override val singularValues: Point<Double> by lazy { RealBuffer(svd.singularValues) }
+                override val singularValues: Point<Double> by lazy { DoubleBuffer(svd.singularValues) }
             }
 
             QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {

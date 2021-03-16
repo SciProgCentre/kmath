@@ -23,7 +23,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  * @author Alexander Nozik
  */
 @UnstableKMathAPI
-public interface RealDomain : Domain<Double> {
+public interface DoubleDomain : Domain<Double> {
 
     /**
      * Global lower edge

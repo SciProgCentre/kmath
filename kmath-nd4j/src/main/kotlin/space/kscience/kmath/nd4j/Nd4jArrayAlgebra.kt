@@ -172,7 +172,7 @@ public interface Nd4jArrayField<T, F : Field<T>> : FieldND<T, F>, Nd4jArrayRing<
         private val floatNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, FloatNd4jArrayField>> =
             ThreadLocal.withInitial { hashMapOf() }
 
-        private val realNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, RealNd4jArrayField>> =
+        private val doubleNd4JArrayFieldCache: ThreadLocal<MutableMap<IntArray, DoubleNd4jArrayField>> =
             ThreadLocal.withInitial { hashMapOf() }
 
         /**
@@ -184,8 +184,8 @@ public interface Nd4jArrayField<T, F : Field<T>> : FieldND<T, F>, Nd4jArrayRing<
         /**
          * Creates an [FieldND] for [Double] values or pull it from cache if it was created previously.
          */
-        public fun real(vararg shape: Int): Nd4jArrayRing<Double, RealField> =
-            realNd4jArrayFieldCache.get().getOrPut(shape) { RealNd4jArrayField(shape) }
+        public fun real(vararg shape: Int): Nd4jArrayRing<Double, DoubleField> =
+            doubleNd4JArrayFieldCache.get().getOrPut(shape) { DoubleNd4jArrayField(shape) }
 
         /**
          * Creates a most suitable implementation of [RingND] using reified class.
@@ -200,12 +200,12 @@ public interface Nd4jArrayField<T, F : Field<T>> : FieldND<T, F>, Nd4jArrayRing<
 }
 
 /**
- * Represents [FieldND] over [Nd4jArrayRealStructure].
+ * Represents [FieldND] over [Nd4jArrayDoubleStructure].
  */
-public class RealNd4jArrayField(public override val shape: IntArray) : Nd4jArrayField<Double, RealField> {
-    public override val elementContext: RealField get() = RealField
+public class DoubleNd4jArrayField(public override val shape: IntArray) : Nd4jArrayField<Double, DoubleField> {
+    public override val elementContext: DoubleField get() = DoubleField
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(this).asRealStructure()
+    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(this).asDoubleStructure()
 
     override fun scale(a: StructureND<Double>, value: Double): Nd4jArrayStructure<Double> {
         return a.ndArray.mul(value).wrap()

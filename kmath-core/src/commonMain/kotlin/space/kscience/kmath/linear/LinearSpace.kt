@@ -5,7 +5,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 
 /**
@@ -176,7 +176,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
-        public val real: LinearSpace<Double, RealField> = buffered(RealField, ::RealBuffer)
+        public val real: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible

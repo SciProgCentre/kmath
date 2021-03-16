@@ -37,11 +37,11 @@ private sealed class Nd4jArrayIteratorBase<T>(protected val iterateOver: INDArra
     }
 }
 
-private class Nd4jArrayRealIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Double>(iterateOver) {
+private class Nd4jArrayDoubleIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Double>(iterateOver) {
     override fun getSingle(indices: LongArray): Double = iterateOver.getDouble(*indices)
 }
 
-internal fun INDArray.realIterator(): Iterator<Pair<IntArray, Double>> = Nd4jArrayRealIterator(this)
+internal fun INDArray.realIterator(): Iterator<Pair<IntArray, Double>> = Nd4jArrayDoubleIterator(this)
 
 private class Nd4jArrayLongIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Long>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)

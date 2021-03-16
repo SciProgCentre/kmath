@@ -4,7 +4,7 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.collect
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 
 public interface Sampler<T : Any> {
     public fun sample(generator: RandomGenerator): Chain<T>
@@ -75,4 +75,4 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
  * Generate a bunch of samples from real distributions
  */
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, ::RealBuffer)
+    sampleBuffer(generator, size, ::DoubleBuffer)

@@ -8,7 +8,7 @@ import kotlin.system.measureTimeMillis
 fun main() {
     val n = 6000
     val array = DoubleArray(n * n) { 1.0 }
-    val buffer = RealBuffer(array)
+    val buffer = DoubleBuffer(array)
     val strides = DefaultStrides(intArrayOf(n, n))
     val structure = NDBuffer(strides, buffer)
 

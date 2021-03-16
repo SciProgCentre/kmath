@@ -8,7 +8,7 @@ import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.real.RealVector
+import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.*
@@ -26,7 +26,7 @@ private val c by symbol
 /**
  * Shortcut to use buffers in plotly
  */
-operator fun TraceValues.invoke(vector: RealVector) {
+operator fun TraceValues.invoke(vector: DoubleVector) {
     numbers = vector.asIterable()
 }
 

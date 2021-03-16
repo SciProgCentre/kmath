@@ -1,15 +1,15 @@
 package space.kscience.kmath.real
 
 import space.kscience.kmath.nd.NDBuffer
-import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.DoubleBuffer
 
 /**
  * Map one [NDBuffer] using function without indices.
  */
-public inline fun NDBuffer<Double>.mapInline(crossinline transform: RealField.(Double) -> Double): NDBuffer<Double> {
-    val array = DoubleArray(strides.linearSize) { offset -> RealField.transform(buffer[offset]) }
-    return NDBuffer(strides, RealBuffer(array))
+public inline fun NDBuffer<Double>.mapInline(crossinline transform: DoubleField.(Double) -> Double): NDBuffer<Double> {
+    val array = DoubleArray(strides.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
+    return NDBuffer(strides, DoubleBuffer(array))
 }
 
 /**

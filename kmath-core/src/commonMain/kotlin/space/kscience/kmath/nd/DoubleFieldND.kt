@@ -1,18 +1,18 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.RealField
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(UnstableKMathAPI::class)
-public class RealFieldND(
+public class DoubleFieldND(
     shape: IntArray,
-) : BufferedFieldND<Double, RealField>(shape, RealField, ::RealBuffer),
+) : BufferedFieldND<Double, DoubleField>(shape, DoubleField, ::DoubleBuffer),
     NumbersAddOperations<StructureND<Double>>,
     ScaleOperations<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
@@ -25,40 +25,40 @@ public class RealFieldND(
         return produce { d }
     }
 
-    override val StructureND<Double>.buffer: RealBuffer
+    override val StructureND<Double>.buffer: DoubleBuffer
         get() = when {
-            !shape.contentEquals(this@RealFieldND.shape) -> throw ShapeMismatchException(
-                this@RealFieldND.shape,
+            !shape.contentEquals(this@DoubleFieldND.shape) -> throw ShapeMismatchException(
+                this@DoubleFieldND.shape,
                 shape
             )
-            this is NDBuffer && this.strides == this@RealFieldND.strides -> this.buffer as RealBuffer
-            else -> RealBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
+            this is NDBuffer && this.strides == this@DoubleFieldND.strides -> this.buffer as DoubleBuffer
+            else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
     @Suppress("OVERRIDE_BY_INLINE")
     override inline fun StructureND<Double>.map(
-        transform: RealField.(Double) -> Double,
+        transform: DoubleField.(Double) -> Double,
     ): NDBuffer<Double> {
-        val buffer = RealBuffer(strides.linearSize) { offset -> RealField.transform(buffer.array[offset]) }
+        val buffer = DoubleBuffer(strides.linearSize) { offset -> DoubleField.transform(buffer.array[offset]) }
         return NDBuffer(strides, buffer)
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    override inline fun produce(initializer: RealField.(IntArray) -> Double): NDBuffer<Double> {
+    override inline fun produce(initializer: DoubleField.(IntArray) -> Double): NDBuffer<Double> {
         val array = DoubleArray(strides.linearSize) { offset ->
             val index = strides.index(offset)
-            RealField.initializer(index)
+            DoubleField.initializer(index)
         }
-        return NDBuffer(strides, RealBuffer(array))
+        return NDBuffer(strides, DoubleBuffer(array))
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
     override inline fun StructureND<Double>.mapIndexed(
-        transform: RealField.(index: IntArray, Double) -> Double,
+        transform: DoubleField.(index: IntArray, Double) -> Double,
     ): NDBuffer<Double> = NDBuffer(
         strides,
-        buffer = RealBuffer(strides.linearSize) { offset ->
-            RealField.transform(
+        buffer = DoubleBuffer(strides.linearSize) { offset ->
+            DoubleField.transform(
                 strides.index(offset),
                 buffer.array[offset]
             )
@@ -68,10 +68,10 @@ public class RealFieldND(
     override inline fun combine(
         a: StructureND<Double>,
         b: StructureND<Double>,
-        transform: RealField.(Double, Double) -> Double,
+        transform: DoubleField.(Double, Double) -> Double,
     ): NDBuffer<Double> {
-        val buffer = RealBuffer(strides.linearSize) { offset ->
-            RealField.transform(a.buffer.array[offset], b.buffer.array[offset])
+        val buffer = DoubleBuffer(strides.linearSize) { offset ->
+            DoubleField.transform(a.buffer.array[offset], b.buffer.array[offset])
         }
         return NDBuffer(strides, buffer)
     }
@@ -99,12 +99,12 @@ public class RealFieldND(
     override fun atanh(arg: StructureND<Double>): NDBuffer<Double> = arg.map { atanh(it) }
 }
 
-public fun AlgebraND.Companion.real(vararg shape: Int): RealFieldND = RealFieldND(shape)
+public fun AlgebraND.Companion.real(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> RealField.nd(vararg shape: Int, action: RealFieldND.() -> R): R {
+public inline fun <R> DoubleField.nd(vararg shape: Int, action: DoubleFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return RealFieldND(shape).run(action)
+    return DoubleFieldND(shape).run(action)
 }
