@@ -21,8 +21,8 @@ internal class IntegrationTest {
     @Test
     fun customSimpson() {
         val res = CMIntegrator.simpson().integrate(0.0..PI, function) {
-            add(CMIntegrator.TargetRelativeAccuracy(1e-4))
-            add(CMIntegrator.TargetAbsoluteAccuracy(1e-4))
+            targetRelativeAccuracy = 1e-4
+            targetAbsoluteAccuracy = 1e-4
         }
         assertTrue { abs(res - 2) < 1e-3 }
         assertTrue { abs(res - 2) > 1e-12 }

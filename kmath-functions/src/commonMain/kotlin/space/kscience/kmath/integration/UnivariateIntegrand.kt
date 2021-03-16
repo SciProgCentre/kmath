@@ -39,7 +39,7 @@ public fun UnivariateIntegrator<Double>.integrate(
     range: ClosedRange<Double>,
     vararg features: IntegrandFeature,
     function: (Double) -> Double,
-): Double = evaluate(
+): Double = integrate(
     UnivariateIntegrand(function, IntegrationRange(range), *features)
 ).value ?: error("Unexpected: no value after integration.")
 
@@ -58,7 +58,7 @@ public fun UnivariateIntegrator<Double>.integrate(
         featureBuilder()
         add(IntegrationRange(range))
     }
-    return evaluate(
+    return integrate(
         UnivariateIntegrand(function, *features.toTypedArray())
     ).value ?: error("Unexpected: no value after integration.")
 }

@@ -27,7 +27,7 @@ public class GaussRuleIntegrator(
     private var type: GaussRule = GaussRule.LEGANDRE,
 ) : UnivariateIntegrator<Double> {
 
-    override fun evaluate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand.getFeature<IntegrationRange<Double>>()?.range
             ?: error("Integration range is not provided")
         val integrator: GaussIntegrator = getIntegrator(range)
@@ -87,7 +87,7 @@ public class GaussRuleIntegrator(
             numPoints: Int = 100,
             type: GaussRule = GaussRule.LEGANDRE,
             function: (Double) -> Double,
-        ): Double = GaussRuleIntegrator(numPoints, type).evaluate(
+        ): Double = GaussRuleIntegrator(numPoints, type).integrate(
             UnivariateIntegrand(function, IntegrationRange(range))
         ).value!!
     }
