@@ -59,6 +59,16 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
+    fun broadcastTo() = DoubleTensorAlgebra {
+        val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
+
+        val res = broadcastTo(tensor2, tensor1.shape)
+        assertTrue(res.shape contentEquals intArrayOf(2, 3))
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
+    }
+
+    @Test
     fun broadcastTensors() = DoubleTensorAlgebra {
         val tensor1 = DoubleTensor(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = DoubleTensor(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
