@@ -52,7 +52,7 @@ private inline class MutableStructure1DWrapper<T>(val structure: MutableNDStruct
 
     override fun get(index: Int): T = structure[index]
     override fun set(index: Int, value: T) {
-        set(index, value)
+        structure[intArrayOf(index)] = value
     }
 
     override fun copy(): MutableBuffer<T> =

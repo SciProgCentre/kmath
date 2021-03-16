@@ -254,6 +254,14 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
+    override fun DoubleTensor.square(): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
 }
 
 public inline fun <R> DoubleTensorAlgebra(block: DoubleTensorAlgebra.() -> R): R =

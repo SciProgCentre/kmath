@@ -36,7 +36,7 @@ class TestDoubleTensor {
         matrix[0,1] = 77.89
         assertEquals(tensor[intArrayOf(0,0,1)], 77.89)
 
-        //vector[0] = 109.56
-        //println(tensor[intArrayOf(0,1,0)])
+        vector[0] = 109.56
+        assertEquals(tensor[intArrayOf(0,1,0)], 109.56)
     }
 }

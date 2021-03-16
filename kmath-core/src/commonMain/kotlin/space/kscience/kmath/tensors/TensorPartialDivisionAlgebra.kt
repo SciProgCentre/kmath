@@ -10,4 +10,7 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.mean.html#torch.mean
     public fun TensorType.mean(dim: Int, keepDim: Boolean): TensorType
+
+    //https://pytorch.org/docs/stable/generated/torch.var.html#torch.var
+    public fun TensorType.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): TensorType
 }

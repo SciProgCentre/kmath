@@ -16,10 +16,6 @@ public class DoubleAnalyticTensorAlgebra:
         TODO("Not yet implemented")
     }
 
-    override fun DoubleTensor.square(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
     override fun DoubleTensor.cos(): DoubleTensor {
         TODO("Not yet implemented")
     }
@@ -149,10 +145,6 @@ public class DoubleAnalyticTensorAlgebra:
     }
 
     override fun DoubleTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")
     }
 

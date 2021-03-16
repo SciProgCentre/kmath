@@ -11,9 +11,6 @@ public interface AnalyticTensorAlgebra<T, TensorType : TensorStructure<T>> :
     //https://pytorch.org/docs/stable/generated/torch.std.html#torch.std
     public fun TensorType.std(dim: Int, unbiased: Boolean, keepDim: Boolean): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.var.html#torch.var
-    public fun TensorType.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): TensorType
-
     //https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun TensorType.exp(): TensorType
 
@@ -22,9 +19,6 @@ public interface AnalyticTensorAlgebra<T, TensorType : TensorStructure<T>> :
 
     //https://pytorch.org/docs/stable/generated/torch.sqrt.html
     public fun TensorType.sqrt(): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.square.html
-    public fun TensorType.square(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.acos.html#torch.cos
     public fun TensorType.cos(): TensorType

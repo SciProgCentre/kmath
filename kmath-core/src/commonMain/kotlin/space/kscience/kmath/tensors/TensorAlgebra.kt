@@ -40,6 +40,9 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public operator fun TensorType.timesAssign(other: TensorType): Unit
     public operator fun TensorType.unaryMinus(): TensorType
 
+    //https://pytorch.org/docs/stable/generated/torch.square.html
+    public fun TensorType.square(): TensorType
+
     //https://pytorch.org/cppdocs/notes/tensor_indexing.html
     public operator fun TensorType.get(i: Int): TensorType
 
