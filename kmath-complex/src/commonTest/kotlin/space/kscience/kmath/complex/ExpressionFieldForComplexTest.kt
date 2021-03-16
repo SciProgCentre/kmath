@@ -17,11 +17,11 @@ internal class ExpressionFieldForComplexTest {
 
     @Test
     fun testComplex() {
-        val expression = FunctionalExpressionField(ComplexField).run {
+        val expression = FunctionalExpressionField(ComplexDoubleField).run {
             val x = bindSymbol(x)
             x * x + 2 * x + one
         }
 
-        assertEquals(expression(x to Complex(1.0, 0.0)), Complex(4.0, 0.0))
+        assertEquals(Complex(4.0, 0.0), expression(x to Complex(1.0, 0.0)))
     }
 }

@@ -32,8 +32,8 @@ fun main() {
 
     // automatically build context most suited for given type.
     val autoField = AlgebraND.auto(DoubleField, dim, dim)
-    // specialized nd-field for Double. It works as generic Double field as well.
-    val realField = AlgebraND.real(dim, dim)
+    // specialized nd-field for Double. It works as generic Double field as well
+    val realField = AlgebraND.double(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
     val boxingField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.

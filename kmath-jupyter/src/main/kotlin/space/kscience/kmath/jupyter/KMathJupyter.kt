@@ -12,7 +12,7 @@ import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
 import space.kscience.kmath.ast.rendering.renderWithStringBuilder
 import space.kscience.kmath.complex.Complex
-import space.kscience.kmath.complex.Quaternion
+import space.kscience.kmath.complex.DoubleQuaternion
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.misc.PerformancePitfall
@@ -121,18 +121,16 @@ internal class KMathJupyter : JupyterIntegration() {
             })
         }
 
-        render<Complex> {
-            MstRing {
-                number(it.re) + number(it.im) * bindSymbol("i")
-            }.toDisplayResult()
+        render<Complex<Number>> {
+            MstRing { number(it.re) + number(it.im) * bindSymbol("i") }.toDisplayResult()
         }
 
-        render<Quaternion> {
+        render<DoubleQuaternion> {
             MstRing {
                 number(it.w) +
                         number(it.x) * bindSymbol("i") +
-                        number(it.x) * bindSymbol("j") +
-                        number(it.x) * bindSymbol("k")
+                        number(it.y) * bindSymbol("j") +
+                        number(it.z) * bindSymbol("k")
             }.toDisplayResult()
         }
     }

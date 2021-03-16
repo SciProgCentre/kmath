@@ -20,9 +20,9 @@ import java.math.BigInteger
 internal class BigIntBenchmark {
 
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
-    val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
+    val jvmNumber = JBigIntegerRing.number(Int.MAX_VALUE)
     val largeKmNumber = BigIntField { number(11).pow(100_000U) }
-    val largeJvmNumber: BigInteger = JBigIntegerField { number(11).pow(100_000) }
+    val largeJvmNumber: BigInteger = JBigIntegerRing { number(11).pow(100_000) }
     val bigExponent = 50_000
 
     @Benchmark
@@ -31,7 +31,7 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
-    fun jvmAdd(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmAdd(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume(jvmNumber + jvmNumber + jvmNumber)
     }
 
@@ -41,7 +41,7 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
-    fun jvmAddLarge(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmAddLarge(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume(largeJvmNumber + largeJvmNumber + largeJvmNumber)
     }
 
@@ -56,12 +56,12 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
-    fun jvmMultiply(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmMultiply(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume(jvmNumber * jvmNumber * jvmNumber)
     }
 
     @Benchmark
-    fun jvmMultiplyLarge(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmMultiplyLarge(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume(largeJvmNumber*largeJvmNumber)
     }
 
@@ -71,27 +71,27 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
-    fun jvmPower(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmPower(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume(jvmNumber.pow(bigExponent))
     }
 
     @Benchmark
-    fun kmParsing16(blackhole: Blackhole) = JBigIntegerField {
+    fun kmParsing16(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume("0x7f57ed8b89c29a3b9a85c7a5b84ca3929c7b7488593".parseBigInteger())
     }
 
     @Benchmark
-    fun kmParsing10(blackhole: Blackhole) = JBigIntegerField {
+    fun kmParsing10(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume("236656783929183747565738292847574838922010".parseBigInteger())
     }
 
     @Benchmark
-    fun jvmParsing10(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmParsing10(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume("236656783929183747565738292847574838922010".toBigInteger(10))
     }
 
     @Benchmark
-    fun jvmParsing16(blackhole: Blackhole) = JBigIntegerField {
+    fun jvmParsing16(blackhole: Blackhole) = JBigIntegerRing {
         blackhole.consume("7f57ed8b89c29a3b9a85c7a5b84ca3929c7b7488593".toBigInteger(16))
     }
 }

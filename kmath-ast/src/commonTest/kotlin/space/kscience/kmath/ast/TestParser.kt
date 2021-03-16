@@ -6,6 +6,7 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.complex.Complex
+import space.kscience.kmath.complex.ComplexDoubleField
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.expressions.evaluate
 import space.kscience.kmath.operations.Algebra
@@ -17,15 +18,15 @@ internal class TestParser {
     @Test
     fun evaluateParsedMst() {
         val mst = "2+2*(2+2)".parseMath()
-        val res = ComplexField.evaluate(mst)
+        val res = ComplexDoubleField.evaluate(mst)
         assertEquals(Complex(10.0, 0.0), res)
     }
 
     @Test
     fun evaluateMstSymbol() {
         val mst = "i".parseMath()
-        val res = ComplexField.evaluate(mst)
-        assertEquals(ComplexField.i, res)
+        val res = ComplexDoubleField.evaluate(mst)
+        assertEquals(ComplexDoubleField.i, res)
     }
 
 

@@ -57,11 +57,11 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     }
 }
 
-public open class BufferedGroupND<T, out A : Group<T>>(
+public open class BufferedGroupND<T, out G : Group<T>>(
     final override val shape: IntArray,
-    final override val elementContext: A,
+    final override val elementContext: G,
     final override val bufferFactory: BufferFactory<T>,
-) : GroupND<T, A>, BufferAlgebraND<T, A> {
+) : GroupND<T, G>, BufferAlgebraND<T, G> {
     override val strides: Strides = DefaultStrides(shape)
     override val zero: BufferND<T> by lazy { produce { zero } }
     override fun StructureND<T>.unaryMinus(): StructureND<T> = produce { -get(it) }
@@ -75,13 +75,30 @@ public open class BufferedRingND<T, out R : Ring<T>>(
     override val one: BufferND<T> by lazy { produce { one } }
 }
 
-public open class BufferedFieldND<T, out R : Field<T>>(
+public open class BufferedFieldND<T, out F : Field<T>>(
     shape: IntArray,
-    elementContext: R,
+    elementContext: F,
     bufferFactory: BufferFactory<T>,
-) : BufferedRingND<T, R>(shape, elementContext, bufferFactory), FieldND<T, R> {
+) : BufferedRingND<T, F>(shape, elementContext, bufferFactory), FieldND<T, F> {
 
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { it * value }
+}
+
+public open class BufferedExtendedFieldND<T, out F : ExtendedField<T>>(
+    shape: IntArray,
+    elementContext: F,
+    bufferFactory: BufferFactory<T>,
+) : BufferedFieldND<T, F>(shape, elementContext, bufferFactory), ExtendedFieldND<T, F> {
+    public override fun sin(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.sin(it) }
+    public override fun cos(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.cos(it) }
+    public override fun asin(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.asin(it) }
+    public override fun acos(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.acos(it) }
+    public override fun atan(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.atan(it) }
+    public override fun power(arg: StructureND<T>, pow: Number): StructureND<T> =
+        arg.map { elementContext.power(it, pow) }
+
+    public override fun exp(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.exp(it) }
+    public override fun ln(arg: StructureND<T>): StructureND<T> = arg.map { elementContext.ln(it) }
 }
 
 // group factories
@@ -139,4 +156,28 @@ public inline fun <T, A : Field<T>, R> A.ndField(
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return AlgebraND.field(this, bufferFactory, *shape).run(action)
+}
+
+public fun <T, A : ExtendedField<T>> AlgebraND.Companion.extendedField(
+    field: A,
+    bufferFactory: BufferFactory<T>,
+    vararg shape: Int,
+): BufferedExtendedFieldND<T, A> = BufferedExtendedFieldND(shape, field, bufferFactory)
+
+@Suppress("UNCHECKED_CAST")
+public inline fun <reified T : Any, A : ExtendedField<T>> AlgebraND.Companion.auto(
+    field: A,
+    vararg shape: Int,
+): FieldND<T, A> = when (field) {
+    DoubleField -> DoubleFieldND(shape) as FieldND<T, A>
+    else -> BufferedFieldND(shape, field, Buffer.Companion::auto)
+}
+
+public inline fun <T, A : ExtendedField<T>, R> A.ndExtendedField(
+    noinline bufferFactory: BufferFactory<T>,
+    vararg shape: Int,
+    action: BufferedExtendedFieldND<T, A>.() -> R,
+): R {
+    contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+    return AlgebraND.extendedField(this, bufferFactory, *shape).run(action)
 }
