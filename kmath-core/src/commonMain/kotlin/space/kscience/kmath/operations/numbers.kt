@@ -55,7 +55,7 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object RealField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
     public override val zero: Double = 0.0
     public override val one: Double = 1.0
 

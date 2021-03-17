@@ -1,6 +1,6 @@
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +11,7 @@ class ExpressionFieldTest {
 
     @Test
     fun testExpression() {
-        val expression = FunctionalExpressionField(RealField).invoke {
+        val expression = FunctionalExpressionField(DoubleField).invoke {
             val x by binding()
             x * x + 2 * x + one
         }
@@ -27,7 +27,7 @@ class ExpressionFieldTest {
             return x * x + 2 * x + one
         }
 
-        val expression = FunctionalExpressionField(RealField).expression()
+        val expression = FunctionalExpressionField(DoubleField).expression()
         assertEquals(expression(x to 1.0), 4.0)
     }
 
@@ -38,7 +38,7 @@ class ExpressionFieldTest {
             x * x + 2 * x + one
         }
 
-        val expression = FunctionalExpressionField(RealField).expressionBuilder()
+        val expression = FunctionalExpressionField(DoubleField).expressionBuilder()
         assertEquals(expression(x to 1.0), 4.0)
     }
 }

@@ -24,21 +24,21 @@ public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T> 
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     x: Buffer<T>,
-    y: Buffer<T>
+    y: Buffer<T>,
 ): PiecewisePolynomial<T> {
     val pointSet = BufferXYPointSet(x, y)
     return interpolatePolynomials(pointSet)
 }
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
-    data: Map<T, T>
+    data: Map<T, T>,
 ): PiecewisePolynomial<T> {
     val pointSet = BufferXYPointSet(data.keys.toList().asBuffer(), data.values.toList().asBuffer())
     return interpolatePolynomials(pointSet)
 }
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
-    data: List<Pair<T, T>>
+    data: List<Pair<T, T>>,
 ): PiecewisePolynomial<T> {
     val pointSet = BufferXYPointSet(data.map { it.first }.asBuffer(), data.map { it.second }.asBuffer())
     return interpolatePolynomials(pointSet)

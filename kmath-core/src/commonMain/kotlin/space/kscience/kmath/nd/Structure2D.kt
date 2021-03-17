@@ -1,16 +1,16 @@
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.linear.BufferMatrix
-import space.kscience.kmath.linear.RealMatrixContext
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
+import kotlin.reflect.KClass
 
 /**
  * A structure that is guaranteed to be two-dimensional.
  *
  * @param T the type of items.
  */
-public interface Structure2D<T> : NDStructure<T> {
+public interface Structure2D<T> : StructureND<T> {
     /**
      * The number of rows in this structure.
      */
@@ -26,14 +26,14 @@ public interface Structure2D<T> : NDStructure<T> {
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
-    public val rows: Buffer<Buffer<T>>
-        get() = VirtualBuffer(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
+    public val rows: List<Buffer<T>>
+        get() = List(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
-    public val columns: Buffer<Buffer<T>>
-        get() = VirtualBuffer(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
+    public val columns: List<Buffer<T>>
+        get() = List(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
 
     /**
      * Retrieves an element from the structure by two indices.
@@ -54,21 +54,13 @@ public interface Structure2D<T> : NDStructure<T> {
             for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
     }
 
-    public companion object {
-        public inline fun real(
-            rows: Int,
-            columns: Int,
-            crossinline init: (i: Int, j: Int) -> Double,
-        ): BufferMatrix<Double> = RealMatrixContext.produce(rows,columns) { i, j ->
-            init(i, j)
-        }
-    }
+    public companion object
 }
 
 /**
  * A 2D wrapper for nd-structure
  */
-private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
+private inline class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -76,20 +68,23 @@ private inline class Structure2DWrapper<T>(val structure: NDStructure<T>) : Stru
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
+    @UnstableKMathAPI
+    override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
+
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
 
 /**
- * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as2D(): Structure2D<T> = if (shape.size == 2)
-    Structure2DWrapper(this)
-else
-    error("Can't create 2d-structure from ${shape.size}d-structure")
+public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
+    2 -> Structure2DWrapper(this)
+    else -> error("Can't create 2d-structure from ${shape.size}d-structure")
+}
 
 /**
- * Alias for [Structure2D] with more familiar name.
- *
- * @param T the type of items in the matrix.
+ * Expose inner [StructureND] if possible
  */
-public typealias Matrix<T> = Structure2D<T>
+internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
+    if (this is Structure2DWrapper) structure
+    else this

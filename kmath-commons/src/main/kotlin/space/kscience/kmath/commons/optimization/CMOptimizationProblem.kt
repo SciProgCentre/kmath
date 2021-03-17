@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
-public class CMOptimizationProblem(override val symbols: List<Symbol>, ) :
+public class CMOptimizationProblem(override val symbols: List<Symbol>) :
     OptimizationProblem<Double>, SymbolIndexer, OptimizationFeature {
     private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
     private var optimizatorBuilder: (() -> MultivariateOptimizer)? = null

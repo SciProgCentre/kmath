@@ -2,8 +2,8 @@ package space.kscience.kmath.stat
 
 import org.apache.commons.rng.UniformRandomProvider
 import org.apache.commons.rng.sampling.distribution.*
+import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.chains.BlockingIntChain
-import space.kscience.kmath.chains.BlockingRealChain
 import space.kscience.kmath.chains.Chain
 import kotlin.math.PI
 import kotlin.math.exp
@@ -11,7 +11,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 public abstract class ContinuousSamplerDistribution : Distribution<Double> {
-    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingRealChain() {
+    private inner class ContinuousSamplerChain(val generator: RandomGenerator) : BlockingDoubleChain() {
         private val sampler = buildCMSampler(generator)
 
         override fun nextDouble(): Double = sampler.sample()
@@ -20,7 +20,7 @@ public abstract class ContinuousSamplerDistribution : Distribution<Double> {
 
     protected abstract fun buildCMSampler(generator: RandomGenerator): ContinuousSampler
 
-    public override fun sample(generator: RandomGenerator): BlockingRealChain = ContinuousSamplerChain(generator)
+    public override fun sample(generator: RandomGenerator): BlockingDoubleChain = ContinuousSamplerChain(generator)
 }
 
 public abstract class DiscreteSamplerDistribution : Distribution<Int> {
@@ -50,7 +50,7 @@ private fun normalSampler(method: NormalSamplerMethod, provider: UniformRandomPr
     }
 
 public fun Distribution.Companion.normal(
-    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
+    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat,
 ): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     override fun buildCMSampler(generator: RandomGenerator): ContinuousSampler {
         val provider = generator.asUniformRandomProvider()
@@ -66,7 +66,7 @@ public fun Distribution.Companion.normal(
 public fun Distribution.Companion.normal(
     mean: Double,
     sigma: Double,
-    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat
+    method: NormalSamplerMethod = NormalSamplerMethod.Ziggurat,
 ): ContinuousSamplerDistribution = object : ContinuousSamplerDistribution() {
     private val sigma2 = sigma.pow(2)
     private val norm = sigma * sqrt(PI * 2)

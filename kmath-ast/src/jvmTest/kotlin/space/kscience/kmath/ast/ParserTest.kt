@@ -4,7 +4,7 @@ import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.Algebra
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -33,7 +33,7 @@ internal class ParserTest {
     @Test
     fun `evaluate MST with unary function`() {
         val mst = "sin(0)".parseMath()
-        val res = RealField.evaluate(mst)
+        val res = DoubleField.evaluate(mst)
         assertEquals(0.0, res)
     }
 

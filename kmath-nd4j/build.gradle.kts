@@ -19,19 +19,16 @@ readme {
 
     feature(
         id = "nd4jarraystructure",
-        description = "NDStructure wrapper for INDArray",
-        ref = "src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt"
+        description = "NDStructure wrapper for INDArray"
     )
 
     feature(
         id = "nd4jarrayrings",
-        description = "Rings over Nd4jArrayStructure of Int and Long",
-        ref = "src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt"
+        description = "Rings over Nd4jArrayStructure of Int and Long"
     )
 
     feature(
         id = "nd4jarrayfields",
-        description = "Fields over Nd4jArrayStructure of Float and Double",
-        ref = "src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt"
+        description = "Fields over Nd4jArrayStructure of Float and Double"
     )
 }

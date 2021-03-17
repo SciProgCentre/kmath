@@ -1,23 +1,25 @@
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
+@UnstableKMathAPI
 @Suppress("UNUSED_VARIABLE")
 class MatrixTest {
     @Test
     fun testTranspose() {
-        val matrix = MatrixContext.real.one(3, 3)
+        val matrix = LinearSpace.real.one(3, 3)
         val transposed = matrix.transpose()
-        assertEquals(matrix, transposed)
+        assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
     @Test
     fun testBuilder() {
-        val matrix = Matrix.build(2, 3)(
+        val matrix = LinearSpace.real.matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
@@ -39,7 +41,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res = RealMatrixContext.invoke { res dot this@pow }
+                res = LinearSpace.real.run { res dot this@pow }
             }
             return res
         }
@@ -49,10 +51,10 @@ class MatrixTest {
 
     @Test
     fun test2DDot() {
-        val firstMatrix = NDStructure.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
-        val secondMatrix = NDStructure.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
+        val firstMatrix = StructureND.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
+        val secondMatrix = StructureND.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
 
-        MatrixContext.real.run {
+        LinearSpace.real.run {
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }
             val result = firstMatrix dot secondMatrix

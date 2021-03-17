@@ -1,90 +1,105 @@
 package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer.Companion.double
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.asIterable
+import space.kscience.kmath.structures.indices
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-public typealias RealVector = Point<Double>
+public typealias DoubleVector = Point<Double>
 
 public object VectorL2Norm : Norm<Point<out Number>, Double> {
     override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble(Number::toDouble))
 }
 
-public operator fun Buffer.Companion.invoke(vararg doubles: Double): RealVector = doubles.asBuffer()
+@Suppress("FunctionName")
+public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
 
 /**
  * Fill the vector of given [size] with given [value]
  */
-public fun Buffer.Companion.same(size: Int, value: Number): RealVector = real(size) { value.toDouble() }
+@UnstableKMathAPI
+public fun Buffer.Companion.same(size: Int, value: Number): DoubleVector = double(size) { value.toDouble() }
 
 // Transformation methods
 
-public inline fun RealVector.map(transform: (Double) -> Double): RealVector =
-    Buffer.real(size) { transform(get(it)) }
+public inline fun DoubleVector.map(transform: (Double) -> Double): DoubleVector =
+    double(size) { transform(get(it)) }
 
-public inline fun RealVector.mapIndexed(transform: (index: Int, value: Double) -> Double): RealVector =
-    Buffer.real(size) { transform(it, get(it)) }
+public inline fun DoubleVector.mapIndexed(transform: (index: Int, value: Double) -> Double): DoubleVector =
+    double(size) { transform(it, get(it)) }
 
-public operator fun RealVector.plus(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+public operator fun DoubleVector.plus(other: DoubleVector): DoubleVector {
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value + other[index] }
 }
 
-public operator fun RealVector.plus(number: Number): RealVector = map { it + number.toDouble() }
+public operator fun DoubleVector.plus(number: Number): DoubleVector = map { it + number.toDouble() }
 
-public operator fun Number.plus(vector: RealVector): RealVector = vector + this
+public operator fun Number.plus(vector: DoubleVector): DoubleVector = vector + this
 
-public operator fun RealVector.unaryMinus(): Buffer<Double> = map { -it }
+public operator fun DoubleVector.unaryMinus(): Buffer<Double> = map { -it }
 
-public operator fun RealVector.minus(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+public operator fun DoubleVector.minus(other: DoubleVector): DoubleVector {
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value - other[index] }
 }
 
-public operator fun RealVector.minus(number: Number): RealVector = map { it - number.toDouble() }
+public operator fun DoubleVector.minus(number: Number): DoubleVector = map { it - number.toDouble() }
 
-public operator fun Number.minus(vector: RealVector): RealVector = vector.map { toDouble() - it }
+public operator fun Number.minus(vector: DoubleVector): DoubleVector = vector.map { toDouble() - it }
 
-public operator fun RealVector.times(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+public operator fun DoubleVector.times(other: DoubleVector): DoubleVector {
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value * other[index] }
 }
 
-public operator fun RealVector.times(number: Number): RealVector = map { it * number.toDouble() }
+public operator fun DoubleVector.times(number: Number): DoubleVector = map { it * number.toDouble() }
 
-public operator fun Number.times(vector: RealVector): RealVector = vector * this
+public operator fun Number.times(vector: DoubleVector): DoubleVector = vector * this
 
-public operator fun RealVector.div(other: RealVector): RealVector {
-    require(size == other.size){"Vector size $size expected but ${other.size} found"}
+public operator fun DoubleVector.div(other: DoubleVector): DoubleVector {
+    require(size == other.size) { "Vector size $size expected but ${other.size} found" }
     return mapIndexed { index, value -> value / other[index] }
 }
 
-public operator fun RealVector.div(number: Number): RealVector = map { it / number.toDouble() }
+public operator fun DoubleVector.div(number: Number): DoubleVector = map { it / number.toDouble() }
 
-public operator fun Number.div(vector: RealVector): RealVector = vector.map { toDouble() / it }
+public operator fun Number.div(vector: DoubleVector): DoubleVector = vector.map { toDouble() / it }
 
 //extended operations
 
-public fun RealVector.pow(p: Double): RealVector = map { it.pow(p) }
+public fun DoubleVector.pow(p: Double): DoubleVector = map { it.pow(p) }
 
-public fun RealVector.pow(p: Int): RealVector = map { it.pow(p) }
+public fun DoubleVector.pow(p: Int): DoubleVector = map { it.pow(p) }
 
-public fun exp(vector: RealVector): RealVector = vector.map { kotlin.math.exp(it) }
+public fun exp(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.exp(it) }
 
-public fun sqrt(vector: RealVector): RealVector = vector.map { kotlin.math.sqrt(it) }
+public fun sqrt(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.sqrt(it) }
 
-public fun RealVector.square(): RealVector = map { it.pow(2) }
+public fun DoubleVector.square(): DoubleVector = map { it.pow(2) }
 
-public fun sin(vector: RealVector): RealVector = vector.map { kotlin.math.sin(it) }
+public fun sin(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.sin(it) }
 
-public fun cos(vector: RealVector): RealVector = vector.map { kotlin.math.cos(it) }
+public fun cos(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.cos(it) }
 
-public fun tan(vector: RealVector): RealVector = vector.map { kotlin.math.tan(it) }
+public fun tan(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.tan(it) }
 
-public fun ln(vector: RealVector): RealVector = vector.map { kotlin.math.ln(it) }
+public fun ln(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.ln(it) }
 
-public fun log10(vector: RealVector): RealVector = vector.map { kotlin.math.log10(it) }
+public fun log10(vector: DoubleVector): DoubleVector = vector.map { kotlin.math.log10(it) }
+
+// reductions methods
+
+public fun DoubleVector.sum(): Double {
+    var res = 0.0
+    for (i in indices) {
+        res += get(i)
+    }
+    return res
+}

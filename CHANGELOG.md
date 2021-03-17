@@ -4,17 +4,22 @@
 ### Added
 - ScaleOperations interface
 - Field extends ScaleOperations
+- Basic integration API
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
+- Buffer factories for primitives moved to MutableBuffer.Companion
+- NDStructure and NDAlgebra to StructureND and AlgebraND respectively
+- Real -> Double
 
 ### Deprecated
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
 - Number multiplication and division in main Algebra chain
+- `contentEquals` from Buffer. It moved to the companion.
 
 ### Fixed
 
@@ -72,6 +77,7 @@
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
 - `Real` class
+- StructureND identity and equals
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)

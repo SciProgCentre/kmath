@@ -35,10 +35,12 @@ public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffe
 public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
 
 /**
- * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [IntArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Int>.array: IntArray
-    get() = (if (this is IntBuffer) array else IntArray(size) { get(it) })
+public fun Buffer<Int>.toIntArray(): IntArray = when (this) {
+    is IntBuffer -> array.copyOf()
+    else -> IntArray(size, ::get)
+}
 
 /**
  * Returns [IntBuffer] over this array.

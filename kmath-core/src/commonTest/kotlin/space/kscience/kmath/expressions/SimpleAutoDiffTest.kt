@@ -1,6 +1,7 @@
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.E
 import kotlin.math.PI
@@ -14,19 +15,19 @@ class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
+        body: SimpleAutoDiffField<Double, DoubleField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+    ): DerivationResult<Double> = DoubleField.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, RealField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = RealField.simpleAutoDiff(xBinding, yBinding) {
+        body: SimpleAutoDiffField<Double, DoubleField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+    ): DerivationResult<Double> = DoubleField.simpleAutoDiff(xBinding, yBinding) {
         body(bindSymbol(xBinding.first), bindSymbol(yBinding.first))
     }
 
-    fun diff(block: SimpleAutoDiffField<Double, RealField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, RealField> {
-        return SimpleAutoDiffExpression(RealField, block)
+    fun diff(block: SimpleAutoDiffField<Double, DoubleField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, DoubleField> {
+        return SimpleAutoDiffExpression(DoubleField, block)
     }
 
     val x by symbol
@@ -35,7 +36,7 @@ class SimpleAutoDiffTest {
 
     @Test
     fun testPlusX2() {
-        val y = RealField.simpleAutoDiff(x to 3.0) {
+        val y = DoubleField.simpleAutoDiff(x to 3.0) {
             // diff w.r.t this x at 3
             val x = bindSymbol(x)
             x + x
@@ -58,7 +59,7 @@ class SimpleAutoDiffTest {
     @Test
     fun testPlus() {
         // two variables
-        val z = RealField.simpleAutoDiff(x to 2.0, y to 3.0) {
+        val z = DoubleField.simpleAutoDiff(x to 2.0, y to 3.0) {
             val x = bindSymbol(x)
             val y = bindSymbol(y)
             x + y
@@ -71,7 +72,7 @@ class SimpleAutoDiffTest {
     @Test
     fun testMinus() {
         // two variables
-        val z = RealField.simpleAutoDiff(x to 7.0, y to 3.0) {
+        val z = DoubleField.simpleAutoDiff(x to 7.0, y to 3.0) {
             val x = bindSymbol(x)
             val y = bindSymbol(y)
 
@@ -276,7 +277,7 @@ class SimpleAutoDiffTest {
     fun testDivGrad() {
         val res = dxy(x to 1.0, y to 2.0) { x, y -> x * x + y * y }
         assertEquals(6.0, res.div())
-        assertTrue(res.grad(x, y).contentEquals(doubleArrayOf(2.0, 4.0).asBuffer()))
+        assertTrue(Buffer.contentEquals(res.grad(x, y), doubleArrayOf(2.0, 4.0).asBuffer()))
     }
 
     private fun assertApprox(a: Double, b: Double) {

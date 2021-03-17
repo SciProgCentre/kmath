@@ -41,7 +41,7 @@ public interface AlgebraElement<T, C : Algebra<T>> {
  */
 @UnstableKMathAPI
 public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.minus(b: T): T =
-    context.add(this, context.run { -b})
+    context.add(this, context.run { -b })
 
 /**
  * Adds element to this one.

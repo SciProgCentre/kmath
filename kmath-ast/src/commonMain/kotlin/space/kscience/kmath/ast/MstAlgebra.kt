@@ -50,11 +50,11 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
  */
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric  get() = MstGroup.zero
+    public override val zero: MST.Numeric get() = MstGroup.zero
     public override val one: MST.Numeric = number(1.0)
 
     public override fun number(value: Number): MST.Numeric = MstGroup.number(value)
-    public override fun bindSymbol(value: String): MST.Symbolic = MstGroup.bindSymbol(value)
+    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstGroup.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
@@ -83,7 +83,7 @@ public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<
 
     public override val one: MST.Numeric get() = MstRing.one
 
-    public override fun bindSymbol(value: String): MST.Symbolic = MstRing.bindSymbol(value)
+    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstRing.add(a, b)
 
@@ -112,7 +112,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     public override val zero: MST.Numeric get() = MstField.zero
     public override val one: MST.Numeric get() = MstField.one
 
-    public override fun bindSymbol(value: String): MST.Symbolic = MstField.bindSymbol(value)
+    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun sin(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
     public override fun cos(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.COS_OPERATION)(arg)

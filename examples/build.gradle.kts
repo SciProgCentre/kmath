@@ -92,6 +92,14 @@ benchmark {
         iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
         include("ExpressionsInterpretersBenchmark")
     }
+
+    configurations.register("matrixInverse") {
+        warmups = 1 // number of warmup iterations
+        iterations = 3 // number of iterations
+        iterationTime = 500 // time in seconds per iteration
+        iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
+        include("MatrixInverseBenchmark")
+    }
 }
 
 kotlin.sourceSets.all {
@@ -105,6 +113,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

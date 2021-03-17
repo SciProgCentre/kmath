@@ -68,7 +68,7 @@ public fun <T : Any, F : OptimizationProblem<T>> Expression<T>.optimizeWith(
     configuration: F.() -> Unit,
 ): OptimizationResult<T> {
     require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = factory(symbols.toList(),configuration)
+    val problem = factory(symbols.toList(), configuration)
     problem.expression(this)
     return problem.optimize()
 }
@@ -76,7 +76,7 @@ public fun <T : Any, F : OptimizationProblem<T>> Expression<T>.optimizeWith(
 /**
  * Optimize differentiable expression using specific [OptimizationProblemFactory]
  */
-public fun <T : Any, F : OptimizationProblem<T>>  DifferentiableExpression<T, Expression<T>>.optimizeWith(
+public fun <T : Any, F : OptimizationProblem<T>> DifferentiableExpression<T, Expression<T>>.optimizeWith(
     factory: OptimizationProblemFactory<T, F>,
     vararg symbols: Symbol,
     configuration: F.() -> Unit,

@@ -1,8 +1,8 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.nd.DefaultStrides
-import space.kscience.kmath.nd.NDStructure
 import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 
 /**
@@ -13,10 +13,10 @@ internal class BufferAccessor2D<T : Any>(
     public val colNum: Int,
     val factory: MutableBufferFactory<T>,
 ) {
-    public operator fun Buffer<T>.get(i: Int, j: Int): T = get(i + colNum * j)
+    public operator fun Buffer<T>.get(i: Int, j: Int): T = get(i * colNum + j)
 
     public operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
-        set(i + colNum * j, value)
+        set(i * colNum + j, value)
     }
 
     public inline fun create(crossinline init: (i: Int, j: Int) -> T): MutableBuffer<T> =
@@ -25,7 +25,7 @@ internal class BufferAccessor2D<T : Any>(
     public fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
     //TODO optimize wrapper
-    public fun MutableBuffer<T>.collect(): Structure2D<T> = NDStructure.build(
+    public fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
         DefaultStrides(intArrayOf(rowNum, colNum)),
         factory
     ) { (i, j) ->

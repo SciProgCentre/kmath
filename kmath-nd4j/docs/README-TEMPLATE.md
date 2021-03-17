@@ -15,7 +15,7 @@ import org.nd4j.linalg.factory.*
 import scientifik.kmath.nd4j.*
 import scientifik.kmath.structures.*
 
-val array = Nd4j.ones(2, 2).asRealStructure()
+val array = Nd4j.ones(2, 2).asDoubleStructure()
 println(array[0, 0]) // 1.0
 array[intArrayOf(0, 0)] = 24.0
 println(array[0, 0]) // 24.0
@@ -28,8 +28,8 @@ import org.nd4j.linalg.factory.*
 import scientifik.kmath.nd4j.*
 import scientifik.kmath.operations.*
 
-val field = RealNd4jArrayField(intArrayOf(2, 2))
-val array = Nd4j.rand(2, 2).asRealStructure()
+val field = DoubleNd4jArrayField(intArrayOf(2, 2))
+val array = Nd4j.rand(2, 2).asDoubleStructure()
 
 val res = field {
     (25.0 / array + 20) * 4

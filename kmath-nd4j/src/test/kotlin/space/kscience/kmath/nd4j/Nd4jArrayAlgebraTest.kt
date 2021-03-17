@@ -8,8 +8,8 @@ import kotlin.test.fail
 internal class Nd4jArrayAlgebraTest {
     @Test
     fun testProduce() {
-        val res = with(RealNd4jArrayField(intArrayOf(2, 2))){ produce { it.sum().toDouble() } }
-        val expected = (Nd4j.create(2, 2) ?: fail()).asRealStructure()
+        val res = with(DoubleNd4jArrayField(intArrayOf(2, 2))) { produce { it.sum().toDouble() } }
+        val expected = (Nd4j.create(2, 2) ?: fail()).asDoubleStructure()
         expected[intArrayOf(0, 0)] = 0.0
         expected[intArrayOf(0, 1)] = 1.0
         expected[intArrayOf(1, 0)] = 1.0

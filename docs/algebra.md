@@ -31,7 +31,7 @@ multiplication;
 - [Ring](http://mathworld.wolfram.com/Ring.html) adds multiplication and its neutral element (i.e. 1);
 - [Field](http://mathworld.wolfram.com/Field.html) adds division operation.
 
-A typical implementation of `Field<T>` is the `RealField` which works on doubles, and `VectorSpace` for `Space<T>`.
+A typical implementation of `Field<T>` is the `DoubleField` which works on doubles, and `VectorSpace` for `Space<T>`.
 
 In some cases algebra context can hold additional operations like `exp` or `sin`, and then it inherits appropriate
 interface. Also, contexts may have operations, which produce elements outside of the context. For example, `Matrix.dot` 
