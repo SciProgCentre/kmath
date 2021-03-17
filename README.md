@@ -120,10 +120,10 @@ KMath is a modular library. Different modules provide different features with di
 >
 > **Features:**
 > - [algebras](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Algebraic structures like rings, spaces and fields.
-> - [nd](kmath-core/src/commonMain/kotlin/space/kscience/kmath/nd/StructureND.kt) : Many-dimensional structures and operations on them.
+> - [nd](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/StructureND.kt) : Many-dimensional structures and operations on them.
 > - [linear](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
-> - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffer.kt) : One-dimensional structure
-> - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of
+> - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
+> - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of 
 objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
 performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
@@ -206,9 +206,9 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [nd4jarraystructure](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
-> - [nd4jarrayrings](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
-> - [nd4jarrayfields](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
+> - [nd4jarraystructure](kmath-nd4j/#) : NDStructure wrapper for INDArray
+> - [nd4jarrayrings](kmath-nd4j/#) : Rings over Nd4jArrayStructure of Int and Long
+> - [nd4jarrayfields](kmath-nd4j/#) : Fields over Nd4jArrayStructure of Float and Double
 
 <hr/>
 

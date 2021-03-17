@@ -4,7 +4,7 @@ import org.ejml.simple.SimpleMatrix
 import space.kscience.kmath.linear.Matrix
 
 /**
- * Represents featured matrix over EJML [SimpleMatrix].
+ * The matrix implementation over EJML [SimpleMatrix].
  *
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
