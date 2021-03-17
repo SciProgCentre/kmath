@@ -5,7 +5,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
 
     public fun zeros(shape: IntArray): TensorType
-    public fun TensorType.zeroesLike(): TensorType
+    public fun TensorType.zeroesLike(): TensorType // mb it shouldn't be tensor but algebra method (like in numpy/torch) ?
     public fun ones(shape: IntArray): TensorType
     public fun TensorType.onesLike(): TensorType
 

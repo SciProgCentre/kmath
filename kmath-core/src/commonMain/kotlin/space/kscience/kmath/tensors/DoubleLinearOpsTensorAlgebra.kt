@@ -9,27 +9,21 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
-        /*
+
         // todo checks
+
         val luTensor = this.copy()
-        val lu = InnerMatrix(luTensor)
-        //stride TODO!!! move to generator?
-        var matCnt = 1
-        for (i in 0 until this.shape.size - 2) {
-            matCnt *= this.shape[i]
-        }
+
         val n = this.shape.size
-        val m = this.shape[n - 1]
-        val pivotsShape = IntArray(n - 1) { i ->
-            this.shape[i]
-        }
+        val m = this.shape.last()
+        val pivotsShape = IntArray(n - 1) { i -> this.shape[i] }
         val pivotsTensor = IntTensor(
             pivotsShape,
-            IntArray(matCnt * m) { 0 }
+            IntArray(pivotsShape.reduce(Int::times)) { 0 } //todo default???
         )
-        val pivot = InnerVector(pivotsTensor)
-        for (i in 0 until matCnt) {
-            for (row in 0 until m) pivot[row] = row
+
+        for ((lu, pivots) in luTensor.matrixSequence().zip(pivotsTensor.vectorSequence())){
+            for (row in 0 until m) pivots[row] = row
 
             for (i in 0 until m) {
                 var maxA = -1.0
@@ -47,9 +41,9 @@ public class DoubleLinearOpsTensorAlgebra :
 
                 if (iMax != i) {
 
-                    val j = pivot[i]
-                    pivot[i] = pivot[iMax]
-                    pivot[iMax] = j
+                    val j = pivots[i]
+                    pivots[i] = pivots[iMax]
+                    pivots[iMax] = j
 
                     for (k in 0 until m) {
                         val tmp = lu[i, k]
@@ -66,42 +60,45 @@ public class DoubleLinearOpsTensorAlgebra :
                     }
                 }
             }
-            lu.makeStep()
-            pivot.makeStep()
         }
 
-        return Pair(luTensor, pivotsTensor)*/
 
-        TODO("Andrei, use view, get, as2D, as1D")
+        return Pair(luTensor, pivotsTensor)
+
     }
 
-    override fun luPivot(lu: DoubleTensor, pivots: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        /*
-        // todo checks
-        val n = lu.shape[0]
-        val p = lu.zeroesLike()
-        pivots.buffer.unsafeToIntArray().forEachIndexed { i, pivot ->
-            p[i, pivot] = 1.0
+    override fun luPivot(luTensor: DoubleTensor, pivotsTensor: IntTensor): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        //todo checks
+        val n = luTensor.shape.last()
+        val pTensor = luTensor.zeroesLike()
+        for ((p, pivot) in pTensor.matrixSequence().zip(pivotsTensor.vectorSequence())){
+            for (i in 0 until n){
+                p[i, pivot[i]] = 1.0
+            }
         }
-        val l = lu.zeroesLike()
-        val u = lu.zeroesLike()
 
-        for (i in 0 until n) {
-            for (j in 0 until n) {
-                if (i == j) {
-                    l[i, j] = 1.0
-                }
-                if (j < i) {
-                    l[i, j] = lu[i, j]
-                }
-                if (j >= i) {
-                    u[i, j] = lu[i, j]
+        val lTensor = luTensor.zeroesLike()
+        val uTensor = luTensor.zeroesLike()
+
+        for ((pairLU, lu) in lTensor.matrixSequence().zip(uTensor.matrixSequence()).zip(luTensor.matrixSequence())){
+            val (l, u) = pairLU
+            for (i in 0 until n) {
+                for (j in 0 until n) {
+                    if (i == j) {
+                        l[i, j] = 1.0
+                    }
+                    if (j < i) {
+                        l[i, j] = lu[i, j]
+                    }
+                    if (j >= i) {
+                        u[i, j] = lu[i, j]
+                    }
                 }
             }
         }
 
-        return Triple(p, l, u)*/
-        TODO("Andrei, first we need implement get(Int)")
+        return Triple(pTensor, lTensor, uTensor)
+
     }
 
     override fun DoubleTensor.cholesky(): DoubleTensor {

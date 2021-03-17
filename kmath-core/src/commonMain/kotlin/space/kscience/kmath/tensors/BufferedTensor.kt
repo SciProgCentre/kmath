@@ -1,5 +1,7 @@
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
 
 
@@ -29,59 +31,50 @@ public open class BufferedTensor<T>(
 
     override fun hashCode(): Int = 0
 
+    // todo rename to vector
+    public inline fun forEachVector(vectorAction : (MutableStructure1D<T>) -> Unit): Unit {
+        check(shape.size >= 1) {"todo"}
+        val vectorOffset = strides.strides[0]
+        val vectorShape = intArrayOf(shape.last())
+        for (offset in 0 until numel step vectorOffset) {
+            val vector = BufferedTensor<T>(vectorShape, buffer, offset).as1D()
+            vectorAction(vector)
+        }
+    }
+
+    public inline fun forEachMatrix(matrixAction : (MutableStructure2D<T>) -> Unit): Unit {
+        check(shape.size >= 2) {"todo"}
+        val matrixOffset = strides.strides[1]
+        val matrixShape = intArrayOf(shape[shape.size - 2], shape.last()) //todo better way?
+        for (offset in 0 until numel step matrixOffset) {
+            val matrix = BufferedTensor<T>(matrixShape, buffer, offset).as2D()
+            matrixAction(matrix)
+        }
+    }
+    // todo remove code copy-pasting
+
+    public fun vectorSequence(): Sequence<MutableStructure1D<T>> = sequence {
+        check(shape.size >= 1) {"todo"}
+        val vectorOffset = strides.strides[0]
+        val vectorShape = intArrayOf(shape.last())
+        for (offset in 0 until numel step vectorOffset) {
+            val vector = BufferedTensor<T>(vectorShape, buffer, offset).as1D()
+            yield(vector)
+        }
+    }
+
+    public fun matrixSequence(): Sequence<MutableStructure2D<T>> = sequence {
+        check(shape.size >= 2) {"todo"}
+        val matrixOffset = strides.strides[1]
+        val matrixShape = intArrayOf(shape[shape.size - 2], shape.last()) //todo better way?
+        for (offset in 0 until numel step matrixOffset) {
+            val matrix = BufferedTensor<T>(matrixShape, buffer, offset).as2D()
+            yield(matrix)
+        }
+    }
+
 }
 
-/*
-//todo make generator mb nextMatrixIndex?
-public class InnerMatrix<T>(private val tensor: BufferedTensor<T>){
-    private var offset: Int = 0
-    private val n : Int = tensor.shape.size
-    //stride?
-    private val step = tensor.shape[n - 1] * tensor.shape[n - 2]
-
-    public operator fun get(i: Int, j: Int): T {
-        val index = tensor.strides.index(offset)
-        index[n - 2] = i
-        index[n - 1] = j
-        return tensor[index]
-    }
-
-    public operator fun set(i: Int, j: Int, value: T): Unit {
-        val index = tensor.strides.index(offset)
-        index[n - 2] = i
-        index[n - 1] = j
-        tensor[index] = value
-    }
-
-    public fun makeStep(){
-        offset += step
-    }
-}
-
-public class InnerVector<T>(private val tensor: BufferedTensor<T>){
-    private var offset: Int = 0
-    private val n : Int = tensor.shape.size
-    //stride?
-    private val step = tensor.shape[n - 1]
-
-    public operator fun get(i: Int): T {
-        val index = tensor.strides.index(offset)
-        index[n - 1] = i
-        return tensor[index]
-    }
-
-    public operator fun set(i: Int, value: T): Unit {
-        val index = tensor.strides.index(offset)
-        index[n - 1] = i
-        tensor[index] = value
-    }
-
-    public fun makeStep(){
-        offset += step
-    }
-}
-//todo default buffer = arrayOf(0)???
- */
 
 public class IntTensor(
     shape: IntArray,
