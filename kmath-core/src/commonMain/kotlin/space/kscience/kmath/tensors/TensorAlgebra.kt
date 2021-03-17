@@ -86,4 +86,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/generated/torch.flatten.html#torch.flatten
     public fun TensorType.flatten(startDim: Int, endDim: Int): TensorType
 
+    //https://pytorch.org/docs/stable/generated/torch.squeeze.html
+    public fun TensorType.squeeze(dim: Int): TensorType
 }

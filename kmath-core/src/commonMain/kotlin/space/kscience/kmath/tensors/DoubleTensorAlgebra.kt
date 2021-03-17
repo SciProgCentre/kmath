@@ -266,6 +266,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
+    override fun DoubleTensor.squeeze(dim: Int): DoubleTensor {
+        TODO("Not yet implemented")
+    }
+
 }
 
 public inline fun <R> DoubleTensorAlgebra(block: DoubleTensorAlgebra.() -> R): R =
