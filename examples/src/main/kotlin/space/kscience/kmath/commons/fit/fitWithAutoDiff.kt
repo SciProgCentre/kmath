@@ -8,10 +8,14 @@ import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
 import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.optimization.FunctionOptimization
+import space.kscience.kmath.optimization.OptimizationResult
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.stat.*
+import space.kscience.kmath.stat.Distribution
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.normal
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.toList
 import kotlin.math.pow
@@ -58,7 +62,7 @@ fun main() {
     val yErr = y.map { sqrt(it) }//RealVector.same(x.size, sigma)
 
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
-    val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
+    val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
         //bind variables to autodiff context
         val a = bind(a)
         val b = bind(b)

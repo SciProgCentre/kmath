@@ -80,19 +80,20 @@ public fun Distribution.Companion.normal(
     override fun probability(arg: Double): Double = exp(-(arg - mean).pow(2) / 2 / sigma2) / norm
 }
 
-public fun Distribution.Companion.poisson(lambda: Double): DiscreteSamplerDistribution =
-    object : DiscreteSamplerDistribution() {
-        private val computedProb: MutableMap<Int, Double> = hashMapOf(0 to exp(-lambda))
+public fun Distribution.Companion.poisson(
+    lambda: Double,
+): DiscreteSamplerDistribution = object : DiscreteSamplerDistribution() {
+    private val computedProb: HashMap<Int, Double> = hashMapOf(0 to exp(-lambda))
 
-        override fun buildSampler(generator: RandomGenerator): DiscreteSampler =
-            PoissonSampler.of(generator.asUniformRandomProvider(), lambda)
+    override fun buildSampler(generator: RandomGenerator): DiscreteSampler =
+        PoissonSampler.of(generator.asUniformRandomProvider(), lambda)
 
-        override fun probability(arg: Int): Double {
-            require(arg >= 0) { "The argument must be >= 0" }
+    override fun probability(arg: Int): Double {
+        require(arg >= 0) { "The argument must be >= 0" }
 
-            return if (arg > 40)
-                exp(-(arg - lambda).pow(2) / 2 / lambda) / sqrt(2 * PI * lambda)
-            else
-                computedProb.getOrPut(arg) { probability(arg - 1) * lambda / arg }
-        }
+        return if (arg > 40)
+            exp(-(arg - lambda).pow(2) / 2 / lambda) / sqrt(2 * PI * lambda)
+        else
+            computedProb.getOrPut(arg) { probability(arg - 1) * lambda / arg }
     }
+}

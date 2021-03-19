@@ -1,6 +1,7 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.Ring
 import kotlin.reflect.KClass
@@ -20,7 +21,7 @@ public class MatrixWrapper<T : Any> internal constructor(
      */
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any> getFeature(type: KClass<T>): T? = features.singleOrNull { type.isInstance(it) } as? T
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = features.singleOrNull { type.isInstance(it) } as? F
         ?: origin.getFeature(type)
 
     override fun toString(): String {

@@ -575,7 +575,7 @@ public final class space/kscience/kmath/linear/MatrixBuilderKt {
 	public static final fun row (Lspace/kscience/kmath/linear/LinearSpace;[Ljava/lang/Object;)Lspace/kscience/kmath/nd/Structure2D;
 }
 
-public abstract interface class space/kscience/kmath/linear/MatrixFeature {
+public abstract interface class space/kscience/kmath/linear/MatrixFeature : space/kscience/kmath/nd/StructureFeature {
 }
 
 public final class space/kscience/kmath/linear/MatrixFeaturesKt {
@@ -1060,9 +1060,13 @@ public final class space/kscience/kmath/nd/Strides$DefaultImpls {
 }
 
 public abstract interface class space/kscience/kmath/nd/Structure1D : space/kscience/kmath/nd/StructureND, space/kscience/kmath/structures/Buffer {
+	public static final field Companion Lspace/kscience/kmath/nd/Structure1D$Companion;
 	public abstract fun get ([I)Ljava/lang/Object;
 	public abstract fun getDimension ()I
 	public abstract fun iterator ()Ljava/util/Iterator;
+}
+
+public final class space/kscience/kmath/nd/Structure1D$Companion {
 }
 
 public final class space/kscience/kmath/nd/Structure1D$DefaultImpls {
@@ -1102,6 +1106,9 @@ public final class space/kscience/kmath/nd/Structure2D$DefaultImpls {
 
 public final class space/kscience/kmath/nd/Structure2DKt {
 	public static final fun as2D (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/Structure2D;
+}
+
+public abstract interface class space/kscience/kmath/nd/StructureFeature {
 }
 
 public abstract interface class space/kscience/kmath/nd/StructureND {

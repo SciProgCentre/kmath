@@ -1,5 +1,3 @@
-import ru.mipt.npm.gradle.KSciencePublishingPlugin
-
 plugins {
     id("ru.mipt.npm.gradle.project")
 }
@@ -20,11 +18,11 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-3"
+    version = "0.3.0-dev-4"
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) apply(plugin = "maven-publish")
 }
 
 readme {

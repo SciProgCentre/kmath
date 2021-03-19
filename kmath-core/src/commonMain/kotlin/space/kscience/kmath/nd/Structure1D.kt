@@ -15,6 +15,8 @@ public interface Structure1D<T> : StructureND<T>, Buffer<T> {
     }
 
     public override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(::get).iterator()
+
+    public companion object
 }
 
 /**

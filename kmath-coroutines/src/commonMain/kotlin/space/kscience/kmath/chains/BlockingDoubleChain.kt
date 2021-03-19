@@ -8,5 +8,5 @@ public abstract class BlockingDoubleChain : Chain<Double> {
 
     override suspend fun next(): Double = nextDouble()
 
-    public fun nextBlock(size: Int): DoubleArray = DoubleArray(size) { nextDouble() }
+    public open fun nextBlock(size: Int): DoubleArray = DoubleArray(size) { nextDouble() }
 }

@@ -3,8 +3,8 @@ package space.kscience.kmath.commons.optimization
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
 import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.stat.Distribution
-import space.kscience.kmath.stat.Fitting
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.normal
 import kotlin.math.pow
@@ -55,7 +55,7 @@ internal class OptimizeTest {
 
         val yErr = List(x.size) { sigma }
 
-        val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
+        val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
             val cWithDefault = bindSymbolOrNull(c) ?: one
             bind(a) * x1.pow(2) + bind(b) * x1 + cWithDefault
         }

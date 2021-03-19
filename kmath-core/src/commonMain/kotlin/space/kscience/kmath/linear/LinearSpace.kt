@@ -164,7 +164,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(structure: Matrix<T>, type: KClass<F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> getFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
 
     public companion object {
 
@@ -194,7 +194,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
+public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
     getFeature(structure, F::class)
 
 

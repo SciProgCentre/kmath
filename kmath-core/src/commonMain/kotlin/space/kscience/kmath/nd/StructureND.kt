@@ -7,6 +7,8 @@ import kotlin.jvm.JvmName
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
+public interface StructureFeature
+
 /**
  * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
  * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
@@ -48,7 +50,7 @@ public interface StructureND<T> {
      * If the feature is not present, null is returned.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(type: KClass<F>): F? = null
+    public fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
 
     public companion object {
         /**
@@ -144,7 +146,7 @@ public interface StructureND<T> {
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
 @UnstableKMathAPI
-public inline fun <reified T : Any> StructureND<*>.getFeature(): T? = getFeature(T::class)
+public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
 
 /**
  * Represents mutable [StructureND].

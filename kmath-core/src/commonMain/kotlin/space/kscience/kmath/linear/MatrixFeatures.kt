@@ -1,10 +1,12 @@
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.nd.StructureFeature
+
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
  */
-public interface MatrixFeature
+public interface MatrixFeature: StructureFeature
 
 /**
  * Matrices with this feature are considered to have only diagonal non-null elements.
