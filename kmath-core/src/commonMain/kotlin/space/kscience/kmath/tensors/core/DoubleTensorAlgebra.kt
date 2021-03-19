@@ -12,7 +12,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(shape, buffer, 0)
     }
 
-
     override operator fun DoubleTensor.get(i: Int): DoubleTensor {
         val lastShape = this.shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
@@ -20,41 +19,24 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(newShape, this.buffer.array(), newStart)
     }
 
-<<<<<<< HEAD:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/DoubleTensorAlgebra.kt
-    override fun full(shape: IntArray, value: Double): DoubleTensor {
-        val buffer = DoubleArray(TensorStrides(shape).linearSize) { value }
-        return DoubleTensor(shape, buffer)
-    }
-
-    override fun zeros(shape: IntArray): DoubleTensor = full(shape, 0.0)
-
-    override fun ones(shape: IntArray): DoubleTensor = full(shape, 1.0)
-
-=======
     override fun full(value: Double, shape: IntArray): DoubleTensor {
         checkEmptyShape(shape)
         val buffer = DoubleArray(shape.reduce(Int::times)) { value }
         return DoubleTensor(shape, buffer)
     }
 
->>>>>>> ups/feature/tensor-algebra:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt
     override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
         val shape = this.shape
         val buffer = DoubleArray(this.strides.linearSize) { value }
         return DoubleTensor(shape, buffer)
     }
 
-<<<<<<< HEAD:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/DoubleTensorAlgebra.kt
-    override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
-
-=======
     override fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
 
     override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
 
     override fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
 
->>>>>>> ups/feature/tensor-algebra:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt
     override fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
 
     override fun eye(n: Int): DoubleTensor {
@@ -70,7 +52,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.copy(): DoubleTensor {
         return DoubleTensor(this.shape, this.buffer.array().copyOf(), this.bufferStart)
     }
-
 
     override fun Double.plus(other: DoubleTensor): DoubleTensor {
         val resBuffer = DoubleArray(other.strides.linearSize) { i ->
