@@ -1,7 +1,17 @@
-package space.kscience.kmath.tensors
+package space.kscience.kmath.tensors.core
+
+import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
 
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
+
+    public fun fromArray(shape: IntArray, buffer: DoubleArray): DoubleTensor {
+        checkEmptyShape(shape)
+        checkEmptyDoubleBuffer(buffer)
+        checkBufferShapeConsistency(shape, buffer)
+        return DoubleTensor(shape, buffer, 0)
+    }
+
 
     override operator fun DoubleTensor.get(i: Int): DoubleTensor {
         val lastShape = this.shape.drop(1).toIntArray()
@@ -10,6 +20,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(newShape, this.buffer.array(), newStart)
     }
 
+<<<<<<< HEAD:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/DoubleTensorAlgebra.kt
     override fun full(shape: IntArray, value: Double): DoubleTensor {
         val buffer = DoubleArray(TensorStrides(shape).linearSize) { value }
         return DoubleTensor(shape, buffer)
@@ -19,14 +30,31 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun ones(shape: IntArray): DoubleTensor = full(shape, 1.0)
 
+=======
+    override fun full(value: Double, shape: IntArray): DoubleTensor {
+        checkEmptyShape(shape)
+        val buffer = DoubleArray(shape.reduce(Int::times)) { value }
+        return DoubleTensor(shape, buffer)
+    }
+
+>>>>>>> ups/feature/tensor-algebra:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt
     override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
         val shape = this.shape
         val buffer = DoubleArray(this.strides.linearSize) { value }
         return DoubleTensor(shape, buffer)
     }
 
+<<<<<<< HEAD:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/DoubleTensorAlgebra.kt
     override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
 
+=======
+    override fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
+
+    override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
+
+    override fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
+
+>>>>>>> ups/feature/tensor-algebra:kmath-core/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt
     override fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
 
     override fun eye(n: Int): DoubleTensor {
@@ -54,13 +82,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.plus(value: Double): DoubleTensor = value + this
 
     override fun DoubleTensor.plus(other: DoubleTensor): DoubleTensor {
-        val broadcast = broadcastTensors(this, other)
-        val newThis = broadcast[0]
-        val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
-            newThis.buffer.array()[i] + newOther.buffer.array()[i]
+        checkShapesCompatible(this, other)
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.array()[i] + other.buffer.array()[i]
         }
-        return DoubleTensor(newThis.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
     override fun DoubleTensor.plusAssign(value: Double) {
@@ -70,10 +96,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.plusAssign(other: DoubleTensor) {
-        val newOther = broadcastTo(other, this.shape)
+        checkShapesCompatible(this, other)
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] +=
-                newOther.buffer.array()[this.bufferStart + i]
+                other.buffer.array()[this.bufferStart + i]
         }
     }
 
@@ -92,13 +118,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.minus(other: DoubleTensor): DoubleTensor {
-        val broadcast = broadcastTensors(this, other)
-        val newThis = broadcast[0]
-        val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
-            newThis.buffer.array()[i] - newOther.buffer.array()[i]
+        checkShapesCompatible(this, other)
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.array()[i] - other.buffer.array()[i]
         }
-        return DoubleTensor(newThis.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
     override fun DoubleTensor.minusAssign(value: Double) {
@@ -108,10 +132,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.minusAssign(other: DoubleTensor) {
-        val newOther = broadcastTo(other, this.shape)
+        checkShapesCompatible(this, other)
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] -=
-                newOther.buffer.array()[this.bufferStart + i]
+                other.buffer.array()[this.bufferStart + i]
         }
     }
 
@@ -125,15 +149,12 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.times(value: Double): DoubleTensor = value * this
 
     override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
-        val broadcast = broadcastTensors(this, other)
-        val newThis = broadcast[0]
-        val newOther = broadcast[1]
-
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
-            newThis.buffer.array()[newOther.bufferStart + i] *
-                    newOther.buffer.array()[newOther.bufferStart + i]
+        checkShapesCompatible(this, other)
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.array()[other.bufferStart + i] *
+                    other.buffer.array()[other.bufferStart + i]
         }
-        return DoubleTensor(newThis.shape, resBuffer)
+        return DoubleTensor(this.shape, resBuffer)
     }
 
     override fun DoubleTensor.timesAssign(value: Double) {
@@ -143,10 +164,40 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.timesAssign(other: DoubleTensor) {
-        val newOther = broadcastTo(other, this.shape)
+        checkShapesCompatible(this, other)
         for (i in 0 until this.strides.linearSize) {
             this.buffer.array()[this.bufferStart + i] *=
-                newOther.buffer.array()[this.bufferStart + i]
+                other.buffer.array()[this.bufferStart + i]
+        }
+    }
+
+    override fun DoubleTensor.div(value: Double): DoubleTensor {
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.array()[this.bufferStart + i] / value
+        }
+        return DoubleTensor(this.shape, resBuffer)
+    }
+
+    override fun DoubleTensor.div(other: DoubleTensor): DoubleTensor {
+        checkShapesCompatible(this, other)
+        val resBuffer = DoubleArray(this.strides.linearSize) { i ->
+            this.buffer.array()[other.bufferStart + i] /
+                    other.buffer.array()[other.bufferStart + i]
+        }
+        return DoubleTensor(this.shape, resBuffer)
+    }
+
+    override fun DoubleTensor.divAssign(value: Double) {
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.array()[this.bufferStart + i] /= value
+        }
+    }
+
+    override fun DoubleTensor.divAssign(other: DoubleTensor) {
+        checkShapesCompatible(this, other)
+        for (i in 0 until this.strides.linearSize) {
+            this.buffer.array()[this.bufferStart + i] /=
+                other.buffer.array()[this.bufferStart + i]
         }
     }
 
@@ -221,24 +272,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
-
-    override fun DoubleTensor.div(value: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.div(other: DoubleTensor): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
     override fun DoubleTensor.flatten(startDim: Int, endDim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.divAssign(value: Double) {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.divAssign(other: DoubleTensor) {
         TODO("Not yet implemented")
     }
 
@@ -263,6 +297,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
 }
+
 
 public inline fun <R> DoubleTensorAlgebra(block: DoubleTensorAlgebra.() -> R): R =
     DoubleTensorAlgebra().block()

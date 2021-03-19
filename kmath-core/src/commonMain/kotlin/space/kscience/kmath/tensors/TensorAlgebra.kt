@@ -3,9 +3,8 @@ package space.kscience.kmath.tensors
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
-
     //https://pytorch.org/docs/stable/generated/torch.full.html
-    public fun full(shape: IntArray, value: T): TensorType
+    public fun full(value: T, shape: IntArray): TensorType
 
     public fun ones(shape: IntArray): TensorType
     public fun zeros(shape: IntArray): TensorType

@@ -1,4 +1,6 @@
-package space.kscience.kmath.tensors
+package space.kscience.kmath.tensors.core
+
+import space.kscience.kmath.tensors.OrderedTensorAlgebra
 
 public open class DoubleOrderedTensorAlgebra:
     OrderedTensorAlgebra<Double, DoubleTensor>,

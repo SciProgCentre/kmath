@@ -1,8 +1,10 @@
-package space.kscience.kmath.tensors
+package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
+import space.kscience.kmath.tensors.TensorStrides
+import space.kscience.kmath.tensors.TensorStructure
 
 
 public open class BufferedTensor<T>(
@@ -66,25 +68,25 @@ public open class BufferedTensor<T>(
 }
 
 
-public class IntTensor(
+public class IntTensor internal constructor(
     shape: IntArray,
     buffer: IntArray,
     offset: Int = 0
 ) : BufferedTensor<Int>(shape, IntBuffer(buffer), offset)
 
-public class LongTensor(
+public class LongTensor internal constructor(
     shape: IntArray,
     buffer: LongArray,
     offset: Int = 0
 ) : BufferedTensor<Long>(shape, LongBuffer(buffer), offset)
 
-public class FloatTensor(
+public class FloatTensor internal constructor(
     shape: IntArray,
     buffer: FloatArray,
     offset: Int = 0
 ) : BufferedTensor<Float>(shape, FloatBuffer(buffer), offset)
 
-public class DoubleTensor(
+public class DoubleTensor internal constructor(
     shape: IntArray,
     buffer: DoubleArray,
     offset: Int = 0
