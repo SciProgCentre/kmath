@@ -1,4 +1,6 @@
-package space.kscience.kmath.tensors
+package space.kscience.kmath.tensors.core
+
+import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
 
 public class DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, DoubleTensor, IntTensor>,
