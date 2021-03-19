@@ -4,17 +4,17 @@ package space.kscience.kmath.tensors
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
 
-    public fun zeros(shape: IntArray): TensorType
-    public fun TensorType.zeroesLike(): TensorType // mb it shouldn't be tensor but algebra method (like in numpy/torch) ?
-    public fun ones(shape: IntArray): TensorType
-    public fun TensorType.onesLike(): TensorType
-
-
     //https://pytorch.org/docs/stable/generated/torch.full.html
     public fun full(shape: IntArray, value: T): TensorType
 
+    public fun ones(shape: IntArray): TensorType
+    public fun zeros(shape: IntArray): TensorType
+
     //https://pytorch.org/docs/stable/generated/torch.full_like.html#torch.full_like
     public fun TensorType.fullLike(value: T): TensorType
+
+    public fun TensorType.zeroesLike(): TensorType
+    public fun TensorType.onesLike(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.eye.html
     public fun eye(n: Int): TensorType

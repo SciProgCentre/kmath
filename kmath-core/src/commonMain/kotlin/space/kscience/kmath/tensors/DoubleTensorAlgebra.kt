@@ -10,23 +10,24 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(newShape, this.buffer.array(), newStart)
     }
 
-    override fun zeros(shape: IntArray): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.zeroesLike(): DoubleTensor {
-        val shape = this.shape
-        val buffer = DoubleArray(this.strides.linearSize) { 0.0 }
+    override fun full(shape: IntArray, value: Double): DoubleTensor {
+        val buffer = DoubleArray(TensorStrides(shape).linearSize) { value }
         return DoubleTensor(shape, buffer)
     }
 
-    override fun ones(shape: IntArray): DoubleTensor {
-        TODO("Not yet implemented")
+    override fun zeros(shape: IntArray): DoubleTensor = full(shape, 0.0)
+
+    override fun ones(shape: IntArray): DoubleTensor = full(shape, 1.0)
+
+    override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
+        val shape = this.shape
+        val buffer = DoubleArray(this.strides.linearSize) { value }
+        return DoubleTensor(shape, buffer)
     }
 
-    override fun DoubleTensor.onesLike(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
+
+    override fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
 
     override fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
@@ -191,15 +192,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.abs(): DoubleTensor {
         TODO("Not yet implemented")
     }
-
-    override fun full(shape: IntArray, value: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
 
     override fun DoubleTensor.sum(dim: Int, keepDim: Boolean): DoubleTensor {
         TODO("Not yet implemented")

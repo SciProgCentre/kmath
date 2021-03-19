@@ -31,28 +31,6 @@ public open class BufferedTensor<T>(
 
     override fun hashCode(): Int = 0
 
-    // todo rename to vector
-    public inline fun forEachVector(vectorAction : (MutableStructure1D<T>) -> Unit): Unit {
-        check(shape.size >= 1) {"todo"}
-        val vectorOffset = strides.strides[0]
-        val vectorShape = intArrayOf(shape.last())
-        for (offset in 0 until numel step vectorOffset) {
-            val vector = BufferedTensor<T>(vectorShape, buffer, offset).as1D()
-            vectorAction(vector)
-        }
-    }
-
-    public inline fun forEachMatrix(matrixAction : (MutableStructure2D<T>) -> Unit): Unit {
-        check(shape.size >= 2) {"todo"}
-        val matrixOffset = strides.strides[1]
-        val matrixShape = intArrayOf(shape[shape.size - 2], shape.last()) //todo better way?
-        for (offset in 0 until numel step matrixOffset) {
-            val matrix = BufferedTensor<T>(matrixShape, buffer, offset).as2D()
-            matrixAction(matrix)
-        }
-    }
-    // todo remove code copy-pasting
-
     public fun vectorSequence(): Sequence<MutableStructure1D<T>> = sequence {
         check(shape.size >= 1) {"todo"}
         val vectorOffset = strides.strides[0]
@@ -70,6 +48,18 @@ public open class BufferedTensor<T>(
         for (offset in 0 until numel step matrixOffset) {
             val matrix = BufferedTensor<T>(matrixShape, buffer, offset).as2D()
             yield(matrix)
+        }
+    }
+
+    public inline fun forEachVector(vectorAction : (MutableStructure1D<T>) -> Unit): Unit {
+        for (vector in vectorSequence()){
+            vectorAction(vector)
+        }
+    }
+
+    public inline fun forEachMatrix(matrixAction : (MutableStructure2D<T>) -> Unit): Unit {
+        for (matrix in matrixSequence()){
+            matrixAction(matrix)
         }
     }
 
