@@ -3,6 +3,8 @@ package space.kscience.kmath.interpolation
 import space.kscience.kmath.functions.OrderedPiecewisePolynomial
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.misc.XYPointSet
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.MutableBufferFactory
@@ -17,7 +19,8 @@ public class SplineInterpolator<T : Comparable<T>>(
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers
 
-    public override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
+    @OptIn(UnstableKMathAPI::class)
+    public override fun interpolatePolynomials(points: XYPointSet<T, T, T>): PiecewisePolynomial<T> = algebra {
         require(points.size >= 3) { "Can't use spline interpolator with less than 3 points" }
         insureSorted(points)
         // Number of intervals.  The number of data points is n + 1.

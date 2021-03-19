@@ -5,7 +5,7 @@ import space.kscience.kmath.ast.MST
 import space.kscience.kmath.ast.MstAlgebra
 import space.kscience.kmath.ast.MstExpression
 import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**

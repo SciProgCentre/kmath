@@ -2,7 +2,7 @@ package space.kscience.kmath.commons.optimization
 
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
-import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.stat.Distribution
 import space.kscience.kmath.stat.RandomGenerator

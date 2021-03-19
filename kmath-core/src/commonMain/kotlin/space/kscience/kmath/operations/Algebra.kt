@@ -1,6 +1,6 @@
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.Symbol
 
 /**
  * Stub for DSL the [Algebra] is.

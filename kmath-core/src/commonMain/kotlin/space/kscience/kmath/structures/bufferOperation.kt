@@ -71,6 +71,15 @@ public inline fun <T : Any, reified R : Any> Buffer<T>.mapIndexed(
 ): Buffer<R> = bufferFactory(size) { block(it, get(it)) }
 
 /**
+ * Fold given buffer according to [operation]
+ */
+public inline fun <T : Any, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R): R {
+    var accumulator = initial
+    for (index in this.indices) accumulator = operation(accumulator, get(index))
+    return accumulator
+}
+
+/**
  * Zip two buffers using given [transform].
  */
 @UnstableKMathAPI

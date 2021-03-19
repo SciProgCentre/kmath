@@ -1,6 +1,6 @@
 package space.kscience.kmath.optimization
 
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.Symbol
 
 public interface OptimizationFeature
 

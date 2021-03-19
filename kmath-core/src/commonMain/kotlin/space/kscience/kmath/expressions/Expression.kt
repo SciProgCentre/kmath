@@ -1,25 +1,10 @@
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.misc.StringSymbol
+import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
-
-/**
- * A marker interface for a symbol. A symbol mus have an identity
- */
-public interface Symbol {
-    /**
-     * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
-     */
-    public val identity: String
-}
-
-/**
- * A [Symbol] with a [String] identity
- */
-public inline class StringSymbol(override val identity: String) : Symbol {
-    override fun toString(): String = identity
-}
 
 /**
  * An elementary function that could be invoked on a map of arguments.
@@ -91,13 +76,6 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
  */
 public fun <T, E> ExpressionAlgebra<T, E>.bindSymbol(symbol: Symbol): E =
     bindSymbolOrNull(symbol) ?: error("Symbol $symbol could not be bound to $this")
-
-/**
- * A delegate to create a symbol with a string identity in this scope
- */
-public val symbol: ReadOnlyProperty<Any?, Symbol> = ReadOnlyProperty { _, property ->
-    StringSymbol(property.name)
-}
 
 /**
  * Bind a symbol by name inside the [ExpressionAlgebra]

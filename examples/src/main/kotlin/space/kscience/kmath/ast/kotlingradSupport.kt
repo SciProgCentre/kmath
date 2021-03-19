@@ -3,8 +3,8 @@ package space.kscience.kmath.ast
 import space.kscience.kmath.asm.compile
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.kotlingrad.differentiable
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 
 /**

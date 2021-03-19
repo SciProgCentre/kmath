@@ -7,7 +7,7 @@ import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
-import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.optimization.OptimizationResult
 import space.kscience.kmath.real.DoubleVector

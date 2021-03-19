@@ -1,5 +1,8 @@
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.misc.StringSymbol
+import space.kscience.kmath.misc.Symbol
+
 /**
  * Represents expression which structure can be differentiated.
  *
