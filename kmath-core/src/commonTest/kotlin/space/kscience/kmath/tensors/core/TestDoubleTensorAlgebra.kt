@@ -47,4 +47,36 @@ class TestDoubleTensorAlgebra {
         assertTrue(res12.buffer.array() contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
     }
 
+    @Test
+    fun linearStructure() = DoubleTensorAlgebra {
+        val shape = intArrayOf(3)
+        val tensorA = full(value = -4.5, shape = shape)
+        val tensorB = full(value = 10.9, shape = shape)
+        val tensorC = full(value = 789.3, shape = shape)
+        val tensorD = full(value = -72.9, shape = shape)
+        val tensorE = full(value = 553.1, shape = shape)
+        val result = 15.8 * tensorA - 1.5 * tensorB * (-tensorD) + 0.02 * tensorC / tensorE - 39.4
+
+        val expected = fromArray(
+            shape,
+            (1..3).map {
+                15.8 * (-4.5) - 1.5 * 10.9 * 72.9 + 0.02 * 789.3 / 553.1 - 39.4
+            }.toDoubleArray()
+        )
+
+        val assignResult = zeros(shape)
+        tensorA *= 15.8
+        tensorB *= 1.5
+        tensorB *= -tensorD
+        tensorC *= 0.02
+        tensorC /= tensorE
+        assignResult += tensorA
+        assignResult -= tensorB
+        assignResult += tensorC
+        assignResult += -39.4
+
+        assertTrue(expected.buffer.array() contentEquals result.buffer.array())
+        assertTrue(expected.buffer.array() contentEquals assignResult.buffer.array())
+    }
+
 }
