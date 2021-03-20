@@ -1,6 +1,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.AnalyticTensorAlgebra
+import kotlin.math.*
 
 public class DoubleAnalyticTensorAlgebra:
     AnalyticTensorAlgebra<Double, DoubleTensor>,
@@ -63,7 +64,11 @@ public class DoubleAnalyticTensorAlgebra:
     }
 
     override fun DoubleTensor.atanh(): DoubleTensor {
-        TODO("Not yet implemented")
+        return DoubleTensor(
+            this.shape,
+            this.buffer.array().map(::atanh).toDoubleArray(),
+            this.bufferStart
+        )
     }
 
     override fun DoubleTensor.ceil(): DoubleTensor {
