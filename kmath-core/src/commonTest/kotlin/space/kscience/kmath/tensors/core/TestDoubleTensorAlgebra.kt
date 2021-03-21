@@ -79,4 +79,8 @@ class TestDoubleTensorAlgebra {
         assertTrue(expected.buffer.array() contentEquals assignResult.buffer.array())
     }
 
+    @Test
+    fun testContentEqual() = DoubleTensorAlgebra {
+        //TODO()
+    }
 }
