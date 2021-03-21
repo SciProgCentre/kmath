@@ -972,6 +972,30 @@ public final class space/kscience/kmath/nd/GroupND$DefaultImpls {
 	public static fun unaryPlus (Lspace/kscience/kmath/nd/GroupND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 }
 
+public abstract interface class space/kscience/kmath/nd/MutableStructure1D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure1D, space/kscience/kmath/structures/MutableBuffer {
+	public abstract fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/nd/MutableStructure1D$DefaultImpls {
+	public static fun get (Lspace/kscience/kmath/nd/MutableStructure1D;[I)Ljava/lang/Object;
+	public static fun getDimension (Lspace/kscience/kmath/nd/MutableStructure1D;)I
+	public static fun iterator (Lspace/kscience/kmath/nd/MutableStructure1D;)Ljava/util/Iterator;
+	public static fun set (Lspace/kscience/kmath/nd/MutableStructure1D;[ILjava/lang/Object;)V
+}
+
+public abstract interface class space/kscience/kmath/nd/MutableStructure2D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure2D {
+	public abstract fun set (IILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/nd/MutableStructure2D$DefaultImpls {
+	public static fun elements (Lspace/kscience/kmath/nd/MutableStructure2D;)Lkotlin/sequences/Sequence;
+	public static fun get (Lspace/kscience/kmath/nd/MutableStructure2D;[I)Ljava/lang/Object;
+	public static fun getColumns (Lspace/kscience/kmath/nd/MutableStructure2D;)Ljava/util/List;
+	public static fun getDimension (Lspace/kscience/kmath/nd/MutableStructure2D;)I
+	public static fun getRows (Lspace/kscience/kmath/nd/MutableStructure2D;)Ljava/util/List;
+	public static fun getShape (Lspace/kscience/kmath/nd/MutableStructure2D;)[I
+}
+
 public abstract interface class space/kscience/kmath/nd/MutableStructureND : space/kscience/kmath/nd/StructureND {
 	public abstract fun set ([ILjava/lang/Object;)V
 }
@@ -1072,6 +1096,7 @@ public final class space/kscience/kmath/nd/Structure1D$DefaultImpls {
 }
 
 public final class space/kscience/kmath/nd/Structure1DKt {
+	public static final fun as1D (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructure1D;
 	public static final fun as1D (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/Structure1D;
 	public static final fun asND (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/nd/Structure1D;
 }
@@ -1101,6 +1126,7 @@ public final class space/kscience/kmath/nd/Structure2D$DefaultImpls {
 }
 
 public final class space/kscience/kmath/nd/Structure2DKt {
+	public static final fun as2D (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructure2D;
 	public static final fun as2D (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/Structure2D;
 }
 
@@ -2580,5 +2606,464 @@ public final class space/kscience/kmath/structures/VirtualBuffer : space/kscienc
 	public fun get (I)Ljava/lang/Object;
 	public fun getSize ()I
 	public fun iterator ()Ljava/util/Iterator;
+}
+
+public abstract interface class space/kscience/kmath/tensors/AnalyticTensorAlgebra : space/kscience/kmath/tensors/OrderedTensorAlgebra, space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
+	public abstract fun acos (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun acosh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun asin (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun asinh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun atan (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun atanh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun ceil (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun clamp (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cos (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cosh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun erf (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun erfc (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun erfinv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun exp (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun floor (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun heaviside (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun histc (Lspace/kscience/kmath/nd/MutableStructureND;ILjava/lang/Object;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun igamma (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun igammac (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun lerp (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun lgamma (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun log (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun logit (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun mvlgamma (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun polygamma (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun pow (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun quantile (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun round (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sigmoid (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sin (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sinc (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sinh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sqrt (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun std (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun tan (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun tanh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun trapz (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public abstract interface class space/kscience/kmath/tensors/ComplexTensorAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
+	public abstract fun angle (Lspace/kscience/kmath/tensors/ComplexTensorStructure;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun bartlettWindow (IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun blackmanWindow (IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cartesianEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/tensors/ComplexTensorStructure;
+	public abstract fun hammingWindow (IZLjava/lang/Object;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun inverseShortTimeFourierTransform (Lspace/kscience/kmath/tensors/ComplexTensorStructure;IIILspace/kscience/kmath/nd/MutableStructureND;ZZZI)V
+	public abstract fun kaiserWindow (IZLjava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun polarEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/tensors/ComplexTensorStructure;
+	public abstract fun shortTimeFourierTransform (Lspace/kscience/kmath/tensors/ComplexTensorStructure;IIILspace/kscience/kmath/nd/MutableStructureND;ZZ)V
+	public abstract fun viewAsComplex (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/tensors/ComplexTensorStructure;
+}
+
+public abstract interface class space/kscience/kmath/tensors/ComplexTensorStructure : space/kscience/kmath/nd/MutableStructureND {
+	public abstract fun imaginaryPart ()Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun realPart ()Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun viewAsReal ()Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public final class space/kscience/kmath/tensors/ComplexTensorStructure$DefaultImpls {
+	public static fun getDimension (Lspace/kscience/kmath/tensors/ComplexTensorStructure;)I
+}
+
+public abstract interface class space/kscience/kmath/tensors/LinearOpsTensorAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
+	public abstract fun cholesky (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun lu (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lkotlin/Pair;
+	public abstract fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
+	public abstract fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun svd (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
+	public abstract fun symEig (Lspace/kscience/kmath/nd/MutableStructureND;Z)Lkotlin/Pair;
+}
+
+public final class space/kscience/kmath/tensors/LinearOpsTensorAlgebra$DefaultImpls {
+	public static synthetic fun symEig$default (Lspace/kscience/kmath/tensors/LinearOpsTensorAlgebra;Lspace/kscience/kmath/nd/MutableStructureND;ZILjava/lang/Object;)Lkotlin/Pair;
+}
+
+public abstract interface class space/kscience/kmath/tensors/OrderedTensorAlgebra : space/kscience/kmath/tensors/TensorAlgebra {
+	public abstract fun cummax (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cummin (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun max (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun maximum (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun median (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun min (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun minimum (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun sort (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public abstract interface class space/kscience/kmath/tensors/ReduceOpsTensorAlgebra : space/kscience/kmath/tensors/TensorAlgebra {
+	public abstract fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
+}
+
+public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
+	public abstract fun abs (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cat (Ljava/util/List;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cumprod (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun cumsum (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun flatten (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun full (Ljava/lang/Object;[I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun fullLike (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun get (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public abstract fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun ones ([I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun onesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public abstract fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun prod (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun square (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun squeeze (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun sum (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun times (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun times (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public abstract fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun transpose (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun unaryMinus (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun view (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun zeroesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun zeros ([I)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public final class space/kscience/kmath/tensors/TensorAlgebra$DefaultImpls {
+	public static synthetic fun diagonalEmbedding$default (Lspace/kscience/kmath/tensors/TensorAlgebra;Lspace/kscience/kmath/nd/MutableStructureND;IIIILjava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public abstract interface class space/kscience/kmath/tensors/TensorPartialDivisionAlgebra : space/kscience/kmath/tensors/TensorAlgebra {
+	public abstract fun div (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun div (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public abstract fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public abstract fun mean (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun variance (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
+public final class space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra {
+	public fun <init> ()V
+	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun div (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun divAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun minus (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun minusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun plus (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun plusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun times (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun times (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun timesAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+}
+
+public final class space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebraKt {
+	public static final fun BroadcastDoubleTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public class space/kscience/kmath/tensors/core/BufferedTensor : space/kscience/kmath/nd/MutableStructureND {
+	public fun <init> ([ILspace/kscience/kmath/structures/MutableBuffer;I)V
+	public fun elements ()Lkotlin/sequences/Sequence;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun forEachMatrix (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachVector (Lkotlin/jvm/functions/Function1;)V
+	public fun get ([I)Ljava/lang/Object;
+	public final fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun getDimension ()I
+	public final fun getLinearStructure ()Lspace/kscience/kmath/tensors/core/TensorLinearStructure;
+	public final fun getNumel ()I
+	public fun getShape ()[I
+	public fun hashCode ()I
+	public final fun matrixSequence ()Lkotlin/sequences/Sequence;
+	public fun set ([ILjava/lang/Object;)V
+	public final fun vectorSequence ()Lkotlin/sequences/Sequence;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleAnalyticTensorAlgebra : space/kscience/kmath/tensors/core/DoubleOrderedTensorAlgebra, space/kscience/kmath/tensors/AnalyticTensorAlgebra {
+	public fun <init> ()V
+	public synthetic fun acos (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun acos (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun acosh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun acosh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun asin (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun asin (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun asinh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun asinh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun atan (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun atan (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun atanh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun atanh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun ceil (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun ceil (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun clamp (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun clamp (Lspace/kscience/kmath/tensors/core/DoubleTensor;DD)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cos (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cos (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cosh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cosh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun erf (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun erf (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun erfc (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun erfc (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun erfinv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun erfinv (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun exp (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun exp (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun floor (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun floor (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun heaviside (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun heaviside (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun histc (Lspace/kscience/kmath/nd/MutableStructureND;ILjava/lang/Object;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun histc (Lspace/kscience/kmath/tensors/core/DoubleTensor;IDD)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun igamma (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun igamma (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun igammac (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun igammac (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun lerp (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun lerp (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun lgamma (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun lgamma (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun log (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun log (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun logit (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun logit (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun mvlgamma (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mvlgamma (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun polygamma (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun polygamma (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun pow (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun pow (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun quantile (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun quantile (Lspace/kscience/kmath/tensors/core/DoubleTensor;DIZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun round (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun round (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sigmoid (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sigmoid (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sin (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sin (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sinc (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sinc (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sinh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sinh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sqrt (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sqrt (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun std (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun std (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun tan (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun tan (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun tanh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun tanh (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun trapz (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun trapz (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleAnalyticTensorAlgebraKt {
+	public static final fun DoubleAnalyticTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleLinearOpsTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra, space/kscience/kmath/tensors/LinearOpsTensorAlgebra {
+	public fun <init> ()V
+	public synthetic fun cholesky (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cholesky (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun inv (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun lu (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lkotlin/Pair;
+	public fun lu (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lkotlin/Pair;
+	public synthetic fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
+	public fun luPivot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/IntTensor;)Lkotlin/Triple;
+	public synthetic fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun qr (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun svd (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
+	public fun svd (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lkotlin/Triple;
+	public synthetic fun symEig (Lspace/kscience/kmath/nd/MutableStructureND;Z)Lkotlin/Pair;
+	public fun symEig (Lspace/kscience/kmath/tensors/core/DoubleTensor;Z)Lkotlin/Pair;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleLinearOpsTensorAlgebraKt {
+	public static final fun DoubleLinearOpsTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public class space/kscience/kmath/tensors/core/DoubleOrderedTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra, space/kscience/kmath/tensors/OrderedTensorAlgebra {
+	public fun <init> ()V
+	public synthetic fun cummax (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cummax (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cummin (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cummin (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun max (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun max (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun maximum (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun maximum (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun median (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun median (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun min (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun min (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun minimum (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun minimum (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun sort (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sort (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleOrderedTensorAlgebraKt {
+	public static final fun DoubleOrderedTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleReduceOpsTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra, space/kscience/kmath/tensors/ReduceOpsTensorAlgebra {
+	public fun <init> ()V
+	public synthetic fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
+	public fun value (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Ljava/lang/Double;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleReduceOpsTensorAlgebraKt {
+	public static final fun DoubleReduceOpsTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleTensor : space/kscience/kmath/tensors/core/BufferedTensor {
+}
+
+public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
+	public fun <init> ()V
+	public synthetic fun abs (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun abs (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cat (Ljava/util/List;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cat (Ljava/util/List;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun contentEquals (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
+	public final fun contentEquals (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function2;)Z
+	public static synthetic fun contentEquals$default (Lspace/kscience/kmath/tensors/core/DoubleTensorAlgebra;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;DILjava/lang/Object;)Z
+	public synthetic fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun copy (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cumprod (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cumprod (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun cumsum (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun cumsum (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun det (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun diagonalEmbedding (Lspace/kscience/kmath/tensors/core/DoubleTensor;III)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun div (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun div (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public synthetic fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun divAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)V
+	public fun divAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun dot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
+	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function2;)Z
+	public static synthetic fun eq$default (Lspace/kscience/kmath/tensors/core/DoubleTensorAlgebra;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;DILjava/lang/Object;)Z
+	public synthetic fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun eye (I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun flatten (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun flatten (Lspace/kscience/kmath/tensors/core/DoubleTensor;II)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun fromArray ([I[D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun full (D[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun full (Ljava/lang/Object;[I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun fullLike (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun fullLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun get (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun get (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun map (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun mean (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mean (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun minus (DLspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun minus (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun minus (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun minusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)V
+	public fun minusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun ones ([I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun ones ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun onesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun onesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun plus (DLspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun plus (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun plus (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public synthetic fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun plusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)V
+	public fun plusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun prod (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun prod (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun square (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun square (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun squeeze (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun squeeze (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun sum (Lspace/kscience/kmath/nd/MutableStructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sum (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun times (DLspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun times (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun times (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun times (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public fun times (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public synthetic fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
+	public fun timesAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)V
+	public fun timesAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
+	public synthetic fun transpose (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun transpose (Lspace/kscience/kmath/tensors/core/DoubleTensor;II)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun unaryMinus (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun unaryMinus (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun variance (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun variance (Lspace/kscience/kmath/tensors/core/DoubleTensor;IZZ)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun view (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun view (Lspace/kscience/kmath/tensors/core/DoubleTensor;[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun viewAs (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun zeroesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun zeroesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun zeros ([I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun zeros ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+}
+
+public final class space/kscience/kmath/tensors/core/DoubleTensorAlgebraKt {
+	public static final fun DoubleTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/tensors/core/FloatTensor : space/kscience/kmath/tensors/core/BufferedTensor {
+}
+
+public final class space/kscience/kmath/tensors/core/IntTensor : space/kscience/kmath/tensors/core/BufferedTensor {
+}
+
+public final class space/kscience/kmath/tensors/core/LongTensor : space/kscience/kmath/tensors/core/BufferedTensor {
+}
+
+public final class space/kscience/kmath/tensors/core/TensorLinearStructure {
+	public fun <init> ([I)V
+	public final fun getShape ()[I
+	public final fun getSize ()I
+	public final fun getStrides ()[I
+	public final fun index (I)[I
+	public final fun indices ()Lkotlin/sequences/Sequence;
+	public final fun offset ([I)I
+	public final fun stepIndex ([I)[I
 }
 

@@ -277,7 +277,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
-    override fun DoubleTensor.map(transform: (Double) -> Double): DoubleTensor {
+    public fun DoubleTensor.map(transform: (Double) -> Double): DoubleTensor {
         return DoubleTensor(
             this.shape,
             this.buffer.array().map { transform(it) }.toDoubleArray(),
@@ -293,17 +293,17 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.eq(other) { x, y -> abs(x - y) < delta }
     }
 
-    override fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
+    public fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
         if (!(this.shape contentEquals other.shape)){
             return false
         }
         return this.eq(other, eqFunction)
     }
 
-    override fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
+    public fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
         // todo broadcasting checking
-        val n = this.strides.linearSize
-        if (n != other.strides.linearSize){
+        val n = this.linearStructure.size
+        if (n != other.linearStructure.size){
             return false
         }
         for (i in 0 until n){
