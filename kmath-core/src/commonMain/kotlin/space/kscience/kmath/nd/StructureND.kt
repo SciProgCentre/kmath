@@ -177,7 +177,7 @@ public interface Strides {
     /**
      * Array strides
      */
-    public val strides: IntArray
+    public val strides: List<Int>
 
     /**
      * Get linear index from multidimensional index
@@ -209,12 +209,6 @@ public interface Strides {
     }
 }
 
-internal inline fun offsetFromIndex(index: IntArray, shape: IntArray, strides: IntArray): Int =
-    index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
-        value * strides[i]
-    }.sum()
-
 /**
  * Simple implementation of [Strides].
  */
@@ -225,7 +219,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     /**
      * Strides for memory access
      */
-    override val strides: IntArray by lazy {
+    override val strides: List<Int> by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -234,10 +228,13 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
                 current *= it
                 yield(current)
             }
-        }.toList().toIntArray()
+        }.toList()
     }
 
-    override fun offset(index: IntArray): Int = offsetFromIndex(index, shape, strides)
+    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
+        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
+        value * strides[i]
+    }.sum()
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)

@@ -1,9 +1,7 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
-import space.kscience.kmath.tensors.TensorStrides
 import space.kscience.kmath.tensors.TensorStructure
 
 
@@ -13,19 +11,19 @@ public open class BufferedTensor<T>(
     internal val bufferStart: Int
 ) : TensorStructure<T>
 {
-    public val strides: TensorStrides
-        get() = TensorStrides(shape)
+    public val linearStructure: TensorLinearStructure
+        get() = TensorLinearStructure(shape)
 
     public val numel: Int
-        get() = strides.linearSize
+        get() = linearStructure.size
 
-    override fun get(index: IntArray): T = buffer[bufferStart + strides.offset(index)]
+    override fun get(index: IntArray): T = buffer[bufferStart + linearStructure.offset(index)]
 
     override fun set(index: IntArray, value: T) {
-        buffer[bufferStart + strides.offset(index)] = value
+        buffer[bufferStart + linearStructure.offset(index)] = value
     }
 
-    override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
+    override fun elements(): Sequence<Pair<IntArray, T>> = linearStructure.indices().map {
         it to this[it]
     }
 
@@ -35,7 +33,7 @@ public open class BufferedTensor<T>(
 
     public fun vectorSequence(): Sequence<MutableStructure1D<T>> = sequence {
         check(shape.size >= 1) {"todo"}
-        val vectorOffset = strides.strides[0]
+        val vectorOffset = linearStructure.strides[0]
         val vectorShape = intArrayOf(shape.last())
         for (offset in 0 until numel step vectorOffset) {
             val vector = BufferedTensor<T>(vectorShape, buffer, offset).as1D()
@@ -45,7 +43,7 @@ public open class BufferedTensor<T>(
 
     public fun matrixSequence(): Sequence<MutableStructure2D<T>> = sequence {
         check(shape.size >= 2) {"todo"}
-        val matrixOffset = strides.strides[1]
+        val matrixOffset = linearStructure.strides[1]
         val matrixShape = intArrayOf(shape[shape.size - 2], shape.last()) //todo better way?
         for (offset in 0 until numel step matrixOffset) {
             val matrix = BufferedTensor<T>(matrixShape, buffer, offset).as2D()
