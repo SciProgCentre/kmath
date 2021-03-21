@@ -14,10 +14,10 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, Inde
     public fun TensorType.qr(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
+    public fun TensorType.lu(tol: T): Pair<TensorType, IndexTensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
-    public fun luPivot(lu: TensorType, pivots: IndexTensorType): Triple<TensorType, TensorType, TensorType>
+    public fun luPivot(luTensor: TensorType, pivotsTensor: IndexTensorType): Triple<TensorType, TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.svd
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>

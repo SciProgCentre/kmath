@@ -65,3 +65,15 @@ internal inline fun <T, TensorType : TensorStructure<T>,
         TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
         TorchTensorAlgebraType.checkView(a: TensorType, shape: IntArray): Unit =
     check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
+
+internal inline fun <T, TensorType : TensorStructure<T>,
+        TorchTensorAlgebraType : TensorAlgebra<T, TensorType>>
+        TorchTensorAlgebraType.checkSquareMatrix(shape: IntArray): Unit {
+    val n = shape.size
+    check(n >= 2) {
+        "Expected tensor with 2 or more dimensions, got size $n instead"
+    }
+    check(shape[n - 1] == shape[n - 2]) {
+        "Tensor must be batches of square matrices, but they are ${shape[n - 1]} by ${shape[n - 1]} matrices"
+    }
+}

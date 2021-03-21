@@ -5,6 +5,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.TensorStrides
 import space.kscience.kmath.tensors.TensorStructure
+import kotlin.math.atanh
 
 
 public open class BufferedTensor<T>(

@@ -1,7 +1,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
-
+import kotlin.math.abs
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
 
@@ -275,6 +275,43 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun DoubleTensor.squeeze(dim: Int): DoubleTensor {
         TODO("Not yet implemented")
+    }
+
+    override fun DoubleTensor.map(transform: (Double) -> Double): DoubleTensor {
+        return DoubleTensor(
+            this.shape,
+            this.buffer.array().map { transform(it) }.toDoubleArray(),
+            this.bufferStart
+        )
+    }
+
+    public fun DoubleTensor.contentEquals(other: DoubleTensor, delta: Double = 1e-5): Boolean {
+        return this.contentEquals(other) { x, y -> abs(x - y) < delta }
+    }
+
+    public fun DoubleTensor.eq(other: DoubleTensor, delta: Double = 1e-5): Boolean {
+        return this.eq(other) { x, y -> abs(x - y) < delta }
+    }
+
+    override fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
+        if (!(this.shape contentEquals other.shape)){
+            return false
+        }
+        return this.eq(other, eqFunction)
+    }
+
+    override fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
+        // todo broadcasting checking
+        val n = this.strides.linearSize
+        if (n != other.strides.linearSize){
+            return false
+        }
+        for (i in 0 until n){
+            if (!eqFunction(this.buffer[this.bufferStart + i], other.buffer[other.bufferStart + i])) {
+                return false
+            }
+        }
+        return true
     }
 
 }

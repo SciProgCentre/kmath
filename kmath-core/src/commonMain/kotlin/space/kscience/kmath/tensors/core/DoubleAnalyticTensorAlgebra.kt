@@ -7,77 +7,40 @@ public class DoubleAnalyticTensorAlgebra:
     AnalyticTensorAlgebra<Double, DoubleTensor>,
     DoubleOrderedTensorAlgebra()
 {
-    override fun DoubleTensor.exp(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.exp(): DoubleTensor = this.map(::exp)
 
-    override fun DoubleTensor.log(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    // todo log with other base????
+    override fun DoubleTensor.log(): DoubleTensor = this.map(::ln)
 
-    override fun DoubleTensor.sqrt(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.sqrt(): DoubleTensor = this.map(::sqrt)
 
-    override fun DoubleTensor.cos(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.cos(): DoubleTensor = this.map(::cos)
 
-    override fun DoubleTensor.acos(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.acos(): DoubleTensor = this.map(::acos)
 
-    override fun DoubleTensor.cosh(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.cosh(): DoubleTensor = this.map(::cosh)
 
-    override fun DoubleTensor.acosh(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.acosh(): DoubleTensor = this.map(::acosh)
 
-    override fun DoubleTensor.sin(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.sin(): DoubleTensor = this.map(::sin)
 
-    override fun DoubleTensor.asin(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.asin(): DoubleTensor = this.map(::asin)
 
-    override fun DoubleTensor.sinh(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.sinh(): DoubleTensor = this.map(::sinh)
 
-    override fun DoubleTensor.asinh(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.asinh(): DoubleTensor = this.map(::asinh)
 
-    override fun DoubleTensor.tan(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.tan(): DoubleTensor = this.map(::tan)
 
-    override fun DoubleTensor.atan(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.atan(): DoubleTensor = this.map(::atan)
 
-    override fun DoubleTensor.tanh(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.tanh(): DoubleTensor = this.map(::tanh)
 
-    override fun DoubleTensor.atanh(): DoubleTensor {
-        return DoubleTensor(
-            this.shape,
-            this.buffer.array().map(::atanh).toDoubleArray(),
-            this.bufferStart
-        )
-    }
+    override fun DoubleTensor.atanh(): DoubleTensor = this.map(::atanh)
 
-    override fun DoubleTensor.ceil(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.ceil(): DoubleTensor = this.map(::ceil)
 
-    override fun DoubleTensor.floor(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
+    override fun DoubleTensor.floor(): DoubleTensor = this.map(::floor)
 
     override fun DoubleTensor.clamp(min: Double, max: Double): DoubleTensor {
         TODO("Not yet implemented")

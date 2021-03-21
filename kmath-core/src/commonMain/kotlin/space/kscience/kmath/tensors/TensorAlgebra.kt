@@ -3,6 +3,11 @@ package space.kscience.kmath.tensors
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
+    public fun TensorType.map(transform: (T) -> T): TensorType
+
+    public fun TensorType.eq(other: TensorType, eqFunction: (T, T) -> Boolean): Boolean
+    public fun TensorType.contentEquals(other: TensorType, eqFunction: (T, T) -> Boolean): Boolean
+
     //https://pytorch.org/docs/stable/generated/torch.full.html
     public fun full(value: T, shape: IntArray): TensorType
 
