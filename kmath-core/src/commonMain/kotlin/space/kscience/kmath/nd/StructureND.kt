@@ -190,11 +190,6 @@ public interface Strides {
     public fun index(offset: Int): IntArray
 
     /**
-     * Get next multidimensional index from the current multidimensional index
-     */
-    public fun nextIndex(index: IntArray): IntArray
-
-    /**
      * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
      */
     public val linearSize: Int
@@ -232,7 +227,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     }
 
     override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
+        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
         value * strides[i]
     }.sum()
 
@@ -248,10 +243,6 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
         }
 
         return res
-    }
-
-    override fun nextIndex(index: IntArray): IntArray {
-        TODO("Not yet implemented")
     }
 
     override fun equals(other: Any?): Boolean {
@@ -274,7 +265,6 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
             defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
     }
 }
-
 
 public inline fun <reified T : Any> StructureND<T>.combine(
     struct: StructureND<T>,
