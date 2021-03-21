@@ -2,14 +2,14 @@
 
 This subproject implements the following features:
 
- - [nd4jarraystructure](src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
- - [nd4jarrayrings](src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
- - [nd4jarrayfields](src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
+ - [nd4jarraystructure](#) : NDStructure wrapper for INDArray
+ - [nd4jarrayrings](#) : Rings over Nd4jArrayStructure of Int and Long
+ - [nd4jarrayfields](#) : Fields over Nd4jArrayStructure of Float and Double
 
 
 > #### Artifact:
 >
-> This module artifact: `space.kscience:kmath-nd4j:0.2.0`.
+> This module artifact: `space.kscience:kmath-nd4j:0.3.0-dev-3`.
 >
 > Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-nd4j/_latestVersion)
 >
@@ -22,13 +22,10 @@ This subproject implements the following features:
 >     maven { url 'https://repo.kotlin.link' }
 >     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
 >     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
->//     Uncomment if repo.kotlin.link is unavailable 
->//     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->//     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
 > }
 > 
 > dependencies {
->     implementation 'space.kscience:kmath-nd4j:0.2.0'
+>     implementation 'space.kscience:kmath-nd4j:0.3.0-dev-3'
 > }
 > ```
 > **Gradle Kotlin DSL:**
@@ -38,13 +35,10 @@ This subproject implements the following features:
 >     maven("https://repo.kotlin.link")
 >     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
 >     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
->//     Uncomment if repo.kotlin.link is unavailable 
->//     maven("https://dl.bintray.com/mipt-npm/kscience")
->//     maven("https://dl.bintray.com/mipt-npm/dev")
 > }
 > 
 > dependencies {
->     implementation("space.kscience:kmath-nd4j:0.2.0")
+>     implementation("space.kscience:kmath-nd4j:0.3.0-dev-3")
 > }
 > ```
 
@@ -57,7 +51,7 @@ import org.nd4j.linalg.factory.*
 import scientifik.kmath.nd4j.*
 import scientifik.kmath.structures.*
 
-val array = Nd4j.ones(2, 2).asRealStructure()
+val array = Nd4j.ones(2, 2).asDoubleStructure()
 println(array[0, 0]) // 1.0
 array[intArrayOf(0, 0)] = 24.0
 println(array[0, 0]) // 24.0
@@ -70,8 +64,8 @@ import org.nd4j.linalg.factory.*
 import scientifik.kmath.nd4j.*
 import scientifik.kmath.operations.*
 
-val field = RealNd4jArrayField(intArrayOf(2, 2))
-val array = Nd4j.rand(2, 2).asRealStructure()
+val field = DoubleNd4jArrayField(intArrayOf(2, 2))
+val array = Nd4j.rand(2, 2).asDoubleStructure()
 
 val res = field {
     (25.0 / array + 20) * 4

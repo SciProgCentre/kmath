@@ -50,7 +50,7 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
  */
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric  get() = MstGroup.zero
+    public override val zero: MST.Numeric get() = MstGroup.zero
     public override val one: MST.Numeric = number(1.0)
 
     public override fun number(value: Number): MST.Numeric = MstGroup.number(value)

@@ -11,7 +11,7 @@ internal class Nd4jArrayStructureTest {
     @Test
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
-        val struct = nd.asRealStructure()
+        val struct = nd.asDoubleStructure()
         val res = struct.elements().map(Pair<IntArray, Double>::second).toList()
         assertEquals(listOf(1.0, 2.0, 3.0), res)
     }
@@ -19,32 +19,32 @@ internal class Nd4jArrayStructureTest {
     @Test
     fun testShape() {
         val nd = Nd4j.rand(10, 2, 3, 6) ?: fail()
-        val struct = nd.asRealStructure()
+        val struct = nd.asDoubleStructure()
         assertEquals(intArrayOf(10, 2, 3, 6).toList(), struct.shape.toList())
     }
 
     @Test
     fun testEquals() {
         val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
-        val struct1 = nd1.asRealStructure()
+        val struct1 = nd1.asDoubleStructure()
         assertEquals(struct1, struct1)
         assertNotEquals(struct1 as Any?, null)
         val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
-        val struct2 = nd2.asRealStructure()
+        val struct2 = nd2.asDoubleStructure()
         assertEquals(struct1, struct2)
         assertEquals(struct2, struct1)
         val nd3 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
-        val struct3 = nd3.asRealStructure()
+        val struct3 = nd3.asDoubleStructure()
         assertEquals(struct2, struct3)
         assertEquals(struct1, struct3)
     }
 
     @Test
     fun testHashCode() {
-        val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))?:fail()
-        val struct1 = nd1.asRealStructure()
-        val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))?:fail()
-        val struct2 = nd2.asRealStructure()
+        val nd1 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
+        val struct1 = nd1.asDoubleStructure()
+        val nd2 = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0)) ?: fail()
+        val struct2 = nd2.asDoubleStructure()
         assertEquals(struct1.hashCode(), struct2.hashCode())
     }
 
@@ -57,7 +57,7 @@ internal class Nd4jArrayStructureTest {
 
     @Test
     fun testGet() {
-        val nd = Nd4j.rand(10, 2, 3, 6)?:fail()
+        val nd = Nd4j.rand(10, 2, 3, 6) ?: fail()
         val struct = nd.asIntStructure()
         assertEquals(nd.getInt(0, 0, 0, 0), struct[0, 0, 0, 0])
     }

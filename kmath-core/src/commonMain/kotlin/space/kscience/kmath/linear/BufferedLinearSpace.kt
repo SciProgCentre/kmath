@@ -9,7 +9,7 @@ import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.indices
 
 
-public class BufferLinearSpace<T : Any, A : Ring<T>>(
+public class BufferedLinearSpace<T : Any, A : Ring<T>>(
     override val elementAlgebra: A,
     private val bufferFactory: BufferFactory<T>,
 ) : LinearSpace<T, A> {
@@ -17,7 +17,7 @@ public class BufferLinearSpace<T : Any, A : Ring<T>>(
     private fun ndRing(
         rows: Int,
         cols: Int,
-    ): BufferedNDRing<T, A> = NDAlgebra.ring(elementAlgebra, bufferFactory, rows, cols)
+    ): BufferedRingND<T, A> = AlgebraND.ring(elementAlgebra, bufferFactory, rows, cols)
 
     override fun buildMatrix(rows: Int, columns: Int, initializer: A.(i: Int, j: Int) -> T): Matrix<T> =
         ndRing(rows, columns).produce { (i, j) -> elementAlgebra.initializer(i, j) }.as2D()
@@ -48,7 +48,7 @@ public class BufferLinearSpace<T : Any, A : Ring<T>>(
     override fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         return elementAlgebra {
-            val rows = this@dot.rows.map{it.linearize()}
+            val rows = this@dot.rows.map { it.linearize() }
             val columns = other.columns.map { it.linearize() }
             buildMatrix(rowNum, other.colNum) { i, j ->
                 val r = rows[i]

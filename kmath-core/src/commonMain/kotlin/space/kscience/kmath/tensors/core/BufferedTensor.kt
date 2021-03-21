@@ -90,4 +90,4 @@ public class DoubleTensor internal constructor(
     shape: IntArray,
     buffer: DoubleArray,
     offset: Int = 0
-) : BufferedTensor<Double>(shape, RealBuffer(buffer), offset)
+) : BufferedTensor<Double>(shape, DoubleBuffer(buffer), offset)

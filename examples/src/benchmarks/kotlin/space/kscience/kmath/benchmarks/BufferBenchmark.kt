@@ -5,14 +5,14 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.complex
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.RealBuffer
 
 @State(Scope.Benchmark)
 internal class BufferBenchmark {
     @Benchmark
-    fun genericRealBufferReadWrite() {
-        val buffer = RealBuffer(size) { it.toDouble() }
+    fun genericDoubleBufferReadWrite() {
+        val buffer = DoubleBuffer(size) { it.toDouble() }
 
         (0 until size).forEach {
             buffer[it]

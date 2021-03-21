@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public interface Structure2D<T> : NDStructure<T> {
+public interface Structure2D<T> : StructureND<T> {
     /**
      * The number of rows in this structure.
      */
@@ -60,7 +60,7 @@ public interface Structure2D<T> : NDStructure<T> {
 /**
  * Represents mutable [Structure2D].
  */
-public interface MutableStructure2D<T> : Structure2D<T>, MutableNDStructure<T> {
+public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
     /**
      * Inserts an item at the specified indices.
      *
@@ -74,7 +74,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableNDStructure<T> {
 /**
  * A 2D wrapper for nd-structure
  */
-private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
+private inline class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -86,16 +86,12 @@ private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D
     override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
-
-    override fun equals(other: Any?): Boolean = structure == other
-
-    override fun hashCode(): Int = structure.hashCode()
 }
 
 /**
  * A 2D wrapper for a mutable nd-structure
  */
-private class MutableStructure2DWrapper<T>(val structure: MutableNDStructure<T>): MutableStructure2D<T>
+private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>): MutableStructure2D<T>
 {
     override val shape: IntArray get() = structure.shape
 
@@ -120,19 +116,25 @@ private class MutableStructure2DWrapper<T>(val structure: MutableNDStructure<T>)
 }
 
 /**
- * Represent a [NDStructure] as [Structure2D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
+public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
-internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> = if (this is Structure2DWrapper) structure else this
-
-public fun <T> MutableNDStructure<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
+public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
     2 -> MutableStructure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
-internal fun <T> MutableStructure2D<T>.unwrap(): MutableNDStructure<T> =
+/**
+ * Expose inner [StructureND] if possible
+ */
+internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
+    if (this is Structure2DWrapper) structure
+    else this
+
+internal fun <T> MutableStructure2D<T>.unwrap(): MutableStructureND<T> =
     if (this is MutableStructure2DWrapper) structure else this
+

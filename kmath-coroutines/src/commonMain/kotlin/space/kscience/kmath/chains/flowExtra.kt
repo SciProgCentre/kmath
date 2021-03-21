@@ -14,7 +14,7 @@ public fun <T> Flow<T>.cumulativeSum(group: GroupOperations<T>): Flow<T> =
     group { runningReduce { sum, element -> sum + element } }
 
 @ExperimentalCoroutinesApi
-public fun <T, S> Flow<T>.mean(algebra: S): Flow<T> where S : Group<T>, S : ScaleOperations<T> = algebra {
+public fun <T, S> Flow<T>.mean(space: S): Flow<T> where S : Group<T>, S : ScaleOperations<T> = space {
     data class Accumulator(var sum: T, var num: Int)
 
     scan(Accumulator(zero, 0)) { sum, element ->

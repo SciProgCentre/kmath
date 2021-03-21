@@ -98,7 +98,7 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
         super<FunctionalExpressionGroup>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionField<T, A:  Field<T>>(
+public open class FunctionalExpressionField<T, A : Field<T>>(
     algebra: A,
 ) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>,
     ScaleOperations<Expression<T>> {

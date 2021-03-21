@@ -31,6 +31,6 @@ internal fun Buffer<Float>.array(): FloatArray = when (this) {
  * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer].
  */
 internal fun Buffer<Double>.array(): DoubleArray = when (this) {
-    is RealBuffer -> array
+    is DoubleBuffer -> array
     else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
 }

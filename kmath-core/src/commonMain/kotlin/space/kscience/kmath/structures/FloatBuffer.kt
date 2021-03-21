@@ -38,7 +38,7 @@ public fun FloatBuffer(vararg floats: Float): FloatBuffer = FloatBuffer(floats)
 /**
  * Returns a new [FloatArray] containing all of the elements of this [Buffer].
  */
-public fun Buffer<Float>.toFloatArray(): FloatArray = when(this) {
+public fun Buffer<Float>.toFloatArray(): FloatArray = when (this) {
     is FloatBuffer -> array.copyOf()
     else -> FloatArray(size, ::get)
 }

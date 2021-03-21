@@ -7,7 +7,7 @@ import space.kscience.kmath.chains.Chain
  */
 public class RandomChain<out R>(
     public val generator: RandomGenerator,
-    private val gen: suspend RandomGenerator.() -> R
+    private val gen: suspend RandomGenerator.() -> R,
 ) : Chain<R> {
     override suspend fun next(): R = generator.gen()
 

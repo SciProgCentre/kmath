@@ -25,12 +25,12 @@ readme {
     feature(
         id = "complex",
         description = "Complex Numbers",
-        ref = "src/commonMain/kotlin/kscience/kmath/complex/Complex.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt"
     )
 
     feature(
         id = "quaternion",
         description = "Quaternions",
-        ref = "src/commonMain/kotlin/kscience/kmath/complex/Quaternion.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt"
     )
 }
