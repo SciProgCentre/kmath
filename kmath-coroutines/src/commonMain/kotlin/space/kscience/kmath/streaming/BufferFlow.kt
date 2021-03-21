@@ -2,10 +2,10 @@ package space.kscience.kmath.streaming
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import space.kscience.kmath.chains.BlockingRealChain
+import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 
 /**
@@ -45,10 +45,10 @@ public fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>)
 /**
  * Specialized flow chunker for real buffer
  */
-public fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
+public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
 
-    if (this@chunked is BlockingRealChain) {
+    if (this@chunked is BlockingDoubleChain) {
         // performance optimization for blocking primitive chain
         while (true) emit(nextBlock(bufferSize).asBuffer())
     } else {
@@ -60,13 +60,13 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<RealBuffer> = flow {
             counter++
 
             if (counter == bufferSize) {
-                val buffer = RealBuffer(array)
+                val buffer = DoubleBuffer(array)
                 emit(buffer)
                 counter = 0
             }
         }
 
-        if (counter > 0) emit(RealBuffer(counter) { array[it] })
+        if (counter > 0) emit(DoubleBuffer(counter) { array[it] })
     }
 }
 

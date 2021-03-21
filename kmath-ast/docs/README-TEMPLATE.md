@@ -16,7 +16,7 @@ a special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 … leads to generation of bytecode, which can be decompiled to the following Java class:
@@ -49,8 +49,8 @@ public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
 This API extends MST and MstExpression, so you may optimize as both of them:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
-RealField.expression("x+2".parseMath())
+DoubleField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.expression("x+2".parseMath())
 ```
 
 #### Known issues
@@ -64,7 +64,7 @@ RealField.expression("x+2".parseMath())
 A similar feature is also available on JS.
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 The code above returns expression implemented with such a JS function:

@@ -32,7 +32,7 @@ public class NDStructureColumn<T>(public val structure: Structure2D<T>, public v
 
 public class BufferXYPointSet<X, Y>(
     public override val x: Buffer<X>,
-    public override val y: Buffer<Y>
+    public override val y: Buffer<Y>,
 ) : XYPointSet<X, Y> {
     public override val size: Int
         get() = x.size

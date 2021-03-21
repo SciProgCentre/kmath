@@ -5,7 +5,7 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 
 @State(Scope.Benchmark)
@@ -13,7 +13,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun autoFieldAdd(blackhole: Blackhole) {
         with(autoField) {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += one }
             blackhole.consume(res)
         }
@@ -22,7 +22,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) {
         with(specializedField) {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -32,7 +32,7 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun boxingFieldAdd(blackhole: Blackhole) {
         with(genericField) {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -41,8 +41,8 @@ internal class NDFieldBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val autoField = NDAlgebra.auto(RealField, dim, dim)
-        private val specializedField = NDAlgebra.real(dim, dim)
-        private val genericField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
+        private val autoField = AlgebraND.auto(DoubleField, dim, dim)
+        private val specializedField = AlgebraND.real(dim, dim)
+        private val genericField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
     }
 }

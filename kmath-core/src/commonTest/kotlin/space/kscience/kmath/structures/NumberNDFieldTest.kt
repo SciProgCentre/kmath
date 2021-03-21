@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = NDAlgebra.real(3,3)
+    val algebra = AlgebraND.real(3, 3)
     val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 
@@ -69,15 +69,15 @@ class NumberNDFieldTest {
         val division = array1.combine(array2, Double::div)
     }
 
-    object L2Norm : Norm<NDStructure<out Number>, Double> {
-        override fun norm(arg: NDStructure<out Number>): Double =
+    object L2Norm : Norm<StructureND<out Number>, Double> {
+        override fun norm(arg: StructureND<out Number>): Double =
             kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
     }
 
     @Test
     fun testInternalContext() {
         algebra {
-            (NDAlgebra.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (AlgebraND.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

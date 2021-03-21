@@ -8,7 +8,7 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpace
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.invoke
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -51,7 +51,7 @@ internal class DotBenchmark {
 
     @Benchmark
     fun bufferedDot(blackhole: Blackhole) {
-        LinearSpace.auto(RealField).invoke {
+        LinearSpace.auto(DoubleField).invoke {
             blackhole.consume(matrix1 dot matrix2)
         }
     }

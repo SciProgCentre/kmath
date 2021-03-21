@@ -35,7 +35,7 @@ public fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
 /**
  * Returns a new [ShortArray] containing all of the elements of this [Buffer].
  */
-public fun Buffer<Short>.toShortArray(): ShortArray = when(this) {
+public fun Buffer<Short>.toShortArray(): ShortArray = when (this) {
     is ShortBuffer -> array.copyOf()
     else -> ShortArray(size, ::get)
 }

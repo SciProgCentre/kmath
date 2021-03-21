@@ -49,19 +49,19 @@ public fun <T : Comparable<T>> Group<T>.abs(value: T): T = if (value > zero) val
  * Returns the sum of all elements in the iterable in provided space.
  *
  * @receiver the collection to sum up.
- * @param space the algebra that provides addition.
+ * @param group the algebra that provides addition.
  * @return the sum.
  */
-public fun <T> Iterable<T>.sumWith(space: Group<T>): T = space.sum(this)
+public fun <T> Iterable<T>.sumWith(group: Group<T>): T = group.sum(this)
 
 /**
  * Returns the sum of all elements in the sequence in provided space.
  *
  * @receiver the collection to sum up.
- * @param space the algebra that provides addition.
+ * @param group the algebra that provides addition.
  * @return the sum.
  */
-public fun <T> Sequence<T>.sumWith(space: Group<T>): T = space.sum(this)
+public fun <T> Sequence<T>.sumWith(group: Group<T>): T = group.sum(this)
 
 /**
  * Returns an average value of elements in the iterable in this [Group].
@@ -71,7 +71,7 @@ public fun <T> Sequence<T>.sumWith(space: Group<T>): T = space.sum(this)
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T, S> Iterable<T>.averageWith(space: S): T  where S : Group<T>, S : ScaleOperations<T>  =
+public fun <T, S> Iterable<T>.averageWith(space: S): T where S : Group<T>, S : ScaleOperations<T> =
     space.average(this)
 
 /**
@@ -82,7 +82,7 @@ public fun <T, S> Iterable<T>.averageWith(space: S): T  where S : Group<T>, S : 
  * @return the average value.
  * @author Iaroslav Postovalov
  */
-public fun <T, S> Sequence<T>.averageWith(space: S): T  where S : Group<T>, S : ScaleOperations<T>  =
+public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Group<T>, S : ScaleOperations<T> =
     space.average(this)
 
 //TODO optimized power operation

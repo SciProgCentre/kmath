@@ -1,9 +1,13 @@
-package space.kscience.kmath.tensors
+package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.nd.Strides
-import space.kscience.kmath.nd.offsetFromIndex
 import kotlin.math.max
 
+
+internal inline fun offsetFromIndex(index: IntArray, shape: IntArray, strides: IntArray): Int =
+    index.mapIndexed { i, value ->
+        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
+        value * strides[i]
+    }.sum()
 
 internal inline fun stridesFromShape(shape: IntArray): IntArray {
     val nDim = shape.size
@@ -35,7 +39,7 @@ internal inline fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): 
     return res
 }
 
-internal inline fun nextIndex(index: IntArray, shape: IntArray, nDim: Int): IntArray {
+internal inline fun stepIndex(index: IntArray, shape: IntArray, nDim: Int): IntArray {
     val res = index.copyOf()
     var current = nDim - 1
     var carry = 0
@@ -47,26 +51,29 @@ internal inline fun nextIndex(index: IntArray, shape: IntArray, nDim: Int): IntA
             res[current] = 0
         }
         current--
-    } while(carry != 0 && current >= 0)
+    } while (carry != 0 && current >= 0)
 
     return res
 }
 
 
-
-public class TensorStrides(override val shape: IntArray): Strides
+public class TensorLinearStructure(public val shape: IntArray)
 {
-    override val strides: IntArray
+    public val strides: IntArray
         get() = stridesFromShape(shape)
 
-    override fun offset(index: IntArray): Int  = offsetFromIndex(index, shape, strides)
+    public fun offset(index: IntArray): Int = offsetFromIndex(index, shape, strides)
 
-    override fun index(offset: Int): IntArray =
+    public fun index(offset: Int): IntArray =
         indexFromOffset(offset, strides, shape.size)
 
-    override fun nextIndex(index: IntArray): IntArray =
-        nextIndex(index, shape, shape.size)
+    public fun stepIndex(index: IntArray): IntArray =
+        stepIndex(index, shape, shape.size)
 
-    override val linearSize: Int
+    public val size: Int
         get() = shape.reduce(Int::times)
+
+    public fun indices(): Sequence<IntArray> = (0 until size).asSequence().map {
+        index(it)
+    }
 }

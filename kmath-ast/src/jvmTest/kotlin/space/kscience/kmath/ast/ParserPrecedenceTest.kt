@@ -1,12 +1,12 @@
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.RealField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class ParserPrecedenceTest {
-    private val f: Field<Double> = RealField
+    private val f: Field<Double> = DoubleField
 
     @Test
     fun test1(): Unit = assertEquals(6.0, f.evaluate("2*2+2".parseMath()))

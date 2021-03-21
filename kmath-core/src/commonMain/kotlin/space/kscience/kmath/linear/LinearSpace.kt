@@ -5,6 +5,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 
 /**
@@ -155,16 +156,15 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Gets a feature from the matrix. This function may return some additional features to
-     * [space.kscience.kmath.nd.NDStructure.getFeature].
+     * Get a feature of the structure in this scope. Structure features take precedence other context features
      *
      * @param F the type of feature.
-     * @param m the matrix.
+     * @param structure the structure.
      * @param type the [KClass] instance of [F].
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(m: Matrix<T>, type: KClass<F>): F? = m.getFeature(type)
+    public fun <F : Any> getFeature(structure: Matrix<T>, type: KClass<F>): F? = structure.getFeature(type)
 
     public companion object {
 
@@ -174,9 +174,9 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
         public fun <T : Any, A : Ring<T>> buffered(
             algebra: A,
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): LinearSpace<T, A> = BufferLinearSpace(algebra,bufferFactory)
+        ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
-        public val real: LinearSpace<Double, RealField> = buffered(RealField, Buffer.Companion::real)
+        public val real: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -186,19 +186,17 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     }
 }
 
-public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
-
 /**
- * Gets a feature from the matrix. This function may return some additional features to
- * [space.kscience.kmath.nd.NDStructure.getFeature].
+ * Get a feature of the structure in this scope. Structure features take precedence other context features
  *
  * @param T the type of items in the matrices.
- * @param M the type of operated matrices.
  * @param F the type of feature.
- * @receiver the [LinearSpace] of [T].
- * @param m the matrix.
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(m: Matrix<T>): F? = getFeature(m, F::class)
+public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
+    getFeature(structure, F::class)
+
+
+public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
 

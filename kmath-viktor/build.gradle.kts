@@ -9,6 +9,6 @@ dependencies {
     api("org.jetbrains.bio:viktor:1.0.1")
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
 }

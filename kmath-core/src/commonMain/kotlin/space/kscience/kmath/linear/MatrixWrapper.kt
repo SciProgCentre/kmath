@@ -23,8 +23,6 @@ public class MatrixWrapper<T : Any> internal constructor(
     override fun <T : Any> getFeature(type: KClass<T>): T? = features.singleOrNull { type.isInstance(it) } as? T
         ?: origin.getFeature(type)
 
-    override fun equals(other: Any?): Boolean = origin == other
-    override fun hashCode(): Int = origin.hashCode()
     override fun toString(): String {
         return "MatrixWrapper(matrix=$origin, features=$features)"
     }

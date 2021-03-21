@@ -4,8 +4,8 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.complex.*
 import space.kscience.kmath.linear.transpose
-import space.kscience.kmath.nd.NDAlgebra
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.AlgebraND
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.real
 import space.kscience.kmath.operations.invoke
@@ -15,12 +15,12 @@ fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = NDAlgebra.real(dim, dim)
-    val complexField: ComplexNDField = NDAlgebra.complex(dim, dim)
+    val realField = AlgebraND.real(dim, dim)
+    val complexField: ComplexFieldND = AlgebraND.complex(dim, dim)
 
     val realTime = measureTimeMillis {
         realField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) {
                 res += 1.0
             }
@@ -31,7 +31,7 @@ fun main() {
 
     val complexTime = measureTimeMillis {
         complexField {
-            var res: NDStructure<Complex> = one
+            var res: StructureND<Complex> = one
             repeat(n) {
                 res += 1.0
             }

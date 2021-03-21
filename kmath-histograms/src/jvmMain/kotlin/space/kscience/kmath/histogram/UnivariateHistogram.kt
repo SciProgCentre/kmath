@@ -9,7 +9,8 @@ import space.kscience.kmath.structures.asSequence
 
 
 @UnstableKMathAPI
-public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2
+public val UnivariateDomain.center: Double
+    get() = (range.endInclusive - range.start) / 2
 
 /**
  * A univariate bin based an a range

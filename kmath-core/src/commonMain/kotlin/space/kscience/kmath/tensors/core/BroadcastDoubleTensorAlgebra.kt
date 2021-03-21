@@ -8,7 +8,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
+        val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
             newThis.buffer.array()[i] + newOther.buffer.array()[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -16,7 +16,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun DoubleTensor.plusAssign(other: DoubleTensor) {
         val newOther = broadcastTo(other, this.shape)
-        for (i in 0 until this.strides.linearSize) {
+        for (i in 0 until this.linearStructure.size) {
             this.buffer.array()[this.bufferStart + i] +=
                 newOther.buffer.array()[this.bufferStart + i]
         }
@@ -26,7 +26,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
+        val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
             newThis.buffer.array()[i] - newOther.buffer.array()[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -34,7 +34,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun DoubleTensor.minusAssign(other: DoubleTensor) {
         val newOther = broadcastTo(other, this.shape)
-        for (i in 0 until this.strides.linearSize) {
+        for (i in 0 until this.linearStructure.size) {
             this.buffer.array()[this.bufferStart + i] -=
                 newOther.buffer.array()[this.bufferStart + i]
         }
@@ -44,7 +44,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
+        val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
             newThis.buffer.array()[newOther.bufferStart + i] *
                     newOther.buffer.array()[newOther.bufferStart + i]
         }
@@ -53,7 +53,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun DoubleTensor.timesAssign(other: DoubleTensor) {
         val newOther = broadcastTo(other, this.shape)
-        for (i in 0 until this.strides.linearSize) {
+        for (i in 0 until this.linearStructure.size) {
             this.buffer.array()[this.bufferStart + i] *=
                 newOther.buffer.array()[this.bufferStart + i]
         }
@@ -63,7 +63,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(this, other)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleArray(newThis.strides.linearSize) { i ->
+        val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
             newThis.buffer.array()[newOther.bufferStart + i] /
                     newOther.buffer.array()[newOther.bufferStart + i]
         }
@@ -72,7 +72,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun DoubleTensor.divAssign(other: DoubleTensor) {
         val newOther = broadcastTo(other, this.shape)
-        for (i in 0 until this.strides.linearSize) {
+        for (i in 0 until this.linearStructure.size) {
             this.buffer.array()[this.bufferStart + i] /=
                 newOther.buffer.array()[this.bufferStart + i]
         }
@@ -130,7 +130,7 @@ internal inline fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): Doubl
     }
 
     for (linearIndex in 0 until n) {
-        val totalMultiIndex = resTensor.strides.index(linearIndex)
+        val totalMultiIndex = resTensor.linearStructure.index(linearIndex)
         val curMultiIndex = tensor.shape.copyOf()
 
         val offset = totalMultiIndex.size - curMultiIndex.size
@@ -143,7 +143,7 @@ internal inline fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): Doubl
             }
         }
 
-        val curLinearIndex = tensor.strides.offset(curMultiIndex)
+        val curLinearIndex = tensor.linearStructure.offset(curMultiIndex)
         resTensor.buffer.array()[linearIndex] =
             tensor.buffer.array()[tensor.bufferStart + curLinearIndex]
     }
@@ -159,7 +159,7 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
         val resTensor = DoubleTensor(totalShape, DoubleArray(n))
 
         for (linearIndex in 0 until n) {
-            val totalMultiIndex = resTensor.strides.index(linearIndex)
+            val totalMultiIndex = resTensor.linearStructure.index(linearIndex)
             val curMultiIndex = tensor.shape.copyOf()
 
             val offset = totalMultiIndex.size - curMultiIndex.size
@@ -172,7 +172,7 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
                 }
             }
 
-            val curLinearIndex = tensor.strides.offset(curMultiIndex)
+            val curLinearIndex = tensor.linearStructure.offset(curMultiIndex)
             resTensor.buffer.array()[linearIndex] =
                 tensor.buffer.array()[tensor.bufferStart + curLinearIndex]
         }

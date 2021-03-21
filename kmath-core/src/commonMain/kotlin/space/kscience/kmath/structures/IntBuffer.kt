@@ -37,7 +37,7 @@ public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
 /**
  * Returns a new [IntArray] containing all of the elements of this [Buffer].
  */
-public fun Buffer<Int>.toIntArray(): IntArray = when(this) {
+public fun Buffer<Int>.toIntArray(): IntArray = when (this) {
     is IntBuffer -> array.copyOf()
     else -> IntArray(size, ::get)
 }

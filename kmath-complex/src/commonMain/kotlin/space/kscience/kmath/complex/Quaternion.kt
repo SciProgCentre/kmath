@@ -172,7 +172,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         else -> super<Field>.bindSymbol(value)
     }
 
-    override fun number(value: Number): Quaternion =value.toQuaternion()
+    override fun number(value: Number): Quaternion = value.toQuaternion()
 
     public override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
     public override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0

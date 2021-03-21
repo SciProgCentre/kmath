@@ -4,7 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.Nd4jArrayField
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.viktor.ViktorNDField
 import kotlin.contracts.InvocationKind
@@ -24,56 +24,56 @@ fun main() {
     val n = 1000
 
     // automatically build context most suited for given type.
-    val autoField = NDAlgebra.auto(RealField, dim, dim)
+    val autoField = AlgebraND.auto(DoubleField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
-    val realField = NDAlgebra.real(dim, dim)
+    val realField = AlgebraND.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val boxingField = NDAlgebra.field(RealField, Buffer.Companion::boxing, dim, dim)
+    val boxingField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
     //viktor field
-    val viktorField = ViktorNDField(dim,dim)
+    val viktorField = ViktorNDField(dim, dim)
     //parallel processing based on Java Streams
-    val parallelField = NDAlgebra.realWithStream(dim,dim)
+    val parallelField = AlgebraND.realWithStream(dim, dim)
 
     measureAndPrint("Boxing addition") {
         boxingField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Specialized addition") {
         realField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Viktor addition") {
         viktorField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Parallel stream addition") {
         parallelField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Automatic field addition") {
         autoField {
-            var res: NDStructure<Double> = one
+            var res: StructureND<Double> = one
             repeat(n) { res += 1.0 }
         }
     }

@@ -4,6 +4,7 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.collect
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.DoubleBuffer
 
 public interface Sampler<T : Any> {
     public fun sample(generator: RandomGenerator): Chain<T>
@@ -52,7 +53,7 @@ public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once
@@ -74,4 +75,4 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
  * Generate a bunch of samples from real distributions
  */
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, Buffer.Companion::real)
+    sampleBuffer(generator, size, ::DoubleBuffer)

@@ -7,7 +7,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
-public class RealHistogramSpace(
+public class DoubleHistogramSpace(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 },
@@ -23,13 +23,13 @@ public class RealHistogramSpace(
     public val dimension: Int get() = lower.size
 
     private val shape = IntArray(binNums.size) { binNums[it] + 2 }
-    override val histogramValueSpace: RealNDField = NDAlgebra.real(*shape)
+    override val histogramValueSpace: DoubleFieldND = AlgebraND.real(*shape)
 
     override val strides: Strides get() = histogramValueSpace.strides
-    private val binSize = RealBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
+    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     /**
-     * Get internal [NDStructure] bin index for given axis
+     * Get internal [StructureND] bin index for given axis
      */
     private fun getIndex(axis: Int, value: Double): Int = when {
         value >= upper[axis] -> binNums[axis] + 1 // overflow
@@ -69,13 +69,13 @@ public class RealHistogramSpace(
     }
 
     override fun produce(builder: HistogramBuilder<Double>.() -> Unit): IndexedHistogram<Double, Double> {
-        val ndCounter = NDStructure.auto(strides) { Counter.real() }
+        val ndCounter = StructureND.auto(strides) { Counter.real() }
         val hBuilder = HistogramBuilder<Double> { point, value ->
             val index = getIndex(point)
             ndCounter[index].add(value.toDouble())
         }
         hBuilder.apply(builder)
-        val values: NDBuffer<Double> = ndCounter.mapToBuffer { it.value }
+        val values: BufferND<Double> = ndCounter.mapToBuffer { it.value }
         return IndexedHistogram(this, values)
     }
 
@@ -91,7 +91,7 @@ public class RealHistogramSpace(
          *)
          *```
          */
-        public fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): RealHistogramSpace = RealHistogramSpace(
+        public fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): DoubleHistogramSpace = DoubleHistogramSpace(
             ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
             ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asBuffer()
         )
@@ -105,8 +105,8 @@ public class RealHistogramSpace(
          *)
          *```
          */
-        public fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): RealHistogramSpace =
-            RealHistogramSpace(
+        public fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): DoubleHistogramSpace =
+            DoubleHistogramSpace(
                 ListBuffer(
                     ranges
                         .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)

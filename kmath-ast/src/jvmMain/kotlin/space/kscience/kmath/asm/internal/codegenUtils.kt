@@ -86,7 +86,7 @@ internal inline fun ClassWriter.visitField(
     descriptor: String,
     signature: String?,
     value: Any?,
-    block: FieldVisitor.() -> Unit
+    block: FieldVisitor.() -> Unit,
 ): FieldVisitor {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return visitField(access, name, descriptor, signature, value).apply(block)

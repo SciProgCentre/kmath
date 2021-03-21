@@ -1,15 +1,15 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
-import space.kscience.kmath.nd.MutableNDStructure
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.MutableStructureND
+import space.kscience.kmath.nd.StructureND
 
 /**
- * Represents a [NDStructure] wrapping an [INDArray] object.
+ * Represents a [StructureND] wrapping an [INDArray] object.
  *
  * @param T the type of items.
  */
-public sealed class Nd4jArrayStructure<T> : MutableNDStructure<T> {
+public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
     /**
      * The wrapped [INDArray].
      */
@@ -45,7 +45,7 @@ private data class Nd4jArrayLongStructure(override val ndArray: INDArray) : Nd4j
  */
 public fun INDArray.asLongStructure(): Nd4jArrayStructure<Long> = Nd4jArrayLongStructure(this)
 
-private data class Nd4jArrayRealStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>() {
+private data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>() {
     override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()
     override fun get(index: IntArray): Double = ndArray.getDouble(*index)
     override fun set(index: IntArray, value: Double): Unit = run { ndArray.putScalar(index, value) }
@@ -54,7 +54,7 @@ private data class Nd4jArrayRealStructure(override val ndArray: INDArray) : Nd4j
 /**
  * Wraps this [INDArray] to [Nd4jArrayStructure].
  */
-public fun INDArray.asRealStructure(): Nd4jArrayStructure<Double> = Nd4jArrayRealStructure(this)
+public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Double> = Nd4jArrayDoubleStructure(this)
 
 private data class Nd4jArrayFloatStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float>() {
     override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = ndArray.floatIterator()
