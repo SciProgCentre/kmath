@@ -1,6 +1,6 @@
-# The Core Module (`kmath-core`)
+# Module kmath-core
 
-The core features of KMath:
+The core interfaces of KMath.
 
 ${features}
 

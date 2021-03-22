@@ -1,6 +1,6 @@
-# ejml-simple support (`kmath-ejml`)
+# Module kmath-ejml
 
-This subproject implements the following features:
+EJML based linear algebra implementation.
 
 ${features}
 

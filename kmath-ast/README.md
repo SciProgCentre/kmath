@@ -1,6 +1,6 @@
-# Abstract Syntax Tree Expression Representation and Operations (`kmath-ast`)
+# Module kmath-ast
 
-This subproject implements the following features:
+Abstract syntax tree expression representation and related optimizations.
 
  - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
  - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
@@ -10,40 +10,34 @@ This subproject implements the following features:
  - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 
-> #### Artifact:
->
-> This module artifact: `space.kscience:kmath-ast:0.3.0-dev-3`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-ast/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url 'https://repo.kotlin.link' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
-> }
-> 
-> dependencies {
->     implementation 'space.kscience:kmath-ast:0.3.0-dev-3'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://repo.kotlin.link")
->     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
->     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
-> }
-> 
-> dependencies {
->     implementation("space.kscience:kmath-ast:0.3.0-dev-3")
-> }
-> ```
+## Artifact:
+
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-3`.
+
+**Gradle:**
+```gradle
+repositories {
+    maven { url 'https://repo.kotlin.link' }
+    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+}
+
+dependencies {
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-3'
+}
+```
+**Gradle Kotlin DSL:**
+```kotlin
+repositories {
+    maven("https://repo.kotlin.link")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+}
+
+dependencies {
+    implementation("space.kscience:kmath-ast:0.3.0-dev-3")
+}
+```
 
 ## Dynamic expression code generation
 

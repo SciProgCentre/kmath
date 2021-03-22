@@ -1,6 +1,6 @@
-# Abstract Syntax Tree Expression Representation and Operations (`kmath-ast`)
+# Module kmath-ast
 
-This subproject implements the following features:
+Abstract syntax tree expression representation and related optimizations.
 
 ${features}
 
