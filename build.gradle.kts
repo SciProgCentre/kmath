@@ -1,4 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import ru.mipt.npm.gradle.KSciencePublishingPlugin
+import java.net.URL
 
 plugins {
     id("ru.mipt.npm.gradle.project")
@@ -9,7 +11,6 @@ allprojects {
         jcenter()
         maven("https://clojars.org/repo")
         maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-        maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://dl.bintray.com/kotlin/kotlinx")
         maven("https://dl.bintray.com/mipt-npm/dev")
@@ -25,6 +26,27 @@ allprojects {
 
 subprojects {
     if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
+
+    afterEvaluate {
+        tasks.withType<DokkaTask> {
+            dokkaSourceSets.all {
+                val readmeFile = File(this@subprojects.projectDir, "./README.md")
+                if (readmeFile.exists())
+                    includes.setFrom(includes + readmeFile.absolutePath)
+
+                arrayOf(
+                    "http://ejml.org/javadoc/",
+                    "https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/",
+                    "https://deeplearning4j.org/api/latest/"
+                ).map { URL("${it}package-list") to URL(it) }.forEach { (a, b) ->
+                    externalDocumentationLink {
+                        packageListUrl.set(a)
+                        url.set(b)
+                    }
+                }
+            }
+        }
+    }
 }
 
 readme {

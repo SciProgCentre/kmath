@@ -1,46 +1,40 @@
-# ND4J NDStructure implementation (`kmath-nd4j`)
+# Module kmath-nd4j
 
-This subproject implements the following features:
+ND4J based implementations of KMath abstractions.
 
  - [nd4jarraystructure](#) : NDStructure wrapper for INDArray
  - [nd4jarrayrings](#) : Rings over Nd4jArrayStructure of Int and Long
  - [nd4jarrayfields](#) : Fields over Nd4jArrayStructure of Float and Double
 
 
-> #### Artifact:
->
-> This module artifact: `space.kscience:kmath-nd4j:0.3.0-dev-3`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-nd4j/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-nd4j/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-nd4j/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url 'https://repo.kotlin.link' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
-> }
-> 
-> dependencies {
->     implementation 'space.kscience:kmath-nd4j:0.3.0-dev-3'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://repo.kotlin.link")
->     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
->     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
-> }
-> 
-> dependencies {
->     implementation("space.kscience:kmath-nd4j:0.3.0-dev-3")
-> }
-> ```
+## Artifact:
+
+The Maven coordinates of this project are `space.kscience:kmath-nd4j:0.3.0-dev-3`.
+
+**Gradle:**
+```gradle
+repositories {
+    maven { url 'https://repo.kotlin.link' }
+    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+}
+
+dependencies {
+    implementation 'space.kscience:kmath-nd4j:0.3.0-dev-3'
+}
+```
+**Gradle Kotlin DSL:**
+```kotlin
+repositories {
+    maven("https://repo.kotlin.link")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+}
+
+dependencies {
+    implementation("space.kscience:kmath-nd4j:0.3.0-dev-3")
+}
+```
 
 ## Examples
 
