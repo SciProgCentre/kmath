@@ -100,8 +100,8 @@ public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbo
 public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
- * Represents linear space without neutral element, i.e. algebraic structure with associative, binary operation [add]
- * and scalar multiplication [multiply].
+ * Represents group without neutral element (also known as inverse semigroup), i.e. algebraic structure with
+ * associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
@@ -177,7 +177,7 @@ public interface GroupOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add].
+ * Represents group, i.e. algebraic structure with associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
@@ -189,8 +189,8 @@ public interface Group<T> : GroupOperations<T> {
 }
 
 /**
- * Represents rng, i.e. algebraic structure with associative, binary, commutative operation [add] and associative,
- * operation [multiply] distributive over [add].
+ * Represents ring without multiplicative and additive identities, i.e. algebraic structure with
+ * associative, binary, commutative operation [add] and associative, operation [multiply] distributive over [add].
  *
  * @param T the type of element of this semiring.
  */
@@ -238,7 +238,7 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
 }
 
 /**
- * Represents field without identity elements, i.e. algebraic structure with associative, binary, commutative operations
+ * Represents field without without multiplicative and additive identities, i.e. algebraic structure with associative, binary, commutative operations
  * [add] and [multiply]; binary operation [divide] as multiplication of left operand by reciprocal of right one.
  *
  * @param T the type of element of this semifield.
@@ -276,10 +276,11 @@ public interface FieldOperations<T> : RingOperations<T> {
 }
 
 /**
- * Represents field, i.e. algebraic structure with three operations: associative "addition" and "multiplication",
- * and "division" and their neutral elements.
+ * Represents field, i.e. algebraic structure with three operations: associative, commutative addition and
+ * multiplication, and division. **This interface differs from the eponymous mathematical definition: fields in KMath
+ * also support associative multiplication by scalar.**
  *
- * @param T the type of element of this semifield.
+ * @param T the type of element of this field.
  */
 public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
     override fun number(value: Number): T = scale(one, value.toDouble())

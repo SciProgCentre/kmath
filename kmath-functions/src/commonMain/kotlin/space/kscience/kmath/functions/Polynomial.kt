@@ -15,6 +15,9 @@ import kotlin.math.pow
  */
 public inline class Polynomial<T : Any>(public val coefficients: List<T>)
 
+/**
+ * Returns a [Polynomial] instance with given [coefficients].
+ */
 @Suppress("FunctionName")
 public fun <T : Any> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
 
