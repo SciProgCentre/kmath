@@ -1,0 +1,397 @@
+public abstract class space/kscience/kmath/torch/Device {
+	public static final field Companion Lspace/kscience/kmath/torch/Device$Companion;
+	public final fun toInt ()I
+}
+
+public final class space/kscience/kmath/torch/Device$CPU : space/kscience/kmath/torch/Device {
+	public static final field INSTANCE Lspace/kscience/kmath/torch/Device$CPU;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/torch/Device$CUDA : space/kscience/kmath/torch/Device {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lspace/kscience/kmath/torch/Device$CUDA;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/torch/Device$CUDA;IILjava/lang/Object;)Lspace/kscience/kmath/torch/Device$CUDA;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/torch/Device$Companion {
+	public final fun fromInt (I)Lspace/kscience/kmath/torch/Device;
+}
+
+public abstract interface class space/kscience/kmath/torch/TorchTensor : space/kscience/kmath/tensors/TensorStructure {
+	public abstract fun elements ()Lkotlin/sequences/Sequence;
+	public abstract fun getDevice ()Lspace/kscience/kmath/torch/Device;
+	public abstract fun getSize ()I
+	public abstract fun getStrides ()[I
+}
+
+public final class space/kscience/kmath/torch/TorchTensor$DefaultImpls {
+	public static fun elements (Lspace/kscience/kmath/torch/TorchTensor;)Lkotlin/sequences/Sequence;
+	public static fun getDimension (Lspace/kscience/kmath/torch/TorchTensor;)I
+	public static fun value (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+}
+
+public abstract interface class space/kscience/kmath/torch/TorchTensorAlgebra : space/kscience/kmath/tensors/TensorAlgebra {
+	public abstract fun copy (Lspace/kscience/kmath/torch/TorchTensor;)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun copyFromArray (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun copyToArray (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+	public abstract fun copyToDevice (Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun cudaAvailable ()Z
+	public abstract fun full (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun getChecks ()Z
+	public abstract fun getNumThreads ()I
+	public abstract fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun randIntegral (Lspace/kscience/kmath/torch/TorchTensor;JJ)Lspace/kscience/kmath/torch/TorchTensor;
+	public abstract fun randIntegralAssign (Lspace/kscience/kmath/torch/TorchTensor;JJ)V
+	public abstract fun setChecks (Z)V
+	public abstract fun setNumThreads (I)V
+	public abstract fun setSeed (I)V
+	public abstract fun swap (Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/TorchTensor;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorAlgebra$DefaultImpls {
+	public static synthetic fun copyFromArray$default (Lspace/kscience/kmath/torch/TorchTensorAlgebra;Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;ILjava/lang/Object;)Lspace/kscience/kmath/torch/TorchTensor;
+	public static synthetic fun randIntegral$default (Lspace/kscience/kmath/torch/TorchTensorAlgebra;JJ[ILspace/kscience/kmath/torch/Device;ILjava/lang/Object;)Lspace/kscience/kmath/torch/TorchTensor;
+}
+
+public abstract class space/kscience/kmath/torch/TorchTensorAlgebraJVM : space/kscience/kmath/torch/TorchTensorAlgebra {
+	public synthetic fun <init> (Lspace/kscience/kmath/memory/DeferScope;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun abs (Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun abs (Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun absAssign (Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun absAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun copy (Lspace/kscience/kmath/torch/TorchTensor;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copy (Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun copyToDevice (Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copyToDevice (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public fun cudaAvailable ()Z
+	public synthetic fun diagonalEmbedding (Lspace/kscience/kmath/tensors/TensorStructure;III)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun diagonalEmbedding (Lspace/kscience/kmath/torch/TorchTensorJVM;III)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun dot (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun dot (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun dotAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun dotAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun dotRightAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun dotRightAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public fun getChecks ()Z
+	public fun getNumThreads ()I
+	public synthetic fun minus (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun minus (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun minusAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun plus (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun plus (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun plusAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun randIntegral (Lspace/kscience/kmath/torch/TorchTensor;JJ)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun randIntegral (Lspace/kscience/kmath/torch/TorchTensorJVM;JJ)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun randIntegralAssign (Lspace/kscience/kmath/torch/TorchTensor;JJ)V
+	public fun randIntegralAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;JJ)V
+	public fun setChecks (Z)V
+	public fun setNumThreads (I)V
+	public fun setSeed (I)V
+	public synthetic fun sum (Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun sum (Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun sumAssign (Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun sumAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun swap (Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/TorchTensor;)V
+	public fun swap (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun times (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun times (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun timesAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;Lspace/kscience/kmath/torch/TorchTensorJVM;)V
+	public synthetic fun transpose (Lspace/kscience/kmath/tensors/TensorStructure;II)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun transpose (Lspace/kscience/kmath/torch/TorchTensorJVM;II)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun transposeAssign (Lspace/kscience/kmath/tensors/TensorStructure;II)V
+	public fun transposeAssign (Lspace/kscience/kmath/torch/TorchTensorJVM;II)V
+	public synthetic fun unaryMinus (Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun unaryMinus (Lspace/kscience/kmath/torch/TorchTensorJVM;)Lspace/kscience/kmath/torch/TorchTensorJVM;
+	public synthetic fun view (Lspace/kscience/kmath/tensors/TensorStructure;[I)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun view (Lspace/kscience/kmath/torch/TorchTensorJVM;[I)Lspace/kscience/kmath/torch/TorchTensorJVM;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorAlgebraJVMKt {
+	public static final fun TorchTensorFloatAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun TorchTensorIntAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun TorchTensorLongAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun TorchTensorRealAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorAlgebraKt {
+	public static final fun checkDeviceCompatible (Lspace/kscience/kmath/torch/TorchTensorAlgebra;Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/TorchTensor;)V
+	public static final fun checkDotOperation (Lspace/kscience/kmath/torch/TorchTensorAlgebra;Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/TorchTensor;)V
+	public static final fun checkLinearOperation (Lspace/kscience/kmath/torch/TorchTensorAlgebra;Lspace/kscience/kmath/torch/TorchTensor;Lspace/kscience/kmath/torch/TorchTensor;)V
+	public static final fun withChecks (Lspace/kscience/kmath/torch/TorchTensorAlgebra;Lkotlin/jvm/functions/Function1;)V
+	public static final fun withGradAt (Lspace/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra;Lspace/kscience/kmath/torch/TorchTensorOverField;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorFloat : space/kscience/kmath/torch/TorchTensorOverFieldJVM {
+	public fun get ([I)Ljava/lang/Float;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun item ()Ljava/lang/Float;
+	public synthetic fun item ()Ljava/lang/Object;
+	public fun set ([IF)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorFloatAlgebra : space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebraJVM {
+	public fun <init> (Lspace/kscience/kmath/memory/DeferScope;)V
+	public synthetic fun copyFromArray (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copyFromArray ([F[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun copyToArray (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+	public fun copyToArray (Lspace/kscience/kmath/torch/TorchTensorFloat;)[F
+	public fun full (F[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun full (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun minus (FLspace/kscience/kmath/torch/TorchTensorFloat;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun minus (Lspace/kscience/kmath/torch/TorchTensorFloat;F)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun minusAssign (Lspace/kscience/kmath/torch/TorchTensorFloat;F)V
+	public fun plus (FLspace/kscience/kmath/torch/TorchTensorFloat;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun plus (Lspace/kscience/kmath/torch/TorchTensorFloat;F)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun plusAssign (Lspace/kscience/kmath/torch/TorchTensorFloat;F)V
+	public synthetic fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public fun randNormal ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun randNormal ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun randUniform ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun randUniform ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun times (FLspace/kscience/kmath/torch/TorchTensorFloat;)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun times (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun times (Lspace/kscience/kmath/torch/TorchTensorFloat;F)Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun timesAssign (Lspace/kscience/kmath/torch/TorchTensorFloat;F)V
+	public synthetic fun wrap$kmath_torch (J)Lspace/kscience/kmath/torch/TorchTensorJVM;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorInt : space/kscience/kmath/torch/TorchTensorOverFieldJVM {
+	public fun get ([I)Ljava/lang/Integer;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun item ()Ljava/lang/Integer;
+	public synthetic fun item ()Ljava/lang/Object;
+	public fun set ([II)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorIntAlgebra : space/kscience/kmath/torch/TorchTensorAlgebraJVM {
+	public fun <init> (Lspace/kscience/kmath/memory/DeferScope;)V
+	public synthetic fun copyFromArray (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copyFromArray ([I[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun copyToArray (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+	public fun copyToArray (Lspace/kscience/kmath/torch/TorchTensorInt;)[I
+	public fun full (I[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun full (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun minus (ILspace/kscience/kmath/torch/TorchTensorInt;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun minus (Lspace/kscience/kmath/torch/TorchTensorInt;I)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun minusAssign (Lspace/kscience/kmath/torch/TorchTensorInt;I)V
+	public fun plus (ILspace/kscience/kmath/torch/TorchTensorInt;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun plus (Lspace/kscience/kmath/torch/TorchTensorInt;I)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun plusAssign (Lspace/kscience/kmath/torch/TorchTensorInt;I)V
+	public synthetic fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public fun times (ILspace/kscience/kmath/torch/TorchTensorInt;)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun times (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun times (Lspace/kscience/kmath/torch/TorchTensorInt;I)Lspace/kscience/kmath/torch/TorchTensorInt;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun timesAssign (Lspace/kscience/kmath/torch/TorchTensorInt;I)V
+	public synthetic fun wrap$kmath_torch (J)Lspace/kscience/kmath/torch/TorchTensorJVM;
+}
+
+public abstract class space/kscience/kmath/torch/TorchTensorJVM : space/kscience/kmath/torch/TorchTensorMemoryHolder, space/kscience/kmath/torch/TorchTensor {
+	public synthetic fun <init> (Lspace/kscience/kmath/memory/DeferScope;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	protected fun close ()V
+	public final fun copyToDouble ()Lspace/kscience/kmath/torch/TorchTensorReal;
+	public final fun copyToFloat ()Lspace/kscience/kmath/torch/TorchTensorFloat;
+	public final fun copyToInt ()Lspace/kscience/kmath/torch/TorchTensorInt;
+	public final fun copyToLong ()Lspace/kscience/kmath/torch/TorchTensorLong;
+	public fun elements ()Lkotlin/sequences/Sequence;
+	public fun getDevice ()Lspace/kscience/kmath/torch/Device;
+	public fun getDimension ()I
+	public fun getShape ()[I
+	public fun getSize ()I
+	public fun getStrides ()[I
+	public fun toString ()Ljava/lang/String;
+	public fun value ()Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorLong : space/kscience/kmath/torch/TorchTensorOverFieldJVM {
+	public fun get ([I)Ljava/lang/Long;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun item ()Ljava/lang/Long;
+	public synthetic fun item ()Ljava/lang/Object;
+	public fun set ([IJ)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorLongAlgebra : space/kscience/kmath/torch/TorchTensorAlgebraJVM {
+	public fun <init> (Lspace/kscience/kmath/memory/DeferScope;)V
+	public synthetic fun copyFromArray (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copyFromArray ([J[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun copyToArray (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+	public fun copyToArray (Lspace/kscience/kmath/torch/TorchTensorLong;)[J
+	public fun full (J[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun full (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun minus (JLspace/kscience/kmath/torch/TorchTensorLong;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun minus (Lspace/kscience/kmath/torch/TorchTensorLong;J)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun minusAssign (Lspace/kscience/kmath/torch/TorchTensorLong;J)V
+	public fun plus (JLspace/kscience/kmath/torch/TorchTensorLong;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun plus (Lspace/kscience/kmath/torch/TorchTensorLong;J)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun plusAssign (Lspace/kscience/kmath/torch/TorchTensorLong;J)V
+	public synthetic fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public fun times (JLspace/kscience/kmath/torch/TorchTensorLong;)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun times (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun times (Lspace/kscience/kmath/torch/TorchTensorLong;J)Lspace/kscience/kmath/torch/TorchTensorLong;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun timesAssign (Lspace/kscience/kmath/torch/TorchTensorLong;J)V
+	public synthetic fun wrap$kmath_torch (J)Lspace/kscience/kmath/torch/TorchTensorJVM;
+}
+
+public abstract class space/kscience/kmath/torch/TorchTensorMemoryHolder {
+	protected abstract fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getScope ()Lspace/kscience/kmath/memory/DeferScope;
+	public fun hashCode ()I
+}
+
+public abstract interface class space/kscience/kmath/torch/TorchTensorOverField : space/kscience/kmath/torch/TorchTensor {
+	public abstract fun getRequiresGrad ()Z
+	public abstract fun setRequiresGrad (Z)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorOverField$DefaultImpls {
+	public static fun elements (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lkotlin/sequences/Sequence;
+	public static fun getDimension (Lspace/kscience/kmath/torch/TorchTensorOverField;)I
+	public static fun value (Lspace/kscience/kmath/torch/TorchTensorOverField;)Ljava/lang/Object;
+}
+
+public abstract class space/kscience/kmath/torch/TorchTensorOverFieldJVM : space/kscience/kmath/torch/TorchTensorJVM, space/kscience/kmath/torch/TorchTensorOverField {
+	public synthetic fun <init> (Lspace/kscience/kmath/memory/DeferScope;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getRequiresGrad ()Z
+	public fun setRequiresGrad (Z)V
+}
+
+public abstract interface class space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra, space/kscience/kmath/torch/TorchTensorAlgebra {
+	public abstract fun detachFromGraph (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun grad (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun grad (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;Z)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun hess (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun randNormal (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun randNormal ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun randNormalAssign (Lspace/kscience/kmath/torch/TorchTensorOverField;)V
+	public abstract fun randUniform (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun randUniform ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public abstract fun randUniformAssign (Lspace/kscience/kmath/torch/TorchTensorOverField;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra$DefaultImpls {
+	public static fun grad (Lspace/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra;Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public static synthetic fun grad$default (Lspace/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra;Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;ZILjava/lang/Object;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public static synthetic fun randNormal$default (Lspace/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra;[ILspace/kscience/kmath/torch/Device;ILjava/lang/Object;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public static synthetic fun randUniform$default (Lspace/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra;[ILspace/kscience/kmath/torch/Device;ILjava/lang/Object;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+}
+
+public abstract class space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebraJVM : space/kscience/kmath/torch/TorchTensorAlgebraJVM, space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebra {
+	public synthetic fun <init> (Lspace/kscience/kmath/memory/DeferScope;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun detachFromGraph (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun detachFromGraph (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun div (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun div (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun divAssign (Lspace/kscience/kmath/tensors/TensorStructure;Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun divAssign (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)V
+	public synthetic fun exp (Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun exp (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun expAssign (Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun expAssign (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)V
+	public synthetic fun grad (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public synthetic fun grad (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;Z)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun grad (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public fun grad (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Z)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun hess (Lspace/kscience/kmath/torch/TorchTensorOverField;Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun hess (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun log (Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun log (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun logAssign (Lspace/kscience/kmath/tensors/TensorStructure;)V
+	public fun logAssign (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)V
+	public synthetic fun randNormal (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun randNormal (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun randNormalAssign (Lspace/kscience/kmath/torch/TorchTensorOverField;)V
+	public fun randNormalAssign (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)V
+	public synthetic fun randUniform (Lspace/kscience/kmath/torch/TorchTensorOverField;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun randUniform (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;
+	public synthetic fun randUniformAssign (Lspace/kscience/kmath/torch/TorchTensorOverField;)V
+	public fun randUniformAssign (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)V
+	public synthetic fun svd (Lspace/kscience/kmath/tensors/TensorStructure;)Lkotlin/Triple;
+	public fun svd (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;)Lkotlin/Triple;
+	public synthetic fun symEig (Lspace/kscience/kmath/tensors/TensorStructure;Z)Lkotlin/Pair;
+	public fun symEig (Lspace/kscience/kmath/torch/TorchTensorOverFieldJVM;Z)Lkotlin/Pair;
+}
+
+public final class space/kscience/kmath/torch/TorchTensorReal : space/kscience/kmath/torch/TorchTensorOverFieldJVM {
+	public fun get ([I)Ljava/lang/Double;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun item ()Ljava/lang/Double;
+	public synthetic fun item ()Ljava/lang/Object;
+	public fun set ([ID)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/torch/TorchTensorRealAlgebra : space/kscience/kmath/torch/TorchTensorPartialDivisionAlgebraJVM {
+	public fun <init> (Lspace/kscience/kmath/memory/DeferScope;)V
+	public synthetic fun copyFromArray (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun copyFromArray ([D[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun copyToArray (Lspace/kscience/kmath/torch/TorchTensor;)Ljava/lang/Object;
+	public fun copyToArray (Lspace/kscience/kmath/torch/TorchTensorReal;)[D
+	public fun full (D[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun full (Ljava/lang/Object;[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun minus (DLspace/kscience/kmath/torch/TorchTensorReal;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun minus (Lspace/kscience/kmath/torch/TorchTensorReal;D)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun minusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun minusAssign (Lspace/kscience/kmath/torch/TorchTensorReal;D)V
+	public fun plus (DLspace/kscience/kmath/torch/TorchTensorReal;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun plus (Lspace/kscience/kmath/torch/TorchTensorReal;D)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun plusAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun plusAssign (Lspace/kscience/kmath/torch/TorchTensorReal;D)V
+	public synthetic fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensor;
+	public fun randIntegral (JJ[ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun randNormal ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun randNormal ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun randUniform ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorOverField;
+	public fun randUniform ([ILspace/kscience/kmath/torch/Device;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public fun times (DLspace/kscience/kmath/torch/TorchTensorReal;)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/tensors/TensorStructure;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public synthetic fun times (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)Lspace/kscience/kmath/tensors/TensorStructure;
+	public fun times (Lspace/kscience/kmath/torch/TorchTensorReal;D)Lspace/kscience/kmath/torch/TorchTensorReal;
+	public synthetic fun timesAssign (Lspace/kscience/kmath/tensors/TensorStructure;Ljava/lang/Object;)V
+	public fun timesAssign (Lspace/kscience/kmath/torch/TorchTensorReal;D)V
+	public synthetic fun wrap$kmath_torch (J)Lspace/kscience/kmath/torch/TorchTensorJVM;
+}
+
