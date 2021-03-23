@@ -80,6 +80,20 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
+    fun dot() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
+        val res12 = tensor1.dot(tensor2)
+
+        assertTrue(res12.buffer.array() contentEquals doubleArrayOf(140.0, 320.0))
+        assertTrue(res12.shape contentEquals intArrayOf(2, 1))
+
+        val tensor4 = fromArray(intArrayOf(10, 3, 4), DoubleArray(10 * 3 * 4) {0.0})
+        val tensor5 = fromArray(intArrayOf(10, 4, 5), DoubleArray(10 * 4 * 5) {0.0})
+        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(10, 3, 5))
+    }
+
+    @Test
     fun testContentEqual() = DoubleTensorAlgebra {
         //TODO()
     }
