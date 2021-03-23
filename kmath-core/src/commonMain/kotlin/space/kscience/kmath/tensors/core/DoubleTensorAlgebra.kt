@@ -262,7 +262,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.det(): DoubleTensor {
-        TODO("Not yet implemented")
+        TODO("ANDREI")
     }
 
     override fun DoubleTensor.square(): DoubleTensor {
