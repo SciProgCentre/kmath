@@ -17,6 +17,8 @@ public typealias Matrix<T> = Structure2D<T>
 
 /**
  * Alias or using [Buffer] as a point/vector in a many-dimensional space.
+ *
+ * @param T the type of elements contained in the buffer.
  */
 public typealias Point<T> = Buffer<T>
 

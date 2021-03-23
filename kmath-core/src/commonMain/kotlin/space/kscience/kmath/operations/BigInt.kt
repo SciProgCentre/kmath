@@ -12,8 +12,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
-public typealias Magnitude = UIntArray
-public typealias TBase = ULong
+private typealias Magnitude = UIntArray
+private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
@@ -358,6 +358,9 @@ private fun stripLeadingZeros(mag: Magnitude): Magnitude {
     return mag.sliceArray(IntRange(0, resSize))
 }
 
+/**
+ * Returns the absolute value of the given value [x].
+ */
 public fun abs(x: BigInt): BigInt = x.abs()
 
 /**

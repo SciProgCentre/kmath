@@ -24,7 +24,6 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  */
 @UnstableKMathAPI
 public interface DoubleDomain : Domain<Double> {
-
     /**
      * Global lower edge
      * @param num axis number

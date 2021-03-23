@@ -3,13 +3,40 @@ package space.kscience.kmath.interpolation
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.Buffer
 
+/**
+ * Pair of associated buffers for X and Y axes values.
+ *
+ * @param X the type of X values.
+ * @param Y the type of Y values.
+ */
 public interface XYPointSet<X, Y> {
+    /**
+     * The size of all the involved buffers.
+     */
     public val size: Int
+
+    /**
+     * The buffer of X values.
+     */
     public val x: Buffer<X>
+
+    /**
+     * The buffer of Y values.
+     */
     public val y: Buffer<Y>
 }
 
+/**
+ * Triple of associated buffers for X, Y, and Z axes values.
+ *
+ * @param X the type of X values.
+ * @param Y the type of Y values.
+ * @param Z the type of Z values.
+ */
 public interface XYZPointSet<X, Y, Z> : XYPointSet<X, Y> {
+    /**
+     * The buffer of Z values.
+     */
     public val z: Buffer<Z>
 }
 
