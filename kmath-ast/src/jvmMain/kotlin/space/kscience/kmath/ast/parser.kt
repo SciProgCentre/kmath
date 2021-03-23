@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 // TODO move to common when https://github.com/h0tk3y/better-parse/pull/37 is merged
 
 package space.kscience.kmath.ast
