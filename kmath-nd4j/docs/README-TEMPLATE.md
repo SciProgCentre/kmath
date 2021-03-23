@@ -1,6 +1,6 @@
-# ND4J NDStructure implementation (`kmath-nd4j`)
+# Module kmath-nd4j
 
-This subproject implements the following features:
+ND4J based implementations of KMath abstractions.
 
 ${features}
 
