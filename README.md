@@ -1,9 +1,8 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
-
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
-
-[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22%20AND%20a:%22kmath-core%22)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
+[![Space](https://img.shields.io/maven-metadata/v?label=Space&metadataUrl=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fkscience%2Fkmath%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
 # KMath
 
@@ -120,10 +119,10 @@ KMath is a modular library. Different modules provide different features with di
 >
 > **Features:**
 > - [algebras](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Algebraic structures like rings, spaces and fields.
-> - [nd](kmath-core/src/commonMain/kotlin/space/kscience/kmath/nd/StructureND.kt) : Many-dimensional structures and operations on them.
+> - [nd](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/StructureND.kt) : Many-dimensional structures and operations on them.
 > - [linear](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
-> - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffer.kt) : One-dimensional structure
-> - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of
+> - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
+> - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of 
 objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
 performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
@@ -147,6 +146,12 @@ performance calculations to code generation.
 > 
 >
 > **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
+> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
+> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+
 <hr/>
 
 * ### [kmath-for-real](kmath-for-real)
@@ -206,9 +211,9 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [nd4jarraystructure](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : NDStructure wrapper for INDArray
-> - [nd4jarrayrings](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/NDStructure.kt) : Rings over Nd4jArrayStructure of Int and Long
-> - [nd4jarrayfields](kmath-nd4j/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : Fields over Nd4jArrayStructure of Float and Double
+> - [nd4jarraystructure](kmath-nd4j/#) : NDStructure wrapper for INDArray
+> - [nd4jarrayrings](kmath-nd4j/#) : Rings over Nd4jArrayStructure of Int and Long
+> - [nd4jarrayfields](kmath-nd4j/#) : Fields over Nd4jArrayStructure of Float and Double
 
 <hr/>
 

@@ -15,10 +15,13 @@ import kotlin.reflect.cast
  * Represents context of basic operations operating with [EjmlMatrix].
  *
  * @author Iaroslav Postovalov
+ * @author Alexander Nozik
  */
 public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
-
-    override val elementAlgebra: DoubleField get() = DoubleField
+    /**
+     * The [DoubleField] reference.
+     */
+    public override val elementAlgebra: DoubleField get() = DoubleField
 
     /**
      * Converts this matrix to EJML one.
@@ -39,14 +42,17 @@ public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
         })
     }
 
-    override fun buildMatrix(rows: Int, columns: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): EjmlMatrix =
-        EjmlMatrix(SimpleMatrix(rows, columns).also {
-            (0 until rows).forEach { row ->
-                (0 until columns).forEach { col -> it[row, col] = DoubleField.initializer(row, col) }
-            }
-        })
+    public override fun buildMatrix(
+        rows: Int,
+        columns: Int,
+        initializer: DoubleField.(i: Int, j: Int) -> Double,
+    ): EjmlMatrix = EjmlMatrix(SimpleMatrix(rows, columns).also {
+        (0 until rows).forEach { row ->
+            (0 until columns).forEach { col -> it[row, col] = DoubleField.initializer(row, col) }
+        }
+    })
 
-    override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): Point<Double> =
+    public override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): Point<Double> =
         EjmlVector(SimpleMatrix(size, 1).also {
             (0 until it.numRows()).forEach { row -> it[row, 0] = DoubleField.initializer(row) }
         })
@@ -54,7 +60,7 @@ public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
     private fun SimpleMatrix.wrapMatrix() = EjmlMatrix(this)
     private fun SimpleMatrix.wrapVector() = EjmlVector(this)
 
-    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * (-1.0)
+    public override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * (-1.0)
 
     public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlMatrix =
         EjmlMatrix(toEjml().origin.mult(other.toEjml().origin))
@@ -68,29 +74,29 @@ public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
     public override operator fun Matrix<Double>.times(value: Double): EjmlMatrix =
         toEjml().origin.scale(value).wrapMatrix()
 
-    override fun Point<Double>.unaryMinus(): EjmlVector =
+    public override fun Point<Double>.unaryMinus(): EjmlVector =
         toEjml().origin.negative().wrapVector()
 
-    override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlMatrix =
+    public override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlMatrix =
         (toEjml().origin + other.toEjml().origin).wrapMatrix()
 
-    override fun Point<Double>.plus(other: Point<Double>): EjmlVector =
+    public override fun Point<Double>.plus(other: Point<Double>): EjmlVector =
         (toEjml().origin + other.toEjml().origin).wrapVector()
 
-    override fun Point<Double>.minus(other: Point<Double>): EjmlVector =
+    public override fun Point<Double>.minus(other: Point<Double>): EjmlVector =
         (toEjml().origin - other.toEjml().origin).wrapVector()
 
-    override fun Double.times(m: Matrix<Double>): EjmlMatrix =
+    public override fun Double.times(m: Matrix<Double>): EjmlMatrix =
         m.toEjml().origin.scale(this).wrapMatrix()
 
-    override fun Point<Double>.times(value: Double): EjmlVector =
+    public override fun Point<Double>.times(value: Double): EjmlVector =
         toEjml().origin.scale(value).wrapVector()
 
-    override fun Double.times(v: Point<Double>): EjmlVector =
+    public override fun Double.times(v: Point<Double>): EjmlVector =
         v.toEjml().origin.scale(this).wrapVector()
 
     @UnstableKMathAPI
-    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
+    public override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         //Return the feature if it is intrinsic to the structure
         structure.getFeature(type)?.let { return it }
 
@@ -161,7 +167,7 @@ public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
 }
 
 /**
- * Solves for X in the following equation: x = a^-1*b, where 'a' is base matrix and 'b' is an n by p matrix.
+ * Solves for *x* in the following equation: *x = [a] <sup>-1</sup> &middot; [b]*.
  *
  * @param a the base matrix.
  * @param b n by p matrix.
@@ -172,7 +178,7 @@ public fun EjmlLinearSpace.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatr
     EjmlMatrix(a.toEjml().origin.solve(b.toEjml().origin))
 
 /**
- * Solves for X in the following equation: x = a^(-1)*b, where 'a' is base matrix and 'b' is an n by p matrix.
+ * Solves for *x* in the following equation: *x = [a] <sup>-1</sup> &middot; [b]*.
  *
  * @param a the base matrix.
  * @param b n by p vector.
@@ -182,7 +188,17 @@ public fun EjmlLinearSpace.solve(a: Matrix<Double>, b: Matrix<Double>): EjmlMatr
 public fun EjmlLinearSpace.solve(a: Matrix<Double>, b: Point<Double>): EjmlVector =
     EjmlVector(a.toEjml().origin.solve(b.toEjml().origin))
 
+/**
+ * Inverts this matrix.
+ *
+ * @author Alexander Nozik
+ */
 @OptIn(UnstableKMathAPI::class)
 public fun EjmlMatrix.inverted(): EjmlMatrix = getFeature<InverseMatrixFeature<Double>>()!!.inverse as EjmlMatrix
 
+/**
+ * Inverts the given matrix.
+ *
+ * @author Alexander Nozik
+ */
 public fun EjmlLinearSpace.inverse(matrix: Matrix<Double>): Matrix<Double> = matrix.toEjml().inverted()

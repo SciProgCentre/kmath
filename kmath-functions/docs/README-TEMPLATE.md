@@ -1,6 +1,6 @@
-# Functions (`kmath-functions`)
+# Module kmath-functions
 
-Functions and interpolations:
+Functions and interpolations.
 
 ${features}
 

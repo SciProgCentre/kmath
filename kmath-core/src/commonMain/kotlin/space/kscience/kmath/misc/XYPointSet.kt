@@ -3,9 +3,28 @@ package space.kscience.kmath.misc
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.Buffer
 
+/**
+ * Pair of associated buffers for X and Y axes values.
+ *
+ * @param X the type of X values.
+ * @param Y the type of Y values.
+ */
+public interface XYPointSet<X, Y> {
+    /**
+     * The size of all the involved buffers.
+     */
+    public val size: Int
+
+    /**
+     * The buffer of X values.
+     */
 @UnstableKMathAPI
 public interface XYPointSet<T, X : T, Y : T> : ColumnarData<T> {
     public val x: Buffer<X>
+
+    /**
+     * The buffer of Y values.
+     */
     public val y: Buffer<Y>
 
     override fun get(symbol: Symbol): Buffer<T> = when (symbol) {
@@ -15,6 +34,17 @@ public interface XYPointSet<T, X : T, Y : T> : ColumnarData<T> {
     }
 }
 
+/**
+ * Triple of associated buffers for X, Y, and Z axes values.
+ *
+ * @param X the type of X values.
+ * @param Y the type of Y values.
+ * @param Z the type of Z values.
+ */
+public interface XYZPointSet<X, Y, Z> : XYPointSet<X, Y> {
+    /**
+     * The buffer of Z values.
+     */
 @UnstableKMathAPI
 public interface XYZPointSet<T, X : T, Y : T, Z : T> : XYPointSet<T, X, Y> {
     public val z: Buffer<Z>
@@ -27,6 +57,10 @@ public interface XYZPointSet<T, X : T, Y : T, Z : T> : XYPointSet<T, X, Y> {
     }
 }
 
+internal fun <T : Comparable<T>> insureSorted(points: XYPointSet<T, *>) {
+    for (i in 0 until points.size - 1)
+        require(points.x[i + 1] > points.x[i]) { "Input data is not sorted at index $i" }
+}
 
 public class NDStructureColumn<T>(public val structure: Structure2D<T>, public val column: Int) : Buffer<T> {
     public override val size: Int

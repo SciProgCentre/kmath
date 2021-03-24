@@ -49,19 +49,19 @@ public fun <T : Comparable<T>> Group<T>.abs(value: T): T = if (value > zero) val
  * Returns the sum of all elements in the iterable in provided space.
  *
  * @receiver the collection to sum up.
- * @param space the algebra that provides addition.
+ * @param group the algebra that provides addition.
  * @return the sum.
  */
-public fun <T> Iterable<T>.sumWith(space: Group<T>): T = space.sum(this)
+public fun <T> Iterable<T>.sumWith(group: Group<T>): T = group.sum(this)
 
 /**
  * Returns the sum of all elements in the sequence in provided space.
  *
  * @receiver the collection to sum up.
- * @param space the algebra that provides addition.
+ * @param group the algebra that provides addition.
  * @return the sum.
  */
-public fun <T> Sequence<T>.sumWith(space: Group<T>): T = space.sum(this)
+public fun <T> Sequence<T>.sumWith(group: Group<T>): T = group.sum(this)
 
 /**
  * Returns an average value of elements in the iterable in this [Group].
