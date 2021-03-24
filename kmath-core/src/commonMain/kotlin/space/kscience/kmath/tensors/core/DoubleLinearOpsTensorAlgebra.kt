@@ -11,7 +11,7 @@ public class DoubleLinearOpsTensorAlgebra :
         TODO("Not yet implemented")
     }
 
-    override fun DoubleTensor.lu(tol: Double): Pair<DoubleTensor, IntTensor> {
+    override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
 
         checkSquareMatrix(shape)
 
@@ -137,7 +137,6 @@ public class DoubleLinearOpsTensorAlgebra :
     override fun DoubleTensor.qr(): DoubleTensor {
         TODO("Not yet implemented")
     }
-
 
     override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         TODO("Not yet implemented")

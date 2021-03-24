@@ -14,7 +14,7 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, Inde
     public fun TensorType.qr(): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(tol: T): Pair<TensorType, IndexTensorType>
+    public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
     public fun luPivot(luTensor: TensorType, pivotsTensor: IndexTensorType): Triple<TensorType, TensorType, TensorType>
