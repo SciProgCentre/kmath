@@ -45,7 +45,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
-            newThis.buffer.array()[newOther.bufferStart + i] *
+            newThis.buffer.array()[newThis.bufferStart + i] *
                     newOther.buffer.array()[newOther.bufferStart + i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -182,17 +182,13 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
 }
 
 internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
-    var onlyTwoDims = true
-    for (tensor in tensors) {
-        if (tensor.shape.size < 2) {
+    val onlyTwoDims = tensors.asSequence().onEach {
+        require(it.shape.size >= 2) {
             throw RuntimeException("Tensors must have at least 2 dimensions")
         }
-        if (tensor.shape.size != 2) {
-            onlyTwoDims = false
-        }
-    }
+    }.any { it.shape.size != 2 }
 
-    if (onlyTwoDims) {
+    if (!onlyTwoDims) {
         return tensors.asList()
     }
 
@@ -233,7 +229,7 @@ internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<Do
                     newTensor.buffer.array()[newTensor.bufferStart + curLinearIndex]
             }
         }
-        res.add(resTensor)
+        res += resTensor
     }
 
     return res

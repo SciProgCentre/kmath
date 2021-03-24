@@ -241,37 +241,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
-    private fun DoubleTensor.dotTwoDimensionalTensors(other: DoubleTensor): DoubleTensor {
-        if (this.shape.size > 2 || other.shape.size > 2) {
-            throw RuntimeException("Both tensors must have a maximum of 2 dimensions")
-        }
-
-        if (this.shape[1] != other.shape[0]) {
-            throw RuntimeException("Tensors dot operation dimension mismatch: " +
-                    "(${this.shape[0]}, ${this.shape[1]}) x (${other.shape[0]}, ${other.shape[1]})")
-        }
-
-        val l = this.shape[0]
-        val m = this.shape[1]
-        val n = other.shape[1]
-
-        val res = DoubleTensor(intArrayOf(l, n), DoubleArray(l * n))
-
-        for (i in 0 until l) {
-            for (j in 0 until n) {
-                var curr = 0.0
-                for (k in 0 until m) {
-                    val ik = this.linearStructure.offset(intArrayOf(i, k))
-                    val kj = other.linearStructure.offset(intArrayOf(k, j))
-                    curr += this.buffer.array()[ik] * other.buffer.array()[kj]
-                }
-                val linearIndex = res.linearStructure.offset(intArrayOf(i, j))
-                res.buffer.array()[linearIndex] = curr
-            }
-        }
-        return res
-    }
-
     override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
         if (this.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
@@ -279,10 +248,15 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
         var newThis = this.copy()
         var newOther = other.copy()
+
+        var penultimateDim = false
+        var lastDim = false
         if (this.shape.size == 1) {
+            penultimateDim = true
             newThis = this.view(intArrayOf(1) + this.shape)
         }
         if (other.shape.size == 1) {
+            lastDim = true
             newOther = other.view(other.shape + intArrayOf(1) )
         }
 
@@ -299,13 +273,12 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         }
         val m = m1
 
-        var resShape = newThis.shape.sliceArray(0..(newThis.shape.size - 2)) + intArrayOf(newOther.shape.last())
+        val resShape = newThis.shape.sliceArray(0..(newThis.shape.size - 2)) + intArrayOf(newOther.shape.last())
         val resSize = resShape.reduce { acc, i -> acc * i }
         val resTensor = DoubleTensor(resShape, DoubleArray(resSize))
 
         for ((res, ab) in resTensor.matrixSequence().zip(newThis.matrixSequence().zip(newOther.matrixSequence()))) {
-            val a = ab.first
-            val b = ab.second
+            val (a, b) = ab
 
             for (i in 0 until l) {
                 for (j in 0 until n) {
@@ -318,6 +291,13 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
             }
         }
 
+        if (penultimateDim) {
+            return resTensor.view(resTensor.shape.dropLast(2).toIntArray() +
+                    intArrayOf(resTensor.shape.last()))
+        }
+        if (lastDim) {
+            return resTensor.view(resTensor.shape.dropLast(1).toIntArray())
+        }
         return resTensor
     }
 
@@ -338,7 +318,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.det(): DoubleTensor {
-        TODO("Not yet implemented")
+        TODO("ANDREI")
     }
 
     override fun DoubleTensor.square(): DoubleTensor {
