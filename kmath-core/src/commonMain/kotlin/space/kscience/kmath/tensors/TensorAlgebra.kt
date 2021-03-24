@@ -1,5 +1,7 @@
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.tensors.core.DoubleTensor
+
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
@@ -51,6 +53,8 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/tensor_view.html
     public fun TensorType.view(shape: IntArray): TensorType
     public fun TensorType.viewAs(other: TensorType): TensorType
+
+    public fun TensorType.eq(other: TensorType, delta: T): Boolean
 
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType
