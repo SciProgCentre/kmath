@@ -18,8 +18,10 @@ import space.kscience.kmath.operations.NumericAlgebra
  * @param A the [NumericAlgebra] of [T].
  * @property expr the underlying [MstExpression].
  */
-public inline class DifferentiableMstExpression<T, A>(public val expr: MstExpression<T, A>) :
-    DifferentiableExpression<T, MstExpression<T, A>> where A : NumericAlgebra<T>, T : Number {
+public inline class DifferentiableMstExpression<T: Number, A>(
+    public val expr: MstExpression<T, A>,
+) : DifferentiableExpression<T, MstExpression<T, A>> where A : NumericAlgebra<T> {
+
     public constructor(algebra: A, mst: MST) : this(MstExpression(algebra, mst))
 
     /**

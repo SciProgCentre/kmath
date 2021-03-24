@@ -1,3 +1,18 @@
+public final class space/kscience/kmath/data/ColumnarDataKt {
+}
+
+public final class space/kscience/kmath/data/XYColumnarData$DefaultImpls {
+	public static fun get (Lspace/kscience/kmath/data/XYColumnarData;Lspace/kscience/kmath/misc/Symbol;)Lspace/kscience/kmath/structures/Buffer;
+}
+
+public final class space/kscience/kmath/data/XYColumnarDataKt {
+	public static synthetic fun asXYData$default (Lspace/kscience/kmath/nd/Structure2D;IIILjava/lang/Object;)Lspace/kscience/kmath/data/XYColumnarData;
+}
+
+public final class space/kscience/kmath/data/XYZColumnarData$DefaultImpls {
+	public static fun get (Lspace/kscience/kmath/data/XYZColumnarData;Lspace/kscience/kmath/misc/Symbol;)Lspace/kscience/kmath/structures/Buffer;
+}
+
 public abstract interface class space/kscience/kmath/domains/Domain {
 	public abstract fun contains (Lspace/kscience/kmath/structures/Buffer;)Z
 	public abstract fun getDimension ()I
@@ -603,15 +618,6 @@ public final class space/kscience/kmath/misc/CumulativeKt {
 	public static final fun cumulativeSumOfLong (Lkotlin/sequences/Sequence;)Lkotlin/sequences/Sequence;
 }
 
-public final class space/kscience/kmath/misc/NDStructureColumn : space/kscience/kmath/structures/Buffer {
-	public fun <init> (Lspace/kscience/kmath/nd/Structure2D;I)V
-	public fun get (I)Ljava/lang/Object;
-	public final fun getColumn ()I
-	public fun getSize ()I
-	public final fun getStructure ()Lspace/kscience/kmath/nd/Structure2D;
-	public fun iterator ()Ljava/util/Iterator;
-}
-
 public final class space/kscience/kmath/misc/StringSymbol : space/kscience/kmath/misc/Symbol {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lspace/kscience/kmath/misc/StringSymbol;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
@@ -642,17 +648,6 @@ public final class space/kscience/kmath/misc/SymbolKt {
 }
 
 public abstract interface annotation class space/kscience/kmath/misc/UnstableKMathAPI : java/lang/annotation/Annotation {
-}
-
-public final class space/kscience/kmath/misc/XYPointSet$DefaultImpls {
-	public static fun get (Lspace/kscience/kmath/misc/XYPointSet;Lspace/kscience/kmath/misc/Symbol;)Lspace/kscience/kmath/structures/Buffer;
-}
-
-public final class space/kscience/kmath/misc/XYPointSetKt {
-}
-
-public final class space/kscience/kmath/misc/XYZPointSet$DefaultImpls {
-	public static fun get (Lspace/kscience/kmath/misc/XYZPointSet;Lspace/kscience/kmath/misc/Symbol;)Lspace/kscience/kmath/structures/Buffer;
 }
 
 public abstract interface class space/kscience/kmath/nd/AlgebraND {

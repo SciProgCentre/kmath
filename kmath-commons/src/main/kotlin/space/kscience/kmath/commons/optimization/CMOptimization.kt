@@ -15,10 +15,7 @@ import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.optimization.FunctionOptimization
-import space.kscience.kmath.optimization.OptimizationFeature
-import space.kscience.kmath.optimization.OptimizationProblemFactory
-import space.kscience.kmath.optimization.OptimizationResult
+import space.kscience.kmath.optimization.*
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point
@@ -27,7 +24,8 @@ public operator fun PointValuePair.component2(): Double = value
 @OptIn(UnstableKMathAPI::class)
 public class CMOptimization(
     override val symbols: List<Symbol>,
-) : FunctionOptimization<Double>, SymbolIndexer, OptimizationFeature {
+) : FunctionOptimization<Double>, NoDerivFunctionOptimization<Double>, SymbolIndexer, OptimizationFeature {
+
     private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
     private var optimizerBuilder: (() -> MultivariateOptimizer)? = null
     public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(
@@ -35,6 +33,12 @@ public class CMOptimization(
         DEFAULT_ABSOLUTE_TOLERANCE,
         DEFAULT_MAX_ITER
     )
+
+    override var maximize: Boolean
+        get() = optimizationData[GoalType::class] == GoalType.MAXIMIZE
+        set(value) {
+            optimizationData[GoalType::class] = if (value) GoalType.MAXIMIZE else GoalType.MINIMIZE
+        }
 
     public fun addOptimizationData(data: OptimizationData) {
         optimizationData[data::class] = data
@@ -50,7 +54,7 @@ public class CMOptimization(
         addOptimizationData(InitialGuess(map.toDoubleArray()))
     }
 
-    public override fun expression(expression: Expression<Double>): Unit {
+    public override fun function(expression: Expression<Double>): Unit {
         val objectiveFunction = ObjectiveFunction {
             val args = it.toMap()
             expression(args)
@@ -58,8 +62,8 @@ public class CMOptimization(
         addOptimizationData(objectiveFunction)
     }
 
-    public override fun diffExpression(expression: DifferentiableExpression<Double, Expression<Double>>) {
-        expression(expression)
+    public override fun diffFunction(expression: DifferentiableExpression<Double, Expression<Double>>) {
+        function(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()
             DoubleArray(symbols.size) { index ->
