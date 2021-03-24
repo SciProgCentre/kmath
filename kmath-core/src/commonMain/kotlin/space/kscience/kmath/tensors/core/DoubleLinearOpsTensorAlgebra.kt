@@ -1,5 +1,8 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure1D
+import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
 import kotlin.math.sqrt
 
@@ -20,6 +23,8 @@ public class DoubleLinearOpsTensorAlgebra :
         val n = shape.size
         val m = shape.last()
         val pivotsShape = IntArray(n - 1) { i -> shape[i] }
+        pivotsShape[n - 2] = m + 1
+
         val pivotsTensor = IntTensor(
             pivotsShape,
             IntArray(pivotsShape.reduce(Int::times)) { 0 }
@@ -53,6 +58,8 @@ public class DoubleLinearOpsTensorAlgebra :
                         lu[i, k] = lu[maxInd, k]
                         lu[maxInd, k] = tmp
                     }
+
+                    pivots[m] += 1
 
                 }
 
@@ -146,6 +153,78 @@ public class DoubleLinearOpsTensorAlgebra :
         TODO("ANDREI")
     }
 
+    private fun luMatrixDet(lu: Structure2D<Double>, pivots: Structure1D<Int>): Double {
+        val m = lu.shape[0]
+        val sign = if((pivots[m] - m) % 2 == 0) 1.0 else -1.0
+        var det = sign
+        for (i in 0 until m){
+            det *= lu[i, i]
+        }
+        return det
+    }
+
+    public fun DoubleTensor.detLU(): DoubleTensor {
+        val (luTensor, pivotsTensor) = this.lu()
+        val n = shape.size
+
+        val detTensorShape = IntArray(n - 1) { i -> shape[i] }
+        detTensorShape[n - 2] = 1
+        val resBuffer =  DoubleArray(detTensorShape.reduce(Int::times)) { 0.0 }
+
+        val detTensor = DoubleTensor(
+            detTensorShape,
+            resBuffer
+        )
+
+        luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).forEachIndexed { index, (luMatrix, pivots) ->
+            resBuffer[index] = luMatrixDet(luMatrix, pivots)
+        }
+
+        return detTensor
+    }
+
+    private fun luMatrixInv(
+        lu: Structure2D<Double>,
+        pivots: Structure1D<Int>,
+        invMatrix : MutableStructure2D<Double>
+    ): Unit {
+        val m = lu.shape[0]
+
+        for (j in 0 until m) {
+            for (i in 0 until m) {
+                if (pivots[i] == j){
+                    invMatrix[i, j] = 1.0
+                }
+
+                for (k in 0 until i){
+                    invMatrix[i, j] -= lu[i, k] * invMatrix[k, j]
+                }
+            }
+
+            for (i in m - 1 downTo 0) {
+                for (k in i + 1 until m) {
+                    invMatrix[i, j] -= lu[i, k] * invMatrix[k, j]
+                }
+                invMatrix[i, j] /= lu[i, i]
+            }
+        }
+    }
+
+    public fun DoubleTensor.invLU(): DoubleTensor {
+        val (luTensor, pivotsTensor) = this.lu()
+        val n = shape.size
+        val invTensor = luTensor.zeroesLike()
+
+        for (
+        (luP, invMatrix) in
+        luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).zip(invTensor.matrixSequence())
+        ) {
+            val (lu, pivots) = luP
+            luMatrixInv(lu, pivots, invMatrix)
+        }
+
+        return invTensor
+    }
 }
 
 public inline fun <R> DoubleLinearOpsTensorAlgebra(block: DoubleLinearOpsTensorAlgebra.() -> R): R =

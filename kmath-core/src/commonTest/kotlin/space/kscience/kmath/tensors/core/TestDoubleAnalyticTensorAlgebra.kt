@@ -3,7 +3,6 @@ package space.kscience.kmath.tensors.core
 import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TestDoubleAnalyticTensorAlgebra {
@@ -16,9 +15,9 @@ class TestDoubleAnalyticTensorAlgebra {
         return this.map(transform).toDoubleArray()
     }
 
-    fun DoubleArray.deltaEqual(other: DoubleArray, delta: Double = 1e-5): Boolean {
+    fun DoubleArray.epsEqual(other: DoubleArray, eps: Double = 1e-5): Boolean {
         for ((elem1, elem2) in this.asSequence().zip(other.asSequence())) {
-            if (abs(elem1 - elem2) > delta) {
+            if (abs(elem1 - elem2) > eps) {
                 return false
             }
         }
@@ -29,7 +28,7 @@ class TestDoubleAnalyticTensorAlgebra {
     fun testExp() = DoubleAnalyticTensorAlgebra {
         tensor.exp().let {
             assertTrue { shape contentEquals it.shape }
-            assertTrue { buffer.fmap(::exp).deltaEqual(it.buffer.array())}
+            assertTrue { buffer.fmap(::exp).epsEqual(it.buffer.array())}
         }
     }
 }

@@ -1,5 +1,8 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
 import kotlin.math.abs
 
@@ -262,7 +265,31 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.det(): DoubleTensor {
-        TODO("ANDREI")
+        TODO()
+        /*
+        checkSquareMatrix(shape)
+
+        val n = shape.size
+        val m = shape.last()
+
+        val detTensorShape = IntArray(n - 1) { i -> shape[i] }
+        detTensorShape[n - 1] = 1
+        val resBuffer =  DoubleArray(detTensorShape.reduce(Int::times)) { 0.0 }
+
+        val detTensor = DoubleTensor(
+            detTensorShape,
+            resBuffer
+        )
+
+        this.matrixSequence().forEachIndexed{i, matrix ->
+            // todo need Matrix determinant algo
+            // todo resBuffer[i] = matrix.det()
+        }
+
+
+        return detTensor
+
+         */
     }
 
     override fun DoubleTensor.square(): DoubleTensor {
@@ -294,7 +321,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     public fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
-        if (!(this.shape contentEquals other.shape)){
+        if (!(this.shape contentEquals other.shape)) {
             return false
         }
         return this.eq(other, eqFunction)
@@ -303,10 +330,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     public fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
         // todo broadcasting checking
         val n = this.linearStructure.size
-        if (n != other.linearStructure.size){
+        if (n != other.linearStructure.size) {
             return false
         }
-        for (i in 0 until n){
+        for (i in 0 until n) {
             if (!eqFunction(this.buffer[this.bufferStart + i], other.buffer[other.bufferStart + i])) {
                 return false
             }

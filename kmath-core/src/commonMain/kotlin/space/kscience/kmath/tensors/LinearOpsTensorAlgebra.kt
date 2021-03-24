@@ -13,7 +13,7 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, Inde
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.qr
     public fun TensorType.qr(): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.lu.html
+    //htt   ps://pytorch.org/docs/stable/generated/torch.lu.html
     public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
