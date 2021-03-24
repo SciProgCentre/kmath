@@ -8,7 +8,7 @@ public class DoubleLinearOpsTensorAlgebra :
     DoubleTensorAlgebra() {
 
     override fun DoubleTensor.inv(): DoubleTensor {
-        TODO("Not yet implemented")
+        TODO("ANDREI")
     }
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
@@ -135,15 +135,15 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     override fun DoubleTensor.qr(): DoubleTensor {
-        TODO("Not yet implemented")
+        TODO("ANDREI")
     }
 
     override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        TODO("Not yet implemented")
+        TODO("ALYA")
     }
 
     override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
-        TODO("Not yet implemented")
+        TODO("ANDREI")
     }
 
 }
