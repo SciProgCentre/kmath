@@ -2674,7 +2674,7 @@ public final class space/kscience/kmath/tensors/ComplexTensorStructure$DefaultIm
 public abstract interface class space/kscience/kmath/tensors/LinearOpsTensorAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
 	public abstract fun cholesky (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun lu (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lkotlin/Pair;
+	public abstract fun lu (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
 	public abstract fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
 	public abstract fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun svd (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
@@ -2884,10 +2884,14 @@ public final class space/kscience/kmath/tensors/core/DoubleLinearOpsTensorAlgebr
 	public fun <init> ()V
 	public synthetic fun cholesky (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun cholesky (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun det (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun detLU (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun inv (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun lu (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lkotlin/Pair;
-	public fun lu (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lkotlin/Pair;
+	public final fun invLU (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun lu (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
+	public fun lu (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lkotlin/Pair;
 	public synthetic fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
 	public fun luPivot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/IntTensor;)Lkotlin/Triple;
 	public synthetic fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
