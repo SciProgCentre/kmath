@@ -320,34 +320,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Not yet implemented")
     }
 
-    override fun DoubleTensor.det(): DoubleTensor {
-        TODO()
-        /*
-        checkSquareMatrix(shape)
-
-        val n = shape.size
-        val m = shape.last()
-
-        val detTensorShape = IntArray(n - 1) { i -> shape[i] }
-        detTensorShape[n - 1] = 1
-        val resBuffer =  DoubleArray(detTensorShape.reduce(Int::times)) { 0.0 }
-
-        val detTensor = DoubleTensor(
-            detTensorShape,
-            resBuffer
-        )
-
-        this.matrixSequence().forEachIndexed{i, matrix ->
-            // todo need Matrix determinant algo
-            // todo resBuffer[i] = matrix.det()
-        }
-
-
-        return detTensor
-
-         */
-    }
-
     override fun DoubleTensor.square(): DoubleTensor {
         TODO("Not yet implemented")
     }

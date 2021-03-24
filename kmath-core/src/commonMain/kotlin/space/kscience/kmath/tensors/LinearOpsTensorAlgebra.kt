@@ -4,6 +4,9 @@ package space.kscience.kmath.tensors
 public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, IndexTensorType: TensorStructure<Int>> :
     TensorPartialDivisionAlgebra<T, TensorType> {
 
+    //https://pytorch.org/docs/stable/linalg.html#torch.linalg.det
+    public fun TensorType.det(): TensorType
+
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.inv
     public fun TensorType.inv(): TensorType
 

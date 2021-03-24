@@ -52,9 +52,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public fun TensorType.view(shape: IntArray): TensorType
     public fun TensorType.viewAs(other: TensorType): TensorType
 
-    //https://pytorch.org/docs/stable/linalg.html#torch.linalg.det
-    public fun TensorType.det(): TensorType
-
     //https://pytorch.org/docs/stable/generated/torch.abs.html
     public fun TensorType.abs(): TensorType
 

@@ -2673,6 +2673,7 @@ public final class space/kscience/kmath/tensors/ComplexTensorStructure$DefaultIm
 
 public abstract interface class space/kscience/kmath/tensors/LinearOpsTensorAlgebra : space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
 	public abstract fun cholesky (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun lu (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
 	public abstract fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
@@ -2706,7 +2707,6 @@ public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
 	public abstract fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun cumprod (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun cumsum (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2958,8 +2958,6 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public fun cumprod (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun cumsum (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun cumsum (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun det (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun det (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun diagonalEmbedding (Lspace/kscience/kmath/tensors/core/DoubleTensor;III)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
