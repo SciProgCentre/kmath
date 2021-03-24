@@ -48,6 +48,36 @@ class TestBroadcasting {
     }
 
     @Test
+    fun broadcastOuterTensors() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
+        val tensor3 = fromArray(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
+
+        val res = broadcastOuterTensors(tensor1, tensor2, tensor3)
+
+        assertTrue(res[0].shape contentEquals intArrayOf(1, 2, 3))
+        assertTrue(res[1].shape contentEquals intArrayOf(1, 1, 3))
+        assertTrue(res[2].shape contentEquals intArrayOf(1, 1, 1))
+
+        assertTrue(res[0].buffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        assertTrue(res[1].buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0))
+        assertTrue(res[2].buffer.array() contentEquals doubleArrayOf(500.0))
+    }
+
+    @Test
+    fun broadcastOuterTensorsShapes() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(2, 1, 3, 2, 3), DoubleArray(2 * 1 * 3 * 2 * 3) {0.0})
+        val tensor2 = fromArray(intArrayOf(4, 2, 5, 1, 3, 3), DoubleArray(4 * 2 * 5 * 1 * 3 * 3) {0.0})
+        val tensor3 = fromArray(intArrayOf(1, 1), doubleArrayOf(500.0))
+
+        val res = broadcastOuterTensors(tensor1, tensor2, tensor3)
+
+        assertTrue(res[0].shape contentEquals intArrayOf(4, 2, 5, 3, 2, 3))
+        assertTrue(res[1].shape contentEquals intArrayOf(4, 2, 5, 3, 3, 3))
+        assertTrue(res[2].shape contentEquals intArrayOf(4, 2, 5, 3, 1, 1))
+    }
+
+    @Test
     fun minusTensor() = BroadcastDoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))

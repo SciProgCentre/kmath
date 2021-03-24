@@ -135,7 +135,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
         checkShapesCompatible(this, other)
         val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[other.bufferStart + i] *
+            this.buffer.array()[this.bufferStart + i] *
                     other.buffer.array()[other.bufferStart + i]
         }
         return DoubleTensor(this.shape, resBuffer)
@@ -245,7 +245,63 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
-        TODO("Alya")
+        if (this.shape.size == 1 && other.shape.size == 1) {
+            return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
+        }
+
+        var newThis = this.copy()
+        var newOther = other.copy()
+
+        var penultimateDim = false
+        var lastDim = false
+        if (this.shape.size == 1) {
+            penultimateDim = true
+            newThis = this.view(intArrayOf(1) + this.shape)
+        }
+        if (other.shape.size == 1) {
+            lastDim = true
+            newOther = other.view(other.shape + intArrayOf(1) )
+        }
+
+        val broadcastTensors = broadcastOuterTensors(newThis, newOther)
+        newThis = broadcastTensors[0]
+        newOther = broadcastTensors[1]
+
+        val l = newThis.shape[newThis.shape.size - 2]
+        val m1= newThis.shape[newThis.shape.size - 1]
+        val m2 = newOther.shape[newOther.shape.size - 2]
+        val n = newOther.shape[newOther.shape.size - 1]
+        if (m1 != m2) {
+            throw RuntimeException("Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)")
+        }
+        val m = m1
+
+        val resShape = newThis.shape.sliceArray(0..(newThis.shape.size - 2)) + intArrayOf(newOther.shape.last())
+        val resSize = resShape.reduce { acc, i -> acc * i }
+        val resTensor = DoubleTensor(resShape, DoubleArray(resSize))
+
+        for ((res, ab) in resTensor.matrixSequence().zip(newThis.matrixSequence().zip(newOther.matrixSequence()))) {
+            val (a, b) = ab
+
+            for (i in 0 until l) {
+                for (j in 0 until n) {
+                    var curr = 0.0
+                    for (k in 0 until m) {
+                        curr += a[i, k] * b[k, j]
+                    }
+                   res[i, j] = curr
+                }
+            }
+        }
+
+        if (penultimateDim) {
+            return resTensor.view(resTensor.shape.dropLast(2).toIntArray() +
+                    intArrayOf(resTensor.shape.last()))
+        }
+        if (lastDim) {
+            return resTensor.view(resTensor.shape.dropLast(1).toIntArray())
+        }
+        return resTensor
     }
 
     override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {

@@ -80,6 +80,42 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
+    fun dot() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor11 = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
+        val tensor3 = fromArray(intArrayOf(1, 1, 3), doubleArrayOf(-1.0, -2.0, -3.0))
+
+        val res12 = tensor1.dot(tensor2)
+        assertTrue(res12.buffer.array() contentEquals doubleArrayOf(140.0, 320.0))
+        assertTrue(res12.shape contentEquals intArrayOf(2))
+
+        val res32 = tensor3.dot(tensor2)
+        assertTrue(res32.buffer.array() contentEquals doubleArrayOf(-140.0))
+        assertTrue(res32.shape contentEquals intArrayOf(1, 1))
+
+        val res22 = tensor2.dot(tensor2)
+        assertTrue(res22.buffer.array() contentEquals doubleArrayOf(1400.0))
+        assertTrue(res22.shape contentEquals intArrayOf(1))
+
+        val res11 = tensor1.dot(tensor11)
+        assertTrue(res11.buffer.array() contentEquals doubleArrayOf(22.0, 28.0, 49.0, 64.0))
+        assertTrue(res11.shape contentEquals intArrayOf(2, 2))
+
+        var tensor4 = fromArray(intArrayOf(10, 3, 4), DoubleArray(10 * 3 * 4) {0.0})
+        var tensor5 = fromArray(intArrayOf(10, 4, 5), DoubleArray(10 * 4 * 5) {0.0})
+        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(10, 3, 5))
+
+        tensor4 = fromArray(intArrayOf(10, 3, 4), DoubleArray(10 * 3 * 4) {0.0})
+        tensor5 = fromArray(intArrayOf(4, 5), DoubleArray(4 * 5) {0.0})
+        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(10, 3, 5))
+
+        tensor4 = fromArray(intArrayOf(4, 2, 1, 3, 8, 1), DoubleArray(4 * 2 * 1 * 3 * 8 * 1) {0.0})
+        tensor5 = fromArray(intArrayOf(5, 1, 2, 8, 3, 1, 5), DoubleArray(5 * 1 * 2 * 8 * 3 * 1 * 5) {0.0})
+        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(5, 4, 2, 8, 3, 8, 5))
+    }
+
+    @Test
     fun testContentEqual() = DoubleTensorAlgebra {
         //TODO()
     }

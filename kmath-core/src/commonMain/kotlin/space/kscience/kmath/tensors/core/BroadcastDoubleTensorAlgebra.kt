@@ -45,7 +45,7 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.linearStructure.size) { i ->
-            newThis.buffer.array()[newOther.bufferStart + i] *
+            newThis.buffer.array()[newThis.bufferStart + i] *
                     newOther.buffer.array()[newOther.bufferStart + i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -85,7 +85,6 @@ public inline fun <R> BroadcastDoubleTensorAlgebra(block: BroadcastDoubleTensorA
 
 
 internal inline fun broadcastShapes(vararg shapes: IntArray): IntArray {
-    println(shapes)
     var totalDim = 0
     for (shape in shapes) {
         totalDim = max(totalDim, shape.size)
@@ -177,6 +176,60 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
                 tensor.buffer.array()[tensor.bufferStart + curLinearIndex]
         }
         res.add(resTensor)
+    }
+
+    return res
+}
+
+internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
+    val onlyTwoDims = tensors.asSequence().onEach {
+        require(it.shape.size >= 2) {
+            throw RuntimeException("Tensors must have at least 2 dimensions")
+        }
+    }.any { it.shape.size != 2 }
+
+    if (!onlyTwoDims) {
+        return tensors.asList()
+    }
+
+    val totalShape = broadcastShapes(*(tensors.map { it.shape.sliceArray(0..it.shape.size - 3) }).toTypedArray())
+    val n = totalShape.reduce { acc, i -> acc * i }
+
+    val res = ArrayList<DoubleTensor>(0)
+    for (tensor in tensors) {
+        val matrixShape = tensor.shape.sliceArray(tensor.shape.size - 2 until tensor.shape.size).copyOf()
+        val matrixSize = matrixShape[0] * matrixShape[1]
+        val matrix = DoubleTensor(matrixShape, DoubleArray(matrixSize))
+
+        val outerTensor = DoubleTensor(totalShape, DoubleArray(n))
+        val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
+
+        for (linearIndex in 0 until n) {
+            val totalMultiIndex = outerTensor.linearStructure.index(linearIndex)
+            var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
+            curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) {1} + curMultiIndex
+
+            val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.buffer.array())
+
+            for (i in curMultiIndex.indices) {
+                if (curMultiIndex[i] != 1) {
+                    curMultiIndex[i] = totalMultiIndex[i]
+                } else {
+                    curMultiIndex[i] = 0
+                }
+            }
+
+            for (i in 0 until matrixSize) {
+                val curLinearIndex = newTensor.linearStructure.offset(curMultiIndex +
+                        matrix.linearStructure.index(i))
+                val newLinearIndex = resTensor.linearStructure.offset(totalMultiIndex +
+                        matrix.linearStructure.index(i))
+
+                resTensor.buffer.array()[resTensor.bufferStart + newLinearIndex] =
+                    newTensor.buffer.array()[newTensor.bufferStart + curLinearIndex]
+            }
+        }
+        res += resTensor
     }
 
     return res
