@@ -68,7 +68,7 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
 /**
  * Compiles an [MST] to ESTree generated expression using given algebra.
  *
- * @author Alexander Nozik.
+ * @author Iaroslav Postovalov
  */
 public fun <T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
     mst.compileWith(this)
@@ -76,7 +76,7 @@ public fun <T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
 /**
  * Optimizes performance of an [MstExpression] by compiling it into ESTree generated expression.
  *
- * @author Alexander Nozik.
+ * @author Iaroslav Postovalov
  */
 public fun <T : Any> MstExpression<T, Algebra<T>>.compile(): Expression<T> =
     mst.compileWith(algebra)

@@ -73,7 +73,7 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
 /**
  * Compiles an [MST] to ASM using given algebra.
  *
- * @author Alexander Nozik.
+ * @author Alexander Nozik
  */
 public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
     mst.compileWith(T::class.java, this)
@@ -81,7 +81,7 @@ public inline fun <reified T : Any> Algebra<T>.expression(mst: MST): Expression<
 /**
  * Optimizes performance of an [MstExpression] using ASM codegen.
  *
- * @author Alexander Nozik.
+ * @author Alexander Nozik
  */
 public inline fun <reified T : Any> MstExpression<T, Algebra<T>>.compile(): Expression<T> =
     mst.compileWith(T::class.java, algebra)
