@@ -5,11 +5,10 @@ import kotlin.math.*
 
 public class DoubleAnalyticTensorAlgebra:
     AnalyticTensorAlgebra<Double, DoubleTensor>,
-    DoubleOrderedTensorAlgebra()
+        DoubleTensorAlgebra()
 {
     override fun DoubleTensor.exp(): DoubleTensor = this.map(::exp)
 
-    // todo log with other base????
     override fun DoubleTensor.log(): DoubleTensor = this.map(::ln)
 
     override fun DoubleTensor.sqrt(): DoubleTensor = this.map(::sqrt)
@@ -41,86 +40,6 @@ public class DoubleAnalyticTensorAlgebra:
     override fun DoubleTensor.ceil(): DoubleTensor = this.map(::ceil)
 
     override fun DoubleTensor.floor(): DoubleTensor = this.map(::floor)
-
-    override fun DoubleTensor.clamp(min: Double, max: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.erf(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.erfinv(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.erfc(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.lerp(end: DoubleTensor, weight: DoubleTensor): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.lgamma(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.logit(eps: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.igamma(other: DoubleTensor): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.igammac(other: DoubleTensor): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.mvlgamma(dimensions: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.polygamma(order: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.pow(exponent: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.round(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.sigmoid(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.sinc(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.heaviside(values: DoubleTensor): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.trapz(xValues: DoubleTensor, dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.quantile(q: Double, dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.std(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.histc(bins: Int, min: Double, max: Double): DoubleTensor {
-        TODO("Not yet implemented")
-    }
 
 }
 

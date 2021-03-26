@@ -41,9 +41,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public operator fun TensorType.timesAssign(other: TensorType): Unit
     public operator fun TensorType.unaryMinus(): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.square.html
-    public fun TensorType.square(): TensorType
-
     //https://pytorch.org/cppdocs/notes/tensor_indexing.html
     public operator fun TensorType.get(i: Int): TensorType
 
@@ -56,21 +53,6 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
     public fun TensorType.eq(other: TensorType, delta: T): Boolean
 
-    //https://pytorch.org/docs/stable/generated/torch.abs.html
-    public fun TensorType.abs(): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.sum.html
-    public fun TensorType.sum(dim: Int, keepDim: Boolean): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.cumsum.html#torch.cumsum
-    public fun TensorType.cumsum(dim: Int): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.prod.html#torch.prod
-    public fun TensorType.prod(dim: Int, keepDim: Boolean): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.cumprod.html#torch.cumprod
-    public fun TensorType.cumprod(dim: Int): TensorType
-
     //https://pytorch.org/docs/stable/generated/torch.matmul.html
     public infix fun TensorType.dot(other: TensorType): TensorType
 
@@ -80,12 +62,4 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
         offset: Int = 0, dim1: Int = -2, dim2: Int = -1
     ): TensorType
 
-    //https://pytorch.org/docs/stable/generated/torch.cat.html#torch.cat
-    public fun cat(tensors: List<TensorType>, dim: Int): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.flatten.html#torch.flatten
-    public fun TensorType.flatten(startDim: Int, endDim: Int): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.squeeze.html
-    public fun TensorType.squeeze(dim: Int): TensorType
 }

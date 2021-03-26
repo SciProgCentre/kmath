@@ -224,26 +224,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.view(other.shape)
     }
 
-    override fun DoubleTensor.abs(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.sum(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.cumsum(dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.prod(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.cumprod(dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
     override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
         if (this.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
@@ -308,29 +288,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         TODO("Alya")
     }
 
-    override fun cat(tensors: List<DoubleTensor>, dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.flatten(startDim: Int, endDim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.mean(dim: Int, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.square(): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.variance(dim: Int, unbiased: Boolean, keepDim: Boolean): DoubleTensor {
-        TODO("Not yet implemented")
-    }
-
-    override fun DoubleTensor.squeeze(dim: Int): DoubleTensor {
-        TODO("Not yet implemented")
-    }
 
     public fun DoubleTensor.map(transform: (Double) -> Double): DoubleTensor {
         return DoubleTensor(
