@@ -2768,6 +2768,11 @@ public abstract interface class space/kscience/kmath/tensors/TensorPartialDivisi
 	public abstract fun variance (Lspace/kscience/kmath/nd/MutableStructureND;IZZ)Lspace/kscience/kmath/nd/MutableStructureND;
 }
 
+public final class space/kscience/kmath/tensors/TensorPartialDivisionAlgebra$DefaultImpls {
+	public static synthetic fun mean$default (Lspace/kscience/kmath/tensors/TensorPartialDivisionAlgebra;Lspace/kscience/kmath/nd/MutableStructureND;IZILjava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public static synthetic fun variance$default (Lspace/kscience/kmath/tensors/TensorPartialDivisionAlgebra;Lspace/kscience/kmath/nd/MutableStructureND;IZZILjava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+}
+
 public final class space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra {
 	public fun <init> ()V
 	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
