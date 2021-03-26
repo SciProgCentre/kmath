@@ -14,7 +14,7 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, Inde
     public fun TensorType.cholesky(): TensorType
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.qr
-    public fun TensorType.qr(): TensorType
+    public fun TensorType.qr(): Pair<TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
     public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
