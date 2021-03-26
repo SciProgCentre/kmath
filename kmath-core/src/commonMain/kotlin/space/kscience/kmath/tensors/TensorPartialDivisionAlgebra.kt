@@ -7,10 +7,4 @@ public interface TensorPartialDivisionAlgebra<T, TensorType : TensorStructure<T>
     public operator fun TensorType.div(other: TensorType): TensorType
     public operator fun TensorType.divAssign(value: T)
     public operator fun TensorType.divAssign(other: TensorType)
-
-    //https://pytorch.org/docs/stable/generated/torch.mean.html#torch.mean
-    public fun TensorType.mean(dim: Int = 0, keepDim: Boolean = false): TensorType
-
-    //https://pytorch.org/docs/stable/generated/torch.var.html#torch.var
-    public fun TensorType.variance(dim: Int = 0, unbiased: Boolean = true, keepDim: Boolean = false): TensorType
 }
