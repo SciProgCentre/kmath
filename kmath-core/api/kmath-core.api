@@ -984,6 +984,8 @@ public final class space/kscience/kmath/nd/MutableStructure1D$DefaultImpls {
 }
 
 public abstract interface class space/kscience/kmath/nd/MutableStructure2D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure2D {
+	public abstract fun getColumns ()Ljava/util/List;
+	public abstract fun getRows ()Ljava/util/List;
 	public abstract fun set (IILjava/lang/Object;)V
 }
 
@@ -2608,6 +2610,15 @@ public final class space/kscience/kmath/structures/VirtualBuffer : space/kscienc
 	public fun iterator ()Ljava/util/Iterator;
 }
 
+public final class space/kscience/kmath/structures/VirtualMutableBuffer : space/kscience/kmath/structures/MutableBuffer {
+	public fun <init> (ILkotlin/jvm/functions/Function1;)V
+	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun get (I)Ljava/lang/Object;
+	public fun getSize ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public fun set (ILjava/lang/Object;)V
+}
+
 public abstract interface class space/kscience/kmath/tensors/AnalyticTensorAlgebra : space/kscience/kmath/tensors/OrderedTensorAlgebra, space/kscience/kmath/tensors/TensorPartialDivisionAlgebra {
 	public abstract fun acos (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun acosh (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2709,6 +2720,7 @@ public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
 	public abstract fun cumsum (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun eq (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Z
 	public abstract fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun flatten (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun full (Ljava/lang/Object;[I)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2970,9 +2982,10 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public fun divAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
 	public synthetic fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun dot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
+	public synthetic fun eq (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Z
+	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Z
+	public fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
 	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function2;)Z
-	public static synthetic fun eq$default (Lspace/kscience/kmath/tensors/core/DoubleTensorAlgebra;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;DILjava/lang/Object;)Z
 	public synthetic fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun eye (I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun flatten (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
