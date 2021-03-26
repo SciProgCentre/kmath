@@ -71,6 +71,21 @@ private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> 
     override operator fun get(index: Int): T = buffer[index]
 }
 
+internal inline class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
+    override val shape: IntArray get() = intArrayOf(buffer.size)
+    override val size: Int get() = buffer.size
+
+    override fun elements(): Sequence<Pair<IntArray, T>> =
+        buffer.asSequence().mapIndexed { index, value -> intArrayOf(index) to value }
+
+    override operator fun get(index: Int): T = buffer[index]
+    override fun set(index: Int, value: T) {
+        buffer[index] = value
+    }
+
+    override fun copy(): MutableBuffer<T> = buffer.copy()
+}
+
 /**
  * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */

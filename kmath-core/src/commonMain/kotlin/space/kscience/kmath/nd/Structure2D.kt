@@ -75,14 +75,14 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
-    override val rows: List<MutableBuffer<T>>
-        get() = List(rowNum) { i -> VirtualMutableBuffer(colNum) { j -> get(i, j) } }
+    override val rows: List<MutableStructure1D<T>>
+        get() = List(rowNum) { i -> MutableBuffer1DWrapper(VirtualMutableBuffer(colNum) { j -> get(i, j) })}
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
-    override val columns: List<MutableBuffer<T>>
-        get() = List(colNum) { j -> VirtualMutableBuffer(rowNum) { i -> get(i, j) } }
+    override val columns: List<MutableStructure1D<T>>
+        get() = List(colNum) { j -> MutableBuffer1DWrapper(VirtualMutableBuffer(rowNum) { i -> get(i, j) }) }
 }
 
 /**
