@@ -1,10 +1,5 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.Structure1D
-import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.asND
 import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
 import kotlin.math.sqrt
 
@@ -163,8 +158,7 @@ public class DoubleLinearOpsTensorAlgebra :
         TODO("ANDREI")
     }
 
-    private fun luMatrixDet(lu: Structure2D<Double>, pivots: Structure1D<Int>): Double {
-        // todo check
+    private fun luMatrixDet(lu: BufferedTensor2D<Double>, pivots: BufferedTensor1D<Int>): Double {
         val m = lu.shape[0]
         val sign = if((pivots[m] - m) % 2 == 0) 1.0 else -1.0
         return (0 until m).asSequence().map { lu[it, it] }.fold(sign) { left, right -> left * right }
@@ -191,9 +185,9 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     private fun luMatrixInv(
-        lu: Structure2D<Double>,
-        pivots: Structure1D<Int>,
-        invMatrix : MutableStructure2D<Double>
+        lu: BufferedTensor2D<Double>,
+        pivots: BufferedTensor1D<Int>,
+        invMatrix : BufferedTensor2D<Double>
     ): Unit {
         //todo check
         val m = lu.shape[0]
