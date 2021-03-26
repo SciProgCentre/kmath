@@ -2,7 +2,9 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.VirtualMutableBuffer
 import kotlin.reflect.KClass
 
 /**
@@ -69,6 +71,18 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      * @param value the value.
      */
     public operator fun set(i: Int, j: Int, value: T)
+
+    /**
+     * The buffer of rows of this structure. It gets elements from the structure dynamically.
+     */
+    override val rows: List<MutableBuffer<T>>
+        get() = List(rowNum) { i -> VirtualMutableBuffer(colNum) { j -> get(i, j) } }
+
+    /**
+     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     */
+    override val columns: List<MutableBuffer<T>>
+        get() = List(colNum) { j -> VirtualMutableBuffer(rowNum) { i -> get(i, j) } }
 }
 
 /**
