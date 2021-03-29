@@ -11,14 +11,14 @@ internal inline fun <T, TensorType : TensorStructure<T>,
         "Illegal empty shape provided"
     }
 
-internal inline fun < TensorType : TensorStructure<Double>,
+internal inline fun <TensorType : TensorStructure<Double>,
         TorchTensorAlgebraType : TensorAlgebra<Double, TensorType>>
         TorchTensorAlgebraType.checkEmptyDoubleBuffer(buffer: DoubleArray): Unit =
     check(buffer.isNotEmpty()) {
         "Illegal empty buffer provided"
     }
 
-internal inline fun < TensorType : TensorStructure<Double>,
+internal inline fun <TensorType : TensorStructure<Double>,
         TorchTensorAlgebraType : TensorAlgebra<Double, TensorType>>
         TorchTensorAlgebraType.checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray): Unit =
     check(buffer.size == shape.reduce(Int::times)) {

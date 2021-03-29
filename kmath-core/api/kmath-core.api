@@ -2731,8 +2731,6 @@ public class space/kscience/kmath/tensors/core/BufferedTensor : space/kscience/k
 	public fun <init> ([ILspace/kscience/kmath/structures/MutableBuffer;I)V
 	public fun elements ()Lkotlin/sequences/Sequence;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun forEachMatrix (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachVector (Lkotlin/jvm/functions/Function1;)V
 	public fun get ([I)Ljava/lang/Object;
 	public final fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun getDimension ()I
@@ -2740,37 +2738,7 @@ public class space/kscience/kmath/tensors/core/BufferedTensor : space/kscience/k
 	public final fun getNumel ()I
 	public fun getShape ()[I
 	public fun hashCode ()I
-	public final fun matrixSequence ()Lkotlin/sequences/Sequence;
 	public fun set ([ILjava/lang/Object;)V
-	public final fun vectorSequence ()Lkotlin/sequences/Sequence;
-}
-
-public final class space/kscience/kmath/tensors/core/BufferedTensor1D : space/kscience/kmath/tensors/core/BufferedTensor, space/kscience/kmath/nd/MutableStructure1D {
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public fun get (I)Ljava/lang/Object;
-	public fun get ([I)Ljava/lang/Object;
-	public fun getDimension ()I
-	public fun getSize ()I
-	public fun iterator ()Ljava/util/Iterator;
-	public fun set (ILjava/lang/Object;)V
-	public fun set ([ILjava/lang/Object;)V
-}
-
-public final class space/kscience/kmath/tensors/core/BufferedTensor2D : space/kscience/kmath/tensors/core/BufferedTensor, space/kscience/kmath/nd/MutableStructure2D {
-	public fun elements ()Lkotlin/sequences/Sequence;
-	public fun get (II)Ljava/lang/Object;
-	public fun get ([I)Ljava/lang/Object;
-	public fun getColNum ()I
-	public fun getColumns ()Ljava/util/List;
-	public fun getRowNum ()I
-	public fun getRows ()Ljava/util/List;
-	public fun getShape ()[I
-	public fun set (IILjava/lang/Object;)V
-}
-
-public final class space/kscience/kmath/tensors/core/BufferedTensorKt {
-	public static final fun as1D (Lspace/kscience/kmath/tensors/core/BufferedTensor;)Lspace/kscience/kmath/tensors/core/BufferedTensor1D;
-	public static final fun as2D (Lspace/kscience/kmath/tensors/core/BufferedTensor;)Lspace/kscience/kmath/tensors/core/BufferedTensor2D;
 }
 
 public final class space/kscience/kmath/tensors/core/DoubleAnalyticTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra, space/kscience/kmath/tensors/AnalyticTensorAlgebra {
@@ -2876,7 +2844,6 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public synthetic fun eq (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Z
 	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Z
 	public fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
-	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function2;)Z
 	public synthetic fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun eye (I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public final fun fromArray ([I[D)Lspace/kscience/kmath/tensors/core/DoubleTensor;

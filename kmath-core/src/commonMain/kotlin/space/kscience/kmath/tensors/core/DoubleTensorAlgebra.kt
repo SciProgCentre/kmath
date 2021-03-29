@@ -1,8 +1,7 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
 import kotlin.math.abs
 
@@ -224,6 +223,23 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.view(other.shape)
     }
 
+    private inline fun dotHelper(
+        a: MutableStructure2D<Double>,
+        b: MutableStructure2D<Double>,
+        res: MutableStructure2D<Double>,
+        l: Int, m: Int, n: Int
+    ) {
+        for (i in 0 until l) {
+            for (j in 0 until n) {
+                var curr = 0.0
+                for (k in 0 until m) {
+                    curr += a[i, k] * b[k, j]
+                }
+                res[i, j] = curr
+            }
+        }
+    }
+
     override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
         if (this.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
@@ -240,7 +256,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         }
         if (other.shape.size == 1) {
             lastDim = true
-            newOther = other.view(other.shape + intArrayOf(1) )
+            newOther = other.view(other.shape + intArrayOf(1))
         }
 
         val broadcastTensors = broadcastOuterTensors(newThis, newOther)
@@ -248,7 +264,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         newOther = broadcastTensors[1]
 
         val l = newThis.shape[newThis.shape.size - 2]
-        val m1= newThis.shape[newThis.shape.size - 1]
+        val m1 = newThis.shape[newThis.shape.size - 1]
         val m2 = newOther.shape[newOther.shape.size - 2]
         val n = newOther.shape[newOther.shape.size - 1]
         if (m1 != m2) {
@@ -262,21 +278,14 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
         for ((res, ab) in resTensor.matrixSequence().zip(newThis.matrixSequence().zip(newOther.matrixSequence()))) {
             val (a, b) = ab
-
-            for (i in 0 until l) {
-                for (j in 0 until n) {
-                    var curr = 0.0
-                    for (k in 0 until m) {
-                        curr += a[i, k] * b[k, j]
-                    }
-                   res[i, j] = curr
-                }
-            }
+            dotHelper(a.as2D(), b.as2D(), res.as2D(), l, m, n)
         }
 
         if (penultimateDim) {
-            return resTensor.view(resTensor.shape.dropLast(2).toIntArray() +
-                    intArrayOf(resTensor.shape.last()))
+            return resTensor.view(
+                resTensor.shape.dropLast(2).toIntArray() +
+                        intArrayOf(resTensor.shape.last())
+            )
         }
         if (lastDim) {
             return resTensor.view(resTensor.shape.dropLast(1).toIntArray())
@@ -307,15 +316,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     public fun DoubleTensor.eq(other: DoubleTensor): Boolean = this.eq(other, 1e-5)
 
-    public fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
-        if (!(this.shape contentEquals other.shape)) {
-            return false
-        }
-        return this.eq(other, eqFunction)
-    }
+    public fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean =
+        this.eq(other, eqFunction)
 
-    public fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
-        // todo broadcasting checking
+    private fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
+        checkShapesCompatible(this, other)
         val n = this.linearStructure.size
         if (n != other.linearStructure.size) {
             return false
