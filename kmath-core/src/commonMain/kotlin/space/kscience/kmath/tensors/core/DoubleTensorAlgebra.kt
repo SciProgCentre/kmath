@@ -7,6 +7,13 @@ import kotlin.math.abs
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
 
+    override fun DoubleTensor.value(): Double {
+        check(this.shape contentEquals intArrayOf(1)) {
+            "Inconsistent value for tensor of shape ${shape.toList()}"
+        }
+        return this.buffer.array()[this.bufferStart]
+    }
+
     public fun fromArray(shape: IntArray, buffer: DoubleArray): DoubleTensor {
         checkEmptyShape(shape)
         checkEmptyDoubleBuffer(buffer)

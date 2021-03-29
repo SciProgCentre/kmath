@@ -72,11 +72,8 @@ class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
     fun testScalarProduct() = DoubleLinearOpsTensorAlgebra {
-        val a = fromArray(intArrayOf(3), doubleArrayOf(1.8,2.5, 6.8))
-        val b = fromArray(intArrayOf(3), doubleArrayOf(5.5,2.6, 6.4))
-        DoubleReduceOpsTensorAlgebra {
-            assertEquals(a.dot(b).value(), 59.92)
-        }
-
+        val a = fromArray(intArrayOf(3), doubleArrayOf(1.8, 2.5, 6.8))
+        val b = fromArray(intArrayOf(3), doubleArrayOf(5.5, 2.6, 6.4))
+        assertEquals(a.dot(b).value(), 59.92)
     }
 }

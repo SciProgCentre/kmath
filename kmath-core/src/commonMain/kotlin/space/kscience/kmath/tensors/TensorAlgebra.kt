@@ -5,6 +5,8 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
 
+    public fun TensorType.value(): T
+
     //https://pytorch.org/docs/stable/generated/torch.full.html
     public fun full(value: T, shape: IntArray): TensorType
 

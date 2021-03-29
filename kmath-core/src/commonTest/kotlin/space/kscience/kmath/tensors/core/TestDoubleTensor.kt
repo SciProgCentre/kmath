@@ -10,7 +10,7 @@ import kotlin.test.assertTrue
 class TestDoubleTensor {
 
     @Test
-    fun valueTest() = DoubleReduceOpsTensorAlgebra {
+    fun valueTest() = DoubleTensorAlgebra {
         val value = 12.5
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)
@@ -37,5 +37,13 @@ class TestDoubleTensor {
 
         vector[0] = 109.56
         assertEquals(tensor[intArrayOf(0,1,0)], 109.56)
+
+        tensor.matrixSequence().forEach {
+            val a = it.asTensor()
+            val secondRow = a[1].as1D()
+            val secondColumn = a.transpose(0,1)[1].as1D()
+            assertEquals(secondColumn[0], 77.89)
+            assertEquals(secondRow[1], secondColumn[1])
+        }
     }
 }

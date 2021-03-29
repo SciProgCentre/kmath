@@ -2654,10 +2654,6 @@ public final class space/kscience/kmath/tensors/LinearOpsTensorAlgebra$DefaultIm
 	public static synthetic fun symEig$default (Lspace/kscience/kmath/tensors/LinearOpsTensorAlgebra;Lspace/kscience/kmath/nd/MutableStructureND;ZILjava/lang/Object;)Lkotlin/Pair;
 }
 
-public abstract interface class space/kscience/kmath/tensors/ReduceOpsTensorAlgebra : space/kscience/kmath/tensors/TensorAlgebra {
-	public abstract fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
-}
-
 public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
 	public abstract fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2686,6 +2682,7 @@ public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
 	public abstract fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
 	public abstract fun transpose (Lspace/kscience/kmath/nd/MutableStructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun unaryMinus (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
 	public abstract fun view (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun zeroesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2809,16 +2806,6 @@ public final class space/kscience/kmath/tensors/core/DoubleLinearOpsTensorAlgebr
 	public static final fun DoubleLinearOpsTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
-public final class space/kscience/kmath/tensors/core/DoubleReduceOpsTensorAlgebra : space/kscience/kmath/tensors/core/DoubleTensorAlgebra, space/kscience/kmath/tensors/ReduceOpsTensorAlgebra {
-	public fun <init> ()V
-	public synthetic fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
-	public fun value (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Ljava/lang/Double;
-}
-
-public final class space/kscience/kmath/tensors/core/DoubleReduceOpsTensorAlgebraKt {
-	public static final fun DoubleReduceOpsTensorAlgebra (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-}
-
 public final class space/kscience/kmath/tensors/core/DoubleTensor : space/kscience/kmath/tensors/core/BufferedTensor {
 }
 
@@ -2892,6 +2879,8 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public fun transpose (Lspace/kscience/kmath/tensors/core/DoubleTensor;II)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun unaryMinus (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun unaryMinus (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
+	public fun value (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Ljava/lang/Double;
 	public synthetic fun view (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun view (Lspace/kscience/kmath/tensors/core/DoubleTensor;[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
