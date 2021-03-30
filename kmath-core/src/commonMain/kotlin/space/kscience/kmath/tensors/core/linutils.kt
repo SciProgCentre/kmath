@@ -203,14 +203,14 @@ internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
         val vv = v.as1D()
         if (j > 0) {
             for (i in 0 until j) {
-                r[i, j] = qT[i].dot(matrixT[j]).value()
+                r[i, j] = (qT[i] dot matrixT[j]).value()
                 for (k in 0 until n) {
                     val qTi = qT[i].as1D()
                     vv[k] = vv[k] - r[i, j] * qTi[k]
                 }
             }
         }
-        r[j, j] = DoubleAnalyticTensorAlgebra { v.dot(v).sqrt().value() }
+        r[j, j] = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }

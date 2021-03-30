@@ -229,7 +229,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.view(other.shape)
     }
 
-    override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
+    override infix fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
         if (this.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
         }
