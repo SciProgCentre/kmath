@@ -86,7 +86,7 @@ public class DoubleLinearOpsTensorAlgebra :
             val (q, r) = qr
             qrHelper(matrix.asTensor(), q.asTensor(), r.as2D())
         }
-        return Pair(qTensor, rTensor)
+        return qTensor to rTensor
     }
 
     override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
