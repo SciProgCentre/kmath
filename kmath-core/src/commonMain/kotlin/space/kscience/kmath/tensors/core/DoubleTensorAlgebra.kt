@@ -27,27 +27,27 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(newShape, this.buffer.array(), newStart)
     }
 
-    override fun full(value: Double, shape: IntArray): DoubleTensor {
+    public fun full(value: Double, shape: IntArray): DoubleTensor {
         checkEmptyShape(shape)
         val buffer = DoubleArray(shape.reduce(Int::times)) { value }
         return DoubleTensor(shape, buffer)
     }
 
-    override fun DoubleTensor.fullLike(value: Double): DoubleTensor {
+    public fun DoubleTensor.fullLike(value: Double): DoubleTensor {
         val shape = this.shape
         val buffer = DoubleArray(this.linearStructure.size) { value }
         return DoubleTensor(shape, buffer)
     }
 
-    override fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
+    public fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
 
-    override fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
+    public fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
 
-    override fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
+    public fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
 
-    override fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
+    public fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
 
-    override fun eye(n: Int): DoubleTensor {
+    public fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
         val buffer = DoubleArray(n * n) { 0.0 }
         val res = DoubleTensor(shape, buffer)
@@ -57,7 +57,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return res
     }
 
-    override fun DoubleTensor.copy(): DoubleTensor {
+    public fun DoubleTensor.copy(): DoubleTensor {
         return DoubleTensor(this.shape, this.buffer.array().copyOf(), this.bufferStart)
     }
 
@@ -299,7 +299,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return this.contentEquals(other) { x, y -> abs(x - y) < delta }
     }
 
-    override fun DoubleTensor.eq(other: DoubleTensor, delta: Double): Boolean {
+    public fun DoubleTensor.eq(other: DoubleTensor, delta: Double): Boolean {
         return this.eq(other) { x, y -> abs(x - y) < delta }
     }
 

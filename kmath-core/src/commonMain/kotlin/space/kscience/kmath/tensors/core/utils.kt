@@ -1,7 +1,8 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.*
-
+import kotlin.random.Random
+import kotlin.math.*
 
 /**
  * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
@@ -33,4 +34,9 @@ internal fun Buffer<Float>.array(): FloatArray = when (this) {
 internal fun Buffer<Double>.array(): DoubleArray = when (this) {
     is DoubleBuffer -> array
     else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
+}
+
+internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
+    val u = Random(seed)
+    return (0 until n).map { sqrt(-2.0 * u.nextDouble()) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
 }
