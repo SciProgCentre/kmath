@@ -1,8 +1,7 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
+import space.kscience.kmath.nd.as2D
 import kotlin.math.abs
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
@@ -228,23 +227,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
 
     override fun DoubleTensor.viewAs(other: DoubleTensor): DoubleTensor {
         return this.view(other.shape)
-    }
-
-    private inline fun dotHelper(
-        a: MutableStructure2D<Double>,
-        b: MutableStructure2D<Double>,
-        res: MutableStructure2D<Double>,
-        l: Int, m: Int, n: Int
-    ) {
-        for (i in 0 until l) {
-            for (j in 0 until n) {
-                var curr = 0.0
-                for (k in 0 until m) {
-                    curr += a[i, k] * b[k, j]
-                }
-                res[i, j] = curr
-            }
-        }
     }
 
     override fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {

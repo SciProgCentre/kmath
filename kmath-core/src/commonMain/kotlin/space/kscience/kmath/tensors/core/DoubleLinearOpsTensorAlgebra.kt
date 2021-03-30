@@ -1,11 +1,8 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.nd.MutableStructure1D
-import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
-import kotlin.math.sqrt
 
 public class DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, DoubleTensor, IntTensor>,
@@ -14,48 +11,6 @@ public class DoubleLinearOpsTensorAlgebra :
     override fun DoubleTensor.inv(): DoubleTensor = invLU()
 
     override fun DoubleTensor.det(): DoubleTensor = detLU()
-
-    private inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>, m: Int) {
-        for (row in 0 until m) pivots[row] = row
-
-        for (i in 0 until m) {
-            var maxVal = -1.0
-            var maxInd = i
-
-            for (k in i until m) {
-                val absA = kotlin.math.abs(lu[k, i])
-                if (absA > maxVal) {
-                    maxVal = absA
-                    maxInd = k
-                }
-            }
-
-            //todo check singularity
-
-            if (maxInd != i) {
-
-                val j = pivots[i]
-                pivots[i] = pivots[maxInd]
-                pivots[maxInd] = j
-
-                for (k in 0 until m) {
-                    val tmp = lu[i, k]
-                    lu[i, k] = lu[maxInd, k]
-                    lu[maxInd, k] = tmp
-                }
-
-                pivots[m] += 1
-
-            }
-
-            for (j in i + 1 until m) {
-                lu[j, i] /= lu[i, i]
-                for (k in i + 1 until m) {
-                    lu[j, k] -= lu[j, i] * lu[i, k]
-                }
-            }
-        }
-    }
 
     override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
 
@@ -78,37 +33,6 @@ public class DoubleLinearOpsTensorAlgebra :
 
         return Pair(luTensor, pivotsTensor)
 
-    }
-
-    private inline fun pivInit(
-        p: MutableStructure2D<Double>,
-        pivot: MutableStructure1D<Int>,
-        n: Int
-    ) {
-        for (i in 0 until n) {
-            p[i, pivot[i]] = 1.0
-        }
-    }
-
-    private inline fun luPivotHelper(
-        l: MutableStructure2D<Double>,
-        u: MutableStructure2D<Double>,
-        lu: MutableStructure2D<Double>,
-        n: Int
-    ) {
-        for (i in 0 until n) {
-            for (j in 0 until n) {
-                if (i == j) {
-                    l[i, j] = 1.0
-                }
-                if (j < i) {
-                    l[i, j] = lu[i, j]
-                }
-                if (j >= i) {
-                    u[i, j] = lu[i, j]
-                }
-            }
-        }
     }
 
     override fun luPivot(
@@ -139,27 +63,6 @@ public class DoubleLinearOpsTensorAlgebra :
 
     }
 
-    private inline fun choleskyHelper(
-        a: MutableStructure2D<Double>,
-        l: MutableStructure2D<Double>,
-        n: Int
-    ) {
-        for (i in 0 until n) {
-            for (j in 0 until i) {
-                var h = a[i, j]
-                for (k in 0 until j) {
-                    h -= l[i, k] * l[j, k]
-                }
-                l[i, j] = h / l[j, j]
-            }
-            var h = a[i, i]
-            for (j in 0 until i) {
-                h -= l[i, j] * l[i, j]
-            }
-            l[i, i] = sqrt(h)
-        }
-    }
-
     override fun DoubleTensor.cholesky(): DoubleTensor {
         // todo checks
         checkSquareMatrix(shape)
@@ -185,14 +88,6 @@ public class DoubleLinearOpsTensorAlgebra :
         TODO("ANDREI")
     }
 
-    private fun luMatrixDet(luTensor: MutableStructure2D<Double>, pivotsTensor: MutableStructure1D<Int>): Double {
-        val lu = luTensor.as2D()
-        val pivots = pivotsTensor.as1D()
-        val m = lu.shape[0]
-        val sign = if ((pivots[m] - m) % 2 == 0) 1.0 else -1.0
-        return (0 until m).asSequence().map { lu[it, it] }.fold(sign) { left, right -> left * right }
-    }
-
     public fun DoubleTensor.detLU(): DoubleTensor {
         val (luTensor, pivotsTensor) = lu()
         val n = shape.size
@@ -211,33 +106,6 @@ public class DoubleLinearOpsTensorAlgebra :
         }
 
         return detTensor
-    }
-
-    private fun luMatrixInv(
-        lu: MutableStructure2D<Double>,
-        pivots: MutableStructure1D<Int>,
-        invMatrix: MutableStructure2D<Double>
-    ) {
-        val m = lu.shape[0]
-
-        for (j in 0 until m) {
-            for (i in 0 until m) {
-                if (pivots[i] == j) {
-                    invMatrix[i, j] = 1.0
-                }
-
-                for (k in 0 until i) {
-                    invMatrix[i, j] -= lu[i, k] * invMatrix[k, j]
-                }
-            }
-
-            for (i in m - 1 downTo 0) {
-                for (k in i + 1 until m) {
-                    invMatrix[i, j] -= lu[i, k] * invMatrix[k, j]
-                }
-                invMatrix[i, j] /= lu[i, i]
-            }
-        }
     }
 
     public fun DoubleTensor.invLU(): DoubleTensor {
