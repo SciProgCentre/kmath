@@ -77,46 +77,6 @@ public class DoubleLinearOpsTensorAlgebra :
         return lTensor
     }
 
-    private fun MutableStructure1D<Double>.dot(other: MutableStructure1D<Double>): Double {
-        var res = 0.0
-        for (i in 0 until size) {
-            res += this[i] * other[i]
-        }
-        return res
-    }
-
-    private fun MutableStructure1D<Double>.l2Norm(): Double {
-        var squareSum = 0.0
-        for (i in 0 until size) {
-            squareSum += this[i] * this[i]
-        }
-        return sqrt(squareSum)
-    }
-
-    fun qrHelper(
-        matrix: MutableStructure2D<Double>,
-        q: MutableStructure2D<Double>,
-        r: MutableStructure2D<Double>
-    ) {
-        //todo check square
-        val n = matrix.colNum
-        for (j in 0 until n) {
-            val v = matrix.columns[j]
-            if (j > 0) {
-                for (i in 0 until j) {
-                    r[i, j] = q.columns[i].dot(matrix.columns[j])
-                    for (k in 0 until n) {
-                        v[k] = v[k] - r[i, j] * q.columns[i][k]
-                    }
-                }
-            }
-            r[j, j] = v.l2Norm()
-            for (i in 0 until n) {
-                q[i, j] = v[i] / r[j, j]
-            }
-        }
-    }
-
     override fun DoubleTensor.qr(): Pair<DoubleTensor, DoubleTensor> {
         checkSquareMatrix(shape)
         val qTensor = zeroesLike()
