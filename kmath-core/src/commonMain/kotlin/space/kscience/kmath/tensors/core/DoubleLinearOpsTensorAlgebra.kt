@@ -183,11 +183,7 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     private fun MutableStructure1D<Double>.l2Norm(): Double {
-        var squareSum = 0.0
-        for (i in 0 until size) {
-            squareSum += this[i] * this[i]
-        }
-        return sqrt(squareSum)
+        return sqrt((0 until size).sumOf { this[it] * this[it] })
     }
 
     fun qrHelper(
@@ -223,7 +219,7 @@ public class DoubleLinearOpsTensorAlgebra :
             val (q, r) = qr
             qrHelper(matrix.as2D(), q.as2D(), r.as2D())
         }
-        return Pair(qTensor, rTensor)
+        return qTensor to rTensor
     }
 
     override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
