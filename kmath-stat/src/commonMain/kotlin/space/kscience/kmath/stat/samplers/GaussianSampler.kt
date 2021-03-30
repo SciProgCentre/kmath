@@ -1,9 +1,9 @@
-package kscience.kmath.stat.samplers
+package space.kscience.kmath.stat.samplers
 
-import kscience.kmath.chains.Chain
-import kscience.kmath.chains.map
-import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.Sampler
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.map
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.Sampler
 
 /**
  * Sampling from a Gaussian distribution with given mean and standard deviation.

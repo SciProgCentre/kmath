@@ -1,8 +1,8 @@
-package kscience.kmath.stat.samplers
+package space.kscience.kmath.stat.samplers
 
-import kscience.kmath.chains.Chain
-import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.Sampler
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.Sampler
 
 /**
  * Sampler for the Poisson distribution.

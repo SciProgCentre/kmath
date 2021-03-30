@@ -1,11 +1,12 @@
-package kscience.kmath.stat
+package space.kscience.kmath.stat
 
 import kotlinx.coroutines.flow.first
-import kscience.kmath.chains.Chain
-import kscience.kmath.chains.collect
-import kscience.kmath.structures.Buffer
-import kscience.kmath.structures.BufferFactory
-import kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.collect
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.MutableBuffer
 import kotlin.jvm.JvmName
 
 /**
@@ -22,7 +23,7 @@ public fun interface Sampler<T : Any> {
 }
 
 /**
- * A distribution of typed objects
+ * A distribution of typed objects.
  */
 public interface Distribution<T : Any> : Sampler<T> {
     /**
@@ -60,7 +61,7 @@ public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing
+    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once
@@ -86,7 +87,7 @@ public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sa
  */
 @JvmName("sampleRealBuffer")
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, Buffer.Companion::real)
+    sampleBuffer(generator, size, MutableBuffer.Companion::double)
 
 /**
  * Generates [size] integer samples and chunks them into some buffers.

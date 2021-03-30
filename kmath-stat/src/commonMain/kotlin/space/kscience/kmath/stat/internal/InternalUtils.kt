@@ -1,4 +1,4 @@
-package kscience.kmath.stat.internal
+package space.kscience.kmath.stat.internal
 
 import kotlin.math.ln
 import kotlin.math.min

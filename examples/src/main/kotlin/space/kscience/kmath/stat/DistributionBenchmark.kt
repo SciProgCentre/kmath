@@ -1,9 +1,9 @@
-package kscience.kmath.stat
+package space.kscience.kmath.stat
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.stat.samplers.GaussianSampler
+import space.kscience.kmath.stat.samplers.GaussianSampler
 import org.apache.commons.rng.simple.RandomSource
 import java.time.Duration
 import java.time.Instant

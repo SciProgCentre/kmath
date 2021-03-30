@@ -1,20 +1,22 @@
-package kscience.kmath.commons.fit
+package space.kscience.kmath.commons.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
-import kscience.kmath.commons.optimization.chiSquared
-import kscience.kmath.commons.optimization.minimize
-import kscience.kmath.expressions.symbol
-import kscience.kmath.real.RealVector
-import kscience.kmath.real.map
-import kscience.kmath.real.step
-import kscience.kmath.stat.*
-import kscience.kmath.stat.distributions.NormalDistribution
-import kscience.kmath.structures.asIterable
-import kscience.kmath.structures.toList
 import kscience.plotly.*
 import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceValues
+import space.kscience.kmath.commons.optimization.chiSquared
+import space.kscience.kmath.commons.optimization.minimize
+import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.optimization.FunctionOptimization
+import space.kscience.kmath.optimization.OptimizationResult
+import space.kscience.kmath.real.DoubleVector
+import space.kscience.kmath.real.map
+import space.kscience.kmath.real.step
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.distributions.NormalDistribution
+import space.kscience.kmath.structures.asIterable
+import space.kscience.kmath.structures.toList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -27,7 +29,7 @@ private val c by symbol
 /**
  * Shortcut to use buffers in plotly
  */
-operator fun TraceValues.invoke(vector: RealVector) {
+operator fun TraceValues.invoke(vector: DoubleVector) {
     numbers = vector.asIterable()
 }
 
@@ -58,12 +60,12 @@ suspend fun main() {
     val yErr = y.map { sqrt(it) }//RealVector.same(x.size, sigma)
 
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
-    val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
+    val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
         //bind variables to autodiff context
         val a = bind(a)
         val b = bind(b)
         //Include default value for c if it is not provided as a parameter
-        val c = bindOrNull(c) ?: one
+        val c = bindSymbolOrNull(c) ?: one
         a * x1.pow(2) + b * x1 + c
     }
 
@@ -90,10 +92,10 @@ suspend fun main() {
             }
         }
         br()
-        h3{
+        h3 {
             +"Fit result: $result"
         }
-        h3{
+        h3 {
             +"Chi2/dof = ${result.value / (x.size - 3)}"
         }
     }

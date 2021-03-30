@@ -1,12 +1,12 @@
-package kscience.kmath.stat.distributions
+package space.kscience.kmath.stat.distributions
 
-import kscience.kmath.chains.Chain
-import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.UnivariateDistribution
-import kscience.kmath.stat.internal.InternalErf
-import kscience.kmath.stat.samplers.GaussianSampler
-import kscience.kmath.stat.samplers.NormalizedGaussianSampler
-import kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.UnivariateDistribution
+import space.kscience.kmath.stat.internal.InternalErf
+import space.kscience.kmath.stat.samplers.GaussianSampler
+import space.kscience.kmath.stat.samplers.NormalizedGaussianSampler
+import space.kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
 /**

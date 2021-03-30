@@ -1,8 +1,8 @@
-package kscience.kmath.stat
+package space.kscience.kmath.stat
 
-import kscience.kmath.chains.BlockingIntChain
-import kscience.kmath.chains.BlockingRealChain
-import kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.BlockingDoubleChain
+import space.kscience.kmath.chains.BlockingIntChain
+import space.kscience.kmath.chains.Chain
 
 /**
  * A possibly stateful chain producing random values.
@@ -18,5 +18,5 @@ public class RandomChain<out R>(
 }
 
 public fun <R> RandomGenerator.chain(gen: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, gen)
-public fun Chain<Double>.blocking(): BlockingRealChain = object : Chain<Double> by this, BlockingRealChain {}
+public fun Chain<Double>.blocking(): BlockingDoubleChain = object : Chain<Double> by this, BlockingDoubleChain {}
 public fun Chain<Int>.blocking(): BlockingIntChain = object : Chain<Int> by this, BlockingIntChain {}

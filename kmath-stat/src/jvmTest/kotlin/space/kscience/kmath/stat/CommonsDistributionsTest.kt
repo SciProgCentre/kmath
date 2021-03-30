@@ -3,9 +3,9 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.stat.samplers.GaussianSampler
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import space.kscience.kmath.stat.samplers.GaussianSampler
 
 internal class CommonsDistributionsTest {
     @Test

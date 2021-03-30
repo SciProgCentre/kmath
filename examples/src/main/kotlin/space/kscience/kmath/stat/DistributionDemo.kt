@@ -1,9 +1,9 @@
-package kscience.kmath.stat
+package space.kscience.kmath.stat
 
 import kotlinx.coroutines.runBlocking
-import kscience.kmath.chains.Chain
-import kscience.kmath.chains.collectWithState
-import kscience.kmath.stat.distributions.NormalDistribution
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.collectWithState
+import space.kscience.kmath.stat.distributions.NormalDistribution
 
 /**
  * The state of distribution averager.

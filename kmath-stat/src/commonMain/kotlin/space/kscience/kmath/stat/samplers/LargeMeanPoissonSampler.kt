@@ -1,12 +1,12 @@
-package kscience.kmath.stat.samplers
+package space.kscience.kmath.stat.samplers
 
-import kscience.kmath.chains.Chain
-import kscience.kmath.chains.ConstantChain
-import kscience.kmath.stat.RandomGenerator
-import kscience.kmath.stat.Sampler
-import kscience.kmath.stat.chain
-import kscience.kmath.stat.internal.InternalUtils
-import kscience.kmath.stat.next
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.ConstantChain
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.stat.chain
+import space.kscience.kmath.stat.internal.InternalUtils
+import space.kscience.kmath.stat.next
 import kotlin.math.*
 
 /**
