@@ -84,7 +84,7 @@ public class DoubleLinearOpsTensorAlgebra :
         val seq = matrixSequence().zip((qTensor.matrixSequence().zip(rTensor.matrixSequence())))
         for ((matrix, qr) in seq) {
             val (q, r) = qr
-            qrHelper(matrix.as2D(), q.as2D(), r.as2D())
+            qrHelper(matrix.asTensor(), q.asTensor(), r.as2D())
         }
         return Pair(qTensor, rTensor)
     }

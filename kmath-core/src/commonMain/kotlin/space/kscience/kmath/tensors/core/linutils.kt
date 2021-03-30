@@ -187,42 +187,32 @@ internal inline fun luMatrixInv(
     }
 }
 
-internal inline fun MutableStructure1D<Double>.dot(other: MutableStructure1D<Double>): Double {
-    var res = 0.0
-    for (i in 0 until size) {
-        res += this[i] * other[i]
-    }
-    return res
-}
-
-internal inline fun MutableStructure1D<Double>.l2Norm(): Double {
-    var squareSum = 0.0
-    for (i in 0 until size) {
-        squareSum += this[i] * this[i]
-    }
-    return sqrt(squareSum)
-}
-
-internal inline fun qrHelper(
-    matrix: MutableStructure2D<Double>,
-    q: MutableStructure2D<Double>,
+internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
+    matrix: DoubleTensor,
+    q: DoubleTensor,
     r: MutableStructure2D<Double>
 ) {
-    //todo check square
-    val n = matrix.colNum
+    checkSquareMatrix(matrix.shape)
+    val n = matrix.shape[0]
+    val qM = q.as2D()
+    val matrixT = matrix.transpose(0,1)
+    val qT = q.transpose(0,1)
+
     for (j in 0 until n) {
-        val v = matrix.columns[j]
+        val v = matrixT[j]
+        val vv = v.as1D()
         if (j > 0) {
             for (i in 0 until j) {
-                r[i, j] = q.columns[i].dot(matrix.columns[j])
+                r[i, j] = qT[i].dot(matrixT[j]).value()
                 for (k in 0 until n) {
-                    v[k] = v[k] - r[i, j] * q.columns[i][k]
+                    val qTi = qT[i].as1D()
+                    vv[k] = vv[k] - r[i, j] * qTi[k]
                 }
             }
         }
-        r[j, j] = v.l2Norm()
+        r[j, j] = DoubleAnalyticTensorAlgebra { v.dot(v).sqrt().value() }
         for (i in 0 until n) {
-            q[i, j] = v[i] / r[j, j]
+            qM[i, j] = vv[i] / r[j, j]
         }
     }
 }

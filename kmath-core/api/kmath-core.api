@@ -2645,7 +2645,7 @@ public abstract interface class space/kscience/kmath/tensors/LinearOpsTensorAlge
 	public abstract fun inv (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun lu (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
 	public abstract fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
-	public abstract fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public abstract fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
 	public abstract fun svd (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
 	public abstract fun symEig (Lspace/kscience/kmath/nd/MutableStructureND;Z)Lkotlin/Pair;
 }
@@ -2794,8 +2794,8 @@ public final class space/kscience/kmath/tensors/core/DoubleLinearOpsTensorAlgebr
 	public fun lu (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lkotlin/Pair;
 	public synthetic fun luPivot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
 	public fun luPivot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/IntTensor;)Lkotlin/Triple;
-	public synthetic fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun qr (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public synthetic fun qr (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Pair;
+	public fun qr (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lkotlin/Pair;
 	public synthetic fun svd (Lspace/kscience/kmath/nd/MutableStructureND;)Lkotlin/Triple;
 	public fun svd (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lkotlin/Triple;
 	public synthetic fun symEig (Lspace/kscience/kmath/nd/MutableStructureND;Z)Lkotlin/Pair;
