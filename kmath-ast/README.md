@@ -1,52 +1,43 @@
-# Abstract Syntax Tree Expression Representation and Operations (`kmath-ast`)
+# Module kmath-ast
 
-This subproject implements the following features:
+Abstract syntax tree expression representation and related optimizations.
 
- - [expression-language](src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
- - [mst-jvm-codegen](src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
- - [mst-js-codegen](src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+ - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
+ - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+ - [mst-building](src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+ - [mst-interpreter](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+ - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+ - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 
-> #### Artifact:
->
-> This module artifact: `kscience.kmath:kmath-ast:0.2.0-dev-7`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-ast/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
->     maven { url 'https://dl.bintray.com/mipt-npm/kscience' }
->     maven { url 'https://dl.bintray.com/mipt-npm/dev' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-> 
-> }
-> 
-> dependencies {
->     implementation 'kscience.kmath:kmath-ast:0.2.0-dev-7'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://dl.bintray.com/kotlin/kotlin-eap")
->     maven("https://dl.bintray.com/mipt-npm/kscience")
->     maven("https://dl.bintray.com/mipt-npm/dev")
->     maven("https://dl.bintray.com/hotkeytlt/maven")
-> }
-> 
-> dependencies {
->     implementation("kscience.kmath:kmath-ast:0.2.0-dev-7")
-> }
-> ```
+## Artifact:
+
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-3`.
+
+**Gradle:**
+```gradle
+repositories {
+    maven { url 'https://repo.kotlin.link' }
+    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+}
+
+dependencies {
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-3'
+}
+```
+**Gradle Kotlin DSL:**
+```kotlin
+repositories {
+    maven("https://repo.kotlin.link")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+}
+
+dependencies {
+    implementation("space.kscience:kmath-ast:0.3.0-dev-3")
+}
+```
 
 ## Dynamic expression code generation
 
@@ -58,19 +49,19 @@ a special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 … leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
-package kscience.kmath.asm.generated;
+package space.kscience.kmath.asm.generated;
 
 import java.util.Map;
 import kotlin.jvm.functions.Function2;
-import kscience.kmath.asm.internal.MapIntrinsics;
-import kscience.kmath.expressions.Expression;
-import kscience.kmath.expressions.Symbol;
+import space.kscience.kmath.asm.internal.MapIntrinsics;
+import space.kscience.kmath.expressions.Expression;
+import space.kscience.kmath.expressions.Symbol;
 
 public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
     private final Object[] constants;
@@ -91,8 +82,8 @@ public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
 This API extends MST and MstExpression, so you may optimize as both of them:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
-RealField.expression("x+2".parseMath())
+DoubleField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.expression("x+2".parseMath())
 ```
 
 #### Known issues
@@ -106,7 +97,7 @@ RealField.expression("x+2".parseMath())
 A similar feature is also available on JS.
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 The code above returns expression implemented with such a JS function:

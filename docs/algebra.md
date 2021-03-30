@@ -5,7 +5,7 @@ operation, say `+`, one needs two objects of a type `T` and an algebra context, 
 say `Space<T>`. Next one needs to run the actual operation in the context:
 
 ```kotlin
-import kscience.kmath.operations.*
+import space.kscience.kmath.operations.*
 
 val a: T = ...
 val b: T = ...
@@ -31,7 +31,7 @@ multiplication;
 - [Ring](http://mathworld.wolfram.com/Ring.html) adds multiplication and its neutral element (i.e. 1);
 - [Field](http://mathworld.wolfram.com/Field.html) adds division operation.
 
-A typical implementation of `Field<T>` is the `RealField` which works on doubles, and `VectorSpace` for `Space<T>`.
+A typical implementation of `Field<T>` is the `DoubleField` which works on doubles, and `VectorSpace` for `Space<T>`.
 
 In some cases algebra context can hold additional operations like `exp` or `sin`, and then it inherits appropriate
 interface. Also, contexts may have operations, which produce elements outside of the context. For example, `Matrix.dot` 
@@ -47,7 +47,7 @@ but it also holds reference to the `ComplexField` singleton, which allows perfor
 numbers without explicit involving the context like:
 
 ```kotlin
-import kscience.kmath.operations.*
+import space.kscience.kmath.operations.*
 
 // Using elements
 val c1 = Complex(1.0, 1.0)
@@ -82,7 +82,7 @@ operations in all performance-critical places. The performance of element operat
 KMath submits both contexts and elements for builtin algebraic structures:
 
 ```kotlin
-import kscience.kmath.operations.*
+import space.kscience.kmath.operations.*
 
 val c1 = Complex(1.0, 2.0)
 val c2 = ComplexField.i
@@ -95,7 +95,7 @@ val c3 = ComplexField { c1 + c2 }
 Also, `ComplexField` features special operations to mix complex and real numbers, for example:
 
 ```kotlin
-import kscience.kmath.operations.*
+import space.kscience.kmath.operations.*
 
 val c1 = Complex(1.0, 2.0)
 val c2 = ComplexField { c1 - 1.0 } // Returns: Complex(re=0.0, im=2.0)

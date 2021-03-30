@@ -1,15 +1,8 @@
 plugins {
-    id("ru.mipt.npm.mpp")
+    id("ru.mipt.npm.gradle.mpp")
 }
 
 kotlin.sourceSets {
-    all {
-        languageSettings.apply {
-            useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-        }
-    }
-
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
@@ -24,6 +17,6 @@ kotlin.sourceSets {
     }
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

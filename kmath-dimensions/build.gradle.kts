@@ -1,6 +1,6 @@
 plugins {
-    id("ru.mipt.npm.mpp")
-    id("ru.mipt.npm.native")
+    id("ru.mipt.npm.gradle.mpp")
+    id("ru.mipt.npm.gradle.native")
 }
 
 description = "A proof of concept module for adding type-safe dimensions to structures"
@@ -19,6 +19,6 @@ kotlin.sourceSets {
     }
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

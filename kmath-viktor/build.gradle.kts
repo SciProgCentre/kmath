@@ -1,5 +1,5 @@
 plugins {
-    id("ru.mipt.npm.jvm")
+    id("ru.mipt.npm.gradle.jvm")
 }
 
 description = "Binding for https://github.com/JetBrains-Research/viktor"
@@ -9,6 +9,6 @@ dependencies {
     api("org.jetbrains.bio:viktor:1.0.1")
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
 }

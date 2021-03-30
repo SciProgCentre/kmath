@@ -1,5 +1,5 @@
 plugins {
-    id("ru.mipt.npm.jvm")
+    id("ru.mipt.npm.gradle.jvm")
 }
 description = "Commons math binding for kmath"
 
@@ -12,6 +12,6 @@ dependencies {
     api("org.apache.commons:commons-math3:3.6.1")
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

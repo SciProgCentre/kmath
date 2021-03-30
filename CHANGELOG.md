@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 ### Added
+- ScaleOperations interface
+- Field extends ScaleOperations
+- Basic integration API
+
+### Changed
+- Exponential operations merged with hyperbolic functions
+- Space is replaced by Group. Space is reserved for vector spaces.
+- VectorSpace is now a vector space
+- Buffer factories for primitives moved to MutableBuffer.Companion
+- NDStructure and NDAlgebra to StructureND and AlgebraND respectively
+- Real -> Double
+- DataSets are moved from functions to core
+
+### Deprecated
+
+### Removed
+- Nearest in Domain. To be implemented in geometry package.
+- Number multiplication and division in main Algebra chain
+- `contentEquals` from Buffer. It moved to the companion.
+
+### Fixed
+
+### Security
+
+## [0.2.0]
+### Added
 - `fun` annotation for SAM interfaces in library
 - Explicit `public` visibility for all public APIs
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140)
@@ -21,11 +47,11 @@
 - Basic Quaternion vector support in `kmath-complex`.
 
 ### Changed
-- Package changed from `scientifik` to `kscience.kmath`
-- Gradle version: 6.6 -> 6.8
+- Package changed from `scientifik` to `space.kscience`
+- Gradle version: 6.6 -> 6.8.2
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
 - `Polynomial` secondary constructor made function
-- Kotlin version: 1.3.72 -> 1.4.21
+- Kotlin version: 1.3.72 -> 1.4.30
 - `kmath-ast` doesn't depend on heavy `kotlin-reflect` library
 - Full autodiff refactoring based on `Symbol`
 - `kmath-prob` renamed to `kmath-stat`
@@ -41,6 +67,8 @@
 - Refactor histograms. They are marked as prototype
 - `Complex` and related features moved to a separate module `kmath-complex`
 - Refactor AlgebraElement
+- `symbol` method in `Algebra` renamed to `bindSymbol` to avoid ambiguity
+- Add `out` projection to `Buffer` generic
 
 ### Deprecated
 
@@ -50,6 +78,7 @@
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
 - `Real` class
+- StructureND identity and equals
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)

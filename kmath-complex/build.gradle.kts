@@ -1,8 +1,8 @@
 import ru.mipt.npm.gradle.Maturity
 
 plugins {
-    id("ru.mipt.npm.mpp")
-    id("ru.mipt.npm.native")
+    id("ru.mipt.npm.gradle.mpp")
+    id("ru.mipt.npm.gradle.native")
 }
 
 kotlin.sourceSets {
@@ -25,12 +25,12 @@ readme {
     feature(
         id = "complex",
         description = "Complex Numbers",
-        ref = "src/commonMain/kotlin/kscience/kmath/complex/Complex.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt"
     )
 
     feature(
         id = "quaternion",
         description = "Quaternions",
-        ref = "src/commonMain/kotlin/kscience/kmath/complex/Quaternion.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt"
     )
 }

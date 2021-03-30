@@ -1,9 +1,9 @@
 plugins {
-    id("ru.mipt.npm.mpp")
-    id("ru.mipt.npm.native")
+    id("ru.mipt.npm.gradle.mpp")
+    id("ru.mipt.npm.gradle.native")
 }
 
-readme{
+readme {
     description = """
         An API and basic implementation for arranging objects in a continous memory block.
     """.trimIndent()

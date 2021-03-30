@@ -1,43 +1,43 @@
-public final class kscience/kmath/memory/ByteBufferMemory : kscience/kmath/memory/Memory {
+public final class space/kscience/kmath/memory/ByteBufferMemory : space/kscience/kmath/memory/Memory {
 	public fun <init> (Ljava/nio/ByteBuffer;II)V
 	public synthetic fun <init> (Ljava/nio/ByteBuffer;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun copy ()Lkscience/kmath/memory/Memory;
+	public fun copy ()Lspace/kscience/kmath/memory/Memory;
 	public final fun getBuffer ()Ljava/nio/ByteBuffer;
 	public fun getSize ()I
 	public final fun getStartOffset ()I
-	public fun reader ()Lkscience/kmath/memory/MemoryReader;
-	public fun view (II)Lkscience/kmath/memory/Memory;
-	public fun writer ()Lkscience/kmath/memory/MemoryWriter;
+	public fun reader ()Lspace/kscience/kmath/memory/MemoryReader;
+	public fun view (II)Lspace/kscience/kmath/memory/Memory;
+	public fun writer ()Lspace/kscience/kmath/memory/MemoryWriter;
 }
 
-public final class kscience/kmath/memory/ByteBufferMemoryKt {
-	public static final fun allocate (Lkscience/kmath/memory/Memory$Companion;I)Lkscience/kmath/memory/Memory;
-	public static final fun asMemory (Ljava/nio/ByteBuffer;II)Lkscience/kmath/memory/Memory;
-	public static synthetic fun asMemory$default (Ljava/nio/ByteBuffer;IIILjava/lang/Object;)Lkscience/kmath/memory/Memory;
+public final class space/kscience/kmath/memory/ByteBufferMemoryKt {
+	public static final fun allocate (Lspace/kscience/kmath/memory/Memory$Companion;I)Lspace/kscience/kmath/memory/Memory;
+	public static final fun asMemory (Ljava/nio/ByteBuffer;II)Lspace/kscience/kmath/memory/Memory;
+	public static synthetic fun asMemory$default (Ljava/nio/ByteBuffer;IIILjava/lang/Object;)Lspace/kscience/kmath/memory/Memory;
 	public static final fun readAsMemory (Ljava/nio/file/Path;JJLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static synthetic fun readAsMemory$default (Ljava/nio/file/Path;JJLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun wrap (Lkscience/kmath/memory/Memory$Companion;[B)Lkscience/kmath/memory/Memory;
+	public static final fun wrap (Lspace/kscience/kmath/memory/Memory$Companion;[B)Lspace/kscience/kmath/memory/Memory;
 }
 
-public abstract interface class kscience/kmath/memory/Memory {
-	public static final field Companion Lkscience/kmath/memory/Memory$Companion;
-	public abstract fun copy ()Lkscience/kmath/memory/Memory;
+public abstract interface class space/kscience/kmath/memory/Memory {
+	public static final field Companion Lspace/kscience/kmath/memory/Memory$Companion;
+	public abstract fun copy ()Lspace/kscience/kmath/memory/Memory;
 	public abstract fun getSize ()I
-	public abstract fun reader ()Lkscience/kmath/memory/MemoryReader;
-	public abstract fun view (II)Lkscience/kmath/memory/Memory;
-	public abstract fun writer ()Lkscience/kmath/memory/MemoryWriter;
+	public abstract fun reader ()Lspace/kscience/kmath/memory/MemoryReader;
+	public abstract fun view (II)Lspace/kscience/kmath/memory/Memory;
+	public abstract fun writer ()Lspace/kscience/kmath/memory/MemoryWriter;
 }
 
-public final class kscience/kmath/memory/Memory$Companion {
+public final class space/kscience/kmath/memory/Memory$Companion {
 }
 
-public final class kscience/kmath/memory/MemoryKt {
-	public static final fun read (Lkscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun write (Lkscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)V
+public final class space/kscience/kmath/memory/MemoryKt {
+	public static final fun read (Lspace/kscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun write (Lspace/kscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract interface class kscience/kmath/memory/MemoryReader {
-	public abstract fun getMemory ()Lkscience/kmath/memory/Memory;
+public abstract interface class space/kscience/kmath/memory/MemoryReader {
+	public abstract fun getMemory ()Lspace/kscience/kmath/memory/Memory;
 	public abstract fun readByte (I)B
 	public abstract fun readDouble (I)D
 	public abstract fun readFloat (I)F
@@ -47,20 +47,20 @@ public abstract interface class kscience/kmath/memory/MemoryReader {
 	public abstract fun release ()V
 }
 
-public abstract interface class kscience/kmath/memory/MemorySpec {
+public abstract interface class space/kscience/kmath/memory/MemorySpec {
 	public abstract fun getObjectSize ()I
-	public abstract fun read (Lkscience/kmath/memory/MemoryReader;I)Ljava/lang/Object;
-	public abstract fun write (Lkscience/kmath/memory/MemoryWriter;ILjava/lang/Object;)V
+	public abstract fun read (Lspace/kscience/kmath/memory/MemoryReader;I)Ljava/lang/Object;
+	public abstract fun write (Lspace/kscience/kmath/memory/MemoryWriter;ILjava/lang/Object;)V
 }
 
-public final class kscience/kmath/memory/MemorySpecKt {
-	public static final fun read (Lkscience/kmath/memory/MemoryReader;Lkscience/kmath/memory/MemorySpec;I)Ljava/lang/Object;
-	public static final fun write (Lkscience/kmath/memory/MemoryWriter;Lkscience/kmath/memory/MemorySpec;ILjava/lang/Object;)V
-	public static final fun writeArray (Lkscience/kmath/memory/MemoryWriter;Lkscience/kmath/memory/MemorySpec;I[Ljava/lang/Object;)V
+public final class space/kscience/kmath/memory/MemorySpecKt {
+	public static final fun read (Lspace/kscience/kmath/memory/MemoryReader;Lspace/kscience/kmath/memory/MemorySpec;I)Ljava/lang/Object;
+	public static final fun write (Lspace/kscience/kmath/memory/MemoryWriter;Lspace/kscience/kmath/memory/MemorySpec;ILjava/lang/Object;)V
+	public static final fun writeArray (Lspace/kscience/kmath/memory/MemoryWriter;Lspace/kscience/kmath/memory/MemorySpec;I[Ljava/lang/Object;)V
 }
 
-public abstract interface class kscience/kmath/memory/MemoryWriter {
-	public abstract fun getMemory ()Lkscience/kmath/memory/Memory;
+public abstract interface class space/kscience/kmath/memory/MemoryWriter {
+	public abstract fun getMemory ()Lspace/kscience/kmath/memory/Memory;
 	public abstract fun release ()V
 	public abstract fun writeByte (IB)V
 	public abstract fun writeDouble (ID)V

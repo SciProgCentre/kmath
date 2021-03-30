@@ -1,6 +1,6 @@
-# The Core Module (`kmath-core`)
+# Module kmath-complex
 
-Complex and hypercomplex number systems in KMath:
+Complex and hypercomplex number systems in KMath.
 
 ${features}
 

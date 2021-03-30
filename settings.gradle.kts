@@ -1,22 +1,21 @@
 pluginManagement {
     repositories {
+        maven("https://repo.kotlin.link")
+        mavenLocal()
         gradlePluginPortal()
         jcenter()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
-        maven("https://dl.bintray.com/mipt-npm/kscience")
-        maven("https://dl.bintray.com/mipt-npm/dev")
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.7.5"
-    val kotlinVersion = "1.4.30"
+    val toolsVersion = "0.9.3"
+    val kotlinVersion = "1.4.32"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"
-        id("ru.mipt.npm.project") version toolsVersion
-        id("ru.mipt.npm.mpp") version toolsVersion
-        id("ru.mipt.npm.jvm") version toolsVersion
-        id("ru.mipt.npm.publish") version toolsVersion
+        id("ru.mipt.npm.gradle.project") version toolsVersion
+        id("ru.mipt.npm.gradle.mpp") version toolsVersion
+        id("ru.mipt.npm.gradle.jvm") version toolsVersion
+        id("ru.mipt.npm.gradle.publish") version toolsVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }

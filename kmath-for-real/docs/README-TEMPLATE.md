@@ -1,4 +1,6 @@
-# Real number specialization module (`kmath-for-real`)
+# Module kmath-for-real
+
+Specialization of KMath APIs for Double numbers.
 
 ${features}
 

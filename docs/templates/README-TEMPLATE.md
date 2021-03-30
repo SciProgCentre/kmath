@@ -1,11 +1,8 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
-
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
-
-Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
-
-Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
+[![Space](https://img.shields.io/maven-metadata/v?label=Space&metadataUrl=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fkscience%2Fkmath%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
 # KMath
 
@@ -97,32 +94,21 @@ better than SciPy.
 
 ### Repositories
 
-Release artifacts are accessible from bintray with following configuration (see documentation of 
-[Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) for more details):
+Release and development artifacts are accessible from mipt-npm [Space](https://www.jetbrains.com/space/) repository `https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven` (see documentation of
+[Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) for more details). The repository could be reached through [repo.kotlin.link](https://repo.kotlin.link) proxy:
 
 ```kotlin
 repositories {
-    maven("https://dl.bintray.com/mipt-npm/kscience")
-    // maven("https://dl.bintray.com/mipt-npm/dev") for dev versions
+    maven("https://repo.kotlin.link")
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:$version")
+    api("${group}:kmath-core:$version")
     // api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
 
 Gradle `6.0+` is required for multiplatform artifacts.
-
-#### Development
-
-Development builds are uploaded to the separate repository:
-
-```kotlin
-repositories {
-    maven("https://dl.bintray.com/mipt-npm/dev")
-}
-```
 
 ## Contributing
 

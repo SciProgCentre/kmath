@@ -1,4 +1,10 @@
-plugins { id("ru.mipt.npm.mpp") }
+plugins {
+    id("ru.mipt.npm.gradle.mpp")
+}
+
+kscience {
+    useAtomic()
+}
 
 kotlin.sourceSets {
     commonMain {
@@ -6,8 +12,8 @@ kotlin.sourceSets {
             api(project(":kmath-core"))
         }
     }
-    commonTest{
-        dependencies{
+    commonTest {
+        dependencies {
             implementation(project(":kmath-for-real"))
         }
     }
