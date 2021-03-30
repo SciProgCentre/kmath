@@ -38,5 +38,5 @@ internal fun Buffer<Double>.array(): DoubleArray = when (this) {
 
 internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
     val u = Random(seed)
-    return (0 until n).map { sqrt(-2.0 * u.nextDouble()) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
+    return (0 until n).map { sqrt(-2.0 * ln(u.nextDouble())) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
 }
