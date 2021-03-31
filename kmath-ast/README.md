@@ -12,7 +12,7 @@ Abstract syntax tree expression representation and related optimizations.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-3`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-4`.
 
 **Gradle:**
 ```gradle
@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-3'
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-4'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-3")
+    implementation("space.kscience:kmath-ast:0.3.0-dev-4")
 }
 ```
 
@@ -111,3 +111,39 @@ var executable = function (constants, arguments) {
 #### Known issues
 
 - This feature uses `eval` which can be unavailable in several environments.
+
+## Rendering expressions
+
+kmath-ast also includes an extensible engine to display expressions in LaTeX or MathML syntax. 
+
+Example usage:
+
+```kotlin
+import space.kscience.kmath.ast.*
+import space.kscience.kmath.ast.rendering.*
+
+public fun main() {
+    val mst = "exp(sqrt(x))-asin(2*x)/(2e10+x^3)/(-12)".parseMath()
+    val syntax = FeaturedMathRendererWithPostProcess.Default.render(mst)
+    val latex = LatexSyntaxRenderer.renderWithStringBuilder(syntax)
+    println("LaTeX:")
+    println(latex)
+    println()
+    val mathML = MathMLSyntaxRenderer.renderWithStringBuilder(syntax)
+    println("MathML:")
+    println(mathML)
+}
+```
+
+Result LaTeX: 
+
+![](http://chart.googleapis.com/chart?cht=tx&chl=e%5E%7B%5Csqrt%7Bx%7D%7D-%5Cfrac%7B%5Cfrac%7B%5Coperatorname%7Bsin%7D%5E%7B-1%7D%5C,%5Cleft(2%5C,x%5Cright)%7D%7B2%5Ctimes10%5E%7B10%7D%2Bx%5E%7B3%7D%7D%7D%7B-12%7D)
+
+Result MathML (embedding MathML is not allowed by GitHub Markdown):
+
+```html
+<mrow><msup><mrow><mi>e</mi></mrow><mrow><msqrt><mi>x</mi></msqrt></mrow></msup><mo>-</mo><mfrac><mrow><mfrac><mrow><msup><mrow><mo>sin</mo></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><mfenced open="(" close=")" separators=""><mn>2</mn><mspace width="0.167em"></mspace><mi>x</mi></mfenced></mrow><mrow><mn>2</mn><mo>&times;</mo><msup><mrow><mn>10</mn></mrow><mrow><mn>10</mn></mrow></msup><mo>+</mo><msup><mrow><mi>x</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow></mfrac></mrow><mrow><mo>-</mo><mn>12</mn></mrow></mfrac></mrow>
+```
+
+It is also possible to create custom algorithms of render, and even add support of other markup languages 
+(see API reference).
