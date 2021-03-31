@@ -4,6 +4,7 @@ import java.net.URL
 
 plugins {
     id("ru.mipt.npm.gradle.project")
+    kotlin("jupyter.api") apply false
 }
 
 allprojects {
@@ -14,6 +15,7 @@ allprojects {
         maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://jitpack.io")
         maven("http://logicrunch.research.it.uu.se/maven/")
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
         mavenCentral()
     }
 

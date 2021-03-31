@@ -16,6 +16,7 @@ pluginManagement {
         id("ru.mipt.npm.gradle.mpp") version toolsVersion
         id("ru.mipt.npm.gradle.jvm") version toolsVersion
         id("ru.mipt.npm.gradle.publish") version toolsVersion
+        kotlin("jupyter.api") version "0.8.3.279"
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
@@ -40,5 +41,6 @@ include(
     ":kmath-ast",
     ":kmath-ejml",
     ":kmath-kotlingrad",
+    ":kmath-jupyter",
     ":examples"
 )

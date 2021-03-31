@@ -127,6 +127,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     public override fun acosh(arg: MST): MST.Unary = unaryOperationFunction(ExponentialOperations.ACOSH_OPERATION)(arg)
     public override fun atanh(arg: MST): MST.Unary = unaryOperationFunction(ExponentialOperations.ATANH_OPERATION)(arg)
     public override fun add(a: MST, b: MST): MST.Binary = MstField.add(a, b)
+    public override fun sqrt(arg: MST): MST = unaryOperationFunction(PowerOperations.SQRT_OPERATION)(arg)
 
     public override fun scale(a: MST, value: Double): MST =
         binaryOperation(GroupOperations.PLUS_OPERATION, a, number(value))
