@@ -126,7 +126,7 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sqrt (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun tan-8UOKELU (Lspace/kscience/kmath/nd/StructureND;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public fun times (DLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;

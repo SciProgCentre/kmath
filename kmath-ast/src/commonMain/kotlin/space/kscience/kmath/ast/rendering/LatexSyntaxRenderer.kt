@@ -34,6 +34,7 @@ public object LatexSyntaxRenderer : SyntaxRenderer {
 
             is SpecialSymbolSyntax -> when (node.kind) {
                 SpecialSymbolSyntax.Kind.INFINITY -> append("\\infty")
+                SpecialSymbolSyntax.Kind.SMALL_PI -> append("\\pi")
             }
 
             is OperandSyntax -> {

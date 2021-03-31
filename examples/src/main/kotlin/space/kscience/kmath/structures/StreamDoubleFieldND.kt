@@ -1,6 +1,5 @@
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
@@ -9,12 +8,10 @@ import java.util.*
 import java.util.stream.IntStream
 
 /**
- * A demonstration implementation of NDField over Real using Java [DoubleStream] for parallel execution
+ * A demonstration implementation of NDField over Real using Java [java.util.stream.DoubleStream] for parallel
+ * execution.
  */
-@OptIn(UnstableKMathAPI::class)
-class StreamDoubleFieldND(
-    override val shape: IntArray,
-) : FieldND<Double, DoubleField>,
+class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, DoubleField>,
     NumbersAddOperations<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
@@ -37,7 +34,6 @@ class StreamDoubleFieldND(
             this is BufferND && this.strides == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
-
 
     override fun produce(initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->

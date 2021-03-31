@@ -46,6 +46,11 @@ internal class TestFeatures {
     }
 
     @Test
+    fun prettyPrintPi() {
+        testLatex("pi", "\\pi")
+    }
+
+    @Test
     fun binaryPlus() = testLatex("2+2", "2+2")
 
     @Test

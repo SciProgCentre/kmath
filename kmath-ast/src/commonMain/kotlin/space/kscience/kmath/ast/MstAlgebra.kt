@@ -49,9 +49,10 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
 /**
  * [Ring] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric get() = MstGroup.zero
+    public override inline val zero: MST.Numeric get() = MstGroup.zero
     public override val one: MST.Numeric = number(1.0)
 
     public override fun number(value: Number): MST.Numeric = MstGroup.number(value)
@@ -78,11 +79,11 @@ public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MS
 /**
  * [Field] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric get() = MstRing.zero
-
-    public override val one: MST.Numeric get() = MstRing.one
+    public override inline val zero: MST.Numeric get() = MstRing.zero
+    public override inline val one: MST.Numeric get() = MstRing.one
 
     public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
@@ -109,9 +110,10 @@ public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<
 /**
  * [ExtendedField] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
-    public override val zero: MST.Numeric get() = MstField.zero
-    public override val one: MST.Numeric get() = MstField.one
+    public override inline val zero: MST.Numeric get() = MstField.zero
+    public override inline val one: MST.Numeric get() = MstField.one
 
     public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)

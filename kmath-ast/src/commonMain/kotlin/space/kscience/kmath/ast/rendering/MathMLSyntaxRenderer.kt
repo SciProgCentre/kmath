@@ -48,6 +48,7 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
 
             is SpecialSymbolSyntax -> when (node.kind) {
                 SpecialSymbolSyntax.Kind.INFINITY -> tag("mo") { append("&infin;") }
+                SpecialSymbolSyntax.Kind.SMALL_PI -> tag("mo") { append("&pi;") }
             }
 
             is OperandSyntax -> if (node.parentheses) {

@@ -3,7 +3,6 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-
 import space.kscience.kmath.streaming.chunked
 import kotlin.test.Test
 

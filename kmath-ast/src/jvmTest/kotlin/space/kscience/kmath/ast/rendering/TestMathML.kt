@@ -19,7 +19,10 @@ internal class TestMathML {
     )
 
     @Test
-    fun specialSymbol() = testMathML(MST.Numeric(Double.POSITIVE_INFINITY), "<mo>&infin;</mo>")
+    fun specialSymbol() {
+        testMathML(MST.Numeric(Double.POSITIVE_INFINITY), "<mo>&infin;</mo>")
+        testMathML("pi", "<mo>&pi;</mo>")
+    }
 
     @Test
     fun operand() {
