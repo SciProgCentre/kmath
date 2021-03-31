@@ -2655,21 +2655,14 @@ public final class space/kscience/kmath/tensors/LinearOpsTensorAlgebra$DefaultIm
 }
 
 public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
-	public abstract fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun eq (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Z
-	public abstract fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun full (Ljava/lang/Object;[I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun fullLike (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun get (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun minus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
 	public abstract fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
-	public abstract fun ones ([I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun onesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2685,8 +2678,6 @@ public abstract interface class space/kscience/kmath/tensors/TensorAlgebra {
 	public abstract fun value (Lspace/kscience/kmath/nd/MutableStructureND;)Ljava/lang/Object;
 	public abstract fun view (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public abstract fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun zeroesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public abstract fun zeros ([I)Lspace/kscience/kmath/nd/MutableStructureND;
 }
 
 public final class space/kscience/kmath/tensors/TensorAlgebra$DefaultImpls {
@@ -2814,8 +2805,7 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public final fun contentEquals (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
 	public final fun contentEquals (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function2;)Z
 	public static synthetic fun contentEquals$default (Lspace/kscience/kmath/tensors/core/DoubleTensorAlgebra;Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;DILjava/lang/Object;)Z
-	public synthetic fun copy (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun copy (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun copy (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun diagonalEmbedding (Lspace/kscience/kmath/nd/MutableStructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun diagonalEmbedding (Lspace/kscience/kmath/tensors/core/DoubleTensor;III)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun div (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2828,16 +2818,12 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public fun divAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
 	public synthetic fun dot (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun dot (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun eq (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Z
 	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Z
-	public fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
-	public synthetic fun eye (I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun eye (I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun eq (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Z
+	public final fun eye (I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public final fun fromArray ([I[D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public fun full (D[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun full (Ljava/lang/Object;[I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public synthetic fun fullLike (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun fullLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun full (D[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun fullLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun get (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun get (Lspace/kscience/kmath/tensors/core/DoubleTensor;I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public final fun map (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
@@ -2851,10 +2837,8 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)V
 	public fun minusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;D)V
 	public fun minusAssign (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)V
-	public synthetic fun ones ([I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun ones ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun onesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun onesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun ones ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun onesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public fun plus (DLspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public synthetic fun plus (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -2885,10 +2869,8 @@ public class space/kscience/kmath/tensors/core/DoubleTensorAlgebra : space/kscie
 	public fun view (Lspace/kscience/kmath/tensors/core/DoubleTensor;[I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 	public synthetic fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun viewAs (Lspace/kscience/kmath/tensors/core/DoubleTensor;Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun zeroesLike (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun zeroesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
-	public synthetic fun zeros ([I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun zeros ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun zeroesLike (Lspace/kscience/kmath/tensors/core/DoubleTensor;)Lspace/kscience/kmath/tensors/core/DoubleTensor;
+	public final fun zeros ([I)Lspace/kscience/kmath/tensors/core/DoubleTensor;
 }
 
 public final class space/kscience/kmath/tensors/core/DoubleTensorAlgebraKt {
