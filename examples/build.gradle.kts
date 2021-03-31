@@ -106,6 +106,7 @@ kotlin.sourceSets.all {
     with(languageSettings) {
         useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
         useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+        useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
 
