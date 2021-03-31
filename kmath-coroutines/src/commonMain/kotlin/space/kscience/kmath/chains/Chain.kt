@@ -63,12 +63,10 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R {
-        mutex.withLock {
-            val newValue = gen(value ?: seed())
-            value = newValue
-            return newValue
-        }
+    public override suspend fun next(): R = mutex.withLock {
+        val newValue = gen(value ?: seed())
+        value = newValue
+        newValue
     }
 
     public override fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
@@ -90,12 +88,10 @@ public class StatefulChain<S, out R>(
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R {
-        mutex.withLock {
-            val newValue = state.gen(value ?: state.seed())
-            value = newValue
-            return newValue
-        }
+    public override suspend fun next(): R = mutex.withLock {
+        val newValue = state.gen(value ?: state.seed())
+        value = newValue
+        newValue
     }
 
     public override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)

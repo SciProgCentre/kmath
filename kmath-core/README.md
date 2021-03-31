@@ -1,6 +1,6 @@
-# The Core Module (`kmath-core`)
+# Module kmath-core
 
-The core features of KMath:
+The core interfaces of KMath.
 
  - [algebras](src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Algebraic structures like rings, spaces and fields.
  - [nd](src/commonMain/kotlin/space/kscience/kmath/structures/StructureND.kt) : Many-dimensional structures and operations on them.
@@ -13,37 +13,31 @@ performance calculations to code generation.
  - [autodif](src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 
-> #### Artifact:
->
-> This module artifact: `space.kscience:kmath-core:0.3.0-dev-3`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url 'https://repo.kotlin.link' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
-> }
-> 
-> dependencies {
->     implementation 'space.kscience:kmath-core:0.3.0-dev-3'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://repo.kotlin.link")
->     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
->     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
-> }
-> 
-> dependencies {
->     implementation("space.kscience:kmath-core:0.3.0-dev-3")
-> }
-> ```
+## Artifact:
+
+The Maven coordinates of this project are `space.kscience:kmath-core:0.3.0-dev-3`.
+
+**Gradle:**
+```gradle
+repositories {
+    maven { url 'https://repo.kotlin.link' }
+    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+}
+
+dependencies {
+    implementation 'space.kscience:kmath-core:0.3.0-dev-3'
+}
+```
+**Gradle Kotlin DSL:**
+```kotlin
+repositories {
+    maven("https://repo.kotlin.link")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+}
+
+dependencies {
+    implementation("space.kscience:kmath-core:0.3.0-dev-3")
+}
+```

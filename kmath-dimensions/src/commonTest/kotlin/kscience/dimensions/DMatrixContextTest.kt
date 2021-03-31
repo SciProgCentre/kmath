@@ -1,4 +1,4 @@
-package kscience.dimensions
+package space.kscience.dimensions
 
 import space.kscience.kmath.dimensions.D2
 import space.kscience.kmath.dimensions.D3

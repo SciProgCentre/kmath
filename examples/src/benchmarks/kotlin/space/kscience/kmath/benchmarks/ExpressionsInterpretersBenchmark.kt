@@ -9,7 +9,7 @@ import space.kscience.kmath.ast.mstInField
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.expressionInField
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import kotlin.random.Random

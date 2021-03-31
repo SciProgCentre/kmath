@@ -2,8 +2,8 @@
 
 package space.kscience.kmath.asm.internal
 
-import space.kscience.kmath.expressions.StringSymbol
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.StringSymbol
+import space.kscience.kmath.misc.Symbol
 
 /**
  * Gets value with given [key] or throws [NoSuchElementException] whenever it is not present.

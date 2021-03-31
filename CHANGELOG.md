@@ -13,6 +13,7 @@
 - Buffer factories for primitives moved to MutableBuffer.Companion
 - NDStructure and NDAlgebra to StructureND and AlgebraND respectively
 - Real -> Double
+- DataSets are moved from functions to core
 
 ### Deprecated
 

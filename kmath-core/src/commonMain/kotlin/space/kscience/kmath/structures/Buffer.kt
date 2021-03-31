@@ -40,7 +40,6 @@ public interface Buffer<out T> {
     public operator fun iterator(): Iterator<T>
 
     public companion object {
-
         /**
          * Check the element-by-element match of content of two buffers.
          */
@@ -110,7 +109,6 @@ public interface MutableBuffer<T> : Buffer<T> {
     public fun copy(): MutableBuffer<T>
 
     public companion object {
-
         /**
          * Creates a [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.

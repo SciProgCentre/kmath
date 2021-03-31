@@ -97,7 +97,7 @@ private inline class Structure2DWrapper<T>(val structure: StructureND<T>) : Stru
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
     @UnstableKMathAPI
-    override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }

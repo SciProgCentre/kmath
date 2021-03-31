@@ -12,8 +12,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
-public typealias Magnitude = UIntArray
-public typealias TBase = ULong
+private typealias Magnitude = UIntArray
+private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
@@ -241,18 +241,18 @@ public class BigInt internal constructor(
         )
 
         private fun compareMagnitudes(mag1: Magnitude, mag2: Magnitude): Int {
-            when {
-                mag1.size > mag2.size -> return 1
-                mag1.size < mag2.size -> return -1
+            return when {
+                mag1.size > mag2.size -> 1
+                mag1.size < mag2.size -> -1
+
                 else -> {
-                    for (i in mag1.size - 1 downTo 0) {
-                        if (mag1[i] > mag2[i]) {
-                            return 1
-                        } else if (mag1[i] < mag2[i]) {
-                            return -1
-                        }
+                    for (i in mag1.size - 1 downTo 0) return when {
+                        mag1[i] > mag2[i] -> 1
+                        mag1[i] < mag2[i] -> -1
+                        else -> continue
                     }
-                    return 0
+
+                    0
                 }
             }
         }
@@ -302,10 +302,11 @@ public class BigInt internal constructor(
             var carry = 0uL
 
             for (i in mag.indices) {
-                val cur: ULong = carry + mag[i].toULong() * x.toULong()
+                val cur = carry + mag[i].toULong() * x.toULong()
                 result[i] = (cur and BASE).toUInt()
                 carry = cur shr BASE_SIZE
             }
+
             result[resultLength - 1] = (carry and BASE).toUInt()
 
             return stripLeadingZeros(result)
@@ -358,6 +359,9 @@ private fun stripLeadingZeros(mag: Magnitude): Magnitude {
     return mag.sliceArray(IntRange(0, resSize))
 }
 
+/**
+ * Returns the absolute value of the given value [x].
+ */
 public fun abs(x: BigInt): BigInt = x.abs()
 
 /**

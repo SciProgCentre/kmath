@@ -4,6 +4,7 @@ import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import org.ejml.simple.SimpleMatrix
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
@@ -95,7 +96,7 @@ public object EjmlLinearSpace : LinearSpace<Double, DoubleField> {
         v.toEjml().origin.scale(this).wrapVector()
 
     @UnstableKMathAPI
-    public override fun <F : Any> getFeature(structure: Matrix<Double>, type: KClass<F>): F? {
+    public override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         //Return the feature if it is intrinsic to the structure
         structure.getFeature(type)?.let { return it }
 

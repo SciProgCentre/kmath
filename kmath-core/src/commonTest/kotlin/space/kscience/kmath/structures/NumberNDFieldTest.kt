@@ -38,12 +38,11 @@ class NumberNDFieldTest {
             (i * 10 + j).toDouble()
         }
 
-        for (i in 0..2) {
+        for (i in 0..2)
             for (j in 0..2) {
                 val expected = (i * 10 + j).toDouble()
                 assertEquals(expected, array[i, j], "Error at index [$i, $j]")
             }
-        }
     }
 
     @Test

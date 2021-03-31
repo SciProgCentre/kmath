@@ -1,13 +1,13 @@
 package space.kscience.kmath.commons.optimization
 
-import org.junit.jupiter.api.Test
+import kotlinx.coroutines.runBlocking
 import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
-import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.stat.Distribution
-import space.kscience.kmath.stat.Fitting
+import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.normal
+import space.kscience.kmath.stat.distributions.NormalDistribution
 import kotlin.math.pow
+import kotlin.test.Test
 
 internal class OptimizeTest {
     val x by symbol
@@ -34,28 +34,29 @@ internal class OptimizeTest {
             simplexSteps(x to 2.0, y to 0.5)
             //this sets simplex optimizer
         }
+
         println(result.point)
         println(result.value)
     }
 
     @Test
-    fun testCmFit() {
+    fun testCmFit() = runBlocking {
         val a by symbol
         val b by symbol
         val c by symbol
 
         val sigma = 1.0
-        val generator = Distribution.normal(0.0, sigma)
+        val generator = NormalDistribution(0.0, sigma)
         val chain = generator.sample(RandomGenerator.default(112667))
         val x = (1..100).map(Int::toDouble)
 
         val y = x.map {
-            it.pow(2) + it + 1 + chain.nextDouble()
+            it.pow(2) + it + 1 + chain.next()
         }
 
         val yErr = List(x.size) { sigma }
 
-        val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
+        val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
             val cWithDefault = bindSymbolOrNull(c) ?: one
             bind(a) * x1.pow(2) + bind(b) * x1 + cWithDefault
         }
@@ -64,5 +65,4 @@ internal class OptimizeTest {
         println(result)
         println("Chi2/dof = ${result.value / (x.size - 3)}")
     }
-
 }

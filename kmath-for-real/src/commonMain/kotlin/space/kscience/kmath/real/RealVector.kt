@@ -6,16 +6,12 @@ import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
 import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.asIterable
+import space.kscience.kmath.structures.fold
 import space.kscience.kmath.structures.indices
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 public typealias DoubleVector = Point<Double>
-
-public object VectorL2Norm : Norm<Point<out Number>, Double> {
-    override fun norm(arg: Point<out Number>): Double = sqrt(arg.asIterable().sumByDouble(Number::toDouble))
-}
 
 @Suppress("FunctionName")
 public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
@@ -103,3 +99,9 @@ public fun DoubleVector.sum(): Double {
     }
     return res
 }
+
+public object VectorL2Norm : Norm<DoubleVector, Double> {
+    override fun norm(arg: DoubleVector): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
+}
+
+public val DoubleVector.norm: Double get() = VectorL2Norm.norm(this)

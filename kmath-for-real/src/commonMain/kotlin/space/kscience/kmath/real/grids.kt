@@ -1,7 +1,41 @@
 package space.kscience.kmath.real
 
-import space.kscience.kmath.structures.asBuffer
-import kotlin.math.abs
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
+import kotlin.math.floor
+
+public val ClosedFloatingPointRange<Double>.length: Double get() = endInclusive - start
+
+/**
+ * Create a Buffer-based grid with equally distributed [numberOfPoints] points. The range could be increasing or  decreasing.
+ * If range has a zero size, then the buffer consisting of [numberOfPoints] equal values is returned.
+ */
+public fun Buffer.Companion.fromRange(range: ClosedFloatingPointRange<Double>, numberOfPoints: Int): DoubleBuffer {
+    require(numberOfPoints >= 2) { "Number of points in grid must be more than 1" }
+    val normalizedRange = when {
+        range.endInclusive > range.start -> range
+        range.endInclusive < range.start -> range.endInclusive..range.start
+        else -> return DoubleBuffer(numberOfPoints) { range.start }
+    }
+    val step = normalizedRange.length / (numberOfPoints - 1)
+    return DoubleBuffer(numberOfPoints) { normalizedRange.start + step * it }
+}
+
+/**
+ * Create a Buffer-based grid with equally distributed points with a fixed [step]. The range could be increasing or  decreasing.
+ * If the step is larger than the range size, single point is returned.
+ */
+public fun Buffer.Companion.withFixedStep(range: ClosedFloatingPointRange<Double>, step: Double): DoubleBuffer {
+    require(step > 0) { "The grid step must be positive" }
+    val normalizedRange = when {
+        range.endInclusive > range.start -> range
+        range.endInclusive < range.start -> range.endInclusive..range.start
+        else -> return DoubleBuffer(range.start)
+    }
+    val numberOfPoints = floor(normalizedRange.length / step).toInt() + 1
+    return DoubleBuffer(numberOfPoints) { normalizedRange.start + step * it  }
+}
 
 /**
  * Convert double range to sequence.
@@ -11,35 +45,5 @@ import kotlin.math.abs
  *
  * If step is negative, the same goes from upper boundary downwards
  */
-public fun ClosedFloatingPointRange<Double>.toSequenceWithStep(step: Double): Sequence<Double> = when {
-    step == 0.0 -> error("Zero step in double progression")
-
-    step > 0 -> sequence {
-        var current = start
-
-        while (current <= endInclusive) {
-            yield(current)
-            current += step
-        }
-    }
-
-    else -> sequence {
-        var current = endInclusive
-
-        while (current >= start) {
-            yield(current)
-            current += step
-        }
-    }
-}
-
-public infix fun ClosedFloatingPointRange<Double>.step(step: Double): DoubleVector =
-    toSequenceWithStep(step).toList().asBuffer()
-
-/**
- * Convert double range to sequence with the fixed number of points
- */
-public fun ClosedFloatingPointRange<Double>.toSequenceWithPoints(numPoints: Int): Sequence<Double> {
-    require(numPoints > 1) { "The number of points should be more than 2" }
-    return toSequenceWithStep(abs(endInclusive - start) / (numPoints - 1))
-}
+@UnstableKMathAPI
+public infix fun ClosedFloatingPointRange<Double>.step(step: Double): DoubleBuffer = Buffer.withFixedStep(this, step)

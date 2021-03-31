@@ -9,22 +9,36 @@ import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjuga
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.AbstractSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
-import space.kscience.kmath.expressions.*
-import space.kscience.kmath.stat.OptimizationFeature
-import space.kscience.kmath.stat.OptimizationProblem
-import space.kscience.kmath.stat.OptimizationProblemFactory
-import space.kscience.kmath.stat.OptimizationResult
+import space.kscience.kmath.expressions.DifferentiableExpression
+import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.SymbolIndexer
+import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.optimization.*
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
-public class CMOptimizationProblem(override val symbols: List<Symbol>) :
-    OptimizationProblem<Double>, SymbolIndexer, OptimizationFeature {
+@OptIn(UnstableKMathAPI::class)
+public class CMOptimization(
+    override val symbols: List<Symbol>,
+) : FunctionOptimization<Double>, NoDerivFunctionOptimization<Double>, SymbolIndexer, OptimizationFeature {
+
     private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
-    private var optimizatorBuilder: (() -> MultivariateOptimizer)? = null
-    public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(DEFAULT_RELATIVE_TOLERANCE,
-        DEFAULT_ABSOLUTE_TOLERANCE, DEFAULT_MAX_ITER)
+    private var optimizerBuilder: (() -> MultivariateOptimizer)? = null
+    public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(
+        DEFAULT_RELATIVE_TOLERANCE,
+        DEFAULT_ABSOLUTE_TOLERANCE,
+        DEFAULT_MAX_ITER
+    )
+
+    override var maximize: Boolean
+        get() = optimizationData[GoalType::class] == GoalType.MAXIMIZE
+        set(value) {
+            optimizationData[GoalType::class] = if (value) GoalType.MAXIMIZE else GoalType.MINIMIZE
+        }
 
     public fun addOptimizationData(data: OptimizationData) {
         optimizationData[data::class] = data
@@ -40,7 +54,7 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
         addOptimizationData(InitialGuess(map.toDoubleArray()))
     }
 
-    public override fun expression(expression: Expression<Double>): Unit {
+    public override fun function(expression: Expression<Double>): Unit {
         val objectiveFunction = ObjectiveFunction {
             val args = it.toMap()
             expression(args)
@@ -48,8 +62,8 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
         addOptimizationData(objectiveFunction)
     }
 
-    public override fun diffExpression(expression: DifferentiableExpression<Double, Expression<Double>>) {
-        expression(expression)
+    public override fun diffFunction(expression: DifferentiableExpression<Double, Expression<Double>>) {
+        function(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()
             DoubleArray(symbols.size) { index ->
@@ -57,8 +71,8 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
             }
         }
         addOptimizationData(gradientFunction)
-        if (optimizatorBuilder == null) {
-            optimizatorBuilder = {
+        if (optimizerBuilder == null) {
+            optimizerBuilder = {
                 NonLinearConjugateGradientOptimizer(
                     NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
                     convergenceChecker
@@ -70,8 +84,8 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
     public fun simplex(simplex: AbstractSimplex) {
         addOptimizationData(simplex)
         //Set optimization builder to simplex if it is not present
-        if (optimizatorBuilder == null) {
-            optimizatorBuilder = { SimplexOptimizer(convergenceChecker) }
+        if (optimizerBuilder == null) {
+            optimizerBuilder = { SimplexOptimizer(convergenceChecker) }
         }
     }
 
@@ -84,7 +98,7 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
     }
 
     public fun optimizer(block: () -> MultivariateOptimizer) {
-        optimizatorBuilder = block
+        optimizerBuilder = block
     }
 
     override fun update(result: OptimizationResult<Double>) {
@@ -92,19 +106,19 @@ public class CMOptimizationProblem(override val symbols: List<Symbol>) :
     }
 
     override fun optimize(): OptimizationResult<Double> {
-        val optimizer = optimizatorBuilder?.invoke() ?: error("Optimizer not defined")
+        val optimizer = optimizerBuilder?.invoke() ?: error("Optimizer not defined")
         val (point, value) = optimizer.optimize(*optimizationData.values.toTypedArray())
         return OptimizationResult(point.toMap(), value, setOf(this))
     }
 
-    public companion object : OptimizationProblemFactory<Double, CMOptimizationProblem> {
+    public companion object : OptimizationProblemFactory<Double, CMOptimization> {
         public const val DEFAULT_RELATIVE_TOLERANCE: Double = 1e-4
         public const val DEFAULT_ABSOLUTE_TOLERANCE: Double = 1e-4
         public const val DEFAULT_MAX_ITER: Int = 1000
 
-        override fun build(symbols: List<Symbol>): CMOptimizationProblem = CMOptimizationProblem(symbols)
+        override fun build(symbols: List<Symbol>): CMOptimization = CMOptimization(symbols)
     }
 }
 
-public fun CMOptimizationProblem.initialGuess(vararg pairs: Pair<Symbol, Double>): Unit = initialGuess(pairs.toMap())
-public fun CMOptimizationProblem.simplexSteps(vararg pairs: Pair<Symbol, Double>): Unit = simplexSteps(pairs.toMap())
+public fun CMOptimization.initialGuess(vararg pairs: Pair<Symbol, Double>): Unit = initialGuess(pairs.toMap())
+public fun CMOptimization.simplexSteps(vararg pairs: Pair<Symbol, Double>): Unit = simplexSteps(pairs.toMap())

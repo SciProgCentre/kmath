@@ -1,15 +1,20 @@
 package space.kscience.kmath.interpolation
 
+import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.OrderedPiecewisePolynomial
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
- * Generic spline interpolator. Not recommended for performance critical places, use platform-specific and type specific ones.
- * Based on https://github.com/apache/commons-math/blob/eb57d6d457002a0bb5336d789a3381a24599affe/src/main/java/org/apache/commons/math4/analysis/interpolation/SplineInterpolator.java
+ * Generic spline interpolator. Not recommended for performance critical places, use platform-specific and type
+ * specific ones.
+ *
+ * Based on
+ * https://github.com/apache/commons-math/blob/eb57d6d457002a0bb5336d789a3381a24599affe/src/main/java/org/apache/commons/math4/analysis/interpolation/SplineInterpolator.java
  */
 public class SplineInterpolator<T : Comparable<T>>(
     public override val algebra: Field<T>,
@@ -17,7 +22,8 @@ public class SplineInterpolator<T : Comparable<T>>(
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers
 
-    public override fun interpolatePolynomials(points: XYPointSet<T, T>): PiecewisePolynomial<T> = algebra {
+    @OptIn(UnstableKMathAPI::class)
+    public override fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T> = algebra {
         require(points.size >= 3) { "Can't use spline interpolator with less than 3 points" }
         insureSorted(points)
         // Number of intervals.  The number of data points is n + 1.

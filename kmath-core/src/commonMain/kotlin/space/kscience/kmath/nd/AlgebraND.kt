@@ -67,7 +67,8 @@ public interface AlgebraND<T, C : Algebra<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(structure: StructureND<T>, type: KClass<F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> getFeature(structure: StructureND<T>, type: KClass<out F>): F? =
+        structure.getFeature(type)
 
     public companion object
 }
@@ -81,7 +82,7 @@ public interface AlgebraND<T, C : Algebra<T>> {
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> AlgebraND<T, *>.getFeature(structure: StructureND<T>): F? =
+public inline fun <T : Any, reified F : StructureFeature> AlgebraND<T, *>.getFeature(structure: StructureND<T>): F? =
     getFeature(structure, F::class)
 
 /**

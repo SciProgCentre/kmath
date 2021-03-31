@@ -1,6 +1,8 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.misc.StringSymbol
+import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

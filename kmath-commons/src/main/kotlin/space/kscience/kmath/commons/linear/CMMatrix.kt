@@ -3,6 +3,7 @@ package space.kscience.kmath.commons.linear
 import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
@@ -89,7 +90,7 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
         v * this
 
     @UnstableKMathAPI
-    override fun <F : Any> getFeature(structure: Matrix<Double>, type: KClass<F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         //Return the feature if it is intrinsic to the structure
         structure.getFeature(type)?.let { return it }
 
