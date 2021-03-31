@@ -1,5 +1,7 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.samplers.BoxMullerNormalizedGaussianSampler
 import space.kscience.kmath.structures.*
 import kotlin.random.Random
 import kotlin.math.*
@@ -35,8 +37,10 @@ internal fun Buffer<Double>.array(): DoubleArray = when (this) {
     is DoubleBuffer -> array
     else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
 }
-
-internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
-    val u = Random(seed)
-    return (0 until n).map { sqrt(-2.0 * ln(u.nextDouble())) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
+/*
+internal inline fun getRandomNormals(n: Int,): DoubleArray {
+    val sampler = BoxMullerNormalizedGaussianSampler.of()
+    val chain = sampler.sample(RandomGenerator.default)
+    return (0 until n).map { chain.next() }.toDoubleArray()
 }
+*/
