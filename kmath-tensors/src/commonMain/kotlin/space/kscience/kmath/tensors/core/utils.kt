@@ -37,10 +37,8 @@ internal fun Buffer<Double>.array(): DoubleArray = when (this) {
     is DoubleBuffer -> array
     else -> throw RuntimeException("Failed to cast Buffer to DoubleArray")
 }
-/*
-internal inline fun getRandomNormals(n: Int,): DoubleArray {
-    val sampler = BoxMullerNormalizedGaussianSampler.of()
-    val chain = sampler.sample(RandomGenerator.default)
-    return (0 until n).map { chain.next() }.toDoubleArray()
+
+internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
+    val u = Random(seed)
+    return (0 until n).map { sqrt(-2.0 * ln(u.nextDouble())) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
 }
-*/
