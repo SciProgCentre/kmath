@@ -1,5 +1,6 @@
 plugins {
     id("ru.mipt.npm.gradle.project")
+    kotlin("jupyter.api") apply false
 }
 
 allprojects {

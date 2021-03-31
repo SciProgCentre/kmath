@@ -11,6 +11,7 @@
 - Multiplatform integration
 - Integration for any Field element
 - Extended operations for ND4J fields
+- Jupyter Notebook integration module (kmath-jupyter)
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
