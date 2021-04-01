@@ -283,7 +283,47 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
-        TODO("Alya")
+        val n = diagonalEntries.shape.size
+        if (dim1 == dim2) {
+            throw RuntimeException("Diagonal dimensions cannot be identical $dim1, $dim2")
+        }
+        if (dim1 > n || dim2 > n) {
+            throw RuntimeException("Dimension out of range")
+        }
+
+        var lessDim = dim1
+        var greaterDim = dim2
+        var realOffset = offset
+        if (lessDim > greaterDim) {
+            realOffset *= -1
+            lessDim = greaterDim.also {greaterDim = lessDim}
+        }
+
+        val resShape = diagonalEntries.shape.slice(0 until lessDim).toIntArray() +
+                intArrayOf(diagonalEntries.shape[n - 1] + abs(realOffset)) +
+                diagonalEntries.shape.slice(lessDim until greaterDim - 1).toIntArray() +
+                intArrayOf(diagonalEntries.shape[n - 1] + abs(realOffset)) +
+                diagonalEntries.shape.slice(greaterDim - 1 until n - 1).toIntArray()
+        val resTensor = zeros(resShape)
+
+        for (i in 0 until diagonalEntries.linearStructure.size) {
+            val multiIndex = diagonalEntries.linearStructure.index(i)
+
+            var offset1 = 0
+            var offset2 = abs(realOffset)
+            if (realOffset < 0) {
+                offset1 = offset2.also {offset2 = offset1}
+            }
+            val diagonalMultiIndex = multiIndex.slice(0 until lessDim).toIntArray() +
+                    intArrayOf(multiIndex[n - 1] + offset1) +
+                    multiIndex.slice(lessDim until greaterDim - 1).toIntArray() +
+                    intArrayOf(multiIndex[n - 1] + offset2) +
+                    multiIndex.slice(greaterDim - 1 until n - 1).toIntArray()
+
+            resTensor[diagonalMultiIndex] = diagonalEntries[multiIndex]
+        }
+
+        return resTensor
     }
 
 

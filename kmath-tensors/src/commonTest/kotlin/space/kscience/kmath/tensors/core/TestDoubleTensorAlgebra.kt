@@ -116,6 +116,39 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
+    fun diagonalEmbedding() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
+        val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor3 = zeros(intArrayOf(2, 3, 4, 5))
+
+        assertTrue(diagonalEmbedding(tensor3, 0, 3, 4).shape contentEquals
+                intArrayOf(2, 3, 4, 5, 5))
+        assertTrue(diagonalEmbedding(tensor3, 1, 3, 4).shape contentEquals
+                intArrayOf(2, 3, 4, 6, 6))
+        assertTrue(diagonalEmbedding(tensor3, 2, 0, 3).shape contentEquals
+                intArrayOf(7, 2, 3, 7, 4))
+
+        val diagonal1 = diagonalEmbedding(tensor1, 0, 1, 0)
+        assertTrue(diagonal1.shape contentEquals intArrayOf(3, 3))
+        assertTrue(diagonal1.buffer.array() contentEquals
+                doubleArrayOf(10.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 30.0))
+
+        val diagonal1_offset = diagonalEmbedding(tensor1, 1, 1, 0)
+        assertTrue(diagonal1_offset.shape contentEquals intArrayOf(4, 4))
+        assertTrue(diagonal1_offset.buffer.array() contentEquals
+                doubleArrayOf(0.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 30.0, 0.0))
+
+        val diagonal2 = diagonalEmbedding(tensor2, 1, 0, 2)
+        assertTrue(diagonal2.shape contentEquals intArrayOf(4, 2, 4))
+        assertTrue(diagonal2.buffer.array() contentEquals
+                doubleArrayOf(
+                    0.0, 1.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0,
+                    0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 5.0, 0.0,
+                    0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 6.0,
+                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+    }
+
+    @Test
     fun testContentEqual() = DoubleTensorAlgebra {
         //TODO()
     }
