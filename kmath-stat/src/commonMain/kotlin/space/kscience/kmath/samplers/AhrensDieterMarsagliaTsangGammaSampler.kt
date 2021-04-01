@@ -1,4 +1,4 @@
-package space.kscience.kmath.stat.samplers
+package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.stat.RandomGenerator
@@ -80,7 +80,7 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         private val gaussian: NormalizedGaussianSampler
 
         init {
-            gaussian = ZigguratNormalizedGaussianSampler.of()
+            gaussian = ZigguratNormalizedGaussianSampler
             dOptim = alpha - ONE_THIRD
             cOptim = ONE_THIRD / sqrt(dOptim)
         }

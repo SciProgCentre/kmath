@@ -2,6 +2,10 @@ plugins {
     id("ru.mipt.npm.gradle.mpp")
 }
 
+kscience{
+    useAtomic()
+}
+
 kotlin.sourceSets {
     commonMain {
         dependencies {

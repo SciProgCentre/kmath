@@ -3,8 +3,8 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import space.kscience.kmath.stat.samplers.GaussianSampler
 import org.apache.commons.rng.simple.RandomSource
+import space.kscience.kmath.samplers.GaussianSampler
 import java.time.Duration
 import java.time.Instant
 import org.apache.commons.rng.sampling.distribution.GaussianSampler as CMGaussianSampler
@@ -12,8 +12,8 @@ import org.apache.commons.rng.sampling.distribution.ZigguratNormalizedGaussianSa
 
 private suspend fun runKMathChained(): Duration {
     val generator = RandomGenerator.fromSource(RandomSource.MT, 123L)
-    val normal = GaussianSampler.of(7.0, 2.0)
-    val chain = normal.sample(generator).blocking()
+    val normal = GaussianSampler(7.0, 2.0)
+    val chain = normal.sample(generator)
     val startTime = Instant.now()
     var sum = 0.0
 

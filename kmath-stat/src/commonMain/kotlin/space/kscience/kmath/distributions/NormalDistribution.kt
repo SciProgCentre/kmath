@@ -1,12 +1,11 @@
-package space.kscience.kmath.stat.distributions
+package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.internal.InternalErf
+import space.kscience.kmath.samplers.GaussianSampler
+import space.kscience.kmath.samplers.NormalizedGaussianSampler
+import space.kscience.kmath.samplers.ZigguratNormalizedGaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.UnivariateDistribution
-import space.kscience.kmath.stat.internal.InternalErf
-import space.kscience.kmath.stat.samplers.GaussianSampler
-import space.kscience.kmath.stat.samplers.NormalizedGaussianSampler
-import space.kscience.kmath.stat.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
 /**
@@ -16,8 +15,8 @@ public inline class NormalDistribution(public val sampler: GaussianSampler) : Un
     public constructor(
         mean: Double,
         standardDeviation: Double,
-        normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler.of(),
-    ) : this(GaussianSampler.of(mean, standardDeviation, normalized))
+        normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler,
+    ) : this(GaussianSampler(mean, standardDeviation, normalized))
 
     public override fun probability(arg: Double): Double {
         val x1 = (arg - sampler.mean) / sampler.standardDeviation

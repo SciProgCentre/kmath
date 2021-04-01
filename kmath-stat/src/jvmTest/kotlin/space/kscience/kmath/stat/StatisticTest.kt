@@ -20,7 +20,7 @@ internal class StatisticTest {
     @Test
     fun testParallelMean() {
         runBlocking {
-            val average = Mean.real
+            val average = Mean.double
                 .flow(chunked) //create a flow with results
                 .drop(99) // Skip first 99 values and use one with total data
                 .first() //get 1e5 data samples average

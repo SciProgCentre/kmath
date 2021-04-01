@@ -1,4 +1,4 @@
-package space.kscience.kmath.stat.internal
+package space.kscience.kmath.internal
 
 import kotlin.math.abs
 

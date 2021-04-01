@@ -3,16 +3,13 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.flow.first
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.collect
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.IntBuffer
-import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.*
 import kotlin.jvm.JvmName
 
 /**
- * Sampler that generates chains of values of type [T].
+ * Sampler that generates chains of values of type [T] in a chain of type [C].
  */
-public fun interface Sampler<T : Any> {
+public fun interface Sampler<out T : Any> {
     /**
      * Generates a chain of samples.
      *
@@ -20,39 +17,6 @@ public fun interface Sampler<T : Any> {
      * @return the new chain.
      */
     public fun sample(generator: RandomGenerator): Chain<T>
-}
-
-/**
- * A distribution of typed objects.
- */
-public interface Distribution<T : Any> : Sampler<T> {
-    /**
-     * A probability value for given argument [arg].
-     * For continuous distributions returns PDF
-     */
-    public fun probability(arg: T): Double
-
-    public override fun sample(generator: RandomGenerator): Chain<T>
-
-    /**
-     * An empty companion. Distribution factories should be written as its extensions
-     */
-    public companion object
-}
-
-public interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
-    /**
-     * Cumulative distribution for ordered parameter (CDF)
-     */
-    public fun cumulative(arg: T): Double
-}
-
-/**
- * Compute probability integral in an interval
- */
-public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Double {
-    require(to > from)
-    return cumulative(to) - cumulative(from)
 }
 
 /**
@@ -71,7 +35,7 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
         //clear list from previous run
         tmp.clear()
         //Fill list
-        repeat(size) { tmp += chain.next() }
+        repeat(size) { tmp.add(chain.next()) }
         //return new buffer with elements from tmp
         bufferFactory(size) { tmp[it] }
     }
@@ -87,7 +51,7 @@ public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sa
  */
 @JvmName("sampleRealBuffer")
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, MutableBuffer.Companion::double)
+    sampleBuffer(generator, size, ::DoubleBuffer)
 
 /**
  * Generates [size] integer samples and chunks them into some buffers.

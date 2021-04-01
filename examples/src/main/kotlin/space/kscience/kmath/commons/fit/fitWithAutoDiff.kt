@@ -7,6 +7,7 @@ import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
+import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.optimization.OptimizationResult
@@ -14,7 +15,6 @@ import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.distributions.NormalDistribution
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.toList
 import kotlin.math.pow
