@@ -2,7 +2,6 @@ package space.kscience.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.misc.StringSymbol
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
@@ -51,11 +50,11 @@ public class DerivativeStructureField(
 
     override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
 
-    public override fun bindSymbolOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
+    override fun bindSymbolOrNull(value: String): DerivativeStructureSymbol? = variables[value]
+    override fun bindSymbol(value: String): DerivativeStructureSymbol = variables.getValue(value)
 
-    public fun bind(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
-
-    override fun bindSymbol(value: String): DerivativeStructureSymbol = bind(StringSymbol(value))
+    public fun bindSymbolOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
+    public fun bindSymbol(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
 
     public fun DerivativeStructure.derivative(symbols: List<Symbol>): Double {
         require(symbols.size <= order) { "The order of derivative ${symbols.size} exceeds computed order $order" }
@@ -107,7 +106,6 @@ public class DerivativeStructureField(
             DerivativeStructureExpression(function)
     }
 }
-
 
 /**
  * A constructs that creates a derivative structure with required order on-demand

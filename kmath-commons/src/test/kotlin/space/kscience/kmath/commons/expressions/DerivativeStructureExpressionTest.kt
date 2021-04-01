@@ -27,7 +27,7 @@ internal class AutoDiffTest {
     @Test
     fun derivativeStructureFieldTest() {
         diff(2, x to 1.0, y to 1.0) {
-            val x = bind(x)//by binding()
+            val x = bindSymbol(x)//by binding()
             val y = bindSymbol("y")
             val z = x * (-sin(x * y) + y) + 2.0
             println(z.derivative(x))

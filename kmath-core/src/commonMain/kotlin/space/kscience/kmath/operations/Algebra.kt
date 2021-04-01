@@ -23,10 +23,18 @@ public interface Algebra<T> {
      *
      * In case if algebra can't parse the string, this method must throw [kotlin.IllegalStateException].
      *
+     * Returns `null` if symbol could not be bound to the context
+     *
      * @param value the raw string.
      * @return an object.
      */
-    public fun bindSymbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
+    public fun bindSymbolOrNull(value: String): T? = null
+
+    /**
+     * The same as [bindSymbolOrNull] but throws an error if symbol could not be bound
+     */
+    public fun bindSymbol(value: String): T =
+        bindSymbolOrNull(value) ?: error("Symbol '$value' is not supported in $this")
 
     /**
      * Dynamically dispatches an unary operation with the certain name.
@@ -91,7 +99,9 @@ public interface Algebra<T> {
         binaryOperationFunction(operation)(left, right)
 }
 
-public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
+public fun <T> Algebra<T>.bindSymbolOrNull(symbol: Symbol): T? = bindSymbolOrNull(symbol.identity)
+
+public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
 
 /**
  * Call a block with an [Algebra] as receiver.

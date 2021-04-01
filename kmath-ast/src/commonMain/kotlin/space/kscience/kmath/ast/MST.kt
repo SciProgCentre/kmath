@@ -58,7 +58,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
 
-    is MST.Symbolic -> bindSymbol(node.value)
+    is MST.Symbolic -> bindSymbol(node.value) ?: error("Symbol '${node.value}' is not supported in $this")
 
     is MST.Unary -> when {
         this is NumericAlgebra && node.value is MST.Numeric -> unaryOperationFunction(node.operation)(number(node.value.value))
@@ -80,11 +80,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
 }
 
 internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
-    override fun bindSymbol(value: String): T = try {
-        algebra.bindSymbol(value)
-    } catch (ignored: IllegalStateException) {
-        null
-    } ?: arguments.getValue(StringSymbol(value))
+    override fun bindSymbolOrNull(value: String): T? = algebra.bindSymbolOrNull(value) ?: arguments[StringSymbol(value)]
 
     override fun unaryOperation(operation: String, arg: T): T =
         algebra.unaryOperation(operation, arg)

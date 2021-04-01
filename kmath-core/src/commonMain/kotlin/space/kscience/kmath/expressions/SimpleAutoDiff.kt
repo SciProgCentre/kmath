@@ -85,7 +85,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         override fun hashCode(): Int = identity.hashCode()
     }
 
-    public override fun bindSymbolOrNull(symbol: Symbol): AutoDiffValue<T>? = bindings[symbol.identity]
+    override fun bindSymbolOrNull(value: String): AutoDiffValue<T>? = bindings[value]
 
     private fun getDerivative(variable: AutoDiffValue<T>): T =
         (variable as? AutoDiffVariableWithDerivative)?.d ?: derivatives[variable] ?: context.zero

@@ -1,6 +1,6 @@
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.StringSymbol
 import space.kscience.kmath.operations.*
 
 /**
@@ -19,8 +19,8 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
     /**
      * Builds an Expression to access a variable.
      */
-    public override fun bindSymbolOrNull(symbol: Symbol): Expression<T>? = Expression { arguments ->
-        arguments[symbol] ?: error("Argument not found: $symbol")
+    override fun bindSymbolOrNull(value: String): Expression<T>? = Expression { arguments ->
+        arguments[StringSymbol(value)] ?: error("Argument not found: $value")
     }
 
     /**
@@ -101,8 +101,7 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
 
 public open class FunctionalExpressionField<T, A : Field<T>>(
     algebra: A,
-) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>,
-    ScaleOperations<Expression<T>> {
+) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>, ScaleOperations<Expression<T>> {
     /**
      * Builds an Expression of division an expression by another one.
      */

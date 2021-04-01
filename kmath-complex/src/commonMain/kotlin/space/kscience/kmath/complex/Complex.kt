@@ -165,8 +165,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
 
     public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
-    public override fun bindSymbol(value: String): Complex =
-        if (value == "i") i else super<ExtendedField>.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): Complex? = if (value == "i") i else null
 }
 
 /**

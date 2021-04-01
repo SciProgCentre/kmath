@@ -40,7 +40,7 @@ internal class ParserTest {
     @Test
     fun `evaluate MST with binary function`() {
         val magicalAlgebra = object : Algebra<String> {
-            override fun bindSymbol(value: String): String = value
+            override fun bindSymbolOrNull(value: String): String = value
 
             override fun unaryOperationFunction(operation: String): (arg: String) -> String {
                 throw NotImplementedError()

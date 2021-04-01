@@ -62,8 +62,8 @@ suspend fun main() {
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
     val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
         //bind variables to autodiff context
-        val a = bind(a)
-        val b = bind(b)
+        val a = bindSymbol(a)
+        val b = bindSymbol(b)
         //Include default value for c if it is not provided as a parameter
         val c = bindSymbolOrNull(c) ?: one
         a * x1.pow(2) + b * x1 + c
