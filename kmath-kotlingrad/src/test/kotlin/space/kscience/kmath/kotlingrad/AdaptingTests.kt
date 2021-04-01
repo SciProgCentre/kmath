@@ -1,9 +1,8 @@
 package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.*
-import space.kscience.kmath.asm.compile
+import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.ast.MstAlgebra
-import space.kscience.kmath.ast.MstExpression
 import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.DoubleField
@@ -43,8 +42,8 @@ internal class AdaptingTests {
     fun simpleFunctionDerivative() {
         val x = MstAlgebra.bindSymbol("x").toSVar<KMathNumber<Double, DoubleField>>()
         val quadratic = "x^2-4*x-44".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        val actualDerivative = MstExpression(DoubleField, quadratic.d(x).toMst()).compile()
-        val expectedDerivative = MstExpression(DoubleField, "2*x-4".parseMath()).compile()
+        val actualDerivative = quadratic.d(x).toMst().compileToExpression(DoubleField)
+        val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
         assertEquals(actualDerivative("x" to 123.0), expectedDerivative("x" to 123.0))
     }
 
@@ -52,12 +51,11 @@ internal class AdaptingTests {
     fun moreComplexDerivative() {
         val x = MstAlgebra.bindSymbol("x").toSVar<KMathNumber<Double, DoubleField>>()
         val composition = "-sqrt(sin(x^2)-cos(x)^2-16*x)".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        val actualDerivative = MstExpression(DoubleField, composition.d(x).toMst()).compile()
+        val actualDerivative = composition.d(x).toMst().compileToExpression(DoubleField)
 
-        val expectedDerivative = MstExpression(
-            DoubleField,
-            "-(2*x*cos(x^2)+2*sin(x)*cos(x)-16)/(2*sqrt(sin(x^2)-16*x-cos(x)^2))".parseMath()
-        ).compile()
+        val expectedDerivative =
+            "-(2*x*cos(x^2)+2*sin(x)*cos(x)-16)/(2*sqrt(sin(x^2)-16*x-cos(x)^2))".parseMath().compileToExpression(DoubleField)
+
 
         assertEquals(actualDerivative("x" to 0.1), expectedDerivative("x" to 0.1))
     }

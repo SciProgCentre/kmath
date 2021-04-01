@@ -2,9 +2,9 @@ package space.kscience.kmath.ast
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
-import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -18,7 +18,7 @@ internal class ParserTest {
 
     @Test
     fun `evaluate MSTExpression`() {
-        val res = ComplexField.mstInField { number(2) + number(2) * (number(2) + number(2)) }()
+        val res = MstField.invoke { number(2) + number(2) * (number(2) + number(2)) }.interpret(ComplexField)
         assertEquals(Complex(10.0, 0.0), res)
     }
 

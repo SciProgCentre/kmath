@@ -1,9 +1,9 @@
 package space.kscience.kmath.ast
 
-import space.kscience.kmath.asm.compile
+import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.kotlingrad.differentiable
+import space.kscience.kmath.kotlingrad.toDiffExpression
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 
@@ -14,11 +14,11 @@ import space.kscience.kmath.operations.DoubleField
 fun main() {
     val x by symbol
 
-    val actualDerivative = MstExpression(DoubleField, "x^2-4*x-44".parseMath())
-        .differentiable()
+    val actualDerivative = "x^2-4*x-44".parseMath()
+        .toDiffExpression(DoubleField)
         .derivative(x)
-        .compile()
 
-    val expectedDerivative = MstExpression(DoubleField, "2*x-4".parseMath()).compile()
+
+    val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
     assert(actualDerivative("x" to 123.0) == expectedDerivative("x" to 123.0))
 }

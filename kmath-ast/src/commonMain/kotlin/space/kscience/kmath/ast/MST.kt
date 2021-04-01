@@ -1,5 +1,8 @@
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.misc.StringSymbol
+import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -76,11 +79,51 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     }
 }
 
+internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
+    override fun bindSymbol(value: String): T = try {
+        algebra.bindSymbol(value)
+    } catch (ignored: IllegalStateException) {
+        null
+    } ?: arguments.getValue(StringSymbol(value))
+
+    override fun unaryOperation(operation: String, arg: T): T =
+        algebra.unaryOperation(operation, arg)
+
+    override fun binaryOperation(operation: String, left: T, right: T): T =
+        algebra.binaryOperation(operation, left, right)
+
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T =
+        algebra.unaryOperationFunction(operation)
+
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T =
+        algebra.binaryOperationFunction(operation)
+
+    @Suppress("UNCHECKED_CAST")
+    override fun number(value: Number): T = if (algebra is NumericAlgebra<*>)
+        (algebra as NumericAlgebra<T>).number(value)
+    else
+        error("Numeric nodes are not supported by $this")
+}
+
 /**
- * Interprets the [MST] node with this [Algebra].
+ * Interprets the [MST] node with this [Algebra] and optional [arguments]
+ */
+public fun <T : Any> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
+    InnerAlgebra(algebra, arguments).evaluate(this)
+
+/**
+ * Interprets the [MST] node with this [Algebra] and optional [arguments]
  *
  * @receiver the node to evaluate.
  * @param algebra the algebra that provides operations.
  * @return the value of expression.
  */
-public fun <T> MST.interpret(algebra: Algebra<T>): T = algebra.evaluate(this)
+public fun <T : Any> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
+    interpret(algebra, mapOf(*arguments))
+
+/**
+ * Interpret this [MST] as expression.
+ */
+public fun <T : Any> MST.toExpression(algebra: Algebra<T>): Expression<T> = Expression { arguments ->
+    interpret(algebra, arguments)
+}
