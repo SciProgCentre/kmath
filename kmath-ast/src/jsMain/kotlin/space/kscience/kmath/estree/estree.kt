@@ -14,11 +14,7 @@ import space.kscience.kmath.operations.NumericAlgebra
 internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
     fun ESTreeBuilder<T>.visit(node: MST): BaseExpression = when (node) {
         is Symbolic -> {
-            val symbol = try {
-                algebra.bindSymbol(node.value)
-            } catch (ignored: IllegalStateException) {
-                null
-            }
+            val symbol = algebra.bindSymbolOrNull(node.value)
 
             if (symbol != null)
                 constant(symbol)

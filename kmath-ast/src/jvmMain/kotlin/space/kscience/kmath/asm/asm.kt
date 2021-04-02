@@ -22,11 +22,7 @@ import space.kscience.kmath.operations.NumericAlgebra
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
         is Symbolic -> {
-            val symbol = try {
-                algebra.bindSymbol(node.value)
-            } catch (ignored: IllegalStateException) {
-                null
-            }
+            val symbol = algebra.bindSymbolOrNull(node.value)
 
             if (symbol != null)
                 loadObjectConstant(symbol as Any)

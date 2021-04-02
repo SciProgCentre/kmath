@@ -58,7 +58,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
 
-    is MST.Symbolic -> bindSymbol(node.value) ?: error("Symbol '${node.value}' is not supported in $this")
+    is MST.Symbolic -> bindSymbol(node.value)
 
     is MST.Unary -> when {
         this is NumericAlgebra && node.value is MST.Numeric -> unaryOperationFunction(node.operation)(number(node.value.value))
