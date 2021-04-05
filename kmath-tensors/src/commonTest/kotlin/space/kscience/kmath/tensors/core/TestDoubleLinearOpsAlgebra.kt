@@ -122,4 +122,36 @@ class TestDoubleLinearOpsTensorAlgebra {
 
         assertTrue { p.dot(tensor).buffer.array().epsEqual(l.dot(u).buffer.array()) }
     }
+
+    @Test
+    fun svd1d() = DoubleLinearOpsTensorAlgebra {
+        val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+
+        val res = svd1d(tensor2)
+
+        assertTrue(res.shape contentEquals intArrayOf(2))
+        assertTrue { abs(abs(res.buffer.array()[res.bufferStart]) -  0.386) < 0.01}
+        assertTrue { abs(abs(res.buffer.array()[res.bufferStart + 1]) -  0.922) < 0.01}
+    }
+
+    @Test
+    fun svd() = DoubleLinearOpsTensorAlgebra {
+        val epsilon = 1e-10
+        fun test_tensor(tensor: DoubleTensor) {
+            val svd = tensor.svd()
+
+            val tensorSVD = svd.first
+                .dot(
+                    diagonalEmbedding(svd.second, 0, 0, 1)
+                        .dot(svd.third.transpose(0, 1))
+                )
+
+            for ((x1, x2) in tensor.buffer.array() zip tensorSVD.buffer.array()) {
+                assertTrue { abs(x1 - x2) < epsilon }
+            }
+        }
+        test_tensor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
+        test_tensor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
+
+    }
 }
