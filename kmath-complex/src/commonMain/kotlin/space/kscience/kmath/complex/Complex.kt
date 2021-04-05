@@ -121,8 +121,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
     /**
      * Adds complex number to real one.
      *
-     * @receiver the addend.
-     * @param c the augend.
+     * @receiver the augend.
+     * @param c the addend.
      * @return the sum.
      */
     public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
@@ -139,8 +139,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
     /**
      * Adds real number to complex one.
      *
-     * @receiver the addend.
-     * @param d the augend.
+     * @receiver the augend.
+     * @param d the addend.
      * @return the sum.
      */
     public operator fun Complex.plus(d: Double): Complex = d + this

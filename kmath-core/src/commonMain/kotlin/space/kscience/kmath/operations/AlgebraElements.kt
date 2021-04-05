@@ -46,7 +46,8 @@ public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.mi
 /**
  * Adds element to this one.
  *
- * @param b the augend.
+ * @receiver the augend.
+ * @param b the addend.
  * @return the sum.
  */
 public operator fun <T : AlgebraElement<T, S>, S : Group<T>> T.plus(b: T): T =
@@ -58,11 +59,11 @@ public operator fun <T : AlgebraElement<T, S>, S : Group<T>> T.plus(b: T): T =
 //public operator fun <T : AlgebraElement<T, S>, S : Space<T>> Number.times(element: T): T =
 //    element.times(this)
 
-
 /**
  * Multiplies this element by another one.
  *
- * @param b the multiplicand.
+ * @receiver the multiplicand.
+ * @param b the multiplier.
  * @return the product.
  */
 public operator fun <T : AlgebraElement<T, R>, R : Ring<T>> T.times(b: T): T =

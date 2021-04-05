@@ -119,8 +119,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @param a the addend.
-     * @param b the augend.
+     * @param a the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public fun add(a: T, b: T): T
@@ -146,8 +146,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public operator fun T.plus(b: T): T = add(this, b)
@@ -293,5 +293,5 @@ public interface FieldOperations<T> : RingOperations<T> {
  * @param T the type of element of this field.
  */
 public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
-    override fun number(value: Number): T = scale(one, value.toDouble())
+    public override fun number(value: Number): T = scale(one, value.toDouble())
 }

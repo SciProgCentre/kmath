@@ -16,7 +16,10 @@ internal class TestLatex {
     fun operatorName() = testLatex("sin(1)", "\\operatorname{sin}\\,\\left(1\\right)")
 
     @Test
-    fun specialSymbol() = testLatex(MST.Numeric(Double.POSITIVE_INFINITY), "\\infty")
+    fun specialSymbol() {
+        testLatex(MST.Numeric(Double.POSITIVE_INFINITY), "\\infty")
+        testLatex("pi", "\\pi")
+    }
 
     @Test
     fun operand() {

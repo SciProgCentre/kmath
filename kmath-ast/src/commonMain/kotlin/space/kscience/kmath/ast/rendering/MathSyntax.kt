@@ -101,6 +101,11 @@ public data class SpecialSymbolSyntax(public var kind: Kind) : TerminalSyntax() 
          * The infinity (&infin;) symbol.
          */
         INFINITY,
+
+        /**
+         * The Pi (&pi;) symbol.
+         */
+        SMALL_PI;
     }
 }
 

@@ -119,6 +119,25 @@ public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : Re
 }
 
 /**
+ * Special printing for symbols meaning Pi.
+ *
+ * @property symbols The allowed symbols.
+ */
+public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
+    public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
+        if (node !is MST.Symbolic || node.value !in symbols) return null
+        return SpecialSymbolSyntax(kind = SpecialSymbolSyntax.Kind.SMALL_PI)
+    }
+
+    public companion object {
+        /**
+         * The default instance containing `pi`.
+         */
+        public val Default: PrettyPrintPi = PrettyPrintPi(setOf("pi"))
+    }
+}
+
+/**
  * Abstract printing of unary operations which discards [MST] if their operation is not in [operations] or its type is
  * not [MST.Unary].
  *

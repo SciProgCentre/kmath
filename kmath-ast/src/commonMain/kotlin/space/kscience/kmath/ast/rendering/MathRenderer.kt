@@ -85,9 +85,10 @@ public open class FeaturedMathRendererWithPostProcess(
                 BinaryOperator.Default,
                 UnaryOperator.Default,
 
-                // Pretty printing for numerics
+                // Pretty printing for some objects
                 PrettyPrintFloats.Default,
                 PrettyPrintIntegers.Default,
+                PrettyPrintPi.Default,
 
                 // Printing terminal nodes as string
                 PrintNumeric,
@@ -96,7 +97,7 @@ public open class FeaturedMathRendererWithPostProcess(
             listOf(
                 SimplifyParentheses.Default,
                 BetterMultiplication,
-            )
+            ),
         )
     }
 }

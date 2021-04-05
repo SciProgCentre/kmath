@@ -24,7 +24,7 @@ public class DerivativeStructureField(
     public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
     public override val one: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order, 1.0) }
 
-    override fun number(value: Number): DerivativeStructure = const(value.toDouble())
+    public override fun number(value: Number): DerivativeStructure = const(value.toDouble())
 
     /**
      * A class that implements both [DerivativeStructure] and a [Symbol]
@@ -35,10 +35,10 @@ public class DerivativeStructureField(
         symbol: Symbol,
         value: Double,
     ) : DerivativeStructure(size, order, index, value), Symbol {
-        override val identity: String = symbol.identity
-        override fun toString(): String = identity
-        override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
-        override fun hashCode(): Int = identity.hashCode()
+        public override val identity: String = symbol.identity
+        public override fun toString(): String = identity
+        public override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
+        public override fun hashCode(): Int = identity.hashCode()
     }
 
     /**
@@ -48,10 +48,10 @@ public class DerivativeStructureField(
         key.identity to DerivativeStructureSymbol(numberOfVariables, index, key, value)
     }.toMap()
 
-    override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
+    public override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
 
-    override fun bindSymbolOrNull(value: String): DerivativeStructureSymbol? = variables[value]
-    override fun bindSymbol(value: String): DerivativeStructureSymbol = variables.getValue(value)
+    public override fun bindSymbolOrNull(value: String): DerivativeStructureSymbol? = variables[value]
+    public override fun bindSymbol(value: String): DerivativeStructureSymbol = variables.getValue(value)
 
     public fun bindSymbolOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
     public fun bindSymbol(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
@@ -64,7 +64,7 @@ public class DerivativeStructureField(
 
     public fun DerivativeStructure.derivative(vararg symbols: Symbol): Double = derivative(symbols.toList())
 
-    override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
+    public override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
 
     public override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
 
