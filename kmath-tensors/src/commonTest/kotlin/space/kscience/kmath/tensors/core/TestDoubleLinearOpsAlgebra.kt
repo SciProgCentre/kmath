@@ -130,7 +130,7 @@ class TestDoubleLinearOpsTensorAlgebra {
     fun testBatchedSVD() = DoubleLinearOpsTensorAlgebra {
         val tensor = randNormal(intArrayOf(7, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
-        val tensorSVD = tensorU dot (diagonalEmbedding(tensorS,0,1,2) dot tensorV)
+        val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV)
         assertTrue(tensor.eq(tensorSVD))
     }
 
@@ -139,7 +139,7 @@ class TestDoubleLinearOpsTensorAlgebra {
         val tensor = randNormal(shape = intArrayOf(5, 2, 2), 0)
         val tensorSigma = tensor + tensor.transpose(1, 2)
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS, 0,1,2) dot tensorV.transpose(1, 2))
+        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose(1, 2))
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 

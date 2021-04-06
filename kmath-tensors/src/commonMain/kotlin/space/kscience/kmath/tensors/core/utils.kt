@@ -40,3 +40,13 @@ internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
     val u = Random(seed)
     return (0 until n).map { sqrt(-2.0 * ln(u.nextDouble())) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
 }
+
+internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {
+    val ii = n + i
+    check(ii >= 0) {
+        "Out of bound index $i for tensor of dim $n"
+    }
+    ii
+}
+
+internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexFrom(this.linearStructure.dim, i)

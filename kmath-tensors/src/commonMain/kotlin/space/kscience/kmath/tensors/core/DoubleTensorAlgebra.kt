@@ -198,19 +198,21 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun DoubleTensor.transpose(i: Int, j: Int): DoubleTensor {
-        checkTranspose(this.dimension, i, j)
+        val ii = minusIndex(i)
+        val jj = minusIndex(j)
+        checkTranspose(this.dimension, ii, jj)
         val n = this.linearStructure.size
         val resBuffer = DoubleArray(n)
 
         val resShape = this.shape.copyOf()
-        resShape[i] = resShape[j].also { resShape[j] = resShape[i] }
+        resShape[ii] = resShape[jj].also { resShape[jj] = resShape[ii] }
 
         val resTensor = DoubleTensor(resShape, resBuffer)
 
         for (offset in 0 until n) {
             val oldMultiIndex = this.linearStructure.index(offset)
             val newMultiIndex = oldMultiIndex.copyOf()
-            newMultiIndex[i] = newMultiIndex[j].also { newMultiIndex[j] = newMultiIndex[i] }
+            newMultiIndex[ii] = newMultiIndex[jj].also { newMultiIndex[jj] = newMultiIndex[ii] }
 
             val linearIndex = resTensor.linearStructure.offset(newMultiIndex)
             resTensor.buffer.array()[linearIndex] =
@@ -283,16 +285,18 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     }
 
     override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
+        val d1 = minusIndexFrom(diagonalEntries.linearStructure.dim + 1, dim1)
+        val d2 = minusIndexFrom(diagonalEntries.linearStructure.dim + 1, dim2)
         val n = diagonalEntries.shape.size
-        if (dim1 == dim2) {
-            throw RuntimeException("Diagonal dimensions cannot be identical $dim1, $dim2")
+        if (d1 == d2) {
+            throw RuntimeException("Diagonal dimensions cannot be identical $d1, $d2")
         }
-        if (dim1 > n || dim2 > n) {
+        if (d1 > n || d2 > n) {
             throw RuntimeException("Dimension out of range")
         }
 
-        var lessDim = dim1
-        var greaterDim = dim2
+        var lessDim = d1
+        var greaterDim = d2
         var realOffset = offset
         if (lessDim > greaterDim) {
             realOffset *= -1

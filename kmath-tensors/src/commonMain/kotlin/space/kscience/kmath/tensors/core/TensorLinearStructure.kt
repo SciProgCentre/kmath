@@ -73,6 +73,9 @@ public class TensorLinearStructure(public val shape: IntArray)
     public val size: Int
         get() = shape.reduce(Int::times)
 
+    public val dim: Int
+        get() = shape.size
+
     public fun indices(): Sequence<IntArray> = (0 until size).asSequence().map {
         index(it)
     }

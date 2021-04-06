@@ -35,8 +35,8 @@ class TestDoubleTensorAlgebra {
     fun transpose1x2x3() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res01 = tensor.transpose(0, 1)
-        val res02 = tensor.transpose(0, 2)
-        val res12 = tensor.transpose(1, 2)
+        val res02 = tensor.transpose(-3, 2)
+        val res12 = tensor.transpose()
 
         assertTrue(res01.shape contentEquals intArrayOf(2, 1, 3))
         assertTrue(res02.shape contentEquals intArrayOf(3, 2, 1))

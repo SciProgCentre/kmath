@@ -28,7 +28,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     public operator fun TensorType.get(i: Int): TensorType
 
     //https://pytorch.org/docs/stable/generated/torch.transpose.html
-    public fun TensorType.transpose(i: Int, j: Int): TensorType
+    public fun TensorType.transpose(i: Int = -2, j: Int = -1): TensorType
 
     //https://pytorch.org/docs/stable/tensor_view.html
     public fun TensorType.view(shape: IntArray): TensorType
@@ -40,7 +40,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
     public fun diagonalEmbedding(
         diagonalEntries: TensorType,
-        offset: Int = 0, dim1: Int = 0, dim2: Int = 1
+        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
     ): TensorType
 
 }
