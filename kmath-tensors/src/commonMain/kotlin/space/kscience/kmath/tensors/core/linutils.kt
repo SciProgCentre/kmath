@@ -4,6 +4,8 @@ import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.sqrt
 
 
@@ -195,8 +197,8 @@ internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
     checkSquareMatrix(matrix.shape)
     val n = matrix.shape[0]
     val qM = q.as2D()
-    val matrixT = matrix.transpose(0,1)
-    val qT = q.transpose(0,1)
+    val matrixT = matrix.transpose(0, 1)
+    val qT = q.transpose(0, 1)
 
     for (j in 0 until n) {
         val v = matrixT[j]
@@ -215,4 +217,74 @@ internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
             qM[i, j] = vv[i] / r[j, j]
         }
     }
+}
+
+internal inline fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10): DoubleTensor {
+    val (n, m) = a.shape
+    var v: DoubleTensor
+    val b: DoubleTensor
+    if (n > m) {
+        b = a.transpose(0, 1).dot(a)
+        v = DoubleTensor(intArrayOf(m), getRandomNormals(m, 0))
+    } else {
+        b = a.dot(a.transpose(0, 1))
+        v = DoubleTensor(intArrayOf(n), getRandomNormals(n, 0))
+    }
+
+    var lastV: DoubleTensor
+    while (true) {
+        lastV = v
+        v = b.dot(lastV)
+        val norm = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+        v = v.times(1.0 / norm)
+        if (abs(v.dot(lastV).value()) > 1 - epsilon) {
+            return v
+        }
+    }
+}
+
+internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
+    matrix: DoubleTensor,
+    USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
+    m: Int, n: Int
+): Unit {
+    val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
+    val (matrixU, SV) = USV
+    val (matrixS, matrixV) = SV
+
+    for (k in 0 until min(n, m)) {
+        var a = matrix.copy()
+        for ((singularValue, u, v) in res.slice(0 until k)) {
+            val outerProduct = DoubleArray(u.shape[0] * v.shape[0])
+            for (i in 0 until u.shape[0]) {
+                for (j in 0 until v.shape[0]) {
+                    outerProduct[i * v.shape[0] + j] = u[i].value() * v[j].value()
+                }
+            }
+            a = a - singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct))
+        }
+        var v: DoubleTensor
+        var u: DoubleTensor
+        var norm: Double
+        if (n > m) {
+            v = svd1d(a)
+            u = matrix.dot(v)
+            norm = DoubleAnalyticTensorAlgebra { (u dot u).sqrt().value() }
+            u = u.times(1.0 / norm)
+        } else {
+            u = svd1d(a)
+            v = matrix.transpose(0, 1).dot(u)
+            norm = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+            v = v.times(1.0 / norm)
+        }
+
+        res.add(Triple(norm, u, v))
+    }
+
+    val s = res.map { it.first }.toDoubleArray()
+    val uBuffer = res.map { it.second }.flatMap { it.buffer.array().toList() }.toDoubleArray()
+    val vBuffer = res.map { it.third }.flatMap { it.buffer.array().toList() }.toDoubleArray()
+    uBuffer.copyInto(matrixU.buffer.array())
+    s.copyInto(matrixS.buffer.array())
+    vBuffer.copyInto(matrixV.buffer.array())
 }

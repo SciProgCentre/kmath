@@ -124,7 +124,7 @@ class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun svd1d() = DoubleLinearOpsTensorAlgebra {
+    fun testSVD1D() = DoubleLinearOpsTensorAlgebra {
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
 
         val res = svd1d(tensor2)
@@ -135,7 +135,7 @@ class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun svd() = DoubleLinearOpsTensorAlgebra {
+    fun testSVD() = DoubleLinearOpsTensorAlgebra {
         val epsilon = 1e-10
         fun test_tensor(tensor: DoubleTensor) {
             val svd = tensor.svd()
