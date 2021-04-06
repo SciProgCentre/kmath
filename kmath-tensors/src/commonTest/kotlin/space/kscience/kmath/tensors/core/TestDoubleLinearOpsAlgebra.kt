@@ -1,6 +1,7 @@
 package space.kscience.kmath.tensors.core
 
 import kotlin.math.abs
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -125,12 +126,21 @@ class TestDoubleLinearOpsTensorAlgebra {
         testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
     }
 
-    @Test
+    @Test @Ignore
     fun testBatchedSVD() = DoubleLinearOpsTensorAlgebra {
         val tensor = randNormal(intArrayOf(7, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
         val tensorSVD = tensorU dot (diagonalEmbedding(tensorS,0,1,2) dot tensorV)
-        println(tensor.eq(tensorSVD))
+        assertTrue(tensor.eq(tensorSVD))
+    }
+
+    @Test @Ignore
+    fun testBatchedSymEig() = DoubleLinearOpsTensorAlgebra {
+        val tensor = randNormal(shape = intArrayOf(5, 2, 2), 0)
+        val tensorSigma = tensor + tensor.transpose(1, 2)
+        val (tensorS, tensorV) = tensorSigma.symEig()
+        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS, 0,1,2) dot tensorV.transpose(1, 2))
+        assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
 
