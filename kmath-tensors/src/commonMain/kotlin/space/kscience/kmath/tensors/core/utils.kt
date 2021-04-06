@@ -1,7 +1,5 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.samplers.BoxMullerNormalizedGaussianSampler
 import space.kscience.kmath.structures.*
 import kotlin.random.Random
 import kotlin.math.*

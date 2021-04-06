@@ -362,6 +362,12 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return true
     }
 
+    public fun randNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
+        DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
+
+    public fun DoubleTensor.randNormalLike(seed: Long = 0): DoubleTensor =
+        DoubleTensor(this.shape, getRandomNormals(this.shape.reduce(Int::times), seed))
+
 }
 
 

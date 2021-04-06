@@ -40,7 +40,7 @@ public interface TensorAlgebra<T, TensorType : TensorStructure<T>> {
     //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
     public fun diagonalEmbedding(
         diagonalEntries: TensorType,
-        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
+        offset: Int = 0, dim1: Int = 0, dim2: Int = 1
     ): TensorType
 
 }
