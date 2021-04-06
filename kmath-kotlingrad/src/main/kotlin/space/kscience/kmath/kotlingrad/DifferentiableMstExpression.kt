@@ -5,7 +5,6 @@ import space.kscience.kmath.ast.MST
 import space.kscience.kmath.ast.MstAlgebra
 import space.kscience.kmath.ast.interpret
 import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -22,7 +21,7 @@ import space.kscience.kmath.operations.NumericAlgebra
 public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
     public val algebra: A,
     public val mst: MST,
-) : DifferentiableExpression<T, Expression<T>> {
+) : DifferentiableExpression<T, DifferentiableMstExpression<T, A>> {
 
     public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 

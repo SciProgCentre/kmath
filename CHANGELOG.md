@@ -6,6 +6,7 @@
 - Field extends ScaleOperations
 - Basic integration API
 - Basic MPP distributions and samplers
+- bindSymbolOrNull
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
