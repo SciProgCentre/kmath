@@ -18,10 +18,12 @@ internal class CommonsDistributionsTest {
     }
 
     @Test
-    fun testNormalDistributionBlocking() = runBlocking {
+    fun testNormalDistributionBlocking()  {
         val distribution = GaussianSampler(7.0, 2.0)
         val generator = RandomGenerator.default(1)
         val sample = distribution.sample(generator).nextBufferBlocking(1000)
-        Assertions.assertEquals(7.0, Mean.double(sample), 0.2)
+        runBlocking {
+            Assertions.assertEquals(7.0, Mean.double(sample), 0.2)
+        }
     }
 }

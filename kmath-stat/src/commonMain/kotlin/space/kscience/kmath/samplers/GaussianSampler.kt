@@ -3,7 +3,6 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.chains.map
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
 
 /**
  * Sampling from a Gaussian distribution with given mean and standard deviation.
@@ -18,7 +17,7 @@ public class GaussianSampler(
     public val mean: Double,
     public val standardDeviation: Double,
     private val normalized: NormalizedGaussianSampler = BoxMullerSampler
-) : Sampler<Double> {
+) : BlockingDoubleSampler {
 
     init {
         require(standardDeviation > 0.0) { "standard deviation is not strictly positive: $standardDeviation" }
