@@ -82,6 +82,19 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
 
             is RadicalSyntax -> tag("msqrt") { render(node.operand) }
 
+            is ExponentSyntax -> if (node.useOperatorForm) {
+                tag("mo") { append("exp") }
+                tag("mspace", "width" to "0.167em")
+                render(node.operand)
+            } else {
+                tag("msup") {
+                    tag("mrow") {
+                        tag("mi") { append("e") }
+                    }
+                    tag("mrow") { render(node.operand) }
+                }
+            }
+
             is SuperscriptSyntax -> tag("msup") {
                 tag("mrow") { render(node.left) }
                 tag("mrow") { render(node.right) }
