@@ -41,7 +41,6 @@ public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double
         }
 
     public override val zero: ViktorStructureND by lazy { F64Array.full(init = 0.0, shape = shape).asStructure() }
-
     public override val one: ViktorStructureND by lazy { F64Array.full(init = 1.0, shape = shape).asStructure() }
 
     private val strides: Strides = DefaultStrides(shape)
@@ -55,7 +54,7 @@ public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double
             }
         }.asStructure()
 
-    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
+    public override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
 
     public override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*this@ViktorFieldND.shape).apply {
@@ -100,24 +99,21 @@ public class ViktorFieldND(public override val shape: IntArray) : FieldND<Double
     public override inline fun StructureND<Double>.plus(arg: Double): ViktorStructureND =
         (f64Buffer.plus(arg)).asStructure()
 
-    override fun number(value: Number): ViktorStructureND =
+    public override fun number(value: Number): ViktorStructureND =
         F64Array.full(init = value.toDouble(), shape = shape).asStructure()
 
-    override fun sin(arg: StructureND<Double>): ViktorStructureND = arg.map { sin(it) }
+    public override fun sin(arg: StructureND<Double>): ViktorStructureND = arg.map { sin(it) }
+    public override fun cos(arg: StructureND<Double>): ViktorStructureND = arg.map { cos(it) }
+    public override fun tan(arg: StructureND<Double>): ViktorStructureND = arg.map { tan(it) }
+    public override fun asin(arg: StructureND<Double>): ViktorStructureND = arg.map { asin(it) }
+    public override fun acos(arg: StructureND<Double>): ViktorStructureND = arg.map { acos(it) }
+    public override fun atan(arg: StructureND<Double>): ViktorStructureND = arg.map { atan(it) }
 
-    override fun cos(arg: StructureND<Double>): ViktorStructureND = arg.map { cos(it) }
+    public override fun power(arg: StructureND<Double>, pow: Number): ViktorStructureND = arg.map { it.pow(pow) }
 
-    override fun asin(arg: StructureND<Double>): ViktorStructureND = arg.map { asin(it) }
+    public override fun exp(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.exp().asStructure()
 
-    override fun acos(arg: StructureND<Double>): ViktorStructureND = arg.map { acos(it) }
-
-    override fun atan(arg: StructureND<Double>): ViktorStructureND = arg.map { atan(it) }
-
-    override fun power(arg: StructureND<Double>, pow: Number): ViktorStructureND = arg.map { it.pow(pow) }
-
-    override fun exp(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.exp().asStructure()
-
-    override fun ln(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.log().asStructure()
+    public override fun ln(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.log().asStructure()
 }
 
 public fun ViktorNDField(vararg shape: Int): ViktorFieldND = ViktorFieldND(shape)

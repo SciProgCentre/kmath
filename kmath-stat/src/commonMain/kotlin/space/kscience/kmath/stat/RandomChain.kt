@@ -1,8 +1,8 @@
 package space.kscience.kmath.stat
 
 import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.chains.BlockingIntChain
 import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.structures.DoubleBuffer
 
 /**
  * A possibly stateful chain producing random values.
@@ -11,12 +11,24 @@ import space.kscience.kmath.chains.Chain
  */
 public class RandomChain<out R>(
     public val generator: RandomGenerator,
-    private val gen: suspend RandomGenerator.() -> R
+    private val gen: suspend RandomGenerator.() -> R,
 ) : Chain<R> {
     override suspend fun next(): R = generator.gen()
-    override fun fork(): Chain<R> = RandomChain(generator.fork(), gen)
+    override suspend fun fork(): Chain<R> = RandomChain(generator.fork(), gen)
 }
 
-public fun <R> RandomGenerator.chain(gen: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, gen)
-public fun Chain<Double>.blocking(): BlockingDoubleChain = object : Chain<Double> by this, BlockingDoubleChain {}
-public fun Chain<Int>.blocking(): BlockingIntChain = object : Chain<Int> by this, BlockingIntChain {}
+/**
+ * Create a generic random chain with provided [generator]
+ */
+public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, generator)
+
+/**
+ * A type-specific double chunk random chain
+ */
+public class UniformDoubleChain(public val generator: RandomGenerator) : BlockingDoubleChain {
+    public override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
+    override suspend fun nextBuffer(size: Int): DoubleBuffer = nextBufferBlocking(size)
+
+    override suspend fun fork(): UniformDoubleChain = UniformDoubleChain(generator.fork())
+}
+

@@ -8,7 +8,8 @@ import space.kscience.kmath.operations.*
  */
 public object MstAlgebra : NumericAlgebra<MST> {
     public override fun number(value: Number): MST.Numeric = MST.Numeric(value)
-    public override fun bindSymbol(value: String): MST.Symbolic = MST.Symbolic(value)
+    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MST.Symbolic(value)
+    override fun bindSymbol(value: String): MST.Symbolic = bindSymbolOrNull(value)
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
         { arg -> MST.Unary(operation, arg) }
@@ -24,7 +25,7 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     public override val zero: MST.Numeric = number(0.0)
 
     public override fun number(value: Number): MST.Numeric = MstAlgebra.number(value)
-    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun add(a: MST, b: MST): MST.Binary = binaryOperationFunction(GroupOperations.PLUS_OPERATION)(a, b)
     public override operator fun MST.unaryPlus(): MST.Unary =
         unaryOperationFunction(GroupOperations.PLUS_OPERATION)(this)
@@ -48,13 +49,14 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
 /**
  * [Ring] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric get() = MstGroup.zero
+    public override inline val zero: MST.Numeric get() = MstGroup.zero
     public override val one: MST.Numeric = number(1.0)
 
     public override fun number(value: Number): MST.Numeric = MstGroup.number(value)
-    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstGroup.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
@@ -77,13 +79,13 @@ public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MS
 /**
  * [Field] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<MST> {
-    public override val zero: MST.Numeric get() = MstRing.zero
+    public override inline val zero: MST.Numeric get() = MstRing.zero
+    public override inline val one: MST.Numeric get() = MstRing.one
 
-    public override val one: MST.Numeric get() = MstRing.one
-
-    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstRing.add(a, b)
 
@@ -108,11 +110,12 @@ public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<
 /**
  * [ExtendedField] over [MST] nodes.
  */
+@Suppress("OVERRIDE_BY_INLINE")
 public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
-    public override val zero: MST.Numeric get() = MstField.zero
-    public override val one: MST.Numeric get() = MstField.one
+    public override inline val zero: MST.Numeric get() = MstField.zero
+    public override inline val one: MST.Numeric get() = MstField.one
 
-    public override fun bindSymbol(value: String): MST.Symbolic = MstAlgebra.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun sin(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
     public override fun cos(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.COS_OPERATION)(arg)

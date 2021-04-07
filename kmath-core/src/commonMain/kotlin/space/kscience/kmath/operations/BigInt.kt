@@ -18,7 +18,8 @@ private typealias TBase = ULong
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
  *
- * @author Robert Drynkin (https://github.com/robdrynkin) and Peter Klimai (https://github.com/pklimai)
+ * @author Robert Drynkin
+ * @author Peter Klimai
  */
 @OptIn(UnstableKMathAPI::class)
 public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOperations<BigInt> {

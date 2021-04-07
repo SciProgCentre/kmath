@@ -165,11 +165,11 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     public override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
     public override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
 
-    public override fun bindSymbol(value: String): Quaternion = when (value) {
+    public override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {
         "i" -> i
         "j" -> j
         "k" -> k
-        else -> super<Field>.bindSymbol(value)
+        else -> null
     }
 
     override fun number(value: Number): Quaternion = value.toQuaternion()

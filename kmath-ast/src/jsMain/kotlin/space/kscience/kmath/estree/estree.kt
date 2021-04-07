@@ -2,10 +2,11 @@ package space.kscience.kmath.estree
 
 import space.kscience.kmath.ast.MST
 import space.kscience.kmath.ast.MST.*
-import space.kscience.kmath.ast.MstExpression
 import space.kscience.kmath.estree.internal.ESTreeBuilder
 import space.kscience.kmath.estree.internal.estree.BaseExpression
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -13,11 +14,7 @@ import space.kscience.kmath.operations.NumericAlgebra
 internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
     fun ESTreeBuilder<T>.visit(node: MST): BaseExpression = when (node) {
         is Symbolic -> {
-            val symbol = try {
-                algebra.bindSymbol(node.value)
-            } catch (ignored: IllegalStateException) {
-                null
-            }
+            val symbol = algebra.bindSymbolOrNull(node.value)
 
             if (symbol != null)
                 constant(symbol)
@@ -64,19 +61,21 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
     return ESTreeBuilder<T> { visit(this@compileWith) }.instance
 }
 
+/**
+ * Create a compiled expression with given [MST] and given [algebra].
+ */
+public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T> = compileWith(algebra)
+
 
 /**
- * Compiles an [MST] to ESTree generated expression using given algebra.
- *
- * @author Alexander Nozik.
+ * Compile given MST to expression and evaluate it against [arguments]
  */
-public fun <T : Any> Algebra<T>.expression(mst: MST): Expression<T> =
-    mst.compileWith(this)
+public inline fun <reified T: Any> MST.compile(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
+    compileToExpression(algebra).invoke(arguments)
+
 
 /**
- * Optimizes performance of an [MstExpression] by compiling it into ESTree generated expression.
- *
- * @author Alexander Nozik.
+ * Compile given MST to expression and evaluate it against [arguments]
  */
-public fun <T : Any> MstExpression<T, Algebra<T>>.compile(): Expression<T> =
-    mst.compileWith(algebra)
+public inline fun <reified T: Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Symbol,T>): T =
+    compileToExpression(algebra).invoke(*arguments)

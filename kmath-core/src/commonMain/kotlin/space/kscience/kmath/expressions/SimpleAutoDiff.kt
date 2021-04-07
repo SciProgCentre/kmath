@@ -85,7 +85,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         override fun hashCode(): Int = identity.hashCode()
     }
 
-    public override fun bindSymbolOrNull(symbol: Symbol): AutoDiffValue<T>? = bindings[symbol.identity]
+    override fun bindSymbolOrNull(value: String): AutoDiffValue<T>? = bindings[value]
 
     private fun getDerivative(variable: AutoDiffValue<T>): T =
         (variable as? AutoDiffVariableWithDerivative)?.d ?: derivatives[variable] ?: context.zero
@@ -337,9 +337,11 @@ public class SimpleAutoDiffExtendedField<T : Any, F : ExtendedField<T>>(
 ) : ExtendedField<AutoDiffValue<T>>, ScaleOperations<AutoDiffValue<T>>,
     SimpleAutoDiffField<T, F>(context, bindings) {
 
-    override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
+    override fun bindSymbol(value: String): AutoDiffValue<T> = super<SimpleAutoDiffField>.bindSymbol(value)
 
-    override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> = a * number(value)
+    public override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
+
+    public override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> = a * number(value)
 
     // x ^ 2
     public fun sqr(x: AutoDiffValue<T>): AutoDiffValue<T> =

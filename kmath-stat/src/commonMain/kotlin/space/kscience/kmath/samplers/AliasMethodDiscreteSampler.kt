@@ -1,10 +1,10 @@
-package space.kscience.kmath.stat.samplers
+package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.internal.InternalUtils
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.Sampler
 import space.kscience.kmath.stat.chain
-import space.kscience.kmath.stat.internal.InternalUtils
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -39,12 +39,12 @@ import kotlin.math.min
 public open class AliasMethodDiscreteSampler private constructor(
     // Deliberate direct storage of input arrays
     protected val probability: LongArray,
-    protected val alias: IntArray
+    protected val alias: IntArray,
 ) : Sampler<Int> {
 
     private class SmallTableAliasMethodDiscreteSampler(
         probability: LongArray,
-        alias: IntArray
+        alias: IntArray,
     ) : AliasMethodDiscreteSampler(probability, alias) {
         // Assume the table size is a power of 2 and create the mask
         private val mask: Int = alias.size - 1
@@ -111,110 +111,6 @@ public open class AliasMethodDiscreteSampler private constructor(
         private const val CONVERT_TO_NUMERATOR: Double = ONE_AS_NUMERATOR.toDouble()
         private const val MAX_SMALL_POWER_2_SIZE = 1 shl 11
 
-        public fun of(
-            probabilities: DoubleArray,
-            alpha: Int = DEFAULT_ALPHA
-        ): Sampler<Int> {
-            // The Alias method balances N categories with counts around the mean into N sections,
-            // each allocated 'mean' observations.
-            //
-            // Consider 4 categories with counts 6,3,2,1. The histogram can be balanced into a
-            // 2D array as 4 sections with a height of the mean:
-            //
-            // 6
-            // 6
-            // 6
-            // 63   => 6366   --
-            // 632     6326    |-- mean
-            // 6321    6321   --
-            //
-            // section abcd
-            //
-            // Each section is divided as:
-            // a: 6=1/1
-            // b: 3=1/1
-            // c: 2=2/3; 6=1/3   (6 is the alias)
-            // d: 1=1/3; 6=2/3   (6 is the alias)
-            //
-            // The sample is obtained by randomly selecting a section, then choosing which category
-            // from the pair based on a uniform random deviate.
-            val sumProb = InternalUtils.validateProbabilities(probabilities)
-            // Allow zero-padding
-            val n = computeSize(probabilities.size, alpha)
-            // Partition into small and large by splitting on the average.
-            val mean = sumProb / n
-            // The cardinality of smallSize + largeSize = n.
-            // So fill the same array from either end.
-            val indices = IntArray(n)
-            var large = n
-            var small = 0
-
-            probabilities.indices.forEach { i ->
-                if (probabilities[i] >= mean) indices[--large] = i else indices[small++] = i
-            }
-
-            small = fillRemainingIndices(probabilities.size, indices, small)
-            // This may be smaller than the input length if the probabilities were already padded.
-            val nonZeroIndex = findLastNonZeroIndex(probabilities)
-            // The probabilities are modified so use a copy.
-            // Note: probabilities are required only up to last nonZeroIndex
-            val remainingProbabilities = probabilities.copyOf(nonZeroIndex + 1)
-            // Allocate the final tables.
-            // Probability table may be truncated (when zero padded).
-            // The alias table is full length.
-            val probability = LongArray(remainingProbabilities.size)
-            val alias = IntArray(n)
-
-            // This loop uses each large in turn to fill the alias table for small probabilities that
-            // do not reach the requirement to fill an entire section alone (i.e. p < mean).
-            // Since the sum of the small should be less than the sum of the large it should use up
-            // all the small first. However floating point round-off can result in
-            // misclassification of items as small or large. The Vose algorithm handles this using
-            // a while loop conditioned on the size of both sets and a subsequent loop to use
-            // unpaired items.
-            while (large != n && small != 0) {
-                // Index of the small and the large probabilities.
-                val j = indices[--small]
-                val k = indices[large++]
-
-                // Optimisation for zero-padded input:
-                // p(j) = 0 above the last nonZeroIndex
-                if (j > nonZeroIndex)
-                // The entire amount for the section is taken from the alias.
-                    remainingProbabilities[k] -= mean
-                else {
-                    val pj = remainingProbabilities[j]
-                    // Item j is a small probability that is below the mean.
-                    // Compute the weight of the section for item j: pj / mean.
-                    // This is scaled by 2^53 and the ceiling function used to round-up
-                    // the probability to a numerator of a fraction in the range [1,2^53].
-                    // Ceiling ensures non-zero values.
-                    probability[j] = ceil(CONVERT_TO_NUMERATOR * (pj / mean)).toLong()
-                    // The remaining amount for the section is taken from the alias.
-                    // Effectively: probabilities[k] -= (mean - pj)
-                    remainingProbabilities[k] += pj - mean
-                }
-
-                // If not j then the alias is k
-                alias[j] = k
-
-                // Add the remaining probability from large to the appropriate list.
-                if (remainingProbabilities[k] >= mean) indices[--large] = k else indices[small++] = k
-            }
-
-            // Final loop conditions to consume unpaired items.
-            // Note: The large set should never be non-empty but this can occur due to round-off
-            // error so consume from both.
-            fillTable(probability, alias, indices, 0, small)
-            fillTable(probability, alias, indices, large, n)
-
-            // Change the algorithm for small power of 2 sized tables
-            return if (isSmallPowerOf2(n))
-                SmallTableAliasMethodDiscreteSampler(probability, alias)
-            else
-                AliasMethodDiscreteSampler(probability, alias)
-        }
-
         private fun fillRemainingIndices(length: Int, indices: IntArray, small: Int): Int {
             var updatedSmall = small
             (length until indices.size).forEach { i -> indices[updatedSmall++] = i }
@@ -246,7 +142,7 @@ public open class AliasMethodDiscreteSampler private constructor(
             alias: IntArray,
             indices: IntArray,
             start: Int,
-            end: Int
+            end: Int,
         ) = (start until end).forEach { i ->
             val index = indices[i]
             probability[index] = ONE_AS_NUMERATOR
@@ -281,6 +177,112 @@ public open class AliasMethodDiscreteSampler private constructor(
             }
 
             return n - (mutI ushr 1)
+        }
+    }
+
+    @Suppress("FunctionName")
+    public fun AliasMethodDiscreteSampler(
+        probabilities: DoubleArray,
+        alpha: Int = DEFAULT_ALPHA,
+    ): Sampler<Int> {
+        // The Alias method balances N categories with counts around the mean into N sections,
+        // each allocated 'mean' observations.
+        //
+        // Consider 4 categories with counts 6,3,2,1. The histogram can be balanced into a
+        // 2D array as 4 sections with a height of the mean:
+        //
+        // 6
+        // 6
+        // 6
+        // 63   => 6366   --
+        // 632     6326    |-- mean
+        // 6321    6321   --
+        //
+        // section abcd
+        //
+        // Each section is divided as:
+        // a: 6=1/1
+        // b: 3=1/1
+        // c: 2=2/3; 6=1/3   (6 is the alias)
+        // d: 1=1/3; 6=2/3   (6 is the alias)
+        //
+        // The sample is obtained by randomly selecting a section, then choosing which category
+        // from the pair based on a uniform random deviate.
+        val sumProb = InternalUtils.validateProbabilities(probabilities)
+        // Allow zero-padding
+        val n = computeSize(probabilities.size, alpha)
+        // Partition into small and large by splitting on the average.
+        val mean = sumProb / n
+        // The cardinality of smallSize + largeSize = n.
+        // So fill the same array from either end.
+        val indices = IntArray(n)
+        var large = n
+        var small = 0
+
+        probabilities.indices.forEach { i ->
+            if (probabilities[i] >= mean) indices[--large] = i else indices[small++] = i
+        }
+
+        small = fillRemainingIndices(probabilities.size, indices, small)
+        // This may be smaller than the input length if the probabilities were already padded.
+        val nonZeroIndex = findLastNonZeroIndex(probabilities)
+        // The probabilities are modified so use a copy.
+        // Note: probabilities are required only up to last nonZeroIndex
+        val remainingProbabilities = probabilities.copyOf(nonZeroIndex + 1)
+        // Allocate the final tables.
+        // Probability table may be truncated (when zero padded).
+        // The alias table is full length.
+        val probability = LongArray(remainingProbabilities.size)
+        val alias = IntArray(n)
+
+        // This loop uses each large in turn to fill the alias table for small probabilities that
+        // do not reach the requirement to fill an entire section alone (i.e. p < mean).
+        // Since the sum of the small should be less than the sum of the large it should use up
+        // all the small first. However floating point round-off can result in
+        // misclassification of items as small or large. The Vose algorithm handles this using
+        // a while loop conditioned on the size of both sets and a subsequent loop to use
+        // unpaired items.
+        while (large != n && small != 0) {
+            // Index of the small and the large probabilities.
+            val j = indices[--small]
+            val k = indices[large++]
+
+            // Optimisation for zero-padded input:
+            // p(j) = 0 above the last nonZeroIndex
+            if (j > nonZeroIndex)
+            // The entire amount for the section is taken from the alias.
+                remainingProbabilities[k] -= mean
+            else {
+                val pj = remainingProbabilities[j]
+                // Item j is a small probability that is below the mean.
+                // Compute the weight of the section for item j: pj / mean.
+                // This is scaled by 2^53 and the ceiling function used to round-up
+                // the probability to a numerator of a fraction in the range [1,2^53].
+                // Ceiling ensures non-zero values.
+                probability[j] = ceil(CONVERT_TO_NUMERATOR * (pj / mean)).toLong()
+                // The remaining amount for the section is taken from the alias.
+                // Effectively: probabilities[k] -= (mean - pj)
+                remainingProbabilities[k] += pj - mean
+            }
+
+            // If not j then the alias is k
+            alias[j] = k
+
+            // Add the remaining probability from large to the appropriate list.
+            if (remainingProbabilities[k] >= mean) indices[--large] = k else indices[small++] = k
+        }
+
+        // Final loop conditions to consume unpaired items.
+        // Note: The large set should never be non-empty but this can occur due to round-off
+        // error so consume from both.
+        fillTable(probability, alias, indices, 0, small)
+        fillTable(probability, alias, indices, large, n)
+
+        // Change the algorithm for small power of 2 sized tables
+        return if (isSmallPowerOf2(n)) {
+            SmallTableAliasMethodDiscreteSampler(probability, alias)
+        } else {
+            AliasMethodDiscreteSampler(probability, alias)
         }
     }
 }

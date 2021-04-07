@@ -6,7 +6,6 @@ import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.asBuffer
 
 /**
  * Create a [Flow] from buffer
@@ -50,7 +49,7 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
 
     if (this@chunked is BlockingDoubleChain) {
         // performance optimization for blocking primitive chain
-        while (true) emit(nextBlock(bufferSize).asBuffer())
+        while (true) emit(nextBufferBlocking(bufferSize))
     } else {
         val array = DoubleArray(bufferSize)
         var counter = 0

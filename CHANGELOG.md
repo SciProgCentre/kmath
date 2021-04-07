@@ -5,6 +5,8 @@
 - ScaleOperations interface
 - Field extends ScaleOperations
 - Basic integration API
+- Basic MPP distributions and samplers
+- bindSymbolOrNull
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -14,6 +16,8 @@
 - NDStructure and NDAlgebra to StructureND and AlgebraND respectively
 - Real -> Double
 - DataSets are moved from functions to core
+- Redesign advanced Chain API
+- Redesign MST. Remove MSTExpression.
 
 ### Deprecated
 
@@ -21,6 +25,7 @@
 - Nearest in Domain. To be implemented in geometry package.
 - Number multiplication and division in main Algebra chain
 - `contentEquals` from Buffer. It moved to the companion.
+- MSTExpression
 
 ### Fixed
 

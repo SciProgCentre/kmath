@@ -3,6 +3,7 @@ package space.kscience.kmath.expressions
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.E

@@ -2,10 +2,10 @@ package space.kscience.kmath.commons.optimization
 
 import kotlinx.coroutines.runBlocking
 import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
+import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.distributions.NormalDistribution
 import kotlin.math.pow
 import kotlin.test.Test
 
@@ -14,7 +14,8 @@ internal class OptimizeTest {
     val y by symbol
 
     val normal = DerivativeStructureExpression {
-        exp(-bind(x).pow(2) / 2) + exp(-bind(y).pow(2) / 2)
+        exp(-bindSymbol(x).pow(2) / 2) + exp(-bindSymbol(y)
+            .pow(2) / 2)
     }
 
     @Test
@@ -58,7 +59,7 @@ internal class OptimizeTest {
 
         val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
             val cWithDefault = bindSymbolOrNull(c) ?: one
-            bind(a) * x1.pow(2) + bind(b) * x1 + cWithDefault
+            bindSymbol(a) * x1.pow(2) + bindSymbol(b) * x1 + cWithDefault
         }
 
         val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)

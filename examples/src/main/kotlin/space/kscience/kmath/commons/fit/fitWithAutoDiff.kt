@@ -7,6 +7,7 @@ import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
+import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.optimization.OptimizationResult
@@ -14,7 +15,6 @@ import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.distributions.NormalDistribution
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.toList
 import kotlin.math.pow
@@ -62,8 +62,8 @@ suspend fun main() {
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
     val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
         //bind variables to autodiff context
-        val a = bind(a)
-        val b = bind(b)
+        val a = bindSymbol(a)
+        val b = bindSymbol(b)
         //Include default value for c if it is not provided as a parameter
         val c = bindSymbolOrNull(c) ?: one
         a * x1.pow(2) + b * x1 + c

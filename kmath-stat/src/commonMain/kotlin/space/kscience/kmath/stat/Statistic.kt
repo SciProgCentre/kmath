@@ -81,7 +81,7 @@ public class Mean<T>(
 
     public companion object {
         //TODO replace with optimized version which respects overflow
-        public val real: Mean<Double> = Mean(DoubleField) { sum, count -> sum / count }
+        public val double: Mean<Double> = Mean(DoubleField) { sum, count -> sum / count }
         public val int: Mean<Int> = Mean(IntRing) { sum, count -> sum / count }
         public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
     }

@@ -23,10 +23,18 @@ public interface Algebra<T> {
      *
      * In case if algebra can't parse the string, this method must throw [kotlin.IllegalStateException].
      *
+     * Returns `null` if symbol could not be bound to the context
+     *
      * @param value the raw string.
      * @return an object.
      */
-    public fun bindSymbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
+    public fun bindSymbolOrNull(value: String): T? = null
+
+    /**
+     * The same as [bindSymbolOrNull] but throws an error if symbol could not be bound
+     */
+    public fun bindSymbol(value: String): T =
+        bindSymbolOrNull(value) ?: error("Symbol '$value' is not supported in $this")
 
     /**
      * Dynamically dispatches an unary operation with the certain name.
@@ -91,7 +99,9 @@ public interface Algebra<T> {
         binaryOperationFunction(operation)(left, right)
 }
 
-public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
+public fun <T> Algebra<T>.bindSymbolOrNull(symbol: Symbol): T? = bindSymbolOrNull(symbol.identity)
+
+public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
 
 /**
  * Call a block with an [Algebra] as receiver.
@@ -109,8 +119,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @param a the addend.
-     * @param b the augend.
+     * @param a the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public fun add(a: T, b: T): T
@@ -136,8 +146,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public operator fun T.plus(b: T): T = add(this, b)
@@ -283,5 +293,5 @@ public interface FieldOperations<T> : RingOperations<T> {
  * @param T the type of element of this field.
  */
 public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
-    override fun number(value: Number): T = scale(one, value.toDouble())
+    public override fun number(value: Number): T = scale(one, value.toDouble())
 }

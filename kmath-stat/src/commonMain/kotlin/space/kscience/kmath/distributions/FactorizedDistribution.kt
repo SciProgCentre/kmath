@@ -1,7 +1,8 @@
-package space.kscience.kmath.stat
+package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.SimpleChain
+import space.kscience.kmath.stat.RandomGenerator
 
 /**
  * A multivariate distribution which takes a map of parameters

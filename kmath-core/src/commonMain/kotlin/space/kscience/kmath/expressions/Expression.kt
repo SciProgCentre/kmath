@@ -55,15 +55,6 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
  * @param E type of the actual expression state
  */
 public interface ExpressionAlgebra<in T, E> : Algebra<E> {
-    /**
-     * Bind a given [Symbol] to this context variable and produce context-specific object. Return null if symbol could not be bound in current context.
-     */
-    public fun bindSymbolOrNull(symbol: Symbol): E?
-
-    /**
-     * Bind a string to a context using [StringSymbol]
-     */
-    override fun bindSymbol(value: String): E = bindSymbol(StringSymbol(value))
 
     /**
      * A constant expression which does not depend on arguments
@@ -72,14 +63,8 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 }
 
 /**
- * Bind a given [Symbol] to this context variable and produce context-specific object.
- */
-public fun <T, E> ExpressionAlgebra<T, E>.bindSymbol(symbol: Symbol): E =
-    bindSymbolOrNull(symbol) ?: error("Symbol $symbol could not be bound to $this")
-
-/**
  * Bind a symbol by name inside the [ExpressionAlgebra]
  */
 public fun <T, E> ExpressionAlgebra<T, E>.binding(): ReadOnlyProperty<Any?, E> = ReadOnlyProperty { _, property ->
-    bindSymbol(StringSymbol(property.name)) ?: error("A variable with name ${property.name} does not exist")
+    bindSymbol(property.name) ?: error("A variable with name ${property.name} does not exist")
 }

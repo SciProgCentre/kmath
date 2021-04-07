@@ -4,14 +4,16 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
-import space.kscience.kmath.asm.compile
-import space.kscience.kmath.ast.mstInField
+import space.kscience.kmath.asm.compileToExpression
+import space.kscience.kmath.ast.MstField
+import space.kscience.kmath.ast.toExpression
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.expressionInField
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
+import space.kscience.kmath.operations.invoke
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -28,20 +30,20 @@ internal class ExpressionsInterpretersBenchmark {
 
     @Benchmark
     fun mstExpression(blackhole: Blackhole) {
-        val expr = algebra.mstInField {
+        val expr = MstField {
             val x = bindSymbol(x)
             x * 2.0 + number(2.0) / x - 16.0
-        }
+        }.toExpression(algebra)
 
         invokeAndSum(expr, blackhole)
     }
 
     @Benchmark
     fun asmExpression(blackhole: Blackhole) {
-        val expr = algebra.mstInField {
+        val expr = MstField {
             val x = bindSymbol(x)
             x * 2.0 + number(2.0) / x - 16.0
-        }.compile()
+        }.compileToExpression(algebra)
 
         invokeAndSum(expr, blackhole)
     }

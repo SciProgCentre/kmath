@@ -46,6 +46,8 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
 	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun combine (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
 	public fun combine-WKhNzhk (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
@@ -124,7 +126,7 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sqrt (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun tan-8UOKELU (Lspace/kscience/kmath/nd/StructureND;)Lorg/jetbrains/bio/viktor/F64Array;
 	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public fun times (DLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
