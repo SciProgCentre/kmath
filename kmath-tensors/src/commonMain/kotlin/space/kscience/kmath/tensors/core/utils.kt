@@ -1,8 +1,8 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.samplers.GaussianSampler
+import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
-import kotlin.random.Random
-import kotlin.math.*
 
 /**
  * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
@@ -37,8 +37,9 @@ internal fun Buffer<Double>.array(): DoubleArray = when (this) {
 }
 
 internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
-    val u = Random(seed)
-    return (0 until n).map { sqrt(-2.0 * ln(u.nextDouble())) * cos(2.0 * PI * u.nextDouble()) }.toDoubleArray()
+    val distribution = GaussianSampler(0.0, 1.0)
+    val generator = RandomGenerator.default(seed)
+    return distribution.sample(generator).nextBufferBlocking(n).toDoubleArray()
 }
 
 internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {
