@@ -126,9 +126,9 @@ class TestDoubleLinearOpsTensorAlgebra {
         testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
     }
 
-    @Test @Ignore
+    @Test
     fun testBatchedSVD() = DoubleLinearOpsTensorAlgebra {
-        val tensor = randNormal(intArrayOf(7, 5, 3), 0)
+        val tensor = randNormal(intArrayOf(1, 15, 4, 7, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
         val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV)
         assertTrue(tensor.eq(tensorSVD))

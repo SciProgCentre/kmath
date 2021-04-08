@@ -96,14 +96,20 @@ public class DoubleLinearOpsTensorAlgebra :
         val size = this.shape.size
         val commonShape = this.shape.sliceArray(0 until size - 2)
         val (n, m) = this.shape.sliceArray(size - 2 until size)
-        val resU = zeros(commonShape + intArrayOf(n, min(n, m)))
+        val resU = zeros(commonShape + intArrayOf(min(n, m), n))
         val resS = zeros(commonShape + intArrayOf(min(n, m)))
         val resV = zeros(commonShape + intArrayOf(min(n, m), m))
 
         for ((matrix, USV) in this.matrixSequence()
-            .zip(resU.matrixSequence().zip(resS.vectorSequence().zip(resV.matrixSequence()))))
-            svdHelper(matrix.asTensor(), USV, m, n)
-        return Triple(resU, resS, resV.transpose(size - 2, size - 1))
+            .zip(resU.matrixSequence().zip(resS.vectorSequence().zip(resV.matrixSequence())))) {
+            val size = matrix.shape.reduce { acc, i -> acc * i }
+            val curMatrix = DoubleTensor(
+                matrix.shape,
+                matrix.buffer.array().slice(matrix.bufferStart until matrix.bufferStart + size).toDoubleArray()
+            )
+            svdHelper(curMatrix, USV, m, n)
+        }
+        return Triple(resU.transpose(size - 2, size - 1), resS, resV)
     }
 
     override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {

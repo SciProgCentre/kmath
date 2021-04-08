@@ -3,6 +3,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
+import kotlin.math.sqrt
 
 /**
  * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
@@ -40,6 +41,12 @@ internal inline fun getRandomNormals(n: Int, seed: Long): DoubleArray {
     val distribution = GaussianSampler(0.0, 1.0)
     val generator = RandomGenerator.default(seed)
     return distribution.sample(generator).nextBufferBlocking(n).toDoubleArray()
+}
+
+internal inline fun getRandomUnitVector(n: Int, seed: Long): DoubleArray {
+    val unnorm = getRandomNormals(n, seed)
+    val norm = sqrt(unnorm.map { it * it }.sum())
+    return unnorm.map { it / norm }.toDoubleArray()
 }
 
 internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {

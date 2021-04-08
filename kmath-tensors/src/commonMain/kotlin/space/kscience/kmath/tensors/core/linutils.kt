@@ -225,10 +225,10 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon:
     val b: DoubleTensor
     if (n > m) {
         b = a.transpose(0, 1).dot(a)
-        v = DoubleTensor(intArrayOf(m), getRandomNormals(m, 0))
+        v = DoubleTensor(intArrayOf(m), getRandomUnitVector(m, 0))
     } else {
         b = a.dot(a.transpose(0, 1))
-        v = DoubleTensor(intArrayOf(n), getRandomNormals(n, 0))
+        v = DoubleTensor(intArrayOf(n), getRandomUnitVector(n, 0))
     }
 
     var lastV: DoubleTensor
@@ -284,7 +284,13 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     val s = res.map { it.first }.toDoubleArray()
     val uBuffer = res.map { it.second }.flatMap { it.buffer.array().toList() }.toDoubleArray()
     val vBuffer = res.map { it.third }.flatMap { it.buffer.array().toList() }.toDoubleArray()
-    uBuffer.copyInto(matrixU.buffer.array())
-    s.copyInto(matrixS.buffer.array())
-    vBuffer.copyInto(matrixV.buffer.array())
+    for (i in uBuffer.indices) {
+        matrixU.buffer.array()[matrixU.bufferStart + i] = uBuffer[i]
+    }
+    for (i in s.indices) {
+        matrixS.buffer.array()[matrixS.bufferStart + i] = s[i]
+    }
+    for (i in vBuffer.indices) {
+        matrixV.buffer.array()[matrixV.bufferStart + i] = vBuffer[i]
+    }
 }
