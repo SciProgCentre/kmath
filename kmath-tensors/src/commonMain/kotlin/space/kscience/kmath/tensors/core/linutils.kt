@@ -6,6 +6,7 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.sign
 import kotlin.math.sqrt
 
 
@@ -293,4 +294,15 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     for (i in vBuffer.indices) {
         matrixV.buffer.array()[matrixV.bufferStart + i] = vBuffer[i]
     }
+}
+
+internal inline fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int): Unit {
+    for (i in 0 until n)
+        for (j in 0 until n) {
+            if (i == j) {
+                matrix[i, j] = sign(matrix[i, j])
+            } else {
+                matrix[i, j] = 0.0
+            }
+        }
 }
