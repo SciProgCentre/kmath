@@ -113,6 +113,19 @@ class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
+    fun testCholesky() = DoubleLinearOpsTensorAlgebra {
+        val tensor = randNormal(intArrayOf(2, 5, 5), 0)
+        val sigma = (tensor dot tensor.transpose()) + diagonalEmbedding(
+            fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
+        )
+        //checkPositiveDefinite(sigma) sigma must be positive definite
+        val low = sigma.cholesky()
+        val sigmChol = low dot low.transpose()
+        assertTrue(sigma.eq(sigmChol))
+
+    }
+
+    @Test
     fun testSVD1D() = DoubleLinearOpsTensorAlgebra {
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
 
