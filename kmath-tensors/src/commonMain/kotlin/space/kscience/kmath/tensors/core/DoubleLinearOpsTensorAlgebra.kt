@@ -115,6 +115,8 @@ public class DoubleLinearOpsTensorAlgebra :
 
     override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(this)
+        //http://hua-zhou.github.io/teaching/biostatm280-2017spring/slides/16-eigsvd/eigsvd.html
+        //see the last point
         TODO("maybe use SVD")
     }
 
