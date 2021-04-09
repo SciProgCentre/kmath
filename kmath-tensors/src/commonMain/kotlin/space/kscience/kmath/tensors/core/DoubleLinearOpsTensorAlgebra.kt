@@ -94,8 +94,10 @@ public class DoubleLinearOpsTensorAlgebra :
         return qTensor to rTensor
     }
 
+    override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
+        svd(epsilon = 1e-10)
 
-    override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun DoubleTensor.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = this.linearStructure.dim
         val commonShape = this.shape.sliceArray(0 until size - 2)
         val (n, m) = this.shape.sliceArray(size - 2 until size)
@@ -110,17 +112,20 @@ public class DoubleLinearOpsTensorAlgebra :
                 matrix.shape,
                 matrix.buffer.array().slice(matrix.bufferStart until matrix.bufferStart + size).toDoubleArray()
             )
-            svdHelper(curMatrix, USV, m, n)
+            svdHelper(curMatrix, USV, m, n, epsilon)
         }
         return Triple(resU.transpose(), resS, resV.transpose())
     }
 
+    override fun DoubleTensor.symEig(): Pair<DoubleTensor, DoubleTensor> =
+        symEig(epsilon = 1e-15)
+
     //http://hua-zhou.github.io/teaching/biostatm280-2017spring/slides/16-eigsvd/eigsvd.html
-    override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
-        checkSymmetric(this)
-        val (u, s, v) = this.svd()
+    public fun DoubleTensor.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+        checkSymmetric(this, epsilon)
+        val (u, s, v) = this.svd(epsilon)
         val shp = s.shape + intArrayOf(1)
-        val utv = (u.transpose() dot v).map { if (abs(it) < 0.99) 0.0 else sign(it) }
+        val utv = (u.transpose() dot v).map { if (abs(it) < 0.9) 0.0 else sign(it) }
         val eig = (utv dot s.view(shp)).view(s.shape)
         return Pair(eig, v)
     }

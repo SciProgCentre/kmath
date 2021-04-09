@@ -143,7 +143,7 @@ class TestDoubleLinearOpsTensorAlgebra {
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
         val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
-        assertTrue(tensorSigma.eq(tensorSigmaCalc, 0.01))
+        assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
 

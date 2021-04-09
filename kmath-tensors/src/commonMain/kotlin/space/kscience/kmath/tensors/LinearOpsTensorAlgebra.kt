@@ -1,7 +1,7 @@
 package space.kscience.kmath.tensors
 
 
-public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, IndexTensorType: TensorStructure<Int>> :
+public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, IndexTensorType : TensorStructure<Int>> :
     TensorPartialDivisionAlgebra<T, TensorType> {
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.det
@@ -26,6 +26,6 @@ public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, Inde
     public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
 
     //https://pytorch.org/docs/stable/generated/torch.symeig.html
-    public fun TensorType.symEig(eigenvectors: Boolean = true): Pair<TensorType, TensorType>
+    public fun TensorType.symEig(): Pair<TensorType, TensorType>
 
 }

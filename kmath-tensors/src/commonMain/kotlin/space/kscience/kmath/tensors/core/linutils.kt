@@ -246,7 +246,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon:
 internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
     USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
-    m: Int, n: Int
+    m: Int, n: Int, epsilon: Double
 ): Unit {
     val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
     val (matrixU, SV) = USV
@@ -267,12 +267,12 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
         var u: DoubleTensor
         var norm: Double
         if (n > m) {
-            v = svd1d(a)
+            v = svd1d(a, epsilon)
             u = matrix.dot(v)
             norm = DoubleAnalyticTensorAlgebra { (u dot u).sqrt().value() }
             u = u.times(1.0 / norm)
         } else {
-            u = svd1d(a)
+            u = svd1d(a, epsilon)
             v = matrix.transpose(0, 1).dot(u)
             norm = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
             v = v.times(1.0 / norm)
