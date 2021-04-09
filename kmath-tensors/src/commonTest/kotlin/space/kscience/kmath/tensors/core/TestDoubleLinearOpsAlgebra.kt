@@ -35,6 +35,19 @@ class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
+    fun testDet() = DoubleLinearOpsTensorAlgebra {
+        val m = fromArray(
+            intArrayOf(3, 3), doubleArrayOf(
+                2.1843, 1.4391, -0.4845,
+                1.4391, 1.7772, 0.4055,
+                -0.4845, 0.4055, 0.7519
+            )
+        )
+        println(m.det().value())
+        println(0.0197) //expected value
+    }
+
+    @Test
     fun testInvLU() = DoubleLinearOpsTensorAlgebra {
         val tensor = fromArray(
             intArrayOf(2, 2, 2),
