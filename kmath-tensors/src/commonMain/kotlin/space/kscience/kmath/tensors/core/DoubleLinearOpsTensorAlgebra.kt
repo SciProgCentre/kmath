@@ -154,6 +154,7 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     public fun DoubleTensor.invLU(): DoubleTensor {
+        //TODO("Andrei the det is non-zero")
         val (luTensor, pivotsTensor) = lu()
         val invTensor = luTensor.zeroesLike()
 
