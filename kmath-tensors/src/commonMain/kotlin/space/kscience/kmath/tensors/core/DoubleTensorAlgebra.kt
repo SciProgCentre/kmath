@@ -339,18 +339,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         )
     }
 
-    public fun DoubleTensor.contentEquals(other: DoubleTensor, delta: Double = 1e-5): Boolean {
-        return this.contentEquals(other) { x, y -> abs(x - y) < delta }
-    }
-
     public fun DoubleTensor.eq(other: DoubleTensor, delta: Double): Boolean {
         return this.eq(other) { x, y -> abs(x - y) < delta }
     }
 
     public fun DoubleTensor.eq(other: DoubleTensor): Boolean = this.eq(other, 1e-5)
-
-    public fun DoubleTensor.contentEquals(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean =
-        this.eq(other, eqFunction)
 
     private fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
         checkShapesCompatible(this, other)

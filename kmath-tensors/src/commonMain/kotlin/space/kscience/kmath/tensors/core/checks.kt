@@ -57,3 +57,4 @@ internal inline fun <T, TensorType : TensorStructure<T>,
         "Tensor must be batches of square matrices, but they are ${shape[n - 1]} by ${shape[n - 1]} matrices"
     }
 }
+

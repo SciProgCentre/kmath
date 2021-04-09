@@ -93,7 +93,7 @@ public class DoubleLinearOpsTensorAlgebra :
 
 
     override fun DoubleTensor.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        val size = this.shape.size
+        val size = this.linearStructure.dim
         val commonShape = this.shape.sliceArray(0 until size - 2)
         val (n, m) = this.shape.sliceArray(size - 2 until size)
         val resU = zeros(commonShape + intArrayOf(min(n, m), n))
@@ -109,11 +109,11 @@ public class DoubleLinearOpsTensorAlgebra :
             )
             svdHelper(curMatrix, USV, m, n)
         }
-        return Triple(resU.transpose(size - 2, size - 1), resS, resV)
+        return Triple(resU.transpose(), resS, resV.transpose())
     }
 
     override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
-        TODO("ANDREI")
+        TODO()
     }
 
     public fun DoubleTensor.detLU(): DoubleTensor {
