@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.structures.toList
 import kotlin.math.abs
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -137,13 +138,12 @@ class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    @Ignore
     fun testBatchedSymEig() = DoubleLinearOpsTensorAlgebra {
-        val tensor = randNormal(shape = intArrayOf(5, 2, 2), 0)
+        val tensor = randNormal(shape = intArrayOf(5, 3, 3), 0)
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
         val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
-        assertTrue(tensorSigma.eq(tensorSigmaCalc))
+        assertTrue(tensorSigma.eq(tensorSigmaCalc, 0.01))
     }
 
 
