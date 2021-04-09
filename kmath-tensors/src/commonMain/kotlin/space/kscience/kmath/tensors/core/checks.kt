@@ -58,3 +58,7 @@ internal inline fun <T, TensorType : TensorStructure<T>,
     }
 }
 
+internal inline fun DoubleTensorAlgebra.checkSymmetric(tensor: DoubleTensor): Unit =
+    check(tensor.eq(tensor.transpose())){
+        "Tensor is not symmetric about the last 2 dimensions"
+    }

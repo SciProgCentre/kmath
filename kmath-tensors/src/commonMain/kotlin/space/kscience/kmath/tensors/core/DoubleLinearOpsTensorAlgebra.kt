@@ -67,7 +67,7 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     override fun DoubleTensor.cholesky(): DoubleTensor {
-        // todo checks
+        checkSymmetric(this)
         checkSquareMatrix(shape)
 
         val n = shape.last()
@@ -113,7 +113,9 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     override fun DoubleTensor.symEig(eigenvectors: Boolean): Pair<DoubleTensor, DoubleTensor> {
-        TODO()
+        checkSymmetric(this)
+        val svd = this.svd()
+        TODO("U might have some columns negative to V")
     }
 
     public fun DoubleTensor.detLU(): DoubleTensor {

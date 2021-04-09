@@ -140,9 +140,9 @@ class TestDoubleLinearOpsTensorAlgebra {
     @Ignore
     fun testBatchedSymEig() = DoubleLinearOpsTensorAlgebra {
         val tensor = randNormal(shape = intArrayOf(5, 2, 2), 0)
-        val tensorSigma = tensor + tensor.transpose(1, 2)
+        val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose(1, 2))
+        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
