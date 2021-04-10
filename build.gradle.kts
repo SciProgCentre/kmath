@@ -1,5 +1,4 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import ru.mipt.npm.gradle.KSciencePublishingPlugin
 import java.net.URL
 
 plugins {
@@ -13,16 +12,19 @@ allprojects {
         maven("https://dl.bintray.com/egor-bogomolov/astminer/")
         maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://jitpack.io")
-        maven("http://logicrunch.research.it.uu.se/maven/")
+        maven{
+            setUrl("http://logicrunch.research.it.uu.se/maven/")
+            isAllowInsecureProtocol = true
+        }
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-5"
+    version = "0.3.0-dev-6"
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
     afterEvaluate {
         tasks.withType<DokkaTask> {

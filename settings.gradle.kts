@@ -7,8 +7,8 @@ pluginManagement {
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.9.3"
-    val kotlinVersion = "1.4.32"
+    val toolsVersion = "0.9.5"
+    val kotlinVersion = "1.5.0-M2"
 
     plugins {
         id("kotlinx.benchmark") version "0.2.0-dev-20"

@@ -20,7 +20,10 @@ repositories {
     maven("https://dl.bintray.com/mipt-npm/dev")
     maven("https://dl.bintray.com/mipt-npm/kscience")
     maven("https://jitpack.io")
-    maven("http://logicrunch.research.it.uu.se/maven/")
+    maven{
+        setUrl("http://logicrunch.research.it.uu.se/maven/")
+        isAllowInsecureProtocol = true
+    }
     mavenCentral()
 }
 

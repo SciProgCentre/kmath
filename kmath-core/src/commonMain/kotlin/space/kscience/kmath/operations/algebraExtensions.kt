@@ -7,7 +7,9 @@ package space.kscience.kmath.operations
  * @param data the iterable to sum up.
  * @return the sum.
  */
-public fun <T> Group<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right -> add(left, right) }
+public fun <T> Group<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right ->
+    add(left, right)
+}
 
 /**
  * Returns the sum of all elements in the sequence in this [Group].
@@ -16,7 +18,9 @@ public fun <T> Group<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, righ
  * @param data the sequence to sum up.
  * @return the sum.
  */
-public fun <T> Group<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right -> add(left, right) }
+public fun <T> Group<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right ->
+    add(left, right)
+}
 
 /**
  * Returns an average value of elements in the iterable in this [Group].
