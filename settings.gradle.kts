@@ -17,6 +17,7 @@ pluginManagement {
         id("ru.mipt.npm.gradle.jvm") version toolsVersion
         id("ru.mipt.npm.gradle.publish") version toolsVersion
         kotlin("jvm") version kotlinVersion
+        kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
 }
