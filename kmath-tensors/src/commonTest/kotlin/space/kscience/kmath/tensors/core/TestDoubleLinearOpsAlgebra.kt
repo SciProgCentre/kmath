@@ -36,6 +36,7 @@ class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
     fun testDet() = DoubleLinearOpsTensorAlgebra {
+        val expectedValue = 0.019827417
         val m = fromArray(
             intArrayOf(3, 3), doubleArrayOf(
                 2.1843, 1.4391, -0.4845,
@@ -43,8 +44,20 @@ class TestDoubleLinearOpsTensorAlgebra {
                 -0.4845, 0.4055, 0.7519
             )
         )
-        println(m.det().value())
-        println(0.0197) //expected value
+
+        assertTrue { abs(m.det().value() - expectedValue) < 1e-5}
+    }
+
+    @Test
+    fun testDetSingle() = DoubleLinearOpsTensorAlgebra {
+        val expectedValue = 48.151623
+        val m = fromArray(
+            intArrayOf(1, 1), doubleArrayOf(
+                expectedValue
+            )
+        )
+
+        assertTrue { abs(m.det().value() - expectedValue) < 1e-5}
     }
 
     @Test

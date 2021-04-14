@@ -2,6 +2,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.TensorAlgebra
 import space.kscience.kmath.tensors.TensorStructure
+import kotlin.math.abs
 
 
 internal inline fun <T, TensorType : TensorStructure<T>,
@@ -63,9 +64,20 @@ internal inline fun DoubleTensorAlgebra.checkSymmetric(tensor: DoubleTensor, eps
         "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
     }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor): Unit {
+internal inline fun DoubleLinearOpsTensorAlgebra.checkPositiveDefinite(
+    tensor: DoubleTensor, epsilon: Double = 1e-6): Unit {
+    checkSymmetric(tensor, epsilon)
     for( mat in tensor.matrixSequence())
         check(mat.asTensor().detLU().value() > 0.0){
             "Tensor contains matrices which are not positive definite ${mat.asTensor().detLU().value()}"
         }
+}
+
+internal inline fun DoubleLinearOpsTensorAlgebra.checkNonSingularMatrix(tensor: DoubleTensor): Unit {
+    for( mat in tensor.matrixSequence()) {
+        val detTensor = mat.asTensor().detLU()
+        check(!(detTensor.eq(detTensor.zeroesLike()))){
+            "Tensor contains matrices which are singular"
+        }
+    }
 }
