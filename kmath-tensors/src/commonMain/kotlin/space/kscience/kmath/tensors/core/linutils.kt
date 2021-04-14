@@ -62,10 +62,10 @@ internal inline fun dotHelper(
 }
 
 internal inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>, m: Int) {
-    for (row in 0 until m) pivots[row] = row
+    for (row in 0..m) pivots[row] = row
 
     for (i in 0 until m) {
-        var maxVal = -1.0
+        var maxVal = 0.0
         var maxInd = i
 
         for (k in i until m) {
@@ -76,7 +76,9 @@ internal inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStru
             }
         }
 
-        //todo check singularity
+        if (abs(maxVal) < 1e-9) {
+            throw RuntimeException()
+        }
 
         if (maxInd != i) {
 
@@ -158,6 +160,9 @@ internal inline fun choleskyHelper(
 internal inline fun luMatrixDet(luTensor: MutableStructure2D<Double>, pivotsTensor: MutableStructure1D<Int>): Double {
     val lu = luTensor.as2D()
     val pivots = pivotsTensor.as1D()
+    if (lu[0, 0] == 0.0) {
+        return 0.0
+    }
     val m = lu.shape[0]
     val sign = if ((pivots[m] - m) % 2 == 0) 1.0 else -1.0
     return (0 until m).asSequence().map { lu[it, it] }.fold(sign) { left, right -> left * right }
