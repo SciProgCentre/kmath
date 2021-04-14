@@ -1,4 +1,4 @@
-package space.kscience.kmath.ast
+package space.kscience.kmath.expressions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*

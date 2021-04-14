@@ -1,6 +1,6 @@
 package space.kscience.kmath.asm
 
-import space.kscience.kmath.ast.MstRing
+import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.ByteRing
 import space.kscience.kmath.operations.invoke

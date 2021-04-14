@@ -1,10 +1,10 @@
 package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.SFun
-import space.kscience.kmath.ast.MST
-import space.kscience.kmath.ast.MstAlgebra
-import space.kscience.kmath.ast.interpret
 import space.kscience.kmath.expressions.DifferentiableExpression
+import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.MstAlgebra
+import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.NumericAlgebra
 

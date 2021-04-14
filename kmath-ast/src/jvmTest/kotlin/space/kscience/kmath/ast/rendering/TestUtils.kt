@@ -1,7 +1,7 @@
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.ast.parseMath
+import space.kscience.kmath.expressions.MST
 import kotlin.test.assertEquals
 
 internal object TestUtils {

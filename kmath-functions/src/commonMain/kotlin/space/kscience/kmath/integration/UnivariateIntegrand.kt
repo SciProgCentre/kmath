@@ -1,6 +1,7 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 public class UnivariateIntegrand<T : Any> internal constructor(
@@ -26,7 +27,8 @@ public fun <T : Any> UnivariateIntegrand(
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
-public inline class IntegrationRange<T : Comparable<T>>(public val range: ClosedRange<T>) : IntegrandFeature
+@JvmInline
+public value class IntegrationRange<T : Comparable<T>>(public val range: ClosedRange<T>) : IntegrandFeature
 
 public val <T : Any> UnivariateIntegrand<T>.value: T? get() = getFeature<IntegrandValue<T>>()?.value
 

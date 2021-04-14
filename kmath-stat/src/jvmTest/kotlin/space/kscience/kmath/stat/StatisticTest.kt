@@ -17,14 +17,12 @@ internal class StatisticTest {
     val chunked = data.chunked(1000)
 
     @Test
-    fun testParallelMean() {
-        runBlocking {
-            val average = Mean.double
-                .flow(chunked) //create a flow with results
-                .drop(99) // Skip first 99 values and use one with total data
-                .first() //get 1e5 data samples average
+    fun testParallelMean() = runBlocking {
+        val average = Mean.double
+            .flow(chunked) //create a flow with results
+            .drop(99) // Skip first 99 values and use one with total data
+            .first() //get 1e5 data samples average
 
-            println(average)
-        }
+        println(average)
     }
 }

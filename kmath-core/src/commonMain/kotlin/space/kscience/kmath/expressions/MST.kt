@@ -1,6 +1,5 @@
-package space.kscience.kmath.ast
+package space.kscience.kmath.expressions
 
-import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.misc.StringSymbol
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra

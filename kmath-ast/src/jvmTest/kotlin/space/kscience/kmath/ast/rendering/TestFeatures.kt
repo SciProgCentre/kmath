@@ -1,7 +1,7 @@
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.ast.MST.Numeric
 import space.kscience.kmath.ast.rendering.TestUtils.testLatex
+import space.kscience.kmath.expressions.MST.Numeric
 import kotlin.test.Test
 
 internal class TestFeatures {

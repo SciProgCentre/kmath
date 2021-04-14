@@ -1,8 +1,8 @@
 package space.kscisnce.kmath.ast
 
-import space.kscience.kmath.ast.MstField
-import space.kscience.kmath.ast.toExpression
+import space.kscience.kmath.expressions.MstField
 import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.expressions.toExpression
 import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol

@@ -1,7 +1,6 @@
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
     id("ru.mipt.npm.gradle.native")
 }
 
@@ -19,7 +18,7 @@ kotlin.sourceSets {
 
 readme {
     description = "Complex numbers and quaternions."
-    maturity = Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

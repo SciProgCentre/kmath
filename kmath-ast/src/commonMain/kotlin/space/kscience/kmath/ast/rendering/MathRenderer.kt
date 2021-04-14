@@ -1,6 +1,6 @@
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.ast.MST
+import space.kscience.kmath.expressions.MST
 
 /**
  * Renders [MST] to [MathSyntax].

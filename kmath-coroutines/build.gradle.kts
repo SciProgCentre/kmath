@@ -1,4 +1,6 @@
-plugins { id("ru.mipt.npm.gradle.mpp") }
+plugins {
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")}
 
 kotlin.sourceSets {
     all {

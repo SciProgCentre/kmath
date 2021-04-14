@@ -7,18 +7,17 @@ pluginManagement {
         maven("https://dl.bintray.com/kotlin/kotlinx")
     }
 
-    val toolsVersion = "0.9.4"
+    val toolsVersion = "0.9.5-dev"
     val kotlinVersion = "1.5.0-M2"
 
     plugins {
-        id("kotlinx.benchmark") version "0.2.0-dev-20"
+        kotlin("multiplatform") version kotlinVersion
+        kotlin("jvm") version kotlinVersion
+        kotlin("plugin.allopen") version kotlinVersion
+        id("org.jetbrains.kotlinx.benchmark") version "0.3.0"
         id("ru.mipt.npm.gradle.project") version toolsVersion
         id("ru.mipt.npm.gradle.mpp") version toolsVersion
         id("ru.mipt.npm.gradle.jvm") version toolsVersion
-        id("ru.mipt.npm.gradle.publish") version toolsVersion
-        kotlin("jvm") version kotlinVersion
-        kotlin("multiplatform") version kotlinVersion
-        kotlin("plugin.allopen") version kotlinVersion
     }
 }
 

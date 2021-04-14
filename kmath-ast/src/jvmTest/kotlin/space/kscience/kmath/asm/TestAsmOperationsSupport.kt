@@ -1,8 +1,8 @@
 package space.kscience.kmath.asm
 
-import space.kscience.kmath.ast.MstExtendedField
-import space.kscience.kmath.ast.MstField
-import space.kscience.kmath.ast.MstGroup
+import space.kscience.kmath.expressions.MstExtendedField
+import space.kscience.kmath.expressions.MstField
+import space.kscience.kmath.expressions.MstGroup
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke

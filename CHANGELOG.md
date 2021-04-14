@@ -18,6 +18,7 @@
 - DataSets are moved from functions to core
 - Redesign advanced Chain API
 - Redesign MST. Remove MSTExpression.
+- Move MST to core
 
 ### Deprecated
 

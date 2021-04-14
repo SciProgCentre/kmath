@@ -1,17 +1,18 @@
 package space.kscience.kmath.stat
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.samplers.GaussianSampler
 
 internal class CommonsDistributionsTest {
     @Test
-    fun testNormalDistributionSuspend() = runBlocking {
+    fun testNormalDistributionSuspend() = GlobalScope.launch {
         val distribution = GaussianSampler(7.0, 2.0)
         val generator = RandomGenerator.default(1)
         val sample = distribution.sample(generator).nextBuffer(1000)
-        Assertions.assertEquals(7.0, Mean.double(sample), 0.2)
+        Assertions.assertEquals(7.0, Mean.evaluate(sample), 0.2)
     }
 
     @Test
@@ -19,8 +20,6 @@ internal class CommonsDistributionsTest {
         val distribution = GaussianSampler(7.0, 2.0)
         val generator = RandomGenerator.default(1)
         val sample = distribution.sample(generator).nextBufferBlocking(1000)
-        runBlocking {
-            Assertions.assertEquals(7.0, Mean.double(sample), 0.2)
-        }
+        Assertions.assertEquals(7.0, Mean.evaluate(sample), 0.2)
     }
 }

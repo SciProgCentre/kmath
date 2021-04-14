@@ -2,8 +2,8 @@ package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.InstructionAdapter
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 

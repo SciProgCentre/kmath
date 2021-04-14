@@ -1,5 +1,6 @@
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.expressions.evaluate
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import kotlin.test.Test

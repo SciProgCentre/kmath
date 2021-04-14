@@ -1,8 +1,8 @@
 package space.kscience.kmath.asm
 
-import space.kscience.kmath.ast.*
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.toComplex
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.ByteRing
 import space.kscience.kmath.operations.DoubleField

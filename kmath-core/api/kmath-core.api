@@ -217,6 +217,332 @@ public class space/kscience/kmath/expressions/FunctionalExpressionRing : space/k
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
+public abstract class space/kscience/kmath/expressions/MST {
+}
+
+public final class space/kscience/kmath/expressions/MST$Binary : space/kscience/kmath/expressions/MST {
+	public fun <init> (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lspace/kscience/kmath/expressions/MST;
+	public final fun component3 ()Lspace/kscience/kmath/expressions/MST;
+	public final fun copy (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/expressions/MST$Binary;Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;ILjava/lang/Object;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLeft ()Lspace/kscience/kmath/expressions/MST;
+	public final fun getOperation ()Ljava/lang/String;
+	public final fun getRight ()Lspace/kscience/kmath/expressions/MST;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/expressions/MST$Numeric : space/kscience/kmath/expressions/MST {
+	public fun <init> (Ljava/lang/Number;)V
+	public final fun component1 ()Ljava/lang/Number;
+	public final fun copy (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/expressions/MST$Numeric;Ljava/lang/Number;ILjava/lang/Object;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/expressions/MST$Symbolic : space/kscience/kmath/expressions/MST {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/expressions/MST$Symbolic;Ljava/lang/String;ILjava/lang/Object;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/expressions/MST$Unary : space/kscience/kmath/expressions/MST {
+	public fun <init> (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lspace/kscience/kmath/expressions/MST;
+	public final fun copy (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/expressions/MST$Unary;Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;ILjava/lang/Object;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOperation ()Ljava/lang/String;
+	public final fun getValue ()Lspace/kscience/kmath/expressions/MST;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/expressions/MSTKt {
+	public static final fun evaluate (Lspace/kscience/kmath/operations/Algebra;Lspace/kscience/kmath/expressions/MST;)Ljava/lang/Object;
+	public static final fun interpret (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/operations/Algebra;Ljava/util/Map;)Ljava/lang/Object;
+	public static final fun interpret (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/operations/Algebra;[Lkotlin/Pair;)Ljava/lang/Object;
+	public static final fun toExpression (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/operations/Algebra;)Lspace/kscience/kmath/expressions/Expression;
+}
+
+public final class space/kscience/kmath/expressions/MstAlgebra : space/kscience/kmath/operations/NumericAlgebra {
+	public static final field INSTANCE Lspace/kscience/kmath/expressions/MstAlgebra;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+}
+
+public final class space/kscience/kmath/expressions/MstExtendedField : space/kscience/kmath/operations/ExtendedField, space/kscience/kmath/operations/NumericAlgebra {
+	public static final field INSTANCE Lspace/kscience/kmath/expressions/MstExtendedField;
+	public synthetic fun acos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acos (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acosh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun add (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun asin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asin (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asinh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun atan (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atan (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atanh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cos (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cosh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun divide (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun exp (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public fun getZero ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun ln (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun multiply (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun pow (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun pow (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/expressions/MST;D)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sin (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sinh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sqrt (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun tan (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun tanh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryPlus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+}
+
+public final class space/kscience/kmath/expressions/MstField : space/kscience/kmath/operations/Field, space/kscience/kmath/operations/NumbersAddOperations, space/kscience/kmath/operations/ScaleOperations {
+	public static final field INSTANCE Lspace/kscience/kmath/expressions/MstField;
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun add (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun divide (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public fun getZero ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun minus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun multiply (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun plus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/expressions/MST;D)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryPlus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+}
+
+public final class space/kscience/kmath/expressions/MstGroup : space/kscience/kmath/operations/Group, space/kscience/kmath/operations/NumericAlgebra, space/kscience/kmath/operations/ScaleOperations {
+	public static final field INSTANCE Lspace/kscience/kmath/expressions/MstGroup;
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun add (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public fun getZero ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/expressions/MST;D)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryPlus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+}
+
+public final class space/kscience/kmath/expressions/MstRing : space/kscience/kmath/operations/NumbersAddOperations, space/kscience/kmath/operations/Ring, space/kscience/kmath/operations/ScaleOperations {
+	public static final field INSTANCE Lspace/kscience/kmath/expressions/MstRing;
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun add (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun binaryOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun binaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbol (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun bindSymbolOrNull (Ljava/lang/String;)Lspace/kscience/kmath/expressions/MST$Symbolic;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun div (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public fun getOne ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public fun getZero ()Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun leftSideNumberOperation (Ljava/lang/String;Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun leftSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun minus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun minus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun multiply (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+	public synthetic fun plus (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun plus (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun rightSideNumberOperation (Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun rightSideNumberOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/expressions/MST;D)Lspace/kscience/kmath/expressions/MST$Binary;
+	public synthetic fun times (Ljava/lang/Number;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST;
+	public fun times (Lspace/kscience/kmath/expressions/MST;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryOperation (Ljava/lang/String;Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
+	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun unaryPlus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryPlus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+}
+
 public final class space/kscience/kmath/expressions/SimpleAutoDiffExpression : space/kscience/kmath/expressions/FirstDerivativeExpression {
 	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)V
 	public fun derivativeOrNull (Lspace/kscience/kmath/misc/Symbol;)Lspace/kscience/kmath/expressions/Expression;

@@ -2,8 +2,8 @@ package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.*
 import space.kscience.kmath.asm.compileToExpression
-import space.kscience.kmath.ast.MstAlgebra
 import space.kscience.kmath.ast.parseMath
+import space.kscience.kmath.expressions.MstAlgebra
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test

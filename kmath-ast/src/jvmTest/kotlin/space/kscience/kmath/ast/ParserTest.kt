@@ -2,6 +2,9 @@ package space.kscience.kmath.ast
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
+import space.kscience.kmath.expressions.MstField
+import space.kscience.kmath.expressions.evaluate
+import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke

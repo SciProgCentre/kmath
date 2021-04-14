@@ -1,10 +1,10 @@
 package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.*
-import space.kscience.kmath.ast.MST
-import space.kscience.kmath.ast.MstAlgebra
-import space.kscience.kmath.ast.MstExtendedField
-import space.kscience.kmath.ast.MstExtendedField.unaryMinus
+import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.MstAlgebra
+import space.kscience.kmath.expressions.MstExtendedField
+import space.kscience.kmath.expressions.MstExtendedField.unaryMinus
 import space.kscience.kmath.operations.*
 
 /**

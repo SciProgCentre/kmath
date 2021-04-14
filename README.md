@@ -87,9 +87,9 @@ KMath is a modular library. Different modules provide different features with di
 >
 > **Features:**
 > - [expression-language](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
-> - [mst](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
-> - [mst-building](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
-> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+> - [mst](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+> - [mst-building](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt) : MST building algebraic structure
+> - [mst-interpreter](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST interpreter
 > - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
 > - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 

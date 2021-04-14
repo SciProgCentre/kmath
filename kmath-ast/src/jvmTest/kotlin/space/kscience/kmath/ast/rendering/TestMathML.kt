@@ -1,7 +1,7 @@
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.ast.rendering.TestUtils.testMathML
+import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.operations.GroupOperations
 import kotlin.test.Test
 
