@@ -1,5 +1,6 @@
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
@@ -43,7 +44,7 @@ public interface Buffer<out T> {
         /**
          * Check the element-by-element match of content of two buffers.
          */
-        public fun <T: Any> contentEquals(first: Buffer<T>, second: Buffer<T>): Boolean{
+        public fun <T : Any> contentEquals(first: Buffer<T>, second: Buffer<T>): Boolean {
             if (first.size != second.size) return false
             for (i in first.indices) {
                 if (first[i] != second[i]) return false
@@ -187,9 +188,8 @@ public interface MutableBuffer<T> : Buffer<T> {
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-public inline class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
-    override val size: Int
-        get() = list.size
+public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
+    override val size: Int get() = list.size
 
     override operator fun get(index: Int): T = list[index]
     override operator fun iterator(): Iterator<T> = list.iterator()
@@ -206,7 +206,8 @@ public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-public inline class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
+@JvmInline
+public value class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
     override val size: Int
         get() = list.size
 
@@ -257,7 +258,8 @@ public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property buffer The underlying buffer.
  */
-public inline class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buffer<T> {
+@JvmInline
+public value class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
     override operator fun get(index: Int): T = buffer[index]

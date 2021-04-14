@@ -114,7 +114,10 @@ kotlin.sourceSets.all {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions{
+        jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+    }
 }
 
 readme {

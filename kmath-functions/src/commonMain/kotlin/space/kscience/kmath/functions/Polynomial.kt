@@ -14,7 +14,7 @@ import kotlin.math.pow
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public inline class Polynomial<T : Any>(public val coefficients: List<T>)
+public class Polynomial<T : Any>(public val coefficients: List<T>)
 
 /**
  * Returns a [Polynomial] instance with given [coefficients].

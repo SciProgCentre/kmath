@@ -11,7 +11,7 @@ import kotlin.math.*
 /**
  * Implements [UnivariateDistribution] for the normal (gaussian) distribution.
  */
-public inline class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
+public class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
     public constructor(
         mean: Double,
         standardDeviation: Double,

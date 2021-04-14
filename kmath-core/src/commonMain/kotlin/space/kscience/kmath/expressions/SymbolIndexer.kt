@@ -5,6 +5,7 @@ import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
+import kotlin.jvm.JvmInline
 
 /**
  * An environment to easy transform indexed variables to symbols and back.
@@ -53,7 +54,8 @@ public interface SymbolIndexer {
 }
 
 @UnstableKMathAPI
-public inline class SimpleSymbolIndexer(override val symbols: List<Symbol>) : SymbolIndexer
+@JvmInline
+public value class SimpleSymbolIndexer(override val symbols: List<Symbol>) : SymbolIndexer
 
 /**
  * Execute the block with symbol indexer based on given symbol order

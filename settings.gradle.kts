@@ -1,14 +1,13 @@
 pluginManagement {
     repositories {
-        maven("https://repo.kotlin.link")
         mavenLocal()
+        mavenCentral()
         gradlePluginPortal()
-        jcenter()
-        maven("https://dl.bintray.com/kotlin/kotlinx")
+        maven("https://repo.kotlin.link")
     }
 
-    val toolsVersion = "0.9.5-dev"
-    val kotlinVersion = "1.5.0-M2"
+    val toolsVersion = "0.9.5-dev-2"
+    val kotlinVersion = "1.5.0-RC"
 
     plugins {
         kotlin("multiplatform") version kotlinVersion
@@ -40,5 +39,5 @@ include(
     ":kmath-ast",
     ":kmath-ejml",
     ":kmath-kotlingrad",
-    ":examples"
+    ":examples",
 )

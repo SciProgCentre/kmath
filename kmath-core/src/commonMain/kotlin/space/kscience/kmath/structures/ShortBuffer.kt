@@ -1,11 +1,14 @@
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
+
 /**
  * Specialized [MutableBuffer] implementation over [ShortArray].
  *
  * @property array the underlying array.
  */
-public inline class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
+@JvmInline
+public value class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
     public override val size: Int get() = array.size
 
     public override operator fun get(index: Int): Short = array[index]

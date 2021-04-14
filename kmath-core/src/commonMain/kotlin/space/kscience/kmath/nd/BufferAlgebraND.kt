@@ -80,13 +80,13 @@ public open class BufferedFieldND<T, R : Field<T>>(
 }
 
 // group factories
-public fun <T, A : Group<T>> AlgebraND.Companion.group(
+public fun <T, A : Ring<T>> AlgebraND.Companion.group(
     space: A,
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedGroupND<T, A> = BufferedGroupND(shape, space, bufferFactory)
 
-public inline fun <T, A : Group<T>, R> A.ndGroup(
+public inline fun <T, A : Ring<T>, R> A.ndGroup(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedGroupND<T, A>.() -> R,

@@ -19,7 +19,7 @@ public object MstAlgebra : NumericAlgebra<MST> {
 }
 
 /**
- * [Group] over [MST] nodes.
+ * [Ring] over [MST] nodes.
  */
 public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     public override val zero: MST.Numeric = number(0.0)

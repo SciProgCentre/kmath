@@ -4,7 +4,7 @@ import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 @UnstableKMathAPI
-public inline class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : DoubleDomain {
+public class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : DoubleDomain {
     public override val dimension: Int get() = 1
 
     public operator fun contains(d: Double): Boolean = range.contains(d)

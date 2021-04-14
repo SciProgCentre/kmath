@@ -7,6 +7,7 @@ import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
+import kotlin.jvm.JvmInline
 
 /**
  * A matrix with compile-time controlled dimension
@@ -39,7 +40,8 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
 /**
  * An inline wrapper for a Matrix
  */
-public inline class DMatrixWrapper<T, R : Dimension, C : Dimension>(
+@JvmInline
+public value class DMatrixWrapper<T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
@@ -68,7 +70,8 @@ public interface DPoint<T, D : Dimension> : Point<T> {
 /**
  * Dimension-safe point wrapper
  */
-public inline class DPointWrapper<T, D : Dimension>(public val point: Point<T>) :
+@JvmInline
+public value class DPointWrapper<T, D : Dimension>(public val point: Point<T>) :
     DPoint<T, D> {
     override val size: Int get() = point.size
 
@@ -81,7 +84,8 @@ public inline class DPointWrapper<T, D : Dimension>(public val point: Point<T>) 
 /**
  * Basic operations on dimension-safe matrices. Operates on [Matrix]
  */
-public inline class DMatrixContext<T : Any, out A : Ring<T>>(public val context: LinearSpace<T, A>) {
+@JvmInline
+public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: LinearSpace<T, A>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
         require(rowNum == Dimension.dim<R>().toInt()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"

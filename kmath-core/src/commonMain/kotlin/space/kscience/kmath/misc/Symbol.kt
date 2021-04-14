@@ -1,5 +1,6 @@
 package space.kscience.kmath.misc
 
+import kotlin.jvm.JvmInline
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -21,7 +22,8 @@ public interface Symbol {
 /**
  * A [Symbol] with a [String] identity
  */
-public inline class StringSymbol(override val identity: String) : Symbol {
+@JvmInline
+public value class StringSymbol(override val identity: String) : Symbol {
     override fun toString(): String = identity
 }
 

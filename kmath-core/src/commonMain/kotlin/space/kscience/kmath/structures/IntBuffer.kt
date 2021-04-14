@@ -1,11 +1,14 @@
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
+
 /**
  * Specialized [MutableBuffer] implementation over [IntArray].
  *
  * @property array the underlying array.
  */
-public inline class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
+@JvmInline
+public value class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]

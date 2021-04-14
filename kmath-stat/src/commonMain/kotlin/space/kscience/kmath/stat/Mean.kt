@@ -8,7 +8,7 @@ import space.kscience.kmath.structures.indices
  * Arithmetic mean
  */
 public class Mean<T>(
-    private val group: Group<T>,
+    private val group: Ring<T>,
     private val division: (sum: T, count: Int) -> T,
 ) : ComposableStatistic<T, Pair<T, Int>, T>, BlockingStatistic<T, T> {
 

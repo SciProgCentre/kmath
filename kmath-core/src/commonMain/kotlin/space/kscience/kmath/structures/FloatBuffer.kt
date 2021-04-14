@@ -1,12 +1,15 @@
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
+
 /**
  * Specialized [MutableBuffer] implementation over [FloatArray].
  *
  * @property array the underlying array.
  * @author Iaroslav Postovalov
  */
-public inline class FloatBuffer(public val array: FloatArray) : MutableBuffer<Float> {
+@JvmInline
+public value class FloatBuffer(public val array: FloatArray) : MutableBuffer<Float> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Float = array[index]

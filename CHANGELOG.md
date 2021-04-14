@@ -7,6 +7,8 @@
 - Basic integration API
 - Basic MPP distributions and samplers
 - bindSymbolOrNull
+- Blocking chains and Statistics
+- Multiplatform integration
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -29,6 +31,7 @@
 - MSTExpression
 
 ### Fixed
+- Ring inherits RingOperations, not GroupOperations
 
 ### Security
 

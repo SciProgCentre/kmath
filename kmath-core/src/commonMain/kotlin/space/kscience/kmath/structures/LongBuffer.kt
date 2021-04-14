@@ -1,11 +1,14 @@
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
+
 /**
  * Specialized [MutableBuffer] implementation over [LongArray].
  *
  * @property array the underlying array.
  */
-public inline class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
+@JvmInline
+public value class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Long = array[index]

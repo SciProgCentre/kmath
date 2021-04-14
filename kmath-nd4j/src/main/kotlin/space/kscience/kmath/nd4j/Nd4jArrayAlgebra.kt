@@ -75,7 +75,7 @@ public interface Nd4jArrayAlgebra<T, C : Algebra<T>> : AlgebraND<T, C> {
  * @param T the type of the element contained in ND structure.
  * @param S the type of space of structure elements.
  */
-public interface Nd4JArrayGroup<T, S : Group<T>> : GroupND<T, S>, Nd4jArrayAlgebra<T, S> {
+public interface Nd4JArrayGroup<T, S : Ring<T>> : GroupND<T, S>, Nd4jArrayAlgebra<T, S> {
 
     public override val zero: Nd4jArrayStructure<T>
         get() = Nd4j.zeros(*shape).wrap()
