@@ -82,6 +82,7 @@ public class DoubleLinearOpsTensorAlgebra :
         checkPositiveDefinite(this)
         //checkPositiveDefinite(this, epsilon)
 
+
         val n = shape.last()
         val lTensor = zeroesLike()
 
