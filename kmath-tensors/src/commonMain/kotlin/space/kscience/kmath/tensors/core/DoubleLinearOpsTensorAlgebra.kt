@@ -66,11 +66,10 @@ public class DoubleLinearOpsTensorAlgebra :
 
     }
 
-    override fun DoubleTensor.cholesky(): DoubleTensor {
-        checkSymmetric(this)
+    public fun DoubleTensor.cholesky(epsilon: Double): DoubleTensor {
         checkSquareMatrix(shape)
         //TODO("Andrei the det routine has bugs")
-        //checkPositiveDefinite(this)
+        //checkPositiveDefinite(this, epsilon)
 
         val n = shape.last()
         val lTensor = zeroesLike()
@@ -80,6 +79,8 @@ public class DoubleLinearOpsTensorAlgebra :
 
         return lTensor
     }
+
+    override fun DoubleTensor.cholesky(): DoubleTensor = cholesky(1e-6)
 
     override fun DoubleTensor.qr(): Pair<DoubleTensor, DoubleTensor> {
         checkSquareMatrix(shape)

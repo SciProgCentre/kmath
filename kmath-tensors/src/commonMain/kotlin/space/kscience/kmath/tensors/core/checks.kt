@@ -63,7 +63,9 @@ internal inline fun DoubleTensorAlgebra.checkSymmetric(tensor: DoubleTensor, eps
         "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
     }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor): Unit {
+internal inline fun DoubleLinearOpsTensorAlgebra.checkPositiveDefinite(
+    tensor: DoubleTensor, epsilon: Double = 1e-6): Unit {
+    checkSymmetric(tensor, epsilon)
     for( mat in tensor.matrixSequence())
         check(mat.asTensor().detLU().value() > 0.0){
             "Tensor contains matrices which are not positive definite ${mat.asTensor().detLU().value()}"
