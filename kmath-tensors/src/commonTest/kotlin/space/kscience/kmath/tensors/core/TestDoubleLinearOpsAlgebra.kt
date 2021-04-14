@@ -1,8 +1,6 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.structures.toList
 import kotlin.math.abs
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -45,7 +43,7 @@ class TestDoubleLinearOpsTensorAlgebra {
             )
         )
 
-        assertTrue { abs(m.det().value() - expectedValue) < 1e-5}
+        assertTrue { abs(m.det().value() - expectedValue) < 1e-5 }
     }
 
     @Test
@@ -57,7 +55,7 @@ class TestDoubleLinearOpsTensorAlgebra {
             )
         )
 
-        assertTrue { abs(m.det().value() - expectedValue) < 1e-5}
+        assertTrue { abs(m.det().value() - expectedValue) < 1e-5 }
     }
 
     @Test
@@ -144,11 +142,9 @@ class TestDoubleLinearOpsTensorAlgebra {
         val sigma = (tensor dot tensor.transpose()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
         )
-        //checkPositiveDefinite(sigma) sigma must be positive definite
         val low = sigma.cholesky()
         val sigmChol = low dot low.transpose()
         assertTrue(sigma.eq(sigmChol))
-
     }
 
     @Test

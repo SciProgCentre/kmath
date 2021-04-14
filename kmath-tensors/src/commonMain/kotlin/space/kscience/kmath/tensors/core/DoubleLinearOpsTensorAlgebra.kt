@@ -10,43 +10,15 @@ public class DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double, DoubleTensor, IntTensor>,
     DoubleTensorAlgebra() {
 
-    override fun DoubleTensor.inv(): DoubleTensor = invLU()
+    override fun DoubleTensor.inv(): DoubleTensor = invLU(1e-9)
 
-    override fun DoubleTensor.det(): DoubleTensor = detLU()
+    override fun DoubleTensor.det(): DoubleTensor = detLU(1e-9)
 
-    internal fun DoubleTensor.luForDet(forDet: Boolean = false): Pair<DoubleTensor, IntTensor> {
-        checkSquareMatrix(shape)
+    public fun DoubleTensor.lu(epsilon: Double): Pair<DoubleTensor, IntTensor> =
+        computeLU(this, epsilon) ?:
+        throw RuntimeException("Tensor contains matrices which are singular at precision $epsilon")
 
-        val luTensor = copy()
-
-        val n = shape.size
-        val m = shape.last()
-        val pivotsShape = IntArray(n - 1) { i -> shape[i] }
-        pivotsShape[n - 2] = m + 1
-
-        val pivotsTensor = IntTensor(
-            pivotsShape,
-            IntArray(pivotsShape.reduce(Int::times)) { 0 }
-        )
-
-        for ((lu, pivots) in luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()))
-            try {
-                luHelper(lu.as2D(), pivots.as1D(), m)
-            } catch (e: RuntimeException) {
-                if (forDet) {
-                    lu.as2D()[intArrayOf(0, 0)] = 0.0
-                } else {
-                    throw IllegalStateException("LUP decomposition can't be performed")
-                }
-            }
-
-
-        return Pair(luTensor, pivotsTensor)
-    }
-
-    override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> {
-        return luForDet(false)
-    }
+    override fun DoubleTensor.lu(): Pair<DoubleTensor, IntTensor> = lu(1e-9)
 
     override fun luPivot(
         luTensor: DoubleTensor,
@@ -79,9 +51,7 @@ public class DoubleLinearOpsTensorAlgebra :
 
     public fun DoubleTensor.cholesky(epsilon: Double): DoubleTensor {
         checkSquareMatrix(shape)
-        checkPositiveDefinite(this)
-        //checkPositiveDefinite(this, epsilon)
-
+        checkPositiveDefinite(this, epsilon)
 
         val n = shape.last()
         val lTensor = zeroesLike()
@@ -139,15 +109,19 @@ public class DoubleLinearOpsTensorAlgebra :
         val shp = s.shape + intArrayOf(1)
         val utv = u.transpose() dot v
         val n = s.shape.last()
-        for( matrix in utv.matrixSequence())
-            cleanSymHelper(matrix.as2D(),n)
+        for (matrix in utv.matrixSequence())
+            cleanSymHelper(matrix.as2D(), n)
 
         val eig = (utv dot s.view(shp)).view(s.shape)
         return Pair(eig, v)
     }
 
-    public fun DoubleTensor.detLU(): DoubleTensor {
-        val (luTensor, pivotsTensor) = luForDet(forDet = true)
+    public fun DoubleTensor.detLU(epsilon: Double = 1e-9): DoubleTensor {
+
+        checkSquareMatrix(this.shape)
+        val luTensor = this.copy()
+        val pivotsTensor = this.setUpPivots()
+
         val n = shape.size
 
         val detTensorShape = IntArray(n - 1) { i -> shape[i] }
@@ -160,15 +134,15 @@ public class DoubleLinearOpsTensorAlgebra :
         )
 
         luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).forEachIndexed { index, (lu, pivots) ->
-            resBuffer[index] = luMatrixDet(lu.as2D(), pivots.as1D())
+            resBuffer[index] = if (luHelper(lu.as2D(), pivots.as1D(), epsilon))
+                0.0 else luMatrixDet(lu.as2D(), pivots.as1D())
         }
 
         return detTensor
     }
 
-    public fun DoubleTensor.invLU(): DoubleTensor {
-        //TODO("Andrei the det is non-zero")
-        val (luTensor, pivotsTensor) = lu()
+    public fun DoubleTensor.invLU(epsilon: Double = 1e-9): DoubleTensor {
+        val (luTensor, pivotsTensor) = lu(epsilon)
         val invTensor = luTensor.zeroesLike()
 
         val seq = luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).zip(invTensor.matrixSequence())

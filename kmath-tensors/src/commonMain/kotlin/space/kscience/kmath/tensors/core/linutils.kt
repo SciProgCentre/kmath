@@ -61,7 +61,13 @@ internal inline fun dotHelper(
     }
 }
 
-internal inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>, m: Int) {
+internal inline fun luHelper(
+    lu: MutableStructure2D<Double>,
+    pivots: MutableStructure1D<Int>,
+    epsilon: Double): Boolean {
+
+    val m = lu.rowNum
+
     for (row in 0..m) pivots[row] = row
 
     for (i in 0 until m) {
@@ -69,16 +75,15 @@ internal inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStru
         var maxInd = i
 
         for (k in i until m) {
-            val absA = kotlin.math.abs(lu[k, i])
+            val absA = abs(lu[k, i])
             if (absA > maxVal) {
                 maxVal = absA
                 maxInd = k
             }
         }
 
-        if (abs(maxVal) < 1e-9) {
-            throw RuntimeException()
-        }
+        if (abs(maxVal) < epsilon)
+            return true // matrix is singular
 
         if (maxInd != i) {
 
@@ -103,6 +108,34 @@ internal inline fun luHelper(lu: MutableStructure2D<Double>, pivots: MutableStru
             }
         }
     }
+    return false
+}
+
+internal inline fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
+    val n = this.shape.size
+    val m = this.shape.last()
+    val pivotsShape = IntArray(n - 1) { i -> this.shape[i] }
+    pivotsShape[n - 2] = m + 1
+
+    return IntTensor(
+        pivotsShape,
+        IntArray(pivotsShape.reduce(Int::times)) { 0 }
+    )
+}
+
+internal inline fun DoubleLinearOpsTensorAlgebra.computeLU(
+    tensor: DoubleTensor,
+    epsilon: Double): Pair<DoubleTensor, IntTensor>? {
+
+    checkSquareMatrix(tensor.shape)
+    val luTensor = tensor.copy()
+    val pivotsTensor = tensor.setUpPivots()
+
+    for ((lu, pivots) in luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()))
+        if(luHelper(lu.as2D(), pivots.as1D(), epsilon))
+            return null
+
+    return Pair(luTensor, pivotsTensor)
 }
 
 internal inline fun pivInit(
