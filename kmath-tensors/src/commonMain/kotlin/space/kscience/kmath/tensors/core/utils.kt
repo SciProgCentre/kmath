@@ -1,5 +1,7 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
@@ -58,3 +60,47 @@ internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {
 }
 
 internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexFrom(this.linearStructure.dim, i)
+
+public fun DoubleTensor.toPrettyString(): String = buildString {
+    var offset = 0
+    val shape = this@toPrettyString.shape
+    val linearStructure = this@toPrettyString.linearStructure
+    var vectorSize = shape.last()
+    val initString = "DoubleTensor(\n"
+    append(initString)
+    var charOffset = 3
+    for (vector in vectorSequence()) {
+        append(" ".repeat(charOffset))
+        val index = linearStructure.index(offset)
+        for (ind in index.reversed()) {
+            if (ind != 0) {
+                break
+            }
+            append("[")
+            charOffset += 1
+        }
+        // todo refactor
+        val values = mutableListOf<Double>()
+        for (i in 0 until vectorSize) {
+            values.add(vector[intArrayOf(i)])
+        }
+        // todo apply exp formatting
+        append(values.joinToString(", "))
+        append("]")
+        charOffset -= 1
+        for ((ind, maxInd) in index.reversed().zip(shape.reversed()).drop(1)){
+            if (ind != maxInd - 1) {
+                break
+            }
+            append("]")
+            charOffset -=1
+        }
+        offset += vectorSize
+        // todo refactor
+        if (this@toPrettyString.numel == offset) {
+            break
+        }
+        append(",\n")
+    }
+    append("\n)")
+}
