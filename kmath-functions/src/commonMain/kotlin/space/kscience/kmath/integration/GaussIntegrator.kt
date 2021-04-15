@@ -23,7 +23,7 @@ import space.kscience.kmath.structures.indices
 /**
  * A simple one-pass integrator based on Gauss rule
  */
-public class GaussIntegrator<T : Any> internal constructor(
+public class GaussIntegrator<T : Comparable<T>> internal constructor(
     public val algebra: Ring<T>,
     private val points: Buffer<T>,
     private val weights: Buffer<T>,
@@ -31,6 +31,7 @@ public class GaussIntegrator<T : Any> internal constructor(
 
     init {
         require(points.size == weights.size) { "Inconsistent points and weights sizes" }
+        require(points.indices.all { i -> i == 0 || points[i] > points[i - 1] }){"Integration nodes must be sorted"}
     }
 
     override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
@@ -54,12 +55,13 @@ public class GaussIntegrator<T : Any> internal constructor(
             range: ClosedRange<Double>,
             numPoints: Int = 100,
             ruleFactory: GaussIntegratorRuleFactory<Double> = GaussLegendreDoubleRuleFactory,
+            features: List<IntegrandFeature> = emptyList(),
             function: (Double) -> Double,
-        ): Double {
+        ): UnivariateIntegrand<Double> {
             val (points, weights) = ruleFactory.build(numPoints, range)
             return GaussIntegrator(DoubleField, points, weights).integrate(
                 UnivariateIntegrand(function, IntegrationRange(range))
-            ).value!!
+            )
         }
     }
 }

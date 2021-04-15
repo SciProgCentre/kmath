@@ -1,6 +1,7 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.*
 import kotlin.jvm.Synchronized
@@ -8,7 +9,7 @@ import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
 public interface GaussIntegratorRuleFactory<T : Any> {
-    public val algebra: Ring<T>
+    public val algebra: Field<T>
     public val bufferFactory: BufferFactory<T>
     public fun build(numPoints: Int): Pair<Buffer<T>, Buffer<T>>
 
@@ -29,7 +30,7 @@ public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
     val points = with(algebra) {
         val length = range.endInclusive - range.start
         normalized.first.map(bufferFactory) {
-            range.start + length * it
+            range.start + length / 2 + length * it/2
         }
     }
 
@@ -46,7 +47,7 @@ public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
 @ThreadLocal
 public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double> {
 
-    override val algebra: Ring<Double> get() = DoubleField
+    override val algebra: Field<Double> get() = DoubleField
 
     override val bufferFactory: BufferFactory<Double> get() = ::DoubleBuffer
 
