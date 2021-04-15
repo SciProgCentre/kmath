@@ -23,7 +23,7 @@ class GaussIntegralTest {
                 0.0
             }
         }
-        assertEquals(20.0, res.value!!, 0.1)
+        assertEquals(20.0, res.value!!, 0.5)
     }
 
 

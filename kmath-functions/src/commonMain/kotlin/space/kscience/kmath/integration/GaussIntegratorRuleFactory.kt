@@ -2,7 +2,6 @@ package space.kscience.kmath.integration
 
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.*
 import kotlin.jvm.Synchronized
 import kotlin.math.ulp
@@ -27,14 +26,19 @@ public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
     range: ClosedRange<T>,
 ): Pair<Buffer<T>, Buffer<T>> {
     val normalized = build(numPoints)
-    val points = with(algebra) {
+    with(algebra) {
         val length = range.endInclusive - range.start
-        normalized.first.map(bufferFactory) {
-            range.start + length / 2 + length * it/2
-        }
-    }
 
-    return points to normalized.second
+        val points = normalized.first.map(bufferFactory) {
+            range.start + length / 2 + length * it / 2
+        }
+
+        val weights = normalized.second.map(bufferFactory) {
+            it * length / 2
+        }
+
+        return points to weights
+    }
 }
 
 
