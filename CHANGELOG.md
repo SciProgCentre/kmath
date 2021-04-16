@@ -9,6 +9,7 @@
 - bindSymbolOrNull
 - Blocking chains and Statistics
 - Multiplatform integration
+- Integration for any Field element
 
 ### Changed
 - Exponential operations merged with hyperbolic functions

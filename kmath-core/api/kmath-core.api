@@ -1791,6 +1791,7 @@ public final class space/kscience/kmath/structures/IntBufferKt {
 }
 
 public final class space/kscience/kmath/structures/ListBuffer : space/kscience/kmath/structures/Buffer {
+	public fun <init> (ILkotlin/jvm/functions/Function1;)V
 	public fun <init> (Ljava/util/List;)V
 	public fun get (I)Ljava/lang/Object;
 	public final fun getList ()Ljava/util/List;
@@ -1865,6 +1866,7 @@ public final class space/kscience/kmath/structures/MutableBuffer$Companion {
 
 public final class space/kscience/kmath/structures/MutableListBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableListBuffer;
+	public static fun constructor-impl (ILkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public static fun copy-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableBuffer;

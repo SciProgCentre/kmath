@@ -20,22 +20,22 @@ internal class BigIntBenchmark {
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
 
     @Benchmark
-    fun kmAdd(blackhole: Blackhole) = BigIntField{
+    fun kmAdd(blackhole: Blackhole) = BigIntField {
         blackhole.consume(kmNumber + kmNumber + kmNumber)
     }
 
     @Benchmark
-    fun jvmAdd(blackhole: Blackhole) = JBigIntegerField{
-        blackhole.consume(jvmNumber + jvmNumber+ jvmNumber)
+    fun jvmAdd(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume(jvmNumber + jvmNumber + jvmNumber)
     }
 
     @Benchmark
-    fun kmMultiply(blackhole: Blackhole) = BigIntField{
-        blackhole.consume(kmNumber*kmNumber*kmNumber)
+    fun kmMultiply(blackhole: Blackhole) = BigIntField {
+        blackhole.consume(kmNumber * kmNumber * kmNumber)
     }
 
     @Benchmark
-    fun jvmMultiply(blackhole: Blackhole) = JBigIntegerField{
-        blackhole.consume(jvmNumber*jvmNumber*jvmNumber)
+    fun jvmMultiply(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume(jvmNumber * jvmNumber * jvmNumber)
     }
 }

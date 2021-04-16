@@ -36,7 +36,7 @@ public class CMIntegrator(
                 IntegrandValue(res) +
                 IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy) +
                 IntegrandRelativeAccuracy(integrator.relativeAccuracy) +
-                IntegrandCalls(integrator.evaluations + integrand.calls)
+                IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
     }
 
 

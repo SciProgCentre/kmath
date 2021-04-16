@@ -194,6 +194,9 @@ public interface MutableBuffer<T> : Buffer<T> {
  * @property list The underlying list.
  */
 public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
+
+    public constructor(size: Int, initializer: (Int) -> T) : this(List(size, initializer))
+
     override val size: Int get() = list.size
 
     override operator fun get(index: Int): T = list[index]
@@ -213,8 +216,10 @@ public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  */
 @JvmInline
 public value class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
-    override val size: Int
-        get() = list.size
+
+    public constructor(size: Int, initializer: (Int) -> T) : this(MutableList(size, initializer))
+
+    override val size: Int get() = list.size
 
     override operator fun get(index: Int): T = list[index]
 

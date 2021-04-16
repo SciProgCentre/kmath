@@ -22,7 +22,7 @@ public class GaussRuleIntegrator(
         val integrator: GaussIntegrator = getIntegrator(range)
         //TODO check performance
         val res: Double = integrator.integrate(integrand.function)
-        return integrand + IntegrandValue(res) + IntegrandCalls(integrand.calls + numpoints)
+        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numpoints)
     }
 
     private fun getIntegrator(range: ClosedRange<Double>): GaussIntegrator {

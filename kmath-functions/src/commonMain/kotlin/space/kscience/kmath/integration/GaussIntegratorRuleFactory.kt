@@ -12,7 +12,7 @@ import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
-public interface GaussIntegratorRuleFactory<T : Any> {
+public interface GaussIntegratorRuleFactory<T : Any> : IntegrandFeature {
     public val algebra: Field<T>
     public val bufferFactory: BufferFactory<T>
 
@@ -20,7 +20,7 @@ public interface GaussIntegratorRuleFactory<T : Any> {
 
     public companion object {
         public fun double(numPoints: Int, range: ClosedRange<Double>): Pair<Buffer<Double>, Buffer<Double>> =
-            GaussLegendreDoubleRuleFactory.build(numPoints, range)
+            DoubleGaussLegendreRuleFactory.build(numPoints, range)
     }
 }
 
@@ -28,16 +28,16 @@ public interface GaussIntegratorRuleFactory<T : Any> {
  * Create an integration rule by scaling existing normalized rule
  *
  */
-public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
+public fun <T : Any> GaussIntegratorRuleFactory<T>.build(
     numPoints: Int,
-    range: ClosedRange<T>,
+    range: ClosedRange<Double>,
 ): Pair<Buffer<T>, Buffer<T>> {
     val normalized = build(numPoints)
     with(algebra) {
         val length = range.endInclusive - range.start
 
         val points = normalized.first.map(bufferFactory) {
-            range.start + length / 2 + length * it / 2
+            number(range.start + length / 2) + number(length / 2) * it
         }
 
         val weights = normalized.second.map(bufferFactory) {
@@ -56,7 +56,7 @@ public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
  *
  */
 @ThreadLocal
-public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double> {
+public object DoubleGaussLegendreRuleFactory : GaussIntegratorRuleFactory<Double> {
 
     override val algebra: Field<Double> get() = DoubleField
 
@@ -173,3 +173,20 @@ public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double
     override fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> = getOrBuildRule(numPoints)
 }
 
+
+/**
+ * A generic Gauss-Legendre rule factory that wraps [DoubleGaussLegendreRuleFactory] in a generic way.
+ */
+public class GenericGaussLegendreRuleFactory<T : Any>(
+    override val algebra: Field<T>,
+    override val bufferFactory: BufferFactory<T>,
+) : GaussIntegratorRuleFactory<T> {
+
+    override fun build(numPoints: Int): Pair<Buffer<T>, Buffer<T>> {
+        val (doublePoints, doubleWeights) = DoubleGaussLegendreRuleFactory.build(numPoints)
+
+        val points = doublePoints.map(bufferFactory) { algebra.number(it) }
+        val weights = doubleWeights.map(bufferFactory) { algebra.number(it) }
+        return points to weights
+    }
+}
