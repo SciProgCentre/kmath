@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -19,7 +24,7 @@ public object MstAlgebra : NumericAlgebra<MST> {
 }
 
 /**
- * [Ring] over [MST] nodes.
+ * [Group] over [MST] nodes.
  */
 public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     public override val zero: MST.Numeric = number(0.0)

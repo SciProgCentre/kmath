@@ -1,6 +1,14 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+import ru.mipt.npm.gradle.Maturity
+
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")}
+    id("ru.mipt.npm.gradle.common")
+}
 
 kotlin.sourceSets {
     all {
@@ -21,5 +29,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = Maturity.EXPERIMENTAL
 }
