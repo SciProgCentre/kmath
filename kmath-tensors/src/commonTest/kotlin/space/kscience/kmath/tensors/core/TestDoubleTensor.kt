@@ -1,6 +1,5 @@
 package space.kscience.kmath.tensors.core
 
-import kotlinx.coroutines.InternalCoroutinesApi
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.structures.toDoubleArray
