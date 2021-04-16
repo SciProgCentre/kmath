@@ -12,10 +12,6 @@ plugins {
 }
 
 kotlin.sourceSets {
-    all {
-        languageSettings.useExperimentalAnnotation("kscience.kmath.misc.UnstableKMathAPI")
-    }
-
     commonMain {
         dependencies {
             api(project(":kmath-core"))

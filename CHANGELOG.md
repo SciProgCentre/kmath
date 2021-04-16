@@ -22,6 +22,7 @@
 - Redesign advanced Chain API
 - Redesign MST. Remove MSTExpression.
 - Move MST to core
+- Separated benchmarks and examples
 
 ### Deprecated
 
