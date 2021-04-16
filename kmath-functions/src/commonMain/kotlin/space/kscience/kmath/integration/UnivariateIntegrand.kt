@@ -5,14 +5,13 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.functions.UnivariateFunction
 import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 public class UnivariateIntegrand<T : Any> internal constructor(
     private val features: Map<KClass<*>, IntegrandFeature>,
-    public val function: UnivariateFunction<T>,
+    public val function: (Double) -> T,
 ) : Integrand {
 
     @Suppress("UNCHECKED_CAST")
@@ -27,7 +26,7 @@ public class UnivariateIntegrand<T : Any> internal constructor(
 
 @Suppress("FunctionName")
 public fun <T : Any> UnivariateIntegrand(
-    function: (T) -> T,
+    function: (Double) -> T,
     vararg features: IntegrandFeature,
 ): UnivariateIntegrand<T> = UnivariateIntegrand(features.associateBy { it::class }, function)
 
