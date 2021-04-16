@@ -3,16 +3,16 @@
 Abstract syntax tree expression representation and related optimizations.
 
  - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](../kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](../kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](../kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST interpreter
+ - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+ - [mst-building](src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+ - [mst-interpreter](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
  - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
  - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-4`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-6`.
 
 **Gradle:**
 ```gradle
@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-4'
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-6'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-4")
+    implementation("space.kscience:kmath-ast:0.3.0-dev-6")
 }
 ```
 
@@ -52,7 +52,7 @@ For example, the following builder:
 DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
-… leads to generation of bytecode, which can be decompiled to the following Java class:
+â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
 package space.kscience.kmath.asm.generated;

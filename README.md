@@ -89,9 +89,9 @@ KMath is a modular library. Different modules provide different features with di
 >
 > **Features:**
 > - [expression-language](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
-> - [mst](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
-> - [mst-building](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt) : MST building algebraic structure
-> - [mst-interpreter](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MST.kt) : MST interpreter
+> - [mst](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+> - [mst-building](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
 > - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
 > - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
@@ -171,15 +171,16 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-functions](kmath-functions)
-> Functions and interpolation
+> Functions, integration and interpolation
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [piecewise](kmath-functions/Piecewise functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt
-> - [polynomials](kmath-functions/Polynomial functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt
-> - [linear interpolation](kmath-functions/Linear XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/LinearInterpolator.kt
-> - [spline interpolation](kmath-functions/Cubic spline XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt
+> - [piecewise](kmath-functions/src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt) : Piecewise functions.
+> - [polynomials](kmath-functions/src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt) : Polynomial functions.
+> - [linear interpolation](kmath-functions/src/commonMain/kotlin/space/kscience/kmath/interpolation/LinearInterpolator.kt) : Linear XY interpolator.
+> - [spline interpolation](kmath-functions/src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt) : Cubic spline XY interpolator.
+> - [integration](kmath-functions/#) : Univariate and multivariate quadratures
 
 <hr/>
 
@@ -250,6 +251,10 @@ cases. We expect the worst KMath benchmarks will perform better than native Pyth
 native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be 
 better than SciPy.
 
+## Requirements
+
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend to use GraalVM-CE 11 for execution in order to get better performance.
+
 ### Repositories
 
 Release and development artifacts are accessible from mipt-npm [Space](https://www.jetbrains.com/space/) repository `https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven` (see documentation of
@@ -261,8 +266,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-4")
-    // api("space.kscience.kmath:kmath-core-jvm:0.3.0-dev-4") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-6")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-6") for jvm-specific version
 }
 ```
 
