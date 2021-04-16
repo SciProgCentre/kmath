@@ -1,6 +1,5 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
@@ -72,7 +71,7 @@ internal inline fun format(value: Double, digits: Int = 4): String {
     val lead = value / ten.pow(order)
     val leadDisplay = round(lead*ten.pow(digits)) / ten.pow(digits)
     val orderDisplay = if(order == 0) "" else if(order > 0) "E+$order" else "E$order"
-    val valueDisplay = "${leadDisplay}$orderDisplay"
+    val valueDisplay = "$leadDisplay$orderDisplay"
     val res = if(value < 0.0) valueDisplay else " $valueDisplay"
     val fLength = digits + 6
     val endSpace = " ".repeat(fLength - res.length)
