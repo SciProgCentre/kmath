@@ -71,8 +71,8 @@ internal inline fun format(value: Double, digits: Int = 4): String {
 
     val lead = value / ten.pow(order)
     val leadDisplay = round(lead*ten.pow(digits)) / ten.pow(digits)
-    val orderDisplay = if(order >= 0) "+$order" else "$order"
-    val valueDisplay = "${leadDisplay}E$orderDisplay"
+    val orderDisplay = if(order == 0) "" else if(order > 0) "E+$order" else "E$order"
+    val valueDisplay = "${leadDisplay}$orderDisplay"
     val res = if(value < 0.0) valueDisplay else " $valueDisplay"
     val fLength = digits + 6
     val endSpace = " ".repeat(fLength - res.length)
@@ -83,7 +83,7 @@ internal inline fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
     val linearStructure = this@toPrettyString.linearStructure
-    var vectorSize = shape.last()
+    val vectorSize = shape.last()
     val initString = "DoubleTensor(\n"
     append(initString)
     var charOffset = 3
