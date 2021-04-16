@@ -103,6 +103,14 @@ benchmark {
         iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
         include("MatrixInverseBenchmark")
     }
+
+    configurations.register("bigInt") {
+        warmups = 1 // number of warmup iterations
+        iterations = 3 // number of iterations
+        iterationTime = 500 // time in seconds per iteration
+        iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
+        include("BigIntBenchmark")
+    }
 }
 
 kotlin.sourceSets.all {

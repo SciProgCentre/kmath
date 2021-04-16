@@ -163,7 +163,7 @@ internal object InternalGamma {
     }
 
     private fun lanczos(x: Double): Double =
-        (LANCZOS.size - 1 downTo 1).sumByDouble { LANCZOS[it] / (x + it) } + LANCZOS[0]
+        (LANCZOS.size - 1 downTo 1).sumOf { LANCZOS[it] / (x + it) } + LANCZOS[0]
 
     private fun invGamma1pm1(x: Double): Double {
         require(x >= -0.5)

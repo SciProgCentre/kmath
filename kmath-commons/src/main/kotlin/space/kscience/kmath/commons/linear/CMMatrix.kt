@@ -9,14 +9,14 @@ import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
-public inline class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
+public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     public override val rowNum: Int get() = origin.rowDimension
     public override val colNum: Int get() = origin.columnDimension
 
     public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
 }
 
-public inline class CMVector(public val origin: RealVector) : Point<Double> {
+public class CMVector(public val origin: RealVector) : Point<Double> {
     public override val size: Int get() = origin.dimension
 
     public override operator fun get(index: Int): Double = origin.getEntry(index)

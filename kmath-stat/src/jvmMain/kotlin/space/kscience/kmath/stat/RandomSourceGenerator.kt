@@ -32,7 +32,7 @@ public class RandomSourceGenerator internal constructor(public val source: Rando
  *
  * @property generator the underlying [RandomGenerator] object.
  */
-public inline class RandomGeneratorProvider(public val generator: RandomGenerator) : UniformRandomProvider {
+public class RandomGeneratorProvider(public val generator: RandomGenerator) : UniformRandomProvider {
     /**
      * Generates a [Boolean] value.
      *

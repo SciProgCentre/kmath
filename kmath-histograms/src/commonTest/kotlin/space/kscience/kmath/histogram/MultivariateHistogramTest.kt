@@ -38,7 +38,7 @@ internal class MultivariateHistogramTest {
                 put(nextDouble(), nextDouble(), nextDouble())
             }
         }
-        assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumOf { it.value.toInt() })
     }
 
     @Test

@@ -70,7 +70,7 @@ class NumberNDFieldTest {
 
     object L2Norm : Norm<StructureND<out Number>, Double> {
         override fun norm(arg: StructureND<out Number>): Double =
-            kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
+            kotlin.math.sqrt(arg.elements().sumOf { it.second.toDouble() })
     }
 
     @Test

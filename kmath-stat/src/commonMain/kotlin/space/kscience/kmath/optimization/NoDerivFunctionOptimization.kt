@@ -40,7 +40,7 @@ public interface NoDerivFunctionOptimization<T : Any> : Optimization<T> {
             require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
 
             return Expression { arguments ->
-                x.indices.sumByDouble {
+                x.indices.sumOf {
                     val xValue = x[it]
                     val yValue = y[it]
                     val yErrValue = yErr[it]

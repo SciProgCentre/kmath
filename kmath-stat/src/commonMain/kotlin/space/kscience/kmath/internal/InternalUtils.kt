@@ -21,7 +21,7 @@ internal object InternalUtils {
     fun validateProbabilities(probabilities: DoubleArray?): Double {
         require(!(probabilities == null || probabilities.isEmpty())) { "Probabilities must not be empty." }
 
-        val sumProb = probabilities.sumByDouble { prob ->
+        val sumProb = probabilities.sumOf { prob ->
             require(!(prob < 0 || prob.isInfinite() || prob.isNaN())) { "Invalid probability: $prob" }
             prob
         }

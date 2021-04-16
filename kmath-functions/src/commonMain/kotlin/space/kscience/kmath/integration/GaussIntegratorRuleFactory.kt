@@ -10,6 +10,7 @@ import kotlin.native.concurrent.ThreadLocal
 public interface GaussIntegratorRuleFactory<T : Any> {
     public val algebra: Field<T>
     public val bufferFactory: BufferFactory<T>
+
     public fun build(numPoints: Int): Pair<Buffer<T>, Buffer<T>>
 
     public companion object {
@@ -20,6 +21,7 @@ public interface GaussIntegratorRuleFactory<T : Any> {
 
 /**
  * Create an integration rule by scaling existing normalized rule
+ *
  */
 public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
     numPoints: Int,
@@ -45,8 +47,8 @@ public fun <T : Comparable<T>> GaussIntegratorRuleFactory<T>.build(
 /**
  * Gauss integrator rule based ont Legendre polynomials. All rules are normalized to
  *
- * The code is based on Apache Commons Math source code version 3.6.1
- * https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/analysis/integration/gauss/LegendreRuleFactory.html
+ * The code is based on [Apache Commons Math source code version 3.6.1](https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/analysis/integration/gauss/LegendreRuleFactory.html)
+ *
  */
 @ThreadLocal
 public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double> {
@@ -96,12 +98,12 @@ public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double
             // P[j](b)
             var pb = b
             for (j in 1 until numPoints) {
-                val two_j_p_1 = 2 * j + 1
-                val j_p_1 = j + 1
+                val twoJP1 = 2 * j + 1
+                val jP1 = j + 1
                 // P[j+1](a)
-                val ppa = (two_j_p_1 * a * pa - j * pma) / j_p_1
+                val ppa = (twoJP1 * a * pa - j * pma) / jP1
                 // P[j+1](b)
-                val ppb = (two_j_p_1 * b * pb - j * pmb) / j_p_1
+                val ppb = (twoJP1 * b * pb - j * pmb) / jP1
                 pma = pa
                 pa = ppa
                 pmb = pb
@@ -129,11 +131,8 @@ public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double
                 if (!done) {
                     if (pa * pc <= 0) {
                         b = c
-                        pmb = pmc
-                        pb = pc
                     } else {
                         a = c
-                        pma = pmc
                         pa = pc
                     }
                     c = 0.5 * (a + b)
@@ -147,7 +146,7 @@ public object GaussLegendreDoubleRuleFactory : GaussIntegratorRuleFactory<Double
             points[idx] = -c
             weights[idx] = w
         }
-        // If "numberOfPoints" is odd, 0 is a root.
+        // If "numPoints" is odd, 0 is a root.
         // Note: as written, the test for oddness will work for negative
         // integers too (although it is not necessary here), preventing
         // a FindBugs warning.
