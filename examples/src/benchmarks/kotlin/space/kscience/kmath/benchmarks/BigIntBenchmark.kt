@@ -18,10 +18,10 @@ internal class BigIntBenchmark {
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
     val largeKmNumber = BigIntField {
         fun BigInt.pow10(): BigInt = power(10, ::multiply)
-        number(11).pow10().pow10().pow10()
+        number(11).pow10().pow10().pow10().pow10().pow10()
     }
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
-    val largeJvmNumber = JBigIntegerField { number(11).pow(1000)  }
+    val largeJvmNumber = JBigIntegerField { number(11).pow(100_000)  }
     val bigExponent = 50_000
 
     @Benchmark
