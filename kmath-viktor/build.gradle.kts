@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+import ru.mipt.npm.gradle.Maturity
+
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    kotlin("jvm")
+    id("ru.mipt.npm.gradle.common")
 }
 
 description = "Binding for https://github.com/JetBrains-Research/viktor"
@@ -14,6 +17,6 @@ dependencies {
     api("org.jetbrains.bio:viktor:1.0.1")
 }
 
-readme{
-    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
+readme {
+    maturity = Maturity.DEVELOPMENT
 }

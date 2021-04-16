@@ -7,8 +7,8 @@ package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.InstructionAdapter
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -91,7 +91,7 @@ internal inline fun ClassWriter.visitField(
     descriptor: String,
     signature: String?,
     value: Any?,
-    block: FieldVisitor.() -> Unit
+    block: FieldVisitor.() -> Unit,
 ): FieldVisitor {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return visitField(access, name, descriptor, signature, value).apply(block)

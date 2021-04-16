@@ -10,7 +10,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 
 /**
@@ -22,6 +22,8 @@ public typealias Matrix<T> = Structure2D<T>
 
 /**
  * Alias or using [Buffer] as a point/vector in a many-dimensional space.
+ *
+ * @param T the type of elements contained in the buffer.
  */
 public typealias Point<T> = Buffer<T>
 
@@ -169,7 +171,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : Any> getFeature(structure: Matrix<T>, type: KClass<F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> getFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
 
     public companion object {
 
@@ -181,7 +183,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
-        public val real: LinearSpace<Double, RealField> = buffered(RealField, ::RealBuffer)
+        public val real: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -199,7 +201,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : Any> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
+public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
     getFeature(structure, F::class)
 
 

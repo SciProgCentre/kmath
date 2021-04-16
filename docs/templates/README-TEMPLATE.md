@@ -1,9 +1,8 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
-
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
-
-[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22%20AND%20a:%22kmath-core%22)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
+[![Space](https://img.shields.io/maven-metadata/v?label=Space&metadataUrl=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fkscience%2Fkmath%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
 # KMath
 
@@ -94,6 +93,10 @@ We expect to focus on creating convenient universal API first and then work on i
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized 
 native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be 
 better than SciPy.
+
+## Requirements
+
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend to use GraalVM-CE 11 for execution in order to get better performance.
 
 ### Repositories
 

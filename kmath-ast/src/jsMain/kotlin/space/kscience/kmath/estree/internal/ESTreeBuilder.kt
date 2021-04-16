@@ -8,7 +8,7 @@ package space.kscience.kmath.estree.internal
 import space.kscience.kmath.estree.internal.astring.generate
 import space.kscience.kmath.estree.internal.estree.*
 import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.Symbol
 
 internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExpression) {
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {

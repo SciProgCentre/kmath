@@ -4,11 +4,12 @@
  */
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import ru.mipt.npm.gradle.Maturity
 
 plugins {
     kotlin("jvm")
     kotlin("plugin.allopen")
-    id("kotlinx.benchmark")
+    id("org.jetbrains.kotlinx.benchmark")
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
@@ -25,7 +26,10 @@ repositories {
     maven("https://dl.bintray.com/mipt-npm/dev")
     maven("https://dl.bintray.com/mipt-npm/kscience")
     maven("https://jitpack.io")
-    maven("http://logicrunch.research.it.uu.se/maven/")
+    maven{
+        setUrl("http://logicrunch.research.it.uu.se/maven/")
+        isAllowInsecureProtocol = true
+    }
     mavenCentral()
 }
 
@@ -58,7 +62,7 @@ dependencies {
     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
 
     implementation("org.jetbrains.kotlinx:kotlinx-io:0.2.0-npm-dev-11")
-    implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime:0.2.0-dev-20")
+    implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.0")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
     // plotting
@@ -105,19 +109,31 @@ benchmark {
         iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
         include("MatrixInverseBenchmark")
     }
+
+    configurations.register("bigInt") {
+        warmups = 1 // number of warmup iterations
+        iterations = 3 // number of iterations
+        iterationTime = 500 // time in seconds per iteration
+        iterationTimeUnit = "ms" // time unity for iterationTime, default is seconds
+        include("BigIntBenchmark")
+    }
 }
 
 kotlin.sourceSets.all {
     with(languageSettings) {
         useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
         useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+        useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions{
+        jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+    }
 }
 
-readme{
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+readme {
+    maturity = Maturity.EXPERIMENTAL
 }

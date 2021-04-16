@@ -8,7 +8,10 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.nd.as1D
 
 /**
- * A group of methods to resolve equation A dot X = B, where A and B are matrices or vectors
+ * A group of methods to solve for *X* in equation *X = A <sup>-1</sup> &middot; B*, where *A* and *B* are matrices or
+ * vectors.
+ *
+ * @param T the type of items.
  */
 public interface LinearSolver<T : Any> {
     /**
@@ -28,7 +31,7 @@ public interface LinearSolver<T : Any> {
 }
 
 /**
- * Convert matrix to vector if it is possible
+ * Convert matrix to vector if it is possible.
  */
 public fun <T : Any> Matrix<T>.asVector(): Point<T> =
     if (this.colNum == 1)
@@ -36,4 +39,11 @@ public fun <T : Any> Matrix<T>.asVector(): Point<T> =
     else
         error("Can't convert matrix with more than one column to vector")
 
+/**
+ * Creates an n &times; 1 [VirtualMatrix], where n is the size of the given buffer.
+ *
+ * @param T the type of elements contained in the buffer.
+ * @receiver a buffer.
+ * @return the new matrix.
+ */
 public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

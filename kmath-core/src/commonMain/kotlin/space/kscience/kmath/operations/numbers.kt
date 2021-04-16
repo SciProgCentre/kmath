@@ -49,6 +49,12 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
     public override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
     public override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2.0
 
+    public override fun bindSymbol(value: String): T = when (value) {
+        "pi" -> pi
+        "e" -> e
+        else -> super<ExtendedFieldOperations>.bindSymbol(value)
+    }
+
     public override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
@@ -60,11 +66,11 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object RealField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
-    public override val zero: Double = 0.0
-    public override val one: Double = 1.0
+public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+    public override inline val zero: Double get() = 0.0
+    public override inline val one: Double get() = 1.0
 
-    override fun number(value: Number): Double = value.toDouble()
+    public override fun number(value: Number): Double = value.toDouble()
 
     public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
@@ -73,13 +79,11 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double>, ScaleOper
         }
 
     public override inline fun add(a: Double, b: Double): Double = a + b
-//    public override inline fun multiply(a: Double, k: Number): Double = a * k.toDouble()
-//    override fun divide(a: Double, k: Number): Double = a / k.toDouble()
 
     public override inline fun multiply(a: Double, b: Double): Double = a * b
     public override inline fun divide(a: Double, b: Double): Double = a / b
 
-    override fun scale(a: Double, value: Double): Double = a * value
+    public override fun scale(a: Double, value: Double): Double = a * value
 
     public override inline fun sin(arg: Double): Double = kotlin.math.sin(arg)
     public override inline fun cos(arg: Double): Double = kotlin.math.cos(arg)
@@ -113,10 +117,10 @@ public object RealField : ExtendedField<Double>, Norm<Double, Double>, ScaleOper
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
-    public override val zero: Float = 0.0f
-    public override val one: Float = 1.0f
+    public override inline val zero: Float get() = 0.0f
+    public override inline val one: Float get() = 1.0f
 
-    override fun number(value: Number): Float = value.toFloat()
+    public override fun number(value: Number): Float = value.toFloat()
 
     public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
         when (operation) {
@@ -125,7 +129,7 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
         }
 
     public override inline fun add(a: Float, b: Float): Float = a + b
-    override fun scale(a: Float, value: Double): Float = a * value.toFloat()
+    public override fun scale(a: Float, value: Double): Float = a * value.toFloat()
 
     public override inline fun multiply(a: Float, b: Float): Float = a * b
 
@@ -163,13 +167,13 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
-    public override val zero: Int
+    public override inline val zero: Int
         get() = 0
 
-    public override val one: Int
+    public override inline val one: Int
         get() = 1
 
-    override fun number(value: Number): Int = value.toInt()
+    public override fun number(value: Number): Int = value.toInt()
     public override inline fun add(a: Int, b: Int): Int = a + b
     public override inline fun multiply(a: Int, b: Int): Int = a * b
     public override inline fun norm(arg: Int): Int = abs(arg)
@@ -185,13 +189,13 @@ public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
-    public override val zero: Short
+    public override inline val zero: Short
         get() = 0
 
-    public override val one: Short
+    public override inline val one: Short
         get() = 1
 
-    override fun number(value: Number): Short = value.toShort()
+    public override fun number(value: Number): Short = value.toShort()
     public override inline fun add(a: Short, b: Short): Short = (a + b).toShort()
     public override inline fun multiply(a: Short, b: Short): Short = (a * b).toShort()
     public override fun norm(arg: Short): Short = if (arg > 0) arg else (-arg).toShort()
@@ -207,13 +211,13 @@ public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short>
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
-    public override val zero: Byte
+    public override inline val zero: Byte
         get() = 0
 
-    public override val one: Byte
+    public override inline val one: Byte
         get() = 1
 
-    override fun number(value: Number): Byte = value.toByte()
+    public override fun number(value: Number): Byte = value.toByte()
     public override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
     public override inline fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
     public override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
@@ -229,13 +233,13 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
-    public override val zero: Long
+    public override inline val zero: Long
         get() = 0L
 
-    public override val one: Long
+    public override inline val one: Long
         get() = 1L
 
-    override fun number(value: Number): Long = value.toLong()
+    public override fun number(value: Number): Long = value.toLong()
     public override inline fun add(a: Long, b: Long): Long = a + b
     public override inline fun multiply(a: Long, b: Long): Long = a * b
     public override fun norm(arg: Long): Long = abs(arg)

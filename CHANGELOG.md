@@ -4,20 +4,35 @@
 ### Added
 - ScaleOperations interface
 - Field extends ScaleOperations
+- Basic integration API
+- Basic MPP distributions and samplers
+- bindSymbolOrNull
+- Blocking chains and Statistics
+- Multiplatform integration
+- Integration for any Field element
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
 - Buffer factories for primitives moved to MutableBuffer.Companion
+- NDStructure and NDAlgebra to StructureND and AlgebraND respectively
+- Real -> Double
+- DataSets are moved from functions to core
+- Redesign advanced Chain API
+- Redesign MST. Remove MSTExpression.
+- Move MST to core
 
 ### Deprecated
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
 - Number multiplication and division in main Algebra chain
+- `contentEquals` from Buffer. It moved to the companion.
+- MSTExpression
 
 ### Fixed
+- Ring inherits RingOperations, not GroupOperations
 
 ### Security
 
@@ -73,6 +88,7 @@
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
 - `Real` class
+- StructureND identity and equals
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)

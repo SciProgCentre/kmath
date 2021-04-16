@@ -58,12 +58,18 @@ public fun <T> Buffer<T>.toMutableList(): MutableList<T> = when (this) {
 public inline fun <reified T> Buffer<T>.toTypedArray(): Array<T> = Array(size, ::get)
 
 /**
- * Create a new buffer from this one with the given mapping function.
- * Provided [BufferFactory] is used to construct the new buffer.
+ * Create a new buffer from this one with the given mapping function and using [Buffer.Companion.auto] buffer factory.
  */
-public inline fun <T : Any, reified R : Any> Buffer<T>.map(
-    bufferFactory: BufferFactory<R> = Buffer.Companion::auto,
-    crossinline block: (T) -> R,
+public inline fun <T : Any, reified R : Any> Buffer<T>.map(block: (T) -> R): Buffer<R> =
+    Buffer.auto(size) { block(get(it)) }
+
+/**
+ * Create a new buffer from this one with the given mapping function.
+ * Provided [bufferFactory] is used to construct the new buffer.
+ */
+public fun <T : Any, R : Any> Buffer<T>.map(
+    bufferFactory: BufferFactory<R>,
+    block: (T) -> R,
 ): Buffer<R> = bufferFactory(size) { block(get(it)) }
 
 /**
@@ -74,6 +80,15 @@ public inline fun <T : Any, reified R : Any> Buffer<T>.mapIndexed(
     bufferFactory: BufferFactory<R> = Buffer.Companion::auto,
     crossinline block: (index: Int, value: T) -> R,
 ): Buffer<R> = bufferFactory(size) { block(it, get(it)) }
+
+/**
+ * Fold given buffer according to [operation]
+ */
+public inline fun <T : Any, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R): R {
+    var accumulator = initial
+    for (index in this.indices) accumulator = operation(accumulator, get(index))
+    return accumulator
+}
 
 /**
  * Zip two buffers using given [transform].

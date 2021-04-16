@@ -18,6 +18,7 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
+import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.operations.FieldOperations
 import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
@@ -26,7 +27,8 @@ import space.kscience.kmath.operations.RingOperations
 /**
  * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
  *
- * @author Alexander Nozik and Iaroslav Postovalov
+ * @author Alexander Nozik
+ * @author Iaroslav Postovalov
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
     // TODO replace with "...".toRegex() when better-parse 0.4.1 is released

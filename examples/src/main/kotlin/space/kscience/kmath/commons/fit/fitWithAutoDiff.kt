@@ -12,11 +12,14 @@ import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
-import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.real.RealVector
+import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.optimization.FunctionOptimization
+import space.kscience.kmath.optimization.OptimizationResult
+import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.stat.*
+import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.toList
 import kotlin.math.pow
@@ -31,17 +34,16 @@ private val c by symbol
 /**
  * Shortcut to use buffers in plotly
  */
-operator fun TraceValues.invoke(vector: RealVector) {
+operator fun TraceValues.invoke(vector: DoubleVector) {
     numbers = vector.asIterable()
 }
 
 /**
  * Least squares fie with auto-differentiation. Uses `kmath-commons` and `kmath-for-real` modules.
  */
-fun main() {
-
+suspend fun main() {
     //A generator for a normally distributed values
-    val generator = Distribution.normal()
+    val generator = NormalDistribution(2.0, 7.0)
 
     //A chain/flow of random values with the given seed
     val chain = generator.sample(RandomGenerator.default(112667))
@@ -54,7 +56,7 @@ fun main() {
     //Perform an operation on each x value (much more effective, than numpy)
     val y = x.map {
         val value = it.pow(2) + it + 1
-        value + chain.nextDouble() * sqrt(value)
+        value + chain.next() * sqrt(value)
     }
     // this will also work, but less effective:
     // val y = x.pow(2)+ x + 1 + chain.nextDouble()
@@ -63,10 +65,10 @@ fun main() {
     val yErr = y.map { sqrt(it) }//RealVector.same(x.size, sigma)
 
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
-    val chi2 = Fitting.chiSquared(x, y, yErr) { x1 ->
+    val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
         //bind variables to autodiff context
-        val a = bind(a)
-        val b = bind(b)
+        val a = bindSymbol(a)
+        val b = bindSymbol(b)
         //Include default value for c if it is not provided as a parameter
         val c = bindSymbolOrNull(c) ?: one
         a * x1.pow(2) + b * x1 + c
@@ -95,10 +97,10 @@ fun main() {
             }
         }
         br()
-        h3{
+        h3 {
             +"Fit result: $result"
         }
-        h3{
+        h3 {
             +"Chi2/dof = ${result.value / (x.size - 3)}"
         }
     }

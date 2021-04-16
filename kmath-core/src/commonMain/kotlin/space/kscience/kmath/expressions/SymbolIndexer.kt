@@ -6,13 +6,17 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
+import kotlin.jvm.JvmInline
 
 /**
  * An environment to easy transform indexed variables to symbols and back.
  * TODO requires multi-receivers to be beautiful
  */
+@UnstableKMathAPI
 public interface SymbolIndexer {
     public val symbols: List<Symbol>
     public fun indexOf(symbol: Symbol): Int = symbols.indexOf(symbol)
@@ -54,13 +58,17 @@ public interface SymbolIndexer {
     public fun Map<Symbol, Double>.toDoubleArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }
 }
 
-public inline class SimpleSymbolIndexer(override val symbols: List<Symbol>) : SymbolIndexer
+@UnstableKMathAPI
+@JvmInline
+public value class SimpleSymbolIndexer(override val symbols: List<Symbol>) : SymbolIndexer
 
 /**
  * Execute the block with symbol indexer based on given symbol order
  */
+@UnstableKMathAPI
 public inline fun <R> withSymbols(vararg symbols: Symbol, block: SymbolIndexer.() -> R): R =
     with(SimpleSymbolIndexer(symbols.toList()), block)
 
+@UnstableKMathAPI
 public inline fun <R> withSymbols(symbols: Collection<Symbol>, block: SymbolIndexer.() -> R): R =
     with(SimpleSymbolIndexer(symbols.toList()), block)

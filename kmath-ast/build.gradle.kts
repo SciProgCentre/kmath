@@ -6,7 +6,8 @@
 import ru.mipt.npm.gradle.Maturity
 
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
 }
 
 kotlin.js {
@@ -63,36 +64,36 @@ readme {
     feature(
         id = "expression-language",
         description = "Expression language and its parser",
-        ref = "src/jvmMain/kotlin/kscience/kmath/ast/parser.kt"
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt"
     )
 
     feature(
         id = "mst",
         description = "MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MST.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt"
     )
 
     feature(
         id = "mst-building",
         description = "MST building algebraic structure",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt"
     )
 
     feature(
         id = "mst-interpreter",
         description = "MST interpreter",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MST.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt"
     )
 
     feature(
         id = "mst-jvm-codegen",
         description = "Dynamic MST to JVM bytecode compiler",
-        ref = "src/jvmMain/kotlin/kscience/kmath/asm/asm.kt"
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt"
     )
 
     feature(
         id = "mst-js-codegen",
         description = "Dynamic MST to JS compiler",
-        ref = "src/jsMain/kotlin/kscience/kmath/estree/estree.kt"
+        ref = "src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt"
     )
 }

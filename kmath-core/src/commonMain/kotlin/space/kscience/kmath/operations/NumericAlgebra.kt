@@ -6,6 +6,8 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import kotlin.math.E
+import kotlin.math.PI
 
 /**
  * An algebraic structure where elements can have numeric representation.
@@ -84,7 +86,25 @@ public interface NumericAlgebra<T> : Algebra<T> {
      */
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
         rightSideNumberOperationFunction(operation)(left, right)
+
+    public override fun bindSymbolOrNull(value: String): T? = when (value) {
+        "pi" -> number(PI)
+        "e" -> number(E)
+        else -> super.bindSymbolOrNull(value)
+    }
 }
+
+/**
+ * The &pi; mathematical constant.
+ */
+public val <T> NumericAlgebra<T>.pi: T
+    get() = bindSymbolOrNull("pi") ?: number(PI)
+
+/**
+ * The *e* mathematical constant.
+ */
+public val <T> NumericAlgebra<T>.e: T
+    get() = number(E)
 
 /**
  * Scale by scalar operations
@@ -132,20 +152,20 @@ public interface ScaleOperations<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface NumbersAddOperations<T> : Group<T>, NumericAlgebra<T> {
+public interface NumbersAddOperations<T> : Ring<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      */
     public operator fun T.plus(b: Number): T = this + number(b)
 
     /**
      * Addition of scalar and element.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      */
     public operator fun Number.plus(b: T): T = b + this
 

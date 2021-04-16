@@ -8,12 +8,12 @@ package space.kscience.kmath.histogram
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDField
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.FieldND
 import space.kscience.kmath.nd.Strides
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 
 /**
@@ -27,8 +27,8 @@ public data class DomainBin<T : Comparable<T>>(
 @OptIn(UnstableKMathAPI::class)
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
     override val context: IndexedHistogramSpace<T, V>,
-    public val values: NDStructure<V>,
-) : Histogram<T, Bin<T>>, SpaceElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
+    public val values: StructureND<V>,
+) : Histogram<T, Bin<T>>, GroupElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
 
     override fun get(point: Point<T>): Bin<T>? {
         val index = context.getIndex(point) ?: return null
@@ -51,7 +51,7 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
     : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
     //public val valueSpace: Space<V>
     public val strides: Strides
-    public val histogramValueSpace: NDField<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
+    public val histogramValueSpace: FieldND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
      * Resolve index of the bin including given [point]

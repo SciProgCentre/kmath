@@ -9,9 +9,9 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.BufferAccessor2D
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
-import space.kscience.kmath.structures.RealBuffer
 
 /**
  * Common implementation of [LupDecompositionFeature].
@@ -156,8 +156,8 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
     noinline checkSingular: (T) -> Boolean,
 ): LupDecomposition<T> = lup(MutableBuffer.Companion::auto, matrix, checkSingular)
 
-public fun LinearSpace<Double, RealField>.lup(matrix: Matrix<Double>): LupDecomposition<Double> =
-    lup(::RealBuffer, matrix) { it < 1e-11 }
+public fun LinearSpace<Double, DoubleField>.lup(matrix: Matrix<Double>): LupDecomposition<Double> =
+    lup(::DoubleBuffer, matrix) { it < 1e-11 }
 
 public fun <T : Any> LupDecomposition<T>.solveWithLup(
     factory: MutableBufferFactory<T>,
@@ -233,9 +233,9 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.inverseWi
 
 
 @OptIn(UnstableKMathAPI::class)
-public fun LinearSpace<Double, RealField>.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
+public fun LinearSpace<Double, DoubleField>.solveWithLup(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> {
     // Use existing decomposition if it is provided by matrix
-    val bufferFactory: MutableBufferFactory<Double> = ::RealBuffer
+    val bufferFactory: MutableBufferFactory<Double> = ::DoubleBuffer
     val decomposition: LupDecomposition<Double> = a.getFeature() ?: lup(bufferFactory, a) { it < 1e-11 }
     return decomposition.solveWithLup(bufferFactory, b)
 }
@@ -243,5 +243,5 @@ public fun LinearSpace<Double, RealField>.solveWithLup(a: Matrix<Double>, b: Mat
 /**
  * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
  */
-public fun LinearSpace<Double, RealField>.inverseWithLup(matrix: Matrix<Double>): Matrix<Double> =
+public fun LinearSpace<Double, DoubleField>.inverseWithLup(matrix: Matrix<Double>): Matrix<Double> =
     solveWithLup(matrix, one(matrix.rowNum, matrix.colNum))

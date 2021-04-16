@@ -1,49 +1,43 @@
-# Abstract Syntax Tree Expression Representation and Operations (`kmath-ast`)
+# Module kmath-ast
 
-This subproject implements the following features:
+Abstract syntax tree expression representation and related optimizations.
 
- - [expression-language](src/jvmMain/kotlin/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](src/commonMain/kotlin/kscience/kmath/ast/MST.kt) : MST interpreter
- - [mst-jvm-codegen](src/jvmMain/kotlin/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
- - [mst-js-codegen](src/jsMain/kotlin/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+ - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
+ - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
+ - [mst-building](src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
+ - [mst-interpreter](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+ - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+ - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 
 
-> #### Artifact:
->
-> This module artifact: `space.kscience:kmath-ast:0.3.0-dev-2`.
->
-> Bintray release version:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-ast/_latestVersion)
->
-> Bintray development version:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-ast/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-ast/_latestVersion)
->
-> **Gradle:**
->
-> ```gradle
-> repositories {
->     maven { url 'https://repo.kotlin.link' }
->     maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
->     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
-> }
-> 
-> dependencies {
->     implementation 'space.kscience:kmath-ast:0.3.0-dev-2'
-> }
-> ```
-> **Gradle Kotlin DSL:**
->
-> ```kotlin
-> repositories {
->     maven("https://repo.kotlin.link")
->     maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
->     maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
-> }
-> 
-> dependencies {
->     implementation("space.kscience:kmath-ast:0.3.0-dev-2")
-> }
-> ```
+## Artifact:
+
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-6`.
+
+**Gradle:**
+```gradle
+repositories {
+    maven { url 'https://repo.kotlin.link' }
+    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+}
+
+dependencies {
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-6'
+}
+```
+**Gradle Kotlin DSL:**
+```kotlin
+repositories {
+    maven("https://repo.kotlin.link")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
+    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+}
+
+dependencies {
+    implementation("space.kscience:kmath-ast:0.3.0-dev-6")
+}
+```
 
 ## Dynamic expression code generation
 
@@ -55,7 +49,7 @@ a special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
@@ -88,8 +82,8 @@ public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
 This API extends MST and MstExpression, so you may optimize as both of them:
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
-RealField.expression("x+2".parseMath())
+DoubleField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.expression("x+2".parseMath())
 ```
 
 #### Known issues
@@ -103,7 +97,7 @@ RealField.expression("x+2".parseMath())
 A similar feature is also available on JS.
 
 ```kotlin
-RealField.mstInField { symbol("x") + 2 }.compile()
+DoubleField.mstInField { symbol("x") + 2 }.compile()
 ``` 
 
 The code above returns expression implemented with such a JS function:
@@ -117,3 +111,39 @@ var executable = function (constants, arguments) {
 #### Known issues
 
 - This feature uses `eval` which can be unavailable in several environments.
+
+## Rendering expressions
+
+kmath-ast also includes an extensible engine to display expressions in LaTeX or MathML syntax. 
+
+Example usage:
+
+```kotlin
+import space.kscience.kmath.ast.*
+import space.kscience.kmath.ast.rendering.*
+
+public fun main() {
+    val mst = "exp(sqrt(x))-asin(2*x)/(2e10+x^3)/(-12)".parseMath()
+    val syntax = FeaturedMathRendererWithPostProcess.Default.render(mst)
+    val latex = LatexSyntaxRenderer.renderWithStringBuilder(syntax)
+    println("LaTeX:")
+    println(latex)
+    println()
+    val mathML = MathMLSyntaxRenderer.renderWithStringBuilder(syntax)
+    println("MathML:")
+    println(mathML)
+}
+```
+
+Result LaTeX: 
+
+![](http://chart.googleapis.com/chart?cht=tx&chl=e%5E%7B%5Csqrt%7Bx%7D%7D-%5Cfrac%7B%5Cfrac%7B%5Coperatorname%7Bsin%7D%5E%7B-1%7D%5C,%5Cleft(2%5C,x%5Cright)%7D%7B2%5Ctimes10%5E%7B10%7D%2Bx%5E%7B3%7D%7D%7D%7B-12%7D)
+
+Result MathML (embedding MathML is not allowed by GitHub Markdown):
+
+```html
+<mrow><msup><mrow><mi>e</mi></mrow><mrow><msqrt><mi>x</mi></msqrt></mrow></msup><mo>-</mo><mfrac><mrow><mfrac><mrow><msup><mrow><mo>sin</mo></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><mfenced open="(" close=")" separators=""><mn>2</mn><mspace width="0.167em"></mspace><mi>x</mi></mfenced></mrow><mrow><mn>2</mn><mo>&times;</mo><msup><mrow><mn>10</mn></mrow><mrow><mn>10</mn></mrow></msup><mo>+</mo><msup><mrow><mi>x</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow></mfrac></mrow><mrow><mo>-</mo><mn>12</mn></mrow></mfrac></mrow>
+```
+
+It is also possible to create custom algorithms of render, and even add support of other markup languages 
+(see API reference).

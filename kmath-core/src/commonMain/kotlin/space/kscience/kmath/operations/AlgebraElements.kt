@@ -51,10 +51,11 @@ public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.mi
 /**
  * Adds element to this one.
  *
- * @param b the augend.
+ * @receiver the augend.
+ * @param b the addend.
  * @return the sum.
  */
-public operator fun <T : AlgebraElement<T, S>, S : Group<T>> T.plus(b: T): T =
+public operator fun <T : AlgebraElement<T, S>, S : Ring<T>> T.plus(b: T): T =
     context.add(this, b)
 
 ///**
@@ -63,11 +64,11 @@ public operator fun <T : AlgebraElement<T, S>, S : Group<T>> T.plus(b: T): T =
 //public operator fun <T : AlgebraElement<T, S>, S : Space<T>> Number.times(element: T): T =
 //    element.times(this)
 
-
 /**
  * Multiplies this element by another one.
  *
- * @param b the multiplicand.
+ * @receiver the multiplicand.
+ * @param b the multiplier.
  * @return the product.
  */
 public operator fun <T : AlgebraElement<T, R>, R : Ring<T>> T.times(b: T): T =
@@ -92,7 +93,7 @@ public operator fun <T : AlgebraElement<T, F>, F : Field<T>> T.div(b: T): T =
  * @param S the type of space.
  */
 @UnstableKMathAPI
-public interface SpaceElement<T : SpaceElement<T, S>, S : Group<T>> : AlgebraElement<T, S>
+public interface GroupElement<T : GroupElement<T, S>, S : Group<T>> : AlgebraElement<T, S>
 
 /**
  * The element of [Ring].
@@ -102,7 +103,7 @@ public interface SpaceElement<T : SpaceElement<T, S>, S : Group<T>> : AlgebraEle
  * @param R the type of ring.
  */
 @UnstableKMathAPI
-public interface RingElement<T : RingElement<T, R>, R : Ring<T>> : SpaceElement<T, R>
+public interface RingElement<T : RingElement<T, R>, R : Ring<T>> : GroupElement<T, R>
 
 /**
  * The element of [Field].

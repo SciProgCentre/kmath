@@ -5,7 +5,11 @@
 
 package space.kscience.kmath.commons.expressions
 
-import space.kscience.kmath.expressions.*
+import space.kscience.kmath.expressions.binding
+import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.symbol
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.test.Test
@@ -28,14 +32,14 @@ internal class AutoDiffTest {
     @Test
     fun derivativeStructureFieldTest() {
         diff(2, x to 1.0, y to 1.0) {
-            val x = bind(x)//by binding()
+            val x = bindSymbol(x)//by binding()
             val y = bindSymbol("y")
             val z = x * (-sin(x * y) + y) + 2.0
             println(z.derivative(x))
-            println(z.derivative(y,x))
+            println(z.derivative(y, x))
             assertEquals(z.derivative(x, y), z.derivative(y, x))
             //check that improper order cause failure
-            assertFails { z.derivative(x,x,y) }
+            assertFails { z.derivative(x, x, y) }
         }
     }
 

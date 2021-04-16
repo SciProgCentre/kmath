@@ -8,13 +8,14 @@ package space.kscience.kmath.histogram
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.SpaceElement
+import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
 
 @UnstableKMathAPI
-public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2
+public val UnivariateDomain.center: Double
+    get() = (range.endInclusive - range.start) / 2
 
 /**
  * A univariate bin based an a range
@@ -35,7 +36,7 @@ public class UnivariateBin(
 
 @OptIn(UnstableKMathAPI::class)
 public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
-    SpaceElement<UnivariateHistogram, Group<UnivariateHistogram>> {
+    GroupElement<UnivariateHistogram, Group<UnivariateHistogram>> {
     public operator fun get(value: Double): UnivariateBin?
     public override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
 

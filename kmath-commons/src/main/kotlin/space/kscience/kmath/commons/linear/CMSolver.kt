@@ -19,7 +19,7 @@ public enum class CMDecomposition {
 
 public fun CMLinearSpace.solver(
     a: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
     CMDecomposition.LUP -> LUDecomposition(a.toCM().origin).solver
     CMDecomposition.RRQR -> RRQRDecomposition(a.toCM().origin).solver
@@ -31,16 +31,16 @@ public fun CMLinearSpace.solver(
 public fun CMLinearSpace.solve(
     a: Matrix<Double>,
     b: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).solve(b.toCM().origin).wrap()
 
 public fun CMLinearSpace.solve(
     a: Matrix<Double>,
     b: Point<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMVector = solver(a, decomposition).solve(b.toCM().origin).toPoint()
 
 public fun CMLinearSpace.inverse(
     a: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).inverse.wrap()

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.structures
 
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
@@ -22,7 +23,9 @@ public typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
 public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
 
 /**
- * A generic immutable random-access structure for both primitives and objects.
+ * A generic read-only random-access structure for both primitives and objects.
+ *
+ * [Buffer] is in general identity-free. [Buffer.contentEquals] should be used for content equality checks.
  *
  * @param T the type of elements contained in the buffer.
  */
@@ -42,13 +45,18 @@ public interface Buffer<out T> {
      */
     public operator fun iterator(): Iterator<T>
 
-    /**
-     * Checks content equality with another buffer.
-     */
-    public fun contentEquals(other: Buffer<*>): Boolean =
-        asSequence().mapIndexed { index, value -> value == other[index] }.all { it }
-
     public companion object {
+        /**
+         * Check the element-by-element match of content of two buffers.
+         */
+        public fun <T : Any> contentEquals(first: Buffer<T>, second: Buffer<T>): Boolean {
+            if (first.size != second.size) return false
+            for (i in first.indices) {
+                if (first[i] != second[i]) return false
+            }
+            return true
+        }
+
         /**
          * Creates a [ListBuffer] of given type [T] with given [size]. Each element is calculated by calling the
          * specified [initializer] function.
@@ -58,14 +66,14 @@ public interface Buffer<out T> {
 
         /**
          * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
             when (type) {
-                Double::class -> MutableBuffer.real(size) { initializer(it) as Double } as Buffer<T>
+                Double::class -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
                 Short::class -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
                 Int::class -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
                 Long::class -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
@@ -75,7 +83,7 @@ public interface Buffer<out T> {
 
         /**
          * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
@@ -107,13 +115,12 @@ public interface MutableBuffer<T> : Buffer<T> {
     public fun copy(): MutableBuffer<T>
 
     public companion object {
-
         /**
-         * Creates a [RealBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun real(size: Int, initializer: (Int) -> Double): RealBuffer =
-            RealBuffer(size, initializer)
+        public inline fun double(size: Int, initializer: (Int) -> Double): DoubleBuffer =
+            DoubleBuffer(size, initializer)
 
         /**
          * Creates a [ShortBuffer] with the specified [size], where each element is calculated by calling the specified
@@ -153,14 +160,14 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
             when (type) {
-                Double::class -> real(size) { initializer(it) as Double } as MutableBuffer<T>
+                Double::class -> double(size) { initializer(it) as Double } as MutableBuffer<T>
                 Short::class -> short(size) { initializer(it) as Short } as MutableBuffer<T>
                 Int::class -> int(size) { initializer(it) as Int } as MutableBuffer<T>
                 Float::class -> float(size) { initializer(it) as Float } as MutableBuffer<T>
@@ -170,7 +177,7 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [RealBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
@@ -186,9 +193,11 @@ public interface MutableBuffer<T> : Buffer<T> {
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-public inline class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
-    override val size: Int
-        get() = list.size
+public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
+
+    public constructor(size: Int, initializer: (Int) -> T) : this(List(size, initializer))
+
+    override val size: Int get() = list.size
 
     override operator fun get(index: Int): T = list[index]
     override operator fun iterator(): Iterator<T> = list.iterator()
@@ -205,9 +214,12 @@ public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-public inline class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
-    override val size: Int
-        get() = list.size
+@JvmInline
+public value class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
+
+    public constructor(size: Int, initializer: (Int) -> T) : this(MutableList(size, initializer))
+
+    override val size: Int get() = list.size
 
     override operator fun get(index: Int): T = list[index]
 
@@ -256,7 +268,8 @@ public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property buffer The underlying buffer.
  */
-public inline class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buffer<T> {
+@JvmInline
+public value class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buffer<T> {
     override val size: Int get() = buffer.size
 
     override operator fun get(index: Int): T = buffer[index]
@@ -277,14 +290,6 @@ public class VirtualBuffer<T>(override val size: Int, private val generator: (In
     }
 
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
-
-    override fun contentEquals(other: Buffer<*>): Boolean {
-        return if (other is VirtualBuffer) {
-            this.size == other.size && this.generator == other.generator
-        } else {
-            super.contentEquals(other)
-        }
-    }
 }
 
 /**

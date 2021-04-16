@@ -4,7 +4,8 @@
  */
 
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    kotlin("jvm")
+    id("ru.mipt.npm.gradle.common")
 }
 
 dependencies {
@@ -13,6 +14,6 @@ dependencies {
     api(project(":kmath-ast"))
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

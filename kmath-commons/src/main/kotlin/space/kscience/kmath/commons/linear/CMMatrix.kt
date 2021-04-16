@@ -8,9 +8,9 @@ package space.kscience.kmath.commons.linear
 import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDStructure
-import space.kscience.kmath.operations.RealField
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
@@ -19,17 +19,9 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     public override val colNum: Int get() = origin.columnDimension
 
     public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is NDStructure<*>) return false
-        return NDStructure.contentEquals(this, other)
-    }
-
-    override fun hashCode(): Int = origin.hashCode()
 }
 
-public inline class CMVector(public val origin: RealVector) : Point<Double> {
+public class CMVector(public val origin: RealVector) : Point<Double> {
     public override val size: Int get() = origin.dimension
 
     public override operator fun get(index: Int): Double = origin.getEntry(index)
@@ -39,15 +31,15 @@ public inline class CMVector(public val origin: RealVector) : Point<Double> {
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)
 
-public object CMLinearSpace : LinearSpace<Double, RealField> {
-    override val elementAlgebra: RealField get() = RealField
+public object CMLinearSpace : LinearSpace<Double, DoubleField> {
+    override val elementAlgebra: DoubleField get() = DoubleField
 
     public override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: RealField.(i: Int, j: Int) -> Double,
+        initializer: DoubleField.(i: Int, j: Int) -> Double,
     ): CMMatrix {
-        val array = Array(rows) { i -> DoubleArray(columns) { j -> RealField.initializer(i, j) } }
+        val array = Array(rows) { i -> DoubleArray(columns) { j -> DoubleField.initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
     }
 
@@ -69,8 +61,8 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
     internal fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
     internal fun RealVector.wrap(): CMVector = CMVector(this)
 
-    override fun buildVector(size: Int, initializer: RealField.(Int) -> Double): Point<Double> =
-        ArrayRealVector(DoubleArray(size) { RealField.initializer(it) }).wrap()
+    override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): Point<Double> =
+        ArrayRealVector(DoubleArray(size) { DoubleField.initializer(it) }).wrap()
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): CMMatrix =
         toCM().origin.add(other.toCM().origin).wrap()
@@ -103,7 +95,7 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
         v * this
 
     @UnstableKMathAPI
-    override fun <F : Any> getFeature(structure: Matrix<Double>, type: KClass<F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         //Return the feature if it is intrinsic to the structure
         structure.getFeature(type)?.let { return it }
 
@@ -140,7 +132,7 @@ public object CMLinearSpace : LinearSpace<Double, RealField> {
                 override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
                 override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
                 override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
-                override val singularValues: Point<Double> by lazy { RealBuffer(sv.singularValues) }
+                override val singularValues: Point<Double> by lazy { DoubleBuffer(sv.singularValues) }
             }
             else -> null
         }?.let(type::cast)

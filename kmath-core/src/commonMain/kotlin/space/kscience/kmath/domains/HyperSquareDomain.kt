@@ -16,7 +16,7 @@ import space.kscience.kmath.structures.indices
  * @author Alexander Nozik
  */
 @UnstableKMathAPI
-public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : RealDomain {
+public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : DoubleDomain {
     public override val dimension: Int get() = lower.size
 
     public override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->

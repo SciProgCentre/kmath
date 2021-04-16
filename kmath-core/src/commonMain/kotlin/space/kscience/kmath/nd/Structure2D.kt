@@ -8,6 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
@@ -15,7 +16,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public interface Structure2D<T> : NDStructure<T> {
+public interface Structure2D<T> : StructureND<T> {
     /**
      * The number of rows in this structure.
      */
@@ -65,7 +66,8 @@ public interface Structure2D<T> : NDStructure<T> {
 /**
  * A 2D wrapper for nd-structure
  */
-private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D<T> {
+@JvmInline
+private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -74,26 +76,22 @@ private class Structure2DWrapper<T>(val structure: NDStructure<T>) : Structure2D
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
     @UnstableKMathAPI
-    override fun <F : Any> getFeature(type: KClass<F>): F? = structure.getFeature(type)
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
 
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
-
-    override fun equals(other: Any?): Boolean = structure == other
-
-    override fun hashCode(): Int = structure.hashCode()
 }
 
 /**
- * Represent a [NDStructure] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */
-public fun <T> NDStructure<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
+public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
 /**
- * Expose inner [NDStructure] if possible
+ * Expose inner [StructureND] if possible
  */
-internal fun <T> Structure2D<T>.unwrap(): NDStructure<T> =
+internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
     if (this is Structure2DWrapper) structure
     else this

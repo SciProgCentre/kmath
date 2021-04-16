@@ -18,7 +18,7 @@ import space.kscience.kmath.structures.VirtualBuffer
 public class RingBuffer<T>(
     private val buffer: MutableBuffer<T?>,
     private var startIndex: Int = 0,
-    size: Int = 0
+    size: Int = 0,
 ) : Buffer<T> {
     private val mutex: Mutex = Mutex()
 
@@ -53,11 +53,9 @@ public class RingBuffer<T>(
     /**
      * A safe snapshot operation
      */
-    public suspend fun snapshot(): Buffer<T> {
-        mutex.withLock {
-            val copy = buffer.copy()
-            return VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
-        }
+    public suspend fun snapshot(): Buffer<T> = mutex.withLock {
+        val copy = buffer.copy()
+        VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
     }
 
     public suspend fun push(element: T) {

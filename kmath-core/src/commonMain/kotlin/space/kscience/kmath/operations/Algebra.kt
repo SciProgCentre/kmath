@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.Symbol
 
 /**
  * Stub for DSL the [Algebra] is.
@@ -28,10 +28,18 @@ public interface Algebra<T> {
      *
      * In case if algebra can't parse the string, this method must throw [kotlin.IllegalStateException].
      *
+     * Returns `null` if symbol could not be bound to the context
+     *
      * @param value the raw string.
      * @return an object.
      */
-    public fun bindSymbol(value: String): T = error("Wrapping of '$value' is not supported in $this")
+    public fun bindSymbolOrNull(value: String): T? = null
+
+    /**
+     * The same as [bindSymbolOrNull] but throws an error if symbol could not be bound
+     */
+    public fun bindSymbol(value: String): T =
+        bindSymbolOrNull(value) ?: error("Symbol '$value' is not supported in $this")
 
     /**
      * Dynamically dispatches an unary operation with the certain name.
@@ -96,7 +104,9 @@ public interface Algebra<T> {
         binaryOperationFunction(operation)(left, right)
 }
 
-public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
+public fun <T> Algebra<T>.bindSymbolOrNull(symbol: Symbol): T? = bindSymbolOrNull(symbol.identity)
+
+public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)
 
 /**
  * Call a block with an [Algebra] as receiver.
@@ -105,8 +115,8 @@ public fun <T : Any> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbo
 public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
- * Represents linear space without neutral element, i.e. algebraic structure with associative, binary operation [add]
- * and scalar multiplication [multiply].
+ * Represents group without neutral element (also known as inverse semigroup), i.e. algebraic structure with
+ * associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
@@ -114,8 +124,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @param a the addend.
-     * @param b the augend.
+     * @param a the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public fun add(a: T, b: T): T
@@ -141,8 +151,8 @@ public interface GroupOperations<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      * @return the sum.
      */
     public operator fun T.plus(b: T): T = add(this, b)
@@ -182,7 +192,7 @@ public interface GroupOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents linear space with neutral element, i.e. algebraic structure with associative, binary operation [add].
+ * Represents group, i.e. algebraic structure with associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
@@ -194,8 +204,8 @@ public interface Group<T> : GroupOperations<T> {
 }
 
 /**
- * Represents rng, i.e. algebraic structure with associative, binary, commutative operation [add] and associative,
- * operation [multiply] distributive over [add].
+ * Represents ring without multiplicative and additive identities, i.e. algebraic structure with
+ * associative, binary, commutative operation [add] and associative, operation [multiply] distributive over [add].
  *
  * @param T the type of element of this semiring.
  */
@@ -243,7 +253,7 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
 }
 
 /**
- * Represents field without identity elements, i.e. algebraic structure with associative, binary, commutative operations
+ * Represents field without without multiplicative and additive identities, i.e. algebraic structure with associative, binary, commutative operations
  * [add] and [multiply]; binary operation [divide] as multiplication of left operand by reciprocal of right one.
  *
  * @param T the type of element of this semifield.
@@ -281,11 +291,12 @@ public interface FieldOperations<T> : RingOperations<T> {
 }
 
 /**
- * Represents field, i.e. algebraic structure with three operations: associative "addition" and "multiplication",
- * and "division" and their neutral elements.
+ * Represents field, i.e. algebraic structure with three operations: associative, commutative addition and
+ * multiplication, and division. **This interface differs from the eponymous mathematical definition: fields in KMath
+ * also support associative multiplication by scalar.**
  *
- * @param T the type of element of this semifield.
+ * @param T the type of element of this field.
  */
 public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
-    override fun number(value: Number): T = scale(one, value.toDouble())
+    public override fun number(value: Number): T = scale(one, value.toDouble())
 }

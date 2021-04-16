@@ -3,19 +3,18 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+import ru.mipt.npm.gradle.Maturity
+
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
+}
+
+kscience {
+    useAtomic()
 }
 
 kotlin.sourceSets {
-    all {
-        languageSettings.apply {
-            useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            useExperimentalAnnotation("kotlinx.coroutines.ObsoleteCoroutinesApi")
-        }
-    }
-
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
@@ -30,6 +29,6 @@ kotlin.sourceSets {
     }
 }
 
-readme{
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+readme {
+    maturity = Maturity.EXPERIMENTAL
 }

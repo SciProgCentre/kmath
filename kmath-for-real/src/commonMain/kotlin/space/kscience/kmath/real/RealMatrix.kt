@@ -7,9 +7,9 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.RealField
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.RealBuffer
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asIterable
 import kotlin.math.pow
 
@@ -27,11 +27,11 @@ import kotlin.math.pow
 
 public typealias RealMatrix = Matrix<Double>
 
-public fun realMatrix(rowNum: Int, colNum: Int, initializer: RealField.(i: Int, j: Int) -> Double): RealMatrix =
+public fun realMatrix(rowNum: Int, colNum: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): RealMatrix =
     LinearSpace.real.buildMatrix(rowNum, colNum, initializer)
 
 @OptIn(UnstableKMathAPI::class)
-public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, RealField> =
+public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, DoubleField> =
     LinearSpace.real.matrix(rowNum, colNum)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
@@ -125,19 +125,19 @@ public fun RealMatrix.extractColumns(columnRange: IntRange): RealMatrix =
 public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
-public fun RealMatrix.sumByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.sumByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
     columns[j].asIterable().sum()
 }
 
-public fun RealMatrix.minByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.minByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
     columns[j].asIterable().minOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun RealMatrix.maxByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.maxByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
     columns[j].asIterable().maxOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun RealMatrix.averageByColumn(): RealBuffer = RealBuffer(colNum) { j ->
+public fun RealMatrix.averageByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
     columns[j].asIterable().average()
 }
 

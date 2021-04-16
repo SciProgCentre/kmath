@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.misc.StringSymbol
 import space.kscience.kmath.operations.*
 
 /**
@@ -23,8 +24,10 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
     /**
      * Builds an Expression to access a variable.
      */
-    public override fun bindSymbolOrNull(symbol: Symbol): Expression<T>? = Expression { arguments ->
-        arguments[symbol] ?: error("Argument not found: $symbol")
+    public override fun bindSymbolOrNull(value: String): Expression<T>? = Expression { arguments ->
+        algebra.bindSymbolOrNull(value)
+            ?: arguments[StringSymbol(value)]
+            ?: error("Symbol '$value' is not supported in $this")
     }
 
     /**
@@ -46,14 +49,14 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
 }
 
 /**
- * A context class for [Expression] construction for [Group] algebras.
+ * A context class for [Expression] construction for [Ring] algebras.
  */
 public open class FunctionalExpressionGroup<T, A : Group<T>>(
     algebra: A,
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
     public override val zero: Expression<T> get() = const(algebra.zero)
 
-    override fun Expression<T>.unaryMinus(): Expression<T> =
+    public override fun Expression<T>.unaryMinus(): Expression<T> =
         unaryOperation(GroupOperations.MINUS_OPERATION, this)
 
     /**
@@ -105,8 +108,7 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
 
 public open class FunctionalExpressionField<T, A : Field<T>>(
     algebra: A,
-) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>,
-    ScaleOperations<Expression<T>> {
+) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>, ScaleOperations<Expression<T>> {
     /**
      * Builds an Expression of division an expression by another one.
      */
@@ -122,16 +124,21 @@ public open class FunctionalExpressionField<T, A : Field<T>>(
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionRing>.binaryOperationFunction(operation)
 
-    override fun scale(a: Expression<T>, value: Double): Expression<T> = algebra {
+    public override fun scale(a: Expression<T>, value: Double): Expression<T> = algebra {
         Expression { args -> a(args) * value }
     }
+
+    public override fun bindSymbolOrNull(value: String): Expression<T>? =
+        super<FunctionalExpressionRing>.bindSymbolOrNull(value)
 }
 
 public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
     algebra: A,
 ) : FunctionalExpressionField<T, A>(algebra), ExtendedField<Expression<T>> {
+    public override fun number(value: Number): Expression<T> = const(algebra.number(value))
 
-    override fun number(value: Number): Expression<T> = const(algebra.number(value))
+    public override fun sqrt(arg: Expression<T>): Expression<T> =
+        unaryOperationFunction(PowerOperations.SQRT_OPERATION)(arg)
 
     public override fun sin(arg: Expression<T>): Expression<T> =
         unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
@@ -162,9 +169,11 @@ public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
 
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionField>.binaryOperationFunction(operation)
+
+    public override fun bindSymbol(value: String): Expression<T> = super<FunctionalExpressionField>.bindSymbol(value)
 }
 
-public inline fun <T, A : Group<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
+public inline fun <T, A : Ring<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
     FunctionalExpressionGroup(this).block()
 
 public inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressionRing<T, A>.() -> Expression<T>): Expression<T> =
