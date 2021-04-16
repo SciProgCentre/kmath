@@ -71,7 +71,7 @@ internal class MultivariateHistogramTest {
             assertTrue {
                 res.bins.count() >= histogram1.bins.count()
             }
-            assertEquals(0.0, res.bins.sumByDouble { it.value.toDouble() })
+            assertEquals(0.0, res.bins.sumOf { it.value.toDouble() })
         }
     }
 }

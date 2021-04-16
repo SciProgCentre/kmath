@@ -10,23 +10,27 @@ import space.kscience.kmath.operations.invoke
 
 @State(Scope.Benchmark)
 internal class BigIntBenchmark {
+
+    val kmNumber = BigIntField.number(Int.MAX_VALUE)
+    val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
+
     @Benchmark
     fun kmAdd(blackhole: Blackhole) = BigIntField{
-        blackhole.consume(one + number(Int.MAX_VALUE))
+        blackhole.consume(kmNumber + kmNumber + kmNumber)
     }
 
     @Benchmark
     fun jvmAdd(blackhole: Blackhole) = JBigIntegerField{
-        blackhole.consume(one + number(Int.MAX_VALUE))
+        blackhole.consume(jvmNumber + jvmNumber+ jvmNumber)
     }
 
     @Benchmark
     fun kmMultiply(blackhole: Blackhole) = BigIntField{
-        blackhole.consume(number(Int.MAX_VALUE)* number(Int.MAX_VALUE))
+        blackhole.consume(kmNumber*kmNumber*kmNumber)
     }
 
     @Benchmark
     fun jvmMultiply(blackhole: Blackhole) = JBigIntegerField{
-        blackhole.consume(number(Int.MAX_VALUE)* number(Int.MAX_VALUE))
+        blackhole.consume(jvmNumber*jvmNumber*jvmNumber)
     }
 }

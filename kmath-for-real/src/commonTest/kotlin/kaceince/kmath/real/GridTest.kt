@@ -1,5 +1,6 @@
 package kaceince.kmath.real
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.minus
 import space.kscience.kmath.real.norm
@@ -8,6 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@UnstableKMathAPI
 class GridTest {
     @Test
     fun testStepGrid() {

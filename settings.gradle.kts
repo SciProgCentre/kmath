@@ -39,5 +39,5 @@ include(
     ":kmath-ast",
     ":kmath-ejml",
     ":kmath-kotlingrad",
-    ":examples",
+    ":examples"
 )
