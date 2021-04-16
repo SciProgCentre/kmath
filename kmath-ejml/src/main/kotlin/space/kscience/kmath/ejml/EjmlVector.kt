@@ -14,7 +14,7 @@ import space.kscience.kmath.linear.Point
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public inline class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
+public class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
     public override val size: Int
         get() = origin.numRows()
 
