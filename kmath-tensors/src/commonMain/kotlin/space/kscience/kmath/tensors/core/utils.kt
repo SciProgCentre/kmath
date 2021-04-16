@@ -1,11 +1,11 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Returns a reference to [IntArray] containing all of the elements of this [Buffer].
@@ -61,7 +61,25 @@ internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {
 
 internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexFrom(this.linearStructure.dim, i)
 
-public fun DoubleTensor.toPrettyString(): String = buildString {
+internal inline fun format(value: Double, digits: Int = 4): String {
+    val ten = 10.0
+    val approxOrder = ceil(log10(abs(value))).toInt()
+    val order = if(
+        ((value % ten) == 0.0) or
+        (value == 1.0) or
+        ((1/value) % ten == 0.0)) approxOrder else approxOrder - 1
+
+    val lead = value / ten.pow(order)
+    val leadDisplay = round(lead*ten.pow(digits)) / ten.pow(digits)
+    val orderDisplay = if(order >= 0) "+$order" else "$order"
+    val valueDisplay = "${leadDisplay}E$orderDisplay"
+    val res = if(value < 0.0) valueDisplay else " $valueDisplay"
+    val fLength = digits + 6
+    val endSpace = " ".repeat(fLength - res.length)
+    return "$res$endSpace"
+}
+
+internal inline fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
     val linearStructure = this@toPrettyString.linearStructure
@@ -79,12 +97,9 @@ public fun DoubleTensor.toPrettyString(): String = buildString {
             append("[")
             charOffset += 1
         }
-        // todo refactor
-        val values = mutableListOf<Double>()
-        for (i in 0 until vectorSize) {
-            values.add(vector[intArrayOf(i)])
-        }
-        // todo apply exp formatting
+
+        val values = vector.as1D().toMutableList().map(::format)
+
         append(values.joinToString(", "))
         append("]")
         charOffset -= 1

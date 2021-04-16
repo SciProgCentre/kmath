@@ -4,7 +4,6 @@ import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.TensorStructure
 
 
-
 public open class BufferedTensor<T>(
     override val shape: IntArray,
     public val buffer: MutableBuffer<T>,
@@ -70,6 +69,9 @@ public class DoubleTensor internal constructor(
 {
     internal constructor(bufferedTensor: BufferedTensor<Double>):
             this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
+
+    override fun toString(): String = toPrettyString()
+
 }
 
 internal fun BufferedTensor<Int>.asTensor(): IntTensor = IntTensor(this)

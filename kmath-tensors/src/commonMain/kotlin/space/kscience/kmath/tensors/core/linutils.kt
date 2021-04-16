@@ -190,9 +190,7 @@ internal inline fun choleskyHelper(
     }
 }
 
-internal inline fun luMatrixDet(luTensor: MutableStructure2D<Double>, pivotsTensor: MutableStructure1D<Int>): Double {
-    val lu = luTensor.as2D()
-    val pivots = pivotsTensor.as1D()
+internal inline fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>): Double {
     if (lu[0, 0] == 0.0) {
         return 0.0
     }

@@ -2,7 +2,7 @@
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.vectorSequence
 import java.lang.StringBuilder
-
+/*
 internal fun format(value: Double, digits: Int = 4): String {
     val res = "%.${digits}e".format(value).replace(',', '.')
     if (value < 0.0) {
@@ -59,6 +59,6 @@ public fun DoubleTensor.toPrettyString(): String {
     }
     return builder.toString()
 }
-
+*/
 
 
