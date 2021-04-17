@@ -18,6 +18,10 @@ import space.kscience.kmath.operations.invoke
 private fun BigInt.pow(power: Int): BigInt = modPow(BigIntField.number(power), BigInt.ONE)
 
 
+
+private fun BigInt.pow(power: Int): BigInt = modPow(BigIntField.number(power), BigInt.ONE)
+
+
 @State(Scope.Benchmark)
 internal class BigIntBenchmark {
 
