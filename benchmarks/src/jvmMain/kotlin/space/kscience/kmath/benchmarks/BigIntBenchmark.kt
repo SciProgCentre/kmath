@@ -5,23 +5,26 @@
 
 package space.kscience.kmath.benchmarks
 
-import edu.mcgill.kaliningraph.power
+
 import kotlinx.benchmark.Blackhole
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.BigInt
+import space.kscience.kmath.operations.BigIntField
+import space.kscience.kmath.operations.JBigIntegerField
+import space.kscience.kmath.operations.invoke
+
+private fun BigInt.pow(power: Int): BigInt = modPow(BigIntField.number(power), BigInt.ONE)
+
 
 @State(Scope.Benchmark)
 internal class BigIntBenchmark {
 
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
-    val largeKmNumber = BigIntField {
-        fun BigInt.pow10(): BigInt = power(10, ::multiply)
-        number(11).pow10().pow10().pow10().pow10().pow10()
-    }
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
-    val largeJvmNumber = JBigIntegerField { number(11).pow(100_000)  }
+    val largeKmNumber = BigIntField { number(11).pow(100_000) }
+    val largeJvmNumber = JBigIntegerField { number(11).pow(100_000) }
     val bigExponent = 50_000
 
     @Benchmark
@@ -41,7 +44,7 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun kmMultiplyLarge(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(largeKmNumber.let { it * it })
+        blackhole.consume(largeKmNumber*largeKmNumber)
     }
 
     @Benchmark
@@ -51,12 +54,12 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun jvmMultiplyLarge(blackhole: Blackhole) = JBigIntegerField {
-        blackhole.consume(largeJvmNumber.let { it * it })
+        blackhole.consume(largeJvmNumber*largeJvmNumber)
     }
 
     @Benchmark
     fun kmPower(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(kmNumber.power(bigExponent, ::multiply))
+        blackhole.consume(kmNumber.pow(bigExponent))
     }
 
     @Benchmark
