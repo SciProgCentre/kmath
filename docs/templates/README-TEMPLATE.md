@@ -94,6 +94,10 @@ cases. We expect the worst KMath benchmarks will perform better than native Pyth
 native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be 
 better than SciPy.
 
+## Requirements
+
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend to use GraalVM-CE 11 for execution in order to get better performance.
+
 ### Repositories
 
 Release and development artifacts are accessible from mipt-npm [Space](https://www.jetbrains.com/space/) repository `https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven` (see documentation of

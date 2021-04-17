@@ -5,22 +5,20 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.map
 import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
-public interface GaussIntegratorRuleFactory<T : Any> : IntegrandFeature {
-    public val algebra: Field<T>
-    public val bufferFactory: BufferFactory<T>
-
-    public fun build(numPoints: Int): Pair<Buffer<T>, Buffer<T>>
+public interface GaussIntegratorRuleFactory : IntegrandFeature {
+    public fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>>
 
     public companion object {
         public fun double(numPoints: Int, range: ClosedRange<Double>): Pair<Buffer<Double>, Buffer<Double>> =
-            DoubleGaussLegendreRuleFactory.build(numPoints, range)
+            GaussLegendreRuleFactory.build(numPoints, range)
     }
 }
 
@@ -28,24 +26,23 @@ public interface GaussIntegratorRuleFactory<T : Any> : IntegrandFeature {
  * Create an integration rule by scaling existing normalized rule
  *
  */
-public fun <T : Any> GaussIntegratorRuleFactory<T>.build(
+public fun GaussIntegratorRuleFactory.build(
     numPoints: Int,
     range: ClosedRange<Double>,
-): Pair<Buffer<T>, Buffer<T>> {
+): Pair<Buffer<Double>, Buffer<Double>> {
     val normalized = build(numPoints)
-    with(algebra) {
-        val length = range.endInclusive - range.start
+    val length = range.endInclusive - range.start
 
-        val points = normalized.first.map(bufferFactory) {
-            number(range.start + length / 2) + number(length / 2) * it
-        }
-
-        val weights = normalized.second.map(bufferFactory) {
-            it * length / 2
-        }
-
-        return points to weights
+    val points = normalized.first.map(::DoubleBuffer) {
+        range.start + length / 2 + length / 2 * it
     }
+
+    val weights = normalized.second.map(::DoubleBuffer) {
+        it * length / 2
+    }
+
+    return points to weights
+
 }
 
 
@@ -56,11 +53,7 @@ public fun <T : Any> GaussIntegratorRuleFactory<T>.build(
  *
  */
 @ThreadLocal
-public object DoubleGaussLegendreRuleFactory : GaussIntegratorRuleFactory<Double> {
-
-    override val algebra: Field<Double> get() = DoubleField
-
-    override val bufferFactory: BufferFactory<Double> get() = ::DoubleBuffer
+public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
 
     private val cache = HashMap<Int, Pair<Buffer<Double>, Buffer<Double>>>()
 
@@ -171,22 +164,4 @@ public object DoubleGaussLegendreRuleFactory : GaussIntegratorRuleFactory<Double
     }
 
     override fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> = getOrBuildRule(numPoints)
-}
-
-
-/**
- * A generic Gauss-Legendre rule factory that wraps [DoubleGaussLegendreRuleFactory] in a generic way.
- */
-public class GenericGaussLegendreRuleFactory<T : Any>(
-    override val algebra: Field<T>,
-    override val bufferFactory: BufferFactory<T>,
-) : GaussIntegratorRuleFactory<T> {
-
-    override fun build(numPoints: Int): Pair<Buffer<T>, Buffer<T>> {
-        val (doublePoints, doubleWeights) = DoubleGaussLegendreRuleFactory.build(numPoints)
-
-        val points = doublePoints.map(bufferFactory) { algebra.number(it) }
-        val weights = doubleWeights.map(bufferFactory) { algebra.number(it) }
-        return points to weights
-    }
 }
