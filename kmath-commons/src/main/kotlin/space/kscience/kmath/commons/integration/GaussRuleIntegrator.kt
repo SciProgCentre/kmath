@@ -17,7 +17,7 @@ public class GaussRuleIntegrator(
 ) : UnivariateIntegrator<Double> {
 
     override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val range = integrand.getFeature<IntegrationRange<Double>>()?.range
+        val range = integrand.getFeature<IntegrationRange>()?.range
             ?: error("Integration range is not provided")
         val integrator: GaussIntegrator = getIntegrator(range)
         //TODO check performance
