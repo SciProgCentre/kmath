@@ -27,6 +27,7 @@ kotlin.js {
 kotlin.sourceSets {
     commonMain {
         dependencies {
+            api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
             api(project(":kmath-core"))
         }
     }
@@ -39,13 +40,12 @@ kotlin.sourceSets {
 
     jsMain {
         dependencies {
-            implementation(npm("astring", "1.7.0"))
+            implementation(npm("astring", "1.7.4"))
         }
     }
 
     jvmMain {
         dependencies {
-            api("com.github.h0tk3y.betterParse:better-parse:0.4.1")
             implementation("org.ow2.asm:asm:9.1")
             implementation("org.ow2.asm:asm-commons:9.1")
         }
@@ -64,25 +64,7 @@ readme {
     feature(
         id = "expression-language",
         description = "Expression language and its parser",
-        ref = "src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt"
-    )
-
-    feature(
-        id = "mst",
-        description = "MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation",
-        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt"
-    )
-
-    feature(
-        id = "mst-building",
-        description = "MST building algebraic structure",
-        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt"
-    )
-
-    feature(
-        id = "mst-interpreter",
-        description = "MST interpreter",
-        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt"
     )
 
     feature(
@@ -95,5 +77,11 @@ readme {
         id = "mst-js-codegen",
         description = "Dynamic MST to JS compiler",
         ref = "src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt"
+    )
+
+    feature(
+        id = "rendering",
+        description = "Extendable MST rendering",
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt"
     )
 }
