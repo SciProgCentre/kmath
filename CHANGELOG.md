@@ -10,6 +10,7 @@
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
+- Extendend operations for ND4J fields
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
