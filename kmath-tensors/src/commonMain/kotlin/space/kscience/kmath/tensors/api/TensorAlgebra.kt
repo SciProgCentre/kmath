@@ -1,4 +1,9 @@
-package space.kscience.kmath.tensors
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.tensors.api
 
 // https://proofwiki.org/wiki/Definition:Algebra_over_Ring
 public interface TensorAlgebra<T> {
@@ -40,7 +45,9 @@ public interface TensorAlgebra<T> {
     //https://pytorch.org/docs/stable/generated/torch.diag_embed.html
     public fun diagonalEmbedding(
         diagonalEntries: TensorStructure<T>,
-        offset: Int = 0, dim1: Int = -2, dim2: Int = -1
+        offset: Int = 0,
+        dim1: Int = -2,
+        dim2: Int = -1
     ): TensorStructure<T>
 
 }

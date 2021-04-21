@@ -1,8 +1,24 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.tensors.core.algebras
 
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
-import space.kscience.kmath.tensors.TensorStructure
+import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
+import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.tensors.core.broadcastOuterTensors
+import space.kscience.kmath.tensors.core.checkBufferShapeConsistency
+import space.kscience.kmath.tensors.core.checkEmptyDoubleBuffer
+import space.kscience.kmath.tensors.core.checkEmptyShape
+import space.kscience.kmath.tensors.core.checkShapesCompatible
+import space.kscience.kmath.tensors.core.checkTranspose
+import space.kscience.kmath.tensors.core.checkView
+import space.kscience.kmath.tensors.core.dotHelper
+import space.kscience.kmath.tensors.core.getRandomNormals
+import space.kscience.kmath.tensors.core.minusIndexFrom
 import kotlin.math.abs
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
@@ -263,7 +279,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         if (m1 != m2) {
             throw RuntimeException("Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)")
         }
-        val m = m1
 
         val resShape = newThis.shape.sliceArray(0..(newThis.shape.size - 2)) + intArrayOf(newOther.shape.last())
         val resSize = resShape.reduce { acc, i -> acc * i }
@@ -271,7 +286,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
         for ((res, ab) in resTensor.matrixSequence().zip(newThis.matrixSequence().zip(newOther.matrixSequence()))) {
             val (a, b) = ab
-            dotHelper(a.as2D(), b.as2D(), res.as2D(), l, m, n)
+            dotHelper(a.as2D(), b.as2D(), res.as2D(), l, m1, n)
         }
 
         if (penultimateDim) {
@@ -347,7 +362,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return tensor.eq(other) { x, y -> abs(x - y) < delta }
     }
 
-    public fun TensorStructure<Double>.eq(other: TensorStructure<Double>): Boolean = tensor.eq(other, 1e-5)
+    public infix fun TensorStructure<Double>.eq(other: TensorStructure<Double>): Boolean = tensor.eq(other, 1e-5)
 
     private fun TensorStructure<Double>.eq(
         other: TensorStructure<Double>,

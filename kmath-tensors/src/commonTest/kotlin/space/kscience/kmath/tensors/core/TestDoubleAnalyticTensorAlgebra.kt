@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.test.Test

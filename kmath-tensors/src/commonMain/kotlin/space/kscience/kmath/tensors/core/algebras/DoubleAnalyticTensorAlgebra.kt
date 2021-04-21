@@ -1,7 +1,14 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
 
-import space.kscience.kmath.tensors.AnalyticTensorAlgebra
-import space.kscience.kmath.tensors.TensorStructure
+package space.kscience.kmath.tensors.core.algebras
+
+import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
+import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.core.DoubleTensor
+import space.kscience.kmath.tensors.core.tensor
 import kotlin.math.*
 
 public class DoubleAnalyticTensorAlgebra:

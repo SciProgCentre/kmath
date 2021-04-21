@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

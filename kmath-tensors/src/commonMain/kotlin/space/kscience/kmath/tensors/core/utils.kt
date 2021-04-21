@@ -110,7 +110,6 @@ internal inline fun DoubleTensor.toPrettyString(): String = buildString {
             charOffset -=1
         }
         offset += vectorSize
-        // todo refactor
         if (this@toPrettyString.numElements == offset) {
             break
         }

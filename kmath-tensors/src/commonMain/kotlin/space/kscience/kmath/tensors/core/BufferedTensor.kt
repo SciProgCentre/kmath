@@ -1,7 +1,8 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.*
-import space.kscience.kmath.tensors.TensorStructure
+import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.core.algebras.TensorLinearStructure
 
 
 public open class BufferedTensor<T>(

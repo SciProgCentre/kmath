@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -124,8 +125,6 @@ class TestDoubleLinearOpsTensorAlgebra {
         val tensor = fromArray(shape, buffer)
 
         val (lu, pivots) = tensor.lu()
-
-        // todo check lu
 
         val (p, l, u) = luPivot(lu, pivots)
 

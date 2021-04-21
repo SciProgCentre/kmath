@@ -1,7 +1,9 @@
 package space.kscience.kmath.tensors.core
 
 
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TestDoubleTensorAlgebra {
@@ -133,9 +135,9 @@ class TestDoubleTensorAlgebra {
         assertTrue(diagonal1.buffer.array() contentEquals
                 doubleArrayOf(10.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 30.0))
 
-        val diagonal1_offset = diagonalEmbedding(tensor1, 1, 1, 0)
-        assertTrue(diagonal1_offset.shape contentEquals intArrayOf(4, 4))
-        assertTrue(diagonal1_offset.buffer.array() contentEquals
+        val diagonal1Offset = diagonalEmbedding(tensor1, 1, 1, 0)
+        assertTrue(diagonal1Offset.shape contentEquals intArrayOf(4, 4))
+        assertTrue(diagonal1Offset.buffer.array() contentEquals
                 doubleArrayOf(0.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 30.0, 0.0))
 
         val diagonal2 = diagonalEmbedding(tensor2, 1, 0, 2)
@@ -149,7 +151,15 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun testContentEqual() = DoubleTensorAlgebra {
-        //TODO()
+    fun testEq() = DoubleTensorAlgebra {
+        val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        val tensor3 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 5.0))
+        val tensor4 = fromArray(intArrayOf(6, 1), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+
+        assertTrue(tensor1 eq tensor1)
+        assertTrue(tensor1 eq tensor2)
+        assertFalse(tensor1.eq(tensor3))
+
     }
 }

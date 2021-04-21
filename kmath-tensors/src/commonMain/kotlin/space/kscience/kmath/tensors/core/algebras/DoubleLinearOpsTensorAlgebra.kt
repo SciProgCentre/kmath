@@ -1,9 +1,23 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
 
-import space.kscience.kmath.tensors.LinearOpsTensorAlgebra
+package space.kscience.kmath.tensors.core.algebras
+
+import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.tensors.TensorStructure
+import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.tensors.core.checkSquareMatrix
+import space.kscience.kmath.tensors.core.choleskyHelper
+import space.kscience.kmath.tensors.core.cleanSymHelper
+import space.kscience.kmath.tensors.core.luHelper
+import space.kscience.kmath.tensors.core.luMatrixDet
+import space.kscience.kmath.tensors.core.luMatrixInv
+import space.kscience.kmath.tensors.core.luPivotHelper
+import space.kscience.kmath.tensors.core.pivInit
 import kotlin.math.min
 
 
@@ -25,12 +39,11 @@ public class DoubleLinearOpsTensorAlgebra :
         luTensor: TensorStructure<Double>,
         pivotsTensor: TensorStructure<Int>
     ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        //todo checks
         checkSquareMatrix(luTensor.shape)
         check(
             luTensor.shape.dropLast(2).toIntArray() contentEquals pivotsTensor.shape.dropLast(1).toIntArray() ||
                     luTensor.shape.last() == pivotsTensor.shape.last() - 1
-        ) { "Bad shapes ((" } //todo rewrite
+        ) { "Inappropriate shapes of input tensors" }
 
         val n = luTensor.shape.last()
         val pTensor = luTensor.zeroesLike()
@@ -90,10 +103,10 @@ public class DoubleLinearOpsTensorAlgebra :
 
         for ((matrix, USV) in tensor.matrixSequence()
             .zip(resU.matrixSequence().zip(resS.vectorSequence().zip(resV.matrixSequence())))) {
-            val size = matrix.shape.reduce { acc, i -> acc * i }
+            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
             val curMatrix = DoubleTensor(
                 matrix.shape,
-                matrix.buffer.array().slice(matrix.bufferStart until matrix.bufferStart + size).toDoubleArray()
+                matrix.buffer.array().slice(matrix.bufferStart until matrix.bufferStart + matrixSize).toDoubleArray()
             )
             svdHelper(curMatrix, USV, m, n, epsilon)
         }

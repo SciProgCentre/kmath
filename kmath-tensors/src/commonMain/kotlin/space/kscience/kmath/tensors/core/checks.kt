@@ -1,6 +1,8 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.tensors.TensorStructure
+import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 
 
 internal inline fun checkEmptyShape(shape: IntArray): Unit =

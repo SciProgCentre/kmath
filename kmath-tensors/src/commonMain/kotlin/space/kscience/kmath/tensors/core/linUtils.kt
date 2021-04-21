@@ -4,6 +4,8 @@ import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
+import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sign
@@ -31,13 +33,13 @@ internal inline fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTen
     }
 }
 
-internal inline fun <T> BufferedTensor<T>.forEachVector(vectorAction: (BufferedTensor<T>) -> Unit): Unit {
+internal inline fun <T> BufferedTensor<T>.forEachVector(vectorAction: (BufferedTensor<T>) -> Unit) {
     for (vector in vectorSequence()) {
         vectorAction(vector)
     }
 }
 
-internal inline fun <T> BufferedTensor<T>.forEachMatrix(matrixAction: (BufferedTensor<T>) -> Unit): Unit {
+internal inline fun <T> BufferedTensor<T>.forEachMatrix(matrixAction: (BufferedTensor<T>) -> Unit) {
     for (matrix in matrixSequence()) {
         matrixAction(matrix)
     }
@@ -284,7 +286,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
     USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
     m: Int, n: Int, epsilon: Double
-): Unit {
+) {
     val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
     val (matrixU, SV) = USV
     val (matrixS, matrixV) = SV
@@ -332,7 +334,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     }
 }
 
-internal inline fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int): Unit {
+internal inline fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int) {
     for (i in 0 until n)
         for (j in 0 until n) {
             if (i == j) {
