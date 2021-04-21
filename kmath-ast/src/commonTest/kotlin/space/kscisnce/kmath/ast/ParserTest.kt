@@ -1,37 +1,24 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
+package space.kscisnce.kmath.ast
 
-package space.kscience.kmath.ast
-
+import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
-import space.kscience.kmath.expressions.MstField
 import space.kscience.kmath.expressions.evaluate
-import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class ParserTest {
     @Test
-    fun `evaluate MST`() {
+    fun evaluateParsedMst() {
         val mst = "2+2*(2+2)".parseMath()
         val res = ComplexField.evaluate(mst)
         assertEquals(Complex(10.0, 0.0), res)
     }
 
     @Test
-    fun `evaluate MSTExpression`() {
-        val res = MstField.invoke { number(2) + number(2) * (number(2) + number(2)) }.interpret(ComplexField)
-        assertEquals(Complex(10.0, 0.0), res)
-    }
-
-    @Test
-    fun `evaluate MST with singular`() {
+    fun evaluateMstSymbol() {
         val mst = "i".parseMath()
         val res = ComplexField.evaluate(mst)
         assertEquals(ComplexField.i, res)
@@ -39,14 +26,14 @@ internal class ParserTest {
 
 
     @Test
-    fun `evaluate MST with unary function`() {
+    fun evaluateMstUnary() {
         val mst = "sin(0)".parseMath()
         val res = DoubleField.evaluate(mst)
         assertEquals(0.0, res)
     }
 
     @Test
-    fun `evaluate MST with binary function`() {
+    fun evaluateMstBinary() {
         val magicalAlgebra = object : Algebra<String> {
             override fun bindSymbolOrNull(value: String): String = value
 

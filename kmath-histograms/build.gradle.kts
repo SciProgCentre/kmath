@@ -3,8 +3,6 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
@@ -28,5 +26,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

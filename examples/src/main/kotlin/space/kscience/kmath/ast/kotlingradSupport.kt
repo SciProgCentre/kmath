@@ -25,5 +25,5 @@ fun main() {
 
 
     val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
-    assert(actualDerivative("x" to 123.0) == expectedDerivative("x" to 123.0))
+    assert(actualDerivative(x to 123.0) == expectedDerivative(x to 123.0))
 }

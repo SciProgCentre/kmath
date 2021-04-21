@@ -3,8 +3,6 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("jvm")
     id("ru.mipt.npm.gradle.common")
@@ -20,7 +18,7 @@ dependencies {
 
 readme {
     description = "ND4J NDStructure implementation and according NDAlgebra classes"
-    maturity = Maturity.EXPERIMENTAL
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

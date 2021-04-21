@@ -5,7 +5,7 @@
 
 @file:Suppress("UNUSED_TYPEALIAS_PARAMETER", "DEPRECATION")
 
-package space.kscience.kmath.estree.internal.tsstdlib
+package space.kscience.kmath.internal.tsstdlib
 
 import kotlin.js.RegExp
 
@@ -37,6 +37,8 @@ internal external interface RegExpConstructor {
     var `$9`: String
     var lastMatch: String
 }
+
+internal typealias Record<K, T> = Any
 
 internal external interface ConcatArray<T> {
     var length: Number
@@ -85,3 +87,10 @@ internal external interface ArrayLike<T> {
 }
 
 internal typealias Extract<T, U> = Any
+
+internal external interface PromiseLike<T> {
+    fun then(
+        onfulfilled: ((value: T) -> Any?)? = definedExternally,
+        onrejected: ((reason: Any) -> Any?)? = definedExternally
+    ): PromiseLike<dynamic /* TResult1 | TResult2 */>
+}

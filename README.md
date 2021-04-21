@@ -76,6 +76,12 @@ KMath is a modular library. Different modules provide different features with di
 
 <hr/>
 
+* ### [benchmarks](benchmarks)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
+
 * ### [examples](examples)
 > 
 >
@@ -88,12 +94,10 @@ KMath is a modular library. Different modules provide different features with di
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [expression-language](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
-> - [mst](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
-> - [mst-building](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
-> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+> - [expression-language](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
 > - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
 > - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+> - [rendering](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
 
 <hr/>
 
@@ -266,8 +270,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-6")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-6") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-7")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-7") for jvm-specific version
 }
 ```
 

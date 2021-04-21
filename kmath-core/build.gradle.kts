@@ -3,8 +3,6 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
@@ -21,7 +19,7 @@ kotlin.sourceSets {
 
 readme {
     description = "Core classes, algebra definitions, basic linear algebra"
-    maturity = Maturity.DEVELOPMENT
+    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
