@@ -1,10 +1,3 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
@@ -41,6 +34,9 @@ kotlin.sourceSets {
     jsMain {
         dependencies {
             implementation(npm("astring", "1.7.4"))
+            implementation(npm("binaryen", "100.0"))
+            implementation(npm("js-base64", "3.6.0"))
+            implementation(npm("webassembly", "0.11.0"))
         }
     }
 
@@ -58,7 +54,7 @@ tasks.dokkaHtml {
 }
 
 readme {
-    maturity = Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

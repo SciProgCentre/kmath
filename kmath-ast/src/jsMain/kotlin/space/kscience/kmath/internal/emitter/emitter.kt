@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.estree.internal.emitter
+package space.kscience.kmath.internal.emitter
 
 internal open external class Emitter {
     constructor(obj: Any)

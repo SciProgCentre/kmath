@@ -10,6 +10,7 @@ import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.MstAlgebra
 import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,8 +20,8 @@ import kotlin.test.fail
 internal class AdaptingTests {
     @Test
     fun symbol() {
-        val c1 = MstAlgebra.bindSymbol("x")
-        assertTrue(c1.toSVar<KMathNumber<Double, DoubleField>>().name == "x")
+        val c1 = MstAlgebra.bindSymbol(x.identity)
+        assertEquals(x.identity, c1.toSVar<KMathNumber<Double, DoubleField>>().name)
         val c2 = "kitten".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
         if (c2 is SVar) assertTrue(c2.name == "kitten") else fail()
     }
@@ -45,23 +46,27 @@ internal class AdaptingTests {
 
     @Test
     fun simpleFunctionDerivative() {
-        val x = MstAlgebra.bindSymbol("x").toSVar<KMathNumber<Double, DoubleField>>()
+        val xSVar = MstAlgebra.bindSymbol(x.identity).toSVar<KMathNumber<Double, DoubleField>>()
         val quadratic = "x^2-4*x-44".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        val actualDerivative = quadratic.d(x).toMst().compileToExpression(DoubleField)
+        val actualDerivative = quadratic.d(xSVar).toMst().compileToExpression(DoubleField)
         val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
-        assertEquals(actualDerivative("x" to 123.0), expectedDerivative("x" to 123.0))
+        assertEquals(actualDerivative(x to 123.0), expectedDerivative(x to 123.0))
     }
 
     @Test
     fun moreComplexDerivative() {
-        val x = MstAlgebra.bindSymbol("x").toSVar<KMathNumber<Double, DoubleField>>()
+        val xSVar = MstAlgebra.bindSymbol(x.identity).toSVar<KMathNumber<Double, DoubleField>>()
         val composition = "-sqrt(sin(x^2)-cos(x)^2-16*x)".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        val actualDerivative = composition.d(x).toMst().compileToExpression(DoubleField)
+        val actualDerivative = composition.d(xSVar).toMst().compileToExpression(DoubleField)
 
-        val expectedDerivative =
-            "-(2*x*cos(x^2)+2*sin(x)*cos(x)-16)/(2*sqrt(sin(x^2)-16*x-cos(x)^2))".parseMath().compileToExpression(DoubleField)
+        val expectedDerivative = "-(2*x*cos(x^2)+2*sin(x)*cos(x)-16)/(2*sqrt(sin(x^2)-16*x-cos(x)^2))"
+            .parseMath()
+            .compileToExpression(DoubleField)
 
+        assertEquals(actualDerivative(x to 0.1), expectedDerivative(x to 0.1))
+    }
 
-        assertEquals(actualDerivative("x" to 0.1), expectedDerivative("x" to 0.1))
+    private companion object {
+        private val x by symbol
     }
 }

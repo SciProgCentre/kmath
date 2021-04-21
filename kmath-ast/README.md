@@ -2,17 +2,15 @@
 
 Abstract syntax tree expression representation and related optimizations.
 
- - [expression-language](src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
- - [mst](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
- - [mst-building](src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
- - [mst-interpreter](src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+ - [expression-language](src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
  - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
  - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+ - [rendering](src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-6`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-7`.
 
 **Gradle:**
 ```gradle
@@ -23,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-6'
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-7'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -35,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-6")
+    implementation("space.kscience:kmath-ast:0.3.0-dev-7")
 }
 ```
 
@@ -49,10 +47,10 @@ a special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder:
 
 ```kotlin
-DoubleField.mstInField { symbol("x") + 2 }.compile()
+MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
 ``` 
 
-â€¦ leads to generation of bytecode, which can be decompiled to the following Java class:
+… leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
 package space.kscience.kmath.asm.generated;
@@ -77,15 +75,6 @@ public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
 
 ```
 
-### Example Usage
-
-This API extends MST and MstExpression, so you may optimize as both of them:
-
-```kotlin
-DoubleField.mstInField { symbol("x") + 2 }.compile()
-DoubleField.expression("x+2".parseMath())
-```
-
 #### Known issues
 
 - The same classes may be generated and loaded twice, so it is recommended to cache compiled expressions to avoid
@@ -97,7 +86,7 @@ DoubleField.expression("x+2".parseMath())
 A similar feature is also available on JS.
 
 ```kotlin
-DoubleField.mstInField { symbol("x") + 2 }.compile()
+MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
 ``` 
 
 The code above returns expression implemented with such a JS function:
@@ -108,13 +97,32 @@ var executable = function (constants, arguments) {
 };
 ```
 
+
+```kotlin
+import space.kscience.kmath.wasm.*
+
+MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
+```
+
+An example of emitted WASM IR in the form of WAT:
+
+```lisp
+(func $executable (param $0 f64) (result f64)
+  (f64.add
+    (local.get $0)
+    (f64.const 2)
+  )
+)
+```
+
 #### Known issues
 
-- This feature uses `eval` which can be unavailable in several environments.
+- ESTree expression compilation uses `eval` which can be unavailable in several environments.
+- WebAssembly isn't supported by old versions of browsers (see https://webassembly.org/roadmap/).
 
 ## Rendering expressions
 
-kmath-ast also includes an extensible engine to display expressions in LaTeX or MathML syntax. 
+kmath-ast also includes an extensible engine to display expressions in LaTeX or MathML syntax.
 
 Example usage:
 
@@ -135,7 +143,7 @@ public fun main() {
 }
 ```
 
-Result LaTeX: 
+Result LaTeX:
 
 ![](http://chart.googleapis.com/chart?cht=tx&chl=e%5E%7B%5Csqrt%7Bx%7D%7D-%5Cfrac%7B%5Cfrac%7B%5Coperatorname%7Bsin%7D%5E%7B-1%7D%5C,%5Cleft(2%5C,x%5Cright)%7D%7B2%5Ctimes10%5E%7B10%7D%2Bx%5E%7B3%7D%7D%7D%7B-12%7D)
 
@@ -145,5 +153,5 @@ Result MathML (embedding MathML is not allowed by GitHub Markdown):
 <mrow><msup><mrow><mi>e</mi></mrow><mrow><msqrt><mi>x</mi></msqrt></mrow></msup><mo>-</mo><mfrac><mrow><mfrac><mrow><msup><mrow><mo>sin</mo></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><mfenced open="(" close=")" separators=""><mn>2</mn><mspace width="0.167em"></mspace><mi>x</mi></mfenced></mrow><mrow><mn>2</mn><mo>&times;</mo><msup><mrow><mn>10</mn></mrow><mrow><mn>10</mn></mrow></msup><mo>+</mo><msup><mrow><mi>x</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow></mfrac></mrow><mrow><mo>-</mo><mn>12</mn></mrow></mfrac></mrow>
 ```
 
-It is also possible to create custom algorithms of render, and even add support of other markup languages 
+It is also possible to create custom algorithms of render, and even add support of other markup languages
 (see API reference).

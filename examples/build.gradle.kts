@@ -1,11 +1,3 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("jvm")
 }
@@ -64,7 +56,7 @@ kotlin.sourceSets.all {
     }
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions{
         jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
@@ -72,5 +64,5 @@ tasks.withType<KotlinCompile> {
 }
 
 readme {
-    maturity = Maturity.EXPERIMENTAL
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

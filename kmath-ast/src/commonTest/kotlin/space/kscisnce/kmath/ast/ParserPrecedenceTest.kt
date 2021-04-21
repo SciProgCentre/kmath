@@ -3,17 +3,15 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.ast
+package space.kscisnce.kmath.ast
 
+import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.evaluate
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Field
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class ParserPrecedenceTest {
-    private val f: Field<Double> = DoubleField
-
     @Test
     fun test1(): Unit = assertEquals(6.0, f.evaluate("2*2+2".parseMath()))
 
@@ -37,4 +35,8 @@ internal class ParserPrecedenceTest {
 
     @Test
     fun test8(): Unit = assertEquals(18.0, f.evaluate("2*2^3+2".parseMath()))
+
+    private companion object {
+        private val f = DoubleField
+    }
 }
