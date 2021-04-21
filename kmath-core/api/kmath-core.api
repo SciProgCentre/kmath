@@ -45,13 +45,6 @@ public abstract interface class space/kscience/kmath/expressions/ExpressionAlgeb
 	public abstract fun const (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class space/kscience/kmath/expressions/ExpressionBuildersKt {
-	public static final fun extendedFieldExpression (Lspace/kscience/kmath/operations/ExtendedField;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-	public static final fun fieldExpression (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-	public static final fun ringExpression (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-	public static final fun spaceExpression (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/expressions/Expression;
-}
-
 public final class space/kscience/kmath/expressions/ExpressionKt {
 	public static final fun binding (Lspace/kscience/kmath/expressions/ExpressionAlgebra;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun callByString (Lspace/kscience/kmath/expressions/Expression;[Lkotlin/Pair;)Ljava/lang/Object;
@@ -705,7 +698,11 @@ public final class space/kscience/kmath/misc/Symbol$Companion {
 }
 
 public final class space/kscience/kmath/misc/SymbolKt {
+	public static final fun get (Ljava/util/Map;Ljava/lang/String;)Ljava/lang/Object;
+	public static final fun get (Ljava/util/Map;Lspace/kscience/kmath/misc/Symbol;)Ljava/lang/Object;
 	public static final fun getSymbol ()Lkotlin/properties/ReadOnlyProperty;
+	public static final fun set (Ljava/util/Map;Ljava/lang/String;Ljava/lang/Object;)V
+	public static final fun set (Ljava/util/Map;Lspace/kscience/kmath/misc/Symbol;Ljava/lang/Object;)V
 }
 
 public abstract interface annotation class space/kscience/kmath/misc/UnstableKMathAPI : java/lang/annotation/Annotation {
@@ -1209,7 +1206,6 @@ public abstract interface class space/kscience/kmath/operations/ExtendedField : 
 	public fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
 	public fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun rightSideNumberOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public fun sinh (Ljava/lang/Object;)Ljava/lang/Object;

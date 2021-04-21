@@ -32,6 +32,7 @@
 - Number multiplication and division in main Algebra chain
 - `contentEquals` from Buffer. It moved to the companion.
 - MSTExpression
+- Expression algebra builders
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

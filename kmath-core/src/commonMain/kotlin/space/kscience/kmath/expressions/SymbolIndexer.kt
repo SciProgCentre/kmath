@@ -33,12 +33,12 @@ public interface SymbolIndexer {
 
     public operator fun DoubleArray.get(symbol: Symbol): Double {
         require(size == symbols.size) { "The input array size for indexer should be ${symbols.size} but $size found" }
-        return get(this@SymbolIndexer.indexOf(symbol))
+        return get(indexOf(symbol))
     }
 
     public operator fun <T> Point<T>.get(symbol: Symbol): T {
         require(size == symbols.size) { "The input buffer size for indexer should be ${symbols.size} but $size found" }
-        return get(this@SymbolIndexer.indexOf(symbol))
+        return get(indexOf(symbol))
     }
 
     public fun DoubleArray.toMap(): Map<Symbol, Double> {
