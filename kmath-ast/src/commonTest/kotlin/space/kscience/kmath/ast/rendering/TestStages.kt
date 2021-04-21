@@ -30,4 +30,11 @@ internal class TestStages {
         testLatex("(x+x)^x+x*x", "\\left(x+x\\right)^{x}+x\\,x")
         testLatex("x^(x+x)", "x^{x+x}")
     }
+
+    @Test
+    fun exponent() {
+        testLatex("exp(x)", "e^{x}")
+        testLatex("exp(x/2)", "\\operatorname{exp}\\,\\left(\\frac{x}{2}\\right)")
+        testLatex("exp(x^2)", "\\operatorname{exp}\\,\\left(x^{2}\\right)")
+    }
 }

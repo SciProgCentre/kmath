@@ -56,10 +56,14 @@ private fun printSignedNumberString(s: String): MathSyntax {
 public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : RenderFeature {
     public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
         if (node !is MST.Numeric || node.value::class !in types) return null
-        val toString = node.value.toString().removeSuffix(".0")
+        val toString = when (val v = node.value) {
+            is Float -> v.multiplatformToString()
+            is Double -> v.multiplatformToString()
+            else -> v.toString()
+        }.removeSuffix(".0")
 
-        if ('E' in toString) {
-            val (beforeE, afterE) = toString.split('E')
+        if (toString.contains('E', ignoreCase = true)) {
+            val (beforeE, afterE) = toString.split('E', ignoreCase = true)
             val significand = beforeE.toDouble().toString().removeSuffix(".0")
             val exponent = afterE.toDouble().toString().removeSuffix(".0")
 
@@ -108,9 +112,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
  */
 public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : RenderFeature {
     public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
-        if (node !is MST.Numeric || node.value::class !in types)
-            return null
-
+        if (node !is MST.Numeric || node.value::class !in types) return null
         return printSignedNumberString(node.value.toString())
     }
 
@@ -282,15 +284,15 @@ public class SquareRoot(operations: Collection<String>?) : Unary(operations) {
     }
 }
 
-public class Exponential(operations: Collection<String>?) : Unary(operations) {
-    public override fun render0(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = SuperscriptSyntax(
+public class Exponent(operations: Collection<String>?) : Unary(operations) {
+    public override fun render0(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = ExponentSyntax(
         operation = node.operation,
-        left = SymbolSyntax(string = "e"),
-        right = parent.render(node.value),
+        operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
+        useOperatorForm = true,
     )
 
     public companion object {
-        public val Default: Exponential = Exponential(setOf(ExponentialOperations.EXP_OPERATION))
+        public val Default: Exponent = Exponent(setOf(ExponentialOperations.EXP_OPERATION))
     }
 }
 
