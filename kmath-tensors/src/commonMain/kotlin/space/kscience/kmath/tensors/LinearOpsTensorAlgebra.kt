@@ -1,31 +1,32 @@
 package space.kscience.kmath.tensors
 
 
-public interface LinearOpsTensorAlgebra<T, TensorType : TensorStructure<T>, IndexTensorType : TensorStructure<Int>> :
-    TensorPartialDivisionAlgebra<T, TensorType> {
+public interface LinearOpsTensorAlgebra<T> :
+    TensorPartialDivisionAlgebra<T> {
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.det
-    public fun TensorType.det(): TensorType
+    public fun TensorStructure<T>.det(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.inv
-    public fun TensorType.inv(): TensorType
+    public fun TensorStructure<T>.inv(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.cholesky
-    public fun TensorType.cholesky(): TensorType
+    public fun TensorStructure<T>.cholesky(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.qr
-    public fun TensorType.qr(): Pair<TensorType, TensorType>
+    public fun TensorStructure<T>.qr(): Pair<TensorStructure<T>, TensorStructure<T>>
 
     //https://pytorch.org/docs/stable/generated/torch.lu.html
-    public fun TensorType.lu(): Pair<TensorType, IndexTensorType>
+    public fun TensorStructure<T>.lu(): Pair<TensorStructure<T>, TensorStructure<Int>>
 
     //https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
-    public fun luPivot(luTensor: TensorType, pivotsTensor: IndexTensorType): Triple<TensorType, TensorType, TensorType>
+    public fun luPivot(luTensor: TensorStructure<T>, pivotsTensor: TensorStructure<Int>):
+            Triple<TensorStructure<T>, TensorStructure<T>, TensorStructure<T>>
 
     //https://pytorch.org/docs/stable/linalg.html#torch.linalg.svd
-    public fun TensorType.svd(): Triple<TensorType, TensorType, TensorType>
+    public fun TensorStructure<T>.svd(): Triple<TensorStructure<T>, TensorStructure<T>, TensorStructure<T>>
 
     //https://pytorch.org/docs/stable/generated/torch.symeig.html
-    public fun TensorType.symEig(): Pair<TensorType, TensorType>
+    public fun TensorStructure<T>.symEig(): Pair<TensorStructure<T>, TensorStructure<T>>
 
 }

@@ -1,45 +1,46 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.AnalyticTensorAlgebra
+import space.kscience.kmath.tensors.TensorStructure
 import kotlin.math.*
 
 public class DoubleAnalyticTensorAlgebra:
-    AnalyticTensorAlgebra<Double, DoubleTensor>,
+    AnalyticTensorAlgebra<Double>,
         DoubleTensorAlgebra()
 {
-    override fun DoubleTensor.exp(): DoubleTensor = this.map(::exp)
+    override fun TensorStructure<Double>.exp(): DoubleTensor = tensor.map(::exp)
 
-    override fun DoubleTensor.log(): DoubleTensor = this.map(::ln)
+    override fun TensorStructure<Double>.log(): DoubleTensor = tensor.map(::ln)
 
-    override fun DoubleTensor.sqrt(): DoubleTensor = this.map(::sqrt)
+    override fun TensorStructure<Double>.sqrt(): DoubleTensor = tensor.map(::sqrt)
 
-    override fun DoubleTensor.cos(): DoubleTensor = this.map(::cos)
+    override fun TensorStructure<Double>.cos(): DoubleTensor = tensor.map(::cos)
 
-    override fun DoubleTensor.acos(): DoubleTensor = this.map(::acos)
+    override fun TensorStructure<Double>.acos(): DoubleTensor = tensor.map(::acos)
 
-    override fun DoubleTensor.cosh(): DoubleTensor = this.map(::cosh)
+    override fun TensorStructure<Double>.cosh(): DoubleTensor = tensor.map(::cosh)
 
-    override fun DoubleTensor.acosh(): DoubleTensor = this.map(::acosh)
+    override fun TensorStructure<Double>.acosh(): DoubleTensor = tensor.map(::acosh)
 
-    override fun DoubleTensor.sin(): DoubleTensor = this.map(::sin)
+    override fun TensorStructure<Double>.sin(): DoubleTensor = tensor.map(::sin)
 
-    override fun DoubleTensor.asin(): DoubleTensor = this.map(::asin)
+    override fun TensorStructure<Double>.asin(): DoubleTensor = tensor.map(::asin)
 
-    override fun DoubleTensor.sinh(): DoubleTensor = this.map(::sinh)
+    override fun TensorStructure<Double>.sinh(): DoubleTensor = tensor.map(::sinh)
 
-    override fun DoubleTensor.asinh(): DoubleTensor = this.map(::asinh)
+    override fun TensorStructure<Double>.asinh(): DoubleTensor = tensor.map(::asinh)
 
-    override fun DoubleTensor.tan(): DoubleTensor = this.map(::tan)
+    override fun TensorStructure<Double>.tan(): DoubleTensor = tensor.map(::tan)
 
-    override fun DoubleTensor.atan(): DoubleTensor = this.map(::atan)
+    override fun TensorStructure<Double>.atan(): DoubleTensor = tensor.map(::atan)
 
-    override fun DoubleTensor.tanh(): DoubleTensor = this.map(::tanh)
+    override fun TensorStructure<Double>.tanh(): DoubleTensor = tensor.map(::tanh)
 
-    override fun DoubleTensor.atanh(): DoubleTensor = this.map(::atanh)
+    override fun TensorStructure<Double>.atanh(): DoubleTensor = tensor.map(::atanh)
 
-    override fun DoubleTensor.ceil(): DoubleTensor = this.map(::ceil)
+    override fun TensorStructure<Double>.ceil(): DoubleTensor = tensor.map(::ceil)
 
-    override fun DoubleTensor.floor(): DoubleTensor = this.map(::floor)
+    override fun TensorStructure<Double>.floor(): DoubleTensor = tensor.map(::floor)
 
 }
 

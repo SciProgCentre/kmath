@@ -1,16 +1,18 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.tensors.TensorPartialDivisionAlgebra
+import space.kscience.kmath.tensors.TensorStructure
 import kotlin.math.abs
 
-public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, DoubleTensor> {
+public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
-    override fun DoubleTensor.value(): Double {
-        check(this.shape contentEquals intArrayOf(1)) {
+
+    override fun TensorStructure<Double>.value(): Double {
+        check(tensor.shape contentEquals intArrayOf(1)) {
             "Inconsistent value for tensor of shape ${shape.toList()}"
         }
-        return this.buffer.array()[this.bufferStart]
+        return tensor.buffer.array()[tensor.bufferStart]
     }
 
     public fun fromArray(shape: IntArray, buffer: DoubleArray): DoubleTensor {
@@ -20,11 +22,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(shape, buffer, 0)
     }
 
-    override operator fun DoubleTensor.get(i: Int): DoubleTensor {
-        val lastShape = this.shape.drop(1).toIntArray()
+    override operator fun TensorStructure<Double>.get(i: Int): DoubleTensor {
+        val lastShape = tensor.shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
-        val newStart = newShape.reduce(Int::times) * i + this.bufferStart
-        return DoubleTensor(newShape, this.buffer.array(), newStart)
+        val newStart = newShape.reduce(Int::times) * i + tensor.bufferStart
+        return DoubleTensor(newShape, tensor.buffer.array(), newStart)
     }
 
     public fun full(value: Double, shape: IntArray): DoubleTensor {
@@ -33,19 +35,19 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return DoubleTensor(shape, buffer)
     }
 
-    public fun DoubleTensor.fullLike(value: Double): DoubleTensor {
-        val shape = this.shape
-        val buffer = DoubleArray(this.linearStructure.size) { value }
+    public fun TensorStructure<Double>.fullLike(value: Double): DoubleTensor {
+        val shape = tensor.shape
+        val buffer = DoubleArray(tensor.numElements) { value }
         return DoubleTensor(shape, buffer)
     }
 
     public fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
 
-    public fun DoubleTensor.zeroesLike(): DoubleTensor = this.fullLike(0.0)
+    public fun TensorStructure<Double>.zeroesLike(): DoubleTensor = tensor.fullLike(0.0)
 
     public fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
 
-    public fun DoubleTensor.onesLike(): DoubleTensor = this.fullLike(1.0)
+    public fun TensorStructure<Double>.onesLike(): DoubleTensor = tensor.fullLike(1.0)
 
     public fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
@@ -57,200 +59,200 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return res
     }
 
-    public fun DoubleTensor.copy(): DoubleTensor {
-        return DoubleTensor(this.shape, this.buffer.array().copyOf(), this.bufferStart)
+    public fun TensorStructure<Double>.copy(): DoubleTensor {
+        return DoubleTensor(tensor.shape, tensor.buffer.array().copyOf(), tensor.bufferStart)
     }
 
-    override fun Double.plus(other: DoubleTensor): DoubleTensor {
-        val resBuffer = DoubleArray(other.linearStructure.size) { i ->
-            other.buffer.array()[other.bufferStart + i] + this
+    override fun Double.plus(other: TensorStructure<Double>): DoubleTensor {
+        val resBuffer = DoubleArray(other.tensor.numElements) { i ->
+            other.tensor.buffer.array()[other.tensor.bufferStart + i] + this
         }
         return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun DoubleTensor.plus(value: Double): DoubleTensor = value + this
+    override fun TensorStructure<Double>.plus(value: Double): DoubleTensor = value + tensor
 
-    override fun DoubleTensor.plus(other: DoubleTensor): DoubleTensor {
-        checkShapesCompatible(this, other)
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[i] + other.buffer.array()[i]
+    override fun TensorStructure<Double>.plus(other: TensorStructure<Double>): DoubleTensor {
+        checkShapesCompatible(tensor, other.tensor)
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[i] + other.tensor.buffer.array()[i]
         }
-        return DoubleTensor(this.shape, resBuffer)
+        return DoubleTensor(tensor.shape, resBuffer)
     }
 
-    override fun DoubleTensor.plusAssign(value: Double) {
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] += value
-        }
-    }
-
-    override fun DoubleTensor.plusAssign(other: DoubleTensor) {
-        checkShapesCompatible(this, other)
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] +=
-                other.buffer.array()[this.bufferStart + i]
+    override fun TensorStructure<Double>.plusAssign(value: Double) {
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] += value
         }
     }
 
-    override fun Double.minus(other: DoubleTensor): DoubleTensor {
-        val resBuffer = DoubleArray(other.linearStructure.size) { i ->
-            this - other.buffer.array()[other.bufferStart + i]
-        }
-        return DoubleTensor(other.shape, resBuffer)
-    }
-
-    override fun DoubleTensor.minus(value: Double): DoubleTensor {
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[this.bufferStart + i] - value
-        }
-        return DoubleTensor(this.shape, resBuffer)
-    }
-
-    override fun DoubleTensor.minus(other: DoubleTensor): DoubleTensor {
-        checkShapesCompatible(this, other)
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[i] - other.buffer.array()[i]
-        }
-        return DoubleTensor(this.shape, resBuffer)
-    }
-
-    override fun DoubleTensor.minusAssign(value: Double) {
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] -= value
+    override fun TensorStructure<Double>.plusAssign(other: TensorStructure<Double>) {
+        checkShapesCompatible(tensor, other.tensor)
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] +=
+                other.tensor.buffer.array()[tensor.bufferStart + i]
         }
     }
 
-    override fun DoubleTensor.minusAssign(other: DoubleTensor) {
-        checkShapesCompatible(this, other)
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] -=
-                other.buffer.array()[this.bufferStart + i]
-        }
-    }
-
-    override fun Double.times(other: DoubleTensor): DoubleTensor {
-        val resBuffer = DoubleArray(other.linearStructure.size) { i ->
-            other.buffer.array()[other.bufferStart + i] * this
+    override fun Double.minus(other: TensorStructure<Double>): DoubleTensor {
+        val resBuffer = DoubleArray(other.tensor.numElements) { i ->
+            this - other.tensor.buffer.array()[other.tensor.bufferStart + i]
         }
         return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun DoubleTensor.times(value: Double): DoubleTensor = value * this
-
-    override fun DoubleTensor.times(other: DoubleTensor): DoubleTensor {
-        checkShapesCompatible(this, other)
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[this.bufferStart + i] *
-                    other.buffer.array()[other.bufferStart + i]
+    override fun TensorStructure<Double>.minus(value: Double): DoubleTensor {
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[tensor.bufferStart + i] - value
         }
-        return DoubleTensor(this.shape, resBuffer)
+        return DoubleTensor(tensor.shape, resBuffer)
     }
 
-    override fun DoubleTensor.timesAssign(value: Double) {
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] *= value
+    override fun TensorStructure<Double>.minus(other: TensorStructure<Double>): DoubleTensor {
+        checkShapesCompatible(tensor, other)
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[i] - other.tensor.buffer.array()[i]
         }
+        return DoubleTensor(tensor.shape, resBuffer)
     }
 
-    override fun DoubleTensor.timesAssign(other: DoubleTensor) {
-        checkShapesCompatible(this, other)
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] *=
-                other.buffer.array()[this.bufferStart + i]
+    override fun TensorStructure<Double>.minusAssign(value: Double) {
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] -= value
         }
     }
 
-    override fun DoubleTensor.div(value: Double): DoubleTensor {
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[this.bufferStart + i] / value
-        }
-        return DoubleTensor(this.shape, resBuffer)
-    }
-
-    override fun DoubleTensor.div(other: DoubleTensor): DoubleTensor {
-        checkShapesCompatible(this, other)
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[other.bufferStart + i] /
-                    other.buffer.array()[other.bufferStart + i]
-        }
-        return DoubleTensor(this.shape, resBuffer)
-    }
-
-    override fun DoubleTensor.divAssign(value: Double) {
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] /= value
+    override fun TensorStructure<Double>.minusAssign(other: TensorStructure<Double>) {
+        checkShapesCompatible(tensor, other)
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] -=
+                other.tensor.buffer.array()[tensor.bufferStart + i]
         }
     }
 
-    override fun DoubleTensor.divAssign(other: DoubleTensor) {
-        checkShapesCompatible(this, other)
-        for (i in 0 until this.linearStructure.size) {
-            this.buffer.array()[this.bufferStart + i] /=
-                other.buffer.array()[this.bufferStart + i]
+    override fun Double.times(other: TensorStructure<Double>): DoubleTensor {
+        val resBuffer = DoubleArray(other.tensor.numElements) { i ->
+            other.tensor.buffer.array()[other.tensor.bufferStart + i] * this
+        }
+        return DoubleTensor(other.shape, resBuffer)
+    }
+
+    override fun TensorStructure<Double>.times(value: Double): DoubleTensor = value * tensor
+
+    override fun TensorStructure<Double>.times(other: TensorStructure<Double>): DoubleTensor {
+        checkShapesCompatible(tensor, other)
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[tensor.bufferStart + i] *
+                    other.tensor.buffer.array()[other.tensor.bufferStart + i]
+        }
+        return DoubleTensor(tensor.shape, resBuffer)
+    }
+
+    override fun TensorStructure<Double>.timesAssign(value: Double) {
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] *= value
         }
     }
 
-    override fun DoubleTensor.unaryMinus(): DoubleTensor {
-        val resBuffer = DoubleArray(this.linearStructure.size) { i ->
-            this.buffer.array()[this.bufferStart + i].unaryMinus()
+    override fun TensorStructure<Double>.timesAssign(other: TensorStructure<Double>) {
+        checkShapesCompatible(tensor, other)
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] *=
+                other.tensor.buffer.array()[tensor.bufferStart + i]
         }
-        return DoubleTensor(this.shape, resBuffer)
     }
 
-    override fun DoubleTensor.transpose(i: Int, j: Int): DoubleTensor {
-        val ii = minusIndex(i)
-        val jj = minusIndex(j)
-        checkTranspose(this.dimension, ii, jj)
-        val n = this.linearStructure.size
+    override fun TensorStructure<Double>.div(value: Double): DoubleTensor {
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[tensor.bufferStart + i] / value
+        }
+        return DoubleTensor(tensor.shape, resBuffer)
+    }
+
+    override fun TensorStructure<Double>.div(other: TensorStructure<Double>): DoubleTensor {
+        checkShapesCompatible(tensor, other)
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[other.tensor.bufferStart + i] /
+                    other.tensor.buffer.array()[other.tensor.bufferStart + i]
+        }
+        return DoubleTensor(tensor.shape, resBuffer)
+    }
+
+    override fun TensorStructure<Double>.divAssign(value: Double) {
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] /= value
+        }
+    }
+
+    override fun TensorStructure<Double>.divAssign(other: TensorStructure<Double>) {
+        checkShapesCompatible(tensor, other)
+        for (i in 0 until tensor.numElements) {
+            tensor.buffer.array()[tensor.bufferStart + i] /=
+                other.tensor.buffer.array()[tensor.bufferStart + i]
+        }
+    }
+
+    override fun TensorStructure<Double>.unaryMinus(): DoubleTensor {
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[tensor.bufferStart + i].unaryMinus()
+        }
+        return DoubleTensor(tensor.shape, resBuffer)
+    }
+
+    override fun TensorStructure<Double>.transpose(i: Int, j: Int): DoubleTensor {
+        val ii = tensor.minusIndex(i)
+        val jj = tensor.minusIndex(j)
+        checkTranspose(tensor.dimension, ii, jj)
+        val n = tensor.numElements
         val resBuffer = DoubleArray(n)
 
-        val resShape = this.shape.copyOf()
+        val resShape = tensor.shape.copyOf()
         resShape[ii] = resShape[jj].also { resShape[jj] = resShape[ii] }
 
         val resTensor = DoubleTensor(resShape, resBuffer)
 
         for (offset in 0 until n) {
-            val oldMultiIndex = this.linearStructure.index(offset)
+            val oldMultiIndex = tensor.linearStructure.index(offset)
             val newMultiIndex = oldMultiIndex.copyOf()
             newMultiIndex[ii] = newMultiIndex[jj].also { newMultiIndex[jj] = newMultiIndex[ii] }
 
             val linearIndex = resTensor.linearStructure.offset(newMultiIndex)
             resTensor.buffer.array()[linearIndex] =
-                this.buffer.array()[this.bufferStart + offset]
+                tensor.buffer.array()[tensor.bufferStart + offset]
         }
         return resTensor
     }
 
 
-    override fun DoubleTensor.view(shape: IntArray): DoubleTensor {
-        checkView(this, shape)
-        return DoubleTensor(shape, this.buffer.array(), this.bufferStart)
+    override fun TensorStructure<Double>.view(shape: IntArray): DoubleTensor {
+        checkView(tensor, shape)
+        return DoubleTensor(shape, tensor.buffer.array(), tensor.bufferStart)
     }
 
-    override fun DoubleTensor.viewAs(other: DoubleTensor): DoubleTensor {
-        return this.view(other.shape)
+    override fun TensorStructure<Double>.viewAs(other: TensorStructure<Double>): DoubleTensor {
+        return tensor.view(other.shape)
     }
 
-    override infix fun DoubleTensor.dot(other: DoubleTensor): DoubleTensor {
-        if (this.shape.size == 1 && other.shape.size == 1) {
-            return DoubleTensor(intArrayOf(1), doubleArrayOf(this.times(other).buffer.array().sum()))
+    override infix fun TensorStructure<Double>.dot(other: TensorStructure<Double>): DoubleTensor {
+        if (tensor.shape.size == 1 && other.shape.size == 1) {
+            return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.buffer.array().sum()))
         }
 
-        var newThis = this.copy()
+        var newThis = tensor.copy()
         var newOther = other.copy()
 
         var penultimateDim = false
         var lastDim = false
-        if (this.shape.size == 1) {
+        if (tensor.shape.size == 1) {
             penultimateDim = true
-            newThis = this.view(intArrayOf(1) + this.shape)
+            newThis = tensor.view(intArrayOf(1) + tensor.shape)
         }
         if (other.shape.size == 1) {
             lastDim = true
-            newOther = other.view(other.shape + intArrayOf(1))
+            newOther = other.tensor.view(other.shape + intArrayOf(1))
         }
 
-        val broadcastTensors = broadcastOuterTensors(newThis, newOther)
+        val broadcastTensors = broadcastOuterTensors(newThis.tensor, newOther.tensor)
         newThis = broadcastTensors[0]
         newOther = broadcastTensors[1]
 
@@ -284,10 +286,12 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         return resTensor
     }
 
-    override fun diagonalEmbedding(diagonalEntries: DoubleTensor, offset: Int, dim1: Int, dim2: Int): DoubleTensor {
-        val d1 = minusIndexFrom(diagonalEntries.linearStructure.dim + 1, dim1)
-        val d2 = minusIndexFrom(diagonalEntries.linearStructure.dim + 1, dim2)
+    override fun diagonalEmbedding(diagonalEntries: TensorStructure<Double>, offset: Int, dim1: Int, dim2: Int):
+            DoubleTensor {
         val n = diagonalEntries.shape.size
+        val d1 = minusIndexFrom(n + 1, dim1)
+        val d2 = minusIndexFrom(n + 1, dim2)
+
         if (d1 == d2) {
             throw RuntimeException("Diagonal dimensions cannot be identical $d1, $d2")
         }
@@ -300,7 +304,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
         var realOffset = offset
         if (lessDim > greaterDim) {
             realOffset *= -1
-            lessDim = greaterDim.also {greaterDim = lessDim}
+            lessDim = greaterDim.also { greaterDim = lessDim }
         }
 
         val resShape = diagonalEntries.shape.slice(0 until lessDim).toIntArray() +
@@ -310,13 +314,13 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
                 diagonalEntries.shape.slice(greaterDim - 1 until n - 1).toIntArray()
         val resTensor = zeros(resShape)
 
-        for (i in 0 until diagonalEntries.linearStructure.size) {
-            val multiIndex = diagonalEntries.linearStructure.index(i)
+        for (i in 0 until diagonalEntries.tensor.numElements) {
+            val multiIndex = diagonalEntries.tensor.linearStructure.index(i)
 
             var offset1 = 0
             var offset2 = abs(realOffset)
             if (realOffset < 0) {
-                offset1 = offset2.also {offset2 = offset1}
+                offset1 = offset2.also { offset2 = offset1 }
             }
             val diagonalMultiIndex = multiIndex.slice(0 until lessDim).toIntArray() +
                     intArrayOf(multiIndex[n - 1] + offset1) +
@@ -327,32 +331,35 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
             resTensor[diagonalMultiIndex] = diagonalEntries[multiIndex]
         }
 
-        return resTensor
+        return resTensor.tensor
     }
 
 
-    public fun DoubleTensor.map(transform: (Double) -> Double): DoubleTensor {
+    public fun TensorStructure<Double>.map(transform: (Double) -> Double): DoubleTensor {
         return DoubleTensor(
-            this.shape,
-            this.buffer.array().map { transform(it) }.toDoubleArray(),
-            this.bufferStart
+            tensor.shape,
+            tensor.buffer.array().map { transform(it) }.toDoubleArray(),
+            tensor.bufferStart
         )
     }
 
-    public fun DoubleTensor.eq(other: DoubleTensor, delta: Double): Boolean {
-        return this.eq(other) { x, y -> abs(x - y) < delta }
+    public fun TensorStructure<Double>.eq(other: TensorStructure<Double>, delta: Double): Boolean {
+        return tensor.eq(other) { x, y -> abs(x - y) < delta }
     }
 
-    public fun DoubleTensor.eq(other: DoubleTensor): Boolean = this.eq(other, 1e-5)
+    public fun TensorStructure<Double>.eq(other: TensorStructure<Double>): Boolean = tensor.eq(other, 1e-5)
 
-    private fun DoubleTensor.eq(other: DoubleTensor, eqFunction: (Double, Double) -> Boolean): Boolean {
-        checkShapesCompatible(this, other)
-        val n = this.linearStructure.size
-        if (n != other.linearStructure.size) {
+    private fun TensorStructure<Double>.eq(
+        other: TensorStructure<Double>,
+        eqFunction: (Double, Double) -> Boolean
+    ): Boolean {
+        checkShapesCompatible(tensor, other)
+        val n = tensor.numElements
+        if (n != other.tensor.numElements) {
             return false
         }
         for (i in 0 until n) {
-            if (!eqFunction(this.buffer[this.bufferStart + i], other.buffer[other.bufferStart + i])) {
+            if (!eqFunction(tensor.buffer[tensor.bufferStart + i], other.tensor.buffer[other.tensor.bufferStart + i])) {
                 return false
             }
         }
@@ -362,8 +369,8 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double, Dou
     public fun randNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
         DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
 
-    public fun DoubleTensor.randNormalLike(seed: Long = 0): DoubleTensor =
-        DoubleTensor(this.shape, getRandomNormals(this.shape.reduce(Int::times), seed))
+    public fun TensorStructure<Double>.randNormalLike(seed: Long = 0): DoubleTensor =
+        DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
 }
 

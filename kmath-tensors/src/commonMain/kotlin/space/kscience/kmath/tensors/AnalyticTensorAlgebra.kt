@@ -1,58 +1,58 @@
 package space.kscience.kmath.tensors
 
 
-public interface AnalyticTensorAlgebra<T, TensorType : TensorStructure<T>> :
-    TensorPartialDivisionAlgebra<T, TensorType> {
+public interface AnalyticTensorAlgebra<T> :
+    TensorPartialDivisionAlgebra<T> {
 
     //https://pytorch.org/docs/stable/generated/torch.exp.html
-    public fun TensorType.exp(): TensorType
+    public fun TensorStructure<T>.exp(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.log.html
-    public fun TensorType.log(): TensorType
+    public fun TensorStructure<T>.log(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.sqrt.html
-    public fun TensorType.sqrt(): TensorType
+    public fun TensorStructure<T>.sqrt(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.acos.html#torch.cos
-    public fun TensorType.cos(): TensorType
+    public fun TensorStructure<T>.cos(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.acos.html#torch.acos
-    public fun TensorType.acos(): TensorType
+    public fun TensorStructure<T>.acos(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.cosh
-    public fun TensorType.cosh(): TensorType
+    public fun TensorStructure<T>.cosh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.acosh
-    public fun TensorType.acosh(): TensorType
+    public fun TensorStructure<T>.acosh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sin
-    public fun TensorType.sin(): TensorType
+    public fun TensorStructure<T>.sin(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asin
-    public fun TensorType.asin(): TensorType
+    public fun TensorStructure<T>.asin(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sinh
-    public fun TensorType.sinh(): TensorType
+    public fun TensorStructure<T>.sinh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asinh
-    public fun TensorType.asinh(): TensorType
+    public fun TensorStructure<T>.asinh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.atan.html#torch.tan
-    public fun TensorType.tan(): TensorType
+    public fun TensorStructure<T>.tan(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.atan.html#torch.atan
-    public fun TensorType.atan(): TensorType
+    public fun TensorStructure<T>.atan(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.tanh
-    public fun TensorType.tanh(): TensorType
+    public fun TensorStructure<T>.tanh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.atanh
-    public fun TensorType.atanh(): TensorType
+    public fun TensorStructure<T>.atanh(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.ceil.html#torch.ceil
-    public fun TensorType.ceil(): TensorType
+    public fun TensorStructure<T>.ceil(): TensorStructure<T>
 
     //https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
-    public fun TensorType.floor(): TensorType
+    public fun TensorStructure<T>.floor(): TensorStructure<T>
 
 }

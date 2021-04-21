@@ -58,7 +58,7 @@ internal inline fun minusIndexFrom(n: Int, i: Int) : Int = if (i >= 0) i else {
     ii
 }
 
-internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexFrom(this.linearStructure.dim, i)
+internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexFrom(this.dimension, i)
 
 internal inline fun format(value: Double, digits: Int = 4): String {
     val ten = 10.0
@@ -111,7 +111,7 @@ internal inline fun DoubleTensor.toPrettyString(): String = buildString {
         }
         offset += vectorSize
         // todo refactor
-        if (this@toPrettyString.numel == offset) {
+        if (this@toPrettyString.numElements == offset) {
             break
         }
         append(",\n")

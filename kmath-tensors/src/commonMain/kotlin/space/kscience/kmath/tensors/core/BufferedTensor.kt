@@ -6,13 +6,13 @@ import space.kscience.kmath.tensors.TensorStructure
 
 public open class BufferedTensor<T>(
     override val shape: IntArray,
-    public val buffer: MutableBuffer<T>,
+    internal val buffer: MutableBuffer<T>,
     internal val bufferStart: Int
 ) : TensorStructure<T> {
     public val linearStructure: TensorLinearStructure
         get() = TensorLinearStructure(shape)
 
-    public val numel: Int
+    public val numElements: Int
         get() = linearStructure.size
 
     override fun get(index: IntArray): T = buffer[bufferStart + linearStructure.offset(index)]
@@ -41,26 +41,6 @@ public class IntTensor internal constructor(
             this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
 }
 
-public class LongTensor internal constructor(
-    shape: IntArray,
-    buffer: LongArray,
-    offset: Int = 0
-) : BufferedTensor<Long>(shape, LongBuffer(buffer), offset)
-{
-    internal constructor(bufferedTensor: BufferedTensor<Long>):
-            this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
-}
-
-public class FloatTensor internal constructor(
-    shape: IntArray,
-    buffer: FloatArray,
-    offset: Int = 0
-) : BufferedTensor<Float>(shape, FloatBuffer(buffer), offset)
-{
-    internal constructor(bufferedTensor: BufferedTensor<Float>):
-            this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
-}
-
 public class DoubleTensor internal constructor(
     shape: IntArray,
     buffer: DoubleArray,
@@ -74,7 +54,23 @@ public class DoubleTensor internal constructor(
 
 }
 
-internal fun BufferedTensor<Int>.asTensor(): IntTensor = IntTensor(this)
-internal fun BufferedTensor<Long>.asTensor(): LongTensor = LongTensor(this)
-internal fun BufferedTensor<Float>.asTensor(): FloatTensor = FloatTensor(this)
-internal fun BufferedTensor<Double>.asTensor(): DoubleTensor = DoubleTensor(this)
+internal inline fun BufferedTensor<Int>.asTensor(): IntTensor = IntTensor(this)
+internal inline fun BufferedTensor<Double>.asTensor(): DoubleTensor = DoubleTensor(this)
+
+internal inline fun <T> TensorStructure<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
+    is BufferedTensor<T> -> this
+    else -> BufferedTensor(this.shape, this.elements().map{ it.second }.toMutableList().asMutableBuffer(), 0)
+}
+
+internal val TensorStructure<Double>.tensor: DoubleTensor
+    get() = when (this) {
+        is DoubleTensor -> this
+        else -> this.toBufferedTensor().asTensor()
+    }
+
+internal val TensorStructure<Int>.tensor: IntTensor
+    get() = when (this) {
+        is IntTensor -> this
+        else -> this.toBufferedTensor().asTensor()
+    }
+

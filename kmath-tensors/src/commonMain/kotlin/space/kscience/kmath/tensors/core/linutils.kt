@@ -14,7 +14,7 @@ internal inline fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTen
     val n = shape.size
     val vectorOffset = shape[n - 1]
     val vectorShape = intArrayOf(shape.last())
-    for (offset in 0 until numel step vectorOffset) {
+    for (offset in 0 until numElements step vectorOffset) {
         val vector = BufferedTensor(vectorShape, buffer, offset)
         yield(vector)
     }
@@ -25,7 +25,7 @@ internal inline fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTen
     val n = shape.size
     val matrixOffset = shape[n - 1] * shape[n - 2]
     val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
-    for (offset in 0 until numel step matrixOffset) {
+    for (offset in 0 until numElements step matrixOffset) {
         val matrix = BufferedTensor(matrixShape, buffer, offset)
         yield(matrix)
     }
