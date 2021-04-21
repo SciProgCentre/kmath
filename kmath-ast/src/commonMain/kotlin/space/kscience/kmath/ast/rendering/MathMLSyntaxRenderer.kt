@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.ast.rendering
 
 /**
@@ -76,6 +81,19 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
             }
 
             is RadicalSyntax -> tag("msqrt") { render(node.operand) }
+
+            is ExponentSyntax -> if (node.useOperatorForm) {
+                tag("mo") { append("exp") }
+                tag("mspace", "width" to "0.167em")
+                render(node.operand)
+            } else {
+                tag("msup") {
+                    tag("mrow") {
+                        tag("mi") { append("e") }
+                    }
+                    tag("mrow") { render(node.operand) }
+                }
+            }
 
             is SuperscriptSyntax -> tag("msup") {
                 tag("mrow") { render(node.left) }

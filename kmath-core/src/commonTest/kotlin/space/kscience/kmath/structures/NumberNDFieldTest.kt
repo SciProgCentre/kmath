@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.linear.LinearSpace
@@ -70,7 +75,7 @@ class NumberNDFieldTest {
 
     object L2Norm : Norm<StructureND<out Number>, Double> {
         override fun norm(arg: StructureND<out Number>): Double =
-            kotlin.math.sqrt(arg.elements().sumByDouble { it.second.toDouble() })
+            kotlin.math.sqrt(arg.elements().sumOf { it.second.toDouble() })
     }
 
     @Test

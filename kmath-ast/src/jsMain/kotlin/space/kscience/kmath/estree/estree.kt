@@ -1,11 +1,16 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.estree
 
-import space.kscience.kmath.ast.MST
-import space.kscience.kmath.ast.MST.*
 import space.kscience.kmath.estree.internal.ESTreeBuilder
-import space.kscience.kmath.estree.internal.estree.BaseExpression
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.MST.*
 import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.internal.estree.BaseExpression
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
@@ -26,16 +31,17 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
 
         is Unary -> when {
             algebra is NumericAlgebra && node.value is Numeric -> constant(
-                algebra.unaryOperationFunction(node.operation)(algebra.number(node.value.value)))
+                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)))
 
             else -> call(algebra.unaryOperationFunction(node.operation), visit(node.value))
         }
 
         is Binary -> when {
             algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> constant(
-                algebra
-                    .binaryOperationFunction(node.operation)
-                    .invoke(algebra.number(node.left.value), algebra.number(node.right.value))
+                algebra.binaryOperationFunction(node.operation).invoke(
+                    algebra.number((node.left as Numeric).value),
+                    algebra.number((node.right as Numeric).value)
+                )
             )
 
             algebra is NumericAlgebra && node.left is Numeric -> call(
@@ -70,12 +76,12 @@ public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T>
 /**
  * Compile given MST to expression and evaluate it against [arguments]
  */
-public inline fun <reified T: Any> MST.compile(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
+public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
     compileToExpression(algebra).invoke(arguments)
 
 
 /**
  * Compile given MST to expression and evaluate it against [arguments]
  */
-public inline fun <reified T: Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Symbol,T>): T =
+public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
     compileToExpression(algebra).invoke(*arguments)

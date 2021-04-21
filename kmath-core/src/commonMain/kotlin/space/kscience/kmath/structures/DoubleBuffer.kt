@@ -1,12 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [DoubleArray].
  *
  * @property array the underlying array.
  */
-@Suppress("OVERRIDE_BY_INLINE")
-public inline class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<Double> {
+@JvmInline
+public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<Double> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Double = array[index]

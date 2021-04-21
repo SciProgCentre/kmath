@@ -1,20 +1,24 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.asm
 
-import space.kscience.kmath.ast.*
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.toComplex
-import space.kscience.kmath.misc.Symbol.Companion.x
+import space.kscience.kmath.expressions.*
+import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.ByteRing
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class TestAsmConsistencyWithInterpreter {
-
     @Test
     fun mstSpace() {
-
         val mst = MstGroup {
             binaryOperationFunction("+")(
                 unaryOperationFunction("+")(
@@ -25,7 +29,7 @@ internal class TestAsmConsistencyWithInterpreter {
                 ),
 
                 number(1)
-            ) + bindSymbol("x") + zero
+            ) + bindSymbol(x) + zero
         }
 
         assertEquals(
@@ -39,7 +43,7 @@ internal class TestAsmConsistencyWithInterpreter {
         val mst = MstRing {
             binaryOperationFunction("+")(
                 unaryOperationFunction("+")(
-                    (bindSymbol("x") - (2.toByte() + (scale(
+                    (bindSymbol(x) - (2.toByte() + (scale(
                         add(number(1), number(1)),
                         2.0
                     ) + 1.toByte()))) * 3.0 - 1.toByte()
@@ -56,10 +60,10 @@ internal class TestAsmConsistencyWithInterpreter {
     }
 
     @Test
-    fun realField() {
+    fun doubleField() {
         val mst = MstField {
             +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
-                (3.0 - (bindSymbol("x") + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
+                (3.0 - (bindSymbol(x) + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one
             ) + zero
@@ -75,7 +79,7 @@ internal class TestAsmConsistencyWithInterpreter {
     fun complexField() {
         val mst = MstField {
             +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
-                (3.0 - (bindSymbol("x") + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
+                (3.0 - (bindSymbol(x) + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one
             ) + zero
@@ -85,5 +89,9 @@ internal class TestAsmConsistencyWithInterpreter {
             mst.interpret(ComplexField, x to 2.0.toComplex()),
             mst.compile(ComplexField, x to 2.0.toComplex())
         )
+    }
+
+    private companion object {
+        private val x by symbol
     }
 }

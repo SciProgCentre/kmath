@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
@@ -9,7 +14,7 @@ import space.kscience.kmath.operations.NumbersAddOperations
 import space.kscience.kmath.operations.ScaleOperations
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public inline class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
+public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
     public override val shape: IntArray get() = f64Buffer.shape
 
     public override inline fun get(index: IntArray): Double = f64Buffer.get(*index)

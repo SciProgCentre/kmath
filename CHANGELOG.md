@@ -7,6 +7,10 @@
 - Basic integration API
 - Basic MPP distributions and samplers
 - bindSymbolOrNull
+- Blocking chains and Statistics
+- Multiplatform integration
+- Integration for any Field element
+- Extendend operations for ND4J fields
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -18,6 +22,8 @@
 - DataSets are moved from functions to core
 - Redesign advanced Chain API
 - Redesign MST. Remove MSTExpression.
+- Move MST to core
+- Separated benchmarks and examples
 
 ### Deprecated
 
@@ -28,6 +34,7 @@
 - MSTExpression
 
 ### Fixed
+- Ring inherits RingOperations, not GroupOperations
 
 ### Security
 

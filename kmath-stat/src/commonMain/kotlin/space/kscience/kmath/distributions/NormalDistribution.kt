@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
@@ -11,7 +16,7 @@ import kotlin.math.*
 /**
  * Implements [UnivariateDistribution] for the normal (gaussian) distribution.
  */
-public inline class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
+public class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
     public constructor(
         mean: Double,
         standardDeviation: Double,

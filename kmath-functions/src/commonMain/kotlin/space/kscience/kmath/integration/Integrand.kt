@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.integration
 
 import kotlin.reflect.KClass
@@ -16,8 +21,8 @@ public class IntegrandRelativeAccuracy(public val accuracy: Double) : IntegrandF
 
 public class IntegrandAbsoluteAccuracy(public val accuracy: Double) : IntegrandFeature
 
-public class IntegrandCalls(public val calls: Int) : IntegrandFeature
+public class IntegrandCallsPerformed(public val calls: Int) : IntegrandFeature
 
-public val Integrand.calls: Int get() = getFeature<IntegrandCalls>()?.calls ?: 0
+public val Integrand.calls: Int get() = getFeature<IntegrandCallsPerformed>()?.calls ?: 0
 
 public class IntegrandMaxCalls(public val maxCalls: Int) : IntegrandFeature

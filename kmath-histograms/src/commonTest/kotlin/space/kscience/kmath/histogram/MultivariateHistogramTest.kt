@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.operations.invoke
@@ -38,7 +43,7 @@ internal class MultivariateHistogramTest {
                 put(nextDouble(), nextDouble(), nextDouble())
             }
         }
-        assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumOf { it.value.toInt() })
     }
 
     @Test
@@ -71,7 +76,7 @@ internal class MultivariateHistogramTest {
             assertTrue {
                 res.bins.count() >= histogram1.bins.count()
             }
-            assertEquals(0.0, res.bins.sumByDouble { it.value.toDouble() })
+            assertEquals(0.0, res.bins.sumOf { it.value.toDouble() })
         }
     }
 }

@@ -9,7 +9,7 @@ EJML based linear algebra implementation.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ejml:0.3.0-dev-4`.
+The Maven coordinates of this project are `space.kscience:kmath-ejml:0.3.0-dev-7`.
 
 **Gradle:**
 ```gradle
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ejml:0.3.0-dev-4'
+    implementation 'space.kscience:kmath-ejml:0.3.0-dev-7'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -32,6 +32,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ejml:0.3.0-dev-4")
+    implementation("space.kscience:kmath-ejml:0.3.0-dev-7")
 }
 ```

@@ -1,9 +1,14 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.SpaceElement
+import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
@@ -31,7 +36,7 @@ public class UnivariateBin(
 
 @OptIn(UnstableKMathAPI::class)
 public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
-    SpaceElement<UnivariateHistogram, Group<UnivariateHistogram>> {
+    GroupElement<UnivariateHistogram, Group<UnivariateHistogram>> {
     public operator fun get(value: Double): UnivariateBin?
     public override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
 

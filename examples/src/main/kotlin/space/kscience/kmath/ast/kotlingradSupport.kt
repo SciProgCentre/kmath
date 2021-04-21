@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.asm.compileToExpression
@@ -20,5 +25,5 @@ fun main() {
 
 
     val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
-    assert(actualDerivative("x" to 123.0) == expectedDerivative("x" to 123.0))
+    assert(actualDerivative(x to 123.0) == expectedDerivative(x to 123.0))
 }

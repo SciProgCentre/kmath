@@ -1,14 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
 @OptIn(UnstableKMathAPI::class)
-public interface Vector3D : Point<Double>, Vector, SpaceElement<Vector3D, Euclidean3DSpace> {
+public interface Vector3D : Point<Double>, Vector, GroupElement<Vector3D, Euclidean3DSpace> {
     public val x: Double
     public val y: Double
     public val z: Double

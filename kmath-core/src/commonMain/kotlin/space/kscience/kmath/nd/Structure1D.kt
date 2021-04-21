@@ -1,9 +1,15 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.structures.asSequence
+import kotlin.jvm.JvmInline
 
 /**
  * A structure that is guaranteed to be one-dimensional
@@ -34,7 +40,8 @@ public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, 
 /**
  * A 1D wrapper for nd-structure
  */
-private inline class Structure1DWrapper<T>(val structure: StructureND<T>) : Structure1D<T> {
+@JvmInline
+private value class Structure1DWrapper<T>(val structure: StructureND<T>) : Structure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -63,7 +70,8 @@ private inline class MutableStructure1DWrapper<T>(val structure: MutableStructur
 /**
  * A structure wrapper for buffer
  */
-private inline class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> {
+@JvmInline
+private value class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> {
     override val shape: IntArray get() = intArrayOf(buffer.size)
     override val size: Int get() = buffer.size
 

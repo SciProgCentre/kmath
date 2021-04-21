@@ -1,11 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [IntArray].
  *
  * @property array the underlying array.
  */
-public inline class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
+@JvmInline
+public value class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]

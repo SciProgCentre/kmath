@@ -1,9 +1,14 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.Ring
 
 /**
  * Common representation for atomic counters
@@ -37,7 +42,7 @@ public class LongCounter : Counter<Long> {
     override val value: Long get() = innerValue.value
 }
 
-public class ObjectCounter<T : Any>(public val group: Group<T>) : Counter<T> {
+public class ObjectCounter<T : Any>(public val group: Ring<T>) : Counter<T> {
     private val innerValue = atomic(group.zero)
 
     override fun add(delta: T) {

@@ -1,8 +1,9 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
 }
 
-kscience{
+kscience {
     useAtomic()
 }
 

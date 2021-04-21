@@ -1,10 +1,12 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.commons.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
-import kscience.plotly.*
-import kscience.plotly.models.ScatterMode
-import kscience.plotly.models.TraceValues
 import space.kscience.kmath.commons.optimization.chiSquared
 import space.kscience.kmath.commons.optimization.minimize
 import space.kscience.kmath.distributions.NormalDistribution
@@ -17,6 +19,9 @@ import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.toList
+import space.kscience.plotly.*
+import space.kscience.plotly.models.ScatterMode
+import space.kscience.plotly.models.TraceValues
 import kotlin.math.pow
 import kotlin.math.sqrt
 

@@ -1,4 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [FloatArray].
@@ -6,7 +13,8 @@ package space.kscience.kmath.structures
  * @property array the underlying array.
  * @author Iaroslav Postovalov
  */
-public inline class FloatBuffer(public val array: FloatArray) : MutableBuffer<Float> {
+@JvmInline
+public value class FloatBuffer(public val array: FloatArray) : MutableBuffer<Float> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Float = array[index]

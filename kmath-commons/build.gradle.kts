@@ -1,6 +1,8 @@
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    kotlin("jvm")
+    id("ru.mipt.npm.gradle.common")
 }
+
 description = "Commons math binding for kmath"
 
 dependencies {

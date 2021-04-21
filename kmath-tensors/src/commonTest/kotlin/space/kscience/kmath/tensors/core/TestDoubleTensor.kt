@@ -47,10 +47,4 @@ class TestDoubleTensor {
             assertEquals(secondRow[1], secondColumn[1])
         }
     }
-
-    @Test @Ignore
-    fun toStringTest() = DoubleTensorAlgebra {
-        val tensor = randNormal(intArrayOf(2,3))
-        println(tensor)
-    }
 }

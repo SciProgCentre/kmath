@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.misc.StringSymbol
@@ -44,7 +49,7 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
 }
 
 /**
- * A context class for [Expression] construction for [Group] algebras.
+ * A context class for [Expression] construction for [Ring] algebras.
  */
 public open class FunctionalExpressionGroup<T, A : Group<T>>(
     algebra: A,
@@ -168,7 +173,7 @@ public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
     public override fun bindSymbol(value: String): Expression<T> = super<FunctionalExpressionField>.bindSymbol(value)
 }
 
-public inline fun <T, A : Group<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
+public inline fun <T, A : Ring<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
     FunctionalExpressionGroup(this).block()
 
 public inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressionRing<T, A>.() -> Expression<T>): Expression<T> =

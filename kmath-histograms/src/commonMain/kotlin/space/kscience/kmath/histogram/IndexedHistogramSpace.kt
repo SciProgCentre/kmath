@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
@@ -7,8 +12,8 @@ import space.kscience.kmath.nd.FieldND
 import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.operations.invoke
 
 /**
@@ -23,7 +28,7 @@ public data class DomainBin<T : Comparable<T>>(
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
     override val context: IndexedHistogramSpace<T, V>,
     public val values: StructureND<V>,
-) : Histogram<T, Bin<T>>, SpaceElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
+) : Histogram<T, Bin<T>>, GroupElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
 
     override fun get(point: Point<T>): Bin<T>? {
         val index = context.getIndex(point) ?: return null

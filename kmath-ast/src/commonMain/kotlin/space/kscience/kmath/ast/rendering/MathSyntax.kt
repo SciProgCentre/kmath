@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.ast.rendering
 
 /**
@@ -178,6 +183,24 @@ public data class UnaryMinusSyntax(
 public data class RadicalSyntax(
     public override val operation: String,
     public override val operand: MathSyntax,
+) : UnarySyntax() {
+    init {
+        operand.parent = this
+    }
+}
+
+/**
+ * Represents exponential function.
+ *
+ * @property operand The argument of function.
+ * @property useOperatorForm `true` if operator form is used (*exp (x)*), `false` if exponentiation form is used
+ * (*e<sup>x</sup>*).
+ * @author Iaroslav Postovalov
+ */
+public data class ExponentSyntax(
+    public override val operation: String,
+    public override val operand: OperandSyntax,
+    public var useOperatorForm: Boolean,
 ) : UnarySyntax() {
     init {
         operand.parent = this

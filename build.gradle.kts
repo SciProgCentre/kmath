@@ -1,7 +1,3 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-import ru.mipt.npm.gradle.KSciencePublishingPlugin
-import java.net.URL
-
 plugins {
     id("ru.mipt.npm.gradle.project")
 }
@@ -13,19 +9,21 @@ allprojects {
         maven("https://dl.bintray.com/egor-bogomolov/astminer/")
         maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://jitpack.io")
-        maven("http://logicrunch.research.it.uu.se/maven/")
+        maven("http://logicrunch.research.it.uu.se/maven/") {
+            isAllowInsecureProtocol = true
+        }
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-5"
+    version = "0.3.0-dev-7"
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
     afterEvaluate {
-        tasks.withType<DokkaTask> {
+        tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
             dokkaSourceSets.all {
                 val readmeFile = File(this@subprojects.projectDir, "./README.md")
                 if (readmeFile.exists())
@@ -35,7 +33,7 @@ subprojects {
                     "http://ejml.org/javadoc/",
                     "https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/",
                     "https://deeplearning4j.org/api/latest/"
-                ).map { URL("${it}package-list") to URL(it) }.forEach { (a, b) ->
+                ).map { java.net.URL("${it}package-list") to java.net.URL(it) }.forEach { (a, b) ->
                     externalDocumentationLink {
                         packageListUrl.set(a)
                         url.set(b)

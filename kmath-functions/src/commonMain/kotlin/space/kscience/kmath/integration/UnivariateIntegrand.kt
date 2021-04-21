@@ -1,11 +1,17 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 public class UnivariateIntegrand<T : Any> internal constructor(
     private val features: Map<KClass<*>, IntegrandFeature>,
-    public val function: (T) -> T,
+    public val function: (Double) -> T,
 ) : Integrand {
 
     @Suppress("UNCHECKED_CAST")
@@ -20,13 +26,14 @@ public class UnivariateIntegrand<T : Any> internal constructor(
 
 @Suppress("FunctionName")
 public fun <T : Any> UnivariateIntegrand(
-    function: (T) -> T,
+    function: (Double) -> T,
     vararg features: IntegrandFeature,
 ): UnivariateIntegrand<T> = UnivariateIntegrand(features.associateBy { it::class }, function)
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
-public inline class IntegrationRange<T : Comparable<T>>(public val range: ClosedRange<T>) : IntegrandFeature
+@JvmInline
+public value class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature
 
 public val <T : Any> UnivariateIntegrand<T>.value: T? get() = getFeature<IntegrandValue<T>>()?.value
 

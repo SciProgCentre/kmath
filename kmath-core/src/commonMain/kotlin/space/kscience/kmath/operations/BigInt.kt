@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -440,7 +445,7 @@ public fun String.parseBigInteger(): BigInt? {
 
     var res = BigInt.ZERO
     var digitValue = BigInt.ONE
-    val sPositiveUpper = sPositive.toUpperCase()
+    val sPositiveUpper = sPositive.uppercase()
 
     if (sPositiveUpper.startsWith("0X")) {  // hex representation
         val sHex = sPositiveUpper.substring(2)
@@ -456,7 +461,7 @@ public fun String.parseBigInteger(): BigInt? {
         if (ch !in '0'..'9') {
             return null
         }
-        res += digitValue * (ch.toInt() - '0'.toInt())
+        res += digitValue * (ch.code - '0'.code)
         digitValue *= 10.toBigInt()
     }
 

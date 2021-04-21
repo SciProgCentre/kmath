@@ -1,10 +1,15 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.VirtualMutableBuffer
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
@@ -88,7 +93,8 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
 /**
  * A 2D wrapper for nd-structure
  */
-private inline class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
+@JvmInline
+private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]

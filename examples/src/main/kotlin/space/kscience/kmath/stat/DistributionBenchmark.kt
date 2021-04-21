@@ -1,14 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.stat
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.rng.sampling.distribution.BoxMullerNormalizedGaussianSampler
 import org.apache.commons.rng.simple.RandomSource
 import space.kscience.kmath.samplers.GaussianSampler
 import java.time.Duration
 import java.time.Instant
 import org.apache.commons.rng.sampling.distribution.GaussianSampler as CMGaussianSampler
-import org.apache.commons.rng.sampling.distribution.ZigguratNormalizedGaussianSampler as CMZigguratNormalizedGaussianSampler
 
 private suspend fun runKMathChained(): Duration {
     val generator = RandomGenerator.fromSource(RandomSource.MT, 123L)
@@ -34,7 +39,7 @@ private fun runApacheDirect(): Duration {
     val rng = RandomSource.create(RandomSource.MT, 123L)
 
     val sampler = CMGaussianSampler.of(
-        CMZigguratNormalizedGaussianSampler.of(rng),
+        BoxMullerNormalizedGaussianSampler.of(rng),
         7.0,
         2.0
     )
@@ -59,8 +64,8 @@ private fun runApacheDirect(): Duration {
  * Comparing chain sampling performance with direct sampling performance
  */
 fun main(): Unit = runBlocking(Dispatchers.Default) {
-    val chainJob = async { runKMathChained() }
     val directJob = async { runApacheDirect() }
+    val chainJob = async { runKMathChained() }
     println("KMath Chained: ${chainJob.await()}")
     println("Apache Direct: ${directJob.await()}")
 }

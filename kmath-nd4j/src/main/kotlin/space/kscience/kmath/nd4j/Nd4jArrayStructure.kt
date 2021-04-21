@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
@@ -15,8 +20,7 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray
-        get() = ndArray.shape().toIntArray()
+    public override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()

@@ -1,5 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package kaceince.kmath.real
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.minus
 import space.kscience.kmath.real.norm
@@ -8,6 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@UnstableKMathAPI
 class GridTest {
     @Test
     fun testStepGrid() {

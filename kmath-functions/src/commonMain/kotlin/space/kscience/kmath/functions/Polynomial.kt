@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.Group
@@ -14,7 +19,7 @@ import kotlin.math.pow
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public inline class Polynomial<T : Any>(public val coefficients: List<T>)
+public class Polynomial<T : Any>(public val coefficients: List<T>)
 
 /**
  * Returns a [Polynomial] instance with given [coefficients].

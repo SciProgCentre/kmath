@@ -1,10 +1,15 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.domains
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 @UnstableKMathAPI
-public inline class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : DoubleDomain {
+public class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : DoubleDomain {
     public override val dimension: Int get() = 1
 
     public operator fun contains(d: Double): Boolean = range.contains(d)

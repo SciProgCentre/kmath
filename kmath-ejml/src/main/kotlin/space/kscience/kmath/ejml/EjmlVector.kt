@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.ejml
 
 import org.ejml.simple.SimpleMatrix
@@ -9,7 +14,7 @@ import space.kscience.kmath.linear.Point
  * @property origin the underlying [SimpleMatrix].
  * @author Iaroslav Postovalov
  */
-public inline class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
+public class EjmlVector internal constructor(public val origin: SimpleMatrix) : Point<Double> {
     public override val size: Int
         get() = origin.numRows()
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.stat
 
 import org.apache.commons.rng.UniformRandomProvider
@@ -32,7 +37,7 @@ public class RandomSourceGenerator internal constructor(public val source: Rando
  *
  * @property generator the underlying [RandomGenerator] object.
  */
-public inline class RandomGeneratorProvider(public val generator: RandomGenerator) : UniformRandomProvider {
+public class RandomGeneratorProvider(public val generator: RandomGenerator) : UniformRandomProvider {
     /**
      * Generates a [Boolean] value.
      *

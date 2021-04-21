@@ -1,17 +1,21 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 
 /**
- * Creates a functional expression with this [Group].
+ * Creates a functional expression with this [Ring].
  */
-public inline fun <T> Group<T>.spaceExpression(block: FunctionalExpressionGroup<T, Group<T>>.() -> Expression<T>): Expression<T> {
+public inline fun <T> Ring<T>.spaceExpression(block: FunctionalExpressionGroup<T, Ring<T>>.() -> Expression<T>): Expression<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return FunctionalExpressionGroup(this).block()
 }

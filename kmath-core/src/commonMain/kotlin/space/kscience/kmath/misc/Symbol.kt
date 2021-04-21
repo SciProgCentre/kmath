@@ -1,5 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.misc
 
+import kotlin.jvm.JvmInline
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -21,7 +27,8 @@ public interface Symbol {
 /**
  * A [Symbol] with a [String] identity
  */
-public inline class StringSymbol(override val identity: String) : Symbol {
+@JvmInline
+public value class StringSymbol(override val identity: String) : Symbol {
     override fun toString(): String = identity
 }
 

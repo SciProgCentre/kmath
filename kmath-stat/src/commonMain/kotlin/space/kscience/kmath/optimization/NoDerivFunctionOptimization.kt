@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.expressions.Expression
@@ -40,7 +45,7 @@ public interface NoDerivFunctionOptimization<T : Any> : Optimization<T> {
             require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
 
             return Expression { arguments ->
-                x.indices.sumByDouble {
+                x.indices.sumOf {
                     val xValue = x[it]
                     val yValue = y[it]
                     val yErrValue = yErr[it]

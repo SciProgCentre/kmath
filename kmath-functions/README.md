@@ -2,15 +2,16 @@
 
 Functions and interpolations.
 
- - [piecewise](Piecewise functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt
- - [polynomials](Polynomial functions.) : src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt
- - [linear interpolation](Linear XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/LinearInterpolator.kt
- - [spline interpolation](Cubic spline XY interpolator.) : src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt
+ - [piecewise](src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt) : Piecewise functions.
+ - [polynomials](src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt) : Polynomial functions.
+ - [linear interpolation](src/commonMain/kotlin/space/kscience/kmath/interpolation/LinearInterpolator.kt) : Linear XY interpolator.
+ - [spline interpolation](src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt) : Cubic spline XY interpolator.
+ - [integration](#) : Univariate and multivariate quadratures
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-functions:0.3.0-dev-4`.
+The Maven coordinates of this project are `space.kscience:kmath-functions:0.3.0-dev-7`.
 
 **Gradle:**
 ```gradle
@@ -21,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-functions:0.3.0-dev-4'
+    implementation 'space.kscience:kmath-functions:0.3.0-dev-7'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -33,6 +34,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-functions:0.3.0-dev-4")
+    implementation("space.kscience:kmath-functions:0.3.0-dev-7")
 }
 ```

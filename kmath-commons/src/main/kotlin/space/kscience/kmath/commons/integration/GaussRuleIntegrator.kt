@@ -1,17 +1,6 @@
-/* 
- * Copyright 2015 Alexander Nozik.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 package space.kscience.kmath.commons.integration
 
@@ -28,12 +17,12 @@ public class GaussRuleIntegrator(
 ) : UnivariateIntegrator<Double> {
 
     override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val range = integrand.getFeature<IntegrationRange<Double>>()?.range
+        val range = integrand.getFeature<IntegrationRange>()?.range
             ?: error("Integration range is not provided")
         val integrator: GaussIntegrator = getIntegrator(range)
         //TODO check performance
         val res: Double = integrator.integrate(integrand.function)
-        return integrand + IntegrandValue(res) + IntegrandCalls(integrand.calls + numpoints)
+        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numpoints)
     }
 
     private fun getIntegrator(range: ClosedRange<Double>): GaussIntegrator {

@@ -1,8 +1,17 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.factory.Nd4j
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.invoke
+import kotlin.math.PI
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 internal class Nd4jArrayAlgebraTest {
@@ -37,5 +46,15 @@ internal class Nd4jArrayAlgebraTest {
         expected[intArrayOf(1, 0)] = 26
         expected[intArrayOf(1, 1)] = 26
         assertEquals(expected, res)
+    }
+
+    @Test
+    fun testSin() = DoubleNd4jArrayField(intArrayOf(2, 2)).invoke {
+        val initial = produce { (i, j) -> if (i == j) PI/2 else 0.0 }
+        val transformed = sin(initial)
+        val expected = produce { (i, j) -> if (i == j) 1.0 else 0.0 }
+
+        println(transformed)
+        assertTrue { StructureND.contentEquals(transformed, expected) }
     }
 }

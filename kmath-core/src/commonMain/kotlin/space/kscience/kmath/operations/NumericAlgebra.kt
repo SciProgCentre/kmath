@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -147,7 +152,7 @@ public interface ScaleOperations<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface NumbersAddOperations<T> : Group<T>, NumericAlgebra<T> {
+public interface NumbersAddOperations<T> : Ring<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *
