@@ -83,7 +83,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 Fraction.Default,
                 Power.Default,
                 SquareRoot.Default,
-                Exponential.Default,
+                Exponent.Default,
                 InverseTrigonometricOperations.Default,
 
                 // Fallback option for unknown operations - printing them as operator
@@ -100,6 +100,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 PrintSymbolic,
             ),
             listOf(
+                BetterExponent,
                 SimplifyParentheses.Default,
                 BetterMultiplication,
             ),

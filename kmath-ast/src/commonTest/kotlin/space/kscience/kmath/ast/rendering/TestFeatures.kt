@@ -42,6 +42,22 @@ internal class TestFeatures {
         testLatex(Numeric(1.1e-10), "1.1\\times10^{-10}")
         testLatex(Numeric(-1.1e-10), "-1.1\\times10^{-10}")
         testLatex(Numeric(-1.1e10), "-1.1\\times10^{10}")
+        testLatex(Numeric(0.001), "0.001")
+        testLatex(Numeric(0.0000001), "1\\times10^{-7}")
+
+        testLatex(Numeric(Float.NaN), "NaN")
+        testLatex(Numeric(Float.POSITIVE_INFINITY), "\\infty")
+        testLatex(Numeric(Float.NEGATIVE_INFINITY), "-\\infty")
+        testLatex(Numeric(1.0f), "1")
+        testLatex(Numeric(-1.0f), "-1")
+        testLatex(Numeric(1.42f), "1.42")
+        testLatex(Numeric(-1.42f), "-1.42")
+        testLatex(Numeric(1e10f), "1\\times10^{10}")
+        testLatex(Numeric(1e-10f), "1\\times10^{-10}")
+        testLatex(Numeric(-1e-10f), "-1\\times10^{-10}")
+        testLatex(Numeric(-1e10f), "-1\\times10^{10}")
+        testLatex(Numeric(0.001f), "0.001")
+        testLatex(Numeric(0.0000001f), "1\\times10^{-7}")
     }
 
     @Test

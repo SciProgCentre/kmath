@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscisnce.kmath.ast
+package space.kscience.kmath.ast
 
 import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.evaluate
