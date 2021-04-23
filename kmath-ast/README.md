@@ -50,7 +50,7 @@ For example, the following builder:
 MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
 ``` 
 
-… leads to generation of bytecode, which can be decompiled to the following Java class:
+... leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
 package space.kscience.kmath.asm.generated;
@@ -97,6 +97,7 @@ var executable = function (constants, arguments) {
 };
 ```
 
+JS also supports very experimental expression optimization with [WebAssembly](https://webassembly.org/) IR generation. Currently, only expressions inside `DoubleField` and `IntRing` are supported.
 
 ```kotlin
 import space.kscience.kmath.wasm.*
@@ -104,7 +105,7 @@ import space.kscience.kmath.wasm.*
 MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
 ```
 
-An example of emitted WASM IR in the form of WAT:
+An example of emitted Wasm IR in the form of WAT:
 
 ```lisp
 (func $executable (param $0 f64) (result f64)
