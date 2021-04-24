@@ -1,5 +1,6 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.TensorStructure
 import space.kscience.kmath.tensors.core.algebras.TensorLinearStructure
@@ -60,6 +61,7 @@ internal inline fun BufferedTensor<Double>.asTensor(): DoubleTensor = DoubleTens
 
 internal inline fun <T> TensorStructure<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
+    is MutableBufferND<T> -> BufferedTensor(this.shape, this.mutableBuffer, 0)
     else -> BufferedTensor(this.shape, this.elements().map{ it.second }.toMutableList().asMutableBuffer(), 0)
 }
 

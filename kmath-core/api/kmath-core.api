@@ -748,7 +748,7 @@ public final class space/kscience/kmath/nd/BufferAlgebraNDKt {
 	public static final fun ring (Lspace/kscience/kmath/nd/AlgebraND$Companion;Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedRingND;
 }
 
-public final class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/StructureND {
+public class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/StructureND {
 	public fun <init> (Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/Buffer;)V
 	public fun elements ()Lkotlin/sequences/Sequence;
 	public fun get ([I)Ljava/lang/Object;
@@ -874,6 +874,12 @@ public abstract interface class space/kscience/kmath/nd/GroupND : space/kscience
 }
 
 public final class space/kscience/kmath/nd/GroupND$Companion {
+}
+
+public final class space/kscience/kmath/nd/MutableBufferND : space/kscience/kmath/nd/BufferND, space/kscience/kmath/nd/MutableStructureND {
+	public fun <init> (Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/MutableBuffer;)V
+	public final fun getMutableBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun set ([ILjava/lang/Object;)V
 }
 
 public abstract interface class space/kscience/kmath/nd/MutableStructure1D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure1D, space/kscience/kmath/structures/MutableBuffer {

@@ -1,7 +1,11 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.test.Test
@@ -46,5 +50,35 @@ class TestDoubleTensor {
             assertEquals(secondColumn[0], 77.89)
             assertEquals(secondRow[1], secondColumn[1])
         }
+    }
+
+    @Test
+    fun bufferProtocol() {
+
+        // create buffers
+        val doubleBuffer = DoubleBuffer(doubleArrayOf(1.0,2.0,3.0))
+        val doubleList = MutableList(3, doubleBuffer::get)
+
+        // create ND buffers
+        val ndBuffer = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleBuffer)
+        val ndList = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleList.asMutableBuffer())
+
+        // map to tensors
+        val bufferedTensorBuffer = ndBuffer.toBufferedTensor() // strides are flipped
+        val tensorBuffer = bufferedTensorBuffer.asTensor() // no data copied
+
+        val bufferedTensorList = ndList.toBufferedTensor() // strides are flipped
+        val tensorList = bufferedTensorList.asTensor() // data copied
+
+        tensorBuffer[intArrayOf(0)] = 55.9
+        assertEquals(ndBuffer[intArrayOf(0)], 55.9)
+        assertEquals(doubleBuffer[0], 55.9)
+
+        tensorList[intArrayOf(0)] = 55.9
+        assertEquals(ndList[intArrayOf(0)], 1.0)
+        assertEquals(doubleList[0], 1.0)
+
+        ndList[intArrayOf(0)] = 55.9
+        assertEquals(doubleList[0], 55.9)
     }
 }
