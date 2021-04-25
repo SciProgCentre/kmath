@@ -5,30 +5,24 @@
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.jvm.JvmInline
-import kotlin.reflect.KClass
+
 
 public class UnivariateIntegrand<T : Any> internal constructor(
-    private val features: Map<KClass<*>, IntegrandFeature>,
+    override val features: FeatureSet<IntegrandFeature>,
     public val function: (Double) -> T,
-) : Integrand {
+) : Integrand
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : IntegrandFeature> getFeature(type: KClass<T>): T? = features[type] as? T
-
-    public operator fun <F : IntegrandFeature> plus(pair: Pair<KClass<out F>, F>): UnivariateIntegrand<T> =
-        UnivariateIntegrand(features + pair, function)
-
-    public operator fun <F : IntegrandFeature> plus(feature: F): UnivariateIntegrand<T> =
-        plus(feature::class to feature)
-}
+public fun <T : Any> UnivariateIntegrand<T>.with(vararg newFeatures: IntegrandFeature): UnivariateIntegrand<T> =
+    UnivariateIntegrand(features.with(*newFeatures), function)
 
 @Suppress("FunctionName")
 public fun <T : Any> UnivariateIntegrand(
     function: (Double) -> T,
     vararg features: IntegrandFeature,
-): UnivariateIntegrand<T> = UnivariateIntegrand(features.associateBy { it::class }, function)
+): UnivariateIntegrand<T> = UnivariateIntegrand(FeatureSet.of(*features), function)
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
@@ -46,7 +40,7 @@ public fun UnivariateIntegrator<Double>.integrate(
     range: ClosedRange<Double>,
     vararg features: IntegrandFeature,
     function: (Double) -> Double,
-): Double = integrate(
+): Double = process(
     UnivariateIntegrand(function, IntegrationRange(range), *features)
 ).value ?: error("Unexpected: no value after integration.")
 
@@ -65,7 +59,7 @@ public fun UnivariateIntegrator<Double>.integrate(
         featureBuilder()
         add(IntegrationRange(range))
     }
-    return integrate(
+    return process(
         UnivariateIntegrand(function, *features.toTypedArray())
     ).value ?: error("Unexpected: no value after integration.")
 }

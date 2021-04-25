@@ -14,10 +14,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjuga
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.AbstractSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.SymbolIndexer
-import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.optimization.*
@@ -26,94 +23,98 @@ import kotlin.reflect.KClass
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
+public class CMOptimizerFactory(public val optimizerBuilder: () -> MultivariateOptimizer) : OptimizationFeature
+//public class CMOptimizerData(public val )
+
 @OptIn(UnstableKMathAPI::class)
-public class CMOptimization(
-    override val symbols: List<Symbol>,
-) : FunctionOptimization<Double>, NoDerivFunctionOptimization<Double>, SymbolIndexer, OptimizationFeature {
+public class CMOptimization : Optimizer<FunctionOptimization<Double>> {
 
-    private val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
-    private var optimizerBuilder: (() -> MultivariateOptimizer)? = null
-    public var convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(
-        DEFAULT_RELATIVE_TOLERANCE,
-        DEFAULT_ABSOLUTE_TOLERANCE,
-        DEFAULT_MAX_ITER
-    )
+    override suspend fun process(
+        problem: FunctionOptimization<Double>
+    ): FunctionOptimization<Double> = withSymbols(problem.parameters){
+        val cmOptimizer: MultivariateOptimizer =
+            problem.getFeature<CMOptimizerFactory>()?.optimizerBuilder?.invoke() ?: SimplexOptimizer()
 
-    override var maximize: Boolean
-        get() = optimizationData[GoalType::class] == GoalType.MAXIMIZE
-        set(value) {
-            optimizationData[GoalType::class] = if (value) GoalType.MAXIMIZE else GoalType.MINIMIZE
+        val convergenceChecker: ConvergenceChecker<PointValuePair> = SimpleValueChecker(
+            DEFAULT_RELATIVE_TOLERANCE,
+            DEFAULT_ABSOLUTE_TOLERANCE,
+            DEFAULT_MAX_ITER
+        )
+
+        val optimizationData: HashMap<KClass<out OptimizationData>, OptimizationData> = HashMap()
+
+        fun addOptimizationData(data: OptimizationData) {
+            optimizationData[data::class] = data
         }
-
-    public fun addOptimizationData(data: OptimizationData) {
-        optimizationData[data::class] = data
-    }
-
-    init {
         addOptimizationData(MaxEval.unlimited())
-    }
+        addOptimizationData(InitialGuess(problem.initialGuess.toDoubleArray()))
 
-    public fun exportOptimizationData(): List<OptimizationData> = optimizationData.values.toList()
+        fun exportOptimizationData(): List<OptimizationData> = optimizationData.values.toList()
 
-    public override fun initialGuess(map: Map<Symbol, Double>): Unit {
-        addOptimizationData(InitialGuess(map.toDoubleArray()))
-    }
 
-    public override fun function(expression: Expression<Double>): Unit {
-        val objectiveFunction = ObjectiveFunction {
-            val args = it.toMap()
-            expression(args)
+        /**
+         * Register no-deriv function instead of  differentiable function
+         */
+        /**
+         * Register no-deriv function instead of  differentiable function
+         */
+        fun noDerivFunction(expression: Expression<Double>): Unit {
+            val objectiveFunction = ObjectiveFunction {
+                val args = problem.initialGuess + it.toMap()
+                expression(args)
+            }
+            addOptimizationData(objectiveFunction)
         }
-        addOptimizationData(objectiveFunction)
-    }
 
-    public override fun diffFunction(expression: DifferentiableExpression<Double, Expression<Double>>) {
-        function(expression)
-        val gradientFunction = ObjectiveFunctionGradient {
-            val args = it.toMap()
-            DoubleArray(symbols.size) { index ->
-                expression.derivative(symbols[index])(args)
+        public override fun function(expression: DifferentiableExpression<Double, Expression<Double>>) {
+            noDerivFunction(expression)
+            val gradientFunction = ObjectiveFunctionGradient {
+                val args = startingPoint + it.toMap()
+                DoubleArray(symbols.size) { index ->
+                    expression.derivative(symbols[index])(args)
+                }
+            }
+            addOptimizationData(gradientFunction)
+            if (optimizerBuilder == null) {
+                optimizerBuilder = {
+                    NonLinearConjugateGradientOptimizer(
+                        NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
+                        convergenceChecker
+                    )
+                }
             }
         }
-        addOptimizationData(gradientFunction)
-        if (optimizerBuilder == null) {
-            optimizerBuilder = {
-                NonLinearConjugateGradientOptimizer(
-                    NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
-                    convergenceChecker
-                )
+
+        public fun simplex(simplex: AbstractSimplex) {
+            addOptimizationData(simplex)
+            //Set optimization builder to simplex if it is not present
+            if (optimizerBuilder == null) {
+                optimizerBuilder = { SimplexOptimizer(convergenceChecker) }
             }
         }
-    }
 
-    public fun simplex(simplex: AbstractSimplex) {
-        addOptimizationData(simplex)
-        //Set optimization builder to simplex if it is not present
-        if (optimizerBuilder == null) {
-            optimizerBuilder = { SimplexOptimizer(convergenceChecker) }
+        public fun simplexSteps(steps: Map<Symbol, Double>) {
+            simplex(NelderMeadSimplex(steps.toDoubleArray()))
         }
-    }
 
-    public fun simplexSteps(steps: Map<Symbol, Double>) {
-        simplex(NelderMeadSimplex(steps.toDoubleArray()))
-    }
+        public fun goal(goalType: GoalType) {
+            addOptimizationData(goalType)
+        }
 
-    public fun goal(goalType: GoalType) {
-        addOptimizationData(goalType)
-    }
+        public fun optimizer(block: () -> MultivariateOptimizer) {
+            optimizerBuilder = block
+        }
 
-    public fun optimizer(block: () -> MultivariateOptimizer) {
-        optimizerBuilder = block
-    }
+        override fun update(result: OptimizationResult<Double>) {
+            initialGuess(result.point)
+        }
 
-    override fun update(result: OptimizationResult<Double>) {
-        initialGuess(result.point)
-    }
-
-    override fun optimize(): OptimizationResult<Double> {
-        val optimizer = optimizerBuilder?.invoke() ?: error("Optimizer not defined")
-        val (point, value) = optimizer.optimize(*optimizationData.values.toTypedArray())
-        return OptimizationResult(point.toMap(), value, setOf(this))
+        override suspend fun optimize(): OptimizationResult<Double> {
+            val optimizer = optimizerBuilder?.invoke() ?: error("Optimizer not defined")
+            val (point, value) = optimizer.optimize(*optimizationData.values.toTypedArray())
+            return OptimizationResult(point.toMap(), value)
+        }
+        return@withSymbols TODO()
     }
 
     public companion object : OptimizationProblemFactory<Double, CMOptimization> {

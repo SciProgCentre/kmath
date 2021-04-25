@@ -51,6 +51,6 @@ public abstract class FirstDerivativeExpression<T, R : Expression<T>> : Differen
 /**
  * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
  */
-public fun interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
+public fun interface AutoDiffProcessor<T, I, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
     public fun process(function: A.() -> I): DifferentiableExpression<T, R>
 }

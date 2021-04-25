@@ -13,7 +13,7 @@ import space.kscience.kmath.nd.as2D
 /**
  * A context that allows to operate on a [MutableBuffer] as on 2d array
  */
-internal class BufferAccessor2D<T : Any>(
+internal class BufferAccessor2D<T>(
     public val rowNum: Int,
     public val colNum: Int,
     val factory: MutableBufferFactory<T>,

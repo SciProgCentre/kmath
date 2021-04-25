@@ -50,7 +50,7 @@ public class GaussIntegrator<T : Any>(
         }
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
+    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
         val f = integrand.function
         val (points, weights) = buildRule(integrand)
         var res = zero
@@ -63,7 +63,7 @@ public class GaussIntegrator<T : Any>(
             c = t - res - y
             res = t
         }
-        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + points.size)
+        return integrand.with(IntegrandValue(res),IntegrandCallsPerformed(integrand.calls + points.size))
     }
 
     public companion object {
@@ -80,17 +80,17 @@ public class GaussIntegrator<T : Any>(
  * * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
  */
 @UnstableKMathAPI
-public fun <T : Any> Field<T>.integrate(
+public fun <T : Any> Field<T>.process(
     vararg features: IntegrandFeature,
     function: (Double) -> T,
-): UnivariateIntegrand<T> = GaussIntegrator(this).integrate(UnivariateIntegrand(function, *features))
+): UnivariateIntegrand<T> = GaussIntegrator(this).process(UnivariateIntegrand(function, *features))
 
 
 /**
  * Use [GaussIntegrator.Companion.integrate] to integrate the function in the current algebra with given [range] and [numPoints]
  */
 @UnstableKMathAPI
-public fun <T : Any> Field<T>.integrate(
+public fun <T : Any> Field<T>.process(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
@@ -104,7 +104,7 @@ public fun <T : Any> Field<T>.integrate(
     val ranges = UnivariateIntegrandRanges(
         (0 until intervals).map { i -> (rangeSize * i)..(rangeSize * (i + 1)) to order }
     )
-    return GaussIntegrator(this).integrate(
+    return GaussIntegrator(this).process(
         UnivariateIntegrand(
             function,
             IntegrationRange(range),

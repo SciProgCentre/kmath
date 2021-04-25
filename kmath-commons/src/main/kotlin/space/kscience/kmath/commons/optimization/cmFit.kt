@@ -10,10 +10,7 @@ import space.kscience.kmath.commons.expressions.DerivativeStructureField
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.optimization.FunctionOptimization
-import space.kscience.kmath.optimization.OptimizationResult
-import space.kscience.kmath.optimization.noDerivOptimizeWith
-import space.kscience.kmath.optimization.optimizeWith
+import space.kscience.kmath.optimization.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 
@@ -46,20 +43,25 @@ public fun FunctionOptimization.Companion.chiSquared(
 /**
  * Optimize expression without derivatives
  */
-public fun Expression<Double>.optimize(
+public suspend fun Expression<Double>.optimize(
     vararg symbols: Symbol,
     configuration: CMOptimization.() -> Unit,
-): OptimizationResult<Double> = noDerivOptimizeWith(CMOptimization, symbols = symbols, configuration)
+): OptimizationResult<Double> {
+    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
+    val problem = CMOptimization(symbols.toList(), configuration)
+    problem.noDerivFunction(this)
+    return problem.optimize()
+}
 
 /**
  * Optimize differentiable expression
  */
-public fun DifferentiableExpression<Double, Expression<Double>>.optimize(
+public suspend fun DifferentiableExpression<Double, Expression<Double>>.optimize(
     vararg symbols: Symbol,
     configuration: CMOptimization.() -> Unit,
 ): OptimizationResult<Double> = optimizeWith(CMOptimization, symbols = symbols, configuration)
 
-public fun DifferentiableExpression<Double, Expression<Double>>.minimize(
+public suspend fun DifferentiableExpression<Double, Expression<Double>>.minimize(
     vararg startPoint: Pair<Symbol, Double>,
     configuration: CMOptimization.() -> Unit = {},
 ): OptimizationResult<Double> {
@@ -67,7 +69,7 @@ public fun DifferentiableExpression<Double, Expression<Double>>.minimize(
     return optimize(*symbols){
         maximize = false
         initialGuess(startPoint.toMap())
-        diffFunction(this@minimize)
+        function(this@minimize)
         configuration()
     }
 }

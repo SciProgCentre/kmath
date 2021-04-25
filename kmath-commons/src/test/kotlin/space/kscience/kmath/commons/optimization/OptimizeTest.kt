@@ -24,7 +24,7 @@ internal class OptimizeTest {
     }
 
     @Test
-    fun testGradientOptimization() {
+    fun testGradientOptimization() = runBlocking{
         val result = normal.optimize(x, y) {
             initialGuess(x to 1.0, y to 1.0)
             //no need to select optimizer. Gradient optimizer is used by default because gradients are provided by function
@@ -34,7 +34,7 @@ internal class OptimizeTest {
     }
 
     @Test
-    fun testSimplexOptimization() {
+    fun testSimplexOptimization() = runBlocking{
         val result = normal.optimize(x, y) {
             initialGuess(x to 1.0, y to 1.0)
             simplexSteps(x to 2.0, y to 0.5)

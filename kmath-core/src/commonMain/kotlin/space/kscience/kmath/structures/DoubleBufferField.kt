@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.ExtendedFieldOperations
+import space.kscience.kmath.operations.Norm
 import kotlin.math.*
 
 /**
@@ -161,12 +163,16 @@ public object DoubleBufferFieldOperations : ExtendedFieldOperations<Buffer<Doubl
         DoubleBuffer(DoubleArray(arg.size) { ln(arg[it]) })
 }
 
+public object DoubleL2Norm : Norm<Point<Double>, Double> {
+    override fun norm(arg: Point<Double>): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
+}
+
 /**
  * [ExtendedField] over [DoubleBuffer].
  *
  * @property size the size of buffers to operate on.
  */
-public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>> {
+public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>>, Norm<Buffer<Double>, Double> {
     public override val zero: Buffer<Double> by lazy { DoubleBuffer(size) { 0.0 } }
     public override val one: Buffer<Double> by lazy { DoubleBuffer(size) { 1.0 } }
 
@@ -274,4 +280,6 @@ public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Doub
         require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
         return DoubleBufferFieldOperations.ln(arg)
     }
+
+    override fun norm(arg: Buffer<Double>): Double  = DoubleL2Norm.norm(arg)
 }

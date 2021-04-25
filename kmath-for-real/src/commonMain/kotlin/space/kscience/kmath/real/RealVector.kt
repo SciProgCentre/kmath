@@ -8,11 +8,8 @@ package space.kscience.kmath.real
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.*
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
-import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.fold
-import space.kscience.kmath.structures.indices
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -105,8 +102,4 @@ public fun DoubleVector.sum(): Double {
     return res
 }
 
-public object VectorL2Norm : Norm<DoubleVector, Double> {
-    override fun norm(arg: DoubleVector): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
-}
-
-public val DoubleVector.norm: Double get() = VectorL2Norm.norm(this)
+public val DoubleVector.norm: Double get() = DoubleL2Norm.norm(this)

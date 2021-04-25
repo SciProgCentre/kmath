@@ -24,7 +24,7 @@ public class CMIntegrator(
     public class MinIterations(public val value: Int) : IntegrandFeature
     public class MaxIterations(public val value: Int) : IntegrandFeature
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls
@@ -32,11 +32,12 @@ public class CMIntegrator(
             ?: error("Integration range is not provided")
         val res = integrator.integrate(remainingCalls, integrand.function, range.start, range.endInclusive)
 
-        return integrand +
-                IntegrandValue(res) +
-                IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy) +
-                IntegrandRelativeAccuracy(integrator.relativeAccuracy) +
-                IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
+        return integrand.with(
+            IntegrandValue(res),
+            IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy),
+            IntegrandRelativeAccuracy(integrator.relativeAccuracy),
+            IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
+        )
     }
 
 

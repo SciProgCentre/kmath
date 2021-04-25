@@ -16,7 +16,7 @@ import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field
 
 @UnstableKMathAPI
-public interface XYFit<T : Any> : Optimization<T> {
+public interface XYFit<T> : OptimizationProblem<T> {
 
     public val algebra: Field<T>
 
