@@ -180,12 +180,17 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
     override fun Double.div(other: TensorStructure<Double>): DoubleTensor {
         val resBuffer = DoubleArray(other.tensor.numElements) { i ->
-            other.tensor.buffer.array()[other.tensor.bufferStart + i] / this
+            this / other.tensor.buffer.array()[other.tensor.bufferStart + i]
         }
         return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun TensorStructure<Double>.div(value: Double): DoubleTensor = value / tensor
+    override fun TensorStructure<Double>.div(value: Double): DoubleTensor {
+        val resBuffer = DoubleArray(tensor.numElements) { i ->
+            tensor.buffer.array()[tensor.bufferStart + i] / value
+        }
+        return DoubleTensor(shape, resBuffer)
+    }
 
     override fun TensorStructure<Double>.div(other: TensorStructure<Double>): DoubleTensor {
         checkShapesCompatible(tensor, other)

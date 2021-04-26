@@ -16,6 +16,20 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
+    fun doubleDiv() = DoubleTensorAlgebra {
+        val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
+        val res = 2.0/tensor
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(1.0, 0.5))
+    }
+
+    @Test
+    fun divDouble() = DoubleTensorAlgebra {
+        val tensor = fromArray(intArrayOf(2), doubleArrayOf(10.0, 5.0))
+        val res = tensor / 2.5
+        assertTrue(res.buffer.array() contentEquals doubleArrayOf(4.0, 2.0))
+    }
+
+    @Test
     fun transpose1x1() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(0.0))
         val res = tensor.transpose(0, 0)
