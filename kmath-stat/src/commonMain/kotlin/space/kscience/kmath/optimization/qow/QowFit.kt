@@ -27,10 +27,6 @@ import kotlin.math.pow
 
 private typealias ParamSet = Map<Symbol, Double>
 
-public fun interface FitLogger {
-    public fun log(block: () -> String)
-}
-
 @OptIn(UnstableKMathAPI::class)
 public class QowFit(
     override val symbols: List<Symbol>,

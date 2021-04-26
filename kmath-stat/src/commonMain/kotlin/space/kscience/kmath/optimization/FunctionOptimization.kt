@@ -15,91 +15,57 @@ import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 
+public class FunctionOptimizationResult<T>(point: Map<Symbol, T>, public val value: T) : OptimizationResult<T>(point)
 
-public class FunctionOptimization<T : Any>(
+public enum class FunctionOptimizationTarget : OptimizationFeature {
+    MAXIMIZE,
+    MINIMIZE
+}
+
+public class FunctionOptimization<T>(
     override val features: FeatureSet<OptimizationFeature>,
     public val expression: DifferentiableExpression<T, Expression<T>>,
     public val initialGuess: Map<Symbol, T>,
     public val parameters: Collection<Symbol>,
-    public val maximize: Boolean,
-) : OptimizationProblem
+) : OptimizationProblem{
+    public companion object{
+        /**
+         * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
+         */
+        public fun <T : Any, I : Any, A> chiSquaredExpression(
+            autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
+            x: Buffer<T>,
+            y: Buffer<T>,
+            yErr: Buffer<T>,
+            model: A.(I) -> I,
+        ): DifferentiableExpression<T, Expression<T>> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
+            require(x.size == y.size) { "X and y buffers should be of the same size" }
+            require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
 
-//
-///**
-// * A likelihood function optimization problem with provided derivatives
-// */
-//public interface FunctionOptimizationBuilder<T : Any> {
-//    /**
-//     * The optimization direction. If true search for function maximum, if false, search for the minimum
-//     */
-//    public var maximize: Boolean
-//
-//    /**
-//     * Define the initial guess for the optimization problem
-//     */
-//    public fun initialGuess(map: Map<Symbol, T>)
-//
-//    /**
-//     * Set a differentiable expression as objective function as function and gradient provider
-//     */
-//    public fun function(expression: DifferentiableExpression<T, Expression<T>>)
-//
-//    public companion object {
-//        /**
-//         * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
-//         */
-//        public fun <T : Any, I : Any, A> chiSquared(
-//            autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
-//            x: Buffer<T>,
-//            y: Buffer<T>,
-//            yErr: Buffer<T>,
-//            model: A.(I) -> I,
-//        ): DifferentiableExpression<T, Expression<T>> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
-//            require(x.size == y.size) { "X and y buffers should be of the same size" }
-//            require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
-//
-//            return autoDiff.process {
-//                var sum = zero
-//
-//                x.indices.forEach {
-//                    val xValue = const(x[it])
-//                    val yValue = const(y[it])
-//                    val yErrValue = const(yErr[it])
-//                    val modelValue = model(xValue)
-//                    sum += ((yValue - modelValue) / yErrValue).pow(2)
-//                }
-//
-//                sum
-//            }
-//        }
-//    }
-//}
-//
-///**
-// * Define a chi-squared-based objective function
-// */
-//public fun <T : Any, I : Any, A> FunctionOptimization<T>.chiSquared(
-//    autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
-//    x: Buffer<T>,
-//    y: Buffer<T>,
-//    yErr: Buffer<T>,
-//    model: A.(I) -> I,
-//) where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
-//    val chiSquared = FunctionOptimization.chiSquared(autoDiff, x, y, yErr, model)
-//    function(chiSquared)
-//    maximize = false
-//}
-//
-///**
-// * Optimize differentiable expression using specific [OptimizationProblemFactory]
-// */
-//public suspend fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T, Expression<T>>.optimizeWith(
-//    factory: OptimizationProblemFactory<T, F>,
-//    vararg symbols: Symbol,
-//    configuration: F.() -> Unit,
-//): OptimizationResult<T> {
-//    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-//    val problem = factory(symbols.toList(), configuration)
-//    problem.function(this)
-//    return problem.optimize()
-//}
+            return autoDiff.process {
+                var sum = zero
+
+                x.indices.forEach {
+                    val xValue = const(x[it])
+                    val yValue = const(y[it])
+                    val yErrValue = const(yErr[it])
+                    val modelValue = model(xValue)
+                    sum += ((yValue - modelValue) / yErrValue).pow(2)
+                }
+
+                sum
+            }
+        }
+    }
+}
+
+
+public fun <T> FunctionOptimization<T>.withFeatures(
+    vararg newFeature: OptimizationFeature,
+): FunctionOptimization<T> = FunctionOptimization(
+    features.with(*newFeature),
+    expression,
+    initialGuess,
+    parameters
+)
+

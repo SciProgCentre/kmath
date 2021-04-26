@@ -17,22 +17,22 @@ import space.kscience.kmath.structures.asBuffer
 /**
  * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
  */
-public fun FunctionOptimization.Companion.chiSquared(
+public fun FunctionOptimization.Companion.chiSquaredExpression(
     x: Buffer<Double>,
     y: Buffer<Double>,
     yErr: Buffer<Double>,
     model: DerivativeStructureField.(x: DerivativeStructure) -> DerivativeStructure,
-): DifferentiableExpression<Double, Expression<Double>> = chiSquared(DerivativeStructureField, x, y, yErr, model)
+): DifferentiableExpression<Double, Expression<Double>> = chiSquaredExpression(DerivativeStructureField, x, y, yErr, model)
 
 /**
  * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
  */
-public fun FunctionOptimization.Companion.chiSquared(
+public fun FunctionOptimization.Companion.chiSquaredExpression(
     x: Iterable<Double>,
     y: Iterable<Double>,
     yErr: Iterable<Double>,
     model: DerivativeStructureField.(x: DerivativeStructure) -> DerivativeStructure,
-): DifferentiableExpression<Double, Expression<Double>> = chiSquared(
+): DifferentiableExpression<Double, Expression<Double>> = chiSquaredExpression(
     DerivativeStructureField,
     x.toList().asBuffer(),
     y.toList().asBuffer(),

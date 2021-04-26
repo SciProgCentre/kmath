@@ -17,7 +17,7 @@ public interface Featured<F : Any> {
 /**
  * A container for a set of features
  */
-public class FeatureSet<F : Any> private constructor(public val features: Map<KClass<out F>, Any>) : Featured<F> {
+public class FeatureSet<F : Any> private constructor(public val features: Map<KClass<out F>, F>) : Featured<F> {
     @Suppress("UNCHECKED_CAST")
     override fun <T : F> getFeature(type: KClass<out T>): T? = features[type] as? T
 
@@ -30,6 +30,8 @@ public class FeatureSet<F : Any> private constructor(public val features: Map<KC
 
     public fun with(vararg otherFeatures: F): FeatureSet<F> =
         FeatureSet(features + otherFeatures.associateBy { it::class })
+
+    public operator fun iterator(): Iterator<F> = features.values.iterator()
 
     public companion object {
         public fun <F : Any> of(vararg features: F): FeatureSet<F> = FeatureSet(features.associateBy { it::class })

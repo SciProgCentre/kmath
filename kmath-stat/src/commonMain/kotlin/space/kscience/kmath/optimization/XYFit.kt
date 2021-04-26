@@ -14,9 +14,11 @@ import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.indices
 
 @UnstableKMathAPI
-public interface XYFit<T> : OptimizationProblem<T> {
+public interface XYFit<T> : OptimizationProblem {
 
     public val algebra: Field<T>
 
@@ -42,4 +44,34 @@ public interface XYFit<T> : OptimizationProblem<T> {
     ): Unit where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> = model { arg ->
         autoDiff.process { modelFunction(const(arg)) }
     }
+}
+
+//
+///**
+// * Define a chi-squared-based objective function
+// */
+//public fun <T : Any, I : Any, A> FunctionOptimization<T>.chiSquared(
+//    autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
+//    x: Buffer<T>,
+//    y: Buffer<T>,
+//    yErr: Buffer<T>,
+//    model: A.(I) -> I,
+//) where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
+//    val chiSquared = FunctionOptimization.chiSquared(autoDiff, x, y, yErr, model)
+//    function(chiSquared)
+//    maximize = false
+//}
+
+/**
+ * Optimize differentiable expression using specific [OptimizationProblemFactory]
+ */
+public suspend fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T, Expression<T>>.optimizeWith(
+    factory: OptimizationProblemFactory<T, F>,
+    vararg symbols: Symbol,
+    configuration: F.() -> Unit,
+): OptimizationResult<T> {
+    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
+    val problem = factory(symbols.toList(), configuration)
+    problem.function(this)
+    return problem.optimize()
 }

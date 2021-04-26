@@ -7,6 +7,8 @@ package space.kscience.kmath.optimization
 
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.Featured
+import space.kscience.kmath.misc.Loggable
+import space.kscience.kmath.misc.Symbol
 import kotlin.reflect.KClass
 
 public interface OptimizationFeature
@@ -17,6 +19,10 @@ public interface OptimizationProblem : Featured<OptimizationFeature> {
 }
 
 public inline fun <reified T : OptimizationFeature> OptimizationProblem.getFeature(): T? = getFeature(T::class)
+
+public open class OptimizationResult<T>(public val point: Map<Symbol, T>) : OptimizationFeature
+
+public class OptimizationLog(private val loggable: Loggable) : Loggable by loggable, OptimizationFeature
 
 //public class OptimizationResult<T>(
 //    public val point: Map<Symbol, T>,
