@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
     implementation(project(":kmath-nd4j"))
+    implementation(project(":kmath-tensors"))
 
     implementation(project(":kmath-for-real"))
 
