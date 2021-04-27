@@ -23,62 +23,64 @@ class TestDoubleTensor {
 
     @Test
     fun stridesTest() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(2,2), doubleArrayOf(3.5,5.8,58.4,2.4))
-        assertEquals(tensor[intArrayOf(0,1)], 5.8)
-        assertTrue(tensor.elements().map{ it.second }.toList().toDoubleArray() contentEquals tensor.buffer.toDoubleArray())
+        val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
+        assertEquals(tensor[intArrayOf(0, 1)], 5.8)
+        assertTrue(
+            tensor.elements().map { it.second }.toList().toDoubleArray() contentEquals tensor.buffer.toDoubleArray()
+        )
     }
 
     @Test
     fun getTest() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(1,2,2), doubleArrayOf(3.5,5.8,58.4,2.4))
+        val tensor = fromArray(intArrayOf(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         val matrix = tensor[0].as2D()
-        assertEquals(matrix[0,1], 5.8)
+        assertEquals(matrix[0, 1], 5.8)
 
         val vector = tensor[0][1].as1D()
         assertEquals(vector[0], 58.4)
 
-        matrix[0,1] = 77.89
-        assertEquals(tensor[intArrayOf(0,0,1)], 77.89)
+        matrix[0, 1] = 77.89
+        assertEquals(tensor[intArrayOf(0, 0, 1)], 77.89)
 
         vector[0] = 109.56
-        assertEquals(tensor[intArrayOf(0,1,0)], 109.56)
+        assertEquals(tensor[intArrayOf(0, 1, 0)], 109.56)
 
         tensor.matrixSequence().forEach {
             val a = it.asTensor()
             val secondRow = a[1].as1D()
-            val secondColumn = a.transpose(0,1)[1].as1D()
+            val secondColumn = a.transpose(0, 1)[1].as1D()
             assertEquals(secondColumn[0], 77.89)
             assertEquals(secondRow[1], secondColumn[1])
         }
     }
 
     @Test
-    fun bufferProtocol() {
+    fun noBufferProtocol() {
 
-        // create buffers
-        val doubleBuffer = DoubleBuffer(doubleArrayOf(1.0,2.0,3.0))
-        val doubleList = MutableList(3, doubleBuffer::get)
+        // create buffer
+        val doubleArray = DoubleBuffer(doubleArrayOf(1.0, 2.0, 3.0))
 
-        // create ND buffers
-        val ndBuffer = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleBuffer)
-        val ndList = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleList.asMutableBuffer())
+        // create ND buffers, no data is copied
+        val ndArray = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleArray)
 
         // map to tensors
-        val bufferedTensorBuffer = ndBuffer.toBufferedTensor() // strides are flipped
-        val tensorBuffer = bufferedTensorBuffer.asTensor() // no data copied
+        val bufferedTensorArray = ndArray.toBufferedTensor() // strides are flipped so data copied
+        val tensorArray = bufferedTensorArray.asTensor() // data not contiguous so copied again
 
-        val bufferedTensorList = ndList.toBufferedTensor() // strides are flipped
-        val tensorList = bufferedTensorList.asTensor() // data copied
+        val tensorArrayPublic = ndArray.toTypedTensor() // public API, data copied twice
+        val sharedTensorArray = tensorArrayPublic.toTypedTensor() // no data copied by matching type
 
-        tensorBuffer[intArrayOf(0)] = 55.9
-        assertEquals(ndBuffer[intArrayOf(0)], 55.9)
-        assertEquals(doubleBuffer[0], 55.9)
+        assertTrue(tensorArray.buffer.array() contentEquals sharedTensorArray.buffer.array())
 
-        tensorList[intArrayOf(0)] = 55.9
-        assertEquals(ndList[intArrayOf(0)], 1.0)
-        assertEquals(doubleList[0], 1.0)
+        tensorArray[intArrayOf(0)] = 55.9
+        assertEquals(tensorArrayPublic[intArrayOf(0)], 1.0)
 
-        ndList[intArrayOf(0)] = 55.9
-        assertEquals(doubleList[0], 55.9)
+        tensorArrayPublic[intArrayOf(0)] = 55.9
+        assertEquals(sharedTensorArray[intArrayOf(0)], 55.9)
+        assertEquals(bufferedTensorArray[intArrayOf(0)], 1.0)
+
+        bufferedTensorArray[intArrayOf(0)] = 55.9
+        assertEquals(ndArray[intArrayOf(0)], 1.0)
+
     }
 }

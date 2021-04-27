@@ -37,9 +37,8 @@ public class IntTensor internal constructor(
     shape: IntArray,
     buffer: IntArray,
     offset: Int = 0
-) : BufferedTensor<Int>(shape, IntBuffer(buffer), offset)
-{
-    internal constructor(bufferedTensor: BufferedTensor<Int>):
+) : BufferedTensor<Int>(shape, IntBuffer(buffer), offset) {
+    internal constructor(bufferedTensor: BufferedTensor<Int>) :
             this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
 }
 
@@ -47,9 +46,8 @@ public class DoubleTensor internal constructor(
     shape: IntArray,
     buffer: DoubleArray,
     offset: Int = 0
-) : BufferedTensor<Double>(shape, DoubleBuffer(buffer), offset)
-{
-    internal constructor(bufferedTensor: BufferedTensor<Double>):
+) : BufferedTensor<Double>(shape, DoubleBuffer(buffer), offset) {
+    internal constructor(bufferedTensor: BufferedTensor<Double>) :
             this(bufferedTensor.shape, bufferedTensor.buffer.array(), bufferedTensor.bufferStart)
 
     override fun toString(): String = toPrettyString()
@@ -59,10 +57,17 @@ public class DoubleTensor internal constructor(
 internal inline fun BufferedTensor<Int>.asTensor(): IntTensor = IntTensor(this)
 internal inline fun BufferedTensor<Double>.asTensor(): DoubleTensor = DoubleTensor(this)
 
+internal inline fun <T> TensorStructure<T>.copyToBufferedTensor(): BufferedTensor<T> =
+    BufferedTensor(
+        this.shape,
+        TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().asMutableBuffer(), 0
+    )
+
 internal inline fun <T> TensorStructure<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
-    is MutableBufferND<T> -> BufferedTensor(this.shape, this.mutableBuffer, 0)
-    else -> BufferedTensor(this.shape, this.elements().map{ it.second }.toMutableList().asMutableBuffer(), 0)
+    is MutableBufferND<T> -> if (this.strides.strides.toIntArray() contentEquals TensorLinearStructure(this.shape).strides)
+        BufferedTensor(this.shape, this.mutableBuffer, 0) else this.copyToBufferedTensor()
+    else -> this.copyToBufferedTensor()
 }
 
 internal val TensorStructure<Double>.tensor: DoubleTensor
@@ -77,3 +82,5 @@ internal val TensorStructure<Int>.tensor: IntTensor
         else -> this.toBufferedTensor().asTensor()
     }
 
+public fun TensorStructure<Double>.toTypedTensor(): DoubleTensor = this.tensor
+public fun TensorStructure<Int>.toTypedTensor(): IntTensor = this.tensor
