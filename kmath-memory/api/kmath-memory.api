@@ -70,3 +70,8 @@ public abstract interface class space/kscience/kmath/memory/MemoryWriter {
 	public abstract fun writeShort (IS)V
 }
 
+public final class space/kscience/kmath/memory/foreign/ForeignMemoryKt {
+	public static final fun allocateAsForeign (Lspace/kscience/kmath/memory/Memory$Companion;I)Lspace/kscience/kmath/memory/Memory;
+	public static final fun wrapAsForeign (Lspace/kscience/kmath/memory/Memory$Companion;[B)Lspace/kscience/kmath/memory/Memory;
+}
+
