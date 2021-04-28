@@ -47,17 +47,17 @@ internal inline fun <T> BufferedTensor<T>.minusIndex(i: Int): Int =  minusIndexF
 
 internal inline fun format(value: Double, digits: Int = 4): String {
     val ten = 10.0
-    val approxOrder = ceil(log10(abs(value))).toInt()
+    val approxOrder = if(value == 0.0) 0 else ceil(log10(abs(value))).toInt()
     val order = if(
         ((value % ten) == 0.0) or
         (value == 1.0) or
         ((1/value) % ten == 0.0)) approxOrder else approxOrder - 1
-
     val lead = value / ten.pow(order)
     val leadDisplay = round(lead*ten.pow(digits)) / ten.pow(digits)
     val orderDisplay = if(order == 0) "" else if(order > 0) "E+$order" else "E$order"
     val valueDisplay = "$leadDisplay$orderDisplay"
     val res = if(value < 0.0) valueDisplay else " $valueDisplay"
+
     val fLength = digits + 6
     val endSpace = " ".repeat(fLength - res.length)
     return "$res$endSpace"
