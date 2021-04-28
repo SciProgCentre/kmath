@@ -16,8 +16,7 @@ The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-7`
 ```gradle
 repositories {
     maven { url 'https://repo.kotlin.link' }
-    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+    mavenCentral()
 }
 
 dependencies {
@@ -28,8 +27,7 @@ dependencies {
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")
-    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
-    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+    mavenCentral()
 }
 
 dependencies {
