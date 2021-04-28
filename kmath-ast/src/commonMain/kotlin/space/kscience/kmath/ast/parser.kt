@@ -29,7 +29,6 @@ import space.kscience.kmath.operations.RingOperations
  * @author Iaroslav Postovalov
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
-    // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
     private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
     private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by literalToken("(")
