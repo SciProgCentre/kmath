@@ -30,20 +30,17 @@ fun main() {
 
         println("Real alpha:\n$alpha")
 
-        // also take sample of size 20 from normal distribution for x TODO rename
+        // also take sample of size 20 from normal distribution for x
         val x = randNormal(
             intArrayOf(20, 5),
             randSeed
         )
 
         // calculate y and add gaussian noise (N(0, 0.05))
-        // TODO: please add an intercept: Y = beta * X + alpha + N(0,0.5)
         val y = x dot alpha
         y += y.randNormalLike(randSeed) * 0.05
 
         // now restore the coefficient vector with OSL estimator with SVD
-        // TODO: you need to change accordingly [X 1] [alpha beta] = Y
-        // TODO: inverting [X 1] via SVD
         val (u, singValues, v) = x.svd()
 
         // we have to make sure the singular values of the matrix are not close to zero
