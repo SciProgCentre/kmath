@@ -7,9 +7,9 @@ Common operations on tensors, the API consists of:
  - [LinearOpsTensorAlgebra](src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Linear algebra operations including LU, QR, Cholesky LL and SVD decompositions
  - [AnalyticTensorAlgebra](src/commonMain/kotlin/space/kscience/kmath/tensors/api/AnalyticTensorAlgebra.kt) : Element-wise analytic operations
 
-The library offers a multiplatform implementation for this interface over the `Double`'s. As the highlight, the user can find:
+The library offers a multiplatform implementation for this interface over the `Double`'s. As a highlight, the user can find:
  - [BroadcastDoubleTensorAlgebra](src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt) : Basic algebra operations implemented with broadcasting.
- - [DoubleLinearOpsTensorAlgebra](src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/DoubleLinearOpsTensorAlgebra.kt) : Includes the power method for SVD and the spectrum of symmetric matrices.
+ - [DoubleLinearOpsTensorAlgebra](src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/DoubleLinearOpsTensorAlgebra.kt) : Contains the power method for SVD and the spectrum of symmetric matrices.
 ## Artifact:
 
 The Maven coordinates of this project are `space.kscience:kmath-tensors:0.3.0-dev-7`.
