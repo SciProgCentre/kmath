@@ -230,6 +230,18 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 <hr/>
 
+* ### [kmath-tensors](kmath-tensors)
+> 
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Basic linear algebra operations on tensors (plus, dot, etc.)
+> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
+> - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
+
+<hr/>
+
 * ### [kmath-viktor](kmath-viktor)
 > 
 >

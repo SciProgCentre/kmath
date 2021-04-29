@@ -10,6 +10,10 @@ import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.broadcastTensors
 import space.kscience.kmath.tensors.core.broadcastTo
 
+/**
+ * Basic linear algebra operations implemented with broadcasting.
+ * For more information: https://pytorch.org/docs/stable/notes/broadcasting.html
+ */
 public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun TensorStructure<Double>.plus(other: TensorStructure<Double>): DoubleTensor {
