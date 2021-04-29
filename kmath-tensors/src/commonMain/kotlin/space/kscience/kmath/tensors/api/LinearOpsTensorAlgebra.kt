@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.api
 /**
  * Common linear algebra operations. Operates on [TensorStructure].
  *
- * @param T the type of items in the tensors.
+ * @param T the type of items closed under division in the tensors.
  */
 public interface LinearOpsTensorAlgebra<T> :
     TensorPartialDivisionAlgebra<T> {

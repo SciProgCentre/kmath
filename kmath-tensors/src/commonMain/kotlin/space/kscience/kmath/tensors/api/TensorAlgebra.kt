@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensors.api
 
 /**
- * Basic linear algebra operations on [TensorStructure].
+ * Algebra over a ring on [TensorStructure].
  * For more information: https://proofwiki.org/wiki/Definition:Algebra_over_Ring
  *
  * @param T the type of items in the tensors.
