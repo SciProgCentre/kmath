@@ -145,7 +145,7 @@ public interface TensorAlgebra<T> {
     /**
      * Numerical negative, element-wise.
      *
-     * @return tensor - negation of the original tensor.
+     * @return tensor negation of the original tensor.
      */
     public operator fun TensorStructure<T>.unaryMinus(): TensorStructure<T>
 
@@ -209,8 +209,8 @@ public interface TensorAlgebra<T> {
      * If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix
      * multiple and removed after.
      * The non-matrix (i.e. batch) dimensions are broadcasted (and thus must be broadcastable).
-     * For example, if `input` is a (j \times 1 \times n \times n) tensor and `other` is a
-     * (k \times n \times n) tensor, out will be a (j \times k \times n \times n) tensor.
+     * For example, if `input` is a (j &times; 1 &times; n &times; n) tensor and `other` is a
+     * (k &times; n &times; n) tensor, out will be a (j &times; k &times; n &times; n) tensor.
      *
      * For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html
      *
@@ -227,17 +227,17 @@ public interface TensorAlgebra<T> {
      *
      * The argument [offset]  controls which diagonal to consider:
      * 1. If [offset] = 0, it is the main diagonal.
-     * 2. If [offset] > 0, it is above the main diagonal.
-     * 3. If [offset] < 0, it is below the main diagonal.
+     * 1. If [offset] > 0, it is above the main diagonal.
+     * 1. If [offset] < 0, it is below the main diagonal.
      *
      * The size of the new matrix will be calculated
      * to make the specified diagonal of the size of the last input dimension.
      * For more information: https://pytorch.org/docs/stable/generated/torch.diag_embed.html
      *
-     * @param diagonalEntries - the input tensor. Must be at least 1-dimensional.
-     * @param offset - which diagonal to consider. Default: 0 (main diagonal).
-     * @param dim1 - first dimension with respect to which to take diagonal. Default: -2.
-     * @param dim2 - second dimension with respect to which to take diagonal. Default: -1.
+     * @param diagonalEntries the input tensor. Must be at least 1-dimensional.
+     * @param offset which diagonal to consider. Default: 0 (main diagonal).
+     * @param dim1 first dimension with respect to which to take diagonal. Default: -2.
+     * @param dim2 second dimension with respect to which to take diagonal. Default: -1.
      *
      * @return tensor whose diagonals of certain 2D planes (specified by [dim1] and [dim2])
      * are filled by [diagonalEntries]
