@@ -49,13 +49,13 @@ public interface LinearOpsTensorAlgebra<T> :
     /**
      * QR decomposition.
      *
-     * Computes the QR decomposition of a matrix or a batch of matrices, and returns a namedtuple `(Q, R)` of tensors.
+     * Computes the QR decomposition of a matrix or a batch of matrices, and returns a pair `(Q, R)` of tensors.
      * Given a tensor `input`, return tensors (Q, R) satisfying ``input = Q * R``,
      * with `Q` being an orthogonal matrix or batch of orthogonal matrices
      * and `R` being an upper triangular matrix or batch of upper triangular matrices.
      * For more information: https://pytorch.org/docs/stable/linalg.html#torch.linalg.qr
      *
-     * @return tuple of Q and R tensors.
+     * @return pair of Q and R tensors.
      */
     public fun TensorStructure<T>.qr(): Pair<TensorStructure<T>, TensorStructure<T>>
 
@@ -82,7 +82,7 @@ public interface LinearOpsTensorAlgebra<T> :
      * Singular Value Decomposition.
      *
      * Computes the singular value decomposition of either a matrix or batch of matrices `input`.
-     * The singular value decomposition is represented as a namedtuple `(U, S, V)`,
+     * The singular value decomposition is represented as a triple `(U, S, V)`,
      * such that ``input = U.dot(diagonalEmbedding(S).dot(V.T))``.
      * If input is a batch of tensors, then U, S, and Vh are also batched with the same batch dimensions as input.
      * For more information: https://pytorch.org/docs/stable/linalg.html#torch.linalg.svd
@@ -93,10 +93,10 @@ public interface LinearOpsTensorAlgebra<T> :
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
-     * represented by a namedtuple (eigenvalues, eigenvectors).
+     * represented by a pair (eigenvalues, eigenvectors).
      * For more information: https://pytorch.org/docs/stable/generated/torch.symeig.html
      *
-     * @return a namedtuple (eigenvalues, eigenvectors)
+     * @return a pair (eigenvalues, eigenvectors)
      */
     public fun TensorStructure<T>.symEig(): Pair<TensorStructure<T>, TensorStructure<T>>
 
