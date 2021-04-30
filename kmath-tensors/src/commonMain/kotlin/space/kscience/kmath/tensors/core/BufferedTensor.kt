@@ -15,7 +15,7 @@ public open class BufferedTensor<T>(
         get() = TensorLinearStructure(shape)
 
     public val numElements: Int
-        get() = linearStructure.size
+        get() = linearStructure.linearSize
 
     override fun get(index: IntArray): T = mutableBuffer[bufferStart + linearStructure.offset(index)]
 
@@ -60,7 +60,7 @@ internal fun <T> TensorStructure<T>.copyToBufferedTensor(): BufferedTensor<T> =
 
 internal fun <T> TensorStructure<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
-    is MutableBufferND<T> -> if (this.strides.strides.toIntArray() contentEquals TensorLinearStructure(this.shape).strides)
+    is MutableBufferND<T> -> if (this.strides.strides contentEquals TensorLinearStructure(this.shape).strides)
         BufferedTensor(this.shape, this.mutableBuffer, 0) else this.copyToBufferedTensor()
     else -> this.copyToBufferedTensor()
 }

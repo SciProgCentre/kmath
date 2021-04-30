@@ -184,7 +184,7 @@ public interface Strides {
     /**
      * Array strides
      */
-    public val strides: List<Int>
+    public val strides: IntArray
 
     /**
      * Get linear index from multidimensional index
@@ -221,7 +221,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     /**
      * Strides for memory access
      */
-    override val strides: List<Int> by lazy {
+    override val strides: IntArray by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -230,7 +230,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
                 current *= it
                 yield(current)
             }
-        }.toList()
+        }.toList().toIntArray()
     }
 
     override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->

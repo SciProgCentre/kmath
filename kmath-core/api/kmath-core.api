@@ -789,7 +789,7 @@ public final class space/kscience/kmath/nd/DefaultStrides : space/kscience/kmath
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLinearSize ()I
 	public fun getShape ()[I
-	public fun getStrides ()Ljava/util/List;
+	public fun getStrides ()[I
 	public fun hashCode ()I
 	public fun index (I)[I
 	public fun offset ([I)I
@@ -931,7 +931,7 @@ public final class space/kscience/kmath/nd/ShortRingNDKt {
 public abstract interface class space/kscience/kmath/nd/Strides {
 	public abstract fun getLinearSize ()I
 	public abstract fun getShape ()[I
-	public abstract fun getStrides ()Ljava/util/List;
+	public abstract fun getStrides ()[I
 	public abstract fun index (I)[I
 	public fun indices ()Lkotlin/sequences/Sequence;
 	public abstract fun offset ([I)I
