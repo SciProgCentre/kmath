@@ -30,7 +30,7 @@ internal class TestBroadcasting {
 
         val res = broadcastTo(tensor2, tensor1.shape)
         assertTrue(res.shape contentEquals intArrayOf(2, 3))
-        assertTrue(res.buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
+        assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
     }
 
     @Test
@@ -45,9 +45,9 @@ internal class TestBroadcasting {
         assertTrue(res[1].shape contentEquals intArrayOf(1, 2, 3))
         assertTrue(res[2].shape contentEquals intArrayOf(1, 2, 3))
 
-        assertTrue(res[0].buffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        assertTrue(res[1].buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
-        assertTrue(res[2].buffer.array() contentEquals doubleArrayOf(500.0, 500.0, 500.0, 500.0, 500.0, 500.0))
+        assertTrue(res[0].mutableBuffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        assertTrue(res[1].mutableBuffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
+        assertTrue(res[2].mutableBuffer.array() contentEquals doubleArrayOf(500.0, 500.0, 500.0, 500.0, 500.0, 500.0))
     }
 
     @Test
@@ -62,9 +62,9 @@ internal class TestBroadcasting {
         assertTrue(res[1].shape contentEquals intArrayOf(1, 1, 3))
         assertTrue(res[2].shape contentEquals intArrayOf(1, 1, 1))
 
-        assertTrue(res[0].buffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
-        assertTrue(res[1].buffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0))
-        assertTrue(res[2].buffer.array() contentEquals doubleArrayOf(500.0))
+        assertTrue(res[0].mutableBuffer.array() contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+        assertTrue(res[1].mutableBuffer.array() contentEquals doubleArrayOf(10.0, 20.0, 30.0))
+        assertTrue(res[2].mutableBuffer.array() contentEquals doubleArrayOf(500.0))
     }
 
     @Test
@@ -91,16 +91,16 @@ internal class TestBroadcasting {
         val tensor32 = tensor3 - tensor2
 
         assertTrue(tensor21.shape contentEquals intArrayOf(2, 3))
-        assertTrue(tensor21.buffer.array() contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))
+        assertTrue(tensor21.mutableBuffer.array() contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))
 
         assertTrue(tensor31.shape contentEquals intArrayOf(1, 2, 3))
         assertTrue(
-            tensor31.buffer.array()
+            tensor31.mutableBuffer.array()
                     contentEquals doubleArrayOf(499.0, 498.0, 497.0, 496.0, 495.0, 494.0)
         )
 
         assertTrue(tensor32.shape contentEquals intArrayOf(1, 1, 3))
-        assertTrue(tensor32.buffer.array() contentEquals doubleArrayOf(490.0, 480.0, 470.0))
+        assertTrue(tensor32.mutableBuffer.array() contentEquals doubleArrayOf(490.0, 480.0, 470.0))
     }
 
 }

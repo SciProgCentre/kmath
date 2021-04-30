@@ -106,7 +106,7 @@ public object DoubleLinearOpsTensorAlgebra :
             val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
             val curMatrix = DoubleTensor(
                 matrix.shape,
-                matrix.buffer.array().slice(matrix.bufferStart until matrix.bufferStart + matrixSize).toDoubleArray()
+                matrix.mutableBuffer.array().slice(matrix.bufferStart until matrix.bufferStart + matrixSize).toDoubleArray()
             )
             svdHelper(curMatrix, USV, m, n, epsilon)
         }

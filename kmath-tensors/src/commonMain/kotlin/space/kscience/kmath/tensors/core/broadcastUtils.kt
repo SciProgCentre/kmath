@@ -18,8 +18,8 @@ internal inline fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: Doub
         }
 
         val curLinearIndex = tensor.linearStructure.offset(curMultiIndex)
-        resTensor.buffer.array()[linearIndex] =
-            tensor.buffer.array()[tensor.bufferStart + curLinearIndex]
+        resTensor.mutableBuffer.array()[linearIndex] =
+            tensor.mutableBuffer.array()[tensor.bufferStart + curLinearIndex]
     }
 }
 
@@ -113,7 +113,7 @@ internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<Do
             var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
             curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
-            val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.buffer.array())
+            val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.mutableBuffer.array())
 
             for (i in curMultiIndex.indices) {
                 if (curMultiIndex[i] != 1) {
@@ -133,8 +133,8 @@ internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<Do
                             matrix.linearStructure.index(i)
                 )
 
-                resTensor.buffer.array()[resTensor.bufferStart + newLinearIndex] =
-                    newTensor.buffer.array()[newTensor.bufferStart + curLinearIndex]
+                resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =
+                    newTensor.mutableBuffer.array()[newTensor.bufferStart + curLinearIndex]
             }
         }
         res += resTensor

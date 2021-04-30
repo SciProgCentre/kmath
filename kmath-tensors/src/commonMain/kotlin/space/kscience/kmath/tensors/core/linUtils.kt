@@ -18,7 +18,7 @@ internal inline fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTen
     val vectorOffset = shape[n - 1]
     val vectorShape = intArrayOf(shape.last())
     for (offset in 0 until numElements step vectorOffset) {
-        val vector = BufferedTensor(vectorShape, buffer, offset)
+        val vector = BufferedTensor(vectorShape, mutableBuffer, offset)
         yield(vector)
     }
 }
@@ -29,7 +29,7 @@ internal inline fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTen
     val matrixOffset = shape[n - 1] * shape[n - 2]
     val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
     for (offset in 0 until numElements step matrixOffset) {
-        val matrix = BufferedTensor(matrixShape, buffer, offset)
+        val matrix = BufferedTensor(matrixShape, mutableBuffer, offset)
         yield(matrix)
     }
 }
@@ -322,16 +322,16 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     }
 
     val s = res.map { it.first }.toDoubleArray()
-    val uBuffer = res.map { it.second }.flatMap { it.buffer.array().toList() }.toDoubleArray()
-    val vBuffer = res.map { it.third }.flatMap { it.buffer.array().toList() }.toDoubleArray()
+    val uBuffer = res.map { it.second }.flatMap { it.mutableBuffer.array().toList() }.toDoubleArray()
+    val vBuffer = res.map { it.third }.flatMap { it.mutableBuffer.array().toList() }.toDoubleArray()
     for (i in uBuffer.indices) {
-        matrixU.buffer.array()[matrixU.bufferStart + i] = uBuffer[i]
+        matrixU.mutableBuffer.array()[matrixU.bufferStart + i] = uBuffer[i]
     }
     for (i in s.indices) {
-        matrixS.buffer.array()[matrixS.bufferStart + i] = s[i]
+        matrixS.mutableBuffer.array()[matrixS.bufferStart + i] = s[i]
     }
     for (i in vBuffer.indices) {
-        matrixV.buffer.array()[matrixV.bufferStart + i] = vBuffer[i]
+        matrixV.mutableBuffer.array()[matrixV.bufferStart + i] = vBuffer[i]
     }
 }
 

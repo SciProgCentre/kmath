@@ -30,7 +30,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     fun testExp() = DoubleAnalyticTensorAlgebra.invoke {
         tensor.exp().let {
             assertTrue { shape contentEquals it.shape }
-            assertTrue { buffer.fmap(::exp).epsEqual(it.buffer.array())}
+            assertTrue { buffer.fmap(::exp).epsEqual(it.mutableBuffer.array())}
         }
     }
 }

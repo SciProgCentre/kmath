@@ -6,7 +6,6 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.test.Test
@@ -27,7 +26,7 @@ internal class TestDoubleTensor {
         val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         assertEquals(tensor[intArrayOf(0, 1)], 5.8)
         assertTrue(
-            tensor.elements().map { it.second }.toList().toDoubleArray() contentEquals tensor.buffer.toDoubleArray()
+            tensor.elements().map { it.second }.toList().toDoubleArray() contentEquals tensor.mutableBuffer.toDoubleArray()
         )
     }
 
@@ -71,7 +70,7 @@ internal class TestDoubleTensor {
         val tensorArrayPublic = ndArray.toTypedTensor() // public API, data copied twice
         val sharedTensorArray = tensorArrayPublic.toTypedTensor() // no data copied by matching type
 
-        assertTrue(tensorArray.buffer.array() contentEquals sharedTensorArray.buffer.array())
+        assertTrue(tensorArray.mutableBuffer.array() contentEquals sharedTensorArray.mutableBuffer.array())
 
         tensorArray[intArrayOf(0)] = 55.9
         assertEquals(tensorArrayPublic[intArrayOf(0)], 1.0)
