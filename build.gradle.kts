@@ -4,14 +4,12 @@ plugins {
 
 allprojects {
     repositories {
-        jcenter()
         maven("https://clojars.org/repo")
-        maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-        maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://jitpack.io")
-        maven("http://logicrunch.research.it.uu.se/maven/") {
+        maven("http://logicrunch.research.it.uu.se/maven") {
             isAllowInsecureProtocol = true
         }
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
         mavenCentral()
     }
 
@@ -23,22 +21,16 @@ subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
     afterEvaluate {
-        tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
-            dokkaSourceSets.all {
-                val readmeFile = File(this@subprojects.projectDir, "./README.md")
-                if (readmeFile.exists())
-                    includes.setFrom(includes + readmeFile.absolutePath)
+        tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
+            dependsOn(tasks.getByName("assemble"))
 
-                arrayOf(
-                    "http://ejml.org/javadoc/",
-                    "https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/",
-                    "https://deeplearning4j.org/api/latest/"
-                ).map { java.net.URL("${it}package-list") to java.net.URL(it) }.forEach { (a, b) ->
-                    externalDocumentationLink {
-                        packageListUrl.set(a)
-                        url.set(b)
-                    }
-                }
+            dokkaSourceSets.all {
+                val readmeFile = File(this@subprojects.projectDir, "README.md")
+                if (readmeFile.exists()) includes.setFrom(includes + readmeFile.absolutePath)
+                externalDocumentationLink("http://ejml.org/javadoc/")
+                externalDocumentationLink("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/")
+                externalDocumentationLink("https://deeplearning4j.org/api/latest/")
+                externalDocumentationLink("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
             }
         }
     }
