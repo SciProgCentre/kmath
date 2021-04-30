@@ -77,5 +77,5 @@ internal val TensorStructure<Int>.tensor: IntTensor
         else -> this.toBufferedTensor().asTensor()
     }
 
-public fun TensorStructure<Double>.toTypedTensor(): DoubleTensor = this.tensor
-public fun TensorStructure<Int>.toTypedTensor(): IntTensor = this.tensor
+public fun TensorStructure<Double>.toDoubleTensor(): DoubleTensor = this.tensor
+public fun TensorStructure<Int>.toIntTensor(): IntTensor = this.tensor

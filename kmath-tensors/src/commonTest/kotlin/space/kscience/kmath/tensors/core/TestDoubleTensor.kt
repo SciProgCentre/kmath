@@ -67,8 +67,8 @@ internal class TestDoubleTensor {
         val bufferedTensorArray = ndArray.toBufferedTensor() // strides are flipped so data copied
         val tensorArray = bufferedTensorArray.asTensor() // data not contiguous so copied again
 
-        val tensorArrayPublic = ndArray.toTypedTensor() // public API, data copied twice
-        val sharedTensorArray = tensorArrayPublic.toTypedTensor() // no data copied by matching type
+        val tensorArrayPublic = ndArray.toDoubleTensor() // public API, data copied twice
+        val sharedTensorArray = tensorArrayPublic.toDoubleTensor() // no data copied by matching type
 
         assertTrue(tensorArray.mutableBuffer.array() contentEquals sharedTensorArray.mutableBuffer.array())
 
