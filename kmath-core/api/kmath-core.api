@@ -1881,15 +1881,6 @@ public final class space/kscience/kmath/structures/MutableBuffer$Companion {
 	public final fun short-1yRgbGw (ILkotlin/jvm/functions/Function1;)[S
 }
 
-public final class space/kscience/kmath/structures/MutableBufferFromGenerator : space/kscience/kmath/structures/MutableBuffer {
-	public fun <init> (ILkotlin/jvm/functions/Function1;)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public fun get (I)Ljava/lang/Object;
-	public fun getSize ()I
-	public fun iterator ()Ljava/util/Iterator;
-	public fun set (ILjava/lang/Object;)V
-}
-
 public final class space/kscience/kmath/structures/MutableListBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableListBuffer;
 	public static fun constructor-impl (ILkotlin/jvm/functions/Function1;)Ljava/util/List;

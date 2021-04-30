@@ -292,24 +292,6 @@ public class VirtualBuffer<T>(override val size: Int, private val generator: (In
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
 }
 
-public class MutableBufferFromGenerator<T>(override val size: Int, private val generator: (Int) -> T) : MutableBuffer<T> {
-
-    private val bufferHolder: MutableListBuffer<T> = (0 until size).map(generator).toMutableList().asMutableBuffer()
-
-    override operator fun get(index: Int): T {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
-        return bufferHolder[index]
-    }
-
-    override operator fun iterator(): Iterator<T> = bufferHolder.iterator()
-
-    override fun set(index: Int, value: T) {
-        bufferHolder[index] = value
-    }
-
-    override fun copy(): MutableBuffer<T> = bufferHolder.copy()
-}
-
 /**
  * Convert this buffer to read-only buffer.
  */

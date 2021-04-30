@@ -8,7 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
-import space.kscience.kmath.structures.MutableBufferFromGenerator
+import space.kscience.kmath.structures.MutableListBuffer
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -81,13 +81,13 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
     override val rows: List<MutableStructure1D<T>>
-        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableBufferFromGenerator(colNum) { j -> get(i, j) })}
+        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) })}
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
     override val columns: List<MutableStructure1D<T>>
-        get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableBufferFromGenerator(rowNum) { i -> get(i, j) }) }
+        get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableListBuffer(rowNum) { i -> get(i, j) }) }
 }
 
 /**
