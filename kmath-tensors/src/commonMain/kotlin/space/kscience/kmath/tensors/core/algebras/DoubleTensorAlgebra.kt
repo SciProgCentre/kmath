@@ -23,6 +23,7 @@ import kotlin.math.abs
 
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
+    public companion object : DoubleTensorAlgebra()
 
     override fun TensorStructure<Double>.value(): Double {
         check(tensor.shape contentEquals intArrayOf(1)) {
@@ -395,7 +396,3 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
 }
-
-
-public inline fun <R> DoubleTensorAlgebra(block: DoubleTensorAlgebra.() -> R): R =
-    DoubleTensorAlgebra().block()

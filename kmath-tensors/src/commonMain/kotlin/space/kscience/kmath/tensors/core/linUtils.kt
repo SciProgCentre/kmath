@@ -4,6 +4,7 @@ import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 import kotlin.math.abs
@@ -251,7 +252,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
                 }
             }
         }
-        r[j, j] = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+        r[j, j] = DoubleAnalyticTensorAlgebra.invoke { (v dot v).sqrt().value() }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }

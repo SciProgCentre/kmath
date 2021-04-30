@@ -1,10 +1,6 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
 import kotlin.math.max
-
-public inline fun <R> BroadcastDoubleTensorAlgebra(block: BroadcastDoubleTensorAlgebra.() -> R): R =
-    BroadcastDoubleTensorAlgebra().block()
 
 internal inline fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {
     for (linearIndex in 0 until linearSize) {

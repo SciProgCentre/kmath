@@ -21,7 +21,7 @@ import space.kscience.kmath.tensors.core.pivInit
 import kotlin.math.min
 
 
-public class DoubleLinearOpsTensorAlgebra :
+public object DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double>,
     DoubleTensorAlgebra() {
 
@@ -30,8 +30,8 @@ public class DoubleLinearOpsTensorAlgebra :
     override fun TensorStructure<Double>.det(): DoubleTensor = detLU(1e-9)
 
     public fun TensorStructure<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
-        computeLU(tensor, epsilon) ?:
-        throw RuntimeException("Tensor contains matrices which are singular at precision $epsilon")
+        computeLU(tensor, epsilon)
+            ?: throw RuntimeException("Tensor contains matrices which are singular at precision $epsilon")
 
     public fun TensorStructure<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
 
@@ -175,8 +175,4 @@ public class DoubleLinearOpsTensorAlgebra :
 
     override fun TensorStructure<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
 
-
 }
-
-public inline fun <R> DoubleLinearOpsTensorAlgebra(block: DoubleLinearOpsTensorAlgebra.() -> R): R =
-    DoubleLinearOpsTensorAlgebra().block()

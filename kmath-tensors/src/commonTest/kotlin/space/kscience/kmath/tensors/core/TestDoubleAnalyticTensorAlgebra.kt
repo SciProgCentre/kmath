@@ -1,12 +1,13 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class TestDoubleAnalyticTensorAlgebra {
+internal class TestDoubleAnalyticTensorAlgebra {
 
     val shape = intArrayOf(2, 1, 3, 2)
     val buffer = doubleArrayOf(27.1, 20.0, 19.84, 23.123, 0.0, 1.0, 3.23, 133.7, 25.3, 100.3, 11.0, 12.012)
@@ -26,7 +27,7 @@ class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testExp() = DoubleAnalyticTensorAlgebra {
+    fun testExp() = DoubleAnalyticTensorAlgebra.invoke {
         tensor.exp().let {
             assertTrue { shape contentEquals it.shape }
             assertTrue { buffer.fmap(::exp).epsEqual(it.buffer.array())}

@@ -11,10 +11,9 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.tensor
 import kotlin.math.*
 
-public class DoubleAnalyticTensorAlgebra:
+public object DoubleAnalyticTensorAlgebra :
     AnalyticTensorAlgebra<Double>,
-        DoubleTensorAlgebra()
-{
+    DoubleTensorAlgebra() {
     override fun TensorStructure<Double>.exp(): DoubleTensor = tensor.map(::exp)
 
     override fun TensorStructure<Double>.log(): DoubleTensor = tensor.map(::ln)
@@ -50,6 +49,3 @@ public class DoubleAnalyticTensorAlgebra:
     override fun TensorStructure<Double>.floor(): DoubleTensor = tensor.map(::floor)
 
 }
-
-public inline fun <R> DoubleAnalyticTensorAlgebra(block: DoubleAnalyticTensorAlgebra.() -> R): R =
-    DoubleAnalyticTensorAlgebra().block()

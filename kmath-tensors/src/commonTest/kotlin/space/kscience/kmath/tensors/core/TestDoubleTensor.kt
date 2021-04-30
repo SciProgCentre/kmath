@@ -4,6 +4,7 @@ import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.structures.toDoubleArray
@@ -12,17 +13,17 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class TestDoubleTensor {
+internal class TestDoubleTensor {
 
     @Test
-    fun valueTest() = DoubleTensorAlgebra {
+    fun valueTest() = DoubleTensorAlgebra.invoke {
         val value = 12.5
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)
     }
 
     @Test
-    fun stridesTest() = DoubleTensorAlgebra {
+    fun stridesTest() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         assertEquals(tensor[intArrayOf(0, 1)], 5.8)
         assertTrue(
@@ -31,7 +32,7 @@ class TestDoubleTensor {
     }
 
     @Test
-    fun getTest() = DoubleTensorAlgebra {
+    fun getTest() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         val matrix = tensor[0].as2D()
         assertEquals(matrix[0, 1], 5.8)

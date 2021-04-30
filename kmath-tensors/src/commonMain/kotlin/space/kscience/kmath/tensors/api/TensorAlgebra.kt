@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.operations.Algebra
+
 /**
  * Algebra over a ring on [TensorStructure].
  * For more information: https://proofwiki.org/wiki/Definition:Algebra_over_Ring
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T> {
+public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
 
     /**
      * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].

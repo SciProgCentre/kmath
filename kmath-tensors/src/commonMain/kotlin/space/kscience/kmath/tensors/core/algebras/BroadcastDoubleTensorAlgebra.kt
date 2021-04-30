@@ -14,7 +14,7 @@ import space.kscience.kmath.tensors.core.broadcastTo
  * Basic linear algebra operations implemented with broadcasting.
  * For more information: https://pytorch.org/docs/stable/notes/broadcasting.html
  */
-public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
+public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun TensorStructure<Double>.plus(other: TensorStructure<Double>): DoubleTensor {
         val broadcast = broadcastTensors(tensor, other.tensor)
@@ -89,5 +89,4 @@ public class BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
                 newOther.buffer.array()[tensor.bufferStart + i]
         }
     }
-
 }

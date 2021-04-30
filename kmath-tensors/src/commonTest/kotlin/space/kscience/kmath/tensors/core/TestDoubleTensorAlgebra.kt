@@ -1,29 +1,30 @@
 package space.kscience.kmath.tensors.core
 
 
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TestDoubleTensorAlgebra {
+internal class TestDoubleTensorAlgebra {
 
     @Test
-    fun doublePlus() = DoubleTensorAlgebra {
+    fun doublePlus() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(1.0, 2.0))
         val res = 10.0 + tensor
         assertTrue(res.buffer.array() contentEquals doubleArrayOf(11.0, 12.0))
     }
 
     @Test
-    fun doubleDiv() = DoubleTensorAlgebra {
+    fun doubleDiv() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
         val res = 2.0/tensor
         assertTrue(res.buffer.array() contentEquals doubleArrayOf(1.0, 0.5))
     }
 
     @Test
-    fun divDouble() = DoubleTensorAlgebra {
+    fun divDouble() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(10.0, 5.0))
         val res = tensor / 2.5
         assertTrue(res.buffer.array() contentEquals doubleArrayOf(4.0, 2.0))
@@ -39,7 +40,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun transpose3x2() = DoubleTensorAlgebra {
+    fun transpose3x2() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res = tensor.transpose(1, 0)
 
@@ -48,7 +49,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun transpose1x2x3() = DoubleTensorAlgebra {
+    fun transpose1x2x3() = DoubleTensorAlgebra.invoke {
         val tensor = fromArray(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res01 = tensor.transpose(0, 1)
         val res02 = tensor.transpose(-3, 2)
@@ -64,7 +65,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun linearStructure() = DoubleTensorAlgebra {
+    fun linearStructure() = DoubleTensorAlgebra.invoke {
         val shape = intArrayOf(3)
         val tensorA = full(value = -4.5, shape = shape)
         val tensorB = full(value = 10.9, shape = shape)
@@ -96,7 +97,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun dot() = DoubleTensorAlgebra {
+    fun dot() = DoubleTensorAlgebra.invoke {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor11 = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
@@ -132,7 +133,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun diagonalEmbedding() = DoubleTensorAlgebra {
+    fun diagonalEmbedding() = DoubleTensorAlgebra.invoke {
         val tensor1 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = zeros(intArrayOf(2, 3, 4, 5))
@@ -165,7 +166,7 @@ class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun testEq() = DoubleTensorAlgebra {
+    fun testEq() = DoubleTensorAlgebra.invoke {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 5.0))
