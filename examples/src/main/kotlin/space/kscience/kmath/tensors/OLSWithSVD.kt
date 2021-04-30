@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
@@ -18,7 +19,7 @@ fun main() {
     val randSeed = 100500L
 
     // work in context with linear operations
-    DoubleLinearOpsTensorAlgebra {
+    DoubleLinearOpsTensorAlgebra.invoke {
         // take coefficient vector from normal distribution
         val alpha = randNormal(
             intArrayOf(5),
