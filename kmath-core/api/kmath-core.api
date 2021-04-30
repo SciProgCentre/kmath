@@ -792,7 +792,6 @@ public final class space/kscience/kmath/nd/DefaultStrides : space/kscience/kmath
 	public fun getStrides ()[I
 	public fun hashCode ()I
 	public fun index (I)[I
-	public fun offset ([I)I
 }
 
 public final class space/kscience/kmath/nd/DefaultStrides$Companion {
@@ -934,7 +933,7 @@ public abstract interface class space/kscience/kmath/nd/Strides {
 	public abstract fun getStrides ()[I
 	public abstract fun index (I)[I
 	public fun indices ()Lkotlin/sequences/Sequence;
-	public abstract fun offset ([I)I
+	public fun offset ([I)I
 }
 
 public abstract interface class space/kscience/kmath/nd/Structure1D : space/kscience/kmath/nd/StructureND, space/kscience/kmath/structures/Buffer {

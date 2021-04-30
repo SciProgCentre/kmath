@@ -75,14 +75,13 @@ internal fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> 
     val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
 
-    val res = ArrayList<DoubleTensor>(0)
-    for (tensor in tensors) {
-        val resTensor = DoubleTensor(totalShape, DoubleArray(n))
-        multiIndexBroadCasting(tensor, resTensor, n)
-        res.add(resTensor)
+    return  buildList {
+        for (tensor in tensors) {
+            val resTensor = DoubleTensor(totalShape, DoubleArray(n))
+            multiIndexBroadCasting(tensor, resTensor, n)
+            add(resTensor)
+        }
     }
-
-    return res
 }
 
 internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {

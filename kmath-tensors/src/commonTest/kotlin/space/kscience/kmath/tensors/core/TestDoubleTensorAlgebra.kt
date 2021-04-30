@@ -170,7 +170,6 @@ internal class TestDoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 5.0))
-        val tensor4 = fromArray(intArrayOf(6, 1), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
 
         assertTrue(tensor1 eq tensor1)
         assertTrue(tensor1 eq tensor2)

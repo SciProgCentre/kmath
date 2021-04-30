@@ -68,8 +68,6 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides
     override val strides: IntArray
         get() = stridesFromShape(shape)
 
-    override fun offset(index: IntArray): Int = offsetFromIndex(index, shape, strides)
-
     override fun index(offset: Int): IntArray =
         indexFromOffset(offset, strides, shape.size)
 
@@ -82,7 +80,4 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides
     public val dim: Int
         get() = shape.size
 
-    override fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map {
-        index(it)
-    }
 }
