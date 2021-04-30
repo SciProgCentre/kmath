@@ -116,7 +116,7 @@ public class DoubleLinearOpsTensorAlgebra :
     override fun TensorStructure<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
         symEig(epsilon = 1e-15)
 
-    //http://hua-zhou.github.io/teaching/biostatm280-2017spring/slides/16-eigsvd/eigsvd.html
+    //For information: http://hua-zhou.github.io/teaching/biostatm280-2017spring/slides/16-eigsvd/eigsvd.html
     public fun TensorStructure<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
         val (u, s, v) = tensor.svd(epsilon)
