@@ -42,8 +42,7 @@ fun main () {
         // solve `Ax = b` system using LUP decomposition
 
         // get P, L, U such that PA = LU
-        val (lu, pivots) = a.lu()
-        val (p, l, u) = luPivot(lu, pivots)
+        val (p, l, u) = a.lu()
 
         // check that P is permutation matrix
         println("P:\n$p")

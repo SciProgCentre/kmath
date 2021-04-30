@@ -124,9 +124,7 @@ class TestDoubleLinearOpsTensorAlgebra {
         )
         val tensor = fromArray(shape, buffer)
 
-        val (lu, pivots) = tensor.lu()
-
-        val (p, l, u) = luPivot(lu, pivots)
+        val (p, l, u) = tensor.lu()
 
         assertTrue { p.shape contentEquals shape }
         assertTrue { l.shape contentEquals shape }

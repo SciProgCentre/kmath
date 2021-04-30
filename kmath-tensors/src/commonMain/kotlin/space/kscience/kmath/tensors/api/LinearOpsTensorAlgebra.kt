@@ -60,23 +60,17 @@ public interface LinearOpsTensorAlgebra<T> :
     public fun TensorStructure<T>.qr(): Pair<TensorStructure<T>, TensorStructure<T>>
 
     /**
-     * TODO('Andrew')
-     * For more information: https://pytorch.org/docs/stable/generated/torch.lu.html
+     * LUP decomposition
      *
-     * @return ...
-     */
-    public fun TensorStructure<T>.lu(): Pair<TensorStructure<T>, TensorStructure<Int>>
-
-    /**
-     * TODO('Andrew')
-     * For more information: https://pytorch.org/docs/stable/generated/torch.lu_unpack.html
+     * Computes the LUP decomposition of a matrix or a batch of matrices.
+     * Given a tensor `input`, return tensors (P, L, U) satisfying ``P * input = L * U``,
+     * with `P` being a permutation matrix or batch of matrices,
+     * `L` being a lower triangular matrix or batch of matrices,
+     * `U` being an upper triangular matrix or batch of matrices.
      *
-     * @param luTensor ...
-     * @param pivotsTensor ...
-     * @return ...
+     * * @return triple of P, L and U tensors
      */
-    public fun luPivot(luTensor: TensorStructure<T>, pivotsTensor: TensorStructure<Int>):
-            Triple<TensorStructure<T>, TensorStructure<T>, TensorStructure<T>>
+    public fun TensorStructure<T>.lu(): Triple<TensorStructure<T>, TensorStructure<T>, TensorStructure<T>>
 
     /**
      * Singular Value Decomposition.

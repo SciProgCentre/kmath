@@ -29,13 +29,13 @@ public class DoubleLinearOpsTensorAlgebra :
 
     override fun TensorStructure<Double>.det(): DoubleTensor = detLU(1e-9)
 
-    public fun TensorStructure<Double>.lu(epsilon: Double): Pair<DoubleTensor, IntTensor> =
+    public fun TensorStructure<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
         computeLU(tensor, epsilon) ?:
         throw RuntimeException("Tensor contains matrices which are singular at precision $epsilon")
 
-    override fun TensorStructure<Double>.lu(): Pair<DoubleTensor, IntTensor> = lu(1e-9)
+    public fun TensorStructure<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
 
-    override fun luPivot(
+    public fun luPivot(
         luTensor: TensorStructure<Double>,
         pivotsTensor: TensorStructure<Int>
     ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
@@ -156,7 +156,7 @@ public class DoubleLinearOpsTensorAlgebra :
     }
 
     public fun TensorStructure<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
-        val (luTensor, pivotsTensor) = lu(epsilon)
+        val (luTensor, pivotsTensor) = luFactor(epsilon)
         val invTensor = luTensor.zeroesLike()
 
         val seq = luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).zip(invTensor.matrixSequence())
@@ -167,6 +167,15 @@ public class DoubleLinearOpsTensorAlgebra :
 
         return invTensor
     }
+
+    public fun TensorStructure<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        val (lu, pivots) = this.luFactor(epsilon)
+        return luPivot(lu, pivots)
+    }
+
+    override fun TensorStructure<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
+
+
 }
 
 public inline fun <R> DoubleLinearOpsTensorAlgebra(block: DoubleLinearOpsTensorAlgebra.() -> R): R =
