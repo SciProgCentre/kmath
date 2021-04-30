@@ -2,7 +2,7 @@ package space.kscience.kmath.tensors.core
 
 import kotlin.math.max
 
-internal inline fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {
+internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {
     for (linearIndex in 0 until linearSize) {
         val totalMultiIndex = resTensor.linearStructure.index(linearIndex)
         val curMultiIndex = tensor.shape.copyOf()
@@ -23,7 +23,7 @@ internal inline fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: Doub
     }
 }
 
-internal inline fun broadcastShapes(vararg shapes: IntArray): IntArray {
+internal fun broadcastShapes(vararg shapes: IntArray): IntArray {
     var totalDim = 0
     for (shape in shapes) {
         totalDim = max(totalDim, shape.size)
@@ -51,7 +51,7 @@ internal inline fun broadcastShapes(vararg shapes: IntArray): IntArray {
     return totalShape
 }
 
-internal inline fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor {
+internal fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor {
     if (tensor.shape.size > newShape.size) {
         throw RuntimeException("Tensor is not compatible with the new shape")
     }
@@ -71,7 +71,7 @@ internal inline fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): Doubl
     return resTensor
 }
 
-internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
+internal fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
     val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
 
@@ -85,7 +85,7 @@ internal inline fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleT
     return res
 }
 
-internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
+internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
     val onlyTwoDims = tensors.asSequence().onEach {
         require(it.shape.size >= 2) {
             throw RuntimeException("Tensors must have at least 2 dimensions")
@@ -99,46 +99,45 @@ internal inline fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<Do
     val totalShape = broadcastShapes(*(tensors.map { it.shape.sliceArray(0..it.shape.size - 3) }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
 
-    val res = ArrayList<DoubleTensor>(0)
-    for (tensor in tensors) {
-        val matrixShape = tensor.shape.sliceArray(tensor.shape.size - 2 until tensor.shape.size).copyOf()
-        val matrixSize = matrixShape[0] * matrixShape[1]
-        val matrix = DoubleTensor(matrixShape, DoubleArray(matrixSize))
+    return buildList {
+        for (tensor in tensors) {
+            val matrixShape = tensor.shape.sliceArray(tensor.shape.size - 2 until tensor.shape.size).copyOf()
+            val matrixSize = matrixShape[0] * matrixShape[1]
+            val matrix = DoubleTensor(matrixShape, DoubleArray(matrixSize))
 
-        val outerTensor = DoubleTensor(totalShape, DoubleArray(n))
-        val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
+            val outerTensor = DoubleTensor(totalShape, DoubleArray(n))
+            val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
 
-        for (linearIndex in 0 until n) {
-            val totalMultiIndex = outerTensor.linearStructure.index(linearIndex)
-            var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
-            curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
+            for (linearIndex in 0 until n) {
+                val totalMultiIndex = outerTensor.linearStructure.index(linearIndex)
+                var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
+                curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
-            val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.mutableBuffer.array())
+                val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.mutableBuffer.array())
 
-            for (i in curMultiIndex.indices) {
-                if (curMultiIndex[i] != 1) {
-                    curMultiIndex[i] = totalMultiIndex[i]
-                } else {
-                    curMultiIndex[i] = 0
+                for (i in curMultiIndex.indices) {
+                    if (curMultiIndex[i] != 1) {
+                        curMultiIndex[i] = totalMultiIndex[i]
+                    } else {
+                        curMultiIndex[i] = 0
+                    }
+                }
+
+                for (i in 0 until matrixSize) {
+                    val curLinearIndex = newTensor.linearStructure.offset(
+                        curMultiIndex +
+                                matrix.linearStructure.index(i)
+                    )
+                    val newLinearIndex = resTensor.linearStructure.offset(
+                        totalMultiIndex +
+                                matrix.linearStructure.index(i)
+                    )
+
+                    resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =
+                        newTensor.mutableBuffer.array()[newTensor.bufferStart + curLinearIndex]
                 }
             }
-
-            for (i in 0 until matrixSize) {
-                val curLinearIndex = newTensor.linearStructure.offset(
-                    curMultiIndex +
-                            matrix.linearStructure.index(i)
-                )
-                val newLinearIndex = resTensor.linearStructure.offset(
-                    totalMultiIndex +
-                            matrix.linearStructure.index(i)
-                )
-
-                resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =
-                    newTensor.mutableBuffer.array()[newTensor.bufferStart + curLinearIndex]
-            }
+            add(resTensor)
         }
-        res += resTensor
     }
-
-    return res
 }

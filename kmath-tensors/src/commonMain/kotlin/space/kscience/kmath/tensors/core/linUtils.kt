@@ -13,7 +13,7 @@ import kotlin.math.sign
 import kotlin.math.sqrt
 
 
-internal inline fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTensor<T>> = sequence {
+internal fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTensor<T>> = sequence {
     val n = shape.size
     val vectorOffset = shape[n - 1]
     val vectorShape = intArrayOf(shape.last())
@@ -23,9 +23,9 @@ internal inline fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTen
     }
 }
 
-internal inline fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = sequence {
-    check(shape.size >= 2) { "todo" }
+internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = sequence {
     val n = shape.size
+    check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
     val matrixOffset = shape[n - 1] * shape[n - 2]
     val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
     for (offset in 0 until numElements step matrixOffset) {
@@ -46,8 +46,7 @@ internal inline fun <T> BufferedTensor<T>.forEachMatrix(matrixAction: (BufferedT
     }
 }
 
-
-internal inline fun dotHelper(
+internal fun dotHelper(
     a: MutableStructure2D<Double>,
     b: MutableStructure2D<Double>,
     res: MutableStructure2D<Double>,
@@ -64,10 +63,11 @@ internal inline fun dotHelper(
     }
 }
 
-internal inline fun luHelper(
+internal fun luHelper(
     lu: MutableStructure2D<Double>,
     pivots: MutableStructure1D<Int>,
-    epsilon: Double): Boolean {
+    epsilon: Double
+): Boolean {
 
     val m = lu.rowNum
 
@@ -114,7 +114,7 @@ internal inline fun luHelper(
     return false
 }
 
-internal inline fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
+internal fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
     val n = this.shape.size
     val m = this.shape.last()
     val pivotsShape = IntArray(n - 1) { i -> this.shape[i] }
@@ -126,22 +126,23 @@ internal inline fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
     )
 }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.computeLU(
+internal fun DoubleLinearOpsTensorAlgebra.computeLU(
     tensor: DoubleTensor,
-    epsilon: Double): Pair<DoubleTensor, IntTensor>? {
+    epsilon: Double
+): Pair<DoubleTensor, IntTensor>? {
 
     checkSquareMatrix(tensor.shape)
     val luTensor = tensor.copy()
     val pivotsTensor = tensor.setUpPivots()
 
     for ((lu, pivots) in luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()))
-        if(luHelper(lu.as2D(), pivots.as1D(), epsilon))
+        if (luHelper(lu.as2D(), pivots.as1D(), epsilon))
             return null
 
     return Pair(luTensor, pivotsTensor)
 }
 
-internal inline fun pivInit(
+internal fun pivInit(
     p: MutableStructure2D<Double>,
     pivot: MutableStructure1D<Int>,
     n: Int
@@ -151,7 +152,7 @@ internal inline fun pivInit(
     }
 }
 
-internal inline fun luPivotHelper(
+internal fun luPivotHelper(
     l: MutableStructure2D<Double>,
     u: MutableStructure2D<Double>,
     lu: MutableStructure2D<Double>,
@@ -172,7 +173,7 @@ internal inline fun luPivotHelper(
     }
 }
 
-internal inline fun choleskyHelper(
+internal fun choleskyHelper(
     a: MutableStructure2D<Double>,
     l: MutableStructure2D<Double>,
     n: Int
@@ -193,7 +194,7 @@ internal inline fun choleskyHelper(
     }
 }
 
-internal inline fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>): Double {
+internal fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>): Double {
     if (lu[0, 0] == 0.0) {
         return 0.0
     }
@@ -202,7 +203,7 @@ internal inline fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableS
     return (0 until m).asSequence().map { lu[it, it] }.fold(sign) { left, right -> left * right }
 }
 
-internal inline fun luMatrixInv(
+internal fun luMatrixInv(
     lu: MutableStructure2D<Double>,
     pivots: MutableStructure1D<Int>,
     invMatrix: MutableStructure2D<Double>
@@ -229,7 +230,7 @@ internal inline fun luMatrixInv(
     }
 }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
+internal fun DoubleLinearOpsTensorAlgebra.qrHelper(
     matrix: DoubleTensor,
     q: DoubleTensor,
     r: MutableStructure2D<Double>
@@ -259,7 +260,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.qrHelper(
     }
 }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10): DoubleTensor {
+internal fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10): DoubleTensor {
     val (n, m) = a.shape
     var v: DoubleTensor
     val b: DoubleTensor
@@ -283,7 +284,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon:
     }
 }
 
-internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
+internal fun DoubleLinearOpsTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
     USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
     m: Int, n: Int, epsilon: Double
@@ -335,7 +336,7 @@ internal inline fun DoubleLinearOpsTensorAlgebra.svdHelper(
     }
 }
 
-internal inline fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int) {
+internal fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int) {
     for (i in 0 until n)
         for (j in 0 until n) {
             if (i == j) {
