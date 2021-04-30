@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.FieldOperations
 import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
@@ -15,6 +16,7 @@ import space.kscience.kmath.operations.RingOperations
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostProcessStage {
     public override fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
@@ -88,6 +90,7 @@ public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostPro
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessStage {
     private fun perform0(node: MathSyntax): Boolean {
         return when (node) {
@@ -129,6 +132,7 @@ public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessSt
  * @property precedenceFunction Returns the precedence number for syntax node. Higher number is lower priority.
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> Int) :
     FeaturedMathRendererWithPostProcess.PostProcessStage {
     public override fun perform(node: MathSyntax): Unit = when (node) {
