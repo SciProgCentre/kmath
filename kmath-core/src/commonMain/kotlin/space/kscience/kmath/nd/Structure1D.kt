@@ -52,7 +52,7 @@ private value class Structure1DWrapper<T>(val structure: StructureND<T>) : Struc
 /**
  * A 1D wrapper for a mutable nd-structure
  */
-private inline class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure1D<T> {
+private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
@@ -81,7 +81,7 @@ private value class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> {
     override operator fun get(index: Int): T = buffer[index]
 }
 
-internal inline class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
+internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
     override val shape: IntArray get() = intArrayOf(buffer.size)
     override val size: Int get() = buffer.size
 

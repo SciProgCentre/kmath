@@ -292,7 +292,7 @@ public class VirtualBuffer<T>(override val size: Int, private val generator: (In
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
 }
 
-public class VirtualMutableBuffer<T>(override val size: Int, private val generator: (Int) -> T) : MutableBuffer<T> {
+public class MutableBufferFromGenerator<T>(override val size: Int, private val generator: (Int) -> T) : MutableBuffer<T> {
 
     private val bufferHolder: MutableListBuffer<T> = (0 until size).map(generator).toMutableList().asMutableBuffer()
 
