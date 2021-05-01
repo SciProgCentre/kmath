@@ -31,7 +31,7 @@ public object DoubleLinearOpsTensorAlgebra :
 
     public fun TensorStructure<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
         computeLU(tensor, epsilon)
-            ?: throw RuntimeException("Tensor contains matrices which are singular at precision $epsilon")
+            ?: throw IllegalArgumentException("Tensor contains matrices which are singular at precision $epsilon")
 
     public fun TensorStructure<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
 
@@ -47,8 +47,10 @@ public object DoubleLinearOpsTensorAlgebra :
 
         val n = luTensor.shape.last()
         val pTensor = luTensor.zeroesLike()
-        for ((p, pivot) in pTensor.matrixSequence().zip(pivotsTensor.tensor.vectorSequence()))
-            pivInit(p.as2D(), pivot.as1D(), n)
+        pTensor
+            .matrixSequence()
+            .zip(pivotsTensor.tensor.vectorSequence())
+            .forEach { (p, pivot) -> pivInit(p.as2D(), pivot.as1D(), n) }
 
         val lTensor = luTensor.zeroesLike()
         val uTensor = luTensor.zeroesLike()

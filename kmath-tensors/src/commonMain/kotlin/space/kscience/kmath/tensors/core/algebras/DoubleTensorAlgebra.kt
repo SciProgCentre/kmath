@@ -284,7 +284,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         val m1 = newThis.shape[newThis.shape.size - 1]
         val m2 = newOther.shape[newOther.shape.size - 2]
         val n = newOther.shape[newOther.shape.size - 1]
-        if (m1 != m2) {
+        check (m1 == m2) {
             throw RuntimeException("Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)")
         }
 
@@ -315,11 +315,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         val d1 = minusIndexFrom(n + 1, dim1)
         val d2 = minusIndexFrom(n + 1, dim2)
 
-        if (d1 == d2) {
-            throw RuntimeException("Diagonal dimensions cannot be identical $d1, $d2")
+        check(d1 != d2) {
+            "Diagonal dimensions cannot be identical $d1, $d2"
         }
-        if (d1 > n || d2 > n) {
-            throw RuntimeException("Dimension out of range")
+        check(d1 <= n && d2 <= n) {
+            "Dimension out of range"
         }
 
         var lessDim = d1
@@ -366,8 +366,8 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         )
     }
 
-    public fun TensorStructure<Double>.eq(other: TensorStructure<Double>, delta: Double): Boolean {
-        return tensor.eq(other) { x, y -> abs(x - y) < delta }
+    public fun TensorStructure<Double>.eq(other: TensorStructure<Double>, epsilon: Double): Boolean {
+        return tensor.eq(other) { x, y -> abs(x - y) < epsilon }
     }
 
     public infix fun TensorStructure<Double>.eq(other: TensorStructure<Double>): Boolean = tensor.eq(other, 1e-5)
@@ -393,10 +393,10 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return true
     }
 
-    public fun randNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
+    public fun randomNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
         DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
 
-    public fun TensorStructure<Double>.randNormalLike(seed: Long = 0): DoubleTensor =
+    public fun TensorStructure<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
     // stack tensors by axis 0

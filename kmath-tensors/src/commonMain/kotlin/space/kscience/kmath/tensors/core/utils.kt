@@ -69,8 +69,7 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
     val shape = this@toPrettyString.shape
     val linearStructure = this@toPrettyString.linearStructure
     val vectorSize = shape.last()
-    val initString = "DoubleTensor(\n"
-    append(initString)
+    append("DoubleTensor(\n")
     var charOffset = 3
     for (vector in vectorSequence()) {
         repeat(charOffset) { append(' ') }

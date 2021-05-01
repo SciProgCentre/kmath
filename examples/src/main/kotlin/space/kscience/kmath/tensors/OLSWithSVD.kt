@@ -21,7 +21,7 @@ fun main() {
     // work in context with linear operations
     DoubleLinearOpsTensorAlgebra.invoke {
         // take coefficient vector from normal distribution
-        val alpha = randNormal(
+        val alpha = randomNormal(
             intArrayOf(5),
             randSeed
         ) + fromArray(
@@ -32,14 +32,14 @@ fun main() {
         println("Real alpha:\n$alpha")
 
         // also take sample of size 20 from normal distribution for x
-        val x = randNormal(
+        val x = randomNormal(
             intArrayOf(20, 5),
             randSeed
         )
 
         // calculate y and add gaussian noise (N(0, 0.05))
         val y = x dot alpha
-        y += y.randNormalLike(randSeed) * 0.05
+        y += y.randomNormalLike(randSeed) * 0.05
 
         // now restore the coefficient vector with OSL estimator with SVD
         val (u, singValues, v) = x.svd()

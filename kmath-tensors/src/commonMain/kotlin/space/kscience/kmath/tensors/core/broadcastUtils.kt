@@ -42,8 +42,8 @@ internal fun broadcastShapes(vararg shapes: IntArray): IntArray {
         for (i in shape.indices) {
             val curDim = shape[i]
             val offset = totalDim - shape.size
-            if (curDim != 1 && totalShape[i + offset] != curDim) {
-                throw RuntimeException("Shapes are not compatible and cannot be broadcast")
+            check(curDim == 1 || totalShape[i + offset] == curDim) {
+                "Shapes are not compatible and cannot be broadcast"
             }
         }
     }
@@ -52,8 +52,8 @@ internal fun broadcastShapes(vararg shapes: IntArray): IntArray {
 }
 
 internal fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor {
-    if (tensor.shape.size > newShape.size) {
-        throw RuntimeException("Tensor is not compatible with the new shape")
+    require(tensor.shape.size <= newShape.size) {
+        "Tensor is not compatible with the new shape"
     }
 
     val n = newShape.reduce { acc, i -> acc * i }
@@ -62,8 +62,8 @@ internal fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor
     for (i in tensor.shape.indices) {
         val curDim = tensor.shape[i]
         val offset = newShape.size - tensor.shape.size
-        if (curDim != 1 && newShape[i + offset] != curDim) {
-            throw RuntimeException("Tensor is not compatible with the new shape and cannot be broadcast")
+        check(curDim == 1 || newShape[i + offset] == curDim) {
+            "Tensor is not compatible with the new shape and cannot be broadcast"
         }
     }
 
@@ -75,19 +75,17 @@ internal fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> 
     val totalShape = broadcastShapes(*(tensors.map { it.shape }).toTypedArray())
     val n = totalShape.reduce { acc, i -> acc * i }
 
-    return  buildList {
-        for (tensor in tensors) {
-            val resTensor = DoubleTensor(totalShape, DoubleArray(n))
-            multiIndexBroadCasting(tensor, resTensor, n)
-            add(resTensor)
-        }
+    return tensors.map { tensor ->
+        val resTensor = DoubleTensor(totalShape, DoubleArray(n))
+        multiIndexBroadCasting(tensor, resTensor, n)
+        resTensor
     }
 }
 
 internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTensor> {
     val onlyTwoDims = tensors.asSequence().onEach {
         require(it.shape.size >= 2) {
-            throw RuntimeException("Tensors must have at least 2 dimensions")
+            "Tensors must have at least 2 dimensions"
         }
     }.any { it.shape.size != 2 }
 

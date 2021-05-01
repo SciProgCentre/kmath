@@ -135,7 +135,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
     fun testCholesky() = DoubleLinearOpsTensorAlgebra.invoke {
-        val tensor = randNormal(intArrayOf(2, 5, 5), 0)
+        val tensor = randomNormal(intArrayOf(2, 5, 5), 0)
         val sigma = (tensor dot tensor.transpose()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
         )
@@ -163,7 +163,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
     fun testBatchedSVD() = DoubleLinearOpsTensorAlgebra.invoke {
-        val tensor = randNormal(intArrayOf(2, 5, 3), 0)
+        val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
         val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
         assertTrue(tensor.eq(tensorSVD))
@@ -171,7 +171,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
     fun testBatchedSymEig() = DoubleLinearOpsTensorAlgebra.invoke {
-        val tensor = randNormal(shape = intArrayOf(2, 3, 3), 0)
+        val tensor = randomNormal(shape = intArrayOf(2, 3, 3), 0)
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
         val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
