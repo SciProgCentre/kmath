@@ -109,9 +109,13 @@ public fun Array<IntArray>.toIntTensor(): IntTensor {
 }
 
 public fun DoubleTensor.toDoubleArray(): DoubleArray {
-    return tensor.mutableBuffer.array().drop(bufferStart).take(numElements).toDoubleArray()
+    return DoubleArray(numElements) { i ->
+        mutableBuffer[bufferStart + i]
+    }
 }
 
 public fun IntTensor.toIntArray(): IntArray {
-    return tensor.mutableBuffer.array().drop(bufferStart).take(numElements).toIntArray()
+    return IntArray(numElements) { i ->
+        mutableBuffer[bufferStart + i]
+    }
 }

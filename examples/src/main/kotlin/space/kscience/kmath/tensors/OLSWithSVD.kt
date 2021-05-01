@@ -19,7 +19,7 @@ fun main() {
     val randSeed = 100500L
 
     // work in context with linear operations
-    DoubleLinearOpsTensorAlgebra.invoke {
+    DoubleLinearOpsTensorAlgebra {
         // take coefficient vector from normal distribution
         val alpha = randomNormal(
             intArrayOf(5),

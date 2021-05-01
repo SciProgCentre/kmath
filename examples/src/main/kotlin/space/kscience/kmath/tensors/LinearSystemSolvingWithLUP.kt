@@ -14,7 +14,7 @@ import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 fun main () {
 
     // work in context with linear operations
-    DoubleLinearOpsTensorAlgebra.invoke {
+    DoubleLinearOpsTensorAlgebra {
 
         // set true value of x
         val trueX = fromArray(

@@ -14,7 +14,6 @@ internal fun Buffer<Int>.array(): IntArray = when (this) {
     else -> this.toIntArray()
 }
 
-
 /**
  * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer] or copy the data.
  */
@@ -31,7 +30,7 @@ internal fun getRandomNormals(n: Int, seed: Long): DoubleArray {
 
 internal fun getRandomUnitVector(n: Int, seed: Long): DoubleArray {
     val unnorm = getRandomNormals(n, seed)
-    val norm = sqrt(unnorm.map { it * it }.sum())
+    val norm = sqrt(unnorm.sumOf { it * it })
     return unnorm.map { it / norm }.toDoubleArray()
 }
 
@@ -45,23 +44,33 @@ internal fun minusIndexFrom(n: Int, i: Int): Int = if (i >= 0) i else {
 
 internal fun <T> BufferedTensor<T>.minusIndex(i: Int): Int = minusIndexFrom(this.dimension, i)
 
-internal fun format(value: Double, digits: Int = 4): String {
-    val ten = 10.0
-    val approxOrder = if (value == 0.0) 0 else ceil(log10(abs(value))).toInt()
-    val order = if (
-        ((value % ten) == 0.0) or
-        (value == 1.0) or
-        ((1 / value) % ten == 0.0)
-    ) approxOrder else approxOrder - 1
-    val lead = value / ten.pow(order)
-    val leadDisplay = round(lead * ten.pow(digits)) / ten.pow(digits)
-    val orderDisplay = if (order == 0) "" else if (order > 0) "E+$order" else "E$order"
-    val valueDisplay = "$leadDisplay$orderDisplay"
-    val res = if (value < 0.0) valueDisplay else " $valueDisplay"
-
+internal fun format(value: Double, digits: Int = 4): String = buildString {
+    val res = buildString {
+        val ten = 10.0
+        val approxOrder = if (value == 0.0) 0 else ceil(log10(abs(value))).toInt()
+        val order = if (
+            ((value % ten) == 0.0) ||
+            (value == 1.0) ||
+            ((1 / value) % ten == 0.0)
+        ) approxOrder else approxOrder - 1
+        val lead = value / ten.pow(order)
+        if (value >= 0.0) append(' ')
+        append(round(lead * ten.pow(digits)) / ten.pow(digits))
+        when {
+            order == 0 -> Unit
+            order > 0 -> {
+                append("e+")
+                append(order)
+            }
+            else -> {
+                append('e')
+                append(order)
+            }
+        }
+    }
     val fLength = digits + 6
-    val endSpace = " ".repeat(fLength - res.length)
-    return "$res$endSpace"
+    append(res)
+    repeat(fLength - res.length) { append(' ') }
 }
 
 internal fun DoubleTensor.toPrettyString(): String = buildString {

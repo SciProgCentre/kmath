@@ -34,18 +34,6 @@ internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>>
     }
 }
 
-internal inline fun <T> BufferedTensor<T>.forEachVector(vectorAction: (BufferedTensor<T>) -> Unit) {
-    for (vector in vectorSequence()) {
-        vectorAction(vector)
-    }
-}
-
-internal inline fun <T> BufferedTensor<T>.forEachMatrix(matrixAction: (BufferedTensor<T>) -> Unit) {
-    for (matrix in matrixSequence()) {
-        matrixAction(matrix)
-    }
-}
-
 internal fun dotHelper(
     a: MutableStructure2D<Double>,
     b: MutableStructure2D<Double>,
