@@ -49,6 +49,7 @@ public class DoubleTensor internal constructor(
 
 internal fun BufferedTensor<Int>.asTensor(): IntTensor =
     IntTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)
+
 internal fun BufferedTensor<Double>.asTensor(): DoubleTensor =
     DoubleTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)
 
@@ -79,3 +80,38 @@ internal val TensorStructure<Int>.tensor: IntTensor
 
 public fun TensorStructure<Double>.toDoubleTensor(): DoubleTensor = this.tensor
 public fun TensorStructure<Int>.toIntTensor(): IntTensor = this.tensor
+
+public fun Array<DoubleArray>.toDoubleTensor(): DoubleTensor {
+    val n = size
+    check(n > 0) { "An empty array cannot be casted to tensor" }
+    val m = first().size
+    check(m > 0) { "Inner arrays must have at least 1 argument" }
+    check(all { size == m }) { "Inner arrays must be the same size" }
+
+    val shape = intArrayOf(n, m)
+    val buffer = this.flatMap { arr -> arr.map { it } }.toDoubleArray()
+
+    return DoubleTensor(shape, buffer, 0)
+}
+
+
+public fun Array<IntArray>.toIntTensor(): IntTensor {
+    val n = size
+    check(n > 0) { "An empty array cannot be casted to tensor" }
+    val m = first().size
+    check(m > 0) { "Inner arrays must have at least 1 argument" }
+    check(all { size == m }) { "Inner arrays must be the same size" }
+
+    val shape = intArrayOf(n, m)
+    val buffer = this.flatMap { arr -> arr.map { it } }.toIntArray()
+
+    return IntTensor(shape, buffer, 0)
+}
+
+public fun DoubleTensor.toDoubleArray(): DoubleArray {
+    return tensor.mutableBuffer.array().drop(bufferStart).take(numElements).toDoubleArray()
+}
+
+public fun IntTensor.toIntArray(): IntArray {
+    return tensor.mutableBuffer.array().drop(bufferStart).take(numElements).toIntArray()
+}
