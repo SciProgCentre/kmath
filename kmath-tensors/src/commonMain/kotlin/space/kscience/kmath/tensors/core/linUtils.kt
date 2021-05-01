@@ -241,7 +241,7 @@ internal fun DoubleLinearOpsTensorAlgebra.qrHelper(
                 }
             }
         }
-        r[j, j] = DoubleAnalyticTensorAlgebra.invoke { (v dot v).sqrt().value() }
+        r[j, j] = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }

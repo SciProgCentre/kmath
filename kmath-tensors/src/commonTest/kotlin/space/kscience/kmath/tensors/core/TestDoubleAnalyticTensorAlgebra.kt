@@ -27,7 +27,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testExp() = DoubleAnalyticTensorAlgebra.invoke {
+    fun testExp() = DoubleAnalyticTensorAlgebra {
         tensor.exp().let {
             assertTrue { shape contentEquals it.shape }
             assertTrue { buffer.fmap(::exp).epsEqual(it.mutableBuffer.array())}

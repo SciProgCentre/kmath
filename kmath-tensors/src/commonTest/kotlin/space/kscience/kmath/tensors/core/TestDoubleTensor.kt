@@ -15,14 +15,14 @@ import kotlin.test.assertTrue
 internal class TestDoubleTensor {
 
     @Test
-    fun valueTest() = DoubleTensorAlgebra.invoke {
+    fun valueTest() = DoubleTensorAlgebra {
         val value = 12.5
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)
     }
 
     @Test
-    fun stridesTest() = DoubleTensorAlgebra.invoke {
+    fun stridesTest() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         assertEquals(tensor[intArrayOf(0, 1)], 5.8)
         assertTrue(
@@ -31,7 +31,7 @@ internal class TestDoubleTensor {
     }
 
     @Test
-    fun getTest() = DoubleTensorAlgebra.invoke {
+    fun getTest() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         val matrix = tensor[0].as2D()
         assertEquals(matrix[0, 1], 5.8)

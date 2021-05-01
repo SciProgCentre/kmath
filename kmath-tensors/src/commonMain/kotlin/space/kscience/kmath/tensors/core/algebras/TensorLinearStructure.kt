@@ -9,12 +9,6 @@ import space.kscience.kmath.nd.Strides
 import kotlin.math.max
 
 
-internal fun offsetFromIndex(index: IntArray, shape: IntArray, strides: IntArray): Int =
-    index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${shape[i]})")
-        value * strides[i]
-    }.sum()
-
 internal fun stridesFromShape(shape: IntArray): IntArray {
     val nDim = shape.size
     val res = IntArray(nDim)
