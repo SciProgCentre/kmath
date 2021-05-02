@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class ParserTest {
+internal class TestParser {
     @Test
     fun evaluateParsedMst() {
         val mst = "2+2*(2+2)".parseMath()

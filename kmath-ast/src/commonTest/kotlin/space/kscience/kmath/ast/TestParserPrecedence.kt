@@ -10,7 +10,7 @@ import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class ParserPrecedenceTest {
+internal class TestParserPrecedence {
     @Test
     fun test1(): Unit = assertEquals(6.0, f.evaluate("2*2+2".parseMath()))
 
