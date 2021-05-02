@@ -8,19 +8,19 @@ package space.kscience.kmath.tensors.api
 import space.kscience.kmath.operations.Algebra
 
 /**
- * Algebra over a ring on [TensorStructure].
+ * Algebra over a ring on [Tensor].
  * For more information: https://proofwiki.org/wiki/Definition:Algebra_over_Ring
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
+public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
 
     /**
      * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
      *
      * @return the value of a scalar tensor.
      */
-    public fun TensorStructure<T>.value(): T
+    public fun Tensor<T>.value(): T
 
     /**
      * Each element of the tensor [other] is added to this value.
@@ -29,7 +29,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be added.
      * @return the sum of this value and tensor [other].
      */
-    public operator fun T.plus(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun T.plus(other: Tensor<T>): Tensor<T>
 
     /**
      * Adds the scalar [value] to each element of this tensor and returns a new resulting tensor.
@@ -37,7 +37,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param value the number to be added to each element of this tensor.
      * @return the sum of this tensor and [value].
      */
-    public operator fun TensorStructure<T>.plus(value: T): TensorStructure<T>
+    public operator fun Tensor<T>.plus(value: T): Tensor<T>
 
     /**
      * Each element of the tensor [other] is added to each element of this tensor.
@@ -46,21 +46,21 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be added.
      * @return the sum of this tensor and [other].
      */
-    public operator fun TensorStructure<T>.plus(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun Tensor<T>.plus(other: Tensor<T>): Tensor<T>
 
     /**
      * Adds the scalar [value] to each element of this tensor.
      *
      * @param value the number to be added to each element of this tensor.
      */
-    public operator fun TensorStructure<T>.plusAssign(value: T): Unit
+    public operator fun Tensor<T>.plusAssign(value: T): Unit
 
     /**
      * Each element of the tensor [other] is added to each element of this tensor.
      *
      * @param other tensor to be added.
      */
-    public operator fun TensorStructure<T>.plusAssign(other: TensorStructure<T>): Unit
+    public operator fun Tensor<T>.plusAssign(other: Tensor<T>): Unit
 
 
     /**
@@ -70,7 +70,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be subtracted.
      * @return the difference between this value and tensor [other].
      */
-    public operator fun T.minus(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun T.minus(other: Tensor<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [value] from each element of this tensor and returns a new resulting tensor.
@@ -78,7 +78,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param value the number to be subtracted from each element of this tensor.
      * @return the difference between this tensor and [value].
      */
-    public operator fun TensorStructure<T>.minus(value: T): TensorStructure<T>
+    public operator fun Tensor<T>.minus(value: T): Tensor<T>
 
     /**
      * Each element of the tensor [other] is subtracted from each element of this tensor.
@@ -87,21 +87,21 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be subtracted.
      * @return the difference between this tensor and [other].
      */
-    public operator fun TensorStructure<T>.minus(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun Tensor<T>.minus(other: Tensor<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [value] from each element of this tensor.
      *
      * @param value the number to be subtracted from each element of this tensor.
      */
-    public operator fun TensorStructure<T>.minusAssign(value: T): Unit
+    public operator fun Tensor<T>.minusAssign(value: T): Unit
 
     /**
      * Each element of the tensor [other] is subtracted from each element of this tensor.
      *
      * @param other tensor to be subtracted.
      */
-    public operator fun TensorStructure<T>.minusAssign(other: TensorStructure<T>): Unit
+    public operator fun Tensor<T>.minusAssign(other: Tensor<T>): Unit
 
 
     /**
@@ -111,7 +111,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be multiplied.
      * @return the product of this value and tensor [other].
      */
-    public operator fun T.times(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun T.times(other: Tensor<T>): Tensor<T>
 
     /**
      * Multiplies the scalar [value] by each element of this tensor and returns a new resulting tensor.
@@ -119,7 +119,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param value the number to be multiplied by each element of this tensor.
      * @return the product of this tensor and [value].
      */
-    public operator fun TensorStructure<T>.times(value: T): TensorStructure<T>
+    public operator fun Tensor<T>.times(value: T): Tensor<T>
 
     /**
      * Each element of the tensor [other] is multiplied by each element of this tensor.
@@ -128,28 +128,28 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be multiplied.
      * @return the product of this tensor and [other].
      */
-    public operator fun TensorStructure<T>.times(other: TensorStructure<T>): TensorStructure<T>
+    public operator fun Tensor<T>.times(other: Tensor<T>): Tensor<T>
 
     /**
      * Multiplies the scalar [value] by each element of this tensor.
      *
      * @param value the number to be multiplied by each element of this tensor.
      */
-    public operator fun TensorStructure<T>.timesAssign(value: T): Unit
+    public operator fun Tensor<T>.timesAssign(value: T): Unit
 
     /**
      * Each element of the tensor [other] is multiplied by each element of this tensor.
      *
      * @param other tensor to be multiplied.
      */
-    public operator fun TensorStructure<T>.timesAssign(other: TensorStructure<T>): Unit
+    public operator fun Tensor<T>.timesAssign(other: Tensor<T>): Unit
 
     /**
      * Numerical negative, element-wise.
      *
      * @return tensor negation of the original tensor.
      */
-    public operator fun TensorStructure<T>.unaryMinus(): TensorStructure<T>
+    public operator fun Tensor<T>.unaryMinus(): Tensor<T>
 
     /**
      * Returns the tensor at index i
@@ -158,7 +158,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param i index of the extractable tensor
      * @return subtensor of the original tensor with index [i]
      */
-    public operator fun TensorStructure<T>.get(i: Int): TensorStructure<T>
+    public operator fun Tensor<T>.get(i: Int): Tensor<T>
 
     /**
      * Returns a tensor that is a transposed version of this tensor. The given dimensions [i] and [j] are swapped.
@@ -168,7 +168,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param j the second dimension to be transposed
      * @return transposed tensor
      */
-    public fun TensorStructure<T>.transpose(i: Int = -2, j: Int = -1): TensorStructure<T>
+    public fun Tensor<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
 
     /**
      * Returns a new tensor with the same data as the self tensor but of a different shape.
@@ -178,7 +178,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param shape the desired size
      * @return tensor with new shape
      */
-    public fun TensorStructure<T>.view(shape: IntArray): TensorStructure<T>
+    public fun Tensor<T>.view(shape: IntArray): Tensor<T>
 
     /**
      * View this tensor as the same size as [other].
@@ -188,7 +188,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other the result tensor has the same size as other.
      * @return the result tensor with the same size as other.
      */
-    public fun TensorStructure<T>.viewAs(other: TensorStructure<T>): TensorStructure<T>
+    public fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T>
 
     /**
      * Matrix product of two tensors.
@@ -219,7 +219,7 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * @param other tensor to be multiplied
      * @return mathematical product of two tensors
      */
-    public infix fun TensorStructure<T>.dot(other: TensorStructure<T>): TensorStructure<T>
+    public infix fun Tensor<T>.dot(other: Tensor<T>): Tensor<T>
 
     /**
      * Creates a tensor whose diagonals of certain 2D planes (specified by [dim1] and [dim2])
@@ -245,10 +245,10 @@ public interface TensorAlgebra<T>: Algebra<TensorStructure<T>> {
      * are filled by [diagonalEntries]
      */
     public fun diagonalEmbedding(
-        diagonalEntries: TensorStructure<T>,
+        diagonalEntries: Tensor<T>,
         offset: Int = 0,
         dim1: Int = -2,
         dim2: Int = -1
-    ): TensorStructure<T>
+    ): Tensor<T>
 
 }

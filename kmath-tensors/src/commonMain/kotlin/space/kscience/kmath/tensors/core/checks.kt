@@ -1,6 +1,6 @@
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 
@@ -20,7 +20,7 @@ internal fun checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray) =
         "Inconsistent shape ${shape.toList()} for buffer of size ${buffer.size} provided"
     }
 
-internal fun <T> checkShapesCompatible(a: TensorStructure<T>, b: TensorStructure<T>) =
+internal fun <T> checkShapesCompatible(a: Tensor<T>, b: Tensor<T>) =
     check(a.shape contentEquals b.shape) {
         "Incompatible shapes ${a.shape.toList()} and ${b.shape.toList()} "
     }
@@ -30,7 +30,7 @@ internal fun checkTranspose(dim: Int, i: Int, j: Int) =
         "Cannot transpose $i to $j for a tensor of dim $dim"
     }
 
-internal fun <T> checkView(a: TensorStructure<T>, shape: IntArray) =
+internal fun <T> checkView(a: Tensor<T>, shape: IntArray) =
     check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
 
 internal fun checkSquareMatrix(shape: IntArray) {
@@ -44,7 +44,7 @@ internal fun checkSquareMatrix(shape: IntArray) {
 }
 
 internal fun DoubleTensorAlgebra.checkSymmetric(
-    tensor: TensorStructure<Double>, epsilon: Double = 1e-6
+    tensor: Tensor<Double>, epsilon: Double = 1e-6
 ) =
     check(tensor.eq(tensor.transpose(), epsilon)) {
         "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"

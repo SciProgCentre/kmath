@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.core.algebras
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.tensors.api.TensorStructure
+import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.checkSquareMatrix
 import space.kscience.kmath.tensors.core.choleskyHelper
@@ -25,19 +25,19 @@ public object DoubleLinearOpsTensorAlgebra :
     LinearOpsTensorAlgebra<Double>,
     DoubleTensorAlgebra() {
 
-    override fun TensorStructure<Double>.inv(): DoubleTensor = invLU(1e-9)
+    override fun Tensor<Double>.inv(): DoubleTensor = invLU(1e-9)
 
-    override fun TensorStructure<Double>.det(): DoubleTensor = detLU(1e-9)
+    override fun Tensor<Double>.det(): DoubleTensor = detLU(1e-9)
 
-    public fun TensorStructure<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
+    public fun Tensor<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
         computeLU(tensor, epsilon)
             ?: throw IllegalArgumentException("Tensor contains matrices which are singular at precision $epsilon")
 
-    public fun TensorStructure<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
+    public fun Tensor<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
 
     public fun luPivot(
-        luTensor: TensorStructure<Double>,
-        pivotsTensor: TensorStructure<Int>
+        luTensor: Tensor<Double>,
+        pivotsTensor: Tensor<Int>
     ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         checkSquareMatrix(luTensor.shape)
         check(
@@ -66,7 +66,7 @@ public object DoubleLinearOpsTensorAlgebra :
         return Triple(pTensor, lTensor, uTensor)
     }
 
-    public fun TensorStructure<Double>.cholesky(epsilon: Double): DoubleTensor {
+    public fun Tensor<Double>.cholesky(epsilon: Double): DoubleTensor {
         checkSquareMatrix(shape)
         checkPositiveDefinite(tensor, epsilon)
 
@@ -79,9 +79,9 @@ public object DoubleLinearOpsTensorAlgebra :
         return lTensor
     }
 
-    override fun TensorStructure<Double>.cholesky(): DoubleTensor = cholesky(1e-6)
+    override fun Tensor<Double>.cholesky(): DoubleTensor = cholesky(1e-6)
 
-    override fun TensorStructure<Double>.qr(): Pair<DoubleTensor, DoubleTensor> {
+    override fun Tensor<Double>.qr(): Pair<DoubleTensor, DoubleTensor> {
         checkSquareMatrix(shape)
         val qTensor = zeroesLike()
         val rTensor = zeroesLike()
@@ -95,10 +95,10 @@ public object DoubleLinearOpsTensorAlgebra :
         return qTensor to rTensor
     }
 
-    override fun TensorStructure<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
+    override fun Tensor<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
         svd(epsilon = 1e-10)
 
-    public fun TensorStructure<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun Tensor<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = tensor.linearStructure.dim
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
@@ -122,11 +122,11 @@ public object DoubleLinearOpsTensorAlgebra :
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
-    override fun TensorStructure<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
+    override fun Tensor<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
         symEig(epsilon = 1e-15)
 
     //For information: http://hua-zhou.github.io/teaching/biostatm280-2017spring/slides/16-eigsvd/eigsvd.html
-    public fun TensorStructure<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+    public fun Tensor<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
         val (u, s, v) = tensor.svd(epsilon)
         val shp = s.shape + intArrayOf(1)
@@ -139,7 +139,7 @@ public object DoubleLinearOpsTensorAlgebra :
         return eig to v
     }
 
-    public fun TensorStructure<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
+    public fun Tensor<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
 
         checkSquareMatrix(tensor.shape)
         val luTensor = tensor.copy()
@@ -164,7 +164,7 @@ public object DoubleLinearOpsTensorAlgebra :
         return detTensor
     }
 
-    public fun TensorStructure<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
+    public fun Tensor<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
         val (luTensor, pivotsTensor) = luFactor(epsilon)
         val invTensor = luTensor.zeroesLike()
 
@@ -177,11 +177,11 @@ public object DoubleLinearOpsTensorAlgebra :
         return invTensor
     }
 
-    public fun TensorStructure<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun Tensor<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val (lu, pivots) = this.luFactor(epsilon)
         return luPivot(lu, pivots)
     }
 
-    override fun TensorStructure<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
+    override fun Tensor<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
 
 }
