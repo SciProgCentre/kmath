@@ -91,7 +91,7 @@ KMath is a modular library. Different modules provide different features with di
 * ### [kmath-ast](kmath-ast)
 > 
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
 >
 > **Features:**
 > - [expression-language](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
@@ -154,9 +154,9 @@ performance calculations to code generation.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
-> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
-> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : Point implementations.
+> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
+> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
 <hr/>
 
@@ -195,6 +195,12 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-histograms](kmath-histograms)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
+* ### [kmath-jupyter](kmath-jupyter)
 > 
 >
 > **Maturity**: PROTOTYPE

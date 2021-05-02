@@ -118,7 +118,11 @@ public object LatexSyntaxRenderer : SyntaxRenderer {
                 render(node.right)
             }
 
-            is FractionSyntax -> {
+            is FractionSyntax -> if (node.infix) {
+                render(node.left)
+                append('/')
+                render(node.right)
+            } else {
                 append("\\frac{")
                 render(node.left)
                 append("}{")

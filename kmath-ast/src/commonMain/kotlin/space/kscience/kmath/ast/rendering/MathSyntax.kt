@@ -102,7 +102,7 @@ public data class SymbolSyntax(public var string: String) : TerminalSyntax()
 public data class OperatorNameSyntax(public var name: String) : TerminalSyntax()
 
 /**
- * Represents a usage of special symbols.
+ * Represents a usage of special symbols (e.g., *&infin;*).
  *
  * @property kind The kind of symbol.
  * @author Iaroslav Postovalov
@@ -143,7 +143,7 @@ public data class OperandSyntax(
 }
 
 /**
- * Represents unary, prefix operator syntax (like f x).
+ * Represents unary, prefix operator syntax (like *f(x)*).
  *
  * @property prefix The prefix.
  * @author Iaroslav Postovalov
@@ -160,7 +160,7 @@ public data class UnaryOperatorSyntax(
 }
 
 /**
- * Represents prefix, unary plus operator.
+ * Represents prefix, unary plus operator (*+x*).
  *
  * @author Iaroslav Postovalov
  */
@@ -175,7 +175,7 @@ public data class UnaryPlusSyntax(
 }
 
 /**
- * Represents prefix, unary minus operator.
+ * Represents prefix, unary minus operator (*-x*).
  *
  * @author Iaroslav Postovalov
  */
@@ -190,7 +190,7 @@ public data class UnaryMinusSyntax(
 }
 
 /**
- * Represents radical with a node inside it.
+ * Represents radical with a node inside it (*&radic;x*).
  *
  * @property operand The radicand.
  * @author Iaroslav Postovalov
@@ -225,7 +225,7 @@ public data class ExponentSyntax(
 }
 
 /**
- * Represents a syntax node with superscript (usually, for exponentiation).
+ * Represents a syntax node with superscript (*x<sup>2</sup>*).
  *
  * @property left The node.
  * @property right The superscript.
@@ -244,7 +244,7 @@ public data class SuperscriptSyntax(
 }
 
 /**
- * Represents a syntax node with subscript.
+ * Represents a syntax node with subscript (*x<sub>i</sup>*).
  *
  * @property left The node.
  * @property right The subscript.
@@ -263,7 +263,7 @@ public data class SubscriptSyntax(
 }
 
 /**
- * Represents binary, prefix operator syntax (like f(a, b)).
+ * Represents binary, prefix operator syntax (like *f(a, b)*).
  *
  * @property prefix The prefix.
  * @author Iaroslav Postovalov
@@ -282,7 +282,7 @@ public data class BinaryOperatorSyntax(
 }
 
 /**
- * Represents binary, infix addition.
+ * Represents binary, infix addition (*42 + 42*).
  *
  * @param left The augend.
  * @param right The addend.
@@ -301,7 +301,7 @@ public data class BinaryPlusSyntax(
 }
 
 /**
- * Represents binary, infix subtraction.
+ * Represents binary, infix subtraction (*42 - 42*).
  *
  * @param left The minuend.
  * @param right The subtrahend.
@@ -324,13 +324,15 @@ public data class BinaryMinusSyntax(
  *
  * @property left The numerator.
  * @property right The denominator.
+ * @property infix Whether infix (*1 / 2*) or normal (*&frac12;*) fraction should be made.
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public data class FractionSyntax(
     public override val operation: String,
-    public override val left: MathSyntax,
-    public override val right: MathSyntax,
+    public override val left: OperandSyntax,
+    public override val right: OperandSyntax,
+    public var infix: Boolean,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -339,7 +341,7 @@ public data class FractionSyntax(
 }
 
 /**
- * Represents radical syntax with index.
+ * Represents radical syntax with index (*<sup>3</sup>&radic;x*).
  *
  * @property left The index.
  * @property right The radicand.
@@ -358,11 +360,11 @@ public data class RadicalWithIndexSyntax(
 }
 
 /**
- * Represents binary, infix multiplication in the form of coefficient (2 x) or with operator (x&times;2).
+ * Represents binary, infix multiplication in the form of coefficient (*2 x*) or with operator (*x &times; 2*).
  *
  * @property left The multiplicand.
  * @property right The multiplier.
- * @property times whether the times (&times;) symbol should be used.
+ * @property times Whether the times (&times;) symbol should be used.
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
