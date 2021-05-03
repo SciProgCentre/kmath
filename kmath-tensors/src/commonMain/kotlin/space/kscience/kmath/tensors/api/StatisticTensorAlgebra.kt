@@ -9,16 +9,12 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 
 /**
  * Common algebra with statistics methods. Operates on [Tensor].
- *
- * @param T the type of items closed under division in the tensors.
  */
 
 public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the minimum value of all elements in the input tensor.
-     *
-     * @return the minimum value of all elements in the input tensor.
      */
     public fun Tensor<T>.min(): Double
 
@@ -37,8 +33,6 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the maximum value of all elements in the input tensor.
-     *
-     * @return the maximum value of all elements in the input tensor.
      */
     public fun Tensor<T>.max(): Double
 
@@ -57,8 +51,6 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the sum of all elements in the input tensor.
-     *
-     * @return the sum of all elements in the input tensor.
      */
     public fun Tensor<T>.sum(): Double
 
@@ -77,8 +69,6 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the mean of all elements in the input tensor.
-     *
-     * @return the mean of all elements in the input tensor.
      */
     public fun Tensor<T>.mean(): Double
 
@@ -97,8 +87,6 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the standard deviation of all elements in the input tensor.
-     *
-     * @return the standard deviation of all elements in the input tensor.
      */
     public fun Tensor<T>.std(): Double
 
@@ -117,8 +105,6 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
 
     /**
      * Returns the variance of all elements in the input tensor.
-     *
-     * @return the variance of all elements in the input tensor.
      */
     public fun Tensor<T>.variance(): Double
 
@@ -134,4 +120,5 @@ public interface StatisticTensorAlgebra<T>: TensorAlgebra<T> {
      * @return the variance of each row of the input tensor in the given dimension [dim].
      */
     public fun Tensor<T>.variance(dim: Int, keepDim: Boolean): DoubleTensor
+
 }

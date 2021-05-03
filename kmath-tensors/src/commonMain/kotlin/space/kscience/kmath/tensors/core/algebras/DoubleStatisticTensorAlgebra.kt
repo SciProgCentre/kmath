@@ -17,9 +17,8 @@ import space.kscience.kmath.tensors.core.algebras.DoubleStatisticTensorAlgebra.v
 
 public object DoubleStatisticTensorAlgebra : StatisticTensorAlgebra<Double>, DoubleTensorAlgebra() {
 
-    private fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double {
-        return foldFunction(this.tensor.toDoubleArray())
-    }
+    private fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
+        foldFunction(this.tensor.toDoubleArray())
 
     private fun Tensor<Double>.foldDim(
         foldFunction: (DoubleArray) -> Double,
