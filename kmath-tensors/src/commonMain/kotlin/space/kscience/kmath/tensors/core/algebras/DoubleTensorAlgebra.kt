@@ -284,7 +284,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         val m1 = newThis.shape[newThis.shape.size - 1]
         val m2 = newOther.shape[newOther.shape.size - 2]
         val n = newOther.shape[newOther.shape.size - 1]
-        check (m1 == m2) {
+        check(m1 == m2) {
             throw RuntimeException("Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)")
         }
 
@@ -403,7 +403,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
     public fun stack(tensors: List<DoubleTensor>): DoubleTensor {
         val shape = tensors.firstOrNull()?.shape
         check(shape != null) { "Collection must have at least 1 element" }
-        check(tensors.all { it.shape contentEquals shape }) {"Stacking tensors must have same shapes"}
+        check(tensors.all { it.shape contentEquals shape }) { "Stacking tensors must have same shapes" }
         val resShape = intArrayOf(tensors.size) + shape
         val resBuffer = tensors.flatMap {
             it.tensor.mutableBuffer.array().drop(it.bufferStart).take(it.numElements)
@@ -415,4 +415,36 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
     public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor {
         return stack(indices.map { this[it] })
     }
+
+    internal fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
+        foldFunction(tensor.toDoubleArray())
+
+    internal fun Tensor<Double>.foldDim(
+        foldFunction: (DoubleArray) -> Double,
+        dim: Int,
+        keepDim: Boolean
+    ): DoubleTensor {
+        check(dim < dimension) { "Dimension $dim out of range $dimension" }
+        val resShape = if (keepDim) {
+            shape.take(dim).toIntArray() + intArrayOf(1) + shape.takeLast(dimension - dim - 1).toIntArray()
+        } else {
+            shape.take(dim).toIntArray() + shape.takeLast(dimension - dim - 1).toIntArray()
+        }
+        val resNumElements = resShape.reduce(Int::times)
+        val resTensor = DoubleTensor(resShape, DoubleArray(resNumElements) { 0.0 }, 0)
+        for (index in resTensor.linearStructure.indices()) {
+            val prefix = index.take(dim).toIntArray()
+            val suffix = index.takeLast(dimension - dim - 1).toIntArray()
+            resTensor[index] = foldFunction(DoubleArray(shape[dim]) { i ->
+                tensor[prefix + intArrayOf(i) + suffix]
+            })
+        }
+
+        return resTensor
+    }
+
+    override fun Tensor<Double>.sum(): Double = tensor.fold { it.sum() }
+
+    override fun Tensor<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x -> x.sum() }, dim, keepDim)
 }

@@ -5,13 +5,106 @@
 
 package space.kscience.kmath.tensors.api
 
+
 /**
- * Element-wise analytic operations on [Tensor].
+ * Analytic operations on [Tensor].
  *
  * @param T the type of items closed under analytic functions in the tensors.
  */
 public interface AnalyticTensorAlgebra<T> :
     TensorPartialDivisionAlgebra<T> {
+
+
+    /**
+     * @return the minimum value of all elements in the input tensor.
+     */
+    public fun Tensor<T>.min(): T
+
+    /**
+     * Returns the minimum value of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the minimum value of each row of the input tensor in the given dimension [dim].
+     */
+    public fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
+
+    /**
+     * @return the maximum value of all elements in the input tensor.
+     */
+    public fun Tensor<T>.max(): T
+
+    /**
+     * Returns the maximum value of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the maximum value of each row of the input tensor in the given dimension [dim].
+     */
+    public fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
+
+
+    /**
+     * @return the mean of all elements in the input tensor.
+     */
+    public fun Tensor<T>.mean(): T
+
+    /**
+     * Returns the mean of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the mean of each row of the input tensor in the given dimension [dim].
+     */
+    public fun Tensor<T>.mean(dim: Int, keepDim: Boolean): Tensor<T>
+
+    /**
+     * @return the standard deviation of all elements in the input tensor.
+     */
+    public fun Tensor<T>.std(): T
+
+    /**
+     * Returns the standard deviation of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the standard deviation of each row of the input tensor in the given dimension [dim].
+     */
+    public fun Tensor<T>.std(dim: Int, keepDim: Boolean): Tensor<T>
+
+    /**
+     * @return the variance of all elements in the input tensor.
+     */
+    public fun Tensor<T>.variance(): T
+
+    /**
+     * Returns the variance of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the variance of each row of the input tensor in the given dimension [dim].
+     */
+    public fun Tensor<T>.variance(dim: Int, keepDim: Boolean): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun Tensor<T>.exp(): Tensor<T>

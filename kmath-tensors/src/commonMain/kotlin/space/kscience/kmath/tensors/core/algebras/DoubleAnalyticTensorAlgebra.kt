@@ -14,6 +14,60 @@ import kotlin.math.*
 public object DoubleAnalyticTensorAlgebra :
     AnalyticTensorAlgebra<Double>,
     DoubleTensorAlgebra() {
+
+    override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
+
+    override fun Tensor<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
+
+    override fun Tensor<Double>.max(): Double = this.fold { it.maxOrNull()!! }
+
+    override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
+
+
+    override fun Tensor<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
+
+    override fun Tensor<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim(
+            { arr ->
+                check(dim < dimension) { "Dimension $dim out of range $dimension" }
+                arr.sum() / shape[dim]
+            },
+            dim,
+            keepDim
+        )
+
+    override fun Tensor<Double>.std(): Double = this.fold { arr ->
+        val mean = arr.sum() / tensor.numElements
+        sqrt(arr.sumOf { (it - mean) * (it - mean) } / (tensor.numElements - 1))
+    }
+
+    override fun Tensor<Double>.std(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
+        { arr ->
+            check(dim < dimension) { "Dimension $dim out of range $dimension" }
+            val mean = arr.sum() / shape[dim]
+            sqrt(arr.sumOf { (it - mean) * (it - mean) } / (shape[dim] - 1))
+        },
+        dim,
+        keepDim
+    )
+
+    override fun Tensor<Double>.variance(): Double = this.fold { arr ->
+        val mean = arr.sum() / tensor.numElements
+        arr.sumOf { (it - mean) * (it - mean) } / (tensor.numElements - 1)
+    }
+
+    override fun Tensor<Double>.variance(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
+        { arr ->
+            check(dim < dimension) { "Dimension $dim out of range $dimension" }
+            val mean = arr.sum() / shape[dim]
+            arr.sumOf { (it - mean) * (it - mean) } / (shape[dim] - 1)
+        },
+        dim,
+        keepDim
+    )
+
     override fun Tensor<Double>.exp(): DoubleTensor = tensor.map(::exp)
 
     override fun Tensor<Double>.log(): DoubleTensor = tensor.map(::ln)
