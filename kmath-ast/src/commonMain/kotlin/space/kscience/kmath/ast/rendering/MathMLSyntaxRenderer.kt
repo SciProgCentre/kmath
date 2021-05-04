@@ -133,14 +133,13 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
                 render(node.right)
             }
 
-            is FractionSyntax -> tag("mfrac") {
-                tag("mrow") {
-                    render(node.left)
-                }
-
-                tag("mrow") {
-                    render(node.right)
-                }
+            is FractionSyntax -> if (node.infix) {
+                render(node.left)
+                tag("mo") { append('/') }
+                render(node.right)
+            } else tag("mfrac") {
+                tag("mrow") { render(node.left) }
+                tag("mrow") { render(node.right) }
             }
 
             is RadicalWithIndexSyntax -> tag("mroot") {

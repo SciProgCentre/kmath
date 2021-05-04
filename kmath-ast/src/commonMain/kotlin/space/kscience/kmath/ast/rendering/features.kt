@@ -54,6 +54,7 @@ else
  * *('-'? (DIGIT+ ('.' DIGIT+)? ('E' '-'? DIGIT+)? | 'Infinity')) | 'NaN'*.
  *
  * @property types The suitable types.
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : RenderFeature {
@@ -113,6 +114,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
  * Special printing for numeric types which are printed in form of *'-'? DIGIT+*.
  *
  * @property types The suitable types.
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : RenderFeature {
@@ -135,6 +137,7 @@ public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : Re
  * Special printing for symbols meaning Pi.
  *
  * @property symbols The allowed symbols.
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
@@ -157,6 +160,7 @@ public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
  * not [MST.Unary].
  *
  * @param operations the allowed operations. If `null`, any operation is accepted.
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public abstract class Unary(public val operations: Collection<String>?) : RenderFeature {
@@ -177,6 +181,7 @@ public abstract class Unary(public val operations: Collection<String>?) : Render
  * not [MST.Binary].
  *
  * @property operations the allowed operations. If `null`, any operation is accepted.
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public abstract class Binary(public val operations: Collection<String>?) : RenderFeature {
@@ -193,6 +198,8 @@ public abstract class Binary(public val operations: Collection<String>?) : Rende
 
 /**
  * Handles binary nodes by producing [BinaryPlusSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class BinaryPlus(operations: Collection<String>?) : Binary(operations) {
@@ -213,6 +220,8 @@ public class BinaryPlus(operations: Collection<String>?) : Binary(operations) {
 
 /**
  * Handles binary nodes by producing [BinaryMinusSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class BinaryMinus(operations: Collection<String>?) : Binary(operations) {
@@ -233,6 +242,8 @@ public class BinaryMinus(operations: Collection<String>?) : Binary(operations) {
 
 /**
  * Handles unary nodes by producing [UnaryPlusSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class UnaryPlus(operations: Collection<String>?) : Unary(operations) {
@@ -251,6 +262,8 @@ public class UnaryPlus(operations: Collection<String>?) : Unary(operations) {
 
 /**
  * Handles binary nodes by producing [UnaryMinusSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class UnaryMinus(operations: Collection<String>?) : Unary(operations) {
@@ -269,13 +282,16 @@ public class UnaryMinus(operations: Collection<String>?) : Unary(operations) {
 
 /**
  * Handles binary nodes by producing [FractionSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class Fraction(operations: Collection<String>?) : Binary(operations) {
     public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): FractionSyntax = FractionSyntax(
         operation = node.operation,
-        left = parent.render(node.left),
-        right = parent.render(node.right),
+        left = OperandSyntax(operand = parent.render(node.left), parentheses = true),
+        right = OperandSyntax(operand = parent.render(node.right), parentheses = true),
+        infix = true,
     )
 
     public companion object {
@@ -288,6 +304,8 @@ public class Fraction(operations: Collection<String>?) : Binary(operations) {
 
 /**
  * Handles binary nodes by producing [BinaryOperatorSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class BinaryOperator(operations: Collection<String>?) : Binary(operations) {
@@ -309,6 +327,8 @@ public class BinaryOperator(operations: Collection<String>?) : Binary(operations
 
 /**
  * Handles unary nodes by producing [UnaryOperatorSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class UnaryOperator(operations: Collection<String>?) : Unary(operations) {
@@ -329,6 +349,8 @@ public class UnaryOperator(operations: Collection<String>?) : Unary(operations) 
 
 /**
  * Handles binary nodes by producing [SuperscriptSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class Power(operations: Collection<String>?) : Binary(operations) {
@@ -365,6 +387,8 @@ public class SquareRoot(operations: Collection<String>?) : Unary(operations) {
 
 /**
  * Handles unary nodes by producing [ExponentSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class Exponent(operations: Collection<String>?) : Unary(operations) {
@@ -384,6 +408,8 @@ public class Exponent(operations: Collection<String>?) : Unary(operations) {
 
 /**
  * Handles binary nodes by producing [MultiplicationSyntax].
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class Multiplication(operations: Collection<String>?) : Binary(operations) {
@@ -404,36 +430,52 @@ public class Multiplication(operations: Collection<String>?) : Binary(operations
 }
 
 /**
- * Handles binary nodes by producing inverse [UnaryOperatorSyntax] (like *sin<sup>-1</sup>*) with removing the `a`
- * prefix of operation ID.
+ * Handles binary nodes by producing inverse [UnaryOperatorSyntax] with *arc* prefix instead of *a*.
+ *
+ * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
 public class InverseTrigonometricOperations(operations: Collection<String>?) : Unary(operations) {
     public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): UnaryOperatorSyntax =
         UnaryOperatorSyntax(
             operation = node.operation,
-            prefix = SuperscriptSyntax(
-                operation = PowerOperations.POW_OPERATION,
-                left = OperatorNameSyntax(name = node.operation.removePrefix("a")),
-                right = UnaryMinusSyntax(
-                    operation = GroupOperations.MINUS_OPERATION,
-                    operand = OperandSyntax(operand = NumberSyntax(string = "1"), parentheses = true),
-                ),
-            ),
+            prefix = OperatorNameSyntax(name = node.operation.replaceFirst("a", "arc")),
             operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
         )
 
     public companion object {
         /**
          * The default instance configured with [TrigonometricOperations.ACOS_OPERATION],
-         * [TrigonometricOperations.ASIN_OPERATION], [TrigonometricOperations.ATAN_OPERATION],
-         * [ExponentialOperations.ACOSH_OPERATION], [ExponentialOperations.ASINH_OPERATION], and
-         * [ExponentialOperations.ATANH_OPERATION].
+         * [TrigonometricOperations.ASIN_OPERATION], [TrigonometricOperations.ATAN_OPERATION].
          */
         public val Default: InverseTrigonometricOperations = InverseTrigonometricOperations(setOf(
             TrigonometricOperations.ACOS_OPERATION,
             TrigonometricOperations.ASIN_OPERATION,
             TrigonometricOperations.ATAN_OPERATION,
+        ))
+    }
+}
+
+/**
+ * Handles binary nodes by producing inverse [UnaryOperatorSyntax] with *ar* prefix instead of *a*.
+ *
+ * @author Iaroslav Postovalov
+ */
+@UnstableKMathAPI
+public class InverseHyperbolicOperations(operations: Collection<String>?) : Unary(operations) {
+    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): UnaryOperatorSyntax =
+        UnaryOperatorSyntax(
+            operation = node.operation,
+            prefix = OperatorNameSyntax(name = node.operation.replaceFirst("a", "ar")),
+            operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
+        )
+
+    public companion object {
+        /**
+         * The default instance configured with [ExponentialOperations.ACOSH_OPERATION],
+         * [ExponentialOperations.ASINH_OPERATION], and [ExponentialOperations.ATANH_OPERATION].
+         */
+        public val Default: InverseHyperbolicOperations = InverseHyperbolicOperations(setOf(
             ExponentialOperations.ACOSH_OPERATION,
             ExponentialOperations.ASINH_OPERATION,
             ExponentialOperations.ATANH_OPERATION,

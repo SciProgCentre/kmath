@@ -99,13 +99,17 @@ internal class TestFeatures {
     fun multiplication() = testLatex("x*1", "x\\times1")
 
     @Test
-    fun inverseTrigonometry() {
-        testLatex("asin(x)", "\\operatorname{sin}^{-1}\\,\\left(x\\right)")
-        testLatex("asinh(x)", "\\operatorname{sinh}^{-1}\\,\\left(x\\right)")
-        testLatex("acos(x)", "\\operatorname{cos}^{-1}\\,\\left(x\\right)")
-        testLatex("acosh(x)", "\\operatorname{cosh}^{-1}\\,\\left(x\\right)")
-        testLatex("atan(x)", "\\operatorname{tan}^{-1}\\,\\left(x\\right)")
-        testLatex("atanh(x)", "\\operatorname{tanh}^{-1}\\,\\left(x\\right)")
+    fun inverseTrigonometric() {
+        testLatex("asin(x)", "\\operatorname{arcsin}\\,\\left(x\\right)")
+        testLatex("acos(x)", "\\operatorname{arccos}\\,\\left(x\\right)")
+        testLatex("atan(x)", "\\operatorname{arctan}\\,\\left(x\\right)")
+    }
+
+    @Test
+    fun inverseHyperbolic() {
+        testLatex("asinh(x)", "\\operatorname{arsinh}\\,\\left(x\\right)")
+        testLatex("acosh(x)", "\\operatorname{arcosh}\\,\\left(x\\right)")
+        testLatex("atanh(x)", "\\operatorname{artanh}\\,\\left(x\\right)")
     }
 
 //    @Test
