@@ -25,7 +25,6 @@ public object DoubleAnalyticTensorAlgebra :
     override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
 
-
     override fun Tensor<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
 
     override fun Tensor<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =
@@ -70,7 +69,7 @@ public object DoubleAnalyticTensorAlgebra :
 
     override fun Tensor<Double>.exp(): DoubleTensor = tensor.map(::exp)
 
-    override fun Tensor<Double>.log(): DoubleTensor = tensor.map(::ln)
+    override fun Tensor<Double>.ln(): DoubleTensor = tensor.map(::ln)
 
     override fun Tensor<Double>.sqrt(): DoubleTensor = tensor.map(::sqrt)
 

@@ -51,7 +51,6 @@ public interface AnalyticTensorAlgebra<T> :
      */
     public fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
 
-
     /**
      * @return the mean of all elements in the input tensor.
      */
@@ -110,7 +109,7 @@ public interface AnalyticTensorAlgebra<T> :
     public fun Tensor<T>.exp(): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.log.html
-    public fun Tensor<T>.log(): Tensor<T>
+    public fun Tensor<T>.ln(): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.sqrt.html
     public fun Tensor<T>.sqrt(): Tensor<T>
