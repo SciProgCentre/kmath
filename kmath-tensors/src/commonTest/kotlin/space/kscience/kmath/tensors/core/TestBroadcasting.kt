@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 internal class TestBroadcasting {
 
     @Test
-    fun broadcastShapes() = DoubleTensorAlgebra {
+    fun testBroadcastShapes() = DoubleTensorAlgebra {
         assertTrue(
             broadcastShapes(
                 intArrayOf(2, 3), intArrayOf(1, 3), intArrayOf(1, 1, 1)
@@ -24,7 +24,7 @@ internal class TestBroadcasting {
     }
 
     @Test
-    fun broadcastTo() = DoubleTensorAlgebra {
+    fun testBroadcastTo() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
 
@@ -34,7 +34,7 @@ internal class TestBroadcasting {
     }
 
     @Test
-    fun broadcastTensors() = DoubleTensorAlgebra {
+    fun testBroadcastTensors() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = fromArray(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
@@ -51,7 +51,7 @@ internal class TestBroadcasting {
     }
 
     @Test
-    fun broadcastOuterTensors() = DoubleTensorAlgebra {
+    fun testBroadcastOuterTensors() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = fromArray(intArrayOf(1, 1, 1), doubleArrayOf(500.0))
@@ -68,7 +68,7 @@ internal class TestBroadcasting {
     }
 
     @Test
-    fun broadcastOuterTensorsShapes() = DoubleTensorAlgebra {
+    fun testBroadcastOuterTensorsShapes() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 1, 3, 2, 3), DoubleArray(2 * 1 * 3 * 2 * 3) {0.0})
         val tensor2 = fromArray(intArrayOf(4, 2, 5, 1, 3, 3), DoubleArray(4 * 2 * 5 * 1 * 3 * 3) {0.0})
         val tensor3 = fromArray(intArrayOf(1, 1), doubleArrayOf(500.0))
@@ -81,7 +81,7 @@ internal class TestBroadcasting {
     }
 
     @Test
-    fun minusTensor() = BroadcastDoubleTensorAlgebra.invoke {
+    fun testMinusTensor() = BroadcastDoubleTensorAlgebra.invoke {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = fromArray(intArrayOf(1, 1, 1), doubleArrayOf(500.0))

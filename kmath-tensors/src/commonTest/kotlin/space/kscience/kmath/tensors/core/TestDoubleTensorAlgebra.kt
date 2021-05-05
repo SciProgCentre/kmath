@@ -10,28 +10,28 @@ import kotlin.test.assertTrue
 internal class TestDoubleTensorAlgebra {
 
     @Test
-    fun doublePlus() = DoubleTensorAlgebra {
+    fun testDoublePlus() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(1.0, 2.0))
         val res = 10.0 + tensor
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(11.0, 12.0))
     }
 
     @Test
-    fun doubleDiv() = DoubleTensorAlgebra {
+    fun TestDoubleDiv() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
         val res = 2.0/tensor
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(1.0, 0.5))
     }
 
     @Test
-    fun divDouble() = DoubleTensorAlgebra {
+    fun testDivDouble() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(10.0, 5.0))
         val res = tensor / 2.5
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(4.0, 2.0))
     }
 
     @Test
-    fun transpose1x1() = DoubleTensorAlgebra {
+    fun testTranspose1x1() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(0.0))
         val res = tensor.transpose(0, 0)
 
@@ -40,7 +40,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun transpose3x2() = DoubleTensorAlgebra {
+    fun testTranspose3x2() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res = tensor.transpose(1, 0)
 
@@ -49,7 +49,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun transpose1x2x3() = DoubleTensorAlgebra {
+    fun testTranspose1x2x3() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(1, 2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val res01 = tensor.transpose(0, 1)
         val res02 = tensor.transpose(-3, 2)
@@ -65,7 +65,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun linearStructure() = DoubleTensorAlgebra {
+    fun testLinearStructure() = DoubleTensorAlgebra {
         val shape = intArrayOf(3)
         val tensorA = full(value = -4.5, shape = shape)
         val tensorB = full(value = 10.9, shape = shape)
@@ -97,7 +97,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun dot() = DoubleTensorAlgebra {
+    fun testDot() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor11 = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
@@ -118,22 +118,10 @@ internal class TestDoubleTensorAlgebra {
         val res11 = tensor1.dot(tensor11)
         assertTrue(res11.mutableBuffer.array() contentEquals doubleArrayOf(22.0, 28.0, 49.0, 64.0))
         assertTrue(res11.shape contentEquals intArrayOf(2, 2))
-
-        var tensor4 = fromArray(intArrayOf(10, 3, 4), DoubleArray(10 * 3 * 4) {0.0})
-        var tensor5 = fromArray(intArrayOf(10, 4, 5), DoubleArray(10 * 4 * 5) {0.0})
-        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(10, 3, 5))
-
-        tensor4 = fromArray(intArrayOf(10, 3, 4), DoubleArray(10 * 3 * 4) {0.0})
-        tensor5 = fromArray(intArrayOf(4, 5), DoubleArray(4 * 5) {0.0})
-        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(10, 3, 5))
-
-        tensor4 = fromArray(intArrayOf(4, 2, 1, 3, 8, 1), DoubleArray(4 * 2 * 1 * 3 * 8 * 1) {0.0})
-        tensor5 = fromArray(intArrayOf(5, 1, 2, 8, 3, 1, 5), DoubleArray(5 * 1 * 2 * 8 * 3 * 1 * 5) {0.0})
-        assertTrue(tensor4.dot(tensor5).shape contentEquals intArrayOf(5, 4, 2, 8, 3, 8, 5))
     }
 
     @Test
-    fun diagonalEmbedding() = DoubleTensorAlgebra {
+    fun testDiagonalEmbedding() = DoubleTensorAlgebra {
         val tensor1 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = zeros(intArrayOf(2, 3, 4, 5))
