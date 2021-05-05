@@ -9,6 +9,8 @@ import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra.fold
+import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra.foldDim
 import space.kscience.kmath.tensors.core.broadcastOuterTensors
 import space.kscience.kmath.tensors.core.checkBufferShapeConsistency
 import space.kscience.kmath.tensors.core.checkEmptyDoubleBuffer
@@ -447,4 +449,16 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
     override fun Tensor<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.sum() }, dim, keepDim)
+
+
+    override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
+
+    override fun Tensor<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
+
+    override fun Tensor<Double>.max(): Double = this.fold { it.maxOrNull()!! }
+
+    override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
+
 }

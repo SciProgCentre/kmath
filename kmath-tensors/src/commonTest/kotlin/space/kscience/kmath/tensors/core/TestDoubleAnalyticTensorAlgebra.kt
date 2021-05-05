@@ -2,7 +2,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra.tan
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.math.*
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -106,7 +106,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     val tensor2 = DoubleTensor(shape2, buffer2)
 
     @Test
-    fun testMin() = DoubleAnalyticTensorAlgebra {
+    fun testMin() = DoubleTensorAlgebra {
         assertTrue { tensor2.min() == -3.0 }
         assertTrue { tensor2.min(0, true) eq fromArray(
             intArrayOf(1, 2),
@@ -119,7 +119,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testMax() = DoubleAnalyticTensorAlgebra {
+    fun testMax() = DoubleTensorAlgebra {
         assertTrue { tensor2.max() == 4.0 }
         assertTrue { tensor2.max(0, true) eq fromArray(
             intArrayOf(1, 2),
@@ -132,7 +132,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testSum() = DoubleAnalyticTensorAlgebra {
+    fun testSum() = DoubleTensorAlgebra {
         assertTrue { tensor2.sum() == 4.0 }
         assertTrue { tensor2.sum(0, true) eq fromArray(
             intArrayOf(1, 2),

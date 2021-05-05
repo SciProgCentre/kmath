@@ -15,16 +15,6 @@ public object DoubleAnalyticTensorAlgebra :
     AnalyticTensorAlgebra<Double>,
     DoubleTensorAlgebra() {
 
-    override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
-
-    override fun Tensor<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
-
-    override fun Tensor<Double>.max(): Double = this.fold { it.maxOrNull()!! }
-
-    override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
-
     override fun Tensor<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
 
     override fun Tensor<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =

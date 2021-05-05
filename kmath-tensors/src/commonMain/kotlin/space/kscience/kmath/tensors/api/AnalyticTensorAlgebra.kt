@@ -14,43 +14,6 @@ package space.kscience.kmath.tensors.api
 public interface AnalyticTensorAlgebra<T> :
     TensorPartialDivisionAlgebra<T> {
 
-
-    /**
-     * @return the minimum value of all elements in the input tensor.
-     */
-    public fun Tensor<T>.min(): T
-
-    /**
-     * Returns the minimum value of each row of the input tensor in the given dimension [dim].
-     *
-     * If [keepDim] is true, the output tensor is of the same size as
-     * input except in the dimension [dim] where it is of size 1.
-     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
-     *
-     * @param dim the dimension to reduce.
-     * @param keepDim whether the output tensor has [dim] retained or not.
-     * @return the minimum value of each row of the input tensor in the given dimension [dim].
-     */
-    public fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
-
-    /**
-     * @return the maximum value of all elements in the input tensor.
-     */
-    public fun Tensor<T>.max(): T
-
-    /**
-     * Returns the maximum value of each row of the input tensor in the given dimension [dim].
-     *
-     * If [keepDim] is true, the output tensor is of the same size as
-     * input except in the dimension [dim] where it is of size 1.
-     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
-     *
-     * @param dim the dimension to reduce.
-     * @param keepDim whether the output tensor has [dim] retained or not.
-     * @return the maximum value of each row of the input tensor in the given dimension [dim].
-     */
-    public fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
-
     /**
      * @return the mean of all elements in the input tensor.
      */
