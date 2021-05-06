@@ -493,7 +493,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
     /**
-     * Concatenates a sequence of tensors along a new dimension.
+     * Concatenates a sequence of tensors along the first dimension.
      *
      * @param tensors the [List] of tensors with same shapes to concatenate
      * @param dim the dimension to insert
