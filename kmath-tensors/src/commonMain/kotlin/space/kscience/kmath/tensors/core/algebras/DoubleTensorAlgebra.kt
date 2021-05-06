@@ -456,19 +456,31 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
     public fun Tensor<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
-    // stack tensors by axis 0
-    public fun stack(tensors: List<DoubleTensor>): DoubleTensor {
-        val shape = tensors.firstOrNull()?.shape
-        check(shape != null) { "Collection must have at least 1 element" }
-        check(tensors.all { it.shape contentEquals shape }) { "Stacking tensors must have same shapes" }
+    /**
+     * Concatenates a sequence of tensors along a new dimension.
+     *
+     * @param tensors the [List] of tensors with same shapes to concatenate
+     * @param dim the dimension to insert
+     * @return tensor with concatenation result
+     */
+    public fun stack(tensors: List<Tensor<Double>>, dim: Int = 0): DoubleTensor {
+        check(dim == 0) { "Stack by non-zero dimension not implemented yet" }
+        check(tensors.isNotEmpty()) { "List must have at least 1 element" }
+        val shape = tensors[0].shape
+        check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
         val resShape = intArrayOf(tensors.size) + shape
         val resBuffer = tensors.flatMap {
-            it.tensor.mutableBuffer.array().drop(it.bufferStart).take(it.numElements)
+            it.tensor.mutableBuffer.array().drop(it.tensor.bufferStart).take(it.tensor.numElements)
         }.toDoubleArray()
         return DoubleTensor(resShape, resBuffer, 0)
     }
 
-    // build tensor from this rows by given indices
+    /**
+     * Build tensor from rows of input tensor
+     *
+     * @param indices the [IntArray] of 1-dimensional indices
+     * @return tensor with rows corresponding to rows by [indices]
+     */
     public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor {
         return stack(indices.map { this[it] })
     }
@@ -504,7 +516,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
     override fun Tensor<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.sum() }, dim, keepDim)
-
 
     override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
 
