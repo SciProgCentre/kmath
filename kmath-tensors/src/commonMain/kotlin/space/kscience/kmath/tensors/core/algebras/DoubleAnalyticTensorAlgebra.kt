@@ -57,6 +57,28 @@ public object DoubleAnalyticTensorAlgebra :
         keepDim
     )
 
+    private fun cov(x: DoubleTensor, y:DoubleTensor): Double{
+        val n = x.shape[0]
+        return ((x - x.mean()) * (y - y.mean())).mean() * n / (n - 1)
+    }
+
+    override fun cov(tensors: List<Tensor<Double>>): DoubleTensor {
+        check(tensors.isNotEmpty()) { "List must have at least 1 element" }
+        val n = tensors.size
+        val m = tensors[0].shape[0]
+        check(tensors.all { it.shape contentEquals intArrayOf(m) }) { "Tensors must have same shapes" }
+        val resTensor = DoubleTensor(
+            intArrayOf(n, n),
+            DoubleArray(n * n) {0.0}
+        )
+        for (i in 0 until n){
+            for (j in 0 until n){
+                resTensor[intArrayOf(i, j)] = cov(tensors[i].tensor, tensors[j].tensor)
+            }
+        }
+        return resTensor
+    }
+
     override fun Tensor<Double>.exp(): DoubleTensor = tensor.map(::exp)
 
     override fun Tensor<Double>.ln(): DoubleTensor = tensor.map(::ln)
