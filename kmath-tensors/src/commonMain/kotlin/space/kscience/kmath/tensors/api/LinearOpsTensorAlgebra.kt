@@ -81,7 +81,7 @@ public interface LinearOpsTensorAlgebra<T> :
      * If input is a batch of tensors, then U, S, and Vh are also batched with the same batch dimensions as input.
      * For more information: https://pytorch.org/docs/stable/linalg.html#torch.linalg.svd
      *
-     * @return the determinant.
+     * @return triple `(U, S, V)`.
      */
     public fun Tensor<T>.svd(): Triple<Tensor<T>, Tensor<T>, Tensor<T>>
 
