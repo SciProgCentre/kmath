@@ -57,7 +57,7 @@ internal fun stepIndex(index: IntArray, shape: IntArray, nDim: Int): IntArray {
 }
 
 /**
- * This [Strides] implemetation follow the last dimension first convention
+ * This [Strides] implementation follows the last dimension first convention
  * For more information: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.strides.html
  *
  * @param shape the shape of the tensor.
