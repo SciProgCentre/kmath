@@ -23,6 +23,9 @@ import space.kscience.kmath.tensors.core.getRandomNormals
 import space.kscience.kmath.tensors.core.minusIndexFrom
 import kotlin.math.abs
 
+/**
+ * Implementation of basic operations over double tensors and basic algebra operations on them.
+ */
 public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
     public companion object : DoubleTensorAlgebra()
@@ -34,6 +37,13 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return tensor.mutableBuffer.array()[tensor.bufferStart]
     }
 
+    /**
+     * Constructs a tensor with the specified shape and data.
+     *
+     * @param shape the desired shape for the tensor.
+     * @param buffer one-dimensional data array.
+     * @return tensor with the [shape] shape and [buffer] data.
+     */
     public fun fromArray(shape: IntArray, buffer: DoubleArray): DoubleTensor {
         checkEmptyShape(shape)
         checkEmptyDoubleBuffer(buffer)
@@ -48,26 +58,67 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return DoubleTensor(newShape, tensor.mutableBuffer.array(), newStart)
     }
 
+    /**
+     * Creates a tensor of a given shape and fills all elements with a given value.
+     *
+     * @param value the value to fill the output tensor with.
+     * @param shape array of integers defining the shape of the output tensor.
+     * @return tensor with the [shape] shape and filled with [value].
+     */
     public fun full(value: Double, shape: IntArray): DoubleTensor {
         checkEmptyShape(shape)
         val buffer = DoubleArray(shape.reduce(Int::times)) { value }
         return DoubleTensor(shape, buffer)
     }
 
+    /**
+     * Returns a tensor with the same shape as `input` filled with [value].
+     *
+     * @param value the value to fill the output tensor with.
+     * @return tensor with the `input` tensor shape and filled with [value].
+     */
     public fun Tensor<Double>.fullLike(value: Double): DoubleTensor {
         val shape = tensor.shape
         val buffer = DoubleArray(tensor.numElements) { value }
         return DoubleTensor(shape, buffer)
     }
 
+    /**
+     * Returns a tensor filled with the scalar value 0.0, with the shape defined by the variable argument [shape].
+     *
+     * @param shape array of integers defining the shape of the output tensor.
+     * @return tensor filled with the scalar value 0.0, with the [shape] shape.
+     */
     public fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
 
+    /**
+     * Returns a tensor filled with the scalar value 0.0, with the same shape as a given array.
+     *
+     * @return tensor filled with the scalar value 0.0, with the same shape as `input` tensor.
+     */
     public fun Tensor<Double>.zeroesLike(): DoubleTensor = tensor.fullLike(0.0)
 
+    /**
+     * Returns a tensor filled with the scalar value 1.0, with the shape defined by the variable argument [shape].
+     *
+     * @param shape array of integers defining the shape of the output tensor.
+     * @return tensor filled with the scalar value 1.0, with the [shape] shape.
+     */
     public fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
 
+    /**
+     * Returns a tensor filled with the scalar value 1.0, with the same shape as a given array.
+     *
+     * @return tensor filled with the scalar value 1.0, with the same shape as `input` tensor.
+     */
     public fun Tensor<Double>.onesLike(): DoubleTensor = tensor.fullLike(1.0)
 
+    /**
+     * Returns a 2-D tensor with shape ([n], [n]), with ones on the diagonal and zeros elsewhere.
+     *
+     * @param n the number of rows and columns
+     * @return a 2-D tensor with ones on the diagonal and zeros elsewhere.
+     */
     public fun eye(n: Int): DoubleTensor {
         val shape = intArrayOf(n, n)
         val buffer = DoubleArray(n * n) { 0.0 }
@@ -78,6 +129,11 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return res
     }
 
+    /**
+     * Return a copy of the tensor.
+     *
+     * @return a copy of the `input` tensor with a copied buffer.
+     */
     public fun Tensor<Double>.copy(): DoubleTensor {
         return DoubleTensor(tensor.shape, tensor.mutableBuffer.array().copyOf(), tensor.bufferStart)
     }
@@ -358,7 +414,6 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
 
         return resTensor.tensor
     }
-
 
     public fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor {
         return DoubleTensor(
