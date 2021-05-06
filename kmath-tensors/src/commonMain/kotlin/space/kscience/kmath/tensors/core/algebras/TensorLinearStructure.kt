@@ -56,7 +56,12 @@ internal fun stepIndex(index: IntArray, shape: IntArray, nDim: Int): IntArray {
     return res
 }
 
-
+/**
+ * This [Strides] implemetation follow the last dimension first convention
+ * For more information: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.strides.html
+ *
+ * @param shape the shape of the tensor.
+ */
 public class TensorLinearStructure(override val shape: IntArray) : Strides
 {
     override val strides: IntArray
@@ -65,6 +70,7 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides
     override fun index(offset: Int): IntArray =
         indexFromOffset(offset, strides, shape.size)
 
+    // TODO: documentation (Alya)
     public fun stepIndex(index: IntArray): IntArray =
         stepIndex(index, shape, shape.size)
 
