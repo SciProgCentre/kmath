@@ -83,6 +83,75 @@ public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostPro
     }
 }
 
+/**
+ * Chooses [FractionSyntax.infix] depending on the context.
+ *
+ * @author Iaroslav Postovalov
+ */
+@UnstableKMathAPI
+public object BetterFraction : FeaturedMathRendererWithPostProcess.PostProcessStage {
+    private fun perform0(node: MathSyntax, infix: Boolean = false): Unit = when (node) {
+        is NumberSyntax -> Unit
+        is SymbolSyntax -> Unit
+        is OperatorNameSyntax -> Unit
+        is SpecialSymbolSyntax -> Unit
+        is OperandSyntax -> perform0(node.operand, infix)
+
+        is UnaryOperatorSyntax -> {
+            perform0(node.prefix, infix)
+            perform0(node.operand, infix)
+        }
+
+        is UnaryPlusSyntax -> perform0(node.operand, infix)
+        is UnaryMinusSyntax -> perform0(node.operand, infix)
+        is RadicalSyntax -> perform0(node.operand, infix)
+        is ExponentSyntax -> perform0(node.operand, infix)
+
+        is SuperscriptSyntax -> {
+            perform0(node.left, true)
+            perform0(node.right, true)
+        }
+
+        is SubscriptSyntax -> {
+            perform0(node.left, true)
+            perform0(node.right, true)
+        }
+
+        is BinaryOperatorSyntax -> {
+            perform0(node.prefix, infix)
+            perform0(node.left, infix)
+            perform0(node.right, infix)
+        }
+
+        is BinaryPlusSyntax -> {
+            perform0(node.left, infix)
+            perform0(node.right, infix)
+        }
+
+        is BinaryMinusSyntax -> {
+            perform0(node.left, infix)
+            perform0(node.right, infix)
+        }
+
+        is FractionSyntax -> {
+            node.infix = infix
+            perform0(node.left, infix)
+            perform0(node.right, infix)
+        }
+
+        is RadicalWithIndexSyntax -> {
+            perform0(node.left, true)
+            perform0(node.right, true)
+        }
+
+        is MultiplicationSyntax -> {
+            perform0(node.left, infix)
+            perform0(node.right, infix)
+        }
+    }
+
+    public override fun perform(node: MathSyntax): Unit = perform0(node)
+}
 
 /**
  * Applies [ExponentSyntax.useOperatorForm] to [ExponentSyntax] when the operand contains a fraction, a
@@ -102,7 +171,7 @@ public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessSt
             is UnaryOperatorSyntax -> perform0(node.prefix) || perform0(node.operand)
             is UnaryPlusSyntax -> perform0(node.operand)
             is UnaryMinusSyntax -> perform0(node.operand)
-            is RadicalSyntax -> perform0(node.operand)
+            is RadicalSyntax -> true
 
             is ExponentSyntax -> {
                 val r = perform0(node.operand)
@@ -116,7 +185,7 @@ public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessSt
             is BinaryPlusSyntax -> perform0(node.left) || perform0(node.right)
             is BinaryMinusSyntax -> perform0(node.left) || perform0(node.right)
             is FractionSyntax -> true
-            is RadicalWithIndexSyntax -> perform0(node.left) || perform0(node.right)
+            is RadicalWithIndexSyntax -> true
             is MultiplicationSyntax -> perform0(node.left) || perform0(node.right)
         }
     }
@@ -163,8 +232,11 @@ public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> 
             val isInsideExpOperator =
                 node.parent is ExponentSyntax && (node.parent as ExponentSyntax).useOperatorForm
 
+            val isOnOrUnderNormalFraction = node.parent is FractionSyntax && !((node.parent as FractionSyntax).infix)
+
             node.parentheses = !isRightOfSuperscript
                     && (needParenthesesByPrecedence || node.parent is UnaryOperatorSyntax || isInsideExpOperator)
+                    && !isOnOrUnderNormalFraction
 
             perform(node.operand)
         }

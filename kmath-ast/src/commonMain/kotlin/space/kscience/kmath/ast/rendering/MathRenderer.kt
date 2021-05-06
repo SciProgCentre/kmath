@@ -89,6 +89,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 SquareRoot.Default,
                 Exponent.Default,
                 InverseTrigonometricOperations.Default,
+                InverseHyperbolicOperations.Default,
 
                 // Fallback option for unknown operations - printing them as operator
                 BinaryOperator.Default,
@@ -105,6 +106,7 @@ public open class FeaturedMathRendererWithPostProcess(
             ),
             listOf(
                 BetterExponent,
+                BetterFraction,
                 SimplifyParentheses.Default,
                 BetterMultiplication,
             ),

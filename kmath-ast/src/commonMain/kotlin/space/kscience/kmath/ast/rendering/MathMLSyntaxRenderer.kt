@@ -18,11 +18,14 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 public object MathMLSyntaxRenderer : SyntaxRenderer {
     public override fun render(node: MathSyntax, output: Appendable) {
         output.append("<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>")
-        render0(node, output)
+        renderPart(node, output)
         output.append("</mrow></math>")
     }
 
-    private fun render0(node: MathSyntax, output: Appendable): Unit = output.run {
+    /**
+     * Renders a part of syntax returning a correct MathML tag not the whole MathML instance.
+     */
+    public fun renderPart(node: MathSyntax, output: Appendable): Unit = output.run {
         fun tag(tagName: String, vararg attr: Pair<String, String>, block: () -> Unit = {}) {
             append('<')
             append(tagName)
@@ -47,7 +50,7 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
             append('>')
         }
 
-        fun render(syntax: MathSyntax) = render0(syntax, output)
+        fun render(syntax: MathSyntax) = renderPart(syntax, output)
 
         when (node) {
             is NumberSyntax -> tag("mn") { append(node.string) }
@@ -130,14 +133,13 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
                 render(node.right)
             }
 
-            is FractionSyntax -> tag("mfrac") {
-                tag("mrow") {
-                    render(node.left)
-                }
-
-                tag("mrow") {
-                    render(node.right)
-                }
+            is FractionSyntax -> if (node.infix) {
+                render(node.left)
+                tag("mo") { append('/') }
+                render(node.right)
+            } else tag("mfrac") {
+                tag("mrow") { render(node.left) }
+                tag("mrow") { render(node.right) }
             }
 
             is RadicalWithIndexSyntax -> tag("mroot") {

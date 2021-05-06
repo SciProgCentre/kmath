@@ -26,11 +26,6 @@ public open class BufferedTensor<T>(
     override fun elements(): Sequence<Pair<IntArray, T>> = linearStructure.indices().map {
         it to this[it]
     }
-
-    override fun equals(other: Any?): Boolean = false
-
-    override fun hashCode(): Int = 0
-
 }
 
 public class IntTensor internal constructor(

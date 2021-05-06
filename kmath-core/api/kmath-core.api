@@ -272,6 +272,8 @@ public final class space/kscience/kmath/expressions/MstExtendedField : space/ksc
 	public fun sin (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
 	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sinh (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
+	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sqrt (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tan (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
 	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
@@ -1008,14 +1010,7 @@ public abstract interface class space/kscience/kmath/operations/Algebra {
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
-public abstract interface class space/kscience/kmath/operations/AlgebraElement {
-	public abstract fun getContext ()Lspace/kscience/kmath/operations/Algebra;
-}
-
 public final class space/kscience/kmath/operations/AlgebraElementsKt {
-	public static final fun div (Lspace/kscience/kmath/operations/AlgebraElement;Lspace/kscience/kmath/operations/AlgebraElement;)Lspace/kscience/kmath/operations/AlgebraElement;
-	public static final fun plus (Lspace/kscience/kmath/operations/AlgebraElement;Lspace/kscience/kmath/operations/AlgebraElement;)Lspace/kscience/kmath/operations/AlgebraElement;
-	public static final fun times (Lspace/kscience/kmath/operations/AlgebraElement;Lspace/kscience/kmath/operations/AlgebraElement;)Lspace/kscience/kmath/operations/AlgebraElement;
 }
 
 public final class space/kscience/kmath/operations/AlgebraExtensionsKt {
