@@ -155,7 +155,7 @@ public object DoubleLinearOpsTensorAlgebra :
      * @return triple `(U, S, V)`.
      */
     public fun Tensor<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        val size = tensor.linearStructure.dim
+        val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
         val uTensor = zeros(commonShape + intArrayOf(min(n, m), n))
