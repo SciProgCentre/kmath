@@ -415,6 +415,12 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return resTensor.tensor
     }
 
+    /**
+     * Applies the [transform] function to each element of the tensor and returns the resulting modified tensor.
+     *
+     * @param transform the function to be applied to each element of the tensor.
+     * @return the resulting tensor after applying the function.
+     */
     public fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor {
         return DoubleTensor(
             tensor.shape,
@@ -423,10 +429,24 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         )
     }
 
+    /**
+     * Compares element-wise two tensors with a specified precision.
+     *
+     * @param other the tensor to compare with `input` tensor.
+     * @param epsilon permissible error when comparing two Double values.
+     * @return true if two tensors have the same shape and elements, false otherwise.
+     */
     public fun Tensor<Double>.eq(other: Tensor<Double>, epsilon: Double): Boolean {
         return tensor.eq(other) { x, y -> abs(x - y) < epsilon }
     }
 
+    /**
+     * Compares element-wise two tensors.
+     * Comparison of two Double values occurs with 1e-5 precision.
+     *
+     * @param other the tensor to compare with `input` tensor.
+     * @return true if two tensors have the same shape and elements, false otherwise.
+     */
     public infix fun Tensor<Double>.eq(other: Tensor<Double>): Boolean = tensor.eq(other, 1e-5)
 
     private fun Tensor<Double>.eq(
@@ -450,9 +470,25 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         return true
     }
 
+    /**
+     * Returns a tensor of random numbers drawn from normal distributions with 0.0 mean and 1.0 standard deviation.
+     *
+     * @param shape the desired shape for the output tensor.
+     * @param seed the random seed of the pseudo-random number generator.
+     * @return tensor of a given shape filled with numbers from the normal distribution
+     * with 0.0 mean and 1.0 standard deviation.
+     */
     public fun randomNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
         DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
 
+    /**
+     * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
+     * with 0.0 mean and 1.0 standard deviation.
+     *
+     * @param seed the random seed of the pseudo-random number generator.
+     * @return tensor with the same shape as `input` filled with numbers from the normal distribution
+     * with 0.0 mean and 1.0 standard deviation.
+     */
     public fun Tensor<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
 
