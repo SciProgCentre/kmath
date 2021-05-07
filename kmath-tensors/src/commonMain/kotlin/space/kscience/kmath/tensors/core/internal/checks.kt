@@ -1,7 +1,12 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 
 
@@ -50,7 +55,7 @@ internal fun DoubleTensorAlgebra.checkSymmetric(
         "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
     }
 
-internal fun DoubleLinearOpsTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
+internal fun DoubleTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
     checkSymmetric(tensor, epsilon)
     for (mat in tensor.matrixSequence())
         check(mat.asTensor().detLU().value() > 0.0) {

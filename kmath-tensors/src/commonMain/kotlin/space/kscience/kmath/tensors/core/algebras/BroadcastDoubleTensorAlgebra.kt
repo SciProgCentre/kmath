@@ -7,8 +7,10 @@ package space.kscience.kmath.tensors.core.algebras
 
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.*
-import space.kscience.kmath.tensors.core.broadcastTensors
-import space.kscience.kmath.tensors.core.broadcastTo
+import space.kscience.kmath.tensors.core.internal.array
+import space.kscience.kmath.tensors.core.internal.broadcastTensors
+import space.kscience.kmath.tensors.core.internal.broadcastTo
+import space.kscience.kmath.tensors.core.internal.tensor
 
 /**
  * Basic linear algebra operations implemented with broadcasting.

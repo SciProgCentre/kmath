@@ -8,6 +8,10 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.internal.array
+import space.kscience.kmath.tensors.core.internal.asTensor
+import space.kscience.kmath.tensors.core.internal.matrixSequence
+import space.kscience.kmath.tensors.core.internal.toBufferedTensor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

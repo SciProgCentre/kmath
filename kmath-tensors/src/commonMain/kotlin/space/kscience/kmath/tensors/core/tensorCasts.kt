@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.api.Tensor
+import space.kscience.kmath.tensors.core.internal.tensor
 
 /**
  * Casts [Tensor<Double>] to [DoubleTensor]

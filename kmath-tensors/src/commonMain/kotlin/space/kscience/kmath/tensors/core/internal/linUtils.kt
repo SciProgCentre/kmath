@@ -1,12 +1,17 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sign
@@ -114,7 +119,7 @@ internal fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
     )
 }
 
-internal fun DoubleLinearOpsTensorAlgebra.computeLU(
+internal fun DoubleTensorAlgebra.computeLU(
     tensor: DoubleTensor,
     epsilon: Double
 ): Pair<DoubleTensor, IntTensor>? {
@@ -218,7 +223,7 @@ internal fun luMatrixInv(
     }
 }
 
-internal fun DoubleLinearOpsTensorAlgebra.qrHelper(
+internal fun DoubleTensorAlgebra.qrHelper(
     matrix: DoubleTensor,
     q: DoubleTensor,
     r: MutableStructure2D<Double>
@@ -241,14 +246,14 @@ internal fun DoubleLinearOpsTensorAlgebra.qrHelper(
                 }
             }
         }
-        r[j, j] = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+        r[j, j] = DoubleTensorAlgebra { (v dot v).sqrt().value() }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }
     }
 }
 
-internal fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10): DoubleTensor {
+internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10): DoubleTensor {
     val (n, m) = a.shape
     var v: DoubleTensor
     val b: DoubleTensor
@@ -264,7 +269,7 @@ internal fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double
     while (true) {
         lastV = v
         v = b.dot(lastV)
-        val norm = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+        val norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
         v = v.times(1.0 / norm)
         if (abs(v.dot(lastV).value()) > 1 - epsilon) {
             return v
@@ -272,7 +277,7 @@ internal fun DoubleLinearOpsTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double
     }
 }
 
-internal fun DoubleLinearOpsTensorAlgebra.svdHelper(
+internal fun DoubleTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
     USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
     m: Int, n: Int, epsilon: Double
@@ -298,12 +303,12 @@ internal fun DoubleLinearOpsTensorAlgebra.svdHelper(
         if (n > m) {
             v = svd1d(a, epsilon)
             u = matrix.dot(v)
-            norm = DoubleAnalyticTensorAlgebra { (u dot u).sqrt().value() }
+            norm = DoubleTensorAlgebra { (u dot u).sqrt().value() }
             u = u.times(1.0 / norm)
         } else {
             u = svd1d(a, epsilon)
             v = matrix.transpose(0, 1).dot(u)
-            norm = DoubleAnalyticTensorAlgebra { (v dot v).sqrt().value() }
+            norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
             v = v.times(1.0 / norm)
         }
 

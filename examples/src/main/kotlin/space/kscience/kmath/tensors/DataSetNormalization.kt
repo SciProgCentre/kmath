@@ -7,22 +7,22 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
+
 
 // Dataset normalization
 
 fun main() {
 
-    // work in context with analytic methods
-    DoubleAnalyticTensorAlgebra {
+    // work in context with broadcast methods
+    BroadcastDoubleTensorAlgebra {
         // take dataset of 5-element vectors from normal distribution
         val dataset = randomNormal(intArrayOf(100, 5)) * 1.5 // all elements from N(0, 1.5)
-        BroadcastDoubleTensorAlgebra {
-            dataset += fromArray(
-                intArrayOf(5),
-                doubleArrayOf(0.0, 1.0, 1.5, 3.0, 5.0) // rows means
-            )
-        }
+
+        dataset += fromArray(
+            intArrayOf(5),
+            doubleArrayOf(0.0, 1.0, 1.5, 3.0, 5.0) // rows means
+        )
+
 
         // find out mean and standard deviation of each column
         val mean = dataset.mean(0, false)
@@ -36,7 +36,7 @@ fun main() {
         println("Maximum:\n${dataset.max(0, false)}")
 
         // now we can scale dataset with mean normalization
-        val datasetScaled = BroadcastDoubleTensorAlgebra { (dataset - mean) / std }
+        val datasetScaled = (dataset - mean) / std
 
         // find out mean and std of scaled dataset
 

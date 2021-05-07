@@ -10,8 +10,7 @@ package space.kscience.kmath.tensors.api
  *
  * @param T the type of items closed under division in the tensors.
  */
-public interface LinearOpsTensorAlgebra<T> :
-    TensorPartialDivisionAlgebra<T> {
+public interface LinearOpsTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
 
     /**
      * Computes the determinant of a square matrix input, or of each square matrix in a batched input.

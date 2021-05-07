@@ -11,8 +11,7 @@ package space.kscience.kmath.tensors.api
  *
  * @param T the type of items closed under division in the tensors.
  */
-public interface TensorPartialDivisionAlgebra<T> :
-    TensorAlgebra<T> {
+public interface TensorPartialDivisionAlgebra<T> : TensorAlgebra<T> {
 
     /**
      * Each element of the tensor [other] is divided by this value.

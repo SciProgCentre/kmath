@@ -11,8 +11,7 @@ package space.kscience.kmath.tensors.api
  *
  * @param T the type of items closed under analytic functions in the tensors.
  */
-public interface AnalyticTensorAlgebra<T> :
-    TensorPartialDivisionAlgebra<T> {
+public interface AnalyticTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
 
     /**
      * @return the mean of all elements in the input tensor.

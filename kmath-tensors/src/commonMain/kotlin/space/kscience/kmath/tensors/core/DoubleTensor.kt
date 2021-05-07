@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.tensors.core.internal.toPrettyString
 
 /**
  * Default [BufferedTensor] implementation for [Double] values

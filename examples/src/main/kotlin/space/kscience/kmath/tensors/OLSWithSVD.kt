@@ -7,8 +7,7 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 
 import kotlin.math.abs
 
@@ -19,7 +18,7 @@ fun main() {
     val randSeed = 100500L
 
     // work in context with linear operations
-    DoubleLinearOpsTensorAlgebra {
+    DoubleTensorAlgebra {
         // take coefficient vector from normal distribution
         val alpha = randomNormal(
             intArrayOf(5),
@@ -56,12 +55,12 @@ fun main() {
                 "$alphaOLS")
 
         // figure out MSE of approximation
-        fun mse(yTrue: DoubleTensor, yPred: DoubleTensor): Double = DoubleAnalyticTensorAlgebra{
+        fun mse(yTrue: DoubleTensor, yPred: DoubleTensor): Double {
             require(yTrue.shape.size == 1)
             require(yTrue.shape contentEquals yPred.shape)
 
             val diff = yTrue - yPred
-            diff.dot(diff).sqrt().value()
+            return diff.dot(diff).sqrt().value()
         }
 
         println("MSE: ${mse(alpha, alphaOLS)}")

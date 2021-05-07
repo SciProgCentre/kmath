@@ -1,7 +1,9 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.internal.array
+import space.kscience.kmath.tensors.core.internal.svd1d
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,7 +12,7 @@ import kotlin.test.assertTrue
 internal class TestDoubleLinearOpsTensorAlgebra {
 
     @Test
-    fun testDetLU() = DoubleLinearOpsTensorAlgebra {
+    fun testDetLU() = DoubleTensorAlgebra {
         val tensor = fromArray(
             intArrayOf(2, 2, 2),
             doubleArrayOf(
@@ -35,7 +37,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testDet() = DoubleLinearOpsTensorAlgebra {
+    fun testDet() = DoubleTensorAlgebra {
         val expectedValue = 0.019827417
         val m = fromArray(
             intArrayOf(3, 3), doubleArrayOf(
@@ -49,7 +51,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testDetSingle() = DoubleLinearOpsTensorAlgebra {
+    fun testDetSingle() = DoubleTensorAlgebra {
         val expectedValue = 48.151623
         val m = fromArray(
             intArrayOf(1, 1), doubleArrayOf(
@@ -61,7 +63,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testInvLU() = DoubleLinearOpsTensorAlgebra {
+    fun testInvLU() = DoubleTensorAlgebra {
         val tensor = fromArray(
             intArrayOf(2, 2, 2),
             doubleArrayOf(
@@ -86,14 +88,14 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testScalarProduct() = DoubleLinearOpsTensorAlgebra {
+    fun testScalarProduct() = DoubleTensorAlgebra {
         val a = fromArray(intArrayOf(3), doubleArrayOf(1.8, 2.5, 6.8))
         val b = fromArray(intArrayOf(3), doubleArrayOf(5.5, 2.6, 6.4))
         assertEquals(a.dot(b).value(), 59.92)
     }
 
     @Test
-    fun testQR() = DoubleLinearOpsTensorAlgebra {
+    fun testQR() = DoubleTensorAlgebra {
         val shape = intArrayOf(2, 2, 2)
         val buffer = doubleArrayOf(
             1.0, 3.0,
@@ -114,7 +116,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testLU() = DoubleLinearOpsTensorAlgebra {
+    fun testLU() = DoubleTensorAlgebra {
         val shape = intArrayOf(2, 2, 2)
         val buffer = doubleArrayOf(
             1.0, 3.0,
@@ -134,7 +136,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testCholesky() = DoubleLinearOpsTensorAlgebra {
+    fun testCholesky() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 5), 0)
         val sigma = (tensor dot tensor.transpose()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
@@ -145,7 +147,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testSVD1D() = DoubleLinearOpsTensorAlgebra {
+    fun testSVD1D() = DoubleTensorAlgebra {
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
 
         val res = svd1d(tensor2)
@@ -156,13 +158,13 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testSVD() = DoubleLinearOpsTensorAlgebra{
+    fun testSVD() = DoubleTensorAlgebra{
         testSVDFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
         testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
     }
 
     @Test
-    fun testBatchedSVD() = DoubleLinearOpsTensorAlgebra {
+    fun testBatchedSVD() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
         val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
@@ -170,7 +172,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testBatchedSymEig() = DoubleLinearOpsTensorAlgebra {
+    fun testBatchedSymEig() = DoubleTensorAlgebra {
         val tensor = randomNormal(shape = intArrayOf(2, 3, 3), 0)
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
@@ -182,7 +184,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 }
 
 
-private fun DoubleLinearOpsTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10): Unit {
+private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10): Unit {
     val svd = tensor.svd()
 
     val tensorSVD = svd.first

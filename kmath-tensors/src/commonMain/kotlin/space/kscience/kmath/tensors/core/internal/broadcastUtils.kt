@@ -1,5 +1,11 @@
-package space.kscience.kmath.tensors.core
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
 
+package space.kscience.kmath.tensors.core.internal
+
+import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.max
 
 internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {

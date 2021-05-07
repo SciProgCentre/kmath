@@ -8,7 +8,6 @@ package space.kscience.kmath.tensors
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.toDoubleArray
 import kotlin.math.sqrt
@@ -48,7 +47,7 @@ fun reluDer(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
 // activation layer with relu activator
 class ReLU : Activation(::relu, ::reluDer)
 
-fun sigmoid(x: DoubleTensor): DoubleTensor = DoubleAnalyticTensorAlgebra {
+fun sigmoid(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
     1.0 / (1.0 + (-x).exp())
 }
 
@@ -83,9 +82,7 @@ class Dense(
         val gradInput = outputError dot weights.transpose()
 
         val gradW = input.transpose() dot outputError
-        val gradBias = DoubleAnalyticTensorAlgebra {
-            outputError.mean(dim = 0, keepDim = false) * input.shape[0].toDouble()
-        }
+        val gradBias = outputError.mean(dim = 0, keepDim = false) * input.shape[0].toDouble()
 
         weights -= learningRate * gradW
         bias -= learningRate * gradBias
@@ -110,7 +107,7 @@ fun accuracy(yPred: DoubleTensor, yTrue: DoubleTensor): Double {
 
 // neural network class
 class NeuralNetwork(private val layers: List<Layer>) {
-    private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = DoubleAnalyticTensorAlgebra {
+    private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
         val onesForAnswers = yPred.zeroesLike()
         yTrue.toDoubleArray().forEachIndexed { index, labelDouble ->
@@ -118,7 +115,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
 
-        val softmaxValue = BroadcastDoubleTensorAlgebra { yPred.exp() / yPred.exp().sum(dim = 1, keepDim = true) }
+        val softmaxValue =  yPred.exp() / yPred.exp().sum(dim = 1, keepDim = true)
 
         (-onesForAnswers + softmaxValue) / (yPred.shape[0].toDouble())
     }
@@ -177,10 +174,9 @@ class NeuralNetwork(private val layers: List<Layer>) {
 }
 
 
-
 @OptIn(ExperimentalStdlibApi::class)
 fun main() {
-    DoubleTensorAlgebra {
+    BroadcastDoubleTensorAlgebra {
         val features = 5
         val sampleSize = 250
         val trainSize = 180
@@ -188,12 +184,12 @@ fun main() {
 
         // take sample of features from normal distribution
         val x = randomNormal(intArrayOf(sampleSize, features), seed) * 2.5
-        BroadcastDoubleTensorAlgebra {
-            x += fromArray(
-                intArrayOf(5),
-                doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // rows means
-            )
-        }
+
+        x += fromArray(
+            intArrayOf(5),
+            doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // rows means
+        )
+
 
         // define class like '1' if the sum of features > 0 and '0' otherwise
         val y = fromArray(

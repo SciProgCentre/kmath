@@ -7,14 +7,14 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
 
 // solving linear system with LUP decomposition
 
 fun main () {
 
     // work in context with linear operations
-    DoubleLinearOpsTensorAlgebra {
+    BroadcastDoubleTensorAlgebra {
 
         // set true value of x
         val trueX = fromArray(

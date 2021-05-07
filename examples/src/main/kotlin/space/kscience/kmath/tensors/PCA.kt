@@ -7,9 +7,6 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
-
 
 
 // simple PCA
@@ -17,8 +14,8 @@ import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 fun main(){
     val seed = 100500L
 
-    // work in context with analytic methods
-    DoubleAnalyticTensorAlgebra {
+    // work in context with broadcast methods
+    BroadcastDoubleTensorAlgebra {
 
         // assume x is range from 0 until 10
         val x = fromArray(
@@ -63,7 +60,7 @@ fun main(){
         println("Covariance matrix:\n$covMatrix")
 
         // and find out eigenvector of it
-        val (_, evecs) = DoubleLinearOpsTensorAlgebra {covMatrix.symEig()}
+        val (_, evecs) = covMatrix.symEig()
         val v = evecs[0]
         println("Eigenvector:\n$v")
 
@@ -74,7 +71,7 @@ fun main(){
         // we can restore original data from reduced data.
         // for example, find 7th element of dataset
         val n = 7
-        val restored = BroadcastDoubleTensorAlgebra{(datasetReduced[n] dot v.view(intArrayOf(1, 2))) * std + mean}
+        val restored = (datasetReduced[n] dot v.view(intArrayOf(1, 2))) * std + mean
         println("Original value:\n${dataset[n]}")
         println("Restored value:\n$restored")
     }

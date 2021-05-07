@@ -3,11 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.core
+package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
+import space.kscience.kmath.tensors.core.BufferedTensor
+import space.kscience.kmath.tensors.core.DoubleTensor
+import space.kscience.kmath.tensors.core.IntTensor
 import space.kscience.kmath.tensors.core.algebras.TensorLinearStructure
 
 internal fun BufferedTensor<Int>.asTensor(): IntTensor =

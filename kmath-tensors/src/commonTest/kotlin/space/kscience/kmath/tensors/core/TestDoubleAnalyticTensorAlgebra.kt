@@ -1,7 +1,6 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import kotlin.math.*
 import kotlin.test.Test
@@ -28,73 +27,73 @@ internal class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testExp() = DoubleAnalyticTensorAlgebra {
+    fun testExp() = DoubleTensorAlgebra {
         assertTrue { tensor.exp() eq expectedTensor(::exp) }
     }
 
     @Test
-    fun testLog() = DoubleAnalyticTensorAlgebra {
+    fun testLog() = DoubleTensorAlgebra {
         assertTrue { tensor.ln() eq expectedTensor(::ln) }
     }
 
     @Test
-    fun testSqrt() = DoubleAnalyticTensorAlgebra {
+    fun testSqrt() = DoubleTensorAlgebra {
         assertTrue { tensor.sqrt() eq expectedTensor(::sqrt) }
     }
 
     @Test
-    fun testCos() = DoubleAnalyticTensorAlgebra {
+    fun testCos() = DoubleTensorAlgebra {
         assertTrue { tensor.cos() eq expectedTensor(::cos) }
     }
 
 
     @Test
-    fun testCosh() = DoubleAnalyticTensorAlgebra {
+    fun testCosh() = DoubleTensorAlgebra {
         assertTrue { tensor.cosh() eq expectedTensor(::cosh) }
     }
 
     @Test
-    fun testAcosh() = DoubleAnalyticTensorAlgebra {
+    fun testAcosh() = DoubleTensorAlgebra {
         assertTrue { tensor.acosh() eq expectedTensor(::acosh) }
     }
 
     @Test
-    fun testSin() = DoubleAnalyticTensorAlgebra {
+    fun testSin() = DoubleTensorAlgebra {
         assertTrue { tensor.sin() eq expectedTensor(::sin) }
     }
 
     @Test
-    fun testSinh() = DoubleAnalyticTensorAlgebra {
+    fun testSinh() = DoubleTensorAlgebra {
         assertTrue { tensor.sinh() eq expectedTensor(::sinh) }
     }
 
     @Test
-    fun testAsinh() = DoubleAnalyticTensorAlgebra {
+    fun testAsinh() = DoubleTensorAlgebra {
         assertTrue { tensor.asinh() eq expectedTensor(::asinh) }
     }
 
     @Test
-    fun testTan() = DoubleAnalyticTensorAlgebra {
+    fun testTan() = DoubleTensorAlgebra {
         assertTrue { tensor.tan() eq expectedTensor(::tan) }
     }
 
     @Test
-    fun testAtan() = DoubleAnalyticTensorAlgebra {
+    fun testAtan() = DoubleTensorAlgebra {
         assertTrue { tensor.atan() eq expectedTensor(::atan) }
     }
 
     @Test
-    fun testTanh() = DoubleAnalyticTensorAlgebra {
+    fun testTanh() = DoubleTensorAlgebra {
         assertTrue { tensor.tanh() eq expectedTensor(::tanh) }
     }
 
     @Test
-    fun testCeil() = DoubleAnalyticTensorAlgebra {
+    fun testCeil() = DoubleTensorAlgebra {
         assertTrue { tensor.ceil() eq expectedTensor(::ceil) }
     }
 
     @Test
-    fun testFloor() = DoubleAnalyticTensorAlgebra {
+    fun testFloor() = DoubleTensorAlgebra {
         assertTrue { tensor.floor() eq expectedTensor(::floor) }
     }
 
@@ -145,7 +144,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
     }
 
     @Test
-    fun testMean() = DoubleAnalyticTensorAlgebra {
+    fun testMean() = DoubleTensorAlgebra {
         assertTrue { tensor2.mean() == 1.0 }
         assertTrue { tensor2.mean(0, true) eq fromArray(
             intArrayOf(1, 2),
