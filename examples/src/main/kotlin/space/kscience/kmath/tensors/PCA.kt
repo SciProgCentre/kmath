@@ -10,11 +10,14 @@ import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleAnalyticTensorAlgebra
 import space.kscience.kmath.tensors.core.algebras.DoubleLinearOpsTensorAlgebra
 
-const val seed = 100500L
+
 
 // simple PCA
 
 fun main(){
+    val seed = 100500L
+
+    // work in context with analytic methods
     DoubleAnalyticTensorAlgebra {
 
         // assume x is range from 0 until 10

@@ -561,4 +561,9 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
     override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
 
+    override fun Tensor<Double>.argMax(dim: Int, keepDim: Boolean): DoubleTensor =
+        foldDim({ x ->
+            x.withIndex().maxByOrNull { it.value }?.index!!.toDouble()
+        }, dim, keepDim)
+
 }
