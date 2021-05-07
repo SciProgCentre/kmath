@@ -23,7 +23,6 @@ internal fun stridesFromShape(shape: IntArray): IntArray {
         current--
     }
     return res
-
 }
 
 internal fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): IntArray {

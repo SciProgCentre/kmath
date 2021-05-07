@@ -288,7 +288,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
     public fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
-     * @return the maximum value of all elements in the input tensor.
+     * Returns the maximum value of all elements in the input tensor.
      */
     public fun Tensor<T>.max(): T
 

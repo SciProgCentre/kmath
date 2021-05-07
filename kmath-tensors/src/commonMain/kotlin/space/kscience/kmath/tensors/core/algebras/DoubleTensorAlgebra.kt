@@ -343,7 +343,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
         val m2 = newOther.shape[newOther.shape.size - 2]
         val n = newOther.shape[newOther.shape.size - 1]
         check(m1 == m2) {
-            throw RuntimeException("Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)")
+            "Tensors dot operation dimension mismatch: ($l, $m1) x ($m2, $n)"
         }
 
         val resShape = newThis.shape.sliceArray(0..(newThis.shape.size - 2)) + intArrayOf(newOther.shape.last())
@@ -436,9 +436,8 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
      * @param epsilon permissible error when comparing two Double values.
      * @return true if two tensors have the same shape and elements, false otherwise.
      */
-    public fun Tensor<Double>.eq(other: Tensor<Double>, epsilon: Double): Boolean {
-        return tensor.eq(other) { x, y -> abs(x - y) < epsilon }
-    }
+    public fun Tensor<Double>.eq(other: Tensor<Double>, epsilon: Double): Boolean =
+        tensor.eq(other) { x, y -> abs(x - y) < epsilon }
 
     /**
      * Compares element-wise two tensors.
@@ -510,7 +509,7 @@ public open class DoubleTensorAlgebra : TensorPartialDivisionAlgebra<Double> {
     }
 
     /**
-     * Build tensor from rows of input tensor
+     * Builds tensor from rows of input tensor
      *
      * @param indices the [IntArray] of 1-dimensional indices
      * @return tensor with rows corresponding to rows by [indices]
