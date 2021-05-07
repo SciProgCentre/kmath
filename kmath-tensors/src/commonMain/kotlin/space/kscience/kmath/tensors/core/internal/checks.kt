@@ -58,7 +58,7 @@ internal fun DoubleTensorAlgebra.checkSymmetric(
 internal fun DoubleTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
     checkSymmetric(tensor, epsilon)
     for (mat in tensor.matrixSequence())
-        check(mat.asTensor().detLU().valueOrNull()!! > 0.0) {
-            "Tensor contains matrices which are not positive definite ${mat.asTensor().detLU().valueOrNull()!!}"
+        check(mat.asTensor().detLU().value() > 0.0) {
+            "Tensor contains matrices which are not positive definite ${mat.asTensor().detLU().value()}"
         }
 }

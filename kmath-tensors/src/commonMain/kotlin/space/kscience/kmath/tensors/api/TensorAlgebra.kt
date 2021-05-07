@@ -17,11 +17,19 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
 
     /**
      *
+     * Returns a single tensor value of unit dimension if tensor shape equals to [1].
+     *
+     * @return a nullable value of a potentially scalar tensor.
+     */
+    public fun Tensor<T>.valueOrNull(): T?
+
+    /**
+     *
      * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.valueOrNull(): T?
+    public fun Tensor<T>.value(): T
 
     /**
      * Each element of the tensor [other] is added to this value.

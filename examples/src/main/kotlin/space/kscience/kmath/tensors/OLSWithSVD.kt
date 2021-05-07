@@ -60,7 +60,7 @@ fun main() {
             require(yTrue.shape contentEquals yPred.shape)
 
             val diff = yTrue - yPred
-            return diff.dot(diff).sqrt().valueOrNull()!!
+            return diff.dot(diff).sqrt().value()
         }
 
         println("MSE: ${mse(alpha, alphaOLS)}")
