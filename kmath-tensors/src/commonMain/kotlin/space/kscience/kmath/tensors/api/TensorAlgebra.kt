@@ -16,7 +16,6 @@ import space.kscience.kmath.operations.Algebra
 public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
 
     /**
-     *
      * Returns a single tensor value of unit dimension if tensor shape equals to [1].
      *
      * @return a nullable value of a potentially scalar tensor.
@@ -24,7 +23,6 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
     public fun Tensor<T>.valueOrNull(): T?
 
     /**
-     *
      * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
      *
      * @return the value of a scalar tensor.
