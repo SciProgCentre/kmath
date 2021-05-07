@@ -35,12 +35,10 @@ public open class DoubleTensorAlgebra :
 
     public companion object : DoubleTensorAlgebra()
 
-    override fun Tensor<Double>.value(): Double {
-        check(tensor.shape contentEquals intArrayOf(1)) {
-            "Inconsistent value for tensor of shape ${shape.toList()}"
-        }
-        return tensor.mutableBuffer.array()[tensor.bufferStart]
-    }
+    override fun Tensor<Double>.valueOrNull(): Double? = if(tensor.shape contentEquals intArrayOf(1)) {
+            // Inconsistent value for tensor of with this shape
+            tensor.mutableBuffer.array()[tensor.bufferStart]
+        } else null
 
     /**
      * Constructs a tensor with the specified shape and data.

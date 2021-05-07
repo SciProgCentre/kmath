@@ -46,7 +46,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
             )
         )
 
-        assertTrue { abs(m.det().value() - expectedValue) < 1e-5 }
+        assertTrue { abs(m.det().valueOrNull()!! - expectedValue) < 1e-5 }
     }
 
     @Test
@@ -58,7 +58,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
             )
         )
 
-        assertTrue { abs(m.det().value() - expectedValue) < 1e-5 }
+        assertTrue { abs(m.det().valueOrNull()!! - expectedValue) < 1e-5 }
     }
 
     @Test
@@ -90,7 +90,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     fun testScalarProduct() = DoubleTensorAlgebra {
         val a = fromArray(intArrayOf(3), doubleArrayOf(1.8, 2.5, 6.8))
         val b = fromArray(intArrayOf(3), doubleArrayOf(5.5, 2.6, 6.4))
-        assertEquals(a.dot(b).value(), 59.92)
+        assertEquals(a.dot(b).valueOrNull()!!, 59.92)
     }
 
     @Test

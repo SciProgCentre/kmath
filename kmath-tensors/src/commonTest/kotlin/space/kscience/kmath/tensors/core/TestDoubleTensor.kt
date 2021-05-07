@@ -21,7 +21,7 @@ internal class TestDoubleTensor {
     fun testValue() = DoubleTensorAlgebra {
         val value = 12.5
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
-        assertEquals(tensor.value(), value)
+        assertEquals(tensor.valueOrNull()!!, value)
     }
 
     @Test

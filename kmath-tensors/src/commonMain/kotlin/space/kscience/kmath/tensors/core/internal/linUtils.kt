@@ -12,6 +12,7 @@ import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.valueOrNull
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sign
@@ -239,14 +240,14 @@ internal fun DoubleTensorAlgebra.qrHelper(
         val vv = v.as1D()
         if (j > 0) {
             for (i in 0 until j) {
-                r[i, j] = (qT[i] dot matrixT[j]).value()
+                r[i, j] = (qT[i] dot matrixT[j]).valueOrNull()!!
                 for (k in 0 until n) {
                     val qTi = qT[i].as1D()
                     vv[k] = vv[k] - r[i, j] * qTi[k]
                 }
             }
         }
-        r[j, j] = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+        r[j, j] = DoubleTensorAlgebra { (v dot v).sqrt().valueOrNull()!! }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }
@@ -269,9 +270,9 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     while (true) {
         lastV = v
         v = b.dot(lastV)
-        val norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+        val norm = DoubleTensorAlgebra { (v dot v).sqrt().valueOrNull()!! }
         v = v.times(1.0 / norm)
-        if (abs(v.dot(lastV).value()) > 1 - epsilon) {
+        if (abs(v.dot(lastV).valueOrNull()!!) > 1 - epsilon) {
             return v
         }
     }
@@ -292,7 +293,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
             val outerProduct = DoubleArray(u.shape[0] * v.shape[0])
             for (i in 0 until u.shape[0]) {
                 for (j in 0 until v.shape[0]) {
-                    outerProduct[i * v.shape[0] + j] = u[i].value() * v[j].value()
+                    outerProduct[i * v.shape[0] + j] = u[i].valueOrNull()!! * v[j].valueOrNull()!!
                 }
             }
             a = a - singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct))
@@ -303,12 +304,12 @@ internal fun DoubleTensorAlgebra.svdHelper(
         if (n > m) {
             v = svd1d(a, epsilon)
             u = matrix.dot(v)
-            norm = DoubleTensorAlgebra { (u dot u).sqrt().value() }
+            norm = DoubleTensorAlgebra { (u dot u).sqrt().valueOrNull()!! }
             u = u.times(1.0 / norm)
         } else {
             u = svd1d(a, epsilon)
             v = matrix.transpose(0, 1).dot(u)
-            norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+            norm = DoubleTensorAlgebra { (v dot v).sqrt().valueOrNull()!! }
             v = v.times(1.0 / norm)
         }
 
