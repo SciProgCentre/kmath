@@ -9,12 +9,12 @@ import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.tensor
 
 /**
- * Casts [Tensor] iof [Double] to [DoubleTensor]
+ * Casts [Tensor] of [Double] to [DoubleTensor]
  */
 public fun Tensor<Double>.toDoubleTensor(): DoubleTensor = this.tensor
 
 /**
- * Casts [Tensor] iof [Int] to [IntTensor]
+ * Casts [Tensor] of [Int] to [IntTensor]
  */
 public fun Tensor<Int>.toIntTensor(): IntTensor = this.tensor
 
