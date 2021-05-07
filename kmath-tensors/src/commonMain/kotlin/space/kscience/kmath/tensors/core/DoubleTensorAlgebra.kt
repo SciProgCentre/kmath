@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.core.algebras
+package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
@@ -11,7 +11,6 @@ import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.internal.dotHelper
 import space.kscience.kmath.tensors.core.internal.getRandomNormals
 import space.kscience.kmath.tensors.core.internal.*

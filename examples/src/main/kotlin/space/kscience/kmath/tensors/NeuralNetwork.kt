@@ -7,8 +7,8 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.toDoubleArray
 import kotlin.math.sqrt
 

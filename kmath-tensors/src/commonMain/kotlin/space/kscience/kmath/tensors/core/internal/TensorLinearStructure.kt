@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.core.algebras
+package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.Strides
 import kotlin.math.max
@@ -44,7 +44,7 @@ internal fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): IntArra
  *
  * @param shape the shape of the tensor.
  */
-public class TensorLinearStructure(override val shape: IntArray) : Strides {
+internal class TensorLinearStructure(override val shape: IntArray) : Strides {
     override val strides: IntArray
         get() = stridesFromShape(shape)
 

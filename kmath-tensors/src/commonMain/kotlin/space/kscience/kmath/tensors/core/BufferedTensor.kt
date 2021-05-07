@@ -1,8 +1,9 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.algebras.TensorLinearStructure
+import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
 
 /**
  * Represents [Tensor] over a [MutableBuffer] intended to be used through [DoubleTensor] and [IntTensor]
@@ -16,7 +17,7 @@ public open class BufferedTensor<T> internal constructor(
     /**
      * Buffer strides based on [TensorLinearStructure] implementation
      */
-    public val linearStructure: TensorLinearStructure
+    public val linearStructure: Strides
         get() = TensorLinearStructure(shape)
 
     /**

@@ -11,7 +11,7 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.*
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sign

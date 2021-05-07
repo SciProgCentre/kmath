@@ -3,10 +3,9 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.core.algebras
+package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.broadcastTensors
 import space.kscience.kmath.tensors.core.internal.broadcastTo

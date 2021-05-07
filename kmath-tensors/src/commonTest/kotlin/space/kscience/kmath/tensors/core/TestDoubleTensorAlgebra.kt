@@ -2,7 +2,6 @@ package space.kscience.kmath.tensors.core
 
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.array
 import kotlin.test.Test
 import kotlin.test.assertFalse

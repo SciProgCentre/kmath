@@ -1,8 +1,6 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.*
 import kotlin.test.Test
 import kotlin.test.assertTrue

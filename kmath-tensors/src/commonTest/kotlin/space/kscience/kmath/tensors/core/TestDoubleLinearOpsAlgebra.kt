@@ -1,7 +1,6 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.svd1d
 import kotlin.math.abs

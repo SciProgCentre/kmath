@@ -7,7 +7,7 @@ package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 
 import kotlin.math.abs
 

@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.algebras.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 
 
 // simple PCA

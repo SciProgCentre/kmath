@@ -7,7 +7,6 @@ import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.toDoubleArray
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.asTensor
 import space.kscience.kmath.tensors.core.internal.matrixSequence

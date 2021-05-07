@@ -7,7 +7,7 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.algebras.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 
 
 internal fun checkEmptyShape(shape: IntArray) =
