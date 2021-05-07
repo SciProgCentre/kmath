@@ -34,7 +34,7 @@ internal class AutoDiffTest {
             println(z.derivative(x))
             println(z.derivative(y, x))
             assertEquals(z.derivative(x, y), z.derivative(y, x))
-            //check that improper order cause failure
+            // check improper order cause failure
             assertFails { z.derivative(x, x, y) }
         }
     }

@@ -10,9 +10,6 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.collectWithState
 import space.kscience.kmath.distributions.NormalDistribution
 
-/**
- * The state of distribution averager.
- */
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
 /**

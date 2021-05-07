@@ -164,7 +164,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features
+     * Get a feature of the structure in this scope. Structure features take precedence other context features.
      *
      * @param F the type of feature.
      * @param structure the structure.
@@ -195,7 +195,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
 }
 
 /**
- * Get a feature of the structure in this scope. Structure features take precedence other context features
+ * Get a feature of the structure in this scope. Structure features take precedence other context features.
  *
  * @param T the type of items in the matrices.
  * @param F the type of feature.

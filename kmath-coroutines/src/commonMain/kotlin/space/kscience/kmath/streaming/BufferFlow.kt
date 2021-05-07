@@ -76,7 +76,7 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
 
 /**
  * Map a flow to a moving window buffer. The window step is one.
- * In order to get different steps, one could use skip operation.
+ * To get different steps, one could use skip operation.
  */
 public fun <T> Flow<T>.windowed(window: Int): Flow<Buffer<T>> = flow {
     require(window > 1) { "Window size must be more than one" }

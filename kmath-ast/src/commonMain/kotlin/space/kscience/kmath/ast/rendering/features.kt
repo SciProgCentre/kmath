@@ -49,7 +49,7 @@ else
     NumberSyntax(string = s)
 
 /**
- * Special printing for numeric types which are printed in form of
+ * Special printing for numeric types that are printed in form of
  * *('-'? (DIGIT+ ('.' DIGIT+)? ('E' '-'? DIGIT+)? | 'Infinity')) | 'NaN'*.
  *
  * @property types The suitable types.
@@ -110,7 +110,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
 }
 
 /**
- * Special printing for numeric types which are printed in form of *'-'? DIGIT+*.
+ * Special printing for numeric types that are printed in form of *'-'? DIGIT+*.
  *
  * @property types The suitable types.
  * @author Iaroslav Postovalov
@@ -155,7 +155,7 @@ public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
 }
 
 /**
- * Abstract printing of unary operations which discards [MST] if their operation is not in [operations] or its type is
+ * Abstract printing of unary operations that discards [MST] if their operation is not in [operations] or its type is
  * not [MST.Unary].
  *
  * @param operations the allowed operations. If `null`, any operation is accepted.
@@ -176,7 +176,7 @@ public abstract class Unary(public val operations: Collection<String>?) : Render
 }
 
 /**
- * Abstract printing of unary operations which discards [MST] if their operation is not in [operations] or its type is
+ * Abstract printing of unary operations that discards [MST] if their operation is not in [operations] or its type is
  * not [MST.Binary].
  *
  * @property operations the allowed operations. If `null`, any operation is accepted.

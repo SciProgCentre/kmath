@@ -26,11 +26,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically dispatches a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [leftSideNumberOperation] overload:
-     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b)`.
+     * 1. If operation is not defined in the structure, then function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [leftSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -41,11 +41,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically invokes a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second [leftSideNumberOperation] overload:
-     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [leftSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @param left the first argument of operation.
@@ -58,11 +58,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically dispatches a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
-     * i.e. `rightSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [rightSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `rightSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -73,11 +73,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically invokes a binary operation with the certain name with numeric second argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
-     * i.e. `rightSideNumberOperationFunction(a)(b, c) == rightSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [rightSideNumberOperationFunction]: for any `a`, `b`, and `c`,
+     * `rightSideNumberOperationFunction(a)(b, c) == rightSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @param left the first argument of operation.

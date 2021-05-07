@@ -14,7 +14,7 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
 /**
- * Returns a reference to [IntArray] containing all of the elements of this [Buffer] or copy the data.
+ * Returns a reference to [IntArray] containing all the elements of this [Buffer] or copy the data.
  */
 internal fun Buffer<Int>.array(): IntArray = when (this) {
     is IntBuffer -> array
@@ -22,7 +22,7 @@ internal fun Buffer<Int>.array(): IntArray = when (this) {
 }
 
 /**
- * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer] or copy the data.
+ * Returns a reference to [DoubleArray] containing all the elements of this [Buffer] or copy the data.
  */
 @PublishedApi
 internal fun Buffer<Double>.array(): DoubleArray = when (this) {

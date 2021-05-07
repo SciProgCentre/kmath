@@ -11,27 +11,28 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 
 /**
- * A likelihood function optimization problem with provided derivatives
+ * A likelihood function optimization problem with provided derivatives.
  */
 public interface FunctionOptimization<T : Any> : Optimization<T> {
     /**
-     * The optimization direction. If true search for function maximum, if false, search for the minimum
+     * The optimization direction. If true search for function maximum, if false, search for the minimum.
      */
     public var maximize: Boolean
 
     /**
-     * Define the initial guess for the optimization problem
+     * Defines the initial guess for the optimization problem.
      */
     public fun initialGuess(map: Map<Symbol, T>)
 
     /**
-     * Set a differentiable expression as objective function as function and gradient provider
+     * Set a differentiable expression as objective function as function and gradient provider.
      */
     public fun diffFunction(expression: DifferentiableExpression<T>)
 
     public companion object {
         /**
-         * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
+         * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic
+         * differentiation.
          */
         public fun <T : Any, I : Any, A> chiSquared(
             autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
@@ -61,7 +62,7 @@ public interface FunctionOptimization<T : Any> : Optimization<T> {
 }
 
 /**
- * Define a chi-squared-based objective function
+ * Defines a chi-squared-based objective function.
  */
 public fun <T: Any, I : Any, A> FunctionOptimization<T>.chiSquared(
     autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
@@ -76,7 +77,7 @@ public fun <T: Any, I : Any, A> FunctionOptimization<T>.chiSquared(
 }
 
 /**
- * Optimize differentiable expression using specific [OptimizationProblemFactory]
+ * Optimizes differentiable expression using specific [OptimizationProblemFactory].
  */
 public fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T>.optimizeWith(
     factory: OptimizationProblemFactory<T, F>,

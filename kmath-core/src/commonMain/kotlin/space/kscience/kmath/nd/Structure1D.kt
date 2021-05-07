@@ -110,7 +110,7 @@ internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : Mutable
 }
 
 /**
- * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch.
  */
 public fun <T> StructureND<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
     when (this) {

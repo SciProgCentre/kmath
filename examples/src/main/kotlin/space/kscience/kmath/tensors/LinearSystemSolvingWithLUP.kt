@@ -42,7 +42,7 @@ fun main() = BroadcastDoubleTensorAlgebra {// work in context with linear operat
     // get P, L, U such that PA = LU
     val (p, l, u) = a.lu()
 
-    // check that P is permutation matrix
+    // check P is permutation matrix
     println("P:\n$p")
     // L is lower triangular matrix and U is upper triangular matrix
     println("L:\n$l")

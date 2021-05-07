@@ -33,7 +33,7 @@ public value class LongBuffer(public val array: LongArray) : MutableBuffer<Long>
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an buffer element given its index.
+ * It should return the value for a buffer element given its index.
  */
 public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongBuffer(LongArray(size) { init(it) })
 
@@ -43,7 +43,7 @@ public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongB
 public fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
 
 /**
- * Returns a new [LongArray] containing all of the elements of this [Buffer].
+ * Returns a new [LongArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Long>.toLongArray(): LongArray = when (this) {
     is LongBuffer -> array.copyOf()

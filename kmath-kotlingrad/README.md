@@ -1,6 +1,6 @@
 # Module kmath-kotlingrad
 
-[Kotlin∇](https://www.htmlsymbols.xyz/unicode/U+2207) integration module.
+[Kotlin∇](https://github.com/breandan/kotlingrad) integration module.
 
  - [differentiable-mst-expression](src/main/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt) : MST based DifferentiableExpression.
  - [scalars-adapters](src/main/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt) : Conversions between Kotlin∇'s SFun and MST

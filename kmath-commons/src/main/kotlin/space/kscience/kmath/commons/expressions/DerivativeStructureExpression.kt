@@ -31,7 +31,7 @@ public class DerivativeStructureField(
     override fun number(value: Number): DerivativeStructure = const(value.toDouble())
 
     /**
-     * A class that implements both [DerivativeStructure] and a [Symbol]
+     * A class implementing both [DerivativeStructure] and [Symbol].
      */
     public inner class DerivativeStructureSymbol(
         size: Int,

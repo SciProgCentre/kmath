@@ -8,7 +8,7 @@ package space.kscience.kmath.ast.rendering
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
- * Mathematical typography syntax node.
+ * Syntax node for mathematical typography.
  *
  * @author Iaroslav Postovalov
  */
@@ -301,7 +301,7 @@ public data class BinaryPlusSyntax(
 }
 
 /**
- * Represents binary, infix subtraction (*42 - 42*).
+ * Represents binary, infix subtraction (*42 &minus; 42*).
  *
  * @param left The minuend.
  * @param right The subtrahend.

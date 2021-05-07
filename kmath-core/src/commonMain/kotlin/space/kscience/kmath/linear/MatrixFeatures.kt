@@ -31,7 +31,7 @@ public object ZeroFeature : DiagonalFeature
 public object UnitFeature : DiagonalFeature
 
 /**
- * Matrices with this feature can be inverted: [inverse] = `a`<sup>-1</sup> where `a` is the owning matrix.
+ * Matrices with this feature can be inverted: *[inverse] = a<sup>&minus;1</sup>* where *a* is the owning matrix.
  *
  * @param T the type of matrices' items.
  */

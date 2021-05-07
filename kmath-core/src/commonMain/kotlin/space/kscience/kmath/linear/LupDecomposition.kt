@@ -114,7 +114,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
                     for (i in 0 until col) sum -= luRow[i] * lu[i, col]
                     luRow[col] = sum
 
-                    // maintain best permutation choice
+                    // maintain the best permutation choice
                     if (abs(sum) > largest) {
                         largest = abs(sum)
                         max = row
@@ -241,7 +241,7 @@ public fun LinearSpace<Double, DoubleField>.solveWithLup(a: Matrix<Double>, b: M
 }
 
 /**
- * Inverses a square matrix using LUP decomposition. Non square matrix will throw a error.
+ * Inverses a square matrix using LUP decomposition. Non square matrix will throw an error.
  */
 public fun LinearSpace<Double, DoubleField>.inverseWithLup(matrix: Matrix<Double>): Matrix<Double> =
     solveWithLup(matrix, one(matrix.rowNum, matrix.colNum))

@@ -11,7 +11,7 @@ import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 
 /**
- * The binned data element. Could be a histogram bin with a number of counts or an artificial construct
+ * The binned data element. Could be a histogram bin with a number of counts or an artificial construct.
  */
 public interface Bin<in T : Any> : Domain<T> {
     /**

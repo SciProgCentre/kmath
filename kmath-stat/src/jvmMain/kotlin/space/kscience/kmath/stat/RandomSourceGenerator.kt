@@ -55,7 +55,7 @@ public class RandomGeneratorProvider(public val generator: RandomGenerator) : Un
     /**
      * Generates [Byte] values and places them into a user-supplied array.
      *
-     * The number of random bytes produced is equal to the length of the the byte array.
+     * The number of random bytes produced is equal to the length of the byte array.
      *
      * @param bytes byte array in which to put the random bytes.
      */

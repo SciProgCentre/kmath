@@ -32,7 +32,7 @@ public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<D
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an buffer element given its index.
+ * It should return the value for a buffer element given its index.
  */
 public inline fun DoubleBuffer(size: Int, init: (Int) -> Double): DoubleBuffer = DoubleBuffer(DoubleArray(size) { init(it) })
 
@@ -47,7 +47,7 @@ public fun DoubleBuffer(vararg doubles: Double): DoubleBuffer = DoubleBuffer(dou
 public fun DoubleBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 /**
- * Returns a new [DoubleArray] containing all of the elements of this [Buffer].
+ * Returns a new [DoubleArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
     is DoubleBuffer -> array.copyOf()

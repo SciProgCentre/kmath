@@ -72,7 +72,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         }
 
         // Get previous rule.
-        // If it has not been computed yet it will trigger a recursive call
+        // If it has not been computed, yet it will trigger a recursive call
         // to this method.
         val previousPoints: Buffer<Double> = getOrBuildRule(numPoints - 1).first
 
@@ -146,7 +146,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         }
         // If "numPoints" is odd, 0 is a root.
         // Note: as written, the test for oddness will work for negative
-        // integers too (although it is not necessary here), preventing
+        // integers too (although it is unnecessary here), preventing
         // a FindBugs warning.
         if (numPoints % 2 != 0) {
             var pmc = 1.0

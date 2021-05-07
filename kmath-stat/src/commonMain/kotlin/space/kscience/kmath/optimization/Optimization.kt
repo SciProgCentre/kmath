@@ -24,7 +24,7 @@ public operator fun <T> OptimizationResult<T>.plus(
 ): OptimizationResult<T> = OptimizationResult(point, value, features + feature)
 
 /**
- * An optimization problem builder over [T] variables
+ * A builder of optimization problems over [T] variables
  */
 public interface Optimization<T : Any> {
 

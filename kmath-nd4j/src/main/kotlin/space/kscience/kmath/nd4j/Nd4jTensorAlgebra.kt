@@ -29,7 +29,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
 
     /**
-     * Unwraps to or acquires [INDArray] from [StructureND].
+     * Unwraps to or gets [INDArray] from [StructureND].
      */
     public val StructureND<T>.ndArray: INDArray
 
