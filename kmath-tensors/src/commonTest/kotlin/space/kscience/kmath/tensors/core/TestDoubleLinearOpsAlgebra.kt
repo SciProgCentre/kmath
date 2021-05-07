@@ -194,5 +194,3 @@ private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double
 
     assertTrue(tensor.eq(tensorSVD, epsilon))
 }
-
-
