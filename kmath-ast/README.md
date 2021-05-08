@@ -10,7 +10,7 @@ Performance and visualization extensions to MST API.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-7`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-8`.
 
 **Gradle:**
 ```gradle
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-7'
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-8'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-7")
+    implementation("space.kscience:kmath-ast:0.3.0-dev-8")
 }
 ```
 
@@ -144,7 +144,7 @@ import space.kscience.kmath.misc.*
 
 @OptIn(UnstableKMathAPI::class)
 public fun main() {
-    val mst = "exp(sqrt(x))-asin(2*x)/(2e10+x^3)/(-12)".parseMath()
+    val mst = "exp(sqrt(x))-asin(2*x)/(2e10+x^3)/(12)+x^(2/3)".parseMath()
     val syntax = FeaturedMathRendererWithPostProcess.Default.render(mst)
     val latex = LatexSyntaxRenderer.renderWithStringBuilder(syntax)
     println("LaTeX:")
@@ -158,9 +158,9 @@ public fun main() {
 
 Result LaTeX:
 
-![](https://latex.codecogs.com/gif.latex?%5Coperatorname{exp}%5C,%5Cleft(%5Csqrt{x}%5Cright)-%5Cfrac{%5Cfrac{%5Coperatorname{arcsin}%5C,%5Cleft(2%5C,x%5Cright)}{2%5Ctimes10^{10}%2Bx^{3}}}{-12})
+![](https://latex.codecogs.com/gif.latex?%5Coperatorname{exp}%5C,%5Cleft(%5Csqrt{x}%5Cright)-%5Cfrac{%5Cfrac{%5Coperatorname{arcsin}%5C,%5Cleft(2%5C,x%5Cright)}{2%5Ctimes10^{10}%2Bx^{3}}}{12}+x^{2/3})
 
-Result MathML (embedding MathML is not allowed by GitHub Markdown):
+Result MathML (can be used with MathJax or other renderers):
 
 <details>
 
@@ -211,10 +211,20 @@ Result MathML (embedding MathML is not allowed by GitHub Markdown):
                 </mfrac>
             </mrow>
             <mrow>
-                <mo>-</mo>
                 <mn>12</mn>
             </mrow>
         </mfrac>
+        <mo>+</mo>
+        <msup>
+            <mrow>
+                <mi>x</mi>
+            </mrow>
+            <mrow>
+                <mn>2</mn>
+                <mo>/</mo>
+                <mn>3</mn>
+            </mrow>
+        </msup>
     </mrow>
 </math>
 ```
