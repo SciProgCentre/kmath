@@ -19,6 +19,7 @@ import kotlin.reflect.KClass
  * @param T the type of items.
  */
 public typealias Matrix<T> = Structure2D<T>
+public typealias MutableMatrix<T> = MutableStructure2D<T>
 
 /**
  * Alias or using [Buffer] as a point/vector in a many-dimensional space.

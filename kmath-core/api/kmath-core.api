@@ -750,7 +750,7 @@ public final class space/kscience/kmath/nd/BufferAlgebraNDKt {
 	public static final fun ring (Lspace/kscience/kmath/nd/AlgebraND$Companion;Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;[I)Lspace/kscience/kmath/nd/BufferedRingND;
 }
 
-public final class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/StructureND {
+public class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/StructureND {
 	public fun <init> (Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/Buffer;)V
 	public fun elements ()Lkotlin/sequences/Sequence;
 	public fun get ([I)Ljava/lang/Object;
@@ -791,10 +791,9 @@ public final class space/kscience/kmath/nd/DefaultStrides : space/kscience/kmath
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLinearSize ()I
 	public fun getShape ()[I
-	public fun getStrides ()Ljava/util/List;
+	public fun getStrides ()[I
 	public fun hashCode ()I
 	public fun index (I)[I
-	public fun offset ([I)I
 }
 
 public final class space/kscience/kmath/nd/DefaultStrides$Companion {
@@ -878,6 +877,22 @@ public abstract interface class space/kscience/kmath/nd/GroupND : space/kscience
 public final class space/kscience/kmath/nd/GroupND$Companion {
 }
 
+public final class space/kscience/kmath/nd/MutableBufferND : space/kscience/kmath/nd/BufferND, space/kscience/kmath/nd/MutableStructureND {
+	public fun <init> (Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/MutableBuffer;)V
+	public final fun getMutableBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun set ([ILjava/lang/Object;)V
+}
+
+public abstract interface class space/kscience/kmath/nd/MutableStructure1D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure1D, space/kscience/kmath/structures/MutableBuffer {
+	public fun set ([ILjava/lang/Object;)V
+}
+
+public abstract interface class space/kscience/kmath/nd/MutableStructure2D : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/Structure2D {
+	public fun getColumns ()Ljava/util/List;
+	public fun getRows ()Ljava/util/List;
+	public abstract fun set (IILjava/lang/Object;)V
+}
+
 public abstract interface class space/kscience/kmath/nd/MutableStructureND : space/kscience/kmath/nd/StructureND {
 	public abstract fun set ([ILjava/lang/Object;)V
 }
@@ -917,10 +932,10 @@ public final class space/kscience/kmath/nd/ShortRingNDKt {
 public abstract interface class space/kscience/kmath/nd/Strides {
 	public abstract fun getLinearSize ()I
 	public abstract fun getShape ()[I
-	public abstract fun getStrides ()Ljava/util/List;
+	public abstract fun getStrides ()[I
 	public abstract fun index (I)[I
 	public fun indices ()Lkotlin/sequences/Sequence;
-	public abstract fun offset ([I)I
+	public fun offset ([I)I
 }
 
 public abstract interface class space/kscience/kmath/nd/Structure1D : space/kscience/kmath/nd/StructureND, space/kscience/kmath/structures/Buffer {
@@ -934,6 +949,7 @@ public final class space/kscience/kmath/nd/Structure1D$Companion {
 }
 
 public final class space/kscience/kmath/nd/Structure1DKt {
+	public static final fun as1D (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructure1D;
 	public static final fun as1D (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/Structure1D;
 	public static final fun asND (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/nd/Structure1D;
 }
@@ -954,6 +970,7 @@ public final class space/kscience/kmath/nd/Structure2D$Companion {
 }
 
 public final class space/kscience/kmath/nd/Structure2DKt {
+	public static final fun as2D (Lspace/kscience/kmath/nd/MutableStructureND;)Lspace/kscience/kmath/nd/MutableStructure2D;
 	public static final fun as2D (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/Structure2D;
 }
 
