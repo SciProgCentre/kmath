@@ -1,5 +1,21 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:space.kscience.kmath.kotlingrad////PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/index.html
+$dokka.location:space.kscience.kmath.kotlingrad//toDiffExpression/space.kscience.kmath.expressions.MST#TypeParam(bounds=[space.kscience.kmath.operations.NumericAlgebra[TypeParam(bounds=[kotlin.Number])]])/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-diff-expression.html
+$dokka.location:space.kscience.kmath.kotlingrad//toMst/edu.umontreal.kotlingrad.api.SConst[TypeParam(bounds=[edu.umontreal.kotlingrad.api.SFun[^]])]#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-mst.html
+$dokka.location:space.kscience.kmath.kotlingrad//toMst/edu.umontreal.kotlingrad.api.SFun[TypeParam(bounds=[edu.umontreal.kotlingrad.api.SFun[^]])]#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-mst.html
+$dokka.location:space.kscience.kmath.kotlingrad//toMst/edu.umontreal.kotlingrad.api.SVar[TypeParam(bounds=[edu.umontreal.kotlingrad.api.SFun[^]])]#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-mst.html
+$dokka.location:space.kscience.kmath.kotlingrad//toSConst/space.kscience.kmath.expressions.MST.Numeric#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-s-const.html
+$dokka.location:space.kscience.kmath.kotlingrad//toSFun/space.kscience.kmath.expressions.MST#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/to-s-fun.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression///PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/index.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression/DifferentiableMstExpression/#TypeParam(bounds=[space.kscience.kmath.operations.NumericAlgebra[TypeParam(bounds=[kotlin.Number])]])#space.kscience.kmath.expressions.MST/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/-differentiable-mst-expression.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression/algebra/#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/algebra.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression/derivativeOrNull/#kotlin.collections.List[space.kscience.kmath.misc.Symbol]/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/derivative-or-null.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression/invoke/#kotlin.collections.Map[space.kscience.kmath.misc.Symbol,TypeParam(bounds=[kotlin.Number])]/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/invoke.html
+$dokka.location:space.kscience.kmath.kotlingrad/DifferentiableMstExpression/mst/#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-differentiable-mst-expression/mst.html
+$dokka.location:space.kscience.kmath.kotlingrad/KMathNumber///PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-k-math-number/index.html
+$dokka.location:space.kscience.kmath.kotlingrad/KMathNumber/KMathNumber/#TypeParam(bounds=[space.kscience.kmath.operations.NumericAlgebra[TypeParam(bounds=[kotlin.Number])]])#TypeParam(bounds=[kotlin.Number])/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-k-math-number/-k-math-number.html
+$dokka.location:space.kscience.kmath.kotlingrad/KMathNumber/algebra/#/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-k-math-number/algebra.html
+$dokka.location:space.kscience.kmath.kotlingrad/KMathNumber/wrap/#kotlin.Number/PointingToDeclaration/kmath-kotlingrad/space.kscience.kmath.kotlingrad/-k-math-number/wrap.html
 space.kscience.kmath.kotlingrad
 

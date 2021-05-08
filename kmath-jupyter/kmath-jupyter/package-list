@@ -1,0 +1,6 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:space.kscience.kmath.jupyter////PointingToDeclaration/kmath-jupyter/space.kscience.kmath.jupyter/index.html
+$dokka.location:space.kscience.kmath.jupyter//toMst/kotlin.Number#/PointingToDeclaration/kmath-jupyter/space.kscience.kmath.jupyter/to-mst.html
+space.kscience.kmath.jupyter
+

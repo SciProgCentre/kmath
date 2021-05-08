@@ -1,5 +1,49 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:space.kscience.kmath.geometry////PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/index.html
+$dokka.location:space.kscience.kmath.geometry//Vector2D/#kotlin.Double#kotlin.Double/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d.html
+$dokka.location:space.kscience.kmath.geometry//Vector3D/#kotlin.Double#kotlin.Double#kotlin.Double/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d.html
+$dokka.location:space.kscience.kmath.geometry//r/space.kscience.kmath.geometry.Vector2D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/r.html
+$dokka.location:space.kscience.kmath.geometry//r/space.kscience.kmath.geometry.Vector3D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/r.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/index.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/add/#space.kscience.kmath.geometry.Vector2D#space.kscience.kmath.geometry.Vector2D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/add.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/distanceTo/space.kscience.kmath.geometry.Vector2D#space.kscience.kmath.geometry.Vector2D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/distance-to.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/dot/space.kscience.kmath.geometry.Vector2D#space.kscience.kmath.geometry.Vector2D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/dot.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/norm/space.kscience.kmath.geometry.Vector2D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/norm.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/scale/#space.kscience.kmath.geometry.Vector2D#kotlin.Double/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/scale.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/unaryMinus/space.kscience.kmath.geometry.Vector2D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/unary-minus.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean2DSpace/zero/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean2-d-space/zero.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/index.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/add/#space.kscience.kmath.geometry.Vector3D#space.kscience.kmath.geometry.Vector3D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/add.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/distanceTo/space.kscience.kmath.geometry.Vector3D#space.kscience.kmath.geometry.Vector3D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/distance-to.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/dot/space.kscience.kmath.geometry.Vector3D#space.kscience.kmath.geometry.Vector3D/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/dot.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/norm/space.kscience.kmath.geometry.Vector3D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/norm.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/scale/#space.kscience.kmath.geometry.Vector3D#kotlin.Double/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/scale.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/unaryMinus/space.kscience.kmath.geometry.Vector3D#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/unary-minus.html
+$dokka.location:space.kscience.kmath.geometry/Euclidean3DSpace/zero/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-euclidean3-d-space/zero.html
+$dokka.location:space.kscience.kmath.geometry/GeometrySpace///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-geometry-space/index.html
+$dokka.location:space.kscience.kmath.geometry/GeometrySpace/distanceTo/TypeParam(bounds=[space.kscience.kmath.geometry.Vector])#TypeParam(bounds=[space.kscience.kmath.geometry.Vector])/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-geometry-space/distance-to.html
+$dokka.location:space.kscience.kmath.geometry/GeometrySpace/dot/TypeParam(bounds=[space.kscience.kmath.geometry.Vector])#TypeParam(bounds=[space.kscience.kmath.geometry.Vector])/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-geometry-space/dot.html
+$dokka.location:space.kscience.kmath.geometry/Line///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-line/index.html
+$dokka.location:space.kscience.kmath.geometry/Line/Line/#TypeParam(bounds=[space.kscience.kmath.geometry.Vector])#TypeParam(bounds=[space.kscience.kmath.geometry.Vector])/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-line/-line.html
+$dokka.location:space.kscience.kmath.geometry/Line/base/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-line/base.html
+$dokka.location:space.kscience.kmath.geometry/Line/direction/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-line/direction.html
+$dokka.location:space.kscience.kmath.geometry/ReferenceFrame///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-reference-frame/index.html
+$dokka.location:space.kscience.kmath.geometry/Vector///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector/index.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/index.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/context/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/context.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/get/#kotlin.Int/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/get.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/iterator/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/iterator.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/size/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/size.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/x/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/x.html
+$dokka.location:space.kscience.kmath.geometry/Vector2D/y/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector2-d/y.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D///PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/index.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/context/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/context.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/get/#kotlin.Int/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/get.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/iterator/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/iterator.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/size/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/size.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/x/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/x.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/y/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/y.html
+$dokka.location:space.kscience.kmath.geometry/Vector3D/z/#/PointingToDeclaration/kmath-geometry/space.kscience.kmath.geometry/-vector3-d/z.html
 space.kscience.kmath.geometry
 

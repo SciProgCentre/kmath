@@ -1,5 +1,51 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:space.kscience.kmath.ejml////PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleMatrix///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-matrix/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleMatrix/EjmlDoubleMatrix/#TypeParam(bounds=[org.ejml.data.DMatrix])/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-matrix/-ejml-double-matrix.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleMatrix/get/#kotlin.Int#kotlin.Int/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-matrix/get.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleMatrix/origin/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-matrix/origin.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleVector///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-vector/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleVector/EjmlDoubleVector/#TypeParam(bounds=[org.ejml.data.DMatrixD1])/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-vector/-ejml-double-vector.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleVector/get/#kotlin.Int/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-vector/get.html
+$dokka.location:space.kscience.kmath.ejml/EjmlDoubleVector/origin/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-double-vector/origin.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace/EjmlLinearSpace/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/-ejml-linear-space.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace/buildMatrix/#kotlin.Int#kotlin.Int#kotlin.Function3[TypeParam(bounds=[space.kscience.kmath.operations.Ring[TypeParam(bounds=[kotlin.Any])]]),kotlin.Int,kotlin.Int,TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/build-matrix.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace/buildVector/#kotlin.Int#kotlin.Function2[TypeParam(bounds=[space.kscience.kmath.operations.Ring[TypeParam(bounds=[kotlin.Any])]]),kotlin.Int,TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/build-vector.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace/toEjml/space.kscience.kmath.nd.Structure2D[TypeParam(bounds=[kotlin.Any])]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/to-ejml.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpace/toEjml/space.kscience.kmath.structures.Buffer[TypeParam(bounds=[kotlin.Any])]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space/to-ejml.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/buildMatrix/#kotlin.Int#kotlin.Int#kotlin.Function3[space.kscience.kmath.operations.DoubleField,kotlin.Int,kotlin.Int,kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/build-matrix.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/buildVector/#kotlin.Int#kotlin.Function2[space.kscience.kmath.operations.DoubleField,kotlin.Int,kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/build-vector.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/dot/space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.nd.Structure2D[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/dot.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/dot/space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.structures.Buffer[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/dot.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/elementAlgebra/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/element-algebra.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/getFeature/#space.kscience.kmath.nd.Structure2D[kotlin.Double]#kotlin.reflect.KClass[TypeParam(bounds=[space.kscience.kmath.nd.StructureFeature])]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/get-feature.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/minus/space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.nd.Structure2D[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/minus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/minus/space.kscience.kmath.structures.Buffer[kotlin.Double]#space.kscience.kmath.structures.Buffer[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/minus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/plus/space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.nd.Structure2D[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/plus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/plus/space.kscience.kmath.structures.Buffer[kotlin.Double]#space.kscience.kmath.structures.Buffer[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/plus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/solve/#space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.nd.Structure2D[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/solve.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/solve/#space.kscience.kmath.nd.Structure2D[kotlin.Double]#space.kscience.kmath.structures.Buffer[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/solve.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/times/kotlin.Double#space.kscience.kmath.nd.Structure2D[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/times.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/times/kotlin.Double#space.kscience.kmath.structures.Buffer[kotlin.Double]/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/times.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/times/space.kscience.kmath.nd.Structure2D[kotlin.Double]#kotlin.Double/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/times.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/times/space.kscience.kmath.structures.Buffer[kotlin.Double]#kotlin.Double/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/times.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/toEjml/space.kscience.kmath.nd.Structure2D[kotlin.Double]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/to-ejml.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/toEjml/space.kscience.kmath.structures.Buffer[kotlin.Double]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/to-ejml.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/unaryMinus/space.kscience.kmath.nd.Structure2D[kotlin.Double]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/unary-minus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlLinearSpaceDDRM/unaryMinus/space.kscience.kmath.structures.Buffer[kotlin.Double]#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-linear-space-d-d-r-m/unary-minus.html
+$dokka.location:space.kscience.kmath.ejml/EjmlMatrix///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-matrix/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlMatrix/EjmlMatrix/#TypeParam(bounds=[org.ejml.data.Matrix])/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-matrix/-ejml-matrix.html
+$dokka.location:space.kscience.kmath.ejml/EjmlMatrix/colNum/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-matrix/col-num.html
+$dokka.location:space.kscience.kmath.ejml/EjmlMatrix/origin/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-matrix/origin.html
+$dokka.location:space.kscience.kmath.ejml/EjmlMatrix/rowNum/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-matrix/row-num.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector///PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/index.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector/EjmlVector/#TypeParam(bounds=[org.ejml.data.Matrix])/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/-ejml-vector.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector/iterator/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/iterator.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector/origin/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/origin.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector/size/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/size.html
+$dokka.location:space.kscience.kmath.ejml/EjmlVector/toString/#/PointingToDeclaration/kmath-ejml/space.kscience.kmath.ejml/-ejml-vector/to-string.html
 space.kscience.kmath.ejml
 

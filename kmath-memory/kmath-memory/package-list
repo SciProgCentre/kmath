@@ -1,5 +1,44 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:space.kscience.kmath.memory////PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/index.html
+$dokka.location:space.kscience.kmath.memory//allocate/space.kscience.kmath.memory.Memory.Companion#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/allocate.html
+$dokka.location:space.kscience.kmath.memory//asMemory/java.nio.ByteBuffer#kotlin.Int#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/as-memory.html
+$dokka.location:space.kscience.kmath.memory//read/space.kscience.kmath.memory.Memory#kotlin.Function1[space.kscience.kmath.memory.MemoryReader,TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/read.html
+$dokka.location:space.kscience.kmath.memory//read/space.kscience.kmath.memory.MemoryReader#space.kscience.kmath.memory.MemorySpec[TypeParam(bounds=[kotlin.Any])]#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/read.html
+$dokka.location:space.kscience.kmath.memory//readArray/space.kscience.kmath.memory.MemoryReader#space.kscience.kmath.memory.MemorySpec[TypeParam(bounds=[kotlin.Any])]#kotlin.Int#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/read-array.html
+$dokka.location:space.kscience.kmath.memory//readAsMemory/java.nio.file.Path#kotlin.Long#kotlin.Long#kotlin.Function1[space.kscience.kmath.memory.Memory,TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/read-as-memory.html
+$dokka.location:space.kscience.kmath.memory//wrap/space.kscience.kmath.memory.Memory.Companion#kotlin.ByteArray/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/wrap.html
+$dokka.location:space.kscience.kmath.memory//write/space.kscience.kmath.memory.Memory#kotlin.Function1[space.kscience.kmath.memory.MemoryWriter,kotlin.Unit]/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/write.html
+$dokka.location:space.kscience.kmath.memory//write/space.kscience.kmath.memory.MemoryWriter#space.kscience.kmath.memory.MemorySpec[TypeParam(bounds=[kotlin.Any])]#kotlin.Int#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/write.html
+$dokka.location:space.kscience.kmath.memory//writeArray/space.kscience.kmath.memory.MemoryWriter#space.kscience.kmath.memory.MemorySpec[TypeParam(bounds=[kotlin.Any])]#kotlin.Int#kotlin.Array[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/write-array.html
+$dokka.location:space.kscience.kmath.memory/Memory.Companion///PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/-companion/index.html
+$dokka.location:space.kscience.kmath.memory/Memory///PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/index.html
+$dokka.location:space.kscience.kmath.memory/Memory/copy/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/copy.html
+$dokka.location:space.kscience.kmath.memory/Memory/reader/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/reader.html
+$dokka.location:space.kscience.kmath.memory/Memory/size/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/size.html
+$dokka.location:space.kscience.kmath.memory/Memory/view/#kotlin.Int#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/view.html
+$dokka.location:space.kscience.kmath.memory/Memory/writer/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory/writer.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader///PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/index.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/memory/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/memory.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readByte/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-byte.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readDouble/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-double.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readFloat/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-float.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readInt/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-int.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readLong/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-long.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/readShort/#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/read-short.html
+$dokka.location:space.kscience.kmath.memory/MemoryReader/release/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-reader/release.html
+$dokka.location:space.kscience.kmath.memory/MemorySpec///PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-spec/index.html
+$dokka.location:space.kscience.kmath.memory/MemorySpec/objectSize/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-spec/object-size.html
+$dokka.location:space.kscience.kmath.memory/MemorySpec/read/space.kscience.kmath.memory.MemoryReader#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-spec/read.html
+$dokka.location:space.kscience.kmath.memory/MemorySpec/write/space.kscience.kmath.memory.MemoryWriter#kotlin.Int#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-spec/write.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter///PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/index.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/memory/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/memory.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/release/#/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/release.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeByte/#kotlin.Int#kotlin.Byte/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-byte.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeDouble/#kotlin.Int#kotlin.Double/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-double.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeFloat/#kotlin.Int#kotlin.Float/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-float.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeInt/#kotlin.Int#kotlin.Int/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-int.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeLong/#kotlin.Int#kotlin.Long/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-long.html
+$dokka.location:space.kscience.kmath.memory/MemoryWriter/writeShort/#kotlin.Int#kotlin.Short/PointingToDeclaration/kmath-memory/space.kscience.kmath.memory/-memory-writer/write-short.html
 space.kscience.kmath.memory
 
