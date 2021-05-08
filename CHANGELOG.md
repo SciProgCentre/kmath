@@ -10,7 +10,8 @@
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
-- Extendend operations for ND4J fields
+- Extended operations for ND4J fields
+- Jupyter Notebook integration module (kmath-jupyter)
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -24,6 +25,7 @@
 - Redesign MST. Remove MSTExpression.
 - Move MST to core
 - Separated benchmarks and examples
+- Rewritten EJML module without ejml-simple
 
 ### Deprecated
 

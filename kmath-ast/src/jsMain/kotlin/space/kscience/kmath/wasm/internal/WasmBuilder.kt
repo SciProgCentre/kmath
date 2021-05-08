@@ -26,7 +26,7 @@ internal sealed class WasmBuilder<T>(
     val keys: MutableList<String> = mutableListOf()
     lateinit var ctx: BinaryenModule
 
-    open fun visitSymbolic(mst: MST.Symbolic): ExpressionRef {
+    open fun visitSymbolic(mst: Symbolic): ExpressionRef {
         try {
             algebra.bindSymbol(mst.value)
         } catch (ignored: Throwable) {

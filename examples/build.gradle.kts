@@ -4,14 +4,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://repo.kotlin.link")
     maven("https://clojars.org/repo")
-    maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-    maven("https://dl.bintray.com/hotkeytlt/maven")
     maven("https://jitpack.io")
-    maven{
-        setUrl("http://logicrunch.research.it.uu.se/maven/")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
+    maven("http://logicrunch.research.it.uu.se/maven") {
         isAllowInsecureProtocol = true
     }
 }
@@ -28,6 +25,7 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
     implementation(project(":kmath-nd4j"))
+    implementation(project(":kmath-tensors"))
 
     implementation(project(":kmath-for-real"))
 

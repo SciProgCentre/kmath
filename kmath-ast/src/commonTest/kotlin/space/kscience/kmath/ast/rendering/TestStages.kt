@@ -37,4 +37,10 @@ internal class TestStages {
         testLatex("exp(x/2)", "\\operatorname{exp}\\,\\left(\\frac{x}{2}\\right)")
         testLatex("exp(x^2)", "\\operatorname{exp}\\,\\left(x^{2}\\right)")
     }
+
+    @Test
+    fun fraction() {
+        testLatex("x/y", "\\frac{x}{y}")
+        testLatex("x^(x/y)", "x^{x/y}")
+    }
 }

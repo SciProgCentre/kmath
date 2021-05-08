@@ -91,7 +91,7 @@ KMath is a modular library. Different modules provide different features with di
 * ### [kmath-ast](kmath-ast)
 > 
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
 >
 > **Features:**
 > - [expression-language](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
@@ -154,9 +154,9 @@ performance calculations to code generation.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
-> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
-> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : Point implementations.
+> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
+> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
 <hr/>
 
@@ -200,6 +200,12 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
+* ### [kmath-jupyter](kmath-jupyter)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
 * ### [kmath-kotlingrad](kmath-kotlingrad)
 > 
 >
@@ -228,6 +234,18 @@ One can still use generic algebras though.
 > 
 >
 > **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-tensors](kmath-tensors)
+> 
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Basic linear algebra operations on tensors (plus, dot, etc.)
+> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
+> - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
+
 <hr/>
 
 * ### [kmath-viktor](kmath-viktor)

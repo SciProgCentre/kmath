@@ -18,6 +18,10 @@ kotlin.js {
 }
 
 kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach { it.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI") }
+
     commonMain {
         dependencies {
             api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
@@ -54,7 +58,7 @@ tasks.dokkaHtml {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

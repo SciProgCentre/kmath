@@ -6,12 +6,14 @@
 package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Renders [MST] to [MathSyntax].
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun interface MathRenderer {
     /**
      * Renders [MST] to [MathSyntax].
@@ -25,6 +27,7 @@ public fun interface MathRenderer {
  * @property features The applied features.
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public open class FeaturedMathRenderer(public val features: List<RenderFeature>) : MathRenderer {
     public override fun render(mst: MST): MathSyntax {
         for (feature in features) feature.render(this, mst)?.let { return it }
@@ -48,6 +51,7 @@ public open class FeaturedMathRenderer(public val features: List<RenderFeature>)
  * @property stages The applied stages.
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public open class FeaturedMathRendererWithPostProcess(
     features: List<RenderFeature>,
     public val stages: List<PostProcessStage>,
@@ -85,6 +89,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 SquareRoot.Default,
                 Exponent.Default,
                 InverseTrigonometricOperations.Default,
+                InverseHyperbolicOperations.Default,
 
                 // Fallback option for unknown operations - printing them as operator
                 BinaryOperator.Default,
@@ -101,6 +106,7 @@ public open class FeaturedMathRendererWithPostProcess(
             ),
             listOf(
                 BetterExponent,
+                BetterFraction,
                 SimplifyParentheses.Default,
                 BetterMultiplication,
             ),

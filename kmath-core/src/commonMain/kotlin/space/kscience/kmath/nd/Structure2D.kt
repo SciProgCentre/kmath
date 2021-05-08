@@ -8,6 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.MutableListBuffer
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -64,6 +65,32 @@ public interface Structure2D<T> : StructureND<T> {
 }
 
 /**
+ * Represents mutable [Structure2D].
+ */
+public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
+    /**
+     * Inserts an item at the specified indices.
+     *
+     * @param i the first index.
+     * @param j the second index.
+     * @param value the value.
+     */
+    public operator fun set(i: Int, j: Int, value: T)
+
+    /**
+     * The buffer of rows of this structure. It gets elements from the structure dynamically.
+     */
+    override val rows: List<MutableStructure1D<T>>
+        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) })}
+
+    /**
+     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     */
+    override val columns: List<MutableStructure1D<T>>
+        get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableListBuffer(rowNum) { i -> get(i, j) }) }
+}
+
+/**
  * A 2D wrapper for nd-structure
  */
 @JvmInline
@@ -82,10 +109,42 @@ private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Struc
 }
 
 /**
+ * A 2D wrapper for a mutable nd-structure
+ */
+private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>): MutableStructure2D<T>
+{
+    override val shape: IntArray get() = structure.shape
+
+    override val rowNum: Int get() = shape[0]
+    override val colNum: Int get() = shape[1]
+
+    override operator fun get(i: Int, j: Int): T = structure[i, j]
+
+    override fun set(index: IntArray, value: T) {
+        structure[index] = value
+    }
+
+    override operator fun set(i: Int, j: Int, value: T){
+        structure[intArrayOf(i, j)] = value
+    }
+
+    override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
+
+    override fun equals(other: Any?): Boolean = false
+
+    override fun hashCode(): Int = 0
+}
+
+/**
  * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
  */
 public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
+    else -> error("Can't create 2d-structure from ${shape.size}d-structure")
+}
+
+public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
+    2 -> MutableStructure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
@@ -95,3 +154,7 @@ public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?
 internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
     if (this is Structure2DWrapper) structure
     else this
+
+internal fun <T> MutableStructure2D<T>.unwrap(): MutableStructureND<T> =
+    if (this is MutableStructure2DWrapper) structure else this
+
