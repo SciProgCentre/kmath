@@ -32,10 +32,33 @@ public value class StringSymbol(override val identity: String) : Symbol {
     override fun toString(): String = identity
 }
 
-
 /**
  * A delegate to create a symbol with a string identity in this scope
  */
 public val symbol: ReadOnlyProperty<Any?, Symbol> = ReadOnlyProperty { _, property ->
     StringSymbol(property.name)
+}
+
+/**
+ * Ger a value from a [String]-keyed map by a [Symbol]
+ */
+public operator fun <T> Map<String, T>.get(symbol: Symbol): T? = get(symbol.identity)
+
+/**
+ * Set a value of [String]-keyed map by a [Symbol]
+ */
+public operator fun <T> MutableMap<String, T>.set(symbol: Symbol, value: T){
+    set(symbol.identity, value)
+}
+
+/**
+ * Get a value from a [Symbol]-keyed map by a [String]
+ */
+public operator fun <T> Map<Symbol, T>.get(string: String): T? = get(StringSymbol(string))
+
+/**
+ * Set a value of [String]-keyed map by a [Symbol]
+ */
+public operator fun <T> MutableMap<Symbol, T>.set(string: String, value: T){
+    set(StringSymbol(string), value)
 }

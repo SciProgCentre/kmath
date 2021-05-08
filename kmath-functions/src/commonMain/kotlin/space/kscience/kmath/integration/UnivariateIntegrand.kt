@@ -33,7 +33,7 @@ public fun <T : Any> UnivariateIntegrand(
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
 @JvmInline
-public value class IntegrationRange<T : Comparable<T>>(public val range: ClosedRange<T>) : IntegrandFeature
+public value class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature
 
 public val <T : Any> UnivariateIntegrand<T>.value: T? get() = getFeature<IntegrandValue<T>>()?.value
 

@@ -5,6 +5,7 @@ out/
 .idea/
 
 !.idea/copyright/
+!.idea/scopes/
 
 .vscode/
 

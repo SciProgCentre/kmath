@@ -13,6 +13,8 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  * @param C the type of mathematical context for this element.
  * @param T the type wrapped by this wrapper.
  */
+@UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public interface AlgebraElement<T, C : Algebra<T>> {
     /**
      * The context this element belongs to.
@@ -45,6 +47,7 @@ public interface AlgebraElement<T, C : Algebra<T>> {
  * @return the difference.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.minus(b: T): T =
     context.add(this, context.run { -b })
 
@@ -55,6 +58,8 @@ public operator fun <T : AlgebraElement<T, S>, S : NumbersAddOperations<T>> T.mi
  * @param b the addend.
  * @return the sum.
  */
+@UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public operator fun <T : AlgebraElement<T, S>, S : Ring<T>> T.plus(b: T): T =
     context.add(this, b)
 
@@ -71,6 +76,8 @@ public operator fun <T : AlgebraElement<T, S>, S : Ring<T>> T.plus(b: T): T =
  * @param b the multiplier.
  * @return the product.
  */
+@UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public operator fun <T : AlgebraElement<T, R>, R : Ring<T>> T.times(b: T): T =
     context.multiply(this, b)
 
@@ -81,6 +88,8 @@ public operator fun <T : AlgebraElement<T, R>, R : Ring<T>> T.times(b: T): T =
  * @param b the divisor.
  * @return the quotient.
  */
+@UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public operator fun <T : AlgebraElement<T, F>, F : Field<T>> T.div(b: T): T =
     context.divide(this, b)
 
@@ -93,6 +102,7 @@ public operator fun <T : AlgebraElement<T, F>, F : Field<T>> T.div(b: T): T =
  * @param S the type of space.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public interface GroupElement<T : GroupElement<T, S>, S : Group<T>> : AlgebraElement<T, S>
 
 /**
@@ -103,6 +113,7 @@ public interface GroupElement<T : GroupElement<T, S>, S : Group<T>> : AlgebraEle
  * @param R the type of ring.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public interface RingElement<T : RingElement<T, R>, R : Ring<T>> : GroupElement<T, R>
 
 /**
@@ -113,4 +124,5 @@ public interface RingElement<T : RingElement<T, R>, R : Ring<T>> : GroupElement<
  * @param F the type of field.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public interface FieldElement<T : FieldElement<T, F>, F : Field<T>> : RingElement<T, F>

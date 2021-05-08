@@ -20,8 +20,7 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray
-        get() = ndArray.shape().toIntArray()
+    public override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()

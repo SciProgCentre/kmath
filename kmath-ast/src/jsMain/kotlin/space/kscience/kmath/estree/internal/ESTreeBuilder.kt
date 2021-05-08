@@ -5,9 +5,14 @@
 
 package space.kscience.kmath.estree.internal
 
-import space.kscience.kmath.estree.internal.astring.generate
-import space.kscience.kmath.estree.internal.estree.*
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.internal.astring.generate
+import space.kscience.kmath.internal.estree.*
+import space.kscience.kmath.internal.estree.BaseExpression
+import space.kscience.kmath.internal.estree.BlockStatement
+import space.kscience.kmath.internal.estree.Program
+import space.kscience.kmath.internal.estree.VariableDeclaration
+import space.kscience.kmath.internal.estree.VariableDeclarator
 import space.kscience.kmath.misc.Symbol
 
 internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExpression) {

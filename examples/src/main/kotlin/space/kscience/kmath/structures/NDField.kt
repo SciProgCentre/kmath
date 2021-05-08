@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.structures
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
@@ -22,6 +23,7 @@ internal inline fun measureAndPrint(title: String, block: () -> Unit) {
     println("$title completed in $time millis")
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun main() {
     // initializing Nd4j
     Nd4j.zeros(0)

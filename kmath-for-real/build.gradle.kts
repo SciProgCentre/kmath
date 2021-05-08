@@ -1,10 +1,3 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
@@ -22,7 +15,7 @@ readme {
         All operations are specialized to work with `Double` numbers without declaring algebraic contexts.
         One can still use generic algebras though.
         """.trimIndent()
-    maturity = Maturity.EXPERIMENTAL
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

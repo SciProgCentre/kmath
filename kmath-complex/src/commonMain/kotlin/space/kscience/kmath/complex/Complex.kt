@@ -9,7 +9,10 @@ import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.ExtendedField
+import space.kscience.kmath.operations.Norm
+import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MemoryBuffer
 import space.kscience.kmath.structures.MutableBuffer
@@ -180,11 +183,9 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
  * @property im The imaginary part.
  */
 @OptIn(UnstableKMathAPI::class)
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
+public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)
-
-    public override val context: ComplexField get() = ComplexField
 
     public override fun toString(): String = "($re + i*$im)"
 
