@@ -35,6 +35,7 @@
 - `contentEquals` from Buffer. It moved to the companion.
 - MSTExpression
 - Expression algebra builders
+- Comples and Quaternion no longer are elements.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

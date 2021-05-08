@@ -6,8 +6,8 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.toDoubleArray
 import kotlin.math.sqrt
@@ -106,6 +106,7 @@ fun accuracy(yPred: DoubleTensor, yTrue: DoubleTensor): Double {
 }
 
 // neural network class
+@OptIn(ExperimentalStdlibApi::class)
 class NeuralNetwork(private val layers: List<Layer>) {
     private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
@@ -120,7 +121,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
         (-onesForAnswers + softmaxValue) / (yPred.shape[0].toDouble())
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
+
     private fun forward(x: DoubleTensor): List<DoubleTensor> {
         var input = x
 
@@ -133,7 +134,6 @@ class NeuralNetwork(private val layers: List<Layer>) {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun train(xTrain: DoubleTensor, yTrain: DoubleTensor) {
         val layerInputs = buildList {
             add(xTrain)
@@ -180,7 +180,7 @@ fun main() {
         val features = 5
         val sampleSize = 250
         val trainSize = 180
-        val testSize = sampleSize - trainSize
+        //val testSize = sampleSize - trainSize
 
         // take sample of features from normal distribution
         val x = randomNormal(intArrayOf(sampleSize, features), seed) * 2.5

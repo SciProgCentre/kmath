@@ -48,7 +48,7 @@ fun main() {
 
 
         // inverse Sigma matrix can be restored from singular values with diagonalEmbedding function
-        val sigma = diagonalEmbedding(singValues.map{ x -> if (abs(x) < 1e-3) 0.0 else 1.0/x })
+        val sigma = diagonalEmbedding(singValues.map{ if (abs(it) < 1e-3) 0.0 else 1.0/it })
 
         val alphaOLS = v dot sigma dot u.transpose() dot y
         println("Estimated alpha:\n" +

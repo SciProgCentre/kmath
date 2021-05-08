@@ -27,8 +27,10 @@ public val Quaternion.conjugate: Quaternion
  */
 public val Quaternion.reciprocal: Quaternion
     get() {
-        val n = QuaternionField { norm(this@reciprocal) }
-        return conjugate / (n * n)
+        QuaternionField {
+            val n = norm(this@reciprocal)
+            return conjugate / (n * n)
+        }
     }
 
 /**
@@ -198,7 +200,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
 @OptIn(UnstableKMathAPI::class)
 public data class Quaternion(
     val w: Double, val x: Double, val y: Double, val z: Double,
-) : FieldElement<Quaternion, QuaternionField> {
+) {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),
@@ -218,8 +220,6 @@ public data class Quaternion(
         require(!y.isNaN()) { "x-component of quaternion is not-a-number" }
         require(!z.isNaN()) { "x-component of quaternion is not-a-number" }
     }
-
-    public override val context: QuaternionField get() = QuaternionField
 
     /**
      * Returns a string representation of this quaternion.
