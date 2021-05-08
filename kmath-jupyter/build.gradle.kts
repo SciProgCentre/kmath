@@ -7,7 +7,10 @@ dependencies {
     api(project(":kmath-ast"))
     api(project(":kmath-complex"))
     api(project(":kmath-for-real"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+}
+
+kscience{
+    useHtml()
 }
 
 readme {

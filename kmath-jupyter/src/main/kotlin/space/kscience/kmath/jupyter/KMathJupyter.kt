@@ -19,49 +19,58 @@ import space.kscience.kmath.operations.RingOperations
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
+/**
+ * A function for conversion of number to MST for pretty print
+ */
+public fun Number.toMst(): MST.Numeric =  MST.Numeric(this)
+
 @JupyterLibrary
 internal class KMathJupyter : JupyterIntegration() {
     private val mathRender = FeaturedMathRendererWithPostProcess.Default
     private val syntaxRender = MathMLSyntaxRenderer
 
+    private fun MST.toDisplayResult(): DisplayResult = HTML(createHTML().div {
+        unsafe {
+            +syntaxRender.renderWithStringBuilder(mathRender.render(this@toDisplayResult))
+        }
+    })
+
+    private fun Unsafe.appendCellValue(it: Any?) {
+        when (it) {
+            is Number -> {
+                val s = StringBuilder()
+                syntaxRender.renderPart(mathRender.render(MST.Numeric(it)), s)
+                +s.toString()
+            }
+            is MST -> {
+                val s = StringBuilder()
+                syntaxRender.renderPart(mathRender.render(it), s)
+                +s.toString()
+            }
+            else -> {
+                +"<ms>"
+                +it.toString()
+                +"</ms>"
+            }
+        }
+    }
+
     override fun Builder.onLoaded() {
         import(
             "space.kscience.kmath.ast.*",
             "space.kscience.kmath.ast.rendering.*",
+            "space.kscience.kmath.structures.*",
             "space.kscience.kmath.operations.*",
             "space.kscience.kmath.expressions.*",
+            "space.kscience.kmath.nd.*",
             "space.kscience.kmath.misc.*",
             "space.kscience.kmath.real.*",
         )
 
-        fun MST.toDisplayResult(): DisplayResult = HTML(createHTML().div {
-            unsafe {
-                +syntaxRender.renderWithStringBuilder(mathRender.render(this@toDisplayResult))
-            }
-        })
+        import("space.kscience.kmath.jupyter.toMst")
 
         render<MST> { it.toDisplayResult() }
-        render<Number> { MST.Numeric(it).toDisplayResult() }
-
-        fun Unsafe.appendCellValue(it: Any?) {
-            when (it) {
-                is Number -> {
-                    val s = StringBuilder()
-                    syntaxRender.renderPart(mathRender.render(MST.Numeric(it)), s)
-                    +s.toString()
-                }
-                is MST -> {
-                    val s = StringBuilder()
-                    syntaxRender.renderPart(mathRender.render(it), s)
-                    +s.toString()
-                }
-                else -> {
-                    +"<ms>"
-                    +it.toString()
-                    +"</ms>"
-                }
-            }
-        }
+        //render<Number> { MST.Numeric(it).toDisplayResult() }
 
         render<Structure2D<*>> { structure ->
             HTML(createHTML().div {
