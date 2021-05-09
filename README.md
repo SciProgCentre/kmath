@@ -207,9 +207,14 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-kotlingrad](kmath-kotlingrad)
-> 
+> Functions, integration and interpolation
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
+>
+> **Features:**
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : MST based DifferentiableExpression.
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : Conversions between Kotlin&nabla;'s SFun and MST
+
 <hr/>
 
 * ### [kmath-memory](kmath-memory)
