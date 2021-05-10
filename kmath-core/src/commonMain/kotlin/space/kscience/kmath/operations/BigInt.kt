@@ -56,8 +56,7 @@ public class BigInt internal constructor(
         else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
-    public override fun equals(other: Any?): Boolean =
-        if (other is BigInt) compareTo(other) == 0 else error("Can't compare KBigInteger to a different type")
+    public override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
     public override fun hashCode(): Int = magnitude.hashCode() + sign
 
