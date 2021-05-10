@@ -15,15 +15,13 @@ import space.kscience.kmath.operations.BigIntField
 import space.kscience.kmath.operations.JBigIntegerField
 import space.kscience.kmath.operations.invoke
 
-private fun BigInt.pow(power: Int): BigInt = modPow(BigIntField.number(power), BigInt.ONE)
-
 
 @State(Scope.Benchmark)
 internal class BigIntBenchmark {
 
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
-    val largeKmNumber = BigIntField { number(11).pow(100_000) }
+    val largeKmNumber = BigIntField { number(11).pow(100_000UL) }
     val largeJvmNumber = JBigIntegerField { number(11).pow(100_000) }
     val bigExponent = 50_000
 
@@ -59,7 +57,7 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun kmPower(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(kmNumber.pow(bigExponent))
+        blackhole.consume(kmNumber.pow(bigExponent.toULong()))
     }
 
     @Benchmark

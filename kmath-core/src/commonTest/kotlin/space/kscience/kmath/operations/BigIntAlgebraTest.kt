@@ -6,6 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.testutils.RingVerifier
+import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,6 +20,19 @@ internal class BigIntAlgebraTest {
             1_000L.toBigInt() * 1_000L.toBigInt()
         }
         assertEquals(res, 1_000_000.toBigInt())
+    }
+
+    @Test
+    fun testKBigIntegerRingPow() {
+        BigIntField {
+            for (num in 0..5)
+                for (exponent in 0UL..10UL)
+                    assertEquals(
+                        num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
+                        num.toBigInt().pow(exponent),
+                        "$num ^ $exponent"
+                    )
+        }
     }
 
     @Test
