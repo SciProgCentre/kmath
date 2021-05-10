@@ -254,6 +254,7 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
     public fun T.pow(exponent: ULong): T = when {
         this == zero && exponent > 0UL -> zero
         this == one -> this
+        this == -one -> powWithoutOptimization(exponent % 2UL)
         else -> powWithoutOptimization(exponent)
     }
 

@@ -25,7 +25,7 @@ internal class BigIntAlgebraTest {
     @Test
     fun testKBigIntegerRingPow() {
         BigIntField {
-            for (num in 0..5)
+            for (num in -5..5)
                 for (exponent in 0UL..10UL)
                     assertEquals(
                         num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
