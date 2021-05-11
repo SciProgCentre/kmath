@@ -452,6 +452,7 @@ private val hexChToInt: MutableMap<Char, Int> = hashMapOf(
  * Returns null if a valid number can not be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
+    if (this.isEmpty()) return null
     val sign: Int
     val sPositive: String
     //TODO substring = O(n). Can be replaced by some drop that is O(1)
@@ -473,15 +474,18 @@ public fun String.parseBigInteger(): BigInt? {
     var res = BigInt.ZERO
     var digitValue = BigInt.ONE
     val sPositiveUpper = sPositive.uppercase()
+    var isEmpty = true
 
     if (sPositiveUpper.startsWith("0X")) {
         // hex representation
         val sHex = sPositiveUpper.substring(2)
+        if (this.isEmpty()) return null
         // TODO optimize O(n2) -> O(n)
 
         for (ch in sHex.reversed()) {
             if (ch == '_') continue
             res += digitValue * (hexChToInt[ch] ?: return null)
+            isEmpty = false
             digitValue *= 16.toBigInt()
         }
     } else for (ch in sPositiveUpper.reversed()) {
@@ -491,10 +495,11 @@ public fun String.parseBigInteger(): BigInt? {
             return null
         }
         res += digitValue * (ch.code - '0'.code)
+        isEmpty = false
         digitValue *= 10.toBigInt()
     }
 
-    return res * sign
+    return if (isEmpty) null else res * sign
 }
 
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
