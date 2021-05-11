@@ -441,11 +441,11 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
     return BigInt(sign, copyOf())
 }
 
-private val hexChToInt: MutableMap<Char, Int> = hashMapOf(
-    '0' to 0, '1' to 1, '2' to 2, '3' to 3,
-    '4' to 4, '5' to 5, '6' to 6, '7' to 7,
-    '8' to 8, '9' to 9, 'A' to 10, 'B' to 11,
-    'C' to 12, 'D' to 13, 'E' to 14, 'F' to 15
+private val hexChToInt: MutableMap<Char, UInt> = hashMapOf(
+    '0' to 0U, '1' to 1U, '2' to 2U, '3' to 3U,
+    '4' to 4U, '5' to 5U, '6' to 6U, '7' to 7U,
+    '8' to 8U, '9' to 9U, 'A' to 10U, 'B' to 11U,
+    'C' to 12U, 'D' to 13U, 'E' to 14U, 'F' to 15U
 )
 
 /**
@@ -454,52 +454,72 @@ private val hexChToInt: MutableMap<Char, Int> = hashMapOf(
 public fun String.parseBigInteger(): BigInt? {
     if (this.isEmpty()) return null
     val sign: Int
-    val sPositive: String
-    //TODO substring = O(n). Can be replaced by some drop that is O(1)
-    when {
-        this[0] == '+' -> {
+
+    val positivePartIndex = when (this[0]) {
+        '+' -> {
             sign = +1
-            sPositive = this.substring(1)
+            1
         }
-        this[0] == '-' -> {
+        '-' -> {
             sign = -1
-            sPositive = this.substring(1)
+            1
         }
         else -> {
-            sPositive = this
             sign = +1
+            0
         }
     }
 
-    var res = BigInt.ZERO
-    var digitValue = BigInt.ONE
-    val sPositiveUpper = sPositive.uppercase()
     var isEmpty = true
 
-    if (sPositiveUpper.startsWith("0X")) {
+    return if (this.startsWith("0X", startIndex = positivePartIndex, ignoreCase = true)) {
         // hex representation
-        val sHex = sPositiveUpper.substring(2)
-        if (this.isEmpty()) return null
-        // TODO optimize O(n2) -> O(n)
 
-        for (ch in sHex.reversed()) {
-            if (ch == '_') continue
-            res += digitValue * (hexChToInt[ch] ?: return null)
+        val uInts = mutableListOf(0U)
+        var offset = 0
+        fun addDigit(value: UInt) {
+            uInts[uInts.lastIndex] += value shl offset
+            offset += 4
+            if (offset == 32) {
+                uInts.add(0U)
+                offset = 0
+            }
+        }
+
+        for (index in lastIndex downTo positivePartIndex + 2) {
+            when (val ch = this[index]) {
+                '_' -> continue
+                in '0'..'9' -> addDigit((ch - '0').toUInt())
+                in 'A'..'F' -> addDigit((ch - 'A').toUInt() + 10U)
+                in 'a'..'f' -> addDigit((ch - 'a').toUInt() + 10U)
+                else -> return null
+            }
             isEmpty = false
-            digitValue *= 16.toBigInt()
         }
-    } else for (ch in sPositiveUpper.reversed()) {
-        // decimal representation
-        if (ch == '_') continue
-        if (ch !in '0'..'9') {
-            return null
-        }
-        res += digitValue * (ch.code - '0'.code)
-        isEmpty = false
-        digitValue *= 10.toBigInt()
-    }
 
-    return if (isEmpty) null else res * sign
+        while (uInts.isNotEmpty() && uInts.last() == 0U)
+            uInts.removeLast()
+
+        if (isEmpty) null else BigInt(sign.toByte(), uInts.toUIntArray())
+    } else {
+        // hex representation
+        var res = BigInt.ZERO
+        var digitValue = BigInt.ONE
+        for (index in lastIndex downTo positivePartIndex) {
+            val ch = this[index]
+            // decimal representation
+            if (ch == '_') continue
+            if (ch !in '0'..'9') {
+                return null
+            }
+            res += digitValue * (ch.code - '0'.code)
+            isEmpty = false
+            digitValue *= 10.toBigInt()
+
+        }
+
+        if (isEmpty) null else res * sign
+    }
 }
 
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
