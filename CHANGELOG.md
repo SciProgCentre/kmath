@@ -26,6 +26,7 @@
 - Move MST to core
 - Separated benchmarks and examples
 - Rewritten EJML module without ejml-simple
+- Stability of kmath-ast and kmath-kotilngrad promoted to EXPERIMENTAL.
 
 ### Deprecated
 
@@ -35,7 +36,7 @@
 - `contentEquals` from Buffer. It moved to the companion.
 - MSTExpression
 - Expression algebra builders
-- Comples and Quaternion no longer are elements.
+- Complex and Quaternion no longer are elements.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

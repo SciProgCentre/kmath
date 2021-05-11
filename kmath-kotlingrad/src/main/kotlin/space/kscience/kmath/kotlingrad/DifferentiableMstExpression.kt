@@ -6,6 +6,7 @@
 package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.SFun
+import edu.umontreal.kotlingrad.api.SVar
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstAlgebra
@@ -14,20 +15,20 @@ import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
- * Represents wrapper of [MstExpression] implementing [DifferentiableExpression].
+ * Represents [MST] based [DifferentiableExpression].
  *
- * The principle of this API is converting the [mst] to an [SFun], differentiating it with Kotlin∇, then converting
- * [SFun] back to [MST].
+ * The principle of this API is converting the [mst] to an [SFun], differentiating it with
+ * [Kotlin∇](https://github.com/breandan/kotlingrad), then converting [SFun] back to [MST].
  *
- * @param T the type of number.
- * @param A the [NumericAlgebra] of [T].
- * @property expr the underlying [MstExpression].
+ * @param T The type of number.
+ * @param A The [NumericAlgebra] of [T].
+ * @property algebra The [A] instance.
+ * @property mst The [MST] node.
  */
 public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
     public val algebra: A,
     public val mst: MST,
 ) : DifferentiableExpression<T, DifferentiableMstExpression<T, A>> {
-
     public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
     public override fun derivativeOrNull(symbols: List<Symbol>): DifferentiableMstExpression<T, A> =
@@ -35,7 +36,7 @@ public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
             algebra,
             symbols.map(Symbol::identity)
                 .map(MstAlgebra::bindSymbol)
-                .map { it.toSVar<KMathNumber<T, A>>() }
+                .map<MST.Symbolic, SVar<KMathNumber<T, A>>>(MST.Symbolic::toSVar)
                 .fold(mst.toSFun(), SFun<KMathNumber<T, A>>::d)
                 .toMst(),
         )

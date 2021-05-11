@@ -10,7 +10,7 @@ import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.MstAlgebra
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -64,9 +64,5 @@ internal class AdaptingTests {
             .compileToExpression(DoubleField)
 
         assertEquals(actualDerivative(x to 0.1), expectedDerivative(x to 0.1))
-    }
-
-    private companion object {
-        private val x by symbol
     }
 }
