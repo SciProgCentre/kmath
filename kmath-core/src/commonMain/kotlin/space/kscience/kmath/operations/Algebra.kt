@@ -250,21 +250,21 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
      * neutral operation for multiplication
      */
     public val one: T
+}
 
-    public fun T.pow(exponent: ULong): T = when {
-        this == zero && exponent > 0UL -> zero
-        this == one -> this
-        this == -one -> powWithoutOptimization(exponent % 2UL)
-        else -> powWithoutOptimization(exponent)
-    }
+public fun <T> Ring<T>.pow(base: T, exponent: ULong): T = when {
+    this == zero && exponent > 0UL -> zero
+    this == one -> base
+    this == -one -> powWithoutOptimization(base, exponent % 2UL)
+    else -> powWithoutOptimization(base, exponent)
+}
 
-    private fun T.powWithoutOptimization(exponent: ULong): T = when (exponent) {
-        0UL -> one
-        1UL -> this
-        else -> {
-            val pre = powWithoutOptimization(exponent shr 1).let { it * it }
-            if (exponent and 1UL == 0UL) pre else pre * this
-        }
+private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: ULong): T = when (exponent) {
+    0UL -> one
+    1UL -> base
+    else -> {
+        val pre = powWithoutOptimization(base, exponent shr 1).let { it * it }
+        if (exponent and 1UL == 0UL) pre else pre * base
     }
 }
 

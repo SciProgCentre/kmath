@@ -98,6 +98,8 @@ public class BigInt internal constructor(
         else -> BigInt(sign, multiplyMagnitudeByUInt(magnitude, other))
     }
 
+    public fun pow(other: ULong): BigInt = BigIntField { pow(this@BigInt, other) }
+
     public operator fun times(other: Int): BigInt = when {
         other > 0 -> this * kotlin.math.abs(other).toUInt()
         other != Int.MIN_VALUE -> -this * kotlin.math.abs(other).toUInt()
