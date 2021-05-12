@@ -324,10 +324,8 @@ public class BigInt internal constructor(
         }
 
         internal fun multiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude = when {
-            mag1.size + mag2.size < KARATSUBA_THRESHOLD || mag1.isEmpty() || mag2.isEmpty() -> naiveMultiplyMagnitudes(
-                mag1,
-                mag2
-            )
+            mag1.size + mag2.size < KARATSUBA_THRESHOLD || mag1.isEmpty() || mag2.isEmpty() ->
+                naiveMultiplyMagnitudes(mag1, mag2)
             // TODO implement Fourier
             else -> karatsubaMultiplyMagnitudes(mag1, mag2)
         }
@@ -361,7 +359,7 @@ public class BigInt internal constructor(
 
             val z0 = x0 * y0
             val z2 = x1 * y1
-            val z1 = (x0 + x1) * (y1 + y0) - z0 - z2
+            val z1 = (x0 - x1) * (y1 - y0) + z0 + z2
 
             return (z2.shl(2 * halfSize * BASE_SIZE) + z1.shl(halfSize * BASE_SIZE) + z0).magnitude
         }
