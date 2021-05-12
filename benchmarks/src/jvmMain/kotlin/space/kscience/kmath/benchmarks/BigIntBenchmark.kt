@@ -10,10 +10,7 @@ import kotlinx.benchmark.Blackhole
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
-import space.kscience.kmath.operations.BigInt
-import space.kscience.kmath.operations.BigIntField
-import space.kscience.kmath.operations.JBigIntegerField
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 
 
 @State(Scope.Benchmark)
@@ -63,5 +60,25 @@ internal class BigIntBenchmark {
     @Benchmark
     fun jvmPower(blackhole: Blackhole) = JBigIntegerField {
         blackhole.consume(jvmNumber.pow(bigExponent))
+    }
+
+    @Benchmark
+    fun kmParsing16(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume("0x7f57ed8b89c29a3b9a85c7a5b84ca3929c7b7488593".parseBigInteger())
+    }
+
+    @Benchmark
+    fun kmParsing10(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume("236656783929183747565738292847574838922010".parseBigInteger())
+    }
+
+    @Benchmark
+    fun jvmParsing10(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume("236656783929183747565738292847574838922010".toBigInteger(10))
+    }
+
+    @Benchmark
+    fun jvmParsing16(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume("7f57ed8b89c29a3b9a85c7a5b84ca3929c7b7488593".toBigInteger(16))
     }
 }

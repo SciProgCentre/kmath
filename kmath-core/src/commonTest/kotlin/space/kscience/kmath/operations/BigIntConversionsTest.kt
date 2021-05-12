@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 class BigIntConversionsTest {
 
     @Test
-    fun emptyString() {
+    fun testEmptyString() {
         assertNull("".parseBigInteger())
         assertNull("+".parseBigInteger())
         assertNull("-".parseBigInteger())
@@ -36,6 +36,12 @@ class BigIntConversionsTest {
     fun testToString0x10() {
         val x = 0x10.toBigInt()
         assertEquals("0x10", x.toString())
+    }
+
+    @Test
+    fun testUnderscores() {
+        assertEquals("0x10", "0x_1_0_".parseBigInteger().toString())
+        assertEquals("0xa", "_1_0_".parseBigInteger().toString())
     }
 
     @Test

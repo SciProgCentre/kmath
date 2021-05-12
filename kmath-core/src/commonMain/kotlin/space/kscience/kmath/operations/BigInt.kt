@@ -441,13 +441,6 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
     return BigInt(sign, copyOf())
 }
 
-private val hexChToInt: MutableMap<Char, UInt> = hashMapOf(
-    '0' to 0U, '1' to 1U, '2' to 2U, '3' to 3U,
-    '4' to 4U, '5' to 5U, '6' to 6U, '7' to 7U,
-    '8' to 8U, '9' to 9U, 'A' to 10U, 'B' to 11U,
-    'C' to 12U, 'D' to 13U, 'E' to 14U, 'F' to 15U
-)
-
 /**
  * Returns null if a valid number can not be read from a string
  */
@@ -475,7 +468,7 @@ public fun String.parseBigInteger(): BigInt? {
     return if (this.startsWith("0X", startIndex = positivePartIndex, ignoreCase = true)) {
         // hex representation
 
-        val uInts = mutableListOf(0U)
+        val uInts = ArrayList<UInt>(length).apply { add(0U) }
         var offset = 0
         fun addDigit(value: UInt) {
             uInts[uInts.lastIndex] += value shl offset
@@ -502,22 +495,34 @@ public fun String.parseBigInteger(): BigInt? {
 
         if (isEmpty) null else BigInt(sign.toByte(), uInts.toUIntArray())
     } else {
-        // hex representation
-        var res = BigInt.ZERO
-        var digitValue = BigInt.ONE
-        for (index in lastIndex downTo positivePartIndex) {
-            val ch = this[index]
-            // decimal representation
-            if (ch == '_') continue
-            if (ch !in '0'..'9') {
-                return null
-            }
-            res += digitValue * (ch.code - '0'.code)
-            isEmpty = false
-            digitValue *= 10.toBigInt()
+        // decimal representation
 
+        val positivePart = buildList(length) {
+            for (index in positivePartIndex until length)
+                when (val a = this@parseBigInteger[index]) {
+                    '_' -> continue
+                    in '0'..'9' -> add(a)
+                    else -> return null
+                }
         }
 
+        val offset = positivePart.size % 9
+        isEmpty = offset == 0
+
+        fun parseUInt(fromIndex: Int, toIndex: Int): UInt? {
+            var res = 0U
+            for (i in fromIndex until toIndex) {
+                res = res * 10U + (positivePart[i].digitToIntOrNull()?.toUInt() ?: return null)
+            }
+            return res
+        }
+
+        var res = parseUInt(0, offset)?.toBigInt() ?: return null
+
+        for (index in offset..positivePart.lastIndex step 9) {
+            isEmpty = false
+            res = res * 1_000_000_000U + (parseUInt(index, index + 9) ?: return null).toBigInt()
+        }
         if (isEmpty) null else res * sign
     }
 }
