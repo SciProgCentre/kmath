@@ -281,7 +281,7 @@ public class BigInt internal constructor(
                 }
 
                 result[i] = (res and BASE).toUInt()
-                carry = (res shr BASE_SIZE)
+                carry = res shr BASE_SIZE
             }
 
             result[resultLength - 1] = carry.toUInt()

@@ -33,6 +33,16 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
+    fun kmAddLarge(blackhole: Blackhole) = BigIntField {
+        blackhole.consume(largeKmNumber + largeKmNumber + largeKmNumber)
+    }
+
+    @Benchmark
+    fun jvmAddLarge(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume(largeJvmNumber + largeJvmNumber + largeJvmNumber)
+    }
+
+    @Benchmark
     fun kmMultiply(blackhole: Blackhole) = BigIntField {
         blackhole.consume(kmNumber * kmNumber * kmNumber)
     }
