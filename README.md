@@ -249,7 +249,7 @@ One can still use generic algebras though.
 > **Features:**
 > - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Interface for basic linear algebra operations on tensors (plus, dot, etc.)
 > - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Interface for advanced linear algebra operations like LU decomposition, SVD, etc.
-> - [tensor algebra over Double](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt): Full implementation of operations for tensors over `Double`'s
+> - [tensor algebra over Double](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt): Full implementation of operations for tensors over `Double`'s.
 > - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting for tensors over `Double`'s.
 
 <hr/>
