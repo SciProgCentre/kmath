@@ -99,6 +99,7 @@ public class BigInt internal constructor(
     }
 
     public fun pow(other: ULong): BigInt = BigIntField { pow(this@BigInt, other) }
+    public fun pow(other: UInt): BigInt = BigIntField { pow(this@BigInt, other) }
 
     public operator fun times(other: Int): BigInt = when {
         other > 0 -> this * kotlin.math.abs(other).toUInt()

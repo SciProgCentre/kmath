@@ -259,6 +259,8 @@ public fun <T> Ring<T>.pow(base: T, exponent: ULong): T = when {
     else -> powWithoutOptimization(base, exponent)
 }
 
+public fun <T> Ring<T>.pow(base: T, exponent: UInt): T = pow(base, exponent.toULong())
+
 private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: ULong): T = when (exponent) {
     0UL -> one
     1UL -> base
