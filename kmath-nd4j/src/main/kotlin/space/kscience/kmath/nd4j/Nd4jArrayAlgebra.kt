@@ -10,6 +10,7 @@ import org.nd4j.linalg.api.ops.impl.scalar.Pow
 import org.nd4j.linalg.api.ops.impl.transforms.strict.*
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.ops.transforms.Transforms
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
@@ -52,6 +53,7 @@ public interface Nd4jArrayAlgebra<T, C : Algebra<T>> : AlgebraND<T, C> {
         return struct
     }
 
+    @PerformancePitfall
     public override fun StructureND<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
         val newStruct = ndArray.dup().wrap()
         newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementContext.transform(value) }

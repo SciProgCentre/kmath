@@ -674,6 +674,9 @@ public final class space/kscience/kmath/misc/CumulativeKt {
 	public static final fun cumulativeSumOfLong (Lkotlin/sequences/Sequence;)Lkotlin/sequences/Sequence;
 }
 
+public abstract interface annotation class space/kscience/kmath/misc/PerformancePitfall : java/lang/annotation/Annotation {
+}
+
 public final class space/kscience/kmath/misc/StringSymbol : space/kscience/kmath/misc/Symbol {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lspace/kscience/kmath/misc/StringSymbol;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;

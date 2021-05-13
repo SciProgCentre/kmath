@@ -59,6 +59,7 @@ public interface Structure2D<T> : StructureND<T> {
         return get(index[0], index[1])
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
         for (i in 0 until rowNum)
             for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
@@ -134,6 +135,7 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
         structure[intArrayOf(i, j)] = value
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 
     override fun equals(other: Any?): Boolean = false

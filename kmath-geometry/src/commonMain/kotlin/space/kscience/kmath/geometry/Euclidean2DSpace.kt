@@ -7,16 +7,14 @@ package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
 @OptIn(UnstableKMathAPI::class)
-public interface Vector2D : Point<Double>, Vector, GroupElement<Vector2D, Euclidean2DSpace> {
+public interface Vector2D : Point<Double>, Vector{
     public val x: Double
     public val y: Double
-    public override val context: Euclidean2DSpace get() = Euclidean2DSpace
     public override val size: Int get() = 2
 
     public override operator fun get(index: Int): Double = when (index) {

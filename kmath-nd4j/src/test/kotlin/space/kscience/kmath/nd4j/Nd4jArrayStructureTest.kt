@@ -6,6 +6,7 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.factory.Nd4j
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,6 +14,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.fail
 
 internal class Nd4jArrayStructureTest {
+    @OptIn(PerformancePitfall::class)
     @Test
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
