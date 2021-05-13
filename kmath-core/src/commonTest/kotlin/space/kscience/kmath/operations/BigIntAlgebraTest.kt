@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.testutils.RingVerifier
 import kotlin.math.pow
 import kotlin.test.Test
@@ -22,23 +23,22 @@ internal class BigIntAlgebraTest {
         assertEquals(res, 1_000_000.toBigInt())
     }
 
+    @UnstableKMathAPI
     @Test
     fun testKBigIntegerRingPow() {
-        BigIntField {
-            for (num in -5..5)
-                for (exponent in 0U..10U) {
-                    assertEquals(
-                        num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
-                        num.toBigInt().pow(exponent.toULong()),
-                        "$num ^ $exponent"
-                    )
-                    assertEquals(
-                        num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
-                        num.toBigInt().pow(exponent),
-                        "$num ^ $exponent"
-                    )
-                }
-        }
+        for (num in -5..5)
+            for (exponent in 0U..10U) {
+                assertEquals(
+                    num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
+                    num.toBigInt().pow(exponent.toULong()),
+                    "$num ^ $exponent"
+                )
+                assertEquals(
+                    num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
+                    num.toBigInt().pow(exponent),
+                    "$num ^ $exponent"
+                )
+            }
     }
 
     @Test

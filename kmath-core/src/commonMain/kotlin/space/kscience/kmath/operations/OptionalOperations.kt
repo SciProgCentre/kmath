@@ -147,7 +147,7 @@ public interface PowerOperations<T> : Algebra<T> {
 }
 
 /**
- * Raises this element to the power [pow].
+ * Raises this element to the power [power].
  *
  * @receiver the base.
  * @param power the exponent.

@@ -6,6 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Stub for DSL the [Algebra] is.
@@ -247,11 +248,12 @@ public interface RingOperations<T> : GroupOperations<T> {
  */
 public interface Ring<T> : Group<T>, RingOperations<T> {
     /**
-     * neutral operation for multiplication
+     * The neutral element of multiplication
      */
     public val one: T
 }
 
+@UnstableKMathAPI
 public fun <T> Ring<T>.pow(base: T, exponent: ULong): T = when {
     this == zero && exponent > 0UL -> zero
     this == one -> base
@@ -259,6 +261,7 @@ public fun <T> Ring<T>.pow(base: T, exponent: ULong): T = when {
     else -> powWithoutOptimization(base, exponent)
 }
 
+@UnstableKMathAPI
 public fun <T> Ring<T>.pow(base: T, exponent: UInt): T = pow(base, exponent.toULong())
 
 private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: ULong): T = when (exponent) {
