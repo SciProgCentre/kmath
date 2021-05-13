@@ -57,8 +57,8 @@ public fun UnivariateIntegrator<Double>.integrate(
 @UnstableKMathAPI
 public fun UnivariateIntegrator<Double>.integrate(
     range: ClosedRange<Double>,
+    featureBuilder: MutableList<IntegrandFeature>.() -> Unit = {},
     function: (Double) -> Double,
-    featureBuilder: (MutableList<IntegrandFeature>.() -> Unit) = {},
 ): Double {
     //TODO use dedicated feature builder class instead or add extensions to MutableList<IntegrandFeature>
     val features = buildList {
