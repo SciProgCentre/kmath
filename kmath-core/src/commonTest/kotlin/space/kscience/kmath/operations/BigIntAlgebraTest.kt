@@ -27,18 +27,12 @@ internal class BigIntAlgebraTest {
     @Test
     fun testKBigIntegerRingPow() {
         for (num in -5..5)
-            for (exponent in 0U..10U) {
-                assertEquals(
-                    num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
-                    num.toBigInt().pow(exponent.toULong()),
-                    "$num ^ $exponent"
-                )
+            for (exponent in 0U..10U)
                 assertEquals(
                     num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
                     num.toBigInt().pow(exponent),
                     "$num ^ $exponent"
                 )
-            }
     }
 
     @Test

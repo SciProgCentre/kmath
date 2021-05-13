@@ -253,26 +253,6 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
     public val one: T
 }
 
-@UnstableKMathAPI
-public fun <T> Ring<T>.pow(base: T, exponent: ULong): T = when {
-    this == zero && exponent > 0UL -> zero
-    this == one -> base
-    this == -one -> powWithoutOptimization(base, exponent % 2UL)
-    else -> powWithoutOptimization(base, exponent)
-}
-
-@UnstableKMathAPI
-public fun <T> Ring<T>.pow(base: T, exponent: UInt): T = pow(base, exponent.toULong())
-
-private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: ULong): T = when (exponent) {
-    0UL -> one
-    1UL -> base
-    else -> {
-        val pre = powWithoutOptimization(base, exponent shr 1).let { it * it }
-        if (exponent and 1UL == 0UL) pre else pre * base
-    }
-}
-
 /**
  * Represents field without without multiplicative and additive identities, i.e. algebraic structure with associative, binary, commutative operations
  * [add] and [multiply]; binary operation [divide] as multiplication of left operand by reciprocal of right one.

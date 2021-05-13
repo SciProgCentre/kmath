@@ -21,7 +21,7 @@ internal class BigIntBenchmark {
 
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
-    val largeKmNumber = BigIntField { number(11).pow(100_000UL) }
+    val largeKmNumber = BigIntField { number(11).pow(100_000U) }
     val largeJvmNumber: BigInteger = JBigIntegerField { number(11).pow(100_000) }
     val bigExponent = 50_000
 
@@ -67,7 +67,7 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun kmPower(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(kmNumber.pow(bigExponent.toULong()))
+        blackhole.consume(kmNumber.pow(bigExponent.toUInt()))
     }
 
     @Benchmark
