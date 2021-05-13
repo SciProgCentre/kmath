@@ -15,3 +15,15 @@ package space.kscience.kmath.misc
 @Retention(value = AnnotationRetention.BINARY)
 @RequiresOptIn("This API is unstable and could change in future", RequiresOptIn.Level.WARNING)
 public annotation class UnstableKMathAPI
+
+/**
+ * Marks API which could cause performance problems. The code, marked by this API is not necessary slow, but could cause
+ * slow-down in some cases. Refer to the documentation and benchmark it to be sure.
+ */
+@MustBeDocumented
+@Retention(value = AnnotationRetention.BINARY)
+@RequiresOptIn(
+    "Refer to the documentation to use this API in performance-critical code",
+    RequiresOptIn.Level.WARNING
+)
+public annotation class PerformancePitfall

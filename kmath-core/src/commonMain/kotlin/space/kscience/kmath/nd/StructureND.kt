@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -48,6 +49,7 @@ public interface StructureND<T> {
      *
      * @return the lazy sequence of pairs of indices to values.
      */
+    @PerformancePitfall
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
@@ -61,6 +63,7 @@ public interface StructureND<T> {
         /**
          * Indicates whether some [StructureND] is equal to another one.
          */
+        @PerformancePitfall
         public fun <T : Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
             if (st1 === st2) return true
 
@@ -169,6 +172,7 @@ public interface MutableStructureND<T> : StructureND<T> {
 /**
  * Transform a structure element-by element in place.
  */
+@OptIn(PerformancePitfall::class)
 public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 

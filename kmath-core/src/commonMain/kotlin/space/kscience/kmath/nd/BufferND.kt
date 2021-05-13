@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.MutableBuffer
@@ -32,6 +33,7 @@ public open class BufferND<T>(
 
     override val shape: IntArray get() = strides.shape
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
         it to this[it]
     }

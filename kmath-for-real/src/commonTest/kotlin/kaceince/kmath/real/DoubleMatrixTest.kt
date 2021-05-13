@@ -7,6 +7,7 @@ package kaceince.kmath.real
 
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.matrix
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.real.*
@@ -15,6 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(PerformancePitfall::class)
 fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
     assertTrue { StructureND.contentEquals(expected, actual) }
 }

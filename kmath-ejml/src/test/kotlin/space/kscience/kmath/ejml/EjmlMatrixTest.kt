@@ -12,12 +12,14 @@ import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import space.kscience.kmath.linear.DeterminantFeature
 import space.kscience.kmath.linear.LupDecompositionFeature
 import space.kscience.kmath.linear.getFeature
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
 
+@OptIn(PerformancePitfall::class)
 fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
     assertTrue { StructureND.contentEquals(expected, actual) }
 }

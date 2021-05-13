@@ -1,7 +1,8 @@
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Strides
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
 
@@ -32,7 +33,8 @@ public open class BufferedTensor<T> internal constructor(
         mutableBuffer[bufferStart + linearStructure.offset(index)] = value
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = linearStructure.indices().map {
-        it to this[it]
+        it to get(it)
     }
 }

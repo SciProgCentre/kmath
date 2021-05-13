@@ -8,11 +8,12 @@ import org.jetbrains.kotlinx.jupyter.api.DisplayResult
 import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
-import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
 import space.kscience.kmath.ast.rendering.renderWithStringBuilder
 import space.kscience.kmath.complex.Complex
+import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.RingOperations
@@ -55,6 +56,7 @@ internal class KMathJupyter : JupyterIntegration() {
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Builder.onLoaded() {
         import(
             "space.kscience.kmath.ast.*",

@@ -12,6 +12,7 @@
 - Integration for any Field element
 - Extended operations for ND4J fields
 - Jupyter Notebook integration module (kmath-jupyter)
+- `@PerformancePitfall` annotation to mark possibly slow API
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
