@@ -187,7 +187,7 @@ public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)
 
-    public override fun toString(): String = "($re + i*$im)"
+    public override fun toString(): String = "($re + i * $im)"
 
     public companion object : MemorySpec<Complex> {
         public override val objectSize: Int
