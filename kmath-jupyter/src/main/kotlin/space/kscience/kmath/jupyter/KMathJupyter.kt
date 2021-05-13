@@ -12,18 +12,19 @@ import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
 import space.kscience.kmath.ast.rendering.renderWithStringBuilder
 import space.kscience.kmath.complex.Complex
+import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.operations.GroupOperations
-import space.kscience.kmath.operations.RingOperations
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
 /**
  * A function for conversion of number to MST for pretty print
  */
-public fun Number.toMst(): MST.Numeric =  MST.Numeric(this)
+public fun Number.toMst(): MST.Numeric = MST.Numeric(this)
 
 @JupyterLibrary
 internal class KMathJupyter : JupyterIntegration() {
@@ -121,11 +122,18 @@ internal class KMathJupyter : JupyterIntegration() {
         }
 
         render<Complex> {
-            MST.Binary(
-                operation = GroupOperations.PLUS_OPERATION,
-                left = MST.Numeric(it.re),
-                right = MST.Binary(RingOperations.TIMES_OPERATION, MST.Numeric(it.im), MST.Symbolic("i")),
-            ).toDisplayResult()
+            MstRing {
+                number(it.re) + number(it.im) * bindSymbol("i")
+            }.toDisplayResult()
+        }
+
+        render<Quaternion> {
+            MstRing {
+                number(it.w) +
+                        number(it.x) * bindSymbol("i") +
+                        number(it.x) * bindSymbol("j") +
+                        number(it.x) * bindSymbol("k")
+            }.toDisplayResult()
         }
     }
 }
