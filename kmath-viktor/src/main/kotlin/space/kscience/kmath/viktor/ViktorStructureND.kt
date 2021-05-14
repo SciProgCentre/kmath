@@ -6,6 +6,7 @@
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
@@ -23,6 +24,7 @@ public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructur
         f64Buffer.set(*index, value = value)
     }
 
+    @PerformancePitfall
     public override fun elements(): Sequence<Pair<IntArray, Double>> =
         DefaultStrides(shape).indices().map { it to get(it) }
 }

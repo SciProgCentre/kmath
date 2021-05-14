@@ -28,7 +28,7 @@ public class CMIntegrator(
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls
-        val range = integrand.getFeature<IntegrationRange<Double>>()?.range
+        val range = integrand.getFeature<IntegrationRange>()?.range
             ?: error("Integration range is not provided")
         val res = integrator.integrate(remainingCalls, integrand.function, range.start, range.endInclusive)
 

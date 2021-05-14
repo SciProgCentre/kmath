@@ -232,7 +232,7 @@ public value class MutableListBuffer<T>(public val list: MutableList<T>) : Mutab
 }
 
 /**
- * Returns an [ListBuffer] that wraps the original list.
+ * Returns an [MutableListBuffer] that wraps the original list.
  */
 public fun <T> MutableList<T>.asMutableBuffer(): MutableListBuffer<T> = MutableListBuffer(this)
 

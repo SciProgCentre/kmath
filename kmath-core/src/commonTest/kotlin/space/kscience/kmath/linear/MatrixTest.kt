@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
@@ -13,6 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @UnstableKMathAPI
+@OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
 class MatrixTest {
     @Test

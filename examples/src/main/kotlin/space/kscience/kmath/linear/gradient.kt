@@ -22,8 +22,8 @@ fun main() {
         return DoubleBuffer(x.size) { i ->
             val h = sigma[i] / 5
             val dVector = DoubleBuffer(x.size) { if (it == i) h else 0.0 }
-            val f1 = invoke(x + dVector / 2)
-            val f0 = invoke(x - dVector / 2)
+            val f1 = this(x + dVector / 2)
+            val f0 = this(x - dVector / 2)
             (f1 - f0) / h
         }
     }

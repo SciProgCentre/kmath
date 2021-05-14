@@ -97,14 +97,12 @@ public interface NumericAlgebra<T> : Algebra<T> {
 /**
  * The &pi; mathematical constant.
  */
-public val <T> NumericAlgebra<T>.pi: T
-    get() = bindSymbolOrNull("pi") ?: number(PI)
+public val <T> NumericAlgebra<T>.pi: T get() = bindSymbolOrNull("pi") ?: number(PI)
 
 /**
  * The *e* mathematical constant.
  */
-public val <T> NumericAlgebra<T>.e: T
-    get() = number(E)
+public val <T> NumericAlgebra<T>.e: T get() = number(E)
 
 /**
  * Scale by scalar operations

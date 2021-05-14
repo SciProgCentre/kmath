@@ -52,7 +52,7 @@ internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.(
  *
  * @author Iaroslav Postovalov
  */
-internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
+internal fun MethodVisitor.label(): Label = Label().also(::visitLabel)
 
 /**
  * Creates a class name for [Expression] subclassed to implement [mst] provided.

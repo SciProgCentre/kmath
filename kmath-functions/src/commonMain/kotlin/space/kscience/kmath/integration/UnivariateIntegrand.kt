@@ -33,7 +33,7 @@ public fun <T : Any> UnivariateIntegrand(
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
 @JvmInline
-public value class IntegrationRange<T : Comparable<T>>(public val range: ClosedRange<T>) : IntegrandFeature
+public value class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature
 
 public val <T : Any> UnivariateIntegrand<T>.value: T? get() = getFeature<IntegrandValue<T>>()?.value
 
@@ -57,8 +57,8 @@ public fun UnivariateIntegrator<Double>.integrate(
 @UnstableKMathAPI
 public fun UnivariateIntegrator<Double>.integrate(
     range: ClosedRange<Double>,
+    featureBuilder: MutableList<IntegrandFeature>.() -> Unit = {},
     function: (Double) -> Double,
-    featureBuilder: (MutableList<IntegrandFeature>.() -> Unit) = {},
 ): Double {
     //TODO use dedicated feature builder class instead or add extensions to MutableList<IntegrandFeature>
     val features = buildList {

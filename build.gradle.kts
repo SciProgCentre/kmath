@@ -1,53 +1,37 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
-import org.jetbrains.dokka.gradle.DokkaTask
-import java.net.URL
-
 plugins {
     id("ru.mipt.npm.gradle.project")
+    kotlin("jupyter.api") apply false
 }
 
 allprojects {
     repositories {
-        jcenter()
         maven("https://clojars.org/repo")
-        maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-        maven("https://dl.bintray.com/hotkeytlt/maven")
         maven("https://jitpack.io")
-        maven{
-            setUrl("http://logicrunch.research.it.uu.se/maven/")
+        maven("http://logicrunch.research.it.uu.se/maven") {
             isAllowInsecureProtocol = true
         }
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-7"
+    version = "0.3.0-dev-8"
 }
 
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
     afterEvaluate {
-        tasks.withType<DokkaTask> {
-            dokkaSourceSets.all {
-                val readmeFile = File(this@subprojects.projectDir, "./README.md")
-                if (readmeFile.exists())
-                    includes.setFrom(includes + readmeFile.absolutePath)
+        tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
+            dependsOn(tasks.getByName("assemble"))
 
-                arrayOf(
-                    "http://ejml.org/javadoc/",
-                    "https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/",
-                    "https://deeplearning4j.org/api/latest/"
-                ).map { URL("${it}package-list") to URL(it) }.forEach { (a, b) ->
-                    externalDocumentationLink {
-                        packageListUrl.set(a)
-                        url.set(b)
-                    }
-                }
+            dokkaSourceSets.all {
+                val readmeFile = File(this@subprojects.projectDir, "README.md")
+                if (readmeFile.exists()) includes.setFrom(includes + readmeFile.absolutePath)
+                externalDocumentationLink("http://ejml.org/javadoc/")
+                externalDocumentationLink("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/")
+                externalDocumentationLink("https://deeplearning4j.org/api/latest/")
+                externalDocumentationLink("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
             }
         }
     }

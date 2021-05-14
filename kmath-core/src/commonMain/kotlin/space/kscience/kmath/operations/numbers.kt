@@ -49,12 +49,6 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
     public override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
     public override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2.0
 
-    public override fun bindSymbol(value: String): T = when (value) {
-        "pi" -> pi
-        "e" -> e
-        else -> super<ExtendedFieldOperations>.bindSymbol(value)
-    }
-
     public override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power

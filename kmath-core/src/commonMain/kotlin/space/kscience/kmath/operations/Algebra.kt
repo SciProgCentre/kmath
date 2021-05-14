@@ -45,9 +45,9 @@ public interface Algebra<T> {
     /**
      * Dynamically dispatches an unary operation with the certain name.
      *
-     * This function must follow two properties:
+     * This function must has two features:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
+     * 1. In case operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
      * 2. This function is symmetric with second `unaryOperation` overload:
      * i.e. `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
      *

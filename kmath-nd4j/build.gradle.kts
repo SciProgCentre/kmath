@@ -1,10 +1,3 @@
-/*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
     kotlin("jvm")
     id("ru.mipt.npm.gradle.common")
@@ -13,14 +6,14 @@ plugins {
 dependencies {
     api(project(":kmath-core"))
     api("org.nd4j:nd4j-api:1.0.0-beta7")
-    testImplementation("org.deeplearning4j:deeplearning4j-core:1.0.0-beta7")
+    testImplementation("org.nd4j:nd4j-native:1.0.0-beta7")
     testImplementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
 readme {
     description = "ND4J NDStructure implementation and according NDAlgebra classes"
-    maturity = Maturity.EXPERIMENTAL
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

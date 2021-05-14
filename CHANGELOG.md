@@ -10,6 +10,9 @@
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
+- Extended operations for ND4J fields
+- Jupyter Notebook integration module (kmath-jupyter)
+- `@PerformancePitfall` annotation to mark possibly slow API
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -23,6 +26,8 @@
 - Redesign MST. Remove MSTExpression.
 - Move MST to core
 - Separated benchmarks and examples
+- Rewritten EJML module without ejml-simple
+- Stability of kmath-ast and kmath-kotilngrad promoted to EXPERIMENTAL.
 
 ### Deprecated
 
@@ -31,6 +36,8 @@
 - Number multiplication and division in main Algebra chain
 - `contentEquals` from Buffer. It moved to the companion.
 - MSTExpression
+- Expression algebra builders
+- Complex and Quaternion no longer are elements.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

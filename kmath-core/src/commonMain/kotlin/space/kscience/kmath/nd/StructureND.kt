@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -48,6 +49,7 @@ public interface StructureND<T> {
      *
      * @return the lazy sequence of pairs of indices to values.
      */
+    @PerformancePitfall
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
@@ -61,6 +63,7 @@ public interface StructureND<T> {
         /**
          * Indicates whether some [StructureND] is equal to another one.
          */
+        @PerformancePitfall
         public fun <T : Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
             if (st1 === st2) return true
 
@@ -169,6 +172,7 @@ public interface MutableStructureND<T> : StructureND<T> {
 /**
  * Transform a structure element-by element in place.
  */
+@OptIn(PerformancePitfall::class)
 public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
@@ -184,12 +188,15 @@ public interface Strides {
     /**
      * Array strides
      */
-    public val strides: List<Int>
+    public val strides: IntArray
 
     /**
      * Get linear index from multidimensional index
      */
-    public fun offset(index: IntArray): Int
+    public fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
+        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
+        value * strides[i]
+    }.sum()
 
     /**
      * Get multidimensional from linear
@@ -221,7 +228,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
     /**
      * Strides for memory access
      */
-    override val strides: List<Int> by lazy {
+    override val strides: IntArray by lazy {
         sequence {
             var current = 1
             yield(1)
@@ -230,13 +237,8 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
                 current *= it
                 yield(current)
             }
-        }.toList()
+        }.toList().toIntArray()
     }
-
-    override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-        value * strides[i]
-    }.sum()
 
     override fun index(offset: Int): IntArray {
         val res = IntArray(shape.size)

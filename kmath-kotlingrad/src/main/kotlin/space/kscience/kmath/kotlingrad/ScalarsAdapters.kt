@@ -15,16 +15,16 @@ import space.kscience.kmath.operations.*
 /**
  * Maps [SVar] to [MST.Symbolic] directly.
  *
- * @receiver the variable.
- * @return a node.
+ * @receiver The variable.
+ * @returnAa node.
  */
 public fun <X : SFun<X>> SVar<X>.toMst(): MST.Symbolic = MstAlgebra.bindSymbol(name)
 
 /**
  * Maps [SVar] to [MST.Numeric] directly.
  *
- * @receiver the constant.
- * @return a node.
+ * @receiver The constant.
+ * @return A node.
  */
 public fun <X : SFun<X>> SConst<X>.toMst(): MST.Numeric = MstAlgebra.number(doubleValue)
 
@@ -49,8 +49,8 @@ public fun <X : SFun<X>> SConst<X>.toMst(): MST.Numeric = MstAlgebra.number(doub
  * - [VSumAll] is requested to be evaluated;
  * - [Derivative] is requested to be evaluated.
  *
- * @receiver the scalar function.
- * @return a node.
+ * @receiver The scalar function.
+ * @return A node.
  */
 public fun <X : SFun<X>> SFun<X>.toMst(): MST = MstExtendedField {
     when (this@toMst) {
@@ -74,17 +74,16 @@ public fun <X : SFun<X>> SFun<X>.toMst(): MST = MstExtendedField {
 /**
  * Maps [MST.Numeric] to [SConst] directly.
  *
- * @receiver the node.
- * @return a new constant.
+ * @receiver The node.
+ * @return A new constant.
  */
 public fun <X : SFun<X>> MST.Numeric.toSConst(): SConst<X> = SConst(value)
 
 /**
  * Maps [MST.Symbolic] to [SVar] directly.
  *
- * @receiver the node.
- * @param proto the prototype instance.
- * @return a new variable.
+ * @receiver The node.
+ * @return A new variable.
  */
 internal fun <X : SFun<X>> MST.Symbolic.toSVar(): SVar<X> = SVar(value)
 
@@ -98,9 +97,8 @@ internal fun <X : SFun<X>> MST.Symbolic.toSVar(): SVar<X> = SVar(value)
  * - [MST.Unary] -> [Negative], [Sine], [Cosine], [Tangent], [Power], [Log];
  * - [MST.Binary] -> [Sum], [Prod], [Power].
  *
- * @receiver the node.
- * @param proto the prototype instance.
- * @return a scalar function.
+ * @receiver The node.
+ * @return A scalar function.
  */
 public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     is MST.Numeric -> toSConst()

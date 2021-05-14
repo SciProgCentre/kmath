@@ -5,12 +5,14 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(PerformancePitfall::class)
 fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
     assertTrue { StructureND.contentEquals(expected, actual) }
 }

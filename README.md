@@ -76,6 +76,12 @@ KMath is a modular library. Different modules provide different features with di
 
 <hr/>
 
+* ### [benchmarks](benchmarks)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
+
 * ### [examples](examples)
 > 
 >
@@ -85,15 +91,13 @@ KMath is a modular library. Different modules provide different features with di
 * ### [kmath-ast](kmath-ast)
 > 
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [expression-language](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
-> - [mst](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation
-> - [mst-building](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MstAlgebra.kt) : MST building algebraic structure
-> - [mst-interpreter](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/MST.kt) : MST interpreter
+> - [expression-language](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
 > - [mst-jvm-codegen](kmath-ast/src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
 > - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+> - [rendering](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
 
 <hr/>
 
@@ -150,9 +154,9 @@ performance calculations to code generation.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
-> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
-> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : Point implementations.
+> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
+> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
 <hr/>
 
@@ -196,10 +200,21 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
-* ### [kmath-kotlingrad](kmath-kotlingrad)
+* ### [kmath-jupyter](kmath-jupyter)
 > 
 >
 > **Maturity**: PROTOTYPE
+<hr/>
+
+* ### [kmath-kotlingrad](kmath-kotlingrad)
+> Functions, integration and interpolation
+>
+> **Maturity**: EXPERIMENTAL
+>
+> **Features:**
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : MST based DifferentiableExpression.
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : Conversions between Kotlin&nabla;'s SFun and MST
+
 <hr/>
 
 * ### [kmath-memory](kmath-memory)
@@ -224,6 +239,19 @@ One can still use generic algebras though.
 > 
 >
 > **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-tensors](kmath-tensors)
+> 
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Interface for basic linear algebra operations on tensors (plus, dot, etc.)
+> - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Interface for advanced linear algebra operations like LU decomposition, SVD, etc.
+> - [tensor algebra over Double](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/DoubleTensorAlgebra.kt): Full implementation of operations for tensors over `Double`'s.
+> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting for tensors over `Double`'s.
+
 <hr/>
 
 * ### [kmath-viktor](kmath-viktor)
@@ -266,8 +294,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-6")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-6") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-8")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-8") for jvm-specific version
 }
 ```
 

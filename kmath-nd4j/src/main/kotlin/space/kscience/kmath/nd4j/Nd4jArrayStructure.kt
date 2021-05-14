@@ -6,6 +6,7 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.StructureND
 
@@ -20,11 +21,11 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray
-        get() = ndArray.shape().toIntArray()
+    public override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()
+    @PerformancePitfall
     public override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
 }
 

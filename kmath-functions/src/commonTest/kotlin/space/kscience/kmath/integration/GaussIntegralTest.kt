@@ -19,12 +19,12 @@ class GaussIntegralTest {
         val res = DoubleField.integrate(0.0..2 * PI) { x ->
             sin(x)
         }
-        assertEquals(0.0, res.value!!, 1e-4)
+        assertEquals(0.0, res.value!!, 1e-2)
     }
 
     @Test
     fun gaussUniform() {
-        val res = DoubleField.integrate(0.0..100.0,300) { x ->
+        val res = DoubleField.integrate(0.0..100.0) { x ->
             if(x in 30.0..50.0){
                 1.0
             } else {

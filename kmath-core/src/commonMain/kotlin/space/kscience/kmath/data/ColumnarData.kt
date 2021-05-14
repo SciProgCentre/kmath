@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.data
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
@@ -25,6 +26,7 @@ public interface ColumnarData<out T> {
  * A zero-copy method to represent a [Structure2D] as a two-column x-y data.
  * There could more than two columns in the structure.
  */
+@OptIn(PerformancePitfall::class)
 @UnstableKMathAPI
 public fun <T> Structure2D<T>.asColumnarData(mapping: Map<Symbol, Int>): ColumnarData<T> {
     require(shape[1] >= mapping.maxOf { it.value }) { "Column index out of bounds" }

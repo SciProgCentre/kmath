@@ -19,16 +19,16 @@ internal class IntegrationTest {
 
     @Test
     fun simpson() {
-        val res = CMIntegrator.simpson().integrate(0.0..2 * PI, function)
+        val res = CMIntegrator.simpson().integrate(0.0..2 * PI, function = function)
         assertTrue { abs(res) < 1e-3 }
     }
 
     @Test
     fun customSimpson() {
-        val res = CMIntegrator.simpson().integrate(0.0..PI, function) {
+        val res = CMIntegrator.simpson().integrate(0.0..PI, {
             targetRelativeAccuracy = 1e-4
             targetAbsoluteAccuracy = 1e-4
-        }
+        }, function)
         assertTrue { abs(res - 2) < 1e-3 }
         assertTrue { abs(res - 2) > 1e-12 }
     }

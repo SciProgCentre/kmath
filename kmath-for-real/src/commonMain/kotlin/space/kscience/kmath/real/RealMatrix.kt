@@ -3,9 +3,13 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(PerformancePitfall::class)
+@file:Suppress("unused")
+
 package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.*
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
