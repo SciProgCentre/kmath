@@ -629,7 +629,15 @@ public open class DoubleTensorAlgebra :
         return ((x - x.mean()) * (y - y.mean())).mean() * n / (n - 1)
     }
 
-    override fun cov(tensors: List<Tensor<Double>>): DoubleTensor {
+    /**
+     * Returns the covariance matrix M of given vectors.
+     *
+     * M[i, j] contains covariance of i-th and j-th given vectors
+     *
+     * @param tensors the [List] of 1-dimensional tensors with same shape
+     * @return the covariance matrix
+     */
+    public fun cov(tensors: List<Tensor<Double>>): DoubleTensor {
         check(tensors.isNotEmpty()) { "List must have at least 1 element" }
         val n = tensors.size
         val m = tensors[0].shape[0]

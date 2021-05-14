@@ -67,16 +67,6 @@ public interface AnalyticTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
      */
     public fun Tensor<T>.variance(dim: Int, keepDim: Boolean): Tensor<T>
 
-    /**
-     * Returns the covariance matrix M of given vectors.
-     *
-     * M[i, j] contains covariance of i-th and j-th given vectors
-     *
-     * @param tensors the [List] of 1-dimensional tensors with same shape
-     * @return the covariance matrix
-     */
-    public fun cov(tensors: List<Tensor<T>>): Tensor<T>
-
     //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun Tensor<T>.exp(): Tensor<T>
 
