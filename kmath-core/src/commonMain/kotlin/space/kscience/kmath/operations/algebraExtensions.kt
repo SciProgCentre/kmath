@@ -108,9 +108,9 @@ public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
  * @author Evgeniy Zhelenskiy
  */
 public fun <T> Ring<T>.power(arg: T, power: UInt): T = when {
-    this == zero && power > 0U -> zero
-    this == one -> arg
-    this == -one -> powWithoutOptimization(arg, power % 2U)
+    arg == zero && power > 0U -> zero
+    arg == one -> arg
+    arg == -one -> powWithoutOptimization(arg, power % 2U)
     else -> powWithoutOptimization(arg, power)
 }
 
