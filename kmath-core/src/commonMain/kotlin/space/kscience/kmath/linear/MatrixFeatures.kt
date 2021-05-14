@@ -76,6 +76,23 @@ public object LFeature : MatrixFeature
 public object UFeature : MatrixFeature
 
 /**
+ * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
+ *
+ * @param T the type of matrices' items.
+ */
+public interface LUDecompositionFeature<T : Any> : MatrixFeature {
+    /**
+     * The lower triangular matrix in this decomposition. It may have [LFeature].
+     */
+    public val l: Matrix<T>
+
+    /**
+     * The upper triangular matrix in this decomposition. It may have [UFeature].
+     */
+    public val u: Matrix<T>
+}
+
+/**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
  * *a* is the owning matrix.
  *

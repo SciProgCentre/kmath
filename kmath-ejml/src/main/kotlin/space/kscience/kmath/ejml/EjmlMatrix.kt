@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.ejml
 
-import org.ejml.data.DMatrix
 import org.ejml.data.Matrix
 import space.kscience.kmath.nd.Structure2D
 
@@ -20,13 +19,4 @@ import space.kscience.kmath.nd.Structure2D
 public abstract class EjmlMatrix<T, out M : Matrix>(public open val origin: M) : Structure2D<T> {
     public override val rowNum: Int get() = origin.numRows
     public override val colNum: Int get() = origin.numCols
-}
-
-/**
- * [EjmlMatrix] specialization for [Double].
- *
- * @author Iaroslav Postovalov
- */
-public class EjmlDoubleMatrix<out M : DMatrix>(public override val origin: M) : EjmlMatrix<Double, M>(origin) {
-    public override operator fun get(i: Int, j: Int): Double = origin[i, j]
 }
