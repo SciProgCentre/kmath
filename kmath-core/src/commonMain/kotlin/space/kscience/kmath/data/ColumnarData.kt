@@ -19,7 +19,7 @@ import space.kscience.kmath.structures.Buffer
 public interface ColumnarData<out T> {
     public val size: Int
 
-    public operator fun get(symbol: Symbol): Buffer<T>
+    public operator fun get(symbol: Symbol): Buffer<T>?
 }
 
 /**

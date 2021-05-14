@@ -29,6 +29,7 @@
 - Separated benchmarks and examples
 - Rewritten EJML module without ejml-simple
 - Stability of kmath-ast and kmath-kotilngrad promoted to EXPERIMENTAL.
+- ColumnarData returns nullable column
 
 ### Deprecated
 

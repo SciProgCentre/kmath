@@ -27,10 +27,10 @@ public interface XYColumnarData<T, out X : T, out Y : T> : ColumnarData<T> {
      */
     public val y: Buffer<Y>
 
-    override fun get(symbol: Symbol): Buffer<T> = when (symbol) {
+    override fun get(symbol: Symbol): Buffer<T>? = when (symbol) {
         Symbol.x -> x
         Symbol.y -> y
-        else -> error("A column for symbol $symbol not found")
+        else -> null
     }
 }
 
