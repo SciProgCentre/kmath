@@ -108,9 +108,9 @@ public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
  * @author Evgeniy Zhelenskiy
  */
 public fun <T> Ring<T>.power(arg: T, power: UInt): T = when {
-    this == zero && power > 0U -> zero
-    this == one -> arg
-    this == -one -> powWithoutOptimization(arg, power % 2U)
+    arg == zero && power > 0U -> zero
+    arg == one -> arg
+    arg == -one -> powWithoutOptimization(arg, power % 2U)
     else -> powWithoutOptimization(arg, power)
 }
 
@@ -135,7 +135,7 @@ private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = whe
  * @return the base raised to the power.
  * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
  */
-public fun <T> Field<T>.power(arg: T, power: Int): T = when {
-    power < 0 -> one / (this as Ring<T>).power(arg, if (power == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-power).toUInt())
-    else -> (this as Ring<T>).power(arg, power.toUInt())
+public fun <T> Field<T>.power(arg: T, power: UInt): T = when {
+    power < 0 -> one / (this as Ring<T>).power(arg, power)
+    else -> (this as Ring<T>).power(arg, power)
 }
