@@ -97,21 +97,21 @@ public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
 //TODO optimized power operation
 
 /**
- * Raises [arg] to the non-negative integer power [power].
+ * Raises [arg] to the non-negative integer power [exponent].
  *
  * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication.
  * @param arg the base.
- * @param power the exponent.
+ * @param exponent the exponent.
  * @return the base raised to the power.
  * @author Evgeniy Zhelenskiy
  */
-public fun <T> Ring<T>.power(arg: T, power: UInt): T = when {
-    arg == zero && power > 0U -> zero
+public fun <T> Ring<T>.power(arg: T, exponent: UInt): T = when {
+    arg == zero && exponent > 0U -> zero
     arg == one -> arg
-    arg == -one -> powWithoutOptimization(arg, power % 2U)
-    else -> powWithoutOptimization(arg, power)
+    arg == -one -> powWithoutOptimization(arg, exponent % 2U)
+    else -> powWithoutOptimization(arg, exponent)
 }
 
 private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = when (exponent) {
@@ -125,17 +125,17 @@ private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = whe
 
 
 /**
- * Raises [arg] to the integer power [power].
+ * Raises [arg] to the integer power [exponent].
  *
  * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication and division.
  * @param arg the base.
- * @param power the exponent.
+ * @param exponent the exponent.
  * @return the base raised to the power.
  * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
  */
-public fun <T> Field<T>.power(arg: T, power: Int): T = when {
-    power < 0 -> one / (this as Ring<T>).power(arg, if (power == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-power).toUInt())
-    else -> (this as Ring<T>).power(arg, power.toUInt())
+public fun <T> Field<T>.power(arg: T, exponent: Int): T = when {
+    exponent < 0 -> one / (this as Ring<T>).power(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+    else -> (this as Ring<T>).power(arg, exponent.toUInt())
 }

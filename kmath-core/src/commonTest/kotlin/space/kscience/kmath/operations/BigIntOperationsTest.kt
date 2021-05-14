@@ -7,7 +7,10 @@ package space.kscience.kmath.operations
 
 import kotlin.random.Random
 import kotlin.random.nextUInt
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @kotlin.ExperimentalUnsignedTypes
 class BigIntOperationsTest {
@@ -153,14 +156,13 @@ class BigIntOperationsTest {
 
     @Test
     fun testKaratsuba() {
+        val random = Random(2222)
         val x = uintArrayOf(12U, 345U)
         val y = uintArrayOf(6U, 789U)
         assertContentEquals(BigInt.naiveMultiplyMagnitudes(x, y), BigInt.karatsubaMultiplyMagnitudes(x, y))
-        repeat(1000) {
-            val x1 = UIntArray(Random.nextInt(100, 1000)) { Random.nextUInt() }
-            val y1 = UIntArray(Random.nextInt(100, 1000)) { Random.nextUInt() }
-            assertContentEquals(BigInt.naiveMultiplyMagnitudes(x1, y1), BigInt.karatsubaMultiplyMagnitudes(x1, y1))
-        }
+        val x1 = UIntArray(Random.nextInt(100, 1000)) { random.nextUInt() }
+        val y1 = UIntArray(Random.nextInt(100, 1000)) { random.nextUInt() }
+        assertContentEquals(BigInt.naiveMultiplyMagnitudes(x1, y1), BigInt.karatsubaMultiplyMagnitudes(x1, y1))
     }
 
     @Test

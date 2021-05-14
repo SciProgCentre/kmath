@@ -22,12 +22,12 @@ internal class DoubleFieldTest {
     @Test
     fun testPow() = DoubleField {
         val num = 5 * one
-        assertEquals(5.0, power(num, 1))
-        assertEquals(25.0, power(num, 2))
-        assertEquals(1.0, power(num, 0))
-        assertEquals(0.2, power(num, -1))
-        assertEquals(0.04, power(num, -2))
-        assertEquals(0.0, power(num, Int.MIN_VALUE))
-        assertEquals(1.0, power(zero, 0))
+        assertEquals(5.0, power(num, 1), 0.01)
+        assertEquals(25.0, power(num, 2), 0.01)
+        assertEquals(1.0, power(num, 0), 0.01)
+        assertEquals(0.2, power(num, -1), 0.01)
+        assertEquals(0.04, power(num, -2), 0.01)
+        assertEquals(0.0, power(num, Int.MIN_VALUE), 0.01)
+        assertEquals(1.0, power(zero, 0), 0.01)
     }
 }

@@ -98,7 +98,7 @@ public class BigInt internal constructor(
         else -> BigInt(sign, multiplyMagnitudeByUInt(magnitude, other))
     }
 
-    public fun pow(exponent: UInt): BigInt = BigIntField.power(this@BigInt, exponent)
+    public fun pow(exponent: UInt): BigInt = BigIntField.power(this, exponent)
 
     public operator fun times(other: Int): BigInt = when {
         other > 0 -> this * kotlin.math.abs(other).toUInt()

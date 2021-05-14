@@ -1020,7 +1020,7 @@ public final class space/kscience/kmath/operations/AlgebraExtensionsKt {
 	public static final fun averageWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Ring;)Ljava/lang/Object;
 	public static final fun averageWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Ring;)Ljava/lang/Object;
 	public static final fun power (Lspace/kscience/kmath/operations/Field;Ljava/lang/Object;I)Ljava/lang/Object;
-	public static final fun power (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;I)Ljava/lang/Object;
+	public static final fun power-jXDDuk8 (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;I)Ljava/lang/Object;
 	public static final fun sum (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Iterable;)Ljava/lang/Object;
 	public static final fun sum (Lspace/kscience/kmath/operations/Ring;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
 	public static final fun sumWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Ring;)Ljava/lang/Object;
@@ -1050,6 +1050,7 @@ public final class space/kscience/kmath/operations/BigInt : java/lang/Comparable
 	public final fun modPow (Lspace/kscience/kmath/operations/BigInt;Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigInt;
 	public final fun or (Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigInt;
 	public final fun plus (Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigInt;
+	public final fun pow-WZ4Q5Ns (I)Lspace/kscience/kmath/operations/BigInt;
 	public final fun rem (I)I
 	public final fun rem (Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigInt;
 	public final fun shl (I)Lspace/kscience/kmath/operations/BigInt;
