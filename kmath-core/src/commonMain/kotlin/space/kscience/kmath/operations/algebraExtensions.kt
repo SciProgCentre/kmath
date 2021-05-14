@@ -94,8 +94,6 @@ public fun <T, S> Iterable<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
 public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : ScaleOperations<T> =
     space.average(this)
 
-//TODO optimized power operation
-
 /**
  * Raises [arg] to the non-negative integer power [exponent].
  *
