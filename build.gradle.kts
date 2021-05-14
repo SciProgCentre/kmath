@@ -32,6 +32,7 @@ subprojects {
                 externalDocumentationLink("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/")
                 externalDocumentationLink("https://deeplearning4j.org/api/latest/")
                 externalDocumentationLink("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
+                externalDocumentationLink("https://breandan.net/kotlingrad/kotlingrad/kotlingrad/")
             }
         }
     }
