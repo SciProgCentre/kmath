@@ -25,7 +25,7 @@ interface Layer {
 // activation layer
 open class Activation(
     val activation: (DoubleTensor) -> DoubleTensor,
-    val activationDer: (DoubleTensor) -> DoubleTensor
+    val activationDer: (DoubleTensor) -> DoubleTensor,
 ) : Layer {
     override fun forward(input: DoubleTensor): DoubleTensor {
         return activation(input)
@@ -62,7 +62,7 @@ class Sigmoid : Activation(::sigmoid, ::sigmoidDer)
 class Dense(
     private val inputUnits: Int,
     private val outputUnits: Int,
-    private val learningRate: Double = 0.1
+    private val learningRate: Double = 0.1,
 ) : Layer {
 
     private val weights: DoubleTensor = DoubleTensorAlgebra {
@@ -74,8 +74,8 @@ class Dense(
 
     private val bias: DoubleTensor = DoubleTensorAlgebra { zeros(intArrayOf(outputUnits)) }
 
-    override fun forward(input: DoubleTensor): DoubleTensor {
-        return BroadcastDoubleTensorAlgebra { (input dot weights) + bias }
+    override fun forward(input: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
+        (input dot weights) + bias
     }
 
     override fun backward(input: DoubleTensor, outputError: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
@@ -116,7 +116,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
 
-        val softmaxValue =  yPred.exp() / yPred.exp().sum(dim = 1, keepDim = true)
+        val softmaxValue = yPred.exp() / yPred.exp().sum(dim = 1, keepDim = true)
 
         (-onesForAnswers + softmaxValue) / (yPred.shape[0].toDouble())
     }
@@ -175,67 +175,65 @@ class NeuralNetwork(private val layers: List<Layer>) {
 
 
 @OptIn(ExperimentalStdlibApi::class)
-fun main() {
-    BroadcastDoubleTensorAlgebra {
-        val features = 5
-        val sampleSize = 250
-        val trainSize = 180
-        //val testSize = sampleSize - trainSize
+fun main() = BroadcastDoubleTensorAlgebra {
+    val features = 5
+    val sampleSize = 250
+    val trainSize = 180
+    //val testSize = sampleSize - trainSize
 
-        // take sample of features from normal distribution
-        val x = randomNormal(intArrayOf(sampleSize, features), seed) * 2.5
+    // take sample of features from normal distribution
+    val x = randomNormal(intArrayOf(sampleSize, features), seed) * 2.5
 
-        x += fromArray(
-            intArrayOf(5),
-            doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // rows means
-        )
+    x += fromArray(
+        intArrayOf(5),
+        doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // rows means
+    )
 
 
-        // define class like '1' if the sum of features > 0 and '0' otherwise
-        val y = fromArray(
-            intArrayOf(sampleSize, 1),
-            DoubleArray(sampleSize) { i ->
-                if (x[i].sum() > 0.0) {
-                    1.0
-                } else {
-                    0.0
-                }
+    // define class like '1' if the sum of features > 0 and '0' otherwise
+    val y = fromArray(
+        intArrayOf(sampleSize, 1),
+        DoubleArray(sampleSize) { i ->
+            if (x[i].sum() > 0.0) {
+                1.0
+            } else {
+                0.0
             }
-        )
-
-        // split train ans test
-        val trainIndices = (0 until trainSize).toList().toIntArray()
-        val testIndices = (trainSize until sampleSize).toList().toIntArray()
-
-        val xTrain = x.rowsByIndices(trainIndices)
-        val yTrain = y.rowsByIndices(trainIndices)
-
-        val xTest = x.rowsByIndices(testIndices)
-        val yTest = y.rowsByIndices(testIndices)
-
-        // build model
-        val layers = buildList {
-            add(Dense(features, 64))
-            add(ReLU())
-            add(Dense(64, 16))
-            add(ReLU())
-            add(Dense(16, 2))
-            add(Sigmoid())
         }
-        val model = NeuralNetwork(layers)
+    )
 
-        // fit it with train data
-        model.fit(xTrain, yTrain, batchSize = 20, epochs = 10)
+    // split train ans test
+    val trainIndices = (0 until trainSize).toList().toIntArray()
+    val testIndices = (trainSize until sampleSize).toList().toIntArray()
 
-        // make prediction
-        val prediction = model.predict(xTest)
+    val xTrain = x.rowsByIndices(trainIndices)
+    val yTrain = y.rowsByIndices(trainIndices)
 
-        // process raw prediction via argMax
-        val predictionLabels = prediction.argMax(1, true)
+    val xTest = x.rowsByIndices(testIndices)
+    val yTest = y.rowsByIndices(testIndices)
 
-        // find out accuracy
-        val acc = accuracy(yTest, predictionLabels)
-        println("Test accuracy:$acc")
-
+    // build model
+    val layers = buildList {
+        add(Dense(features, 64))
+        add(ReLU())
+        add(Dense(64, 16))
+        add(ReLU())
+        add(Dense(16, 2))
+        add(Sigmoid())
     }
+    val model = NeuralNetwork(layers)
+
+    // fit it with train data
+    model.fit(xTrain, yTrain, batchSize = 20, epochs = 10)
+
+    // make prediction
+    val prediction = model.predict(xTest)
+
+    // process raw prediction via argMax
+    val predictionLabels = prediction.argMax(1, true)
+
+    // find out accuracy
+    val acc = accuracy(yTest, predictionLabels)
+    println("Test accuracy:$acc")
+
 }

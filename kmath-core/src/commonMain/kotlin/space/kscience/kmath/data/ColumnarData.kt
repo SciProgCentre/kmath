@@ -19,6 +19,9 @@ import space.kscience.kmath.structures.Buffer
 public interface ColumnarData<out T> {
     public val size: Int
 
+    /**
+     * Provide a column by symbol or null if column with given symbol is not defined
+     */
     public operator fun get(symbol: Symbol): Buffer<T>?
 }
 
