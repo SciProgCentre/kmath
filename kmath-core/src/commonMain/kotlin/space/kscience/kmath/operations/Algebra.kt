@@ -6,6 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Stub for DSL the [Algebra] is.
@@ -247,7 +248,7 @@ public interface RingOperations<T> : GroupOperations<T> {
  */
 public interface Ring<T> : Group<T>, RingOperations<T> {
     /**
-     * neutral operation for multiplication
+     * The neutral element of multiplication
      */
     public val one: T
 }

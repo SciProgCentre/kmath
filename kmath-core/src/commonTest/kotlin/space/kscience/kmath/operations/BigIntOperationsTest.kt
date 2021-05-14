@@ -5,8 +5,9 @@
 
 package space.kscience.kmath.operations
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.random.Random
+import kotlin.random.nextUInt
+import kotlin.test.*
 
 @kotlin.ExperimentalUnsignedTypes
 class BigIntOperationsTest {
@@ -148,6 +149,18 @@ class BigIntOperationsTest {
         val prod = 0xfffffffe00000001UL.toBigInt()
 
         assertEquals(prod, res)
+    }
+
+    @Test
+    fun testKaratsuba() {
+        val x = uintArrayOf(12U, 345U)
+        val y = uintArrayOf(6U, 789U)
+        assertContentEquals(BigInt.naiveMultiplyMagnitudes(x, y), BigInt.karatsubaMultiplyMagnitudes(x, y))
+        repeat(1000) {
+            val x1 = UIntArray(Random.nextInt(100, 1000)) { Random.nextUInt() }
+            val y1 = UIntArray(Random.nextInt(100, 1000)) { Random.nextUInt() }
+            assertContentEquals(BigInt.naiveMultiplyMagnitudes(x1, y1), BigInt.karatsubaMultiplyMagnitudes(x1, y1))
+        }
     }
 
     @Test
@@ -382,5 +395,13 @@ class BigIntOperationsTest {
         val res = 0xdef01.toBigInt()
 
         return assertEquals(res, x % mod)
+    }
+
+    @Test
+    fun testNotEqualsOtherTypeInstanceButButNotFails() = assertFalse(0.toBigInt().equals(""))
+
+    @Test
+    fun testIntAbsOverflow() {
+        assertEquals((-Int.MAX_VALUE.toLong().toBigInt() - 1.toBigInt()) * 2, 2.toBigInt() * Int.MIN_VALUE)
     }
 }

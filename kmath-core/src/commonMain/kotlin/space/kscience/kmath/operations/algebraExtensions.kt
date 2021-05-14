@@ -97,34 +97,45 @@ public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
 //TODO optimized power operation
 
 /**
- * Raises [arg] to the natural power [power].
+ * Raises [arg] to the non-negative integer power [power].
+ *
+ * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication.
  * @param arg the base.
  * @param power the exponent.
  * @return the base raised to the power.
+ * @author Evgeniy Zhelenskiy
  */
-public fun <T> Ring<T>.power(arg: T, power: Int): T {
-    require(power >= 0) { "The power can't be negative." }
-    require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
-    if (power == 0) return one
-    var res = arg
-    repeat(power - 1) { res *= arg }
-    return res
+public fun <T> Ring<T>.power(arg: T, power: UInt): T = when {
+    arg == zero && power > 0U -> zero
+    arg == one -> arg
+    arg == -one -> powWithoutOptimization(arg, power % 2U)
+    else -> powWithoutOptimization(arg, power)
 }
+
+private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = when (exponent) {
+    0U -> one
+    1U -> base
+    else -> {
+        val pre = powWithoutOptimization(base, exponent shr 1).let { it * it }
+        if (exponent and 1U == 0U) pre else pre * base
+    }
+}
+
 
 /**
  * Raises [arg] to the integer power [power].
+ *
+ * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication and division.
  * @param arg the base.
  * @param power the exponent.
  * @return the base raised to the power.
- * @author Iaroslav Postovalov
+ * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
  */
-public fun <T> Field<T>.power(arg: T, power: Int): T {
-    require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
-    if (power == 0) return one
-    if (power < 0) return one / (this as Ring<T>).power(arg, -power)
-    return (this as Ring<T>).power(arg, power)
+public fun <T> Field<T>.power(arg: T, power: UInt): T = when {
+    power < 0 -> one / (this as Ring<T>).power(arg, power)
+    else -> (this as Ring<T>).power(arg, power)
 }
