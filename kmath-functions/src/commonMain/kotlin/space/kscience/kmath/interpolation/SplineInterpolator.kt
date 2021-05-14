@@ -42,9 +42,11 @@ public class SplineInterpolator<T : Comparable<T>>(
             val g = 2.0 * (points.x[i + 1] - points.x[i - 1]) - h[i - 1] * mu[i - 1]
             mu[i] = h[i] / g
 
-            z[i] =
-                (3.0 * (points.y[i + 1] * h[i - 1] - points.x[i] * (points.x[i + 1] - points.x[i - 1]) + points.y[i - 1] * h[i]) / (h[i - 1] * h[i])
-                        - h[i - 1] * z[i - 1]) / g
+            z[i] = (3.0 * (points.y[i + 1] * h[i - 1]
+                    - points.x[i] * (points.x[i + 1] - points.x[i - 1])
+                    + points.y[i - 1] * h[i]) / (h[i - 1] * h[i])
+                    - h[i - 1] * z[i - 1]
+                    ) / g
         }
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)

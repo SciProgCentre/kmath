@@ -79,4 +79,13 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
     findPiece(arg)?.value(ring, arg)
 
+/**
+ * Convert this polynomial to a function returning nullable value (null if argument is outside piecewise range).
+ */
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }
+
+/**
+ * Convert this polynomial to a function using [defaultValue] for arguments outside the piecewise range.
+ */
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C, defaultValue: T): (T) -> T =
+    { value(ring, it) ?: defaultValue }
