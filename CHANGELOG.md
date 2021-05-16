@@ -30,6 +30,7 @@
 - Rewritten EJML module without ejml-simple
 - Stability of kmath-ast and kmath-kotilngrad promoted to EXPERIMENTAL.
 - ColumnarData returns nullable column
+- Replaced MST.Symbolic by Symbol. Symbol now inherits MST
 
 ### Deprecated
 

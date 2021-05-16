@@ -9,7 +9,7 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.commons.expressions.DerivativeStructureField
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.optimization.FunctionOptimization
 import space.kscience.kmath.optimization.OptimizationResult
 import space.kscience.kmath.optimization.noDerivOptimizeWith

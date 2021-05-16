@@ -5,8 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.expressions.Symbol
 
 /**
  * Stub for DSL the [Algebra] is.

@@ -8,7 +8,7 @@ package space.kscience.kmath.wasm
 import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.operations.bindSymbol

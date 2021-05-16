@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke

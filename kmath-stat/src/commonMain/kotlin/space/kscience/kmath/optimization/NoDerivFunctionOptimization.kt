@@ -6,7 +6,7 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.math.pow

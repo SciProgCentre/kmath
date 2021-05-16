@@ -6,8 +6,8 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.MstField
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.interpret
-import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
