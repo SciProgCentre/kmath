@@ -500,6 +500,11 @@ public final class space/kscience/kmath/linear/LFeature : space/kscience/kmath/l
 	public static final field INSTANCE Lspace/kscience/kmath/linear/LFeature;
 }
 
+public abstract interface class space/kscience/kmath/linear/LUDecompositionFeature : space/kscience/kmath/linear/MatrixFeature {
+	public abstract fun getL ()Lspace/kscience/kmath/nd/Structure2D;
+	public abstract fun getU ()Lspace/kscience/kmath/nd/Structure2D;
+}
+
 public abstract interface class space/kscience/kmath/linear/LinearSolver {
 	public abstract fun inverse (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public abstract fun solve (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
