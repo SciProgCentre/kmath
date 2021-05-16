@@ -24,14 +24,14 @@ class GaussIntegralTest {
 
     @Test
     fun gaussUniform() {
-        val res = DoubleField.integrator.integrate(0.0..100.0) { x ->
+        val res = DoubleField.integrator.integrate(35.0..100.0) { x ->
             if(x in 30.0..50.0){
                 1.0
             } else {
                 0.0
             }
         }
-        assertEquals(20.0, res.valueOrNull!!, 0.5)
+        assertEquals(15.0, res.valueOrNull!!, 0.5)
     }
 
 

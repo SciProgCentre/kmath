@@ -98,7 +98,7 @@ public fun <T : Any> GaussIntegrator<T>.integrate(
     require(intervals > 0) { "Number of intervals must be positive" }
     val rangeSize = (range.endInclusive - range.start) / intervals
     val ranges = UnivariateIntegrandRanges(
-        (0 until intervals).map { i -> (rangeSize * i)..(rangeSize * (i + 1)) to order }
+        (0 until intervals).map { i -> (range.start + rangeSize * i)..(range.start + rangeSize * (i + 1)) to order }
     )
     return integrate(
         UnivariateIntegrand(
