@@ -76,7 +76,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     }
 }
 
-internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
+internal class InnerAlgebra<T>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
     override fun bindSymbolOrNull(value: String): T? = algebra.bindSymbolOrNull(value) ?: arguments[StringSymbol(value)]
 
     override fun unaryOperation(operation: String, arg: T): T =
@@ -101,7 +101,7 @@ internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map
 /**
  * Interprets the [MST] node with this [Algebra] and optional [arguments]
  */
-public fun <T : Any> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
+public fun <T> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
     InnerAlgebra(algebra, arguments).evaluate(this)
 
 /**
@@ -111,7 +111,7 @@ public fun <T : Any> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T
  * @param algebra the algebra that provides operations.
  * @return the value of expression.
  */
-public fun <T : Any> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
+public fun <T> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
     interpret(algebra, mapOf(*arguments))
 
 /**

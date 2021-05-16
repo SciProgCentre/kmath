@@ -27,10 +27,16 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
         else -> super.unaryOperation(operation, arg)
     }
 
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T = { unaryOperation(operation, it) }
+
     override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
         Boolean::and.name -> left.and(right)
         Boolean::or.name -> left.or(right)
         else -> super.binaryOperation(operation, left, right)
+    }
+
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = { l, r ->
+        binaryOperation(operation, l, r)
     }
 
     /**

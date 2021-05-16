@@ -6,7 +6,6 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -16,7 +15,7 @@ class ExpressionFieldTest {
 
     @Test
     fun testExpression() {
-        val expression = FunctionalExpressionField(DoubleField).invoke {
+        val expression = with(FunctionalExpressionField(DoubleField)) {
             val x by binding()
             x * x + 2 * x + one
         }
