@@ -78,6 +78,6 @@ public class GaussRuleIntegrator(
             function: (Double) -> Double,
         ): Double = GaussRuleIntegrator(numPoints, type).integrate(
             UnivariateIntegrand(function, IntegrationRange(range))
-        ).value!!
+        ).valueOrNull!!
     }
 }

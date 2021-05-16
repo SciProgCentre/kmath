@@ -66,31 +66,25 @@ public class GaussIntegrator<T : Any>(
         return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + points.size)
     }
 
-    public companion object {
-
-    }
+    public companion object
 }
 
 /**
- * Integrate [T]-valued univariate function using provided set of [IntegrandFeature]
- * Following features are evaluated:
+ * Create a Gauss-Legendre integrator for this field
+ * Following integrand features are accepted:
  * * [GaussIntegratorRuleFactory] - A factory for computing the Gauss integration rule. By default uses [GaussLegendreRuleFactory]
  * * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
  * * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
  * * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
  */
-@UnstableKMathAPI
-public fun <T : Any> Field<T>.integrate(
-    vararg features: IntegrandFeature,
-    function: (Double) -> T,
-): UnivariateIntegrand<T> = GaussIntegrator(this).integrate(UnivariateIntegrand(function, *features))
+public val <T:Any> Field<T>.integrator: GaussIntegrator<T> get() = GaussIntegrator(this)
 
 
 /**
- * Use [GaussIntegrator.Companion.integrate] to integrate the function in the current algebra with given [range] and [numPoints]
+ * Use [integrate] to integrate the function in the current algebra with given [range] and [numPoints]
  */
 @UnstableKMathAPI
-public fun <T : Any> Field<T>.integrate(
+public fun <T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
@@ -104,7 +98,7 @@ public fun <T : Any> Field<T>.integrate(
     val ranges = UnivariateIntegrandRanges(
         (0 until intervals).map { i -> (rangeSize * i)..(rangeSize * (i + 1)) to order }
     )
-    return GaussIntegrator(this).integrate(
+    return integrate(
         UnivariateIntegrand(
             function,
             IntegrationRange(range),

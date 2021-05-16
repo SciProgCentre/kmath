@@ -19,7 +19,7 @@ class GaussIntegralTest {
         val res = DoubleField.integrate(0.0..2 * PI) { x ->
             sin(x)
         }
-        assertEquals(0.0, res.value!!, 1e-2)
+        assertEquals(0.0, res.valueOrNull!!, 1e-2)
     }
 
     @Test
@@ -31,7 +31,7 @@ class GaussIntegralTest {
                 0.0
             }
         }
-        assertEquals(20.0, res.value!!, 0.5)
+        assertEquals(20.0, res.valueOrNull!!, 0.5)
     }
 
 
