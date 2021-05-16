@@ -6,7 +6,9 @@ package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.indices
 
 /**
  * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
@@ -81,7 +83,7 @@ public val <T:Any> Field<T>.integrator: GaussIntegrator<T> get() = GaussIntegrat
 
 
 /**
- * Use [integrate] to integrate the function in the current algebra with given [range] and [numPoints]
+ * Integrate using [intervals] segments with Gauss-Legendre rule of [order] order
  */
 @UnstableKMathAPI
 public fun <T : Any> GaussIntegrator<T>.integrate(
