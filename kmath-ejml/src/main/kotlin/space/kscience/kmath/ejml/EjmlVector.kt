@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.ejml
 
-import org.ejml.data.DMatrixD1
 import org.ejml.data.Matrix
 import space.kscience.kmath.linear.Point
 
@@ -14,12 +13,12 @@ import space.kscience.kmath.linear.Point
  *
  * @param T the type of elements contained in the buffer.
  * @param M the type of EJML matrix.
- * @property origin The underlying matrix.
+ * @property origin The underlying matrix, must have only one row.
  * @author Iaroslav Postovalov
  */
 public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: M) : Point<T> {
     public override val size: Int
-        get() = origin.numRows
+        get() = origin.numCols
 
     public override operator fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor: Int = 0
@@ -33,13 +32,4 @@ public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: 
     }
 
     public override fun toString(): String = "EjmlVector(origin=$origin)"
-}
-
-/**
- * [EjmlVector] specialization for [Double].
- *
- * @author Iaroslav Postovalov
- */
-public class EjmlDoubleVector<out M : DMatrixD1>(public override val origin: M) : EjmlVector<Double, M>(origin) {
-    public override operator fun get(index: Int): Double = origin[index]
 }
