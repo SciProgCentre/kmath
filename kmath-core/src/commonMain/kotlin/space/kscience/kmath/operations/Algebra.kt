@@ -84,7 +84,7 @@ public interface Algebra<T> {
      * @return an operation.
      */
     public fun binaryOperationFunction(operation: String): (left: T, right: T) -> T =
-        error("Binary operation '$operation; not defined in $this")
+        error("Binary operation '$operation' not defined in $this")
 
     /**
      * Dynamically invokes a binary operation with the certain name.
