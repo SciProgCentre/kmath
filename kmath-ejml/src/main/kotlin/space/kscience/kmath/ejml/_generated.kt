@@ -8,18 +8,28 @@
 package space.kscience.kmath.ejml
 
 import org.ejml.data.*
+import org.ejml.dense.row.CommonOps_DDRM
+import org.ejml.dense.row.CommonOps_FDRM
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM
+import org.ejml.dense.row.factory.DecompositionFactory_FDRM
+import org.ejml.sparse.FillReducing
+import org.ejml.sparse.csc.CommonOps_DSCC
+import org.ejml.sparse.csc.CommonOps_FSCC
+import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
+import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
+import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
+import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.*
-import space.kscience.kmath.misc.*
-import kotlin.reflect.*
-import org.ejml.dense.row.*
-import org.ejml.dense.row.factory.*
-import org.ejml.sparse.*
-import org.ejml.sparse.csc.*
-import org.ejml.sparse.csc.factory.*
-import space.kscience.kmath.nd.*
 import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.FloatField
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.FloatBuffer
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 /**
  * [EjmlVector] specialization for [Double].

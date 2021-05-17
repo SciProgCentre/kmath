@@ -33,24 +33,21 @@ fun main() {
         data.map { it.second }.toDoubleArray()
     )
 
-    println(function(2.0))
-    println(cmInterpolate.value(2.0))
 
-//
-//    Plotly.plot {
-//        scatter {
-//            name = "interpolated"
-//            x.numbers = data.map { it.first }
-//            y.numbers = x.doubles.map { function(it) }
-//        }
-//        scatter {
-//            name = "original"
-//            functionXY(0.0..(2 * PI), 0.1) { sin(it) }
-//        }
-//        scatter {
-//            name = "cm"
-//            x.numbers = data.map { it.first }
-//            y.numbers = x.doubles.map { cmInterpolate.value(it) }
-//        }
-//    }.makeFile()
+    Plotly.plot {
+        scatter {
+            name = "interpolated"
+            x.numbers = data.map { it.first }
+            y.numbers = x.doubles.map { function(it) }
+        }
+        scatter {
+            name = "original"
+            functionXY(0.0..(2 * PI), 0.1) { sin(it) }
+        }
+        scatter {
+            name = "cm"
+            x.numbers = data.map { it.first }
+            y.numbers = x.doubles.map { cmInterpolate.value(it) }
+        }
+    }.makeFile()
 }

@@ -10,8 +10,10 @@ import space.kscience.kmath.functions.OrderedPiecewisePolynomial
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
@@ -56,10 +58,23 @@ public class SplineInterpolator<T : Comparable<T>>(
                 val a = points.y[j]
                 val b = (points.y[j + 1] - points.y[j]) / h[j] - h[j] * (cOld + 2.0 * c) / 3.0
                 val d = (cOld - c) / (3.0 * h[j])
-                val polynomial = Polynomial(a, b, c, d)
+                val x0 = points.x[j]
+                val x02 = x0 * x0
+                val x03 = x02 * x0
+                //Shift coefficients to represent absolute polynomial instead of one with an offset
+                val polynomial = Polynomial(
+                    a - b * x0 + c * x02 - d * x03,
+                    b - 2*c*x0 + 3*d*x02,
+                    c - 3*d*x0,
+                    d
+                )
                 cOld = c
-                putLeft(points.x[j], polynomial)
+                putLeft(x0, polynomial)
             }
         }
+    }
+
+    public companion object {
+        public val double: SplineInterpolator<Double> = SplineInterpolator(DoubleField, ::DoubleBuffer)
     }
 }
