@@ -43,7 +43,7 @@ dependencies {
 
     implementation("org.slf4j:slf4j-simple:1.7.30")
     // plotting
-    implementation("space.kscience:plotlykt-server:0.4.0-dev-2")
+    implementation("space.kscience:plotlykt-server:0.4.0")
 }
 
 kotlin.sourceSets.all {

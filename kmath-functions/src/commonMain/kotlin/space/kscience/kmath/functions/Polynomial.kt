@@ -19,7 +19,9 @@ import kotlin.math.pow
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public class Polynomial<T : Any>(public val coefficients: List<T>)
+public class Polynomial<T : Any>(public val coefficients: List<T>){
+    override fun toString(): String = "Polynomial$coefficients"
+}
 
 /**
  * Returns a [Polynomial] instance with given [coefficients].
@@ -34,19 +36,15 @@ public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { ind
 
 /**
  * Evaluates the value of the given polynomial for given argument.
+ * https://en.wikipedia.org/wiki/Horner%27s_method
  */
 public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring {
     if (coefficients.isEmpty()) return@ring zero
-    var res = coefficients.first()
-    var powerArg = arg
-
-    for (index in 1 until coefficients.size) {
-        res += coefficients[index] * powerArg
-        // recalculating power on each step to avoid power costs on long polynomials
-        powerArg *= arg
+    var result: T = coefficients.last()
+    for (j in coefficients.size - 2 downTo 0) {
+        result = (arg * result) + coefficients[j]
     }
-
-    res
+    return result
 }
 
 /**

@@ -26,12 +26,12 @@ public fun interface Piecewise<T, R> {
 public fun interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
 
 /**
- * Basic [Piecewise] implementation where all the pieces are ordered by the [Comparable] type instances.
+ * A [Piecewise]  builder where all the pieces are ordered by the [Comparable] type instances.
  *
  * @param T the comparable piece key type.
+ * @param delimiter the initial piecewise separator
  */
-public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
-    PiecewisePolynomial<T> {
+public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) : PiecewisePolynomial<T> {
     private val delimiters: MutableList<T> = arrayListOf(delimiter)
     private val pieces: MutableList<Polynomial<T>> = arrayListOf()
 
@@ -64,9 +64,7 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
             return null
         else {
             for (index in 1 until delimiters.size)
-                if (arg < delimiters[index])
-                    return pieces[index - 1]
-
+                if (arg < delimiters[index]) return pieces[index - 1]
             error("Piece not found")
         }
     }

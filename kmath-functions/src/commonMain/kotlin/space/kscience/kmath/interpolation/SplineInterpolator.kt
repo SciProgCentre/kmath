@@ -34,19 +34,16 @@ public class SplineInterpolator<T : Comparable<T>>(
         // Number of intervals.  The number of data points is n + 1.
         val n = points.size - 1
         // Differences between knot points
-        val h = bufferFactory(points.size) { i -> points.x[i + 1] - points.x[i] }
-        val mu = bufferFactory(points.size - 1) { zero }
-        val z = bufferFactory(points.size) { zero }
+        val h = bufferFactory(n) { i -> points.x[i + 1] - points.x[i] }
+        val mu = bufferFactory(n) { zero }
+        val z = bufferFactory(n + 1) { zero }
 
         for (i in 1 until n) {
             val g = 2.0 * (points.x[i + 1] - points.x[i - 1]) - h[i - 1] * mu[i - 1]
             mu[i] = h[i] / g
-
-            z[i] = (3.0 * (points.y[i + 1] * h[i - 1]
-                    - points.x[i] * (points.x[i + 1] - points.x[i - 1])
-                    + points.y[i - 1] * h[i]) / (h[i - 1] * h[i])
-                    - h[i - 1] * z[i - 1]
-                    ) / g
+            z[i] =
+                ((points.y[i + 1] * h[i - 1] - points.y[i] * (points.x[i + 1] - points.x[i - 1]) + points.y[i - 1] * h[i]) * 3.0 /
+                        (h[i - 1] * h[i]) - h[i - 1] * z[i - 1]) / g
         }
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)
