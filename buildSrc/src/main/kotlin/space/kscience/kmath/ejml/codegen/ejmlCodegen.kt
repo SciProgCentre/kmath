@@ -369,19 +369,29 @@ fun ejmlCodegen(outputFile: String): Unit = File(outputFile).run {
         it.appendLine()
         it.appendLine("package space.kscience.kmath.ejml")
         it.appendLine()
-        it.appendLine("import org.ejml.data.*")
-        it.appendLine("import space.kscience.kmath.linear.*")
-        it.appendLine("import space.kscience.kmath.operations.*")
-        it.appendLine("import space.kscience.kmath.structures.*")
-        it.appendLine("import space.kscience.kmath.misc.*")
-        it.appendLine("import kotlin.reflect.*")
-        it.appendLine("import org.ejml.dense.row.*")
-        it.appendLine("import org.ejml.dense.row.factory.*")
-        it.appendLine("import org.ejml.sparse.*")
-        it.appendLine("import org.ejml.sparse.csc.*")
-        it.appendLine("import org.ejml.sparse.csc.factory.*")
-        it.appendLine("import space.kscience.kmath.nd.*")
-        it.appendLine("import space.kscience.kmath.linear.Matrix")
+        it.appendLine("""import org.ejml.data.*
+import org.ejml.dense.row.CommonOps_DDRM
+import org.ejml.dense.row.CommonOps_FDRM
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM
+import org.ejml.dense.row.factory.DecompositionFactory_FDRM
+import org.ejml.sparse.FillReducing
+import org.ejml.sparse.csc.CommonOps_DSCC
+import org.ejml.sparse.csc.CommonOps_FSCC
+import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
+import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
+import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
+import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
+import space.kscience.kmath.linear.*
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.FloatField
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.FloatBuffer
+import kotlin.reflect.KClass
+import kotlin.reflect.cast""")
         it.appendLine()
         it.appendEjmlVector("Double", "DMatrix")
         it.appendEjmlVector("Float", "FMatrix")
