@@ -54,6 +54,12 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
      */
     public infix fun T.or(other: T): T
 
+    /**
+     * Logic 'xor'
+     */
+    public infix fun T.xor(other: T): T
+
+
     public companion object {
         public val TRUE: Symbol by symbol
         public val FALSE: Symbol by symbol
@@ -74,4 +80,6 @@ public object BooleanAlgebra : LogicAlgebra<Boolean> {
     override fun Boolean.and(other: Boolean): Boolean = this && other
 
     override fun Boolean.or(other: Boolean): Boolean = this || other
+
+    override fun Boolean.xor(other: Boolean): Boolean = this xor other
 }

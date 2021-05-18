@@ -177,4 +177,6 @@ public object MstLogicAlgebra : LogicAlgebra<MST> {
     override fun MST.and(other: MST): MST = MST.Binary(Boolean::and.name, this, other)
 
     override fun MST.or(other: MST): MST  = MST.Binary(Boolean::or.name, this, other)
+
+    override fun MST.xor(other: MST): MST  = MST.Binary(Boolean::xor.name, this, other)
 }
