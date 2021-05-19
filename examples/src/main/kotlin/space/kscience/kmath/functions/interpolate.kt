@@ -10,12 +10,14 @@ import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.plotly.Plotly
+import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.functionXY
 import space.kscience.plotly.scatter
 import kotlin.math.PI
 import kotlin.math.sin
 
+@OptIn(UnstablePlotlyAPI::class)
 fun main() {
     val data = (0..10).map {
         val x = it.toDouble() / 5 * PI

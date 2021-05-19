@@ -6,7 +6,6 @@
 package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
-import space.kscience.kmath.functions.OrderedPiecewisePolynomial
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -28,7 +27,7 @@ public class LinearInterpolator<T : Comparable<T>>(public override val algebra: 
         require(points.size > 0) { "Point array should not be empty" }
         insureSorted(points)
 
-        OrderedPiecewisePolynomial(points.x[0]).apply {
+        PiecewisePolynomial(points.x[0]) {
             for (i in 0 until points.size - 1) {
                 val slope = (points.y[i + 1] - points.y[i]) / (points.x[i + 1] - points.x[i])
                 val const = points.y[i] - slope * points.x[i]

@@ -6,7 +6,6 @@
 package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
-import space.kscience.kmath.functions.OrderedPiecewisePolynomial
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -50,7 +49,7 @@ public class SplineInterpolator<T : Comparable<T>>(
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)
 
-        OrderedPiecewisePolynomial(points.x[points.size - 1]).apply {
+        PiecewisePolynomial(points.x[points.size - 1]) {
             var cOld = zero
 
             for (j in n - 1 downTo 0) {

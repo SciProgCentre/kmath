@@ -22,8 +22,20 @@ public fun interface Piecewise<T, R> {
 
 /**
  * Represents piecewise-defined function where all the sub-functions are polynomials.
+ * @param pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no "holes" in it.
  */
-public fun interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
+public class PiecewisePolynomial<T : Comparable<T>>(
+    public val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
+) : Piecewise<T, Polynomial<T>> {
+
+    public override fun findPiece(arg: T): Polynomial<T>? {
+        return if (arg < pieces.first().first.start || arg >= pieces.last().first.endInclusive)
+            null
+        else {
+            pieces.firstOrNull { arg in it.first }?.second
+        }
+    }
+}
 
 /**
  * A [Piecewise]  builder where all the pieces are ordered by the [Comparable] type instances.
@@ -31,7 +43,7 @@ public fun interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
  * @param T the comparable piece key type.
  * @param delimiter the initial piecewise separator
  */
-public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) : PiecewisePolynomial<T> {
+public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
     private val delimiters: MutableList<T> = arrayListOf(delimiter)
     private val pieces: MutableList<Polynomial<T>> = arrayListOf()
 
@@ -59,16 +71,18 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) : Piece
         pieces.add(0, piece)
     }
 
-    public override fun findPiece(arg: T): Polynomial<T>? {
-        if (arg < delimiters.first() || arg >= delimiters.last())
-            return null
-        else {
-            for (index in 1 until delimiters.size)
-                if (arg < delimiters[index]) return pieces[index - 1]
-            error("Piece not found")
-        }
+    public fun build(): PiecewisePolynomial<T> {
+        return PiecewisePolynomial(delimiters.zipWithNext { l, r -> l..r }.zip(pieces))
     }
 }
+
+/**
+ * A builder for [PiecewisePolynomial]
+ */
+public fun <T : Comparable<T>> PiecewisePolynomial(
+    startingPoint: T,
+    builder: PiecewiseBuilder<T>.() -> Unit,
+): PiecewisePolynomial<T> = PiecewiseBuilder(startingPoint).apply(builder).build()
 
 /**
  * Return a value of polynomial function with given [ring] an given [arg] or null if argument is outside of piecewise
