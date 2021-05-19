@@ -7,7 +7,6 @@ package space.kscience.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations

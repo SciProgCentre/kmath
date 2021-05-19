@@ -7,7 +7,7 @@ package space.kscience.kmath.complex
 
 import space.kscience.kmath.expressions.FunctionalExpressionField
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.bindSymbol
 import kotlin.test.Test
 import kotlin.test.assertEquals

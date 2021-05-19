@@ -6,7 +6,6 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.bindSymbol

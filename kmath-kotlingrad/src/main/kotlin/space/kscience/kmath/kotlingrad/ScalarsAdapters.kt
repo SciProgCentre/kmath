@@ -7,9 +7,10 @@ package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.*
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.MstAlgebra
 import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.MstExtendedField.unaryMinus
+import space.kscience.kmath.expressions.MstNumericAlgebra
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.*
 
 /**
@@ -18,7 +19,7 @@ import space.kscience.kmath.operations.*
  * @receiver The variable.
  * @returnAa node.
  */
-public fun <X : SFun<X>> SVar<X>.toMst(): MST.Symbolic = MstAlgebra.bindSymbol(name)
+public fun <X : SFun<X>> SVar<X>.toMst(): Symbol = MstNumericAlgebra.bindSymbol(name)
 
 /**
  * Maps [SVar] to [MST.Numeric] directly.
@@ -26,7 +27,7 @@ public fun <X : SFun<X>> SVar<X>.toMst(): MST.Symbolic = MstAlgebra.bindSymbol(n
  * @receiver The constant.
  * @return A node.
  */
-public fun <X : SFun<X>> SConst<X>.toMst(): MST.Numeric = MstAlgebra.number(doubleValue)
+public fun <X : SFun<X>> SConst<X>.toMst(): MST.Numeric = MstNumericAlgebra.number(doubleValue)
 
 /**
  * Maps [SFun] objects to [MST]. Some unsupported operations like [Derivative] are bound and converted then.
@@ -85,7 +86,7 @@ public fun <X : SFun<X>> MST.Numeric.toSConst(): SConst<X> = SConst(value)
  * @receiver The node.
  * @return A new variable.
  */
-internal fun <X : SFun<X>> MST.Symbolic.toSVar(): SVar<X> = SVar(value)
+internal fun <X : SFun<X>> Symbol.toSVar(): SVar<X> = SVar(identity)
 
 /**
  * Maps [MST] objects to [SFun]. Unsupported operations throw [IllegalStateException].
@@ -102,7 +103,7 @@ internal fun <X : SFun<X>> MST.Symbolic.toSVar(): SVar<X> = SVar(value)
  */
 public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     is MST.Numeric -> toSConst()
-    is MST.Symbolic -> toSVar()
+    is Symbol -> toSVar()
 
     is MST.Unary -> when (operation) {
         GroupOperations.PLUS_OPERATION -> +value.toSFun<X>()

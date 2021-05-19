@@ -14,13 +14,17 @@ import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjuga
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.AbstractSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.SymbolIndexer
-import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.optimization.*
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.set
+import kotlin.collections.setOf
+import kotlin.collections.toList
+import kotlin.collections.toMap
+import kotlin.collections.toTypedArray
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point

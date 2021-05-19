@@ -3,15 +3,16 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.misc
+package space.kscience.kmath.expressions
 
 import kotlin.jvm.JvmInline
 import kotlin.properties.ReadOnlyProperty
 
 /**
- * A marker interface for a symbol. A symbol mus have an identity
+ * A marker interface for a symbol. A symbol must have an identity.
+ * Ic
  */
-public interface Symbol {
+public interface Symbol: MST {
     /**
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
      */

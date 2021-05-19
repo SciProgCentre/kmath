@@ -8,8 +8,8 @@ package space.kscience.kmath.wasm
 import space.kscience.kmath.estree.compileWith
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
