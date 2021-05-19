@@ -11,8 +11,6 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke

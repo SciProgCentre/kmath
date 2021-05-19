@@ -11,10 +11,10 @@ import space.kscience.kmath.operations.*
 /**
  * [Algebra] over [MST] nodes.
  */
-public object MstAlgebra : NumericAlgebra<MST> {
+public object MstNumericAlgebra : NumericAlgebra<MST> {
     public override fun number(value: Number): MST.Numeric = MST.Numeric(value)
-    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MST.Symbolic(value)
-    override fun bindSymbol(value: String): MST.Symbolic = bindSymbolOrNull(value)
+    public override fun bindSymbolOrNull(value: String): Symbol = StringSymbol(value)
+    override fun bindSymbol(value: String): Symbol = bindSymbolOrNull(value)
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
         { arg -> MST.Unary(operation, arg) }
@@ -29,8 +29,8 @@ public object MstAlgebra : NumericAlgebra<MST> {
 public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     public override val zero: MST.Numeric = number(0.0)
 
-    public override fun number(value: Number): MST.Numeric = MstAlgebra.number(value)
-    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
+    public override fun number(value: Number): MST.Numeric = MstNumericAlgebra.number(value)
+    public override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
     public override fun add(a: MST, b: MST): MST.Binary = binaryOperationFunction(GroupOperations.PLUS_OPERATION)(a, b)
     public override operator fun MST.unaryPlus(): MST.Unary =
         unaryOperationFunction(GroupOperations.PLUS_OPERATION)(this)
@@ -45,10 +45,10 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
         binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, number(value))
 
     public override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
-        MstAlgebra.binaryOperationFunction(operation)
+        MstNumericAlgebra.binaryOperationFunction(operation)
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
-        MstAlgebra.unaryOperationFunction(operation)
+        MstNumericAlgebra.unaryOperationFunction(operation)
 }
 
 /**
@@ -61,7 +61,7 @@ public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MS
     public override val one: MST.Numeric = number(1.0)
 
     public override fun number(value: Number): MST.Numeric = MstGroup.number(value)
-    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
+    public override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstGroup.add(a, b)
 
     public override fun scale(a: MST, value: Double): MST.Binary =
@@ -78,7 +78,7 @@ public object MstRing : Ring<MST>, NumbersAddOperations<MST>, ScaleOperations<MS
         MstGroup.binaryOperationFunction(operation)
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
-        MstAlgebra.unaryOperationFunction(operation)
+        MstNumericAlgebra.unaryOperationFunction(operation)
 }
 
 /**
@@ -90,7 +90,7 @@ public object MstField : Field<MST>, NumbersAddOperations<MST>, ScaleOperations<
     public override inline val zero: MST.Numeric get() = MstRing.zero
     public override inline val one: MST.Numeric get() = MstRing.one
 
-    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
+    public override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun add(a: MST, b: MST): MST.Binary = MstRing.add(a, b)
 
@@ -120,7 +120,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     public override inline val zero: MST.Numeric get() = MstField.zero
     public override inline val one: MST.Numeric get() = MstField.one
 
-    public override fun bindSymbolOrNull(value: String): MST.Symbolic = MstAlgebra.bindSymbolOrNull(value)
+    public override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
     public override fun number(value: Number): MST.Numeric = MstRing.number(value)
     public override fun sin(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.SIN_OPERATION)(arg)
     public override fun cos(arg: MST): MST.Unary = unaryOperationFunction(TrigonometricOperations.COS_OPERATION)(arg)
@@ -157,4 +157,26 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
 
     public override fun unaryOperationFunction(operation: String): (arg: MST) -> MST.Unary =
         MstField.unaryOperationFunction(operation)
+}
+
+/**
+ * Logic algebra for [MST]
+ */
+@UnstableKMathAPI
+public object MstLogicAlgebra : LogicAlgebra<MST> {
+    public override fun bindSymbolOrNull(value: String): MST = super.bindSymbolOrNull(value) ?: StringSymbol(value)
+
+    override fun const(boolean: Boolean): Symbol = if (boolean) {
+        LogicAlgebra.TRUE
+    } else {
+        LogicAlgebra.FALSE
+    }
+
+    override fun MST.not(): MST = MST.Unary(Boolean::not.name, this)
+
+    override fun MST.and(other: MST): MST = MST.Binary(Boolean::and.name, this, other)
+
+    override fun MST.or(other: MST): MST  = MST.Binary(Boolean::or.name, this, other)
+
+    override fun MST.xor(other: MST): MST  = MST.Binary(Boolean::xor.name, this, other)
 }

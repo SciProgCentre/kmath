@@ -7,11 +7,7 @@ package space.kscience.kmath.kotlingrad
 
 import edu.umontreal.kotlingrad.api.SFun
 import edu.umontreal.kotlingrad.api.SVar
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.MstAlgebra
-import space.kscience.kmath.expressions.interpret
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
@@ -35,8 +31,8 @@ public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
         DifferentiableMstExpression(
             algebra,
             symbols.map(Symbol::identity)
-                .map(MstAlgebra::bindSymbol)
-                .map<MST.Symbolic, SVar<KMathNumber<T, A>>>(MST.Symbolic::toSVar)
+                .map(MstNumericAlgebra::bindSymbol)
+                .map<Symbol, SVar<KMathNumber<T, A>>>(Symbol::toSVar)
                 .fold(mst.toSFun(), SFun<KMathNumber<T, A>>::d)
                 .toMst(),
         )

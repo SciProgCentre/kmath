@@ -7,6 +7,7 @@ package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.FeaturedMathRenderer.RenderFeature
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.reflect.KClass
@@ -19,9 +20,8 @@ import kotlin.reflect.KClass
 @UnstableKMathAPI
 public object PrintSymbolic : RenderFeature {
     public override fun render(renderer: FeaturedMathRenderer, node: MST): SymbolSyntax? =
-        if (node !is MST.Symbolic) null
-        else
-            SymbolSyntax(string = node.value)
+        if (node !is Symbol) null
+        else SymbolSyntax(string = node.identity)
 }
 
 /**
@@ -142,7 +142,7 @@ public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : Re
 @UnstableKMathAPI
 public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
     public override fun render(renderer: FeaturedMathRenderer, node: MST): SpecialSymbolSyntax? =
-        if (node !is MST.Symbolic || node.value !in symbols)
+        if (node !is Symbol || node.identity !in symbols)
             null
         else
             SpecialSymbolSyntax(kind = SpecialSymbolSyntax.Kind.SMALL_PI)

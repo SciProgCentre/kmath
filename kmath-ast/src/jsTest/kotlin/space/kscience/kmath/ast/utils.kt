@@ -7,7 +7,7 @@ package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.estree.compile as estreeCompile

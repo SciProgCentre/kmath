@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.optimization
 
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.Symbol
 
 public interface OptimizationFeature
 

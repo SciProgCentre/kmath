@@ -6,8 +6,8 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.MstExtendedField
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
@@ -17,31 +17,31 @@ import kotlin.test.assertEquals
 internal class TestCompilerOperations {
     @Test
     fun testUnaryPlus() = runCompilerTest {
-        val expr = MstExtendedField { +bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { +x }.compileToExpression(DoubleField)
         assertEquals(2.0, expr(x to 2.0))
     }
 
     @Test
     fun testUnaryMinus() = runCompilerTest {
-        val expr = MstExtendedField { -bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { -x }.compileToExpression(DoubleField)
         assertEquals(-2.0, expr(x to 2.0))
     }
 
     @Test
     fun testAdd() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) + bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x + x }.compileToExpression(DoubleField)
         assertEquals(4.0, expr(x to 2.0))
     }
 
     @Test
     fun testSine() = runCompilerTest {
-        val expr = MstExtendedField { sin(bindSymbol(x)) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { sin(x) }.compileToExpression(DoubleField)
         assertEquals(0.0, expr(x to 0.0))
     }
 
     @Test
     fun testCosine() = runCompilerTest {
-        val expr = MstExtendedField { cos(bindSymbol(x)) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { cos(x) }.compileToExpression(DoubleField)
         assertEquals(1.0, expr(x to 0.0))
     }
 

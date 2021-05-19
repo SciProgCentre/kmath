@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.data
 
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.Buffer
