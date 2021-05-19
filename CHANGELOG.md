@@ -32,6 +32,7 @@
 - ColumnarData returns nullable column
 - MST is made sealed interface
 - Replaced MST.Symbolic by Symbol, Symbol now implements MST
+- Removed Any restriction on polynomials
 
 ### Deprecated
 

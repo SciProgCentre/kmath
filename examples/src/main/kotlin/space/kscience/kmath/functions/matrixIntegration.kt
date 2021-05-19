@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.integration.gaussIntegrator
 import space.kscience.kmath.integration.integrate
-import space.kscience.kmath.integration.integrator
 import space.kscience.kmath.integration.value
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.nd
@@ -25,7 +25,7 @@ fun main(): Unit = DoubleField {
         val function: (Double) -> StructureND<Double> = { x: Double -> 3 * number(x).pow(2) + 2 * diagonal(x) + 1 }
 
         //get the result of the integration
-        val result = integrator.integrate(0.0..10.0, function = function)
+        val result = gaussIntegrator.integrate(0.0..10.0, function = function)
 
         //the value is nullable because in some cases the integration could not succeed
         println(result.value)

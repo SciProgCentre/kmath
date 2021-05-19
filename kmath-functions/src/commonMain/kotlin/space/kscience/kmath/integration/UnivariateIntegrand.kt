@@ -46,6 +46,16 @@ public val <T : Any> UnivariateIntegrand<T>.valueOrNull: T? get() = getFeature<I
 public val <T : Any> UnivariateIntegrand<T>.value: T get() = valueOrNull ?: error("No value in the integrand")
 
 /**
+ * A shortcut method to integrate a [function] with additional [features]. Range must be provided in features.
+ * The [function] is placed in the end position to allow passing a lambda.
+ */
+@UnstableKMathAPI
+public fun <T: Any> UnivariateIntegrator<T>.integrate(
+    vararg features: IntegrandFeature,
+    function: (Double) -> T,
+): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(function, *features))
+
+/**
  * A shortcut method to integrate a [function] in [range] with additional [features].
  * The [function] is placed in the end position to allow passing a lambda.
  */

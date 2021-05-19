@@ -20,6 +20,11 @@ public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<
 
 /**
  * A simple one-pass integrator based on Gauss rule
+ * Following integrand features are accepted:
+ * [GaussIntegratorRuleFactory] - A factory for computing the Gauss integration rule. By default uses [GaussLegendreRuleFactory]
+ * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
+ * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
  */
 public class GaussIntegrator<T : Any>(
     public val algebra: Field<T>,
@@ -73,13 +78,9 @@ public class GaussIntegrator<T : Any>(
 
 /**
  * Create a Gauss-Legendre integrator for this field
- * Following integrand features are accepted:
- * * [GaussIntegratorRuleFactory] - A factory for computing the Gauss integration rule. By default uses [GaussLegendreRuleFactory]
- * * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
- * * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
- * * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
+ * @see [GaussIntegrator]
  */
-public val <T:Any> Field<T>.integrator: GaussIntegrator<T> get() = GaussIntegrator(this)
+public val <T:Any> Field<T>.gaussIntegrator: GaussIntegrator<T> get() = GaussIntegrator(this)
 
 
 /**

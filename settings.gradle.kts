@@ -5,7 +5,7 @@ pluginManagement {
         maven("https://repo.kotlin.link")
     }
 
-    val toolsVersion = "0.9.7"
+    val toolsVersion = "0.9.8"
     val kotlinVersion = "1.5.0"
 
     plugins {
