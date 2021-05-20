@@ -9,20 +9,9 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
-import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.internal.dotHelper
-import space.kscience.kmath.tensors.core.internal.getRandomNormals
+import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 import space.kscience.kmath.tensors.core.internal.*
-import space.kscience.kmath.tensors.core.internal.broadcastOuterTensors
-import space.kscience.kmath.tensors.core.internal.checkBufferShapeConsistency
-import space.kscience.kmath.tensors.core.internal.checkEmptyDoubleBuffer
-import space.kscience.kmath.tensors.core.internal.checkEmptyShape
-import space.kscience.kmath.tensors.core.internal.checkShapesCompatible
-import space.kscience.kmath.tensors.core.internal.checkSquareMatrix
-import space.kscience.kmath.tensors.core.internal.checkTranspose
-import space.kscience.kmath.tensors.core.internal.checkView
-import space.kscience.kmath.tensors.core.internal.minusIndexFrom
 import kotlin.math.*
 
 /**
@@ -38,8 +27,8 @@ public open class DoubleTensorAlgebra :
     override fun Tensor<Double>.valueOrNull(): Double? = if (tensor.shape contentEquals intArrayOf(1))
         tensor.mutableBuffer.array()[tensor.bufferStart] else null
 
-    override fun Tensor<Double>.value(): Double =
-        valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
+    override fun Tensor<Double>.value(): Double = valueOrNull()
+        ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
 
     /**
      * Constructs a tensor with the specified shape and data.
@@ -466,7 +455,7 @@ public open class DoubleTensorAlgebra :
 
     private fun Tensor<Double>.eq(
         other: Tensor<Double>,
-        eqFunction: (Double, Double) -> Boolean
+        eqFunction: (Double, Double) -> Boolean,
     ): Boolean {
         checkShapesCompatible(tensor, other)
         val n = tensor.numElements
@@ -540,7 +529,7 @@ public open class DoubleTensorAlgebra :
     internal fun Tensor<Double>.foldDim(
         foldFunction: (DoubleArray) -> Double,
         dim: Int,
-        keepDim: Boolean
+        keepDim: Boolean,
     ): DoubleTensor {
         check(dim < dimension) { "Dimension $dim out of range $dimension" }
         val resShape = if (keepDim) {
@@ -729,7 +718,7 @@ public open class DoubleTensorAlgebra :
      */
     public fun luPivot(
         luTensor: Tensor<Double>,
-        pivotsTensor: Tensor<Int>
+        pivotsTensor: Tensor<Int>,
     ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         checkSquareMatrix(luTensor.shape)
         check(

@@ -72,7 +72,7 @@ internal class Nd4jArrayStructureTest {
     @Test
     fun testSet() {
         val nd = Nd4j.rand(17, 12, 4, 8)!!
-        val struct = nd.asLongStructure()
+        val struct = nd.asIntStructure()
         struct[intArrayOf(1, 2, 3, 4)] = 777
         assertEquals(777, struct[1, 2, 3, 4])
     }

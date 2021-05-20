@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.Algebra
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
+public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
 
     /**
      * Returns a single tensor value of unit dimension if tensor shape equals to [1].
@@ -27,7 +27,8 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.value(): T
+    public fun Tensor<T>.value(): T =
+        valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
 
     /**
      * Each element of the tensor [other] is added to this value.
@@ -60,15 +61,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be added to each element of this tensor.
      */
-    public operator fun Tensor<T>.plusAssign(value: T): Unit
+    public operator fun Tensor<T>.plusAssign(value: T)
 
     /**
      * Each element of the tensor [other] is added to each element of this tensor.
      *
      * @param other tensor to be added.
      */
-    public operator fun Tensor<T>.plusAssign(other: Tensor<T>): Unit
-
+    public operator fun Tensor<T>.plusAssign(other: Tensor<T>)
 
     /**
      * Each element of the tensor [other] is subtracted from this value.
@@ -101,14 +101,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be subtracted from each element of this tensor.
      */
-    public operator fun Tensor<T>.minusAssign(value: T): Unit
+    public operator fun Tensor<T>.minusAssign(value: T)
 
     /**
      * Each element of the tensor [other] is subtracted from each element of this tensor.
      *
      * @param other tensor to be subtracted.
      */
-    public operator fun Tensor<T>.minusAssign(other: Tensor<T>): Unit
+    public operator fun Tensor<T>.minusAssign(other: Tensor<T>)
 
 
     /**
@@ -142,14 +142,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be multiplied by each element of this tensor.
      */
-    public operator fun Tensor<T>.timesAssign(value: T): Unit
+    public operator fun Tensor<T>.timesAssign(value: T)
 
     /**
      * Each element of the tensor [other] is multiplied by each element of this tensor.
      *
      * @param other tensor to be multiplied.
      */
-    public operator fun Tensor<T>.timesAssign(other: Tensor<T>): Unit
+    public operator fun Tensor<T>.timesAssign(other: Tensor<T>)
 
     /**
      * Numerical negative, element-wise.
@@ -217,7 +217,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      * a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after.
      * If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix
      * multiple and removed after.
-     * The non-matrix (i.e. batch) dimensions are broadcasted (and thus must be broadcastable).
+     * The non-matrix (i.e. batch) dimensions are broadcast (and thus must be broadcastable).
      * For example, if `input` is a (j &times; 1 &times; n &times; n) tensor and `other` is a
      * (k &times; n &times; n) tensor, out will be a (j &times; k &times; n &times; n) tensor.
      *
@@ -255,7 +255,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
         diagonalEntries: Tensor<T>,
         offset: Int = 0,
         dim1: Int = -2,
-        dim2: Int = -1
+        dim2: Int = -1,
     ): Tensor<T>
 
     /**

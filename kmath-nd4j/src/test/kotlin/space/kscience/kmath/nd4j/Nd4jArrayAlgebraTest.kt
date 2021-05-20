@@ -52,7 +52,7 @@ internal class Nd4jArrayAlgebraTest {
 
     @Test
     fun testSin() = DoubleNd4jArrayField(intArrayOf(2, 2)).invoke {
-        val initial = produce { (i, j) -> if (i == j) PI/2 else 0.0 }
+        val initial = produce { (i, j) -> if (i == j) PI / 2 else 0.0 }
         val transformed = sin(initial)
         val expected = produce { (i, j) -> if (i == j) 1.0 else 0.0 }
 
