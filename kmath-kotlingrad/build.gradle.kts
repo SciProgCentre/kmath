@@ -3,14 +3,16 @@ plugins {
     id("ru.mipt.npm.gradle.common")
 }
 
+description = "Kotlin∇ integration module"
+
 dependencies {
     api("com.github.breandan:kaliningraph:0.1.6")
     api("com.github.breandan:kotlingrad:0.4.5")
-    api(project(":kmath-ast"))
+    api(project(":kmath-core"))
+    testImplementation(project(":kmath-ast"))
 }
 
 readme {
-    description = "Functions, integration and interpolation"
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 

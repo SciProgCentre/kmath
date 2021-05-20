@@ -3,6 +3,8 @@ plugins {
     id("ru.mipt.npm.gradle.common")
 }
 
+description = "ND4J NDStructure implementation and according NDAlgebra classes"
+
 dependencies {
     api(project(":kmath-tensors"))
     api("org.nd4j:nd4j-api:1.0.0-beta7")
@@ -12,7 +14,6 @@ dependencies {
 }
 
 readme {
-    description = "ND4J NDStructure implementation and according NDAlgebra classes"
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
     feature(id = "nd4jarraystructure") { "NDStructure wrapper for INDArray" }

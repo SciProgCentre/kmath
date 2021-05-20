@@ -11,24 +11,24 @@ import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
- * Represents [MST] based [DifferentiableExpression].
+ * Represents [MST] based [DifferentiableExpression] relying on [Kotlin∇](https://github.com/breandan/kotlingrad).
  *
- * The principle of this API is converting the [mst] to an [SFun], differentiating it with
- * [Kotlin∇](https://github.com/breandan/kotlingrad), then converting [SFun] back to [MST].
+ * The principle of this API is converting the [mst] to an [SFun], differentiating it with Kotlin∇, then converting
+ * [SFun] back to [MST].
  *
  * @param T The type of number.
  * @param A The [NumericAlgebra] of [T].
  * @property algebra The [A] instance.
  * @property mst The [MST] node.
  */
-public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
+public class KotlingradExpression<T : Number, A : NumericAlgebra<T>>(
     public val algebra: A,
     public val mst: MST,
-) : DifferentiableExpression<T, DifferentiableMstExpression<T, A>> {
+) : DifferentiableExpression<T, KotlingradExpression<T, A>> {
     public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
-    public override fun derivativeOrNull(symbols: List<Symbol>): DifferentiableMstExpression<T, A> =
-        DifferentiableMstExpression(
+    public override fun derivativeOrNull(symbols: List<Symbol>): KotlingradExpression<T, A> =
+        KotlingradExpression(
             algebra,
             symbols.map(Symbol::identity)
                 .map(MstNumericAlgebra::bindSymbol)
@@ -39,7 +39,7 @@ public class DifferentiableMstExpression<T : Number, A : NumericAlgebra<T>>(
 }
 
 /**
- * Wraps this [MST] into [DifferentiableMstExpression].
+ * Wraps this [MST] into [KotlingradExpression].
  */
-public fun <T : Number, A : NumericAlgebra<T>> MST.toDiffExpression(algebra: A): DifferentiableMstExpression<T, A> =
-    DifferentiableMstExpression(algebra, this)
+public fun <T : Number, A : NumericAlgebra<T>> MST.toDiffExpression(algebra: A): KotlingradExpression<T, A> =
+    KotlingradExpression(algebra, this)

@@ -34,6 +34,7 @@
 - Replace `MST.Symbolic` by `Symbol`, `Symbol` now implements MST
 - Remove Any restriction on polynomials
 - Add `out` variance to type parameters of `StructureND` and its implementations where possible
+- Rename `DifferentiableMstExpression` to `KotlingradExpression`
 
 ### Deprecated
 
