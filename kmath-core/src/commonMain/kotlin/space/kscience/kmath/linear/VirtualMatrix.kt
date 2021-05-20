@@ -10,7 +10,7 @@ package space.kscience.kmath.linear
  *
  * @property generator the function that provides elements.
  */
-public class VirtualMatrix<T : Any>(
+public class VirtualMatrix<out T : Any>(
     override val rowNum: Int,
     override val colNum: Int,
     public val generator: (i: Int, j: Int) -> T,

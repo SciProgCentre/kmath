@@ -24,7 +24,7 @@ public interface StructureFeature
  *
  * @param T the type of items.
  */
-public interface StructureND<T> {
+public interface StructureND<out T> {
     /**
      * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
@@ -213,9 +213,7 @@ public interface Strides {
     /**
      * Iterate over ND indices in a natural order
      */
-    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map {
-        index(it)
-    }
+    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
 }
 
 /**

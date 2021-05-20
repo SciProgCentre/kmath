@@ -15,7 +15,7 @@ import kotlin.jvm.JvmInline
 /**
  * A structure that is guaranteed to be one-dimensional
  */
-public interface Structure1D<T> : StructureND<T>, Buffer<T> {
+public interface Structure1D<out T> : StructureND<T>, Buffer<T> {
     public override val dimension: Int get() = 1
 
     public override operator fun get(index: IntArray): T {
@@ -42,7 +42,7 @@ public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, 
  * A 1D wrapper for nd-structure
  */
 @JvmInline
-private value class Structure1DWrapper<T>(val structure: StructureND<T>) : Structure1D<T> {
+private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : Structure1D<T> {
     override val shape: IntArray get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -68,7 +68,11 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
     }
 
     @PerformancePitfall
-    override fun copy(): MutableBuffer<T> = structure.elements().map { it.second }.toMutableList().asMutableBuffer()
+    override fun copy(): MutableBuffer<T> = structure
+        .elements()
+        .map(Pair<IntArray, T>::second)
+        .toMutableList()
+        .asMutableBuffer()
 }
 
 
@@ -76,7 +80,7 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
  * A structure wrapper for buffer
  */
 @JvmInline
-private value class Buffer1DWrapper<T>(val buffer: Buffer<T>) : Structure1D<T> {
+private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<T> {
     override val shape: IntArray get() = intArrayOf(buffer.size)
     override val size: Int get() = buffer.size
 

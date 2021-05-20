@@ -20,19 +20,20 @@
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
 - Buffer factories for primitives moved to MutableBuffer.Companion
-- NDStructure and NDAlgebra to StructureND and AlgebraND respectively
-- Real -> Double
+- Rename `NDStructure` and `NDAlgebra` to `StructureND` and `AlgebraND` respectively
+- `Real` -> `Double`
 - DataSets are moved from functions to core
 - Redesign advanced Chain API
-- Redesign MST. Remove MSTExpression.
-- Move MST to core
+- Redesign `MST`. Remove `MstExpression`.
+- Move `MST` to core
 - Separated benchmarks and examples
-- Rewritten EJML module without ejml-simple
-- Stability of kmath-ast and kmath-kotilngrad promoted to EXPERIMENTAL.
+- Rewrite `kmath-ejml` without `ejml-simple` artifact, support sparse matrices
+- Promote stability of kmath-ast and kmath-kotlingrad to EXPERIMENTAL.
 - ColumnarData returns nullable column
-- MST is made sealed interface
-- Replaced MST.Symbolic by Symbol, Symbol now implements MST
-- Removed Any restriction on polynomials
+- `MST` is made sealed interface
+- Replace `MST.Symbolic` by `Symbol`, `Symbol` now implements MST
+- Remove Any restriction on polynomials
+- Add `out` variance to type parameters of `StructureND` and its implementations where possible
 
 ### Deprecated
 

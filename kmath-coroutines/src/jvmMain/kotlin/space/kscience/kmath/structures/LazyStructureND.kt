@@ -11,7 +11,7 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.StructureND
 
-public class LazyStructureND<T>(
+public class LazyStructureND<out T>(
     public val scope: CoroutineScope,
     public override val shape: IntArray,
     public val function: suspend (IntArray) -> T,

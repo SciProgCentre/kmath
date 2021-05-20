@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public interface Structure2D<T> : StructureND<T> {
+public interface Structure2D<out T> : StructureND<T> {
     /**
      * The number of rows in this structure.
      */
@@ -100,7 +100,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  * A 2D wrapper for nd-structure
  */
 @JvmInline
-private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
+private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]

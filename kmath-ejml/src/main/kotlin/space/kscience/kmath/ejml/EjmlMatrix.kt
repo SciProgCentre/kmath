@@ -16,7 +16,7 @@ import space.kscience.kmath.nd.Structure2D
  * @property origin The underlying EJML matrix.
  * @author Iaroslav Postovalov
  */
-public abstract class EjmlMatrix<T, out M : Matrix>(public open val origin: M) : Structure2D<T> {
+public abstract class EjmlMatrix<out T, out M : Matrix>(public open val origin: M) : Structure2D<T> {
     public override val rowNum: Int get() = origin.numRows
     public override val colNum: Int get() = origin.numCols
 }

@@ -8,7 +8,7 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
-public class MatrixBuilder<T : Any, A : Ring<T>>(
+public class MatrixBuilder<T : Any, out A : Ring<T>>(
     public val linearSpace: LinearSpace<T, A>,
     public val rows: Int,
     public val columns: Int,
