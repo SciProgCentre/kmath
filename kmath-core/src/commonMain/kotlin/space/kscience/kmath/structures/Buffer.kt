@@ -283,7 +283,7 @@ public value class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buff
  *
  * @param T the type of elements provided by the buffer.
  */
-public class VirtualBuffer<T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
+public class VirtualBuffer<out T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
     override operator fun get(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
         return generator(index)

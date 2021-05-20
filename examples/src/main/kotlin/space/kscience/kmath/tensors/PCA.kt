@@ -11,7 +11,7 @@ import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 
 // simple PCA
 
-fun main() = BroadcastDoubleTensorAlgebra {  // work in context with broadcast methods
+fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broadcast methods
     val seed = 100500L
 
     // assume x is range from 0 until 10

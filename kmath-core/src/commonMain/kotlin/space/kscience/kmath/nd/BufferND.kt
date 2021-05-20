@@ -18,7 +18,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * @param strides The strides to access elements of [Buffer] by linear indices.
  * @param buffer The underlying buffer.
  */
-public open class BufferND<T>(
+public open class BufferND<out T>(
     public val strides: Strides,
     public val buffer: Buffer<T>,
 ) : StructureND<T> {

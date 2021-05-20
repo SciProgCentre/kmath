@@ -17,7 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SimpleAutoDiffTest {
+internal class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
