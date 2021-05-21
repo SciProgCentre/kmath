@@ -14,7 +14,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.*
 
 /**
- * Maps [SVar] to [MST.Symbolic] directly.
+ * Maps [SVar] to [Symbol] directly.
  *
  * @receiver The variable.
  * @returnAa node.
@@ -81,7 +81,7 @@ public fun <X : SFun<X>> SFun<X>.toMst(): MST = MstExtendedField {
 public fun <X : SFun<X>> MST.Numeric.toSConst(): SConst<X> = SConst(value)
 
 /**
- * Maps [MST.Symbolic] to [SVar] directly.
+ * Maps [Symbol] to [SVar] directly.
  *
  * @receiver The node.
  * @return A new variable.
@@ -94,7 +94,7 @@ internal fun <X : SFun<X>> Symbol.toSVar(): SVar<X> = SVar(identity)
  * Detailed mapping is:
  *
  * - [MST.Numeric] -> [SConst];
- * - [MST.Symbolic] -> [SVar];
+ * - [Symbol] -> [SVar];
  * - [MST.Unary] -> [Negative], [Sine], [Cosine], [Tangent], [Power], [Log];
  * - [MST.Binary] -> [Sum], [Prod], [Power].
  *
@@ -114,6 +114,12 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
         PowerOperations.SQRT_OPERATION -> sqrt(value.toSFun())
         ExponentialOperations.EXP_OPERATION -> exp(value.toSFun())
         ExponentialOperations.LN_OPERATION -> value.toSFun<X>().ln()
+        ExponentialOperations.SINH_OPERATION -> MstExtendedField { (exp(value) - exp(-value)) / 2.0 }.toSFun()
+        ExponentialOperations.COSH_OPERATION -> MstExtendedField { (exp(value) + exp(-value)) / 2.0 }.toSFun()
+        ExponentialOperations.TANH_OPERATION -> MstExtendedField { (exp(value) - exp(-value)) / (exp(-value) + exp(value)) }.toSFun()
+        ExponentialOperations.ASINH_OPERATION -> MstExtendedField { ln(sqrt(value * value + one) + value) }.toSFun()
+        ExponentialOperations.ACOSH_OPERATION -> MstExtendedField { ln(value + sqrt((value - one) * (value + one))) }.toSFun()
+        ExponentialOperations.ATANH_OPERATION -> MstExtendedField { (ln(value + one) - ln(one - value)) / 2.0 }.toSFun()
         else -> error("Unary operation $operation not defined in $this")
     }
 
