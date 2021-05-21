@@ -35,7 +35,6 @@ fun main() {
         data.map { it.second }.toDoubleArray()
     )
 
-
     Plotly.plot {
         scatter {
             name = "interpolated"

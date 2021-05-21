@@ -13,10 +13,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(UnstableKMathAPI::class)
-class GaussIntegralTest {
+class SimpsonIntegralTest {
     @Test
     fun gaussSin() {
-        val res = DoubleField.gaussIntegrator.integrate(0.0..2 * PI) { x ->
+        val res = DoubleField.simpsonIntegrator.integrate(0.0..2 * PI, IntegrandMaxCalls(5)) { x ->
             sin(x)
         }
         assertEquals(0.0, res.value, 1e-2)
@@ -24,7 +24,7 @@ class GaussIntegralTest {
 
     @Test
     fun gaussUniform() {
-        val res = DoubleField.gaussIntegrator.integrate(35.0..100.0) { x ->
+        val res = DoubleField.simpsonIntegrator.integrate(35.0..100.0) { x ->
             if(x in 30.0..50.0){
                 1.0
             } else {

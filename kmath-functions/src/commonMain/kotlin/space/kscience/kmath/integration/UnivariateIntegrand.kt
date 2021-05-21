@@ -9,7 +9,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
-public class UnivariateIntegrand<T : Any> internal constructor(
+public class UnivariateIntegrand<T> internal constructor(
     private val features: Map<KClass<*>, IntegrandFeature>,
     public val function: (Double) -> T,
 ) : Integrand {

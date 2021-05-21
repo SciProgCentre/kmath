@@ -11,7 +11,7 @@ import space.kscience.kmath.integration.*
 /**
  * A simple one-pass integrator based on Gauss rule
  */
-public class GaussRuleIntegrator(
+public class CMGaussRuleIntegrator(
     private val numpoints: Int,
     private var type: GaussRule = GaussRule.LEGANDRE,
 ) : UnivariateIntegrator<Double> {
@@ -76,7 +76,7 @@ public class GaussRuleIntegrator(
             numPoints: Int = 100,
             type: GaussRule = GaussRule.LEGANDRE,
             function: (Double) -> Double,
-        ): Double = GaussRuleIntegrator(numPoints, type).integrate(
+        ): Double = CMGaussRuleIntegrator(numPoints, type).integrate(
             UnivariateIntegrand(function, IntegrationRange(range))
         ).valueOrNull!!
     }
