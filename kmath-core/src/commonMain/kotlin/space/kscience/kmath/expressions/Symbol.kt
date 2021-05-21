@@ -12,13 +12,13 @@ import kotlin.properties.ReadOnlyProperty
  * A marker interface for a symbol. A symbol must have an identity.
  * Ic
  */
-public interface Symbol: MST {
+public interface Symbol : MST {
     /**
      * Identity object for the symbol. Two symbols with the same identity are considered to be the same symbol.
      */
     public val identity: String
 
-    public companion object{
+    public companion object {
         public val x: StringSymbol = StringSymbol("x")
         public val y: StringSymbol = StringSymbol("y")
         public val z: StringSymbol = StringSymbol("z")
@@ -48,7 +48,7 @@ public operator fun <T> Map<String, T>.get(symbol: Symbol): T? = get(symbol.iden
 /**
  * Set a value of [String]-keyed map by a [Symbol]
  */
-public operator fun <T> MutableMap<String, T>.set(symbol: Symbol, value: T){
+public operator fun <T> MutableMap<String, T>.set(symbol: Symbol, value: T) {
     set(symbol.identity, value)
 }
 
@@ -60,6 +60,6 @@ public operator fun <T> Map<Symbol, T>.get(string: String): T? = get(StringSymbo
 /**
  * Set a value of [String]-keyed map by a [Symbol]
  */
-public operator fun <T> MutableMap<Symbol, T>.set(string: String, value: T){
+public operator fun <T> MutableMap<Symbol, T>.set(string: String, value: T) {
     set(StringSymbol(string), value)
 }
