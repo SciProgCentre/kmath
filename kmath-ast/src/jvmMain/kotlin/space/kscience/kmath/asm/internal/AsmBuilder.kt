@@ -342,8 +342,8 @@ internal class AsmBuilder<T>(
         val MAP_INTRINSICS_TYPE: Type by lazy { getObjectType("space/kscience/kmath/asm/internal/MapIntrinsics") }
 
         /**
-         * ASM Type for [space.kscience.kmath.misc.Symbol].
+         * ASM Type for [space.kscience.kmath.expressions.Symbol].
          */
-        val SYMBOL_TYPE: Type by lazy { getObjectType("space/kscience/kmath/misc/Symbol") }
+        val SYMBOL_TYPE: Type by lazy { getObjectType("space/kscience/kmath/expressions/Symbol") }
     }
 }
