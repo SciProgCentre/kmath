@@ -2,18 +2,19 @@
 
 ## [Unreleased]
 ### Added
-- ScaleOperations interface
-- Field extends ScaleOperations
+- `ScaleOperations` interface
+- `Field` extends `ScaleOperations`
 - Basic integration API
 - Basic MPP distributions and samplers
-- bindSymbolOrNull
+- `bindSymbolOrNull`
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
 - Extended operations for ND4J fields
 - Jupyter Notebook integration module (kmath-jupyter)
 - `@PerformancePitfall` annotation to mark possibly slow API
-- BigInt operation performance improvement and fixes by @zhelenskiy (#328)
+- `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
+- Integration between `MST` and Symja `IExpr`
 
 ### Changed
 - Exponential operations merged with hyperbolic functions

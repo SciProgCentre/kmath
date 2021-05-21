@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":kmath-ejml"))
     implementation(project(":kmath-nd4j"))
     implementation(project(":kmath-tensors"))
-
+    implementation(project(":kmath-symja"))
     implementation(project(":kmath-for-real"))
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
