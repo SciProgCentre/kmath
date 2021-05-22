@@ -10,13 +10,7 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 
-/**
- * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
- * integration nodes per range
- */
-public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
-    public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
-}
+
 
 /**
  * A simple one-pass integrator based on Gauss rule

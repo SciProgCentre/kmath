@@ -16,6 +16,8 @@ public fun <T> Ring<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right
     add(left, right)
 }
 
+//TODO replace by sumOf with multi-receivers
+
 /**
  * Returns the sum of all elements in the sequence in this [Ring].
  *

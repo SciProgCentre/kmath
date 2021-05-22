@@ -74,9 +74,9 @@ class NumberNDFieldTest {
         val division = array1.combine(array2, Double::div)
     }
 
-    object L2Norm : Norm<StructureND<out Number>, Double> {
+    object L2Norm : Norm<StructureND<Number>, Double> {
         @OptIn(PerformancePitfall::class)
-        override fun norm(arg: StructureND<out Number>): Double =
+        override fun norm(arg: StructureND<Number>): Double =
             kotlin.math.sqrt(arg.elements().sumOf { it.second.toDouble() })
     }
 

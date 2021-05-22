@@ -15,10 +15,16 @@ import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 
+/**
+ * And interpolator for data with x column type [X], y column type [Y].
+ */
 public fun interface Interpolator<T, X : T, Y : T> {
     public fun interpolate(points: XYColumnarData<T, X, Y>): (X) -> Y
 }
 
+/**
+ * And interpolator returning [PiecewisePolynomial] function
+ */
 public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, T> {
     public val algebra: Ring<T>
 

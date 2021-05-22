@@ -6,6 +6,8 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -34,6 +36,19 @@ public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
 @JvmInline
 public value class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature
+
+/**
+ * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
+ * integration nodes per range
+ */
+public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
+    public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
+}
+
+public class UnivariateIntegrationNodes(public val nodes: Buffer<Double>) : IntegrandFeature {
+    public constructor(vararg nodes: Double) : this(DoubleBuffer(nodes))
+}
+
 
 /**
  * Value of the integrand if it is present or null

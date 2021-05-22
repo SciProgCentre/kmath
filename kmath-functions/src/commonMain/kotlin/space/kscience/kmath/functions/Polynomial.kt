@@ -69,18 +69,23 @@ public fun <T, A> Polynomial<T>.differentiate(
 public fun <T, A> Polynomial<T>.integrate(
     algebra: A,
 ): Polynomial<T> where  A : Field<T>, A : NumericAlgebra<T> = algebra {
-    Polynomial(coefficients.mapIndexed { index, t -> t / number(index) })
+    val integratedCoefficients = buildList<T>(coefficients.size + 1) {
+        add(zero)
+        coefficients.forEachIndexed{ index, t -> add(t / (number(index) + one)) }
+    }
+    Polynomial(integratedCoefficients)
 }
 
 /**
  * Compute a definite integral of a given polynomial in a [range]
  */
 @UnstableKMathAPI
-public fun <T : Comparable<T>, A> Polynomial<T>.integrate(
-    algebra: A,
+public fun <T : Comparable<T>> Polynomial<T>.integrate(
+    algebra: Field<T>,
     range: ClosedRange<T>,
-): T where  A : Field<T>, A : NumericAlgebra<T> = algebra {
-    value(algebra, range.endInclusive) - value(algebra, range.start)
+): T = algebra {
+    val integral = integrate(algebra)
+    integral.value(algebra, range.endInclusive) - integral.value(algebra, range.start)
 }
 
 /**

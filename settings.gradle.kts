@@ -1,11 +1,11 @@
 pluginManagement {
     repositories {
+        maven("https://repo.kotlin.link")
         mavenCentral()
         gradlePluginPortal()
-        maven("https://repo.kotlin.link")
     }
 
-    val toolsVersion = "0.9.8"
+    val toolsVersion = "0.9.9"
     val kotlinVersion = "1.5.0"
 
     plugins {
@@ -15,8 +15,8 @@ pluginManagement {
         kotlin("multiplatform") version kotlinVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
-        id("org.jetbrains.kotlinx.benchmark") version "0.3.0"
-        kotlin("jupyter.api") version "0.9.1-61"
+        id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
+        kotlin("jupyter.api") version "0.10.0-25"
 
     }
 }
