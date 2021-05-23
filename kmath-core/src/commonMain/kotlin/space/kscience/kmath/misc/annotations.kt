@@ -26,4 +26,6 @@ public annotation class UnstableKMathAPI
     "Refer to the documentation to use this API in performance-critical code",
     RequiresOptIn.Level.WARNING
 )
-public annotation class PerformancePitfall
+public annotation class PerformancePitfall(
+    val message: String = "Potential performance problem"
+)

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.Ring
 
 /**
@@ -24,17 +25,43 @@ public fun interface Piecewise<T, R> {
  * Represents piecewise-defined function where all the sub-functions are polynomials.
  * @param pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no "holes" in it.
  */
-public class PiecewisePolynomial<T : Comparable<T>>(
-    public val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
-) : Piecewise<T, Polynomial<T>> {
+public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomial<T>> {
+    public val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>
 
-    public override fun findPiece(arg: T): Polynomial<T>? {
-        return if (arg < pieces.first().first.start || arg >= pieces.last().first.endInclusive)
-            null
-        else {
-            pieces.firstOrNull { arg in it.first }?.second
+    public override fun findPiece(arg: T): Polynomial<T>?
+}
+
+/**
+ * A generic piecewise without constraints on how pieces are placed
+ */
+@PerformancePitfall("findPiece method of resulting piecewise is slow")
+public fun <T : Comparable<T>> PiecewisePolynomial(
+    pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>,
+): PiecewisePolynomial<T> = object : PiecewisePolynomial<T> {
+    override val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>> = pieces
+
+    override fun findPiece(arg: T): Polynomial<T>? = pieces.firstOrNull { arg in it.first }?.second
+}
+
+/**
+ * An optimized piecewise which uses not separate pieces, but a range separated by delimiters.
+ * The pices search is logarithmic
+ */
+private class OrderedPiecewisePolynomial<T : Comparable<T>>(
+    override val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
+) : PiecewisePolynomial<T> {
+
+    override fun findPiece(arg: T): Polynomial<T>? {
+        val index = pieces.binarySearch { (range, _) ->
+            when {
+                arg >= range.endInclusive -> -1
+                arg < range.start -> +1
+                else -> 0
+            }
         }
+        return if (index < 0) null else pieces[index].second
     }
+
 }
 
 /**
@@ -71,9 +98,9 @@ public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
         pieces.add(0, piece)
     }
 
-    public fun build(): PiecewisePolynomial<T> {
-        return PiecewisePolynomial(delimiters.zipWithNext { l, r -> l..r }.zip(pieces))
-    }
+    public fun build(): PiecewisePolynomial<T> = OrderedPiecewisePolynomial(delimiters.zipWithNext { l, r ->
+        l..r
+    }.zip(pieces))
 }
 
 /**
