@@ -10,10 +10,11 @@ import space.kscience.kmath.asm.internal.buildName
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MST.*
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
+import space.kscience.kmath.operations.bindSymbolOrNull
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -26,13 +27,13 @@ import space.kscience.kmath.operations.NumericAlgebra
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
-        is Symbolic -> {
-            val symbol = algebra.bindSymbolOrNull(node.value)
+        is Symbol -> {
+            val symbol = algebra.bindSymbolOrNull(node)
 
             if (symbol != null)
                 loadObjectConstant(symbol as Any)
             else
-                loadVariable(node.value)
+                loadVariable(node.identity)
         }
 
         is Numeric -> loadNumberConstant(node.value)

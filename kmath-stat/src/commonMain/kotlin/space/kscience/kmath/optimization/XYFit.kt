@@ -6,11 +6,7 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.data.ColumnarData
-import space.kscience.kmath.expressions.AutoDiffProcessor
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.ExpressionAlgebra
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field

@@ -5,18 +5,18 @@
 
 package space.kscience.kmath.ejml
 
-import org.ejml.simple.SimpleMatrix
-import space.kscience.kmath.linear.Matrix
+import org.ejml.data.Matrix
+import space.kscience.kmath.nd.Structure2D
 
 /**
- * The matrix implementation over EJML [SimpleMatrix].
+ * [space.kscience.kmath.linear.Matrix] implementation based on EJML [Matrix].
  *
- * @property origin the underlying [SimpleMatrix].
+ * @param T the type of elements contained in the buffer.
+ * @param M the type of EJML matrix.
+ * @property origin The underlying EJML matrix.
  * @author Iaroslav Postovalov
  */
-public class EjmlMatrix(public val origin: SimpleMatrix) : Matrix<Double> {
-    public override val rowNum: Int get() = origin.numRows()
-    public override val colNum: Int get() = origin.numCols()
-
-    public override operator fun get(i: Int, j: Int): Double = origin[i, j]
+public abstract class EjmlMatrix<out T, out M : Matrix>(public open val origin: M) : Structure2D<T> {
+    public override val rowNum: Int get() = origin.numRows
+    public override val colNum: Int get() = origin.numCols
 }

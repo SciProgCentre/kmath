@@ -40,7 +40,7 @@ KMath is a modular library. Different modules provide different features with di
 
 * **PROTOTYPE**. On this level there are no compatibility guarantees. All methods and classes form those modules could break any moment. You can still use it, but be sure to fix the specific version.
 * **EXPERIMENTAL**. The general API is decided, but some changes could be made. Volatile API is marked with `@UnstableKmathAPI` or other stability warning annotations.
-* **DEVELOPMENT**. API breaking genrally follows semantic versioning ideology. There could be changes in minor versions, but not in patch versions. API is protected with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
+* **DEVELOPMENT**. API breaking generally follows semantic versioning ideology. There could be changes in minor versions, but not in patch versions. API is protected with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
 * **STABLE**. The API stabilized. Breaking changes are allowed only in major releases.
 
 <!--Current feature list is [here](/docs/features.md)-->
@@ -91,7 +91,7 @@ KMath is a modular library. Different modules provide different features with di
 * ### [kmath-ast](kmath-ast)
 > 
 >
-> **Maturity**: PROTOTYPE
+> **Maturity**: EXPERIMENTAL
 >
 > **Features:**
 > - [expression-language](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
@@ -154,9 +154,9 @@ performance calculations to code generation.
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
-> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
-> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+> - [ejml-vector](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : Point implementations.
+> - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
+> - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
 <hr/>
 
@@ -200,10 +200,21 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
-* ### [kmath-kotlingrad](kmath-kotlingrad)
+* ### [kmath-jupyter](kmath-jupyter)
 > 
 >
 > **Maturity**: PROTOTYPE
+<hr/>
+
+* ### [kmath-kotlingrad](kmath-kotlingrad)
+> Functions, integration and interpolation
+>
+> **Maturity**: EXPERIMENTAL
+>
+> **Features:**
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : MST based DifferentiableExpression.
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : Conversions between Kotlin∇'s SFun and MST
+
 <hr/>
 
 * ### [kmath-memory](kmath-memory)
@@ -228,6 +239,18 @@ One can still use generic algebras though.
 > 
 >
 > **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-tensors](kmath-tensors)
+> 
+>
+> **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Basic linear algebra operations on tensors (plus, dot, etc.)
+> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
+> - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
+
 <hr/>
 
 * ### [kmath-viktor](kmath-viktor)
@@ -270,8 +293,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-7")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-7") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-11")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-11") for jvm-specific version
 }
 ```
 

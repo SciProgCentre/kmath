@@ -6,21 +6,29 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.FeatureSet
 import kotlin.reflect.KClass
 
 public class MultivariateIntegrand<T : Any> internal constructor(
-    override val features: FeatureSet<IntegrandFeature>,
+    private val featureMap: Map<KClass<*>, IntegrandFeature>,
     public val function: (Point<T>) -> T,
-) : Integrand
+) : Integrand {
 
-public fun <T : Any> MultivariateIntegrand<T>.with(vararg newFeatures: IntegrandFeature): MultivariateIntegrand<T> =
-    MultivariateIntegrand(features.with(*newFeatures), function)
+    override val features: Set<IntegrandFeature> get() = featureMap.values.toSet()
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : IntegrandFeature> getFeature(type: KClass<T>): T? = featureMap[type] as? T
+
+    public operator fun <F : IntegrandFeature> plus(pair: Pair<KClass<out F>, F>): MultivariateIntegrand<T> =
+        MultivariateIntegrand(featureMap + pair, function)
+
+    public operator fun <F : IntegrandFeature> plus(feature: F): MultivariateIntegrand<T> =
+        plus(feature::class to feature)
+}
 
 @Suppress("FunctionName")
 public fun <T : Any> MultivariateIntegrand(
     vararg features: IntegrandFeature,
     function: (Point<T>) -> T,
-): MultivariateIntegrand<T> = MultivariateIntegrand(FeatureSet.of(*features), function)
+): MultivariateIntegrand<T> = MultivariateIntegrand(features.associateBy { it::class }, function)
 
 public val <T : Any> MultivariateIntegrand<T>.value: T? get() = getFeature<IntegrandValue<T>>()?.value

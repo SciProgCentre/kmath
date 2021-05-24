@@ -6,18 +6,19 @@ package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.indices
 
-/**
- * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
- * integration nodes per range
- */
-public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
-    public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
-}
+
 
 /**
  * A simple one-pass integrator based on Gauss rule
+ * Following integrand features are accepted:
+ * [GaussIntegratorRuleFactory] - A factory for computing the Gauss integration rule. By default uses [GaussLegendreRuleFactory]
+ * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
+ * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
  */
 public class GaussIntegrator<T : Any>(
     public val algebra: Field<T>,
@@ -50,7 +51,7 @@ public class GaussIntegrator<T : Any>(
         }
     }
 
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
         val f = integrand.function
         val (points, weights) = buildRule(integrand)
         var res = zero
@@ -63,34 +64,24 @@ public class GaussIntegrator<T : Any>(
             c = t - res - y
             res = t
         }
-        return integrand.with(IntegrandValue(res),IntegrandCallsPerformed(integrand.calls + points.size))
+        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + points.size)
     }
 
-    public companion object {
-
-    }
+    public companion object
 }
 
 /**
- * Integrate [T]-valued univariate function using provided set of [IntegrandFeature]
- * Following features are evaluated:
- * * [GaussIntegratorRuleFactory] - A factory for computing the Gauss integration rule. By default uses [GaussLegendreRuleFactory]
- * * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
- * * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
- * * [UnivariateIntegrandRanges] - Set of ranges and number of points per range. Defaults to given [IntegrationRange] and [IntegrandMaxCalls]
+ * Create a Gauss-Legendre integrator for this field
+ * @see [GaussIntegrator]
  */
-@UnstableKMathAPI
-public fun <T : Any> Field<T>.process(
-    vararg features: IntegrandFeature,
-    function: (Double) -> T,
-): UnivariateIntegrand<T> = GaussIntegrator(this).process(UnivariateIntegrand(function, *features))
+public val <T:Any> Field<T>.gaussIntegrator: GaussIntegrator<T> get() = GaussIntegrator(this)
 
 
 /**
- * Use [GaussIntegrator.Companion.integrate] to integrate the function in the current algebra with given [range] and [numPoints]
+ * Integrate using [intervals] segments with Gauss-Legendre rule of [order] order
  */
 @UnstableKMathAPI
-public fun <T : Any> Field<T>.process(
+public fun <T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
@@ -102,9 +93,9 @@ public fun <T : Any> Field<T>.process(
     require(intervals > 0) { "Number of intervals must be positive" }
     val rangeSize = (range.endInclusive - range.start) / intervals
     val ranges = UnivariateIntegrandRanges(
-        (0 until intervals).map { i -> (rangeSize * i)..(rangeSize * (i + 1)) to order }
+        (0 until intervals).map { i -> (range.start + rangeSize * i)..(range.start + rangeSize * (i + 1)) to order }
     )
-    return GaussIntegrator(this).process(
+    return integrate(
         UnivariateIntegrand(
             function,
             IntegrationRange(range),

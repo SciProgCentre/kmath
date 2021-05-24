@@ -1,22 +1,23 @@
 pluginManagement {
     repositories {
-        mavenLocal()
+        maven("https://repo.kotlin.link")
         mavenCentral()
         gradlePluginPortal()
-        maven("https://repo.kotlin.link")
     }
 
-    val toolsVersion = "0.9.5-dev-2"
-    val kotlinVersion = "1.5.0-RC"
+    val toolsVersion = "0.9.9"
+    val kotlinVersion = "1.5.0"
 
     plugins {
-        kotlin("multiplatform") version kotlinVersion
-        kotlin("jvm") version kotlinVersion
-        kotlin("plugin.allopen") version kotlinVersion
-        id("org.jetbrains.kotlinx.benchmark") version "0.3.0"
         id("ru.mipt.npm.gradle.project") version toolsVersion
         id("ru.mipt.npm.gradle.mpp") version toolsVersion
         id("ru.mipt.npm.gradle.jvm") version toolsVersion
+        kotlin("multiplatform") version kotlinVersion
+        kotlin("jvm") version kotlinVersion
+        kotlin("plugin.allopen") version kotlinVersion
+        id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
+        kotlin("jupyter.api") version "0.10.0-25"
+
     }
 }
 
@@ -39,6 +40,8 @@ include(
     ":kmath-ast",
     ":kmath-ejml",
     ":kmath-kotlingrad",
+    ":kmath-tensors",
+    ":kmath-jupyter",
     ":examples",
     ":benchmarks"
 )

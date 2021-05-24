@@ -5,19 +5,26 @@
 
 package space.kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.api.RealNumber
 import edu.umontreal.kotlingrad.api.SConst
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
- * Implements [RealNumber] by delegating its functionality to [NumericAlgebra].
+ * Implements [SConst] by delegating its functionality to [NumericAlgebra].
  *
- * @param T the type of number.
- * @param A the [NumericAlgebra] of [T].
- * @property algebra the algebra.
- * @param value the value of this number.
+ * @param T The type of number.
+ * @param A The [NumericAlgebra] over [T].
+ * @property algebra The algebra.
+ * @property value The value of this number.
  */
-public class KMathNumber<T, A>(public val algebra: A, value: T) :
-    RealNumber<KMathNumber<T, A>, T>(value) where T : Number, A : NumericAlgebra<T> {
-    public override fun wrap(number: Number): SConst<KMathNumber<T, A>> = SConst(algebra.number(number))
+public class KMathNumber<T, A>(public val algebra: A, public override val value: T) :
+    SConst<KMathNumber<T, A>>(value) where T : Number, A : NumericAlgebra<T> {
+    /**
+     * Returns a string representation of the [value].
+     */
+    public override fun toString(): String = value.toString()
+
+    /**
+     * Wraps [Number] to [KMathNumber].
+     */
+    public override fun wrap(number: Number): KMathNumber<T, A> = KMathNumber(algebra, algebra.number(number))
 }

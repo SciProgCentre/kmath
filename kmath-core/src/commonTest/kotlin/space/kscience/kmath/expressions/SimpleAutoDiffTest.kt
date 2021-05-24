@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.structures.Buffer
@@ -19,7 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SimpleAutoDiffTest {
+internal class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,

@@ -28,7 +28,6 @@ private fun <B : ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(val
 
 @UnstableKMathAPI
 public class TreeHistogram(
-    override val context: TreeHistogramSpace,
     private val binMap: TreeMap<Double, out UnivariateBin>,
 ) : UnivariateHistogram {
     override fun get(value: Double): UnivariateBin? = binMap.getBin(value)
@@ -79,15 +78,15 @@ public class TreeHistogramSpace(
             val count = binCounter.counter.value
             resBins[key] = UnivariateBin(binCounter.domain, count, sqrt(count))
         }
-        return TreeHistogram(this, resBins)
+        return TreeHistogram(resBins)
     }
 
     override fun add(
         a: UnivariateHistogram,
         b: UnivariateHistogram,
     ): UnivariateHistogram {
-        require(a.context == this) { "Histogram $a does not belong to this context" }
-        require(b.context == this) { "Histogram $b does not belong to this context" }
+//        require(a.context == this) { "Histogram $a does not belong to this context" }
+//        require(b.context == this) { "Histogram $b does not belong to this context" }
         val bins = TreeMap<Double, UnivariateBin>().apply {
             (a.bins.map { it.domain } union b.bins.map { it.domain }).forEach { def ->
                 put(def.center,
@@ -100,7 +99,7 @@ public class TreeHistogramSpace(
                 )
             }
         }
-        return TreeHistogram(this, bins)
+        return TreeHistogram(bins)
     }
 
     override fun scale(a: UnivariateHistogram, value: Double): UnivariateHistogram {
@@ -116,7 +115,7 @@ public class TreeHistogramSpace(
             }
         }
 
-        return TreeHistogram(this, bins)
+        return TreeHistogram(bins)
     }
 
     override fun UnivariateHistogram.unaryMinus(): UnivariateHistogram = this * (-1)

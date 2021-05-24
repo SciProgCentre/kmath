@@ -2,36 +2,34 @@
 
 EJML based linear algebra implementation.
 
- - [ejml-vector](src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : The Point implementation using SimpleMatrix.
- - [ejml-matrix](src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : The Matrix implementation using SimpleMatrix.
- - [ejml-linear-space](src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : The LinearSpace implementation using SimpleMatrix.
+ - [ejml-vector](src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt) : Point implementations.
+ - [ejml-matrix](src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
+ - [ejml-linear-space](src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ejml:0.3.0-dev-7`.
+The Maven coordinates of this project are `space.kscience:kmath-ejml:0.3.0-dev-11`.
 
 **Gradle:**
 ```gradle
 repositories {
     maven { url 'https://repo.kotlin.link' }
-    maven { url 'https://dl.bintray.com/hotkeytlt/maven' }
-    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // include for builds based on kotlin-eap
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ejml:0.3.0-dev-7'
+    implementation 'space.kscience:kmath-ejml:0.3.0-dev-11'
 }
 ```
 **Gradle Kotlin DSL:**
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")
-    maven("https://dl.bintray.com/kotlin/kotlin-eap") // include for builds based on kotlin-eap
-    maven("https://dl.bintray.com/hotkeytlt/maven") // required for a
+    mavenCentral()
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ejml:0.3.0-dev-7")
+    implementation("space.kscience:kmath-ejml:0.3.0-dev-11")
 }
 ```

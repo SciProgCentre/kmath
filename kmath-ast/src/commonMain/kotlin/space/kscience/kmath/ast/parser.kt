@@ -17,6 +17,7 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.StringSymbol
 import space.kscience.kmath.operations.FieldOperations
 import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
@@ -29,7 +30,6 @@ import space.kscience.kmath.operations.RingOperations
  * @author Iaroslav Postovalov
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
-    // TODO replace with "...".toRegex() when better-parse 0.4.1 is released
     private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
     private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by literalToken("(")
@@ -43,7 +43,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
-    private val singular: Parser<MST> by id use { MST.Symbolic(text) }
+    private val singular: Parser<MST> by id use { StringSymbol(text) }
 
     private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }

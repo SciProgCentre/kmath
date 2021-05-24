@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.data
 
-import space.kscience.kmath.misc.Symbol
+import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.Buffer
@@ -26,10 +27,10 @@ public interface XYColumnarData<T, out X : T, out Y : T> : ColumnarData<T> {
      */
     public val y: Buffer<Y>
 
-    override fun get(symbol: Symbol): Buffer<T> = when (symbol) {
+    override fun get(symbol: Symbol): Buffer<T>? = when (symbol) {
         Symbol.x -> x
         Symbol.y -> y
-        else -> error("A column for symbol $symbol not found")
+        else -> null
     }
 }
 
@@ -49,6 +50,7 @@ public fun <T, X : T, Y : T> XYColumnarData(x: Buffer<X>, y: Buffer<Y>): XYColum
  * A zero-copy method to represent a [Structure2D] as a two-column x-y data.
  * There could more than two columns in the structure.
  */
+@OptIn(PerformancePitfall::class)
 @UnstableKMathAPI
 public fun <T> Structure2D<T>.asXYData(xIndex: Int = 0, yIndex: Int = 1): XYColumnarData<T, T, T> {
     require(shape[1] >= max(xIndex, yIndex)) { "Column index out of bounds" }

@@ -5,8 +5,11 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * Represents [StructureND] over [Buffer].
@@ -15,7 +18,7 @@ import space.kscience.kmath.structures.BufferFactory
  * @param strides The strides to access elements of [Buffer] by linear indices.
  * @param buffer The underlying buffer.
  */
-public class BufferND<T>(
+public open class BufferND<out T>(
     public val strides: Strides,
     public val buffer: Buffer<T>,
 ) : StructureND<T> {
@@ -30,6 +33,7 @@ public class BufferND<T>(
 
     override val shape: IntArray get() = strides.shape
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
         it to this[it]
     }
@@ -49,5 +53,36 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
     else {
         val strides = DefaultStrides(shape)
         BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
+    }
+}
+
+/**
+ * Represents [MutableStructureND] over [MutableBuffer].
+ *
+ * @param T the type of items.
+ * @param strides The strides to access elements of [MutableBuffer] by linear indices.
+ * @param mutableBuffer The underlying buffer.
+ */
+public class MutableBufferND<T>(
+    strides: Strides,
+    public val mutableBuffer: MutableBuffer<T>,
+) : MutableStructureND<T>, BufferND<T>(strides, mutableBuffer) {
+    override fun set(index: IntArray, value: T) {
+        mutableBuffer[strides.offset(index)] = value
+    }
+}
+
+/**
+ * Transform structure to a new structure using provided [MutableBufferFactory] and optimizing if argument is [MutableBufferND]
+ */
+public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
+    factory: MutableBufferFactory<R> = MutableBuffer.Companion::auto,
+    crossinline transform: (T) -> R,
+): MutableBufferND<R> {
+    return if (this is MutableBufferND<T>)
+        MutableBufferND(this.strides, factory.invoke(strides.linearSize) { transform(mutableBuffer[it]) })
+    else {
+        val strides = DefaultStrides(shape)
+        MutableBufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
     }
 }

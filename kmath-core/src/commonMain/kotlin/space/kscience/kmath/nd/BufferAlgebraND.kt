@@ -11,7 +11,7 @@ import space.kscience.kmath.structures.BufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public interface BufferAlgebraND<T, A : Algebra<T>> : AlgebraND<T, A> {
+public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val strides: Strides
     public val bufferFactory: BufferFactory<T>
 

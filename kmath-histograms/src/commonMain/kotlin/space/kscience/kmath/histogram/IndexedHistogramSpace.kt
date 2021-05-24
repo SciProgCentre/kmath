@@ -12,7 +12,6 @@ import space.kscience.kmath.nd.FieldND
 import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.GroupElement
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 
@@ -26,9 +25,9 @@ public data class DomainBin<T : Comparable<T>>(
 
 @OptIn(UnstableKMathAPI::class)
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
-    override val context: IndexedHistogramSpace<T, V>,
+    public val context: IndexedHistogramSpace<T, V>,
     public val values: StructureND<V>,
-) : Histogram<T, Bin<T>>, GroupElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
+) : Histogram<T, Bin<T>> {
 
     override fun get(point: Point<T>): Bin<T>? {
         val index = context.getIndex(point) ?: return null

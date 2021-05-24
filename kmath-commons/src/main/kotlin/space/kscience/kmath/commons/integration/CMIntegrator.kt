@@ -18,13 +18,7 @@ public class CMIntegrator(
     public val integratorBuilder: (Integrand) -> org.apache.commons.math3.analysis.integration.UnivariateIntegrator,
 ) : UnivariateIntegrator<Double> {
 
-    public class TargetRelativeAccuracy(public val value: Double) : IntegrandFeature
-    public class TargetAbsoluteAccuracy(public val value: Double) : IntegrandFeature
-
-    public class MinIterations(public val value: Int) : IntegrandFeature
-    public class MaxIterations(public val value: Int) : IntegrandFeature
-
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls
@@ -32,12 +26,11 @@ public class CMIntegrator(
             ?: error("Integration range is not provided")
         val res = integrator.integrate(remainingCalls, integrand.function, range.start, range.endInclusive)
 
-        return integrand.with(
-            IntegrandValue(res),
-            IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy),
-            IntegrandRelativeAccuracy(integrator.relativeAccuracy),
-            IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
-        )
+        return integrand +
+                IntegrandValue(res) +
+                IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy) +
+                IntegrandRelativeAccuracy(integrator.relativeAccuracy) +
+                IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
     }
 
 
@@ -46,16 +39,15 @@ public class CMIntegrator(
          * Create a Simpson integrator based on [SimpsonIntegrator]
          */
         public fun simpson(defaultMaxCalls: Int = 200): CMIntegrator = CMIntegrator(defaultMaxCalls) { integrand ->
-            val absoluteAccuracy = integrand.getFeature<TargetAbsoluteAccuracy>()?.value
+            val absoluteAccuracy = integrand.getFeature<IntegrandAbsoluteAccuracy>()?.accuracy
                 ?: SimpsonIntegrator.DEFAULT_ABSOLUTE_ACCURACY
-            val relativeAccuracy = integrand.getFeature<TargetRelativeAccuracy>()?.value
+            val relativeAccuracy = integrand.getFeature<IntegrandRelativeAccuracy>()?.accuracy
                 ?: SimpsonIntegrator.DEFAULT_ABSOLUTE_ACCURACY
-            val minIterations = integrand.getFeature<MinIterations>()?.value
-                ?: SimpsonIntegrator.DEFAULT_MIN_ITERATIONS_COUNT
-            val maxIterations = integrand.getFeature<MaxIterations>()?.value
-                ?: SimpsonIntegrator.SIMPSON_MAX_ITERATIONS_COUNT
+            val iterations = integrand.getFeature<IntegrandIterationsRange>()?.range
+                ?: SimpsonIntegrator.DEFAULT_MIN_ITERATIONS_COUNT..SimpsonIntegrator.SIMPSON_MAX_ITERATIONS_COUNT
 
-            SimpsonIntegrator(relativeAccuracy, absoluteAccuracy, minIterations, maxIterations)
+
+            SimpsonIntegrator(relativeAccuracy, absoluteAccuracy, iterations.first, iterations.last)
         }
 
         /**
@@ -63,21 +55,19 @@ public class CMIntegrator(
          */
         public fun legandre(numPoints: Int, defaultMaxCalls: Int = numPoints * 5): CMIntegrator =
             CMIntegrator(defaultMaxCalls) { integrand ->
-                val absoluteAccuracy = integrand.getFeature<TargetAbsoluteAccuracy>()?.value
+                val absoluteAccuracy = integrand.getFeature<IntegrandAbsoluteAccuracy>()?.accuracy
                     ?: IterativeLegendreGaussIntegrator.DEFAULT_ABSOLUTE_ACCURACY
-                val relativeAccuracy = integrand.getFeature<TargetRelativeAccuracy>()?.value
+                val relativeAccuracy = integrand.getFeature<IntegrandRelativeAccuracy>()?.accuracy
                     ?: IterativeLegendreGaussIntegrator.DEFAULT_ABSOLUTE_ACCURACY
-                val minIterations = integrand.getFeature<MinIterations>()?.value
-                    ?: IterativeLegendreGaussIntegrator.DEFAULT_MIN_ITERATIONS_COUNT
-                val maxIterations = integrand.getFeature<MaxIterations>()?.value
-                    ?: IterativeLegendreGaussIntegrator.DEFAULT_MAX_ITERATIONS_COUNT
+                val iterations = integrand.getFeature<IntegrandIterationsRange>()?.range
+                    ?: IterativeLegendreGaussIntegrator.DEFAULT_MIN_ITERATIONS_COUNT..IterativeLegendreGaussIntegrator.DEFAULT_MAX_ITERATIONS_COUNT
 
                 IterativeLegendreGaussIntegrator(
                     numPoints,
                     relativeAccuracy,
                     absoluteAccuracy,
-                    minIterations,
-                    maxIterations
+                    iterations.first,
+                    iterations.last
                 )
             }
     }
@@ -85,14 +75,14 @@ public class CMIntegrator(
 
 @UnstableKMathAPI
 public var MutableList<IntegrandFeature>.targetAbsoluteAccuracy: Double?
-    get() = filterIsInstance<CMIntegrator.TargetAbsoluteAccuracy>().lastOrNull()?.value
+    get() = filterIsInstance<IntegrandAbsoluteAccuracy>().lastOrNull()?.accuracy
     set(value) {
-        value?.let { add(CMIntegrator.TargetAbsoluteAccuracy(value)) }
+        value?.let { add(IntegrandAbsoluteAccuracy(value)) }
     }
 
 @UnstableKMathAPI
 public var MutableList<IntegrandFeature>.targetRelativeAccuracy: Double?
-    get() = filterIsInstance<CMIntegrator.TargetRelativeAccuracy>().lastOrNull()?.value
+    get() = filterIsInstance<IntegrandRelativeAccuracy>().lastOrNull()?.accuracy
     set(value) {
-        value?.let { add(CMIntegrator.TargetRelativeAccuracy(value)) }
+        value?.let { add(IntegrandRelativeAccuracy(value)) }
     }

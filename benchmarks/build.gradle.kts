@@ -9,14 +9,10 @@ sourceSets.register("benchmarks")
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://repo.kotlin.link")
     maven("https://clojars.org/repo")
-    maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-    maven("https://dl.bintray.com/hotkeytlt/maven")
     maven("https://jitpack.io")
-    maven {
-        setUrl("http://logicrunch.research.it.uu.se/maven/")
+    maven("http://logicrunch.research.it.uu.se/maven") {
         isAllowInsecureProtocol = true
     }
 }

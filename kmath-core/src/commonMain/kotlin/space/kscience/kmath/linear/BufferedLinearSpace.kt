@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
@@ -50,6 +51,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
         this
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         return elementAlgebra {
@@ -67,6 +69,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         return elementAlgebra {

@@ -6,6 +6,7 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.invoke
@@ -73,8 +74,9 @@ class NumberNDFieldTest {
         val division = array1.combine(array2, Double::div)
     }
 
-    object L2Norm : Norm<StructureND<out Number>, Double> {
-        override fun norm(arg: StructureND<out Number>): Double =
+    object L2Norm : Norm<StructureND<Number>, Double> {
+        @OptIn(PerformancePitfall::class)
+        override fun norm(arg: StructureND<Number>): Double =
             kotlin.math.sqrt(arg.elements().sumOf { it.second.toDouble() })
     }
 

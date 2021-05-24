@@ -5,10 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.math.max
@@ -19,40 +17,76 @@ import kotlin.math.pow
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public class Polynomial<T : Any>(public val coefficients: List<T>)
+public class Polynomial<T>(public val coefficients: List<T>) {
+    override fun toString(): String = "Polynomial$coefficients"
+}
 
 /**
  * Returns a [Polynomial] instance with given [coefficients].
  */
 @Suppress("FunctionName")
-public fun <T : Any> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
+public fun <T> Polynomial(vararg coefficients: T): Polynomial<T> = Polynomial(coefficients.toList())
 
 /**
  * Evaluates the value of the given double polynomial for given double argument.
  */
-public fun Polynomial<Double>.value(): Double = coefficients.reduceIndexed { index, acc, d -> acc + d.pow(index) }
+public fun Polynomial<Double>.value(arg: Double): Double = coefficients.reduceIndexed { index, acc, c ->
+    acc + c * arg.pow(index)
+}
 
 /**
  * Evaluates the value of the given polynomial for given argument.
+ * https://en.wikipedia.org/wiki/Horner%27s_method
  */
-public fun <T : Any, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring {
+public fun <T, C : Ring<T>> Polynomial<T>.value(ring: C, arg: T): T = ring {
     if (coefficients.isEmpty()) return@ring zero
-    var res = coefficients.first()
-    var powerArg = arg
-
-    for (index in 1 until coefficients.size) {
-        res += coefficients[index] * powerArg
-        // recalculating power on each step to avoid power costs on long polynomials
-        powerArg *= arg
+    var result: T = coefficients.last()
+    for (j in coefficients.size - 2 downTo 0) {
+        result = (arg * result) + coefficients[j]
     }
-
-    res
+    return result
 }
 
 /**
  * Represent the polynomial as a regular context-less function.
  */
-public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = { value(ring, it) }
+public fun <T, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = { value(ring, it) }
+
+/**
+ * Create a polynomial witch represents differentiated version of this polynomial
+ */
+@UnstableKMathAPI
+public fun <T, A> Polynomial<T>.differentiate(
+    algebra: A,
+): Polynomial<T> where  A : Ring<T>, A : NumericAlgebra<T> = algebra {
+    Polynomial(coefficients.drop(1).mapIndexed { index, t -> number(index) * t })
+}
+
+/**
+ * Create a polynomial witch represents indefinite integral version of this polynomial
+ */
+@UnstableKMathAPI
+public fun <T, A> Polynomial<T>.integrate(
+    algebra: A,
+): Polynomial<T> where  A : Field<T>, A : NumericAlgebra<T> = algebra {
+    val integratedCoefficients = buildList<T>(coefficients.size + 1) {
+        add(zero)
+        coefficients.forEachIndexed{ index, t -> add(t / (number(index) + one)) }
+    }
+    Polynomial(integratedCoefficients)
+}
+
+/**
+ * Compute a definite integral of a given polynomial in a [range]
+ */
+@UnstableKMathAPI
+public fun <T : Comparable<T>> Polynomial<T>.integrate(
+    algebra: Field<T>,
+    range: ClosedRange<T>,
+): T = algebra {
+    val integral = integrate(algebra)
+    integral.value(algebra, range.endInclusive) - integral.value(algebra, range.start)
+}
 
 /**
  * Space of polynomials.
@@ -61,7 +95,7 @@ public fun <T : Any, C : Ring<T>> Polynomial<T>.asFunction(ring: C): (T) -> T = 
  * @param C the intersection of [Ring] of [T] and [ScaleOperations] of [T].
  * @param ring the [C] instance.
  */
-public class PolynomialSpace<T : Any, C>(
+public class PolynomialSpace<T, C>(
     private val ring: C,
 ) : Group<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
     public override val zero: Polynomial<T> = Polynomial(emptyList())
@@ -87,9 +121,12 @@ public class PolynomialSpace<T : Any, C>(
      * Evaluates the polynomial for the given value [arg].
      */
     public operator fun Polynomial<T>.invoke(arg: T): T = value(ring, arg)
+
+    public fun Polynomial<T>.asFunction(): (T) -> T = asFunction(ring)
+
 }
 
-public inline fun <T : Any, C, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R where C : Ring<T>, C : ScaleOperations<T> {
+public inline fun <T, C, R> C.polynomial(block: PolynomialSpace<T, C>.() -> R): R where C : Ring<T>, C : ScaleOperations<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return PolynomialSpace(this).block()
 }

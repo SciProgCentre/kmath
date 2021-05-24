@@ -8,9 +8,9 @@ package space.kscience.kmath.wasm.internal
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MST.*
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
-import space.kscience.kmath.misc.StringSymbol
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.internal.binaryen.Module as BinaryenModule
 import space.kscience.kmath.internal.webassembly.Module as WasmModule
@@ -23,20 +23,20 @@ internal sealed class WasmBuilder<T>(
     val algebra: Algebra<T>,
     val target: MST,
 ) where T : Number {
-    val keys: MutableList<String> = mutableListOf()
+    val keys: MutableList<Symbol> = mutableListOf()
     lateinit var ctx: BinaryenModule
 
-    open fun visitSymbolic(mst: MST.Symbolic): ExpressionRef {
+    open fun visitSymbolic(mst: Symbol): ExpressionRef {
         try {
-            algebra.bindSymbol(mst.value)
+            algebra.bindSymbol(mst)
         } catch (ignored: Throwable) {
             null
         }?.let { return visitNumeric(Numeric(it)) }
 
-        var idx = keys.indexOf(mst.value)
+        var idx = keys.indexOf(mst)
 
         if (idx == -1) {
-            keys += mst.value
+            keys += mst
             idx = keys.lastIndex
         }
 
@@ -54,7 +54,7 @@ internal sealed class WasmBuilder<T>(
     open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
 
     fun visit(mst: MST): ExpressionRef = when (mst) {
-        is Symbolic -> visitSymbolic(mst)
+        is Symbol -> visitSymbolic(mst)
         is Numeric -> visitNumeric(mst)
 
         is Unary -> when {
@@ -96,7 +96,7 @@ internal sealed class WasmBuilder<T>(
         })
 
         val i = Instance(c, js("{}") as Any)
-        val symbols = keys.map(::StringSymbol)
+        val symbols = keys
         keys.clear()
 
         Expression<T> { args ->

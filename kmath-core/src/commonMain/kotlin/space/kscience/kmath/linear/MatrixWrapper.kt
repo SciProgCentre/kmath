@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public class MatrixWrapper<T : Any> internal constructor(
+public class MatrixWrapper<out T : Any> internal constructor(
     public val origin: Matrix<T>,
     public val features: Set<MatrixFeature>,
 ) : Matrix<T> by origin {
@@ -26,12 +26,11 @@ public class MatrixWrapper<T : Any> internal constructor(
      */
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
-    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = features.singleOrNull { type.isInstance(it) } as? F
-        ?: origin.getFeature(type)
+    public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
+        features.singleOrNull(type::isInstance) as? F
+            ?: origin.getFeature(type)
 
-    override fun toString(): String {
-        return "MatrixWrapper(matrix=$origin, features=$features)"
-    }
+    public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
 
 /**
@@ -82,7 +81,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
     elementAlgebra.zero
 } + ZeroFeature
 
-public class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
+public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : MatrixFeature
 
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`

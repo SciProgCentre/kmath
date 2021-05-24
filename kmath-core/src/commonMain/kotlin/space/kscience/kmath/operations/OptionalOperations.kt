@@ -80,36 +80,42 @@ public interface TrigonometricOperations<T> : Algebra<T> {
  * Computes the sine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
 
 /**
  * Computes the cosine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
 
 /**
  * Computes the tangent of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> tan(arg: T): T = arg.context.tan(arg)
 
 /**
  * Computes the inverse sine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> asin(arg: T): T = arg.context.asin(arg)
 
 /**
  * Computes the inverse cosine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> acos(arg: T): T = arg.context.acos(arg)
 
 /**
  * Computes the inverse tangent of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
 
 /**
@@ -147,25 +153,28 @@ public interface PowerOperations<T> : Algebra<T> {
 }
 
 /**
- * Raises this element to the power [pow].
+ * Raises this element to the power [power].
  *
  * @receiver the base.
  * @param power the exponent.
  * @return the base raised to the power.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public infix fun <T : AlgebraElement<T, out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
 
 /**
  * Computes the square root of the value [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
 
 /**
  * Computes the square of the value [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /**
@@ -261,12 +270,14 @@ public interface ExponentialOperations<T> : Algebra<T> {
  * The identifier of exponential function.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
 
 /**
  * The identifier of natural logarithm.
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
 
 
@@ -280,30 +291,35 @@ public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> sinh(arg: T): T
  * Computes the hyperbolic cosine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
 
 /**
  * Computes the hyperbolic tangent of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
 
 /**
  * Computes the inverse hyperbolic sine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
 
 /**
  * Computes the inverse hyperbolic cosine of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
 
 /**
  * Computes the inverse hyperbolic tangent of [arg].
  */
 @UnstableKMathAPI
+@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
 public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
 
 /**

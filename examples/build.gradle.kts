@@ -4,14 +4,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://repo.kotlin.link")
     maven("https://clojars.org/repo")
-    maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-    maven("https://dl.bintray.com/hotkeytlt/maven")
     maven("https://jitpack.io")
-    maven{
-        setUrl("http://logicrunch.research.it.uu.se/maven/")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
+    maven("http://logicrunch.research.it.uu.se/maven") {
         isAllowInsecureProtocol = true
     }
 }
@@ -28,6 +25,7 @@ dependencies {
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
     implementation(project(":kmath-nd4j"))
+    implementation(project(":kmath-tensors"))
 
     implementation(project(":kmath-for-real"))
 
@@ -45,7 +43,7 @@ dependencies {
 
     implementation("org.slf4j:slf4j-simple:1.7.30")
     // plotting
-    implementation("space.kscience:plotlykt-server:0.4.0-dev-2")
+    implementation("space.kscience:plotlykt-server:0.4.0")
 }
 
 kotlin.sourceSets.all {
@@ -59,7 +57,7 @@ kotlin.sourceSets.all {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions{
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 

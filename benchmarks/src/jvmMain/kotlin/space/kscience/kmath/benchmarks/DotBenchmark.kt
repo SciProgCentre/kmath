@@ -10,7 +10,7 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
-import space.kscience.kmath.ejml.EjmlLinearSpace
+import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.operations.DoubleField
@@ -29,8 +29,8 @@ internal class DotBenchmark {
         val cmMatrix1 = CMLinearSpace { matrix1.toCM() }
         val cmMatrix2 = CMLinearSpace { matrix2.toCM() }
 
-        val ejmlMatrix1 = EjmlLinearSpace { matrix1.toEjml() }
-        val ejmlMatrix2 = EjmlLinearSpace { matrix2.toEjml() }
+        val ejmlMatrix1 = EjmlLinearSpaceDDRM { matrix1.toEjml() }
+        val ejmlMatrix2 = EjmlLinearSpaceDDRM { matrix2.toEjml() }
     }
 
     @Benchmark
@@ -42,14 +42,14 @@ internal class DotBenchmark {
 
     @Benchmark
     fun ejmlDot(blackhole: Blackhole) {
-        EjmlLinearSpace {
+        EjmlLinearSpaceDDRM {
             blackhole.consume(ejmlMatrix1 dot ejmlMatrix2)
         }
     }
 
     @Benchmark
     fun ejmlDotWithConversion(blackhole: Blackhole) {
-        EjmlLinearSpace {
+        EjmlLinearSpaceDDRM {
             blackhole.consume(matrix1 dot matrix2)
         }
     }

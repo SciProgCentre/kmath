@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.Ring
 
 /**
@@ -22,16 +23,54 @@ public fun interface Piecewise<T, R> {
 
 /**
  * Represents piecewise-defined function where all the sub-functions are polynomials.
+ * @param pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no "holes" in it.
  */
-public fun interface PiecewisePolynomial<T : Any> : Piecewise<T, Polynomial<T>>
+public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomial<T>> {
+    public val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>
+
+    public override fun findPiece(arg: T): Polynomial<T>?
+}
 
 /**
- * Basic [Piecewise] implementation where all the pieces are ordered by the [Comparable] type instances.
+ * A generic piecewise without constraints on how pieces are placed
+ */
+@PerformancePitfall("findPiece method of resulting piecewise is slow")
+public fun <T : Comparable<T>> PiecewisePolynomial(
+    pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>,
+): PiecewisePolynomial<T> = object : PiecewisePolynomial<T> {
+    override val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>> = pieces
+
+    override fun findPiece(arg: T): Polynomial<T>? = pieces.firstOrNull { arg in it.first }?.second
+}
+
+/**
+ * An optimized piecewise which uses not separate pieces, but a range separated by delimiters.
+ * The pices search is logarithmic
+ */
+private class OrderedPiecewisePolynomial<T : Comparable<T>>(
+    override val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
+) : PiecewisePolynomial<T> {
+
+    override fun findPiece(arg: T): Polynomial<T>? {
+        val index = pieces.binarySearch { (range, _) ->
+            when {
+                arg >= range.endInclusive -> -1
+                arg < range.start -> +1
+                else -> 0
+            }
+        }
+        return if (index < 0) null else pieces[index].second
+    }
+
+}
+
+/**
+ * A [Piecewise]  builder where all the pieces are ordered by the [Comparable] type instances.
  *
  * @param T the comparable piece key type.
+ * @param delimiter the initial piecewise separator
  */
-public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
-    PiecewisePolynomial<T> {
+public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
     private val delimiters: MutableList<T> = arrayListOf(delimiter)
     private val pieces: MutableList<Polynomial<T>> = arrayListOf()
 
@@ -59,18 +98,18 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
         pieces.add(0, piece)
     }
 
-    public override fun findPiece(arg: T): Polynomial<T>? {
-        if (arg < delimiters.first() || arg >= delimiters.last())
-            return null
-        else {
-            for (index in 1 until delimiters.size)
-                if (arg < delimiters[index])
-                    return pieces[index - 1]
-
-            error("Piece not found")
-        }
-    }
+    public fun build(): PiecewisePolynomial<T> = OrderedPiecewisePolynomial(delimiters.zipWithNext { l, r ->
+        l..r
+    }.zip(pieces))
 }
+
+/**
+ * A builder for [PiecewisePolynomial]
+ */
+public fun <T : Comparable<T>> PiecewisePolynomial(
+    startingPoint: T,
+    builder: PiecewiseBuilder<T>.() -> Unit,
+): PiecewisePolynomial<T> = PiecewiseBuilder(startingPoint).apply(builder).build()
 
 /**
  * Return a value of polynomial function with given [ring] an given [arg] or null if argument is outside of piecewise
@@ -79,4 +118,13 @@ public class OrderedPiecewisePolynomial<T : Comparable<T>>(delimiter: T) :
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
     findPiece(arg)?.value(ring, arg)
 
+/**
+ * Convert this polynomial to a function returning nullable value (null if argument is outside piecewise range).
+ */
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }
+
+/**
+ * Convert this polynomial to a function using [defaultValue] for arguments outside the piecewise range.
+ */
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C, defaultValue: T): (T) -> T =
+    { value(ring, it) ?: defaultValue }

@@ -164,4 +164,6 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
     }
 
     override fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> = getOrBuildRule(numPoints)
+
+    override fun toString(): String = "GaussLegendreRule"
 }

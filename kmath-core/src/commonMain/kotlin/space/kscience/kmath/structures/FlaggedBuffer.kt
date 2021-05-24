@@ -37,7 +37,7 @@ public enum class ValueFlag(public val mask: Byte) {
 /**
  * A buffer with flagged values.
  */
-public interface FlaggedBuffer<T> : Buffer<T> {
+public interface FlaggedBuffer<out T> : Buffer<T> {
     public fun getFlag(index: Int): Byte
 }
 

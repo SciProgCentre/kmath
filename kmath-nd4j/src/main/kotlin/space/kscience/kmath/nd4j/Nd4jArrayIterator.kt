@@ -48,12 +48,6 @@ private class Nd4jArrayDoubleIterator(iterateOver: INDArray) : Nd4jArrayIterator
 
 internal fun INDArray.realIterator(): Iterator<Pair<IntArray, Double>> = Nd4jArrayDoubleIterator(this)
 
-private class Nd4jArrayLongIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Long>(iterateOver) {
-    override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)
-}
-
-internal fun INDArray.longIterator(): Iterator<Pair<IntArray, Long>> = Nd4jArrayLongIterator(this)
-
 private class Nd4jArrayIntIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Int>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getInt(*indices.toIntArray())
 }

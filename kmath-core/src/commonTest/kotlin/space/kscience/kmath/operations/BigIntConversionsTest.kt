@@ -7,13 +7,41 @@ package space.kscience.kmath.operations
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @kotlin.ExperimentalUnsignedTypes
 class BigIntConversionsTest {
+
+    @Test
+    fun testEmptyString() {
+        assertNull("".parseBigInteger())
+        assertNull("+".parseBigInteger())
+        assertNull("-".parseBigInteger())
+
+        assertNull("0x".parseBigInteger())
+        assertNull("+0x".parseBigInteger())
+        assertNull("-0x".parseBigInteger())
+
+
+        assertNull("_".parseBigInteger())
+        assertNull("+_".parseBigInteger())
+        assertNull("-_".parseBigInteger())
+
+        assertNull("0x_".parseBigInteger())
+        assertNull("+0x_".parseBigInteger())
+        assertNull("-0x_".parseBigInteger())
+    }
+
     @Test
     fun testToString0x10() {
         val x = 0x10.toBigInt()
         assertEquals("0x10", x.toString())
+    }
+
+    @Test
+    fun testUnderscores() {
+        assertEquals("0x10", "0x_1_0_".parseBigInteger().toString())
+        assertEquals("0xa", "_1_0_".parseBigInteger().toString())
     }
 
     @Test

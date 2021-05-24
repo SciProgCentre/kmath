@@ -15,24 +15,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Cache gradle
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ubuntu-20.04-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ubuntu-20.04-gradle-
-      - name: Cache konan
-        uses: actions/cache@v2
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Build
-        run: |
-          ./gradlew dokkaHtmlMultiModule --no-daemon --no-parallel --stacktrace
-          mv build/dokka/htmlMultiModule/-modules.html build/dokka/htmlMultiModule/index.html
+        run: ./gradlew dokkaHtmlMultiModule --no-daemon --no-parallel --stacktrace
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:

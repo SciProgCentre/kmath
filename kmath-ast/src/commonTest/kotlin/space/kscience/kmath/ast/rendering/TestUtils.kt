@@ -30,17 +30,17 @@ internal object TestUtils {
     )
 
     internal fun testMathML(mst: MST, expectedMathML: String) = assertEquals(
-        expected = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
+        expected = "<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
         actual = mathML(mst),
     )
 
     internal fun testMathML(expression: String, expectedMathML: String) = assertEquals(
-        expected = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
+        expected = "<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
         actual = mathML(expression.parseMath()),
     )
 
     internal fun testMathML(expression: MathSyntax, expectedMathML: String) = assertEquals(
-        expected = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
+        expected = "<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>$expectedMathML</mrow></math>",
         actual = MathMLSyntaxRenderer.renderWithStringBuilder(expression),
     )
 }

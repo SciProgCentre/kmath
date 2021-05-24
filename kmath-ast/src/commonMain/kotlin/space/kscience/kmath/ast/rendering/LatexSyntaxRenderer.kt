@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.misc.UnstableKMathAPI
+
 /**
  * [SyntaxRenderer] implementation for LaTeX.
  *
@@ -23,6 +25,7 @@ package space.kscience.kmath.ast.rendering
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public object LatexSyntaxRenderer : SyntaxRenderer {
     public override fun render(node: MathSyntax, output: Appendable): Unit = output.run {
         fun render(syntax: MathSyntax) = render(syntax, output)
@@ -115,7 +118,11 @@ public object LatexSyntaxRenderer : SyntaxRenderer {
                 render(node.right)
             }
 
-            is FractionSyntax -> {
+            is FractionSyntax -> if (node.infix) {
+                render(node.left)
+                append('/')
+                render(node.right)
+            } else {
                 append("\\frac{")
                 render(node.left)
                 append("}{")
