@@ -17,7 +17,7 @@ import space.kscience.kmath.nd.StructureND
  */
 public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
     /**
-     * The wrapped [INDArray]. Since KMath uses [Int] indexes, assuming the size of [INDArray] is less or equal to
+     * The wrapped [INDArray]. Since KMath uses [Int] indices, assuming the size of [INDArray] is less or equal to
      * [Int.MAX_VALUE].
      */
     public abstract val ndArray: INDArray
