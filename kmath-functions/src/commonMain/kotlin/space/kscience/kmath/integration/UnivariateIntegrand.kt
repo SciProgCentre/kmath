@@ -8,19 +8,20 @@ package space.kscience.kmath.integration
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
-import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 public class UnivariateIntegrand<T> internal constructor(
-    private val features: Map<KClass<*>, IntegrandFeature>,
+    private val featureMap: Map<KClass<*>, IntegrandFeature>,
     public val function: (Double) -> T,
 ) : Integrand {
 
+    override val features: Set<IntegrandFeature> get() = featureMap.values.toSet()
+
     @Suppress("UNCHECKED_CAST")
-    override fun <T : IntegrandFeature> getFeature(type: KClass<T>): T? = features[type] as? T
+    override fun <T : IntegrandFeature> getFeature(type: KClass<T>): T? = featureMap[type] as? T
 
     public operator fun <F : IntegrandFeature> plus(pair: Pair<KClass<out F>, F>): UnivariateIntegrand<T> =
-        UnivariateIntegrand(features + pair, function)
+        UnivariateIntegrand(featureMap + pair, function)
 
     public operator fun <F : IntegrandFeature> plus(feature: F): UnivariateIntegrand<T> =
         plus(feature::class to feature)
@@ -34,8 +35,9 @@ public fun <T : Any> UnivariateIntegrand(
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
-@JvmInline
-public value class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature
+public class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature {
+    override fun toString(): String = "Range(${range.start}..${range.endInclusive})"
+}
 
 /**
  * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
@@ -43,10 +45,19 @@ public value class IntegrationRange(public val range: ClosedRange<Double>) : Int
  */
 public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
     public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
+
+    override fun toString(): String {
+        val rangesString = ranges.joinToString(separator = ",") { (range, points) ->
+            "${range.start}..${range.endInclusive} : $points"
+        }
+        return "UnivariateRanges($rangesString)"
+    }
 }
 
 public class UnivariateIntegrationNodes(public val nodes: Buffer<Double>) : IntegrandFeature {
     public constructor(vararg nodes: Double) : this(DoubleBuffer(nodes))
+
+    override fun toString(): String = "UnivariateNodes($nodes)"
 }
 
 
@@ -65,7 +76,7 @@ public val <T : Any> UnivariateIntegrand<T>.value: T get() = valueOrNull ?: erro
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T: Any> UnivariateIntegrator<T>.integrate(
+public fun <T : Any> UnivariateIntegrator<T>.integrate(
     vararg features: IntegrandFeature,
     function: (Double) -> T,
 ): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(function, *features))
@@ -75,7 +86,7 @@ public fun <T: Any> UnivariateIntegrator<T>.integrate(
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T: Any> UnivariateIntegrator<T>.integrate(
+public fun <T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     vararg features: IntegrandFeature,
     function: (Double) -> T,
@@ -86,7 +97,7 @@ public fun <T: Any> UnivariateIntegrator<T>.integrate(
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T: Any> UnivariateIntegrator<T>.integrate(
+public fun <T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     featureBuilder: MutableList<IntegrandFeature>.() -> Unit = {},
     function: (Double) -> T,
