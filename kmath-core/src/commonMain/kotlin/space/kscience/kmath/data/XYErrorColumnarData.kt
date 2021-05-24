@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.data
 
-import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.misc.Symbol.Companion.z
+import space.kscience.kmath.data.XYErrorColumnarData.Companion
+import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.structures.Buffer
 
 

@@ -43,7 +43,7 @@ public class SimpsonIntegrator<T : Any>(
         return res
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
+    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
         val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
         return if (ranges != null) {
             val res = algebra.sum(ranges.ranges.map { integrateRange(integrand, it.first, it.second) })
@@ -89,7 +89,7 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
         return res
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }

@@ -7,12 +7,8 @@ package space.kscience.kmath.optimization.qow
 
 import space.kscience.kmath.data.ColumnarData
 import space.kscience.kmath.data.XYErrorColumnarData
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.SymbolIndexer
-import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field

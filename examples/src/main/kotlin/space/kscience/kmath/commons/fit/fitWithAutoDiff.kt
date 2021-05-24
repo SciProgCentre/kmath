@@ -8,7 +8,6 @@ package space.kscience.kmath.commons.fit
 import kotlinx.html.br
 import kotlinx.html.h3
 import space.kscience.kmath.commons.optimization.chiSquared
-import space.kscience.kmath.commons.optimization.minimize
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.optimization.FunctionOptimization

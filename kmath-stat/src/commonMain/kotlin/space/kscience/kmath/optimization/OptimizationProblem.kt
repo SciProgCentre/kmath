@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.Loggable
-import space.kscience.kmath.misc.Symbol
 import kotlin.reflect.KClass
 
-public interface OptimizationFeature
+public interface OptimizationFeature {
+    override fun toString(): String
+}
 
 public interface OptimizationProblem : Featured<OptimizationFeature> {
     public val features: FeatureSet<OptimizationFeature>
@@ -20,31 +22,22 @@ public interface OptimizationProblem : Featured<OptimizationFeature> {
 
 public inline fun <reified T : OptimizationFeature> OptimizationProblem.getFeature(): T? = getFeature(T::class)
 
-public open class OptimizationResult<T>(public val point: Map<Symbol, T>) : OptimizationFeature
+public open class OptimizationStartPoint<T>(public val point: Map<Symbol, T>) : OptimizationFeature {
+    override fun toString(): String = "StartPoint($point)"
+}
 
-public class OptimizationLog(private val loggable: Loggable) : Loggable by loggable, OptimizationFeature
+public open class OptimizationResult<T>(public val point: Map<Symbol, T>) : OptimizationFeature {
+    override fun toString(): String = "Result($point)"
+}
 
-//public class OptimizationResult<T>(
-//    public val point: Map<Symbol, T>,
-//    public val value: T,
-//    public val features: Set<OptimizationFeature> = emptySet(),
-//) {
-//    override fun toString(): String {
-//        return "OptimizationResult(point=$point, value=$value)"
-//    }
-//}
-//
-//public operator fun <T> OptimizationResult<T>.plus(
-//    feature: OptimizationFeature,
-//): OptimizationResult<T> = OptimizationResult(point, value, features + feature)
-//public fun interface OptimizationProblemFactory<T : Any, out P : OptimizationProblem<T>> {
-//    public fun build(symbols: List<Symbol>): P
-//}
-//
-//public operator fun <T : Any, P : OptimizationProblem<T>> OptimizationProblemFactory<T, P>.invoke(
-//    symbols: List<Symbol>,
-//    block: P.() -> Unit,
-//): P = build(symbols).apply(block)
+public class OptimizationLog(private val loggable: Loggable) : Loggable by loggable, OptimizationFeature {
+    override fun toString(): String = "Log($loggable)"
+}
+
+public class OptimizationParameters(public val symbols: List<Symbol>): OptimizationFeature{
+    override fun toString(): String = "Parameters($symbols)"
+}
+
 
 public interface Optimizer<P : OptimizationProblem> {
     public suspend fun process(problem: P): P

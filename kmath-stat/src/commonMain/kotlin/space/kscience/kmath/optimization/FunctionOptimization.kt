@@ -10,12 +10,13 @@ import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.ExpressionAlgebra
 import space.kscience.kmath.misc.FeatureSet
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 
-public class FunctionOptimizationResult<T>(point: Map<Symbol, T>, public val value: T) : OptimizationResult<T>(point)
+public class OptimizationValue<T>(public val value: T) : OptimizationFeature{
+    override fun toString(): String = "Value($value)"
+}
 
 public enum class FunctionOptimizationTarget : OptimizationFeature {
     MAXIMIZE,
@@ -25,9 +26,8 @@ public enum class FunctionOptimizationTarget : OptimizationFeature {
 public class FunctionOptimization<T>(
     override val features: FeatureSet<OptimizationFeature>,
     public val expression: DifferentiableExpression<T, Expression<T>>,
-    public val initialGuess: Map<Symbol, T>,
-    public val parameters: Collection<Symbol>,
 ) : OptimizationProblem{
+
     public companion object{
         /**
          * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
@@ -65,7 +65,5 @@ public fun <T> FunctionOptimization<T>.withFeatures(
 ): FunctionOptimization<T> = FunctionOptimization(
     features.with(*newFeature),
     expression,
-    initialGuess,
-    parameters
 )
 

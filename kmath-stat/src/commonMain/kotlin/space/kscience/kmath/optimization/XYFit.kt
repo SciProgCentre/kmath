@@ -10,8 +10,6 @@ import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.indices
 
 @UnstableKMathAPI
 public interface XYFit<T> : OptimizationProblem {
@@ -59,15 +57,16 @@ public interface XYFit<T> : OptimizationProblem {
 //}
 
 /**
- * Optimize differentiable expression using specific [OptimizationProblemFactory]
+ * Optimize differentiable expression using specific [Optimizer]
  */
 public suspend fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T, Expression<T>>.optimizeWith(
-    factory: OptimizationProblemFactory<T, F>,
-    vararg symbols: Symbol,
-    configuration: F.() -> Unit,
-): OptimizationResult<T> {
-    require(symbols.isNotEmpty()) { "Must provide a list of symbols for optimization" }
-    val problem = factory(symbols.toList(), configuration)
-    problem.function(this)
-    return problem.optimize()
+    optimizer: Optimizer<F>,
+    startingPoint: Map<Symbol,T>,
+    vararg features: OptimizationFeature
+): OptimizationProblem {
+//    require(startingPoint.isNotEmpty()) { "Must provide a list of symbols for optimization" }
+//    val problem = factory(symbols.toList(), configuration)
+//    problem.function(this)
+//    return problem.optimize()
+    val problem = FunctionOptimization<T>()
 }
