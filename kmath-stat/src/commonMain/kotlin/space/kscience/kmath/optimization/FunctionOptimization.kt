@@ -22,7 +22,7 @@ public enum class FunctionOptimizationTarget : OptimizationFeature {
 
 public class FunctionOptimization<T>(
     override val features: FeatureSet<OptimizationFeature>,
-    public val expression: DifferentiableExpression<T, Expression<T>>,
+    public val expression: DifferentiableExpression<T>,
 ) : OptimizationProblem{
 
     public companion object{
@@ -35,7 +35,7 @@ public class FunctionOptimization<T>(
             y: Buffer<T>,
             yErr: Buffer<T>,
             model: A.(I) -> I,
-        ): DifferentiableExpression<T, Expression<T>> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
+        ): DifferentiableExpression<T> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
             require(x.size == y.size) { "X and y buffers should be of the same size" }
             require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
 

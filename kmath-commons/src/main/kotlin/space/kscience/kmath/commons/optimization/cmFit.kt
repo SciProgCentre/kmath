@@ -22,7 +22,7 @@ public fun FunctionOptimization.Companion.chiSquaredExpression(
     y: Buffer<Double>,
     yErr: Buffer<Double>,
     model: DerivativeStructureField.(x: DerivativeStructure) -> DerivativeStructure,
-): DifferentiableExpression<Double, Expression<Double>> = chiSquaredExpression(DerivativeStructureField, x, y, yErr, model)
+): DifferentiableExpression<Double> = chiSquaredExpression(DerivativeStructureField, x, y, yErr, model)
 
 /**
  * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
@@ -32,7 +32,7 @@ public fun FunctionOptimization.Companion.chiSquaredExpression(
     y: Iterable<Double>,
     yErr: Iterable<Double>,
     model: DerivativeStructureField.(x: DerivativeStructure) -> DerivativeStructure,
-): DifferentiableExpression<Double, Expression<Double>> = chiSquaredExpression(
+): DifferentiableExpression<Double> = chiSquaredExpression(
     DerivativeStructureField,
     x.toList().asBuffer(),
     y.toList().asBuffer(),
@@ -56,12 +56,12 @@ public suspend fun Expression<Double>.optimize(
 /**
  * Optimize differentiable expression
  */
-public suspend fun DifferentiableExpression<Double, Expression<Double>>.optimize(
+public suspend fun DifferentiableExpression<Double>.optimize(
     vararg symbols: Symbol,
     configuration: CMOptimization.() -> Unit,
 ): OptimizationResult<Double> = optimizeWith(CMOptimization, symbols = symbols, configuration)
 
-public suspend fun DifferentiableExpression<Double, Expression<Double>>.minimize(
+public suspend fun DifferentiableExpression<Double>.minimize(
     vararg startPoint: Pair<Symbol, Double>,
     configuration: CMOptimization.() -> Unit = {},
 ): OptimizationResult<Double> {

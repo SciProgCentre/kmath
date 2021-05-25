@@ -45,6 +45,7 @@
 - MSTExpression
 - Expression algebra builders
 - Complex and Quaternion no longer are elements.
+- Second generic from DifferentiableExpression
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

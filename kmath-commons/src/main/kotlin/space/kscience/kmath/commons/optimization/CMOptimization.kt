@@ -15,6 +15,7 @@ import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.withSymbols
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.optimization.*
+import kotlin.collections.set
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point
