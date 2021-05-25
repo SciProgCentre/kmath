@@ -12,38 +12,62 @@ import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
+import kotlin.math.pow
 
-public fun interface PointToCurveDistance<T> {
-    public fun distance(problem: XYOptimization<T>, index: Int): DifferentiableExpression<T, Expression<T>>
+public interface PointToCurveDistance : OptimizationFeature {
+    public fun distance(problem: XYOptimization, index: Int): DifferentiableExpression<Double>
 
     public companion object {
-        public fun <T> byY(
-            algebra: Field<T>,
-        ): PointToCurveDistance<T> = PointToCurveDistance { problem, index ->
-            algebra {
+        public val byY: PointToCurveDistance = object : PointToCurveDistance {
+            override fun distance(problem: XYOptimization, index: Int): DifferentiableExpression<Double> {
+
                 val x = problem.data.x[index]
                 val y = problem.data.y[index]
-                
-                val model = problem.model(args + (Symbol.x to x))
-                model - y
+                return object : DifferentiableExpression<Double> {
+                    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double>? =
+                        problem.model.derivativeOrNull(symbols)
+
+                    override fun invoke(arguments: Map<Symbol, Double>): Double =
+                        problem.model(arguments + (Symbol.x to x)) - y
+                }
             }
+
+            override fun toString(): String = "PointToCurveDistanceByY"
+
         }
 
-
-//        val default = PointToCurveDistance<Double>{args, data, index ->
-//
-//        }
     }
 }
 
-
-public class XYOptimization<T>(
+public class XYOptimization(
     override val features: FeatureSet<OptimizationFeature>,
-    public val data: XYColumnarData<T, T, T>,
-    public val model: DifferentiableExpression<T, Expression<T>>,
+    public val data: XYColumnarData<Double, Double, Double>,
+    public val model: DifferentiableExpression<Double>,
 ) : OptimizationProblem
+
+
+public suspend fun Optimizer<FunctionOptimization<Double>>.maximumLogLikelihood(problem: XYOptimization): XYOptimization {
+    val distanceBuilder = problem.getFeature() ?: PointToCurveDistance.byY
+    val likelihood: DifferentiableExpression<Double> = object : DifferentiableExpression<Double> {
+        override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double>? {
+            TODO("Not yet implemented")
+        }
+
+        override fun invoke(arguments: Map<Symbol, Double>): Double {
+            var res = 0.0
+            for (index in 0 until problem.data.size) {
+                val d = distanceBuilder.distance(problem, index).invoke(arguments)
+                val sigma: Double = TODO()
+                res -= (d / sigma).pow(2)
+            }
+            return res
+        }
+
+    }
+    val functionOptimization = FunctionOptimization(problem.features, likelihood)
+    val result = optimize(functionOptimization)
+    return XYOptimization(result.features, problem.data, problem.model)
+}
 
 //
 //@UnstableKMathAPI

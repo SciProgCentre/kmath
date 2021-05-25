@@ -67,12 +67,12 @@ public fun <T> FunctionOptimization<T>.withFeatures(
 /**
  * Optimize differentiable expression using specific [optimizer] form given [startingPoint]
  */
-public suspend fun <T : Any> DifferentiableExpression<T, Expression<T>>.optimizeWith(
+public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
     optimizer: Optimizer<FunctionOptimization<T>>,
     startingPoint: Map<Symbol, T>,
     vararg features: OptimizationFeature,
 ): FunctionOptimization<T> {
     val problem = FunctionOptimization<T>(FeatureSet.of(OptimizationStartPoint(startingPoint), *features), this)
-    return optimizer.process(problem)
+    return optimizer.optimize(problem)
 }
 

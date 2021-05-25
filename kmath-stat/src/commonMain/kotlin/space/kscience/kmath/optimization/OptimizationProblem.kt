@@ -40,7 +40,3 @@ public class OptimizationParameters(public val symbols: List<Symbol>): Optimizat
 }
 
 
-public interface Optimizer<P : OptimizationProblem> {
-    public suspend fun process(problem: P): P
-}
-

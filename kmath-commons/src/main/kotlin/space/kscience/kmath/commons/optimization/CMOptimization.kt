@@ -35,7 +35,7 @@ public class CMOptimizerData(public val data: List<OptimizationData>) : Optimiza
 @OptIn(UnstableKMathAPI::class)
 public class CMOptimization : Optimizer<FunctionOptimization<Double>> {
 
-    override suspend fun process(
+    override suspend fun optimize(
         problem: FunctionOptimization<Double>,
     ): FunctionOptimization<Double> {
         val startPoint = problem.getFeature<OptimizationStartPoint<Double>>()?.point
