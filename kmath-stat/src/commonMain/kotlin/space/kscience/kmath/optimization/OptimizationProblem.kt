@@ -35,6 +35,7 @@ public class OptimizationLog(private val loggable: Loggable) : Loggable by logga
 }
 
 public class OptimizationParameters(public val symbols: List<Symbol>): OptimizationFeature{
+    public constructor(vararg symbols: Symbol) : this(listOf(*symbols))
     override fun toString(): String = "Parameters($symbols)"
 }
 

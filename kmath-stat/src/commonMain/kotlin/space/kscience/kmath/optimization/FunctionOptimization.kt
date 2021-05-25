@@ -5,10 +5,7 @@
 
 package space.kscience.kmath.optimization
 
-import space.kscience.kmath.expressions.AutoDiffProcessor
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.ExpressionAlgebra
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.structures.Buffer
@@ -66,4 +63,16 @@ public fun <T> FunctionOptimization<T>.withFeatures(
     features.with(*newFeature),
     expression,
 )
+
+/**
+ * Optimize differentiable expression using specific [optimizer] form given [startingPoint]
+ */
+public suspend fun <T : Any> DifferentiableExpression<T, Expression<T>>.optimizeWith(
+    optimizer: Optimizer<FunctionOptimization<T>>,
+    startingPoint: Map<Symbol, T>,
+    vararg features: OptimizationFeature,
+): FunctionOptimization<T> {
+    val problem = FunctionOptimization<T>(FeatureSet.of(OptimizationStartPoint(startingPoint), *features), this)
+    return optimizer.process(problem)
+}
 

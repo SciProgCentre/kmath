@@ -15,7 +15,7 @@ import space.kscience.kmath.operations.Field
 import space.kscience.kmath.optimization.OptimizationFeature
 import space.kscience.kmath.optimization.OptimizationProblemFactory
 import space.kscience.kmath.optimization.OptimizationResult
-import space.kscience.kmath.optimization.XYFit
+import space.kscience.kmath.optimization.XYOptimization
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.DoubleL2Norm
 import kotlin.math.pow
@@ -28,7 +28,7 @@ public class QowFit(
     override val symbols: List<Symbol>,
     private val space: LinearSpace<Double, DoubleField>,
     private val solver: LinearSolver<Double>,
-) : XYFit<Double>, SymbolIndexer {
+) : XYOptimization<Double>, SymbolIndexer {
 
     private var logger: FitLogger? = null
 

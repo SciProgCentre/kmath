@@ -45,6 +45,27 @@ public fun <T, X : T, Y : T> XYColumnarData(x: Buffer<X>, y: Buffer<Y>): XYColum
     }
 }
 
+/**
+ * Represent a [ColumnarData] as an [XYColumnarData]. The presence or respective columns is checked on creation.
+ */
+@UnstableKMathAPI
+public fun <T> ColumnarData<T>.asXYData(
+    xSymbol: Symbol,
+    ySymbol: Symbol,
+): XYColumnarData<T, T, T> = object : XYColumnarData<T, T, T> {
+    init {
+        requireNotNull(this@asXYData[xSymbol]){"The column with name $xSymbol is not present in $this"}
+        requireNotNull(this@asXYData[ySymbol]){"The column with name $ySymbol is not present in $this"}
+    }
+    override val size: Int get() = this@asXYData.size
+    override val x: Buffer<T> get() = this@asXYData[xSymbol]!!
+    override val y: Buffer<T> get() = this@asXYData[ySymbol]!!
+    override fun get(symbol: Symbol): Buffer<T>? = when (symbol) {
+        Symbol.x -> x
+        Symbol.y -> y
+        else -> this@asXYData.get(symbol)
+    }
+}
 
 /**
  * A zero-copy method to represent a [Structure2D] as a two-column x-y data.
