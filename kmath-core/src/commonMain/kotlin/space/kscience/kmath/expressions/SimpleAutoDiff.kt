@@ -232,7 +232,7 @@ public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
 public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
     public val field: F,
     public val function: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
-) : FirstDerivativeExpression<T, Expression<T>>() {
+) : FirstDerivativeExpression<T>() {
     public override operator fun invoke(arguments: Map<Symbol, T>): T {
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         return SimpleAutoDiffField(field, arguments).function().value

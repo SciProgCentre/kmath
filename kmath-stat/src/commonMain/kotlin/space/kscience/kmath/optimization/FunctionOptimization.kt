@@ -27,7 +27,7 @@ public interface FunctionOptimization<T : Any> : Optimization<T> {
     /**
      * Set a differentiable expression as objective function as function and gradient provider
      */
-    public fun diffFunction(expression: DifferentiableExpression<T, Expression<T>>)
+    public fun diffFunction(expression: DifferentiableExpression<T>)
 
     public companion object {
         /**
@@ -39,7 +39,7 @@ public interface FunctionOptimization<T : Any> : Optimization<T> {
             y: Buffer<T>,
             yErr: Buffer<T>,
             model: A.(I) -> I,
-        ): DifferentiableExpression<T, Expression<T>> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
+        ): DifferentiableExpression<T> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
             require(x.size == y.size) { "X and y buffers should be of the same size" }
             require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
 
@@ -78,7 +78,7 @@ public fun <T: Any, I : Any, A> FunctionOptimization<T>.chiSquared(
 /**
  * Optimize differentiable expression using specific [OptimizationProblemFactory]
  */
-public fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T, Expression<T>>.optimizeWith(
+public fun <T : Any, F : FunctionOptimization<T>> DifferentiableExpression<T>.optimizeWith(
     factory: OptimizationProblemFactory<T, F>,
     vararg symbols: Symbol,
     configuration: F.() -> Unit,

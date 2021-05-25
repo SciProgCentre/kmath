@@ -27,7 +27,7 @@ public interface XYFit<T : Any> : Optimization<T> {
         yErrSymbol: Symbol? = null,
     )
 
-    public fun model(model: (T) -> DifferentiableExpression<T, *>)
+    public fun model(model: (T) -> DifferentiableExpression<T>)
 
     /**
      * Set the differentiable model for this fit

@@ -17,14 +17,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.optimization.*
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
-import kotlin.collections.setOf
-import kotlin.collections.toList
-import kotlin.collections.toMap
-import kotlin.collections.toTypedArray
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point
@@ -71,7 +64,7 @@ public class CMOptimization(
         addOptimizationData(objectiveFunction)
     }
 
-    public override fun diffFunction(expression: DifferentiableExpression<Double, Expression<Double>>) {
+    public override fun diffFunction(expression: DifferentiableExpression<Double>) {
         function(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()
