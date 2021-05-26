@@ -39,7 +39,7 @@ public class KotlingradExpression<T : Number, A : NumericAlgebra<T>>(
 }
 
 /**
- * Wraps this [MST] into [KotlingradExpression].
+ * Wraps this [MST] into [KotlingradExpression] in the context of [algebra].
  */
-public fun <T : Number, A : NumericAlgebra<T>> MST.toDiffExpression(algebra: A): KotlingradExpression<T, A> =
+public fun <T : Number, A : NumericAlgebra<T>> MST.toKotlingradExpression(algebra: A): KotlingradExpression<T, A> =
     KotlingradExpression(algebra, this)
