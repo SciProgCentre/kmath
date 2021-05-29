@@ -11,7 +11,14 @@ plugins {
 description = "Symja integration module"
 
 dependencies {
-    api("org.matheclipse:matheclipse-core:2.0.0-SNAPSHOT")
+    api("org.matheclipse:matheclipse-core:2.0.0-SNAPSHOT") {
+        // Incorrect transitive dependency org.apfloat:apfloat:1.10.0-SNAPSHOT
+        exclude("org.apfloat", "apfloat")
+    }
+
+    // Replace for org.apfloat:apfloat:1.10.0-SNAPSHOT
+    api("org.apfloat:apfloat:1.10.0")
+
     api(project(":kmath-core"))
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
