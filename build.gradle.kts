@@ -10,7 +10,9 @@ allprojects {
         maven("http://logicrunch.research.it.uu.se/maven") {
             isAllowInsecureProtocol = true
         }
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven("https://oss.sonatype.org/content/repositories/snapshots") {
+
+        }
         mavenCentral()
     }
 
@@ -27,11 +29,13 @@ subprojects {
 
             dokkaSourceSets.all {
                 val readmeFile = File(this@subprojects.projectDir, "README.md")
-                if (readmeFile.exists()) includes.setFrom(includes + readmeFile.absolutePath)
+                if (readmeFile.exists()) includes.from(readmeFile.absolutePath)
                 externalDocumentationLink("http://ejml.org/javadoc/")
                 externalDocumentationLink("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/")
                 externalDocumentationLink("https://deeplearning4j.org/api/latest/")
+                externalDocumentationLink("https://axelclk.bitbucket.io/symja/javadoc/")
                 externalDocumentationLink("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
+                externalDocumentationLink("https://breandan.net/kotlingrad/kotlingrad/", "https://breandan.net/kotlingrad/kotlingrad/kotlingrad/package-list")
             }
         }
     }
