@@ -1,6 +1,7 @@
 package space.kscience.kmath.jafama
 
 import space.kscience.kmath.operations.*
+import net.jafama.*
 
 /**
  * Advanced Number-like semifield that implements basic operations.
@@ -55,7 +56,7 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+public object JafamaDoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
     public override inline val zero: Double get() = 0.0
     public override inline val one: Double get() = 1.0
 

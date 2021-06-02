@@ -3,13 +3,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":kmath-ast"))
-    api(project(":kmath-complex"))
-    api(project(":kmath-for-real"))
+    api(project(":kmath-core"))
+    api("net.jafama:jafama:2.3.2")
 }
 
-kscience{
-    useHtml()
+repositories {
+    mavenCentral()
 }
 
 readme {
