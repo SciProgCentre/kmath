@@ -25,6 +25,9 @@ public interface ColumnarData<out T> {
     public operator fun get(symbol: Symbol): Buffer<T>?
 }
 
+@UnstableKMathAPI
+public val ColumnarData<*>.indices: IntRange get() = 0 until size
+
 /**
  * A zero-copy method to represent a [Structure2D] as a two-column x-y data.
  * There could more than two columns in the structure.

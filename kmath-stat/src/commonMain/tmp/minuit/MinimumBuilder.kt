@@ -15,23 +15,31 @@
  */
 package ru.inr.mass.minuit
 
+import space.kscience.kmath.optimization.minuit.MinimumSeed
+
 /**
- * base class for seed generators (starting values); the seed generator prepares
- * initial starting values from the input (MnUserParameterState) for the
- * minimization;
  *
  * @version $Id$
  */
-interface MinimumSeedGenerator {
+interface MinimumBuilder {
     /**
      *
-     * generate.
+     * minimum.
      *
      * @param fcn a [hep.dataforge.MINUIT.MnFcn] object.
-     * @param calc a [hep.dataforge.MINUIT.GradientCalculator] object.
-     * @param user a [hep.dataforge.MINUIT.MnUserParameterState] object.
-     * @param stra a [hep.dataforge.MINUIT.MnStrategy] object.
-     * @return a [hep.dataforge.MINUIT.MinimumSeed] object.
+     * @param gc a [hep.dataforge.MINUIT.GradientCalculator] object.
+     * @param seed a [hep.dataforge.MINUIT.MinimumSeed] object.
+     * @param strategy a [hep.dataforge.MINUIT.MnStrategy] object.
+     * @param maxfcn a int.
+     * @param toler a double.
+     * @return a [hep.dataforge.MINUIT.FunctionMinimum] object.
      */
-    fun generate(fcn: MnFcn?, calc: GradientCalculator?, user: MnUserParameterState?, stra: MnStrategy?): MinimumSeed
+    fun minimum(
+        fcn: MnFcn?,
+        gc: GradientCalculator?,
+        seed: MinimumSeed?,
+        strategy: MnStrategy?,
+        maxfcn: Int,
+        toler: Double
+    ): FunctionMinimum
 }

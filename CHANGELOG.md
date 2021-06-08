@@ -14,6 +14,7 @@
 - Jupyter Notebook integration module (kmath-jupyter)
 - `@PerformancePitfall` annotation to mark possibly slow API
 - BigInt operation performance improvement and fixes by @zhelenskiy (#328)
+- Unified architecture for Integration and Optimization using features.
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -35,6 +36,8 @@
 - Remove Any restriction on polynomials
 - Add `out` variance to type parameters of `StructureND` and its implementations where possible
 - Rename `DifferentiableMstExpression` to `KotlingradExpression`
+- `FeatureSet` now accepts only `Feature`. It is possible to override keys and use interfaces.
+- Use `Symbol` factory function instead of `StringSymbol`
 
 ### Deprecated
 

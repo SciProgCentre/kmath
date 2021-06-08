@@ -25,7 +25,7 @@ internal class MatrixInverseBenchmark {
         private val random = Random(1224)
         private const val dim = 100
 
-        private val space = LinearSpace.real
+        private val space = LinearSpace.double
 
         //creating invertible matrix
         private val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
@@ -35,7 +35,7 @@ internal class MatrixInverseBenchmark {
 
     @Benchmark
     fun kmathLupInversion(blackhole: Blackhole) {
-        blackhole.consume(LinearSpace.real.inverseWithLup(matrix))
+        blackhole.consume(LinearSpace.double.inverseWithLup(matrix))
     }
 
     @Benchmark

@@ -27,19 +27,30 @@ public class KotlingradExpression<T : Number, A : NumericAlgebra<T>>(
 ) : SpecialDifferentiableExpression<T, KotlingradExpression<T, A>> {
     public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
-    public override fun derivativeOrNull(symbols: List<Symbol>): KotlingradExpression<T, A> =
-        KotlingradExpression(
-            algebra,
-            symbols.map(Symbol::identity)
-                .map(MstNumericAlgebra::bindSymbol)
-                .map<Symbol, SVar<KMathNumber<T, A>>>(Symbol::toSVar)
-                .fold(mst.toSFun(), SFun<KMathNumber<T, A>>::d)
-                .toMst(),
-        )
+    public override fun derivativeOrNull(
+        symbols: List<Symbol>,
+    ): KotlingradExpression<T, A> = KotlingradExpression(
+        algebra,
+        symbols.map(Symbol::identity)
+            .map(MstNumericAlgebra::bindSymbol)
+            .map<Symbol, SVar<KMathNumber<T, A>>>(Symbol::toSVar)
+            .fold(mst.toSFun(), SFun<KMathNumber<T, A>>::d)
+            .toMst(),
+    )
+}
+
+/**
+ * A diff processor using [MST] to Kotlingrad converter
+ */
+public class KotlingradProcessor<T : Number, A : NumericAlgebra<T>>(
+    public val algebra: A,
+) : AutoDiffProcessor<T, MST, MstExtendedField> {
+    override fun differentiate(function: MstExtendedField.() -> MST): DifferentiableExpression<T> =
+        MstExtendedField.function().toKotlingradExpression(algebra)
 }
 
 /**
  * Wraps this [MST] into [KotlingradExpression].
  */
-public fun <T : Number, A : NumericAlgebra<T>> MST.toDiffExpression(algebra: A): KotlingradExpression<T, A> =
+public fun <T : Number, A : NumericAlgebra<T>> MST.toKotlingradExpression(algebra: A): KotlingradExpression<T, A> =
     KotlingradExpression(algebra, this)

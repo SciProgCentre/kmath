@@ -103,12 +103,12 @@ public class DerivativeStructureField(
     public override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
     public override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
     public override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
+}
 
-    public companion object :
-        AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField, Expression<Double>> {
-        public override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double> =
-            DerivativeStructureExpression(function)
-    }
+public object DSProcessor : AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField> {
+    public override fun differentiate(
+        function: DerivativeStructureField.() -> DerivativeStructure,
+    ): DerivativeStructureExpression = DerivativeStructureExpression(function)
 }
 
 /**

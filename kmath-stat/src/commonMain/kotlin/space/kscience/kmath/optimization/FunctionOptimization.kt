@@ -23,7 +23,7 @@ public enum class FunctionOptimizationTarget : OptimizationFeature {
 public class FunctionOptimization<T>(
     override val features: FeatureSet<OptimizationFeature>,
     public val expression: DifferentiableExpression<T>,
-) : OptimizationProblem{
+) : OptimizationProblem<T>{
 
     public companion object{
         /**
@@ -56,7 +56,6 @@ public class FunctionOptimization<T>(
     }
 }
 
-
 public fun <T> FunctionOptimization<T>.withFeatures(
     vararg newFeature: OptimizationFeature,
 ): FunctionOptimization<T> = FunctionOptimization(
@@ -68,7 +67,7 @@ public fun <T> FunctionOptimization<T>.withFeatures(
  * Optimize differentiable expression using specific [optimizer] form given [startingPoint]
  */
 public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
-    optimizer: Optimizer<FunctionOptimization<T>>,
+    optimizer: Optimizer<T, FunctionOptimization<T>>,
     startingPoint: Map<Symbol, T>,
     vararg features: OptimizationFeature,
 ): FunctionOptimization<T> {
@@ -76,3 +75,8 @@ public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
     return optimizer.optimize(problem)
 }
 
+public val <T> FunctionOptimization<T>.resultValueOrNull:T?
+    get() = getFeature<OptimizationResult<T>>()?.point?.let { expression(it) }
+
+public val <T> FunctionOptimization<T>.resultValue: T
+    get() = resultValueOrNull ?: error("Result is not present in $this")

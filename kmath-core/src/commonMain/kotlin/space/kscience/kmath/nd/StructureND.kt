@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.Feature
+import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
@@ -13,7 +15,7 @@ import kotlin.jvm.JvmName
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
-public interface StructureFeature
+public interface StructureFeature : Feature<StructureFeature>
 
 /**
  * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
@@ -24,7 +26,7 @@ public interface StructureFeature
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> {
+public interface StructureND<out T> : Featured<StructureFeature> {
     /**
      * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
@@ -57,7 +59,7 @@ public interface StructureND<out T> {
      * If the feature is not present, null is returned.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
 
     public companion object {
         /**

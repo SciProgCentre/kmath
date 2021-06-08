@@ -17,7 +17,7 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.StringSymbol
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.FieldOperations
 import space.kscience.kmath.operations.GroupOperations
 import space.kscience.kmath.operations.PowerOperations
@@ -43,7 +43,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
-    private val singular: Parser<MST> by id use { StringSymbol(text) }
+    private val singular: Parser<MST> by id use { Symbol(text) }
 
     private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }

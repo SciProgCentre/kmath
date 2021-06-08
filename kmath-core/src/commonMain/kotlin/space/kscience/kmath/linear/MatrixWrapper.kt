@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.getFeature
@@ -18,7 +19,7 @@ import kotlin.reflect.KClass
  */
 public class MatrixWrapper<out T : Any> internal constructor(
     public val origin: Matrix<T>,
-    public val features: Set<MatrixFeature>,
+    public val features: FeatureSet<StructureFeature>,
 ) : Matrix<T> by origin {
 
     /**
@@ -27,8 +28,7 @@ public class MatrixWrapper<out T : Any> internal constructor(
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
     public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
-        features.singleOrNull(type::isInstance) as? F
-            ?: origin.getFeature(type)
+        features.getFeature(type) ?: origin.getFeature(type)
 
     public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
@@ -44,20 +44,23 @@ public val <T : Any> Matrix<T>.origin: Matrix<T>
 /**
  * Add a single feature to a [Matrix]
  */
-public operator fun <T : Any> Matrix<T>.plus(newFeature: MatrixFeature): MatrixWrapper<T> = if (this is MatrixWrapper) {
-    MatrixWrapper(origin, features + newFeature)
+public fun <T : Any> Matrix<T>.withFeature(newFeature: MatrixFeature): MatrixWrapper<T> = if (this is MatrixWrapper) {
+    MatrixWrapper(origin, features.with(newFeature))
 } else {
-    MatrixWrapper(this, setOf(newFeature))
+    MatrixWrapper(this, FeatureSet.of(newFeature))
 }
+
+@Deprecated("To be replaced by withFeature")
+public operator fun <T : Any> Matrix<T>.plus(newFeature: MatrixFeature): MatrixWrapper<T> = withFeature(newFeature)
 
 /**
  * Add a collection of features to a [Matrix]
  */
-public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeature>): MatrixWrapper<T> =
+public fun <T : Any> Matrix<T>.withFeatures(newFeatures: Iterable<MatrixFeature>): MatrixWrapper<T> =
     if (this is MatrixWrapper) {
-        MatrixWrapper(origin, features + newFeatures)
+        MatrixWrapper(origin, features.with(newFeatures))
     } else {
-        MatrixWrapper(this, newFeatures.toSet())
+        MatrixWrapper(this, FeatureSet.of(newFeatures))
     }
 
 /**
@@ -68,7 +71,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { i, j ->
     if (i == j) elementAlgebra.one else elementAlgebra.zero
-} + UnitFeature
+}.withFeature(UnitFeature)
 
 
 /**
@@ -79,7 +82,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { _, _ ->
     elementAlgebra.zero
-} + ZeroFeature
+}.withFeature(ZeroFeature)
 
 public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : MatrixFeature
 
@@ -90,4 +93,4 @@ public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : Ma
 public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
     colNum,
     rowNum,
-) { i, j -> get(j, i) } + TransposedFeature(this)
+) { i, j -> get(j, i) }.withFeature(TransposedFeature(this))

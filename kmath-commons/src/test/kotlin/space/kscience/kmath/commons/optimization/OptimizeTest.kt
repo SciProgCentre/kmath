@@ -6,43 +6,38 @@
 package space.kscience.kmath.commons.optimization
 
 import kotlinx.coroutines.runBlocking
+import space.kscience.kmath.commons.expressions.DSProcessor
 import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
 import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.expressions.Symbol.Companion.x
+import space.kscience.kmath.expressions.Symbol.Companion.y
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.optimization.FunctionOptimization
+import space.kscience.kmath.optimization.*
 import space.kscience.kmath.stat.RandomGenerator
 import kotlin.math.pow
 import kotlin.test.Test
 
 internal class OptimizeTest {
-    val x by symbol
-    val y by symbol
-
     val normal = DerivativeStructureExpression {
-        exp(-bindSymbol(x).pow(2) / 2) + exp(-bindSymbol(y)
-            .pow(2) / 2)
+        exp(-bindSymbol(x).pow(2) / 2) + exp(-bindSymbol(y).pow(2) / 2)
     }
 
     @Test
-    fun testGradientOptimization() = runBlocking{
-        val result = normal.optimize(x, y) {
-            initialGuess(x to 1.0, y to 1.0)
-            //no need to select optimizer. Gradient optimizer is used by default because gradients are provided by function
-        }
-        println(result.point)
-        println(result.value)
+    fun testGradientOptimization() = runBlocking {
+        val result = normal.optimizeWith(CMOptimizer, x to 1.0, y to 1.0)
+        println(result.resultPoint)
+        println(result.resultValue)
     }
 
     @Test
-    fun testSimplexOptimization() = runBlocking{
-        val result = normal.optimize(x, y) {
-            initialGuess(x to 1.0, y to 1.0)
+    fun testSimplexOptimization() = runBlocking {
+        val result = normal.optimizeWith(CMOptimizer, x to 1.0, y to 1.0) {
             simplexSteps(x to 2.0, y to 0.5)
             //this sets simplex optimizer
         }
 
-        println(result.point)
-        println(result.value)
+        println(result.resultPoint)
+        println(result.resultValue)
     }
 
     @Test
@@ -61,6 +56,11 @@ internal class OptimizeTest {
         }
 
         val yErr = List(x.size) { sigma }
+
+        val model = DSProcessor.differentiate { x1 ->
+            val cWithDefault = bindSymbolOrNull(c) ?: one
+            bindSymbol(a) * x1.pow(2) + bindSymbol(b) * x1 + cWithDefault
+        }
 
         val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
             val cWithDefault = bindSymbolOrNull(c) ?: one

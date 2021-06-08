@@ -17,6 +17,7 @@ package ru.inr.mass.minuit
 
 import space.kscience.kmath.optimization.minuit.MINUITPlugin
 import ru.inr.mass.minuit.*
+import space.kscience.kmath.optimization.minuit.MinimumSeed
 
 /**
  *

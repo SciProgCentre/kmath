@@ -65,7 +65,7 @@ internal class DoubleMatrixTest {
             4.0, 6.0, 2.0
         )
         val matrix2 = (matrix1 * 2.5 + 1.0 - 2.0) / 2.0
-        val expectedResult = LinearSpace.real.matrix(2, 3)(
+        val expectedResult = LinearSpace.double.matrix(2, 3)(
             0.75, -0.5, 3.25,
             4.5, 7.0, 2.0
         )
@@ -160,7 +160,7 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testAllElementOperations() {
-        val matrix1 = LinearSpace.real.matrix(2, 4)(
+        val matrix1 = LinearSpace.double.matrix(2, 4)(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )

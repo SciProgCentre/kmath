@@ -35,7 +35,7 @@ internal class DoubleVectorTest {
         val vector2 = DoubleBuffer(5) { 5 - it.toDouble() }
         val matrix1 = vector1.asMatrix()
         val matrix2 = vector2.asMatrix().transpose()
-        val product = LinearSpace.real.run { matrix1 dot matrix2 }
+        val product = LinearSpace.double.run { matrix1 dot matrix2 }
         assertEquals(5.0, product[1, 0])
         assertEquals(6.0, product[2, 2])
     }

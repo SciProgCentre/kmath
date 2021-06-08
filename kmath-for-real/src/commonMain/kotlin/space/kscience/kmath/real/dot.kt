@@ -12,6 +12,6 @@ import space.kscience.kmath.linear.Matrix
 /**
  * Optimized dot product for real matrices
  */
-public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = LinearSpace.real.run {
+public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = LinearSpace.double.run {
     this@dot dot other
 }

@@ -6,6 +6,7 @@
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import space.kscience.kmath.linear.LinearSolver
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
 
@@ -44,3 +45,12 @@ public fun CMLinearSpace.inverse(
     a: Matrix<Double>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).inverse.wrap()
+
+
+public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Double> = object : LinearSolver<Double> {
+    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solve(a, b, decomposition)
+
+    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> = solve(a, b, decomposition)
+
+    override fun inverse(matrix: Matrix<Double>): Matrix<Double> = inverse(matrix, decomposition)
+}

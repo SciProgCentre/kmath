@@ -40,7 +40,7 @@ class NumberNDFieldTest {
     @Test
     fun testGeneration() {
 
-        val array = LinearSpace.real.buildMatrix(3, 3) { i, j ->
+        val array = LinearSpace.double.buildMatrix(3, 3) { i, j ->
             (i * 10 + j).toDouble()
         }
 

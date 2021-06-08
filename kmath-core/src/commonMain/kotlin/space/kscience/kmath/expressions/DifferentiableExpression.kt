@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.operations.Algebra
+
 /**
  * Represents expression which structure can be differentiated.
  *
@@ -63,7 +65,10 @@ public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T>
 
 /**
  * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
+ * @param T type of the constants for the expression
+ * @param I type of the actual expression state
+ * @param A type of expression algebra
  */
-public fun interface AutoDiffProcessor<T, I, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
-    public fun process(function: A.() -> I): DifferentiableExpression<T>
+public fun interface AutoDiffProcessor<T, I, A : Algebra<I>> {
+    public fun differentiate(function: A.() -> I): DifferentiableExpression<T>
 }

@@ -17,6 +17,7 @@ package ru.inr.mass.minuit
 
 import org.apache.commons.math3.linear.ArrayRealVector
 import ru.inr.mass.minuit.*
+import space.kscience.kmath.optimization.minuit.MinimumSeed
 
 /**
  *

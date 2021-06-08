@@ -7,7 +7,6 @@
 
 package space.kscience.kmath.asm.internal
 
-import space.kscience.kmath.expressions.StringSymbol
 import space.kscience.kmath.expressions.Symbol
 
 /**
@@ -15,4 +14,4 @@ import space.kscience.kmath.expressions.Symbol
  *
  * @author Iaroslav Postovalov
  */
-internal fun <V> Map<Symbol, V>.getOrFail(key: String): V = getValue(StringSymbol(key))
+internal fun <V> Map<Symbol, V>.getOrFail(key: String): V = getValue(Symbol(key))

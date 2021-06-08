@@ -14,30 +14,30 @@ import space.kscience.kmath.nd.as2D
  * A context that allows to operate on a [MutableBuffer] as on 2d array
  */
 internal class BufferAccessor2D<T>(
-    public val rowNum: Int,
-    public val colNum: Int,
+    val rowNum: Int,
+    val colNum: Int,
     val factory: MutableBufferFactory<T>,
 ) {
-    public operator fun Buffer<T>.get(i: Int, j: Int): T = get(i * colNum + j)
+    operator fun Buffer<T>.get(i: Int, j: Int): T = get(i * colNum + j)
 
-    public operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
+    operator fun MutableBuffer<T>.set(i: Int, j: Int, value: T) {
         set(i * colNum + j, value)
     }
 
-    public inline fun create(crossinline init: (i: Int, j: Int) -> T): MutableBuffer<T> =
+    inline fun create(crossinline init: (i: Int, j: Int) -> T): MutableBuffer<T> =
         factory(rowNum * colNum) { offset -> init(offset / colNum, offset % colNum) }
 
-    public fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
+    fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
     //TODO optimize wrapper
-    public fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
+    fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
         DefaultStrides(intArrayOf(rowNum, colNum)),
         factory
     ) { (i, j) ->
         get(i, j)
     }.as2D()
 
-    public inner class Row(public val buffer: MutableBuffer<T>, public val rowIndex: Int) : MutableBuffer<T> {
+    inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
         override val size: Int get() = colNum
 
         override operator fun get(index: Int): T = buffer[rowIndex, index]
@@ -54,5 +54,5 @@ internal class BufferAccessor2D<T>(
     /**
      * Get row
      */
-    public fun MutableBuffer<T>.row(i: Int): Row = Row(this, i)
+    fun MutableBuffer<T>.row(i: Int): Row = Row(this, i)
 }

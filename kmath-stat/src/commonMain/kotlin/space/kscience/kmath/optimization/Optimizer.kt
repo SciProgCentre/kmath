@@ -5,6 +5,6 @@
 
 package space.kscience.kmath.optimization
 
-public interface Optimizer<P : OptimizationProblem> {
+public interface Optimizer<T, P : OptimizationProblem<T>> {
     public suspend fun optimize(problem: P): P
 }

@@ -9,7 +9,7 @@ import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.kotlingrad.toDiffExpression
+import space.kscience.kmath.kotlingrad.toKotlingradExpression
 import space.kscience.kmath.operations.DoubleField
 
 /**
@@ -20,7 +20,7 @@ fun main() {
     val x by symbol
 
     val actualDerivative = "x^2-4*x-44".parseMath()
-        .toDiffExpression(DoubleField)
+        .toKotlingradExpression(DoubleField)
         .derivative(x)
 
 

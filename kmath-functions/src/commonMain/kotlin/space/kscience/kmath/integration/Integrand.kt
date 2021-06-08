@@ -5,11 +5,12 @@
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.misc.Feature
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.Featured
 import kotlin.reflect.KClass
 
-public interface IntegrandFeature {
+public interface IntegrandFeature : Feature<IntegrandFeature> {
     override fun toString(): String
 }
 
@@ -18,7 +19,7 @@ public interface Integrand : Featured<IntegrandFeature> {
     override fun <T : IntegrandFeature> getFeature(type: KClass<out T>): T? = features.getFeature(type)
 }
 
-public inline fun <reified T: IntegrandFeature> Integrand.getFeature(): T? = getFeature(T::class)
+public inline fun <reified T : IntegrandFeature> Integrand.getFeature(): T? = getFeature(T::class)
 
 public class IntegrandValue<T : Any>(public val value: T) : IntegrandFeature {
     override fun toString(): String = "Value($value)"
