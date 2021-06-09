@@ -2,7 +2,7 @@
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
-[![Space](https://img.shields.io/maven-metadata/v?label=Space&metadataUrl=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fspace%2Fkscience%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
+[![Space](https://img.shields.io/badge/dynamic/xml?color=orange&label=Space&query=//metadata/versioning/latest&url=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fspace%2Fkscience%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
 # KMath
 
@@ -207,7 +207,7 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-kotlingrad](kmath-kotlingrad)
-> Functions, integration and interpolation
+> 
 >
 > **Maturity**: EXPERIMENTAL
 >
@@ -218,13 +218,13 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-memory](kmath-memory)
-> An API and basic implementation for arranging objects in a continous memory block.
+> An API and basic implementation for arranging objects in a continuous memory block.
 >
 > **Maturity**: DEVELOPMENT
 <hr/>
 
 * ### [kmath-nd4j](kmath-nd4j)
-> ND4J NDStructure implementation and according NDAlgebra classes
+> 
 >
 > **Maturity**: EXPERIMENTAL
 >
@@ -239,6 +239,12 @@ One can still use generic algebras though.
 > 
 >
 > **Maturity**: EXPERIMENTAL
+<hr/>
+
+* ### [kmath-symja](kmath-symja)
+> 
+>
+> **Maturity**: PROTOTYPE
 <hr/>
 
 * ### [kmath-tensors](kmath-tensors)
@@ -293,8 +299,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-11")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-11") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-13")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-13") for jvm-specific version
 }
 ```
 

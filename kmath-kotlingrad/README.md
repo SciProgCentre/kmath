@@ -8,7 +8,7 @@
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-kotlingrad:0.3.0-dev-11`.
+The Maven coordinates of this project are `space.kscience:kmath-kotlingrad:0.3.0-dev-13`.
 
 **Gradle:**
 ```gradle
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-kotlingrad:0.3.0-dev-11'
+    implementation 'space.kscience:kmath-kotlingrad:0.3.0-dev-13'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -29,6 +29,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-kotlingrad:0.3.0-dev-11")
+    implementation("space.kscience:kmath-kotlingrad:0.3.0-dev-13")
 }
 ```
