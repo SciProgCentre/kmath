@@ -29,7 +29,7 @@ public typealias MutableMatrix<T> = MutableStructure2D<T>
 public typealias Point<T> = Buffer<T>
 
 /**
- * Basic operations on matrices and vectors. Operates on [Matrix].
+ * Basic operations on matrices and vectors.
  *
  * @param T the type of items in the matrices.
  * @param A the type of ring over [T].

@@ -5,8 +5,11 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
@@ -144,6 +147,44 @@ public interface StructureND<out T> {
         ): BufferND<T> = auto(type, DefaultStrides(shape), initializer)
     }
 }
+
+/**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> AlgebraND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> GroupND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementContext { (value - st2[index]) } < absoluteTolerance }
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
 
 /**
  * Returns the value at the specified indices.
