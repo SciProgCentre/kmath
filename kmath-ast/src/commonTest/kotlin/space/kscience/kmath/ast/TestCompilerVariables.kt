@@ -18,13 +18,13 @@ import kotlin.test.assertFailsWith
 internal class TestCompilerVariables {
     @Test
     fun testVariable() = runCompilerTest {
-        val expr = MstRing { bindSymbol(x) }.compileToExpression(IntRing)
+        val expr = MstRing { x }.compileToExpression(IntRing)
         assertEquals(1, expr(x to 1))
     }
 
     @Test
     fun testUndefinedVariableFails() = runCompilerTest {
-        val expr = MstRing { bindSymbol(x) }.compileToExpression(IntRing)
+        val expr = MstRing { x }.compileToExpression(IntRing)
         assertFailsWith<NoSuchElementException> { expr() }
     }
 }

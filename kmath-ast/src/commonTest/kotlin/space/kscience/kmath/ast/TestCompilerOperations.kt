@@ -47,19 +47,19 @@ internal class TestCompilerOperations {
 
     @Test
     fun testSubtract() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) - bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x - x }.compileToExpression(DoubleField)
         assertEquals(0.0, expr(x to 2.0))
     }
 
     @Test
     fun testDivide() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) / bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x / x }.compileToExpression(DoubleField)
         assertEquals(1.0, expr(x to 2.0))
     }
 
     @Test
     fun testPower() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) pow 2 }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x pow 2 }.compileToExpression(DoubleField)
         assertEquals(4.0, expr(x to 2.0))
     }
 }

@@ -22,7 +22,7 @@ internal class TestCompilerConsistencyWithInterpreter {
         val mst = MstRing {
             binaryOperationFunction("+")(
                 unaryOperationFunction("+")(
-                    (bindSymbol(x) - (2.toByte() + (scale(
+                    (x - (2.toByte() + (scale(
                         add(number(1), number(1)),
                         2.0,
                     ) + 1.toByte()))) * 3.0 - 1.toByte()
@@ -42,7 +42,7 @@ internal class TestCompilerConsistencyWithInterpreter {
     fun doubleField() = runCompilerTest {
         val mst = MstField {
             +(3 - 2 + 2 * number(1) + 1.0) + binaryOperationFunction("+")(
-                (3.0 - (bindSymbol(x) + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
+                (3.0 - (x + (scale(add(number(1.0), number(1.0)), 2.0) + 1.0))) * 3 - 1.0
                         + number(1),
                 number(1) / 2 + number(2.0) * one,
             ) + zero

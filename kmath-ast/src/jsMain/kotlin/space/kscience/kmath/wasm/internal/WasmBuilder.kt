@@ -27,11 +27,7 @@ internal sealed class WasmBuilder<T>(
     lateinit var ctx: BinaryenModule
 
     open fun visitSymbolic(mst: Symbol): ExpressionRef {
-        try {
-            algebra.bindSymbol(mst)
-        } catch (ignored: Throwable) {
-            null
-        }?.let { return visitNumeric(Numeric(it)) }
+        algebra.bindSymbolOrNull(mst)?.let { return visitNumeric(Numeric(it)) }
 
         var idx = keys.indexOf(mst)
 

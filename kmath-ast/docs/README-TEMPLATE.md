@@ -16,11 +16,12 @@ special implementation of `Expression<T>` with implemented `invoke` function.
 For example, the following builder:
 
 ```kotlin
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.asm.*
 
-MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
+MstField { x + 2 }.compileToExpression(DoubleField)
 ``` 
 
 ... leads to generation of bytecode, which can be decompiled to the following Java class:
@@ -60,11 +61,12 @@ public final class AsmCompiledExpression_45045_0 implements Expression<Double> {
 A similar feature is also available on JS.
 
 ```kotlin
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.estree.*
 
-MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
+MstField { x + 2 }.compileToExpression(DoubleField)
 ``` 
 
 The code above returns expression implemented with such a JS function:
@@ -79,11 +81,12 @@ JS also supports very experimental expression optimization with [WebAssembly](ht
 Currently, only expressions inside `DoubleField` and `IntRing` are supported.
 
 ```kotlin
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.wasm.*
 
-MstField { bindSymbol("x") + 2 }.compileToExpression(DoubleField)
+MstField { x + 2 }.compileToExpression(DoubleField)
 ```
 
 An example of emitted Wasm IR in the form of WAT:

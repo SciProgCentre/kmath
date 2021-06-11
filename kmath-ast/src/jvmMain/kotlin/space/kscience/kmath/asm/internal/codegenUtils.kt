@@ -63,7 +63,7 @@ internal fun MethodVisitor.label(): Label = Label().also(::visitLabel)
  * @author Iaroslav Postovalov
  */
 internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
-    val name = "kscience.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
+    val name = "space.kscience.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
 
     try {
         Class.forName(name)
