@@ -13,6 +13,9 @@ import space.kscience.kmath.jafama.JafamaDoubleField
 import space.kscience.kmath.jafama.StrictJafamaDoubleField
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
+import kotlin.math.cos
+import kotlin.math.exp
+import kotlin.math.pow
 
 
 @State(Scope.Benchmark)
@@ -26,6 +29,9 @@ internal class JafamaBenchmark {
     @Benchmark
     fun strictJafamaBench(blackhole: Blackhole) = invokeBenchmarks(strictJafama,blackhole)
 
+    @Benchmark
+    fun kotlinMathBench(blackhole: Blackhole) = invokeBenchmarks(kotlinMath, blackhole)
+
     private fun invokeBenchmarks(expr: Double, blackhole: Blackhole) {
         blackhole.consume(expr)
     }
@@ -36,6 +42,8 @@ internal class JafamaBenchmark {
         private val jafama = JafamaDoubleField{
             x * power(x, 1_000_000) * exp(x) / cos(x)
         }
+
+        private val kotlinMath = x * x.pow(1_000_000) * exp(x) / cos(x)
 
         private val core = DoubleField {
             x * power(x, 1_000_000) * exp(x) / cos(x)

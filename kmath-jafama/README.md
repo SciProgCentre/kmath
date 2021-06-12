@@ -28,41 +28,53 @@ Comparing Operations on DoubleField and JafamaDoubleField
 ```bash
 jvm: space.kscience.kmath.benchmarks.JafamaBenchmark.coreBench
 
-Warm-up 1: 242556635.528 ops/s
-Iteration 1: 236249893.335 ops/s
-Iteration 2: 294526940.968 ops/s
-Iteration 3: 295973752.533 ops/s
-Iteration 4: 296467676.763 ops/s
-Iteration 5: 295929441.421 ops/s
+Warm-up 1: 384414358.081 ops/s
+Iteration 1: 374827571.951 ops/s
+Iteration 2: 479335182.332 ops/s
+Iteration 3: 475483069.577 ops/s
+Iteration 4: 478235949.414 ops/s
+Iteration 5: 472256385.114 ops/s
 
-283829541.004 ±(99.9%) 102456604.440 ops/s [Average]
-  (min, avg, max) = (236249893.335, 283829541.004, 296467676.763), stdev = 26607654.808
-  CI (99.9%): [181372936.564, 386286145.444] (assumes normal distribution)
+456027631.678 ±(99.9%) 175106815.384 ops/s [Average]
+  (min, avg, max) = (374827571.951, 456027631.678, 479335182.332), stdev = 45474683.880
+  CI (99.9%): [280920816.294, 631134447.061] (assumes normal distribution)
 
 jvm: space.kscience.kmath.benchmarks.JafamaBenchmark.jafamaBench
 
-Warm-up 1: 234737640.196 ops/s
-Iteration 1: 231689614.905 ops/s
-Iteration 2: 296629612.909 ops/s
-Iteration 3: 297456237.453 ops/s
-Iteration 4: 296754794.513 ops/s
-Iteration 5: 293722557.848 ops/s
+Warm-up 1: 359418665.041 ops/s
+Iteration 1: 335704885.798 ops/s
+Iteration 2: 427684801.542 ops/s
+Iteration 3: 452193034.265 ops/s
+Iteration 4: 433855064.931 ops/s
+Iteration 5: 453863386.566 ops/s
 
-283250563.526 ±(99.9%) 111125582.233 ops/s [Average]
-  (min, avg, max) = (231689614.905, 283250563.526, 297456237.453), stdev = 28858960.811
-  CI (99.9%): [172124981.293, 394376145.759] (assumes normal distribution)
+420660234.620 ±(99.9%) 188028426.875 ops/s [Average]
+  (min, avg, max) = (335704885.798, 420660234.620, 453863386.566), stdev = 48830385.349
+  CI (99.9%): [232631807.746, 608688661.495] (assumes normal distribution)
+
+jvm: space.kscience.kmath.benchmarks.JafamaBenchmark.kotlinMathBench
+
+Warm-up 1: 371570418.113 ops/s
+Iteration 1: 379281146.127 ops/s
+Iteration 2: 465234403.109 ops/s
+Iteration 3: 470621634.240 ops/s
+Iteration 4: 467074553.006 ops/s
+Iteration 5: 466424840.144 ops/s
+
+449727315.325 ±(99.9%) 151837475.500 ops/s [Average]
+  (min, avg, max) = (379281146.127, 449727315.325, 470621634.240), stdev = 39431710.207
+  CI (99.9%): [297889839.825, 601564790.825] (assumes normal distribution)
 
 jvm: space.kscience.kmath.benchmarks.JafamaBenchmark.strictJafamaBench
 
-Warm-up 1: 234895701.589 ops/s
-Iteration 1: 236061284.195 ops/s
-Iteration 2: 296894799.416 ops/s
-Iteration 3: 286852020.677 ops/s
-Iteration 4: 284021863.614 ops/s
-Iteration 5: 284404358.656 ops/s
+Warm-up 1: 371241281.065 ops/s
+Iteration 1: 374490259.387 ops/s
+Iteration 2: 464995837.424 ops/s
+Iteration 3: 469788706.385 ops/s
+Iteration 4: 469528470.682 ops/s
+Iteration 5: 456727921.978 ops/s
 
-277646865.312 ±(99.9%) 91748868.927 ops/s [Average]
-  (min, avg, max) = (236061284.195, 277646865.312, 296894799.416), stdev = 23826889.899
-  CI (99.9%): [185897996.385, 369395734.239] (assumes normal distribution)
-
+447106239.171 ±(99.9%) 157629035.980 ops/s [Average]
+  (min, avg, max) = (374490259.387, 447106239.171, 469788706.385), stdev = 40935760.071
+  CI (99.9%): [289477203.192, 604735275.151] (assumes normal distribution)
 ```
