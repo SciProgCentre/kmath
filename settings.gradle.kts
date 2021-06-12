@@ -43,6 +43,7 @@ include(
     ":kmath-tensors",
     ":kmath-jupyter",
     ":kmath-symja",
+    ":kmath-jafama",
     ":examples",
     ":benchmarks"
 )

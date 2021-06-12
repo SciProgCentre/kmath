@@ -200,6 +200,12 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
+* ### [kmath-jafama](kmath-jafama)
+>
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
 * ### [kmath-jupyter](kmath-jupyter)
 > 
 >

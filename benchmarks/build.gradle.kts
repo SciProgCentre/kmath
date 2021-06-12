@@ -30,6 +30,7 @@ kotlin {
                 implementation(project(":kmath-stat"))
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
+                implementation(project(":kmath-jafama"))
                 implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.0")
             }
         }
@@ -42,7 +43,6 @@ kotlin {
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
                 implementation("org.nd4j:nd4j-native:1.0.0-beta7")
-
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
                 //
@@ -94,6 +94,11 @@ benchmark {
     configurations.register("bigInt") {
         commonConfiguration()
         include("BigIntBenchmark")
+    }
+
+    configurations.register("jafamaDouble") {
+        commonConfiguration()
+        include("JafamaBenchmark")
     }
 }
 
