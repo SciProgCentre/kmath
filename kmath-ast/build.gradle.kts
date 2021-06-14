@@ -37,10 +37,9 @@ kotlin.sourceSets {
 
     jsMain {
         dependencies {
-            implementation(npm("astring", "1.7.4"))
-            implementation(npm("binaryen", "100.0"))
-            implementation(npm("js-base64", "3.6.0"))
-            implementation(npm("webassembly", "0.11.0"))
+            implementation(npm("astring", "1.7.5"))
+            implementation(npm("binaryen", "101.0.0"))
+            implementation(npm("js-base64", "3.6.1"))
         }
     }
 

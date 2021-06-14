@@ -13,44 +13,27 @@ import space.kscience.kmath.jafama.JafamaDoubleField
 import space.kscience.kmath.jafama.StrictJafamaDoubleField
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
-import kotlin.math.cos
-import kotlin.math.exp
-import kotlin.math.pow
-
+import kotlin.random.Random
 
 @State(Scope.Benchmark)
 internal class JafamaBenchmark {
     @Benchmark
-    fun jafamaBench(blackhole: Blackhole) = invokeBenchmarks(jafama, blackhole)
-
-    @Benchmark
-    fun coreBench(blackhole: Blackhole) = invokeBenchmarks(core,blackhole)
-
-    @Benchmark
-    fun strictJafamaBench(blackhole: Blackhole) = invokeBenchmarks(strictJafama,blackhole)
-
-    @Benchmark
-    fun kotlinMathBench(blackhole: Blackhole) = invokeBenchmarks(kotlinMath, blackhole)
-
-    private fun invokeBenchmarks(expr: Double, blackhole: Blackhole) {
-        blackhole.consume(expr)
+    fun jafamaBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+        JafamaDoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
     }
 
-    private companion object {
-        private val x: Double = Double.MAX_VALUE
+    @Benchmark
+    fun coreBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+        DoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
+    }
 
-        private val jafama = JafamaDoubleField{
-            x * power(x, 1_000_000) * exp(x) / cos(x)
-        }
+    @Benchmark
+    fun strictJafamaBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+        StrictJafamaDoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
+    }
 
-        private val kotlinMath = x * x.pow(1_000_000) * exp(x) / cos(x)
-
-        private val core = DoubleField {
-            x * power(x, 1_000_000) * exp(x) / cos(x)
-        }
-
-        private val strictJafama = StrictJafamaDoubleField {
-            x * power(x, 1_000_000) * exp(x) / cos(x)
-        }
+    private inline fun invokeBenchmarks(blackhole: Blackhole, expr: (Double) -> Double) {
+        val rng = Random(0)
+        repeat(1000000) { blackhole.consume(expr(rng.nextDouble())) }
     }
 }
