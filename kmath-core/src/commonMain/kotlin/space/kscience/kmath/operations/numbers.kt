@@ -64,7 +64,7 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     public override inline val zero: Double get() = 0.0
     public override inline val one: Double get() = 1.0
 
-    public override fun number(value: Number): Double = value.toDouble()
+    public override inline fun number(value: Number): Double = value.toDouble()
 
     public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
@@ -77,7 +77,7 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     public override inline fun multiply(a: Double, b: Double): Double = a * b
     public override inline fun divide(a: Double, b: Double): Double = a / b
 
-    public override fun scale(a: Double, value: Double): Double = a * value
+    public override inline fun scale(a: Double, value: Double): Double = a * value
 
     public override inline fun sin(arg: Double): Double = kotlin.math.sin(arg)
     public override inline fun cos(arg: Double): Double = kotlin.math.cos(arg)
@@ -93,6 +93,7 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     public override inline fun acosh(arg: Double): Double = kotlin.math.acosh(arg)
     public override inline fun atanh(arg: Double): Double = kotlin.math.atanh(arg)
 
+    public override inline fun sqrt(arg: Double): Double = kotlin.math.sqrt(arg)
     public override inline fun power(arg: Double, pow: Number): Double = arg.kpow(pow.toDouble())
     public override inline fun exp(arg: Double): Double = kotlin.math.exp(arg)
     public override inline fun ln(arg: Double): Double = kotlin.math.ln(arg)
@@ -143,6 +144,7 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     public override inline fun acosh(arg: Float): Float = kotlin.math.acosh(arg)
     public override inline fun atanh(arg: Float): Float = kotlin.math.atanh(arg)
 
+    public override inline fun sqrt(arg: Float): Float = kotlin.math.sqrt(arg)
     public override inline fun power(arg: Float, pow: Number): Float = arg.kpow(pow.toFloat())
     public override inline fun exp(arg: Float): Float = kotlin.math.exp(arg)
     public override inline fun ln(arg: Float): Float = kotlin.math.ln(arg)

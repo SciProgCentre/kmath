@@ -3,6 +3,8 @@ plugins {
     id("ru.mipt.npm.gradle.common")
 }
 
+description = "Functions, integration and interpolation"
+
 kotlin.sourceSets.commonMain {
     dependencies {
         api(project(":kmath-core"))
@@ -10,7 +12,6 @@ kotlin.sourceSets.commonMain {
 }
 
 readme {
-    description = "Functions, integration and interpolation"
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 

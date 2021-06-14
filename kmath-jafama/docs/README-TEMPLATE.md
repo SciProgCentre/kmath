@@ -2,35 +2,9 @@
 
 Integration with [Jafama](https://github.com/jeffhain/jafama).
 
- - [jafama-double](src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
+${features}
 
-
-## Artifact:
-
-The Maven coordinates of this project are `space.kscience:kmath-jafama:0.3.0-dev-13`.
-
-**Gradle:**
-```gradle
-repositories {
-    maven { url 'https://repo.kotlin.link' }
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'space.kscience:kmath-jafama:0.3.0-dev-13'
-}
-```
-**Gradle Kotlin DSL:**
-```kotlin
-repositories {
-    maven("https://repo.kotlin.link")
-    mavenCentral()
-}
-
-dependencies {
-    implementation("space.kscience:kmath-jafama:0.3.0-dev-13")
-}
-```
+${artifact}
 
 ## Example usage
 

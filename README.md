@@ -175,7 +175,7 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-functions](kmath-functions)
-> Functions, integration and interpolation
+> 
 >
 > **Maturity**: EXPERIMENTAL
 >
@@ -201,9 +201,13 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-jafama](kmath-jafama)
->
+> 
 >
 > **Maturity**: PROTOTYPE
+>
+> **Features:**
+> - [jafama-double](kmath-jafama/src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
+
 <hr/>
 
 * ### [kmath-jupyter](kmath-jupyter)
