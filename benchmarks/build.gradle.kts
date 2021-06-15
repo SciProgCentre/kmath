@@ -1,3 +1,7 @@
+@file:Suppress("UNUSED_VARIABLE")
+
+import space.kscience.kmath.benchmarks.addBenchmarkProperties
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.allopen")
@@ -32,7 +36,7 @@ kotlin {
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-jafama"))
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
             }
         }
 
@@ -130,3 +134,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }
+
+addBenchmarkProperties()
