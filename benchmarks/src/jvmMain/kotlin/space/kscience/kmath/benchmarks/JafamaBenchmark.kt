@@ -18,17 +18,17 @@ import kotlin.random.Random
 @State(Scope.Benchmark)
 internal class JafamaBenchmark {
     @Benchmark
-    fun jafamaBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+    fun jafama(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
         JafamaDoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
     }
 
     @Benchmark
-    fun coreBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+    fun core(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
         DoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
     }
 
     @Benchmark
-    fun strictJafamaBench(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
+    fun strictJafama(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
         StrictJafamaDoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
     }
 

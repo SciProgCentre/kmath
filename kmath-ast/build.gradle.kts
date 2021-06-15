@@ -62,25 +62,21 @@ readme {
 
     feature(
         id = "expression-language",
-        description = "Expression language and its parser",
         ref = "src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt"
-    )
+    ) { "Expression language and its parser" }
 
     feature(
         id = "mst-jvm-codegen",
-        description = "Dynamic MST to JVM bytecode compiler",
         ref = "src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt"
-    )
+    ) { "Dynamic MST to JVM bytecode compiler" }
 
     feature(
         id = "mst-js-codegen",
-        description = "Dynamic MST to JS compiler",
         ref = "src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt"
-    )
+    ) { "Dynamic MST to JS compiler" }
 
     feature(
         id = "rendering",
-        description = "Extendable MST rendering",
         ref = "src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt"
-    )
+    ) { "Extendable MST rendering" }
 }
