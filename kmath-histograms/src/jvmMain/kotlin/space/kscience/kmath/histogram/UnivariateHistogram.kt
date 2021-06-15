@@ -13,7 +13,7 @@ import space.kscience.kmath.structures.asSequence
 
 @UnstableKMathAPI
 public val UnivariateDomain.center: Double
-    get() = (range.endInclusive - range.start) / 2
+    get() = (range.endInclusive + range.start) / 2
 
 /**
  * A univariate bin based an a range
@@ -45,7 +45,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin>{
             binSize: Double,
             start: Double = 0.0,
             builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = TreeHistogramSpace.uniform(binSize, start).produce(builder)
+        ): UnivariateHistogram = TreeHistogramSpace.uniform(binSize, start).fill(builder)
 
         /**
          * Build and fill a histogram with custom borders. Returns a read-only histogram.
@@ -53,7 +53,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin>{
         public fun custom(
             borders: DoubleArray,
             builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = TreeHistogramSpace.custom(borders).produce(builder)
+        ): UnivariateHistogram = TreeHistogramSpace.custom(borders).fill(builder)
 
     }
 }

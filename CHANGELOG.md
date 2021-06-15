@@ -50,6 +50,7 @@
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations
+- Univariate histogram filling
 
 ### Security
 
