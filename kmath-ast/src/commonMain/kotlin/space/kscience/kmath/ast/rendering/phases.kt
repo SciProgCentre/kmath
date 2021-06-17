@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess.PostProcessPhase
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.FieldOperations
 import space.kscience.kmath.operations.GroupOperations
@@ -17,8 +18,8 @@ import space.kscience.kmath.operations.RingOperations
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostProcessStage {
-    public override fun perform(node: MathSyntax): Unit = when (node) {
+public val BetterMultiplication: PostProcessPhase = PostProcessPhase { node ->
+    fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
         is SymbolSyntax -> Unit
         is OperatorNameSyntax -> Unit
@@ -81,6 +82,8 @@ public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostPro
             perform(node.right)
         }
     }
+
+    perform(node)
 }
 
 /**
@@ -89,68 +92,68 @@ public object BetterMultiplication : FeaturedMathRendererWithPostProcess.PostPro
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public object BetterFraction : FeaturedMathRendererWithPostProcess.PostProcessStage {
-    private fun perform0(node: MathSyntax, infix: Boolean = false): Unit = when (node) {
+public val BetterFraction: PostProcessPhase = PostProcessPhase { node ->
+    fun perform(node: MathSyntax, infix: Boolean = false): Unit = when (node) {
         is NumberSyntax -> Unit
         is SymbolSyntax -> Unit
         is OperatorNameSyntax -> Unit
         is SpecialSymbolSyntax -> Unit
-        is OperandSyntax -> perform0(node.operand, infix)
+        is OperandSyntax -> perform(node.operand, infix)
 
         is UnaryOperatorSyntax -> {
-            perform0(node.prefix, infix)
-            perform0(node.operand, infix)
+            perform(node.prefix, infix)
+            perform(node.operand, infix)
         }
 
-        is UnaryPlusSyntax -> perform0(node.operand, infix)
-        is UnaryMinusSyntax -> perform0(node.operand, infix)
-        is RadicalSyntax -> perform0(node.operand, infix)
-        is ExponentSyntax -> perform0(node.operand, infix)
+        is UnaryPlusSyntax -> perform(node.operand, infix)
+        is UnaryMinusSyntax -> perform(node.operand, infix)
+        is RadicalSyntax -> perform(node.operand, infix)
+        is ExponentSyntax -> perform(node.operand, infix)
 
         is SuperscriptSyntax -> {
-            perform0(node.left, true)
-            perform0(node.right, true)
+            perform(node.left, true)
+            perform(node.right, true)
         }
 
         is SubscriptSyntax -> {
-            perform0(node.left, true)
-            perform0(node.right, true)
+            perform(node.left, true)
+            perform(node.right, true)
         }
 
         is BinaryOperatorSyntax -> {
-            perform0(node.prefix, infix)
-            perform0(node.left, infix)
-            perform0(node.right, infix)
+            perform(node.prefix, infix)
+            perform(node.left, infix)
+            perform(node.right, infix)
         }
 
         is BinaryPlusSyntax -> {
-            perform0(node.left, infix)
-            perform0(node.right, infix)
+            perform(node.left, infix)
+            perform(node.right, infix)
         }
 
         is BinaryMinusSyntax -> {
-            perform0(node.left, infix)
-            perform0(node.right, infix)
+            perform(node.left, infix)
+            perform(node.right, infix)
         }
 
         is FractionSyntax -> {
             node.infix = infix
-            perform0(node.left, infix)
-            perform0(node.right, infix)
+            perform(node.left, infix)
+            perform(node.right, infix)
         }
 
         is RadicalWithIndexSyntax -> {
-            perform0(node.left, true)
-            perform0(node.right, true)
+            perform(node.left, true)
+            perform(node.right, true)
         }
 
         is MultiplicationSyntax -> {
-            perform0(node.left, infix)
-            perform0(node.right, infix)
+            perform(node.left, infix)
+            perform(node.right, infix)
         }
     }
 
-    public override fun perform(node: MathSyntax): Unit = perform0(node)
+    perform(node)
 }
 
 /**
@@ -160,39 +163,37 @@ public object BetterFraction : FeaturedMathRendererWithPostProcess.PostProcessSt
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessStage {
-    private fun perform0(node: MathSyntax): Boolean {
+public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
+    fun perform(node: MathSyntax): Boolean {
         return when (node) {
             is NumberSyntax -> false
             is SymbolSyntax -> false
             is OperatorNameSyntax -> false
             is SpecialSymbolSyntax -> false
-            is OperandSyntax -> perform0(node.operand)
-            is UnaryOperatorSyntax -> perform0(node.prefix) || perform0(node.operand)
-            is UnaryPlusSyntax -> perform0(node.operand)
-            is UnaryMinusSyntax -> perform0(node.operand)
+            is OperandSyntax -> perform(node.operand)
+            is UnaryOperatorSyntax -> perform(node.prefix) || perform(node.operand)
+            is UnaryPlusSyntax -> perform(node.operand)
+            is UnaryMinusSyntax -> perform(node.operand)
             is RadicalSyntax -> true
 
             is ExponentSyntax -> {
-                val r = perform0(node.operand)
+                val r = perform(node.operand)
                 node.useOperatorForm = r
                 r
             }
 
             is SuperscriptSyntax -> true
             is SubscriptSyntax -> true
-            is BinaryOperatorSyntax -> perform0(node.prefix) || perform0(node.left) || perform0(node.right)
-            is BinaryPlusSyntax -> perform0(node.left) || perform0(node.right)
-            is BinaryMinusSyntax -> perform0(node.left) || perform0(node.right)
+            is BinaryOperatorSyntax -> perform(node.prefix) || perform(node.left) || perform(node.right)
+            is BinaryPlusSyntax -> perform(node.left) || perform(node.right)
+            is BinaryMinusSyntax -> perform(node.left) || perform(node.right)
             is FractionSyntax -> true
             is RadicalWithIndexSyntax -> true
-            is MultiplicationSyntax -> perform0(node.left) || perform0(node.right)
+            is MultiplicationSyntax -> perform(node.left) || perform(node.right)
         }
     }
 
-    public override fun perform(node: MathSyntax) {
-        perform0(node)
-    }
+    perform(node)
 }
 
 /**
@@ -203,7 +204,7 @@ public object BetterExponent : FeaturedMathRendererWithPostProcess.PostProcessSt
  */
 @UnstableKMathAPI
 public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> Int) :
-    FeaturedMathRendererWithPostProcess.PostProcessStage {
+    PostProcessPhase {
     public override fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
         is SymbolSyntax -> Unit

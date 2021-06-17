@@ -54,7 +54,7 @@ public open class FeaturedMathRenderer(public val features: List<RenderFeature>)
 @UnstableKMathAPI
 public open class FeaturedMathRendererWithPostProcess(
     features: List<RenderFeature>,
-    public val stages: List<PostProcessStage>,
+    public val stages: List<PostProcessPhase>,
 ) : FeaturedMathRenderer(features) {
     public override fun render(mst: MST): MathSyntax {
         val res = super.render(mst)
@@ -65,7 +65,7 @@ public open class FeaturedMathRendererWithPostProcess(
     /**
      * Logical unit of [MathSyntax] post-processing.
      */
-    public fun interface PostProcessStage {
+    public fun interface PostProcessPhase {
         /**
          * Performs the specified action over [MathSyntax].
          */
@@ -102,7 +102,7 @@ public open class FeaturedMathRendererWithPostProcess(
 
                 // Printing terminal nodes as string
                 PrintNumeric,
-                PrintSymbolic,
+                PrintSymbol,
             ),
             listOf(
                 BetterExponent,
