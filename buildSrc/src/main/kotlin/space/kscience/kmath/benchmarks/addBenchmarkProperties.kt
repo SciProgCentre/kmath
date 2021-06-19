@@ -5,8 +5,11 @@
 
 package space.kscience.kmath.benchmarks
 
+import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import org.gradle.api.Project
+import ru.mipt.npm.gradle.KScienceReadmeExtension
 import java.time.*
 import java.time.format.*
 import java.time.temporal.ChronoField.*
@@ -42,63 +45,55 @@ private fun noun(number: Number, singular: String, plural: String) = if (number.
 fun Project.addBenchmarkProperties() {
     val benchmarksProject = this
     rootProject.subprojects.forEach { p ->
-        p.extensions.findByType(ru.mipt.npm.gradle.KScienceReadmeExtension::class.java)?.run {
-            benchmarksProject.extensions.findByType(kotlinx.benchmark.gradle.BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
-                // TODO remove this hack when https://github.com/mipt-npm/gradle-tools/pull/15 is merged
-                @Suppress("UNCHECKED_CAST")
-                (javaClass.getDeclaredField("properties")
-                    .also {
-                        it.isAccessible = true
-                    }[this] as MutableMap<String, () -> Any?>)["benchmark${cfg.name.replaceFirstChar(Char::uppercase)}"] =
-                    {
-                        val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
+        p.extensions.findByType(KScienceReadmeExtension::class.java)?.run {
+            benchmarksProject.extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
+                property("benchmark${cfg.name.replaceFirstChar(Char::uppercase)}") {
+                    val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
 
-                        val resDirectory = launches.listFiles()?.maxByOrNull {
-                            LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
-                        }
+                    val resDirectory = launches.listFiles()?.maxByOrNull {
+                        LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
+                    }
 
-                        if (resDirectory == null) {
-                            "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
-                        } else {
-                            val reports =
-                                kotlinx.serialization.json.Json.decodeFromString<List<JmhReport>>(
-                                    resDirectory.resolve("jvm.json").readText()
-                                )
+                    if (resDirectory == null) {
+                        "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
+                    } else {
+                        val reports =
+                            Json.decodeFromString<List<JmhReport>>(resDirectory.resolve("jvm.json").readText())
 
-                            buildString {
-                                appendLine("<details>")
-                                appendLine("<summary>")
-                                appendLine("Report for benchmark configuration <code>${cfg.name}</code>")
-                                appendLine("</summary>")
-                                appendLine()
-                                val first = reports.first()
+                        buildString {
+                            appendLine("<details>")
+                            appendLine("<summary>")
+                            appendLine("Report for benchmark configuration <code>${cfg.name}</code>")
+                            appendLine("</summary>")
+                            appendLine()
+                            val first = reports.first()
 
-                                appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
-                                appendLine()
-                                appendLine("```")
-                                appendLine("${first.jvm} ${
-                                    first.jvmArgs.joinToString(" ")
-                                }")
-                                appendLine("```")
+                            appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
+                            appendLine()
+                            appendLine("```")
+                            appendLine("${first.jvm} ${
+                                first.jvmArgs.joinToString(" ")
+                            }")
+                            appendLine("```")
 
-                                appendLine("* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
-                                    noun(first.warmupIterations, "iteration", "iterations")
-                                } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
-                                    noun(first.measurementIterations, "iteration", "iterations")
-                                } by ${first.measurementTime}.")
+                            appendLine("* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
+                                noun(first.warmupIterations, "iteration", "iterations")
+                            } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
+                                noun(first.measurementIterations, "iteration", "iterations")
+                            } by ${first.measurementTime}.")
 
-                                appendLine()
-                                appendLine("| Benchmark | Score |")
-                                appendLine("|:---------:|:-----:|")
+                            appendLine()
+                            appendLine("| Benchmark | Score |")
+                            appendLine("|:---------:|:-----:|")
 
-                                reports.forEach { report ->
-                                    appendLine("|`${report.benchmark}`|${report.primaryMetric.score} &plusmn; ${report.primaryMetric.scoreError} ${report.primaryMetric.scoreUnit}|")
-                                }
-
-                                appendLine("</details>")
+                            reports.forEach { report ->
+                                appendLine("|`${report.benchmark}`|${report.primaryMetric.score} &plusmn; ${report.primaryMetric.scoreError} ${report.primaryMetric.scoreUnit}|")
                             }
+
+                            appendLine("</details>")
                         }
                     }
+                }
             }
         }
     }

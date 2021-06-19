@@ -4,13 +4,14 @@ plugins {
 }
 
 repositories {
-    gradlePluginPortal()
+    maven("https://repo.kotlin.link")
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-    api("ru.mipt.npm:gradle-tools:0.9.10")
+    api("ru.mipt.npm:gradle-tools:0.10.0")
     api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
 }
 
