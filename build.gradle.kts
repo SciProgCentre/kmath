@@ -10,9 +10,7 @@ allprojects {
         maven("http://logicrunch.research.it.uu.se/maven") {
             isAllowInsecureProtocol = true
         }
-        maven("https://oss.sonatype.org/content/repositories/snapshots") {
-
-        }
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
 
