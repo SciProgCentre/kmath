@@ -6,6 +6,7 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
+import space.kscience.kmath.misc.toIntExact
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.math.*
@@ -58,7 +59,7 @@ public object ZigguratNormalizedGaussianSampler : NormalizedGaussianSampler {
 
     private fun sampleOne(generator: RandomGenerator): Double {
         val j = generator.nextLong()
-        val i = (j and LAST.toLong()).toInt()
+        val i = (j and LAST.toLong()).toIntExact()
         return if (abs(j) < K[i]) j * W[i] else fix(generator, j, i)
     }
 

@@ -7,6 +7,7 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingIntChain
 import space.kscience.kmath.internal.InternalUtils
+import space.kscience.kmath.misc.toIntExact
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.Sampler
 import space.kscience.kmath.structures.IntBuffer
@@ -119,7 +120,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
             val gaussian = ZigguratNormalizedGaussianSampler.sample(generator)
 
             val smallMeanPoissonSampler = if (mean - lambda < Double.MIN_VALUE) {
-               null
+                null
             } else {
                 KempSmallMeanPoissonSampler(mean - lambda).sample(generator)
             }
@@ -188,7 +189,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
                 }
             }
 
-            return min(y2 + y.toLong(), Int.MAX_VALUE.toLong()).toInt()
+            return min(y2 + y.toLong(), Int.MAX_VALUE.toLong()).toIntExact()
         }
 
         override fun nextBufferBlocking(size: Int): IntBuffer = IntBuffer(size) { nextBlocking() }

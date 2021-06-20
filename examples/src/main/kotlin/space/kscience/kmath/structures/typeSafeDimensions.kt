@@ -19,7 +19,7 @@ private fun DMatrixContext<Double, *>.simple() {
 }
 
 private object D5 : Dimension {
-    override val dim: UInt = 5u
+    override val dim: Int = 5
 }
 
 private fun DMatrixContext<Double, *>.custom() {

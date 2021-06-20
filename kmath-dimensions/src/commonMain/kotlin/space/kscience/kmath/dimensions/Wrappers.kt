@@ -23,11 +23,11 @@ public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
          * Coerces a regular matrix to a matrix with type-safe dimensions and throws a error if coercion failed
          */
         public inline fun <T, reified R : Dimension, reified C : Dimension> coerce(structure: Structure2D<T>): DMatrix<T, R, C> {
-            require(structure.rowNum == Dimension.dim<R>().toInt()) {
+            require(structure.rowNum == Dimension.dim<R>()) {
                 "Row number mismatch: expected ${Dimension.dim<R>()} but found ${structure.rowNum}"
             }
 
-            require(structure.colNum == Dimension.dim<C>().toInt()) {
+            require(structure.colNum == Dimension.dim<C>()) {
                 "Column number mismatch: expected ${Dimension.dim<C>()} but found ${structure.colNum}"
             }
 
@@ -61,7 +61,7 @@ public value class DMatrixWrapper<out T, R : Dimension, C : Dimension>(
 public interface DPoint<out T, D : Dimension> : Point<T> {
     public companion object {
         public inline fun <T, reified D : Dimension> coerce(point: Point<T>): DPoint<T, D> {
-            require(point.size == Dimension.dim<D>().toInt()) {
+            require(point.size == Dimension.dim<D>()) {
                 "Vector dimension mismatch: expected ${Dimension.dim<D>()}, but found ${point.size}"
             }
 
@@ -92,11 +92,11 @@ public value class DPointWrapper<out T, D : Dimension>(public val point: Point<T
 @JvmInline
 public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: LinearSpace<T, A>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
-        require(rowNum == Dimension.dim<R>().toInt()) {
+        require(rowNum == Dimension.dim<R>()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"
         }
 
-        require(colNum == Dimension.dim<C>().toInt()) {
+        require(colNum == Dimension.dim<C>()) {
             "Column number mismatch: expected ${Dimension.dim<C>()} but found $colNum"
         }
 
@@ -111,7 +111,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
     ): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
-        return context.buildMatrix(rows.toInt(), cols.toInt(), initializer).coerce()
+        return context.buildMatrix(rows, cols, initializer).coerce()
     }
 
     public inline fun <reified D : Dimension> point(noinline initializer: A.(Int) -> T): DPoint<T, D> {
@@ -119,7 +119,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
 
         return DPoint.coerceUnsafe(
             context.buildVector(
-                size.toInt(),
+                size,
                 initializer
             )
         )
