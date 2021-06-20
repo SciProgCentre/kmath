@@ -9,17 +9,17 @@ import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
 @ThreadLocal
-private val dimensionMap: MutableMap<UInt, Dimension> = hashMapOf(1u to D1, 2u to D2, 3u to D3)
+private val dimensionMap: MutableMap<Int, Dimension> = hashMapOf(1 to D1, 2 to D2, 3 to D3)
 
 @Suppress("UNCHECKED_CAST")
 public actual fun <D : Dimension> Dimension.Companion.resolve(type: KClass<D>): D = dimensionMap
     .entries
-    .map(MutableMap.MutableEntry<UInt, Dimension>::value)
+    .map(MutableMap.MutableEntry<Int, Dimension>::value)
     .find { it::class == type } as? D
     ?: error("Can't resolve dimension $type")
 
-public actual fun Dimension.Companion.of(dim: UInt): Dimension = dimensionMap.getOrPut(dim) {
+public actual fun Dimension.Companion.of(dim: Int): Dimension = dimensionMap.getOrPut(dim) {
     object : Dimension {
-        override val dim: UInt get() = dim
+        override val dim: Int get() = dim
     }
 }
