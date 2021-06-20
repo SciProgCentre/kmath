@@ -5,7 +5,11 @@
 
 package space.kscience.kmath.commons.random
 
+import kotlinx.coroutines.runBlocking
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.stat.next
 
 public class CMRandomGeneratorWrapper(
     public val factory: (IntArray) -> RandomGenerator,
@@ -33,7 +37,10 @@ public class CMRandomGeneratorWrapper(
 
     public override fun nextInt(): Int = generator.nextInt()
     public override fun nextInt(n: Int): Int = generator.nextInt(n)
-    public override fun nextGaussian(): Double = TODO()
+
+    @PerformancePitfall
+    public override fun nextGaussian(): Double = runBlocking { GaussianSampler(0.0, 1.0).next(generator) }
+
     public override fun nextDouble(): Double = generator.nextDouble()
     public override fun nextLong(): Long = generator.nextLong()
 }
