@@ -47,3 +47,8 @@ include(
     ":examples",
     ":benchmarks"
 )
+
+
+if(System.getProperty("os.name") == "Linux"){
+    include(":kmath-noa")
+}
