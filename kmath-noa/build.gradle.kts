@@ -18,8 +18,8 @@ dependencies {
     api(project(":kmath-tensors"))
 }
 
-val home = System.getProperty("user.home")
-val javaHome = System.getProperty("java.home")
+val home: String = System.getProperty("user.home")
+val javaHome: String = System.getProperty("java.home")
 val thirdPartyDir = "$home/.konan/third-party/kmath-noa-${project.property("version")}"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
 val cppSources = projectDir.resolve("src/main/cpp")
