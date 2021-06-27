@@ -18,14 +18,8 @@ the [GNU](https://gcc.gnu.org/) toolchain. For `GPU` kernels, we require a compa
 installation. If you are on Windows, we recommend setting up
 everything on [WSL](https://docs.nvidia.com/cuda/wsl-user-guide/index.html).
 
-To install the library, you have to publish 
-locally `kmath-core`, `kmath-tensors` with `kmath-noa`:
-
+To install the library, simply publish it locally:
 ```
-./gradlew -q :kmath-core:publishToMavenLocal :kmath-tensors:publishToMavenLocal :kmath-noa:publishToMavenLocal
+./gradlew -q :kmath-noa:publishToMavenLocal
 ```
-
-This builds `jtorch` a JNI wrapper for `NOA/LibTorch`, placed inside:
-
-`~/.konan/third-party/kmath-noa-<version>/cpp-build`
 
