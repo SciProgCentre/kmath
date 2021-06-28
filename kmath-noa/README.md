@@ -18,8 +18,9 @@ the [GNU](https://gcc.gnu.org/) toolchain. For `GPU` kernels, we require a compa
 installation. If you are on Windows, we recommend setting up
 everything on [WSL](https://docs.nvidia.com/cuda/wsl-user-guide/index.html).
 
-To install the library, simply publish it locally:
+To install the library, simply publish the modules `kmath-tensors` 
+and `kmath-noa` locally:
 ```
-./gradlew -q :kmath-noa:publishToMavenLocal
+./gradlew -q :kmath-tensors:publishToMavenLocal :kmath-noa:publishToMavenLocal
 ```
 
