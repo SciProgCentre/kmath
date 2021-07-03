@@ -47,7 +47,7 @@ kotlin {
                 implementation(project(":kmath-nd4j"))
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
-                implementation("org.nd4j:nd4j-native:1.0.0-beta7")
+                implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
                 //
