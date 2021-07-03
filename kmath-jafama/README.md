@@ -7,7 +7,7 @@ Integration with [Jafama](https://github.com/jeffhain/jafama).
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-jafama:0.3.0-dev-13`.
+The Maven coordinates of this project are `space.kscience:kmath-jafama:0.3.0-dev-14`.
 
 **Gradle:**
 ```gradle
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-jafama:0.3.0-dev-13'
+    implementation 'space.kscience:kmath-jafama:0.3.0-dev-14'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-jafama:0.3.0-dev-13")
+    implementation("space.kscience:kmath-jafama:0.3.0-dev-14")
 }
 ```
 
@@ -66,8 +66,8 @@ Report for benchmark configuration <code>jafamaDouble</code>
 
 | Benchmark | Score |
 |:---------:|:-----:|
-|`space.kscience.kmath.benchmarks.JafamaBenchmark.core`|14.296120859512893 &plusmn; 0.36462633435888736 ops/s|
-|`space.kscience.kmath.benchmarks.JafamaBenchmark.jafama`|11.431566395649781 &plusmn; 2.570896777898243 ops/s|
-|`space.kscience.kmath.benchmarks.JafamaBenchmark.strictJafama`|11.746020495694117 &plusmn; 6.205909559197869 ops/s|
+|`space.kscience.kmath.benchmarks.JafamaBenchmark.core`|14.35014650168397 &plusmn; 0.9200669832937576 ops/s|
+|`space.kscience.kmath.benchmarks.JafamaBenchmark.jafama`|12.048429204455887 &plusmn; 1.2882929181842269 ops/s|
+|`space.kscience.kmath.benchmarks.JafamaBenchmark.strictJafama`|12.977653357239152 &plusmn; 1.4122819627470866 ops/s|
 </details>
 

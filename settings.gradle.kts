@@ -6,7 +6,7 @@ pluginManagement {
     }
 
     val toolsVersion = "0.10.0"
-    val kotlinVersion = "1.5.0"
+    val kotlinVersion = "1.5.20"
 
     plugins {
         id("ru.mipt.npm.gradle.project") version toolsVersion
@@ -17,7 +17,6 @@ pluginManagement {
         kotlin("plugin.allopen") version kotlinVersion
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
         kotlin("jupyter.api") version "0.10.0-25"
-
     }
 }
 
@@ -45,5 +44,5 @@ include(
     ":kmath-symja",
     ":kmath-jafama",
     ":examples",
-    ":benchmarks"
+    ":benchmarks",
 )
