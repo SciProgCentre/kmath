@@ -9,7 +9,7 @@ public class JNoa {
 
     static {
         String jNoaPath = System.getProperty("user.home") +
-                "/.konan/third-party/kmath-noa-0.3.0-dev-14/cpp-build/libjnoa.so";
+                "/.konan/third-party/kmath-noa-0.3.0-dev-14/cpp-build/kmath/libjnoa.so";
 
         try {
             System.load(jNoaPath);

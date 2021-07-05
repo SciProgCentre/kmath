@@ -22,7 +22,7 @@ val home: String = System.getProperty("user.home")
 val javaHome: String = System.getProperty("java.home")
 val thirdPartyDir = "$home/.konan/third-party/kmath-noa-${project.property("version")}"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
-val cppSources = projectDir.resolve("src/main/cpp")
+val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath"
 
 val cudaHome: String? = System.getenv("CUDA_HOME")
 val cudaDefault = file("/usr/local/cuda").exists()
@@ -42,7 +42,8 @@ val generateJNIHeader by tasks.registering {
     doLast {
         exec {
             workingDir(projectDir.resolve("src/main/java/space/kscience/kmath/noa"))
-            commandLine("$javaHome/bin/javac", "-h", cppSources , "JNoa.java")
+            commandLine("$javaHome/bin/javac", "-h",
+                projectDir.resolve("src/main/resources") , "JNoa.java")
         }
     }
 }
@@ -77,6 +78,12 @@ val downloadTorch by tasks.registering(Download::class) {
     overwrite(false)
 }
 
+val downloadJNoa by tasks.registering(Download::class) {
+    src("https://github.com/grinisrit/noa/archive/refs/heads/kmath.zip")
+    dest(File("$thirdPartyDir/jnoa", "kmath.zip"))
+    overwrite(false)
+}
+
 val extractCMake by tasks.registering(Copy::class) {
     dependsOn(downloadCMake)
     from(tarTree(resources.gzip(downloadCMake.get().dest)))
@@ -106,11 +113,18 @@ val extractTorch by tasks.registering(Copy::class) {
     into("$thirdPartyDir/torch")
 }
 
+val extractJNoa by tasks.registering(Copy::class) {
+    dependsOn(downloadJNoa)
+    from(zipTree(downloadJNoa.get().dest))
+    into("$thirdPartyDir/jnoa")
+}
+
 val configureCpp by tasks.registering {
     dependsOn(extractCMake)
     dependsOn(extractClang)
     dependsOn(extractNinja)
     dependsOn(extractTorch)
+    dependsOn(extractJNoa)
     onlyIf { !file(cppBuildDir).exists() }
     doLast {
         exec {
@@ -121,15 +135,19 @@ val configureCpp by tasks.registering {
             workingDir(cppBuildDir)
             commandLine(
                 cmakeCmd,
-                cppSources,
+                jNoaDir,
                 "-GNinja",
                 "-DCMAKE_C_COMPILER=$clangCmd",
                 "-DCMAKE_CXX_COMPILER=$clangxxCmd",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
+                "-DBUILD_NOA_KMATH=ON",
                 "-DCMAKE_BUILD_TYPE=Release",
-                "-DBUILD_NOA_CUDA=${if(!cudaFound) "ON" else "OFF"}"
+                "-DBUILD_NOA_CUDA=${if(!cudaFound) "ON" else "OFF"}",
+                "-DBUILD_NOA_TESTS=OFF",
+                "-DBUILD_NOA_BENCHMARKS=OFF",
+                "-DINSTALL_NOA=OFF"
             )
         }
     }
@@ -156,3 +174,7 @@ val buildCpp by tasks.registering {
 }
 
 tasks["compileJava"].dependsOn(buildCpp)
+
+readme {
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+}
