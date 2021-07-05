@@ -10,12 +10,16 @@ import kotlin.test.Test
 class TestUtils {
 
     @Test
-    fun testExceptions() {
+    fun throwingExceptions() {
         try {
-            println(cudaAvailable())
+            JNoa.testException()
         } catch(e:NoaException) {
-            println(e)
-            println("ALL GOOD")
+            println("Caught NoaException in JVM\n:$e")
         }
+    }
+
+    @Test
+    fun cudaSupport() {
+        println("CUDA support available: ${cudaAvailable()}")
     }
 }

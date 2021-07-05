@@ -20,5 +20,6 @@ public class JNoa {
         }
     }
 
+    public static native void testException();
     public static native boolean cudaIsAvailable();
 }

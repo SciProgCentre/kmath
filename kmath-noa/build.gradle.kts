@@ -42,8 +42,10 @@ val generateJNIHeader by tasks.registering {
     doLast {
         exec {
             workingDir(projectDir.resolve("src/main/java/space/kscience/kmath/noa"))
-            commandLine("$javaHome/bin/javac", "-h",
-                projectDir.resolve("src/main/resources") , "JNoa.java")
+            commandLine(
+                "$javaHome/bin/javac", "-h",
+                projectDir.resolve("src/main/resources"), "JNoa.java"
+            )
         }
     }
 }
@@ -78,11 +80,16 @@ val downloadTorch by tasks.registering(Download::class) {
     overwrite(false)
 }
 
-val downloadJNoa by tasks.registering(Download::class) {
+fun downloadJNoaHelper(update: Boolean) = tasks.registering(Download::class) {
     src("https://github.com/grinisrit/noa/archive/refs/heads/kmath.zip")
     dest(File("$thirdPartyDir/jnoa", "kmath.zip"))
-    overwrite(false)
+    overwrite(update)
 }
+
+val downloadJNoa by downloadJNoaHelper(false)
+
+val reDownloadJNoa by downloadJNoaHelper(true)
+
 
 val extractCMake by tasks.registering(Copy::class) {
     dependsOn(downloadCMake)
@@ -144,7 +151,7 @@ val configureCpp by tasks.registering {
                 "-DJAVA_HOME=$javaHome",
                 "-DBUILD_NOA_KMATH=ON",
                 "-DCMAKE_BUILD_TYPE=Release",
-                "-DBUILD_NOA_CUDA=${if(!cudaFound) "ON" else "OFF"}",
+                "-DBUILD_NOA_CUDA=${if (!cudaFound) "ON" else "OFF"}",
                 "-DBUILD_NOA_TESTS=OFF",
                 "-DBUILD_NOA_BENCHMARKS=OFF",
                 "-DINSTALL_NOA=OFF"

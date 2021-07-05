@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    testException
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_testException
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    cudaIsAvailable
  * Signature: ()Z
  */
