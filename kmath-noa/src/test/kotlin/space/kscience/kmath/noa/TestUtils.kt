@@ -10,7 +10,12 @@ import kotlin.test.Test
 class TestUtils {
 
     @Test
-    fun checkCuda() {
-        println(cudaAvailable())
+    fun testExceptions() {
+        try {
+            println(cudaAvailable())
+        } catch(e:NoaException) {
+            println(e)
+            println("ALL GOOD")
+        }
     }
 }

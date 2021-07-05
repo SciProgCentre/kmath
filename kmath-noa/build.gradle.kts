@@ -27,14 +27,18 @@ val cppSources = projectDir.resolve("src/main/cpp")
 val cudaHome: String? = System.getenv("CUDA_HOME")
 val cudaDefault = file("/usr/local/cuda").exists()
 val cudaFound = cudaHome?.isNotEmpty() ?: false or cudaDefault
+
 val cmakeArchive = "cmake-3.20.5-linux-x86_64"
+val clangArchive = "clang+llvm-12.0.0-x86_64-linux-gnu-ubuntu-16.04"
 val torchArchive = "libtorch"
 
 val cmakeCmd = "$thirdPartyDir/cmake/$cmakeArchive/bin/cmake"
+val clangRootDir = "$thirdPartyDir/clang/$clangArchive"
+val clangCmd = "$clangRootDir/bin/clang"
+val clangxxCmd = "$clangRootDir/bin/clang++"
 val ninjaCmd = "$thirdPartyDir/ninja/ninja"
 
 val generateJNIHeader by tasks.registering {
-    println(cmakeCmd)
     doLast {
         exec {
             workingDir(projectDir.resolve("src/main/java/space/kscience/kmath/noa"))
@@ -47,6 +51,13 @@ val downloadCMake by tasks.registering(Download::class) {
     val tarFile = "$cmakeArchive.tar.gz"
     src("https://github.com/Kitware/CMake/releases/download/v3.20.5/$tarFile")
     dest(File("$thirdPartyDir/cmake", tarFile))
+    overwrite(false)
+}
+
+val downloadClang by tasks.registering(Download::class) {
+    val tarFile = "$clangArchive.tar.xz"
+    src("https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0/$tarFile")
+    dest(File("$thirdPartyDir/clang", tarFile))
     overwrite(false)
 }
 
@@ -72,6 +83,17 @@ val extractCMake by tasks.registering(Copy::class) {
     into("$thirdPartyDir/cmake")
 }
 
+val extractClang by tasks.registering {
+    dependsOn(downloadClang)
+    onlyIf { !file(clangRootDir).exists() }
+    doLast {
+        exec {
+            workingDir("$thirdPartyDir/clang")
+            commandLine("tar", "-xf", "$clangArchive.tar.xz")
+        }
+    }
+}
+
 val extractNinja by tasks.registering(Copy::class) {
     dependsOn(downloadNinja)
     from(zipTree(downloadNinja.get().dest))
@@ -86,6 +108,7 @@ val extractTorch by tasks.registering(Copy::class) {
 
 val configureCpp by tasks.registering {
     dependsOn(extractCMake)
+    dependsOn(extractClang)
     dependsOn(extractNinja)
     dependsOn(extractTorch)
     onlyIf { !file(cppBuildDir).exists() }
@@ -100,6 +123,8 @@ val configureCpp by tasks.registering {
                 cmakeCmd,
                 cppSources,
                 "-GNinja",
+                "-DCMAKE_C_COMPILER=$clangCmd",
+                "-DCMAKE_CXX_COMPILER=$clangxxCmd",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
