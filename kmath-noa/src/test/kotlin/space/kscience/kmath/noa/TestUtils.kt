@@ -6,20 +6,17 @@
 package space.kscience.kmath.noa
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class TestUtils {
 
     @Test
     fun throwingExceptions() {
-        try {
-            JNoa.testException()
-        } catch(e:NoaException) {
-            println("Caught NoaException in JVM\n:$e")
+        val i = try {
+            JNoa.testException(5)
+        } catch (e: NoaException) {
+            10
         }
-    }
-
-    @Test
-    fun cudaSupport() {
-        println("CUDA support available: ${cudaAvailable()}")
+        assertEquals(i, 10)
     }
 }

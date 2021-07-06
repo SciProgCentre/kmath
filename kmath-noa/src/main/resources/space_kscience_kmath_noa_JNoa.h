@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     space_kscience_kmath_noa_JNoa
  * Method:    testException
- * Signature: ()V
+ * Signature: (I)I
  */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_testException
-  (JNIEnv *, jclass);
+JNIEXPORT jint JNICALL Java_space_kscience_kmath_noa_JNoa_testException
+  (JNIEnv *, jclass, jint);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa

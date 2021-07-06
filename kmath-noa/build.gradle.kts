@@ -180,7 +180,7 @@ val buildCpp by tasks.registering {
     }
 }
 
-tasks["compileJava"].dependsOn(buildCpp)
+//tasks["compileJava"].dependsOn(buildCpp)
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
