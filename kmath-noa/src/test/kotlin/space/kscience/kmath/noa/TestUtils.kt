@@ -19,4 +19,11 @@ class TestUtils {
         }
         assertEquals(i, 10)
     }
+
+    @Test
+    fun settingNumThreads(){
+        val numThreads = 2
+        setNumThreads(numThreads)
+        assertEquals(numThreads, getNumThreads())
+    }
 }

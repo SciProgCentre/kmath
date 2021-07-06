@@ -23,6 +23,30 @@ JNIEXPORT jint JNICALL Java_space_kscience_kmath_noa_JNoa_testException
 JNIEXPORT jboolean JNICALL Java_space_kscience_kmath_noa_JNoa_cudaIsAvailable
   (JNIEnv *, jclass);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getNumThreads
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_space_kscience_kmath_noa_JNoa_getNumThreads
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setNumThreads
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setNumThreads
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSeed
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSeed
+  (JNIEnv *, jclass, jint);
+
 #ifdef __cplusplus
 }
 #endif
