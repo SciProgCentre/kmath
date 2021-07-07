@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.noa
 
+import space.kscience.kmath.noa.memory.NoaScope
+import space.kscience.kmath.noa.memory.withNoaScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,4 +28,6 @@ class TestUtils {
         setNumThreads(numThreads)
         assertEquals(numThreads, getNumThreads())
     }
+
+
 }

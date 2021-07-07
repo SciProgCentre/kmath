@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.noa;
 
-public class JNoa {
+class JNoa {
 
     static {
         String jNoaPath = System.getProperty("user.home") +
@@ -30,5 +30,8 @@ public class JNoa {
     public static native void setNumThreads(int numThreads);
 
     public static native void setSeed(int seed);
+
+    public static native void disposeTensor(long tensorHandle);
+
 }
 

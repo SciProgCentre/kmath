@@ -47,6 +47,14 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setNumThreads
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSeed
   (JNIEnv *, jclass, jint);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeTensor
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeTensor
+  (JNIEnv *, jclass, jlong);
+
 #ifdef __cplusplus
 }
 #endif
