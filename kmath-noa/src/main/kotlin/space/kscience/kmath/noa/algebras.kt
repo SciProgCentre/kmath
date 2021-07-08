@@ -220,6 +220,29 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
     override fun Tensor<T>.floor(): TensorType =
         wrap(JNoa.floorTensor(tensor.tensorHandle))
 
+    override fun Tensor<T>.det(): Tensor<T> =
+        wrap(JNoa.detTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.inv(): Tensor<T> =
+        wrap(JNoa.invTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.cholesky(): Tensor<T> =
+        wrap(JNoa.choleskyTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.qr(): Pair<TensorType, TensorType> {
+        val Q = JNoa.emptyTensor()
+        val R = JNoa.emptyTensor()
+        JNoa.qrTensor(tensor.tensorHandle, Q, R)
+        return Pair(wrap(Q), wrap(R))
+    }
+
+    override fun Tensor<T>.lu(): Triple<TensorType, TensorType, TensorType> {
+        val P = JNoa.emptyTensor()
+        val L = JNoa.emptyTensor()
+        val U = JNoa.emptyTensor()
+        JNoa.svdTensor(tensor.tensorHandle, P, L, U)
+        return Triple(wrap(P), wrap(L), wrap(U))
+    }
 
     override fun Tensor<T>.svd(): Triple<TensorType, TensorType, TensorType> {
         val U = JNoa.emptyTensor()
@@ -232,7 +255,7 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
     override fun Tensor<T>.symEig(): Pair<TensorType, TensorType> {
         val V = JNoa.emptyTensor()
         val S = JNoa.emptyTensor()
-        JNoa.symeigTensor(tensor.tensorHandle, S, V)
+        JNoa.symEigTensor(tensor.tensorHandle, S, V)
         return Pair(wrap(S), wrap(V))
     }
 

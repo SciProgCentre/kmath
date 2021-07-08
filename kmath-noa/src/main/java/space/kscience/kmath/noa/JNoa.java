@@ -255,9 +255,19 @@ class JNoa {
 
     public static native long diagEmbed(long diagsHandle, int offset, int dim1, int dim2);
 
+    public static native long detTensor(long tensorHandle);
+
+    public static native long invTensor(long tensorHandle);
+
+    public static native long choleskyTensor(long tensorHandle);
+
+    public static native void qrTensor(long tensorHandle, long Qhandle, long Rhandle);
+
+    public static native void luTensor(long tensorHandle, long Phandle, long Lhandle, long Uhandle);
+
     public static native void svdTensor(long tensorHandle, long Uhandle, long Shandle, long Vhandle);
 
-    public static native void symeigTensor(long tensorHandle, long Shandle, long Vhandle);
+    public static native void symEigTensor(long tensorHandle, long Shandle, long Vhandle);
 
     public static native boolean requiresGrad(long tensorHandle);
 

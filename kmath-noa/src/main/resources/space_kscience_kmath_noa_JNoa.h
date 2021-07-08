@@ -945,6 +945,46 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_diagEmbed
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    detTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_detTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    invTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_invTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    choleskyTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_choleskyTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    qrTensor
+ * Signature: (JJJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_qrTensor
+  (JNIEnv *, jclass, jlong, jlong, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    luTensor
+ * Signature: (JJJJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_luTensor
+  (JNIEnv *, jclass, jlong, jlong, jlong, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    svdTensor
  * Signature: (JJJJ)V
  */
@@ -953,10 +993,10 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_svdTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    symeigTensor
+ * Method:    symEigTensor
  * Signature: (JJJ)V
  */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_symeigTensor
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_symEigTensor
   (JNIEnv *, jclass, jlong, jlong, jlong);
 
 /*
