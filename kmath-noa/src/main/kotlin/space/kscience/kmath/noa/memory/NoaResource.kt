@@ -6,7 +6,7 @@
 package space.kscience.kmath.noa.memory
 
 public abstract class NoaResource
-internal constructor(scope: NoaScope) {
+internal constructor(internal val scope: NoaScope) {
     init {
         scope.add(::dispose)
     }

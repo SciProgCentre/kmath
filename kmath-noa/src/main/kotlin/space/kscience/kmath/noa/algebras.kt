@@ -5,4 +5,24 @@
 
 package space.kscience.kmath.noa
 
-public sealed class NoaAlgebra<T>{}
+import space.kscience.kmath.noa.memory.NoaScope
+import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
+import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
+import space.kscience.kmath.tensors.api.Tensor
+import space.kscience.kmath.tensors.api.TensorAlgebra
+
+public abstract class NoaAlgebra<T, TensorType: NoaTensor<T>>
+internal constructor(protected val scope: NoaScope)
+    : TensorAlgebra<T>  {
+
+    protected abstract fun Tensor<T>.cast(): TensorType
+}
+
+public abstract class NoaPartialDivisionAlgebra<T, TensorType: NoaTensor<T>>
+internal constructor(scope: NoaScope)
+    : NoaAlgebra<T, TensorType>(scope), LinearOpsTensorAlgebra<T>, AnalyticTensorAlgebra<T> {
+
+
+}
+
+

@@ -11,6 +11,7 @@ import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.IntTensor
+import space.kscience.kmath.tensors.core.TensorLinearStructure
 
 internal fun BufferedTensor<Int>.asTensor(): IntTensor =
     IntTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)

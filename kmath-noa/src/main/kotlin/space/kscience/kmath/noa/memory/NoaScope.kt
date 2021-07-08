@@ -26,7 +26,7 @@ public class NoaScope {
     }
 }
 
-internal inline fun <R> withNoaScope(i: Int, block: NoaScope.() -> R): R {
+internal inline fun <R> withNoaScope(block: NoaScope.() -> R): R {
     val noaScope = NoaScope()
     val result = noaScope.block()
     noaScope.disposeAll()
