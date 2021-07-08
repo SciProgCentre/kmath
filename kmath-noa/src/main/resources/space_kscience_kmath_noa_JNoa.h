@@ -353,6 +353,22 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_randnFloat
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    randintDouble
+ * Signature: (JJ[II)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_randintDouble
+  (JNIEnv *, jclass, jlong, jlong, jintArray, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    randintFloat
+ * Signature: (JJ[II)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_randintFloat
+  (JNIEnv *, jclass, jlong, jlong, jintArray, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    randintLong
  * Signature: (JJ[II)J
  */

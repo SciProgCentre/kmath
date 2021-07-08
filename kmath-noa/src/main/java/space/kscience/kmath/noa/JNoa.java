@@ -107,6 +107,10 @@ class JNoa {
 
     public static native long randnFloat(int[] shape, int device);
 
+    public static native long randintDouble(long low, long high, int[] shape, int device);
+
+    public static native long randintFloat(long low, long high, int[] shape, int device);
+
     public static native long randintLong(long low, long high, int[] shape, int device);
 
     public static native long randintInt(long low, long high, int[] shape, int device);

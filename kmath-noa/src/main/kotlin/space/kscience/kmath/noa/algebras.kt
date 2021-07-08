@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.noa
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.noa.memory.NoaScope
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
@@ -240,7 +241,7 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
         val P = JNoa.emptyTensor()
         val L = JNoa.emptyTensor()
         val U = JNoa.emptyTensor()
-        JNoa.svdTensor(tensor.tensorHandle, P, L, U)
+        JNoa.luTensor(tensor.tensorHandle, P, L, U)
         return Triple(wrap(P), wrap(L), wrap(U))
     }
 
@@ -269,6 +270,72 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
 
     public fun TensorType.detachFromGraph(): TensorType =
         wrap(JNoa.detachFromGraph(tensorHandle))
+
+}
+
+public class NoaDoubleAlgebra(scope: NoaScope) :
+    NoaPartialDivisionAlgebra<Double, NoaDoubleTensor>(scope) {
+
+    override val Tensor<Double>.tensor: NoaDoubleTensor
+        get() = TODO("Not yet implemented")
+
+    override fun wrap(tensorHandle: Long): NoaDoubleTensor =
+        NoaDoubleTensor(scope = scope, tensorHandle = tensorHandle)
+
+    @PerformancePitfall
+    public fun Tensor<Double>.copyToArray(): DoubleArray =
+        tensor.elements().map { it.second }.toList().toDoubleArray()
+
+    public fun copyFromArray(array: DoubleArray, shape: IntArray, device: Device): NoaDoubleTensor =
+        wrap(JNoa.fromBlobDouble(array, shape, device.toInt()))
+
+    public fun randNormalDouble(shape: IntArray, device: Device): NoaDoubleTensor =
+        wrap(JNoa.randnDouble(shape, device.toInt()))
+
+    public fun randUniformDouble(shape: IntArray, device: Device): NoaDoubleTensor =
+        wrap(JNoa.randDouble(shape, device.toInt()))
+
+    public fun randDiscreteDouble(low: Long, high: Long, shape: IntArray, device: Device): NoaDoubleTensor =
+        wrap(JNoa.randintDouble(low, high, shape, device.toInt()))
+
+    override operator fun Double.plus(other: Tensor<Double>): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(this, other.tensor.tensorHandle))
+
+    override fun Tensor<Double>.plus(value: Double): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(value, tensor.tensorHandle))
+
+    override fun Tensor<Double>.plusAssign(value: Double): Unit =
+        JNoa.plusDoubleAssign(value, tensor.tensorHandle)
+
+    override operator fun Double.minus(other: Tensor<Double>): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(-this, other.tensor.tensorHandle))
+
+    override fun Tensor<Double>.minus(value: Double): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(-value, tensor.tensorHandle))
+
+    override fun Tensor<Double>.minusAssign(value: Double): Unit =
+        JNoa.plusDoubleAssign(-value, tensor.tensorHandle)
+
+    override operator fun Double.times(other: Tensor<Double>): NoaDoubleTensor =
+        wrap(JNoa.timesDouble(this, other.tensor.tensorHandle))
+
+    override fun Tensor<Double>.times(value: Double): NoaDoubleTensor =
+        wrap(JNoa.timesDouble(value, tensor.tensorHandle))
+
+    override fun Tensor<Double>.timesAssign(value: Double): Unit =
+        JNoa.timesDoubleAssign(value, tensor.tensorHandle)
+
+    override fun Double.div(other: Tensor<Double>): NoaDoubleTensor =
+        other * (1 / this)
+
+    override fun Tensor<Double>.div(value: Double): NoaDoubleTensor =
+        tensor * (1 / value)
+
+    override fun Tensor<Double>.divAssign(value: Double): Unit =
+        tensor.timesAssign(1 / value)
+
+    public fun full(value: Double, shape: IntArray, device: Device): NoaDoubleTensor =
+        wrap(JNoa.fullDouble(value, shape, device.toInt()))
 
 }
 
