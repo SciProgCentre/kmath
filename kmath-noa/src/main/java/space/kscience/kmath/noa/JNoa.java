@@ -191,6 +191,18 @@ class JNoa {
 
     public static native long sumDimTensor(long tensorHandle, int dim, boolean keepDim);
 
+    public static native long minTensor(long tensorHandle);
+
+    public static native long minDimTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long maxTensor(long tensorHandle);
+
+    public static native long maxDimTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long argMaxTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long flattenTensor(long tensorHandle);
+
     public static native long matmul(long lhs, long rhs);
 
     public static native void matmulAssign(long lhs, long rhs);

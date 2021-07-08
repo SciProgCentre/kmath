@@ -28,8 +28,6 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
      */
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
 
-    public fun INDArray.wrapInt(): Nd4jArrayStructure<Int>
-
     /**
      * Unwraps to or acquires [INDArray] from [StructureND].
      */
@@ -93,7 +91,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
     public override fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T> = view(other.shape)
 
     override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> =
-        ndBase.get().argmax(ndArray, keepDim, dim).wrapInt()
+        ndBase.get().argmax(ndArray, keepDim, dim).asIntStructure()
 
     public override fun Tensor<T>.mean(dim: Int, keepDim: Boolean): Tensor<T> = ndArray.mean(keepDim, dim).wrap()
 
@@ -146,7 +144,6 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
  */
 public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double> {
     public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
-    public override fun INDArray.wrapInt(): Nd4jArrayStructure<Int> = asIntStructure()
 
     @OptIn(PerformancePitfall::class)
     public override val StructureND<Double>.ndArray: INDArray

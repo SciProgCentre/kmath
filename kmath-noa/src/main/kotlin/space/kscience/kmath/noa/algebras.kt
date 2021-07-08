@@ -100,6 +100,22 @@ constructor(protected val scope: NoaScope) : TensorAlgebra<T> {
     override fun Tensor<T>.sum(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.sumDimTensor(this.cast().tensorHandle, dim, keepDim))
 
+    public fun Tensor<T>.minAll(): TensorType = wrap(JNoa.minTensor(this.cast().tensorHandle))
+    override fun Tensor<T>.min(): T = minAll().item()
+    override fun Tensor<T>.min(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.minDimTensor(this.cast().tensorHandle, dim, keepDim))
+
+    public fun Tensor<T>.maxAll(): TensorType = wrap(JNoa.maxTensor(this.cast().tensorHandle))
+    override fun Tensor<T>.max(): T = maxAll().item()
+    override fun Tensor<T>.max(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.maxDimTensor(this.cast().tensorHandle, dim, keepDim))
+
+    override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): NoaIntTensor =
+        NoaIntTensor(scope, JNoa.argMaxTensor(this.cast().tensorHandle, dim, keepDim))
+
+    public fun Tensor<T>.flatten(): TensorType =
+        wrap(JNoa.flattenTensor(this.cast().tensorHandle))
+
     public fun Tensor<T>.copy(): TensorType =
         wrap(JNoa.copyTensor(this.cast().tensorHandle))
 
