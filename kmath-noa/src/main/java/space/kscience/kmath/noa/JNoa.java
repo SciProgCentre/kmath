@@ -33,6 +33,8 @@ class JNoa {
 
     public static native void disposeTensor(long tensorHandle);
 
+    public static native long emptyTensor();
+
     public static native long fromBlobDouble(double[] data, int[] shape, int device);
 
     public static native long fromBlobFloat(float[] data, int[] shape, int device);
@@ -185,7 +187,7 @@ class JNoa {
 
     public static native long expTensor(long tensorHandle);
 
-    public static native long logTensor(long tensorHandle);
+    public static native long lnTensor(long tensorHandle);
 
     public static native long sumTensor(long tensorHandle);
 
@@ -213,7 +215,7 @@ class JNoa {
 
     public static native void svdTensor(long tensorHandle, long Uhandle, long Shandle, long Vhandle);
 
-    public static native void symeigTensor(long tensorHandle, long Shandle, long Vhandle, boolean eigenvectors);
+    public static native void symeigTensor(long tensorHandle, long Shandle, long Vhandle);
 
     public static native boolean requiresGrad(long tensorHandle);
 
