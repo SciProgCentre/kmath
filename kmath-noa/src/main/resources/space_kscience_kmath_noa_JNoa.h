@@ -145,6 +145,14 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_viewTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    viewAsTensor
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_viewAsTensor
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    tensorToString
  * Signature: (J)Ljava/lang/String;
  */
@@ -222,6 +230,22 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getItemLong
  */
 JNIEXPORT jint JNICALL Java_space_kscience_kmath_noa_JNoa_getItemInt
   (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getIndex
+ * Signature: (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getIndex
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getIndexTensor
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getIndexTensor
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
@@ -625,26 +649,10 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_absTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    absTensorAssign
- * Signature: (J)V
- */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_absTensorAssign
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     space_kscience_kmath_noa_JNoa
  * Method:    transposeTensor
  * Signature: (JII)J
  */
 JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_transposeTensor
-  (JNIEnv *, jclass, jlong, jint, jint);
-
-/*
- * Class:     space_kscience_kmath_noa_JNoa
- * Method:    transposeTensorAssign
- * Signature: (JII)V
- */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_transposeTensorAssign
   (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
@@ -657,26 +665,10 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_expTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    expTensorAssign
- * Signature: (J)V
- */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_expTensorAssign
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     space_kscience_kmath_noa_JNoa
  * Method:    logTensor
  * Signature: (J)J
  */
 JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_logTensor
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     space_kscience_kmath_noa_JNoa
- * Method:    logTensorAssign
- * Signature: (J)V
- */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_logTensorAssign
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -689,11 +681,11 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sumTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    sumTensorAssign
- * Signature: (J)V
+ * Method:    sumDimTensor
+ * Signature: (JIZ)J
  */
-JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_sumTensorAssign
-  (JNIEnv *, jclass, jlong);
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sumDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa

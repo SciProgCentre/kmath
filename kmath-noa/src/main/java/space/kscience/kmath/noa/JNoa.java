@@ -55,6 +55,8 @@ class JNoa {
 
     public static native long viewTensor(long tensorHandle, int[] shape);
 
+    public static native long viewAsTensor(long tensorHandle, long asTensorHandle);
+
     public static native String tensorToString(long tensorHandle);
 
     public static native int getDim(long tensorHandle);
@@ -74,6 +76,10 @@ class JNoa {
     public static native long getItemLong(long tensorHandle);
 
     public static native int getItemInt(long tensorHandle);
+
+    public static native long getIndex(long tensorHandle, int index);
+
+    public static native long getIndexTensor(long tensorHandle, long indexTensorHandle);
 
     public static native double getDouble(long tensorHandle, int[] index);
 
@@ -175,23 +181,15 @@ class JNoa {
 
     public static native long absTensor(long tensorHandle);
 
-    public static native void absTensorAssign(long tensorHandle);
-
     public static native long transposeTensor(long tensorHandle, int i, int j);
-
-    public static native void transposeTensorAssign(long tensorHandle, int i, int j);
 
     public static native long expTensor(long tensorHandle);
 
-    public static native void expTensorAssign(long tensorHandle);
-
     public static native long logTensor(long tensorHandle);
-
-    public static native void logTensorAssign(long tensorHandle);
 
     public static native long sumTensor(long tensorHandle);
 
-    public static native void sumTensorAssign(long tensorHandle);
+    public static native long sumDimTensor(long tensorHandle, int dim, boolean keepDim);
 
     public static native long matmul(long lhs, long rhs);
 

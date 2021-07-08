@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
@@ -537,11 +539,11 @@ public open class DoubleTensorAlgebra :
     internal fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(tensor.toDoubleArray())
 
-    internal fun Tensor<Double>.foldDim(
-        foldFunction: (DoubleArray) -> Double,
+    internal fun <R> Tensor<Double>.foldDim(
+        foldFunction: (DoubleArray) -> R,
         dim: Int,
         keepDim: Boolean,
-    ): DoubleTensor {
+    ): BufferedTensor<R> {
         check(dim < dimension) { "Dimension $dim out of range $dimension" }
         val resShape = if (keepDim) {
             shape.take(dim).toIntArray() + intArrayOf(1) + shape.takeLast(dimension - dim - 1).toIntArray()
@@ -549,7 +551,9 @@ public open class DoubleTensorAlgebra :
             shape.take(dim).toIntArray() + shape.takeLast(dimension - dim - 1).toIntArray()
         }
         val resNumElements = resShape.reduce(Int::times)
-        val resTensor = DoubleTensor(resShape, DoubleArray(resNumElements) { 0.0 }, 0)
+        val init = foldFunction(DoubleArray(1){0.0})
+        val resTensor = BufferedTensor(resShape,
+            MutableList(resNumElements) { init }.asMutableBuffer(), 0)
         for (index in resTensor.linearStructure.indices()) {
             val prefix = index.take(dim).toIntArray()
             val suffix = index.takeLast(dimension - dim - 1).toIntArray()
@@ -557,41 +561,30 @@ public open class DoubleTensorAlgebra :
                 tensor[prefix + intArrayOf(i) + suffix]
             })
         }
-
         return resTensor
     }
+
 
     override fun Tensor<Double>.sum(): Double = tensor.fold { it.sum() }
 
     override fun Tensor<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.sum() }, dim, keepDim)
+        foldDim({ x -> x.sum() }, dim, keepDim).toDoubleTensor()
 
     override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
 
     override fun Tensor<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
+        foldDim({ x -> x.minOrNull()!! }, dim, keepDim).toDoubleTensor()
 
     override fun Tensor<Double>.max(): Double = this.fold { it.maxOrNull()!! }
 
     override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
+        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim).toDoubleTensor()
 
 
-    /**
-     * Returns the index of maximum value of each row of the input tensor in the given dimension [dim].
-     *
-     * If [keepDim] is true, the output tensor is of the same size as
-     * input except in the dimension [dim] where it is of size 1.
-     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
-     *
-     * @param dim the dimension to reduce.
-     * @param keepDim whether the output tensor has [dim] retained or not.
-     * @return the the index of maximum value of each row of the input tensor in the given dimension [dim].
-     */
-    public fun Tensor<Double>.argMax(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun Tensor<Double>.argMax(dim: Int, keepDim: Boolean): IntTensor =
         foldDim({ x ->
-            x.withIndex().maxByOrNull { it.value }?.index!!.toDouble()
-        }, dim, keepDim)
+            x.withIndex().maxByOrNull { it.value }?.index!!
+        }, dim, keepDim).toIntTensor()
 
 
     override fun Tensor<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
@@ -604,7 +597,7 @@ public open class DoubleTensorAlgebra :
             },
             dim,
             keepDim
-        )
+        ).toDoubleTensor()
 
     override fun Tensor<Double>.std(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
@@ -619,7 +612,7 @@ public open class DoubleTensorAlgebra :
         },
         dim,
         keepDim
-    )
+    ).toDoubleTensor()
 
     override fun Tensor<Double>.variance(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
@@ -634,7 +627,7 @@ public open class DoubleTensorAlgebra :
         },
         dim,
         keepDim
-    )
+    ).toDoubleTensor()
 
     private fun cov(x: DoubleTensor, y: DoubleTensor): Double {
         val n = x.shape[0]

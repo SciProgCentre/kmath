@@ -57,6 +57,55 @@ constructor(protected val scope: NoaScope) : TensorAlgebra<T> {
 
     override operator fun Tensor<T>.unaryMinus(): TensorType =
         wrap(JNoa.unaryMinus(this.cast().tensorHandle))
+
+    override infix fun Tensor<T>.dot(other: Tensor<T>): TensorType {
+        return wrap(JNoa.matmul(this.cast().tensorHandle, other.cast().tensorHandle))
+    }
+
+    public infix fun Tensor<T>.dotAssign(other: Tensor<T>): Unit {
+        JNoa.matmulAssign(this.cast().tensorHandle, other.cast().tensorHandle)
+    }
+
+    public infix fun Tensor<T>.dotRightAssign(other: Tensor<T>): Unit {
+        JNoa.matmulRightAssign(this.cast().tensorHandle, other.cast().tensorHandle)
+    }
+
+    override operator fun Tensor<T>.get(i: Int): TensorType =
+        wrap(JNoa.getIndex(this.cast().tensorHandle, i))
+
+    public operator fun Tensor<T>.get(indexTensor: NoaLongTensor): TensorType =
+        wrap(JNoa.getIndexTensor(this.cast().tensorHandle, indexTensor.tensorHandle))
+
+    override fun diagonalEmbedding(
+        diagonalEntries: Tensor<T>, offset: Int, dim1: Int, dim2: Int
+    ): TensorType =
+        wrap(JNoa.diagEmbed(diagonalEntries.cast().tensorHandle, offset, dim1, dim2))
+
+    override fun Tensor<T>.transpose(i: Int, j: Int): TensorType {
+        return wrap(JNoa.transposeTensor(this.cast().tensorHandle, i, j))
+    }
+
+    override fun Tensor<T>.view(shape: IntArray): TensorType {
+        return wrap(JNoa.viewTensor(this.cast().tensorHandle, shape))
+    }
+
+    override fun Tensor<T>.viewAs(other: Tensor<T>): TensorType {
+        return wrap(JNoa.viewAsTensor(this.cast().tensorHandle, other.cast().tensorHandle))
+    }
+
+    public fun Tensor<T>.abs(): TensorType = wrap(JNoa.absTensor(this.cast().tensorHandle))
+
+    public fun Tensor<T>.sumAll(): TensorType = wrap(JNoa.sumTensor(this.cast().tensorHandle))
+    override fun Tensor<T>.sum(): T = sumAll().item()
+    override fun Tensor<T>.sum(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.sumDimTensor(this.cast().tensorHandle, dim, keepDim))
+
+    public fun Tensor<T>.copy(): TensorType =
+        wrap(JNoa.copyTensor(this.cast().tensorHandle))
+
+    public fun Tensor<T>.copyToDevice(device: Device): TensorType =
+        wrap(JNoa.copyToDevice(this.cast().tensorHandle, device.toInt()))
+
 }
 
 public abstract class NoaPartialDivisionAlgebra<T, TensorType : NoaTensor<T>>
