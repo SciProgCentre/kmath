@@ -90,7 +90,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
     public override fun Tensor<T>.view(shape: IntArray): Tensor<T> = ndArray.reshape(shape).wrap()
     public override fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T> = view(other.shape)
 
-    public override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T> =
+    public fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T> =
         ndBase.get().argmax(ndArray, keepDim, dim).wrap()
 
     public override fun Tensor<T>.mean(dim: Int, keepDim: Boolean): Tensor<T> = ndArray.mean(keepDim, dim).wrap()

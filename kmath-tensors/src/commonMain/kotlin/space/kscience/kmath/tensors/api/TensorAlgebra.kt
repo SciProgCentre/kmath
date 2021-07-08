@@ -28,7 +28,8 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.value(): T
+    public fun Tensor<T>.value(): T = valueOrNull()
+        ?: throw IllegalArgumentException("Illegal value call for non scalar tensor")
 
     /**
      * Each element of the tensor [other] is added to this value.
