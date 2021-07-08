@@ -116,10 +116,10 @@ constructor(protected val scope: NoaScope) : TensorAlgebra<T> {
     public fun Tensor<T>.flatten(): TensorType =
         wrap(JNoa.flattenTensor(tensor.tensorHandle))
 
-    public fun Tensor<T>.randIntegral(low: Long, high: Long): TensorType =
+    public fun Tensor<T>.randDiscrete(low: Long, high: Long): TensorType =
         wrap(JNoa.randintLike(tensor.tensorHandle, low, high))
 
-    public fun Tensor<T>.randIntegralAssign(low: Long, high: Long): Unit =
+    public fun Tensor<T>.randDiscreteAssign(low: Long, high: Long): Unit =
         JNoa.randintLikeAssign(tensor.tensorHandle, low, high)
 
     public fun Tensor<T>.copy(): TensorType =
@@ -142,6 +142,21 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
         JNoa.divTensorAssign(tensor.tensorHandle, other.tensor.tensorHandle)
     }
 
+    public fun Tensor<T>.meanAll(): TensorType = wrap(JNoa.meanTensor(tensor.tensorHandle))
+    override fun Tensor<T>.mean(): T = meanAll().item()
+    override fun Tensor<T>.mean(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.meanDimTensor(tensor.tensorHandle, dim, keepDim))
+
+    public fun Tensor<T>.stdAll(): TensorType = wrap(JNoa.stdTensor(tensor.tensorHandle))
+    override fun Tensor<T>.std(): T = stdAll().item()
+    override fun Tensor<T>.std(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.stdDimTensor(tensor.tensorHandle, dim, keepDim))
+
+    public fun Tensor<T>.varAll(): TensorType = wrap(JNoa.varTensor(tensor.tensorHandle))
+    override fun Tensor<T>.variance(): T = varAll().item()
+    override fun Tensor<T>.variance(dim: Int, keepDim: Boolean): TensorType =
+        wrap(JNoa.varDimTensor(tensor.tensorHandle, dim, keepDim))
+
     public fun Tensor<T>.randUniform(): TensorType =
         wrap(JNoa.randLike(tensor.tensorHandle))
 
@@ -154,12 +169,57 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
     public fun Tensor<T>.randNormalAssign(): Unit =
         JNoa.randnLikeAssign(tensor.tensorHandle)
 
-    override fun Tensor<T>.exp(): TensorType = 
+    override fun Tensor<T>.exp(): TensorType =
         wrap(JNoa.expTensor(tensor.tensorHandle))
-   
-    override fun Tensor<T>.ln(): TensorType = 
+
+    override fun Tensor<T>.ln(): TensorType =
         wrap(JNoa.lnTensor(tensor.tensorHandle))
-  
+
+    override fun Tensor<T>.sqrt(): TensorType =
+        wrap(JNoa.sqrtTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.cos(): TensorType =
+        wrap(JNoa.cosTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.acos(): TensorType =
+        wrap(JNoa.acosTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.cosh(): TensorType =
+        wrap(JNoa.coshTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.acosh(): TensorType =
+        wrap(JNoa.acoshTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.sin(): TensorType =
+        wrap(JNoa.sinTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.asin(): TensorType =
+        wrap(JNoa.asinTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.sinh(): TensorType =
+        wrap(JNoa.sinhTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.asinh(): TensorType =
+        wrap(JNoa.asinhTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.tan(): TensorType =
+        wrap(JNoa.tanTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.atan(): TensorType =
+        wrap(JNoa.atanTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.tanh(): TensorType =
+        wrap(JNoa.tanhTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.atanh(): TensorType =
+        wrap(JNoa.atanhTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.ceil(): TensorType =
+        wrap(JNoa.ceilTensor(tensor.tensorHandle))
+
+    override fun Tensor<T>.floor(): TensorType =
+        wrap(JNoa.floorTensor(tensor.tensorHandle))
+
 
     override fun Tensor<T>.svd(): Triple<TensorType, TensorType, TensorType> {
         val U = JNoa.emptyTensor()
@@ -177,16 +237,16 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
     }
 
     public fun TensorType.grad(variable: TensorType, retainGraph: Boolean): TensorType {
-        return wrap(JNoa.autogradTensor(tensorHandle, variable.tensorHandle, retainGraph))
+        return wrap(JNoa.autoGradTensor(tensorHandle, variable.tensorHandle, retainGraph))
     }
 
     public infix fun TensorType.hess(variable: TensorType): TensorType {
-        return wrap(JNoa.autohessTensor(tensorHandle, variable.tensorHandle))
+        return wrap(JNoa.autoHessTensor(tensorHandle, variable.tensorHandle))
     }
 
     public fun TensorType.detachFromGraph(): TensorType =
         wrap(JNoa.detachFromGraph(tensorHandle))
-    
+
 }
 
 

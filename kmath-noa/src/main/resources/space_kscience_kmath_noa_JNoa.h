@@ -57,6 +57,14 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    emptyTensor
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_emptyTensor
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    fromBlobDouble
  * Signature: ([D[II)J
  */
@@ -665,10 +673,130 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_expTensor
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    logTensor
+ * Method:    lnTensor
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_logTensor
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_lnTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    sqrtTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sqrtTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    cosTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_cosTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    acosTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_acosTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    coshTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_coshTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    acoshTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_acoshTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    sinTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sinTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    asinTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_asinTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    sinhTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sinhTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    asinhTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_asinhTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    tanTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_tanTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    atanTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_atanTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    tanhTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_tanhTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    atanhTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_atanhTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    ceilTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_ceilTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    floorTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_floorTensor
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -686,6 +814,102 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sumTensor
  */
 JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sumDimTensor
   (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    minTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_minTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    minDimTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_minDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    maxTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_maxTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    maxDimTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_maxDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    meanTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_meanTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    meanDimTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_meanDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stdTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_stdTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stdDimTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_stdDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    varTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_varTensor
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    varDimTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_varDimTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    argMaxTensor
+ * Signature: (JIZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_argMaxTensor
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    flattenTensor
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_flattenTensor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
@@ -730,10 +954,10 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_svdTensor
 /*
  * Class:     space_kscience_kmath_noa_JNoa
  * Method:    symeigTensor
- * Signature: (JJJZ)V
+ * Signature: (JJJ)V
  */
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_symeigTensor
-  (JNIEnv *, jclass, jlong, jlong, jlong, jboolean);
+  (JNIEnv *, jclass, jlong, jlong, jlong);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
@@ -761,18 +985,18 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_detachFromGraph
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    autogradTensor
+ * Method:    autoGradTensor
  * Signature: (JJZ)J
  */
-JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autogradTensor
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autoGradTensor
   (JNIEnv *, jclass, jlong, jlong, jboolean);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    autohessTensor
+ * Method:    autoHessTensor
  * Signature: (JJ)J
  */
-JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autohessTensor
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autoHessTensor
   (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus

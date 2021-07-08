@@ -189,6 +189,36 @@ class JNoa {
 
     public static native long lnTensor(long tensorHandle);
 
+    public static native long sqrtTensor(long tensorHandle);
+
+    public static native long cosTensor(long tensorHandle);
+
+    public static native long acosTensor(long tensorHandle);
+
+    public static native long coshTensor(long tensorHandle);
+
+    public static native long acoshTensor(long tensorHandle);
+
+    public static native long sinTensor(long tensorHandle);
+
+    public static native long asinTensor(long tensorHandle);
+
+    public static native long sinhTensor(long tensorHandle);
+
+    public static native long asinhTensor(long tensorHandle);
+
+    public static native long tanTensor(long tensorHandle);
+
+    public static native long atanTensor(long tensorHandle);
+
+    public static native long tanhTensor(long tensorHandle);
+
+    public static native long atanhTensor(long tensorHandle);
+
+    public static native long ceilTensor(long tensorHandle);
+
+    public static native long floorTensor(long tensorHandle);
+
     public static native long sumTensor(long tensorHandle);
 
     public static native long sumDimTensor(long tensorHandle, int dim, boolean keepDim);
@@ -200,6 +230,18 @@ class JNoa {
     public static native long maxTensor(long tensorHandle);
 
     public static native long maxDimTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long meanTensor(long tensorHandle);
+
+    public static native long meanDimTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long stdTensor(long tensorHandle);
+
+    public static native long stdDimTensor(long tensorHandle, int dim, boolean keepDim);
+
+    public static native long varTensor(long tensorHandle);
+
+    public static native long varDimTensor(long tensorHandle, int dim, boolean keepDim);
 
     public static native long argMaxTensor(long tensorHandle, int dim, boolean keepDim);
 
@@ -223,8 +265,8 @@ class JNoa {
 
     public static native long detachFromGraph(long tensorHandle);
 
-    public static native long autogradTensor(long value, long variable, boolean retainGraph);
+    public static native long autoGradTensor(long value, long variable, boolean retainGraph);
 
-    public static native long autohessTensor(long value, long variable);
+    public static native long autoHessTensor(long value, long variable);
 
 }

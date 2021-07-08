@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors.api
 
 import space.kscience.kmath.operations.Algebra
-import space.kscience.kmath.tensors.core.DoubleTensor
 
 /**
  * Algebra over a ring on [Tensor].
