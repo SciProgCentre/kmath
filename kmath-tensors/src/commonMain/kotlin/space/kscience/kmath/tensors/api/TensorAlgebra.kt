@@ -16,19 +16,19 @@ import space.kscience.kmath.operations.Algebra
 public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
 
     /**
-     * Returns a single tensor value of unit dimension if tensor shape equals to [1].
+     * For a tensor containing a single element, i.e. a scalar tensor, the value of that element is returned.
+     * You need to check if the implementation puts any restrictions on the shape of a scalar tensor.
      *
      * @return a nullable value of a potentially scalar tensor.
      */
     public fun Tensor<T>.valueOrNull(): T?
 
     /**
-     * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
+     * Unsafe version of [valueOrNull]
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.value(): T =
-        valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
+    public fun Tensor<T>.value(): T
 
     /**
      * Each element of the tensor [other] is added to this value.

@@ -19,6 +19,8 @@ constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) :
 
     override fun dispose(): Unit = JNoa.disposeTensor(tensorHandle)
 
+    internal abstract fun item(): T
+
     override val dimension: Int get() = JNoa.getDim(tensorHandle)
 
     override val shape: IntArray
@@ -79,7 +81,7 @@ public class NoaDoubleTensor
 internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
     NoaTensorOverField<Double>(scope, tensorHandle) {
 
-    internal fun item(): Double = JNoa.getItemDouble(tensorHandle)
+    override fun item(): Double = JNoa.getItemDouble(tensorHandle)
 
     @PerformancePitfall
     override fun get(index: IntArray): Double = JNoa.getDouble(tensorHandle, index)
@@ -94,7 +96,7 @@ public class NoaFloatTensor
 internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
     NoaTensorOverField<Float>(scope, tensorHandle) {
 
-    internal fun item(): Float = JNoa.getItemFloat(tensorHandle)
+    override fun item(): Float = JNoa.getItemFloat(tensorHandle)
 
     @PerformancePitfall
     override fun get(index: IntArray): Float = JNoa.getFloat(tensorHandle, index)
@@ -109,7 +111,7 @@ public class NoaLongTensor
 internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
     NoaTensor<Long>(scope, tensorHandle) {
 
-    internal fun item(): Long = JNoa.getItemLong(tensorHandle)
+    override fun item(): Long = JNoa.getItemLong(tensorHandle)
 
     @PerformancePitfall
     override fun get(index: IntArray): Long = JNoa.getLong(tensorHandle, index)
@@ -124,7 +126,7 @@ public class NoaIntTensor
 internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
     NoaTensor<Int>(scope, tensorHandle) {
 
-    internal fun item(): Int = JNoa.getItemInt(tensorHandle)
+    override fun item(): Int = JNoa.getItemInt(tensorHandle)
 
     @PerformancePitfall
     override fun get(index: IntArray): Int = JNoa.getInt(tensorHandle, index)

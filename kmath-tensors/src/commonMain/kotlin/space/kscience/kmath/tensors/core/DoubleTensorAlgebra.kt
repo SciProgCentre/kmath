@@ -24,9 +24,20 @@ public open class DoubleTensorAlgebra :
 
     public companion object : DoubleTensorAlgebra()
 
+
+    /**
+     * Returns a single tensor value of unit dimension if tensor shape equals to [1].
+     *
+     * @return a nullable value of a potentially scalar tensor.
+     */
     override fun Tensor<Double>.valueOrNull(): Double? = if (tensor.shape contentEquals intArrayOf(1))
         tensor.mutableBuffer.array()[tensor.bufferStart] else null
 
+    /**
+     * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
+     *
+     * @return the value of a scalar tensor.
+     */
     override fun Tensor<Double>.value(): Double = valueOrNull()
         ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
 
