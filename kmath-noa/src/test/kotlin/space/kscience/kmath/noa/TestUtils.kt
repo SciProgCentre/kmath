@@ -5,9 +5,6 @@
 
 package space.kscience.kmath.noa
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.noa.memory.NoaScope
-import space.kscience.kmath.tensors.core.TensorLinearStructure
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -185,6 +185,7 @@ val buildCpp by tasks.registering {
 tasks {
     withType<Test>{
         systemProperty("java.library.path",
+            //"$cppBuildDir/kmath"
         "$home/devspace/noa/cmake-build-release/kmath")
     }
 }
