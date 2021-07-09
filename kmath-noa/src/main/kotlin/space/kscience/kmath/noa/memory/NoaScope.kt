@@ -30,14 +30,14 @@ public class NoaScope {
     }
 }
 
-internal fun <R> withNoaScope(block: NoaScope.() -> R): R? {
+internal inline fun <R> withNoaScope(block: NoaScope.() -> R): R? {
     val noaScope = NoaScope()
     val result = try { noaScope.block() } catch (e: Throwable) { null }
     noaScope.disposeAll()
     return result
 }
 
-internal fun <R> withNoaScope(scope: NoaScope, block: NoaScope.() -> R): R? {
+internal inline fun <R> withNoaScope(scope: NoaScope, block: NoaScope.() -> R): R? {
     val noaScope = NoaScope()
     val result = try { noaScope.block() } catch (e: Throwable) { null }
     if (result == null){

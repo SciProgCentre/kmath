@@ -15,7 +15,8 @@ import space.kscience.kmath.tensors.core.TensorLinearStructure
 
 
 public sealed class NoaAlgebra<T, TensorType : NoaTensor<T>>
-constructor(protected val scope: NoaScope) : TensorAlgebra<T> {
+protected constructor(protected val scope: NoaScope) :
+    TensorAlgebra<T> {
 
     protected abstract val Tensor<T>.tensor: TensorType
 
@@ -132,8 +133,10 @@ constructor(protected val scope: NoaScope) : TensorAlgebra<T> {
 
 }
 
-public abstract class NoaPartialDivisionAlgebra<T, TensorType : NoaTensor<T>>
-internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), LinearOpsTensorAlgebra<T>,
+public sealed class NoaPartialDivisionAlgebra<T, TensorType : NoaTensor<T>>
+protected constructor(scope: NoaScope) :
+    NoaAlgebra<T, TensorType>(scope),
+    LinearOpsTensorAlgebra<T>,
     AnalyticTensorAlgebra<T> {
 
     override operator fun Tensor<T>.div(other: Tensor<T>): TensorType {
@@ -274,7 +277,8 @@ internal constructor(scope: NoaScope) : NoaAlgebra<T, TensorType>(scope), Linear
 
 }
 
-public class NoaDoubleAlgebra(scope: NoaScope) :
+public sealed class NoaDoubleAlgebra
+protected constructor(scope: NoaScope) :
     NoaPartialDivisionAlgebra<Double, NoaDoubleTensor>(scope) {
 
     private fun Tensor<Double>.castHelper(): NoaDoubleTensor =
@@ -349,7 +353,8 @@ public class NoaDoubleAlgebra(scope: NoaScope) :
 
 }
 
-public class NoaFloatAlgebra(scope: NoaScope) :
+public sealed class NoaFloatAlgebra
+protected constructor(scope: NoaScope) :
     NoaPartialDivisionAlgebra<Float, NoaFloatTensor>(scope) {
 
     private fun Tensor<Float>.castHelper(): NoaFloatTensor =
@@ -424,7 +429,8 @@ public class NoaFloatAlgebra(scope: NoaScope) :
 
 }
 
-public class NoaLongAlgebra(scope: NoaScope) :
+public sealed class NoaLongAlgebra
+protected constructor(scope: NoaScope) :
     NoaAlgebra<Long, NoaLongTensor>(scope) {
 
     private fun Tensor<Long>.castHelper(): NoaLongTensor =
@@ -484,7 +490,8 @@ public class NoaLongAlgebra(scope: NoaScope) :
 
 }
 
-public class NoaIntAlgebra(scope: NoaScope) :
+public sealed class NoaIntAlgebra
+protected constructor(scope: NoaScope) :
     NoaAlgebra<Int, NoaIntTensor>(scope) {
 
     private fun Tensor<Int>.castHelper(): NoaIntTensor =
