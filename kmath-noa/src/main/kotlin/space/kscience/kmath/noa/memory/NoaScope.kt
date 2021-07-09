@@ -9,7 +9,7 @@ private typealias Disposable = () -> Unit
 
 public class NoaScope {
 
-    private val disposables: ArrayDeque<Disposable> = ArrayDeque(0)
+    internal val disposables: ArrayDeque<Disposable> = ArrayDeque(0)
 
     public fun disposeAll() {
         disposables.forEach(Disposable::invoke)
@@ -20,15 +20,30 @@ public class NoaScope {
         disposables += {
             try {
                 disposable()
-            } catch (ignored: Throwable) {
+            } catch (e: Throwable) {
             }
         }
     }
+
+    internal fun addAll(scope: NoaScope) {
+        disposables.addAll(scope.disposables)
+    }
 }
 
-internal inline fun <R> withNoaScope(block: NoaScope.() -> R): R {
+internal fun <R> withNoaScope(block: NoaScope.() -> R): R? {
     val noaScope = NoaScope()
-    val result = noaScope.block()
+    val result = try { noaScope.block() } catch (e: Throwable) { null }
     noaScope.disposeAll()
+    return result
+}
+
+internal fun <R> withNoaScope(scope: NoaScope, block: NoaScope.() -> R): R? {
+    val noaScope = NoaScope()
+    val result = try { noaScope.block() } catch (e: Throwable) { null }
+    if (result == null){
+        noaScope.disposeAll()
+    } else {
+        scope.addAll(noaScope)
+    }
     return result
 }
