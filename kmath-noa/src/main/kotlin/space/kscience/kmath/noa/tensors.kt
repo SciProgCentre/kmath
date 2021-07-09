@@ -47,22 +47,22 @@ constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) :
     }
 
 
-    public fun copyToDouble(): NoaDoubleTensor = NoaDoubleTensor(
+    public fun asDouble(): NoaDoubleTensor = NoaDoubleTensor(
         scope = scope,
         tensorHandle = JNoa.copyToDouble(this.tensorHandle)
     )
 
-    public fun copyToFloat(): NoaFloatTensor = NoaFloatTensor(
+    public fun asFloat(): NoaFloatTensor = NoaFloatTensor(
         scope = scope,
         tensorHandle = JNoa.copyToFloat(this.tensorHandle)
     )
 
-    public fun copyToLong(): NoaLongTensor = NoaLongTensor(
+    public fun asLong(): NoaLongTensor = NoaLongTensor(
         scope = scope,
         tensorHandle = JNoa.copyToLong(this.tensorHandle)
     )
 
-    public fun copyToInt(): NoaIntTensor = NoaIntTensor(
+    public fun asInt(): NoaIntTensor = NoaIntTensor(
         scope = scope,
         tensorHandle = JNoa.copyToInt(this.tensorHandle)
     )
