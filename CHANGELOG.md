@@ -40,6 +40,7 @@
 - Use `Symbol` factory function instead of `StringSymbol`
 
 ### Deprecated
+- Specialized `DoubleBufferAlgebra`
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.

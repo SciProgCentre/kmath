@@ -6,6 +6,8 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.ExtendedFieldOperations
 import space.kscience.kmath.operations.Norm
@@ -14,6 +16,7 @@ import kotlin.math.*
 /**
  * [ExtendedFieldOperations] over [DoubleBuffer].
  */
+@Deprecated("To be replaced by generic BufferAlgebra")
 public object DoubleBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
         DoubleBuffer(size) { -array[it] }
@@ -172,6 +175,7 @@ public object DoubleL2Norm : Norm<Point<Double>, Double> {
  *
  * @property size the size of buffers to operate on.
  */
+@Deprecated("To be replaced by generic BufferAlgebra")
 public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>>, Norm<Buffer<Double>, Double> {
     public override val zero: Buffer<Double> by lazy { DoubleBuffer(size) { 0.0 } }
     public override val one: Buffer<Double> by lazy { DoubleBuffer(size) { 1.0 } }
