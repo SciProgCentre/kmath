@@ -8,15 +8,12 @@ package space.kscience.kmath.noa;
 class JNoa {
 
     static {
-        String jNoaPath = System.getProperty("user.home") +
-                "/devspace/noa/cmake-build-release/kmath/libjnoa.so";
-        //"/.konan/third-party/kmath-noa-0.3.0-dev-14/cpp-build/kmath/libjnoa.so";
-
         try {
-            System.load(jNoaPath);
+            System.loadLibrary("jnoa");
         } catch (UnsatisfiedLinkError e) {
-            System.err.println("Failed to load native NOA library from:\n" +
-                    jNoaPath + "\n" + e);
+            System.err.println(
+                    "Failed to load the native library NOA:\n" +
+                            " Set JAVA_LIBRARY_PATH to the location of libjnoa.so");
             System.exit(1);
         }
     }

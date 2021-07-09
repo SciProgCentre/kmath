@@ -20,7 +20,7 @@ dependencies {
 
 val home: String = System.getProperty("user.home")
 val javaHome: String = System.getProperty("java.home")
-val thirdPartyDir = "$home/.konan/third-party/kmath-noa-${project.property("version")}"
+val thirdPartyDir = "$home/.konan/third-party/noa-v0.0.1"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
 val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath"
 
@@ -181,6 +181,13 @@ val buildCpp by tasks.registering {
 }
 
 //tasks["compileJava"].dependsOn(buildCpp)
+
+tasks {
+    withType<Test>{
+        systemProperty("java.library.path",
+        "$home/devspace/noa/cmake-build-release/kmath")
+    }
+}
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE

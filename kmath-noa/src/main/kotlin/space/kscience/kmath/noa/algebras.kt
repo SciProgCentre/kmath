@@ -387,28 +387,28 @@ public class NoaFloatAlgebra(scope: NoaScope) :
         wrap(JNoa.plusFloat(this, other.tensor.tensorHandle))
 
     override fun Tensor<Float>.plus(value: Float): NoaFloatTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusFloat(value, tensor.tensorHandle))
+        wrap(JNoa.plusFloat(value, tensor.tensorHandle))
 
     override fun Tensor<Float>.plusAssign(value: Float): Unit =
-        space.kscience.kmath.noa.JNoa.plusFloatAssign(value, tensor.tensorHandle)
+        JNoa.plusFloatAssign(value, tensor.tensorHandle)
 
     override operator fun Float.minus(other: Tensor<Float>): NoaFloatTensor =
         wrap(JNoa.plusFloat(-this, other.tensor.tensorHandle))
 
     override fun Tensor<Float>.minus(value: Float): NoaFloatTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusFloat(-value, tensor.tensorHandle))
+        wrap(JNoa.plusFloat(-value, tensor.tensorHandle))
 
     override fun Tensor<Float>.minusAssign(value: Float): Unit =
-        space.kscience.kmath.noa.JNoa.plusFloatAssign(-value, tensor.tensorHandle)
+        JNoa.plusFloatAssign(-value, tensor.tensorHandle)
 
     override operator fun Float.times(other: Tensor<Float>): NoaFloatTensor =
         wrap(JNoa.timesFloat(this, other.tensor.tensorHandle))
 
     override fun Tensor<Float>.times(value: Float): NoaFloatTensor =
-        wrap(space.kscience.kmath.noa.JNoa.timesFloat(value, tensor.tensorHandle))
+        wrap(JNoa.timesFloat(value, tensor.tensorHandle))
 
     override fun Tensor<Float>.timesAssign(value: Float): Unit =
-        space.kscience.kmath.noa.JNoa.timesFloatAssign(value, tensor.tensorHandle)
+        JNoa.timesFloatAssign(value, tensor.tensorHandle)
 
     override fun Float.div(other: Tensor<Float>): NoaFloatTensor =
         other * (1 / this)
@@ -456,28 +456,28 @@ public class NoaLongAlgebra(scope: NoaScope) :
         wrap(JNoa.plusLong(this, other.tensor.tensorHandle))
 
     override fun Tensor<Long>.plus(value: Long): NoaLongTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusLong(value, tensor.tensorHandle))
+        wrap(JNoa.plusLong(value, tensor.tensorHandle))
 
     override fun Tensor<Long>.plusAssign(value: Long): Unit =
-        space.kscience.kmath.noa.JNoa.plusLongAssign(value, tensor.tensorHandle)
+        JNoa.plusLongAssign(value, tensor.tensorHandle)
 
     override operator fun Long.minus(other: Tensor<Long>): NoaLongTensor =
         wrap(JNoa.plusLong(-this, other.tensor.tensorHandle))
 
     override fun Tensor<Long>.minus(value: Long): NoaLongTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusLong(-value, tensor.tensorHandle))
+        wrap(JNoa.plusLong(-value, tensor.tensorHandle))
 
     override fun Tensor<Long>.minusAssign(value: Long): Unit =
-        space.kscience.kmath.noa.JNoa.plusLongAssign(-value, tensor.tensorHandle)
+        JNoa.plusLongAssign(-value, tensor.tensorHandle)
 
     override operator fun Long.times(other: Tensor<Long>): NoaLongTensor =
         wrap(JNoa.timesLong(this, other.tensor.tensorHandle))
 
     override fun Tensor<Long>.times(value: Long): NoaLongTensor =
-        wrap(space.kscience.kmath.noa.JNoa.timesLong(value, tensor.tensorHandle))
+        wrap(JNoa.timesLong(value, tensor.tensorHandle))
 
     override fun Tensor<Long>.timesAssign(value: Long): Unit =
-        space.kscience.kmath.noa.JNoa.timesLongAssign(value, tensor.tensorHandle)
+        JNoa.timesLongAssign(value, tensor.tensorHandle)
 
     public fun full(value: Long, shape: IntArray, device: Device): NoaLongTensor =
         wrap(JNoa.fullLong(value, shape, device.toInt()))
@@ -516,28 +516,28 @@ public class NoaIntAlgebra(scope: NoaScope) :
         wrap(JNoa.plusInt(this, other.tensor.tensorHandle))
 
     override fun Tensor<Int>.plus(value: Int): NoaIntTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusInt(value, tensor.tensorHandle))
+        wrap(JNoa.plusInt(value, tensor.tensorHandle))
 
     override fun Tensor<Int>.plusAssign(value: Int): Unit =
-        space.kscience.kmath.noa.JNoa.plusIntAssign(value, tensor.tensorHandle)
+        JNoa.plusIntAssign(value, tensor.tensorHandle)
 
     override operator fun Int.minus(other: Tensor<Int>): NoaIntTensor =
         wrap(JNoa.plusInt(-this, other.tensor.tensorHandle))
 
     override fun Tensor<Int>.minus(value: Int): NoaIntTensor =
-        wrap(space.kscience.kmath.noa.JNoa.plusInt(-value, tensor.tensorHandle))
+        wrap(JNoa.plusInt(-value, tensor.tensorHandle))
 
     override fun Tensor<Int>.minusAssign(value: Int): Unit =
-        space.kscience.kmath.noa.JNoa.plusIntAssign(-value, tensor.tensorHandle)
+        JNoa.plusIntAssign(-value, tensor.tensorHandle)
 
     override operator fun Int.times(other: Tensor<Int>): NoaIntTensor =
         wrap(JNoa.timesInt(this, other.tensor.tensorHandle))
 
     override fun Tensor<Int>.times(value: Int): NoaIntTensor =
-        wrap(space.kscience.kmath.noa.JNoa.timesInt(value, tensor.tensorHandle))
+        wrap(JNoa.timesInt(value, tensor.tensorHandle))
 
     override fun Tensor<Int>.timesAssign(value: Int): Unit =
-        space.kscience.kmath.noa.JNoa.timesIntAssign(value, tensor.tensorHandle)
+        JNoa.timesIntAssign(value, tensor.tensorHandle)
 
     public fun full(value: Int, shape: IntArray, device: Device): NoaIntTensor =
         wrap(JNoa.fullInt(value, shape, device.toInt()))
