@@ -22,6 +22,8 @@ protected constructor(protected val scope: NoaScope) :
 
     protected abstract fun wrap(tensorHandle: TensorHandle): TensorType
 
+    public fun Tensor<T>.cast(): TensorType = tensor
+
     /**
      * A scalar tensor must have empty shape
      */
