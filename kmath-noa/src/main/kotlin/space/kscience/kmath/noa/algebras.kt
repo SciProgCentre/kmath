@@ -352,7 +352,7 @@ protected constructor(scope: NoaScope) :
         JNoa.timesDoubleAssign(value, tensor.tensorHandle)
 
     override fun Double.div(other: Tensor<Double>): NoaDoubleTensor =
-        other * (1 / this)
+        other.tensor * (1 / this)
 
     override fun Tensor<Double>.div(value: Double): NoaDoubleTensor =
         tensor * (1 / value)
@@ -428,7 +428,7 @@ protected constructor(scope: NoaScope) :
         JNoa.timesFloatAssign(value, tensor.tensorHandle)
 
     override fun Float.div(other: Tensor<Float>): NoaFloatTensor =
-        other * (1 / this)
+        other.tensor * (1 / this)
 
     override fun Tensor<Float>.div(value: Float): NoaFloatTensor =
         tensor * (1 / value)
