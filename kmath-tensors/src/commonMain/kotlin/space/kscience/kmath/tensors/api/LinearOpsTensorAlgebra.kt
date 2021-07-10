@@ -62,8 +62,10 @@ public interface LinearOpsTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
      * LUP decomposition
      *
      * Computes the LUP decomposition of a matrix or a batch of matrices.
-     * Given a tensor `input`, return tensors (P, L, U) satisfying `P dot input = L dot  U`,
-     * with `P` being a permutation matrix or batch of matrices,
+     * Given a tensor `input`, return tensors (P, L, U) satisfying :
+     * `P dot input = L dot  U` or `input = P dot L dot  U`
+     * depending on the implementation, with :
+     * `P` being a permutation matrix or batch of matrices,
      * `L` being a lower triangular matrix or batch of matrices,
      * `U` being an upper triangular matrix or batch of matrices.
      *
