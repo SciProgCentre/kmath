@@ -124,8 +124,8 @@ protected constructor(protected val scope: NoaScope) :
     override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): NoaIntTensor =
         NoaIntTensor(scope, JNoa.argMaxTensor(tensor.tensorHandle, dim, keepDim))
 
-    public fun Tensor<T>.flatten(): TensorType =
-        wrap(JNoa.flattenTensor(tensor.tensorHandle))
+    public fun Tensor<T>.flatten(startDim: Int, endDim: Int): TensorType =
+        wrap(JNoa.flattenTensor(tensor.tensorHandle, startDim, endDim))
 
     public fun Tensor<T>.randDiscrete(low: Long, high: Long): TensorType =
         wrap(JNoa.randintLike(tensor.tensorHandle, low, high))

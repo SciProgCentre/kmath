@@ -182,9 +182,9 @@ class JNoa {
 
     public static native long unaryMinus(long tensorHandle);
 
-    public static native long absTensor(long tensorHandle);
-
     public static native long transposeTensor(long tensorHandle, int i, int j);
+
+    public static native long absTensor(long tensorHandle);
 
     public static native long expTensor(long tensorHandle);
 
@@ -246,7 +246,7 @@ class JNoa {
 
     public static native long argMaxTensor(long tensorHandle, int dim, boolean keepDim);
 
-    public static native long flattenTensor(long tensorHandle);
+    public static native long flattenTensor(long tensorHandle, int startDim, int endDim);
 
     public static native long matmul(long lhs, long rhs);
 
