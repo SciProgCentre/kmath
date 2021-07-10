@@ -252,7 +252,9 @@ protected constructor(scope: NoaScope) :
         JNoa.qrTensor(tensor.tensorHandle, Q, R)
         return Pair(wrap(Q), wrap(R))
     }
-
+    /**
+     * this implementation satisfies `tensor = P dot L dot U`
+     */
     override fun Tensor<T>.lu(): Triple<TensorType, TensorType, TensorType> {
         val P = JNoa.emptyTensor()
         val L = JNoa.emptyTensor()
