@@ -78,9 +78,6 @@ protected constructor(protected val scope: NoaScope) :
     override operator fun Tensor<T>.get(i: Int): TensorType =
         wrap(JNoa.getIndex(tensor.tensorHandle, i))
 
-    public operator fun Tensor<T>.get(indexTensor: NoaLongTensor): TensorType =
-        wrap(JNoa.getIndexTensor(tensor.tensorHandle, indexTensor.tensorHandle))
-
     override fun diagonalEmbedding(
         diagonalEntries: Tensor<T>, offset: Int, dim1: Int, dim2: Int
     ): TensorType =

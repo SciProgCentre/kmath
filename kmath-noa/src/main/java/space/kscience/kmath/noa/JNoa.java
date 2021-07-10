@@ -80,8 +80,6 @@ class JNoa {
 
     public static native long getIndex(long tensorHandle, int index);
 
-    public static native long getIndexTensor(long tensorHandle, long indexTensorHandle);
-
     public static native double getDouble(long tensorHandle, int[] index);
 
     public static native float getFloat(long tensorHandle, int[] index);

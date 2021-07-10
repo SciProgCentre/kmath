@@ -249,14 +249,6 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getIndex
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
- * Method:    getIndexTensor
- * Signature: (JJ)J
- */
-JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getIndexTensor
-  (JNIEnv *, jclass, jlong, jlong);
-
-/*
- * Class:     space_kscience_kmath_noa_JNoa
  * Method:    getDouble
  * Signature: (J[I)D
  */
