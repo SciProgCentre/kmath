@@ -1,14 +1,14 @@
 # Module kmath-noa
 
-This module provides a `kotlin-jvm` frontend for the 
+A Bayesian computation library over
 [NOA](https://github.com/grinisrit/noa.git)
-library together with relevant functionality from 
+together with relevant functionality from 
 [LibTorch](https://pytorch.org/cppdocs). 
 
-Our aim is to create a Bayesian computational platform 
-which covers a wide set of applications from particle physics
-simulations to deep learning and general differentiable programs
-written on top of `AutoGrad` & `ATen`.
+Our aim is to cover a wide set of applications from particle physics
+simulations to deep learning. In fact, we support any 
+differentiable program written on top of 
+`AutoGrad` & `ATen`.
 
 ## Installation
 
