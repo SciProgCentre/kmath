@@ -31,6 +31,7 @@ internal fun <T> Tensor<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     else -> this.copyToBufferedTensor()
 }
 
+@PublishedApi
 internal val Tensor<Double>.tensor: DoubleTensor
     get() = when (this) {
         is DoubleTensor -> this

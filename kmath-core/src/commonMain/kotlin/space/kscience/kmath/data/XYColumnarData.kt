@@ -16,7 +16,7 @@ import kotlin.math.max
  * The buffer of X values.
  */
 @UnstableKMathAPI
-public interface XYColumnarData<T, out X : T, out Y : T> : ColumnarData<T> {
+public interface XYColumnarData<out T, out X : T, out Y : T> : ColumnarData<T> {
     /**
      * The buffer of X values
      */

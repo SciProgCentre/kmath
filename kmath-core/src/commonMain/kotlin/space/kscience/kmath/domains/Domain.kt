@@ -12,7 +12,7 @@ import space.kscience.kmath.linear.Point
  *
  * @param T the type of element of this domain.
  */
-public interface Domain<T : Any> {
+public interface Domain<in T : Any> {
     /**
      * Checks if the specified point is contained in this domain.
      */

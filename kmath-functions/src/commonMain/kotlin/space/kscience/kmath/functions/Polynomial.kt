@@ -17,7 +17,7 @@ import kotlin.math.pow
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public class Polynomial<T>(public val coefficients: List<T>) {
+public class Polynomial<out T>(public val coefficients: List<T>) {
     override fun toString(): String = "Polynomial$coefficients"
 }
 
@@ -69,7 +69,7 @@ public fun <T, A> Polynomial<T>.differentiate(
 public fun <T, A> Polynomial<T>.integrate(
     algebra: A,
 ): Polynomial<T> where  A : Field<T>, A : NumericAlgebra<T> = algebra {
-    val integratedCoefficients = buildList<T>(coefficients.size + 1) {
+    val integratedCoefficients = buildList(coefficients.size + 1) {
         add(zero)
         coefficients.forEachIndexed{ index, t -> add(t / (number(index) + one)) }
     }

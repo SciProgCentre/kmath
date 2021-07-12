@@ -17,7 +17,7 @@ import kotlin.jvm.JvmInline
 /**
  * A matrix with compile-time controlled dimension
  */
-public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
+public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
     public companion object {
         /**
          * Coerces a regular matrix to a matrix with type-safe dimensions and throws a error if coercion failed
@@ -46,7 +46,7 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
  * An inline wrapper for a Matrix
  */
 @JvmInline
-public value class DMatrixWrapper<T, R : Dimension, C : Dimension>(
+public value class DMatrixWrapper<out T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
@@ -58,7 +58,7 @@ public value class DMatrixWrapper<T, R : Dimension, C : Dimension>(
 /**
  * Dimension-safe point
  */
-public interface DPoint<T, D : Dimension> : Point<T> {
+public interface DPoint<out T, D : Dimension> : Point<T> {
     public companion object {
         public inline fun <T, reified D : Dimension> coerce(point: Point<T>): DPoint<T, D> {
             require(point.size == Dimension.dim<D>().toInt()) {
@@ -76,7 +76,7 @@ public interface DPoint<T, D : Dimension> : Point<T> {
  * Dimension-safe point wrapper
  */
 @JvmInline
-public value class DPointWrapper<T, D : Dimension>(public val point: Point<T>) :
+public value class DPointWrapper<out T, D : Dimension>(public val point: Point<T>) :
     DPoint<T, D> {
     override val size: Int get() = point.size
 
@@ -111,7 +111,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
     ): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
-        return context.buildMatrix(rows.toInt(), cols.toInt(), initializer).coerce<R, C>()
+        return context.buildMatrix(rows.toInt(), cols.toInt(), initializer).coerce()
     }
 
     public inline fun <reified D : Dimension> point(noinline initializer: A.(Int) -> T): DPoint<T, D> {

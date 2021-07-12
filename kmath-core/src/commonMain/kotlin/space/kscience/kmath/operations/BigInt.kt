@@ -445,7 +445,7 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
  * Returns null if a valid number can not be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
-    if (this.isEmpty()) return null
+    if (isEmpty()) return null
     val sign: Int
 
     val positivePartIndex = when (this[0]) {

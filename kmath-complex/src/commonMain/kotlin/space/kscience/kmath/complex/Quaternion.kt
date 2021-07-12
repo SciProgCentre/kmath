@@ -147,7 +147,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
             return if (arg.w > 0)
                 Quaternion(ln(arg.w), 0, 0, 0)
             else {
-                val l = ComplexField { ComplexField.ln(arg.w.toComplex()) }
+                val l = ComplexField { ln(arg.w.toComplex()) }
                 Quaternion(l.re, l.im, 0, 0)
             }
 

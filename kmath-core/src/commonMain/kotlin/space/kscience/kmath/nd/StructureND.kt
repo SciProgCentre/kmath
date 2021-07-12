@@ -53,7 +53,7 @@ public interface StructureND<out T> {
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
-     * Feature is some additional strucure information which allows to access it special properties or hints.
+     * Feature is some additional structure information which allows to access it special properties or hints.
      * If the feature is not present, null is returned.
      */
     @UnstableKMathAPI

@@ -36,9 +36,10 @@ public class TreeHistogram(
 }
 
 @OptIn(UnstableKMathAPI::class)
-private class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
+@PublishedApi
+internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
 
-    private class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
+    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
         ClosedFloatingPointRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()
@@ -80,10 +81,10 @@ private class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain)
  */
 @UnstableKMathAPI
 public class TreeHistogramSpace(
-    private val binFactory: (Double) -> UnivariateDomain,
+    @PublishedApi internal val binFactory: (Double) -> UnivariateDomain,
 ) : Group<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
 
-    public fun fill(block: UnivariateHistogramBuilder.() -> Unit): UnivariateHistogram =
+    public inline fun fill(block: UnivariateHistogramBuilder.() -> Unit): UnivariateHistogram =
         TreeHistogramBuilder(binFactory).apply(block).build()
 
     override fun add(
@@ -115,8 +116,8 @@ public class TreeHistogramSpace(
                     bin.domain.center,
                     UnivariateBin(
                         bin.domain,
-                        value = bin.value * value.toDouble(),
-                        standardDeviation = abs(bin.standardDeviation * value.toDouble())
+                        value = bin.value * value,
+                        standardDeviation = abs(bin.standardDeviation * value)
                     )
                 )
             }

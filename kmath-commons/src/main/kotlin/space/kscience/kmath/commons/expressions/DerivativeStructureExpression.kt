@@ -15,7 +15,7 @@ import space.kscience.kmath.operations.NumbersAddOperations
  * A field over commons-math [DerivativeStructure].
  *
  * @property order The derivation order.
- * @property bindings The map of bindings values. All bindings are considered free parameters
+ * @param bindings The map of bindings values. All bindings are considered free parameters
  */
 @OptIn(UnstableKMathAPI::class)
 public class DerivativeStructureField(

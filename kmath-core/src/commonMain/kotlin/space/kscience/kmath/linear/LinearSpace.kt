@@ -32,7 +32,7 @@ public typealias Point<T> = Buffer<T>
  * Basic operations on matrices and vectors. Operates on [Matrix].
  *
  * @param T the type of items in the matrices.
- * @param M the type of operated matrices.
+ * @param A the type of ring over [T].
  */
 public interface LinearSpace<T : Any, out A : Ring<T>> {
     public val elementAlgebra: A

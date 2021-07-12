@@ -57,7 +57,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     }
 }
 
-public open class BufferedGroupND<T, A : Group<T>>(
+public open class BufferedGroupND<T, out A : Group<T>>(
     final override val shape: IntArray,
     final override val elementContext: A,
     final override val bufferFactory: BufferFactory<T>,
@@ -67,7 +67,7 @@ public open class BufferedGroupND<T, A : Group<T>>(
     override fun StructureND<T>.unaryMinus(): StructureND<T> = produce { -get(it) }
 }
 
-public open class BufferedRingND<T, R : Ring<T>>(
+public open class BufferedRingND<T, out R : Ring<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,
@@ -75,7 +75,7 @@ public open class BufferedRingND<T, R : Ring<T>>(
     override val one: BufferND<T> by lazy { produce { one } }
 }
 
-public open class BufferedFieldND<T, R : Field<T>>(
+public open class BufferedFieldND<T, out R : Field<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,

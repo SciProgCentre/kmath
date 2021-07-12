@@ -10,6 +10,8 @@ import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import space.kscience.kmath.estree.compile as estreeCompile
 import space.kscience.kmath.estree.compileToExpression as estreeCompileToExpression
 import space.kscience.kmath.wasm.compile as wasmCompile
@@ -34,6 +36,7 @@ private object ESTreeCompilerTestContext : CompilerTestContext {
 }
 
 internal actual inline fun runCompilerTest(action: CompilerTestContext.() -> Unit) {
+    contract { callsInPlace(action, InvocationKind.AT_LEAST_ONCE) }
     action(WasmCompilerTestContext)
     action(ESTreeCompilerTestContext)
 }

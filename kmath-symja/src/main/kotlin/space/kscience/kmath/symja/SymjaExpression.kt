@@ -14,7 +14,8 @@ import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
- * Represents [MST] based [DifferentiableExpression] relying on [Symja](https://github.com/axkr/symja_android_library).
+ * Represents [MST] based [space.kscience.kmath.expressions.DifferentiableExpression] relying on
+ * [Symja](https://github.com/axkr/symja_android_library).
  *
  * The principle of this API is converting the [mst] to an [org.matheclipse.core.interfaces.IExpr], differentiating it
  * with Symja's [F.D], then converting [org.matheclipse.core.interfaces.IExpr] back to [MST].

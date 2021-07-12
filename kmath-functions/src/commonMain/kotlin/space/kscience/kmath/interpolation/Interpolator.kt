@@ -18,7 +18,7 @@ import space.kscience.kmath.structures.asBuffer
 /**
  * And interpolator for data with x column type [X], y column type [Y].
  */
-public fun interface Interpolator<T, X : T, Y : T> {
+public fun interface Interpolator<T, in X : T, Y : T> {
     public fun interpolate(points: XYColumnarData<T, X, Y>): (X) -> Y
 }
 

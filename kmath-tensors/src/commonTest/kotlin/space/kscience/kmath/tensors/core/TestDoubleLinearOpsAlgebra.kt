@@ -183,7 +183,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 }
 
 
-private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10): Unit {
+private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
     val svd = tensor.svd()
 
     val tensorSVD = svd.first

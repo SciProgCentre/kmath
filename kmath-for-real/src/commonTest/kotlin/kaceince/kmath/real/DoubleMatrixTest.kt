@@ -32,7 +32,7 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testSequenceToMatrix() {
-        val m = Sequence<DoubleArray> {
+        val m = Sequence {
             listOf(
                 DoubleArray(10) { 10.0 },
                 DoubleArray(10) { 20.0 },

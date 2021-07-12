@@ -15,7 +15,7 @@ import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.indices
 
 
-public class BufferedLinearSpace<T : Any, A : Ring<T>>(
+public class BufferedLinearSpace<T : Any, out A : Ring<T>>(
     override val elementAlgebra: A,
     private val bufferFactory: BufferFactory<T>,
 ) : LinearSpace<T, A> {

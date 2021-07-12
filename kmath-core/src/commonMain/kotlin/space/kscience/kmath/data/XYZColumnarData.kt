@@ -14,7 +14,7 @@ import space.kscience.kmath.structures.Buffer
  * Inherits [XYColumnarData].
  */
 @UnstableKMathAPI
-public interface XYZColumnarData<T, out X : T, out Y : T, out Z : T> : XYColumnarData<T, X, Y> {
+public interface XYZColumnarData<out T, out X : T, out Y : T, out Z : T> : XYColumnarData<T, X, Y> {
     public val z: Buffer<Z>
 
     override fun get(symbol: Symbol): Buffer<T>? = when (symbol) {

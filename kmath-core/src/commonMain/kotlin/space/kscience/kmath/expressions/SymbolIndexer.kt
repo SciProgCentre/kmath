@@ -9,6 +9,8 @@ import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
 
 /**
@@ -65,9 +67,13 @@ public value class SimpleSymbolIndexer(override val symbols: List<Symbol>) : Sym
  * Execute the block with symbol indexer based on given symbol order
  */
 @UnstableKMathAPI
-public inline fun <R> withSymbols(vararg symbols: Symbol, block: SymbolIndexer.() -> R): R =
-    with(SimpleSymbolIndexer(symbols.toList()), block)
+public inline fun <R> withSymbols(vararg symbols: Symbol, block: SymbolIndexer.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return with(SimpleSymbolIndexer(symbols.toList()), block)
+}
 
 @UnstableKMathAPI
-public inline fun <R> withSymbols(symbols: Collection<Symbol>, block: SymbolIndexer.() -> R): R =
-    with(SimpleSymbolIndexer(symbols.toList()), block)
+public inline fun <R> withSymbols(symbols: Collection<Symbol>, block: SymbolIndexer.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return with(SimpleSymbolIndexer(symbols.toList()), block)
+}

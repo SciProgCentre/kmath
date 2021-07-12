@@ -34,7 +34,7 @@ public inline fun <T, R> Iterable<T>.cumulative(initial: R, crossinline operatio
 public inline fun <T, R> Sequence<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): Sequence<R> =
     Sequence { this@cumulative.iterator().cumulative(initial, operation) }
 
-public fun <T, R> List<T>.cumulative(initial: R, operation: (R, T) -> R): List<R> =
+public inline fun <T, R> List<T>.cumulative(initial: R, crossinline operation: (R, T) -> R): List<R> =
     iterator().cumulative(initial, operation).asSequence().toList()
 
 //Cumulative sum

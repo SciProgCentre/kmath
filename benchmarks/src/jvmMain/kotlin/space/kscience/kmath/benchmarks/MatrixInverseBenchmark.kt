@@ -40,14 +40,14 @@ internal class MatrixInverseBenchmark {
 
     @Benchmark
     fun cmLUPInversion(blackhole: Blackhole) {
-        with(CMLinearSpace) {
+        CMLinearSpace {
             blackhole.consume(inverse(matrix))
         }
     }
 
     @Benchmark
     fun ejmlInverse(blackhole: Blackhole) {
-        with(EjmlLinearSpaceDDRM) {
+        EjmlLinearSpaceDDRM {
             blackhole.consume(matrix.getFeature<InverseMatrixFeature<Double>>()?.inverse)
         }
     }

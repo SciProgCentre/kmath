@@ -6,13 +6,15 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.*
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * A context class for [Expression] construction.
  *
  * @param algebra The algebra to provide for Expressions built.
  */
-public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
+public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     public val algebra: A,
 ) : ExpressionAlgebra<T, Expression<T>> {
     /**
@@ -29,9 +31,6 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
             ?: error("Symbol '$value' is not supported in $this")
     }
 
-    /**
-     * Builds an Expression of dynamic call of binary operation [operation] on [left] and [right].
-     */
     public override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         { left, right ->
             Expression { arguments ->
@@ -39,9 +38,6 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
             }
         }
 
-    /**
-     * Builds an Expression of dynamic call of unary operation with name [operation] on [arg].
-     */
     public override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
         Expression { arguments -> algebra.unaryOperationFunction(operation)(arg.invoke(arguments)) }
     }
@@ -50,7 +46,7 @@ public abstract class FunctionalExpressionAlgebra<T, A : Algebra<T>>(
 /**
  * A context class for [Expression] construction for [Ring] algebras.
  */
-public open class FunctionalExpressionGroup<T, A : Group<T>>(
+public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     algebra: A,
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
     public override val zero: Expression<T> get() = const(algebra.zero)
@@ -84,7 +80,7 @@ public open class FunctionalExpressionGroup<T, A : Group<T>>(
 
 }
 
-public open class FunctionalExpressionRing<T, A : Ring<T>>(
+public open class FunctionalExpressionRing<T, out A : Ring<T>>(
     algebra: A,
 ) : FunctionalExpressionGroup<T, A>(algebra), Ring<Expression<T>> {
     public override val one: Expression<T> get() = const(algebra.one)
@@ -105,7 +101,7 @@ public open class FunctionalExpressionRing<T, A : Ring<T>>(
         super<FunctionalExpressionGroup>.binaryOperationFunction(operation)
 }
 
-public open class FunctionalExpressionField<T, A : Field<T>>(
+public open class FunctionalExpressionField<T, out A : Field<T>>(
     algebra: A,
 ) : FunctionalExpressionRing<T, A>(algebra), Field<Expression<T>>, ScaleOperations<Expression<T>> {
     /**
@@ -131,7 +127,7 @@ public open class FunctionalExpressionField<T, A : Field<T>>(
         super<FunctionalExpressionRing>.bindSymbolOrNull(value)
 }
 
-public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
+public open class FunctionalExpressionExtendedField<T, out A : ExtendedField<T>>(
     algebra: A,
 ) : FunctionalExpressionField<T, A>(algebra), ExtendedField<Expression<T>> {
     public override fun number(value: Number): Expression<T> = const(algebra.number(value))
@@ -172,14 +168,26 @@ public open class FunctionalExpressionExtendedField<T, A : ExtendedField<T>>(
     public override fun bindSymbol(value: String): Expression<T> = super<FunctionalExpressionField>.bindSymbol(value)
 }
 
-public inline fun <T, A : Ring<T>> A.expressionInSpace(block: FunctionalExpressionGroup<T, A>.() -> Expression<T>): Expression<T> =
-    FunctionalExpressionGroup(this).block()
+public inline fun <T, A : Group<T>> A.expressionInGroup(
+    block: FunctionalExpressionGroup<T, A>.() -> Expression<T>,
+): Expression<T> {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return FunctionalExpressionGroup(this).block()
+}
 
-public inline fun <T, A : Ring<T>> A.expressionInRing(block: FunctionalExpressionRing<T, A>.() -> Expression<T>): Expression<T> =
-    FunctionalExpressionRing(this).block()
+public inline fun <T, A : Ring<T>> A.expressionInRing(
+    block: FunctionalExpressionRing<T, A>.() -> Expression<T>,
+): Expression<T> {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return FunctionalExpressionRing(this).block()
+}
 
-public inline fun <T, A : Field<T>> A.expressionInField(block: FunctionalExpressionField<T, A>.() -> Expression<T>): Expression<T> =
-    FunctionalExpressionField(this).block()
+public inline fun <T, A : Field<T>> A.expressionInField(
+    block: FunctionalExpressionField<T, A>.() -> Expression<T>,
+): Expression<T> {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return FunctionalExpressionField(this).block()
+}
 
 public inline fun <T, A : ExtendedField<T>> A.expressionInExtendedField(
     block: FunctionalExpressionExtendedField<T, A>.() -> Expression<T>,

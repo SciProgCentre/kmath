@@ -115,6 +115,8 @@ via extension function.
 Usually it is bad idea to compare the direct numerical operation performance in different languages, but it hard to
 work completely without frame of reference. In this case, simple numpy code:
 ```python
+import numpy as np
+
 res = np.ones((1000,1000))
 for i in range(1000):
     res = res + 1.0

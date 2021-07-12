@@ -18,7 +18,7 @@ import space.kscience.kmath.operations.invoke
  *
  * @property value the value to sample.
  */
-public class ConstantSampler<T : Any>(public val value: T) : Sampler<T> {
+public class ConstantSampler<out T : Any>(public val value: T) : Sampler<T> {
     public override fun sample(generator: RandomGenerator): Chain<T> = ConstantChain(value)
 }
 
@@ -27,7 +27,7 @@ public class ConstantSampler<T : Any>(public val value: T) : Sampler<T> {
  *
  * @property chainBuilder the provider of [Chain].
  */
-public class BasicSampler<T : Any>(public val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
+public class BasicSampler<out T : Any>(public val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
     public override fun sample(generator: RandomGenerator): Chain<T> = chainBuilder(generator)
 }
 
@@ -36,7 +36,7 @@ public class BasicSampler<T : Any>(public val chainBuilder: (RandomGenerator) ->
  *
  * @property algebra the space to provide addition and scalar multiplication for [T].
  */
-public class SamplerSpace<T : Any, S>(public val algebra: S) : Group<Sampler<T>>,
+public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler<T>>,
     ScaleOperations<Sampler<T>> where S : Group<T>, S : ScaleOperations<T> {
 
     public override val zero: Sampler<T> = ConstantSampler(algebra.zero)
