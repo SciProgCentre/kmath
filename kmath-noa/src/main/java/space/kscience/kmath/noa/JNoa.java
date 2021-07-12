@@ -299,4 +299,12 @@ class JNoa {
     public static native long forwardPass(long jitModuleHandle, long tensorHandle);
 
     public static native void forwardPassAssign(long jitModuleHandle, long tensorHandle);
+
+    public static native long getModuleParameter(long jitModuleHandle, String name);
+
+    public static native void setModuleParameter(long jitModuleHandle, String name, long tensorHandle);
+
+    public static native long getModuleBuffer(long jitModuleHandle, String name);
+
+    public static native void setModuleBuffer(long jitModuleHandle, String name, long tensorHandle);
 }

@@ -1127,6 +1127,38 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPass
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPassAssign
   (JNIEnv *, jclass, jlong, jlong);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getModuleParameter
+ * Signature: (JLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getModuleParameter
+  (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setModuleParameter
+ * Signature: (JLjava/lang/String;J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setModuleParameter
+  (JNIEnv *, jclass, jlong, jstring, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getModuleBuffer
+ * Signature: (JLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getModuleBuffer
+  (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setModuleBuffer
+ * Signature: (JLjava/lang/String;J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setModuleBuffer
+  (JNIEnv *, jclass, jlong, jstring, jlong);
+
 #ifdef __cplusplus
 }
 #endif

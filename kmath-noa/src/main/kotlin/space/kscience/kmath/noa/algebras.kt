@@ -142,11 +142,23 @@ protected constructor(protected val scope: NoaScope) :
 
     public abstract fun loadJitModule(path: String, device: Device): NoaJitModule
 
-    public fun NoaJitModule.forward(parameters: TensorType): TensorType =
-        wrap(JNoa.forwardPass(this.jitModuleHandle, parameters.tensorHandle))
+    public fun NoaJitModule.forward(parameters: Tensor<T>): TensorType =
+        wrap(JNoa.forwardPass(this.jitModuleHandle, parameters.tensor.tensorHandle))
 
     public fun NoaJitModule.forwardAssign(parameters: TensorType): Unit =
         JNoa.forwardPassAssign(this.jitModuleHandle, parameters.tensorHandle)
+
+    public fun NoaJitModule.getParameter(name: String): TensorType =
+        wrap(JNoa.getModuleParameter(this.jitModuleHandle, name))
+
+    public fun NoaJitModule.setParameter(name: String, parameter: Tensor<T>): Unit =
+        JNoa.setModuleParameter(this.jitModuleHandle, name, parameter.tensor.tensorHandle)
+
+    public fun NoaJitModule.getBuffer(name: String): TensorType =
+        wrap(JNoa.getModuleParameter(this.jitModuleHandle, name))
+
+    public fun NoaJitModule.setBuffer(name: String, buffer: Tensor<T>): Unit =
+        JNoa.setModuleBuffer(this.jitModuleHandle, name, buffer.tensor.tensorHandle)
 
 }
 
@@ -304,7 +316,6 @@ protected constructor(scope: NoaScope) :
 
     public fun NoaJitModule.train(status: Boolean): Unit =
         JNoa.trainMode(this.jitModuleHandle, status)
-
 }
 
 public sealed class NoaDoubleAlgebra
