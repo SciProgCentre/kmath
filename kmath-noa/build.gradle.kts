@@ -15,7 +15,7 @@ plugins {
 description = "Wrapper for the Bayesian Computation library NOA on top of LibTorch"
 
 dependencies {
-    api(project(":kmath-tensors"))
+    implementation(project(":kmath-tensors"))
 }
 
 val home: String = System.getProperty("user.home")
@@ -185,8 +185,8 @@ val buildCpp by tasks.registering {
 tasks {
     withType<Test>{
         systemProperty("java.library.path",
-            //"$cppBuildDir/kmath"
-        "$home/devspace/noa/cmake-build-release/kmath")
+            "$cppBuildDir/kmath")
+        //"$home/devspace/noa/cmake-build-release/kmath")
     }
 }
 

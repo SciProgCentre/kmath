@@ -9,7 +9,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-core"))
-            api(project(":kmath-stat"))
+            implementation(project(":kmath-stat"))
         }
     }
 }

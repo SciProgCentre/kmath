@@ -12,15 +12,14 @@ differentiable program written on top of
 
 ## Installation
 
-Currently, to build native artifacts, we support only 
-the [GNU](https://gcc.gnu.org/) toolchain. For `GPU` kernels, we require a compatible 
+To install the library, you can simply publish to the local
+Maven repository:
+```
+./gradlew -q :kmath-noa:publishToMavenLocal
+```
+This will fetch and build native artifacts as well.
+Currently, we support only
+the [GNU](https://gcc.gnu.org/) toolchain. For `GPU` kernels, we require a compatible
 [CUDA](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
 installation. If you are on Windows, we recommend setting up
 everything on [WSL](https://docs.nvidia.com/cuda/wsl-user-guide/index.html).
-
-To install the library, simply publish the modules `kmath-tensors` 
-and `kmath-noa` locally:
-```
-./gradlew -q :kmath-tensors:publishToMavenLocal :kmath-noa:publishToMavenLocal
-```
-
