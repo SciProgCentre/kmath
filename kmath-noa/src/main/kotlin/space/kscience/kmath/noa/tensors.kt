@@ -14,7 +14,7 @@ import space.kscience.kmath.tensors.core.TensorLinearStructure
 internal typealias TensorHandle = Long
 
 public sealed class NoaTensor<T>
-constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) :
+protected constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) :
     NoaResource(scope), Tensor<T> {
 
     override fun dispose(): Unit = JNoa.disposeTensor(tensorHandle)
@@ -69,7 +69,7 @@ constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) :
 }
 
 public sealed class NoaTensorOverField<T>
-constructor(scope: NoaScope, tensorHandle: Long) :
+protected constructor(scope: NoaScope, tensorHandle: Long) :
     NoaTensor<T>(scope, tensorHandle) {
     public var requiresGrad: Boolean
         get() = JNoa.requiresGrad(tensorHandle)

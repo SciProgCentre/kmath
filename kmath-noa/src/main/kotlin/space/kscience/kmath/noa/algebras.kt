@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.noa
 
+import com.sun.security.auth.module.JndiLoginModule
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.noa.memory.NoaScope
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
@@ -138,6 +139,14 @@ protected constructor(protected val scope: NoaScope) :
 
     public fun Tensor<T>.copyToDevice(device: Device): TensorType =
         wrap(JNoa.copyToDevice(tensor.tensorHandle, device.toInt()))
+
+    public abstract fun loadJitModule(path: String, device: Device): NoaJitModule
+
+    public fun NoaJitModule.forward(parameters: TensorType): TensorType =
+        wrap(JNoa.forwardPass(this.jitModuleHandle, parameters.tensorHandle))
+
+    public fun NoaJitModule.forwardAssign(parameters: TensorType): Unit =
+        JNoa.forwardPassAssign(this.jitModuleHandle, parameters.tensorHandle)
 
 }
 
@@ -278,16 +287,23 @@ protected constructor(scope: NoaScope) :
         return Pair(wrap(S), wrap(V))
     }
 
-    public fun TensorType.grad(variable: TensorType, retainGraph: Boolean): TensorType {
-        return wrap(JNoa.autoGradTensor(tensorHandle, variable.tensorHandle, retainGraph))
-    }
+    public fun TensorType.autoGradient(variable: TensorType, retainGraph: Boolean): TensorType =
+        wrap(JNoa.autoGradTensor(tensorHandle, variable.tensorHandle, retainGraph))
 
-    public infix fun TensorType.hess(variable: TensorType): TensorType {
-        return wrap(JNoa.autoHessTensor(tensorHandle, variable.tensorHandle))
-    }
+    public fun TensorType.autoHessian(variable: TensorType): TensorType =
+        wrap(JNoa.autoHessTensor(tensorHandle, variable.tensorHandle))
 
     public fun TensorType.detachFromGraph(): TensorType =
         wrap(JNoa.detachFromGraph(tensorHandle))
+
+    public fun TensorType.backward(): Unit =
+        JNoa.backwardPass(tensorHandle)
+
+    public fun TensorType.grad(): TensorType =
+        wrap(JNoa.tensorGrad(tensorHandle))
+
+    public fun NoaJitModule.train(status: Boolean): Unit =
+        JNoa.trainMode(this.jitModuleHandle, status)
 
 }
 
@@ -365,6 +381,8 @@ protected constructor(scope: NoaScope) :
     override fun full(value: Double, shape: IntArray, device: Device): NoaDoubleTensor =
         wrap(JNoa.fullDouble(value, shape, device.toInt()))
 
+    override fun loadJitModule(path: String, device: Device): NoaJitModule =
+        NoaJitModule(scope, JNoa.loadJitModuleDouble(path, device.toInt()))
 }
 
 public sealed class NoaFloatAlgebra
@@ -441,6 +459,9 @@ protected constructor(scope: NoaScope) :
     override fun full(value: Float, shape: IntArray, device: Device): NoaFloatTensor =
         wrap(JNoa.fullFloat(value, shape, device.toInt()))
 
+    override fun loadJitModule(path: String, device: Device): NoaJitModule =
+        NoaJitModule(scope, JNoa.loadJitModuleFloat(path, device.toInt()))
+
 }
 
 public sealed class NoaLongAlgebra
@@ -502,6 +523,9 @@ protected constructor(scope: NoaScope) :
     override fun full(value: Long, shape: IntArray, device: Device): NoaLongTensor =
         wrap(JNoa.fullLong(value, shape, device.toInt()))
 
+    override fun loadJitModule(path: String, device: Device): NoaJitModule =
+        NoaJitModule(scope, JNoa.loadJitModuleLong(path, device.toInt()))
+
 }
 
 public sealed class NoaIntAlgebra
@@ -562,5 +586,8 @@ protected constructor(scope: NoaScope) :
 
     override fun full(value: Int, shape: IntArray, device: Device): NoaIntTensor =
         wrap(JNoa.fullInt(value, shape, device.toInt()))
+
+    override fun loadJitModule(path: String, device: Device): NoaJitModule =
+        NoaJitModule(scope, JNoa.loadJitModuleInt(path, device.toInt()))
 
 }

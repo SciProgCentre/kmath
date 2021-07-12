@@ -280,4 +280,23 @@ class JNoa {
 
     public static native long autoHessTensor(long value, long variable);
 
+    public static native void backwardPass(long tensorHandle);
+
+    public static native long tensorGrad(long tensorHandle);
+
+    public static native void disposeJitModule(long jitModuleHandle);
+
+    public static native void trainMode(long jitModuleHandle, boolean status);
+
+    public static native long loadJitModuleDouble(String path, int device);
+
+    public static native long loadJitModuleFloat(String path, int device);
+
+    public static native long loadJitModuleLong(String path, int device);
+
+    public static native long loadJitModuleInt(String path, int device);
+
+    public static native long forwardPass(long jitModuleHandle, long tensorHandle);
+
+    public static native void forwardPassAssign(long jitModuleHandle, long tensorHandle);
 }
