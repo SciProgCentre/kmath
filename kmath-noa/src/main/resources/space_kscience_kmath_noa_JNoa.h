@@ -1047,6 +1047,86 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autoGradTensor
 JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_autoHessTensor
   (JNIEnv *, jclass, jlong, jlong);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    backwardPass
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_backwardPass
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    tensorGrad
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_tensorGrad
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeJitModule
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeJitModule
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    trainMode
+ * Signature: (JZ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_trainMode
+  (JNIEnv *, jclass, jlong, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadJitModuleDouble
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadJitModuleDouble
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadJitModuleFloat
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadJitModuleFloat
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadJitModuleLong
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadJitModuleLong
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadJitModuleInt
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadJitModuleInt
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    forwardPass
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPass
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    forwardPassAssign
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPassAssign
+  (JNIEnv *, jclass, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif
