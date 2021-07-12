@@ -1,8 +1,13 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.BufferedNDRing
-import space.kscience.kmath.nd.NDAlgebra
+import space.kscience.kmath.nd.AlgebraND
+import space.kscience.kmath.nd.BufferedRingND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import space.kscience.kmath.structures.Buffer
@@ -12,38 +17,38 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
-public typealias Magnitude = UIntArray
-public typealias TBase = ULong
+private typealias Magnitude = UIntArray
+private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
  *
- * @author Robert Drynkin (https://github.com/robdrynkin) and Peter Klimai (https://github.com/pklimai)
+ * @author Robert Drynkin
+ * @author Peter Klimai
  */
 @OptIn(UnstableKMathAPI::class)
-public object BigIntField : Field<BigInt>, RingWithNumbers<BigInt> {
+public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOperations<BigInt> {
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
-    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
     override fun number(value: Number): BigInt = value.toLong().toBigInt()
 
-    override fun multiply(a: BigInt, k: Number): BigInt = a.times(number(k))
-
+    @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+    override fun BigInt.unaryMinus(): BigInt = -this
+    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
     override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
+    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
 
     public operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
-
     public operator fun String.unaryMinus(): BigInt =
         -(this.parseBigInteger() ?: error("Can't parse $this as big integer"))
-
-    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
 }
 
 public class BigInt internal constructor(
     private val sign: Byte,
-    private val magnitude: Magnitude
-    ) : Comparable<BigInt> {
+    private val magnitude: Magnitude,
+) : Comparable<BigInt> {
     public override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1
@@ -51,8 +56,7 @@ public class BigInt internal constructor(
         else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
-    public override fun equals(other: Any?): Boolean =
-        if (other is BigInt) compareTo(other) == 0 else error("Can't compare KBigInteger to a different type")
+    public override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
     public override fun hashCode(): Int = magnitude.hashCode() + sign
 
@@ -82,20 +86,25 @@ public class BigInt internal constructor(
     public operator fun times(b: BigInt): BigInt = when {
         this.sign == 0.toByte() -> ZERO
         b.sign == 0.toByte() -> ZERO
-//          TODO: Karatsuba
+        b.magnitude.size == 1 -> this * b.magnitude[0] * b.sign.toInt()
+        this.magnitude.size == 1 -> b * this.magnitude[0] * this.sign.toInt()
         else -> BigInt((this.sign * b.sign).toByte(), multiplyMagnitudes(this.magnitude, b.magnitude))
     }
 
     public operator fun times(other: UInt): BigInt = when {
         sign == 0.toByte() -> ZERO
         other == 0U -> ZERO
+        other == 1U -> this
         else -> BigInt(sign, multiplyMagnitudeByUInt(magnitude, other))
     }
 
-    public operator fun times(other: Int): BigInt = if (other > 0)
-        this * kotlin.math.abs(other).toUInt()
-    else
-        -this * kotlin.math.abs(other).toUInt()
+    public fun pow(exponent: UInt): BigInt = BigIntField.power(this, exponent)
+
+    public operator fun times(other: Int): BigInt = when {
+        other > 0 -> this * kotlin.math.abs(other).toUInt()
+        other != Int.MIN_VALUE -> -this * kotlin.math.abs(other).toUInt()
+        else -> times(other.toBigInt())
+    }
 
     public operator fun div(other: UInt): BigInt = BigInt(this.sign, divideMagnitudeByUInt(this.magnitude, other))
 
@@ -233,6 +242,7 @@ public class BigInt internal constructor(
         public const val BASE_SIZE: Int = 32
         public val ZERO: BigInt = BigInt(0, uintArrayOf())
         public val ONE: BigInt = BigInt(1, uintArrayOf(1u))
+        private const val KARATSUBA_THRESHOLD = 80
 
         private val hexMapping: HashMap<UInt, String> = hashMapOf(
             0U to "0", 1U to "1", 2U to "2", 3U to "3",
@@ -242,18 +252,18 @@ public class BigInt internal constructor(
         )
 
         private fun compareMagnitudes(mag1: Magnitude, mag2: Magnitude): Int {
-            when {
-                mag1.size > mag2.size -> return 1
-                mag1.size < mag2.size -> return -1
+            return when {
+                mag1.size > mag2.size -> 1
+                mag1.size < mag2.size -> -1
+
                 else -> {
-                    for (i in mag1.size - 1 downTo 0) {
-                        if (mag1[i] > mag2[i]) {
-                            return 1
-                        } else if (mag1[i] < mag2[i]) {
-                            return -1
-                        }
+                    for (i in mag1.size - 1 downTo 0) return when {
+                        mag1[i] > mag2[i] -> 1
+                        mag1[i] < mag2[i] -> -1
+                        else -> continue
                     }
-                    return 0
+
+                    0
                 }
             }
         }
@@ -271,7 +281,7 @@ public class BigInt internal constructor(
                 }
 
                 result[i] = (res and BASE).toUInt()
-                carry = (res shr BASE_SIZE)
+                carry = res shr BASE_SIZE
             }
 
             result[resultLength - 1] = carry.toUInt()
@@ -303,16 +313,24 @@ public class BigInt internal constructor(
             var carry = 0uL
 
             for (i in mag.indices) {
-                val cur: ULong = carry + mag[i].toULong() * x.toULong()
+                val cur = carry + mag[i].toULong() * x.toULong()
                 result[i] = (cur and BASE).toUInt()
                 carry = cur shr BASE_SIZE
             }
+
             result[resultLength - 1] = (carry and BASE).toUInt()
 
             return stripLeadingZeros(result)
         }
 
-        private fun multiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
+        internal fun multiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude = when {
+            mag1.size + mag2.size < KARATSUBA_THRESHOLD || mag1.isEmpty() || mag2.isEmpty() ->
+                naiveMultiplyMagnitudes(mag1, mag2)
+            // TODO implement Fourier
+            else -> karatsubaMultiplyMagnitudes(mag1, mag2)
+        }
+
+        internal fun naiveMultiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
             val resultLength = mag1.size + mag2.size
             val result = Magnitude(resultLength)
 
@@ -329,6 +347,21 @@ public class BigInt internal constructor(
             }
 
             return stripLeadingZeros(result)
+        }
+
+        internal fun karatsubaMultiplyMagnitudes(mag1: Magnitude, mag2: Magnitude): Magnitude {
+            //https://en.wikipedia.org/wiki/Karatsuba_algorithm
+            val halfSize = min(mag1.size, mag2.size) / 2
+            val x0 = mag1.sliceArray(0 until halfSize).toBigInt(1)
+            val x1 = mag1.sliceArray(halfSize until mag1.size).toBigInt(1)
+            val y0 = mag2.sliceArray(0 until halfSize).toBigInt(1)
+            val y1 = mag2.sliceArray(halfSize until mag2.size).toBigInt(1)
+
+            val z0 = x0 * y0
+            val z2 = x1 * y1
+            val z1 = (x0 - x1) * (y1 - y0) + z0 + z2
+
+            return (z2.shl(2 * halfSize * BASE_SIZE) + z1.shl(halfSize * BASE_SIZE) + z0).magnitude
         }
 
         private fun divideMagnitudeByUInt(mag: Magnitude, x: UInt): Magnitude {
@@ -359,6 +392,9 @@ private fun stripLeadingZeros(mag: Magnitude): Magnitude {
     return mag.sliceArray(IntRange(0, resSize))
 }
 
+/**
+ * Returns the absolute value of the given value [x].
+ */
 public fun abs(x: BigInt): BigInt = x.abs()
 
 /**
@@ -405,58 +441,90 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
     return BigInt(sign, copyOf())
 }
 
-private val hexChToInt: MutableMap<Char, Int> = hashMapOf(
-    '0' to 0, '1' to 1, '2' to 2, '3' to 3,
-    '4' to 4, '5' to 5, '6' to 6, '7' to 7,
-    '8' to 8, '9' to 9, 'A' to 10, 'B' to 11,
-    'C' to 12, 'D' to 13, 'E' to 14, 'F' to 15
-)
-
 /**
  * Returns null if a valid number can not be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
+    if (this.isEmpty()) return null
     val sign: Int
-    val sPositive: String
 
-    when {
-        this[0] == '+' -> {
+    val positivePartIndex = when (this[0]) {
+        '+' -> {
             sign = +1
-            sPositive = this.substring(1)
+            1
         }
-        this[0] == '-' -> {
+        '-' -> {
             sign = -1
-            sPositive = this.substring(1)
+            1
         }
         else -> {
-            sPositive = this
             sign = +1
+            0
         }
     }
 
-    var res = BigInt.ZERO
-    var digitValue = BigInt.ONE
-    val sPositiveUpper = sPositive.toUpperCase()
+    var isEmpty = true
 
-    if (sPositiveUpper.startsWith("0X")) {  // hex representation
-        val sHex = sPositiveUpper.substring(2)
+    return if (this.startsWith("0X", startIndex = positivePartIndex, ignoreCase = true)) {
+        // hex representation
 
-        for (ch in sHex.reversed()) {
-            if (ch == '_') continue
-            res += digitValue * (hexChToInt[ch] ?: return null)
-            digitValue *= 16.toBigInt()
+        val uInts = ArrayList<UInt>(length).apply { add(0U) }
+        var offset = 0
+        fun addDigit(value: UInt) {
+            uInts[uInts.lastIndex] += value shl offset
+            offset += 4
+            if (offset == 32) {
+                uInts.add(0U)
+                offset = 0
+            }
         }
-    } else for (ch in sPositiveUpper.reversed()) {
+
+        for (index in lastIndex downTo positivePartIndex + 2) {
+            when (val ch = this[index]) {
+                '_' -> continue
+                in '0'..'9' -> addDigit((ch - '0').toUInt())
+                in 'A'..'F' -> addDigit((ch - 'A').toUInt() + 10U)
+                in 'a'..'f' -> addDigit((ch - 'a').toUInt() + 10U)
+                else -> return null
+            }
+            isEmpty = false
+        }
+
+        while (uInts.isNotEmpty() && uInts.last() == 0U)
+            uInts.removeLast()
+
+        if (isEmpty) null else BigInt(sign.toByte(), uInts.toUIntArray())
+    } else {
         // decimal representation
-        if (ch == '_') continue
-        if (ch !in '0'..'9') {
-            return null
-        }
-        res += digitValue * (ch.toInt() - '0'.toInt())
-        digitValue *= 10.toBigInt()
-    }
 
-    return res * sign
+        val positivePart = buildList(length) {
+            for (index in positivePartIndex until length)
+                when (val a = this@parseBigInteger[index]) {
+                    '_' -> continue
+                    in '0'..'9' -> add(a)
+                    else -> return null
+                }
+        }
+
+        val offset = positivePart.size % 9
+        isEmpty = offset == 0
+
+        fun parseUInt(fromIndex: Int, toIndex: Int): UInt? {
+            var res = 0U
+            for (i in fromIndex until toIndex) {
+                res = res * 10U + (positivePart[i].digitToIntOrNull()?.toUInt() ?: return null)
+            }
+            return res
+        }
+
+        var res = parseUInt(0, offset)?.toBigInt() ?: return null
+
+        for (index in offset..positivePart.lastIndex step 9) {
+            isEmpty = false
+            res = res * 1_000_000_000U + (parseUInt(index, index + 9) ?: return null).toBigInt()
+        }
+        if (isEmpty) null else res * sign
+    }
 }
 
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
@@ -465,5 +533,5 @@ public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigIn
 public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
     boxing(size, initializer)
 
-public fun NDAlgebra.Companion.bigInt(vararg shape: Int): BufferedNDRing<BigInt, BigIntField> =
-    BufferedNDRing(shape, BigIntField, Buffer.Companion::bigInt)
+public fun AlgebraND.Companion.bigInt(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
+    BufferedRingND(shape, BigIntField, Buffer.Companion::bigInt)

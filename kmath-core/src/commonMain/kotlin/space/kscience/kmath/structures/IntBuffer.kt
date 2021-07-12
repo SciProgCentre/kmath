@@ -1,11 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [IntArray].
  *
  * @property array the underlying array.
  */
-public inline class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
+@JvmInline
+public value class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]
@@ -35,10 +43,12 @@ public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffe
 public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
 
 /**
- * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [IntArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Int>.array: IntArray
-    get() = (if (this is IntBuffer) array else IntArray(size) { get(it) })
+public fun Buffer<Int>.toIntArray(): IntArray = when (this) {
+    is IntBuffer -> array.copyOf()
+    else -> IntArray(size, ::get)
+}
 
 /**
  * Returns [IntBuffer] over this array.

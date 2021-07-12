@@ -1,6 +1,13 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import kotlin.math.E
+import kotlin.math.PI
 
 /**
  * An algebraic structure where elements can have numeric representation.
@@ -79,6 +86,63 @@ public interface NumericAlgebra<T> : Algebra<T> {
      */
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
         rightSideNumberOperationFunction(operation)(left, right)
+
+    public override fun bindSymbolOrNull(value: String): T? = when (value) {
+        "pi" -> number(PI)
+        "e" -> number(E)
+        else -> super.bindSymbolOrNull(value)
+    }
+}
+
+/**
+ * The &pi; mathematical constant.
+ */
+public val <T> NumericAlgebra<T>.pi: T get() = bindSymbolOrNull("pi") ?: number(PI)
+
+/**
+ * The *e* mathematical constant.
+ */
+public val <T> NumericAlgebra<T>.e: T get() = number(E)
+
+/**
+ * Scale by scalar operations
+ */
+public interface ScaleOperations<T> : Algebra<T> {
+    /**
+     * Scaling an element by a scalar.
+     *
+     * @param a the multiplier.
+     * @param value the multiplicand.
+     * @return the produce.
+     */
+    public fun scale(a: T, value: Double): T
+
+    /**
+     * Multiplication of this element by a scalar.
+     *
+     * @receiver the multiplier.
+     * @param k the multiplicand.
+     * @return the product.
+     */
+    public operator fun T.times(k: Number): T = scale(this, k.toDouble())
+
+    /**
+     * Division of this element by scalar.
+     *
+     * @receiver the dividend.
+     * @param k the divisor.
+     * @return the quotient.
+     */
+    public operator fun T.div(k: Number): T = scale(this, 1.0 / k.toDouble())
+
+    /**
+     * Multiplication of this number by element.
+     *
+     * @receiver the multiplier.
+     * @param b the multiplicand.
+     * @return the product.
+     */
+    public operator fun Number.times(b: T): T = b * this
 }
 
 /**
@@ -86,22 +150,20 @@ public interface NumericAlgebra<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface RingWithNumbers<T>: Ring<T>, NumericAlgebra<T>{
-    public override fun number(value: Number): T = one * value
-
+public interface NumbersAddOperations<T> : Ring<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      */
     public operator fun T.plus(b: Number): T = this + number(b)
 
     /**
      * Addition of scalar and element.
      *
-     * @receiver the addend.
-     * @param b the augend.
+     * @receiver the augend.
+     * @param b the addend.
      */
     public operator fun Number.plus(b: T): T = b + this
 

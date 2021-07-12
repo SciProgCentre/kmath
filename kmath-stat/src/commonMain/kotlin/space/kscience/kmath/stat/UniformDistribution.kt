@@ -1,7 +1,14 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.stat
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.SimpleChain
+import space.kscience.kmath.distributions.Distribution
+import space.kscience.kmath.distributions.UnivariateDistribution
 
 public class UniformDistribution(public val range: ClosedFloatingPointRange<Double>) : UnivariateDistribution<Double> {
     private val length: Double = range.endInclusive - range.start

@@ -1,4 +1,7 @@
-plugins { id("ru.mipt.npm.gradle.mpp") }
+plugins {
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
+}
 
 kotlin.sourceSets {
     all {
@@ -18,6 +21,6 @@ kotlin.sourceSets {
     }
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }

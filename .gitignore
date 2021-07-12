@@ -1,7 +1,12 @@
 .gradle
 build/
 out/
+
 .idea/
+
+!.idea/copyright/
+!.idea/scopes/
+
 .vscode/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)

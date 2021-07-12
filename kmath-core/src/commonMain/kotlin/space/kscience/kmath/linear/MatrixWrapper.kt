@@ -1,20 +1,22 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.structures.asBuffer
-import kotlin.math.sqrt
 import kotlin.reflect.KClass
-import kotlin.reflect.safeCast
 
 /**
  * A [Matrix] that holds [MatrixFeature] objects.
  *
  * @param T the type of items.
  */
-public class MatrixWrapper<T : Any> internal  constructor(
+public class MatrixWrapper<out T : Any> internal constructor(
     public val origin: Matrix<T>,
     public val features: Set<MatrixFeature>,
 ) : Matrix<T> by origin {
@@ -23,14 +25,12 @@ public class MatrixWrapper<T : Any> internal  constructor(
      * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
      */
     @UnstableKMathAPI
-    override fun <T : Any> getFeature(type: KClass<T>): T? = type.safeCast(features.find { type.isInstance(it) })
-        ?: origin.getFeature(type)
+    @Suppress("UNCHECKED_CAST")
+    public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
+        features.singleOrNull(type::isInstance) as? F
+            ?: origin.getFeature(type)
 
-    override fun equals(other: Any?): Boolean = origin == other
-    override fun hashCode(): Int = origin.hashCode()
-    override fun toString(): String {
-        return "MatrixWrapper(matrix=$origin, features=$features)"
-    }
+    public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
 
 /**
@@ -61,39 +61,33 @@ public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeatu
     }
 
 /**
- * Build a square matrix from given elements.
- */
-public fun <T : Any> Structure2D.Companion.square(vararg elements: T): Matrix<T> {
-    val size: Int = sqrt(elements.size.toDouble()).toInt()
-    require(size * size == elements.size) { "The number of elements ${elements.size} is not a full square" }
-    val buffer = elements.asBuffer()
-    return BufferMatrix(size, size, buffer)
-}
-
-/**
  * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
  */
-public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.one(rows: Int, columns: Int): Matrix<T> =
-    VirtualMatrix(rows, columns) { i, j ->
-        if (i == j) elementContext.one else elementContext.zero
-    } + UnitFeature
+public fun <T : Any> LinearSpace<T, Ring<T>>.one(
+    rows: Int,
+    columns: Int,
+): Matrix<T> = VirtualMatrix(rows, columns) { i, j ->
+    if (i == j) elementAlgebra.one else elementAlgebra.zero
+} + UnitFeature
 
 
 /**
  * A virtual matrix of zeroes
  */
-public fun <T : Any, R : Ring<T>> GenericMatrixContext<T, R, *>.zero(rows: Int, columns: Int): Matrix<T> =
-    VirtualMatrix(rows, columns) { _, _ -> elementContext.zero } + ZeroFeature
+public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
+    rows: Int,
+    columns: Int,
+): Matrix<T> = VirtualMatrix(rows, columns) { _, _ ->
+    elementAlgebra.zero
+} + ZeroFeature
 
-public class TransposedFeature<T : Any>(public val original: Matrix<T>) : MatrixFeature
+public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : MatrixFeature
 
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> {
-    return getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
-        colNum,
-        rowNum,
-    ) { i, j -> get(j, i) } + TransposedFeature(this)
-}
+public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
+    colNum,
+    rowNum,
+) { i, j -> get(j, i) } + TransposedFeature(this)

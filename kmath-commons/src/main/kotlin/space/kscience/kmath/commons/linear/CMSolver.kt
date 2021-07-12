@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
@@ -12,9 +17,9 @@ public enum class CMDecomposition {
     CHOLESKY
 }
 
-public fun CMMatrixContext.solver(
+public fun CMLinearSpace.solver(
     a: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
     CMDecomposition.LUP -> LUDecomposition(a.toCM().origin).solver
     CMDecomposition.RRQR -> RRQRDecomposition(a.toCM().origin).solver
@@ -23,19 +28,19 @@ public fun CMMatrixContext.solver(
     CMDecomposition.CHOLESKY -> CholeskyDecomposition(a.toCM().origin).solver
 }
 
-public fun CMMatrixContext.solve(
+public fun CMLinearSpace.solve(
     a: Matrix<Double>,
     b: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
-): CMMatrix = solver(a, decomposition).solve(b.toCM().origin).asMatrix()
+    decomposition: CMDecomposition = CMDecomposition.LUP,
+): CMMatrix = solver(a, decomposition).solve(b.toCM().origin).wrap()
 
-public fun CMMatrixContext.solve(
+public fun CMLinearSpace.solve(
     a: Matrix<Double>,
     b: Point<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
+    decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMVector = solver(a, decomposition).solve(b.toCM().origin).toPoint()
 
-public fun CMMatrixContext.inverse(
+public fun CMLinearSpace.inverse(
     a: Matrix<Double>,
-    decomposition: CMDecomposition = CMDecomposition.LUP
-): CMMatrix = solver(a, decomposition).inverse.asMatrix()
+    decomposition: CMDecomposition = CMDecomposition.LUP,
+): CMMatrix = solver(a, decomposition).inverse.wrap()

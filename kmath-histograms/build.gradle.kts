@@ -1,5 +1,6 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
 }
 
 kscience {
@@ -20,5 +21,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    this.maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

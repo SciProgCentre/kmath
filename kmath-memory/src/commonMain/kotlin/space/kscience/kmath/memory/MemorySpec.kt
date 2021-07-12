@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.memory
 
 /**
@@ -32,7 +37,8 @@ public fun <T : Any> MemoryReader.read(spec: MemorySpec<T>, offset: Int): T = wi
 /**
  * Writes the object [value] with [spec] starting from [offset].
  */
-public fun <T : Any> MemoryWriter.write(spec: MemorySpec<T>, offset: Int, value: T): Unit = with(spec) { write(offset, value) }
+public fun <T : Any> MemoryWriter.write(spec: MemorySpec<T>, offset: Int, value: T): Unit =
+    with(spec) { write(offset, value) }
 
 /**
  * Reads array of [size] objects mapped by [spec] at certain [offset].

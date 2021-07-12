@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.coroutines
 
 import kotlinx.coroutines.*
@@ -27,7 +32,7 @@ public class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<L
 
 public fun <T, R> Flow<T>.async(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    block: suspend CoroutineScope.(T) -> R
+    block: suspend CoroutineScope.(T) -> R,
 ): AsyncFlow<R> {
     val flow = map { LazyDeferred(dispatcher) { block(it) } }
     return AsyncFlow(flow)
@@ -72,12 +77,12 @@ public suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCol
 
 public suspend inline fun <T> AsyncFlow<T>.collect(
     concurrency: Int,
-    crossinline action: suspend (value: T) -> Unit
+    crossinline action: suspend (value: T) -> Unit,
 ): Unit = collect(concurrency, object : FlowCollector<T> {
     override suspend fun emit(value: T): Unit = action(value)
 })
 
 public inline fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    crossinline transform: suspend (T) -> R
+    crossinline transform: suspend (T) -> R,
 ): Flow<R> = flatMapMerge { value -> flow { emit(transform(value)) } }.flowOn(dispatcher)

@@ -1,17 +1,6 @@
 /*
- * Copyright  2018 Alexander Nozik.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.chains
@@ -24,20 +13,20 @@ import kotlinx.coroutines.sync.withLock
 
 /**
  * A not-necessary-Markov chain of some type
- * @param R - the chain element type
+ * @param T - the chain element type
  */
-public interface Chain<out R> : Flow<R> {
+public interface Chain<out T> : Flow<T> {
     /**
      * Generate next value, changing state if needed
      */
-    public suspend fun next(): R
+    public suspend fun next(): T
 
     /**
      * Create a copy of current chain state. Consuming resulting chain does not affect initial chain
      */
-    public fun fork(): Chain<R>
+    public suspend fun fork(): Chain<T>
 
-    override suspend fun collect(collector: FlowCollector<R>): Unit =
+    override suspend fun collect(collector: FlowCollector<T>): Unit =
         flow { while (true) emit(next()) }.collect(collector)
 
     public companion object
@@ -51,7 +40,7 @@ public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
  */
 public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
     public override suspend fun next(): R = gen()
-    public override fun fork(): Chain<R> = this
+    public override suspend fun fork(): Chain<R> = this
 }
 
 /**
@@ -63,15 +52,13 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R {
-        mutex.withLock {
-            val newValue = gen(value ?: seed())
-            value = newValue
-            return newValue
-        }
+    public override suspend fun next(): R = mutex.withLock {
+        val newValue = gen(value ?: seed())
+        value = newValue
+        newValue
     }
 
-    public override fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
+    public override suspend fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
 }
 
 /**
@@ -83,22 +70,20 @@ public class StatefulChain<S, out R>(
     private val state: S,
     private val seed: S.() -> R,
     private val forkState: ((S) -> S),
-    private val gen: suspend S.(R) -> R
+    private val gen: suspend S.(R) -> R,
 ) : Chain<R> {
     private val mutex: Mutex = Mutex()
     private var value: R? = null
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R {
-        mutex.withLock {
-            val newValue = state.gen(value ?: state.seed())
-            value = newValue
-            return newValue
-        }
+    public override suspend fun next(): R = mutex.withLock {
+        val newValue = state.gen(value ?: state.seed())
+        value = newValue
+        newValue
     }
 
-    public override fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
+    public override suspend fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
 }
 
 /**
@@ -106,7 +91,7 @@ public class StatefulChain<S, out R>(
  */
 public class ConstantChain<out T>(public val value: T) : Chain<T> {
     public override suspend fun next(): T = value
-    public override fun fork(): Chain<T> = this
+    public override suspend fun fork(): Chain<T> = this
 }
 
 /**
@@ -115,7 +100,7 @@ public class ConstantChain<out T>(public val value: T) : Chain<T> {
  */
 public fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = func(this@map.next())
-    override fun fork(): Chain<R> = this@map.fork().map(func)
+    override suspend fun fork(): Chain<R> = this@map.fork().map(func)
 }
 
 /**
@@ -131,7 +116,7 @@ public fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain
         return next
     }
 
-    override fun fork(): Chain<T> = this@filter.fork().filter(block)
+    override suspend fun fork(): Chain<T> = this@filter.fork().filter(block)
 }
 
 /**
@@ -139,17 +124,17 @@ public fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain
  */
 public fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = mapper(this@collect)
-    override fun fork(): Chain<R> = this@collect.fork().collect(mapper)
+    override suspend fun fork(): Chain<R> = this@collect.fork().collect(mapper)
 }
 
 public fun <T, S, R> Chain<T>.collectWithState(
     state: S,
     stateFork: (S) -> S,
-    mapper: suspend S.(Chain<T>) -> R
+    mapper: suspend S.(Chain<T>) -> R,
 ): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = state.mapper(this@collectWithState)
 
-    override fun fork(): Chain<R> =
+    override suspend fun fork(): Chain<R> =
         this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
 }
 
@@ -158,5 +143,5 @@ public fun <T, S, R> Chain<T>.collectWithState(
  */
 public fun <T, U, R> Chain<T>.zip(other: Chain<U>, block: suspend (T, U) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = block(this@zip.next(), other.next())
-    override fun fork(): Chain<R> = this@zip.fork().zip(other.fork(), block)
+    override suspend fun fork(): Chain<R> = this@zip.fork().zip(other.fork(), block)
 }

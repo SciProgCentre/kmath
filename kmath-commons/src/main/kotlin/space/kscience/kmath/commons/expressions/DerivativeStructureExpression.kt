@@ -1,10 +1,15 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.RingWithNumbers
+import space.kscience.kmath.operations.NumbersAddOperations
 
 /**
  * A field over commons-math [DerivativeStructure].
@@ -16,13 +21,14 @@ import space.kscience.kmath.operations.RingWithNumbers
 public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
-) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>, RingWithNumbers<DerivativeStructure> {
+) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
+    NumbersAddOperations<DerivativeStructure> {
     public val numberOfVariables: Int = bindings.size
 
     public override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
     public override val one: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order, 1.0) }
 
-    override fun number(value: Number): DerivativeStructure = const(value.toDouble())
+    public override fun number(value: Number): DerivativeStructure = const(value.toDouble())
 
     /**
      * A class that implements both [DerivativeStructure] and a [Symbol]
@@ -33,10 +39,10 @@ public class DerivativeStructureField(
         symbol: Symbol,
         value: Double,
     ) : DerivativeStructure(size, order, index, value), Symbol {
-        override val identity: String = symbol.identity
-        override fun toString(): String = identity
-        override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
-        override fun hashCode(): Int = identity.hashCode()
+        public override val identity: String = symbol.identity
+        public override fun toString(): String = identity
+        public override fun equals(other: Any?): Boolean = this.identity == (other as? Symbol)?.identity
+        public override fun hashCode(): Int = identity.hashCode()
     }
 
     /**
@@ -46,13 +52,13 @@ public class DerivativeStructureField(
         key.identity to DerivativeStructureSymbol(numberOfVariables, index, key, value)
     }.toMap()
 
-    override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
+    public override fun const(value: Double): DerivativeStructure = DerivativeStructure(numberOfVariables, order, value)
 
-    public override fun bindSymbolOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
+    public override fun bindSymbolOrNull(value: String): DerivativeStructureSymbol? = variables[value]
+    public override fun bindSymbol(value: String): DerivativeStructureSymbol = variables.getValue(value)
 
-    public fun bind(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
-
-    override fun bindSymbol(value: String): DerivativeStructureSymbol = bind(StringSymbol(value))
+    public fun bindSymbolOrNull(symbol: Symbol): DerivativeStructureSymbol? = variables[symbol.identity]
+    public fun bindSymbol(symbol: Symbol): DerivativeStructureSymbol = variables.getValue(symbol.identity)
 
     public fun DerivativeStructure.derivative(symbols: List<Symbol>): Double {
         require(symbols.size <= order) { "The order of derivative ${symbols.size} exceeds computed order $order" }
@@ -62,13 +68,11 @@ public class DerivativeStructureField(
 
     public fun DerivativeStructure.derivative(vararg symbols: Symbol): Double = derivative(symbols.toList())
 
+    public override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
+
     public override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
 
-    public override fun multiply(a: DerivativeStructure, k: Number): DerivativeStructure = when (k) {
-        is Double -> a.multiply(k)
-        is Int -> a.multiply(k)
-        else -> a.multiply(k.toDouble())
-    }
+    public override fun scale(a: DerivativeStructure, value: Double): DerivativeStructure = a.multiply(value)
 
     public override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
     public override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
@@ -102,18 +106,17 @@ public class DerivativeStructureField(
 
     public companion object :
         AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField, Expression<Double>> {
-        public override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double, Expression<Double>> =
+        public override fun process(function: DerivativeStructureField.() -> DerivativeStructure): DifferentiableExpression<Double> =
             DerivativeStructureExpression(function)
     }
 }
-
 
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
 public class DerivativeStructureExpression(
     public val function: DerivativeStructureField.() -> DerivativeStructure,
-) : DifferentiableExpression<Double, Expression<Double>> {
+) : DifferentiableExpression<Double> {
     public override operator fun invoke(arguments: Map<Symbol, Double>): Double =
         DerivativeStructureField(0, arguments).function().value
 

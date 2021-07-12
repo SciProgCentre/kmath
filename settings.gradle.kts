@@ -1,23 +1,22 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
-        jcenter()
         maven("https://repo.kotlin.link")
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
-        maven("https://dl.bintray.com/kotlin/kotlinx")
+        mavenCentral()
+        gradlePluginPortal()
     }
 
-    val toolsVersion = "0.8.1"
-    val kotlinVersion = "1.4.30"
+    val toolsVersion = "0.10.0"
+    val kotlinVersion = "1.5.20"
 
     plugins {
-        id("kotlinx.benchmark") version "0.2.0-dev-20"
         id("ru.mipt.npm.gradle.project") version toolsVersion
         id("ru.mipt.npm.gradle.mpp") version toolsVersion
         id("ru.mipt.npm.gradle.jvm") version toolsVersion
-        id("ru.mipt.npm.gradle.publish") version toolsVersion
+        kotlin("multiplatform") version kotlinVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
+        id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
+        kotlin("jupyter.api") version "0.10.0-25"
     }
 }
 
@@ -40,7 +39,12 @@ include(
     ":kmath-ast",
     ":kmath-ejml",
     ":kmath-kotlingrad",
-    ":examples"
+    ":kmath-tensors",
+    ":kmath-jupyter",
+    ":kmath-symja",
+    ":kmath-jafama",
+    ":examples",
+    ":benchmarks",
 )
 
 if(System.getProperty("os.name") == "Linux"){

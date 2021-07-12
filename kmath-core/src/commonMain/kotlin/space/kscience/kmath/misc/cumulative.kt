@@ -1,6 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.misc
 
-import space.kscience.kmath.operations.Space
+import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import kotlin.jvm.JvmName
 
@@ -37,8 +42,8 @@ public fun <T, R> List<T>.cumulative(initial: R, operation: (R, T) -> R): List<R
 /**
  * Cumulative sum with custom space
  */
-public fun <T> Iterable<T>.cumulativeSum(space: Space<T>): Iterable<T> =
-    space { cumulative(zero) { element: T, sum: T -> sum + element } }
+public fun <T> Iterable<T>.cumulativeSum(group: Ring<T>): Iterable<T> =
+    group { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
 public fun Iterable<Double>.cumulativeSum(): Iterable<Double> = cumulative(0.0) { element, sum -> sum + element }
@@ -49,8 +54,8 @@ public fun Iterable<Int>.cumulativeSum(): Iterable<Int> = cumulative(0) { elemen
 @JvmName("cumulativeSumOfLong")
 public fun Iterable<Long>.cumulativeSum(): Iterable<Long> = cumulative(0L) { element, sum -> sum + element }
 
-public fun <T> Sequence<T>.cumulativeSum(space: Space<T>): Sequence<T> =
-    space { cumulative(zero) { element: T, sum: T -> sum + element } }
+public fun <T> Sequence<T>.cumulativeSum(group: Ring<T>): Sequence<T> =
+    group { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
 public fun Sequence<Double>.cumulativeSum(): Sequence<Double> = cumulative(0.0) { element, sum -> sum + element }
@@ -61,8 +66,8 @@ public fun Sequence<Int>.cumulativeSum(): Sequence<Int> = cumulative(0) { elemen
 @JvmName("cumulativeSumOfLong")
 public fun Sequence<Long>.cumulativeSum(): Sequence<Long> = cumulative(0L) { element, sum -> sum + element }
 
-public fun <T> List<T>.cumulativeSum(space: Space<T>): List<T> =
-    space { cumulative(zero) { element: T, sum: T -> sum + element } }
+public fun <T> List<T>.cumulativeSum(group: Ring<T>): List<T> =
+    group { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
 public fun List<Double>.cumulativeSum(): List<Double> = cumulative(0.0) { element, sum -> sum + element }

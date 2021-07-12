@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.memory
 
 import java.io.IOException
@@ -13,7 +18,7 @@ import kotlin.contracts.contract
 internal class ByteBufferMemory(
     val buffer: ByteBuffer,
     val startOffset: Int = 0,
-    override val size: Int = buffer.limit()
+    override val size: Int = buffer.limit(),
 ) : Memory {
     @Suppress("NOTHING_TO_INLINE")
     private inline fun position(o: Int): Int = startOffset + o
@@ -100,7 +105,8 @@ public actual fun Memory.Companion.allocate(length: Int): Memory =
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
  * and could be mutated independently from the resulting [Memory].
  */
-public actual fun Memory.Companion.wrap(array: ByteArray): Memory = ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
+public actual fun Memory.Companion.wrap(array: ByteArray): Memory =
+    ByteBufferMemory(checkNotNull(ByteBuffer.wrap(array)))
 
 /**
  * Wraps this [ByteBuffer] to [Memory] object.

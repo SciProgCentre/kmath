@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.*
@@ -5,8 +10,8 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.asm.internal.AsmBuilder.ClassLoader
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.util.stream.Collectors.toMap
@@ -337,7 +342,7 @@ internal class AsmBuilder<T>(
         val MAP_INTRINSICS_TYPE: Type by lazy { getObjectType("space/kscience/kmath/asm/internal/MapIntrinsics") }
 
         /**
-         * ASM Type for [kscience.kmath.expressions.Symbol].
+         * ASM Type for [space.kscience.kmath.expressions.Symbol].
          */
         val SYMBOL_TYPE: Type by lazy { getObjectType("space/kscience/kmath/expressions/Symbol") }
     }

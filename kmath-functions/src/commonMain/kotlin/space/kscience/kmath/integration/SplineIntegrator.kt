@@ -1,0 +1,102 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.integration
+
+import space.kscience.kmath.functions.PiecewisePolynomial
+import space.kscience.kmath.functions.integrate
+import space.kscience.kmath.interpolation.PolynomialInterpolator
+import space.kscience.kmath.interpolation.SplineInterpolator
+import space.kscience.kmath.interpolation.interpolatePolynomials
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.sum
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
+import space.kscience.kmath.structures.map
+
+/**
+ * Compute analytical indefinite integral of this [PiecewisePolynomial], keeping all intervals intact
+ */
+@UnstableKMathAPI
+public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(algebra: Field<T>): PiecewisePolynomial<T> =
+    PiecewisePolynomial(pieces.map { it.first to it.second.integrate(algebra) })
+
+/**
+ * Compute definite integral of given [PiecewisePolynomial] piece by piece in a given [range]
+ * Requires [UnivariateIntegrationNodes] or [IntegrationRange] and [IntegrandMaxCalls]
+ */
+@UnstableKMathAPI
+public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(
+    algebra: Field<T>, range: ClosedRange<T>,
+): T = algebra.sum(
+    pieces.map { (region, poly) ->
+        val intersectedRange = maxOf(range.start, region.start)..minOf(range.endInclusive, region.endInclusive)
+        //Check if polynomial range is not used
+        if (intersectedRange.start == intersectedRange.endInclusive) algebra.zero
+        else poly.integrate(algebra, intersectedRange)
+    }
+)
+
+/**
+ * A generic spline-interpolation-based analytic integration
+ * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
+ * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ */
+@UnstableKMathAPI
+public class SplineIntegrator<T : Comparable<T>>(
+    public val algebra: Field<T>,
+    public val bufferFactory: MutableBufferFactory<T>,
+) : UnivariateIntegrator<T> {
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
+        val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+
+        val interpolator: PolynomialInterpolator<T> = SplineInterpolator(algebra, bufferFactory)
+        val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
+            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val step = (range.endInclusive - range.start) / (numPoints - 1)
+            DoubleBuffer(numPoints) { i -> range.start + i * step }
+        }
+
+        val values = nodes.map(bufferFactory) { integrand.function(it) }
+        val polynomials = interpolator.interpolatePolynomials(
+            nodes.map(bufferFactory) { number(it) },
+            values
+        )
+        val res = polynomials.integrate(algebra, number(range.start)..number(range.endInclusive))
+        integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)
+    }
+}
+
+/**
+ * A simplified double-based spline-interpolation-based analytic integration
+ * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
+ * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ */
+@UnstableKMathAPI
+public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+        val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+
+        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(DoubleField, ::DoubleBuffer)
+        val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
+            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val step = (range.endInclusive - range.start) / (numPoints - 1)
+            DoubleBuffer(numPoints) { i -> range.start + i * step }
+        }
+
+        val values = nodes.map { integrand.function(it) }
+        val polynomials = interpolator.interpolatePolynomials(nodes, values)
+        val res = polynomials.integrate(DoubleField, range)
+        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)
+    }
+}
+
+@UnstableKMathAPI
+public inline val DoubleField.splineIntegrator: UnivariateIntegrator<Double>
+    get() = DoubleSplineIntegrator

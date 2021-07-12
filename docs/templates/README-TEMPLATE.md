@@ -1,11 +1,8 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
-
 ![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
-
-Bintray:        [ ![Download](https://api.bintray.com/packages/mipt-npm/kscience/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/kscience/kmath-core/_latestVersion)
-
-Bintray-dev:    [ ![Download](https://api.bintray.com/packages/mipt-npm/dev/kmath-core/images/download.svg) ](https://bintray.com/mipt-npm/dev/kmath-core/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
+[![Space](https://img.shields.io/badge/dynamic/xml?color=orange&label=Space&query=//metadata/versioning/latest&url=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fspace%2Fkscience%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
 # KMath
 
@@ -13,6 +10,8 @@ Could be pronounced as `key-math`. The **K**otlin **Math**ematics library was in
 Python's NumPy library. Later we found that kotlin is much more flexible language and allows superior architecture 
 designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like experience could 
 be achieved with [kmath-for-real](/kmath-for-real) extension module.
+
+[Documentation site (**WIP**)](https://mipt-npm.github.io/kmath/)
 
 ## Publications and talks
 
@@ -41,7 +40,7 @@ KMath is a modular library. Different modules provide different features with di
 
 * **PROTOTYPE**. On this level there are no compatibility guarantees. All methods and classes form those modules could break any moment. You can still use it, but be sure to fix the specific version.
 * **EXPERIMENTAL**. The general API is decided, but some changes could be made. Volatile API is marked with `@UnstableKmathAPI` or other stability warning annotations.
-* **DEVELOPMENT**. API breaking genrally follows semantic versioning ideology. There could be changes in minor versions, but not in patch versions. API is protected with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
+* **DEVELOPMENT**. API breaking generally follows semantic versioning ideology. There could be changes in minor versions, but not in patch versions. API is protected with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
 * **STABLE**. The API stabilized. Breaking changes are allowed only in major releases.
 
 <!--Current feature list is [here](/docs/features.md)-->
@@ -95,6 +94,10 @@ cases. We expect the worst KMath benchmarks will perform better than native Pyth
 native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be 
 better than SciPy.
 
+## Requirements
+
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend to use GraalVM-CE 11 for execution in order to get better performance.
+
 ### Repositories
 
 Release and development artifacts are accessible from mipt-npm [Space](https://www.jetbrains.com/space/) repository `https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven` (see documentation of
@@ -106,8 +109,8 @@ repositories {
 }
 
 dependencies {
-    api("kscience.kmath:kmath-core:$version")
-    // api("kscience.kmath:kmath-core-jvm:$version") for jvm-specific version
+    api("${group}:kmath-core:$version")
+    // api("${group}:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
 

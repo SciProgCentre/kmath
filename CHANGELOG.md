@@ -2,14 +2,55 @@
 
 ## [Unreleased]
 ### Added
+- `ScaleOperations` interface
+- `Field` extends `ScaleOperations`
+- Basic integration API
+- Basic MPP distributions and samplers
+- `bindSymbolOrNull`
+- Blocking chains and Statistics
+- Multiplatform integration
+- Integration for any Field element
+- Extended operations for ND4J fields
+- Jupyter Notebook integration module (kmath-jupyter)
+- `@PerformancePitfall` annotation to mark possibly slow API
+- `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
+- Integration between `MST` and Symja `IExpr`
 
 ### Changed
+- Exponential operations merged with hyperbolic functions
+- Space is replaced by Group. Space is reserved for vector spaces.
+- VectorSpace is now a vector space
+- Buffer factories for primitives moved to MutableBuffer.Companion
+- Rename `NDStructure` and `NDAlgebra` to `StructureND` and `AlgebraND` respectively
+- `Real` -> `Double`
+- DataSets are moved from functions to core
+- Redesign advanced Chain API
+- Redesign `MST`. Remove `MstExpression`.
+- Move `MST` to core
+- Separated benchmarks and examples
+- Rewrite `kmath-ejml` without `ejml-simple` artifact, support sparse matrices
+- Promote stability of kmath-ast and kmath-kotlingrad to EXPERIMENTAL.
+- ColumnarData returns nullable column
+- `MST` is made sealed interface
+- Replace `MST.Symbolic` by `Symbol`, `Symbol` now implements MST
+- Remove Any restriction on polynomials
+- Add `out` variance to type parameters of `StructureND` and its implementations where possible
+- Rename `DifferentiableMstExpression` to `KotlingradExpression`
 
 ### Deprecated
 
 ### Removed
+- Nearest in Domain. To be implemented in geometry package.
+- Number multiplication and division in main Algebra chain
+- `contentEquals` from Buffer. It moved to the companion.
+- MSTExpression
+- Expression algebra builders
+- Complex and Quaternion no longer are elements.
+- Second generic from DifferentiableExpression
 
 ### Fixed
+- Ring inherits RingOperations, not GroupOperations
+- Univariate histogram filling
 
 ### Security
 
@@ -65,6 +106,7 @@
 - `toGrid` method.
 - Public visibility of `BufferAccessor2D`
 - `Real` class
+- StructureND identity and equals
 
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)

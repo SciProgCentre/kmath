@@ -1,0 +1,61 @@
+name: Gradle publish
+
+on:
+  workflow_dispatch:
+  release:
+    types:
+      - created
+
+jobs:
+  publish:
+    environment:
+      name: publish
+    strategy:
+      matrix:
+        os: [ macOS-latest, windows-latest ]
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: DeLaGuardo/setup-graalvm@4.0
+        with:
+          graalvm: 21.1.0
+          java: java11
+          arch: amd64
+      - name: Add msys to path
+        if: matrix.os == 'windows-latest'
+        run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
+      - name: Cache gradle
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Cache konan
+        uses: actions/cache@v2
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Publish Windows Artifacts
+        if: matrix.os == 'windows-latest'
+        run: >
+          ./gradlew release --no-daemon
+          -Ppublishing.enabled=true
+          -Ppublishing.github.user=${{ secrets.PUBLISHING_GITHUB_USER }}
+          -Ppublishing.github.token=${{ secrets.PUBLISHING_GITHUB_TOKEN }}
+          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
+          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}
+      - name: Publish Mac Artifacts
+        if: matrix.os == 'macOS-latest'
+        run: >
+          ./gradlew release --no-daemon
+          -Ppublishing.enabled=true
+          -Ppublishing.platform=macosX64
+          -Ppublishing.github.user=${{ secrets.PUBLISHING_GITHUB_USER }}
+          -Ppublishing.github.token=${{ secrets.PUBLISHING_GITHUB_TOKEN }}
+          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
+          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}

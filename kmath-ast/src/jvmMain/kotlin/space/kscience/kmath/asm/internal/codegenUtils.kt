@@ -1,9 +1,14 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.InstructionAdapter
-import space.kscience.kmath.ast.MST
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -47,7 +52,7 @@ internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.(
  *
  * @author Iaroslav Postovalov
  */
-internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
+internal fun MethodVisitor.label(): Label = Label().also(::visitLabel)
 
 /**
  * Creates a class name for [Expression] subclassed to implement [mst] provided.
@@ -58,7 +63,7 @@ internal fun MethodVisitor.label(): Label = Label().also { visitLabel(it) }
  * @author Iaroslav Postovalov
  */
 internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
-    val name = "kscience.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
+    val name = "space.kscience.kmath.asm.generated.AsmCompiledExpression_${mst.hashCode()}_$collision"
 
     try {
         Class.forName(name)
@@ -86,7 +91,7 @@ internal inline fun ClassWriter.visitField(
     descriptor: String,
     signature: String?,
     value: Any?,
-    block: FieldVisitor.() -> Unit
+    block: FieldVisitor.() -> Unit,
 ): FieldVisitor {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return visitField(access, name, descriptor, signature, value).apply(block)

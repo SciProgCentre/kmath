@@ -1,7 +1,16 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.operations
 
+import kotlin.random.Random
+import kotlin.random.nextUInt
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @kotlin.ExperimentalUnsignedTypes
 class BigIntOperationsTest {
@@ -143,6 +152,17 @@ class BigIntOperationsTest {
         val prod = 0xfffffffe00000001UL.toBigInt()
 
         assertEquals(prod, res)
+    }
+
+    @Test
+    fun testKaratsuba() {
+        val random = Random(2222)
+        val x = uintArrayOf(12U, 345U)
+        val y = uintArrayOf(6U, 789U)
+        assertContentEquals(BigInt.naiveMultiplyMagnitudes(x, y), BigInt.karatsubaMultiplyMagnitudes(x, y))
+        val x1 = UIntArray(Random.nextInt(100, 1000)) { random.nextUInt() }
+        val y1 = UIntArray(Random.nextInt(100, 1000)) { random.nextUInt() }
+        assertContentEquals(BigInt.naiveMultiplyMagnitudes(x1, y1), BigInt.karatsubaMultiplyMagnitudes(x1, y1))
     }
 
     @Test
@@ -377,5 +397,13 @@ class BigIntOperationsTest {
         val res = 0xdef01.toBigInt()
 
         return assertEquals(res, x % mod)
+    }
+
+    @Test
+    fun testNotEqualsOtherTypeInstanceButButNotFails() = assertFalse(0.toBigInt().equals(""))
+
+    @Test
+    fun testIntAbsOverflow() {
+        assertEquals((-Int.MAX_VALUE.toLong().toBigInt() - 1.toBigInt()) * 2, 2.toBigInt() * Int.MIN_VALUE)
     }
 }

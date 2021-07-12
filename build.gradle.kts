@@ -1,28 +1,46 @@
 plugins {
     id("ru.mipt.npm.gradle.project")
+    kotlin("jupyter.api") apply false
 }
 
 allprojects {
     repositories {
-        jcenter()
         maven("https://clojars.org/repo")
-        maven("https://dl.bintray.com/egor-bogomolov/astminer/")
-        maven("https://dl.bintray.com/hotkeytlt/maven")
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
-        maven("https://dl.bintray.com/kotlin/kotlinx")
-        maven("https://dl.bintray.com/mipt-npm/dev")
-        maven("https://dl.bintray.com/mipt-npm/kscience")
         maven("https://jitpack.io")
-        maven("http://logicrunch.research.it.uu.se/maven/")
+        maven("http://logicrunch.research.it.uu.se/maven") {
+            isAllowInsecureProtocol = true
+        }
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.2.0"
+    version = "0.3.0-dev-14"
 }
 
 subprojects {
-    if (name.startsWith("kmath")) apply<ru.mipt.npm.gradle.KSciencePublishingPlugin>()
+    if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
+
+    afterEvaluate {
+        tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
+            dependsOn(tasks.getByName("assemble"))
+
+            dokkaSourceSets.all {
+                val readmeFile = File(this@subprojects.projectDir, "README.md")
+                if (readmeFile.exists()) includes.from(readmeFile.absolutePath)
+                externalDocumentationLink("https://ejml.org/javadoc/")
+                externalDocumentationLink("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/")
+                externalDocumentationLink("https://deeplearning4j.org/api/latest/")
+                externalDocumentationLink("https://axelclk.bitbucket.io/symja/javadoc/")
+                externalDocumentationLink("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
+
+                externalDocumentationLink(
+                    "https://breandan.net/kotlingrad/kotlingrad/",
+                    "https://breandan.net/kotlingrad/kotlingrad/kotlingrad/package-list",
+                )
+            }
+        }
+    }
 }
 
 readme {
@@ -30,11 +48,11 @@ readme {
 }
 
 ksciencePublish {
-    spaceRepo = "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven"
-    bintrayRepo = "kscience"
-    githubProject = "kmath"
+    github("kmath")
+    space()
+    sonatype()
 }
 
-apiValidation{
+apiValidation {
     nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
 }

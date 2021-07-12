@@ -1,5 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.stat
 
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.random.Random
 
 /**
@@ -15,6 +21,11 @@ public interface RandomGenerator {
      * Gets the next random [Double] value uniformly distributed between 0 (inclusive) and 1 (exclusive).
      */
     public fun nextDouble(): Double
+
+    /**
+     * A chunk of doubles of given [size]
+     */
+    public fun nextDoubleBuffer(size: Int): DoubleBuffer = DoubleBuffer(size) { nextDouble() }
 
     /**
      * Gets the next random `Int` from the random number generator.
@@ -82,6 +93,8 @@ public interface RandomGenerator {
 
 /**
  * Implements [RandomGenerator] by delegating all operations to [Random].
+ *
+ * @property random the underlying [Random] object.
  */
 public class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
     public override fun nextBoolean(): Boolean = random.nextBoolean()

@@ -1,11 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [LongArray].
  *
  * @property array the underlying array.
  */
-public inline class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
+@JvmInline
+public value class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Long = array[index]
@@ -35,10 +43,12 @@ public inline fun LongBuffer(size: Int, init: (Int) -> Long): LongBuffer = LongB
 public fun LongBuffer(vararg longs: Long): LongBuffer = LongBuffer(longs)
 
 /**
- * Returns a [IntArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [LongArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Long>.array: LongArray
-    get() = (if (this is LongBuffer) array else LongArray(size) { get(it) })
+public fun Buffer<Long>.toLongArray(): LongArray = when (this) {
+    is LongBuffer -> array.copyOf()
+    else -> LongArray(size, ::get)
+}
 
 /**
  * Returns [LongBuffer] over this array.

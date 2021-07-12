@@ -1,15 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.real.RealVector
-import space.kscience.kmath.real.invoke
+import space.kscience.kmath.real.DoubleVector
 import kotlin.random.Random
 import kotlin.test.*
 
 internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val hSpace = RealHistogramSpace.fromRanges(
+        val hSpace = DoubleHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
@@ -17,14 +21,14 @@ internal class MultivariateHistogramTest {
             put(0.55, 0.55)
         }
         val bin = histogram.bins.find { it.value.toInt() > 0 } ?: fail()
-        assertTrue { bin.contains(RealVector(0.55, 0.55)) }
-        assertTrue { bin.contains(RealVector(0.6, 0.5)) }
-        assertFalse { bin.contains(RealVector(-0.55, 0.55)) }
+        assertTrue { bin.contains(DoubleVector(0.55, 0.55)) }
+        assertTrue { bin.contains(DoubleVector(0.6, 0.5)) }
+        assertFalse { bin.contains(DoubleVector(-0.55, 0.55)) }
     }
 
     @Test
     fun testSequentialPut() {
-        val hSpace = RealHistogramSpace.fromRanges(
+        val hSpace = DoubleHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -39,12 +43,12 @@ internal class MultivariateHistogramTest {
                 put(nextDouble(), nextDouble(), nextDouble())
             }
         }
-        assertEquals(n, histogram.bins.sumBy { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumOf { it.value.toInt() })
     }
 
     @Test
     fun testHistogramAlgebra() {
-       RealHistogramSpace.fromRanges(
+        DoubleHistogramSpace.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -72,7 +76,7 @@ internal class MultivariateHistogramTest {
             assertTrue {
                 res.bins.count() >= histogram1.bins.count()
             }
-            assertEquals(0.0, res.bins.sumByDouble { it.value.toDouble() })
+            assertEquals(0.0, res.bins.sumOf { it.value.toDouble() })
         }
     }
 }

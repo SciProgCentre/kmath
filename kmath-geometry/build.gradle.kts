@@ -1,4 +1,7 @@
-plugins { id("ru.mipt.npm.gradle.mpp") }
+plugins {
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
+}
 
 kotlin.sourceSets.commonMain {
     dependencies {
@@ -6,6 +9,6 @@ kotlin.sourceSets.commonMain {
     }
 }
 
-readme{
+readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
 }

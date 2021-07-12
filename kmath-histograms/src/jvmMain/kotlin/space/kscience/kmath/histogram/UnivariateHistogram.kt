@@ -1,20 +1,26 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Space
-import space.kscience.kmath.operations.SpaceElement
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asSequence
 
 
-public val UnivariateDomain.center: Double get() = (range.endInclusive - range.start) / 2
+@UnstableKMathAPI
+public val UnivariateDomain.center: Double
+    get() = (range.endInclusive + range.start) / 2
 
 /**
  * A univariate bin based an a range
  * @param value The value of histogram including weighting
  * @param standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
  */
+@UnstableKMathAPI
 public class UnivariateBin(
     public val domain: UnivariateDomain,
     override val value: Double,
@@ -27,8 +33,7 @@ public class UnivariateBin(
 }
 
 @OptIn(UnstableKMathAPI::class)
-public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
-    SpaceElement<UnivariateHistogram, Space<UnivariateHistogram>> {
+public interface UnivariateHistogram : Histogram<Double, UnivariateBin>{
     public operator fun get(value: Double): UnivariateBin?
     public override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
 
@@ -40,7 +45,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
             binSize: Double,
             start: Double = 0.0,
             builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = TreeHistogramSpace.uniform(binSize, start).produce(builder)
+        ): UnivariateHistogram = TreeHistogramSpace.uniform(binSize, start).fill(builder)
 
         /**
          * Build and fill a histogram with custom borders. Returns a read-only histogram.
@@ -48,7 +53,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin>,
         public fun custom(
             borders: DoubleArray,
             builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = TreeHistogramSpace.custom(borders).produce(builder)
+        ): UnivariateHistogram = TreeHistogramSpace.custom(borders).fill(builder)
 
     }
 }

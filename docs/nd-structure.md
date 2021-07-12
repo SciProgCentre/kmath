@@ -10,11 +10,11 @@ structures. In `kmath` performance depends on which particular context was used 
 Let us consider following contexts:
 ```kotlin
     // automatically build context most suited for given type.
-    val autoField = NDField.auto(RealField, dim, dim)
+    val autoField = NDField.auto(DoubleField, dim, dim)
     // specialized nd-field for Double. It works as generic Double field as well
     val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
-    val genericField = NDField.buffered(RealField, dim, dim)
+    val genericField = NDField.buffered(DoubleField, dim, dim)
 ```
 Now let us perform several tests and see which implementation is best suited for each case:
 

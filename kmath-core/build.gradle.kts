@@ -1,7 +1,6 @@
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
     id("ru.mipt.npm.gradle.native")
 }
 
@@ -15,7 +14,7 @@ kotlin.sourceSets {
 
 readme {
     description = "Core classes, algebra definitions, basic linear algebra"
-    maturity = Maturity.DEVELOPMENT
+    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
@@ -23,13 +22,13 @@ readme {
         description = """
             Algebraic structures like rings, spaces and fields.
         """.trimIndent(),
-        ref = "src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt"
     )
 
     feature(
         id = "nd",
         description = "Many-dimensional structures and operations on them.",
-        ref = "src/commonMain/kotlin/kscience/kmath/structures/NDStructure.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/structures/StructureND.kt"
     )
 
     feature(
@@ -37,13 +36,13 @@ readme {
         description = """
             Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
         """.trimIndent(),
-        ref = "src/commonMain/kotlin/kscience/kmath/operations/Algebra.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt"
     )
 
     feature(
         id = "buffers",
         description = "One-dimensional structure",
-        ref = "src/commonMain/kotlin/kscience/kmath/structures/Buffers.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt"
     )
 
     feature(
@@ -53,18 +52,18 @@ readme {
             objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
             performance calculations to code generation.
         """.trimIndent(),
-        ref = "src/commonMain/kotlin/kscience/kmath/expressions"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/expressions"
     )
 
     feature(
         id = "domains",
         description = "Domains",
-        ref = "src/commonMain/kotlin/kscience/kmath/domains"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/domains"
     )
 
     feature(
         id = "autodif",
         description = "Automatic differentiation",
-        ref = "src/commonMain/kotlin/kscience/kmath/expressions/SimpleAutoDiff.kt"
+        ref = "src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt"
     )
 }

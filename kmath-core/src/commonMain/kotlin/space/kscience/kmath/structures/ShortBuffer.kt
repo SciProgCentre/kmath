@@ -1,11 +1,19 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * Specialized [MutableBuffer] implementation over [ShortArray].
  *
  * @property array the underlying array.
  */
-public inline class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
+@JvmInline
+public value class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
     public override val size: Int get() = array.size
 
     public override operator fun get(index: Int): Short = array[index]
@@ -33,10 +41,12 @@ public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer = Sh
 public fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
 
 /**
- * Returns a [ShortArray] containing all of the elements of this [MutableBuffer].
+ * Returns a new [ShortArray] containing all of the elements of this [Buffer].
  */
-public val MutableBuffer<out Short>.array: ShortArray
-    get() = (if (this is ShortBuffer) array else ShortArray(size) { get(it) })
+public fun Buffer<Short>.toShortArray(): ShortArray = when (this) {
+    is ShortBuffer -> array.copyOf()
+    else -> ShortArray(size, ::get)
+}
 
 /**
  * Returns [ShortBuffer] over this array.

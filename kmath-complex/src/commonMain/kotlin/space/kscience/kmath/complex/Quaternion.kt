@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.memory.MemoryReader
@@ -22,8 +27,10 @@ public val Quaternion.conjugate: Quaternion
  */
 public val Quaternion.reciprocal: Quaternion
     get() {
-        val n = QuaternionField { norm(this@reciprocal) }
-        return conjugate / (n * n)
+        QuaternionField {
+            val n = norm(this@reciprocal)
+            return conjugate / (n * n)
+        }
     }
 
 /**
@@ -37,7 +44,7 @@ public val Quaternion.r: Double
  */
 @OptIn(UnstableKMathAPI::class)
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
-    ExponentialOperations<Quaternion>, RingWithNumbers<Quaternion> {
+    ExponentialOperations<Quaternion>, NumbersAddOperations<Quaternion>, ScaleOperations<Quaternion> {
     override val zero: Quaternion = 0.toQuaternion()
     override val one: Quaternion = 1.toQuaternion()
 
@@ -59,10 +66,8 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     public override fun add(a: Quaternion, b: Quaternion): Quaternion =
         Quaternion(a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z)
 
-    public override fun multiply(a: Quaternion, k: Number): Quaternion {
-        val d = k.toDouble()
-        return Quaternion(a.w * d, a.x * d, a.y * d, a.z * d)
-    }
+    public override fun scale(a: Quaternion, value: Double): Quaternion =
+        Quaternion(a.w * value, a.x * value, a.y * value, a.z * value)
 
     public override fun multiply(a: Quaternion, b: Quaternion): Quaternion = Quaternion(
         a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
@@ -167,12 +172,21 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     public override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
     public override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
 
-    public override fun bindSymbol(value: String): Quaternion = when (value) {
+    public override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {
         "i" -> i
         "j" -> j
         "k" -> k
-        else -> super<Field>.bindSymbol(value)
+        else -> null
     }
+
+    override fun number(value: Number): Quaternion = value.toQuaternion()
+
+    public override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
+    public override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0
+    public override fun tanh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
+    public override fun asinh(arg: Quaternion): Quaternion = ln(sqrt(arg * arg + one) + arg)
+    public override fun acosh(arg: Quaternion): Quaternion = ln(arg + sqrt((arg - one) * (arg + one)))
+    public override fun atanh(arg: Quaternion): Quaternion = (ln(arg + one) - ln(one - arg)) / 2.0
 }
 
 /**
@@ -186,7 +200,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
 @OptIn(UnstableKMathAPI::class)
 public data class Quaternion(
     val w: Double, val x: Double, val y: Double, val z: Double,
-) : FieldElement<Quaternion, QuaternionField> {
+) {
     public constructor(w: Number, x: Number, y: Number, z: Number) : this(
         w.toDouble(),
         x.toDouble(),
@@ -206,9 +220,6 @@ public data class Quaternion(
         require(!y.isNaN()) { "x-component of quaternion is not-a-number" }
         require(!z.isNaN()) { "x-component of quaternion is not-a-number" }
     }
-
-    public override val context: QuaternionField
-        get() = QuaternionField
 
     /**
      * Returns a string representation of this quaternion.

@@ -1,10 +1,17 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.linear
+
+import space.kscience.kmath.nd.StructureFeature
 
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
  */
-public interface MatrixFeature
+public interface MatrixFeature: StructureFeature
 
 /**
  * Matrices with this feature are considered to have only diagonal non-null elements.
@@ -67,6 +74,23 @@ public object LFeature : MatrixFeature
  * Matrices with this feature are upper triangular ones.
  */
 public object UFeature : MatrixFeature
+
+/**
+ * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
+ *
+ * @param T the type of matrices' items.
+ */
+public interface LUDecompositionFeature<T : Any> : MatrixFeature {
+    /**
+     * The lower triangular matrix in this decomposition. It may have [LFeature].
+     */
+    public val l: Matrix<T>
+
+    /**
+     * The upper triangular matrix in this decomposition. It may have [UFeature].
+     */
+    public val u: Matrix<T>
+}
 
 /**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where

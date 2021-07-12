@@ -1,7 +1,6 @@
-import ru.mipt.npm.gradle.Maturity
-
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
 }
 
 kotlin.js {
@@ -19,8 +18,13 @@ kotlin.js {
 }
 
 kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach { it.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI") }
+
     commonMain {
         dependencies {
+            api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
             api(project(":kmath-core"))
         }
     }
@@ -33,15 +37,15 @@ kotlin.sourceSets {
 
     jsMain {
         dependencies {
-            implementation(npm("astring", "1.7.0"))
+            implementation(npm("astring", "1.7.5"))
+            implementation(npm("binaryen", "101.0.0"))
+            implementation(npm("js-base64", "3.6.1"))
         }
     }
 
     jvmMain {
         dependencies {
-            api("com.github.h0tk3y.betterParse:better-parse:0.4.1")
-            implementation("org.ow2.asm:asm:9.1")
-            implementation("org.ow2.asm:asm-commons:9.1")
+            implementation("org.ow2.asm:asm-commons:9.2")
         }
     }
 }
@@ -52,42 +56,26 @@ tasks.dokkaHtml {
 }
 
 readme {
-    maturity = Maturity.PROTOTYPE
+    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
         id = "expression-language",
-        description = "Expression language and its parser",
-        ref = "src/jvmMain/kotlin/kscience/kmath/ast/parser.kt"
-    )
-
-    feature(
-        id = "mst",
-        description = "MST (Mathematical Syntax Tree) as expression language's syntax intermediate representation",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MST.kt"
-    )
-
-    feature(
-        id = "mst-building",
-        description = "MST building algebraic structure",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MstAlgebra.kt"
-    )
-
-    feature(
-        id = "mst-interpreter",
-        description = "MST interpreter",
-        ref = "src/commonMain/kotlin/kscience/kmath/ast/MST.kt"
-    )
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt"
+    ) { "Expression language and its parser" }
 
     feature(
         id = "mst-jvm-codegen",
-        description = "Dynamic MST to JVM bytecode compiler",
-        ref = "src/jvmMain/kotlin/kscience/kmath/asm/asm.kt"
-    )
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt"
+    ) { "Dynamic MST to JVM bytecode compiler" }
 
     feature(
         id = "mst-js-codegen",
-        description = "Dynamic MST to JS compiler",
-        ref = "src/jsMain/kotlin/kscience/kmath/estree/estree.kt"
-    )
+        ref = "src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt"
+    ) { "Dynamic MST to JS compiler" }
+
+    feature(
+        id = "rendering",
+        ref = "src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt"
+    ) { "Extendable MST rendering" }
 }

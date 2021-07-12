@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.memory.MemoryReader
@@ -5,9 +10,9 @@ import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.FieldElement
 import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.RingWithNumbers
+import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MemoryBuffer
 import space.kscience.kmath.structures.MutableBuffer
@@ -47,7 +52,8 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
  * A field of [Complex].
  */
 @OptIn(UnstableKMathAPI::class)
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, RingWithNumbers<Complex> {
+public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, NumbersAddOperations<Complex>,
+    ScaleOperations<Complex> {
     public override val zero: Complex = 0.0.toComplex()
     public override val one: Complex = 1.0.toComplex()
 
@@ -56,8 +62,14 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
      */
     public val i: Complex by lazy { Complex(0.0, 1.0) }
 
+    override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
+
+    override fun number(value: Number): Complex = Complex(value.toDouble(), 0.0)
+
+    override fun scale(a: Complex, value: Double): Complex = Complex(a.re * value, a.im * value)
+
     public override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
-    public override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
+//    public override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
 
     public override fun multiply(a: Complex, b: Complex): Complex =
         Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
@@ -86,8 +98,10 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
         }
     }
 
-    public override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2
-    public override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2
+    override operator fun Complex.div(k: Number): Complex = Complex(re / k.toDouble(), im / k.toDouble())
+
+    public override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2.0
+    public override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2.0
 
     public override fun tan(arg: Complex): Complex {
         val e1 = exp(-i * arg)
@@ -115,8 +129,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
     /**
      * Adds complex number to real one.
      *
-     * @receiver the addend.
-     * @param c the augend.
+     * @receiver the augend.
+     * @param c the addend.
      * @return the sum.
      */
     public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
@@ -133,8 +147,8 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
     /**
      * Adds real number to complex one.
      *
-     * @receiver the addend.
-     * @param d the augend.
+     * @receiver the augend.
+     * @param d the addend.
      * @return the sum.
      */
     public operator fun Complex.plus(d: Double): Complex = d + this
@@ -159,7 +173,7 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
 
     public override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 
-    public override fun bindSymbol(value: String): Complex = if (value == "i") i else super<ExtendedField>.bindSymbol(value)
+    public override fun bindSymbolOrNull(value: String): Complex? = if (value == "i") i else null
 }
 
 /**
@@ -169,19 +183,18 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Rin
  * @property im The imaginary part.
  */
 @OptIn(UnstableKMathAPI::class)
-public data class Complex(val re: Double, val im: Double) : FieldElement<Complex, ComplexField> {
+public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)
 
-    public override val context: ComplexField get() = ComplexField
-
-    public override fun toString(): String = "($re + i*$im)"
+    public override fun toString(): String = "($re + i * $im)"
 
     public companion object : MemorySpec<Complex> {
         public override val objectSize: Int
             get() = 16
 
-        public override fun MemoryReader.read(offset: Int): Complex = Complex(readDouble(offset), readDouble(offset + 8))
+        public override fun MemoryReader.read(offset: Int): Complex =
+            Complex(readDouble(offset), readDouble(offset + 8))
 
         public override fun MemoryWriter.write(offset: Int, value: Complex) {
             writeDouble(offset, value.re)

@@ -1,13 +1,18 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.NDSpace
-import space.kscience.kmath.nd.NDStructure
+import space.kscience.kmath.nd.FieldND
 import space.kscience.kmath.nd.Strides
-import space.kscience.kmath.operations.Space
-import space.kscience.kmath.operations.SpaceElement
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 
 /**
@@ -20,9 +25,9 @@ public data class DomainBin<T : Comparable<T>>(
 
 @OptIn(UnstableKMathAPI::class)
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
-    override val context: IndexedHistogramSpace<T, V>,
-    public val values: NDStructure<V>,
-) : Histogram<T, Bin<T>>, SpaceElement<IndexedHistogram<T, V>, IndexedHistogramSpace<T, V>> {
+    public val context: IndexedHistogramSpace<T, V>,
+    public val values: StructureND<V>,
+) : Histogram<T, Bin<T>> {
 
     override fun get(point: Point<T>): Bin<T>? {
         val index = context.getIndex(point) ?: return null
@@ -41,10 +46,11 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
 /**
  * A space for producing histograms with values in a NDStructure
  */
-public interface IndexedHistogramSpace<T : Comparable<T>, V : Any> : Space<IndexedHistogram<T, V>> {
+public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
+    : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
     //public val valueSpace: Space<V>
     public val strides: Strides
-    public val histogramValueSpace: NDSpace<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
+    public val histogramValueSpace: FieldND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
      * Resolve index of the bin including given [point]
@@ -63,12 +69,12 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any> : Space<Index
     override fun add(a: IndexedHistogram<T, V>, b: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
         require(a.context == this) { "Can't operate on a histogram produced by external space" }
         require(b.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace.invoke { a.values + b.values })
+        return IndexedHistogram(this, histogramValueSpace { a.values + b.values })
     }
 
-    override fun multiply(a: IndexedHistogram<T, V>, k: Number): IndexedHistogram<T, V> {
+    override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {
         require(a.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace.invoke { a.values * k })
+        return IndexedHistogram(this, histogramValueSpace { a.values * value })
     }
 
     override val zero: IndexedHistogram<T, V> get() = produce { }
