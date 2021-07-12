@@ -1159,6 +1159,46 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getModuleBuffer
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setModuleBuffer
   (JNIEnv *, jclass, jlong, jstring, jlong);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    adamOptim
+ * Signature: (JD)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_adamOptim
+  (JNIEnv *, jclass, jlong, jdouble);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeAdamOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeAdamOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stepAdamOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_stepAdamOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    zeroGradAdamOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradAdamOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    swapTensors
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_swapTensors
+  (JNIEnv *, jclass, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif

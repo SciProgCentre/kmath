@@ -307,4 +307,14 @@ class JNoa {
     public static native long getModuleBuffer(long jitModuleHandle, String name);
 
     public static native void setModuleBuffer(long jitModuleHandle, String name, long tensorHandle);
+
+    public static native long adamOptim(long jitModuleHandle, double learningRate);
+
+    public static native void disposeAdamOptim(long adamOptHandle);
+
+    public static native void stepAdamOptim(long adamOptHandle);
+
+    public static native void zeroGradAdamOptim(long adamOptHandle);
+
+    public static native void swapTensors(long lhsHandle, long rhsHandle);
 }

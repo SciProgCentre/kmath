@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.noa
 
-import com.sun.security.auth.module.JndiLoginModule
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.noa.memory.NoaScope
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
@@ -143,22 +142,25 @@ protected constructor(protected val scope: NoaScope) :
     public abstract fun loadJitModule(path: String, device: Device): NoaJitModule
 
     public fun NoaJitModule.forward(parameters: Tensor<T>): TensorType =
-        wrap(JNoa.forwardPass(this.jitModuleHandle, parameters.tensor.tensorHandle))
+        wrap(JNoa.forwardPass(jitModuleHandle, parameters.tensor.tensorHandle))
 
     public fun NoaJitModule.forwardAssign(parameters: TensorType): Unit =
-        JNoa.forwardPassAssign(this.jitModuleHandle, parameters.tensorHandle)
+        JNoa.forwardPassAssign(jitModuleHandle, parameters.tensorHandle)
 
     public fun NoaJitModule.getParameter(name: String): TensorType =
-        wrap(JNoa.getModuleParameter(this.jitModuleHandle, name))
+        wrap(JNoa.getModuleParameter(jitModuleHandle, name))
 
     public fun NoaJitModule.setParameter(name: String, parameter: Tensor<T>): Unit =
-        JNoa.setModuleParameter(this.jitModuleHandle, name, parameter.tensor.tensorHandle)
+        JNoa.setModuleParameter(jitModuleHandle, name, parameter.tensor.tensorHandle)
 
     public fun NoaJitModule.getBuffer(name: String): TensorType =
-        wrap(JNoa.getModuleParameter(this.jitModuleHandle, name))
+        wrap(JNoa.getModuleParameter(jitModuleHandle, name))
 
     public fun NoaJitModule.setBuffer(name: String, buffer: Tensor<T>): Unit =
-        JNoa.setModuleBuffer(this.jitModuleHandle, name, buffer.tensor.tensorHandle)
+        JNoa.setModuleBuffer(jitModuleHandle, name, buffer.tensor.tensorHandle)
+
+    public infix fun TensorType.swap(other: TensorType): Unit =
+        JNoa.swapTensors(tensorHandle, other.tensorHandle)
 
 }
 
@@ -315,7 +317,10 @@ protected constructor(scope: NoaScope) :
         wrap(JNoa.tensorGrad(tensorHandle))
 
     public fun NoaJitModule.train(status: Boolean): Unit =
-        JNoa.trainMode(this.jitModuleHandle, status)
+        JNoa.trainMode(jitModuleHandle, status)
+
+    public fun NoaJitModule.adamOptimiser(learningRate: Double): AdamOptimiser =
+        AdamOptimiser(scope, JNoa.adamOptim(jitModuleHandle, learningRate))
 }
 
 public sealed class NoaDoubleAlgebra
