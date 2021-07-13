@@ -53,7 +53,7 @@ class TestUtils {
     }
 
     @Test
-    fun testSetSeed(): Unit = NoaFloat {
+    fun testSetSeed() = NoaFloat {
         withCuda { device ->
             testingSetSeed(device)
         }
