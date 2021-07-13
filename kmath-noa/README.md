@@ -200,7 +200,7 @@ NoaFloat {
     // Compute the loss on validation dataset
     lossModule.forwardAssign(yPred, loss)
     println("Validation loss: $loss")
-    }
+}
 
 ```
 
