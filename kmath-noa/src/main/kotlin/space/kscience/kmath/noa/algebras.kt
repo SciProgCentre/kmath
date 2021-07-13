@@ -36,14 +36,14 @@ protected constructor(protected val scope: NoaScope) :
 
     override fun Tensor<T>.value(): T = tensor.item()
 
-    public abstract fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device): TensorType
+    public abstract fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device = Device.CPU): TensorType
 
     @PerformancePitfall
     public abstract fun Tensor<T>.copyToArray(): PrimitiveArray
 
-    public abstract fun copyFromArray(array: PrimitiveArray, shape: IntArray, device: Device): TensorType
+    public abstract fun copyFromArray(array: PrimitiveArray, shape: IntArray, device: Device = Device.CPU): TensorType
 
-    public abstract fun full(value: T, shape: IntArray, device: Device): TensorType
+    public abstract fun full(value: T, shape: IntArray, device: Device = Device.CPU): TensorType
 
     override operator fun Tensor<T>.times(other: Tensor<T>): TensorType {
         return wrap(JNoa.timesTensor(tensor.tensorHandle, other.tensor.tensorHandle))
@@ -136,10 +136,10 @@ protected constructor(protected val scope: NoaScope) :
     public fun Tensor<T>.copy(): TensorType =
         wrap(JNoa.copyTensor(tensor.tensorHandle))
 
-    public fun Tensor<T>.copyToDevice(device: Device): TensorType =
+    public fun Tensor<T>.copyToDevice(device: Device = Device.CPU): TensorType =
         wrap(JNoa.copyToDevice(tensor.tensorHandle, device.toInt()))
 
-    public abstract fun loadJitModule(path: String, device: Device): NoaJitModule
+    public abstract fun loadJitModule(path: String, device: Device = Device.CPU): NoaJitModule
 
     public fun NoaJitModule.forward(parameters: Tensor<T>): TensorType =
         wrap(JNoa.forwardPass(jitModuleHandle, parameters.tensor.tensorHandle))
@@ -193,9 +193,9 @@ protected constructor(scope: NoaScope) :
     override fun Tensor<T>.variance(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.varDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    public abstract fun randNormal(shape: IntArray, device: Device): TensorType
+    public abstract fun randNormal(shape: IntArray, device: Device = Device.CPU): TensorType
 
-    public abstract fun randUniform(shape: IntArray, device: Device): TensorType
+    public abstract fun randUniform(shape: IntArray, device: Device = Device.CPU): TensorType
 
     public fun Tensor<T>.randUniform(): TensorType =
         wrap(JNoa.randLike(tensor.tensorHandle))
@@ -301,7 +301,7 @@ protected constructor(scope: NoaScope) :
         return Pair(wrap(S), wrap(V))
     }
 
-    public fun TensorType.autoGradient(variable: TensorType, retainGraph: Boolean): TensorType =
+    public fun TensorType.autoGradient(variable: TensorType, retainGraph: Boolean = false): TensorType =
         wrap(JNoa.autoGradTensor(tensorHandle, variable.tensorHandle, retainGraph))
 
     public fun TensorType.autoHessian(variable: TensorType): TensorType =

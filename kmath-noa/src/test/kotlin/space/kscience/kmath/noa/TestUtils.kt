@@ -46,7 +46,7 @@ class TestUtils {
     }
 
     @Test
-    fun testSetNumThreads(){
+    fun testSetNumThreads() {
         val numThreads = 2
         setNumThreads(numThreads)
         assertEquals(numThreads, getNumThreads())
@@ -59,6 +59,4 @@ class TestUtils {
         }
     }!!
 
-
-    
 }
