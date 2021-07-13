@@ -29,16 +29,14 @@ val cudaDefault = file("/usr/local/cuda").exists()
 val cudaFound = cudaHome?.isNotEmpty() ?: false or cudaDefault
 
 val cmakeArchive = "cmake-3.20.5-linux-x86_64"
-val clangArchive = "clang+llvm-12.0.0-x86_64-linux-gnu-ubuntu-16.04"
 val torchArchive = "libtorch"
 
 val cmakeCmd = "$thirdPartyDir/cmake/$cmakeArchive/bin/cmake"
-val clangRootDir = "$thirdPartyDir/clang/$clangArchive"
-val clangCmd = "$clangRootDir/bin/clang"
-val clangxxCmd = "$clangRootDir/bin/clang++"
 val ninjaCmd = "$thirdPartyDir/ninja/ninja"
 
 val generateJNIHeader by tasks.registering {
+    println("Path:")
+    println(System.getProperty("java.library.path"))
     doLast {
         exec {
             workingDir(projectDir.resolve("src/main/java/space/kscience/kmath/noa"))
@@ -57,12 +55,6 @@ val downloadCMake by tasks.registering(Download::class) {
     overwrite(false)
 }
 
-val downloadClang by tasks.registering(Download::class) {
-    val tarFile = "$clangArchive.tar.xz"
-    src("https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0/$tarFile")
-    dest(File("$thirdPartyDir/clang", tarFile))
-    overwrite(false)
-}
 
 val downloadNinja by tasks.registering(Download::class) {
     src("https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip")
@@ -97,17 +89,6 @@ val extractCMake by tasks.registering(Copy::class) {
     into("$thirdPartyDir/cmake")
 }
 
-val extractClang by tasks.registering {
-    dependsOn(downloadClang)
-    onlyIf { !file(clangRootDir).exists() }
-    doLast {
-        exec {
-            workingDir("$thirdPartyDir/clang")
-            commandLine("tar", "-xf", "$clangArchive.tar.xz")
-        }
-    }
-}
-
 val extractNinja by tasks.registering(Copy::class) {
     dependsOn(downloadNinja)
     from(zipTree(downloadNinja.get().dest))
@@ -128,7 +109,6 @@ val extractJNoa by tasks.registering(Copy::class) {
 
 val configureCpp by tasks.registering {
     dependsOn(extractCMake)
-    dependsOn(extractClang)
     dependsOn(extractNinja)
     dependsOn(extractTorch)
     dependsOn(extractJNoa)
@@ -144,8 +124,6 @@ val configureCpp by tasks.registering {
                 cmakeCmd,
                 jNoaDir,
                 "-GNinja",
-                "-DCMAKE_C_COMPILER=$clangCmd",
-                "-DCMAKE_CXX_COMPILER=$clangxxCmd",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
@@ -180,14 +158,14 @@ val buildCpp by tasks.registering {
     }
 }
 
-//tasks["compileJava"].dependsOn(buildCpp)
-/*
+tasks["compileJava"].dependsOn(buildCpp)
+
 tasks {
     withType<Test>{
         systemProperty("java.library.path", "$home/devspace/noa/cmake-build-release/kmath")
-        //      "$cppBuildDir/kmath")
+              //"$cppBuildDir/kmath")
     }
-}*/
+}
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE

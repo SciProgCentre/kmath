@@ -15,7 +15,7 @@ class JNoa {
                     "Failed to load the native library NOA:\n" +
                             " - Follow the installation instructions from\n" +
                             "   https://github.com/grinisrit/noa \n" +
-                            " - Set JAVA_LIBRARY_PATH to the location of libjnoa.so");
+                            " - Set java.library.path to the location of libjnoa.so");
             System.exit(1);
         }
     }
