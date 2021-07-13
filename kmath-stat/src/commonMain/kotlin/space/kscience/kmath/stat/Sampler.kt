@@ -12,7 +12,7 @@ import space.kscience.kmath.structures.*
 import kotlin.jvm.JvmName
 
 /**
- * Sampler that generates chains of values of type [T] in a chain of type [C].
+ * Sampler that generates chains of values of type [T].
  */
 public fun interface Sampler<out T : Any> {
     /**

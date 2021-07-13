@@ -426,13 +426,11 @@ public open class DoubleTensorAlgebra :
      * @param transform the function to be applied to each element of the tensor.
      * @return the resulting tensor after applying the function.
      */
-    public fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor {
-        return DoubleTensor(
-            tensor.shape,
-            tensor.mutableBuffer.array().map { transform(it) }.toDoubleArray(),
-            tensor.bufferStart
-        )
-    }
+    public inline fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor = DoubleTensor(
+        tensor.shape,
+        tensor.mutableBuffer.array().map { transform(it) }.toDoubleArray(),
+        tensor.bufferStart
+    )
 
     /**
      * Compares element-wise two tensors with a specified precision.
@@ -519,14 +517,12 @@ public open class DoubleTensorAlgebra :
      * @param indices the [IntArray] of 1-dimensional indices
      * @return tensor with rows corresponding to rows by [indices]
      */
-    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor {
-        return stack(indices.map { this[it] })
-    }
+    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { this[it] })
 
-    internal fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
+    internal inline fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(tensor.toDoubleArray())
 
-    internal fun Tensor<Double>.foldDim(
+    internal inline fun Tensor<Double>.foldDim(
         foldFunction: (DoubleArray) -> Double,
         dim: Int,
         keepDim: Boolean,

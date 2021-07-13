@@ -16,7 +16,7 @@ internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
     block: DerivativeStructureField.() -> Unit,
-): Unit {
+) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     DerivativeStructureField(order, mapOf(*parameters)).run(block)
 }

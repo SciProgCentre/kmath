@@ -18,7 +18,7 @@ import space.kscience.kmath.operations.invoke
 /**
  * A simple histogram bin based on domain
  */
-public data class DomainBin<T : Comparable<T>>(
+public data class DomainBin<in T : Comparable<T>>(
     public val domain: Domain<T>,
     public override val value: Number,
 ) : Bin<T>, Domain<T> by domain

@@ -6,6 +6,8 @@
 package space.kscience.kmath.stat
 
 import kotlinx.coroutines.*
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
@@ -23,14 +25,18 @@ public class MCScope(
 /**
  * Launches a supervised Monte-Carlo scope
  */
-public suspend inline fun <T> mcScope(generator: RandomGenerator, block: MCScope.() -> T): T =
-    MCScope(coroutineContext, generator).block()
+public suspend inline fun <T> mcScope(generator: RandomGenerator, block: MCScope.() -> T): T {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return MCScope(coroutineContext, generator).block()
+}
 
 /**
  * Launch mc scope with a given seed
  */
-public suspend inline fun <T> mcScope(seed: Long, block: MCScope.() -> T): T =
-    mcScope(RandomGenerator.default(seed), block)
+public suspend inline fun <T> mcScope(seed: Long, block: MCScope.() -> T): T {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return mcScope(RandomGenerator.default(seed), block)
+}
 
 /**
  * Specialized launch for [MCScope]. Behaves the same way as regular [CoroutineScope.launch], but also stores the generator fork.

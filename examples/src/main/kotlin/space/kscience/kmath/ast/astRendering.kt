@@ -10,7 +10,7 @@ import space.kscience.kmath.ast.rendering.LatexSyntaxRenderer
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
 import space.kscience.kmath.ast.rendering.renderWithStringBuilder
 
-public fun main() {
+fun main() {
     val mst = "exp(sqrt(x))-asin(2*x)/(2e10+x^3)/(-12)".parseMath()
     val syntax = FeaturedMathRendererWithPostProcess.Default.render(mst)
     println("MathSyntax:")

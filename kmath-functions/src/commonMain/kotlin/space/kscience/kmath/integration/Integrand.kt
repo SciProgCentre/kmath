@@ -18,7 +18,7 @@ public interface Integrand {
 
 public inline fun <reified T : IntegrandFeature> Integrand.getFeature(): T? = getFeature(T::class)
 
-public class IntegrandValue<T : Any>(public val value: T) : IntegrandFeature {
+public class IntegrandValue<out T : Any>(public val value: T) : IntegrandFeature {
     override fun toString(): String = "Value($value)"
 }
 

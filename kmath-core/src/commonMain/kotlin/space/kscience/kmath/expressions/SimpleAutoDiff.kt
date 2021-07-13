@@ -119,8 +119,6 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         get() = getDerivative(this)
         set(value) = setDerivative(this, value)
 
-    public inline fun const(block: F.() -> T): AutoDiffValue<T> = const(context.block())
-
     /**
      * Performs update of derivative after the rest of the formula in the back-pass.
      *
@@ -194,6 +192,11 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         }
 }
 
+public inline fun <T : Any, F : Field<T>> SimpleAutoDiffField<T, F>.const(block: F.() -> T): AutoDiffValue<T> {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return const(context.block())
+}
+
 
 /**
  * Runs differentiation and establishes [SimpleAutoDiffField] context inside the block of code.
@@ -208,7 +211,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
  * assertEquals(9.0, x.d)  // dy/dx
  * ```
  *
- * @param body the action in [SimpleAutoDiffField] context returning [AutoDiffVariable] to differentiate with respect to.
+ * @param body the action in [SimpleAutoDiffField] context returning [AutoDiffValue] to differentiate with respect to.
  * @return the result of differentiation.
  */
 public fun <T : Any, F : Field<T>> F.simpleAutoDiff(

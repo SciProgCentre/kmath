@@ -24,6 +24,7 @@ internal fun Buffer<Int>.array(): IntArray = when (this) {
 /**
  * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer] or copy the data.
  */
+@PublishedApi
 internal fun Buffer<Double>.array(): DoubleArray = when (this) {
     is DoubleBuffer -> array
     else -> this.toDoubleArray()

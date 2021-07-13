@@ -24,20 +24,16 @@ readme {
 
     feature(
         id = "tensor algebra",
-        description = "Basic linear algebra operations on tensors (plus, dot, etc.)",
         ref = "src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt"
-    )
+    ) { "Basic linear algebra operations on tensors (plus, dot, etc.)" }
 
     feature(
         id = "tensor algebra with broadcasting",
-        description = "Basic linear algebra operations implemented with broadcasting.",
-        ref = "src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt"
-    )
+        ref = "src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt"
+    ) { "Basic linear algebra operations implemented with broadcasting." }
 
     feature(
         id = "linear algebra operations",
-        description = "Advanced linear algebra operations like LU decomposition, SVD, etc.",
         ref = "src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt"
-    )
-
+    ) { "Advanced linear algebra operations like LU decomposition, SVD, etc." }
 }

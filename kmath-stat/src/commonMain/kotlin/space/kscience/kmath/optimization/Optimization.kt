@@ -9,7 +9,7 @@ import space.kscience.kmath.expressions.Symbol
 
 public interface OptimizationFeature
 
-public class OptimizationResult<T>(
+public class OptimizationResult<out T>(
     public val point: Map<Symbol, T>,
     public val value: T,
     public val features: Set<OptimizationFeature> = emptySet(),

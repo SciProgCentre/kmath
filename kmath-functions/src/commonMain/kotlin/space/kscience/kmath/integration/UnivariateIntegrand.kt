@@ -93,7 +93,7 @@ public fun <T : Any> UnivariateIntegrator<T>.integrate(
 ): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(function, IntegrationRange(range), *features))
 
 /**
- * A shortcut method to integrate a [function] in [range] with additional [features].
+ * A shortcut method to integrate a [function] in [range] with additional features.
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI

@@ -11,7 +11,6 @@ import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
-import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals

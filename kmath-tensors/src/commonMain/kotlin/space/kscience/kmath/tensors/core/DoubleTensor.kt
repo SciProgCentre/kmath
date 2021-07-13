@@ -11,7 +11,7 @@ import space.kscience.kmath.tensors.core.internal.toPrettyString
 /**
  * Default [BufferedTensor] implementation for [Double] values
  */
-public class DoubleTensor internal constructor(
+public class DoubleTensor @PublishedApi internal constructor(
     shape: IntArray,
     buffer: DoubleArray,
     offset: Int = 0

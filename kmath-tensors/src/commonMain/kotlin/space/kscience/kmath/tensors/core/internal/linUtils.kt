@@ -10,14 +10,14 @@ import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.tensors.core.BufferedTensor
+import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.valueOrNull
+import space.kscience.kmath.tensors.core.IntTensor
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sign
 import kotlin.math.sqrt
-
 
 internal fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTensor<T>> = sequence {
     val n = shape.size

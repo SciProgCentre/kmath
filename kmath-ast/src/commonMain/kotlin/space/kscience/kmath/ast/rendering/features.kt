@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.*
 import kotlin.reflect.KClass
 
 /**
- * Prints any [Symbol] as a [SymbolSyntax] containing the [Symbol.value] of it.
+ * Prints any [Symbol] as a [SymbolSyntax] containing the [Symbol.identity] of it.
  *
  * @author Iaroslav Postovalov
  */

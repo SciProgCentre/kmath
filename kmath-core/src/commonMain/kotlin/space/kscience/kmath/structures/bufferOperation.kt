@@ -67,9 +67,9 @@ public inline fun <T : Any, reified R : Any> Buffer<T>.map(block: (T) -> R): Buf
  * Create a new buffer from this one with the given mapping function.
  * Provided [bufferFactory] is used to construct the new buffer.
  */
-public fun <T : Any, R : Any> Buffer<T>.map(
+public inline fun <T : Any, R : Any> Buffer<T>.map(
     bufferFactory: BufferFactory<R>,
-    block: (T) -> R,
+    crossinline block: (T) -> R,
 ): Buffer<R> = bufferFactory(size) { block(get(it)) }
 
 /**

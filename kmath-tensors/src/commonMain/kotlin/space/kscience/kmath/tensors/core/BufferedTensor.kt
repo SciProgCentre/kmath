@@ -11,8 +11,8 @@ import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
  */
 public open class BufferedTensor<T> internal constructor(
     override val shape: IntArray,
-    internal val mutableBuffer: MutableBuffer<T>,
-    internal val bufferStart: Int
+    @PublishedApi internal val mutableBuffer: MutableBuffer<T>,
+    @PublishedApi internal val bufferStart: Int,
 ) : Tensor<T> {
 
     /**

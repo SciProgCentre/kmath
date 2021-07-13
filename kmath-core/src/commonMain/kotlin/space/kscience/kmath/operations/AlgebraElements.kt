@@ -15,7 +15,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  */
 @UnstableKMathAPI
 @Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public interface AlgebraElement<T, C : Algebra<T>> {
+public interface AlgebraElement<T, out C : Algebra<T>> {
     /**
      * The context this element belongs to.
      */

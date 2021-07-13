@@ -24,7 +24,6 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  *
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
- * @param N the type of the structure.
  */
 public interface AlgebraND<T, out C : Algebra<T>> {
     /**
@@ -118,8 +117,7 @@ internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(element: StructureND
  * Space of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param N the type of ND structure.
- * @param S the type of space of structure elements.
+ * @param S the type of group over structure elements.
  */
 public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND<T, S> {
     /**
@@ -186,8 +184,7 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
  * Ring of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param N the type of ND structure.
- * @param R the type of ring of structure elements.
+ * @param R the type of ring over structure elements.
  */
 public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R> {
     /**
@@ -227,7 +224,7 @@ public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R
  * Field of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param F the type field of structure elements.
+ * @param F the type field over structure elements.
  */
 public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T, F>, ScaleOperations<StructureND<T>> {
     /**
