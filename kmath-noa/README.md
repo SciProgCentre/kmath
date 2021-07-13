@@ -5,12 +5,13 @@ A Bayesian computation library over
 together with relevant functionality from 
 [LibTorch](https://pytorch.org/cppdocs). 
 
-Our aim is to cover a wide set of applications from particle physics
-simulations to deep learning. In fact, we support any 
+Our aim is to cover a wide set of applications 
+from deep learning to particle physics
+simulations. In fact, we support any 
 differentiable program written on top of 
 `AutoGrad` & `ATen`.
 
-## Installation
+## Installation from source
 
 Currently, we support only
 the [GNU](https://gcc.gnu.org/) toolchain for the native artifacts.
