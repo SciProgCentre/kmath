@@ -20,3 +20,14 @@ public fun setNumThreads(numThreads: Int): Unit {
 public fun setSeed(seed: Int): Unit {
     JNoa.setSeed(seed)
 }
+
+public inline fun <T, ArrayT,
+        GradTensorT : NoaTensorOverField<T>,
+        GradAlgebraT : NoaPartialDivisionAlgebra<T, ArrayT, GradTensorT>>
+        GradAlgebraT.withGradAt(
+    tensor: GradTensorT,
+    block: GradAlgebraT.(GradTensorT) -> GradTensorT
+): GradTensorT {
+    tensor.requiresGrad = true
+    return this.block(tensor)
+}

@@ -81,5 +81,4 @@ class TestAlgebra {
             testingBatchedSymEig(device)
         }
     }!!
-
 }

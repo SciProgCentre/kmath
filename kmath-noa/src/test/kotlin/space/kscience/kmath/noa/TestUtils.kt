@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.noa
 
+import space.kscience.kmath.noa.memory.NoaScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -58,5 +59,17 @@ class TestUtils {
             testingSetSeed(device)
         }
     }!!
+
+    @Test
+    fun testScoping(): Unit {
+        val scope = NoaScope()
+        val tensor = NoaFloat(scope){
+             full(5f, intArrayOf(1))
+        }!!
+        assertEquals(tensor.numElements, 1)
+        assertEquals(scope.disposables.size, 1)
+        scope.disposeAll()
+        assertEquals(scope.disposables.size, 0)
+    }
 
 }
