@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 class TestUtils {
 
     @Test
-    fun throwingExceptions() {
+    fun testException() {
         val i = try {
             JNoa.testException(5)
         } catch (e: NoaException) {
@@ -21,7 +21,7 @@ class TestUtils {
     }
 
     @Test
-    fun settingNumThreads(){
+    fun testSetNumThreads(){
         val numThreads = 2
         setNumThreads(numThreads)
         assertEquals(numThreads, getNumThreads())
