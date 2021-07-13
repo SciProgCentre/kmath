@@ -35,8 +35,6 @@ val cmakeCmd = "$thirdPartyDir/cmake/$cmakeArchive/bin/cmake"
 val ninjaCmd = "$thirdPartyDir/ninja/ninja"
 
 val generateJNIHeader by tasks.registering {
-    println("Path:")
-    println(System.getProperty("java.library.path"))
     doLast {
         exec {
             workingDir(projectDir.resolve("src/main/java/space/kscience/kmath/noa"))
