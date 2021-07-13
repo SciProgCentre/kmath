@@ -160,8 +160,7 @@ tasks["compileJava"].dependsOn(buildCpp)
 
 tasks {
     withType<Test>{
-        systemProperty("java.library.path", //"$home/devspace/noa/cmake-build-release/kmath")
-              "$cppBuildDir/kmath")
+        systemProperty("java.library.path", "$cppBuildDir/kmath")
     }
 }
 

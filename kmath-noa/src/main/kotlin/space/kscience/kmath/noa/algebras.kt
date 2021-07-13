@@ -141,11 +141,11 @@ protected constructor(protected val scope: NoaScope) :
 
     public abstract fun loadJitModule(path: String, device: Device = Device.CPU): NoaJitModule
 
-    public fun NoaJitModule.forward(parameters: Tensor<T>): TensorType =
-        wrap(JNoa.forwardPass(jitModuleHandle, parameters.tensor.tensorHandle))
+    public fun NoaJitModule.forward(features: Tensor<T>): TensorType =
+        wrap(JNoa.forwardPass(jitModuleHandle, features.tensor.tensorHandle))
 
-    public fun NoaJitModule.forwardAssign(parameters: TensorType): Unit =
-        JNoa.forwardPassAssign(jitModuleHandle, parameters.tensorHandle)
+    public fun NoaJitModule.forwardAssign(features: TensorType, predictions: TensorType): Unit =
+        JNoa.forwardPassAssign(jitModuleHandle, features.tensorHandle, predictions.tensorHandle)
 
     public fun NoaJitModule.getParameter(name: String): TensorType =
         wrap(JNoa.getModuleParameter(jitModuleHandle, name))
@@ -154,7 +154,7 @@ protected constructor(protected val scope: NoaScope) :
         JNoa.setModuleParameter(jitModuleHandle, name, parameter.tensor.tensorHandle)
 
     public fun NoaJitModule.getBuffer(name: String): TensorType =
-        wrap(JNoa.getModuleParameter(jitModuleHandle, name))
+        wrap(JNoa.getModuleBuffer(jitModuleHandle, name))
 
     public fun NoaJitModule.setBuffer(name: String, buffer: Tensor<T>): Unit =
         JNoa.setModuleBuffer(jitModuleHandle, name, buffer.tensor.tensorHandle)

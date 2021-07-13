@@ -1122,10 +1122,10 @@ JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPass
 /*
  * Class:     space_kscience_kmath_noa_JNoa
  * Method:    forwardPassAssign
- * Signature: (JJ)V
+ * Signature: (JJJ)V
  */
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_forwardPassAssign
-  (JNIEnv *, jclass, jlong, jlong);
+  (JNIEnv *, jclass, jlong, jlong, jlong);
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
