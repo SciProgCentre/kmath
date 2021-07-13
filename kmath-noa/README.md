@@ -45,9 +45,10 @@ To load the native library you will need to add to the VM options:
 
 ## Usage
 
-The library spans several use cases. 
+The library is under active development. Many more features
+will be available soon.
 
-###Linear Algebra
+### Linear Algebra
 
 We implement the tensor algebra interfaces 
 from [kmath-tensors](../kmath-tensors):
@@ -222,4 +223,7 @@ scope.disposeAll()
 
 // Attempts to use tensor here is undefined behaviour
 ```
+
+For more examples have a look at [NOA documentation](https://github.com/grinisrit/noa/tree/master/docs).
+
 Contributed by [Roland Grinis](https://github.com/grinisrit)
