@@ -45,6 +45,8 @@ To load the native library you will need to add to the VM options:
 
 ## Usage
 
+The library spans several use cases. 
+
 ###Linear Algebra
 
 We implement the tensor algebra interfaces 
