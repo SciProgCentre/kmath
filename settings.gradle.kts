@@ -47,6 +47,10 @@ include(
     ":benchmarks",
 )
 
-if(System.getProperty("os.name") == "Linux"){
+if (System.getProperty("os.name") == "Linux") {
     include(":kmath-torch")
+    include(":kmath-torchscript-library")
+    include(":kmath-torchscript:example")
+    include(":kmath-torchscript:runtime")
+    includeBuild("kmath-torchscript/plugin")
 }
