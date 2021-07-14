@@ -224,6 +224,7 @@ scope.disposeAll()
 // Attempts to use tensor here is undefined behaviour
 ```
 
-For more examples have a look at [NOA documentation](https://github.com/grinisrit/noa/tree/master/docs).
+For more examples have a look at 
+[NOA](https://github.com/grinisrit/noa) docs.
 
 Contributed by [Roland Grinis](https://github.com/grinisrit)
