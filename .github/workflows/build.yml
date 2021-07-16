@@ -2,8 +2,10 @@ name: Gradle build
 
 on:
   push:
+    branches:
+      - dev
+      - master
   pull_request:
-    types: [opened, edited]
 
 jobs:
   build:
@@ -21,9 +23,6 @@ jobs:
           graalvm: 21.1.0
           java: java11
           arch: amd64
-      - name: Add msys to path
-        if: matrix.os == 'windows-latest'
-        run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
         uses: actions/cache@v2
         with:

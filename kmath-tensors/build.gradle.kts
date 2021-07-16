@@ -1,21 +1,20 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    kotlin("multiplatform")
+    id("ru.mipt.npm.gradle.common")
+    id("ru.mipt.npm.gradle.native")
 }
 
 kotlin.sourceSets {
     all {
         languageSettings.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
     }
+
     commonMain {
         dependencies {
             api(project(":kmath-core"))
             api(project(":kmath-stat"))
         }
     }
-}
-
-tasks.dokkaHtml {
-    dependsOn(tasks.build)
 }
 
 readme {
