@@ -5,8 +5,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val toolsVersion = "0.10.0"
-    val kotlinVersion = "1.5.20"
+    val toolsVersion = "0.10.1"
+    val kotlinVersion = "1.5.21"
 
     plugins {
         id("ru.mipt.npm.gradle.project") version toolsVersion
@@ -16,7 +16,7 @@ pluginManagement {
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        kotlin("jupyter.api") version "0.10.0-25"
+        kotlin("jupyter.api") version "0.10.0-131-1"
     }
 }
 

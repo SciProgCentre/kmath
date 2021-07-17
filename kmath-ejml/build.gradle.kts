@@ -6,10 +6,10 @@ plugins {
 }
 
 dependencies {
-    api("org.ejml:ejml-ddense:0.40")
-    api("org.ejml:ejml-fdense:0.40")
-    api("org.ejml:ejml-dsparse:0.40")
-    api("org.ejml:ejml-fsparse:0.40")
+    api("org.ejml:ejml-ddense:0.41")
+    api("org.ejml:ejml-fdense:0.41")
+    api("org.ejml:ejml-dsparse:0.41")
+    api("org.ejml:ejml-fsparse:0.41")
     api(project(":kmath-core"))
 }
 
