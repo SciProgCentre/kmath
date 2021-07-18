@@ -29,7 +29,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public val colNum: Int
 
-    public override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.

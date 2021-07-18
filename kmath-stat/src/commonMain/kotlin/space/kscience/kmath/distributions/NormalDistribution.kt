@@ -23,14 +23,14 @@ public class NormalDistribution(public val sampler: GaussianSampler) : Univariat
         normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler,
     ) : this(GaussianSampler(mean, standardDeviation, normalized))
 
-    public override fun probability(arg: Double): Double {
+    override fun probability(arg: Double): Double {
         val x1 = (arg - sampler.mean) / sampler.standardDeviation
         return exp(-0.5 * x1 * x1 - (ln(sampler.standardDeviation) + 0.5 * ln(2 * PI)))
     }
 
-    public override fun sample(generator: RandomGenerator): Chain<Double> = sampler.sample(generator)
+    override fun sample(generator: RandomGenerator): Chain<Double> = sampler.sample(generator)
 
-    public override fun cumulative(arg: Double): Double {
+    override fun cumulative(arg: Double): Double {
         val dev = arg - sampler.mean
 
         return when {

@@ -27,7 +27,7 @@ public class KempSmallMeanPoissonSampler internal constructor(
     private val p0: Double,
     private val mean: Double,
 ) : Sampler<Int> {
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             //TODO move to nextBufferBlocking
             // Note on the algorithm:
@@ -60,7 +60,7 @@ public class KempSmallMeanPoissonSampler internal constructor(
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }
 
-    public override fun toString(): String = "Kemp Small Mean Poisson deviate"
+    override fun toString(): String = "Kemp Small Mean Poisson deviate"
 }
 
 public fun KempSmallMeanPoissonSampler(mean: Double): KempSmallMeanPoissonSampler {

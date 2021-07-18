@@ -30,7 +30,7 @@ public fun interface Piecewise<in T, out R> {
 public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomial<T>> {
     public val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>
 
-    public override fun findPiece(arg: T): Polynomial<T>?
+    override fun findPiece(arg: T): Polynomial<T>?
 }
 
 /**

@@ -113,8 +113,8 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         }
     }
 
-    public override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
-    public override fun toString(): String = delegate.toString()
+    override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
+    override fun toString(): String = delegate.toString()
 
     public companion object {
         public fun of(

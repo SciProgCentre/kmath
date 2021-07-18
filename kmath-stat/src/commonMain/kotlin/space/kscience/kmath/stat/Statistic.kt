@@ -44,7 +44,7 @@ public interface ComposableStatistic<in T, I, out R> : Statistic<T, R> {
     //Transform block to result
     public suspend fun toResult(intermediate: I): R
 
-    public override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
+    override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
 }
 
 @FlowPreview

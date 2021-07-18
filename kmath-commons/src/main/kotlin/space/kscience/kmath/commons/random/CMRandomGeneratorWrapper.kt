@@ -16,31 +16,31 @@ public class CMRandomGeneratorWrapper(
 ) : org.apache.commons.math3.random.RandomGenerator {
     private var generator: RandomGenerator = factory(intArrayOf())
 
-    public override fun nextBoolean(): Boolean = generator.nextBoolean()
-    public override fun nextFloat(): Float = generator.nextDouble().toFloat()
+    override fun nextBoolean(): Boolean = generator.nextBoolean()
+    override fun nextFloat(): Float = generator.nextDouble().toFloat()
 
-    public override fun setSeed(seed: Int) {
+    override fun setSeed(seed: Int) {
         generator = factory(intArrayOf(seed))
     }
 
-    public override fun setSeed(seed: IntArray) {
+    override fun setSeed(seed: IntArray) {
         generator = factory(seed)
     }
 
-    public override fun setSeed(seed: Long) {
+    override fun setSeed(seed: Long) {
         setSeed(seed.toInt())
     }
 
-    public override fun nextBytes(bytes: ByteArray) {
+    override fun nextBytes(bytes: ByteArray) {
         generator.fillBytes(bytes)
     }
 
-    public override fun nextInt(): Int = generator.nextInt()
-    public override fun nextInt(n: Int): Int = generator.nextInt(n)
+    override fun nextInt(): Int = generator.nextInt()
+    override fun nextInt(n: Int): Int = generator.nextInt(n)
 
     @PerformancePitfall
-    public override fun nextGaussian(): Double = runBlocking { GaussianSampler(0.0, 1.0).next(generator) }
+    override fun nextGaussian(): Double = runBlocking { GaussianSampler(0.0, 1.0).next(generator) }
 
-    public override fun nextDouble(): Double = generator.nextDouble()
-    public override fun nextLong(): Long = generator.nextLong()
+    override fun nextDouble(): Double = generator.nextDouble()
+    override fun nextLong(): Long = generator.nextLong()
 }

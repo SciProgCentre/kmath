@@ -34,37 +34,37 @@ import kotlin.reflect.cast
 /**
  * [EjmlVector] specialization for [Double].
  */
-public class EjmlDoubleVector<out M : DMatrix>(public override val origin: M) : EjmlVector<Double, M>(origin) {
+public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVector<Double, M>(origin) {
     init {
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
-    public override operator fun get(index: Int): Double = origin[0, index]
+    override operator fun get(index: Int): Double = origin[0, index]
 }
 
 /**
  * [EjmlVector] specialization for [Float].
  */
-public class EjmlFloatVector<out M : FMatrix>(public override val origin: M) : EjmlVector<Float, M>(origin) {
+public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVector<Float, M>(origin) {
     init {
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
-    public override operator fun get(index: Int): Float = origin[0, index]
+    override operator fun get(index: Int): Float = origin[0, index]
 }
 
 /**
  * [EjmlMatrix] specialization for [Double].
  */
-public class EjmlDoubleMatrix<out M : DMatrix>(public override val origin: M) : EjmlMatrix<Double, M>(origin) {
-    public override operator fun get(i: Int, j: Int): Double = origin[i, j]
+public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMatrix<Double, M>(origin) {
+    override operator fun get(i: Int, j: Int): Double = origin[i, j]
 }
 
 /**
  * [EjmlMatrix] specialization for [Float].
  */
-public class EjmlFloatMatrix<out M : FMatrix>(public override val origin: M) : EjmlMatrix<Float, M>(origin) {
-    public override operator fun get(i: Int, j: Int): Float = origin[i, j]
+public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatrix<Float, M>(origin) {
+    override operator fun get(i: Int, j: Int): Float = origin[i, j]
 }
 
 /**
@@ -75,23 +75,23 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
     /**
      * The [DoubleField] reference.
      */
-    public override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: DoubleField get() = DoubleField
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixRMaj> = when {
+    override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixRMaj> = when {
         this is EjmlDoubleMatrix<*> && origin is DMatrixRMaj -> this as EjmlDoubleMatrix<DMatrixRMaj>
         else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Point<Double>.toEjml(): EjmlDoubleVector<DMatrixRMaj> = when {
+    override fun Point<Double>.toEjml(): EjmlDoubleVector<DMatrixRMaj> = when {
         this is EjmlDoubleVector<*> && origin is DMatrixRMaj -> this as EjmlDoubleVector<DMatrixRMaj>
         else -> EjmlDoubleVector(DMatrixRMaj(size, 1).also {
             (0 until it.numRows).forEach { row -> it[row, 0] = get(row) }
         })
     }
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double,
@@ -101,7 +101,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         }
     }.wrapMatrix()
 
-    public override fun buildVector(
+    override fun buildVector(
         size: Int,
         initializer: DoubleField.(Int) -> Double,
     ): EjmlDoubleVector<DMatrixRMaj> = EjmlDoubleVector(DMatrixRMaj(size, 1).also {
@@ -111,21 +111,21 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
     private fun <T : DMatrix> T.wrapMatrix() = EjmlDoubleMatrix(this)
     private fun <T : DMatrix> T.wrapVector() = EjmlDoubleVector(this)
 
-    public override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * elementAlgebra { -one }
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * elementAlgebra { -one }
 
-    public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
+    override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
         CommonOps_DDRM.mult(toEjml().origin, other.toEjml().origin, out)
         return out.wrapMatrix()
     }
 
-    public override fun Matrix<Double>.dot(vector: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
+    override fun Matrix<Double>.dot(vector: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
         CommonOps_DDRM.mult(toEjml().origin, vector.toEjml().origin, out)
         return out.wrapVector()
     }
 
-    public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
+    override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
 
         CommonOps_DDRM.add(
@@ -139,19 +139,19 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapMatrix()
     }
 
-    public override operator fun Matrix<Double>.times(value: Double): EjmlDoubleMatrix<DMatrixRMaj> {
+    override operator fun Matrix<Double>.times(value: Double): EjmlDoubleMatrix<DMatrixRMaj> {
         val res = DMatrixRMaj(1, 1)
         CommonOps_DDRM.scale(value, toEjml().origin, res)
         return res.wrapMatrix()
     }
 
-    public override fun Point<Double>.unaryMinus(): EjmlDoubleVector<DMatrixRMaj> {
+    override fun Point<Double>.unaryMinus(): EjmlDoubleVector<DMatrixRMaj> {
         val res = DMatrixRMaj(1, 1)
         CommonOps_DDRM.changeSign(toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
+    override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
         
         CommonOps_DDRM.add(
@@ -165,7 +165,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapMatrix()
     }
 
-    public override fun Point<Double>.plus(other: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
+    override fun Point<Double>.plus(other: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
 
         CommonOps_DDRM.add(
@@ -179,7 +179,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapVector()
     }
 
-    public override fun Point<Double>.minus(other: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
+    override fun Point<Double>.minus(other: Point<Double>): EjmlDoubleVector<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
 
         CommonOps_DDRM.add(
@@ -193,18 +193,18 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapVector()
     }
 
-    public override fun Double.times(m: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> = m * this
+    override fun Double.times(m: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> = m * this
 
-    public override fun Point<Double>.times(value: Double): EjmlDoubleVector<DMatrixRMaj> {
+    override fun Point<Double>.times(value: Double): EjmlDoubleVector<DMatrixRMaj> {
         val res = DMatrixRMaj(1, 1)
         CommonOps_DDRM.scale(value, toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixRMaj> = v * this
+    override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixRMaj> = v * this
 
     @UnstableKMathAPI
-    public override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
@@ -309,23 +309,23 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
     /**
      * The [FloatField] reference.
      */
-    public override val elementAlgebra: FloatField get() = FloatField
+    override val elementAlgebra: FloatField get() = FloatField
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixRMaj> = when {
+    override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixRMaj> = when {
         this is EjmlFloatMatrix<*> && origin is FMatrixRMaj -> this as EjmlFloatMatrix<FMatrixRMaj>
         else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Point<Float>.toEjml(): EjmlFloatVector<FMatrixRMaj> = when {
+    override fun Point<Float>.toEjml(): EjmlFloatVector<FMatrixRMaj> = when {
         this is EjmlFloatVector<*> && origin is FMatrixRMaj -> this as EjmlFloatVector<FMatrixRMaj>
         else -> EjmlFloatVector(FMatrixRMaj(size, 1).also {
             (0 until it.numRows).forEach { row -> it[row, 0] = get(row) }
         })
     }
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: FloatField.(i: Int, j: Int) -> Float,
@@ -335,7 +335,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         }
     }.wrapMatrix()
 
-    public override fun buildVector(
+    override fun buildVector(
         size: Int,
         initializer: FloatField.(Int) -> Float,
     ): EjmlFloatVector<FMatrixRMaj> = EjmlFloatVector(FMatrixRMaj(size, 1).also {
@@ -345,21 +345,21 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
     private fun <T : FMatrix> T.wrapMatrix() = EjmlFloatMatrix(this)
     private fun <T : FMatrix> T.wrapVector() = EjmlFloatVector(this)
 
-    public override fun Matrix<Float>.unaryMinus(): Matrix<Float> = this * elementAlgebra { -one }
+    override fun Matrix<Float>.unaryMinus(): Matrix<Float> = this * elementAlgebra { -one }
 
-    public override fun Matrix<Float>.dot(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
+    override fun Matrix<Float>.dot(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
         CommonOps_FDRM.mult(toEjml().origin, other.toEjml().origin, out)
         return out.wrapMatrix()
     }
 
-    public override fun Matrix<Float>.dot(vector: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
+    override fun Matrix<Float>.dot(vector: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
         CommonOps_FDRM.mult(toEjml().origin, vector.toEjml().origin, out)
         return out.wrapVector()
     }
 
-    public override operator fun Matrix<Float>.minus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
+    override operator fun Matrix<Float>.minus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
 
         CommonOps_FDRM.add(
@@ -373,19 +373,19 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         return out.wrapMatrix()
     }
 
-    public override operator fun Matrix<Float>.times(value: Float): EjmlFloatMatrix<FMatrixRMaj> {
+    override operator fun Matrix<Float>.times(value: Float): EjmlFloatMatrix<FMatrixRMaj> {
         val res = FMatrixRMaj(1, 1)
         CommonOps_FDRM.scale(value, toEjml().origin, res)
         return res.wrapMatrix()
     }
 
-    public override fun Point<Float>.unaryMinus(): EjmlFloatVector<FMatrixRMaj> {
+    override fun Point<Float>.unaryMinus(): EjmlFloatVector<FMatrixRMaj> {
         val res = FMatrixRMaj(1, 1)
         CommonOps_FDRM.changeSign(toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
+    override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
         
         CommonOps_FDRM.add(
@@ -399,7 +399,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         return out.wrapMatrix()
     }
 
-    public override fun Point<Float>.plus(other: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
+    override fun Point<Float>.plus(other: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
 
         CommonOps_FDRM.add(
@@ -413,7 +413,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         return out.wrapVector()
     }
 
-    public override fun Point<Float>.minus(other: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
+    override fun Point<Float>.minus(other: Point<Float>): EjmlFloatVector<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
 
         CommonOps_FDRM.add(
@@ -427,18 +427,18 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         return out.wrapVector()
     }
 
-    public override fun Float.times(m: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> = m * this
+    override fun Float.times(m: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> = m * this
 
-    public override fun Point<Float>.times(value: Float): EjmlFloatVector<FMatrixRMaj> {
+    override fun Point<Float>.times(value: Float): EjmlFloatVector<FMatrixRMaj> {
         val res = FMatrixRMaj(1, 1)
         CommonOps_FDRM.scale(value, toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixRMaj> = v * this
+    override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixRMaj> = v * this
 
     @UnstableKMathAPI
-    public override fun <F : StructureFeature> getFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
@@ -543,23 +543,23 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
     /**
      * The [DoubleField] reference.
      */
-    public override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: DoubleField get() = DoubleField
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixSparseCSC> = when {
+    override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixSparseCSC> = when {
         this is EjmlDoubleMatrix<*> && origin is DMatrixSparseCSC -> this as EjmlDoubleMatrix<DMatrixSparseCSC>
         else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Point<Double>.toEjml(): EjmlDoubleVector<DMatrixSparseCSC> = when {
+    override fun Point<Double>.toEjml(): EjmlDoubleVector<DMatrixSparseCSC> = when {
         this is EjmlDoubleVector<*> && origin is DMatrixSparseCSC -> this as EjmlDoubleVector<DMatrixSparseCSC>
         else -> EjmlDoubleVector(DMatrixSparseCSC(size, 1).also {
             (0 until it.numRows).forEach { row -> it[row, 0] = get(row) }
         })
     }
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double,
@@ -569,7 +569,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         }
     }.wrapMatrix()
 
-    public override fun buildVector(
+    override fun buildVector(
         size: Int,
         initializer: DoubleField.(Int) -> Double,
     ): EjmlDoubleVector<DMatrixSparseCSC> = EjmlDoubleVector(DMatrixSparseCSC(size, 1).also {
@@ -579,21 +579,21 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
     private fun <T : DMatrix> T.wrapMatrix() = EjmlDoubleMatrix(this)
     private fun <T : DMatrix> T.wrapVector() = EjmlDoubleVector(this)
 
-    public override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * elementAlgebra { -one }
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = this * elementAlgebra { -one }
 
-    public override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
+    override fun Matrix<Double>.dot(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
         CommonOps_DSCC.mult(toEjml().origin, other.toEjml().origin, out)
         return out.wrapMatrix()
     }
 
-    public override fun Matrix<Double>.dot(vector: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
+    override fun Matrix<Double>.dot(vector: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
         CommonOps_DSCC.mult(toEjml().origin, vector.toEjml().origin, out)
         return out.wrapVector()
     }
 
-    public override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
+    override operator fun Matrix<Double>.minus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
 
         CommonOps_DSCC.add(
@@ -609,19 +609,19 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapMatrix()
     }
 
-    public override operator fun Matrix<Double>.times(value: Double): EjmlDoubleMatrix<DMatrixSparseCSC> {
+    override operator fun Matrix<Double>.times(value: Double): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val res = DMatrixSparseCSC(1, 1)
         CommonOps_DSCC.scale(value, toEjml().origin, res)
         return res.wrapMatrix()
     }
 
-    public override fun Point<Double>.unaryMinus(): EjmlDoubleVector<DMatrixSparseCSC> {
+    override fun Point<Double>.unaryMinus(): EjmlDoubleVector<DMatrixSparseCSC> {
         val res = DMatrixSparseCSC(1, 1)
         CommonOps_DSCC.changeSign(toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
+    override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
         
         CommonOps_DSCC.add(
@@ -637,7 +637,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapMatrix()
     }
 
-    public override fun Point<Double>.plus(other: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
+    override fun Point<Double>.plus(other: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
 
         CommonOps_DSCC.add(
@@ -653,7 +653,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapVector()
     }
 
-    public override fun Point<Double>.minus(other: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
+    override fun Point<Double>.minus(other: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
 
         CommonOps_DSCC.add(
@@ -669,18 +669,18 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         return out.wrapVector()
     }
 
-    public override fun Double.times(m: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> = m * this
+    override fun Double.times(m: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> = m * this
 
-    public override fun Point<Double>.times(value: Double): EjmlDoubleVector<DMatrixSparseCSC> {
+    override fun Point<Double>.times(value: Double): EjmlDoubleVector<DMatrixSparseCSC> {
         val res = DMatrixSparseCSC(1, 1)
         CommonOps_DSCC.scale(value, toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> = v * this
+    override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> = v * this
 
     @UnstableKMathAPI
-    public override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
@@ -772,23 +772,23 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
     /**
      * The [FloatField] reference.
      */
-    public override val elementAlgebra: FloatField get() = FloatField
+    override val elementAlgebra: FloatField get() = FloatField
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixSparseCSC> = when {
+    override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixSparseCSC> = when {
         this is EjmlFloatMatrix<*> && origin is FMatrixSparseCSC -> this as EjmlFloatMatrix<FMatrixSparseCSC>
         else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Point<Float>.toEjml(): EjmlFloatVector<FMatrixSparseCSC> = when {
+    override fun Point<Float>.toEjml(): EjmlFloatVector<FMatrixSparseCSC> = when {
         this is EjmlFloatVector<*> && origin is FMatrixSparseCSC -> this as EjmlFloatVector<FMatrixSparseCSC>
         else -> EjmlFloatVector(FMatrixSparseCSC(size, 1).also {
             (0 until it.numRows).forEach { row -> it[row, 0] = get(row) }
         })
     }
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: FloatField.(i: Int, j: Int) -> Float,
@@ -798,7 +798,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         }
     }.wrapMatrix()
 
-    public override fun buildVector(
+    override fun buildVector(
         size: Int,
         initializer: FloatField.(Int) -> Float,
     ): EjmlFloatVector<FMatrixSparseCSC> = EjmlFloatVector(FMatrixSparseCSC(size, 1).also {
@@ -808,21 +808,21 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
     private fun <T : FMatrix> T.wrapMatrix() = EjmlFloatMatrix(this)
     private fun <T : FMatrix> T.wrapVector() = EjmlFloatVector(this)
 
-    public override fun Matrix<Float>.unaryMinus(): Matrix<Float> = this * elementAlgebra { -one }
+    override fun Matrix<Float>.unaryMinus(): Matrix<Float> = this * elementAlgebra { -one }
 
-    public override fun Matrix<Float>.dot(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
+    override fun Matrix<Float>.dot(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
         CommonOps_FSCC.mult(toEjml().origin, other.toEjml().origin, out)
         return out.wrapMatrix()
     }
 
-    public override fun Matrix<Float>.dot(vector: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
+    override fun Matrix<Float>.dot(vector: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
         CommonOps_FSCC.mult(toEjml().origin, vector.toEjml().origin, out)
         return out.wrapVector()
     }
 
-    public override operator fun Matrix<Float>.minus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
+    override operator fun Matrix<Float>.minus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
 
         CommonOps_FSCC.add(
@@ -838,19 +838,19 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         return out.wrapMatrix()
     }
 
-    public override operator fun Matrix<Float>.times(value: Float): EjmlFloatMatrix<FMatrixSparseCSC> {
+    override operator fun Matrix<Float>.times(value: Float): EjmlFloatMatrix<FMatrixSparseCSC> {
         val res = FMatrixSparseCSC(1, 1)
         CommonOps_FSCC.scale(value, toEjml().origin, res)
         return res.wrapMatrix()
     }
 
-    public override fun Point<Float>.unaryMinus(): EjmlFloatVector<FMatrixSparseCSC> {
+    override fun Point<Float>.unaryMinus(): EjmlFloatVector<FMatrixSparseCSC> {
         val res = FMatrixSparseCSC(1, 1)
         CommonOps_FSCC.changeSign(toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
+    override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
         
         CommonOps_FSCC.add(
@@ -866,7 +866,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         return out.wrapMatrix()
     }
 
-    public override fun Point<Float>.plus(other: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
+    override fun Point<Float>.plus(other: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
 
         CommonOps_FSCC.add(
@@ -882,7 +882,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         return out.wrapVector()
     }
 
-    public override fun Point<Float>.minus(other: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
+    override fun Point<Float>.minus(other: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
 
         CommonOps_FSCC.add(
@@ -898,18 +898,18 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         return out.wrapVector()
     }
 
-    public override fun Float.times(m: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> = m * this
+    override fun Float.times(m: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> = m * this
 
-    public override fun Point<Float>.times(value: Float): EjmlFloatVector<FMatrixSparseCSC> {
+    override fun Point<Float>.times(value: Float): EjmlFloatVector<FMatrixSparseCSC> {
         val res = FMatrixSparseCSC(1, 1)
         CommonOps_FSCC.scale(value, toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> = v * this
+    override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> = v * this
 
     @UnstableKMathAPI
-    public override fun <F : StructureFeature> getFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 

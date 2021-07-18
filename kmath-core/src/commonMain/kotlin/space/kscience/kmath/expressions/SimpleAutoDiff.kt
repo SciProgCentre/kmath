@@ -60,8 +60,8 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     public val context: F,
     bindings: Map<Symbol, T>,
 ) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, NumbersAddOperations<AutoDiffValue<T>> {
-    public override val zero: AutoDiffValue<T> get() = const(context.zero)
-    public override val one: AutoDiffValue<T> get() = const(context.one)
+    override val zero: AutoDiffValue<T> get() = const(context.zero)
+    override val one: AutoDiffValue<T> get() = const(context.one)
 
     // this stack contains pairs of blocks and values to apply them to
     private var stack: Array<Any?> = arrayOfNulls<Any?>(8)
@@ -149,17 +149,17 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
 //    // Overloads for Double constants
 //
-//    public override operator fun Number.plus(b: AutoDiffValue<T>): AutoDiffValue<T> =
+//    override operator fun Number.plus(b: AutoDiffValue<T>): AutoDiffValue<T> =
 //        derive(const { this@plus.toDouble() * one + b.value }) { z ->
 //            b.d += z.d
 //        }
 //
-//    public override operator fun AutoDiffValue<T>.plus(b: Number): AutoDiffValue<T> = b.plus(this)
+//    override operator fun AutoDiffValue<T>.plus(b: Number): AutoDiffValue<T> = b.plus(this)
 //
-//    public override operator fun Number.minus(b: AutoDiffValue<T>): AutoDiffValue<T> =
+//    override operator fun Number.minus(b: AutoDiffValue<T>): AutoDiffValue<T> =
 //        derive(const { this@minus.toDouble() * one - b.value }) { z -> b.d -= z.d }
 //
-//    public override operator fun AutoDiffValue<T>.minus(b: Number): AutoDiffValue<T> =
+//    override operator fun AutoDiffValue<T>.minus(b: Number): AutoDiffValue<T> =
 //        derive(const { this@minus.value - one * b.toDouble() }) { z -> d += z.d }
 
 
@@ -168,25 +168,25 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
     // Basic math (+, -, *, /)
 
-    public override fun add(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun add(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
         derive(const { a.value + b.value }) { z ->
             a.d += z.d
             b.d += z.d
         }
 
-    public override fun multiply(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun multiply(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
         derive(const { a.value * b.value }) { z ->
             a.d += z.d * b.value
             b.d += z.d * a.value
         }
 
-    public override fun divide(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun divide(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
         derive(const { a.value / b.value }) { z ->
             a.d += z.d / b.value
             b.d -= z.d * a.value / (b.value * b.value)
         }
 
-    public override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> =
+    override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> =
         derive(const { value * a.value }) { z ->
             a.d += z.d * value
         }
@@ -236,12 +236,12 @@ public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
     public val field: F,
     public val function: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
 ) : FirstDerivativeExpression<T>() {
-    public override operator fun invoke(arguments: Map<Symbol, T>): T {
+    override operator fun invoke(arguments: Map<Symbol, T>): T {
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         return SimpleAutoDiffField(field, arguments).function().value
     }
 
-    public override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression { arguments ->
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         val derivationResult = SimpleAutoDiffField(field, arguments).differentiate(function)
         derivationResult.derivative(symbol)
@@ -346,28 +346,28 @@ public class SimpleAutoDiffExtendedField<T : Any, F : ExtendedField<T>>(
 
     override fun bindSymbol(value: String): AutoDiffValue<T> = super<SimpleAutoDiffField>.bindSymbol(value)
 
-    public override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
+    override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
 
-    public override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> = a * number(value)
+    override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> = a * number(value)
 
     // x ^ 2
     public fun sqr(x: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).sqr(x)
 
     // x ^ 1/2
-    public override fun sqrt(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun sqrt(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).sqrt(arg)
 
     // x ^ y (const)
-    public override fun power(arg: AutoDiffValue<T>, pow: Number): AutoDiffValue<T> =
+    override fun power(arg: AutoDiffValue<T>, pow: Number): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).pow(arg, pow.toDouble())
 
     // exp(x)
-    public override fun exp(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun exp(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).exp(arg)
 
     // ln(x)
-    public override fun ln(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun ln(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).ln(arg)
 
     // x ^ y (any)
@@ -377,40 +377,40 @@ public class SimpleAutoDiffExtendedField<T : Any, F : ExtendedField<T>>(
     ): AutoDiffValue<T> = exp(y * ln(x))
 
     // sin(x)
-    public override fun sin(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun sin(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).sin(arg)
 
     // cos(x)
-    public override fun cos(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun cos(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).cos(arg)
 
-    public override fun tan(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun tan(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).tan(arg)
 
-    public override fun asin(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun asin(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).asin(arg)
 
-    public override fun acos(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun acos(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).acos(arg)
 
-    public override fun atan(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun atan(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).atan(arg)
 
-    public override fun sinh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun sinh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).sinh(arg)
 
-    public override fun cosh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun cosh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).cosh(arg)
 
-    public override fun tanh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun tanh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).tanh(arg)
 
-    public override fun asinh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun asinh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).asinh(arg)
 
-    public override fun acosh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun acosh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).acosh(arg)
 
-    public override fun atanh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+    override fun atanh(arg: AutoDiffValue<T>): AutoDiffValue<T> =
         (this as SimpleAutoDiffField<T, F>).atanh(arg)
 }

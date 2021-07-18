@@ -22,13 +22,13 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray get() = ndArray.shape().toIntArray()
+    override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()
 
     @PerformancePitfall
-    public override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
+    override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
 }
 
 private data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Int>() {

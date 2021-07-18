@@ -20,7 +20,7 @@ import space.kscience.kmath.operations.invoke
  */
 public data class DomainBin<in T : Comparable<T>>(
     public val domain: Domain<T>,
-    public override val value: Number,
+    override val value: Number,
 ) : Bin<T>, Domain<T> by domain
 
 @OptIn(UnstableKMathAPI::class)

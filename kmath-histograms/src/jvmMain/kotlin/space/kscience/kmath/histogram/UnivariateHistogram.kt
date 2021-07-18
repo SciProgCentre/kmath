@@ -27,15 +27,15 @@ public class UnivariateBin(
     public val standardDeviation: Double,
 ) : Bin<Double>, ClosedFloatingPointRange<Double> by domain.range {
 
-    public override val dimension: Int get() = 1
+    override val dimension: Int get() = 1
 
-    public override fun contains(point: Buffer<Double>): Boolean = point.size == 1 && contains(point[0])
+    override fun contains(point: Buffer<Double>): Boolean = point.size == 1 && contains(point[0])
 }
 
 @OptIn(UnstableKMathAPI::class)
 public interface UnivariateHistogram : Histogram<Double, UnivariateBin>{
     public operator fun get(value: Double): UnivariateBin?
-    public override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
+    override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
 
     public companion object {
         /**

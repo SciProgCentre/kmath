@@ -58,7 +58,7 @@ public class SmallMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
         throw IllegalArgumentException("No p(x=0) probability for mean: $mean")
     }.toInt()
 
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             var n = 0
             var r = 1.0
@@ -76,7 +76,7 @@ public class SmallMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }
 
-    public override fun toString(): String = "Small Mean Poisson deviate"
+    override fun toString(): String = "Small Mean Poisson deviate"
 }
 
 
@@ -113,7 +113,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
     private val p1: Double = a1 / aSum
     private val p2: Double = a2 / aSum
 
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             val exponential = AhrensDieterExponentialSampler(1.0).sample(generator)
             val gaussian = ZigguratNormalizedGaussianSampler.sample(generator)
@@ -197,7 +197,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
     }
 
     private fun getFactorialLog(n: Int): Double = factorialLog.value(n)
-    public override fun toString(): String = "Large Mean Poisson deviate"
+    override fun toString(): String = "Large Mean Poisson deviate"
 
     public companion object {
         private const val MAX_MEAN: Double = 0.5 * Int.MAX_VALUE

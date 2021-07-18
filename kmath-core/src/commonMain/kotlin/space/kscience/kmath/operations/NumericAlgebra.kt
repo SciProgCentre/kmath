@@ -87,7 +87,7 @@ public interface NumericAlgebra<T> : Algebra<T> {
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
         rightSideNumberOperationFunction(operation)(left, right)
 
-    public override fun bindSymbolOrNull(value: String): T? = when (value) {
+    override fun bindSymbolOrNull(value: String): T? = when (value) {
         "pi" -> number(PI)
         "e" -> number(E)
         else -> super.bindSymbolOrNull(value)

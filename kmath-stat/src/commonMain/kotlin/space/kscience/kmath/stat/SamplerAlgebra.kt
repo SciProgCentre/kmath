@@ -19,7 +19,7 @@ import space.kscience.kmath.operations.invoke
  * @property value the value to sample.
  */
 public class ConstantSampler<out T : Any>(public val value: T) : Sampler<T> {
-    public override fun sample(generator: RandomGenerator): Chain<T> = ConstantChain(value)
+    override fun sample(generator: RandomGenerator): Chain<T> = ConstantChain(value)
 }
 
 /**
@@ -28,7 +28,7 @@ public class ConstantSampler<out T : Any>(public val value: T) : Sampler<T> {
  * @property chainBuilder the provider of [Chain].
  */
 public class BasicSampler<out T : Any>(public val chainBuilder: (RandomGenerator) -> Chain<T>) : Sampler<T> {
-    public override fun sample(generator: RandomGenerator): Chain<T> = chainBuilder(generator)
+    override fun sample(generator: RandomGenerator): Chain<T> = chainBuilder(generator)
 }
 
 /**
@@ -39,17 +39,17 @@ public class BasicSampler<out T : Any>(public val chainBuilder: (RandomGenerator
 public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler<T>>,
     ScaleOperations<Sampler<T>> where S : Group<T>, S : ScaleOperations<T> {
 
-    public override val zero: Sampler<T> = ConstantSampler(algebra.zero)
+    override val zero: Sampler<T> = ConstantSampler(algebra.zero)
 
-    public override fun add(a: Sampler<T>, b: Sampler<T>): Sampler<T> = BasicSampler { generator ->
+    override fun add(a: Sampler<T>, b: Sampler<T>): Sampler<T> = BasicSampler { generator ->
         a.sample(generator).zip(b.sample(generator)) { aValue, bValue -> algebra { aValue + bValue } }
     }
 
-    public override fun scale(a: Sampler<T>, value: Double): Sampler<T> = BasicSampler { generator ->
+    override fun scale(a: Sampler<T>, value: Double): Sampler<T> = BasicSampler { generator ->
         a.sample(generator).map { a ->
             algebra { a * value }
         }
     }
 
-    public override fun Sampler<T>.unaryMinus(): Sampler<T> = scale(this, -1.0)
+    override fun Sampler<T>.unaryMinus(): Sampler<T> = scale(this, -1.0)
 }

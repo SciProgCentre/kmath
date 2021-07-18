@@ -17,10 +17,10 @@ import space.kscience.kmath.linear.Point
  * @author Iaroslav Postovalov
  */
 public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: M) : Point<T> {
-    public override val size: Int
+    override val size: Int
         get() = origin.numCols
 
-    public override operator fun iterator(): Iterator<T> = object : Iterator<T> {
+    override operator fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor: Int = 0
 
         override fun next(): T {
@@ -31,5 +31,5 @@ public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: 
         override fun hasNext(): Boolean = cursor < origin.numCols * origin.numRows
     }
 
-    public override fun toString(): String = "EjmlVector(origin=$origin)"
+    override fun toString(): String = "EjmlVector(origin=$origin)"
 }

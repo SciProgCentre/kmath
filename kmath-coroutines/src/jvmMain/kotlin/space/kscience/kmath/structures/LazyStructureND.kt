@@ -13,7 +13,7 @@ import space.kscience.kmath.nd.StructureND
 
 public class LazyStructureND<out T>(
     public val scope: CoroutineScope,
-    public override val shape: IntArray,
+    override val shape: IntArray,
     public val function: suspend (IntArray) -> T,
 ) : StructureND<T> {
     private val cache: MutableMap<IntArray, Deferred<T>> = HashMap()
@@ -23,10 +23,10 @@ public class LazyStructureND<out T>(
     }
 
     public suspend fun await(index: IntArray): T = deferred(index).await()
-    public override operator fun get(index: IntArray): T = runBlocking { deferred(index).await() }
+    override operator fun get(index: IntArray): T = runBlocking { deferred(index).await() }
 
     @OptIn(PerformancePitfall::class)
-    public override fun elements(): Sequence<Pair<IntArray, T>> {
+    override fun elements(): Sequence<Pair<IntArray, T>> {
         val strides = DefaultStrides(shape)
         val res = runBlocking { strides.indices().toList().map { index -> index to await(index) } }
         return res.asSequence()

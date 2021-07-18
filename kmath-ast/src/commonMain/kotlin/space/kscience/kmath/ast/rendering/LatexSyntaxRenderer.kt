@@ -27,7 +27,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  */
 @UnstableKMathAPI
 public object LatexSyntaxRenderer : SyntaxRenderer {
-    public override fun render(node: MathSyntax, output: Appendable): Unit = output.run {
+    override fun render(node: MathSyntax, output: Appendable): Unit = output.run {
         fun render(syntax: MathSyntax) = render(syntax, output)
 
         when (node) {
