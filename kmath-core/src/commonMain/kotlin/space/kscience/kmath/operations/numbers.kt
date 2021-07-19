@@ -15,10 +15,10 @@ public interface ExtendedFieldOperations<T> :
     TrigonometricOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T> {
-    public override fun tan(arg: T): T = sin(arg) / cos(arg)
-    public override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
+    override fun tan(arg: T): T = sin(arg) / cos(arg)
+    override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
-    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         TrigonometricOperations.COS_OPERATION -> ::cos
         TrigonometricOperations.SIN_OPERATION -> ::sin
         TrigonometricOperations.TAN_OPERATION -> ::tan
@@ -42,14 +42,14 @@ public interface ExtendedFieldOperations<T> :
  * Advanced Number-like field that implements basic operations.
  */
 public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T>, ScaleOperations<T> {
-    public override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
-    public override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
-    public override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
-    public override fun asinh(arg: T): T = ln(sqrt(arg * arg + one) + arg)
-    public override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
-    public override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2.0
+    override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
+    override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
+    override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
+    override fun asinh(arg: T): T = ln(sqrt(arg * arg + one) + arg)
+    override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
+    override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2.0
 
-    public override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
+    override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
             else -> super<Field>.rightSideNumberOperationFunction(operation)
@@ -61,50 +61,50 @@ public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, Numeri
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
-    public override inline val zero: Double get() = 0.0
-    public override inline val one: Double get() = 1.0
+    override inline val zero: Double get() = 0.0
+    override inline val one: Double get() = 1.0
 
-    public override inline fun number(value: Number): Double = value.toDouble()
+    override inline fun number(value: Number): Double = value.toDouble()
 
-    public override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
+    override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
             else -> super<ExtendedField>.binaryOperationFunction(operation)
         }
 
-    public override inline fun add(a: Double, b: Double): Double = a + b
+    override inline fun add(a: Double, b: Double): Double = a + b
 
-    public override inline fun multiply(a: Double, b: Double): Double = a * b
-    public override inline fun divide(a: Double, b: Double): Double = a / b
+    override inline fun multiply(a: Double, b: Double): Double = a * b
+    override inline fun divide(a: Double, b: Double): Double = a / b
 
-    public override inline fun scale(a: Double, value: Double): Double = a * value
+    override inline fun scale(a: Double, value: Double): Double = a * value
 
-    public override inline fun sin(arg: Double): Double = kotlin.math.sin(arg)
-    public override inline fun cos(arg: Double): Double = kotlin.math.cos(arg)
-    public override inline fun tan(arg: Double): Double = kotlin.math.tan(arg)
-    public override inline fun acos(arg: Double): Double = kotlin.math.acos(arg)
-    public override inline fun asin(arg: Double): Double = kotlin.math.asin(arg)
-    public override inline fun atan(arg: Double): Double = kotlin.math.atan(arg)
+    override inline fun sin(arg: Double): Double = kotlin.math.sin(arg)
+    override inline fun cos(arg: Double): Double = kotlin.math.cos(arg)
+    override inline fun tan(arg: Double): Double = kotlin.math.tan(arg)
+    override inline fun acos(arg: Double): Double = kotlin.math.acos(arg)
+    override inline fun asin(arg: Double): Double = kotlin.math.asin(arg)
+    override inline fun atan(arg: Double): Double = kotlin.math.atan(arg)
 
-    public override inline fun sinh(arg: Double): Double = kotlin.math.sinh(arg)
-    public override inline fun cosh(arg: Double): Double = kotlin.math.cosh(arg)
-    public override inline fun tanh(arg: Double): Double = kotlin.math.tanh(arg)
-    public override inline fun asinh(arg: Double): Double = kotlin.math.asinh(arg)
-    public override inline fun acosh(arg: Double): Double = kotlin.math.acosh(arg)
-    public override inline fun atanh(arg: Double): Double = kotlin.math.atanh(arg)
+    override inline fun sinh(arg: Double): Double = kotlin.math.sinh(arg)
+    override inline fun cosh(arg: Double): Double = kotlin.math.cosh(arg)
+    override inline fun tanh(arg: Double): Double = kotlin.math.tanh(arg)
+    override inline fun asinh(arg: Double): Double = kotlin.math.asinh(arg)
+    override inline fun acosh(arg: Double): Double = kotlin.math.acosh(arg)
+    override inline fun atanh(arg: Double): Double = kotlin.math.atanh(arg)
 
-    public override inline fun sqrt(arg: Double): Double = kotlin.math.sqrt(arg)
-    public override inline fun power(arg: Double, pow: Number): Double = arg.kpow(pow.toDouble())
-    public override inline fun exp(arg: Double): Double = kotlin.math.exp(arg)
-    public override inline fun ln(arg: Double): Double = kotlin.math.ln(arg)
+    override inline fun sqrt(arg: Double): Double = kotlin.math.sqrt(arg)
+    override inline fun power(arg: Double, pow: Number): Double = arg.kpow(pow.toDouble())
+    override inline fun exp(arg: Double): Double = kotlin.math.exp(arg)
+    override inline fun ln(arg: Double): Double = kotlin.math.ln(arg)
 
-    public override inline fun norm(arg: Double): Double = abs(arg)
+    override inline fun norm(arg: Double): Double = abs(arg)
 
-    public override inline fun Double.unaryMinus(): Double = -this
-    public override inline fun Double.plus(b: Double): Double = this + b
-    public override inline fun Double.minus(b: Double): Double = this - b
-    public override inline fun Double.times(b: Double): Double = this * b
-    public override inline fun Double.div(b: Double): Double = this / b
+    override inline fun Double.unaryMinus(): Double = -this
+    override inline fun Double.plus(b: Double): Double = this + b
+    override inline fun Double.minus(b: Double): Double = this - b
+    override inline fun Double.times(b: Double): Double = this * b
+    override inline fun Double.div(b: Double): Double = this / b
 }
 
 /**
@@ -112,50 +112,50 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
-    public override inline val zero: Float get() = 0.0f
-    public override inline val one: Float get() = 1.0f
+    override inline val zero: Float get() = 0.0f
+    override inline val one: Float get() = 1.0f
 
-    public override fun number(value: Number): Float = value.toFloat()
+    override fun number(value: Number): Float = value.toFloat()
 
-    public override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
+    override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
         when (operation) {
             PowerOperations.POW_OPERATION -> ::power
             else -> super.binaryOperationFunction(operation)
         }
 
-    public override inline fun add(a: Float, b: Float): Float = a + b
-    public override fun scale(a: Float, value: Double): Float = a * value.toFloat()
+    override inline fun add(a: Float, b: Float): Float = a + b
+    override fun scale(a: Float, value: Double): Float = a * value.toFloat()
 
-    public override inline fun multiply(a: Float, b: Float): Float = a * b
+    override inline fun multiply(a: Float, b: Float): Float = a * b
 
-    public override inline fun divide(a: Float, b: Float): Float = a / b
+    override inline fun divide(a: Float, b: Float): Float = a / b
 
-    public override inline fun sin(arg: Float): Float = kotlin.math.sin(arg)
-    public override inline fun cos(arg: Float): Float = kotlin.math.cos(arg)
-    public override inline fun tan(arg: Float): Float = kotlin.math.tan(arg)
-    public override inline fun acos(arg: Float): Float = kotlin.math.acos(arg)
-    public override inline fun asin(arg: Float): Float = kotlin.math.asin(arg)
-    public override inline fun atan(arg: Float): Float = kotlin.math.atan(arg)
+    override inline fun sin(arg: Float): Float = kotlin.math.sin(arg)
+    override inline fun cos(arg: Float): Float = kotlin.math.cos(arg)
+    override inline fun tan(arg: Float): Float = kotlin.math.tan(arg)
+    override inline fun acos(arg: Float): Float = kotlin.math.acos(arg)
+    override inline fun asin(arg: Float): Float = kotlin.math.asin(arg)
+    override inline fun atan(arg: Float): Float = kotlin.math.atan(arg)
 
-    public override inline fun sinh(arg: Float): Float = kotlin.math.sinh(arg)
-    public override inline fun cosh(arg: Float): Float = kotlin.math.cosh(arg)
-    public override inline fun tanh(arg: Float): Float = kotlin.math.tanh(arg)
-    public override inline fun asinh(arg: Float): Float = kotlin.math.asinh(arg)
-    public override inline fun acosh(arg: Float): Float = kotlin.math.acosh(arg)
-    public override inline fun atanh(arg: Float): Float = kotlin.math.atanh(arg)
+    override inline fun sinh(arg: Float): Float = kotlin.math.sinh(arg)
+    override inline fun cosh(arg: Float): Float = kotlin.math.cosh(arg)
+    override inline fun tanh(arg: Float): Float = kotlin.math.tanh(arg)
+    override inline fun asinh(arg: Float): Float = kotlin.math.asinh(arg)
+    override inline fun acosh(arg: Float): Float = kotlin.math.acosh(arg)
+    override inline fun atanh(arg: Float): Float = kotlin.math.atanh(arg)
 
-    public override inline fun sqrt(arg: Float): Float = kotlin.math.sqrt(arg)
-    public override inline fun power(arg: Float, pow: Number): Float = arg.kpow(pow.toFloat())
-    public override inline fun exp(arg: Float): Float = kotlin.math.exp(arg)
-    public override inline fun ln(arg: Float): Float = kotlin.math.ln(arg)
+    override inline fun sqrt(arg: Float): Float = kotlin.math.sqrt(arg)
+    override inline fun power(arg: Float, pow: Number): Float = arg.kpow(pow.toFloat())
+    override inline fun exp(arg: Float): Float = kotlin.math.exp(arg)
+    override inline fun ln(arg: Float): Float = kotlin.math.ln(arg)
 
-    public override inline fun norm(arg: Float): Float = abs(arg)
+    override inline fun norm(arg: Float): Float = abs(arg)
 
-    public override inline fun Float.unaryMinus(): Float = -this
-    public override inline fun Float.plus(b: Float): Float = this + b
-    public override inline fun Float.minus(b: Float): Float = this - b
-    public override inline fun Float.times(b: Float): Float = this * b
-    public override inline fun Float.div(b: Float): Float = this / b
+    override inline fun Float.unaryMinus(): Float = -this
+    override inline fun Float.plus(b: Float): Float = this + b
+    override inline fun Float.minus(b: Float): Float = this - b
+    override inline fun Float.times(b: Float): Float = this * b
+    override inline fun Float.div(b: Float): Float = this / b
 }
 
 /**
@@ -163,21 +163,21 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
-    public override inline val zero: Int
+    override inline val zero: Int
         get() = 0
 
-    public override inline val one: Int
+    override inline val one: Int
         get() = 1
 
-    public override fun number(value: Number): Int = value.toInt()
-    public override inline fun add(a: Int, b: Int): Int = a + b
-    public override inline fun multiply(a: Int, b: Int): Int = a * b
-    public override inline fun norm(arg: Int): Int = abs(arg)
+    override fun number(value: Number): Int = value.toInt()
+    override inline fun add(a: Int, b: Int): Int = a + b
+    override inline fun multiply(a: Int, b: Int): Int = a * b
+    override inline fun norm(arg: Int): Int = abs(arg)
 
-    public override inline fun Int.unaryMinus(): Int = -this
-    public override inline fun Int.plus(b: Int): Int = this + b
-    public override inline fun Int.minus(b: Int): Int = this - b
-    public override inline fun Int.times(b: Int): Int = this * b
+    override inline fun Int.unaryMinus(): Int = -this
+    override inline fun Int.plus(b: Int): Int = this + b
+    override inline fun Int.minus(b: Int): Int = this - b
+    override inline fun Int.times(b: Int): Int = this * b
 }
 
 /**
@@ -185,21 +185,21 @@ public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
-    public override inline val zero: Short
+    override inline val zero: Short
         get() = 0
 
-    public override inline val one: Short
+    override inline val one: Short
         get() = 1
 
-    public override fun number(value: Number): Short = value.toShort()
-    public override inline fun add(a: Short, b: Short): Short = (a + b).toShort()
-    public override inline fun multiply(a: Short, b: Short): Short = (a * b).toShort()
-    public override fun norm(arg: Short): Short = if (arg > 0) arg else (-arg).toShort()
+    override fun number(value: Number): Short = value.toShort()
+    override inline fun add(a: Short, b: Short): Short = (a + b).toShort()
+    override inline fun multiply(a: Short, b: Short): Short = (a * b).toShort()
+    override fun norm(arg: Short): Short = if (arg > 0) arg else (-arg).toShort()
 
-    public override inline fun Short.unaryMinus(): Short = (-this).toShort()
-    public override inline fun Short.plus(b: Short): Short = (this + b).toShort()
-    public override inline fun Short.minus(b: Short): Short = (this - b).toShort()
-    public override inline fun Short.times(b: Short): Short = (this * b).toShort()
+    override inline fun Short.unaryMinus(): Short = (-this).toShort()
+    override inline fun Short.plus(b: Short): Short = (this + b).toShort()
+    override inline fun Short.minus(b: Short): Short = (this - b).toShort()
+    override inline fun Short.times(b: Short): Short = (this * b).toShort()
 }
 
 /**
@@ -207,21 +207,21 @@ public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short>
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
-    public override inline val zero: Byte
+    override inline val zero: Byte
         get() = 0
 
-    public override inline val one: Byte
+    override inline val one: Byte
         get() = 1
 
-    public override fun number(value: Number): Byte = value.toByte()
-    public override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
-    public override inline fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
-    public override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
+    override fun number(value: Number): Byte = value.toByte()
+    override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
+    override inline fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
+    override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
 
-    public override inline fun Byte.unaryMinus(): Byte = (-this).toByte()
-    public override inline fun Byte.plus(b: Byte): Byte = (this + b).toByte()
-    public override inline fun Byte.minus(b: Byte): Byte = (this - b).toByte()
-    public override inline fun Byte.times(b: Byte): Byte = (this * b).toByte()
+    override inline fun Byte.unaryMinus(): Byte = (-this).toByte()
+    override inline fun Byte.plus(b: Byte): Byte = (this + b).toByte()
+    override inline fun Byte.minus(b: Byte): Byte = (this - b).toByte()
+    override inline fun Byte.times(b: Byte): Byte = (this * b).toByte()
 }
 
 /**
@@ -229,19 +229,19 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
-    public override inline val zero: Long
+    override inline val zero: Long
         get() = 0L
 
-    public override inline val one: Long
+    override inline val one: Long
         get() = 1L
 
-    public override fun number(value: Number): Long = value.toLong()
-    public override inline fun add(a: Long, b: Long): Long = a + b
-    public override inline fun multiply(a: Long, b: Long): Long = a * b
-    public override fun norm(arg: Long): Long = abs(arg)
+    override fun number(value: Number): Long = value.toLong()
+    override inline fun add(a: Long, b: Long): Long = a + b
+    override inline fun multiply(a: Long, b: Long): Long = a * b
+    override fun norm(arg: Long): Long = abs(arg)
 
-    public override inline fun Long.unaryMinus(): Long = (-this)
-    public override inline fun Long.plus(b: Long): Long = (this + b)
-    public override inline fun Long.minus(b: Long): Long = (this - b)
-    public override inline fun Long.times(b: Long): Long = (this * b)
+    override inline fun Long.unaryMinus(): Long = (-this)
+    override inline fun Long.plus(b: Long): Long = (this + b)
+    override inline fun Long.minus(b: Long): Long = (this - b)
+    override inline fun Long.times(b: Long): Long = (this * b)
 }

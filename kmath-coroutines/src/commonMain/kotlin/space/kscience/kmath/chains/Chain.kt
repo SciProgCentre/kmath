@@ -39,8 +39,8 @@ public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
  * A simple chain of independent tokens. [fork] returns the same chain.
  */
 public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
-    public override suspend fun next(): R = gen()
-    public override suspend fun fork(): Chain<R> = this
+    override suspend fun next(): R = gen()
+    override suspend fun fork(): Chain<R> = this
 }
 
 /**
@@ -52,13 +52,13 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R = mutex.withLock {
+    override suspend fun next(): R = mutex.withLock {
         val newValue = gen(value ?: seed())
         value = newValue
         newValue
     }
 
-    public override suspend fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
+    override suspend fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
 }
 
 /**
@@ -77,21 +77,21 @@ public class StatefulChain<S, out R>(
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R = mutex.withLock {
+    override suspend fun next(): R = mutex.withLock {
         val newValue = state.gen(value ?: state.seed())
         value = newValue
         newValue
     }
 
-    public override suspend fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
+    override suspend fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
 }
 
 /**
  * A chain that repeats the same value
  */
 public class ConstantChain<out T>(public val value: T) : Chain<T> {
-    public override suspend fun next(): T = value
-    public override suspend fun fork(): Chain<T> = this
+    override suspend fun next(): T = value
+    override suspend fun fork(): Chain<T> = this
 }
 
 /**

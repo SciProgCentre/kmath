@@ -97,17 +97,17 @@ public interface RandomGenerator {
  * @property random the underlying [Random] object.
  */
 public class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
-    public override fun nextBoolean(): Boolean = random.nextBoolean()
-    public override fun nextDouble(): Double = random.nextDouble()
-    public override fun nextInt(): Int = random.nextInt()
-    public override fun nextInt(until: Int): Int = random.nextInt(until)
-    public override fun nextLong(): Long = random.nextLong()
-    public override fun nextLong(until: Long): Long = random.nextLong(until)
+    override fun nextBoolean(): Boolean = random.nextBoolean()
+    override fun nextDouble(): Double = random.nextDouble()
+    override fun nextInt(): Int = random.nextInt()
+    override fun nextInt(until: Int): Int = random.nextInt(until)
+    override fun nextLong(): Long = random.nextLong()
+    override fun nextLong(until: Long): Long = random.nextLong(until)
 
-    public override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
+    override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
         random.nextBytes(array, fromIndex, toIndex)
     }
 
-    public override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
-    public override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
+    override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
+    override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
 }

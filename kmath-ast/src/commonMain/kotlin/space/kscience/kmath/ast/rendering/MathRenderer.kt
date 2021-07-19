@@ -29,7 +29,7 @@ public fun interface MathRenderer {
  */
 @UnstableKMathAPI
 public open class FeaturedMathRenderer(public val features: List<RenderFeature>) : MathRenderer {
-    public override fun render(mst: MST): MathSyntax {
+    override fun render(mst: MST): MathSyntax {
         for (feature in features) feature.render(this, mst)?.let { return it }
         throw UnsupportedOperationException("Renderer $this has no appropriate feature to render node $mst.")
     }
@@ -56,7 +56,7 @@ public open class FeaturedMathRendererWithPostProcess(
     features: List<RenderFeature>,
     public val stages: List<PostProcessPhase>,
 ) : FeaturedMathRenderer(features) {
-    public override fun render(mst: MST): MathSyntax {
+    override fun render(mst: MST): MathSyntax {
         val res = super.render(mst)
         for (stage in stages) stage.perform(res)
         return res

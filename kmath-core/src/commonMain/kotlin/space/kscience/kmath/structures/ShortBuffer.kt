@@ -14,16 +14,16 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
-    public override val size: Int get() = array.size
+    override val size: Int get() = array.size
 
-    public override operator fun get(index: Int): Short = array[index]
+    override operator fun get(index: Int): Short = array[index]
 
-    public override operator fun set(index: Int, value: Short) {
+    override operator fun set(index: Int, value: Short) {
         array[index] = value
     }
 
-    public override operator fun iterator(): ShortIterator = array.iterator()
-    public override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
+    override operator fun iterator(): ShortIterator = array.iterator()
+    override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
 }
 
 /**

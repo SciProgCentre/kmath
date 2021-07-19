@@ -52,11 +52,11 @@ public class CMOptimization(
 
     public fun exportOptimizationData(): List<OptimizationData> = optimizationData.values.toList()
 
-    public override fun initialGuess(map: Map<Symbol, Double>) {
+    override fun initialGuess(map: Map<Symbol, Double>) {
         addOptimizationData(InitialGuess(map.toDoubleArray()))
     }
 
-    public override fun function(expression: Expression<Double>) {
+    override fun function(expression: Expression<Double>) {
         val objectiveFunction = ObjectiveFunction {
             val args = it.toMap()
             expression(args)
@@ -64,7 +64,7 @@ public class CMOptimization(
         addOptimizationData(objectiveFunction)
     }
 
-    public override fun diffFunction(expression: DifferentiableExpression<Double>) {
+    override fun diffFunction(expression: DifferentiableExpression<Double>) {
         function(expression)
         val gradientFunction = ObjectiveFunctionGradient {
             val args = it.toMap()

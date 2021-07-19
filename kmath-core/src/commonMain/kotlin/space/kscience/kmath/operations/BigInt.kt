@@ -49,16 +49,16 @@ public class BigInt internal constructor(
     private val sign: Byte,
     private val magnitude: Magnitude,
 ) : Comparable<BigInt> {
-    public override fun compareTo(other: BigInt): Int = when {
+    override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1
         sign > other.sign -> 1
         else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
-    public override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
+    override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
-    public override fun hashCode(): Int = magnitude.hashCode() + sign
+    override fun hashCode(): Int = magnitude.hashCode() + sign
 
     public fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 

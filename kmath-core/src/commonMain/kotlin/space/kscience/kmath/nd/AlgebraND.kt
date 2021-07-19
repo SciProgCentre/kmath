@@ -127,7 +127,7 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
      * @param b the addend.
      * @return the sum.
      */
-    public override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> add(aValue, bValue) }
 
 //    /**
@@ -137,7 +137,7 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
 //     * @param k the multiplier.
 //     * @return the product.
 //     */
-//    public override fun multiply(a: NDStructure<T>, k: Number): NDStructure<T> =  a.map { multiply(it, k) }
+//    override fun multiply(a: NDStructure<T>, k: Number): NDStructure<T> =  a.map { multiply(it, k) }
 
     // TODO move to extensions after KEEP-176
 
@@ -194,7 +194,7 @@ public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R
      * @param b the multiplier.
      * @return the product.
      */
-    public override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
@@ -234,7 +234,7 @@ public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T,
      * @param b the divisor.
      * @return the quotient.
      */
-    public override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176

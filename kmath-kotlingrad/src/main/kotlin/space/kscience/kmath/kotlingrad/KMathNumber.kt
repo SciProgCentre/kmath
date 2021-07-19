@@ -16,15 +16,15 @@ import space.kscience.kmath.operations.NumericAlgebra
  * @property algebra The algebra.
  * @property value The value of this number.
  */
-public class KMathNumber<T, A>(public val algebra: A, public override val value: T) :
+public class KMathNumber<T, A>(public val algebra: A, override val value: T) :
     SConst<KMathNumber<T, A>>(value) where T : Number, A : NumericAlgebra<T> {
     /**
      * Returns a string representation of the [value].
      */
-    public override fun toString(): String = value.toString()
+    override fun toString(): String = value.toString()
 
     /**
      * Wraps [Number] to [KMathNumber].
      */
-    public override fun wrap(number: Number): KMathNumber<T, A> = KMathNumber(algebra, algebra.number(number))
+    override fun wrap(number: Number): KMathNumber<T, A> = KMathNumber(algebra, algebra.number(number))
 }

@@ -76,7 +76,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         }
     }
 
-    public override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
+    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
         // This implements the algorithm as per Vose (1991):
         // v = uniform()  in [0, 1)
         // j = uniform(n) in [0, n)
@@ -107,7 +107,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         if (generator.nextLong() ushr 11 < probability[j]) j else alias[j]
     }
 
-    public override fun toString(): String = "Alias method"
+    override fun toString(): String = "Alias method"
 
     public companion object {
         private const val DEFAULT_ALPHA = 0

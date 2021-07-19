@@ -26,11 +26,11 @@ public class MatrixWrapper<out T : Any> internal constructor(
      */
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
-    public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
         features.singleOrNull(type::isInstance) as? F
             ?: origin.getFeature(type)
 
-    public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
+    override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
 
 /**

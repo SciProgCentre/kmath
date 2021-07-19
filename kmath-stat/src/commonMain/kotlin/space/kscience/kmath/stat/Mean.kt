@@ -27,13 +27,13 @@ public class Mean<T>(
 
     override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
 
-    public override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =
+    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> =
         evaluateBlocking(data) to data.size
 
-    public override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
+    override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
         group { first.first + second.first } to (first.second + second.second)
 
-    public override suspend fun toResult(intermediate: Pair<T, Int>): T = group {
+    override suspend fun toResult(intermediate: Pair<T, Int>): T = group {
         division(intermediate.first, intermediate.second)
     }
 

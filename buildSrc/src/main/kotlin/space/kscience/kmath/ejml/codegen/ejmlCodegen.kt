@@ -14,12 +14,12 @@ private fun Appendable.appendEjmlVector(type: String, ejmlMatrixType: String) {
     @Language("kotlin") val text = """/**
  * [EjmlVector] specialization for [$type].
  */
-public class Ejml${type}Vector<out M : $ejmlMatrixType>(public override val origin: M) : EjmlVector<$type, M>(origin) {
+public class Ejml${type}Vector<out M : $ejmlMatrixType>(override val origin: M) : EjmlVector<$type, M>(origin) {
     init {
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
-    public override operator fun get(index: Int): $type = origin[0, index]
+    override operator fun get(index: Int): $type = origin[0, index]
 }"""
     appendLine(text)
     appendLine()
@@ -29,8 +29,8 @@ private fun Appendable.appendEjmlMatrix(type: String, ejmlMatrixType: String) {
     val text = """/**
  * [EjmlMatrix] specialization for [$type].
  */
-public class Ejml${type}Matrix<out M : $ejmlMatrixType>(public override val origin: M) : EjmlMatrix<$type, M>(origin) {
-    public override operator fun get(i: Int, j: Int): $type = origin[i, j]
+public class Ejml${type}Matrix<out M : $ejmlMatrixType>(override val origin: M) : EjmlMatrix<$type, M>(origin) {
+    override operator fun get(i: Int, j: Int): $type = origin[i, j]
 }"""
     appendLine(text)
     appendLine()
@@ -54,23 +54,23 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
     /**
      * The [${kmathAlgebra}] reference.
      */
-    public override val elementAlgebra: $kmathAlgebra get() = $kmathAlgebra
+    override val elementAlgebra: $kmathAlgebra get() = $kmathAlgebra
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Matrix<${type}>.toEjml(): Ejml${type}Matrix<${ejmlMatrixType}> = when {
+    override fun Matrix<${type}>.toEjml(): Ejml${type}Matrix<${ejmlMatrixType}> = when {
         this is Ejml${type}Matrix<*> && origin is $ejmlMatrixType -> this as Ejml${type}Matrix<${ejmlMatrixType}>
         else -> buildMatrix(rowNum, colNum) { i, j -> get(i, j) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    public override fun Point<${type}>.toEjml(): Ejml${type}Vector<${ejmlMatrixType}> = when {
+    override fun Point<${type}>.toEjml(): Ejml${type}Vector<${ejmlMatrixType}> = when {
         this is Ejml${type}Vector<*> && origin is $ejmlMatrixType -> this as Ejml${type}Vector<${ejmlMatrixType}>
         else -> Ejml${type}Vector(${ejmlMatrixType}(size, 1).also {
             (0 until it.numRows).forEach { row -> it[row, 0] = get(row) }
         })
     }
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: ${kmathAlgebra}.(i: Int, j: Int) -> ${type},
@@ -80,7 +80,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         }
     }.wrapMatrix()
 
-    public override fun buildVector(
+    override fun buildVector(
         size: Int,
         initializer: ${kmathAlgebra}.(Int) -> ${type},
     ): Ejml${type}Vector<${ejmlMatrixType}> = Ejml${type}Vector(${ejmlMatrixType}(size, 1).also {
@@ -90,21 +90,21 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
     private fun <T : ${ejmlMatrixParentTypeMatrix}> T.wrapMatrix() = Ejml${type}Matrix(this)
     private fun <T : ${ejmlMatrixParentTypeMatrix}> T.wrapVector() = Ejml${type}Vector(this)
 
-    public override fun Matrix<${type}>.unaryMinus(): Matrix<${type}> = this * elementAlgebra { -one }
+    override fun Matrix<${type}>.unaryMinus(): Matrix<${type}> = this * elementAlgebra { -one }
 
-    public override fun Matrix<${type}>.dot(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
+    override fun Matrix<${type}>.dot(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
         CommonOps_${ops}.mult(toEjml().origin, other.toEjml().origin, out)
         return out.wrapMatrix()
     }
 
-    public override fun Matrix<${type}>.dot(vector: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
+    override fun Matrix<${type}>.dot(vector: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
         CommonOps_${ops}.mult(toEjml().origin, vector.toEjml().origin, out)
         return out.wrapVector()
     }
 
-    public override operator fun Matrix<${type}>.minus(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
+    override operator fun Matrix<${type}>.minus(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
 
         CommonOps_${ops}.add(
@@ -123,19 +123,19 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         return out.wrapMatrix()
     }
 
-    public override operator fun Matrix<${type}>.times(value: ${type}): Ejml${type}Matrix<${ejmlMatrixType}> {
+    override operator fun Matrix<${type}>.times(value: ${type}): Ejml${type}Matrix<${ejmlMatrixType}> {
         val res = ${ejmlMatrixType}(1, 1)
         CommonOps_${ops}.scale(value, toEjml().origin, res)
         return res.wrapMatrix()
     }
 
-    public override fun Point<${type}>.unaryMinus(): Ejml${type}Vector<${ejmlMatrixType}> {
+    override fun Point<${type}>.unaryMinus(): Ejml${type}Vector<${ejmlMatrixType}> {
         val res = ${ejmlMatrixType}(1, 1)
         CommonOps_${ops}.changeSign(toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun Matrix<${type}>.plus(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
+    override fun Matrix<${type}>.plus(other: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
         
         CommonOps_${ops}.add(
@@ -154,7 +154,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         return out.wrapMatrix()
     }
 
-    public override fun Point<${type}>.plus(other: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
+    override fun Point<${type}>.plus(other: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
 
         CommonOps_${ops}.add(
@@ -173,7 +173,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         return out.wrapVector()
     }
 
-    public override fun Point<${type}>.minus(other: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
+    override fun Point<${type}>.minus(other: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> {
         val out = ${ejmlMatrixType}(1, 1)
 
         CommonOps_${ops}.add(
@@ -192,18 +192,18 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         return out.wrapVector()
     }
 
-    public override fun ${type}.times(m: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> = m * this
+    override fun ${type}.times(m: Matrix<${type}>): Ejml${type}Matrix<${ejmlMatrixType}> = m * this
 
-    public override fun Point<${type}>.times(value: ${type}): Ejml${type}Vector<${ejmlMatrixType}> {
+    override fun Point<${type}>.times(value: ${type}): Ejml${type}Vector<${ejmlMatrixType}> {
         val res = ${ejmlMatrixType}(1, 1)
         CommonOps_${ops}.scale(value, toEjml().origin, res)
         return res.wrapVector()
     }
 
-    public override fun ${type}.times(v: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> = v * this
+    override fun ${type}.times(v: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> = v * this
 
     @UnstableKMathAPI
-    public override fun <F : StructureFeature> getFeature(structure: Matrix<${type}>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> getFeature(structure: Matrix<${type}>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 

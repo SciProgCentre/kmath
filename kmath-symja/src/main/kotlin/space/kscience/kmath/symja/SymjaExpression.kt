@@ -30,9 +30,9 @@ public class SymjaExpression<T : Number, A : NumericAlgebra<T>>(
     public val mst: MST,
     public val evaluator: ExprEvaluator = DEFAULT_EVALUATOR,
 ) : SpecialDifferentiableExpression<T, SymjaExpression<T, A>> {
-    public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
+    override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
-    public override fun derivativeOrNull(symbols: List<Symbol>): SymjaExpression<T, A> = SymjaExpression(
+    override fun derivativeOrNull(symbols: List<Symbol>): SymjaExpression<T, A> = SymjaExpression(
         algebra,
         symbols.map(Symbol::toIExpr).fold(mst.toIExpr(), F::D).toMst(evaluator),
         evaluator,

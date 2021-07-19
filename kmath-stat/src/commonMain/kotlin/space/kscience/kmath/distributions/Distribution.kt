@@ -19,7 +19,7 @@ public interface Distribution<T : Any> : Sampler<T> {
      */
     public fun probability(arg: T): Double
 
-    public override fun sample(generator: RandomGenerator): Chain<T>
+    override fun sample(generator: RandomGenerator): Chain<T>
 
     /**
      * An empty companion. Distribution factories should be written as its extensions

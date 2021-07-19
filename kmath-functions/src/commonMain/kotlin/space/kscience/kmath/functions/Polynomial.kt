@@ -98,13 +98,13 @@ public fun <T : Comparable<T>> Polynomial<T>.integrate(
 public class PolynomialSpace<T, C>(
     private val ring: C,
 ) : Group<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
-    public override val zero: Polynomial<T> = Polynomial(emptyList())
+    override val zero: Polynomial<T> = Polynomial(emptyList())
 
     override fun Polynomial<T>.unaryMinus(): Polynomial<T> = ring {
         Polynomial(coefficients.map { -it })
     }
 
-    public override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
+    override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
         val dim = max(a.coefficients.size, b.coefficients.size)
 
         return ring {
@@ -114,7 +114,7 @@ public class PolynomialSpace<T, C>(
         }
     }
 
-    public override fun scale(a: Polynomial<T>, value: Double): Polynomial<T> =
+    override fun scale(a: Polynomial<T>, value: Double): Polynomial<T> =
         ring { Polynomial(List(a.coefficients.size) { index -> a.coefficients[index] * value }) }
 
     /**

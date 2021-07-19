@@ -166,13 +166,13 @@ public interface GroupOperations<T> : Algebra<T> {
      */
     public operator fun T.minus(b: T): T = add(this, -b)
 
-    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
         MINUS_OPERATION -> { arg -> -arg }
         else -> super.unaryOperationFunction(operation)
     }
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         PLUS_OPERATION -> ::add
         MINUS_OPERATION -> { left, right -> left - right }
         else -> super.binaryOperationFunction(operation)
@@ -226,7 +226,7 @@ public interface RingOperations<T> : GroupOperations<T> {
      */
     public operator fun T.times(b: T): T = multiply(this, b)
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         TIMES_OPERATION -> ::multiply
         else -> super.binaryOperationFunction(operation)
     }
@@ -277,7 +277,7 @@ public interface FieldOperations<T> : RingOperations<T> {
      */
     public operator fun T.div(b: T): T = divide(this, b)
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         DIV_OPERATION -> ::divide
         else -> super.binaryOperationFunction(operation)
     }
@@ -298,5 +298,5 @@ public interface FieldOperations<T> : RingOperations<T> {
  * @param T the type of element of this field.
  */
 public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
-    public override fun number(value: Number): T = scale(one, value.toDouble())
+    override fun number(value: Number): T = scale(one, value.toDouble())
 }

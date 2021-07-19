@@ -57,7 +57,7 @@ else
  */
 @UnstableKMathAPI
 public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : RenderFeature {
-    public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
+    override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
         if (node !is MST.Numeric || node.value::class !in types) return null
 
         val toString = when (val v = node.value) {
@@ -117,7 +117,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
  */
 @UnstableKMathAPI
 public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : RenderFeature {
-    public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? =
+    override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? =
         if (node !is MST.Numeric || node.value::class !in types)
             null
         else
@@ -140,7 +140,7 @@ public class PrettyPrintIntegers(public val types: Set<KClass<out Number>>) : Re
  */
 @UnstableKMathAPI
 public class PrettyPrintPi(public val symbols: Set<String>) : RenderFeature {
-    public override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? =
+    override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? =
         if (node !is Symbol || node.identity !in symbols)
             null
         else
@@ -202,7 +202,7 @@ public abstract class Binary(public val operations: Collection<String>?) : Rende
  */
 @UnstableKMathAPI
 public class BinaryPlus(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
         BinaryPlusSyntax(
             operation = node.operation,
             left = OperandSyntax(parent.render(node.left), true),
@@ -224,7 +224,7 @@ public class BinaryPlus(operations: Collection<String>?) : Binary(operations) {
  */
 @UnstableKMathAPI
 public class BinaryMinus(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
         BinaryMinusSyntax(
             operation = node.operation,
             left = OperandSyntax(operand = parent.render(node.left), parentheses = true),
@@ -246,7 +246,7 @@ public class BinaryMinus(operations: Collection<String>?) : Binary(operations) {
  */
 @UnstableKMathAPI
 public class UnaryPlus(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = UnaryPlusSyntax(
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = UnaryPlusSyntax(
         operation = node.operation,
         operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
     )
@@ -266,7 +266,7 @@ public class UnaryPlus(operations: Collection<String>?) : Unary(operations) {
  */
 @UnstableKMathAPI
 public class UnaryMinus(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = UnaryMinusSyntax(
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = UnaryMinusSyntax(
         operation = node.operation,
         operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
     )
@@ -286,7 +286,7 @@ public class UnaryMinus(operations: Collection<String>?) : Unary(operations) {
  */
 @UnstableKMathAPI
 public class Fraction(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax = FractionSyntax(
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax = FractionSyntax(
         operation = node.operation,
         left = OperandSyntax(operand = parent.render(node.left), parentheses = true),
         right = OperandSyntax(operand = parent.render(node.right), parentheses = true),
@@ -308,7 +308,7 @@ public class Fraction(operations: Collection<String>?) : Binary(operations) {
  */
 @UnstableKMathAPI
 public class BinaryOperator(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
         BinaryOperatorSyntax(
             operation = node.operation,
             prefix = OperatorNameSyntax(name = node.operation),
@@ -331,7 +331,7 @@ public class BinaryOperator(operations: Collection<String>?) : Binary(operations
  */
 @UnstableKMathAPI
 public class UnaryOperator(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
         UnaryOperatorSyntax(
             operation = node.operation,
             prefix = OperatorNameSyntax(node.operation),
@@ -353,7 +353,7 @@ public class UnaryOperator(operations: Collection<String>?) : Unary(operations) 
  */
 @UnstableKMathAPI
 public class Power(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
         SuperscriptSyntax(
             operation = node.operation,
             left = OperandSyntax(parent.render(node.left), true),
@@ -373,7 +373,7 @@ public class Power(operations: Collection<String>?) : Binary(operations) {
  */
 @UnstableKMathAPI
 public class SquareRoot(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
         RadicalSyntax(operation = node.operation, operand = parent.render(node.value))
 
     public companion object {
@@ -391,7 +391,7 @@ public class SquareRoot(operations: Collection<String>?) : Unary(operations) {
  */
 @UnstableKMathAPI
 public class Exponent(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = ExponentSyntax(
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax = ExponentSyntax(
         operation = node.operation,
         operand = OperandSyntax(operand = parent.render(node.value), parentheses = true),
         useOperatorForm = true,
@@ -412,7 +412,7 @@ public class Exponent(operations: Collection<String>?) : Unary(operations) {
  */
 @UnstableKMathAPI
 public class Multiplication(operations: Collection<String>?) : Binary(operations) {
-    public override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
+    override fun renderBinary(parent: FeaturedMathRenderer, node: MST.Binary): MathSyntax =
         MultiplicationSyntax(
             operation = node.operation,
             left = OperandSyntax(operand = parent.render(node.left), parentheses = true),
@@ -435,7 +435,7 @@ public class Multiplication(operations: Collection<String>?) : Binary(operations
  */
 @UnstableKMathAPI
 public class InverseTrigonometricOperations(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
         UnaryOperatorSyntax(
             operation = node.operation,
             prefix = OperatorNameSyntax(name = node.operation.replaceFirst("a", "arc")),
@@ -462,7 +462,7 @@ public class InverseTrigonometricOperations(operations: Collection<String>?) : U
  */
 @UnstableKMathAPI
 public class InverseHyperbolicOperations(operations: Collection<String>?) : Unary(operations) {
-    public override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
+    override fun renderUnary(parent: FeaturedMathRenderer, node: MST.Unary): MathSyntax =
         UnaryOperatorSyntax(
             operation = node.operation,
             prefix = OperatorNameSyntax(name = node.operation.replaceFirst("a", "ar")),

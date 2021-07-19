@@ -31,7 +31,7 @@ public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R)
  * A type-specific double chunk random chain
  */
 public class UniformDoubleChain(public val generator: RandomGenerator) : BlockingDoubleChain {
-    public override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
+    override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
     override suspend fun nextBuffer(size: Int): DoubleBuffer = nextBufferBlocking(size)
 
     override suspend fun fork(): UniformDoubleChain = UniformDoubleChain(generator.fork())

@@ -205,7 +205,7 @@ public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
 @UnstableKMathAPI
 public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> Int) :
     PostProcessPhase {
-    public override fun perform(node: MathSyntax): Unit = when (node) {
+    override fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
         is SymbolSyntax -> Unit
         is OperatorNameSyntax -> Unit
