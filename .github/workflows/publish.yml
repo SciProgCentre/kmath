@@ -42,11 +42,13 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: >
           ./gradlew release --no-daemon -Ppublishing.enabled=true
-          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
-          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}
+          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
+          -Ppublishing.sonatype=false
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
         run: >
           ./gradlew release --no-daemon -Ppublishing.enabled=true -Ppublishing.platform=macosX64
-          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
-          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}
+          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
+          -Ppublishing.sonatype=false

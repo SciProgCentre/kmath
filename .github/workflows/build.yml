@@ -2,9 +2,7 @@ name: Gradle build
 
 on:
   push:
-    branches:
-      - dev
-      - master
+    branches: [ dev, master ]
   pull_request:
 
 jobs:
@@ -26,7 +24,9 @@ jobs:
       - name: Cache gradle
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
