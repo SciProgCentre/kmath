@@ -132,7 +132,7 @@ KMath is a modular library. Different modules provide different features with di
 objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
 performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
-> - [autodif](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
+> - [autodiff](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
 <hr/>
 
@@ -222,8 +222,8 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : MST based DifferentiableExpression.
-> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/DifferentiableMstExpression.kt) : Conversions between Kotlin∇'s SFun and MST
+> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt) : MST based DifferentiableExpression.
+> - [scalars-adapters](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt) : Conversions between Kotlin∇'s SFun and MST
 
 <hr/>
 
@@ -264,7 +264,7 @@ One can still use generic algebras though.
 >
 > **Features:**
 > - [tensor algebra](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt) : Basic linear algebra operations on tensors (plus, dot, etc.)
-> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/algebras/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
+> - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
 > - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
 
 <hr/>

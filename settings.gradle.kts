@@ -5,7 +5,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val toolsVersion = "0.10.1"
+    val toolsVersion = "0.10.2"
     val kotlinVersion = "1.5.21"
 
     plugins {
