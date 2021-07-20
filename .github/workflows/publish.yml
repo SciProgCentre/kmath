@@ -40,9 +40,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
+        shell: cmd
         run: >
-          ./gradlew release --no-daemon -Ppublishing.enabled=true
-          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+          ./gradlew release --no-daemon -Ppublishing.enabled=true -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
           -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
           -Ppublishing.sonatype=false
       - name: Publish Mac Artifacts
