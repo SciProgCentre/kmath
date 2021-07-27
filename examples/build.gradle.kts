@@ -41,9 +41,9 @@ dependencies {
 //    } else
     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
 
-    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.31")
     // plotting
-    implementation("space.kscience:plotlykt-server:0.4.0")
+    implementation("space.kscience:plotlykt-server:0.4.2")
     //jafama
     implementation(project(":kmath-jafama"))
 }
