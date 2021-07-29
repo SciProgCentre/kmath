@@ -38,4 +38,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew build --build-cache --no-daemon --stacktrace
