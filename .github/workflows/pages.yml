@@ -20,7 +20,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - run: ./gradlew dokkaHtmlMultiModule --no-daemon --no-parallel --stacktrace
+      - run: ./gradlew dokkaHtmlMultiModule --build-cache --no-daemon --no-parallel --stacktrace
       - uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
           branch: gh-pages
