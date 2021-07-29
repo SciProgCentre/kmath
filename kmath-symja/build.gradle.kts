@@ -34,7 +34,7 @@ dependencies {
     api("org.hipparchus:hipparchus-stat:1.8")
 
     api(project(":kmath-core"))
-    testImplementation("org.slf4j:slf4j-simple:1.7.30")
+    testImplementation("org.slf4j:slf4j-simple:1.7.31")
 }
 
 readme {
