@@ -7,8 +7,8 @@ package space.kscience.kmath.misc
 
 /**
  * Marks declarations that are still experimental in the KMath APIs, which means that the design of the corresponding
- * declarations has open issues which may (or may not) lead to their changes in the future. Roughly speaking, there is
- * a chance that those declarations will be deprecated in the near future or the semantics of their behavior may change
+ * declarations has open issues that may (or may not) lead to their changes in the future. Roughly speaking, there is
+ * a chance of those declarations will be deprecated in the near future or the semantics of their behavior may change
  * in some way that may break some code.
  */
 @MustBeDocumented
@@ -17,7 +17,7 @@ package space.kscience.kmath.misc
 public annotation class UnstableKMathAPI
 
 /**
- * Marks API which could cause performance problems. The code, marked by this API is not necessary slow, but could cause
+ * Marks API that could cause performance problems. The code marked by this API is unnecessary slow but could cause
  * slow-down in some cases. Refer to the documentation and benchmark it to be sure.
  */
 @MustBeDocumented

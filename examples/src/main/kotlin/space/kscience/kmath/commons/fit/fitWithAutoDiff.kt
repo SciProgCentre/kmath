@@ -25,8 +25,7 @@ import space.kscience.plotly.models.TraceValues
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-//Forward declaration of symbols that will be used in expressions.
-// This declaration is required for
+// Forward declaration of symbols that will be used in expressions.
 private val a by symbol
 private val b by symbol
 private val c by symbol

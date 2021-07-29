@@ -22,7 +22,7 @@ public interface Distribution<T : Any> : Sampler<T> {
     override fun sample(generator: RandomGenerator): Chain<T>
 
     /**
-     * An empty companion. Distribution factories should be written as its extensions
+     * An empty companion. Distribution factories should be written as its extensions.
      */
     public companion object
 }

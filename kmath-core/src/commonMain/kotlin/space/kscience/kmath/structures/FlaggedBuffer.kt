@@ -51,7 +51,7 @@ public fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (get
 public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
 
 /**
- * A real buffer which supports flags for each value like NaN or Missing
+ * A [Double] buffer that supports flags for each value like `NaN` or Missing.
  */
 public class FlaggedDoubleBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>,
     Buffer<Double?> {

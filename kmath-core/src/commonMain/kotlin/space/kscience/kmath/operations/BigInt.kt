@@ -121,7 +121,7 @@ public class BigInt internal constructor(
         var r = ZERO
 
         val bitSize =
-            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: 0f + 1)).toInt()
+            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: (0f + 1))).toInt()
 
         for (i in bitSize downTo 0) {
             r = r shl 1
@@ -442,7 +442,7 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
 }
 
 /**
- * Returns null if a valid number can not be read from a string
+ * Returns `null` if a valid number cannot be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
     if (isEmpty()) return null

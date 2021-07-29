@@ -16,9 +16,10 @@ public val UnivariateDomain.center: Double
     get() = (range.endInclusive + range.start) / 2
 
 /**
- * A univariate bin based an a range
- * @param value The value of histogram including weighting
- * @param standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
+ * A univariate bin based on a range
+ *
+ * @property value The value of histogram including weighting
+ * @property standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
  */
 @UnstableKMathAPI
 public class UnivariateBin(

@@ -6,7 +6,7 @@
 package space.kscience.kmath.expressions
 
 /**
- * Represents expression which structure can be differentiated.
+ * Represents expression, which structure can be differentiated.
  *
  * @param T the type this expression takes as argument and returns.
  */

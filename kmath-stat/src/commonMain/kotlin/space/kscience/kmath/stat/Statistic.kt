@@ -30,9 +30,10 @@ public interface BlockingStatistic<in T, out R> : Statistic<T, R> {
 
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
- * @param T - source type
- * @param I - intermediate block type
- * @param R - result type
+ *
+ * @param T the source type.
+ * @param I the intermediate block type.
+ * @param R the result type.
  */
 public interface ComposableStatistic<in T, I, out R> : Statistic<T, R> {
     //compute statistic on a single block

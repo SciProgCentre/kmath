@@ -9,7 +9,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Abstraction of writing [MathSyntax] as a string of an actual markup language. Typical implementation should
- * involve traversal of MathSyntax with handling each its subtype.
+ * involve traversal of MathSyntax with handling each subtype.
  *
  * @author Iaroslav Postovalov
  */

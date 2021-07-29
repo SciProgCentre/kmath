@@ -16,7 +16,7 @@ import kotlin.math.pow
  */
 public interface NoDerivFunctionOptimization<T : Any> : Optimization<T> {
     /**
-     * The optimization direction. If true search for function maximum, if false, search for the minimum
+     * The optimization direction. If `true` search for function maximum, search for the minimum otherwise.
      */
     public var maximize: Boolean
 

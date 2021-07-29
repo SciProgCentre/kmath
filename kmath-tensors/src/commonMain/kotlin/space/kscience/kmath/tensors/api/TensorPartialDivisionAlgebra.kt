@@ -49,7 +49,7 @@ public interface TensorPartialDivisionAlgebra<T> : TensorAlgebra<T> {
     /**
      * Each element of this tensor is divided by each element of the [other] tensor.
      *
-     * @param other tensor to be divide by.
+     * @param other tensor to be divided by.
      */
     public operator fun Tensor<T>.divAssign(other: Tensor<T>)
 }

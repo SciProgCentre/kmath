@@ -8,7 +8,7 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
- * The generic mathematics elements which is able to store its context
+ * The generic mathematics elements that is able to store its context
  *
  * @param C the type of mathematical context for this element.
  * @param T the type wrapped by this wrapper.

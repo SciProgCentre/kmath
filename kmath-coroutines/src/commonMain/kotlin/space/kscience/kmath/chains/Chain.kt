@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.withLock
 
 /**
  * A not-necessary-Markov chain of some type
- * @param T - the chain element type
+ * @param T the chain element type
  */
 public interface Chain<out T> : Flow<T> {
     /**
@@ -22,7 +22,7 @@ public interface Chain<out T> : Flow<T> {
     public suspend fun next(): T
 
     /**
-     * Create a copy of current chain state. Consuming resulting chain does not affect initial chain
+     * Create a copy of current chain state. Consuming resulting chain does not affect initial chain.
      */
     public suspend fun fork(): Chain<T>
 
@@ -62,9 +62,11 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
 }
 
 /**
- * A chain with possibly mutable state. The state must not be changed outside the chain. Two chins should never share the state
- * @param S - the state of the chain
- * @param forkState - the function to copy current state without modifying it
+ * A chain with possibly mutable state. The state must not be changed outside the chain. Two chins should never share
+ * the state.
+ *
+ * @param S the state of the chain.
+ * @param forkState the function to copy current state without modifying it.
  */
 public class StatefulChain<S, out R>(
     private val state: S,
@@ -96,7 +98,7 @@ public class ConstantChain<out T>(public val value: T) : Chain<T> {
 
 /**
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed
- * since mapped chain consumes tokens. Accepts regular transformation function
+ * since mapped chain consumes tokens. Accepts regular transformation function.
  */
 public fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = func(this@map.next())

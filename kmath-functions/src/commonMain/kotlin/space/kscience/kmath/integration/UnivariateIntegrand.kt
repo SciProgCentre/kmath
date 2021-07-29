@@ -40,8 +40,8 @@ public class IntegrationRange(public val range: ClosedRange<Double>) : Integrand
 }
 
 /**
- * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
- * integration nodes per range
+ * Set of univariate integration ranges. First components correspond to the ranges themselves, second components to
+ * number of integration nodes per range.
  */
 public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
     public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())

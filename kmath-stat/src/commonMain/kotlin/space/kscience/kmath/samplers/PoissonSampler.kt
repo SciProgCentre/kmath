@@ -18,11 +18,11 @@ private const val PIVOT = 40.0
 
 /**
  * Sampler for the Poisson distribution.
- * - For small means, a Poisson process is simulated using uniform deviates, as described in
+ * * For small means, a Poisson process is simulated using uniform deviates, as described in
  *   Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Chapter 3.4.1.F.3
  *   Important integer-valued distributions: The Poisson distribution. Addison Wesley.
  * The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
- * - For large means, we use the rejection algorithm described in
+ * * For large means, we use the rejection algorithm described in
  *   Devroye, Luc. (1981). The Computer Generation of Poisson Random Variables Computing vol. 26 pp. 197-207.
  *
  * Based on Commons RNG implementation.
@@ -35,10 +35,10 @@ public fun PoissonSampler(mean: Double): Sampler<Int> {
 
 /**
  * Sampler for the Poisson distribution.
- * - For small means, a Poisson process is simulated using uniform deviates, as described in
+ * * For small means, a Poisson process is simulated using uniform deviates, as described in
  *   Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Chapter 3.4.1.F.3 Important
  *   integer-valued distributions: The Poisson distribution. Addison Wesley.
- * - The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
+ * * The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
  *   This sampler is suitable for mean < 40. For large means, [LargeMeanPoissonSampler] should be used instead.
  *
  * Based on Commons RNG implementation.

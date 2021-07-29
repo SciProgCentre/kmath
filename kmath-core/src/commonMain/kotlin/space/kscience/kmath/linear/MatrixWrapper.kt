@@ -22,7 +22,8 @@ public class MatrixWrapper<out T : Any> internal constructor(
 ) : Matrix<T> by origin {
 
     /**
-     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
+     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the
+     * criteria.
      */
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
@@ -61,7 +62,7 @@ public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeatu
     }
 
 /**
- * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
+ * Diagonal matrix of ones. The matrix is virtual no actual matrix is created.
  */
 public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     rows: Int,
@@ -87,7 +88,7 @@ public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : Ma
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
+public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: (VirtualMatrix(
     colNum,
     rowNum,
-) { i, j -> get(j, i) } + TransposedFeature(this)
+) { i, j -> get(j, i) } + TransposedFeature(this))

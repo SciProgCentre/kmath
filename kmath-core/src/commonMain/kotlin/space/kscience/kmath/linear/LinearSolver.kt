@@ -8,8 +8,8 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.nd.as1D
 
 /**
- * A group of methods to solve for *X* in equation *X = A <sup>-1</sup> &middot; B*, where *A* and *B* are matrices or
- * vectors.
+ * A group of methods to solve for *X* in equation *X = A<sup>&minus;1</sup> &middot; B*, where *A* and *B* are
+ * matrices or vectors.
  *
  * @param T the type of items.
  */

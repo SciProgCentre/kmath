@@ -330,13 +330,13 @@ public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> atanh(arg: T): 
  */
 public interface Norm<in T : Any, out R> {
     /**
-     * Computes the norm of [arg] (i.e. absolute value or vector length).
+     * Computes the norm of [arg] (i.e., absolute value or vector length).
      */
     public fun norm(arg: T): R
 }
 
 /**
- * Computes the norm of [arg] (i.e. absolute value or vector length).
+ * Computes the norm of [arg] (i.e., absolute value or vector length).
  */
 @UnstableKMathAPI
 public fun <T : AlgebraElement<T, out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)

@@ -43,7 +43,7 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T =
 /**
  * Calls this expression from arguments.
  *
- * @param pairs the pairs of arguments' names to values.
+ * @param pairs the pairs of arguments' names to value.
  * @return a value.
  */
 @JvmName("callByString")
@@ -60,7 +60,7 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
 public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 
     /**
-     * A constant expression which does not depend on arguments
+     * A constant expression that does not depend on arguments.
      */
     public fun const(value: T): E
 }

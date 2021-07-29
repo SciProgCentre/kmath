@@ -20,7 +20,7 @@ import kotlin.jvm.JvmInline
 public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
     public companion object {
         /**
-         * Coerces a regular matrix to a matrix with type-safe dimensions and throws a error if coercion failed
+         * Coerces a regular matrix to a matrix with type-safe dimensions and throws an error if coercion failed
          */
         public inline fun <T, reified R : Dimension, reified C : Dimension> coerce(structure: Structure2D<T>): DMatrix<T, R, C> {
             require(structure.rowNum == Dimension.dim<R>()) {
@@ -35,7 +35,7 @@ public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
         }
 
         /**
-         * The same as [DMatrix.coerce] but without dimension checks. Use with caution
+         * The same as [DMatrix.coerce] but without dimension checks. Use with caution.
          */
         public fun <T, R : Dimension, C : Dimension> coerceUnsafe(structure: Structure2D<T>): DMatrix<T, R, C> =
             DMatrixWrapper(structure)

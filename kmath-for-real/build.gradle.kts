@@ -12,7 +12,7 @@ kotlin.sourceSets.commonMain {
 
 readme {
     description = """
-        Extension module that should be used to achieve numpy-like behavior. 
+        Extension module that should be used to achieve numpy-like behavior.
         All operations are specialized to work with `Double` numbers without declaring algebraic contexts.
         One can still use generic algebras though.
         """.trimIndent()

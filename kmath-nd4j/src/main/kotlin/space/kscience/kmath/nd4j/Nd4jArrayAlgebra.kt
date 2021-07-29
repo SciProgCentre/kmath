@@ -35,7 +35,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
 
     /**
-     * Unwraps to or acquires [INDArray] from [StructureND].
+     * Unwraps to or get [INDArray] from [StructureND].
      */
     public val StructureND<T>.ndArray: INDArray
 

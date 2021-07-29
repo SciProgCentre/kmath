@@ -18,7 +18,7 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     public val algebra: A,
 ) : ExpressionAlgebra<T, Expression<T>> {
     /**
-     * Builds an Expression of constant expression which does not depend on arguments.
+     * Builds an Expression of constant expression that does not depend on arguments.
      */
     override fun const(value: T): Expression<T> = Expression { value }
 

@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 public interface StructureFeature
 
 /**
- * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
  * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
  * specify the sizes of each dimension.
  *
@@ -26,7 +26,7 @@ public interface StructureFeature
  */
 public interface StructureND<out T> {
     /**
-     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
     public val shape: IntArray
@@ -53,8 +53,8 @@ public interface StructureND<out T> {
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
-     * Feature is some additional structure information which allows to access it special properties or hints.
-     * If the feature is not present, null is returned.
+     * Feature is some additional structure information that allows to access it special properties or hints.
+     * If the feature is not present, `null` is returned.
      */
     @UnstableKMathAPI
     public fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
@@ -177,7 +177,7 @@ public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> 
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
 /**
- * A way to convert ND index to linear one and back.
+ * A way to convert ND indices to linear one and back.
  */
 public interface Strides {
     /**

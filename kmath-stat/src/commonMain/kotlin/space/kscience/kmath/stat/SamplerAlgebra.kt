@@ -32,7 +32,7 @@ public class BasicSampler<out T : Any>(public val chainBuilder: (RandomGenerator
 }
 
 /**
- * A space of samplers. Allows to perform simple operations on distributions.
+ * A space of samplers. Allows performing simple operations on distributions.
  *
  * @property algebra the space to provide addition and scalar multiplication for [T].
  */

@@ -110,7 +110,7 @@ internal object InternalGamma {
 
         x <= 8.0 -> {
             val n = floor(x - 1.5).toInt()
-            val prod = (1..n).fold(1.0, { prod, i -> prod * (x - i) })
+            val prod = (1..n).fold(1.0) { prod, i -> prod * (x - i) }
             logGamma1p(x - (n + 1)) + ln(prod)
         }
 
