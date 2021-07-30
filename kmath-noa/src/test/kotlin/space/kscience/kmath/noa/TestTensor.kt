@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.noa
 
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -37,7 +38,18 @@ internal fun NoaInt.testingViewWithNoCopy(device: Device = Device.CPU) {
     assertEquals(tensor[intArrayOf(0)], 10)
 }
 
+internal fun NoaFloat.testingTensorSerialisation(tensorPath: String, device: Device = Device.CPU){
+    val tensor = copyFromArray(floatArrayOf(45.5f, 98.6f), intArrayOf(2), device)
+    tensor.save(tensorPath)
+    val loadedTensor = loadTensor(tensorPath, device)
+    assertTrue(tensor.copyToArray() contentEquals loadedTensor.copyToArray())
+}
+
 class TestTensor {
+
+    private val resources = File("").resolve("src/test/resources")
+    private val tensorPath = resources.resolve("tensor.pt").absolutePath
+
     @Test
     fun testCopying() = NoaFloat {
         withCuda { device ->
@@ -73,6 +85,13 @@ class TestTensor {
     fun testViewWithNoCopy() = NoaInt {
         withCuda { device ->
             testingViewWithNoCopy(device)
+        }
+    }!!
+
+    @Test
+    fun tensorSerialisation() = NoaFloat {
+        withCuda { device ->
+            testingTensorSerialisation(tensorPath, device)
         }
     }!!
 

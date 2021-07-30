@@ -1199,6 +1199,54 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradAdamOptim
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_swapTensors
   (JNIEnv *, jclass, jlong, jlong);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadTensorDouble
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadTensorDouble
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadTensorFloat
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadTensorFloat
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadTensorLong
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadTensorLong
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    loadTensorInt
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_loadTensorInt
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    saveTensor
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_saveTensor
+  (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    saveJitModule
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_saveJitModule
+  (JNIEnv *, jclass, jlong, jstring);
+
 #ifdef __cplusplus
 }
 #endif

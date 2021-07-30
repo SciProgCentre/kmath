@@ -14,4 +14,6 @@ public class NoaJitModule
 internal constructor(scope: NoaScope, internal val jitModuleHandle: JitModuleHandle)
     : NoaResource(scope){
     override fun dispose(): Unit = JNoa.disposeJitModule(jitModuleHandle)
+
+    public fun save(path: String): Unit = JNoa.saveJitModule(jitModuleHandle, path)
 }

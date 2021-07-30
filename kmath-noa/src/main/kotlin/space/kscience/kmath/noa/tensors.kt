@@ -33,6 +33,8 @@ protected constructor(scope: NoaScope, internal val tensorHandle: TensorHandle) 
 
     public val device: Device get() = Device.fromInt(JNoa.getDevice(tensorHandle))
 
+    public fun save(path: String): Unit = JNoa.saveTensor(tensorHandle, path)
+
     override fun toString(): String = JNoa.tensorToString(tensorHandle)
 
     @PerformancePitfall

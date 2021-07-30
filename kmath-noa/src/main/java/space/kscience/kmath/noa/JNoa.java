@@ -317,4 +317,16 @@ class JNoa {
     public static native void zeroGradAdamOptim(long adamOptHandle);
 
     public static native void swapTensors(long lhsHandle, long rhsHandle);
+
+    public static native long loadTensorDouble(String path, int device);
+
+    public static native long loadTensorFloat(String path, int device);
+
+    public static native long loadTensorLong(String path, int device);
+
+    public static native long loadTensorInt(String path, int device);
+
+    public static native void saveTensor(long tensorHandle, String path);
+
+    public static native void saveJitModule(long jitModuleHandle, String path);
 }

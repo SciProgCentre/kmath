@@ -141,6 +141,8 @@ protected constructor(protected val scope: NoaScope) :
 
     public abstract fun loadJitModule(path: String, device: Device = Device.CPU): NoaJitModule
 
+    public abstract fun loadTensor(path: String, device: Device = Device.CPU): TensorType
+
     public fun NoaJitModule.forward(features: Tensor<T>): TensorType =
         wrap(JNoa.forwardPass(jitModuleHandle, features.tensor.tensorHandle))
 
@@ -275,6 +277,7 @@ protected constructor(scope: NoaScope) :
         JNoa.qrTensor(tensor.tensorHandle, Q, R)
         return Pair(wrap(Q), wrap(R))
     }
+
     /**
      * this implementation satisfies `tensor = P dot L dot U`
      */
@@ -399,6 +402,9 @@ protected constructor(scope: NoaScope) :
 
     override fun loadJitModule(path: String, device: Device): NoaJitModule =
         NoaJitModule(scope, JNoa.loadJitModuleDouble(path, device.toInt()))
+
+    override fun loadTensor(path: String, device: Device): NoaDoubleTensor =
+        wrap(JNoa.loadTensorDouble(path, device.toInt()))
 }
 
 public sealed class NoaFloatAlgebra
@@ -478,6 +484,8 @@ protected constructor(scope: NoaScope) :
     override fun loadJitModule(path: String, device: Device): NoaJitModule =
         NoaJitModule(scope, JNoa.loadJitModuleFloat(path, device.toInt()))
 
+    override fun loadTensor(path: String, device: Device): NoaFloatTensor =
+        wrap(JNoa.loadTensorFloat(path, device.toInt()))
 }
 
 public sealed class NoaLongAlgebra
@@ -542,6 +550,9 @@ protected constructor(scope: NoaScope) :
     override fun loadJitModule(path: String, device: Device): NoaJitModule =
         NoaJitModule(scope, JNoa.loadJitModuleLong(path, device.toInt()))
 
+    override fun loadTensor(path: String, device: Device): NoaLongTensor =
+        wrap(JNoa.loadTensorLong(path, device.toInt()))
+
 }
 
 public sealed class NoaIntAlgebra
@@ -605,5 +616,8 @@ protected constructor(scope: NoaScope) :
 
     override fun loadJitModule(path: String, device: Device): NoaJitModule =
         NoaJitModule(scope, JNoa.loadJitModuleInt(path, device.toInt()))
+
+    override fun loadTensor(path: String, device: Device): NoaIntTensor =
+        wrap(JNoa.loadTensorInt(path, device.toInt()))
 
 }

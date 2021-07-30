@@ -65,8 +65,18 @@ NoaFloat {
     // Reconstruct tensor
     val tensorReg =
         tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose(-2, -1))
+    
+    // Serialise tensor for later
+    tensorReg.save("tensorReg.pt")
 }
 ```
+The saved tensor can be loaded in `C++` or in `python`:
+```python
+import torch
+tensor_reg = list(torch.jit.load('tensorReg.pt').parameters())[0]
+```
+
+
 ### Automatic Differentiation
 The [AutoGrad](https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html)
 engine is exposed:
@@ -200,6 +210,9 @@ NoaFloat {
     // Compute the loss on validation dataset
     lossModule.forwardAssign(yPred, loss)
     println("Validation loss: $loss")
+    
+    // The model can be serialised in its current state
+    netModule.save("trained_net.pt")
 }
 
 ```
