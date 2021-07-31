@@ -350,8 +350,22 @@ class JNoa {
 
     public static native void getBlobFloat(long tensorHandle, float[] data);
 
-    public static native void getBlobLong(long tensorHandle,  long[] data);
+    public static native void getBlobLong(long tensorHandle, long[] data);
 
     public static native void getBlobInt(long tensorHandle, int[] data);
+
+    public static native void setTensor(long tensorHandle, int i, long tensorValue);
+
+    public static native long getSliceTensor(long tensorHandle, int dim, int start, int end);
+
+    public static native void setSliceTensor(long tensorHandle, int dim, int start, int end, long tensorValue);
+
+    public static native void setSliceBlobDouble(long tensorHandle, int dim, int start, int end, double[] data);
+
+    public static native void setSliceBlobFloat(long tensorHandle, int dim, int start, int end, float[] data);
+
+    public static native void setSliceBlobLong(long tensorHandle, int dim, int start, int end, long[] data);
+
+    public static native void setSliceBlobInt(long tensorHandle, int dim, int start, int end, int[] data);
 
 }

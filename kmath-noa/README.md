@@ -77,7 +77,7 @@ import torch
 tensor_reg = list(torch.jit.load('tensorReg.pt').parameters())[0]
 ```
 
-The most efficient way pass data between the `JVM` and the native backend
+The most efficient way passing data between the `JVM` and the native backend
 is to rely on primitive arrays: 
 ```kotlin
 val array = (1..8).map { 100f * it }.toFloatArray()

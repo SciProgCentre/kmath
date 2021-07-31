@@ -45,18 +45,31 @@ internal fun NoaFloat.testingSerialisation(tensorPath: String, device: Device = 
     assertTrue(tensor.copyToArray() contentEquals loadedTensor.copyToArray())
 }
 
-internal fun NoaFloat.testingArrayTransfer(device: Device = Device.CPU) {
+internal fun NoaFloat.testingBatchedGetterSetter(device: Device = Device.CPU) {
     val array = (1..8).map { 100f * it }.toFloatArray()
+    val tensor = full(0.0f, intArrayOf(2, 2, 2), device)
+    tensor.assignFromArray(array)
+    assertTrue(tensor.copyToArray() contentEquals array)
+
     val updateArray = floatArrayOf(15f, 20f)
-    val resArray = NoaFloat {
-        val tensor = copyFromArray(array, intArrayOf(2, 2, 2), device)
-        NoaFloat {
-            tensor[0][1] = updateArray
-        }!!
-        assertEquals(tensor[intArrayOf(0, 1, 0)], 15f)
-        tensor.copyToArray()
+    val updateTensor = full(5.0f, intArrayOf(4), device)
+    updateTensor[0, 1, 3] = updateArray
+
+    NoaFloat {
+        tensor[0][1] = updateArray
+        tensor[1] = updateTensor.view(intArrayOf(2, 2))
+        updateTensor[0, 2, 4] = updateTensor[0, 0, 2]
     }!!
-    assertEquals(resArray[3], 20f)
+
+    assertTrue(
+        tensor.copyToArray() contentEquals
+                floatArrayOf(100f, 200f, 15f, 20f, 5f, 15f, 20f, 5f)
+    )
+    assertTrue(
+        updateTensor.copyToArray() contentEquals
+                floatArrayOf(5f, 15f, 5f, 15f)
+    )
+
 }
 
 class TestTensor {
@@ -110,9 +123,9 @@ class TestTensor {
     }!!
 
     @Test
-    fun testArrayTransfer() = NoaFloat {
+    fun testBatchedGetterSetter() = NoaFloat {
         withCuda { device ->
-            testingArrayTransfer(device)
+            testingBatchedGetterSetter(device)
         }
     }!!
 

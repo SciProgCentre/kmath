@@ -1343,6 +1343,62 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobLong
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobInt
   (JNIEnv *, jclass, jlong, jintArray);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setTensor
+ * Signature: (JIJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setTensor
+  (JNIEnv *, jclass, jlong, jint, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getSliceTensor
+ * Signature: (JIII)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_getSliceTensor
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSliceTensor
+ * Signature: (JIIIJ)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSliceTensor
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSliceBlobDouble
+ * Signature: (JIII[D)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSliceBlobDouble
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jdoubleArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSliceBlobFloat
+ * Signature: (JIII[F)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSliceBlobFloat
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jfloatArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSliceBlobLong
+ * Signature: (JIII[J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSliceBlobLong
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jlongArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setSliceBlobInt
+ * Signature: (JIII[I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setSliceBlobInt
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jintArray);
+
 #ifdef __cplusplus
 }
 #endif
