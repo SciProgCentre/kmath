@@ -1247,6 +1247,102 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_saveTensor
 JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_saveJitModule
   (JNIEnv *, jclass, jlong, jstring);
 
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    assignBlobDouble
+ * Signature: (J[D)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_assignBlobDouble
+  (JNIEnv *, jclass, jlong, jdoubleArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    assignBlobFloat
+ * Signature: (J[F)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_assignBlobFloat
+  (JNIEnv *, jclass, jlong, jfloatArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    assignBlobLong
+ * Signature: (J[J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_assignBlobLong
+  (JNIEnv *, jclass, jlong, jlongArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    assignBlobInt
+ * Signature: (J[I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_assignBlobInt
+  (JNIEnv *, jclass, jlong, jintArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setBlobDouble
+ * Signature: (JI[D)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setBlobDouble
+  (JNIEnv *, jclass, jlong, jint, jdoubleArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setBlobFloat
+ * Signature: (JI[F)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setBlobFloat
+  (JNIEnv *, jclass, jlong, jint, jfloatArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setBlobLong
+ * Signature: (JI[J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setBlobLong
+  (JNIEnv *, jclass, jlong, jint, jlongArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    setBlobInt
+ * Signature: (JI[I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_setBlobInt
+  (JNIEnv *, jclass, jlong, jint, jintArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getBlobDouble
+ * Signature: (J[D)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobDouble
+  (JNIEnv *, jclass, jlong, jdoubleArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getBlobFloat
+ * Signature: (J[F)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobFloat
+  (JNIEnv *, jclass, jlong, jfloatArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getBlobLong
+ * Signature: (J[J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobLong
+  (JNIEnv *, jclass, jlong, jlongArray);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    getBlobInt
+ * Signature: (J[I)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_getBlobInt
+  (JNIEnv *, jclass, jlong, jintArray);
+
 #ifdef __cplusplus
 }
 #endif

@@ -22,6 +22,7 @@ protected constructor(protected val scope: NoaScope) :
 
     protected abstract fun wrap(tensorHandle: TensorHandle): TensorType
 
+    @PerformancePitfall
     public fun Tensor<T>.cast(): TensorType = tensor
 
     /**
@@ -38,8 +39,7 @@ protected constructor(protected val scope: NoaScope) :
 
     public abstract fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device = Device.CPU): TensorType
 
-    @PerformancePitfall
-    public abstract fun Tensor<T>.copyToArray(): PrimitiveArray
+    public abstract fun TensorType.copyToArray(): PrimitiveArray
 
     public abstract fun copyFromArray(array: PrimitiveArray, shape: IntArray, device: Device = Device.CPU): TensorType
 
@@ -163,6 +163,10 @@ protected constructor(protected val scope: NoaScope) :
 
     public infix fun TensorType.swap(other: TensorType): Unit =
         JNoa.swapTensors(tensorHandle, other.tensorHandle)
+
+    public abstract fun TensorType.assignFromArray(array: PrimitiveArray): Unit
+
+    public abstract operator fun TensorType.set(i: Int, array: PrimitiveArray): Unit
 
 }
 
@@ -345,9 +349,11 @@ protected constructor(scope: NoaScope) :
     override fun wrap(tensorHandle: TensorHandle): NoaDoubleTensor =
         NoaDoubleTensor(scope = scope, tensorHandle = tensorHandle)
 
-    @PerformancePitfall
-    override fun Tensor<Double>.copyToArray(): DoubleArray =
-        tensor.elements().map { it.second }.toList().toDoubleArray()
+    override fun NoaDoubleTensor.copyToArray(): DoubleArray {
+        val array = DoubleArray(numElements)
+        JNoa.getBlobDouble(tensorHandle, array)
+        return array
+    }
 
     override fun copyFromArray(array: DoubleArray, shape: IntArray, device: Device): NoaDoubleTensor =
         wrap(JNoa.fromBlobDouble(array, shape, device.toInt()))
@@ -405,6 +411,13 @@ protected constructor(scope: NoaScope) :
 
     override fun loadTensor(path: String, device: Device): NoaDoubleTensor =
         wrap(JNoa.loadTensorDouble(path, device.toInt()))
+
+    override fun NoaDoubleTensor.assignFromArray(array: DoubleArray): Unit =
+        JNoa.assignBlobDouble(tensorHandle, array)
+
+    override fun NoaDoubleTensor.set(i: Int, array: DoubleArray): Unit =
+        JNoa.setBlobDouble(tensorHandle, i, array)
+
 }
 
 public sealed class NoaFloatAlgebra
@@ -426,9 +439,11 @@ protected constructor(scope: NoaScope) :
     override fun wrap(tensorHandle: TensorHandle): NoaFloatTensor =
         NoaFloatTensor(scope = scope, tensorHandle = tensorHandle)
 
-    @PerformancePitfall
-    override fun Tensor<Float>.copyToArray(): FloatArray =
-        tensor.elements().map { it.second }.toList().toFloatArray()
+    override fun NoaFloatTensor.copyToArray(): FloatArray {
+        val res = FloatArray(numElements)
+        JNoa.getBlobFloat(tensorHandle, res)
+        return res
+    }
 
     override fun copyFromArray(array: FloatArray, shape: IntArray, device: Device): NoaFloatTensor =
         wrap(JNoa.fromBlobFloat(array, shape, device.toInt()))
@@ -486,6 +501,13 @@ protected constructor(scope: NoaScope) :
 
     override fun loadTensor(path: String, device: Device): NoaFloatTensor =
         wrap(JNoa.loadTensorFloat(path, device.toInt()))
+
+    override fun NoaFloatTensor.assignFromArray(array: FloatArray): Unit =
+        JNoa.assignBlobFloat(tensorHandle, array)
+
+    override fun NoaFloatTensor.set(i: Int, array: FloatArray): Unit =
+        JNoa.setBlobFloat(tensorHandle, i, array)
+
 }
 
 public sealed class NoaLongAlgebra
@@ -507,9 +529,11 @@ protected constructor(scope: NoaScope) :
     override fun wrap(tensorHandle: TensorHandle): NoaLongTensor =
         NoaLongTensor(scope = scope, tensorHandle = tensorHandle)
 
-    @PerformancePitfall
-    override fun Tensor<Long>.copyToArray(): LongArray =
-        tensor.elements().map { it.second }.toList().toLongArray()
+    override fun NoaLongTensor.copyToArray(): LongArray {
+        val array = LongArray(numElements)
+        JNoa.getBlobLong(tensorHandle, array)
+        return array
+    }
 
     override fun copyFromArray(array: LongArray, shape: IntArray, device: Device): NoaLongTensor =
         wrap(JNoa.fromBlobLong(array, shape, device.toInt()))
@@ -553,6 +577,12 @@ protected constructor(scope: NoaScope) :
     override fun loadTensor(path: String, device: Device): NoaLongTensor =
         wrap(JNoa.loadTensorLong(path, device.toInt()))
 
+    override fun NoaLongTensor.assignFromArray(array: LongArray): Unit =
+        JNoa.assignBlobLong(tensorHandle, array)
+
+    override fun NoaLongTensor.set(i: Int, array: LongArray): Unit =
+        JNoa.setBlobLong(tensorHandle, i, array)
+
 }
 
 public sealed class NoaIntAlgebra
@@ -574,9 +604,11 @@ protected constructor(scope: NoaScope) :
     override fun wrap(tensorHandle: TensorHandle): NoaIntTensor =
         NoaIntTensor(scope = scope, tensorHandle = tensorHandle)
 
-    @PerformancePitfall
-    override fun Tensor<Int>.copyToArray(): IntArray =
-        tensor.elements().map { it.second }.toList().toIntArray()
+    override fun NoaIntTensor.copyToArray(): IntArray {
+        val array = IntArray(numElements)
+        JNoa.getBlobInt(tensorHandle, array)
+        return array
+    }
 
     override fun copyFromArray(array: IntArray, shape: IntArray, device: Device): NoaIntTensor =
         wrap(JNoa.fromBlobInt(array, shape, device.toInt()))
@@ -619,5 +651,11 @@ protected constructor(scope: NoaScope) :
 
     override fun loadTensor(path: String, device: Device): NoaIntTensor =
         wrap(JNoa.loadTensorInt(path, device.toInt()))
+
+    override fun NoaIntTensor.assignFromArray(array: IntArray): Unit =
+        JNoa.assignBlobInt(tensorHandle, array)
+
+    override fun NoaIntTensor.set(i: Int, array: IntArray): Unit =
+        JNoa.setBlobInt(tensorHandle, i, array)
 
 }

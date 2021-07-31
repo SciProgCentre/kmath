@@ -48,7 +48,7 @@ To load the native library you will need to add to the VM options:
 The library is under active development. Many more features
 will be available soon.
 
-### Linear Algebra
+### Tensors and Linear Algebra
 
 We implement the tensor algebra interfaces 
 from [kmath-tensors](../kmath-tensors):
@@ -70,12 +70,31 @@ NoaFloat {
     tensorReg.save("tensorReg.pt")
 }
 ```
+
 The saved tensor can be loaded in `C++` or in `python`:
 ```python
 import torch
 tensor_reg = list(torch.jit.load('tensorReg.pt').parameters())[0]
 ```
 
+The most efficient way pass data between the `JVM` and the native backend
+is to rely on primitive arrays: 
+```kotlin
+val array = (1..8).map { 100f * it }.toFloatArray()
+val updateArray = floatArrayOf(15f, 20f)
+val resArray = NoaFloat {
+    val tensor = copyFromArray(array, intArrayOf(2, 2, 2))
+    NoaFloat {
+        // The call `tensor[0]` creates a native tensor instance pointing to a slice of `tensor`
+        // The second call `[1]` is a setter call and does not create any new instances
+        tensor[0][1] = updateArray
+        // The instance `tensor[0]` is destroyed as we move out of the scope
+    }!! // if the computation fails the result fill be null
+    tensor.copyToArray()
+    // the instance `tensor` is destroyed here
+}!!
+
+```
 
 ### Automatic Differentiation
 The [AutoGrad](https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html)

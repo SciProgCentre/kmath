@@ -329,4 +329,29 @@ class JNoa {
     public static native void saveTensor(long tensorHandle, String path);
 
     public static native void saveJitModule(long jitModuleHandle, String path);
+
+    public static native void assignBlobDouble(long tensorHandle, double[] data);
+
+    public static native void assignBlobFloat(long tensorHandle, float[] data);
+
+    public static native void assignBlobLong(long tensorHandle, long[] data);
+
+    public static native void assignBlobInt(long tensorHandle, int[] data);
+
+    public static native void setBlobDouble(long tensorHandle, int i, double[] data);
+
+    public static native void setBlobFloat(long tensorHandle, int i, float[] data);
+
+    public static native void setBlobLong(long tensorHandle, int i, long[] data);
+
+    public static native void setBlobInt(long tensorHandle, int i, int[] data);
+
+    public static native void getBlobDouble(long tensorHandle, double[] data);
+
+    public static native void getBlobFloat(long tensorHandle, float[] data);
+
+    public static native void getBlobLong(long tensorHandle,  long[] data);
+
+    public static native void getBlobInt(long tensorHandle, int[] data);
+
 }
