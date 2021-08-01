@@ -12,7 +12,7 @@ plugins {
     id("de.undercouch.download")
 }
 
-description = "Wrapper for the Bayesian Computation library NOA on top of LibTorch"
+description = "Wrapper for the Differentiable Computation library NOA on top of LibTorch"
 
 dependencies {
     implementation(project(":kmath-tensors"))
@@ -30,9 +30,13 @@ val cudaFound = cudaHome?.isNotEmpty() ?: false or cudaDefault
 
 val cmakeArchive = "cmake-3.20.5-linux-x86_64"
 val torchArchive = "libtorch"
+val clangArchive = "clang+llvm-12.0.1-x86_64-linux-gnu-ubuntu-16.04"
 
 val cmakeCmd = "$thirdPartyDir/cmake/$cmakeArchive/bin/cmake"
 val ninjaCmd = "$thirdPartyDir/ninja/ninja"
+val clangRootDir = "$thirdPartyDir/clang/$clangArchive"
+val clangCmd = "$clangRootDir/bin/clang"
+val clangxxCmd = "$clangRootDir/bin/clang++"
 
 val generateJNIHeader by tasks.registering {
     doLast {
@@ -57,6 +61,13 @@ val downloadCMake by tasks.registering(Download::class) {
 val downloadNinja by tasks.registering(Download::class) {
     src("https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip")
     dest(File("$thirdPartyDir/ninja", "ninja-linux.zip"))
+    overwrite(false)
+}
+
+val downloadClang by tasks.registering(Download::class) {
+    val tarFile = "$clangArchive.tar.xz"
+    src("https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/$tarFile")
+    dest(File("$thirdPartyDir/clang", tarFile))
     overwrite(false)
 }
 
@@ -93,6 +104,22 @@ val extractNinja by tasks.registering(Copy::class) {
     into("$thirdPartyDir/ninja")
 }
 
+val extractClang by tasks.registering {
+    dependsOn(downloadClang)
+    onlyIf { !file(clangRootDir).exists() }
+    doLast {
+        exec {
+            workingDir("$thirdPartyDir/clang")
+            commandLine("mkdir", clangArchive)
+        }
+        exec {
+            workingDir("$thirdPartyDir/clang")
+            commandLine("tar", "-xf", "$clangArchive.tar.xz",
+            "-C", clangArchive, "--strip-components", "1")
+        }
+    }
+}
+
 val extractTorch by tasks.registering(Copy::class) {
     dependsOn(downloadTorch)
     from(zipTree(downloadTorch.get().dest))
@@ -123,6 +150,8 @@ val configureCpp by tasks.registering {
                 jNoaDir,
                 "-GNinja",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
+                "-DCMAKE_C_COMPILER=$clangCmd",
+                "-DCMAKE_CXX_COMPILER=$clangxxCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
                 "-DBUILD_JNOA=ON",

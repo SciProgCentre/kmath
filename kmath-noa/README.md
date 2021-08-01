@@ -13,8 +13,7 @@ differentiable program written on top of
 
 ## Installation from source
 
-Currently, we support only
-the [GNU](https://gcc.gnu.org/) toolchain for the native artifacts.
+Currently, we support only the linux platform for the native artifacts.
 For `GPU` kernels, we require a compatible
 [CUDA](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
 installation. If you are on Windows, we recommend setting up
