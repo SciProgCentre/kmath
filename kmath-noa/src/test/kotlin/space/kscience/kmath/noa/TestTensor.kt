@@ -53,12 +53,12 @@ internal fun NoaFloat.testingBatchedGetterSetter(device: Device = Device.CPU) {
 
     val updateArray = floatArrayOf(15f, 20f)
     val updateTensor = full(5.0f, intArrayOf(4), device)
-    updateTensor[0, 1, 3] = updateArray
+    updateTensor[0, Slice(1, 3)] = updateArray
 
     NoaFloat {
         tensor[0][1] = updateArray
         tensor[1] = updateTensor.view(intArrayOf(2, 2))
-        updateTensor[0, 2, 4] = updateTensor[0, 0, 2]
+        updateTensor[0, Slice(2, 4)] = updateTensor[0, Slice(0, 2)]
     }!!
 
     assertTrue(
