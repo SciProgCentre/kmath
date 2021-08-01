@@ -125,7 +125,7 @@ val configureCpp by tasks.registering {
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
-                "-DBUILD_NOA_KMATH=ON",
+                "-DBUILD_JNOA=ON",
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-DBUILD_NOA_CUDA=${if (!cudaFound) "ON" else "OFF"}",
                 "-DBUILD_NOA_TESTS=OFF",
@@ -151,7 +151,7 @@ val buildCpp by tasks.registering {
     doLast {
         exec {
             workingDir(cppBuildDir)
-            commandLine(cmakeCmd, "--build", ".", "--config", "Release")
+            commandLine(cmakeCmd, "--build", ".", "--config", "Release", "--target", "jnoa")
         }
     }
 }
@@ -160,9 +160,9 @@ tasks["compileJava"].dependsOn(buildCpp)
 
 tasks {
     withType<Test>{
-        systemProperty("java.library.path", "$cppBuildDir/kmath")
+        systemProperty("java.library.path", "$cppBuildDir/jnoa")
         //systemProperty("java.library.path",
-        //    "${System.getProperty("user.home")}/devspace/noa/cmake-build-release/kmath")
+        //    "${System.getProperty("user.home")}/devspace/noa/cmake-build-release/jnoa")
     }
 }
 
