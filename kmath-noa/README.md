@@ -1,12 +1,12 @@
 # Module kmath-noa
 
-A Bayesian computation library over
+A general purpose differentiable computation library over
 [NOA](https://github.com/grinisrit/noa.git)
 together with relevant functionality from 
 [LibTorch](https://pytorch.org/cppdocs). 
 
 Our aim is to cover a wide set of applications 
-from deep learning to particle physics
+from bayesian optimisation and deep learning to particle physics
 simulations. In fact, we support any 
 differentiable program written on top of 
 `AutoGrad` & `ATen`.
@@ -40,7 +40,7 @@ dependencies {
 ```
 To load the native library you will need to add to the VM options:
 ```
--Djava.library.path=${HOME}/.konan/third-party/noa-v0.0.1/cpp-build/kmath
+-Djava.library.path=${HOME}/.konan/third-party/noa-v0.0.1/cpp-build/jnoa
 ```
 
 ## Usage
