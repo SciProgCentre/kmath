@@ -19,10 +19,10 @@ For `GPU` kernels, we require a compatible
 installation. If you are on Windows, we recommend setting up
 everything on [WSL](https://docs.nvidia.com/cuda/wsl-user-guide/index.html).
 
-To install the library, you can simply publish to the local
+To install the library, you can simply publish `KMath` to the local
 Maven repository:
 ```
-./gradlew -q :kmath-noa:publishToMavenLocal
+$ ./gradlew -Dorg.gradle.java.home=/path/to/local/jdk -q publishToMavenLocal
 ```
 This will fetch and build the `JNI` wrapper `jnoa`. 
 
