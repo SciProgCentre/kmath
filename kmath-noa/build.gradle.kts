@@ -26,7 +26,7 @@ val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath"
 
 val cudaHome: String? = System.getenv("CUDA_HOME")
 val cudaDefault = file("/usr/local/cuda").exists()
-val cudaFound = cudaHome?.isNotEmpty() ?: false or cudaDefault
+val cudaFound = (cudaHome?.isNotEmpty() ?: false) or cudaDefault
 
 val cmakeArchive = "cmake-3.20.5-linux-x86_64"
 val torchArchive = "libtorch"
