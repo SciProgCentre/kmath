@@ -9,7 +9,7 @@ pluginManagement {
 
     plugins {
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        id("ru.mipt.npm.gradle.project") version "0.10.2"
+        id("ru.mipt.npm.gradle.project") version "0.10.2-fixrelease-1"
         kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
