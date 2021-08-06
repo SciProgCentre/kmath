@@ -28,7 +28,7 @@ public class GaussianSampler(
         require(standardDeviation > 0.0) { "standard deviation is not strictly positive: $standardDeviation" }
     }
 
-    public override fun sample(generator: RandomGenerator): BlockingDoubleChain = normalized
+    override fun sample(generator: RandomGenerator): BlockingDoubleChain = normalized
         .sample(generator)
         .map { standardDeviation * it + mean }
 

@@ -9,7 +9,6 @@ import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,19 +46,19 @@ internal class TestCompilerOperations {
 
     @Test
     fun testSubtract() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) - bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x - x }.compileToExpression(DoubleField)
         assertEquals(0.0, expr(x to 2.0))
     }
 
     @Test
     fun testDivide() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) / bindSymbol(x) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x / x }.compileToExpression(DoubleField)
         assertEquals(1.0, expr(x to 2.0))
     }
 
     @Test
     fun testPower() = runCompilerTest {
-        val expr = MstExtendedField { bindSymbol(x) pow 2 }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x pow 2 }.compileToExpression(DoubleField)
         assertEquals(4.0, expr(x to 2.0))
     }
 }

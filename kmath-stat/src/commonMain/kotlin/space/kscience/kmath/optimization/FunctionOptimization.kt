@@ -25,35 +25,7 @@ public class FunctionOptimization<T>(
     public val expression: DifferentiableExpression<T>,
 ) : OptimizationProblem<T>{
 
-    public companion object{
-        /**
-         * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation
-         */
-        public fun <T : Any, I : Any, A> chiSquaredExpression(
-            autoDiff: AutoDiffProcessor<T, I, A, Expression<T>>,
-            x: Buffer<T>,
-            y: Buffer<T>,
-            yErr: Buffer<T>,
-            model: A.(I) -> I,
-        ): DifferentiableExpression<T> where A : ExtendedField<I>, A : ExpressionAlgebra<T, I> {
-            require(x.size == y.size) { "X and y buffers should be of the same size" }
-            require(y.size == yErr.size) { "Y and yErr buffer should of the same size" }
-
-            return autoDiff.process {
-                var sum = zero
-
-                x.indices.forEach {
-                    val xValue = const(x[it])
-                    val yValue = const(y[it])
-                    val yErrValue = const(yErr[it])
-                    val modelValue = model(xValue)
-                    sum += ((yValue - modelValue) / yErrValue).pow(2)
-                }
-
-                sum
-            }
-        }
-    }
+    public companion object
 }
 
 public fun <T> FunctionOptimization<T>.withFeatures(
@@ -64,7 +36,7 @@ public fun <T> FunctionOptimization<T>.withFeatures(
 )
 
 /**
- * Optimize differentiable expression using specific [optimizer] form given [startingPoint]
+ * Optimizes differentiable expression using specific [optimizer] form given [startingPoint].
  */
 public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
     optimizer: Optimizer<T, FunctionOptimization<T>>,

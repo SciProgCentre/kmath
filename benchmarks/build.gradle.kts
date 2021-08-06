@@ -1,3 +1,7 @@
+@file:Suppress("UNUSED_VARIABLE")
+
+import space.kscience.kmath.benchmarks.addBenchmarkProperties
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.allopen")
@@ -12,6 +16,7 @@ repositories {
     maven("https://repo.kotlin.link")
     maven("https://clojars.org/repo")
     maven("https://jitpack.io")
+
     maven("http://logicrunch.research.it.uu.se/maven") {
         isAllowInsecureProtocol = true
     }
@@ -30,7 +35,8 @@ kotlin {
                 implementation(project(":kmath-stat"))
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.0")
+                implementation(project(":kmath-jafama"))
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
             }
         }
 
@@ -41,8 +47,7 @@ kotlin {
                 implementation(project(":kmath-nd4j"))
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
-                implementation("org.nd4j:nd4j-native:1.0.0-beta7")
-
+                implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
                 //
@@ -95,6 +100,11 @@ benchmark {
         commonConfiguration()
         include("BigIntBenchmark")
     }
+
+    configurations.register("jafamaDouble") {
+        commonConfiguration()
+        include("JafamaBenchmark")
+    }
 }
 
 // Fix kotlinx-benchmarks bug
@@ -124,3 +134,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
 }
+
+addBenchmarkProperties()

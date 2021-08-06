@@ -65,8 +65,8 @@ fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broad
     val datasetReduced  = v dot stack(listOf(xScaled, yScaled))
     println("Reduced data:\n$datasetReduced")
 
-    // we can restore original data from reduced data.
-    // for example, find 7th element of dataset
+    // we can restore original data from reduced data;
+    // for example, find 7th element of dataset.
     val n = 7
     val restored = (datasetReduced[n] dot v.view(intArrayOf(1, 2))) * std + mean
     println("Original value:\n${dataset[n]}")

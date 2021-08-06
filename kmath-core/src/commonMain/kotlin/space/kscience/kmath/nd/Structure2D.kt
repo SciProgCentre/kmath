@@ -29,7 +29,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public val colNum: Int
 
-    public override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
@@ -144,13 +144,16 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
 }
 
 /**
- * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represents a [StructureND] as [Structure2D]. Throws runtime error in case of dimension mismatch.
  */
 public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
+/**
+ * Represents a [StructureND] as [Structure2D]. Throws runtime error in case of dimension mismatch.
+ */
 public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
     2 -> MutableStructure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")

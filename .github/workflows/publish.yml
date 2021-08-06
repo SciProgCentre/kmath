@@ -3,8 +3,7 @@ name: Gradle publish
 on:
   workflow_dispatch:
   release:
-    types:
-      - created
+    types: [ created ]
 
 jobs:
   publish:
@@ -20,16 +19,15 @@ jobs:
       - name: Set up JDK 11
         uses: DeLaGuardo/setup-graalvm@4.0
         with:
-          graalvm: 21.1.0
+          graalvm: 21.2.0
           java: java11
           arch: amd64
-      - name: Add msys to path
-        if: matrix.os == 'windows-latest'
-        run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -42,20 +40,14 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
+        shell: cmd
         run: >
-          ./gradlew release --no-daemon
-          -Ppublishing.enabled=true
-          -Ppublishing.github.user=${{ secrets.PUBLISHING_GITHUB_USER }}
-          -Ppublishing.github.token=${{ secrets.PUBLISHING_GITHUB_TOKEN }}
-          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
-          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}
+          ./gradlew release --no-daemon --build-cache -Ppublishing.enabled=true
+          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
         run: >
-          ./gradlew release --no-daemon
-          -Ppublishing.enabled=true
-          -Ppublishing.platform=macosX64
-          -Ppublishing.github.user=${{ secrets.PUBLISHING_GITHUB_USER }}
-          -Ppublishing.github.token=${{ secrets.PUBLISHING_GITHUB_TOKEN }}
-          -Ppublishing.space.user=${{ secrets.PUBLISHING_SPACE_USER }}
-          -Ppublishing.space.token=${{ secrets.PUBLISHING_SPACE_TOKEN }}
+          ./gradlew release --no-daemon --build-cache -Ppublishing.enabled=true -Ppublishing.platform=macosX64
+          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}

@@ -37,17 +37,15 @@ kotlin.sourceSets {
 
     jsMain {
         dependencies {
-            implementation(npm("astring", "1.7.4"))
-            implementation(npm("binaryen", "100.0"))
-            implementation(npm("js-base64", "3.6.0"))
-            implementation(npm("webassembly", "0.11.0"))
+            implementation(npm("astring", "1.7.5"))
+            implementation(npm("binaryen", "101.0.0"))
+            implementation(npm("js-base64", "3.6.1"))
         }
     }
 
     jvmMain {
         dependencies {
-            implementation("org.ow2.asm:asm:9.1")
-            implementation("org.ow2.asm:asm-commons:9.1")
+            implementation("org.ow2.asm:asm-commons:9.2")
         }
     }
 }
@@ -63,25 +61,21 @@ readme {
 
     feature(
         id = "expression-language",
-        description = "Expression language and its parser",
         ref = "src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt"
-    )
+    ) { "Expression language and its parser" }
 
     feature(
         id = "mst-jvm-codegen",
-        description = "Dynamic MST to JVM bytecode compiler",
         ref = "src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt"
-    )
+    ) { "Dynamic MST to JVM bytecode compiler" }
 
     feature(
         id = "mst-js-codegen",
-        description = "Dynamic MST to JS compiler",
         ref = "src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt"
-    )
+    ) { "Dynamic MST to JS compiler" }
 
     feature(
         id = "rendering",
-        description = "Extendable MST rendering",
         ref = "src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt"
-    )
+    ) { "Extendable MST rendering" }
 }

@@ -32,7 +32,7 @@ public object Transformations {
     /**
      * Create a virtual buffer on top of array
      */
-    private fun Array<org.apache.commons.math3.complex.Complex>.asBuffer() = VirtualBuffer<Complex>(size) {
+    private fun Array<org.apache.commons.math3.complex.Complex>.asBuffer() = VirtualBuffer(size) {
         val value = get(it)
         Complex(value.real, value.imaginary)
     }

@@ -7,11 +7,15 @@ package space.kscience.kmath.commons.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
-import space.kscience.kmath.commons.optimization.chiSquared
+import space.kscience.kmath.commons.expressions.DSProcessor
+import space.kscience.kmath.commons.optimization.CMOptimizer
 import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.optimization.FunctionOptimization
-import space.kscience.kmath.optimization.OptimizationResult
+import space.kscience.kmath.optimization.FunctionOptimizationTarget
+import space.kscience.kmath.optimization.optimizeWith
+import space.kscience.kmath.optimization.resultPoint
+import space.kscience.kmath.optimization.resultValue
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
@@ -24,8 +28,7 @@ import space.kscience.plotly.models.TraceValues
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-//Forward declaration of symbols that will be used in expressions.
-// This declaration is required for
+// Forward declaration of symbols that will be used in expressions.
 private val a by symbol
 private val b by symbol
 private val c by symbol
@@ -64,17 +67,21 @@ suspend fun main() {
     val yErr = y.map { sqrt(it) }//RealVector.same(x.size, sigma)
 
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
-    val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
+    val chi2 = DSProcessor.chiSquaredExpression(x, y, yErr) { arg ->
         //bind variables to autodiff context
         val a = bindSymbol(a)
         val b = bindSymbol(b)
         //Include default value for c if it is not provided as a parameter
         val c = bindSymbolOrNull(c) ?: one
-        a * x1.pow(2) + b * x1 + c
+        a * arg.pow(2) + b * arg + c
     }
 
     //minimize the chi^2 in given starting point. Derivatives are not required, they are already included.
-    val result: OptimizationResult<Double> = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
+    val result = chi2.optimizeWith(
+        CMOptimizer,
+        mapOf(a to 1.5, b to 0.9, c to 1.0),
+        FunctionOptimizationTarget.MINIMIZE
+    )
 
     //display a page with plot and numerical results
     val page = Plotly.page {
@@ -91,7 +98,7 @@ suspend fun main() {
             scatter {
                 mode = ScatterMode.lines
                 x(x)
-                y(x.map { result.point[a]!! * it.pow(2) + result.point[b]!! * it + 1 })
+                y(x.map { result.resultPoint[a]!! * it.pow(2) + result.resultPoint[b]!! * it + 1 })
                 name = "fit"
             }
         }
@@ -100,7 +107,7 @@ suspend fun main() {
             +"Fit result: $result"
         }
         h3 {
-            +"Chi2/dof = ${result.value / (x.size - 3)}"
+            +"Chi2/dof = ${result.resultValue / (x.size - 3)}"
         }
     }
 

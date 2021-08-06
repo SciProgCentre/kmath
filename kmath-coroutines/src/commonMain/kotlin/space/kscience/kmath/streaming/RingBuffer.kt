@@ -22,10 +22,10 @@ public class RingBuffer<T>(
 ) : Buffer<T> {
     private val mutex: Mutex = Mutex()
 
-    public override var size: Int = size
+    override var size: Int = size
         private set
 
-    public override operator fun get(index: Int): T {
+    override operator fun get(index: Int): T {
         require(index >= 0) { "Index must be positive" }
         require(index < size) { "Index $index is out of circular buffer size $size" }
         return buffer[startIndex.forward(index)] as T
@@ -36,7 +36,7 @@ public class RingBuffer<T>(
     /**
      * Iterator could provide wrong results if buffer is changed in initialization (iteration is safe)
      */
-    public override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
+    override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
         private var count = size
         private var index = startIndex
         val copy = buffer.copy()

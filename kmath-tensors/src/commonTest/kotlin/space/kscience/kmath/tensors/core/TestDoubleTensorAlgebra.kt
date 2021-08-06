@@ -17,7 +17,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun TestDoubleDiv() = DoubleTensorAlgebra {
+    fun testDoubleDiv() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
         val res = 2.0/tensor
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(1.0, 0.5))

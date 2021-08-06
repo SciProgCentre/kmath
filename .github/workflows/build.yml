@@ -1,6 +1,9 @@
 name: Gradle build
 
-on: [ push ]
+on:
+  push:
+    branches: [ dev, master ]
+  pull_request:
 
 jobs:
   build:
@@ -8,23 +11,22 @@ jobs:
       matrix:
         os: [ macOS-latest, windows-latest ]
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: DeLaGuardo/setup-graalvm@4.0
         with:
-          graalvm: 21.1.0
+          graalvm: 21.2.0
           java: java11
           arch: amd64
-      - name: Add msys to path
-        if: matrix.os == 'windows-latest'
-        run: SETX PATH "%PATH%;C:\msys64\mingw64\bin"
       - name: Cache gradle
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -36,4 +38,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew build --build-cache --no-daemon --stacktrace

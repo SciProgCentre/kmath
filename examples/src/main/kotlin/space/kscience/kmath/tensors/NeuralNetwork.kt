@@ -186,7 +186,7 @@ fun main() = BroadcastDoubleTensorAlgebra {
 
     x += fromArray(
         intArrayOf(5),
-        doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // rows means
+        doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // row means
     )
 
 

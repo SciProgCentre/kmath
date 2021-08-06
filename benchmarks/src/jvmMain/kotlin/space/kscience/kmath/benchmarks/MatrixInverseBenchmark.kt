@@ -14,8 +14,8 @@ import space.kscience.kmath.commons.linear.inverse
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.InverseMatrixFeature
 import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.inverseWithLup
 import space.kscience.kmath.linear.invoke
+import space.kscience.kmath.linear.lupSolver
 import space.kscience.kmath.nd.getFeature
 import kotlin.random.Random
 
@@ -35,19 +35,19 @@ internal class MatrixInverseBenchmark {
 
     @Benchmark
     fun kmathLupInversion(blackhole: Blackhole) {
-        blackhole.consume(LinearSpace.double.inverseWithLup(matrix))
+        blackhole.consume(LinearSpace.double.lupSolver().inverse(matrix))
     }
 
     @Benchmark
     fun cmLUPInversion(blackhole: Blackhole) {
-        with(CMLinearSpace) {
+        CMLinearSpace {
             blackhole.consume(inverse(matrix))
         }
     }
 
     @Benchmark
     fun ejmlInverse(blackhole: Blackhole) {
-        with(EjmlLinearSpaceDDRM) {
+        EjmlLinearSpaceDDRM {
             blackhole.consume(matrix.getFeature<InverseMatrixFeature<Double>>()?.inverse)
         }
     }

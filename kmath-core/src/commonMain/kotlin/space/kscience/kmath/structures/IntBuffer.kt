@@ -33,7 +33,7 @@ public value class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an buffer element given its index.
+ * It should return the value for a buffer element given its index.
  */
 public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
 
@@ -43,7 +43,7 @@ public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffe
 public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
 
 /**
- * Returns a new [IntArray] containing all of the elements of this [Buffer].
+ * Returns a new [IntArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Int>.toIntArray(): IntArray = when (this) {
     is IntBuffer -> array.copyOf()

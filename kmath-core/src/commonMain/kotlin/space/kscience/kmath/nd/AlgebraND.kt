@@ -11,7 +11,7 @@ import space.kscience.kmath.structures.*
 import kotlin.reflect.KClass
 
 /**
- * An exception is thrown when the expected ans actual shape of NDArray differs.
+ * An exception is thrown when the expected and actual shape of NDArray differ.
  *
  * @property expected the expected shape.
  * @property actual the actual shape.
@@ -24,7 +24,6 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  *
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
- * @param N the type of the structure.
  */
 public interface AlgebraND<T, out C : Algebra<T>> {
     /**
@@ -64,7 +63,7 @@ public interface AlgebraND<T, out C : Algebra<T>> {
         structure.map { value -> this@invoke(value) }
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features
+     * Get a feature of the structure in this scope. Structure features take precedence other context features.
      *
      * @param F the type of feature.
      * @param structure the structure.
@@ -80,7 +79,7 @@ public interface AlgebraND<T, out C : Algebra<T>> {
 
 
 /**
- * Get a feature of the structure in this scope. Structure features take precedence other context features
+ * Get a feature of the structure in this scope. Structure features take precedence other context features.
  *
  * @param T the type of items in the matrices.
  * @param F the type of feature.
@@ -118,8 +117,7 @@ internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(element: StructureND
  * Space of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param N the type of ND structure.
- * @param S the type of space of structure elements.
+ * @param S the type of group over structure elements.
  */
 public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND<T, S> {
     /**
@@ -129,17 +127,8 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
      * @param b the addend.
      * @return the sum.
      */
-    public override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> add(aValue, bValue) }
-
-//    /**
-//     * Element-wise multiplication by scalar.
-//     *
-//     * @param a the multiplicand.
-//     * @param k the multiplier.
-//     * @return the product.
-//     */
-//    public override fun multiply(a: NDStructure<T>, k: Number): NDStructure<T> =  a.map { multiply(it, k) }
 
     // TODO move to extensions after KEEP-176
 
@@ -186,8 +175,7 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
  * Ring of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param N the type of ND structure.
- * @param R the type of ring of structure elements.
+ * @param R the type of ring over structure elements.
  */
 public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R> {
     /**
@@ -197,7 +185,7 @@ public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R
      * @param b the multiplier.
      * @return the product.
      */
-    public override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
@@ -227,9 +215,9 @@ public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R
  * Field of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param F the type field of structure elements.
+ * @param F the type field over structure elements.
  */
-public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T, F>, ScaleOperations<StructureND<T>> {
+public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T, F> {
     /**
      * Element-wise division.
      *
@@ -237,7 +225,7 @@ public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T,
      * @param b the divisor.
      * @return the quotient.
      */
-    public override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
+    override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
         combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
@@ -258,6 +246,15 @@ public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T,
      * @return the quotient.
      */
     public operator fun T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
+
+    /**
+     * Element-wise scaling.
+     *
+     * @param a the multiplicand.
+     * @param value the multiplier.
+     * @return the product.
+     */
+    override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { scale(it, value) }
 
 //    @ThreadLocal
 //    public companion object {

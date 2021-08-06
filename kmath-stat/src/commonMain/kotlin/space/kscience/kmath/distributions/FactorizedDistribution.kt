@@ -10,12 +10,12 @@ import space.kscience.kmath.chains.SimpleChain
 import space.kscience.kmath.stat.RandomGenerator
 
 /**
- * A multivariate distribution which takes a map of parameters
+ * A multivariate distribution that takes a map of parameters.
  */
 public interface NamedDistribution<T> : Distribution<Map<String, T>>
 
 /**
- * A multivariate distribution that has independent distributions for separate axis
+ * A multivariate distribution that has independent distributions for separate axis.
  */
 public class FactorizedDistribution<T>(public val distributions: Collection<NamedDistribution<T>>) :
     NamedDistribution<T> {

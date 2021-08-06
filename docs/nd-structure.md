@@ -11,16 +11,16 @@ Let us consider following contexts:
 ```kotlin
     // automatically build context most suited for given type.
     val autoField = NDField.auto(DoubleField, dim, dim)
-    // specialized nd-field for Double. It works as generic Double field as well
+    // specialized nd-field for Double. It works as generic Double field as well.
     val specializedField = NDField.real(dim, dim)
     //A generic boxing field. It should be used for objects, not primitives.
     val genericField = NDField.buffered(DoubleField, dim, dim)
 ```
-Now let us perform several tests and see which implementation is best suited for each case:
+Now let us perform several tests and see, which implementation is best suited for each case:
 
 ## Test case
 
-In order to test performance we will take 2d-structures with `dim = 1000` and add a structure filled with `1.0`
+To test performance we will take 2d-structures with `dim = 1000` and add a structure filled with `1.0`
 to it `n = 1000` times.
 
 ## Specialized
@@ -35,8 +35,8 @@ The code to run this looks like:
 ```
 The performance of this code is the best of all tests since it inlines all operations and is specialized for operation
 with doubles. We will measure everything else relative to this one, so time for this test will be `1x` (real time
-on my computer is about 4.5 seconds). The only problem with this approach is that it requires to specify type
-from the beginning. Everyone do so anyway, so it is the recommended approach.
+on my computer is about 4.5 seconds). The only problem with this approach is that it requires specifying type
+from the beginning. Everyone does so anyway, so it is the recommended approach.
 
 ## Automatic
 Let's do the same with automatic field inference:
@@ -49,7 +49,7 @@ Let's do the same with automatic field inference:
     }
 ```
 Ths speed of this operation is approximately the same as for specialized case since `NDField.auto` just
-returns the same `RealNDField` in this case. Of course it is usually better to use specialized method to be sure.
+returns the same `RealNDField` in this case. Of course, it is usually better to use specialized method to be sure.
 
 ## Lazy
 Lazy field does not produce a structure when asked, instead it generates an empty structure and fills it on-demand
@@ -63,7 +63,7 @@ When one calls
         }
     }
 ```
-The result will be calculated almost immediately but the result will be empty. In order to get the full result
+The result will be calculated almost immediately but the result will be empty. To get the full result
 structure one needs to call all its elements. In this case computation overhead will be huge. So this field never
 should be used if one expects to use the full result structure. Though if one wants only small fraction, it could
 save a lot of time.
@@ -94,7 +94,7 @@ The boxing field produced by
         }
     }
 ```
-obviously is the slowest one, because it requires to box and unbox the `double` on each operation. It takes about
+is the slowest one, because it requires boxing and unboxing the `double` on each operation. It takes about
 `15x` time (**TODO: there seems to be a problem here, it should be slow, but not that slow**). This field should
 never be used for primitives.
 
@@ -115,12 +115,14 @@ via extension function.
 Usually it is bad idea to compare the direct numerical operation performance in different languages, but it hard to
 work completely without frame of reference. In this case, simple numpy code:
 ```python
+import numpy as np
+
 res = np.ones((1000,1000))
 for i in range(1000):
     res = res + 1.0
 ```
 gives the completion time of about `1.1x`, which means that specialized kotlin code in fact is working faster (I think it is
 because better memory management). Of course if one writes `res += 1.0`, the performance will be different,
-but it would be differenc case, because numpy overrides `+=` with in-place operations. In-place operations are
+but it would be different case, because numpy overrides `+=` with in-place operations. In-place operations are
 available in `kmath` with `MutableNDStructure` but there is no field for it (one can still work with mapping
 functions).

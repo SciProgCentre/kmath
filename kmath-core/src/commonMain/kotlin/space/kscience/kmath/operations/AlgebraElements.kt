@@ -8,14 +8,14 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
- * The generic mathematics elements which is able to store its context
+ * The generic mathematics elements that is able to store its context
  *
  * @param C the type of mathematical context for this element.
  * @param T the type wrapped by this wrapper.
  */
 @UnstableKMathAPI
 @Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public interface AlgebraElement<T, C : Algebra<T>> {
+public interface AlgebraElement<T, out C : Algebra<T>> {
     /**
      * The context this element belongs to.
      */

@@ -31,8 +31,8 @@ public class IntegrationRange(public val range: ClosedRange<Double>) : Integrand
 }
 
 /**
- * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
- * integration nodes per range
+ * Set of univariate integration ranges. First components correspond to the ranges themselves, second components to
+ * number of integration nodes per range.
  */
 public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
     public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
@@ -84,7 +84,7 @@ public fun <T : Any> UnivariateIntegrator<T>.integrate(
 ): UnivariateIntegrand<T> = process(UnivariateIntegrand(function, IntegrationRange(range), *features))
 
 /**
- * A shortcut method to integrate a [function] in [range] with additional [features].
+ * A shortcut method to integrate a [function] in [range] with additional features.
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI

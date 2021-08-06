@@ -24,7 +24,7 @@ public class AhrensDieterExponentialSampler(public val mean: Double) : Sampler<D
         require(mean > 0) { "mean is not strictly positive: $mean" }
     }
 
-    public override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
+    override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
         override fun nextBlocking(): Double {
             // Step 1:
             var a = 0.0

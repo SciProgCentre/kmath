@@ -29,10 +29,10 @@ public typealias MutableMatrix<T> = MutableStructure2D<T>
 public typealias Point<T> = Buffer<T>
 
 /**
- * Basic operations on matrices and vectors. Operates on [Matrix].
+ * Basic operations on matrices and vectors.
  *
  * @param T the type of items in the matrices.
- * @param M the type of operated matrices.
+ * @param A the type of ring over [T].
  */
 public interface LinearSpace<T : Any, out A : Ring<T>> {
     public val elementAlgebra: A
@@ -164,7 +164,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Compute a feature of the structure in this scope. Structure features take precedence other context features
+     * Compute a feature of the structure in this scope. Structure features take precedence other context features.
      *
      * @param F the type of feature.
      * @param structure the structure.
@@ -195,7 +195,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
 }
 
 /**
- * Get a feature of the structure in this scope. Structure features take precedence other context features
+ * Get a feature of the structure in this scope. Structure features take precedence other context features.
  *
  * @param T the type of items in the matrices.
  * @param F the type of feature.

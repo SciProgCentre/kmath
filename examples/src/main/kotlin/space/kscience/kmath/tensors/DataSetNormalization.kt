@@ -17,7 +17,7 @@ fun main() = BroadcastDoubleTensorAlgebra {  // work in context with broadcast m
 
     dataset += fromArray(
         intArrayOf(5),
-        doubleArrayOf(0.0, 1.0, 1.5, 3.0, 5.0) // rows means
+        doubleArrayOf(0.0, 1.0, 1.5, 3.0, 5.0) // row means
     )
 
 
@@ -28,7 +28,7 @@ fun main() = BroadcastDoubleTensorAlgebra {  // work in context with broadcast m
     println("Mean:\n$mean")
     println("Standard deviation:\n$std")
 
-    // also we can calculate other statistic as minimum and maximum of rows
+    // also, we can calculate other statistic as minimum and maximum of rows
     println("Minimum:\n${dataset.min(0, false)}")
     println("Maximum:\n${dataset.max(0, false)}")
 

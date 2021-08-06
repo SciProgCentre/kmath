@@ -1,7 +1,10 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
+    id("ru.mipt.npm.gradle.native")
 }
+
+description = "Functions, integration and interpolation"
 
 kotlin.sourceSets.commonMain {
     dependencies {
@@ -10,7 +13,6 @@ kotlin.sourceSets.commonMain {
 }
 
 readme {
-    description = "Functions, integration and interpolation"
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 

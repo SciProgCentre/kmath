@@ -16,7 +16,7 @@ internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
     block: DerivativeStructureField.() -> Unit,
-): Unit {
+) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     DerivativeStructureField(order, mapOf(*parameters)).run(block)
 }
@@ -34,7 +34,7 @@ internal class AutoDiffTest {
             println(z.derivative(x))
             println(z.derivative(y, x))
             assertEquals(z.derivative(x, y), z.derivative(y, x))
-            //check that improper order cause failure
+            // check improper order cause failure
             assertFails { z.derivative(x, x, y) }
         }
     }

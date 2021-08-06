@@ -20,7 +20,7 @@ import kotlin.math.min
  * implements Vose's algorithm.
  *
  * Vose, M.D., A linear algorithm for generating random numbers with a given distribution, IEEE Transactions on
- * Software Engineering, 17, 972-975, 1991. he algorithm will sample values in O(1) time after a pre-processing step
+ * Software Engineering, 17, 972-975, 1991. The algorithm will sample values in O(1) time after a pre-processing step
  * of O(n) time.
  *
  * The alias tables are constructed using fraction probabilities with an assumed denominator of 253. In the generic
@@ -76,8 +76,8 @@ public open class AliasMethodDiscreteSampler private constructor(
         }
     }
 
-    public override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
-        // This implements the algorithm as per Vose (1991):
+    override fun sample(generator: RandomGenerator): Chain<Int> = generator.chain {
+        // This implements the algorithm in accordance with Vose (1991):
         // v = uniform()  in [0, 1)
         // j = uniform(n) in [0, n)
         // if v < prob[j] then
@@ -95,7 +95,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         // p(j) == 1  => j
         // However it is assumed these edge cases are rare:
         //
-        // The probability table will be 1 for approximately 1/n samples, i.e. only the
+        // The probability table will be 1 for approximately 1/n samples i.e., only the
         // last unpaired probability. This is only worth checking for when the table size (n)
         // is small. But in that case the user should zero-pad the table for performance.
         //
@@ -107,7 +107,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         if (generator.nextLong() ushr 11 < probability[j]) j else alias[j]
     }
 
-    public override fun toString(): String = "Alias method"
+    override fun toString(): String = "Alias method"
 
     public companion object {
         private const val DEFAULT_ALPHA = 0
@@ -211,7 +211,7 @@ public open class AliasMethodDiscreteSampler private constructor(
         // c: 2=2/3; 6=1/3   (6 is the alias)
         // d: 1=1/3; 6=2/3   (6 is the alias)
         //
-        // The sample is obtained by randomly selecting a section, then choosing which category
+        // The sample is obtained by randomly selecting a section, then choosing, which category
         // from the pair based on a uniform random deviate.
         val sumProb = InternalUtils.validateProbabilities(probabilities)
         // Allow zero-padding
@@ -241,9 +241,9 @@ public open class AliasMethodDiscreteSampler private constructor(
         val alias = IntArray(n)
 
         // This loop uses each large in turn to fill the alias table for small probabilities that
-        // do not reach the requirement to fill an entire section alone (i.e. p < mean).
+        // do not reach the requirement to fill an entire section alone (i.e., p < mean).
         // Since the sum of the small should be less than the sum of the large it should use up
-        // all the small first. However floating point round-off can result in
+        // all the small first. However, floating point round-off can result in
         // misclassification of items as small or large. The Vose algorithm handles this using
         // a while loop conditioned on the size of both sets and a subsequent loop to use
         // unpaired items.

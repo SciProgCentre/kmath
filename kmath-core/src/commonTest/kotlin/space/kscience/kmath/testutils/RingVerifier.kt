@@ -10,7 +10,7 @@ import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import kotlin.test.assertEquals
 
-internal open class RingVerifier<T, A>(algebra: A, a: T, b: T, c: T, x: Number) :
+internal open class RingVerifier<T, out A>(algebra: A, a: T, b: T, c: T, x: Number) :
     SpaceVerifier<T, A>(algebra, a, b, c, x) where A : Ring<T>, A : ScaleOperations<T> {
 
     override fun verify() {

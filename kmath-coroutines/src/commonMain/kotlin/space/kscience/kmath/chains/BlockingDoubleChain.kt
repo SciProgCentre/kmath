@@ -15,7 +15,7 @@ public interface BlockingDoubleChain : BlockingBufferChain<Double> {
     /**
      * Returns an [DoubleArray] chunk of [size] values of [next].
      */
-    public override fun nextBufferBlocking(size: Int): DoubleBuffer
+    override fun nextBufferBlocking(size: Int): DoubleBuffer
 
     override suspend fun fork(): BlockingDoubleChain
 

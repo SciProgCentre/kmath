@@ -17,18 +17,18 @@ import space.kscience.kmath.nd.StructureND
  */
 public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
     /**
-     * The wrapped [INDArray]. Since KMath uses [Int] indexes, assuming that the size of [INDArray] is less or equal to
+     * The wrapped [INDArray]. Since KMath uses [Int] indexes, assuming the size of [INDArray] is less or equal to
      * [Int.MAX_VALUE].
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray get() = ndArray.shape().toIntArray()
+    override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()
 
     @PerformancePitfall
-    public override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
+    override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
 }
 
 private data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Int>() {

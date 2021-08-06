@@ -12,7 +12,7 @@ import space.kscience.kmath.structures.asSequence
  * Non-composable median
  */
 public class Median<T>(private val comparator: Comparator<T>) : BlockingStatistic<T, T> {
-    public override fun evaluateBlocking(data: Buffer<T>): T =
+    override fun evaluateBlocking(data: Buffer<T>): T =
         data.asSequence().sortedWith(comparator).toList()[data.size / 2] //TODO check if this is correct
 
     public companion object {

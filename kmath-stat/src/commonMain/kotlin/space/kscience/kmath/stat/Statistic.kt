@@ -18,23 +18,24 @@ import space.kscience.kmath.structures.Buffer
 /**
  * A function, that transforms a buffer of random quantities to some resulting value
  */
-public interface Statistic<T, R> {
+public interface Statistic<in T, out R> {
     public suspend fun evaluate(data: Buffer<T>): R
 }
 
-public interface BlockingStatistic<T,R>: Statistic<T,R>{
+public interface BlockingStatistic<in T, out R> : Statistic<T, R> {
     public fun evaluateBlocking(data: Buffer<T>): R
 
-    override suspend fun evaluate(data: Buffer<T>): R  = evaluateBlocking(data)
+    override suspend fun evaluate(data: Buffer<T>): R = evaluateBlocking(data)
 }
 
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
- * @param T - source type
- * @param I - intermediate block type
- * @param R - result type
+ *
+ * @param T the source type.
+ * @param I the intermediate block type.
+ * @param R the result type.
  */
-public interface ComposableStatistic<T, I, R> : Statistic<T, R> {
+public interface ComposableStatistic<in T, I, out R> : Statistic<T, R> {
     //compute statistic on a single block
     public suspend fun computeIntermediate(data: Buffer<T>): I
 
@@ -44,7 +45,7 @@ public interface ComposableStatistic<T, I, R> : Statistic<T, R> {
     //Transform block to result
     public suspend fun toResult(intermediate: I): R
 
-    public override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
+    override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
 }
 
 @FlowPreview

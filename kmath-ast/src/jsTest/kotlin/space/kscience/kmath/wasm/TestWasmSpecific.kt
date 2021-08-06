@@ -11,7 +11,6 @@ import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
-import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +30,7 @@ internal class TestWasmSpecific {
 
     @Test
     fun argsPassing() {
-        val res = MstExtendedField { bindSymbol(y) + bindSymbol(x).pow(10) }.compile(
+        val res = MstExtendedField { y + x.pow(10) }.compile(
             DoubleField,
             x to 2.0,
             y to 100000000.0,
@@ -42,7 +41,7 @@ internal class TestWasmSpecific {
 
     @Test
     fun powFunction() {
-        val expr = MstExtendedField { bindSymbol(x).pow(1.0 / 6.0) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x.pow(1.0 / 6.0) }.compileToExpression(DoubleField)
         assertEquals(0.9730585187140817, expr(x to 0.8488554755054833))
     }
 

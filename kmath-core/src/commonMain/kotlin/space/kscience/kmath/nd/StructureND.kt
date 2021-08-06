@@ -5,10 +5,13 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.misc.Feature
 import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
@@ -18,7 +21,7 @@ import kotlin.reflect.KClass
 public interface StructureFeature : Feature<StructureFeature>
 
 /**
- * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
  * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
  * specify the sizes of each dimension.
  *
@@ -28,7 +31,7 @@ public interface StructureFeature : Feature<StructureFeature>
  */
 public interface StructureND<out T> : Featured<StructureFeature> {
     /**
-     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
     public val shape: IntArray
@@ -55,8 +58,8 @@ public interface StructureND<out T> : Featured<StructureFeature> {
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
-     * Feature is some additional strucure information which allows to access it special properties or hints.
-     * If the feature is not present, null is returned.
+     * Feature is some additional structure information that allows to access it special properties or hints.
+     * If the feature is not present, `null` is returned.
      */
     @UnstableKMathAPI
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
@@ -148,6 +151,44 @@ public interface StructureND<out T> : Featured<StructureFeature> {
 }
 
 /**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> AlgebraND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> GroupND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementContext { (value - st2[index]) } < absoluteTolerance }
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
+
+/**
  * Returns the value at the specified indices.
  *
  * @param index the indices.
@@ -179,7 +220,7 @@ public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> 
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
 /**
- * A way to convert ND index to linear one and back.
+ * A way to convert ND indices to linear one and back.
  */
 public interface Strides {
     /**

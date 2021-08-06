@@ -11,9 +11,12 @@ import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.Symbol.Companion.y
+import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.map
 import kotlin.math.pow
 import kotlin.test.Test
 
@@ -49,26 +52,27 @@ internal class OptimizeTest {
         val sigma = 1.0
         val generator = NormalDistribution(0.0, sigma)
         val chain = generator.sample(RandomGenerator.default(112667))
-        val x = (1..100).map(Int::toDouble)
+        val x = (1..100).map(Int::toDouble).asBuffer()
 
         val y = x.map {
             it.pow(2) + it + 1 + chain.next()
         }
 
-        val yErr = List(x.size) { sigma }
+        val yErr = List(x.size) { sigma }.asBuffer()
 
-        val model = DSProcessor.differentiate { x1 ->
+        val chi2 = DSProcessor.chiSquaredExpression(
+            x, y, yErr
+        ) { arg ->
             val cWithDefault = bindSymbolOrNull(c) ?: one
-            bindSymbol(a) * x1.pow(2) + bindSymbol(b) * x1 + cWithDefault
+            bindSymbol(a) * arg.pow(2) + bindSymbol(b) * arg + cWithDefault
         }
 
-        val chi2 = FunctionOptimization.chiSquared(x, y, yErr) { x1 ->
-            val cWithDefault = bindSymbolOrNull(c) ?: one
-            bindSymbol(a) * x1.pow(2) + bindSymbol(b) * x1 + cWithDefault
-        }
-
-        val result = chi2.minimize(a to 1.5, b to 0.9, c to 1.0)
+        val result: FunctionOptimization<Double> = chi2.optimizeWith(
+            CMOptimizer,
+            mapOf(a to 1.5, b to 0.9, c to 1.0),
+            FunctionOptimizationTarget.MINIMIZE
+        )
         println(result)
-        println("Chi2/dof = ${result.value / (x.size - 3)}")
+        println("Chi2/dof = ${result.resultValue / (x.size - 3)}")
     }
 }

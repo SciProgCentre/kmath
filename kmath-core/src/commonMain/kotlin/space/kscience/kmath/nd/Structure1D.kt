@@ -16,14 +16,14 @@ import kotlin.jvm.JvmInline
  * A structure that is guaranteed to be one-dimensional
  */
 public interface Structure1D<out T> : StructureND<T>, Buffer<T> {
-    public override val dimension: Int get() = 1
+    override val dimension: Int get() = 1
 
-    public override operator fun get(index: IntArray): T {
+    override operator fun get(index: IntArray): T {
         require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         return get(index[0])
     }
 
-    public override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(::get).iterator()
+    override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(::get).iterator()
 
     public companion object
 }
@@ -32,7 +32,7 @@ public interface Structure1D<out T> : StructureND<T>, Buffer<T> {
  * A mutable structure that is guaranteed to be one-dimensional
  */
 public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, MutableBuffer<T> {
-    public override operator fun set(index: IntArray, value: T) {
+    override operator fun set(index: IntArray, value: T) {
         require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         set(index[0], value)
     }
@@ -110,7 +110,7 @@ internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : Mutable
 }
 
 /**
- * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch.
  */
 public fun <T> StructureND<T>.as1D(): Structure1D<T> = this as? Structure1D<T> ?: if (shape.size == 1) {
     when (this) {

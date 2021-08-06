@@ -25,7 +25,7 @@ private class Nd4jArrayIndicesIterator(private val iterateOver: INDArray) : Iter
 
 internal fun INDArray.indicesIterator(): Iterator<IntArray> = Nd4jArrayIndicesIterator(this)
 
-private sealed class Nd4jArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
+private sealed class Nd4jArrayIteratorBase<out T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
     private var i: Int = 0
 
     final override fun hasNext(): Boolean = i < iterateOver.length()

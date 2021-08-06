@@ -5,25 +5,23 @@
 
 package space.kscience.kmath.ast
 
-import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.expressions.Symbol.Companion.x
+import space.kscience.kmath.expressions.toExpression
 import space.kscience.kmath.kotlingrad.toKotlingradExpression
 import space.kscience.kmath.operations.DoubleField
 
 /**
- * In this example, x^2-4*x-44 function is differentiated with Kotlin∇, and the autodiff result is compared with
- * valid derivative.
+ * In this example, *x<sup>2</sup> &minus; 4 x &minus; 44* function is differentiated with Kotlin∇, and the
+ * derivation result is compared with valid derivative in a certain point.
  */
 fun main() {
-    val x by symbol
-
-    val actualDerivative = "x^2-4*x-44".parseMath()
+    val actualDerivative = "x^2-4*x-44"
+        .parseMath()
         .toKotlingradExpression(DoubleField)
         .derivative(x)
 
-
-    val expectedDerivative = "2*x-4".parseMath().compileToExpression(DoubleField)
-    assert(actualDerivative(x to 123.0) == expectedDerivative(x to 123.0))
+    val expectedDerivative = "2*x-4".parseMath().toExpression(DoubleField)
+    check(actualDerivative(x to 123.0) == expectedDerivative(x to 123.0))
 }

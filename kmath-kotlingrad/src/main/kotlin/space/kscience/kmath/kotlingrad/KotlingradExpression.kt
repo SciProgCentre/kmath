@@ -25,9 +25,9 @@ public class KotlingradExpression<T : Number, A : NumericAlgebra<T>>(
     public val algebra: A,
     public val mst: MST,
 ) : SpecialDifferentiableExpression<T, KotlingradExpression<T, A>> {
-    public override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
+    override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
-    public override fun derivativeOrNull(
+    override fun derivativeOrNull(
         symbols: List<Symbol>,
     ): KotlingradExpression<T, A> = KotlingradExpression(
         algebra,
@@ -50,7 +50,7 @@ public class KotlingradProcessor<T : Number, A : NumericAlgebra<T>>(
 }
 
 /**
- * Wraps this [MST] into [KotlingradExpression].
+ * Wraps this [MST] into [KotlingradExpression] in the context of [algebra].
  */
 public fun <T : Number, A : NumericAlgebra<T>> MST.toKotlingradExpression(algebra: A): KotlingradExpression<T, A> =
     KotlingradExpression(algebra, this)

@@ -21,9 +21,9 @@ internal fun <T : Comparable<T>> insureSorted(points: XYColumnarData<*, T, *>) {
 /**
  * Reference JVM implementation: https://github.com/apache/commons-math/blob/master/src/main/java/org/apache/commons/math4/analysis/interpolation/LinearInterpolator.java
  */
-public class LinearInterpolator<T : Comparable<T>>(public override val algebra: Field<T>) : PolynomialInterpolator<T> {
+public class LinearInterpolator<T : Comparable<T>>(override val algebra: Field<T>) : PolynomialInterpolator<T> {
     @OptIn(UnstableKMathAPI::class)
-    public override fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T> = algebra {
+    override fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T> = algebra {
         require(points.size > 0) { "Point array should not be empty" }
         insureSorted(points)
 

@@ -49,16 +49,16 @@ public class BigInt internal constructor(
     private val sign: Byte,
     private val magnitude: Magnitude,
 ) : Comparable<BigInt> {
-    public override fun compareTo(other: BigInt): Int = when {
+    override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1
         sign > other.sign -> 1
         else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
-    public override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
+    override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
-    public override fun hashCode(): Int = magnitude.hashCode() + sign
+    override fun hashCode(): Int = magnitude.hashCode() + sign
 
     public fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 
@@ -121,7 +121,7 @@ public class BigInt internal constructor(
         var r = ZERO
 
         val bitSize =
-            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: 0f + 1)).toInt()
+            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: (0f + 1))).toInt()
 
         for (i in bitSize downTo 0) {
             r = r shl 1
@@ -442,10 +442,10 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
 }
 
 /**
- * Returns null if a valid number can not be read from a string
+ * Returns `null` if a valid number cannot be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
-    if (this.isEmpty()) return null
+    if (isEmpty()) return null
     val sign: Int
 
     val positivePartIndex = when (this[0]) {

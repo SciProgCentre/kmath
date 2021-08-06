@@ -115,7 +115,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
                     for (i in 0 until col) sum -= luRow[i] * lu[i, col]
                     luRow[col] = sum
 
-                    // maintain best permutation choice
+                    // maintain the best permutation choice
                     if (abs(sum) > largest) {
                         largest = abs(sum)
                         max = row

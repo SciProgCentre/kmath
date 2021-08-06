@@ -92,37 +92,37 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * Returns a tensor filled with the scalar value 0.0, with the shape defined by the variable argument [shape].
+     * Returns a tensor filled with the scalar value `0.0`, with the shape defined by the variable argument [shape].
      *
      * @param shape array of integers defining the shape of the output tensor.
-     * @return tensor filled with the scalar value 0.0, with the [shape] shape.
+     * @return tensor filled with the scalar value `0.0`, with the [shape] shape.
      */
     public fun zeros(shape: IntArray): DoubleTensor = full(0.0, shape)
 
     /**
-     * Returns a tensor filled with the scalar value 0.0, with the same shape as a given array.
+     * Returns a tensor filled with the scalar value `0.0`, with the same shape as a given array.
      *
-     * @return tensor filled with the scalar value 0.0, with the same shape as `input` tensor.
+     * @return tensor filled with the scalar value `0.0`, with the same shape as `input` tensor.
      */
     public fun Tensor<Double>.zeroesLike(): DoubleTensor = tensor.fullLike(0.0)
 
     /**
-     * Returns a tensor filled with the scalar value 1.0, with the shape defined by the variable argument [shape].
+     * Returns a tensor filled with the scalar value `1.0`, with the shape defined by the variable argument [shape].
      *
      * @param shape array of integers defining the shape of the output tensor.
-     * @return tensor filled with the scalar value 1.0, with the [shape] shape.
+     * @return tensor filled with the scalar value `1.0`, with the [shape] shape.
      */
     public fun ones(shape: IntArray): DoubleTensor = full(1.0, shape)
 
     /**
-     * Returns a tensor filled with the scalar value 1.0, with the same shape as a given array.
+     * Returns a tensor filled with the scalar value `1.0`, with the same shape as a given array.
      *
-     * @return tensor filled with the scalar value 1.0, with the same shape as `input` tensor.
+     * @return tensor filled with the scalar value `1.0`, with the same shape as `input` tensor.
      */
     public fun Tensor<Double>.onesLike(): DoubleTensor = tensor.fullLike(1.0)
 
     /**
-     * Returns a 2-D tensor with shape ([n], [n]), with ones on the diagonal and zeros elsewhere.
+     * Returns a 2D tensor with shape ([n], [n]), with ones on the diagonal and zeros elsewhere.
      *
      * @param n the number of rows and columns
      * @return a 2-D tensor with ones on the diagonal and zeros elsewhere.
@@ -313,7 +313,6 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-
     override fun Tensor<Double>.view(shape: IntArray): DoubleTensor {
         checkView(tensor, shape)
         return DoubleTensor(shape, tensor.mutableBuffer.array(), tensor.bufferStart)
@@ -428,13 +427,11 @@ public open class DoubleTensorAlgebra :
      * @param transform the function to be applied to each element of the tensor.
      * @return the resulting tensor after applying the function.
      */
-    public fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor {
-        return DoubleTensor(
-            tensor.shape,
-            tensor.mutableBuffer.array().map { transform(it) }.toDoubleArray(),
-            tensor.bufferStart
-        )
-    }
+    public inline fun Tensor<Double>.map(transform: (Double) -> Double): DoubleTensor = DoubleTensor(
+        tensor.shape,
+        tensor.mutableBuffer.array().map { transform(it) }.toDoubleArray(),
+        tensor.bufferStart
+    )
 
     /**
      * Compares element-wise two tensors with a specified precision.
@@ -448,7 +445,7 @@ public open class DoubleTensorAlgebra :
 
     /**
      * Compares element-wise two tensors.
-     * Comparison of two Double values occurs with 1e-5 precision.
+     * Comparison of two Double values occurs with `1e-5` precision.
      *
      * @param other the tensor to compare with `input` tensor.
      * @return true if two tensors have the same shape and elements, false otherwise.
@@ -477,23 +474,24 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * Returns a tensor of random numbers drawn from normal distributions with 0.0 mean and 1.0 standard deviation.
+     * Returns a tensor of random numbers drawn from normal distributions with `0.0` mean and `1.0` standard deviation.
      *
      * @param shape the desired shape for the output tensor.
      * @param seed the random seed of the pseudo-random number generator.
      * @return tensor of a given shape filled with numbers from the normal distribution
-     * with 0.0 mean and 1.0 standard deviation.
+     * with `0.0` mean and `1.0` standard deviation.
      */
     public fun randomNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
         DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
 
     /**
      * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
-     * with 0.0 mean and 1.0 standard deviation.
+     * with `0.0` mean and `1.0` standard deviation.
      *
+     * @receiver the `input`.
      * @param seed the random seed of the pseudo-random number generator.
-     * @return tensor with the same shape as `input` filled with numbers from the normal distribution
-     * with 0.0 mean and 1.0 standard deviation.
+     * @return a tensor with the same shape as `input` filled with numbers from the normal distribution
+     * with `0.0` mean and `1.0` standard deviation.
      */
     public fun Tensor<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
         DoubleTensor(tensor.shape, getRandomNormals(tensor.shape.reduce(Int::times), seed))
@@ -516,19 +514,17 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * Builds tensor from rows of input tensor
+     * Builds tensor from rows of the input tensor.
      *
      * @param indices the [IntArray] of 1-dimensional indices
-     * @return tensor with rows corresponding to rows by [indices]
+     * @return tensor with rows corresponding to row by [indices]
      */
-    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor {
-        return stack(indices.map { this[it] })
-    }
+    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { this[it] })
 
-    internal fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
+    internal inline fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(tensor.toDoubleArray())
 
-    internal fun Tensor<Double>.foldDim(
+    internal inline fun Tensor<Double>.foldDim(
         foldFunction: (DoubleArray) -> Double,
         dim: Int,
         keepDim: Boolean,
@@ -621,12 +617,12 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * Returns the covariance matrix M of given vectors.
+     * Returns the covariance matrix `M` of given vectors.
      *
-     * M[i, j] contains covariance of i-th and j-th given vectors
+     * `M[i, j]` contains covariance of `i`-th and `j`-th given vectors
      *
      * @param tensors the [List] of 1-dimensional tensors with same shape
-     * @return the covariance matrix
+     * @return `M`.
      */
     public fun cov(tensors: List<Tensor<Double>>): DoubleTensor {
         check(tensors.isNotEmpty()) { "List must have at least 1 element" }
@@ -709,14 +705,14 @@ public open class DoubleTensorAlgebra :
 
     /**
      * Unpacks the data and pivots from a LU factorization of a tensor.
-     * Given a tensor [luTensor], return tensors (P, L, U) satisfying ``P * luTensor = L * U``,
+     * Given a tensor [luTensor], return tensors `Triple(P, L, U)` satisfying `P dot luTensor = L dot U`,
      * with `P` being a permutation matrix or batch of matrices,
      * `L` being a lower triangular matrix or batch of matrices,
      * `U` being an upper triangular matrix or batch of matrices.
      *
      * @param luTensor the packed LU factorization data
      * @param pivotsTensor the packed LU factorization pivots
-     * @return triple of P, L and U tensors
+     * @return triple of `P`, `L` and `U` tensors
      */
     public fun luPivot(
         luTensor: Tensor<Double>,
@@ -752,14 +748,15 @@ public open class DoubleTensorAlgebra :
     /**
      * QR decomposition.
      *
-     * Computes the QR decomposition of a matrix or a batch of matrices, and returns a pair `(Q, R)` of tensors.
-     * Given a tensor `input`, return tensors (Q, R) satisfying ``input = Q * R``,
+     * Computes the QR decomposition of a matrix or a batch of matrices, and returns a pair `Q to R` of tensors.
+     * Given a tensor `input`, return tensors `Q to R` satisfying `input == Q dot R`,
      * with `Q` being an orthogonal matrix or batch of orthogonal matrices
      * and `R` being an upper triangular matrix or batch of upper triangular matrices.
      *
-     * @param epsilon permissible error when comparing tensors for equality.
+     * @receiver the `input`.
+     * @param epsilon the permissible error when comparing tensors for equality.
      * Used when checking the positive definiteness of the input matrix or matrices.
-     * @return pair of Q and R tensors.
+     * @return a pair of `Q` and `R` tensors.
      */
     public fun Tensor<Double>.cholesky(epsilon: Double): DoubleTensor {
         checkSquareMatrix(shape)
@@ -799,13 +796,14 @@ public open class DoubleTensorAlgebra :
      * Singular Value Decomposition.
      *
      * Computes the singular value decomposition of either a matrix or batch of matrices `input`.
-     * The singular value decomposition is represented as a triple `(U, S, V)`,
-     * such that ``input = U.dot(diagonalEmbedding(S).dot(V.T))``.
-     * If input is a batch of tensors, then U, S, and Vh are also batched with the same batch dimensions as input.
+     * The singular value decomposition is represented as a triple `Triple(U, S, V)`,
+     * such that `input == U dot diagonalEmbedding(S) dot V.transpose()`.
+     * If `input` is a batch of tensors, then U, S, and Vh are also batched with the same batch dimensions as `input.
      *
-     * @param epsilon permissible error when calculating the dot product of vectors,
-     * i.e. the precision with which the cosine approaches 1 in an iterative algorithm.
-     * @return triple `(U, S, V)`.
+     * @receiver the `input`.
+     * @param epsilon permissible error when calculating the dot product of vectors
+     * i.e., the precision with which the cosine approaches 1 in an iterative algorithm.
+     * @return a triple `Triple(U, S, V)`.
      */
     public fun Tensor<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = tensor.dimension
@@ -844,11 +842,11 @@ public open class DoubleTensorAlgebra :
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
-     * represented by a pair (eigenvalues, eigenvectors).
+     * represented by a pair `eigenvalues to eigenvectors`.
      *
-     * @param epsilon permissible error when comparing tensors for equality
+     * @param epsilon the permissible error when comparing tensors for equality
      * and when the cosine approaches 1 in the SVD algorithm.
-     * @return a pair (eigenvalues, eigenvectors)
+     * @return a pair `eigenvalues to eigenvectors`.
      */
     public fun Tensor<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
@@ -881,11 +879,11 @@ public open class DoubleTensorAlgebra :
      * Computes the determinant of a square matrix input, or of each square matrix in a batched input
      * using LU factorization algorithm.
      *
-     * @param epsilon error in the LU algorithm - permissible error when comparing the determinant of a matrix with zero
+     * @param epsilon the error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix
+     * with zero.
      * @return the determinant.
      */
     public fun Tensor<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
-
         checkSquareMatrix(tensor.shape)
         val luTensor = tensor.copy()
         val pivotsTensor = tensor.setUpPivots()
@@ -913,9 +911,9 @@ public open class DoubleTensorAlgebra :
      * Computes the multiplicative inverse matrix of a square matrix input, or of each square matrix in a batched input
      * using LU factorization algorithm.
      * Given a square matrix `a`, return the matrix `aInv` satisfying
-     * ``a.dot(aInv) = aInv.dot(a) = eye(a.shape[0])``.
+     * `a dot aInv == aInv dot a == eye(a.shape[0])`.
      *
-     * @param epsilon error in the LU algorithm - permissible error when comparing the determinant of a matrix with zero
+     * @param epsilon error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix with zero
      * @return the multiplicative inverse of a matrix.
      */
     public fun Tensor<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
@@ -932,16 +930,16 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * LUP decomposition
+     * LUP decomposition.
      *
      * Computes the LUP decomposition of a matrix or a batch of matrices.
-     * Given a tensor `input`, return tensors (P, L, U) satisfying ``P * input = L * U``,
+     * Given a tensor `input`, return tensors `Triple(P, L, U)` satisfying `P dot input == L dot U`,
      * with `P` being a permutation matrix or batch of matrices,
      * `L` being a lower triangular matrix or batch of matrices,
      * `U` being an upper triangular matrix or batch of matrices.
      *
-     * @param epsilon permissible error when comparing the determinant of a matrix with zero
-     * @return triple of P, L and U tensors
+     * @param epsilon permissible error when comparing the determinant of a matrix with zero.
+     * @return triple of `P`, `L` and `U` tensors.
      */
     public fun Tensor<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val (lu, pivots) = tensor.luFactor(epsilon)

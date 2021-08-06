@@ -2,11 +2,11 @@
 
 ## [Unreleased]
 ### Added
-- ScaleOperations interface
-- Field extends ScaleOperations
+- `ScaleOperations` interface
+- `Field` extends `ScaleOperations`
 - Basic integration API
 - Basic MPP distributions and samplers
-- bindSymbolOrNull
+- `bindSymbolOrNull`
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
@@ -15,6 +15,8 @@
 - `@PerformancePitfall` annotation to mark possibly slow API
 - BigInt operation performance improvement and fixes by @zhelenskiy (#328)
 - Unified architecture for Integration and Optimization using features.
+- `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
+- Integration between `MST` and Symja `IExpr`
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -53,6 +55,7 @@
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations
+- Univariate histogram filling
 
 ### Security
 

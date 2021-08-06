@@ -19,7 +19,7 @@ public typealias DoubleVector = Point<Double>
 public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
 
 /**
- * Fill the vector of given [size] with given [value]
+ * Fill the vector with given [size] with given [value]
  */
 @UnstableKMathAPI
 public fun Buffer.Companion.same(size: Int, value: Number): DoubleVector = double(size) { value.toDouble() }

@@ -23,14 +23,15 @@ public class MatrixWrapper<out T : Any> internal constructor(
 ) : Matrix<T> by origin {
 
     /**
-     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
+     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the
+     * criteria.
      */
     @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
-    public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
         features.getFeature(type) ?: origin.getFeature(type)
 
-    public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
+    override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
 
 /**
@@ -64,7 +65,7 @@ public fun <T : Any> Matrix<T>.withFeatures(newFeatures: Iterable<MatrixFeature>
     }
 
 /**
- * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
+ * Diagonal matrix of ones. The matrix is virtual no actual matrix is created.
  */
 public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     rows: Int,

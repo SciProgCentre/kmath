@@ -17,6 +17,7 @@ import kotlin.test.assertTrue
 @OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
 class MatrixTest {
+
     @Test
     fun testTranspose() {
         val matrix = LinearSpace.double.one(3, 3)

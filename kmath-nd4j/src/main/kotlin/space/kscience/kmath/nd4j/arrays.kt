@@ -5,4 +5,6 @@
 
 package space.kscience.kmath.nd4j
 
-internal fun LongArray.toIntArray(): IntArray = IntArray(size) { this[it].toInt() }
+import space.kscience.kmath.misc.toIntExact
+
+internal fun LongArray.toIntArray(): IntArray = IntArray(size) { this[it].toIntExact() }

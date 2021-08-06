@@ -104,7 +104,6 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
     private fun QoWeight.getEqDerivValues(
         theta: Map<Symbol, Double> = parameters,
     ): Matrix<Double> = with(linearSpace) {
-        val fitDim = size
         //Возвращает производную k-того Eq по l-тому параметру
         //val res = Array(fitDim) { DoubleArray(fitDim) }
         val sderiv = buildMatrix(data.size, size) { i, l ->

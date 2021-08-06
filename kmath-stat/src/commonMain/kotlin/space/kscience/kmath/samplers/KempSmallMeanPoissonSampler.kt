@@ -13,7 +13,7 @@ import kotlin.math.exp
 
 /**
  * Sampler for the Poisson distribution.
- * - Kemp, A, W, (1981) Efficient Generation of Logarithmically Distributed Pseudo-Random Variables. Journal of the Royal Statistical Society. Vol. 30, No. 3, pp. 249-253.
+ * * Kemp, A, W, (1981) Efficient Generation of Logarithmically Distributed Pseudo-Random Variables. Journal of the Royal Statistical Society. Vol. 30, No. 3, pp. 249-253.
  * This sampler is suitable for mean < 40. For large means, LargeMeanPoissonSampler should be used instead.
  *
  * Note: The algorithm uses a recurrence relation to compute the Poisson probability and a rolling summation for the cumulative probability. When the mean is large the initial probability (Math.exp(-mean)) is zero and an exception is raised by the constructor.
@@ -27,7 +27,7 @@ public class KempSmallMeanPoissonSampler internal constructor(
     private val p0: Double,
     private val mean: Double,
 ) : Sampler<Int> {
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             //TODO move to nextBufferBlocking
             // Note on the algorithm:
@@ -60,14 +60,13 @@ public class KempSmallMeanPoissonSampler internal constructor(
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }
 
-    public override fun toString(): String = "Kemp Small Mean Poisson deviate"
+    override fun toString(): String = "Kemp Small Mean Poisson deviate"
 }
 
 public fun KempSmallMeanPoissonSampler(mean: Double): KempSmallMeanPoissonSampler {
     require(mean > 0) { "Mean is not strictly positive: $mean" }
     val p0 = exp(-mean)
-    // Probability must be positive. As mean increases then p(0) decreases.
+    // Probability must be positive. As mean increases, p(0) decreases.
     require(p0 > 0) { "No probability for mean: $mean" }
     return KempSmallMeanPoissonSampler(p0, mean)
 }
-
