@@ -135,6 +135,7 @@ val extractJNoa by tasks.registering(Copy::class) {
 val configureCpp by tasks.registering {
     dependsOn(extractCMake)
     dependsOn(extractNinja)
+    dependsOn(extractClang)
     dependsOn(extractTorch)
     dependsOn(extractJNoa)
     onlyIf { !file(cppBuildDir).exists() }
@@ -150,9 +151,8 @@ val configureCpp by tasks.registering {
                 jNoaDir,
                 "-GNinja",
                 "-DCMAKE_MAKE_PROGRAM=$ninjaCmd",
-                // uncomment if Clang required
-                //"-DCMAKE_C_COMPILER=$clangCmd",
-                //"-DCMAKE_CXX_COMPILER=$clangxxCmd",
+                "-DCMAKE_C_COMPILER=$clangCmd",
+                "-DCMAKE_CXX_COMPILER=$clangxxCmd",
                 "-DCMAKE_PREFIX_PATH=$thirdPartyDir/torch/$torchArchive",
                 "-DJAVA_HOME=$javaHome",
                 "-DBUILD_JNOA=ON",
