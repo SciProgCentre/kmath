@@ -48,7 +48,8 @@ internal object InternalUtils {
                 cache.copyInto(
                     logFactorials,
                     BEGIN_LOG_FACTORIALS,
-                    BEGIN_LOG_FACTORIALS, endCopy
+                    BEGIN_LOG_FACTORIALS,
+                    endCopy,
                 )
             } else
             // All values to be computed

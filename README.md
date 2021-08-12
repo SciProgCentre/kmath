@@ -44,7 +44,7 @@ module definitions below. The module stability could have the following levels:
 * **PROTOTYPE**. On this level there are no compatibility guarantees. All methods and classes form those modules could
   break any moment. You can still use it, but be sure to fix the specific version.
 * **EXPERIMENTAL**. The general API is decided, but some changes could be made. Volatile API is marked
-  with `@UnstableKmathAPI` or other stability warning annotations.
+  with `@UnstableKMathAPI` or other stability warning annotations.
 * **DEVELOPMENT**. API breaking generally follows semantic versioning ideology. There could be changes in minor
   versions, but not in patch versions. API is protected
   with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
