@@ -16,13 +16,14 @@ public interface Featured<F : Any> {
 
 public typealias FeatureKey<T> = KClass<out T>
 
-public interface Feature<F: Feature<F>> {
+public interface Feature<F : Feature<F>> {
 
     /**
      * A key used for extraction
      */
     @Suppress("UNCHECKED_CAST")
-    public val key: FeatureKey<F> get() = this::class as FeatureKey<F>
+    public val key: FeatureKey<F>
+        get() = this::class as FeatureKey<F>
 }
 
 /**
@@ -30,7 +31,7 @@ public interface Feature<F: Feature<F>> {
  */
 public class FeatureSet<F : Feature<F>> private constructor(public val features: Map<FeatureKey<F>, F>) : Featured<F> {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : F> getFeature(type: FeatureKey<T>): T? = features[type] as? T
+    override fun <T : F> getFeature(type: FeatureKey<T>): T? = features[type]?.let { it as T }
 
     public inline fun <reified T : F> getFeature(): T? = getFeature(T::class)
 
@@ -49,6 +50,7 @@ public class FeatureSet<F : Feature<F>> private constructor(public val features:
 
     public companion object {
         public fun <F : Feature<F>> of(vararg features: F): FeatureSet<F> = FeatureSet(features.associateBy { it.key })
-        public fun <F : Feature<F>> of(features: Iterable<F>): FeatureSet<F> = FeatureSet(features.associateBy { it.key })
+        public fun <F : Feature<F>> of(features: Iterable<F>): FeatureSet<F> =
+            FeatureSet(features.associateBy { it.key })
     }
 }
