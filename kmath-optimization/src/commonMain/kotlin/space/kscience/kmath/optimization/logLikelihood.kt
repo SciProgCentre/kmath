@@ -26,7 +26,7 @@ internal fun XYFit.logLikelihood(): DifferentiableExpression<Double> = object : 
         data.indices.sumOf { index ->
             val d = distance(index)(arguments)
             val weight = weight(index)(arguments)
-            val weightDerivative = weight(index)(arguments)
+            val weightDerivative = weight(index).derivative(symbols)(arguments)
 
             //  -1 / (sqrt(2 PI) * sigma) + 2 (x-mu)/ 2 sigma^2 * d mu/ d theta - (x-mu)^2 / 2 * d w/ d theta
             return@sumOf -oneOver2Pi * sqrt(weight) + //offset derivative

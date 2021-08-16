@@ -14,6 +14,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.optimization.QowOptimizer
+import space.kscience.kmath.optimization.chiSquaredOrNull
 import space.kscience.kmath.optimization.fitWith
 import space.kscience.kmath.optimization.resultPoint
 import space.kscience.kmath.real.map
@@ -50,7 +51,7 @@ suspend fun main() {
 
     //Perform an operation on each x value (much more effective, than numpy)
     val y = x.map { it ->
-        val value = it.pow(2) + it + 100
+        val value = it.pow(2) + it + 1
         value + chain.next() * sqrt(value)
     }
     // this will also work, but less effective:
@@ -63,7 +64,7 @@ suspend fun main() {
     val result = XYErrorColumnarData.of(x, y, yErr).fitWith(
         QowOptimizer,
         DSProcessor,
-        mapOf(a to 1.0, b to 1.2, c to 99.0)
+        mapOf(a to 0.9, b to 1.2, c to 2.0)
     ) { arg ->
         //bind variables to autodiff context
         val a by binding
@@ -96,9 +97,9 @@ suspend fun main() {
         h3 {
             +"Fit result: ${result.resultPoint}"
         }
-//        h3 {
-//            +"Chi2/dof = ${result.resultValue / (x.size - 3)}"
-//        }
+        h3 {
+            +"Chi2/dof = ${result.chiSquaredOrNull!! / (x.size - 3)}"
+        }
     }
 
     page.makeFile()

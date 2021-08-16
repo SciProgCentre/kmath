@@ -7,6 +7,7 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.data.XYColumnarData
+import space.kscience.kmath.data.indices
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.Loggable
@@ -81,6 +82,7 @@ public class XYFit(
     override val features: FeatureSet<OptimizationFeature>,
     internal val pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
     internal val pointWeight: PointWeight = PointWeight.byYSigma,
+    public val xSymbol: Symbol = Symbol.x,
 ) : OptimizationProblem<Double> {
     public fun distance(index: Int): DifferentiableExpression<Double> = pointToCurveDistance.distance(this, index)
 
@@ -119,7 +121,26 @@ public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
         modelExpression,
         actualFeatures,
         pointToCurveDistance,
-        pointWeight
+        pointWeight,
+        xSymbol
     )
     return optimizer.optimize(problem)
+}
+
+/**
+ * Compute chi squared value for completed fit. Return null for incomplete fit
+ */
+public val XYFit.chiSquaredOrNull: Double? get() {
+    val result = resultPointOrNull ?: return null
+
+    return data.indices.sumOf { index->
+
+        val x = data.x[index]
+        val y = data.y[index]
+        val yErr = data[Symbol.yError]?.get(index) ?: 1.0
+
+        val mu = model.invoke(result + (xSymbol to x) )
+
+        ((y - mu)/yErr).pow(2)
+    }
 }

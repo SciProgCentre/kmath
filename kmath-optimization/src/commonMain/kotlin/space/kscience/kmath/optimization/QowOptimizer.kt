@@ -50,7 +50,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
          */
         val dispersion: Point<Double> by lazy {
             DoubleBuffer(problem.data.size) { d ->
-                problem.weight(d).invoke(parameters)
+                1.0/problem.weight(d).invoke(parameters)
             }
         }
 
