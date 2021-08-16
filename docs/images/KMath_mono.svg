@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  - Copyright 2018-2021 KMath contributors.
+  - Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+  -->
+
 <svg
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:cc="http://creativecommons.org/ns#"
