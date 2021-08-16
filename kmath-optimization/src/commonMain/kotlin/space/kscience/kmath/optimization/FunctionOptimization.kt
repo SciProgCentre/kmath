@@ -5,13 +5,11 @@
 
 package space.kscience.kmath.optimization
 
-import space.kscience.kmath.expressions.*
+import space.kscience.kmath.expressions.DifferentiableExpression
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.FeatureSet
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.indices
 
-public class OptimizationValue<T>(public val value: T) : OptimizationFeature{
+public class OptimizationValue<T>(public val value: T) : OptimizationFeature {
     override fun toString(): String = "Value($value)"
 }
 
@@ -23,9 +21,28 @@ public enum class FunctionOptimizationTarget : OptimizationFeature {
 public class FunctionOptimization<T>(
     override val features: FeatureSet<OptimizationFeature>,
     public val expression: DifferentiableExpression<T>,
-) : OptimizationProblem<T>{
+) : OptimizationProblem<T> {
 
-    public companion object
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as FunctionOptimization<*>
+
+        if (features != other.features) return false
+        if (expression != other.expression) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = features.hashCode()
+        result = 31 * result + expression.hashCode()
+        return result
+    }
+
+    override fun toString(): String = "FunctionOptimization(features=$features)"
 }
 
 public fun <T> FunctionOptimization<T>.withFeatures(
@@ -47,7 +64,7 @@ public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
     return optimizer.optimize(problem)
 }
 
-public val <T> FunctionOptimization<T>.resultValueOrNull:T?
+public val <T> FunctionOptimization<T>.resultValueOrNull: T?
     get() = getFeature<OptimizationResult<T>>()?.point?.let { expression(it) }
 
 public val <T> FunctionOptimization<T>.resultValue: T

@@ -32,18 +32,20 @@ public interface XYColumnarData<out T, out X : T, out Y : T> : ColumnarData<T> {
         Symbol.y -> y
         else -> null
     }
-}
 
-@Suppress("FunctionName")
-@UnstableKMathAPI
-public fun <T, X : T, Y : T> XYColumnarData(x: Buffer<X>, y: Buffer<Y>): XYColumnarData<T, X, Y> {
-    require(x.size == y.size) { "Buffer size mismatch. x buffer size is ${x.size}, y buffer size is ${y.size}" }
-    return object : XYColumnarData<T, X, Y> {
-        override val size: Int = x.size
-        override val x: Buffer<X> = x
-        override val y: Buffer<Y> = y
+    public companion object{
+        @UnstableKMathAPI
+        public fun <T, X : T, Y : T> of(x: Buffer<X>, y: Buffer<Y>): XYColumnarData<T, X, Y> {
+            require(x.size == y.size) { "Buffer size mismatch. x buffer size is ${x.size}, y buffer size is ${y.size}" }
+            return object : XYColumnarData<T, X, Y> {
+                override val size: Int = x.size
+                override val x: Buffer<X> = x
+                override val y: Buffer<Y> = y
+            }
+        }
     }
 }
+
 
 /**
  * Represent a [ColumnarData] as an [XYColumnarData]. The presence or respective columns is checked on creation.

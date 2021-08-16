@@ -42,8 +42,8 @@ internal class AutoDiffTest {
     @Test
     fun autoDifTest() {
         val f = DerivativeStructureExpression {
-            val x by binding()
-            val y by binding()
+            val x by binding
+            val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1
         }
 

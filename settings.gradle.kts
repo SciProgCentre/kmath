@@ -26,6 +26,7 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
+    ":kmath-optimization",
     ":kmath-stat",
     ":kmath-nd4j",
     ":kmath-dimensions",

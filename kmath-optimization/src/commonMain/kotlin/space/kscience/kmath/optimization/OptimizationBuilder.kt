@@ -72,15 +72,15 @@ public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
 public class XYOptimizationBuilder(
     public val data: XYColumnarData<Double, Double, Double>,
     public val model: DifferentiableExpression<Double>,
-) : OptimizationBuilder<Double, XYOptimization>() {
+) : OptimizationBuilder<Double, XYFit>() {
 
     public var pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY
     public var pointWeight: PointWeight = PointWeight.byYSigma
 
-    override fun build(): XYOptimization = XYOptimization(
-        FeatureSet.of(features),
+    override fun build(): XYFit = XYFit(
         data,
         model,
+        FeatureSet.of(features),
         pointToCurveDistance,
         pointWeight
     )
@@ -90,4 +90,4 @@ public fun XYOptimization(
     data: XYColumnarData<Double, Double, Double>,
     model: DifferentiableExpression<Double>,
     builder: XYOptimizationBuilder.() -> Unit,
-): XYOptimization = XYOptimizationBuilder(data, model).apply(builder).build()
+): XYFit = XYOptimizationBuilder(data, model).apply(builder).build()

@@ -18,6 +18,7 @@ import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.withSymbols
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.misc.log
 import space.kscience.kmath.optimization.*
 import kotlin.collections.set
 import kotlin.reflect.KClass
@@ -108,15 +109,17 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
 
             val objectiveFunction = ObjectiveFunction {
                 val args = startPoint + it.toMap()
-                problem.expression(args)
+                val res = problem.expression(args)
+                res
             }
             addOptimizationData(objectiveFunction)
 
             val gradientFunction = ObjectiveFunctionGradient {
                 val args = startPoint + it.toMap()
-                DoubleArray(symbols.size) { index ->
+                val res = DoubleArray(symbols.size) { index ->
                     problem.expression.derivative(symbols[index])(args)
                 }
+                res
             }
             addOptimizationData(gradientFunction)
 

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.misc
 
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
@@ -29,7 +30,8 @@ public interface Feature<F : Feature<F>> {
 /**
  * A container for a set of features
  */
-public class FeatureSet<F : Feature<F>> private constructor(public val features: Map<FeatureKey<F>, F>) : Featured<F> {
+@JvmInline
+public value class FeatureSet<F : Feature<F>> private constructor(public val features: Map<FeatureKey<F>, F>) : Featured<F> {
     @Suppress("UNCHECKED_CAST")
     override fun <T : F> getFeature(type: FeatureKey<T>): T? = features[type]?.let { it as T }
 
@@ -47,6 +49,9 @@ public class FeatureSet<F : Feature<F>> private constructor(public val features:
         FeatureSet(features + otherFeatures.associateBy { it.key })
 
     public operator fun iterator(): Iterator<F> = features.values.iterator()
+
+    override fun toString(): String = features.values.joinToString(prefix = "[ ", postfix = " ]")
+
 
     public companion object {
         public fun <F : Feature<F>> of(vararg features: F): FeatureSet<F> = FeatureSet(features.associateBy { it.key })

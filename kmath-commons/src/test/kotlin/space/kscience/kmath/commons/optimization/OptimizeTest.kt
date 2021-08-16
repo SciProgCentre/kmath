@@ -15,6 +15,7 @@ import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.map
 import kotlin.math.pow
@@ -58,7 +59,7 @@ internal class OptimizeTest {
             it.pow(2) + it + 1 + chain.next()
         }
 
-        val yErr = List(x.size) { sigma }.asBuffer()
+        val yErr = DoubleBuffer(x.size) { sigma }
 
         val chi2 = DSProcessor.chiSquaredExpression(
             x, y, yErr

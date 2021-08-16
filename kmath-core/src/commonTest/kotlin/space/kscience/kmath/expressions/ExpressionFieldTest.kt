@@ -16,7 +16,7 @@ class ExpressionFieldTest {
     @Test
     fun testExpression() {
         val expression = with(FunctionalExpressionField(DoubleField)) {
-            val x by binding()
+            val x by binding
             x * x + 2 * x + one
         }
 
@@ -27,7 +27,7 @@ class ExpressionFieldTest {
     @Test
     fun separateContext() {
         fun <T> FunctionalExpressionField<T, *>.expression(): Expression<T> {
-            val x by binding()
+            val x by binding
             return x * x + 2 * x + one
         }
 
@@ -38,7 +38,7 @@ class ExpressionFieldTest {
     @Test
     fun valueExpression() {
         val expressionBuilder: FunctionalExpressionField<Double, *>.() -> Expression<Double> = {
-            val x by binding()
+            val x by binding
             x * x + 2 * x + one
         }
 

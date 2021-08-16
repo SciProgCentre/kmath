@@ -7,13 +7,18 @@ package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asIterable
 import space.kscience.kmath.structures.indices
+import kotlin.jvm.JvmName
 
 /**
  * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic
  * differentiation.
+ *
+ * **WARNING** All elements of [yErr] must be positive.
  */
-public fun <T : Any, I : Any, A> AutoDiffProcessor<T, I, A>.chiSquaredExpression(
+@JvmName("genericChiSquaredExpression")
+public fun <T : Comparable<T>, I : Any, A> AutoDiffProcessor<T, I, A>.chiSquaredExpression(
     x: Buffer<T>,
     y: Buffer<T>,
     yErr: Buffer<T>,
@@ -35,4 +40,14 @@ public fun <T : Any, I : Any, A> AutoDiffProcessor<T, I, A>.chiSquaredExpression
 
         sum
     }
+}
+
+public fun <I : Any, A> AutoDiffProcessor<Double, I, A>.chiSquaredExpression(
+    x: Buffer<Double>,
+    y: Buffer<Double>,
+    yErr: Buffer<Double>,
+    model: A.(I) -> I,
+): DifferentiableExpression<Double> where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
+    require(yErr.asIterable().all { it > 0.0 }) { "All errors must be strictly positive" }
+    return chiSquaredExpression<Double, I, A>(x, y, yErr, model)
 }

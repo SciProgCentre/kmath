@@ -73,7 +73,8 @@ public class GaussIntegrator<T : Any>(
 }
 
 /**
- * Create a Gauss-Legendre integrator for this field.
+ * Create a Gauss integrator for this field. By default, uses Legendre rule to compute points and weights.
+ * Custom rules could be provided by [GaussIntegratorRuleFactory] feature.
  * @see [GaussIntegrator]
  */
 public val <T : Any> Field<T>.gaussIntegrator: GaussIntegrator<T> get() = GaussIntegrator(this)

@@ -11,6 +11,7 @@ import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.misc.log
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.DoubleL2Norm
@@ -21,14 +22,14 @@ import space.kscience.kmath.structures.DoubleL2Norm
  * See [the article](http://arxiv.org/abs/physics/0604127).
  */
 @UnstableKMathAPI
-public class QowOptimizer : Optimizer<Double, XYOptimization> {
+public object QowOptimizer : Optimizer<Double, XYFit> {
 
     private val linearSpace: LinearSpace<Double, DoubleField> = LinearSpace.double
     private val solver: LinearSolver<Double> = linearSpace.lupSolver()
 
     @OptIn(UnstableKMathAPI::class)
-    private inner class QoWeight(
-        val problem: XYOptimization,
+    private class QoWeight(
+        val problem: XYFit,
         val parameters: Map<Symbol, Double>,
     ) : Map<Symbol, Double> by parameters, SymbolIndexer {
         override val symbols: List<Symbol> = parameters.keys.toList()
@@ -39,8 +40,8 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
          * Derivatives of the spectrum over parameters. First index in the point number, second one - index of parameter
          */
         val derivs: Matrix<Double> by lazy {
-            linearSpace.buildMatrix(problem.data.size, symbols.size) { i, k ->
-                problem.distance(i).derivative(symbols[k])(parameters)
+            linearSpace.buildMatrix(problem.data.size, symbols.size) { d, s ->
+                problem.distance(d).derivative(symbols[s])(parameters)
             }
         }
 
@@ -48,25 +49,27 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
          * Array of dispersions in each point
          */
         val dispersion: Point<Double> by lazy {
-            DoubleBuffer(problem.data.size) { i ->
-                problem.weight(i).invoke(parameters)
+            DoubleBuffer(problem.data.size) { d ->
+                problem.weight(d).invoke(parameters)
             }
         }
 
         val prior: DifferentiableExpression<Double>? get() = problem.getFeature<OptimizationPrior<Double>>()
+
+        override fun toString(): String  = parameters.toString()
     }
 
     /**
-     * The signed distance from the model to the [i]-th point of data.
+     * The signed distance from the model to the [d]-th point of data.
      */
-    private fun QoWeight.distance(i: Int, parameters: Map<Symbol, Double>): Double = problem.distance(i)(parameters)
+    private fun QoWeight.distance(d: Int, parameters: Map<Symbol, Double>): Double = problem.distance(d)(parameters)
 
 
     /**
      * The derivative of [distance]
      */
-    private fun QoWeight.distanceDerivative(symbol: Symbol, i: Int, parameters: Map<Symbol, Double>): Double =
-        problem.distance(i).derivative(symbol)(parameters)
+    private fun QoWeight.distanceDerivative(symbol: Symbol, d: Int, parameters: Map<Symbol, Double>): Double =
+        problem.distance(d).derivative(symbol)(parameters)
 
     /**
      * Теоретическая ковариация весовых функций.
@@ -74,8 +77,8 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
      * D(\phi)=E(\phi_k(\theta_0) \phi_l(\theta_0))= disDeriv_k * disDeriv_l /sigma^2
      */
     private fun QoWeight.covarF(): Matrix<Double> =
-        linearSpace.matrix(size, size).symmetric { k, l ->
-            (0 until data.size).sumOf { i -> derivs[k, i] * derivs[l, i] / dispersion[i] }
+        linearSpace.matrix(size, size).symmetric { s1, s2 ->
+            (0 until data.size).sumOf { d -> derivs[d, s1] * derivs[d, s2] / dispersion[d] }
         }
 
     /**
@@ -89,12 +92,12 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
              * количество вызывов функции будет dim^2 вместо dim Первый индекс -
              * номер точки, второй - номер переменной, по которой берется производная
              */
-            val eqvalues = linearSpace.buildMatrix(data.size, size) { i, l ->
-                distance(i, theta) * derivs[l, i] / dispersion[i]
+            val eqvalues = linearSpace.buildMatrix(data.size, size) { d, s ->
+                distance(d, theta) * derivs[d, s] / dispersion[d]
             }
 
-            buildMatrix(size, size) { k, l ->
-                (0 until data.size).sumOf { i -> eqvalues[i, l] * eqvalues[i, k] }
+            buildMatrix(size, size) { s1, s2 ->
+                (0 until data.size).sumOf { d -> eqvalues[d, s2] * eqvalues[d, s1] }
             }
         }
 
@@ -106,20 +109,20 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
     ): Matrix<Double> = with(linearSpace) {
         //Возвращает производную k-того Eq по l-тому параметру
         //val res = Array(fitDim) { DoubleArray(fitDim) }
-        val sderiv = buildMatrix(data.size, size) { i, l ->
-            distanceDerivative(symbols[l], i, theta)
+        val sderiv = buildMatrix(data.size, size) { d, s ->
+            distanceDerivative(symbols[s], d, theta)
         }
 
-        buildMatrix(size, size) { k, l ->
-            val base = (0 until data.size).sumOf { i ->
-                require(dispersion[i] > 0)
-                sderiv[i, l] * derivs[k, i] / dispersion[i]
+        buildMatrix(size, size) { s1, s2 ->
+            val base = (0 until data.size).sumOf { d ->
+                require(dispersion[d] > 0)
+                sderiv[d, s2] * derivs[d, s1] / dispersion[d]
             }
             prior?.let { prior ->
                 //Check if this one is correct
                 val pi = prior(theta)
-                val deriv1 = prior.derivative(symbols[k])(theta)
-                val deriv2 = prior.derivative(symbols[l])(theta)
+                val deriv1 = prior.derivative(symbols[s1])(theta)
+                val deriv2 = prior.derivative(symbols[s2])(theta)
                 base + deriv1 * deriv2 / pi / pi
             } ?: base
         }
@@ -130,13 +133,13 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
      * Значения уравнений метода квазиоптимальных весов
      */
     private fun QoWeight.getEqValues(theta: Map<Symbol, Double> = this): Point<Double> {
-        val distances = DoubleBuffer(data.size) { i -> distance(i, theta) }
+        val distances = DoubleBuffer(data.size) { d -> distance(d, theta) }
 
-        return DoubleBuffer(size) { k ->
-            val base = (0 until data.size).sumOf { i -> distances[i] * derivs[k, i] / dispersion[i] }
+        return DoubleBuffer(size) { s ->
+            val base = (0 until data.size).sumOf { d -> distances[d] * derivs[d, s] / dispersion[d] }
             //Поправка на априорную вероятность
             prior?.let { prior ->
-                base - prior.derivative(symbols[k])(theta) / prior(theta)
+                base - prior.derivative(symbols[s])(theta) / prior(theta)
             } ?: base
         }
     }
@@ -163,15 +166,15 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
 
         val logger = problem.getFeature<OptimizationLog>()
 
-        var dis: Double//норма невязки
-        // Для удобства работаем всегда с полным набором параметров
+        var dis: Double //discrepancy value
+        // Working with the full set of parameters
         var par = problem.startPoint
 
         logger?.log { "Starting newtonian iteration from: \n\t$par" }
 
-        var eqvalues = getEqValues(par)//значения функций
+        var eqvalues = getEqValues(par) //Values of the weight functions
 
-        dis = DoubleL2Norm.norm(eqvalues)// невязка
+        dis = DoubleL2Norm.norm(eqvalues) // discrepancy
         logger?.log { "Starting discrepancy is $dis" }
         var i = 0
         var flag = false
@@ -238,7 +241,8 @@ public class QowOptimizer : Optimizer<Double, XYOptimization> {
         return covar
     }
 
-    override suspend fun optimize(problem: XYOptimization): XYOptimization {
+    override suspend fun optimize(problem: XYFit): XYFit {
+        val qowSteps = 2
         val initialWeight = QoWeight(problem, problem.startPoint)
         val res = initialWeight.newtonianRun()
         return res.problem.withFeature(OptimizationResult(res.parameters))

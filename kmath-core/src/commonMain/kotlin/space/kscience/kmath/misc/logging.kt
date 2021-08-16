@@ -5,10 +5,18 @@
 
 package space.kscience.kmath.misc
 
-public interface Loggable {
-    public fun log(tag: String = INFO, block: () -> String)
+import space.kscience.kmath.misc.Loggable.Companion.INFO
+
+public fun interface Loggable {
+    public fun log(tag: String, block: () -> String)
 
     public companion object {
         public const val INFO: String = "INFO"
+
+        public val console: Loggable = Loggable { tag, block ->
+            println("[$tag] ${block()}")
+        }
     }
 }
+
+public fun Loggable.log(block: () -> String): Unit = log(INFO, block)
