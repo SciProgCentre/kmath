@@ -64,9 +64,10 @@ internal class ProjectionOntoLineTest {
         )
 
         with(Euclidean3DSpace) {
-            for (x in (-10.0..10.0).generateList(0.15)) {
-                for (y in (-10.0..10.0).generateList(0.15)) {
-                    for (z in (-10.0..10.0).generateList(0.15)) {
+            val testDomain = (-10.0..10.0).generateList(0.15)
+            for (x in testDomain) {
+                for (y in testDomain) {
+                    for (z in testDomain) {
                         val v = Vector3D(x, y, z)
                         val result = projectToLine(v, line)
 
