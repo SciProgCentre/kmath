@@ -42,7 +42,7 @@ internal class ProjectionAlongTest {
         val base = Vector3D(2.0, -0.0037, 11.1111)
 
         with(Euclidean3DSpace) {
-            val testDomain = (-10.0..10.0).generateList(0.15)
+            val testDomain = (-10.0..10.0).generateList(0.43)
             for (x in testDomain) {
                 for (y in testDomain) {
                     for (z in testDomain) {

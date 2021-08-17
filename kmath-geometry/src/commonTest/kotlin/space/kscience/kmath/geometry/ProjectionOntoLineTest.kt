@@ -64,7 +64,7 @@ internal class ProjectionOntoLineTest {
         )
 
         with(Euclidean3DSpace) {
-            val testDomain = (-10.0..10.0).generateList(0.15)
+            val testDomain = (-10.0..10.0).generateList(0.43)
             for (x in testDomain) {
                 for (y in testDomain) {
                     for (z in testDomain) {
