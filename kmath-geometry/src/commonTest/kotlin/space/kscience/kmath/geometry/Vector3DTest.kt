@@ -8,7 +8,7 @@ internal class Vector3DTest {
     private val vector = Vector3D(1.0, -7.999, 0.001)
 
     @Test
-    fun getSize() {
+    fun size() {
         assertEquals(3, vector.size)
     }
 
@@ -20,22 +20,22 @@ internal class Vector3DTest {
     }
 
     @Test
-    operator fun iterator() {
+    fun iterator() {
         assertEquals(listOf(1.0, -7.999, 0.001), vector.toList())
     }
 
     @Test
-    fun getX() {
+    fun x() {
         assertEquals(1.0, vector.x)
     }
 
     @Test
-    fun getY() {
+    fun y() {
         assertEquals(-7.999, vector.y)
     }
 
     @Test
-    fun getZ() {
+    fun z() {
         assertEquals(0.001, vector.z)
     }
 }

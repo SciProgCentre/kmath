@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 internal class Euclidean3DSpaceTest {
     @Test
-    fun getZero() {
+    fun zero() {
         assertVectorEquals(Vector3D(0.0, 0.0, 0.0), Euclidean3DSpace.zero)
     }
 

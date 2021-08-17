@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 internal class Euclidean2DSpaceTest {
     @Test
-    fun getZero() {
+    fun zero() {
         assertVectorEquals(Vector2D(0.0, 0.0), Euclidean2DSpace.zero)
     }
 

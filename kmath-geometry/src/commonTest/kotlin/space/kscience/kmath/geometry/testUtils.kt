@@ -20,22 +20,22 @@ fun grid(
     return xs.flatMap { x -> ys.map { y -> x to y } }
 }
 
-fun assertVectorEquals(expected: Vector2D, actual: Vector2D, eps: Double = 1e-6) {
-    assertEquals(expected.x, actual.x, eps)
-    assertEquals(expected.y, actual.y, eps)
+fun assertVectorEquals(expected: Vector2D, actual: Vector2D, absoluteTolerance: Double = 1e-6) {
+    assertEquals(expected.x, actual.x, absoluteTolerance)
+    assertEquals(expected.y, actual.y, absoluteTolerance)
 }
 
-fun assertVectorEquals(expected: Vector3D, actual: Vector3D, eps: Double = 1e-6) {
-    assertEquals(expected.x, actual.x, eps)
-    assertEquals(expected.y, actual.y, eps)
-    assertEquals(expected.z, actual.z, eps)
+fun assertVectorEquals(expected: Vector3D, actual: Vector3D, absoluteTolerance: Double = 1e-6) {
+    assertEquals(expected.x, actual.x, absoluteTolerance)
+    assertEquals(expected.y, actual.y, absoluteTolerance)
+    assertEquals(expected.z, actual.z, absoluteTolerance)
 }
 
-fun <V : Vector> GeometrySpace<V>.isCollinear(a: V, b: V, eps: Double = 1e-6): Boolean {
+fun <V : Vector> GeometrySpace<V>.isCollinear(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean {
     val aDist = a.distanceTo(zero)
     val bDist = b.distanceTo(zero)
-    return abs(aDist) < eps || abs(bDist) < eps || abs(abs((a dot b) / (aDist * bDist)) - 1) < eps
+    return abs(aDist) < absoluteTolerance || abs(bDist) < absoluteTolerance || abs(abs((a dot b) / (aDist * bDist)) - 1) < absoluteTolerance
 }
 
-fun <V : Vector> GeometrySpace<V>.isOrthogonal(a: V, b: V, eps: Double = 1e-6): Boolean =
-    abs(a dot b) < eps
+fun <V : Vector> GeometrySpace<V>.isOrthogonal(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean =
+    abs(a dot b) < absoluteTolerance
