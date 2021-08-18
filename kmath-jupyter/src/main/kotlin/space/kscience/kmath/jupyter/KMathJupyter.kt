@@ -31,7 +31,6 @@ import space.kscience.kmath.structures.asSequence
  */
 public fun Number.toMst(): MST.Numeric = MST.Numeric(this)
 
-@JupyterLibrary
 internal class KMathJupyter : JupyterIntegration() {
     private val mathRender = FeaturedMathRendererWithPostProcess.Default
     private val syntaxRender = MathMLSyntaxRenderer
