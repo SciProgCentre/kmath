@@ -59,7 +59,7 @@ public object ZigguratNormalizedGaussianSampler : NormalizedGaussianSampler {
 
     private fun sampleOne(generator: RandomGenerator): Double {
         val j = generator.nextLong()
-        val i = (j and LAST.toLong()).toIntExact()
+        val i = (j and LAST.toLong()).toInt()
         return if (abs(j) < K[i]) j * W[i] else fix(generator, j, i)
     }
 
