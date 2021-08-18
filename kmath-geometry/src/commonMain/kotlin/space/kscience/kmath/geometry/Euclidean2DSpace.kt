@@ -12,14 +12,14 @@ import space.kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
 @OptIn(UnstableKMathAPI::class)
-public interface Vector2D : Point<Double>, Vector{
+public interface Vector2D : Point<Double>, Vector {
     public val x: Double
     public val y: Double
     override val size: Int get() = 2
 
     override operator fun get(index: Int): Double = when (index) {
-        1 -> x
-        2 -> y
+        0 -> x
+        1 -> y
         else -> error("Accessing outside of point bounds")
     }
 
@@ -27,7 +27,7 @@ public interface Vector2D : Point<Double>, Vector{
 }
 
 public val Vector2D.r: Double
-    get() = Euclidean2DSpace { sqrt(norm()) }
+    get() = Euclidean2DSpace { norm() }
 
 @Suppress("FunctionName")
 public fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)

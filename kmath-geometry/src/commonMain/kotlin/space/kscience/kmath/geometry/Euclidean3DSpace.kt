@@ -19,9 +19,9 @@ public interface Vector3D : Point<Double>, Vector {
     override val size: Int get() = 3
 
     override operator fun get(index: Int): Double = when (index) {
-        1 -> x
-        2 -> y
-        3 -> z
+        0 -> x
+        1 -> y
+        2 -> z
         else -> error("Accessing outside of point bounds")
     }
 
@@ -31,7 +31,7 @@ public interface Vector3D : Point<Double>, Vector {
 @Suppress("FunctionName")
 public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
 
-public val Vector3D.r: Double get() = Euclidean3DSpace { sqrt(norm()) }
+public val Vector3D.r: Double get() = Euclidean3DSpace { norm() }
 
 private data class Vector3DImpl(
     override val x: Double,
