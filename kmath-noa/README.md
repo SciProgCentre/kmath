@@ -1,12 +1,12 @@
 # Module kmath-noa
 
-A general purpose differentiable computation library over
+A general purpose differentiable programming library over
 [NOA](https://github.com/grinisrit/noa.git)
 together with relevant functionality from 
 [LibTorch](https://pytorch.org/cppdocs). 
 
 Our aim is to cover a wide set of applications 
-from bayesian optimisation and deep learning to particle physics
+from bayesian computation and deep learning to particle physics
 simulations. In fact, we support any 
 differentiable program written on top of 
 `AutoGrad` & `ATen`.
