@@ -13,7 +13,6 @@
 - Extended operations for ND4J fields
 - Jupyter Notebook integration module (kmath-jupyter)
 - `@PerformancePitfall` annotation to mark possibly slow API
-- BigInt operation performance improvement and fixes by @zhelenskiy (#328)
 - Unified architecture for Integration and Optimization using features.
 - `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
 - Integration between `MST` and Symja `IExpr`
