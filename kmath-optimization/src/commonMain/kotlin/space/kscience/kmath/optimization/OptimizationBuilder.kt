@@ -11,7 +11,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.FeatureSet
 
 public abstract class OptimizationBuilder<T, R : OptimizationProblem<T>> {
-    public val features: ArrayList<OptimizationFeature> = ArrayList()
+    public val features: MutableList<OptimizationFeature> = ArrayList()
 
     public fun addFeature(feature: OptimizationFeature) {
         features.add(feature)
