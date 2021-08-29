@@ -12,7 +12,7 @@ package space.kscience.kmath.misc
  * in some way that may break some code.
  */
 @MustBeDocumented
-@Retention(value = AnnotationRetention.BINARY)
+@Retention(value = AnnotationRetention.SOURCE)
 @RequiresOptIn("This API is unstable and could change in future", RequiresOptIn.Level.WARNING)
 public annotation class UnstableKMathAPI
 
@@ -21,7 +21,7 @@ public annotation class UnstableKMathAPI
  * slow-down in some cases. Refer to the documentation and benchmark it to be sure.
  */
 @MustBeDocumented
-@Retention(value = AnnotationRetention.BINARY)
+@Retention(value = AnnotationRetention.SOURCE)
 @RequiresOptIn(
     "Refer to the documentation to use this API in performance-critical code",
     RequiresOptIn.Level.WARNING

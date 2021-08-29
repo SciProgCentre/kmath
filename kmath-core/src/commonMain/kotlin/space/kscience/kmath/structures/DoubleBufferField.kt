@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.ExtendedFieldOperations
+import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.*
 import kotlin.math.*
 
 /**
  * [ExtendedFieldOperations] over [DoubleBuffer].
  */
+@Deprecated("To be replaced by generic BufferAlgebra")
 public object DoubleBufferFieldOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
         DoubleBuffer(size) { -array[it] }
@@ -161,12 +163,17 @@ public object DoubleBufferFieldOperations : ExtendedFieldOperations<Buffer<Doubl
         DoubleBuffer(DoubleArray(arg.size) { ln(arg[it]) })
 }
 
+public object DoubleL2Norm : Norm<Point<Double>, Double> {
+    override fun norm(arg: Point<Double>): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
+}
+
 /**
  * [ExtendedField] over [DoubleBuffer].
  *
  * @property size the size of buffers to operate on.
  */
-public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>> {
+@Deprecated("To be replaced by generic BufferAlgebra")
+public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>>, Norm<Buffer<Double>, Double> {
     override val zero: Buffer<Double> by lazy { DoubleBuffer(size) { 0.0 } }
     override val one: Buffer<Double> by lazy { DoubleBuffer(size) { 1.0 } }
 
@@ -274,4 +281,6 @@ public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Doub
         require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
         return DoubleBufferFieldOperations.ln(arg)
     }
+
+    override fun norm(arg: Buffer<Double>): Double  = DoubleL2Norm.norm(arg)
 }

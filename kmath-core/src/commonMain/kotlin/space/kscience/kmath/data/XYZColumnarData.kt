@@ -10,7 +10,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 
 /**
- * A [XYColumnarData] with guaranteed [x], [y] and [z] columns designated by corresponding symbols.
+ * A [ColumnarData] with guaranteed [x], [y] and [z] columns designated by corresponding symbols.
  * Inherits [XYColumnarData].
  */
 @UnstableKMathAPI

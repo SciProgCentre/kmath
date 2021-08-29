@@ -18,7 +18,7 @@ public class CMIntegrator(
     public val integratorBuilder: (Integrand) -> org.apache.commons.math3.analysis.integration.UnivariateIntegrator,
 ) : UnivariateIntegrator<Double> {
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls

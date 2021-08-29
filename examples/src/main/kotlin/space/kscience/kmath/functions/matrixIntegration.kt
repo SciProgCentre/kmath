@@ -22,7 +22,7 @@ fun main(): Unit = DoubleField {
         }
 
         //Define a function in a nd space
-        val function: (Double) -> StructureND<Double> = { x: Double -> 3 * number(x).pow(2) + 2 * diagonal(x) + 1 }
+        val function: (Double) -> StructureND<Double> = { x: Double -> 3 * x.pow(2) + 2 * diagonal(x) + 1 }
 
         //get the result of the integration
         val result = gaussIntegrator.integrate(0.0..10.0, function = function)

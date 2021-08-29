@@ -11,7 +11,7 @@ import org.ejml.dense.row.RandomMatrices_DDRM
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
 import space.kscience.kmath.linear.DeterminantFeature
 import space.kscience.kmath.linear.LupDecompositionFeature
-import space.kscience.kmath.linear.getFeature
+import space.kscience.kmath.linear.computeFeature
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
@@ -59,9 +59,9 @@ internal class EjmlMatrixTest {
     fun features() {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        val det: DeterminantFeature<Double> = EjmlLinearSpaceDDRM.getFeature(w) ?: fail()
+        val det: DeterminantFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
         assertEquals(CommonOps_DDRM.det(m), det.determinant)
-        val lup: LupDecompositionFeature<Double> = EjmlLinearSpaceDDRM.getFeature(w) ?: fail()
+        val lup: LupDecompositionFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }

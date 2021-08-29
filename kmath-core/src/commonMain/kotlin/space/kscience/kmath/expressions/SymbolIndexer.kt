@@ -9,6 +9,7 @@ import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
@@ -47,6 +48,11 @@ public interface SymbolIndexer {
         return symbols.indices.associate { symbols[it] to get(it) }
     }
 
+    public fun <T> Point<T>.toMap(): Map<Symbol, T> {
+        require(size == symbols.size) { "The input array size for indexer should be ${symbols.size} but $size found" }
+        return symbols.indices.associate { symbols[it] to get(it) }
+    }
+
     public operator fun <T> Structure2D<T>.get(rowSymbol: Symbol, columnSymbol: Symbol): T =
         get(indexOf(rowSymbol), indexOf(columnSymbol))
 
@@ -55,6 +61,10 @@ public interface SymbolIndexer {
 
     public fun <T> Map<Symbol, T>.toPoint(bufferFactory: BufferFactory<T>): Point<T> =
         bufferFactory(symbols.size) { getValue(symbols[it]) }
+
+    public fun Map<Symbol, Double>.toPoint(): DoubleBuffer =
+        DoubleBuffer(symbols.size) { getValue(symbols[it]) }
+
 
     public fun Map<Symbol, Double>.toDoubleArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }
 }

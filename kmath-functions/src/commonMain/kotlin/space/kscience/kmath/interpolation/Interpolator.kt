@@ -42,20 +42,20 @@ public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     x: Buffer<T>,
     y: Buffer<T>,
 ): PiecewisePolynomial<T> {
-    val pointSet = XYColumnarData(x, y)
+    val pointSet = XYColumnarData.of(x, y)
     return interpolatePolynomials(pointSet)
 }
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     data: Map<T, T>,
 ): PiecewisePolynomial<T> {
-    val pointSet = XYColumnarData(data.keys.toList().asBuffer(), data.values.toList().asBuffer())
+    val pointSet = XYColumnarData.of(data.keys.toList().asBuffer(), data.values.toList().asBuffer())
     return interpolatePolynomials(pointSet)
 }
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     data: List<Pair<T, T>>,
 ): PiecewisePolynomial<T> {
-    val pointSet = XYColumnarData(data.map { it.first }.asBuffer(), data.map { it.second }.asBuffer())
+    val pointSet = XYColumnarData.of(data.map { it.first }.asBuffer(), data.map { it.second }.asBuffer())
     return interpolatePolynomials(pointSet)
 }

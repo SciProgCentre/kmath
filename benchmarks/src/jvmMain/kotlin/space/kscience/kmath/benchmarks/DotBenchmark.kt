@@ -23,8 +23,8 @@ internal class DotBenchmark {
         const val dim = 1000
 
         //creating invertible matrix
-        val matrix1 = LinearSpace.real.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
-        val matrix2 = LinearSpace.real.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val matrix1 = LinearSpace.double.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val matrix2 = LinearSpace.double.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
 
         val cmMatrix1 = CMLinearSpace { matrix1.toCM() }
         val cmMatrix2 = CMLinearSpace { matrix2.toCM() }
@@ -63,7 +63,7 @@ internal class DotBenchmark {
 
     @Benchmark
     fun realDot(blackhole: Blackhole) {
-        LinearSpace.real {
+        LinearSpace.double {
             blackhole.consume(matrix1 dot matrix2)
         }
     }

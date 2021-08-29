@@ -151,7 +151,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
         context.run { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(LinearSpace.real)
+        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(LinearSpace.double)
     }
 }
 

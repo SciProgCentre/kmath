@@ -20,3 +20,6 @@ public class VirtualMatrix<out T : Any>(
 
     override operator fun get(i: Int, j: Int): T = generator(i, j)
 }
+
+public fun <T : Any> MatrixBuilder<T, *>.virtual(generator: (i: Int, j: Int) -> T): VirtualMatrix<T> =
+    VirtualMatrix(rows, columns, generator)

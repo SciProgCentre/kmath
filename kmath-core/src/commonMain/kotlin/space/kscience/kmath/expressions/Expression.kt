@@ -68,6 +68,7 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 /**
  * Bind a symbol by name inside the [ExpressionAlgebra]
  */
-public fun <T, E> ExpressionAlgebra<T, E>.binding(): ReadOnlyProperty<Any?, E> = ReadOnlyProperty { _, property ->
-    bindSymbol(property.name) ?: error("A variable with name ${property.name} does not exist")
-}
+public val <T, E> ExpressionAlgebra<T, E>.binding: ReadOnlyProperty<Any?, E>
+    get() = ReadOnlyProperty { _, property ->
+        bindSymbol(property.name) ?: error("A variable with name ${property.name} does not exist")
+    }

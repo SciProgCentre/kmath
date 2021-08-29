@@ -32,18 +32,18 @@ import kotlin.math.pow
 public typealias RealMatrix = Matrix<Double>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum, initializer)
+    LinearSpace.double.buildMatrix(rowNum, colNum, initializer)
 
 @OptIn(UnstableKMathAPI::class)
 public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, DoubleField> =
-    LinearSpace.real.matrix(rowNum, colNum)
+    LinearSpace.double.matrix(rowNum, colNum)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
-    return LinearSpace.real.buildMatrix(size, this[0].size) { row, col -> this@toMatrix[row][col] }
+    return LinearSpace.double.buildMatrix(size, this[0].size) { row, col -> this@toMatrix[row][col] }
 }
 
 public fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
-    LinearSpace.real.buildMatrix(it.size, it[0].size) { row, col -> it[row][col] }
+    LinearSpace.double.buildMatrix(it.size, it[0].size) { row, col -> it[row][col] }
 }
 
 public fun RealMatrix.repeatStackVertical(n: Int): RealMatrix =
@@ -56,37 +56,37 @@ public fun RealMatrix.repeatStackVertical(n: Int): RealMatrix =
  */
 
 public operator fun RealMatrix.times(double: Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col ->
         get(row, col) * double
     }
 
 public operator fun RealMatrix.plus(double: Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col ->
         get(row, col) + double
     }
 
 public operator fun RealMatrix.minus(double: Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col ->
         get(row, col) - double
     }
 
 public operator fun RealMatrix.div(double: Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col ->
         get(row, col) / double
     }
 
 public operator fun Double.times(matrix: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
+    LinearSpace.double.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
         this@times * matrix[row, col]
     }
 
 public operator fun Double.plus(matrix: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
+    LinearSpace.double.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
         this@plus + matrix[row, col]
     }
 
 public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
+    LinearSpace.double.buildMatrix(matrix.rowNum, matrix.colNum) { row, col ->
         this@minus - matrix[row, col]
     }
 
@@ -101,20 +101,20 @@ public operator fun Double.minus(matrix: RealMatrix): RealMatrix =
 
 @UnstableKMathAPI
 public operator fun RealMatrix.times(other: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this@times[row, col] * other[row, col] }
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col -> this@times[row, col] * other[row, col] }
 
 public operator fun RealMatrix.plus(other: RealMatrix): RealMatrix =
-    LinearSpace.real.run { this@plus + other }
+    LinearSpace.double.run { this@plus + other }
 
 public operator fun RealMatrix.minus(other: RealMatrix): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { row, col -> this@minus[row, col] - other[row, col] }
+    LinearSpace.double.buildMatrix(rowNum, colNum) { row, col -> this@minus[row, col] - other[row, col] }
 
 /*
  *  Operations on columns
  */
 
 public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum + 1) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, colNum + 1) { row, col ->
         if (col < colNum)
             get(row, col)
         else
@@ -122,7 +122,7 @@ public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Double>) -
     }
 
 public fun RealMatrix.extractColumns(columnRange: IntRange): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, columnRange.count()) { row, col ->
+    LinearSpace.double.buildMatrix(rowNum, columnRange.count()) { row, col ->
         this@extractColumns[row, columnRange.first + col]
     }
 
@@ -155,14 +155,14 @@ public fun RealMatrix.max(): Double? = elements().map { (_, value) -> value }.ma
 public fun RealMatrix.average(): Double = elements().map { (_, value) -> value }.average()
 
 public inline fun RealMatrix.map(crossinline transform: (Double) -> Double): RealMatrix =
-    LinearSpace.real.buildMatrix(rowNum, colNum) { i, j ->
+    LinearSpace.double.buildMatrix(rowNum, colNum) { i, j ->
         transform(get(i, j))
     }
 
 /**
  * Inverse a square real matrix using LUP decomposition
  */
-public fun RealMatrix.inverseWithLup(): RealMatrix = LinearSpace.real.inverseWithLup(this)
+public fun RealMatrix.inverseWithLup(): RealMatrix = LinearSpace.double.lupSolver().inverse(this)
 
 //extended operations
 

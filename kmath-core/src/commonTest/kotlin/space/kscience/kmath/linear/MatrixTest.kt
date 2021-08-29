@@ -17,16 +17,17 @@ import kotlin.test.assertTrue
 @OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
 class MatrixTest {
+
     @Test
     fun testTranspose() {
-        val matrix = LinearSpace.real.one(3, 3)
+        val matrix = LinearSpace.double.one(3, 3)
         val transposed = matrix.transpose()
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
     @Test
     fun testBuilder() {
-        val matrix = LinearSpace.real.matrix(2, 3)(
+        val matrix = LinearSpace.double.matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
@@ -48,7 +49,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res = LinearSpace.real.run { res dot this@pow }
+                res = LinearSpace.double.run { res dot this@pow }
             }
             return res
         }
@@ -61,7 +62,7 @@ class MatrixTest {
         val firstMatrix = StructureND.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
         val secondMatrix = StructureND.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
 
-        LinearSpace.real.run {
+        LinearSpace.double.run {
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }
             val result = firstMatrix dot secondMatrix

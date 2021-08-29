@@ -19,9 +19,12 @@ public interface Symbol : MST {
     public val identity: String
 
     public companion object {
-        public val x: StringSymbol = StringSymbol("x")
-        public val y: StringSymbol = StringSymbol("y")
-        public val z: StringSymbol = StringSymbol("z")
+        public val x: Symbol = Symbol("x")
+        public val xError: Symbol = Symbol("x.error")
+        public val y: Symbol = Symbol("y")
+        public val yError: Symbol = Symbol("y.error")
+        public val z: Symbol = Symbol("z")
+        public val zError: Symbol = Symbol("z.error")
     }
 }
 
@@ -29,9 +32,14 @@ public interface Symbol : MST {
  * A [Symbol] with a [String] identity
  */
 @JvmInline
-public value class StringSymbol(override val identity: String) : Symbol {
+internal value class StringSymbol(override val identity: String) : Symbol {
     override fun toString(): String = identity
 }
+
+/**
+ * Create s Symbols with a string identity
+ */
+public fun Symbol(identity: String): Symbol = StringSymbol(identity)
 
 /**
  * A delegate to create a symbol with a string identity in this scope

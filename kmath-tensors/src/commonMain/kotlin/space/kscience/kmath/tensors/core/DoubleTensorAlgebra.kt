@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
@@ -811,28 +813,32 @@ public open class DoubleTensorAlgebra :
         val sTensor = zeros(commonShape + intArrayOf(min(n, m)))
         val vTensor = zeros(commonShape + intArrayOf(min(n, m), m))
 
-        tensor.matrixSequence()
-            .zip(
-                uTensor.matrixSequence()
-                    .zip(
-                        sTensor.vectorSequence()
-                            .zip(vTensor.matrixSequence())
-                    )
-            ).forEach { (matrix, USV) ->
-                val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
-                val curMatrix = DoubleTensor(
-                    matrix.shape,
-                    matrix.mutableBuffer.array().slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
-                        .toDoubleArray()
-                )
-                svdHelper(curMatrix, USV, m, n, epsilon)
-            }
+        val matrices = tensor.matrices
+        val uTensors = uTensor.matrices
+        val sTensorVectors = sTensor.vectors
+        val vTensors = vTensor.matrices
+
+        for (index in matrices.indices) {
+            val matrix = matrices[index]
+            val usv = Triple(
+                uTensors[index],
+                sTensorVectors[index],
+                vTensors[index]
+            )
+            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
+            val curMatrix = DoubleTensor(
+                matrix.shape,
+                matrix.mutableBuffer.array()
+                    .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
+                    .toDoubleArray()
+            )
+            svdHelper(curMatrix, usv, m, n, epsilon)
+        }
 
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
-    override fun Tensor<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
-        symEig(epsilon = 1e-15)
+    override fun Tensor<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEig(epsilon = 1e-15)
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
@@ -844,12 +850,26 @@ public open class DoubleTensorAlgebra :
      */
     public fun Tensor<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
+
+        fun MutableStructure2D<Double>.cleanSym(n: Int) {
+            for (i in 0 until n) {
+                for (j in 0 until n) {
+                    if (i == j) {
+                        this[i, j] = sign(this[i, j])
+                    } else {
+                        this[i, j] = 0.0
+                    }
+                }
+            }
+        }
+
         val (u, s, v) = tensor.svd(epsilon)
         val shp = s.shape + intArrayOf(1)
         val utv = u.transpose() dot v
         val n = s.shape.last()
-        for (matrix in utv.matrixSequence())
-            cleanSymHelper(matrix.as2D(), n)
+        for (matrix in utv.matrixSequence()) {
+            matrix.as2D().cleanSym(n)
+        }
 
         val eig = (utv dot s.view(shp)).view(s.shape)
         return eig to v

@@ -251,7 +251,9 @@ public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
 /**
  * Generate [AutoDiffProcessor] for [SimpleAutoDiffExpression]
  */
-public fun <T : Any, F : Field<T>> simpleAutoDiff(field: F): AutoDiffProcessor<T, AutoDiffValue<T>, SimpleAutoDiffField<T, F>, Expression<T>> =
+public fun <T : Any, F : Field<T>> simpleAutoDiff(
+    field: F
+): AutoDiffProcessor<T, AutoDiffValue<T>, SimpleAutoDiffField<T, F>> =
     AutoDiffProcessor { function ->
         SimpleAutoDiffExpression(field, function)
     }

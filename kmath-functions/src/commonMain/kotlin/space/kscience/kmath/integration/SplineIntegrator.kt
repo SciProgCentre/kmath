@@ -54,7 +54,7 @@ public class SplineIntegrator<T : Comparable<T>>(
     public val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>,
 ) : UnivariateIntegrator<T> {
-    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
+    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
         val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
 
         val interpolator: PolynomialInterpolator<T> = SplineInterpolator(algebra, bufferFactory)
@@ -83,7 +83,7 @@ public class SplineIntegrator<T : Comparable<T>>(
  */
 @UnstableKMathAPI
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
         val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(DoubleField, ::DoubleBuffer)
 

@@ -164,7 +164,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features.
+     * Compute a feature of the structure in this scope. Structure features take precedence other context features.
      *
      * @param F the type of feature.
      * @param structure the structure.
@@ -172,7 +172,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
 
     public companion object {
 
@@ -184,7 +184,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
-        public val real: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
+        public val double: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -202,9 +202,27 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
-    getFeature(structure, F::class)
+public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.computeFeature(structure: Matrix<T>): F? =
+    computeFeature(structure, F::class)
 
 
-public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
+public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
 
+
+/**
+ * Convert matrix to vector if it is possible.
+ */
+public fun <T : Any> Matrix<T>.asVector(): Point<T> =
+    if (this.colNum == 1)
+        as1D()
+    else
+        error("Can't convert matrix with more than one column to vector")
+
+/**
+ * Creates an n &times; 1 [VirtualMatrix], where n is the size of the given buffer.
+ *
+ * @param T the type of elements contained in the buffer.
+ * @receiver a buffer.
+ * @return the new matrix.
+ */
+public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

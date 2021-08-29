@@ -203,7 +203,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
     override fun ${type}.times(v: Point<${type}>): Ejml${type}Vector<${ejmlMatrixType}> = v * this
 
     @UnstableKMathAPI
-    override fun <F : StructureFeature> getFeature(structure: Matrix<${type}>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> computeFeature(structure: Matrix<${type}>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 

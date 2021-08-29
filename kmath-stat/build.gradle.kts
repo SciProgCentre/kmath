@@ -1,6 +1,5 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
+    id("ru.mipt.npm.gradle.mpp")
     id("ru.mipt.npm.gradle.native")
 }
 
