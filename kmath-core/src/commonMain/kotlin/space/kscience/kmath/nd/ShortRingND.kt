@@ -34,7 +34,7 @@ public class ShortRingND(
 public inline fun BufferedRingND<Short, ShortRing>.produceInline(crossinline initializer: ShortRing.(Int) -> Short): BufferND<Short> =
     BufferND(strides, ShortBuffer(ShortArray(strides.linearSize) { offset -> ShortRing.initializer(offset) }))
 
-public inline fun <R> ShortRing.nd(vararg shape: Int, action: ShortRingND.() -> R): R {
+public inline fun <R> ShortRing.withNd(vararg shape: Int, action: ShortRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return ShortRingND(shape).run(action)
 }

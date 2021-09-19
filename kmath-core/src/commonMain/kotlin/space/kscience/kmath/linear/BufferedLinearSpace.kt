@@ -6,7 +6,10 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.BufferedRingND
+import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.nd
+import space.kscience.kmath.nd.unwrap
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
@@ -23,7 +26,7 @@ public class BufferedLinearSpace<T : Any, out A : Ring<T>>(
     private fun ndRing(
         rows: Int,
         cols: Int,
-    ): BufferedRingND<T, A> = AlgebraND.ring(elementAlgebra, bufferFactory, rows, cols)
+    ): BufferedRingND<T, A> = elementAlgebra.nd(bufferFactory, rows, cols)
 
     override fun buildMatrix(rows: Int, columns: Int, initializer: A.(i: Int, j: Int) -> T): Matrix<T> =
         ndRing(rows, columns).produce { (i, j) -> elementAlgebra.initializer(i, j) }.as2D()

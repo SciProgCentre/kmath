@@ -6,7 +6,6 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.BufferedRingND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
@@ -533,5 +532,5 @@ public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigIn
 public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
     boxing(size, initializer)
 
-public fun AlgebraND.Companion.bigInt(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
+public fun BigIntField.nd(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
     BufferedRingND(shape, BigIntField, Buffer.Companion::bigInt)

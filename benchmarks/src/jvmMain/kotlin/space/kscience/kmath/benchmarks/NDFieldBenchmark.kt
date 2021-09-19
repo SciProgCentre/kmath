@@ -46,8 +46,8 @@ internal class NDFieldBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val autoField = AlgebraND.auto(DoubleField, dim, dim)
-        private val specializedField = AlgebraND.real(dim, dim)
-        private val genericField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
+        private val autoField = DoubleField.autoNd(dim, dim)
+        private val specializedField = DoubleField.nd(dim, dim)
+        private val genericField = DoubleField.nd(Buffer.Companion::boxing, dim, dim)
     }
 }

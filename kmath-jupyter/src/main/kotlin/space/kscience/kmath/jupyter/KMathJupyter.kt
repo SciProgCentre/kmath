@@ -11,7 +11,6 @@ import kotlinx.html.stream.createHTML
 import kotlinx.html.unsafe
 import org.jetbrains.kotlinx.jupyter.api.DisplayResult
 import org.jetbrains.kotlinx.jupyter.api.HTML
-import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer

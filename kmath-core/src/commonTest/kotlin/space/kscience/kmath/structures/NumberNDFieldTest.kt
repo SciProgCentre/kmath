@@ -7,7 +7,11 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.combine
+import space.kscience.kmath.nd.get
+import space.kscience.kmath.nd.nd
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.invoke
 import kotlin.math.abs
@@ -17,7 +21,7 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = AlgebraND.real(3, 3)
+    val algebra = DoubleField.nd(3, 3)
     val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
 
@@ -83,7 +87,7 @@ class NumberNDFieldTest {
     @Test
     fun testInternalContext() {
         algebra {
-            (AlgebraND.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (DoubleField.nd(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

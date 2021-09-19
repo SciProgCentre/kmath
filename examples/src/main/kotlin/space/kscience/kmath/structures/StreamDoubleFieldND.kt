@@ -105,4 +105,4 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-fun AlgebraND.Companion.realWithStream(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)
+fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)

@@ -9,12 +9,12 @@ import space.kscience.kmath.integration.gaussIntegrator
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.nd
+import space.kscience.kmath.nd.withNd
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 
 fun main(): Unit = DoubleField {
-    nd(2, 2) {
+    withNd(2, 2) {
 
         //Produce a diagonal StructureND
         fun diagonal(v: Double) = produce { (i, j) ->

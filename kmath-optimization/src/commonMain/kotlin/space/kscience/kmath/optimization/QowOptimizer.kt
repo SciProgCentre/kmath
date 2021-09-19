@@ -16,6 +16,14 @@ import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.DoubleL2Norm
 
+public class QowRuns(public val runs: Int) : OptimizationFeature {
+    init {
+        require(runs >= 1) { "Number of runs must be more than zero" }
+    }
+
+    override fun toString(): String = "QowRuns(runs=$runs)"
+}
+
 
 /**
  * An optimizer based onf Fyodor Tkachev's quasi-optimal weights method.
@@ -56,7 +64,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
         val prior: DifferentiableExpression<Double>? get() = problem.getFeature<OptimizationPrior<Double>>()
 
-        override fun toString(): String  = parameters.toString()
+        override fun toString(): String = parameters.toString()
     }
 
     /**
@@ -242,9 +250,15 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     }
 
     override suspend fun optimize(problem: XYFit): XYFit {
-        val qowSteps = 2
-        val initialWeight = QoWeight(problem, problem.startPoint)
-        val res = initialWeight.newtonianRun()
+        val qowRuns = problem.getFeature<QowRuns>()?.runs ?: 2
+
+
+        var qow = QoWeight(problem, problem.startPoint)
+        var res = qow.newtonianRun()
+        repeat(qowRuns - 1) {
+            qow = QoWeight(problem, res.parameters)
+            res = qow.newtonianRun()
+        }
         return res.problem.withFeature(OptimizationResult(res.parameters))
     }
 }

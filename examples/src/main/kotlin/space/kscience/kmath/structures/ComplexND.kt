@@ -9,10 +9,10 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.complex.*
 import space.kscience.kmath.linear.transpose
-import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.nd.real
+import space.kscience.kmath.nd.nd
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis
 
@@ -20,8 +20,8 @@ fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = AlgebraND.real(dim, dim)
-    val complexField: ComplexFieldND = AlgebraND.complex(dim, dim)
+    val realField = DoubleField.nd(dim, dim)
+    val complexField: ComplexFieldND = ComplexField.nd(dim, dim)
 
     val realTime = measureTimeMillis {
         realField {
@@ -49,7 +49,7 @@ fun main() {
 fun complexExample() {
     //Create a context for 2-d structure with complex values
     ComplexField {
-        nd(4, 8) {
+        withNd(4, 8) {
             //a constant real-valued structure
             val x = one * 2.5
             operator fun Number.plus(other: Complex) = Complex(this.toDouble() + other.re, other.im)

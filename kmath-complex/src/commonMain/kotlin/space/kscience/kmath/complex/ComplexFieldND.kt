@@ -6,7 +6,6 @@
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.BufferedFieldND
 import space.kscience.kmath.nd.StructureND
@@ -113,12 +112,12 @@ public inline fun BufferedFieldND<Complex, ComplexField>.produceInline(initializ
 }
 
 
-public fun AlgebraND.Companion.complex(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
+public fun ComplexField.nd(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexFieldND.() -> R): R {
+public inline fun <R> ComplexField.withNd(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return ComplexFieldND(shape).action()
 }

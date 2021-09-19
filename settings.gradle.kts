@@ -5,11 +5,11 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val kotlinVersion = "1.5.21"
+    val kotlinVersion = "1.5.30"
 
     plugins {
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        id("ru.mipt.npm.gradle.project") version "0.10.2"
+        id("ru.mipt.npm.gradle.project") version "0.10.3"
         kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
