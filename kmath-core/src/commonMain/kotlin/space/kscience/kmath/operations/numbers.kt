@@ -107,6 +107,8 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     override inline fun Double.div(b: Double): Double = this / b
 }
 
+public val Double.Companion.algebra: DoubleField get() = DoubleField
+
 /**
  * A field for [Float] without boxing. Does not produce appropriate field element.
  */
@@ -158,6 +160,8 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override inline fun Float.div(b: Float): Float = this / b
 }
 
+public val Float.Companion.algebra: FloatField get() = FloatField
+
 /**
  * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
@@ -179,6 +183,8 @@ public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
     override inline fun Int.minus(b: Int): Int = this - b
     override inline fun Int.times(b: Int): Int = this * b
 }
+
+public val Int.Companion.algebra: IntRing get() = IntRing
 
 /**
  * A field for [Short] without boxing. Does not produce appropriate ring element.
@@ -202,6 +208,8 @@ public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short>
     override inline fun Short.times(b: Short): Short = (this * b).toShort()
 }
 
+public val Short.Companion.algebra: ShortRing get() = ShortRing
+
 /**
  * A field for [Byte] without boxing. Does not produce appropriate ring element.
  */
@@ -224,6 +232,8 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
     override inline fun Byte.times(b: Byte): Byte = (this * b).toByte()
 }
 
+public val Byte.Companion.algebra: ByteRing get() = ByteRing
+
 /**
  * A field for [Double] without boxing. Does not produce appropriate ring element.
  */
@@ -245,3 +255,5 @@ public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
     override inline fun Long.minus(b: Long): Long = (this - b)
     override inline fun Long.times(b: Long): Long = (this * b)
 }
+
+public val Long.Companion.algebra: LongRing get() = LongRing

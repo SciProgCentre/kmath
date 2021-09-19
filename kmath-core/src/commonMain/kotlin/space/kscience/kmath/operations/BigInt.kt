@@ -526,11 +526,21 @@ public fun String.parseBigInteger(): BigInt? {
     }
 }
 
+public val BigInt.algebra: BigIntField get() = BigIntField
+
+@Deprecated("Use BigInt::buffer")
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     boxing(size, initializer)
 
+public inline fun BigInt.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    Buffer.boxing(size, initializer)
+
+@Deprecated("Use BigInt::mutableBuffer")
 public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
     boxing(size, initializer)
+
+public inline fun BigInt.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    Buffer.boxing(size, initializer)
 
 public fun BigIntField.nd(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
     BufferedRingND(shape, BigIntField, Buffer.Companion::bigInt)

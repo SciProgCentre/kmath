@@ -7,13 +7,13 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
+import space.kscience.kmath.complex.nd
 import space.kscience.kmath.complex.withNd
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.autoNd
 
 fun main() {
     // 2d element
-    val element = ComplexField.autoNd(2, 2).produce { (i, j) ->
+    val element = ComplexField.nd(2, 2).produce { (i, j) ->
         Complex(i - j, i + j)
     }
     println(element)

@@ -203,6 +203,8 @@ public data class Complex(val re: Double, val im: Double) {
     }
 }
 
+public val Complex.Companion.algebra: ComplexField get() = ComplexField
+
 
 /**
  * Creates a complex number with real part equal to this real.

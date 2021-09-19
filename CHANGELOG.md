@@ -39,6 +39,7 @@
 - Rename `DifferentiableMstExpression` to `KotlingradExpression`
 - `FeatureSet` now accepts only `Feature`. It is possible to override keys and use interfaces.
 - Use `Symbol` factory function instead of `StringSymbol`
+- New discoverability pattern: `<Type>.algebra.<nd/etc>`
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`
