@@ -69,6 +69,8 @@ public class RingBuffer<T>(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
 
+    override fun toString(): String = Buffer.toString(this)
+
     public companion object {
         public inline fun <reified T : Any> build(size: Int, empty: T): RingBuffer<T> {
             val buffer = MutableBuffer.auto(size) { empty } as MutableBuffer<T?>

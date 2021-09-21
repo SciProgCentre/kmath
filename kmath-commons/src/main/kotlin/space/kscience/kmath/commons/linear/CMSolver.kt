@@ -18,7 +18,7 @@ public enum class CMDecomposition {
     CHOLESKY
 }
 
-public fun CMLinearSpace.solver(
+private fun CMLinearSpace.solver(
     a: Matrix<Double>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
@@ -48,9 +48,11 @@ public fun CMLinearSpace.inverse(
 
 
 public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Double> = object : LinearSolver<Double> {
-    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solve(a, b, decomposition)
+    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solver(a, decomposition).solve(b.toCM().origin).wrap()
 
-    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> = solve(a, b, decomposition)
+    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> = solver(a, decomposition).solve(b.toCM().origin).toPoint()
 
-    override fun inverse(matrix: Matrix<Double>): Matrix<Double> = inverse(matrix, decomposition)
+    override fun inverse(matrix: Matrix<Double>): Matrix<Double> = solver(matrix, decomposition).inverse.wrap()
 }
+
+public fun CMLinearSpace.lupSolver(): LinearSolver<Double> = solver((CMDecomposition.LUP))

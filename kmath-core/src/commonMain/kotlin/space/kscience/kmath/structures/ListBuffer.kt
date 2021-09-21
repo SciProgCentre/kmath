@@ -21,6 +21,8 @@ public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
 
     override operator fun get(index: Int): T = list[index]
     override operator fun iterator(): Iterator<T> = list.iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 

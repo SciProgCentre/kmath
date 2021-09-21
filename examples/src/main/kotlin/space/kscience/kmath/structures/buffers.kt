@@ -6,8 +6,8 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.buffer
 import space.kscience.kmath.operations.bufferAlgebra
-import space.kscience.kmath.operations.produce
 
 inline fun <reified R : Any> MutableBuffer.Companion.same(
     n: Int,
@@ -17,6 +17,6 @@ inline fun <reified R : Any> MutableBuffer.Companion.same(
 
 fun main() {
     with(DoubleField.bufferAlgebra(5)) {
-        println(number(2.0) + produce(1, 2, 3, 4, 5))
+        println(number(2.0) + buffer(1, 2, 3, 4, 5))
     }
 }

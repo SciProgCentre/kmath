@@ -105,6 +105,16 @@ benchmark {
         commonConfiguration()
         include("JafamaBenchmark")
     }
+
+    configurations.register("viktor") {
+        commonConfiguration()
+        include("ViktorBenchmark")
+    }
+
+    configurations.register("viktorLog") {
+        commonConfiguration()
+        include("ViktorLogBenchmark")
+    }
 }
 
 // Fix kotlinx-benchmarks bug

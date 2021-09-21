@@ -67,12 +67,14 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
         structure[intArrayOf(index)] = value
     }
 
-    @PerformancePitfall
+    @OptIn(PerformancePitfall::class)
     override fun copy(): MutableBuffer<T> = structure
         .elements()
         .map(Pair<IntArray, T>::second)
         .toMutableList()
         .asMutableBuffer()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 
@@ -107,6 +109,8 @@ internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : Mutable
     }
 
     override fun copy(): MutableBuffer<T> = buffer.copy()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 /**

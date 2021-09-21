@@ -9,12 +9,12 @@ import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.misc.Feature
 import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
+import kotlin.math.abs
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
@@ -61,7 +61,6 @@ public interface StructureND<out T> : Featured<StructureFeature> {
      * Feature is some additional structure information that allows to access it special properties or hints.
      * If the feature is not present, `null` is returned.
      */
-    @UnstableKMathAPI
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
 
     public companion object {
@@ -78,6 +77,22 @@ public interface StructureND<out T> : Featured<StructureFeature> {
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }
+        }
+
+        @PerformancePitfall
+        public fun contentEquals(
+            st1: StructureND<Double>,
+            st2: StructureND<Double>,
+            tolerance: Double = 1e-11
+        ): Boolean {
+            if (st1 === st2) return true
+
+            // fast comparison of buffers if possible
+            if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
+                return Buffer.contentEquals(st1.buffer, st2.buffer)
+
+            //element by element comparison if it could not be avoided
+            return st1.elements().all { (index, value) -> abs(value - st2[index]) < tolerance }
         }
 
         /**
@@ -196,8 +211,8 @@ public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
  */
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
-@UnstableKMathAPI
-public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
+//@UnstableKMathAPI
+//public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
 
 /**
  * Represents mutable [StructureND].

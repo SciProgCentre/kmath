@@ -13,7 +13,10 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.invoke
+import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Buffer
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -35,7 +38,7 @@ internal class DotBenchmark {
 
     @Benchmark
     fun cmDot(blackhole: Blackhole) {
-        CMLinearSpace.run {
+        CMLinearSpace {
             blackhole.consume(cmMatrix1 dot cmMatrix2)
         }
     }
@@ -56,14 +59,14 @@ internal class DotBenchmark {
 
     @Benchmark
     fun bufferedDot(blackhole: Blackhole) {
-        LinearSpace.auto(DoubleField).invoke {
+        with(DoubleField.linearSpace(Buffer.Companion::auto)) {
             blackhole.consume(matrix1 dot matrix2)
         }
     }
 
     @Benchmark
-    fun realDot(blackhole: Blackhole) {
-        LinearSpace.double {
+    fun doubleDot(blackhole: Blackhole) {
+        with(Double.algebra.linearSpace) {
             blackhole.consume(matrix1 dot matrix2)
         }
     }

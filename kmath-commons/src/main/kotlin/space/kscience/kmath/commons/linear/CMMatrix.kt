@@ -10,6 +10,7 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
@@ -21,12 +22,15 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
 }
 
-public class CMVector(public val origin: RealVector) : Point<Double> {
+@JvmInline
+public value class CMVector(public val origin: RealVector) : Point<Double> {
     override val size: Int get() = origin.dimension
 
     override operator fun get(index: Int): Double = origin.getEntry(index)
 
     override operator fun iterator(): Iterator<Double> = origin.toArray().iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)

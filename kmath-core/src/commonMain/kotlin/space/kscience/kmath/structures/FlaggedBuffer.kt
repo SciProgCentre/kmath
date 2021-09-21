@@ -53,8 +53,10 @@ public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, Valu
 /**
  * A [Double] buffer that supports flags for each value like `NaN` or Missing.
  */
-public class FlaggedDoubleBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>,
-    Buffer<Double?> {
+public class FlaggedDoubleBuffer(
+    public val values: DoubleArray,
+    public val flags: ByteArray
+) : FlaggedBuffer<Double?>, Buffer<Double?> {
     init {
         require(values.size == flags.size) { "Values and flags must have the same dimensions" }
     }
@@ -68,6 +70,8 @@ public class FlaggedDoubleBuffer(public val values: DoubleArray, public val flag
     override operator fun iterator(): Iterator<Double?> = values.indices.asSequence().map {
         if (isValid(it)) values[it] else null
     }.iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 public inline fun FlaggedDoubleBuffer.forEachValid(block: (Double) -> Unit) {

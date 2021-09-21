@@ -9,8 +9,10 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.BufferedFieldND
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.BufferField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.structures.Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -111,13 +113,16 @@ public inline fun BufferedFieldND<Complex, ComplexField>.produceInline(initializ
     return BufferND(strides, buffer)
 }
 
+@UnstableKMathAPI
+public fun ComplexField.bufferAlgebra(size: Int): BufferField<Complex, ComplexField> =
+    bufferAlgebra(Buffer.Companion::complex, size)
 
-public fun ComplexField.nd(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
+public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> ComplexField.withNd(vararg shape: Int, action: ComplexFieldND.() -> R): R {
+public inline fun <R> ComplexField.withNdAlgebra(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return ComplexFieldND(shape).action()
 }

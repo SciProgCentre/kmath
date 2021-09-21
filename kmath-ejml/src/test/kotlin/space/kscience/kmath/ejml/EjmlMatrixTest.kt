@@ -9,12 +9,11 @@ import org.ejml.data.DMatrixRMaj
 import org.ejml.dense.row.CommonOps_DDRM
 import org.ejml.dense.row.RandomMatrices_DDRM
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
-import space.kscience.kmath.linear.DeterminantFeature
-import space.kscience.kmath.linear.LupDecompositionFeature
-import space.kscience.kmath.linear.computeFeature
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
@@ -81,5 +80,25 @@ internal class EjmlMatrixTest {
     fun origin() {
         val m = randomMatrix
         assertSame(m, EjmlDoubleMatrix(m).origin)
+    }
+
+    @Test
+    fun inverse() = EjmlLinearSpaceDDRM {
+        val random = Random(1224)
+        val dim = 20
+
+        val space = Double.algebra.linearSpace
+
+        //creating invertible matrix
+        val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val l = space.buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
+        val matrix = space { l dot u }
+        val inverted = matrix.toEjml().inverse()
+
+        val res = matrix dot inverted
+
+        println(StructureND.toString(res))
+
+        assertTrue { StructureND.contentEquals(one(dim, dim), res, 1e-3) }
     }
 }

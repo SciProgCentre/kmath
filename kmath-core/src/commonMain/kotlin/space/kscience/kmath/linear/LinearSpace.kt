@@ -6,8 +6,13 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -34,7 +39,7 @@ public typealias Point<T> = Buffer<T>
  * @param T the type of items in the matrices.
  * @param A the type of ring over [T].
  */
-public interface LinearSpace<T : Any, out A : Ring<T>> {
+public interface LinearSpace<T, out A : Ring<T>> {
     public val elementAlgebra: A
 
     /**
@@ -172,7 +177,8 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? =
+        structure.getFeature(type)
 
     public companion object {
 
@@ -184,6 +190,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
+        @Deprecated("use DoubleField.linearSpace")
         public val double: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
@@ -213,10 +220,8 @@ public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() ->
  * Convert matrix to vector if it is possible.
  */
 public fun <T : Any> Matrix<T>.asVector(): Point<T> =
-    if (this.colNum == 1)
-        as1D()
-    else
-        error("Can't convert matrix with more than one column to vector")
+    if (this.colNum == 1) as1D()
+    else error("Can't convert matrix with more than one column to vector")
 
 /**
  * Creates an n &times; 1 [VirtualMatrix], where n is the size of the given buffer.

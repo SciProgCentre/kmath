@@ -87,39 +87,39 @@ public open class BufferedFieldND<T, out R : Field<T>>(
 }
 
 // group factories
-public fun <T, A : Group<T>> A.nd(
+public fun <T, A : Group<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedGroupND<T, A> = BufferedGroupND(shape, this, bufferFactory)
 
 @JvmName("withNdGroup")
-public inline fun <T, A : Group<T>, R> A.withNd(
+public inline fun <T, A : Group<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedGroupND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return nd(bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }
 
 //ring factories
-public fun <T, A : Ring<T>> A.nd(
+public fun <T, A : Ring<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedRingND<T, A> = BufferedRingND(shape, this, bufferFactory)
 
 @JvmName("withNdRing")
-public inline fun <T, A : Ring<T>, R> A.withNd(
+public inline fun <T, A : Ring<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedRingND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return nd(bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }
 
 //field factories
-public fun <T, A : Field<T>> A.nd(
+public fun <T, A : Field<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
 ): BufferedFieldND<T, A> = BufferedFieldND(shape, this, bufferFactory)
@@ -129,7 +129,7 @@ public fun <T, A : Field<T>> A.nd(
  */
 @UnstableKMathAPI
 @Suppress("UNCHECKED_CAST")
-public inline fun <reified T : Any, A : Field<T>> A.autoNd(
+public inline fun <reified T : Any, A : Field<T>> A.autoNdAlgebra(
     vararg shape: Int,
 ): FieldND<T, A> = when (this) {
     DoubleField -> DoubleFieldND(shape) as FieldND<T, A>
@@ -137,11 +137,11 @@ public inline fun <reified T : Any, A : Field<T>> A.autoNd(
 }
 
 @JvmName("withNdField")
-public inline fun <T, A : Field<T>, R> A.withNd(
+public inline fun <T, A : Field<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedFieldND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return nd(bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }

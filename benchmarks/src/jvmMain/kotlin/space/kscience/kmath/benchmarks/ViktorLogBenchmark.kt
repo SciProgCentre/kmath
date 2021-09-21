@@ -10,8 +10,8 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.nd.autoNd
-import space.kscience.kmath.nd.nd
+import space.kscience.kmath.nd.autoNdAlgebra
+import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.viktor.ViktorFieldND
 
@@ -50,8 +50,8 @@ internal class ViktorLogBenchmark {
         private const val n = 100
 
         // automatically build context most suited for given type.
-        private val autoField = DoubleField.autoNd(dim, dim)
-        private val realNdField = DoubleField.nd(dim, dim)
+        private val autoField = DoubleField.autoNdAlgebra(dim, dim)
+        private val realNdField = DoubleField.ndAlgebra(dim, dim)
         private val viktorField = ViktorFieldND(intArrayOf(dim, dim))
     }
 }

@@ -6,7 +6,6 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableListBuffer
 import space.kscience.kmath.structures.VirtualBuffer
@@ -108,7 +107,6 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
-    @UnstableKMathAPI
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
 
     @PerformancePitfall

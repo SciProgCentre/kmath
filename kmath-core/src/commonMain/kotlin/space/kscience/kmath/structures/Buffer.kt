@@ -45,7 +45,12 @@ public interface Buffer<out T> {
      */
     public operator fun iterator(): Iterator<T>
 
+    override fun toString(): String
+
     public companion object {
+
+        public fun toString(buffer: Buffer<*>): String = buffer.asSequence().joinToString(prefix = "[", separator = ", ", postfix = "]")
+
         /**
          * Check the element-by-element match of content of two buffers.
          */
@@ -126,6 +131,8 @@ public class VirtualBuffer<out T>(override val size: Int, private val generator:
     }
 
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map(generator).iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 /**

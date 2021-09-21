@@ -17,6 +17,12 @@ import space.kscience.kmath.structures.DoubleBuffer
 public interface BufferAlgebra<T, A : Algebra<T>> : Algebra<Buffer<T>> {
     public val bufferFactory: BufferFactory<T>
     public val elementAlgebra: A
+    public val size: Int
+
+    public fun buffer(vararg elements: T): Buffer<T> {
+        require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
+        return bufferFactory(size) { elements[it] }
+    }
 
     //TODO move to multi-receiver inline extension
     public fun Buffer<T>.map(block: (T) -> T): Buffer<T> = bufferFactory(size) { block(get(it)) }
@@ -37,6 +43,11 @@ public interface BufferAlgebra<T, A : Algebra<T>> : Algebra<Buffer<T>> {
             bufferFactory(left.size) { operationFunction(left[it], right[it]) }
         }
     }
+}
+
+@UnstableKMathAPI
+public fun <T> BufferField<T, *>.buffer(initializer: (Int) -> T): Buffer<T> {
+    return bufferFactory(size, initializer)
 }
 
 @UnstableKMathAPI
@@ -104,13 +115,8 @@ public fun <T, A : PowerOperations<T>> BufferAlgebra<T, A>.pow(arg: Buffer<T>, p
 public class BufferField<T, A : Field<T>>(
     override val bufferFactory: BufferFactory<T>,
     override val elementAlgebra: A,
-    public val size: Int
+    override val size: Int
 ) : BufferAlgebra<T, A>, Field<Buffer<T>> {
-
-    public fun produce(vararg elements: T): Buffer<T> {
-        require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
-        return bufferFactory(size) { elements[it] }
-    }
 
     override val zero: Buffer<T> = bufferFactory(size) { elementAlgebra.zero }
     override val one: Buffer<T> = bufferFactory(size) { elementAlgebra.one }
@@ -135,10 +141,14 @@ public class BufferField<T, A : Field<T>>(
 //Double buffer specialization
 
 @UnstableKMathAPI
-public fun BufferField<Double, *>.produce(vararg elements: Number): Buffer<Double> {
+public fun BufferField<Double, *>.buffer(vararg elements: Number): Buffer<Double> {
     require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
     return bufferFactory(size) { elements[it].toDouble() }
 }
+
+@UnstableKMathAPI
+public fun <T, A : Field<T>> A.bufferAlgebra(bufferFactory: BufferFactory<T>, size: Int): BufferField<T, A> =
+    BufferField(bufferFactory, this, size)
 
 @UnstableKMathAPI
 public fun DoubleField.bufferAlgebra(size: Int): BufferField<Double, DoubleField> =

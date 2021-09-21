@@ -9,7 +9,9 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.autoNdAlgebra
+import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 
@@ -46,8 +48,8 @@ internal class NDFieldBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val autoField = DoubleField.autoNd(dim, dim)
-        private val specializedField = DoubleField.nd(dim, dim)
-        private val genericField = DoubleField.nd(Buffer.Companion::boxing, dim, dim)
+        private val autoField = DoubleField.autoNdAlgebra(dim, dim)
+        private val specializedField = DoubleField.ndAlgebra(dim, dim)
+        private val genericField = DoubleField.ndAlgebra(Buffer.Companion::boxing, dim, dim)
     }
 }

@@ -23,6 +23,8 @@ public class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<T> {
 
     override operator fun iterator(): Iterator<T> = array.iterator()
     override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 

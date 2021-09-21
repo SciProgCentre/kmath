@@ -5,9 +5,7 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.BufferAccessor2D
 import space.kscience.kmath.structures.DoubleBuffer
@@ -214,7 +212,6 @@ internal fun <T : Any> LupDecomposition<T>.solve(
 /**
  * Produce a generic solver based on LUP decomposition
  */
-@PerformancePitfall()
 @OptIn(UnstableKMathAPI::class)
 public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
     bufferFactory: MutableBufferFactory<T>,
@@ -222,13 +219,12 @@ public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
 ): LinearSolver<T> = object : LinearSolver<T> {
     override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
         // Use existing decomposition if it is provided by matrix
-        val decomposition = a.getFeature() ?: lup(bufferFactory, a, singularityCheck)
+        val decomposition = computeFeature(a) ?: lup(bufferFactory, a, singularityCheck)
         return decomposition.solve(bufferFactory, b)
     }
 
     override fun inverse(matrix: Matrix<T>): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum))
 }
 
-@PerformancePitfall
 public fun LinearSpace<Double, DoubleField>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
     lupSolver(::DoubleBuffer) { it < singularityThreshold }

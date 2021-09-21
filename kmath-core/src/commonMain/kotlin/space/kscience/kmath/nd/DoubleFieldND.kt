@@ -103,12 +103,12 @@ public class DoubleFieldND(
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-public fun DoubleField.nd(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
+public fun DoubleField.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> DoubleField.withNd(vararg shape: Int, action: DoubleFieldND.() -> R): R {
+public inline fun <R> DoubleField.withNdAlgebra(vararg shape: Int, action: DoubleFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return DoubleFieldND(shape).run(action)
 }

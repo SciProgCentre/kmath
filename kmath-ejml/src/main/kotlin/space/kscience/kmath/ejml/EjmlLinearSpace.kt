@@ -5,9 +5,12 @@
 
 package space.kscience.kmath.ejml
 
+import space.kscience.kmath.linear.InverseMatrixFeature
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.Ring
 
 /**
@@ -36,4 +39,7 @@ public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml
     ): EjmlMatrix<T, M>
 
     public abstract override fun buildVector(size: Int, initializer: A.(Int) -> T): EjmlVector<T, M>
+
+    @UnstableKMathAPI
+    public fun EjmlMatrix<T, *>.inverse(): Structure2D<Double> = computeFeature(this, InverseMatrixFeature::class)?.inverse as Structure2D<Double>
 }

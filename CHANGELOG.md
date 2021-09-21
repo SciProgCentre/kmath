@@ -40,6 +40,7 @@
 - `FeatureSet` now accepts only `Feature`. It is possible to override keys and use interfaces.
 - Use `Symbol` factory function instead of `StringSymbol`
 - New discoverability pattern: `<Type>.algebra.<nd/etc>`
+- Adjusted commons-math API for linear solvers to match conventions.
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`

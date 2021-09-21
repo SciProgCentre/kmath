@@ -8,7 +8,6 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.Ring
 import kotlin.reflect.KClass
 
@@ -26,7 +25,6 @@ public class MatrixWrapper<out T : Any> internal constructor(
      * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the
      * criteria.
      */
-    @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
         features.getFeature(type) ?: origin.getFeature(type)
@@ -90,8 +88,7 @@ public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : Ma
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
+@Suppress("UNCHECKED_CAST")
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
-    colNum,
-    rowNum,
-) { i, j -> get(j, i) }.withFeature(TransposedFeature(this))
+public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature(TransposedFeature::class)?.original as? Matrix<T>
+    ?: VirtualMatrix(colNum, rowNum) { i, j -> get(j, i) }.withFeature(TransposedFeature(this))

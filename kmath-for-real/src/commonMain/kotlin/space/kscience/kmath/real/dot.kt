@@ -5,13 +5,14 @@
 
 package space.kscience.kmath.real
 
-import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.linear.linearSpace
+import space.kscience.kmath.operations.algebra
 
 
 /**
  * Optimized dot product for real matrices
  */
-public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = LinearSpace.double.run {
+public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = Double.algebra.linearSpace.run {
     this@dot dot other
 }

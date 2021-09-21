@@ -49,6 +49,8 @@ internal class BufferAccessor2D<T>(
         override fun copy(): MutableBuffer<T> = factory(colNum) { get(it) }
         override operator fun iterator(): Iterator<T> = (0 until colNum).map(::get).iterator()
 
+        override fun toString(): String = Buffer.toString(this)
+
     }
 
     /**

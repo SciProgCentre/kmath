@@ -22,6 +22,8 @@ public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected 
     override operator fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
 
+    override fun toString(): String = Buffer.toString(this)
+
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MemoryBuffer<T> =
             MemoryBuffer(Memory.allocate(size * spec.objectSize), spec)
