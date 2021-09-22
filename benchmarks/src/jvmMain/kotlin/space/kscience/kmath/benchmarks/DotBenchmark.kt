@@ -11,7 +11,6 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
-import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.operations.DoubleField
@@ -26,8 +25,12 @@ internal class DotBenchmark {
         const val dim = 1000
 
         //creating invertible matrix
-        val matrix1 = LinearSpace.double.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
-        val matrix2 = LinearSpace.double.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val matrix1 = Double.algebra.linearSpace.buildMatrix(dim, dim) { i, j ->
+            if (i <= j) random.nextDouble() else 0.0
+        }
+        val matrix2 = Double.algebra.linearSpace.buildMatrix(dim, dim) { i, j ->
+            if (i <= j) random.nextDouble() else 0.0
+        }
 
         val cmMatrix1 = CMLinearSpace { matrix1.toCM() }
         val cmMatrix2 = CMLinearSpace { matrix2.toCM() }
@@ -37,37 +40,32 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun cmDot(blackhole: Blackhole) {
-        CMLinearSpace {
-            blackhole.consume(cmMatrix1 dot cmMatrix2)
-        }
+    fun cmDotWithConversion(blackhole: Blackhole) = CMLinearSpace {
+        blackhole.consume(matrix1 dot matrix2)
     }
 
     @Benchmark
-    fun ejmlDot(blackhole: Blackhole) {
-        EjmlLinearSpaceDDRM {
-            blackhole.consume(ejmlMatrix1 dot ejmlMatrix2)
-        }
+    fun cmDot(blackhole: Blackhole) = CMLinearSpace {
+        blackhole.consume(cmMatrix1 dot cmMatrix2)
     }
 
     @Benchmark
-    fun ejmlDotWithConversion(blackhole: Blackhole) {
-        EjmlLinearSpaceDDRM {
-            blackhole.consume(matrix1 dot matrix2)
-        }
+    fun ejmlDot(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
+        blackhole.consume(ejmlMatrix1 dot ejmlMatrix2)
     }
 
     @Benchmark
-    fun bufferedDot(blackhole: Blackhole) {
-        with(DoubleField.linearSpace(Buffer.Companion::auto)) {
-            blackhole.consume(matrix1 dot matrix2)
-        }
+    fun ejmlDotWithConversion(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
+        blackhole.consume(matrix1 dot matrix2)
     }
 
     @Benchmark
-    fun doubleDot(blackhole: Blackhole) {
-        with(Double.algebra.linearSpace) {
-            blackhole.consume(matrix1 dot matrix2)
-        }
+    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace(Buffer.Companion::auto)) {
+        blackhole.consume(matrix1 dot matrix2)
+    }
+
+    @Benchmark
+    fun doubleDot(blackhole: Blackhole) = with(Double.algebra.linearSpace) {
+        blackhole.consume(matrix1 dot matrix2)
     }
 }

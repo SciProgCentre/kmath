@@ -11,7 +11,10 @@ import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.BigIntField
+import space.kscience.kmath.operations.JBigIntegerField
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.parseBigInteger
 import java.math.BigInteger
 
 
@@ -19,11 +22,23 @@ import java.math.BigInteger
 @State(Scope.Benchmark)
 internal class BigIntBenchmark {
 
+    val kmSmallNumber = BigIntField.number(100)
+    val jvmSmallNumber = JBigIntegerField.number(100)
     val kmNumber = BigIntField.number(Int.MAX_VALUE)
     val jvmNumber = JBigIntegerField.number(Int.MAX_VALUE)
-    val largeKmNumber = BigIntField { number(11).pow(100_000U) }
-    val largeJvmNumber: BigInteger = JBigIntegerField { number(11).pow(100_000) }
+    val kmLargeNumber = BigIntField { number(11).pow(100_000U) }
+    val jvmLargeNumber: BigInteger = JBigIntegerField { number(11).pow(100_000) }
     val bigExponent = 50_000
+
+    @Benchmark
+    fun kmSmallAdd(blackhole: Blackhole) = BigIntField {
+        blackhole.consume(kmSmallNumber + kmSmallNumber + kmSmallNumber)
+    }
+
+    @Benchmark
+    fun jvmSmallAdd(blackhole: Blackhole) = JBigIntegerField {
+        blackhole.consume(jvmSmallNumber + jvmSmallNumber + jvmSmallNumber)
+    }
 
     @Benchmark
     fun kmAdd(blackhole: Blackhole) = BigIntField {
@@ -37,12 +52,12 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun kmAddLarge(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(largeKmNumber + largeKmNumber + largeKmNumber)
+        blackhole.consume(kmLargeNumber + kmLargeNumber + kmLargeNumber)
     }
 
     @Benchmark
     fun jvmAddLarge(blackhole: Blackhole) = JBigIntegerField {
-        blackhole.consume(largeJvmNumber + largeJvmNumber + largeJvmNumber)
+        blackhole.consume(jvmLargeNumber + jvmLargeNumber + jvmLargeNumber)
     }
 
     @Benchmark
@@ -52,7 +67,7 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun kmMultiplyLarge(blackhole: Blackhole) = BigIntField {
-        blackhole.consume(largeKmNumber*largeKmNumber)
+        blackhole.consume(kmLargeNumber*kmLargeNumber)
     }
 
     @Benchmark
@@ -62,7 +77,7 @@ internal class BigIntBenchmark {
 
     @Benchmark
     fun jvmMultiplyLarge(blackhole: Blackhole) = JBigIntegerField {
-        blackhole.consume(largeJvmNumber*largeJvmNumber)
+        blackhole.consume(jvmLargeNumber*jvmLargeNumber)
     }
 
     @Benchmark
