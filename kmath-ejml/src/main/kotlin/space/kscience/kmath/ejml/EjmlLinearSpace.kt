@@ -40,6 +40,8 @@ public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml
 
     public abstract override fun buildVector(size: Int, initializer: A.(Int) -> T): EjmlVector<T, M>
 
+    @Suppress("UNCHECKED_CAST")
     @UnstableKMathAPI
-    public fun EjmlMatrix<T, *>.inverse(): Structure2D<Double> = computeFeature(this, InverseMatrixFeature::class)?.inverse as Structure2D<Double>
+    public fun EjmlMatrix<T, *>.inverse(): Structure2D<Double> =
+        computeFeature(this, InverseMatrixFeature::class)?.inverse as Structure2D<Double>
 }

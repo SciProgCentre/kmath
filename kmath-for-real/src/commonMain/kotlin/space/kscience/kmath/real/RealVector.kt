@@ -7,11 +7,12 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.operations.DoubleL2Norm
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.indices
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 public typealias DoubleVector = Point<Double>
 

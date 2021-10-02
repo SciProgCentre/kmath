@@ -306,14 +306,14 @@ public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> tanh(arg: T): T
  */
 @UnstableKMathAPI
 @Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
+public fun <T : AlgebraElement<T, ExponentialOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
 
 /**
  * Computes the inverse hyperbolic cosine of [arg].
  */
 @UnstableKMathAPI
 @Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
+public fun <T : AlgebraElement<T, ExponentialOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
 
 /**
  * Computes the inverse hyperbolic tangent of [arg].
