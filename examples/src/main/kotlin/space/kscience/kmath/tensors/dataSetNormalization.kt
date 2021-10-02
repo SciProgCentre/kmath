@@ -5,13 +5,13 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.tensorAlgebra
+import space.kscience.kmath.tensors.core.withBroadcast
 
 
 // Dataset normalization
 
-fun main() = BroadcastDoubleTensorAlgebra {  // work in context with broadcast methods
+fun main() = Double.tensorAlgebra.withBroadcast {  // work in context with broadcast methods
     // take dataset of 5-element vectors from normal distribution
     val dataset = randomNormal(intArrayOf(100, 5)) * 1.5 // all elements from N(0, 1.5)
 

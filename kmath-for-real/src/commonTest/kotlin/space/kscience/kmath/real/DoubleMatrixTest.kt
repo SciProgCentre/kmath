@@ -5,12 +5,12 @@
 
 package space.kscience.kmath.real
 
-import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.real.*
+import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -59,13 +59,13 @@ internal class DoubleMatrixTest {
     }
 
     @Test
-    fun testMatrixAndDouble() {
+    fun testMatrixAndDouble() = Double.algebra.linearSpace.run {
         val matrix1 = realMatrix(2, 3)(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = (matrix1 * 2.5 + 1.0 - 2.0) / 2.0
-        val expectedResult = LinearSpace.double.matrix(2, 3)(
+        val expectedResult = matrix(2, 3)(
             0.75, -0.5, 3.25,
             4.5, 7.0, 2.0
         )
@@ -159,8 +159,8 @@ internal class DoubleMatrixTest {
     }
 
     @Test
-    fun testAllElementOperations() {
-        val matrix1 = LinearSpace.double.matrix(2, 4)(
+    fun testAllElementOperations() = Double.algebra.linearSpace.run {
+        val matrix1 = matrix(2, 4)(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )

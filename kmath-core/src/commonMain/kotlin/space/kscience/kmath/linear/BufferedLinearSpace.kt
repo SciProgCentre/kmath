@@ -8,12 +8,14 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.BufferedRingND
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.asND
 import space.kscience.kmath.nd.ndAlgebra
-import space.kscience.kmath.nd.unwrap
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.indices
 
 
 public class BufferedLinearSpace<T, out A : Ring<T>>(
@@ -33,17 +35,17 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
         bufferFactory(size) { elementAlgebra.initializer(it) }
 
     override fun Matrix<T>.unaryMinus(): Matrix<T> = ndRing(rowNum, colNum).run {
-        unwrap().map { -it }.as2D()
+        asND().map { -it }.as2D()
     }
 
     override fun Matrix<T>.plus(other: Matrix<T>): Matrix<T> = ndRing(rowNum, colNum).run {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::plus. Expected $shape but found ${other.shape}" }
-        unwrap().plus(other.unwrap()).as2D()
+        asND().plus(other.asND()).as2D()
     }
 
     override fun Matrix<T>.minus(other: Matrix<T>): Matrix<T> = ndRing(rowNum, colNum).run {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::minus. Expected $shape but found ${other.shape}" }
-        unwrap().minus(other.unwrap()).as2D()
+        asND().minus(other.asND()).as2D()
     }
 
     private fun Buffer<T>.linearize() = if (this is VirtualBuffer) {
@@ -87,13 +89,10 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
     }
 
     override fun Matrix<T>.times(value: T): Matrix<T> = ndRing(rowNum, colNum).run {
-        unwrap().map { it * value }.as2D()
+        asND().map { it * value }.as2D()
     }
 }
 
 
 public fun <T, A : Ring<T>> A.linearSpace(bufferFactory: BufferFactory<T>): BufferedLinearSpace<T, A> =
     BufferedLinearSpace(this, bufferFactory)
-
-public val DoubleField.linearSpace: BufferedLinearSpace<Double, DoubleField>
-    get() = BufferedLinearSpace(this, ::DoubleBuffer)

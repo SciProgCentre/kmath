@@ -8,6 +8,7 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.algebra
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -21,39 +22,37 @@ fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T
 class DoubleLUSolverTest {
 
     @Test
-    fun testInvertOne() {
-        val matrix = LinearSpace.double.one(2, 2)
-        val inverted = LinearSpace.double.lupSolver().inverse(matrix)
+    fun testInvertOne() = Double.algebra.linearSpace.run{
+        val matrix = one(2, 2)
+        val inverted = lupSolver().inverse(matrix)
         assertMatrixEquals(matrix, inverted)
     }
 
     @Test
-    fun testDecomposition() {
-        LinearSpace.double.run {
-            val matrix = matrix(2, 2)(
-                3.0, 1.0,
-                2.0, 3.0
-            )
+    fun testDecomposition() = Double.algebra.linearSpace.run {
+        val matrix = matrix(2, 2)(
+            3.0, 1.0,
+            2.0, 3.0
+        )
 
-            val lup = lup(matrix)
+        val lup = lup(matrix)
 
-            //Check determinant
-            assertEquals(7.0, lup.determinant)
+        //Check determinant
+        assertEquals(7.0, lup.determinant)
 
-            assertMatrixEquals(lup.p dot matrix, lup.l dot lup.u)
-        }
+        assertMatrixEquals(lup.p dot matrix, lup.l dot lup.u)
     }
 
     @Test
-    fun testInvert() {
-        val matrix = LinearSpace.double.matrix(2, 2)(
+    fun testInvert()  = Double.algebra.linearSpace.run{
+        val matrix = matrix(2, 2)(
             3.0, 1.0,
             1.0, 3.0
         )
 
-        val inverted = LinearSpace.double.lupSolver().inverse(matrix)
+        val inverted = lupSolver().inverse(matrix)
 
-        val expected = LinearSpace.double.matrix(2, 2)(
+        val expected = matrix(2, 2)(
             0.375, -0.125,
             -0.125, 0.375
         )

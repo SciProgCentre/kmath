@@ -532,7 +532,7 @@ public val BigInt.algebra: BigIntField get() = BigIntField
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     boxing(size, initializer)
 
-public inline fun BigInt.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     Buffer.boxing(size, initializer)
 
 @Deprecated("Use BigInt::mutableBuffer")
@@ -543,4 +543,4 @@ public inline fun BigInt.mutableBuffer(size: Int, initializer: (Int) -> BigInt):
     Buffer.boxing(size, initializer)
 
 public fun BigIntField.nd(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
-    BufferedRingND(shape, BigIntField, Buffer.Companion::bigInt)
+    BufferedRingND(shape, BigIntField, BigInt::buffer)

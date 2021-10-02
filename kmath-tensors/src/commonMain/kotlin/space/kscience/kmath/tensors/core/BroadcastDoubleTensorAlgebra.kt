@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.broadcastTensors
@@ -91,3 +92,11 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         }
     }
 }
+
+
+/**
+ * Compute a value using broadcast double tensor algebra
+ */
+@UnstableKMathAPI
+public fun <R> DoubleTensorAlgebra.withBroadcast(block: BroadcastDoubleTensorAlgebra.() -> R): R =
+    BroadcastDoubleTensorAlgebra.block()

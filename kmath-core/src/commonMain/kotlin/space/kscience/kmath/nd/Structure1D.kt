@@ -136,7 +136,7 @@ public fun <T> Buffer<T>.asND(): Structure1D<T> = Buffer1DWrapper(this)
 /**
  * Expose inner buffer of this [Structure1D] if possible
  */
-internal fun <T : Any> Structure1D<T>.unwrap(): Buffer<T> = when {
+internal fun <T : Any> Structure1D<T>.asND(): Buffer<T> = when {
     this is Buffer1DWrapper<T> -> buffer
     this is Structure1DWrapper && structure is BufferND<T> -> structure.buffer
     else -> this

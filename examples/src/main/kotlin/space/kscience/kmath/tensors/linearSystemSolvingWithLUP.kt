@@ -5,13 +5,13 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensor
+import space.kscience.kmath.tensors.core.tensorAlgebra
+import space.kscience.kmath.tensors.core.withBroadcast
 
 // solving linear system with LUP decomposition
 
-fun main() = BroadcastDoubleTensorAlgebra {// work in context with linear operations
+fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear operations
 
     // set true value of x
     val trueX = fromArray(

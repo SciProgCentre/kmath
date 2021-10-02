@@ -25,6 +25,12 @@ public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<D
     override operator fun iterator(): DoubleIterator = array.iterator()
 
     override fun copy(): DoubleBuffer = DoubleBuffer(array.copyOf())
+
+    override fun toString(): String = Buffer.toString(this)
+
+    public companion object{
+        public fun zero(size: Int): DoubleBuffer = DoubleArray(size).asBuffer()
+    }
 }
 
 /**

@@ -5,13 +5,11 @@
 
 package space.kscience.kmath.dimensions
 
-import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.Point
-import space.kscience.kmath.linear.transpose
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.algebra
 import kotlin.jvm.JvmInline
 
 /**
@@ -151,7 +149,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
         context.run { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(LinearSpace.double)
+        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(Double.algebra.linearSpace)
     }
 }
 

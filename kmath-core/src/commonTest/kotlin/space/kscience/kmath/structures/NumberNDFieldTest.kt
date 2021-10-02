@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.combine
@@ -13,6 +13,7 @@ import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Norm
+import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
 import kotlin.math.abs
 import kotlin.math.pow
@@ -42,17 +43,18 @@ class NumberNDFieldTest {
     }
 
     @Test
-    fun testGeneration() {
+    fun testGeneration() = Double.algebra.linearSpace.run {
 
-        val array = LinearSpace.double.buildMatrix(3, 3) { i, j ->
+        val array = buildMatrix(3, 3) { i, j ->
             (i * 10 + j).toDouble()
         }
 
-        for (i in 0..2)
+        for (i in 0..2) {
             for (j in 0..2) {
                 val expected = (i * 10 + j).toDouble()
                 assertEquals(expected, array[i, j], "Error at index [$i, $j]")
             }
+        }
     }
 
     @Test

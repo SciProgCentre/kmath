@@ -5,17 +5,20 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val kotlinVersion = "1.5.30"
+    val kotlinVersion = "1.6.0-M1"
 
     plugins {
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        id("ru.mipt.npm.gradle.project") version "0.10.3"
+        id("ru.mipt.npm.gradle.project") version "0.10.4"
         kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
 }
 
 rootProject.name = "kmath"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("VERSION_CATALOGS")
 
 include(
     ":kmath-memory",

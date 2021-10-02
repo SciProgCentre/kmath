@@ -160,10 +160,10 @@ public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? Mu
 /**
  * Expose inner [StructureND] if possible
  */
-internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
+internal fun <T> Structure2D<T>.asND(): StructureND<T> =
     if (this is Structure2DWrapper) structure
     else this
 
-internal fun <T> MutableStructure2D<T>.unwrap(): MutableStructureND<T> =
+internal fun <T> MutableStructure2D<T>.asND(): MutableStructureND<T> =
     if (this is MutableStructure2DWrapper) structure else this
 

@@ -5,19 +5,19 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.tensorAlgebra
+import space.kscience.kmath.tensors.core.withBroadcast
 
 
 // simple PCA
 
-fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broadcast methods
+fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with broadcast methods
     val seed = 100500L
 
     // assume x is range from 0 until 10
     val x = fromArray(
         intArrayOf(10),
-        (0 until 10).toList().map { it.toDouble() }.toDoubleArray()
+        DoubleArray(10) { it.toDouble() }
     )
 
     // take y dependent on x with noise
@@ -62,7 +62,7 @@ fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broad
     println("Eigenvector:\n$v")
 
     // reduce dimension of dataset
-    val datasetReduced  = v dot stack(listOf(xScaled, yScaled))
+    val datasetReduced = v dot stack(listOf(xScaled, yScaled))
     println("Reduced data:\n$datasetReduced")
 
     // we can restore original data from reduced data;
