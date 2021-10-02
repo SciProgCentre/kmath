@@ -53,6 +53,7 @@
 - Expression algebra builders
 - Complex and Quaternion no longer are elements.
 - Second generic from DifferentiableExpression
+- Algebra elements are completely removed. Use algebra contexts instead.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

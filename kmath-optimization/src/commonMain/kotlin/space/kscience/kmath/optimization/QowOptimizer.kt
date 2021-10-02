@@ -13,9 +13,10 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.misc.log
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.DoubleL2Norm
+
 
 public class QowRuns(public val runs: Int) : OptimizationFeature {
     init {

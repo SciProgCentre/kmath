@@ -240,10 +240,10 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                 }
 
                 override val q: Matrix<${type}> by lazy {
-                    qr.getQ(null, false).wrapMatrix() + OrthogonalFeature
+                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
                 }
 
-                override val r: Matrix<${type}> by lazy { qr.getR(null, false).wrapMatrix() + UFeature }
+                override val r: Matrix<${type}> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
             }
 
             CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<${type}> {
@@ -251,7 +251,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                     val cholesky =
                         DecompositionFactory_${ops}.chol(structure.rowNum, true).apply { decompose(origin.copy()) }
 
-                    cholesky.getT(null).wrapMatrix() + LFeature
+                    cholesky.getT(null).wrapMatrix().withFeature(LFeature)
                 }
             }
 
@@ -261,11 +261,11 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                 }
 
                 override val l: Matrix<${type}> by lazy {
-                    lup.getLower(null).wrapMatrix() + LFeature
+                    lup.getLower(null).wrapMatrix().withFeature(LFeature)
                 }
 
                 override val u: Matrix<${type}> by lazy {
-                    lup.getUpper(null).wrapMatrix() + UFeature
+                    lup.getUpper(null).wrapMatrix().withFeature(UFeature)
                 }
 
                 override val p: Matrix<${type}> by lazy { lup.getRowPivot(null).wrapMatrix() }
@@ -275,10 +275,10 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                 }
 
                 override val q: Matrix<${type}> by lazy {
-                    qr.getQ(null, false).wrapMatrix() + OrthogonalFeature
+                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
                 }
 
-                override val r: Matrix<${type}> by lazy { qr.getR(null, false).wrapMatrix() + UFeature }
+                override val r: Matrix<${type}> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
             }
 
             CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<${type}> {
@@ -286,7 +286,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                     val cholesky =
                         DecompositionFactory_${ops}.cholesky().apply { decompose(origin.copy()) }
 
-                    (cholesky.getT(null) as ${ejmlMatrixParentTypeMatrix}).wrapMatrix() + LFeature
+                    (cholesky.getT(null) as ${ejmlMatrixParentTypeMatrix}).wrapMatrix().withFeature(LFeature)
                 }
             }
 
@@ -297,11 +297,11 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
                 }
 
                 override val l: Matrix<${type}> by lazy {
-                    lu.getLower(null).wrapMatrix() + LFeature
+                    lu.getLower(null).wrapMatrix().withFeature(LFeature)
                 }
 
                 override val u: Matrix<${type}> by lazy {
-                    lu.getUpper(null).wrapMatrix() + UFeature
+                    lu.getUpper(null).wrapMatrix().withFeature(UFeature)
                 }
 
                 override val inverse: Matrix<${type}> by lazy {

@@ -24,7 +24,7 @@ fun main() {
     val time = measureTimeMillis {
         with(Double.algebra.linearSpace) {
             repeat(10) {
-                val res = matrix1 dot matrix2
+                matrix1 dot matrix2
             }
         }
     }
