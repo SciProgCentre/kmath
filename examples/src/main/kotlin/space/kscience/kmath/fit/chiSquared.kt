@@ -10,20 +10,21 @@ import kotlinx.html.h3
 import space.kscience.kmath.commons.expressions.DSProcessor
 import space.kscience.kmath.commons.optimization.CMOptimizer
 import space.kscience.kmath.distributions.NormalDistribution
-import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.optimization.*
+import space.kscience.kmath.operations.asIterable
+import space.kscience.kmath.operations.toList
+import space.kscience.kmath.optimization.FunctionOptimizationTarget
+import space.kscience.kmath.optimization.optimizeWith
+import space.kscience.kmath.optimization.resultPoint
+import space.kscience.kmath.optimization.resultValue
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.structures.asIterable
-import space.kscience.kmath.structures.toList
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.models.TraceValues
-import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 

@@ -8,13 +8,13 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.fold
+
 import kotlin.math.*
 
 /**
  * [ExtendedFieldOperations] over [DoubleBuffer].
  */
-public object DoubleBufferOperations : ExtendedFieldOperations<Buffer<Double>> {
+public abstract class DoubleBufferOperations : ExtendedFieldOperations<Buffer<Double>>, Norm<Buffer<Double>, Double> {
     override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
         DoubleBuffer(size) { -array[it] }
     } else {
@@ -32,7 +32,22 @@ public object DoubleBufferOperations : ExtendedFieldOperations<Buffer<Double>> {
             DoubleBuffer(DoubleArray(a.size) { aArray[it] + bArray[it] })
         } else DoubleBuffer(DoubleArray(a.size) { a[it] + b[it] })
     }
-//
+
+    override fun Buffer<Double>.plus(b: Buffer<Double>): DoubleBuffer = add(this, b)
+
+    override fun Buffer<Double>.minus(b: Buffer<Double>): DoubleBuffer {
+        require(b.size == this.size) {
+            "The size of the first buffer ${this.size} should be the same as for second one: ${b.size} "
+        }
+
+        return if (this is DoubleBuffer && b is DoubleBuffer) {
+            val aArray = this.array
+            val bArray = b.array
+            DoubleBuffer(DoubleArray(this.size) { aArray[it] - bArray[it] })
+        } else DoubleBuffer(DoubleArray(this.size) { this[it] - b[it] })
+    }
+
+    //
 //    override fun multiply(a: Buffer<Double>, k: Number): RealBuffer {
 //        val kValue = k.toDouble()
 //
@@ -159,128 +174,21 @@ public object DoubleBufferOperations : ExtendedFieldOperations<Buffer<Double>> {
     override fun ln(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
         val array = arg.array
         DoubleBuffer(DoubleArray(arg.size) { ln(array[it]) })
-    } else
+    } else {
         DoubleBuffer(DoubleArray(arg.size) { ln(arg[it]) })
+    }
+
+    override fun norm(arg: Buffer<Double>): Double = DoubleL2Norm.norm(arg)
+
+    override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = if (a is DoubleBuffer) {
+        val aArray = a.array
+        DoubleBuffer(DoubleArray(a.size) { aArray[it] * value })
+    } else DoubleBuffer(DoubleArray(a.size) { a[it] * value })
+
+    public companion object : DoubleBufferOperations()
 }
 
 public object DoubleL2Norm : Norm<Point<Double>, Double> {
     override fun norm(arg: Point<Double>): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
 }
 
-/**
- * [ExtendedField] over [DoubleBuffer].
- *
- * @property size the size of buffers to operate on.
- */
-@Deprecated("To be replaced by generic BufferAlgebra")
-public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Double>>, Norm<Buffer<Double>, Double> {
-    override val zero: Buffer<Double> by lazy { DoubleBuffer(size) { 0.0 } }
-    override val one: Buffer<Double> by lazy { DoubleBuffer(size) { 1.0 } }
-
-    override fun number(value: Number): Buffer<Double> = DoubleBuffer(size) { value.toDouble() }
-
-    override fun Buffer<Double>.unaryMinus(): Buffer<Double> = DoubleBufferOperations.run {
-        -this@unaryMinus
-    }
-
-    override fun add(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
-        return DoubleBufferOperations.add(a, b)
-    }
-
-    override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer {
-        require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
-
-        return if (a is DoubleBuffer) {
-            val aArray = a.array
-            DoubleBuffer(DoubleArray(a.size) { aArray[it] * value })
-        } else DoubleBuffer(DoubleArray(a.size) { a[it] * value })
-    }
-
-    override fun multiply(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
-        return DoubleBufferOperations.multiply(a, b)
-    }
-
-    override fun divide(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(a.size == size) { "The buffer size ${a.size} does not match context size $size" }
-        return DoubleBufferOperations.divide(a, b)
-    }
-
-    override fun sin(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.sin(arg)
-    }
-
-    override fun cos(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.cos(arg)
-    }
-
-    override fun tan(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.tan(arg)
-    }
-
-    override fun asin(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.asin(arg)
-    }
-
-    override fun acos(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.acos(arg)
-    }
-
-    override fun atan(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.atan(arg)
-    }
-
-    override fun sinh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.sinh(arg)
-    }
-
-    override fun cosh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.cosh(arg)
-    }
-
-    override fun tanh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.tanh(arg)
-    }
-
-    override fun asinh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.asinh(arg)
-    }
-
-    override fun acosh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.acosh(arg)
-    }
-
-    override fun atanh(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.atanh(arg)
-    }
-
-    override fun power(arg: Buffer<Double>, pow: Number): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.power(arg, pow)
-    }
-
-    override fun exp(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.exp(arg)
-    }
-
-    override fun ln(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == size) { "The buffer size ${arg.size} does not match context size $size" }
-        return DoubleBufferOperations.ln(arg)
-    }
-
-    override fun norm(arg: Buffer<Double>): Double  = DoubleL2Norm.norm(arg)
-}

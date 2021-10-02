@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.operations.map
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.map
 import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal

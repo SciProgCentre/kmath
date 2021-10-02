@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.kmath.operations.asSequence
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -49,7 +50,8 @@ public interface Buffer<out T> {
 
     public companion object {
 
-        public fun toString(buffer: Buffer<*>): String = buffer.asSequence().joinToString(prefix = "[", separator = ", ", postfix = "]")
+        public fun toString(buffer: Buffer<*>): String =
+            buffer.asSequence().joinToString(prefix = "[", separator = ", ", postfix = "]")
 
         /**
          * Check the element-by-element match of content of two buffers.

@@ -10,10 +10,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.apache.commons.math3.transform.*
 import space.kscience.kmath.complex.Complex
+import space.kscience.kmath.operations.SuspendBufferTransform
 import space.kscience.kmath.streaming.chunked
 import space.kscience.kmath.streaming.spread
-import space.kscience.kmath.structures.*
-
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.asBuffer
 
 
 /**

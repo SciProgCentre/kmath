@@ -1,9 +1,8 @@
 package space.kscience.kmath.geometry
 
-import space.kscience.kmath.structures.asSequence
-import space.kscience.kmath.structures.toList
-import kotlin.test.assertEquals
+import space.kscience.kmath.operations.toList
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class Vector2DTest {
     private val vector = Vector2D(1.0, -7.999)

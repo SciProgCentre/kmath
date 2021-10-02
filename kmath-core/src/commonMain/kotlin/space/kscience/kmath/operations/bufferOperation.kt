@@ -3,9 +3,10 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
-package space.kscience.kmath.structures
+package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.structures.*
 
 /**
  * Typealias for buffer transformations.

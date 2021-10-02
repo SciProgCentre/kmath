@@ -7,8 +7,8 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asSequence
 
 
 @UnstableKMathAPI
@@ -34,7 +34,7 @@ public class UnivariateBin(
 }
 
 @OptIn(UnstableKMathAPI::class)
-public interface UnivariateHistogram : Histogram<Double, UnivariateBin>{
+public interface UnivariateHistogram : Histogram<Double, UnivariateBin> {
     public operator fun get(value: Double): UnivariateBin?
     override operator fun get(point: Buffer<Double>): UnivariateBin? = get(point[0])
 

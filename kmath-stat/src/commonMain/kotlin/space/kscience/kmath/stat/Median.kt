@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.stat
 
+import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asSequence
 
 /**
  * Non-composable median

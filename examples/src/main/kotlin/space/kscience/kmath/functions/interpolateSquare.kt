@@ -8,8 +8,8 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.structures.map
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile

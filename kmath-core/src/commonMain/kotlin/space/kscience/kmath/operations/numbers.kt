@@ -14,7 +14,8 @@ public interface ExtendedFieldOperations<T> :
     FieldOperations<T>,
     TrigonometricOperations<T>,
     PowerOperations<T>,
-    ExponentialOperations<T> {
+    ExponentialOperations<T>,
+    ScaleOperations<T>  {
     override fun tan(arg: T): T = sin(arg) / cos(arg)
     override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
@@ -41,7 +42,7 @@ public interface ExtendedFieldOperations<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T>, ScaleOperations<T> {
+public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T>{
     override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
     override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
     override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))

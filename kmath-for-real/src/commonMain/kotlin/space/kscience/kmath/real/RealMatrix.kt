@@ -13,9 +13,9 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.asIterable
 import kotlin.math.pow
 
 /*

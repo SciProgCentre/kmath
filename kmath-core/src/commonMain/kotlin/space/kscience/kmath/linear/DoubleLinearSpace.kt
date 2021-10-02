@@ -9,6 +9,7 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DoubleFieldND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.asND
+import space.kscience.kmath.operations.DoubleBufferOperations
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
@@ -89,17 +90,21 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
         asND().map { it * value }.as2D()
     }
 
-    public override fun Point<Double>.plus(other: Point<Double>): DoubleBuffer = DoubleBuffer(size) {
-        get(it) + other[it]
+    public override fun Point<Double>.plus(other: Point<Double>): DoubleBuffer = DoubleBufferOperations.run {
+        this@plus + other
     }
 
-    public override fun Point<Double>.minus(other: Point<Double>): DoubleBuffer = DoubleBuffer(size) {
-        get(it) - other[it]
+    public override fun Point<Double>.minus(other: Point<Double>): DoubleBuffer = DoubleBufferOperations.run {
+        this@minus - other
     }
 
-    public override fun Point<Double>.times(value: Double): DoubleBuffer = DoubleBuffer(size) { i -> get(i) * value }
+    public override fun Point<Double>.times(value: Double): DoubleBuffer = DoubleBufferOperations.run {
+        scale(this@times, value)
+    }
 
-    public operator fun Point<Double>.div(value: Double): DoubleBuffer = DoubleBuffer(size) { i -> get(i) / value }
+    public operator fun Point<Double>.div(value: Double): DoubleBuffer = DoubleBufferOperations.run {
+        scale(this@div, 1.0 / value)
+    }
 
     public override fun Double.times(v: Point<Double>): DoubleBuffer = v * this
 
