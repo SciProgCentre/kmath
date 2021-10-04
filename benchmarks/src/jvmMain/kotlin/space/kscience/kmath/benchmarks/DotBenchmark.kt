@@ -14,7 +14,6 @@ import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.Buffer
 import kotlin.random.Random
 
@@ -25,11 +24,11 @@ internal class DotBenchmark {
         const val dim = 1000
 
         //creating invertible matrix
-        val matrix1 = Double.algebra.linearSpace.buildMatrix(dim, dim) { i, j ->
-            if (i <= j) random.nextDouble() else 0.0
+        val matrix1 = DoubleField.linearSpace.buildMatrix(dim, dim) { _, _ ->
+            random.nextDouble()
         }
-        val matrix2 = Double.algebra.linearSpace.buildMatrix(dim, dim) { i, j ->
-            if (i <= j) random.nextDouble() else 0.0
+        val matrix2 = DoubleField.linearSpace.buildMatrix(dim, dim) { _, _ ->
+            random.nextDouble()
         }
 
         val cmMatrix1 = CMLinearSpace { matrix1.toCM() }
@@ -65,7 +64,7 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun doubleDot(blackhole: Blackhole) = with(Double.algebra.linearSpace) {
+    fun doubleDot(blackhole: Blackhole) = with(DoubleField.linearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 }

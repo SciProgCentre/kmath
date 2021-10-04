@@ -192,3 +192,7 @@ public inline fun <T, A : Field<T>> A.expressionInField(
 public inline fun <T, A : ExtendedField<T>> A.expressionInExtendedField(
     block: FunctionalExpressionExtendedField<T, A>.() -> Expression<T>,
 ): Expression<T> = FunctionalExpressionExtendedField(this).block()
+
+public inline fun DoubleField.expression(
+    block: FunctionalExpressionExtendedField<Double, DoubleField>.() -> Expression<Double>,
+): Expression<Double> = FunctionalExpressionExtendedField(this).block()

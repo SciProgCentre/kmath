@@ -13,7 +13,6 @@ import space.kscience.kmath.operations.DoubleBufferOperations
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.indices
 
 public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
@@ -29,7 +28,6 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double
     ): Matrix<Double> = ndRing(rows, columns).produce { (i, j) -> DoubleField.initializer(i, j) }.as2D()
-
 
     override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): DoubleBuffer =
         DoubleBuffer(size) { DoubleField.initializer(it) }
@@ -50,9 +48,9 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
     // Create a continuous in-memory representation of this vector for better memory layout handling
     private fun Buffer<Double>.linearize() = if (this is DoubleBuffer) {
-        this
+        this.array
     } else {
-        DoubleBuffer(size) { get(it) }
+        DoubleArray(size) { get(it) }
     }
 
     @OptIn(PerformancePitfall::class)
