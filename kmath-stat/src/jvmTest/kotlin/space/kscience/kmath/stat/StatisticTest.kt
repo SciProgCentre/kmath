@@ -44,7 +44,7 @@ internal class StatisticTest {
             .take(100) // Take 100 data chunks from the source and accumulate them
             .last() //get 1e5 data samples average
 
-        assertEquals(0.5,average, 1e-3)
+        assertEquals(0.5,average, 1e-2)
     }
 
 }

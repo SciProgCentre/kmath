@@ -50,9 +50,9 @@ public class Mean<T>(
         @Deprecated("Use Long.mean instead")
         public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
 
-        public fun evaluate(buffer: Buffer<Double>): Double = double.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Int>): Int = int.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Long>): Long = long.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Double>): Double = Double.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int>): Int = Int.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Long>): Long = Long.mean.evaluateBlocking(buffer)
     }
 }
 
