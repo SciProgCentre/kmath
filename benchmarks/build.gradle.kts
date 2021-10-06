@@ -36,6 +36,7 @@ kotlin {
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-jafama"))
+                implementation(project(":kmath-tensors"))
                 implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
             }
         }
@@ -79,6 +80,11 @@ benchmark {
     configurations.register("buffer") {
         commonConfiguration()
         include("BufferBenchmark")
+    }
+
+    configurations.register("nd") {
+        commonConfiguration()
+        include("NDFieldBenchmark")
     }
 
     configurations.register("dot") {

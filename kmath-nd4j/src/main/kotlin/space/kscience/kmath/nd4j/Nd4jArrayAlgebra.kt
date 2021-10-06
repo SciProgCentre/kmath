@@ -45,7 +45,6 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return struct
     }
 
-    @PerformancePitfall
     override fun StructureND<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
         val newStruct = ndArray.dup().wrap()
         newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementContext.transform(value) }
@@ -264,6 +263,8 @@ public class DoubleNd4jArrayField(override val shape: IntArray) : Nd4jArrayExten
         return arg.ndArray.rsub(this).wrap()
     }
 }
+
+public fun DoubleField.nd4j(vararg shape: Int): DoubleNd4jArrayField = DoubleNd4jArrayField(intArrayOf(*shape))
 
 /**
  * Represents [FieldND] over [Nd4jArrayStructure] of [Float].

@@ -158,7 +158,6 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double> {
         if (shape contentEquals intArrayOf(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
-    @PerformancePitfall
     override fun diagonalEmbedding(
         diagonalEntries: Tensor<Double>,
         offset: Int,
