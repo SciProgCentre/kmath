@@ -9,10 +9,7 @@ import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.NumbersAddOperations
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MemoryBuffer
 import space.kscience.kmath.structures.MutableBuffer
@@ -52,10 +49,22 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
  * A field of [Complex].
  */
 @OptIn(UnstableKMathAPI::class)
-public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, NumbersAddOperations<Complex>,
+public object ComplexField :
+    ExtendedField<Complex>,
+    Norm<Complex, Complex>,
+    NumbersAddOperations<Complex>,
     ScaleOperations<Complex> {
+
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()
+
+    override fun bindSymbolOrNull(value: String): Complex? = if (value == "i") i else null
+
+    override fun binaryOperationFunction(operation: String): (left: Complex, right: Complex) -> Complex =
+        when (operation) {
+            PowerOperations.POW_OPERATION -> ComplexField::power
+            else -> super<ExtendedField>.binaryOperationFunction(operation)
+        }
 
     /**
      * The imaginary unit.
@@ -117,10 +126,14 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
         return i * (ln(1 - iArg) - ln(1 + iArg)) / 2
     }
 
-    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0)
+    override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0) {
         arg.re.pow(pow.toDouble()).toComplex()
-    else
+    } else {
         exp(pow * ln(arg))
+    }
+
+    public fun power(arg: Complex, pow: Complex): Complex = exp(pow * ln(arg))
+
 
     override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
 
@@ -172,8 +185,6 @@ public object ComplexField : ExtendedField<Complex>, Norm<Complex, Complex>, Num
     public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
-
-    override fun bindSymbolOrNull(value: String): Complex? = if (value == "i") i else null
 }
 
 /**

@@ -16,6 +16,7 @@
 - Unified architecture for Integration and Optimization using features.
 - `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
 - Integration between `MST` and Symja `IExpr`
+- Complex power
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
