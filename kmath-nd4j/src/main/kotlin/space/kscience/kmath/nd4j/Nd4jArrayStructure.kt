@@ -1,11 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.StructureND
 
@@ -16,15 +17,18 @@ import space.kscience.kmath.nd.StructureND
  */
 public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
     /**
-     * The wrapped [INDArray].
+     * The wrapped [INDArray]. Since KMath uses [Int] indexes, assuming the size of [INDArray] is less or equal to
+     * [Int.MAX_VALUE].
      */
     public abstract val ndArray: INDArray
 
-    public override val shape: IntArray get() = ndArray.shape().toIntArray()
+    override val shape: IntArray get() = ndArray.shape().toIntArray()
 
     internal abstract fun elementsIterator(): Iterator<Pair<IntArray, T>>
     internal fun indicesIterator(): Iterator<IntArray> = ndArray.indicesIterator()
-    public override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
+
+    @PerformancePitfall
+    override fun elements(): Sequence<Pair<IntArray, T>> = Sequence(::elementsIterator)
 }
 
 private data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Int>() {
@@ -37,17 +41,6 @@ private data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jA
  * Wraps this [INDArray] to [Nd4jArrayStructure].
  */
 public fun INDArray.asIntStructure(): Nd4jArrayStructure<Int> = Nd4jArrayIntStructure(this)
-
-private data class Nd4jArrayLongStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Long>() {
-    override fun elementsIterator(): Iterator<Pair<IntArray, Long>> = ndArray.longIterator()
-    override fun get(index: IntArray): Long = ndArray.getLong(*index.toLongArray())
-    override fun set(index: IntArray, value: Long): Unit = run { ndArray.putScalar(index, value.toDouble()) }
-}
-
-/**
- * Wraps this [INDArray] to [Nd4jArrayStructure].
- */
-public fun INDArray.asLongStructure(): Nd4jArrayStructure<Long> = Nd4jArrayLongStructure(this)
 
 private data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>() {
     override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()

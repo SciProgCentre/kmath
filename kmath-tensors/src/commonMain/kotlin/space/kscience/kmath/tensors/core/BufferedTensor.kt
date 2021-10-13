@@ -1,7 +1,13 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Strides
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
 
@@ -10,8 +16,8 @@ import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
  */
 public open class BufferedTensor<T> internal constructor(
     override val shape: IntArray,
-    internal val mutableBuffer: MutableBuffer<T>,
-    internal val bufferStart: Int
+    @PublishedApi internal val mutableBuffer: MutableBuffer<T>,
+    @PublishedApi internal val bufferStart: Int,
 ) : Tensor<T> {
 
     /**
@@ -32,7 +38,8 @@ public open class BufferedTensor<T> internal constructor(
         mutableBuffer[bufferStart + linearStructure.offset(index)] = value
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = linearStructure.indices().map {
-        it to this[it]
+        it to get(it)
     }
 }

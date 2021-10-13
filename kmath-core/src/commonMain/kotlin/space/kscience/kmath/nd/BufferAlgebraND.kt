@@ -1,17 +1,19 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.jvm.JvmName
 
-public interface BufferAlgebraND<T, A : Algebra<T>> : AlgebraND<T, A> {
+public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val strides: Strides
     public val bufferFactory: BufferFactory<T>
 
@@ -57,7 +59,7 @@ public interface BufferAlgebraND<T, A : Algebra<T>> : AlgebraND<T, A> {
     }
 }
 
-public open class BufferedGroupND<T, A : Group<T>>(
+public open class BufferedGroupND<T, out A : Group<T>>(
     final override val shape: IntArray,
     final override val elementContext: A,
     final override val bufferFactory: BufferFactory<T>,
@@ -67,7 +69,7 @@ public open class BufferedGroupND<T, A : Group<T>>(
     override fun StructureND<T>.unaryMinus(): StructureND<T> = produce { -get(it) }
 }
 
-public open class BufferedRingND<T, R : Ring<T>>(
+public open class BufferedRingND<T, out R : Ring<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,
@@ -75,7 +77,7 @@ public open class BufferedRingND<T, R : Ring<T>>(
     override val one: BufferND<T> by lazy { produce { one } }
 }
 
-public open class BufferedFieldND<T, R : Field<T>>(
+public open class BufferedFieldND<T, out R : Field<T>>(
     shape: IntArray,
     elementContext: R,
     bufferFactory: BufferFactory<T>,
@@ -85,58 +87,61 @@ public open class BufferedFieldND<T, R : Field<T>>(
 }
 
 // group factories
-public fun <T, A : Ring<T>> AlgebraND.Companion.group(
-    space: A,
+public fun <T, A : Group<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
-): BufferedGroupND<T, A> = BufferedGroupND(shape, space, bufferFactory)
+): BufferedGroupND<T, A> = BufferedGroupND(shape, this, bufferFactory)
 
-public inline fun <T, A : Ring<T>, R> A.ndGroup(
+@JvmName("withNdGroup")
+public inline fun <T, A : Group<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedGroupND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return AlgebraND.group(this, bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }
 
 //ring factories
-public fun <T, A : Ring<T>> AlgebraND.Companion.ring(
-    ring: A,
+public fun <T, A : Ring<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
-): BufferedRingND<T, A> = BufferedRingND(shape, ring, bufferFactory)
+): BufferedRingND<T, A> = BufferedRingND(shape, this, bufferFactory)
 
-public inline fun <T, A : Ring<T>, R> A.ndRing(
+@JvmName("withNdRing")
+public inline fun <T, A : Ring<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedRingND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return AlgebraND.ring(this, bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }
 
 //field factories
-public fun <T, A : Field<T>> AlgebraND.Companion.field(
-    field: A,
+public fun <T, A : Field<T>> A.ndAlgebra(
     bufferFactory: BufferFactory<T>,
     vararg shape: Int,
-): BufferedFieldND<T, A> = BufferedFieldND(shape, field, bufferFactory)
+): BufferedFieldND<T, A> = BufferedFieldND(shape, this, bufferFactory)
 
+/**
+ * Create a [FieldND] for this [Field] inferring proper buffer factory from the type
+ */
+@UnstableKMathAPI
 @Suppress("UNCHECKED_CAST")
-public inline fun <reified T : Any, A : Field<T>> AlgebraND.Companion.auto(
-    field: A,
+public inline fun <reified T : Any, A : Field<T>> A.autoNdAlgebra(
     vararg shape: Int,
-): FieldND<T, A> = when (field) {
+): FieldND<T, A> = when (this) {
     DoubleField -> DoubleFieldND(shape) as FieldND<T, A>
-    else -> BufferedFieldND(shape, field, Buffer.Companion::auto)
+    else -> BufferedFieldND(shape, this, Buffer.Companion::auto)
 }
 
-public inline fun <T, A : Field<T>, R> A.ndField(
+@JvmName("withNdField")
+public inline fun <T, A : Field<T>, R> A.withNdAlgebra(
     noinline bufferFactory: BufferFactory<T>,
     vararg shape: Int,
     action: BufferedFieldND<T, A>.() -> R,
 ): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return AlgebraND.field(this, bufferFactory, *shape).run(action)
+    return ndAlgebra(bufferFactory, *shape).run(action)
 }

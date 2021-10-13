@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 package space.kscience.kmath.domains
 
@@ -17,17 +17,17 @@ import space.kscience.kmath.structures.indices
  */
 @UnstableKMathAPI
 public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : DoubleDomain {
-    public override val dimension: Int get() = lower.size
+    override val dimension: Int get() = lower.size
 
-    public override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
+    override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]
     }
 
-    public override fun getLowerBound(num: Int): Double = lower[num]
+    override fun getLowerBound(num: Int): Double = lower[num]
 
-    public override fun getUpperBound(num: Int): Double = upper[num]
+    override fun getUpperBound(num: Int): Double = upper[num]
 
-    public override fun volume(): Double {
+    override fun volume(): Double {
         var res = 1.0
 
         for (i in 0 until dimension) {

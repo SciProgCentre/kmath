@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
@@ -29,7 +29,7 @@ public fun interface MathRenderer {
  */
 @UnstableKMathAPI
 public open class FeaturedMathRenderer(public val features: List<RenderFeature>) : MathRenderer {
-    public override fun render(mst: MST): MathSyntax {
+    override fun render(mst: MST): MathSyntax {
         for (feature in features) feature.render(this, mst)?.let { return it }
         throw UnsupportedOperationException("Renderer $this has no appropriate feature to render node $mst.")
     }
@@ -54,9 +54,9 @@ public open class FeaturedMathRenderer(public val features: List<RenderFeature>)
 @UnstableKMathAPI
 public open class FeaturedMathRendererWithPostProcess(
     features: List<RenderFeature>,
-    public val stages: List<PostProcessStage>,
+    public val stages: List<PostProcessPhase>,
 ) : FeaturedMathRenderer(features) {
-    public override fun render(mst: MST): MathSyntax {
+    override fun render(mst: MST): MathSyntax {
         val res = super.render(mst)
         for (stage in stages) stage.perform(res)
         return res
@@ -65,7 +65,7 @@ public open class FeaturedMathRendererWithPostProcess(
     /**
      * Logical unit of [MathSyntax] post-processing.
      */
-    public fun interface PostProcessStage {
+    public fun interface PostProcessPhase {
         /**
          * Performs the specified action over [MathSyntax].
          */
@@ -102,7 +102,7 @@ public open class FeaturedMathRendererWithPostProcess(
 
                 // Printing terminal nodes as string
                 PrintNumeric,
-                PrintSymbolic,
+                PrintSymbol,
             ),
             listOf(
                 BetterExponent,

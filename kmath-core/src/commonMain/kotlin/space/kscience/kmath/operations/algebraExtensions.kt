@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
@@ -15,6 +15,8 @@ package space.kscience.kmath.operations
 public fun <T> Ring<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, right ->
     add(left, right)
 }
+
+//TODO replace by sumOf with multi-receivers
 
 /**
  * Returns the sum of all elements in the sequence in this [Ring].
@@ -94,37 +96,46 @@ public fun <T, S> Iterable<T>.averageWith(space: S): T where S : Ring<T>, S : Sc
 public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Ring<T>, S : ScaleOperations<T> =
     space.average(this)
 
-//TODO optimized power operation
-
 /**
- * Raises [arg] to the natural power [power].
+ * Raises [arg] to the non-negative integer power [exponent].
+ *
+ * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication.
  * @param arg the base.
- * @param power the exponent.
+ * @param exponent the exponent.
  * @return the base raised to the power.
+ * @author Evgeniy Zhelenskiy
  */
-public fun <T> Ring<T>.power(arg: T, power: Int): T {
-    require(power >= 0) { "The power can't be negative." }
-    require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
-    if (power == 0) return one
-    var res = arg
-    repeat(power - 1) { res *= arg }
-    return res
+public fun <T> Ring<T>.power(arg: T, exponent: UInt): T = when {
+    arg == zero && exponent > 0U -> zero
+    arg == one -> arg
+    arg == -one -> powWithoutOptimization(arg, exponent % 2U)
+    else -> powWithoutOptimization(arg, exponent)
 }
 
+private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = when (exponent) {
+    0U -> one
+    1U -> base
+    else -> {
+        val pre = powWithoutOptimization(base, exponent shr 1).let { it * it }
+        if (exponent and 1U == 0U) pre else pre * base
+    }
+}
+
+
 /**
- * Raises [arg] to the integer power [power].
+ * Raises [arg] to the integer power [exponent].
+ *
+ * Special case: 0 ^ 0 is 1.
  *
  * @receiver the algebra to provide multiplication and division.
  * @param arg the base.
- * @param power the exponent.
+ * @param exponent the exponent.
  * @return the base raised to the power.
- * @author Iaroslav Postovalov
+ * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
  */
-public fun <T> Field<T>.power(arg: T, power: Int): T {
-    require(power != 0 || arg != zero) { "The $zero raised to $power is not defined." }
-    if (power == 0) return one
-    if (power < 0) return one / (this as Ring<T>).power(arg, -power)
-    return (this as Ring<T>).power(arg, power)
+public fun <T> Field<T>.power(arg: T, exponent: Int): T = when {
+    exponent < 0 -> one / (this as Ring<T>).power(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+    else -> (this as Ring<T>).power(arg, exponent.toUInt())
 }

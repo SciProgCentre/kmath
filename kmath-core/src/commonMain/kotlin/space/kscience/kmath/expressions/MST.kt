@@ -1,34 +1,27 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.StringSymbol
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
+import space.kscience.kmath.operations.bindSymbol
 
 /**
  * A Mathematical Syntax Tree (MST) node for mathematical expressions.
  *
  * @author Alexander Nozik
  */
-public sealed class MST {
-    /**
-     * A node containing raw string.
-     *
-     * @property value the value of this node.
-     */
-    public data class Symbolic(val value: String) : MST()
+public sealed interface MST {
 
     /**
      * A node containing a numeric value or scalar.
      *
      * @property value the value of this number.
      */
-    public data class Numeric(val value: Number) : MST()
+    public data class Numeric(val value: Number) : MST
 
     /**
      * A node containing an unary operation.
@@ -36,7 +29,7 @@ public sealed class MST {
      * @property operation the identifier of operation.
      * @property value the argument of this operation.
      */
-    public data class Unary(val operation: String, val value: MST) : MST()
+    public data class Unary(val operation: String, val value: MST) : MST
 
     /**
      * A node containing binary operation.
@@ -45,7 +38,7 @@ public sealed class MST {
      * @property left the left operand.
      * @property right the right operand.
      */
-    public data class Binary(val operation: String, val left: MST, val right: MST) : MST()
+    public data class Binary(val operation: String, val left: MST, val right: MST) : MST
 }
 
 // TODO add a function with named arguments
@@ -62,7 +55,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     is MST.Numeric -> (this as? NumericAlgebra<T>)?.number(node.value)
         ?: error("Numeric nodes are not supported by $this")
 
-    is MST.Symbolic -> bindSymbol(node.value)
+    is Symbol -> bindSymbol(node)
 
     is MST.Unary -> when {
         this is NumericAlgebra && node.value is MST.Numeric -> unaryOperationFunction(node.operation)(number(node.value.value))
@@ -83,7 +76,7 @@ public fun <T> Algebra<T>.evaluate(node: MST): T = when (node) {
     }
 }
 
-internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
+internal class InnerAlgebra<T>(val algebra: Algebra<T>, val arguments: Map<Symbol, T>) : NumericAlgebra<T> {
     override fun bindSymbolOrNull(value: String): T? = algebra.bindSymbolOrNull(value) ?: arguments[StringSymbol(value)]
 
     override fun unaryOperation(operation: String, arg: T): T =
@@ -108,7 +101,7 @@ internal class InnerAlgebra<T : Any>(val algebra: Algebra<T>, val arguments: Map
 /**
  * Interprets the [MST] node with this [Algebra] and optional [arguments]
  */
-public fun <T : Any> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
+public fun <T> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
     InnerAlgebra(algebra, arguments).evaluate(this)
 
 /**
@@ -118,7 +111,7 @@ public fun <T : Any> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T
  * @param algebra the algebra that provides operations.
  * @return the value of expression.
  */
-public fun <T : Any> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
+public fun <T> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
     interpret(algebra, mapOf(*arguments))
 
 /**

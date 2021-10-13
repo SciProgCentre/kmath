@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
@@ -25,7 +25,7 @@ private class Nd4jArrayIndicesIterator(private val iterateOver: INDArray) : Iter
 
 internal fun INDArray.indicesIterator(): Iterator<IntArray> = Nd4jArrayIndicesIterator(this)
 
-private sealed class Nd4jArrayIteratorBase<T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
+private sealed class Nd4jArrayIteratorBase<out T>(protected val iterateOver: INDArray) : Iterator<Pair<IntArray, T>> {
     private var i: Int = 0
 
     final override fun hasNext(): Boolean = i < iterateOver.length()
@@ -47,12 +47,6 @@ private class Nd4jArrayDoubleIterator(iterateOver: INDArray) : Nd4jArrayIterator
 }
 
 internal fun INDArray.realIterator(): Iterator<Pair<IntArray, Double>> = Nd4jArrayDoubleIterator(this)
-
-private class Nd4jArrayLongIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Long>(iterateOver) {
-    override fun getSingle(indices: LongArray) = iterateOver.getLong(*indices)
-}
-
-internal fun INDArray.longIterator(): Iterator<Pair<IntArray, Long>> = Nd4jArrayLongIterator(this)
 
 private class Nd4jArrayIntIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Int>(iterateOver) {
     override fun getSingle(indices: LongArray) = iterateOver.getInt(*indices.toIntArray())

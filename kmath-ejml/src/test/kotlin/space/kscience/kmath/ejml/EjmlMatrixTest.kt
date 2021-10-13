@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ejml
@@ -9,15 +9,16 @@ import org.ejml.data.DMatrixRMaj
 import org.ejml.dense.row.CommonOps_DDRM
 import org.ejml.dense.row.RandomMatrices_DDRM
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
-import space.kscience.kmath.linear.DeterminantFeature
-import space.kscience.kmath.linear.LupDecompositionFeature
-import space.kscience.kmath.linear.getFeature
+import space.kscience.kmath.linear.*
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
 
+@OptIn(PerformancePitfall::class)
 fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
     assertTrue { StructureND.contentEquals(expected, actual) }
 }
@@ -57,9 +58,9 @@ internal class EjmlMatrixTest {
     fun features() {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        val det: DeterminantFeature<Double> = EjmlLinearSpaceDDRM.getFeature(w) ?: fail()
+        val det: DeterminantFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
         assertEquals(CommonOps_DDRM.det(m), det.determinant)
-        val lup: LupDecompositionFeature<Double> = EjmlLinearSpaceDDRM.getFeature(w) ?: fail()
+        val lup: LupDecompositionFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }
@@ -79,5 +80,25 @@ internal class EjmlMatrixTest {
     fun origin() {
         val m = randomMatrix
         assertSame(m, EjmlDoubleMatrix(m).origin)
+    }
+
+    @Test
+    fun inverse() = EjmlLinearSpaceDDRM {
+        val random = Random(1224)
+        val dim = 20
+
+        val space = Double.algebra.linearSpace
+
+        //creating invertible matrix
+        val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val l = space.buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
+        val matrix = space { l dot u }
+        val inverted = matrix.toEjml().inverse()
+
+        val res = matrix dot inverted
+
+        println(StructureND.toString(res))
+
+        assertTrue { StructureND.contentEquals(one(dim, dim), res, 1e-3) }
     }
 }

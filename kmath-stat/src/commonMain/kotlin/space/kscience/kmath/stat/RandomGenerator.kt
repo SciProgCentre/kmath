@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
@@ -23,7 +23,7 @@ public interface RandomGenerator {
     public fun nextDouble(): Double
 
     /**
-     * A chunk of doubles of given [size]
+     * A chunk of doubles of given [size].
      */
     public fun nextDoubleBuffer(size: Int): DoubleBuffer = DoubleBuffer(size) { nextDouble() }
 
@@ -57,7 +57,7 @@ public interface RandomGenerator {
     public fun nextLong(until: Long): Long
 
     /**
-     * Fills a subrange of the specified byte [array] starting from [fromIndex] inclusive and ending [toIndex] exclusive
+     * Fills a subrange with the specified byte [array] starting from [fromIndex] inclusive and ending [toIndex] exclusive
      * with random bytes.
      *
      * @return [array] with the subrange filled with random bytes.
@@ -70,7 +70,7 @@ public interface RandomGenerator {
     public fun nextBytes(size: Int): ByteArray = ByteArray(size).also { fillBytes(it) }
 
     /**
-     * Create a new generator which is independent from current generator (operations on new generator do not affect this one
+     * Create a new generator that is independent of current generator (operations on new generator do not affect this one
      * and vise versa). The statistical properties of new generator should be the same as for this one.
      * For pseudo-random generator, the fork is keeping the same sequence of numbers for given call order for each run.
      *
@@ -97,17 +97,17 @@ public interface RandomGenerator {
  * @property random the underlying [Random] object.
  */
 public class DefaultGenerator(public val random: Random = Random) : RandomGenerator {
-    public override fun nextBoolean(): Boolean = random.nextBoolean()
-    public override fun nextDouble(): Double = random.nextDouble()
-    public override fun nextInt(): Int = random.nextInt()
-    public override fun nextInt(until: Int): Int = random.nextInt(until)
-    public override fun nextLong(): Long = random.nextLong()
-    public override fun nextLong(until: Long): Long = random.nextLong(until)
+    override fun nextBoolean(): Boolean = random.nextBoolean()
+    override fun nextDouble(): Double = random.nextDouble()
+    override fun nextInt(): Int = random.nextInt()
+    override fun nextInt(until: Int): Int = random.nextInt(until)
+    override fun nextLong(): Long = random.nextLong()
+    override fun nextLong(until: Long): Long = random.nextLong(until)
 
-    public override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
+    override fun fillBytes(array: ByteArray, fromIndex: Int, toIndex: Int) {
         random.nextBytes(array, fromIndex, toIndex)
     }
 
-    public override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
-    public override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
+    override fun nextBytes(size: Int): ByteArray = random.nextBytes(size)
+    override fun fork(): RandomGenerator = RandomGenerator.default(random.nextLong())
 }

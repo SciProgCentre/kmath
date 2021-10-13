@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.samplers
@@ -24,7 +24,7 @@ public class AhrensDieterExponentialSampler(public val mean: Double) : Sampler<D
         require(mean > 0) { "mean is not strictly positive: $mean" }
     }
 
-    public override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
+    override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
         override fun nextBlocking(): Double {
             // Step 1:
             var a = 0.0

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
@@ -8,7 +8,7 @@ package space.kscience.kmath.ast.rendering
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
- * Mathematical typography syntax node.
+ * Syntax node for mathematical typography.
  *
  * @author Iaroslav Postovalov
  */
@@ -150,9 +150,9 @@ public data class OperandSyntax(
  */
 @UnstableKMathAPI
 public data class UnaryOperatorSyntax(
-    public override val operation: String,
+    override val operation: String,
     public var prefix: MathSyntax,
-    public override val operand: OperandSyntax,
+    override val operand: OperandSyntax,
 ) : UnarySyntax() {
     init {
         operand.parent = this
@@ -166,8 +166,8 @@ public data class UnaryOperatorSyntax(
  */
 @UnstableKMathAPI
 public data class UnaryPlusSyntax(
-    public override val operation: String,
-    public override val operand: OperandSyntax,
+    override val operation: String,
+    override val operand: OperandSyntax,
 ) : UnarySyntax() {
     init {
         operand.parent = this
@@ -181,8 +181,8 @@ public data class UnaryPlusSyntax(
  */
 @UnstableKMathAPI
 public data class UnaryMinusSyntax(
-    public override val operation: String,
-    public override val operand: OperandSyntax,
+    override val operation: String,
+    override val operand: OperandSyntax,
 ) : UnarySyntax() {
     init {
         operand.parent = this
@@ -197,8 +197,8 @@ public data class UnaryMinusSyntax(
  */
 @UnstableKMathAPI
 public data class RadicalSyntax(
-    public override val operation: String,
-    public override val operand: MathSyntax,
+    override val operation: String,
+    override val operand: MathSyntax,
 ) : UnarySyntax() {
     init {
         operand.parent = this
@@ -215,8 +215,8 @@ public data class RadicalSyntax(
  */
 @UnstableKMathAPI
 public data class ExponentSyntax(
-    public override val operation: String,
-    public override val operand: OperandSyntax,
+    override val operation: String,
+    override val operand: OperandSyntax,
     public var useOperatorForm: Boolean,
 ) : UnarySyntax() {
     init {
@@ -233,9 +233,9 @@ public data class ExponentSyntax(
  */
 @UnstableKMathAPI
 public data class SuperscriptSyntax(
-    public override val operation: String,
-    public override val left: MathSyntax,
-    public override val right: MathSyntax,
+    override val operation: String,
+    override val left: MathSyntax,
+    override val right: MathSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -252,9 +252,9 @@ public data class SuperscriptSyntax(
  */
 @UnstableKMathAPI
 public data class SubscriptSyntax(
-    public override val operation: String,
-    public override val left: MathSyntax,
-    public override val right: MathSyntax,
+    override val operation: String,
+    override val left: MathSyntax,
+    override val right: MathSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -270,10 +270,10 @@ public data class SubscriptSyntax(
  */
 @UnstableKMathAPI
 public data class BinaryOperatorSyntax(
-    public override val operation: String,
+    override val operation: String,
     public var prefix: MathSyntax,
-    public override val left: MathSyntax,
-    public override val right: MathSyntax,
+    override val left: MathSyntax,
+    override val right: MathSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -290,9 +290,9 @@ public data class BinaryOperatorSyntax(
  */
 @UnstableKMathAPI
 public data class BinaryPlusSyntax(
-    public override val operation: String,
-    public override val left: OperandSyntax,
-    public override val right: OperandSyntax,
+    override val operation: String,
+    override val left: OperandSyntax,
+    override val right: OperandSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -301,7 +301,7 @@ public data class BinaryPlusSyntax(
 }
 
 /**
- * Represents binary, infix subtraction (*42 - 42*).
+ * Represents binary, infix subtraction (*42 &minus; 42*).
  *
  * @param left The minuend.
  * @param right The subtrahend.
@@ -309,9 +309,9 @@ public data class BinaryPlusSyntax(
  */
 @UnstableKMathAPI
 public data class BinaryMinusSyntax(
-    public override val operation: String,
-    public override val left: OperandSyntax,
-    public override val right: OperandSyntax,
+    override val operation: String,
+    override val left: OperandSyntax,
+    override val right: OperandSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -329,9 +329,9 @@ public data class BinaryMinusSyntax(
  */
 @UnstableKMathAPI
 public data class FractionSyntax(
-    public override val operation: String,
-    public override val left: OperandSyntax,
-    public override val right: OperandSyntax,
+    override val operation: String,
+    override val left: OperandSyntax,
+    override val right: OperandSyntax,
     public var infix: Boolean,
 ) : BinarySyntax() {
     init {
@@ -349,9 +349,9 @@ public data class FractionSyntax(
  */
 @UnstableKMathAPI
 public data class RadicalWithIndexSyntax(
-    public override val operation: String,
-    public override val left: MathSyntax,
-    public override val right: MathSyntax,
+    override val operation: String,
+    override val left: MathSyntax,
+    override val right: MathSyntax,
 ) : BinarySyntax() {
     init {
         left.parent = this
@@ -369,9 +369,9 @@ public data class RadicalWithIndexSyntax(
  */
 @UnstableKMathAPI
 public data class MultiplicationSyntax(
-    public override val operation: String,
-    public override val left: OperandSyntax,
-    public override val right: OperandSyntax,
+    override val operation: String,
+    override val left: OperandSyntax,
+    override val right: OperandSyntax,
     public var times: Boolean,
 ) : BinarySyntax() {
     init {

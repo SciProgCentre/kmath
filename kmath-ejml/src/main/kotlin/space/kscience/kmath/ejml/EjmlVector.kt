@@ -1,11 +1,10 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ejml
 
-import org.ejml.data.DMatrixD1
 import org.ejml.data.Matrix
 import space.kscience.kmath.linear.Point
 
@@ -14,14 +13,14 @@ import space.kscience.kmath.linear.Point
  *
  * @param T the type of elements contained in the buffer.
  * @param M the type of EJML matrix.
- * @property origin The underlying matrix.
+ * @property origin The underlying matrix, must have only one row.
  * @author Iaroslav Postovalov
  */
 public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: M) : Point<T> {
-    public override val size: Int
-        get() = origin.numRows
+    override val size: Int
+        get() = origin.numCols
 
-    public override operator fun iterator(): Iterator<T> = object : Iterator<T> {
+    override operator fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor: Int = 0
 
         override fun next(): T {
@@ -32,14 +31,5 @@ public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: 
         override fun hasNext(): Boolean = cursor < origin.numCols * origin.numRows
     }
 
-    public override fun toString(): String = "EjmlVector(origin=$origin)"
-}
-
-/**
- * [EjmlVector] specialization for [Double].
- *
- * @author Iaroslav Postovalov
- */
-public class EjmlDoubleVector<out M : DMatrixD1>(public override val origin: M) : EjmlVector<Double, M>(origin) {
-    public override operator fun get(index: Int): Double = origin[index]
+    override fun toString(): String = "EjmlVector(origin=$origin)"
 }

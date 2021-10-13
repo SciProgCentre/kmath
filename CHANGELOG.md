@@ -2,32 +2,49 @@
 
 ## [Unreleased]
 ### Added
-- ScaleOperations interface
-- Field extends ScaleOperations
+- `ScaleOperations` interface
+- `Field` extends `ScaleOperations`
 - Basic integration API
 - Basic MPP distributions and samplers
-- bindSymbolOrNull
+- `bindSymbolOrNull`
 - Blocking chains and Statistics
 - Multiplatform integration
 - Integration for any Field element
 - Extended operations for ND4J fields
 - Jupyter Notebook integration module (kmath-jupyter)
+- `@PerformancePitfall` annotation to mark possibly slow API
+- Unified architecture for Integration and Optimization using features.
+- `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
+- Integration between `MST` and Symja `IExpr`
+- Complex power
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
 - Buffer factories for primitives moved to MutableBuffer.Companion
-- NDStructure and NDAlgebra to StructureND and AlgebraND respectively
-- Real -> Double
+- Rename `NDStructure` and `NDAlgebra` to `StructureND` and `AlgebraND` respectively
+- `Real` -> `Double`
 - DataSets are moved from functions to core
 - Redesign advanced Chain API
-- Redesign MST. Remove MSTExpression.
-- Move MST to core
+- Redesign `MST`. Remove `MstExpression`.
+- Move `MST` to core
 - Separated benchmarks and examples
-- Rewritten EJML module without ejml-simple
+- Rewrite `kmath-ejml` without `ejml-simple` artifact, support sparse matrices
+- Promote stability of kmath-ast and kmath-kotlingrad to EXPERIMENTAL.
+- ColumnarData returns nullable column
+- `MST` is made sealed interface
+- Replace `MST.Symbolic` by `Symbol`, `Symbol` now implements MST
+- Remove Any restriction on polynomials
+- Add `out` variance to type parameters of `StructureND` and its implementations where possible
+- Rename `DifferentiableMstExpression` to `KotlingradExpression`
+- `FeatureSet` now accepts only `Feature`. It is possible to override keys and use interfaces.
+- Use `Symbol` factory function instead of `StringSymbol`
+- New discoverability pattern: `<Type>.algebra.<nd/etc>`
+- Adjusted commons-math API for linear solvers to match conventions.
 
 ### Deprecated
+- Specialized `DoubleBufferAlgebra`
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
@@ -35,10 +52,13 @@
 - `contentEquals` from Buffer. It moved to the companion.
 - MSTExpression
 - Expression algebra builders
-- Comples and Quaternion no longer are elements.
+- Complex and Quaternion no longer are elements.
+- Second generic from DifferentiableExpression
+- Algebra elements are completely removed. Use algebra contexts instead.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations
+- Univariate histogram filling
 
 ### Security
 

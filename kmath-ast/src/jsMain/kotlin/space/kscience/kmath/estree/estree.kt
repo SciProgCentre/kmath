@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.estree
@@ -9,22 +9,23 @@ import space.kscience.kmath.estree.internal.ESTreeBuilder
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MST.*
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.internal.estree.BaseExpression
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
+import space.kscience.kmath.operations.bindSymbolOrNull
 
 @PublishedApi
 internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
     fun ESTreeBuilder<T>.visit(node: MST): BaseExpression = when (node) {
-        is Symbolic -> {
-            val symbol = algebra.bindSymbolOrNull(node.value)
+        is Symbol -> {
+            val symbol = algebra.bindSymbolOrNull(node)
 
             if (symbol != null)
                 constant(symbol)
             else
-                variable(node.value)
+                variable(node.identity)
         }
 
         is Numeric -> constant(node.value)

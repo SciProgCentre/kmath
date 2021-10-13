@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.testutils
@@ -10,7 +10,7 @@ import space.kscience.kmath.operations.invoke
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-internal class FieldVerifier<T, A : Field<T>>(
+internal class FieldVerifier<T, out A : Field<T>>(
     algebra: A, a: T, b: T, c: T, x: Number,
 ) : RingVerifier<T, A>(algebra, a, b, c, x) {
 

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.domains
@@ -12,7 +12,7 @@ import space.kscience.kmath.linear.Point
  *
  * @param T the type of element of this domain.
  */
-public interface Domain<T : Any> {
+public interface Domain<in T : Any> {
     /**
      * Checks if the specified point is contained in this domain.
      */

@@ -1,21 +1,27 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.misc.Feature
+import space.kscience.kmath.misc.Featured
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
+import kotlin.math.abs
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
-public interface StructureFeature
+public interface StructureFeature : Feature<StructureFeature>
 
 /**
- * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
  * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
  * specify the sizes of each dimension.
  *
@@ -23,9 +29,9 @@ public interface StructureFeature
  *
  * @param T the type of items.
  */
-public interface StructureND<T> {
+public interface StructureND<out T> : Featured<StructureFeature> {
     /**
-     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
     public val shape: IntArray
@@ -48,19 +54,20 @@ public interface StructureND<T> {
      *
      * @return the lazy sequence of pairs of indices to values.
      */
+    @PerformancePitfall
     public fun elements(): Sequence<Pair<IntArray, T>>
 
     /**
-     * Feature is some additional strucure information which allows to access it special properties or hints.
-     * If the feature is not present, null is returned.
+     * Feature is some additional structure information that allows to access it special properties or hints.
+     * If the feature is not present, `null` is returned.
      */
-    @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
 
     public companion object {
         /**
          * Indicates whether some [StructureND] is equal to another one.
          */
+        @PerformancePitfall
         public fun <T : Any> contentEquals(st1: StructureND<T>, st2: StructureND<T>): Boolean {
             if (st1 === st2) return true
 
@@ -70,6 +77,22 @@ public interface StructureND<T> {
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }
+        }
+
+        @PerformancePitfall
+        public fun contentEquals(
+            st1: StructureND<Double>,
+            st2: StructureND<Double>,
+            tolerance: Double = 1e-11
+        ): Boolean {
+            if (st1 === st2) return true
+
+            // fast comparison of buffers if possible
+            if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
+                return Buffer.contentEquals(st1.buffer, st2.buffer)
+
+            //element by element comparison if it could not be avoided
+            return st1.elements().all { (index, value) -> abs(value - st2[index]) < tolerance }
         }
 
         /**
@@ -143,6 +166,44 @@ public interface StructureND<T> {
 }
 
 /**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> AlgebraND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> GroupND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementContext { (value - st2[index]) } < absoluteTolerance }
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
+
+/**
  * Returns the value at the specified indices.
  *
  * @param index the indices.
@@ -150,8 +211,8 @@ public interface StructureND<T> {
  */
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
-@UnstableKMathAPI
-public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
+//@UnstableKMathAPI
+//public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
 
 /**
  * Represents mutable [StructureND].
@@ -169,11 +230,12 @@ public interface MutableStructureND<T> : StructureND<T> {
 /**
  * Transform a structure element-by element in place.
  */
+@OptIn(PerformancePitfall::class)
 public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
 /**
- * A way to convert ND index to linear one and back.
+ * A way to convert ND indices to linear one and back.
  */
 public interface Strides {
     /**
@@ -209,9 +271,7 @@ public interface Strides {
     /**
      * Iterate over ND indices in a natural order
      */
-    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map {
-        index(it)
-    }
+    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
 }
 
 /**

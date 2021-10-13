@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.histogram
@@ -9,6 +9,7 @@ import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.domains.HyperSquareDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
@@ -28,7 +29,7 @@ public class DoubleHistogramSpace(
     public val dimension: Int get() = lower.size
 
     private val shape = IntArray(binNums.size) { binNums[it] + 2 }
-    override val histogramValueSpace: DoubleFieldND = AlgebraND.real(*shape)
+    override val histogramValueSpace: DoubleFieldND = DoubleField.ndAlgebra(*shape)
 
     override val strides: Strides get() = histogramValueSpace.strides
     private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }

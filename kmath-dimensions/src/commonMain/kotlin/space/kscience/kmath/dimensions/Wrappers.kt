@@ -1,33 +1,31 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.dimensions
 
-import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.Point
-import space.kscience.kmath.linear.transpose
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.algebra
 import kotlin.jvm.JvmInline
 
 /**
  * A matrix with compile-time controlled dimension
  */
-public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
+public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
     public companion object {
         /**
-         * Coerces a regular matrix to a matrix with type-safe dimensions and throws a error if coercion failed
+         * Coerces a regular matrix to a matrix with type-safe dimensions and throws an error if coercion failed
          */
         public inline fun <T, reified R : Dimension, reified C : Dimension> coerce(structure: Structure2D<T>): DMatrix<T, R, C> {
-            require(structure.rowNum == Dimension.dim<R>().toInt()) {
+            require(structure.rowNum == Dimension.dim<R>()) {
                 "Row number mismatch: expected ${Dimension.dim<R>()} but found ${structure.rowNum}"
             }
 
-            require(structure.colNum == Dimension.dim<C>().toInt()) {
+            require(structure.colNum == Dimension.dim<C>()) {
                 "Column number mismatch: expected ${Dimension.dim<C>()} but found ${structure.colNum}"
             }
 
@@ -35,7 +33,7 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
         }
 
         /**
-         * The same as [DMatrix.coerce] but without dimension checks. Use with caution
+         * The same as [DMatrix.coerce] but without dimension checks. Use with caution.
          */
         public fun <T, R : Dimension, C : Dimension> coerceUnsafe(structure: Structure2D<T>): DMatrix<T, R, C> =
             DMatrixWrapper(structure)
@@ -46,7 +44,7 @@ public interface DMatrix<T, R : Dimension, C : Dimension> : Structure2D<T> {
  * An inline wrapper for a Matrix
  */
 @JvmInline
-public value class DMatrixWrapper<T, R : Dimension, C : Dimension>(
+public value class DMatrixWrapper<out T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
     override val shape: IntArray get() = structure.shape
@@ -58,10 +56,10 @@ public value class DMatrixWrapper<T, R : Dimension, C : Dimension>(
 /**
  * Dimension-safe point
  */
-public interface DPoint<T, D : Dimension> : Point<T> {
+public interface DPoint<out T, D : Dimension> : Point<T> {
     public companion object {
         public inline fun <T, reified D : Dimension> coerce(point: Point<T>): DPoint<T, D> {
-            require(point.size == Dimension.dim<D>().toInt()) {
+            require(point.size == Dimension.dim<D>()) {
                 "Vector dimension mismatch: expected ${Dimension.dim<D>()}, but found ${point.size}"
             }
 
@@ -76,7 +74,7 @@ public interface DPoint<T, D : Dimension> : Point<T> {
  * Dimension-safe point wrapper
  */
 @JvmInline
-public value class DPointWrapper<T, D : Dimension>(public val point: Point<T>) :
+public value class DPointWrapper<out T, D : Dimension>(public val point: Point<T>) :
     DPoint<T, D> {
     override val size: Int get() = point.size
 
@@ -92,11 +90,11 @@ public value class DPointWrapper<T, D : Dimension>(public val point: Point<T>) :
 @JvmInline
 public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: LinearSpace<T, A>) {
     public inline fun <reified R : Dimension, reified C : Dimension> Matrix<T>.coerce(): DMatrix<T, R, C> {
-        require(rowNum == Dimension.dim<R>().toInt()) {
+        require(rowNum == Dimension.dim<R>()) {
             "Row number mismatch: expected ${Dimension.dim<R>()} but found $rowNum"
         }
 
-        require(colNum == Dimension.dim<C>().toInt()) {
+        require(colNum == Dimension.dim<C>()) {
             "Column number mismatch: expected ${Dimension.dim<C>()} but found $colNum"
         }
 
@@ -111,7 +109,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
     ): DMatrix<T, R, C> {
         val rows = Dimension.dim<R>()
         val cols = Dimension.dim<C>()
-        return context.buildMatrix(rows.toInt(), cols.toInt(), initializer).coerce<R, C>()
+        return context.buildMatrix(rows, cols, initializer).coerce()
     }
 
     public inline fun <reified D : Dimension> point(noinline initializer: A.(Int) -> T): DPoint<T, D> {
@@ -119,7 +117,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
 
         return DPoint.coerceUnsafe(
             context.buildVector(
-                size.toInt(),
+                size,
                 initializer
             )
         )
@@ -151,7 +149,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
         context.run { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(LinearSpace.real)
+        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(Double.algebra.linearSpace)
     }
 }
 

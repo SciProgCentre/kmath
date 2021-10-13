@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.api
@@ -49,7 +49,7 @@ public interface TensorPartialDivisionAlgebra<T> : TensorAlgebra<T> {
     /**
      * Each element of this tensor is divided by each element of the [other] tensor.
      *
-     * @param other tensor to be divide by.
+     * @param other tensor to be divided by.
      */
     public operator fun Tensor<T>.divAssign(other: Tensor<T>)
 }

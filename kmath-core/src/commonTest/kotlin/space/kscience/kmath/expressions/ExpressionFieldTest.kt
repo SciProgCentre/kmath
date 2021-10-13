@@ -1,13 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.symbol
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -17,8 +15,8 @@ class ExpressionFieldTest {
 
     @Test
     fun testExpression() {
-        val expression = FunctionalExpressionField(DoubleField).invoke {
-            val x by binding()
+        val expression = with(FunctionalExpressionField(DoubleField)) {
+            val x by binding
             x * x + 2 * x + one
         }
 
@@ -29,7 +27,7 @@ class ExpressionFieldTest {
     @Test
     fun separateContext() {
         fun <T> FunctionalExpressionField<T, *>.expression(): Expression<T> {
-            val x by binding()
+            val x by binding
             return x * x + 2 * x + one
         }
 
@@ -40,7 +38,7 @@ class ExpressionFieldTest {
     @Test
     fun valueExpression() {
         val expressionBuilder: FunctionalExpressionField<Double, *>.() -> Expression<Double> = {
-            val x by binding()
+            val x by binding
             x * x + 2 * x + one
         }
 

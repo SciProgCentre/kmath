@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.commons.linear
@@ -10,23 +10,27 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
 public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
-    public override val rowNum: Int get() = origin.rowDimension
-    public override val colNum: Int get() = origin.columnDimension
+    override val rowNum: Int get() = origin.rowDimension
+    override val colNum: Int get() = origin.columnDimension
 
-    public override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
+    override operator fun get(i: Int, j: Int): Double = origin.getEntry(i, j)
 }
 
-public class CMVector(public val origin: RealVector) : Point<Double> {
-    public override val size: Int get() = origin.dimension
+@JvmInline
+public value class CMVector(public val origin: RealVector) : Point<Double> {
+    override val size: Int get() = origin.dimension
 
-    public override operator fun get(index: Int): Double = origin.getEntry(index)
+    override operator fun get(index: Int): Double = origin.getEntry(index)
 
-    public override operator fun iterator(): Iterator<Double> = origin.toArray().iterator()
+    override operator fun iterator(): Iterator<Double> = origin.toArray().iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)
@@ -34,7 +38,7 @@ public fun RealVector.toPoint(): CMVector = CMVector(this)
 public object CMLinearSpace : LinearSpace<Double, DoubleField> {
     override val elementAlgebra: DoubleField get() = DoubleField
 
-    public override fun buildMatrix(
+    override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double,
@@ -73,16 +77,16 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
     override fun Point<Double>.minus(other: Point<Double>): CMVector =
         toCM().origin.subtract(other.toCM().origin).wrap()
 
-    public override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
+    override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
         toCM().origin.multiply(other.toCM().origin).wrap()
 
-    public override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
+    override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
         toCM().origin.preMultiply(vector.toCM().origin).wrap()
 
-    public override operator fun Matrix<Double>.minus(other: Matrix<Double>): CMMatrix =
+    override operator fun Matrix<Double>.minus(other: Matrix<Double>): CMMatrix =
         toCM().origin.subtract(other.toCM().origin).wrap()
 
-    public override operator fun Matrix<Double>.times(value: Double): CMMatrix =
+    override operator fun Matrix<Double>.times(value: Double): CMMatrix =
         toCM().origin.scalarMultiply(value).wrap()
 
     override fun Double.times(m: Matrix<Double>): CMMatrix =
@@ -95,7 +99,7 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
         v * this
 
     @UnstableKMathAPI
-    override fun <F : StructureFeature> getFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
+    override fun <F : StructureFeature> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         //Return the feature if it is intrinsic to the structure
         structure.getFeature(type)?.let { return it }
 
@@ -109,22 +113,22 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
                 LupDecompositionFeature<Double> {
                 private val lup by lazy { LUDecomposition(origin) }
                 override val determinant: Double by lazy { lup.determinant }
-                override val l: Matrix<Double> by lazy { CMMatrix(lup.l) + LFeature }
-                override val u: Matrix<Double> by lazy { CMMatrix(lup.u) + UFeature }
+                override val l: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.l).withFeature(LFeature) }
+                override val u: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.u).withFeature(UFeature) }
                 override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
             }
 
             CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
-                override val l: Matrix<Double> by lazy {
+                override val l: Matrix<Double> by lazy<Matrix<Double>> {
                     val cholesky = CholeskyDecomposition(origin)
-                    CMMatrix(cholesky.l) + LFeature
+                    CMMatrix(cholesky.l).withFeature(LFeature)
                 }
             }
 
             QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
                 private val qr by lazy { QRDecomposition(origin) }
-                override val q: Matrix<Double> by lazy { CMMatrix(qr.q) + OrthogonalFeature }
-                override val r: Matrix<Double> by lazy { CMMatrix(qr.r) + UFeature }
+                override val q: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.q).withFeature(OrthogonalFeature) }
+                override val r: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.r).withFeature(UFeature) }
             }
 
             SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {

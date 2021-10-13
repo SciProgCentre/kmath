@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.api
@@ -13,8 +13,7 @@ import space.kscience.kmath.operations.Algebra
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
-
+public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
     /**
      * Returns a single tensor value of unit dimension if tensor shape equals to [1].
      *
@@ -27,7 +26,8 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.value(): T
+    public fun Tensor<T>.value(): T =
+        valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
 
     /**
      * Each element of the tensor [other] is added to this value.
@@ -60,15 +60,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be added to each element of this tensor.
      */
-    public operator fun Tensor<T>.plusAssign(value: T): Unit
+    public operator fun Tensor<T>.plusAssign(value: T)
 
     /**
      * Each element of the tensor [other] is added to each element of this tensor.
      *
      * @param other tensor to be added.
      */
-    public operator fun Tensor<T>.plusAssign(other: Tensor<T>): Unit
-
+    public operator fun Tensor<T>.plusAssign(other: Tensor<T>)
 
     /**
      * Each element of the tensor [other] is subtracted from this value.
@@ -101,14 +100,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be subtracted from each element of this tensor.
      */
-    public operator fun Tensor<T>.minusAssign(value: T): Unit
+    public operator fun Tensor<T>.minusAssign(value: T)
 
     /**
      * Each element of the tensor [other] is subtracted from each element of this tensor.
      *
      * @param other tensor to be subtracted.
      */
-    public operator fun Tensor<T>.minusAssign(other: Tensor<T>): Unit
+    public operator fun Tensor<T>.minusAssign(other: Tensor<T>)
 
 
     /**
@@ -142,14 +141,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param value the number to be multiplied by each element of this tensor.
      */
-    public operator fun Tensor<T>.timesAssign(value: T): Unit
+    public operator fun Tensor<T>.timesAssign(value: T)
 
     /**
      * Each element of the tensor [other] is multiplied by each element of this tensor.
      *
      * @param other tensor to be multiplied.
      */
-    public operator fun Tensor<T>.timesAssign(other: Tensor<T>): Unit
+    public operator fun Tensor<T>.timesAssign(other: Tensor<T>)
 
     /**
      * Numerical negative, element-wise.
@@ -189,7 +188,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
 
     /**
      * View this tensor as the same size as [other].
-     * ``this.viewAs(other) is equivalent to this.view(other.shape)``.
+     * `this.viewAs(other)` is equivalent to `this.view(other.shape)`.
      * For more information: https://pytorch.org/cppdocs/notes/tensor_indexing.html
      *
      * @param other the result tensor has the same size as other.
@@ -217,14 +216,14 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      * a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after.
      * If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix
      * multiple and removed after.
-     * The non-matrix (i.e. batch) dimensions are broadcasted (and thus must be broadcastable).
+     * The non-matrix (i.e., batch) dimensions are broadcast (and thus must be broadcastable).
      * For example, if `input` is a (j &times; 1 &times; n &times; n) tensor and `other` is a
      * (k &times; n &times; n) tensor, out will be a (j &times; k &times; n &times; n) tensor.
      *
      * For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html
      *
-     * @param other tensor to be multiplied
-     * @return mathematical product of two tensors
+     * @param other tensor to be multiplied.
+     * @return a mathematical product of two tensors.
      */
     public infix fun Tensor<T>.dot(other: Tensor<T>): Tensor<T>
 
@@ -234,7 +233,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      * To facilitate creating batched diagonal matrices,
      * the 2D planes formed by the last two dimensions of the returned tensor are chosen by default.
      *
-     * The argument [offset]  controls which diagonal to consider:
+     * The argument [offset] controls, which diagonal to consider:
      * 1. If [offset] = 0, it is the main diagonal.
      * 1. If [offset] > 0, it is above the main diagonal.
      * 1. If [offset] < 0, it is below the main diagonal.
@@ -255,7 +254,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
         diagonalEntries: Tensor<T>,
         offset: Int = 0,
         dim1: Int = -2,
-        dim2: Int = -1
+        dim2: Int = -1,
     ): Tensor<T>
 
     /**
@@ -321,7 +320,7 @@ public interface TensorAlgebra<T>: Algebra<Tensor<T>> {
      *
      * @param dim the dimension to reduce.
      * @param keepDim whether the output tensor has [dim] retained or not.
-     * @return the the index of maximum value of each row of the input tensor in the given dimension [dim].
+     * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
      */
     public fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
 }

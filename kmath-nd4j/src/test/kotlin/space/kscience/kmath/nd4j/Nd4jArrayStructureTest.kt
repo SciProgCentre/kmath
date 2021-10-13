@@ -1,11 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.factory.Nd4j
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,6 +14,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.fail
 
 internal class Nd4jArrayStructureTest {
+    @OptIn(PerformancePitfall::class)
     @Test
     fun testElements() {
         val nd = Nd4j.create(doubleArrayOf(1.0, 2.0, 3.0))!!
@@ -70,7 +72,7 @@ internal class Nd4jArrayStructureTest {
     @Test
     fun testSet() {
         val nd = Nd4j.rand(17, 12, 4, 8)!!
-        val struct = nd.asLongStructure()
+        val struct = nd.asIntStructure()
         struct[intArrayOf(1, 2, 3, 4)] = 777
         assertEquals(777, struct[1, 2, 3, 4])
     }

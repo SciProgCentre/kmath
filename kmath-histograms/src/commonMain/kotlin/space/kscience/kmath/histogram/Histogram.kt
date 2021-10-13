@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.histogram
@@ -11,16 +11,16 @@ import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 
 /**
- * The binned data element. Could be a histogram bin with a number of counts or an artificial construct
+ * The binned data element. Could be a histogram bin with a number of counts or an artificial construct.
  */
-public interface Bin<T : Any> : Domain<T> {
+public interface Bin<in T : Any> : Domain<T> {
     /**
      * The value of this bin.
      */
     public val value: Number
 }
 
-public interface Histogram<T : Any, out B : Bin<T>> {
+public interface Histogram<in T : Any, out B : Bin<T>> {
     /**
      * Find existing bin, corresponding to given coordinates
      */
@@ -34,7 +34,7 @@ public interface Histogram<T : Any, out B : Bin<T>> {
     public val bins: Iterable<B>
 }
 
-public fun interface HistogramBuilder<T : Any> {
+public fun interface HistogramBuilder<in T : Any> {
 
     /**
      * Increment appropriate bin

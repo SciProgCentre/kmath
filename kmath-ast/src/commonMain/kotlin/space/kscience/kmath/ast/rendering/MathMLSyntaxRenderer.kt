@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
@@ -16,7 +16,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  */
 @UnstableKMathAPI
 public object MathMLSyntaxRenderer : SyntaxRenderer {
-    public override fun render(node: MathSyntax, output: Appendable) {
+    override fun render(node: MathSyntax, output: Appendable) {
         output.append("<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>")
         renderPart(node, output)
         output.append("</mrow></math>")

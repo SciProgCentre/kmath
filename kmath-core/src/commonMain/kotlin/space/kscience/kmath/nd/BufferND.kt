@@ -1,10 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.MutableBuffer
@@ -17,7 +18,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * @param strides The strides to access elements of [Buffer] by linear indices.
  * @param buffer The underlying buffer.
  */
-public open class BufferND<T>(
+public open class BufferND<out T>(
     public val strides: Strides,
     public val buffer: Buffer<T>,
 ) : StructureND<T> {
@@ -32,6 +33,7 @@ public open class BufferND<T>(
 
     override val shape: IntArray get() = strides.shape
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = strides.indices().map {
         it to this[it]
     }

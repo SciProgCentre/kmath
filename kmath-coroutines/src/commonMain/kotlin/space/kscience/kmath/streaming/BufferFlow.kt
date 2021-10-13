@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.streaming
@@ -76,7 +76,7 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
 
 /**
  * Map a flow to a moving window buffer. The window step is one.
- * In order to get different steps, one could use skip operation.
+ * To get different steps, one could use skip operation.
  */
 public fun <T> Flow<T>.windowed(window: Int): Flow<Buffer<T>> = flow {
     require(window > 1) { "Window size must be more than one" }

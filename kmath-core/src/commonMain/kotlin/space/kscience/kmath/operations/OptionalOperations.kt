@@ -1,11 +1,9 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
-
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * A container for trigonometric operations for specific type.
@@ -77,48 +75,6 @@ public interface TrigonometricOperations<T> : Algebra<T> {
 }
 
 /**
- * Computes the sine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> sin(arg: T): T = arg.context.sin(arg)
-
-/**
- * Computes the cosine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> cos(arg: T): T = arg.context.cos(arg)
-
-/**
- * Computes the tangent of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> tan(arg: T): T = arg.context.tan(arg)
-
-/**
- * Computes the inverse sine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> asin(arg: T): T = arg.context.asin(arg)
-
-/**
- * Computes the inverse cosine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> acos(arg: T): T = arg.context.acos(arg)
-
-/**
- * Computes the inverse tangent of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out TrigonometricOperations<T>>> atan(arg: T): T = arg.context.atan(arg)
-
-/**
  * A context extension to include power operations based on exponentiation.
  *
  * @param T the type of element of this structure.
@@ -151,31 +107,6 @@ public interface PowerOperations<T> : Algebra<T> {
         public const val SQRT_OPERATION: String = "sqrt"
     }
 }
-
-/**
- * Raises this element to the power [pow].
- *
- * @receiver the base.
- * @param power the exponent.
- * @return the base raised to the power.
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public infix fun <T : AlgebraElement<T, out PowerOperations<T>>> T.pow(power: Double): T = context.power(this, power)
-
-/**
- * Computes the square root of the value [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqrt(arg: T): T = arg pow 0.5
-
-/**
- * Computes the square of the value [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out PowerOperations<T>>> sqr(arg: T): T = arg pow 2.0
 
 /**
  * A container for operations related to `exp` and `ln` functions.
@@ -267,62 +198,6 @@ public interface ExponentialOperations<T> : Algebra<T> {
 }
 
 /**
- * The identifier of exponential function.
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> exp(arg: T): T = arg.context.exp(arg)
-
-/**
- * The identifier of natural logarithm.
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> ln(arg: T): T = arg.context.ln(arg)
-
-
-/**
- * Computes the hyperbolic sine of [arg].
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> sinh(arg: T): T = arg.context.sinh(arg)
-
-/**
- * Computes the hyperbolic cosine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> cosh(arg: T): T = arg.context.cosh(arg)
-
-/**
- * Computes the hyperbolic tangent of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> tanh(arg: T): T = arg.context.tanh(arg)
-
-/**
- * Computes the inverse hyperbolic sine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> asinh(arg: T): T = arg.context.asinh(arg)
-
-/**
- * Computes the inverse hyperbolic cosine of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> acosh(arg: T): T = arg.context.acosh(arg)
-
-/**
- * Computes the inverse hyperbolic tangent of [arg].
- */
-@UnstableKMathAPI
-@Deprecated("AlgebraElements are considered odd and will be removed in future releases.")
-public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> atanh(arg: T): T = arg.context.atanh(arg)
-
-/**
  * A container for norm functional on element.
  *
  * @param T the type of element having norm defined.
@@ -330,13 +205,8 @@ public fun <T : AlgebraElement<T, out ExponentialOperations<T>>> atanh(arg: T): 
  */
 public interface Norm<in T : Any, out R> {
     /**
-     * Computes the norm of [arg] (i.e. absolute value or vector length).
+     * Computes the norm of [arg] (i.e., absolute value or vector length).
      */
     public fun norm(arg: T): R
 }
 
-/**
- * Computes the norm of [arg] (i.e. absolute value or vector length).
- */
-@UnstableKMathAPI
-public fun <T : AlgebraElement<T, out Norm<T, R>>, R> norm(arg: T): R = arg.context.norm(arg)

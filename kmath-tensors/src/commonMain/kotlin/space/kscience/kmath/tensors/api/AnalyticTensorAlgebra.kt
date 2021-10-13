@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.api
@@ -66,16 +66,6 @@ public interface AnalyticTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
      * @return the variance of each row of the input tensor in the given dimension [dim].
      */
     public fun Tensor<T>.variance(dim: Int, keepDim: Boolean): Tensor<T>
-
-    /**
-     * Returns the covariance matrix M of given vectors.
-     *
-     * M[i, j] contains covariance of i-th and j-th given vectors
-     *
-     * @param tensors the [List] of 1-dimensional tensors with same shape
-     * @return the covariance matrix
-     */
-    public fun cov(tensors: List<Tensor<T>>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
     public fun Tensor<T>.exp(): Tensor<T>

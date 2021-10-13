@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
@@ -9,7 +9,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Abstraction of writing [MathSyntax] as a string of an actual markup language. Typical implementation should
- * involve traversal of MathSyntax with handling each its subtype.
+ * involve traversal of MathSyntax with handling each subtype.
  *
  * @author Iaroslav Postovalov
  */

@@ -1,12 +1,10 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.StringSymbol
-import space.kscience.kmath.misc.Symbol
 import space.kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
@@ -45,7 +43,7 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T =
 /**
  * Calls this expression from arguments.
  *
- * @param pairs the pairs of arguments' names to values.
+ * @param pairs the pairs of arguments' names to value.
  * @return a value.
  */
 @JvmName("callByString")
@@ -62,7 +60,7 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
 public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 
     /**
-     * A constant expression which does not depend on arguments
+     * A constant expression that does not depend on arguments.
      */
     public fun const(value: T): E
 }
@@ -70,6 +68,7 @@ public interface ExpressionAlgebra<in T, E> : Algebra<E> {
 /**
  * Bind a symbol by name inside the [ExpressionAlgebra]
  */
-public fun <T, E> ExpressionAlgebra<T, E>.binding(): ReadOnlyProperty<Any?, E> = ReadOnlyProperty { _, property ->
-    bindSymbol(property.name) ?: error("A variable with name ${property.name} does not exist")
-}
+public val <T, E> ExpressionAlgebra<T, E>.binding: ReadOnlyProperty<Any?, E>
+    get() = ReadOnlyProperty { _, property ->
+        bindSymbol(property.name) ?: error("A variable with name ${property.name} does not exist")
+    }

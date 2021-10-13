@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -105,4 +105,4 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-fun AlgebraND.Companion.realWithStream(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)
+fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)

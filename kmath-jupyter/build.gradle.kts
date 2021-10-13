@@ -20,3 +20,7 @@ readme {
 kotlin.sourceSets.all {
     languageSettings.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
 }
+
+tasks.processJupyterApiResources {
+    libraryProducers = listOf("space.kscience.kmath.jupyter.KMathJupyter")
+}

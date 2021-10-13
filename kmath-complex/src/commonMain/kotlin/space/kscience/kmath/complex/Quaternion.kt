@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.complex
@@ -63,20 +63,20 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
      */
     public val k: Quaternion = Quaternion(0, 0, 0, 1)
 
-    public override fun add(a: Quaternion, b: Quaternion): Quaternion =
+    override fun add(a: Quaternion, b: Quaternion): Quaternion =
         Quaternion(a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z)
 
-    public override fun scale(a: Quaternion, value: Double): Quaternion =
+    override fun scale(a: Quaternion, value: Double): Quaternion =
         Quaternion(a.w * value, a.x * value, a.y * value, a.z * value)
 
-    public override fun multiply(a: Quaternion, b: Quaternion): Quaternion = Quaternion(
+    override fun multiply(a: Quaternion, b: Quaternion): Quaternion = Quaternion(
         a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
         a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
         a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
         a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
     )
 
-    public override fun divide(a: Quaternion, b: Quaternion): Quaternion {
+    override fun divide(a: Quaternion, b: Quaternion): Quaternion {
         val s = b.w * b.w + b.x * b.x + b.y * b.y + b.z * b.z
 
         return Quaternion(
@@ -87,7 +87,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         )
     }
 
-    public override fun power(arg: Quaternion, pow: Number): Quaternion {
+    override fun power(arg: Quaternion, pow: Number): Quaternion {
         if (pow is Int) return pwr(arg, pow)
         if (floor(pow.toDouble()) == pow.toDouble()) return pwr(arg, pow.toInt())
         return exp(pow * ln(arg))
@@ -131,7 +131,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(a2 * a2 - 6 * a2 * n1 + n1 * n1, x.x * n2, x.y * n2, x.z * n2)
     }
 
-    public override fun exp(arg: Quaternion): Quaternion {
+    override fun exp(arg: Quaternion): Quaternion {
         val un = arg.x * arg.x + arg.y * arg.y + arg.z * arg.z
         if (un == 0.0) return exp(arg.w).toQuaternion()
         val n1 = sqrt(un)
@@ -140,14 +140,14 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(ea * cos(n1), n2 * arg.x, n2 * arg.y, n2 * arg.z)
     }
 
-    public override fun ln(arg: Quaternion): Quaternion {
+    override fun ln(arg: Quaternion): Quaternion {
         val nu2 = arg.x * arg.x + arg.y * arg.y + arg.z * arg.z
 
         if (nu2 == 0.0)
             return if (arg.w > 0)
                 Quaternion(ln(arg.w), 0, 0, 0)
             else {
-                val l = ComplexField { ComplexField.ln(arg.w.toComplex()) }
+                val l = ComplexField { ln(arg.w.toComplex()) }
                 Quaternion(l.re, l.im, 0, 0)
             }
 
@@ -158,21 +158,21 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(ln(n), th * arg.x, th * arg.y, th * arg.z)
     }
 
-    public override operator fun Number.plus(b: Quaternion): Quaternion = Quaternion(toDouble() + b.w, b.x, b.y, b.z)
+    override operator fun Number.plus(b: Quaternion): Quaternion = Quaternion(toDouble() + b.w, b.x, b.y, b.z)
 
-    public override operator fun Number.minus(b: Quaternion): Quaternion =
+    override operator fun Number.minus(b: Quaternion): Quaternion =
         Quaternion(toDouble() - b.w, -b.x, -b.y, -b.z)
 
-    public override operator fun Quaternion.plus(b: Number): Quaternion = Quaternion(w + b.toDouble(), x, y, z)
-    public override operator fun Quaternion.minus(b: Number): Quaternion = Quaternion(w - b.toDouble(), x, y, z)
+    override operator fun Quaternion.plus(b: Number): Quaternion = Quaternion(w + b.toDouble(), x, y, z)
+    override operator fun Quaternion.minus(b: Number): Quaternion = Quaternion(w - b.toDouble(), x, y, z)
 
-    public override operator fun Number.times(b: Quaternion): Quaternion =
+    override operator fun Number.times(b: Quaternion): Quaternion =
         Quaternion(toDouble() * b.w, toDouble() * b.x, toDouble() * b.y, toDouble() * b.z)
 
-    public override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
-    public override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
+    override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
+    override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
 
-    public override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {
+    override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {
         "i" -> i
         "j" -> j
         "k" -> k
@@ -181,12 +181,12 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
 
     override fun number(value: Number): Quaternion = value.toQuaternion()
 
-    public override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
-    public override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0
-    public override fun tanh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
-    public override fun asinh(arg: Quaternion): Quaternion = ln(sqrt(arg * arg + one) + arg)
-    public override fun acosh(arg: Quaternion): Quaternion = ln(arg + sqrt((arg - one) * (arg + one)))
-    public override fun atanh(arg: Quaternion): Quaternion = (ln(arg + one) - ln(one - arg)) / 2.0
+    override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
+    override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0
+    override fun tanh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
+    override fun asinh(arg: Quaternion): Quaternion = ln(sqrt(arg * arg + one) + arg)
+    override fun acosh(arg: Quaternion): Quaternion = ln(arg + sqrt((arg - one) * (arg + one)))
+    override fun atanh(arg: Quaternion): Quaternion = (ln(arg + one) - ln(one - arg)) / 2.0
 }
 
 /**
@@ -224,16 +224,16 @@ public data class Quaternion(
     /**
      * Returns a string representation of this quaternion.
      */
-    public override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
+    override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
 
     public companion object : MemorySpec<Quaternion> {
-        public override val objectSize: Int
+        override val objectSize: Int
             get() = 32
 
-        public override fun MemoryReader.read(offset: Int): Quaternion =
+        override fun MemoryReader.read(offset: Int): Quaternion =
             Quaternion(readDouble(offset), readDouble(offset + 8), readDouble(offset + 16), readDouble(offset + 24))
 
-        public override fun MemoryWriter.write(offset: Int, value: Quaternion) {
+        override fun MemoryWriter.write(offset: Int, value: Quaternion) {
             writeDouble(offset, value.w)
             writeDouble(offset + 8, value.x)
             writeDouble(offset + 16, value.y)

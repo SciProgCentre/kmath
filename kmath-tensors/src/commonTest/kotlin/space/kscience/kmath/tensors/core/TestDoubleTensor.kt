@@ -1,5 +1,11 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.nd.as1D
@@ -24,6 +30,7 @@ internal class TestDoubleTensor {
         assertEquals(tensor.value(), value)
     }
 
+    @OptIn(PerformancePitfall::class)
     @Test
     fun testStrides() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))

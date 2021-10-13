@@ -1,15 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.commons.expressions
 
-import space.kscience.kmath.expressions.binding
-import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.misc.Symbol
-import space.kscience.kmath.misc.symbol
+import space.kscience.kmath.expressions.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.test.Test
@@ -20,7 +16,7 @@ internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
     block: DerivativeStructureField.() -> Unit,
-): Unit {
+) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     DerivativeStructureField(order, mapOf(*parameters)).run(block)
 }
@@ -38,7 +34,7 @@ internal class AutoDiffTest {
             println(z.derivative(x))
             println(z.derivative(y, x))
             assertEquals(z.derivative(x, y), z.derivative(y, x))
-            //check that improper order cause failure
+            // check improper order cause failure
             assertFails { z.derivative(x, x, y) }
         }
     }
@@ -46,8 +42,8 @@ internal class AutoDiffTest {
     @Test
     fun autoDifTest() {
         val f = DerivativeStructureExpression {
-            val x by binding()
-            val y by binding()
+            val x by binding
+            val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1
         }
 

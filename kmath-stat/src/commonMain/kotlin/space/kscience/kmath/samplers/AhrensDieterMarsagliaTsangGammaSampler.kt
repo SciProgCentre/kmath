@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.samplers
@@ -14,9 +14,9 @@ import kotlin.math.*
 
 /**
  * Sampling from the [gamma distribution](http://mathworld.wolfram.com/GammaDistribution.html).
- *  - For 0 < alpha < 1:
+ * * For 0 < alpha < 1:
  *    Ahrens, J. H. and Dieter, U., Computer methods for sampling from gamma, beta, Poisson and binomial distributions, Computing, 12, 223-246, 1974.
- *  - For alpha >= 1:
+ * * For alpha >= 1:
  *    Marsaglia and Tsang, A Simple Method for Generating Gamma Variables. ACM Transactions on Mathematical Software, Volume 26 Issue 3, September, 2000.
  *
  * Based on Commons RNG implementation.
@@ -113,8 +113,8 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         }
     }
 
-    public override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
-    public override fun toString(): String = delegate.toString()
+    override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
+    override fun toString(): String = delegate.toString()
 
     public companion object {
         public fun of(

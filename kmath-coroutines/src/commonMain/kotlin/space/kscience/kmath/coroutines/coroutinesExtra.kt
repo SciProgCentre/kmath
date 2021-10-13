@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.coroutines
@@ -15,30 +15,33 @@ public val Dispatchers.Math: CoroutineDispatcher
 /**
  * An imitator of [Deferred] which holds a suspended function block and dispatcher
  */
-internal class LazyDeferred<T>(val dispatcher: CoroutineDispatcher, val block: suspend CoroutineScope.() -> T) {
+@PublishedApi
+internal class LazyDeferred<out T>(val dispatcher: CoroutineDispatcher, val block: suspend CoroutineScope.() -> T) {
     private var deferred: Deferred<T>? = null
 
-    internal fun start(scope: CoroutineScope) {
+    fun start(scope: CoroutineScope) {
         if (deferred == null) deferred = scope.async(dispatcher, block = block)
     }
 
     suspend fun await(): T = deferred?.await() ?: error("Coroutine not started")
 }
 
-public class AsyncFlow<T> internal constructor(internal val deferredFlow: Flow<LazyDeferred<T>>) : Flow<T> {
+public class AsyncFlow<out T> @PublishedApi internal constructor(
+    @PublishedApi internal val deferredFlow: Flow<LazyDeferred<T>>,
+) : Flow<T> {
     override suspend fun collect(collector: FlowCollector<T>): Unit =
         deferredFlow.collect { collector.emit((it.await())) }
 }
 
-public fun <T, R> Flow<T>.async(
+public inline fun <T, R> Flow<T>.async(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    block: suspend CoroutineScope.(T) -> R,
+    crossinline block: suspend CoroutineScope.(T) -> R,
 ): AsyncFlow<R> {
     val flow = map { LazyDeferred(dispatcher) { block(it) } }
     return AsyncFlow(flow)
 }
 
-public fun <T, R> AsyncFlow<T>.map(action: (T) -> R): AsyncFlow<R> =
+public inline fun <T, R> AsyncFlow<T>.map(crossinline action: (T) -> R): AsyncFlow<R> =
     AsyncFlow(deferredFlow.map { input ->
         //TODO add function composition
         LazyDeferred(input.dispatcher) {

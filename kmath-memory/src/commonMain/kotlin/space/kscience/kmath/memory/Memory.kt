@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.memory
@@ -156,6 +156,6 @@ public expect fun Memory.Companion.allocate(length: Int): Memory
 
 /**
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
- * and could be mutated independently from the resulting [Memory].
+ * and could be mutated independently of the resulting [Memory].
  */
 public expect fun Memory.Companion.wrap(array: ByteArray): Memory

@@ -1,17 +1,18 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.AlgebraND
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.BufferedFieldND
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.BufferField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.structures.Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -27,10 +28,10 @@ public class ComplexFieldND(
     NumbersAddOperations<StructureND<Complex>>,
     ExtendedField<StructureND<Complex>> {
 
-    public override val zero: BufferND<Complex> by lazy { produce { zero } }
-    public override val one: BufferND<Complex> by lazy { produce { one } }
+    override val zero: BufferND<Complex> by lazy { produce { zero } }
+    override val one: BufferND<Complex> by lazy { produce { one } }
 
-    public override fun number(value: Number): BufferND<Complex> {
+    override fun number(value: Number): BufferND<Complex> {
         val d = value.toComplex() // minimize conversions
         return produce { d }
     }
@@ -81,25 +82,25 @@ public class ComplexFieldND(
 //        return BufferedNDFieldElement(this, buffer)
 //    }
 
-    public override fun power(arg: StructureND<Complex>, pow: Number): BufferND<Complex> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Complex>, pow: Number): BufferND<Complex> = arg.map { power(it, pow) }
 
-    public override fun exp(arg: StructureND<Complex>): BufferND<Complex> = arg.map { exp(it) }
+    override fun exp(arg: StructureND<Complex>): BufferND<Complex> = arg.map { exp(it) }
 
-    public override fun ln(arg: StructureND<Complex>): BufferND<Complex> = arg.map { ln(it) }
+    override fun ln(arg: StructureND<Complex>): BufferND<Complex> = arg.map { ln(it) }
 
-    public override fun sin(arg: StructureND<Complex>): BufferND<Complex> = arg.map { sin(it) }
-    public override fun cos(arg: StructureND<Complex>): BufferND<Complex> = arg.map { cos(it) }
-    public override fun tan(arg: StructureND<Complex>): BufferND<Complex> = arg.map { tan(it) }
-    public override fun asin(arg: StructureND<Complex>): BufferND<Complex> = arg.map { asin(it) }
-    public override fun acos(arg: StructureND<Complex>): BufferND<Complex> = arg.map { acos(it) }
-    public override fun atan(arg: StructureND<Complex>): BufferND<Complex> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Complex>): BufferND<Complex> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Complex>): BufferND<Complex> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Complex>): BufferND<Complex> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Complex>): BufferND<Complex> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Complex>): BufferND<Complex> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Complex>): BufferND<Complex> = arg.map { atan(it) }
 
-    public override fun sinh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { sinh(it) }
-    public override fun cosh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { cosh(it) }
-    public override fun tanh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { tanh(it) }
-    public override fun asinh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { asinh(it) }
-    public override fun acosh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { acosh(it) }
-    public override fun atanh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Complex>): BufferND<Complex> = arg.map { atanh(it) }
 }
 
 
@@ -112,13 +113,16 @@ public inline fun BufferedFieldND<Complex, ComplexField>.produceInline(initializ
     return BufferND(strides, buffer)
 }
 
+@UnstableKMathAPI
+public fun ComplexField.bufferAlgebra(size: Int): BufferField<Complex, ComplexField> =
+    bufferAlgebra(Buffer.Companion::complex, size)
 
-public fun AlgebraND.Companion.complex(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
+public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> ComplexField.nd(vararg shape: Int, action: ComplexFieldND.() -> R): R {
+public inline fun <R> ComplexField.withNdAlgebra(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return ComplexFieldND(shape).action()
 }

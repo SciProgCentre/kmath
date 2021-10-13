@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.memory
@@ -60,7 +60,7 @@ internal class NativeMemory(
         }
 
         override fun writeByte(offset: Int, value: Byte) {
-            array.set(position(offset), value)
+            array[position(offset)] = value
         }
 
         override fun writeShort(offset: Int, value: Short) {
@@ -85,7 +85,7 @@ internal class NativeMemory(
 
 /**
  * Wraps a [Memory] around existing [ByteArray]. This operation is unsafe since the array is not copied
- * and could be mutated independently from the resulting [Memory].
+ * and could be mutated independently of the resulting [Memory].
  */
 public actual fun Memory.Companion.wrap(array: ByteArray): Memory = NativeMemory(array)
 

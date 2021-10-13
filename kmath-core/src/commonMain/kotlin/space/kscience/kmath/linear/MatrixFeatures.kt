@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.linear
@@ -31,11 +31,11 @@ public object ZeroFeature : DiagonalFeature
 public object UnitFeature : DiagonalFeature
 
 /**
- * Matrices with this feature can be inverted: [inverse] = `a`<sup>-1</sup> where `a` is the owning matrix.
+ * Matrices with this feature can be inverted: *[inverse] = a<sup>&minus;1</sup>* where *a* is the owning matrix.
  *
  * @param T the type of matrices' items.
  */
-public interface InverseMatrixFeature<T : Any> : MatrixFeature {
+public interface InverseMatrixFeature<out T : Any> : MatrixFeature {
     /**
      * The inverse matrix of the matrix that owns this feature.
      */
@@ -47,7 +47,7 @@ public interface InverseMatrixFeature<T : Any> : MatrixFeature {
  *
  * @param T the type of matrices' items.
  */
-public interface DeterminantFeature<T : Any> : MatrixFeature {
+public interface DeterminantFeature<out T : Any> : MatrixFeature {
     /**
      * The determinant of the matrix that owns this feature.
      */
@@ -76,12 +76,29 @@ public object LFeature : MatrixFeature
 public object UFeature : MatrixFeature
 
 /**
+ * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
+ *
+ * @param T the type of matrices' items.
+ */
+public interface LUDecompositionFeature<out T : Any> : MatrixFeature {
+    /**
+     * The lower triangular matrix in this decomposition. It may have [LFeature].
+     */
+    public val l: Matrix<T>
+
+    /**
+     * The upper triangular matrix in this decomposition. It may have [UFeature].
+     */
+    public val u: Matrix<T>
+}
+
+/**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
  * *a* is the owning matrix.
  *
  * @param T the type of matrices' items.
  */
-public interface LupDecompositionFeature<T : Any> : MatrixFeature {
+public interface LupDecompositionFeature<out T : Any> : MatrixFeature {
     /**
      * The lower triangular matrix in this decomposition. It may have [LFeature].
      */
@@ -109,7 +126,7 @@ public object OrthogonalFeature : MatrixFeature
  *
  * @param T the type of matrices' items.
  */
-public interface QRDecompositionFeature<T : Any> : MatrixFeature {
+public interface QRDecompositionFeature<out T : Any> : MatrixFeature {
     /**
      * The orthogonal matrix in this decomposition. It may have [OrthogonalFeature].
      */
@@ -127,7 +144,7 @@ public interface QRDecompositionFeature<T : Any> : MatrixFeature {
  *
  * @param T the type of matrices' items.
  */
-public interface CholeskyDecompositionFeature<T : Any> : MatrixFeature {
+public interface CholeskyDecompositionFeature<out T : Any> : MatrixFeature {
     /**
      * The triangular matrix in this decomposition. It may have either [UFeature] or [LFeature].
      */
@@ -140,7 +157,7 @@ public interface CholeskyDecompositionFeature<T : Any> : MatrixFeature {
  *
  * @param T the type of matrices' items.
  */
-public interface SingularValueDecompositionFeature<T : Any> : MatrixFeature {
+public interface SingularValueDecompositionFeature<out T : Any> : MatrixFeature {
     /**
      * The matrix in this decomposition. It is unitary, and it consists from left singular vectors.
      */

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -19,7 +19,7 @@ private fun DMatrixContext<Double, *>.simple() {
 }
 
 private object D5 : Dimension {
-    override val dim: UInt = 5u
+    override val dim: Int = 5
 }
 
 private fun DMatrixContext<Double, *>.custom() {

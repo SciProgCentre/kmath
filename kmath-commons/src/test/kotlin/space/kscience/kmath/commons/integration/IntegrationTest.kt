@@ -1,12 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.commons.integration
 
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.integration.integrate
+import space.kscience.kmath.integration.value
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField.sin
 import kotlin.math.PI
@@ -19,16 +20,16 @@ internal class IntegrationTest {
 
     @Test
     fun simpson() {
-        val res = CMIntegrator.simpson().integrate(0.0..2 * PI, function)
+        val res = CMIntegrator.simpson().integrate(0.0..2 * PI, function = function).value
         assertTrue { abs(res) < 1e-3 }
     }
 
     @Test
     fun customSimpson() {
-        val res = CMIntegrator.simpson().integrate(0.0..PI, function) {
+        val res = CMIntegrator.simpson().integrate(0.0..PI, {
             targetRelativeAccuracy = 1e-4
             targetAbsoluteAccuracy = 1e-4
-        }
+        }, function).value
         assertTrue { abs(res - 2) < 1e-3 }
         assertTrue { abs(res - 2) > 1e-12 }
     }

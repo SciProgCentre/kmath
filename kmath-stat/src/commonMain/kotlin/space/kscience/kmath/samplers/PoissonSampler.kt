@@ -1,12 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingIntChain
 import space.kscience.kmath.internal.InternalUtils
+import space.kscience.kmath.misc.toIntExact
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.Sampler
 import space.kscience.kmath.structures.IntBuffer
@@ -17,11 +18,11 @@ private const val PIVOT = 40.0
 
 /**
  * Sampler for the Poisson distribution.
- * - For small means, a Poisson process is simulated using uniform deviates, as described in
+ * * For small means, a Poisson process is simulated using uniform deviates, as described in
  *   Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Chapter 3.4.1.F.3
  *   Important integer-valued distributions: The Poisson distribution. Addison Wesley.
  * The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
- * - For large means, we use the rejection algorithm described in
+ * * For large means, we use the rejection algorithm described in
  *   Devroye, Luc. (1981). The Computer Generation of Poisson Random Variables Computing vol. 26 pp. 197-207.
  *
  * Based on Commons RNG implementation.
@@ -34,10 +35,10 @@ public fun PoissonSampler(mean: Double): Sampler<Int> {
 
 /**
  * Sampler for the Poisson distribution.
- * - For small means, a Poisson process is simulated using uniform deviates, as described in
+ * * For small means, a Poisson process is simulated using uniform deviates, as described in
  *   Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Chapter 3.4.1.F.3 Important
  *   integer-valued distributions: The Poisson distribution. Addison Wesley.
- * - The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
+ * * The Poisson process (and hence, the returned value) is bounded by 1000 * mean.
  *   This sampler is suitable for mean < 40. For large means, [LargeMeanPoissonSampler] should be used instead.
  *
  * Based on Commons RNG implementation.
@@ -58,7 +59,7 @@ public class SmallMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
         throw IllegalArgumentException("No p(x=0) probability for mean: $mean")
     }.toInt()
 
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             var n = 0
             var r = 1.0
@@ -76,7 +77,7 @@ public class SmallMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }
 
-    public override fun toString(): String = "Small Mean Poisson deviate"
+    override fun toString(): String = "Small Mean Poisson deviate"
 }
 
 
@@ -113,13 +114,13 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
     private val p1: Double = a1 / aSum
     private val p2: Double = a2 / aSum
 
-    public override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
+    override fun sample(generator: RandomGenerator): BlockingIntChain = object : BlockingIntChain {
         override fun nextBlocking(): Int {
             val exponential = AhrensDieterExponentialSampler(1.0).sample(generator)
             val gaussian = ZigguratNormalizedGaussianSampler.sample(generator)
 
             val smallMeanPoissonSampler = if (mean - lambda < Double.MIN_VALUE) {
-               null
+                null
             } else {
                 KempSmallMeanPoissonSampler(mean - lambda).sample(generator)
             }
@@ -188,7 +189,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
                 }
             }
 
-            return min(y2 + y.toLong(), Int.MAX_VALUE.toLong()).toInt()
+            return min(y2 + y.toLong(), Int.MAX_VALUE.toLong()).toIntExact()
         }
 
         override fun nextBufferBlocking(size: Int): IntBuffer = IntBuffer(size) { nextBlocking() }
@@ -197,7 +198,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
     }
 
     private fun getFactorialLog(n: Int): Double = factorialLog.value(n)
-    public override fun toString(): String = "Large Mean Poisson deviate"
+    override fun toString(): String = "Large Mean Poisson deviate"
 
     public companion object {
         private const val MAX_MEAN: Double = 0.5 * Int.MAX_VALUE

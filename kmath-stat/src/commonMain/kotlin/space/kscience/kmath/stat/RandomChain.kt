@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
@@ -31,7 +31,7 @@ public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R)
  * A type-specific double chunk random chain
  */
 public class UniformDoubleChain(public val generator: RandomGenerator) : BlockingDoubleChain {
-    public override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
+    override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
     override suspend fun nextBuffer(size: Int): DoubleBuffer = nextBufferBlocking(size)
 
     override suspend fun fork(): UniformDoubleChain = UniformDoubleChain(generator.fork())

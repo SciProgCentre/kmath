@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
@@ -22,15 +22,15 @@ public class DoubleFieldND(
     ScaleOperations<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
-    public override val zero: BufferND<Double> by lazy { produce { zero } }
-    public override val one: BufferND<Double> by lazy { produce { one } }
+    override val zero: BufferND<Double> by lazy { produce { zero } }
+    override val one: BufferND<Double> by lazy { produce { one } }
 
-    public override fun number(value: Number): BufferND<Double> {
+    override fun number(value: Number): BufferND<Double> {
         val d = value.toDouble() // minimize conversions
         return produce { d }
     }
 
-    public override val StructureND<Double>.buffer: DoubleBuffer
+    override val StructureND<Double>.buffer: DoubleBuffer
         get() = when {
             !shape.contentEquals(this@DoubleFieldND.shape) -> throw ShapeMismatchException(
                 this@DoubleFieldND.shape,
@@ -41,7 +41,7 @@ public class DoubleFieldND(
         }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    public override inline fun StructureND<Double>.map(
+    override inline fun StructureND<Double>.map(
         transform: DoubleField.(Double) -> Double,
     ): BufferND<Double> {
         val buffer = DoubleBuffer(strides.linearSize) { offset -> DoubleField.transform(buffer.array[offset]) }
@@ -49,7 +49,7 @@ public class DoubleFieldND(
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    public override inline fun produce(initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override inline fun produce(initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = DoubleArray(strides.linearSize) { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)
@@ -58,7 +58,7 @@ public class DoubleFieldND(
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    public override inline fun StructureND<Double>.mapIndexed(
+    override inline fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): BufferND<Double> = BufferND(
         strides,
@@ -70,7 +70,7 @@ public class DoubleFieldND(
         })
 
     @Suppress("OVERRIDE_BY_INLINE")
-    public override inline fun combine(
+    override inline fun combine(
         a: StructureND<Double>,
         b: StructureND<Double>,
         transform: DoubleField.(Double, Double) -> Double,
@@ -81,34 +81,34 @@ public class DoubleFieldND(
         return BufferND(strides, buffer)
     }
 
-    public override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
+    override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
 
-    public override fun power(arg: StructureND<Double>, pow: Number): BufferND<Double> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Double>, pow: Number): BufferND<Double> = arg.map { power(it, pow) }
 
-    public override fun exp(arg: StructureND<Double>): BufferND<Double> = arg.map { exp(it) }
-    public override fun ln(arg: StructureND<Double>): BufferND<Double> = arg.map { ln(it) }
+    override fun exp(arg: StructureND<Double>): BufferND<Double> = arg.map { exp(it) }
+    override fun ln(arg: StructureND<Double>): BufferND<Double> = arg.map { ln(it) }
 
-    public override fun sin(arg: StructureND<Double>): BufferND<Double> = arg.map { sin(it) }
-    public override fun cos(arg: StructureND<Double>): BufferND<Double> = arg.map { cos(it) }
-    public override fun tan(arg: StructureND<Double>): BufferND<Double> = arg.map { tan(it) }
-    public override fun asin(arg: StructureND<Double>): BufferND<Double> = arg.map { asin(it) }
-    public override fun acos(arg: StructureND<Double>): BufferND<Double> = arg.map { acos(it) }
-    public override fun atan(arg: StructureND<Double>): BufferND<Double> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Double>): BufferND<Double> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Double>): BufferND<Double> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Double>): BufferND<Double> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Double>): BufferND<Double> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Double>): BufferND<Double> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Double>): BufferND<Double> = arg.map { atan(it) }
 
-    public override fun sinh(arg: StructureND<Double>): BufferND<Double> = arg.map { sinh(it) }
-    public override fun cosh(arg: StructureND<Double>): BufferND<Double> = arg.map { cosh(it) }
-    public override fun tanh(arg: StructureND<Double>): BufferND<Double> = arg.map { tanh(it) }
-    public override fun asinh(arg: StructureND<Double>): BufferND<Double> = arg.map { asinh(it) }
-    public override fun acosh(arg: StructureND<Double>): BufferND<Double> = arg.map { acosh(it) }
-    public override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Double>): BufferND<Double> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Double>): BufferND<Double> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Double>): BufferND<Double> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Double>): BufferND<Double> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Double>): BufferND<Double> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-public fun AlgebraND.Companion.real(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
+public fun DoubleField.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
-public inline fun <R> DoubleField.nd(vararg shape: Int, action: DoubleFieldND.() -> R): R {
+public inline fun <R> DoubleField.withNdAlgebra(vararg shape: Int, action: DoubleFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return DoubleFieldND(shape).run(action)
 }

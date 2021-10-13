@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
@@ -8,7 +8,6 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningReduce
@@ -18,23 +17,31 @@ import space.kscience.kmath.structures.Buffer
 /**
  * A function, that transforms a buffer of random quantities to some resulting value
  */
-public interface Statistic<T, R> {
+public fun interface Statistic<in T, out R> {
     public suspend fun evaluate(data: Buffer<T>): R
 }
 
-public interface BlockingStatistic<T,R>: Statistic<T,R>{
+public suspend operator fun <T, R> Statistic<T, R>.invoke(data: Buffer<T>): R = evaluate(data)
+
+/**
+ * A statistic that is computed in a synchronous blocking mode
+ */
+public fun interface BlockingStatistic<in T, out R> : Statistic<T, R> {
     public fun evaluateBlocking(data: Buffer<T>): R
 
-    override suspend fun evaluate(data: Buffer<T>): R  = evaluateBlocking(data)
+    override suspend fun evaluate(data: Buffer<T>): R = evaluateBlocking(data)
 }
+
+public operator fun <T, R> BlockingStatistic<T, R>.invoke(data: Buffer<T>): R = evaluateBlocking(data)
 
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
- * @param T - source type
- * @param I - intermediate block type
- * @param R - result type
+ *
+ * @param T the source type.
+ * @param I the intermediate block type.
+ * @param R the result type.
  */
-public interface ComposableStatistic<T, I, R> : Statistic<T, R> {
+public interface ComposableStatistic<in T, I, out R> : Statistic<T, R> {
     //compute statistic on a single block
     public suspend fun computeIntermediate(data: Buffer<T>): I
 
@@ -44,11 +51,13 @@ public interface ComposableStatistic<T, I, R> : Statistic<T, R> {
     //Transform block to result
     public suspend fun toResult(intermediate: I): R
 
-    public override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
+    override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
+/**
+ * Flow intermediate state of the [ComposableStatistic]
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
 private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
     flow: Flow<Buffer<T>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -63,7 +72,7 @@ private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
  *
  * The resulting flow contains values that include the whole previous statistics, not only the last chunk.
  */
-@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 public fun <T, I, R> ComposableStatistic<T, I, R>.flow(
     flow: Flow<Buffer<T>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,

@@ -1,20 +1,18 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.MstField
+import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.interpret
-import space.kscience.kmath.misc.Symbol.Companion.x
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 
 fun main() {
     val expr = MstField {
-        val x = bindSymbol(x)
         x * 2.0 + number(2.0) / x - 16.0
     }
 

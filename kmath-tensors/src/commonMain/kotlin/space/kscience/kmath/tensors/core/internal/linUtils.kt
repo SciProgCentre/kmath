@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.core.internal
@@ -9,42 +9,55 @@ import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.*
+import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.tensors.core.BufferedTensor
+import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.valueOrNull
+import space.kscience.kmath.tensors.core.IntTensor
 import kotlin.math.abs
 import kotlin.math.min
-import kotlin.math.sign
 import kotlin.math.sqrt
 
+internal val <T> BufferedTensor<T>.vectors: VirtualBuffer<BufferedTensor<T>>
+    get() {
+        val n = shape.size
+        val vectorOffset = shape[n - 1]
+        val vectorShape = intArrayOf(shape.last())
 
-internal fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTensor<T>> = sequence {
-    val n = shape.size
-    val vectorOffset = shape[n - 1]
-    val vectorShape = intArrayOf(shape.last())
-    for (offset in 0 until numElements step vectorOffset) {
-        val vector = BufferedTensor(vectorShape, mutableBuffer, bufferStart + offset)
-        yield(vector)
+        return VirtualBuffer(numElements / vectorOffset) { index ->
+            val offset = index * vectorOffset
+            BufferedTensor(vectorShape, mutableBuffer, bufferStart + offset)
+        }
     }
-}
 
-internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = sequence {
-    val n = shape.size
-    check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
-    val matrixOffset = shape[n - 1] * shape[n - 2]
-    val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
-    for (offset in 0 until numElements step matrixOffset) {
-        val matrix = BufferedTensor(matrixShape, mutableBuffer, bufferStart + offset)
-        yield(matrix)
+
+internal fun <T> BufferedTensor<T>.vectorSequence(): Sequence<BufferedTensor<T>> = vectors.asSequence()
+
+/**
+ * A random access alternative to [matrixSequence]
+ */
+internal val <T> BufferedTensor<T>.matrices: VirtualBuffer<BufferedTensor<T>>
+    get() {
+        val n = shape.size
+        check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
+        val matrixOffset = shape[n - 1] * shape[n - 2]
+        val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
+
+        return VirtualBuffer(numElements / matrixOffset) { index ->
+            val offset = index * matrixOffset
+            BufferedTensor(matrixShape, mutableBuffer, bufferStart + offset)
+        }
     }
-}
+
+internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = matrices.asSequence()
 
 internal fun dotHelper(
     a: MutableStructure2D<Double>,
     b: MutableStructure2D<Double>,
     res: MutableStructure2D<Double>,
-    l: Int, m: Int, n: Int
+    l: Int, m: Int, n: Int,
 ) {
     for (i in 0 until l) {
         for (j in 0 until n) {
@@ -60,7 +73,7 @@ internal fun dotHelper(
 internal fun luHelper(
     lu: MutableStructure2D<Double>,
     pivots: MutableStructure1D<Int>,
-    epsilon: Double
+    epsilon: Double,
 ): Boolean {
 
     val m = lu.rowNum
@@ -122,7 +135,7 @@ internal fun <T> BufferedTensor<T>.setUpPivots(): IntTensor {
 
 internal fun DoubleTensorAlgebra.computeLU(
     tensor: DoubleTensor,
-    epsilon: Double
+    epsilon: Double,
 ): Pair<DoubleTensor, IntTensor>? {
 
     checkSquareMatrix(tensor.shape)
@@ -139,7 +152,7 @@ internal fun DoubleTensorAlgebra.computeLU(
 internal fun pivInit(
     p: MutableStructure2D<Double>,
     pivot: MutableStructure1D<Int>,
-    n: Int
+    n: Int,
 ) {
     for (i in 0 until n) {
         p[i, pivot[i]] = 1.0
@@ -150,7 +163,7 @@ internal fun luPivotHelper(
     l: MutableStructure2D<Double>,
     u: MutableStructure2D<Double>,
     lu: MutableStructure2D<Double>,
-    n: Int
+    n: Int,
 ) {
     for (i in 0 until n) {
         for (j in 0 until n) {
@@ -170,7 +183,7 @@ internal fun luPivotHelper(
 internal fun choleskyHelper(
     a: MutableStructure2D<Double>,
     l: MutableStructure2D<Double>,
-    n: Int
+    n: Int,
 ) {
     for (i in 0 until n) {
         for (j in 0 until i) {
@@ -200,7 +213,7 @@ internal fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructur
 internal fun luMatrixInv(
     lu: MutableStructure2D<Double>,
     pivots: MutableStructure1D<Int>,
-    invMatrix: MutableStructure2D<Double>
+    invMatrix: MutableStructure2D<Double>,
 ) {
     val m = lu.shape[0]
 
@@ -227,7 +240,7 @@ internal fun luMatrixInv(
 internal fun DoubleTensorAlgebra.qrHelper(
     matrix: DoubleTensor,
     q: DoubleTensor,
-    r: MutableStructure2D<Double>
+    r: MutableStructure2D<Double>,
 ) {
     checkSquareMatrix(matrix.shape)
     val n = matrix.shape[0]
@@ -280,12 +293,11 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
 
 internal fun DoubleTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
-    USV: Pair<BufferedTensor<Double>, Pair<BufferedTensor<Double>, BufferedTensor<Double>>>,
-    m: Int, n: Int, epsilon: Double
+    USV: Triple<BufferedTensor<Double>, BufferedTensor<Double>, BufferedTensor<Double>>,
+    m: Int, n: Int, epsilon: Double,
 ) {
     val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
-    val (matrixU, SV) = USV
-    val (matrixS, matrixV) = SV
+    val (matrixU, matrixS, matrixV) = USV
 
     for (k in 0 until min(n, m)) {
         var a = matrix.copy()
@@ -328,15 +340,4 @@ internal fun DoubleTensorAlgebra.svdHelper(
     for (i in vBuffer.indices) {
         matrixV.mutableBuffer.array()[matrixV.bufferStart + i] = vBuffer[i]
     }
-}
-
-internal fun cleanSymHelper(matrix: MutableStructure2D<Double>, n: Int) {
-    for (i in 0 until n)
-        for (j in 0 until n) {
-            if (i == j) {
-                matrix[i, j] = sign(matrix[i, j])
-            } else {
-                matrix[i, j] = 0.0
-            }
-        }
 }

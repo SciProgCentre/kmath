@@ -1,11 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.testutils.RingVerifier
+import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,6 +21,18 @@ internal class BigIntAlgebraTest {
             1_000L.toBigInt() * 1_000L.toBigInt()
         }
         assertEquals(res, 1_000_000.toBigInt())
+    }
+
+    @UnstableKMathAPI
+    @Test
+    fun testKBigIntegerRingPow() {
+        for (num in -5..5)
+            for (exponent in 0U..10U)
+                assertEquals(
+                    num.toDouble().pow(exponent.toInt()).toLong().toBigInt(),
+                    num.toBigInt().pow(exponent),
+                    "$num ^ $exponent"
+                )
     }
 
     @Test

@@ -1,13 +1,18 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -29,12 +34,12 @@ public typealias MutableMatrix<T> = MutableStructure2D<T>
 public typealias Point<T> = Buffer<T>
 
 /**
- * Basic operations on matrices and vectors. Operates on [Matrix].
+ * Basic operations on matrices and vectors.
  *
  * @param T the type of items in the matrices.
- * @param M the type of operated matrices.
+ * @param A the type of ring over [T].
  */
-public interface LinearSpace<T : Any, out A : Ring<T>> {
+public interface LinearSpace<T, out A : Ring<T>> {
     public val elementAlgebra: A
 
     /**
@@ -164,7 +169,7 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features
+     * Compute a feature of the structure in this scope. Structure features take precedence other context features.
      *
      * @param F the type of feature.
      * @param structure the structure.
@@ -172,7 +177,8 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(structure: Matrix<T>, type: KClass<out F>): F? = structure.getFeature(type)
+    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? =
+        structure.getFeature(type)
 
     public companion object {
 
@@ -184,7 +190,8 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
             bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
         ): LinearSpace<T, A> = BufferedLinearSpace(algebra, bufferFactory)
 
-        public val real: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
+        @Deprecated("use DoubleField.linearSpace")
+        public val double: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
 
         /**
          * Automatic buffered matrix, unboxed if it is possible
@@ -195,16 +202,32 @@ public interface LinearSpace<T : Any, out A : Ring<T>> {
 }
 
 /**
- * Get a feature of the structure in this scope. Structure features take precedence other context features
+ * Get a feature of the structure in this scope. Structure features take precedence other context features.
  *
  * @param T the type of items in the matrices.
  * @param F the type of feature.
  * @return a feature object or `null` if it isn't present.
  */
 @UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.getFeature(structure: Matrix<T>): F? =
-    getFeature(structure, F::class)
+public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.computeFeature(structure: Matrix<T>): F? =
+    computeFeature(structure, F::class)
 
 
-public operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
+public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
 
+
+/**
+ * Convert matrix to vector if it is possible.
+ */
+public fun <T : Any> Matrix<T>.asVector(): Point<T> =
+    if (this.colNum == 1) as1D()
+    else error("Can't convert matrix with more than one column to vector")
+
+/**
+ * Creates an n &times; 1 [VirtualMatrix], where n is the size of the given buffer.
+ *
+ * @param T the type of elements contained in the buffer.
+ * @receiver a buffer.
+ * @return the new matrix.
+ */
+public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

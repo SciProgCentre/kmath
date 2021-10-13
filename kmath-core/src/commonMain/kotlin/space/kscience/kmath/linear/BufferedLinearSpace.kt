@@ -1,11 +1,15 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.BufferedRingND
+import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.asND
+import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
@@ -14,7 +18,7 @@ import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.indices
 
 
-public class BufferedLinearSpace<T : Any, A : Ring<T>>(
+public class BufferedLinearSpace<T, out A : Ring<T>>(
     override val elementAlgebra: A,
     private val bufferFactory: BufferFactory<T>,
 ) : LinearSpace<T, A> {
@@ -22,7 +26,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
     private fun ndRing(
         rows: Int,
         cols: Int,
-    ): BufferedRingND<T, A> = AlgebraND.ring(elementAlgebra, bufferFactory, rows, cols)
+    ): BufferedRingND<T, A> = elementAlgebra.ndAlgebra(bufferFactory, rows, cols)
 
     override fun buildMatrix(rows: Int, columns: Int, initializer: A.(i: Int, j: Int) -> T): Matrix<T> =
         ndRing(rows, columns).produce { (i, j) -> elementAlgebra.initializer(i, j) }.as2D()
@@ -31,17 +35,17 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
         bufferFactory(size) { elementAlgebra.initializer(it) }
 
     override fun Matrix<T>.unaryMinus(): Matrix<T> = ndRing(rowNum, colNum).run {
-        unwrap().map { -it }.as2D()
+        asND().map { -it }.as2D()
     }
 
     override fun Matrix<T>.plus(other: Matrix<T>): Matrix<T> = ndRing(rowNum, colNum).run {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::plus. Expected $shape but found ${other.shape}" }
-        unwrap().plus(other.unwrap()).as2D()
+        asND().plus(other.asND()).as2D()
     }
 
     override fun Matrix<T>.minus(other: Matrix<T>): Matrix<T> = ndRing(rowNum, colNum).run {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::minus. Expected $shape but found ${other.shape}" }
-        unwrap().minus(other.unwrap()).as2D()
+        asND().minus(other.asND()).as2D()
     }
 
     private fun Buffer<T>.linearize() = if (this is VirtualBuffer) {
@@ -50,6 +54,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
         this
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.dot(other: Matrix<T>): Matrix<T> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         return elementAlgebra {
@@ -67,6 +72,7 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.dot(vector: Point<T>): Point<T> {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         return elementAlgebra {
@@ -83,6 +89,10 @@ public class BufferedLinearSpace<T : Any, A : Ring<T>>(
     }
 
     override fun Matrix<T>.times(value: T): Matrix<T> = ndRing(rowNum, colNum).run {
-        unwrap().map { it * value }.as2D()
+        asND().map { it * value }.as2D()
     }
 }
+
+
+public fun <T, A : Ring<T>> A.linearSpace(bufferFactory: BufferFactory<T>): BufferedLinearSpace<T, A> =
+    BufferedLinearSpace(this, bufferFactory)

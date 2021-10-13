@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.real
@@ -45,8 +45,8 @@ public fun Buffer.Companion.withFixedStep(range: ClosedFloatingPointRange<Double
 /**
  * Convert double range to sequence.
  *
- * If the step is positive, than the sequence starts with the lower boundary and increments by [step] until current value is lower than upper boundary.
- * The boundary itself is not necessary included.
+ * If the step is positive, then the sequence starts with the lower boundary and increments by [step] until current value is lower than upper boundary.
+ * The boundary itself is unnecessarily included.
  *
  * If step is negative, the same goes from upper boundary downwards
  */

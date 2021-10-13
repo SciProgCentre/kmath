@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -25,6 +25,12 @@ public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<D
     override operator fun iterator(): DoubleIterator = array.iterator()
 
     override fun copy(): DoubleBuffer = DoubleBuffer(array.copyOf())
+
+    override fun toString(): String = Buffer.toString(this)
+
+    public companion object{
+        public fun zero(size: Int): DoubleBuffer = DoubleArray(size).asBuffer()
+    }
 }
 
 /**
@@ -32,7 +38,7 @@ public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<D
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an buffer element given its index.
+ * It should return the value for a buffer element given its index.
  */
 public inline fun DoubleBuffer(size: Int, init: (Int) -> Double): DoubleBuffer = DoubleBuffer(DoubleArray(size) { init(it) })
 
@@ -47,7 +53,7 @@ public fun DoubleBuffer(vararg doubles: Double): DoubleBuffer = DoubleBuffer(dou
 public fun DoubleBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 /**
- * Returns a new [DoubleArray] containing all of the elements of this [Buffer].
+ * Returns a new [DoubleArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
     is DoubleBuffer -> array.copyOf()

@@ -1,14 +1,14 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.MutableListBuffer
+import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
  *
  * @param T the type of items.
  */
-public interface Structure2D<T> : StructureND<T> {
+public interface Structure2D<out T> : StructureND<T> {
     /**
      * The number of rows in this structure.
      */
@@ -28,17 +28,19 @@ public interface Structure2D<T> : StructureND<T> {
      */
     public val colNum: Int
 
-    public override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
+    @PerformancePitfall
     public val rows: List<Buffer<T>>
         get() = List(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
+    @PerformancePitfall
     public val columns: List<Buffer<T>>
         get() = List(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
 
@@ -56,6 +58,7 @@ public interface Structure2D<T> : StructureND<T> {
         return get(index[0], index[1])
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = sequence {
         for (i in 0 until rowNum)
             for (j in 0 until colNum) yield(intArrayOf(i, j) to get(i, j))
@@ -80,12 +83,14 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
+    @PerformancePitfall
     override val rows: List<MutableStructure1D<T>>
         get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) })}
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
+    @PerformancePitfall
     override val columns: List<MutableStructure1D<T>>
         get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableListBuffer(rowNum) { i -> get(i, j) }) }
 }
@@ -94,7 +99,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  * A 2D wrapper for nd-structure
  */
 @JvmInline
-private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Structure2D<T> {
+private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
     override val shape: IntArray get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -102,9 +107,9 @@ private value class Structure2DWrapper<T>(val structure: StructureND<T>) : Struc
 
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
-    @UnstableKMathAPI
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 }
 
@@ -128,6 +133,7 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
         structure[intArrayOf(i, j)] = value
     }
 
+    @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 
     override fun equals(other: Any?): Boolean = false
@@ -136,13 +142,16 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
 }
 
 /**
- * Represent a [StructureND] as [Structure1D]. Throw error in case of dimension mismatch
+ * Represents a [StructureND] as [Structure2D]. Throws runtime error in case of dimension mismatch.
  */
 public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?: when (shape.size) {
     2 -> Structure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
 }
 
+/**
+ * Represents a [StructureND] as [Structure2D]. Throws runtime error in case of dimension mismatch.
+ */
 public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
     2 -> MutableStructure2DWrapper(this)
     else -> error("Can't create 2d-structure from ${shape.size}d-structure")
@@ -151,10 +160,10 @@ public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? Mu
 /**
  * Expose inner [StructureND] if possible
  */
-internal fun <T> Structure2D<T>.unwrap(): StructureND<T> =
+internal fun <T> Structure2D<T>.asND(): StructureND<T> =
     if (this is Structure2DWrapper) structure
     else this
 
-internal fun <T> MutableStructure2D<T>.unwrap(): MutableStructureND<T> =
+internal fun <T> MutableStructure2D<T>.asND(): MutableStructureND<T> =
     if (this is MutableStructure2DWrapper) structure else this
 
