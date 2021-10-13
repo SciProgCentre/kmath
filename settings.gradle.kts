@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         maven("https://repo.kotlin.link")
         mavenCentral()
         gradlePluginPortal()
@@ -9,7 +10,7 @@ pluginManagement {
 
     plugins {
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        id("ru.mipt.npm.gradle.project") version "0.10.4"
+        id("ru.mipt.npm.gradle.project") version "0.10.5"
         kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
     }
