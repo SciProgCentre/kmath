@@ -158,16 +158,16 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(ln(n), th * arg.x, th * arg.y, th * arg.z)
     }
 
-    override operator fun Number.plus(b: Quaternion): Quaternion = Quaternion(toDouble() + b.w, b.x, b.y, b.z)
+    override operator fun Number.plus(other: Quaternion): Quaternion = Quaternion(toDouble() + other.w, other.x, other.y, other.z)
 
-    override operator fun Number.minus(b: Quaternion): Quaternion =
-        Quaternion(toDouble() - b.w, -b.x, -b.y, -b.z)
+    override operator fun Number.minus(other: Quaternion): Quaternion =
+        Quaternion(toDouble() - other.w, -other.x, -other.y, -other.z)
 
-    override operator fun Quaternion.plus(b: Number): Quaternion = Quaternion(w + b.toDouble(), x, y, z)
-    override operator fun Quaternion.minus(b: Number): Quaternion = Quaternion(w - b.toDouble(), x, y, z)
+    override operator fun Quaternion.plus(other: Number): Quaternion = Quaternion(w + other.toDouble(), x, y, z)
+    override operator fun Quaternion.minus(other: Number): Quaternion = Quaternion(w - other.toDouble(), x, y, z)
 
-    override operator fun Number.times(b: Quaternion): Quaternion =
-        Quaternion(toDouble() * b.w, toDouble() * b.x, toDouble() * b.y, toDouble() * b.z)
+    override operator fun Number.times(other: Quaternion): Quaternion =
+        Quaternion(toDouble() * other.w, toDouble() * other.x, toDouble() * other.y, toDouble() * other.z)
 
     override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
     override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)

@@ -99,10 +99,10 @@ public class DerivativeStructureField(
     override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
     override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
 
-    override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
-    override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
-    override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
-    override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
+    override operator fun DerivativeStructure.plus(other: Number): DerivativeStructure = add(other.toDouble())
+    override operator fun DerivativeStructure.minus(other: Number): DerivativeStructure = subtract(other.toDouble())
+    override operator fun Number.plus(other: DerivativeStructure): DerivativeStructure = other + this
+    override operator fun Number.minus(other: DerivativeStructure): DerivativeStructure = other - this
 }
 
 /**
