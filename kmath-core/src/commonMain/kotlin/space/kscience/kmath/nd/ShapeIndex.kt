@@ -105,16 +105,15 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 
     override fun hashCode(): Int = shape.contentHashCode()
 
-    @ThreadLocal
-    public companion object {
-        //private val defaultStridesCache = HashMap<IntArray, Strides>()
 
+    public companion object {
         /**
          * Cached builder for default strides
          */
-        public operator fun invoke(shape: IntArray): Strides = DefaultStrides(shape)
-            //defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
-
-        //TODO fix cache
+        public operator fun invoke(shape: IntArray): Strides =
+            defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
     }
 }
+
+@ThreadLocal
+private val defaultStridesCache = HashMap<IntArray, Strides>()

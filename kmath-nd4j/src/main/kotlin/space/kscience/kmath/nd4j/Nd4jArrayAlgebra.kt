@@ -38,6 +38,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return struct
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
         val newStruct = ndArray.dup().wrap()
         newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementAlgebra.transform(value) }
@@ -117,7 +118,7 @@ public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, 
          * Creates a most suitable implementation of [RingND] using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Number> auto(vararg shape: Int): Nd4jArrayRingOps<T, Ring<T>> = when {
+        public inline fun <reified T : Number> auto(): Nd4jArrayRingOps<T, Ring<T>> = when {
             T::class == Int::class -> IntRing.nd4j as Nd4jArrayRingOps<T, Ring<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Long type.")
         }
@@ -142,7 +143,7 @@ public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, 
          * Creates a most suitable implementation of [FieldND] using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Any> auto(vararg shape: Int): Nd4jArrayField<T, Field<T>> = when {
+        public inline fun <reified T : Any> auto(): Nd4jArrayField<T, Field<T>> = when {
             T::class == Float::class -> FloatField.nd4j as Nd4jArrayField<T, Field<T>>
             T::class == Double::class -> DoubleField.nd4j as Nd4jArrayField<T, Field<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Float and Double types.")

@@ -5,4 +5,12 @@
 
 package space.kscience.kmath.tensors.core
 
-public fun DoubleTensorAlgebra.ones(vararg shape: Int): DoubleTensor = ones(intArrayOf(*shape))
+import space.kscience.kmath.nd.Shape
+import kotlin.jvm.JvmName
+
+@JvmName("varArgOne")
+public fun DoubleTensorAlgebra.one(vararg shape: Int): DoubleTensor = ones(intArrayOf(*shape))
+public fun DoubleTensorAlgebra.one(shape: Shape): DoubleTensor = ones(shape)
+@JvmName("varArgZero")
+public fun DoubleTensorAlgebra.zero(vararg shape: Int): DoubleTensor = zeros(intArrayOf(*shape))
+public fun DoubleTensorAlgebra.zero(shape: Shape): DoubleTensor = zeros(shape)

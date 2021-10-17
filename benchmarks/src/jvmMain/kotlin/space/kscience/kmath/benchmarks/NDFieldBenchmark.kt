@@ -9,6 +9,7 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
+import space.kscience.kmath.multik.multikND
 import space.kscience.kmath.nd.BufferedFieldOpsND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
@@ -17,8 +18,9 @@ import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.ones
+import space.kscience.kmath.tensors.core.one
 import space.kscience.kmath.tensors.core.tensorAlgebra
+import space.kscience.kmath.viktor.viktorAlgebra
 
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
@@ -44,15 +46,29 @@ internal class NDFieldBenchmark {
     }
 
     @Benchmark
+    fun multikAdd(blackhole: Blackhole) = with(multikField) {
+        var res: StructureND<Double> = one(shape)
+        repeat(n) { res += 1.0 }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
+    fun viktorAdd(blackhole: Blackhole) = with(viktorField) {
+        var res: StructureND<Double> = one(shape)
+        repeat(n) { res += 1.0 }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
     fun tensorAdd(blackhole: Blackhole) = with(Double.tensorAlgebra) {
-        var res: DoubleTensor = ones(dim, dim)
+        var res: DoubleTensor = one(shape)
         repeat(n) { res = res + 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun tensorInPlaceAdd(blackhole: Blackhole) = with(Double.tensorAlgebra) {
-        val res: DoubleTensor = ones(dim, dim)
+        val res: DoubleTensor = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
@@ -72,5 +88,7 @@ internal class NDFieldBenchmark {
         private val specializedField = DoubleField.ndAlgebra
         private val genericField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
         private val nd4jField = DoubleField.nd4j
+        private val multikField = DoubleField.multikND
+        private val viktorField = DoubleField.viktorAlgebra
     }
 }

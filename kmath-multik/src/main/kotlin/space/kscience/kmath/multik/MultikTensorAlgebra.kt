@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.multik
 
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.api.zeros
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
@@ -30,6 +32,7 @@ public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) :
 
 
 public abstract class MultikTensorAlgebra<T>(
+    public val type: DataType,
     public val elementAlgebra: Ring<T>,
     public val comparator: Comparator<T>
 ) : TensorAlgebra<T> {
@@ -38,15 +41,19 @@ public abstract class MultikTensorAlgebra<T>(
      * Convert a tensor to [MultikTensor] if necessary. If tensor is converted, changes on the resulting tensor
      * are not reflected back onto the source
      */
-    public fun Tensor<T>.asMultik(): MultikTensor<T> {
+    private fun Tensor<T>.asMultik(): MultikTensor<T> {
         return if (this is MultikTensor) {
             this
         } else {
-            TODO()
+            val res = mk.zeros<T, DN>(shape, type).asDNArray()
+            for (index in res.multiIndices) {
+                res[index] = this[index]
+            }
+            res.wrap()
         }
     }
 
-    public fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
+    private fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
 
     override fun Tensor<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1)) {
         get(intArrayOf(0))
@@ -77,8 +84,7 @@ public abstract class MultikTensorAlgebra<T>(
         }
     }
 
-    //TODO avoid additional copy
-    override fun T.minus(other: Tensor<T>): MultikTensor<T> = -(other - this)
+    override fun T.minus(other: Tensor<T>): MultikTensor<T> = (-(other.asMultik().array - this)).wrap()
 
     override fun Tensor<T>.minus(value: T): MultikTensor<T> =
         asMultik().array.deepCopy().apply { minusAssign(value) }.wrap()
@@ -130,13 +136,9 @@ public abstract class MultikTensorAlgebra<T>(
     override fun Tensor<T>.unaryMinus(): MultikTensor<T> =
         asMultik().array.unaryMinus().wrap()
 
-    override fun Tensor<T>.get(i: Int): MultikTensor<T> {
-        TODO("Not yet implemented")
-    }
+    override fun Tensor<T>.get(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): MultikTensor<T> {
-        TODO("Not yet implemented")
-    }
+    override fun Tensor<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
     override fun Tensor<T>.view(shape: IntArray): MultikTensor<T> {
         require(shape.all { it > 0 })
@@ -158,16 +160,14 @@ public abstract class MultikTensorAlgebra<T>(
         }.wrap()
     }
 
-    override fun Tensor<T>.viewAs(other: Tensor<T>): MultikTensor<T> {
-        TODO("Not yet implemented")
-    }
+    override fun Tensor<T>.viewAs(other: Tensor<T>): MultikTensor<T> = view(other.shape)
 
     override fun Tensor<T>.dot(other: Tensor<T>): MultikTensor<T> {
         TODO("Not yet implemented")
     }
 
     override fun diagonalEmbedding(diagonalEntries: Tensor<T>, offset: Int, dim1: Int, dim2: Int): MultikTensor<T> {
-        TODO("Not yet implemented")
+        TODO("Diagonal embedding not implemented")
     }
 
     override fun Tensor<T>.sum(): T = asMultik().array.reduceMultiIndexed { _: IntArray, acc: T, t: T ->
