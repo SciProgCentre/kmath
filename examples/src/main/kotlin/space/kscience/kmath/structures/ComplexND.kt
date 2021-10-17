@@ -12,6 +12,7 @@ import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.produce
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis

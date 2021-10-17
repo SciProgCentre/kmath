@@ -100,12 +100,12 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
     /**
      * Element-wise addition.
      *
-     * @param a the augend.
-     * @param b the addend.
+     * @param left the augend.
+     * @param right the addend.
      * @return the sum.
      */
-    override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        zip(a, b) { aValue, bValue -> add(aValue, bValue) }
+    override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
     // TODO move to extensions after KEEP-176
 
@@ -134,7 +134,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
      * @param arg the addend.
      * @return the sum.
      */
-    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
+    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg + this
 
     /**
      * Subtracts an ND structure from an element of it.
@@ -162,12 +162,12 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
     /**
      * Element-wise multiplication.
      *
-     * @param a the multiplicand.
-     * @param b the multiplier.
+     * @param left the multiplicand.
+     * @param right the multiplier.
      * @return the product.
      */
-    override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        zip(a, b) { aValue, bValue -> multiply(aValue, bValue) }
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
 
@@ -208,12 +208,12 @@ public interface FieldOpsND<T, out A : Field<T>> : FieldOps<StructureND<T>>, Rin
     /**
      * Element-wise division.
      *
-     * @param a the dividend.
-     * @param b the divisor.
+     * @param left the dividend.
+     * @param right the divisor.
      * @return the quotient.
      */
-    override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        zip(a, b) { aValue, bValue -> divide(aValue, bValue) }
+    override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
     //TODO move to extensions after https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md
     /**

@@ -18,9 +18,9 @@ public object JBigIntegerField : Ring<BigInteger>, NumericAlgebra<BigInteger> {
     override val one: BigInteger get() = BigInteger.ONE
 
     override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
-    override fun add(a: BigInteger, b: BigInteger): BigInteger = a.add(b)
-    override operator fun BigInteger.minus(b: BigInteger): BigInteger = subtract(b)
-    override fun multiply(a: BigInteger, b: BigInteger): BigInteger = a.multiply(b)
+    override fun add(left: BigInteger, right: BigInteger): BigInteger = left.add(right)
+    override operator fun BigInteger.minus(other: BigInteger): BigInteger = subtract(other)
+    override fun multiply(left: BigInteger, right: BigInteger): BigInteger = left.multiply(right)
 
     override operator fun BigInteger.unaryMinus(): BigInteger = negate()
 }
@@ -39,15 +39,15 @@ public abstract class JBigDecimalFieldBase internal constructor(
     override val one: BigDecimal
         get() = BigDecimal.ONE
 
-    override fun add(a: BigDecimal, b: BigDecimal): BigDecimal = a.add(b)
-    override operator fun BigDecimal.minus(b: BigDecimal): BigDecimal = subtract(b)
+    override fun add(left: BigDecimal, right: BigDecimal): BigDecimal = left.add(right)
+    override operator fun BigDecimal.minus(other: BigDecimal): BigDecimal = subtract(other)
     override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
 
     override fun scale(a: BigDecimal, value: Double): BigDecimal =
         a.multiply(value.toBigDecimal(mathContext), mathContext)
 
-    override fun multiply(a: BigDecimal, b: BigDecimal): BigDecimal = a.multiply(b, mathContext)
-    override fun divide(a: BigDecimal, b: BigDecimal): BigDecimal = a.divide(b, mathContext)
+    override fun multiply(left: BigDecimal, right: BigDecimal): BigDecimal = left.multiply(right, mathContext)
+    override fun divide(left: BigDecimal, right: BigDecimal): BigDecimal = left.divide(right, mathContext)
     override fun power(arg: BigDecimal, pow: Number): BigDecimal = arg.pow(pow.toInt(), mathContext)
     override fun sqrt(arg: BigDecimal): BigDecimal = arg.sqrt(mathContext)
     override operator fun BigDecimal.unaryMinus(): BigDecimal = negate(mathContext)

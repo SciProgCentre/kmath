@@ -73,10 +73,10 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
             else -> super<ExtendedField>.binaryOperationFunction(operation)
         }
 
-    override inline fun add(a: Double, b: Double): Double = a + b
+    override inline fun add(left: Double, right: Double): Double = left + right
 
-    override inline fun multiply(a: Double, b: Double): Double = a * b
-    override inline fun divide(a: Double, b: Double): Double = a / b
+    override inline fun multiply(left: Double, right: Double): Double = left * right
+    override inline fun divide(left: Double, right: Double): Double = left / right
 
     override inline fun scale(a: Double, value: Double): Double = a * value
 
@@ -102,10 +102,10 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     override inline fun norm(arg: Double): Double = abs(arg)
 
     override inline fun Double.unaryMinus(): Double = -this
-    override inline fun Double.plus(b: Double): Double = this + b
-    override inline fun Double.minus(b: Double): Double = this - b
-    override inline fun Double.times(b: Double): Double = this * b
-    override inline fun Double.div(b: Double): Double = this / b
+    override inline fun Double.plus(other: Double): Double = this + other
+    override inline fun Double.minus(other: Double): Double = this - other
+    override inline fun Double.times(other: Double): Double = this * other
+    override inline fun Double.div(other: Double): Double = this / other
 }
 
 public val Double.Companion.algebra: DoubleField get() = DoubleField
@@ -126,12 +126,12 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
             else -> super.binaryOperationFunction(operation)
         }
 
-    override inline fun add(a: Float, b: Float): Float = a + b
+    override inline fun add(left: Float, right: Float): Float = left + right
     override fun scale(a: Float, value: Double): Float = a * value.toFloat()
 
-    override inline fun multiply(a: Float, b: Float): Float = a * b
+    override inline fun multiply(left: Float, right: Float): Float = left * right
 
-    override inline fun divide(a: Float, b: Float): Float = a / b
+    override inline fun divide(left: Float, right: Float): Float = left / right
 
     override inline fun sin(arg: Float): Float = kotlin.math.sin(arg)
     override inline fun cos(arg: Float): Float = kotlin.math.cos(arg)
@@ -155,10 +155,10 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override inline fun norm(arg: Float): Float = abs(arg)
 
     override inline fun Float.unaryMinus(): Float = -this
-    override inline fun Float.plus(b: Float): Float = this + b
-    override inline fun Float.minus(b: Float): Float = this - b
-    override inline fun Float.times(b: Float): Float = this * b
-    override inline fun Float.div(b: Float): Float = this / b
+    override inline fun Float.plus(other: Float): Float = this + other
+    override inline fun Float.minus(other: Float): Float = this - other
+    override inline fun Float.times(other: Float): Float = this * other
+    override inline fun Float.div(other: Float): Float = this / other
 }
 
 public val Float.Companion.algebra: FloatField get() = FloatField
@@ -175,14 +175,14 @@ public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
         get() = 1
 
     override fun number(value: Number): Int = value.toInt()
-    override inline fun add(a: Int, b: Int): Int = a + b
-    override inline fun multiply(a: Int, b: Int): Int = a * b
+    override inline fun add(left: Int, right: Int): Int = left + right
+    override inline fun multiply(left: Int, right: Int): Int = left * right
     override inline fun norm(arg: Int): Int = abs(arg)
 
     override inline fun Int.unaryMinus(): Int = -this
-    override inline fun Int.plus(b: Int): Int = this + b
-    override inline fun Int.minus(b: Int): Int = this - b
-    override inline fun Int.times(b: Int): Int = this * b
+    override inline fun Int.plus(other: Int): Int = this + other
+    override inline fun Int.minus(other: Int): Int = this - other
+    override inline fun Int.times(other: Int): Int = this * other
 }
 
 public val Int.Companion.algebra: IntRing get() = IntRing
@@ -199,14 +199,14 @@ public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short>
         get() = 1
 
     override fun number(value: Number): Short = value.toShort()
-    override inline fun add(a: Short, b: Short): Short = (a + b).toShort()
-    override inline fun multiply(a: Short, b: Short): Short = (a * b).toShort()
+    override inline fun add(left: Short, right: Short): Short = (left + right).toShort()
+    override inline fun multiply(left: Short, right: Short): Short = (left * right).toShort()
     override fun norm(arg: Short): Short = if (arg > 0) arg else (-arg).toShort()
 
     override inline fun Short.unaryMinus(): Short = (-this).toShort()
-    override inline fun Short.plus(b: Short): Short = (this + b).toShort()
-    override inline fun Short.minus(b: Short): Short = (this - b).toShort()
-    override inline fun Short.times(b: Short): Short = (this * b).toShort()
+    override inline fun Short.plus(other: Short): Short = (this + other).toShort()
+    override inline fun Short.minus(other: Short): Short = (this - other).toShort()
+    override inline fun Short.times(other: Short): Short = (this * other).toShort()
 }
 
 public val Short.Companion.algebra: ShortRing get() = ShortRing
@@ -223,14 +223,14 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
         get() = 1
 
     override fun number(value: Number): Byte = value.toByte()
-    override inline fun add(a: Byte, b: Byte): Byte = (a + b).toByte()
-    override inline fun multiply(a: Byte, b: Byte): Byte = (a * b).toByte()
+    override inline fun add(left: Byte, right: Byte): Byte = (left + right).toByte()
+    override inline fun multiply(left: Byte, right: Byte): Byte = (left * right).toByte()
     override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
 
     override inline fun Byte.unaryMinus(): Byte = (-this).toByte()
-    override inline fun Byte.plus(b: Byte): Byte = (this + b).toByte()
-    override inline fun Byte.minus(b: Byte): Byte = (this - b).toByte()
-    override inline fun Byte.times(b: Byte): Byte = (this * b).toByte()
+    override inline fun Byte.plus(other: Byte): Byte = (this + other).toByte()
+    override inline fun Byte.minus(other: Byte): Byte = (this - other).toByte()
+    override inline fun Byte.times(other: Byte): Byte = (this * other).toByte()
 }
 
 public val Byte.Companion.algebra: ByteRing get() = ByteRing
@@ -247,14 +247,14 @@ public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
         get() = 1L
 
     override fun number(value: Number): Long = value.toLong()
-    override inline fun add(a: Long, b: Long): Long = a + b
-    override inline fun multiply(a: Long, b: Long): Long = a * b
+    override inline fun add(left: Long, right: Long): Long = left + right
+    override inline fun multiply(left: Long, right: Long): Long = left * right
     override fun norm(arg: Long): Long = abs(arg)
 
     override inline fun Long.unaryMinus(): Long = (-this)
-    override inline fun Long.plus(b: Long): Long = (this + b)
-    override inline fun Long.minus(b: Long): Long = (this - b)
-    override inline fun Long.times(b: Long): Long = (this * b)
+    override inline fun Long.plus(other: Long): Long = (this + other)
+    override inline fun Long.minus(other: Long): Long = (this - other)
+    override inline fun Long.times(other: Long): Long = (this * other)
 }
 
 public val Long.Companion.algebra: LongRing get() = LongRing

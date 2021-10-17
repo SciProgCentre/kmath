@@ -20,7 +20,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  */
 public open class BufferND<out T>(
     public val indexes: ShapeIndex,
-    public val buffer: Buffer<T>,
+    public open val buffer: Buffer<T>,
 ) : StructureND<T> {
 
     override operator fun get(index: IntArray): T = buffer[indexes.offset(index)]
@@ -55,14 +55,14 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
  *
  * @param T the type of items.
  * @param strides The strides to access elements of [MutableBuffer] by linear indices.
- * @param mutableBuffer The underlying buffer.
+ * @param buffer The underlying buffer.
  */
 public class MutableBufferND<T>(
     strides: ShapeIndex,
-    public val mutableBuffer: MutableBuffer<T>,
-) : MutableStructureND<T>, BufferND<T>(strides, mutableBuffer) {
+    override val buffer: MutableBuffer<T>,
+) : MutableStructureND<T>, BufferND<T>(strides, buffer) {
     override fun set(index: IntArray, value: T) {
-        mutableBuffer[indexes.offset(index)] = value
+        buffer[indexes.offset(index)] = value
     }
 }
 
@@ -74,7 +74,7 @@ public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
     crossinline transform: (T) -> R,
 ): MutableBufferND<R> {
     return if (this is MutableBufferND<T>)
-        MutableBufferND(this.indexes, factory.invoke(indexes.linearSize) { transform(mutableBuffer[it]) })
+        MutableBufferND(this.indexes, factory.invoke(indexes.linearSize) { transform(buffer[it]) })
     else {
         val strides = DefaultStrides(shape)
         MutableBufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })

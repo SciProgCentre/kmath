@@ -57,12 +57,12 @@ internal class NDFieldBenchmark {
         blackhole.consume(res)
     }
 
-    @Benchmark
-    fun nd4jAdd(blackhole: Blackhole) = with(nd4jField) {
-        var res: StructureND<Double> = one(dim, dim)
-        repeat(n) { res += 1.0 }
-        blackhole.consume(res)
-    }
+//    @Benchmark
+//    fun nd4jAdd(blackhole: Blackhole) = with(nd4jField) {
+//        var res: StructureND<Double> = one(dim, dim)
+//        repeat(n) { res += 1.0 }
+//        blackhole.consume(res)
+//    }
 
     private companion object {
         private const val dim = 1000

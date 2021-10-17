@@ -77,33 +77,33 @@ public object ComplexField :
 
     override fun scale(a: Complex, value: Double): Complex = Complex(a.re * value, a.im * value)
 
-    override fun add(a: Complex, b: Complex): Complex = Complex(a.re + b.re, a.im + b.im)
+    override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
 //    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
 
-    override fun multiply(a: Complex, b: Complex): Complex =
-        Complex(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re)
+    override fun multiply(left: Complex, right: Complex): Complex =
+        Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)
 
-    override fun divide(a: Complex, b: Complex): Complex = when {
-        abs(b.im) < abs(b.re) -> {
-            val wr = b.im / b.re
-            val wd = b.re + wr * b.im
+    override fun divide(left: Complex, right: Complex): Complex = when {
+        abs(right.im) < abs(right.re) -> {
+            val wr = right.im / right.re
+            val wd = right.re + wr * right.im
 
             if (wd.isNaN() || wd == 0.0)
                 throw ArithmeticException("Division by zero or infinity")
             else
-                Complex((a.re + a.im * wr) / wd, (a.im - a.re * wr) / wd)
+                Complex((left.re + left.im * wr) / wd, (left.im - left.re * wr) / wd)
         }
 
-        b.im == 0.0 -> throw ArithmeticException("Division by zero")
+        right.im == 0.0 -> throw ArithmeticException("Division by zero")
 
         else -> {
-            val wr = b.re / b.im
-            val wd = b.im + wr * b.re
+            val wr = right.re / right.im
+            val wd = right.im + wr * right.re
 
             if (wd.isNaN() || wd == 0.0)
                 throw ArithmeticException("Division by zero or infinity")
             else
-                Complex((a.re * wr + a.im) / wd, (a.im * wr - a.re) / wd)
+                Complex((left.re * wr + left.im) / wd, (left.im * wr - left.re) / wd)
         }
     }
 

@@ -88,17 +88,17 @@ public class ViktorFieldND(override val shape: IntArray) : FieldND<Double, Doubl
         }
     }.asStructure()
 
-    override fun add(a: StructureND<Double>, b: StructureND<Double>): ViktorStructureND =
-        (a.f64Buffer + b.f64Buffer).asStructure()
+    override fun add(left: StructureND<Double>, right: StructureND<Double>): ViktorStructureND =
+        (left.f64Buffer + right.f64Buffer).asStructure()
 
     override fun scale(a: StructureND<Double>, value: Double): ViktorStructureND =
         (a.f64Buffer * value).asStructure()
 
-    override inline fun StructureND<Double>.plus(b: StructureND<Double>): ViktorStructureND =
-        (f64Buffer + b.f64Buffer).asStructure()
+    override inline fun StructureND<Double>.plus(other: StructureND<Double>): ViktorStructureND =
+        (f64Buffer + other.f64Buffer).asStructure()
 
-    override inline fun StructureND<Double>.minus(b: StructureND<Double>): ViktorStructureND =
-        (f64Buffer - b.f64Buffer).asStructure()
+    override inline fun StructureND<Double>.minus(other: StructureND<Double>): ViktorStructureND =
+        (f64Buffer - other.f64Buffer).asStructure()
 
     override inline fun StructureND<Double>.times(k: Number): ViktorStructureND =
         (f64Buffer * k.toDouble()).asStructure()

@@ -134,8 +134,8 @@ public open class BufferRingOps<T, A: Ring<T>>(
     override val bufferFactory: BufferFactory<T>,
 ) : BufferAlgebra<T, A>, RingOps<Buffer<T>>{
 
-    override fun add(a: Buffer<T>, b: Buffer<T>): Buffer<T> = zipInline(a, b) { l, r -> l + r }
-    override fun multiply(a: Buffer<T>, b: Buffer<T>): Buffer<T> = zipInline(a, b) { l, r -> l * r }
+    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
+    override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> =
@@ -153,9 +153,9 @@ public open class BufferFieldOps<T, A : Field<T>>(
     bufferFactory: BufferFactory<T>,
 ) : BufferRingOps<T, A>(elementAlgebra, bufferFactory), BufferAlgebra<T, A>, FieldOps<Buffer<T>>, ScaleOperations<Buffer<T>> {
 
-    override fun add(a: Buffer<T>, b: Buffer<T>): Buffer<T> = zipInline(a, b) { l, r -> l + r }
-    override fun multiply(a: Buffer<T>, b: Buffer<T>): Buffer<T> = zipInline(a, b) { l, r -> l * r }
-    override fun divide(a: Buffer<T>, b: Buffer<T>): Buffer<T> = zipInline(a, b) { l, r -> l / r }
+    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
+    override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
+    override fun divide(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l / r }
 
     override fun scale(a: Buffer<T>, value: Double): Buffer<T> = a.map { scale(it, value) }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }

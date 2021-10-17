@@ -67,10 +67,10 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
 
     public fun produce(builder: HistogramBuilder<T>.() -> Unit): IndexedHistogram<T, V>
 
-    override fun add(a: IndexedHistogram<T, V>, b: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
-        require(a.context == this) { "Can't operate on a histogram produced by external space" }
-        require(b.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace { a.values + b.values })
+    override fun add(left: IndexedHistogram<T, V>, right: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
+        require(left.context == this) { "Can't operate on a histogram produced by external space" }
+        require(right.context == this) { "Can't operate on a histogram produced by external space" }
+        return IndexedHistogram(this, histogramValueSpace { left.values + right.values })
     }
 
     override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {

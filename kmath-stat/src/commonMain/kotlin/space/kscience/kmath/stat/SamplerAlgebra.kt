@@ -41,8 +41,8 @@ public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler
 
     override val zero: Sampler<T> = ConstantSampler(algebra.zero)
 
-    override fun add(a: Sampler<T>, b: Sampler<T>): Sampler<T> = BasicSampler { generator ->
-        a.sample(generator).zip(b.sample(generator)) { aValue, bValue -> algebra { aValue + bValue } }
+    override fun add(left: Sampler<T>, right: Sampler<T>): Sampler<T> = BasicSampler { generator ->
+        left.sample(generator).zip(right.sample(generator)) { aValue, bValue -> algebra { aValue + bValue } }
     }
 
     override fun scale(a: Sampler<T>, value: Double): Sampler<T> = BasicSampler { generator ->

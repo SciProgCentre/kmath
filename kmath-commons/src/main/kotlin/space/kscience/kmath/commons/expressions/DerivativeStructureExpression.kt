@@ -70,12 +70,12 @@ public class DerivativeStructureField(
 
     override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
 
-    override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
+    override fun add(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.add(right)
 
     override fun scale(a: DerivativeStructure, value: Double): DerivativeStructure = a.multiply(value)
 
-    override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
-    override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
+    override fun multiply(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.multiply(right)
+    override fun divide(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.divide(right)
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
     override fun tan(arg: DerivativeStructure): DerivativeStructure = arg.tan()

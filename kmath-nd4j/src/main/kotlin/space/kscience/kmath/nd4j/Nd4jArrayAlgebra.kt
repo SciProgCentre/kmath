@@ -72,11 +72,11 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
  */
 public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>, Nd4jArrayAlgebra<T, S> {
 
-    override fun add(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.add(b.ndArray).wrap()
+    override fun add(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.add(right.ndArray).wrap()
 
-    override operator fun StructureND<T>.minus(b: StructureND<T>): Nd4jArrayStructure<T> =
-        ndArray.sub(b.ndArray).wrap()
+    override operator fun StructureND<T>.minus(other: StructureND<T>): Nd4jArrayStructure<T> =
+        ndArray.sub(other.ndArray).wrap()
 
     override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
         ndArray.neg().wrap()
@@ -94,8 +94,8 @@ public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>
 @OptIn(UnstableKMathAPI::class)
 public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, Nd4jArrayGroupOps<T, R> {
 
-    override fun multiply(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.mul(b.ndArray).wrap()
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.mul(right.ndArray).wrap()
 //
 //    override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
 //        check(this)
@@ -132,8 +132,8 @@ public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, 
  */
 public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, Nd4jArrayRingOps<T, F> {
 
-    override fun divide(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.div(b.ndArray).wrap()
+    override fun divide(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.div(right.ndArray).wrap()
 
     public operator fun Number.div(b: StructureND<T>): Nd4jArrayStructure<T> = b.ndArray.rdiv(this).wrap()
 

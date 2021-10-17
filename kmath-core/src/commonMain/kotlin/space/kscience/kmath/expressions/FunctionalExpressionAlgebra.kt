@@ -57,8 +57,8 @@ public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     /**
      * Builds an Expression of addition of two another expressions.
      */
-    override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(GroupOps.PLUS_OPERATION, a, b)
+    override fun add(left: Expression<T>, right: Expression<T>): Expression<T> =
+        binaryOperation(GroupOps.PLUS_OPERATION, left, right)
 
 //    /**
 //     * Builds an Expression of multiplication of expression by number.
@@ -88,8 +88,8 @@ public open class FunctionalExpressionRing<T, out A : Ring<T>>(
     /**
      * Builds an Expression of multiplication of two expressions.
      */
-    override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperationFunction(RingOps.TIMES_OPERATION)(a, b)
+    override fun multiply(left: Expression<T>, right: Expression<T>): Expression<T> =
+        binaryOperationFunction(RingOps.TIMES_OPERATION)(left, right)
 
     public operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
     public operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
@@ -107,8 +107,8 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
     /**
      * Builds an Expression of division an expression by another one.
      */
-    override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperationFunction(FieldOps.DIV_OPERATION)(a, b)
+    override fun divide(left: Expression<T>, right: Expression<T>): Expression<T> =
+        binaryOperationFunction(FieldOps.DIV_OPERATION)(left, right)
 
     public operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
     public operator fun T.div(arg: Expression<T>): Expression<T> = arg / this

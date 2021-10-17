@@ -121,11 +121,11 @@ public interface GroupOps<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @param a the augend.
-     * @param b the addend.
+     * @param left the augend.
+     * @param right the addend.
      * @return the sum.
      */
-    public fun add(a: T, b: T): T
+    public fun add(left: T, right: T): T
 
     // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176.
 
@@ -149,19 +149,19 @@ public interface GroupOps<T> : Algebra<T> {
      * Addition of two elements.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param other the addend.
      * @return the sum.
      */
-    public operator fun T.plus(b: T): T = add(this, b)
+    public operator fun T.plus(other: T): T = add(this, other)
 
     /**
      * Subtraction of two elements.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param other the subtrahend.
      * @return the difference.
      */
-    public operator fun T.minus(b: T): T = add(this, -b)
+    public operator fun T.minus(other: T): T = add(this, -other)
     // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
@@ -210,18 +210,18 @@ public interface RingOps<T> : GroupOps<T> {
     /**
      * Multiplies two elements.
      *
-     * @param a the multiplier.
-     * @param b the multiplicand.
+     * @param left the multiplier.
+     * @param right the multiplicand.
      */
-    public fun multiply(a: T, b: T): T
+    public fun multiply(left: T, right: T): T
 
     /**
      * Multiplies this element by scalar.
      *
      * @receiver the multiplier.
-     * @param b the multiplicand.
+     * @param other the multiplicand.
      */
-    public operator fun T.times(b: T): T = multiply(this, b)
+    public operator fun T.times(other: T): T = multiply(this, other)
 
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         TIMES_OPERATION -> ::multiply
@@ -260,20 +260,20 @@ public interface FieldOps<T> : RingOps<T> {
     /**
      * Division of two elements.
      *
-     * @param a the dividend.
-     * @param b the divisor.
+     * @param left the dividend.
+     * @param right the divisor.
      * @return the quotient.
      */
-    public fun divide(a: T, b: T): T
+    public fun divide(left: T, right: T): T
 
     /**
      * Division of two elements.
      *
      * @receiver the dividend.
-     * @param b the divisor.
+     * @param other the divisor.
      * @return the quotient.
      */
-    public operator fun T.div(b: T): T = divide(this, b)
+    public operator fun T.div(other: T): T = divide(this, other)
 
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         DIV_OPERATION -> ::divide

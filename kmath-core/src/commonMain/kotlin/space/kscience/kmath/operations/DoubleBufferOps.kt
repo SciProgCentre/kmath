@@ -15,36 +15,37 @@ import kotlin.math.*
  * [ExtendedFieldOps] over [DoubleBuffer].
  */
 public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<Buffer<Double>, Double> {
+
     override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
         DoubleBuffer(size) { -array[it] }
     } else {
         DoubleBuffer(size) { -get(it) }
     }
 
-    override fun add(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(b.size == a.size) {
-            "The size of the first buffer ${a.size} should be the same as for second one: ${b.size} "
+    override fun add(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
+        require(right.size == left.size) {
+            "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
 
-        return if (a is DoubleBuffer && b is DoubleBuffer) {
-            val aArray = a.array
-            val bArray = b.array
-            DoubleBuffer(DoubleArray(a.size) { aArray[it] + bArray[it] })
-        } else DoubleBuffer(DoubleArray(a.size) { a[it] + b[it] })
+        return if (left is DoubleBuffer && right is DoubleBuffer) {
+            val aArray = left.array
+            val bArray = right.array
+            DoubleBuffer(DoubleArray(left.size) { aArray[it] + bArray[it] })
+        } else DoubleBuffer(DoubleArray(left.size) { left[it] + right[it] })
     }
 
-    override fun Buffer<Double>.plus(b: Buffer<Double>): DoubleBuffer = add(this, b)
+    override fun Buffer<Double>.plus(other: Buffer<Double>): DoubleBuffer = add(this, other)
 
-    override fun Buffer<Double>.minus(b: Buffer<Double>): DoubleBuffer {
-        require(b.size == this.size) {
-            "The size of the first buffer ${this.size} should be the same as for second one: ${b.size} "
+    override fun Buffer<Double>.minus(other: Buffer<Double>): DoubleBuffer {
+        require(other.size == this.size) {
+            "The size of the first buffer ${this.size} should be the same as for second one: ${other.size} "
         }
 
-        return if (this is DoubleBuffer && b is DoubleBuffer) {
+        return if (this is DoubleBuffer && other is DoubleBuffer) {
             val aArray = this.array
-            val bArray = b.array
+            val bArray = other.array
             DoubleBuffer(DoubleArray(this.size) { aArray[it] - bArray[it] })
-        } else DoubleBuffer(DoubleArray(this.size) { this[it] - b[it] })
+        } else DoubleBuffer(DoubleArray(this.size) { this[it] - other[it] })
     }
 
     //
@@ -66,29 +67,29 @@ public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<B
 //        } else RealBuffer(DoubleArray(a.size) { a[it] / kValue })
 //    }
 
-    override fun multiply(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(b.size == a.size) {
-            "The size of the first buffer ${a.size} should be the same as for second one: ${b.size} "
+    override fun multiply(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
+        require(right.size == left.size) {
+            "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
 
-        return if (a is DoubleBuffer && b is DoubleBuffer) {
-            val aArray = a.array
-            val bArray = b.array
-            DoubleBuffer(DoubleArray(a.size) { aArray[it] * bArray[it] })
+        return if (left is DoubleBuffer && right is DoubleBuffer) {
+            val aArray = left.array
+            val bArray = right.array
+            DoubleBuffer(DoubleArray(left.size) { aArray[it] * bArray[it] })
         } else
-            DoubleBuffer(DoubleArray(a.size) { a[it] * b[it] })
+            DoubleBuffer(DoubleArray(left.size) { left[it] * right[it] })
     }
 
-    override fun divide(a: Buffer<Double>, b: Buffer<Double>): DoubleBuffer {
-        require(b.size == a.size) {
-            "The size of the first buffer ${a.size} should be the same as for second one: ${b.size} "
+    override fun divide(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
+        require(right.size == left.size) {
+            "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
 
-        return if (a is DoubleBuffer && b is DoubleBuffer) {
-            val aArray = a.array
-            val bArray = b.array
-            DoubleBuffer(DoubleArray(a.size) { aArray[it] / bArray[it] })
-        } else DoubleBuffer(DoubleArray(a.size) { a[it] / b[it] })
+        return if (left is DoubleBuffer && right is DoubleBuffer) {
+            val aArray = left.array
+            val bArray = right.array
+            DoubleBuffer(DoubleArray(left.size) { aArray[it] / bArray[it] })
+        } else DoubleBuffer(DoubleArray(left.size) { left[it] / right[it] })
     }
 
     override fun sin(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {

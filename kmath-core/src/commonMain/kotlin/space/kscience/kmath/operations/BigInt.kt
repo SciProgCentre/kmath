@@ -34,10 +34,10 @@ public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperation
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
     override fun BigInt.unaryMinus(): BigInt = -this
-    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun add(left: BigInt, right: BigInt): BigInt = left.plus(right)
     override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
-    override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
-    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
+    override fun multiply(left: BigInt, right: BigInt): BigInt = left.times(right)
+    override fun divide(left: BigInt, right: BigInt): BigInt = left.div(right)
 
     public operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
     public operator fun String.unaryMinus(): BigInt =

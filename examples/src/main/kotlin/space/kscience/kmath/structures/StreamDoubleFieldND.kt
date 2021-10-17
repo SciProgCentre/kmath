@@ -22,12 +22,12 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
 
     private val strides = DefaultStrides(shape)
     override val elementAlgebra: DoubleField get() = DoubleField
-    override val zero: BufferND<Double> by lazy { produce { zero } }
-    override val one: BufferND<Double> by lazy { produce { one } }
+    override val zero: BufferND<Double> by lazy { produce(shape) { zero } }
+    override val one: BufferND<Double> by lazy { produce(shape) { one } }
 
     override fun number(value: Number): BufferND<Double> {
         val d = value.toDouble() // minimize conversions
-        return produce { d }
+        return produce(shape) { d }
     }
 
     private val StructureND<Double>.buffer: DoubleBuffer
@@ -40,7 +40,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun produce(initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override fun produce(shape: Shape, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)
@@ -70,12 +70,12 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
     }
 
     override fun zip(
-        a: StructureND<Double>,
-        b: StructureND<Double>,
+        left: StructureND<Double>,
+        right: StructureND<Double>,
         transform: DoubleField.(Double, Double) -> Double,
     ): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            DoubleField.transform(a.buffer.array[offset], b.buffer.array[offset])
+            DoubleField.transform(left.buffer.array[offset], right.buffer.array[offset])
         }.toArray()
         return BufferND(strides, array.asBuffer())
     }

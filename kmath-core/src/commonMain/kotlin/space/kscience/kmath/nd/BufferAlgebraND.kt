@@ -73,7 +73,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     r: BufferND<T>,
     crossinline block: A.(l: T, r: T) -> T
 ): BufferND<T> {
-    require(l.indexes == r.indexes)
+    require(l.indexes == r.indexes) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
     val indexes = l.indexes
     return BufferND(indexes, bufferAlgebra.zipInline(l.buffer, r.buffer, block))
 }
@@ -113,6 +113,10 @@ public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.produce(
     vararg shape: Int,
     initializer: A.(IntArray) -> T
 ): BufferND<T> = produce(shape, initializer)
+
+public fun <T, EA : Algebra<T>, A> A.produce(
+    initializer: EA.(IntArray) -> T
+): BufferND<T> where A : BufferAlgebraND<T, EA>, A : WithShape = produce(shape, initializer)
 
 //// group factories
 //public fun <T, A : Group<T>> A.ndAlgebra(

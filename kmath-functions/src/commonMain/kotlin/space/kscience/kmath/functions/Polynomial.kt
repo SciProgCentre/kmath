@@ -104,12 +104,12 @@ public class PolynomialSpace<T, C>(
         Polynomial(coefficients.map { -it })
     }
 
-    override fun add(a: Polynomial<T>, b: Polynomial<T>): Polynomial<T> {
-        val dim = max(a.coefficients.size, b.coefficients.size)
+    override fun add(left: Polynomial<T>, right: Polynomial<T>): Polynomial<T> {
+        val dim = max(left.coefficients.size, right.coefficients.size)
 
         return ring {
             Polynomial(List(dim) { index ->
-                a.coefficients.getOrElse(index) { zero } + b.coefficients.getOrElse(index) { zero }
+                left.coefficients.getOrElse(index) { zero } + right.coefficients.getOrElse(index) { zero }
             })
         }
     }
