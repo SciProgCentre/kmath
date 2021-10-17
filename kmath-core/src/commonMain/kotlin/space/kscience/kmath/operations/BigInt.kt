@@ -6,7 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.BufferedRingND
+import space.kscience.kmath.nd.BufferedRingOpsND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import space.kscience.kmath.structures.Buffer
@@ -26,7 +26,7 @@ private typealias TBase = ULong
  * @author Peter Klimai
  */
 @OptIn(UnstableKMathAPI::class)
-public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOperations<BigInt> {
+public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperations<BigInt> {
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
@@ -34,10 +34,10 @@ public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOp
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
     override fun BigInt.unaryMinus(): BigInt = -this
-    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun add(left: BigInt, right: BigInt): BigInt = left.plus(right)
     override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
-    override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
-    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
+    override fun multiply(left: BigInt, right: BigInt): BigInt = left.times(right)
+    override fun divide(left: BigInt, right: BigInt): BigInt = left.div(right)
 
     public operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
     public operator fun String.unaryMinus(): BigInt =
@@ -542,5 +542,5 @@ public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -
 public inline fun BigInt.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     Buffer.boxing(size, initializer)
 
-public fun BigIntField.nd(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
-    BufferedRingND(shape, BigIntField, BigInt::buffer)
+public val BigIntField.nd: BufferedRingOpsND<BigInt, BigIntField>
+    get() = BufferedRingOpsND(BufferRingOps(BigIntField, BigInt::buffer))

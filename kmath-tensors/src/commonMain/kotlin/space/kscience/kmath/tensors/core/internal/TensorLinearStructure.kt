@@ -44,7 +44,7 @@ internal fun indexFromOffset(offset: Int, strides: IntArray, nDim: Int): IntArra
  *
  * @param shape the shape of the tensor.
  */
-internal class TensorLinearStructure(override val shape: IntArray) : Strides {
+internal class TensorLinearStructure(override val shape: IntArray) : Strides() {
     override val strides: IntArray
         get() = stridesFromShape(shape)
 
@@ -54,4 +54,18 @@ internal class TensorLinearStructure(override val shape: IntArray) : Strides {
     override val linearSize: Int
         get() = shape.reduce(Int::times)
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as TensorLinearStructure
+
+        if (!shape.contentEquals(other.shape)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return shape.contentHashCode()
+    }
 }

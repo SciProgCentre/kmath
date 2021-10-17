@@ -150,7 +150,7 @@ public interface ScaleOperations<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface NumbersAddOperations<T> : Ring<T>, NumericAlgebra<T> {
+public interface NumbersAddOps<T> : RingOps<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *

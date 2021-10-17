@@ -8,6 +8,10 @@ package space.kscience.kmath.nd4j
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.one
+import space.kscience.kmath.nd.produce
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.operations.invoke
 import kotlin.math.PI
 import kotlin.test.Test
@@ -19,7 +23,7 @@ import kotlin.test.fail
 internal class Nd4jArrayAlgebraTest {
     @Test
     fun testProduce() {
-        val res = with(DoubleNd4jArrayField(intArrayOf(2, 2))) { produce { it.sum().toDouble() } }
+        val res = DoubleField.nd4j.produce(2, 2) { it.sum().toDouble() }
         val expected = (Nd4j.create(2, 2) ?: fail()).asDoubleStructure()
         expected[intArrayOf(0, 0)] = 0.0
         expected[intArrayOf(0, 1)] = 1.0
@@ -30,7 +34,9 @@ internal class Nd4jArrayAlgebraTest {
 
     @Test
     fun testMap() {
-        val res = with(IntNd4jArrayRing(intArrayOf(2, 2))) { one.map { it + it * 2 } }
+        val res = IntRing.nd4j {
+            one(2, 2).map { it + it * 2 }
+        }
         val expected = (Nd4j.create(2, 2) ?: fail()).asIntStructure()
         expected[intArrayOf(0, 0)] = 3
         expected[intArrayOf(0, 1)] = 3
@@ -41,7 +47,7 @@ internal class Nd4jArrayAlgebraTest {
 
     @Test
     fun testAdd() {
-        val res = with(IntNd4jArrayRing(intArrayOf(2, 2))) { one + 25 }
+        val res = IntRing.nd4j { one(2, 2) + 25 }
         val expected = (Nd4j.create(2, 2) ?: fail()).asIntStructure()
         expected[intArrayOf(0, 0)] = 26
         expected[intArrayOf(0, 1)] = 26
@@ -51,10 +57,10 @@ internal class Nd4jArrayAlgebraTest {
     }
 
     @Test
-    fun testSin() = DoubleNd4jArrayField(intArrayOf(2, 2)).invoke {
-        val initial = produce { (i, j) -> if (i == j) PI / 2 else 0.0 }
+    fun testSin() = DoubleField.nd4j{
+        val initial = produce(2, 2) { (i, j) -> if (i == j) PI / 2 else 0.0 }
         val transformed = sin(initial)
-        val expected = produce { (i, j) -> if (i == j) 1.0 else 0.0 }
+        val expected = produce(2, 2) { (i, j) -> if (i == j) 1.0 else 0.0 }
 
         println(transformed)
         assertTrue { StructureND.contentEquals(transformed, expected) }

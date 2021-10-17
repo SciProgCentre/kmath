@@ -47,7 +47,7 @@ public object Euclidean2DSpace : GeometrySpace<Vector2D>, ScaleOperations<Vector
     override fun Vector2D.unaryMinus(): Vector2D = Vector2D(-x, -y)
 
     override fun Vector2D.distanceTo(other: Vector2D): Double = (this - other).norm()
-    override fun add(a: Vector2D, b: Vector2D): Vector2D = Vector2D(a.x + b.x, a.y + b.y)
+    override fun add(left: Vector2D, right: Vector2D): Vector2D = Vector2D(left.x + right.x, left.y + right.y)
     override fun scale(a: Vector2D, value: Double): Vector2D = Vector2D(a.x * value, a.y * value)
     override fun Vector2D.dot(other: Vector2D): Double = x * other.x + y * other.y
 }

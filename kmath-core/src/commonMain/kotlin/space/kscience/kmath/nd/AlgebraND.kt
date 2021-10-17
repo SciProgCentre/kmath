@@ -7,7 +7,6 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.*
 import kotlin.reflect.KClass
 
 /**
@@ -19,6 +18,14 @@ import kotlin.reflect.KClass
 public class ShapeMismatchException(public val expected: IntArray, public val actual: IntArray) :
     RuntimeException("Shape ${actual.contentToString()} doesn't fit in expected shape ${expected.contentToString()}.")
 
+public typealias Shape = IntArray
+
+public fun Shape(shapeFirst: Int, vararg shapeRest: Int): Shape = intArrayOf(shapeFirst, *shapeRest)
+
+public interface WithShape {
+    public val shape: Shape
+}
+
 /**
  * The base interface for all ND-algebra implementations.
  *
@@ -27,19 +34,14 @@ public class ShapeMismatchException(public val expected: IntArray, public val ac
  */
 public interface AlgebraND<T, out C : Algebra<T>> {
     /**
-     * The shape of ND-structures this algebra operates on.
-     */
-    public val shape: IntArray
-
-    /**
      * The algebra over elements of ND structure.
      */
-    public val elementContext: C
+    public val elementAlgebra: C
 
     /**
      * Produces a new NDStructure using given initializer function.
      */
-    public fun produce(initializer: C.(IntArray) -> T): StructureND<T>
+    public fun produce(shape: Shape, initializer: C.(IntArray) -> T): StructureND<T>
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.
@@ -54,7 +56,7 @@ public interface AlgebraND<T, out C : Algebra<T>> {
     /**
      * Combines two structures into one.
      */
-    public fun combine(a: StructureND<T>, b: StructureND<T>, transform: C.(T, T) -> T): StructureND<T>
+    public fun zip(left: StructureND<T>, right: StructureND<T>, transform: C.(T, T) -> T): StructureND<T>
 
     /**
      * Element-wise invocation of function working on [T] on a [StructureND].
@@ -77,7 +79,6 @@ public interface AlgebraND<T, out C : Algebra<T>> {
     public companion object
 }
 
-
 /**
  * Get a feature of the structure in this scope. Structure features take precedence other context features.
  *
@@ -90,45 +91,21 @@ public inline fun <T : Any, reified F : StructureFeature> AlgebraND<T, *>.getFea
     getFeature(structure, F::class)
 
 /**
- * Checks if given elements are consistent with this context.
- *
- * @param structures the structures to check.
- * @return the array of valid structures.
- */
-internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(vararg structures: StructureND<T>): Array<out StructureND<T>> =
-    structures
-        .map(StructureND<T>::shape)
-        .singleOrNull { !shape.contentEquals(it) }
-        ?.let<IntArray, Array<out StructureND<T>>> { throw ShapeMismatchException(shape, it) }
-        ?: structures
-
-/**
- * Checks if given element is consistent with this context.
- *
- * @param element the structure to check.
- * @return the valid structure.
- */
-internal fun <T, C : Algebra<T>> AlgebraND<T, C>.checkShape(element: StructureND<T>): StructureND<T> {
-    if (!element.shape.contentEquals(shape)) throw ShapeMismatchException(shape, element.shape)
-    return element
-}
-
-/**
  * Space of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param S the type of group over structure elements.
+ * @param A the type of group over structure elements.
  */
-public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND<T, S> {
+public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, AlgebraND<T, A> {
     /**
      * Element-wise addition.
      *
-     * @param a the augend.
-     * @param b the addend.
+     * @param left the augend.
+     * @param right the addend.
      * @return the sum.
      */
-    override fun add(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        combine(a, b) { aValue, bValue -> add(aValue, bValue) }
+    override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
     // TODO move to extensions after KEEP-176
 
@@ -157,7 +134,7 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
      * @param arg the addend.
      * @return the sum.
      */
-    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
+    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg + this
 
     /**
      * Subtracts an ND structure from an element of it.
@@ -171,22 +148,26 @@ public interface GroupND<T, out S : Group<T>> : Group<StructureND<T>>, AlgebraND
     public companion object
 }
 
+public interface GroupND<T, out A : Group<T>> : Group<StructureND<T>>, GroupOpsND<T, A>, WithShape {
+    override val zero: StructureND<T> get() = produce(shape) { elementAlgebra.zero }
+}
+
 /**
  * Ring of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param R the type of ring over structure elements.
+ * @param A the type of ring over structure elements.
  */
-public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R> {
+public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, GroupOpsND<T, A> {
     /**
      * Element-wise multiplication.
      *
-     * @param a the multiplicand.
-     * @param b the multiplier.
+     * @param left the multiplicand.
+     * @param right the multiplier.
      * @return the product.
      */
-    override fun multiply(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        combine(a, b) { aValue, bValue -> multiply(aValue, bValue) }
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
     //TODO move to extensions after KEEP-176
 
@@ -211,24 +192,32 @@ public interface RingND<T, out R : Ring<T>> : Ring<StructureND<T>>, GroupND<T, R
     public companion object
 }
 
+public interface RingND<T, out A : Ring<T>> : Ring<StructureND<T>>, RingOpsND<T, A>, GroupND<T, A>, WithShape {
+    override val one: StructureND<T> get() = produce(shape) { elementAlgebra.one }
+}
+
+
 /**
  * Field of [StructureND].
  *
  * @param T the type of the element contained in ND structure.
- * @param F the type field over structure elements.
+ * @param A the type field over structure elements.
  */
-public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T, F> {
+public interface FieldOpsND<T, out A : Field<T>> :
+    FieldOps<StructureND<T>>,
+    RingOpsND<T, A>,
+    ScaleOperations<StructureND<T>> {
     /**
      * Element-wise division.
      *
-     * @param a the dividend.
-     * @param b the divisor.
+     * @param left the dividend.
+     * @param right the divisor.
      * @return the quotient.
      */
-    override fun divide(a: StructureND<T>, b: StructureND<T>): StructureND<T> =
-        combine(a, b) { aValue, bValue -> divide(aValue, bValue) }
+    override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
+        zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
-    //TODO move to extensions after KEEP-176
+    //TODO move to extensions after https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md
     /**
      * Divides an ND structure by an element of it.
      *
@@ -247,42 +236,9 @@ public interface FieldND<T, out F : Field<T>> : Field<StructureND<T>>, RingND<T,
      */
     public operator fun T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
 
-    /**
-     * Element-wise scaling.
-     *
-     * @param a the multiplicand.
-     * @param value the multiplier.
-     * @return the product.
-     */
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { scale(it, value) }
+}
 
-//    @ThreadLocal
-//    public companion object {
-//        private val realNDFieldCache: MutableMap<IntArray, RealNDField> = hashMapOf()
-//
-//        /**
-//         * Create a nd-field for [Double] values or pull it from cache if it was created previously.
-//         */
-//        public fun real(vararg shape: Int): RealNDField = realNDFieldCache.getOrPut(shape) { RealNDField(shape) }
-//
-//        /**
-//         * Create an ND field with boxing generic buffer.
-//         */
-//        public fun <T : Any, F : Field<T>> boxing(
-//            field: F,
-//            vararg shape: Int,
-//            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-//        ): BufferedNDField<T, F> = BufferedNDField(shape, field, bufferFactory)
-//
-//        /**
-//         * Create a most suitable implementation for nd-field using reified class.
-//         */
-//        @Suppress("UNCHECKED_CAST")
-//        public inline fun <reified T : Any, F : Field<T>> auto(field: F, vararg shape: Int): NDField<T, F> =
-//            when {
-//                T::class == Double::class -> real(*shape) as NDField<T, F>
-//                T::class == Complex::class -> complex(*shape) as BufferedNDField<T, F>
-//                else -> BoxingNDField(shape, field, Buffer.Companion::auto)
-//            }
-//    }
+public interface FieldND<T, out A : Field<T>> : Field<StructureND<T>>, FieldOpsND<T, A>, RingND<T, A>, WithShape {
+    override val one: StructureND<T> get() = produce(shape) { elementAlgebra.one }
 }

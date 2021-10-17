@@ -7,10 +7,7 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.combine
-import space.kscience.kmath.nd.get
-import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.algebra
@@ -22,9 +19,9 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = DoubleField.ndAlgebra(3, 3)
-    val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
-    val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
+    val algebra = DoubleField.ndAlgebra
+    val array1 = algebra.produce(3, 3) { (i, j) -> (i + j).toDouble() }
+    val array2 = algebra.produce(3, 3) { (i, j) -> (i - j).toDouble() }
 
     @Test
     fun testSum() {
@@ -77,7 +74,7 @@ class NumberNDFieldTest {
 
     @Test
     fun combineTest() {
-        val division = array1.combine(array2, Double::div)
+        val division = array1.zip(array2, Double::div)
     }
 
     object L2Norm : Norm<StructureND<Number>, Double> {

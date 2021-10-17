@@ -59,7 +59,7 @@ public fun <T : Any> DerivationResult<T>.grad(vararg variables: Symbol): Point<T
 public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     public val context: F,
     bindings: Map<Symbol, T>,
-) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, NumbersAddOperations<AutoDiffValue<T>> {
+) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, NumbersAddOps<AutoDiffValue<T>> {
     override val zero: AutoDiffValue<T> get() = const(context.zero)
     override val one: AutoDiffValue<T> get() = const(context.one)
 
@@ -168,22 +168,22 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
     // Basic math (+, -, *, /)
 
-    override fun add(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
-        derive(const { a.value + b.value }) { z ->
-            a.d += z.d
-            b.d += z.d
+    override fun add(left: AutoDiffValue<T>, right: AutoDiffValue<T>): AutoDiffValue<T> =
+        derive(const { left.value + right.value }) { z ->
+            left.d += z.d
+            right.d += z.d
         }
 
-    override fun multiply(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
-        derive(const { a.value * b.value }) { z ->
-            a.d += z.d * b.value
-            b.d += z.d * a.value
+    override fun multiply(left: AutoDiffValue<T>, right: AutoDiffValue<T>): AutoDiffValue<T> =
+        derive(const { left.value * right.value }) { z ->
+            left.d += z.d * right.value
+            right.d += z.d * left.value
         }
 
-    override fun divide(a: AutoDiffValue<T>, b: AutoDiffValue<T>): AutoDiffValue<T> =
-        derive(const { a.value / b.value }) { z ->
-            a.d += z.d / b.value
-            b.d -= z.d * a.value / (b.value * b.value)
+    override fun divide(left: AutoDiffValue<T>, right: AutoDiffValue<T>): AutoDiffValue<T> =
+        derive(const { left.value / right.value }) { z ->
+            left.d += z.d / right.value
+            right.d -= z.d * left.value / (right.value * right.value)
         }
 
     override fun scale(a: AutoDiffValue<T>, value: Double): AutoDiffValue<T> =

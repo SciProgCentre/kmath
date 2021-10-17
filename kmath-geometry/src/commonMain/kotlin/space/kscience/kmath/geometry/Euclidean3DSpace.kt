@@ -47,8 +47,8 @@ public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector
 
     override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
 
-    override fun add(a: Vector3D, b: Vector3D): Vector3D =
-        Vector3D(a.x + b.x, a.y + b.y, a.z + b.z)
+    override fun add(left: Vector3D, right: Vector3D): Vector3D =
+        Vector3D(left.x + right.x, left.y + right.y, left.z + right.z)
 
     override fun scale(a: Vector3D, value: Double): Vector3D =
         Vector3D(a.x * value, a.y * value, a.z * value)

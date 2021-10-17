@@ -88,20 +88,20 @@ public class TreeHistogramSpace(
         TreeHistogramBuilder(binFactory).apply(block).build()
 
     override fun add(
-        a: UnivariateHistogram,
-        b: UnivariateHistogram,
+        left: UnivariateHistogram,
+        right: UnivariateHistogram,
     ): UnivariateHistogram {
 //        require(a.context == this) { "Histogram $a does not belong to this context" }
 //        require(b.context == this) { "Histogram $b does not belong to this context" }
         val bins = TreeMap<Double, UnivariateBin>().apply {
-            (a.bins.map { it.domain } union b.bins.map { it.domain }).forEach { def ->
+            (left.bins.map { it.domain } union right.bins.map { it.domain }).forEach { def ->
                 put(
                     def.center,
                     UnivariateBin(
                         def,
-                        value = (a[def.center]?.value ?: 0.0) + (b[def.center]?.value ?: 0.0),
-                        standardDeviation = (a[def.center]?.standardDeviation
-                            ?: 0.0) + (b[def.center]?.standardDeviation ?: 0.0)
+                        value = (left[def.center]?.value ?: 0.0) + (right[def.center]?.value ?: 0.0),
+                        standardDeviation = (left[def.center]?.standardDeviation
+                            ?: 0.0) + (right[def.center]?.standardDeviation ?: 0.0)
                     )
                 )
             }

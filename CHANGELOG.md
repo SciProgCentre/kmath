@@ -42,6 +42,9 @@
 - Use `Symbol` factory function instead of `StringSymbol`
 - New discoverability pattern: `<Type>.algebra.<nd/etc>`
 - Adjusted commons-math API for linear solvers to match conventions.
+- Buffer algebra does not require size anymore
+- Operations -> Ops
+- Default Buffer and ND algebras are now Ops and lack neutral elements (0, 1) as well as algebra-level shapes.
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`
