@@ -52,7 +52,7 @@ private val PI_DIV_2 = Complex(PI / 2, 0)
 public object ComplexField :
     ExtendedField<Complex>,
     Norm<Complex, Complex>,
-    NumbersAddOperations<Complex>,
+    NumbersAddOps<Complex>,
     ScaleOperations<Complex> {
 
     override val zero: Complex = 0.0.toComplex()
@@ -215,7 +215,6 @@ public data class Complex(val re: Double, val im: Double) {
 }
 
 public val Complex.Companion.algebra: ComplexField get() = ComplexField
-
 
 /**
  * Creates a complex number with real part equal to this real.

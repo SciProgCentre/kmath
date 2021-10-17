@@ -9,7 +9,7 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.NumbersAddOps
 
 /**
  * A field over commons-math [DerivativeStructure].
@@ -22,7 +22,7 @@ public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
-    NumbersAddOperations<DerivativeStructure> {
+    NumbersAddOps<DerivativeStructure> {
     public val numberOfVariables: Int = bindings.size
 
     override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }

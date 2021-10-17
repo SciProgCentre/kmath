@@ -44,7 +44,7 @@ public val Quaternion.r: Double
  */
 @OptIn(UnstableKMathAPI::class)
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
-    ExponentialOperations<Quaternion>, NumbersAddOperations<Quaternion>, ScaleOperations<Quaternion> {
+    ExponentialOperations<Quaternion>, NumbersAddOps<Quaternion>, ScaleOperations<Quaternion> {
     override val zero: Quaternion = 0.toQuaternion()
     override val one: Quaternion = 1.toQuaternion()
 

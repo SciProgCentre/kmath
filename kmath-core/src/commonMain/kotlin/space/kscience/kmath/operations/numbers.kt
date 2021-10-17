@@ -10,8 +10,8 @@ import kotlin.math.pow as kpow
 /**
  * Advanced Number-like semifield that implements basic operations.
  */
-public interface ExtendedFieldOperations<T> :
-    FieldOperations<T>,
+public interface ExtendedFieldOps<T> :
+    FieldOps<T>,
     TrigonometricOperations<T>,
     PowerOperations<T>,
     ExponentialOperations<T>,
@@ -35,14 +35,14 @@ public interface ExtendedFieldOperations<T> :
         ExponentialOperations.ACOSH_OPERATION -> ::acosh
         ExponentialOperations.ASINH_OPERATION -> ::asinh
         ExponentialOperations.ATANH_OPERATION -> ::atanh
-        else -> super<FieldOperations>.unaryOperationFunction(operation)
+        else -> super<FieldOps>.unaryOperationFunction(operation)
     }
 }
 
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOperations<T>, Field<T>, NumericAlgebra<T>{
+public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebra<T>{
     override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
     override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
     override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))

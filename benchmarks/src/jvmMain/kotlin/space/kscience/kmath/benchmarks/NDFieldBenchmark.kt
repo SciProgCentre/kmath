@@ -9,9 +9,10 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
+import space.kscience.kmath.nd.BufferedFieldOpsND
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.autoNdAlgebra
 import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.one
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
@@ -23,21 +24,21 @@ import space.kscience.kmath.tensors.core.tensorAlgebra
 internal class NDFieldBenchmark {
     @Benchmark
     fun autoFieldAdd(blackhole: Blackhole) = with(autoField) {
-        var res: StructureND<Double> = one
-        repeat(n) { res += one }
+        var res: StructureND<Double> = one(shape)
+        repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
-        var res: StructureND<Double> = one
+        var res: StructureND<Double> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun boxingFieldAdd(blackhole: Blackhole) = with(genericField) {
-        var res: StructureND<Double> = one
+        var res: StructureND<Double> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
@@ -56,19 +57,20 @@ internal class NDFieldBenchmark {
         blackhole.consume(res)
     }
 
-//    @Benchmark
-//    fun nd4jAdd(blackhole: Blackhole) = with(nd4jField) {
-//        var res: StructureND<Double> = one
-//        repeat(n) { res += 1.0 }
-//        blackhole.consume(res)
-//    }
+    @Benchmark
+    fun nd4jAdd(blackhole: Blackhole) = with(nd4jField) {
+        var res: StructureND<Double> = one(dim, dim)
+        repeat(n) { res += 1.0 }
+        blackhole.consume(res)
+    }
 
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val autoField = DoubleField.autoNdAlgebra(dim, dim)
-        private val specializedField = DoubleField.ndAlgebra(dim, dim)
-        private val genericField = DoubleField.ndAlgebra(Buffer.Companion::boxing, dim, dim)
-        private val nd4jField = DoubleField.nd4j(dim, dim)
+        private val shape = intArrayOf(dim, dim)
+        private val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
+        private val specializedField = DoubleField.ndAlgebra
+        private val genericField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
+        private val nd4jField = DoubleField.nd4j
     }
 }

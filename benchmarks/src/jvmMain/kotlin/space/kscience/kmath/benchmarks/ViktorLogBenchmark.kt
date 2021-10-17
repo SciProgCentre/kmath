@@ -10,18 +10,21 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.nd.autoNdAlgebra
+import space.kscience.kmath.nd.BufferedFieldOpsND
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.viktor.ViktorFieldND
 
 @State(Scope.Benchmark)
 internal class ViktorLogBenchmark {
     @Benchmark
     fun realFieldLog(blackhole: Blackhole) {
-        with(realNdField) {
-            val fortyTwo = produce { 42.0 }
-            var res = one
+        with(realField) {
+            val fortyTwo = produce(shape) { 42.0 }
+            var res = one(shape)
             repeat(n) { res = ln(fortyTwo) }
             blackhole.consume(res)
         }
@@ -30,7 +33,7 @@ internal class ViktorLogBenchmark {
     @Benchmark
     fun viktorFieldLog(blackhole: Blackhole) {
         with(viktorField) {
-            val fortyTwo = produce { 42.0 }
+            val fortyTwo = produce(shape) { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }
             blackhole.consume(res)
@@ -48,10 +51,11 @@ internal class ViktorLogBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
+        private val shape = Shape(dim, dim)
 
         // automatically build context most suited for given type.
-        private val autoField = DoubleField.autoNdAlgebra(dim, dim)
-        private val realNdField = DoubleField.ndAlgebra(dim, dim)
-        private val viktorField = ViktorFieldND(intArrayOf(dim, dim))
+        private val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
+        private val realField = DoubleField.ndAlgebra
+        private val viktorField = ViktorFieldND(dim, dim)
     }
 }

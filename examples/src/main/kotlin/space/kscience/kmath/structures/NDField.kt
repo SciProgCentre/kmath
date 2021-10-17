@@ -14,7 +14,7 @@ import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd4j.Nd4jArrayField
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.viktor.ViktorNDField
+import space.kscience.kmath.viktor.ViktorFieldND
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis
@@ -41,7 +41,7 @@ fun main() {
     // Nd4j specialized field.
     val nd4jField = Nd4jArrayField.real(dim, dim)
     //viktor field
-    val viktorField = ViktorNDField(dim, dim)
+    val viktorField = ViktorFieldND(dim, dim)
     //parallel processing based on Java Streams
     val parallelField = DoubleField.ndStreaming(dim, dim)
 

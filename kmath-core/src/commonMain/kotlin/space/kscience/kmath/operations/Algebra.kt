@@ -117,7 +117,7 @@ public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = r
  *
  * @param T the type of element of this semispace.
  */
-public interface GroupOperations<T> : Algebra<T> {
+public interface GroupOps<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
@@ -162,7 +162,7 @@ public interface GroupOperations<T> : Algebra<T> {
      * @return the difference.
      */
     public operator fun T.minus(b: T): T = add(this, -b)
-
+    // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
         MINUS_OPERATION -> { arg -> -arg }
@@ -193,7 +193,7 @@ public interface GroupOperations<T> : Algebra<T> {
  *
  * @param T the type of element of this semispace.
  */
-public interface Group<T> : GroupOperations<T> {
+public interface Group<T> : GroupOps<T> {
     /**
      * The neutral element of addition.
      */
@@ -206,7 +206,7 @@ public interface Group<T> : GroupOperations<T> {
  *
  * @param T the type of element of this semiring.
  */
-public interface RingOperations<T> : GroupOperations<T> {
+public interface RingOps<T> : GroupOps<T> {
     /**
      * Multiplies two elements.
      *
@@ -242,7 +242,7 @@ public interface RingOperations<T> : GroupOperations<T> {
  *
  * @param T the type of element of this ring.
  */
-public interface Ring<T> : Group<T>, RingOperations<T> {
+public interface Ring<T> : Group<T>, RingOps<T> {
     /**
      * The neutral element of multiplication
      */
@@ -256,7 +256,7 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
  *
  * @param T the type of element of this semifield.
  */
-public interface FieldOperations<T> : RingOperations<T> {
+public interface FieldOps<T> : RingOps<T> {
     /**
      * Division of two elements.
      *
@@ -295,6 +295,6 @@ public interface FieldOperations<T> : RingOperations<T> {
  *
  * @param T the type of element of this field.
  */
-public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
+public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlgebra<T> {
     override fun number(value: Number): T = scale(one, value.toDouble())
 }

@@ -108,8 +108,8 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double>(f64, DoubleF
     override fun visitNumeric(mst: Numeric): ExpressionRef = ctx.f64.const(mst.value)
 
     override fun visitUnary(mst: Unary): ExpressionRef = when (mst.operation) {
-        GroupOperations.MINUS_OPERATION -> ctx.f64.neg(visit(mst.value))
-        GroupOperations.PLUS_OPERATION -> visit(mst.value)
+        GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(mst.value))
+        GroupOps.PLUS_OPERATION -> visit(mst.value)
         PowerOperations.SQRT_OPERATION -> ctx.f64.sqrt(visit(mst.value))
         TrigonometricOperations.SIN_OPERATION -> ctx.call("sin", arrayOf(visit(mst.value)), f64)
         TrigonometricOperations.COS_OPERATION -> ctx.call("cos", arrayOf(visit(mst.value)), f64)
@@ -129,10 +129,10 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double>(f64, DoubleF
     }
 
     override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {
-        GroupOperations.PLUS_OPERATION -> ctx.f64.add(visit(mst.left), visit(mst.right))
-        GroupOperations.MINUS_OPERATION -> ctx.f64.sub(visit(mst.left), visit(mst.right))
-        RingOperations.TIMES_OPERATION -> ctx.f64.mul(visit(mst.left), visit(mst.right))
-        FieldOperations.DIV_OPERATION -> ctx.f64.div(visit(mst.left), visit(mst.right))
+        GroupOps.PLUS_OPERATION -> ctx.f64.add(visit(mst.left), visit(mst.right))
+        GroupOps.MINUS_OPERATION -> ctx.f64.sub(visit(mst.left), visit(mst.right))
+        RingOps.TIMES_OPERATION -> ctx.f64.mul(visit(mst.left), visit(mst.right))
+        FieldOps.DIV_OPERATION -> ctx.f64.div(visit(mst.left), visit(mst.right))
         PowerOperations.POW_OPERATION -> ctx.call("pow", arrayOf(visit(mst.left), visit(mst.right)), f64)
         else -> super.visitBinary(mst)
     }
@@ -142,15 +142,15 @@ internal class IntWasmBuilder(target: MST) : WasmBuilder<Int>(i32, IntRing, targ
     override fun visitNumeric(mst: Numeric): ExpressionRef = ctx.i32.const(mst.value)
 
     override fun visitUnary(mst: Unary): ExpressionRef = when (mst.operation) {
-        GroupOperations.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(mst.value))
-        GroupOperations.PLUS_OPERATION -> visit(mst.value)
+        GroupOps.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(mst.value))
+        GroupOps.PLUS_OPERATION -> visit(mst.value)
         else -> super.visitUnary(mst)
     }
 
     override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {
-        GroupOperations.PLUS_OPERATION -> ctx.i32.add(visit(mst.left), visit(mst.right))
-        GroupOperations.MINUS_OPERATION -> ctx.i32.sub(visit(mst.left), visit(mst.right))
-        RingOperations.TIMES_OPERATION -> ctx.i32.mul(visit(mst.left), visit(mst.right))
+        GroupOps.PLUS_OPERATION -> ctx.i32.add(visit(mst.left), visit(mst.right))
+        GroupOps.MINUS_OPERATION -> ctx.i32.sub(visit(mst.left), visit(mst.right))
+        RingOps.TIMES_OPERATION -> ctx.i32.mul(visit(mst.left), visit(mst.right))
         else -> super.visitBinary(mst)
     }
 }

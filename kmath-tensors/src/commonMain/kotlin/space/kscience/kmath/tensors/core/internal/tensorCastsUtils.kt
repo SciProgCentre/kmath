@@ -26,8 +26,11 @@ internal fun <T> Tensor<T>.copyToBufferedTensor(): BufferedTensor<T> =
 
 internal fun <T> Tensor<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
-    is MutableBufferND<T> -> if (this.strides.strides contentEquals TensorLinearStructure(this.shape).strides)
-        BufferedTensor(this.shape, this.mutableBuffer, 0) else this.copyToBufferedTensor()
+    is MutableBufferND<T> -> if (this.indexes == TensorLinearStructure(this.shape)) {
+        BufferedTensor(this.shape, this.mutableBuffer, 0)
+    } else {
+        this.copyToBufferedTensor()
+    }
     else -> this.copyToBufferedTensor()
 }
 

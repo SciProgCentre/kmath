@@ -39,7 +39,7 @@ public val PrintNumeric: RenderFeature = RenderFeature { _, node ->
 @UnstableKMathAPI
 private fun printSignedNumberString(s: String): MathSyntax = if (s.startsWith('-'))
     UnaryMinusSyntax(
-        operation = GroupOperations.MINUS_OPERATION,
+        operation = GroupOps.MINUS_OPERATION,
         operand = OperandSyntax(
             operand = NumberSyntax(string = s.removePrefix("-")),
             parentheses = true,
@@ -72,7 +72,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
             val exponent = afterE.toDouble().toString().removeSuffix(".0")
 
             return MultiplicationSyntax(
-                operation = RingOperations.TIMES_OPERATION,
+                operation = RingOps.TIMES_OPERATION,
                 left = OperandSyntax(operand = NumberSyntax(significand), parentheses = true),
                 right = OperandSyntax(
                     operand = SuperscriptSyntax(
@@ -91,7 +91,7 @@ public class PrettyPrintFloats(public val types: Set<KClass<out Number>>) : Rend
 
             if (toString.startsWith('-'))
                 return UnaryMinusSyntax(
-                    operation = GroupOperations.MINUS_OPERATION,
+                    operation = GroupOps.MINUS_OPERATION,
                     operand = OperandSyntax(operand = infty, parentheses = true),
                 )
 
@@ -211,9 +211,9 @@ public class BinaryPlus(operations: Collection<String>?) : Binary(operations) {
 
     public companion object {
         /**
-         * The default instance configured with [GroupOperations.PLUS_OPERATION].
+         * The default instance configured with [GroupOps.PLUS_OPERATION].
          */
-        public val Default: BinaryPlus = BinaryPlus(setOf(GroupOperations.PLUS_OPERATION))
+        public val Default: BinaryPlus = BinaryPlus(setOf(GroupOps.PLUS_OPERATION))
     }
 }
 
@@ -233,9 +233,9 @@ public class BinaryMinus(operations: Collection<String>?) : Binary(operations) {
 
     public companion object {
         /**
-         * The default instance configured with [GroupOperations.MINUS_OPERATION].
+         * The default instance configured with [GroupOps.MINUS_OPERATION].
          */
-        public val Default: BinaryMinus = BinaryMinus(setOf(GroupOperations.MINUS_OPERATION))
+        public val Default: BinaryMinus = BinaryMinus(setOf(GroupOps.MINUS_OPERATION))
     }
 }
 
@@ -253,9 +253,9 @@ public class UnaryPlus(operations: Collection<String>?) : Unary(operations) {
 
     public companion object {
         /**
-         * The default instance configured with [GroupOperations.PLUS_OPERATION].
+         * The default instance configured with [GroupOps.PLUS_OPERATION].
          */
-        public val Default: UnaryPlus = UnaryPlus(setOf(GroupOperations.PLUS_OPERATION))
+        public val Default: UnaryPlus = UnaryPlus(setOf(GroupOps.PLUS_OPERATION))
     }
 }
 
@@ -273,9 +273,9 @@ public class UnaryMinus(operations: Collection<String>?) : Unary(operations) {
 
     public companion object {
         /**
-         * The default instance configured with [GroupOperations.MINUS_OPERATION].
+         * The default instance configured with [GroupOps.MINUS_OPERATION].
          */
-        public val Default: UnaryMinus = UnaryMinus(setOf(GroupOperations.MINUS_OPERATION))
+        public val Default: UnaryMinus = UnaryMinus(setOf(GroupOps.MINUS_OPERATION))
     }
 }
 
@@ -295,9 +295,9 @@ public class Fraction(operations: Collection<String>?) : Binary(operations) {
 
     public companion object {
         /**
-         * The default instance configured with [FieldOperations.DIV_OPERATION].
+         * The default instance configured with [FieldOps.DIV_OPERATION].
          */
-        public val Default: Fraction = Fraction(setOf(FieldOperations.DIV_OPERATION))
+        public val Default: Fraction = Fraction(setOf(FieldOps.DIV_OPERATION))
     }
 }
 
@@ -422,9 +422,9 @@ public class Multiplication(operations: Collection<String>?) : Binary(operations
 
     public companion object {
         /**
-         * The default instance configured with [RingOperations.TIMES_OPERATION].
+         * The default instance configured with [RingOps.TIMES_OPERATION].
          */
-        public val Default: Multiplication = Multiplication(setOf(RingOperations.TIMES_OPERATION))
+        public val Default: Multiplication = Multiplication(setOf(RingOps.TIMES_OPERATION))
     }
 }
 

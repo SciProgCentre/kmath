@@ -8,7 +8,7 @@ package space.kscience.kmath.structures
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.NumbersAddOps
 import java.util.*
 import java.util.stream.IntStream
 
@@ -17,11 +17,11 @@ import java.util.stream.IntStream
  * execution.
  */
 class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, DoubleField>,
-    NumbersAddOperations<StructureND<Double>>,
+    NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
     private val strides = DefaultStrides(shape)
-    override val elementContext: DoubleField get() = DoubleField
+    override val elementAlgebra: DoubleField get() = DoubleField
     override val zero: BufferND<Double> by lazy { produce { zero } }
     override val one: BufferND<Double> by lazy { produce { one } }
 
@@ -36,7 +36,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
                 this@StreamDoubleFieldND.shape,
                 shape
             )
-            this is BufferND && this.strides == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
+            this is BufferND && this.indexes == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
@@ -69,7 +69,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
-    override fun combine(
+    override fun zip(
         a: StructureND<Double>,
         b: StructureND<Double>,
         transform: DoubleField.(Double, Double) -> Double,

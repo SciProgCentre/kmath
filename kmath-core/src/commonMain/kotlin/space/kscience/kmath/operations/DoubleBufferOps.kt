@@ -12,9 +12,9 @@ import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.math.*
 
 /**
- * [ExtendedFieldOperations] over [DoubleBuffer].
+ * [ExtendedFieldOps] over [DoubleBuffer].
  */
-public abstract class DoubleBufferOperations : ExtendedFieldOperations<Buffer<Double>>, Norm<Buffer<Double>, Double> {
+public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<Buffer<Double>, Double> {
     override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
         DoubleBuffer(size) { -array[it] }
     } else {
@@ -185,7 +185,7 @@ public abstract class DoubleBufferOperations : ExtendedFieldOperations<Buffer<Do
         DoubleBuffer(DoubleArray(a.size) { aArray[it] * value })
     } else DoubleBuffer(DoubleArray(a.size) { a[it] * value })
 
-    public companion object : DoubleBufferOperations()
+    public companion object : DoubleBufferOps()
 }
 
 public object DoubleL2Norm : Norm<Point<Double>, Double> {

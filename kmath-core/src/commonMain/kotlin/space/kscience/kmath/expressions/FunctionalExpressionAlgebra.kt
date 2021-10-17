@@ -52,13 +52,13 @@ public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     override val zero: Expression<T> get() = const(algebra.zero)
 
     override fun Expression<T>.unaryMinus(): Expression<T> =
-        unaryOperation(GroupOperations.MINUS_OPERATION, this)
+        unaryOperation(GroupOps.MINUS_OPERATION, this)
 
     /**
      * Builds an Expression of addition of two another expressions.
      */
     override fun add(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperation(GroupOperations.PLUS_OPERATION, a, b)
+        binaryOperation(GroupOps.PLUS_OPERATION, a, b)
 
 //    /**
 //     * Builds an Expression of multiplication of expression by number.
@@ -89,7 +89,7 @@ public open class FunctionalExpressionRing<T, out A : Ring<T>>(
      * Builds an Expression of multiplication of two expressions.
      */
     override fun multiply(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperationFunction(RingOperations.TIMES_OPERATION)(a, b)
+        binaryOperationFunction(RingOps.TIMES_OPERATION)(a, b)
 
     public operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
     public operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
@@ -108,7 +108,7 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
      * Builds an Expression of division an expression by another one.
      */
     override fun divide(a: Expression<T>, b: Expression<T>): Expression<T> =
-        binaryOperationFunction(FieldOperations.DIV_OPERATION)(a, b)
+        binaryOperationFunction(FieldOps.DIV_OPERATION)(a, b)
 
     public operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
     public operator fun T.div(arg: Expression<T>): Expression<T> = arg / this
