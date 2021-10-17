@@ -203,7 +203,9 @@ public interface RingND<T, out A : Ring<T>> : Ring<StructureND<T>>, RingOpsND<T,
  * @param T the type of the element contained in ND structure.
  * @param A the type field over structure elements.
  */
-public interface FieldOpsND<T, out A : Field<T>> : FieldOps<StructureND<T>>, RingOpsND<T, A>,
+public interface FieldOpsND<T, out A : Field<T>> :
+    FieldOps<StructureND<T>>,
+    RingOpsND<T, A>,
     ScaleOperations<StructureND<T>> {
     /**
      * Element-wise division.
