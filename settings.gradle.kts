@@ -32,6 +32,7 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
+    ":kmath-multik",
     ":kmath-optimization",
     ":kmath-stat",
     ":kmath-nd4j",

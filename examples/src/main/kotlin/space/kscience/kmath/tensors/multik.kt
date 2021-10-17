@@ -7,6 +7,7 @@ package space.kscience.kmath.tensors
 
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.linalg.dot
+import org.jetbrains.kotlinx.multik.api.math.exp
 import org.jetbrains.kotlinx.multik.api.ndarray
 import org.jetbrains.kotlinx.multik.ndarray.operations.minus
 import org.jetbrains.kotlinx.multik.ndarray.operations.plus
@@ -18,4 +19,6 @@ fun main() {
     2 + (-a) - 2
 
     a dot a
+
+    a.exp()
 }
