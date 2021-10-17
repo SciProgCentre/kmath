@@ -139,10 +139,10 @@ public interface ScaleOperations<T> : Algebra<T> {
      * Multiplication of this number by element.
      *
      * @receiver the multiplier.
-     * @param b the multiplicand.
+     * @param other the multiplicand.
      * @return the product.
      */
-    public operator fun Number.times(b: T): T = b * this
+    public operator fun Number.times(other: T): T = other * this
 }
 
 /**
@@ -155,33 +155,33 @@ public interface NumbersAddOps<T> : RingOps<T>, NumericAlgebra<T> {
      * Addition of element and scalar.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param other the addend.
      */
-    public operator fun T.plus(b: Number): T = this + number(b)
+    public operator fun T.plus(other: Number): T = this + number(other)
 
     /**
      * Addition of scalar and element.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param other the addend.
      */
-    public operator fun Number.plus(b: T): T = b + this
+    public operator fun Number.plus(other: T): T = other + this
 
     /**
      * Subtraction of element from number.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param other the subtrahend.
      * @receiver the difference.
      */
-    public operator fun T.minus(b: Number): T = this - number(b)
+    public operator fun T.minus(other: Number): T = this - number(other)
 
     /**
      * Subtraction of number from element.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param other the subtrahend.
      * @receiver the difference.
      */
-    public operator fun Number.minus(b: T): T = -b + this
+    public operator fun Number.minus(other: T): T = -other + this
 }
