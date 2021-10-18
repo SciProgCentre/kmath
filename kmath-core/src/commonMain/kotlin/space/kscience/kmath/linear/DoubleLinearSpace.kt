@@ -23,7 +23,7 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
         rows: Int,
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double
-    ): Matrix<Double> = DoubleFieldOpsND.produce(intArrayOf(rows, columns)) { (i, j) ->
+    ): Matrix<Double> = DoubleFieldOpsND.structureND(intArrayOf(rows, columns)) { (i, j) ->
         DoubleField.initializer(i, j)
     }.as2D()
 

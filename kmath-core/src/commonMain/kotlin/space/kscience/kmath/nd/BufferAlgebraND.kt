@@ -16,7 +16,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val bufferAlgebra: BufferAlgebra<T, A>
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
-    override fun produce(shape: Shape, initializer: A.(IntArray) -> T): BufferND<T> {
+    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): BufferND<T> {
         val indexer = indexerBuilder(shape)
         return BufferND(
             indexer,
@@ -109,14 +109,14 @@ public val <T, A : Ring<T>> BufferAlgebra<T, A>.nd: BufferedRingOpsND<T, A> get(
 public val <T, A : Field<T>> BufferAlgebra<T, A>.nd: BufferedFieldOpsND<T, A> get() = BufferedFieldOpsND(this)
 
 
-public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.produce(
+public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.structureND(
     vararg shape: Int,
     initializer: A.(IntArray) -> T
-): BufferND<T> = produce(shape, initializer)
+): BufferND<T> = structureND(shape, initializer)
 
-public fun <T, EA : Algebra<T>, A> A.produce(
+public fun <T, EA : Algebra<T>, A> A.structureND(
     initializer: EA.(IntArray) -> T
-): BufferND<T> where A : BufferAlgebraND<T, EA>, A : WithShape = produce(shape, initializer)
+): BufferND<T> where A : BufferAlgebraND<T, EA>, A : WithShape = structureND(shape, initializer)
 
 //// group factories
 //public fun <T, A : Group<T>> A.ndAlgebra(

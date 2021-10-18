@@ -23,7 +23,7 @@ internal class ViktorLogBenchmark {
     @Benchmark
     fun realFieldLog(blackhole: Blackhole) {
         with(realField) {
-            val fortyTwo = produce(shape) { 42.0 }
+            val fortyTwo = structureND(shape) { 42.0 }
             var res = one(shape)
             repeat(n) { res = ln(fortyTwo) }
             blackhole.consume(res)
@@ -33,7 +33,7 @@ internal class ViktorLogBenchmark {
     @Benchmark
     fun viktorFieldLog(blackhole: Blackhole) {
         with(viktorField) {
-            val fortyTwo = produce(shape) { 42.0 }
+            val fortyTwo = structureND(shape) { 42.0 }
             var res = one
             repeat(n) { res = ln(fortyTwo) }
             blackhole.consume(res)

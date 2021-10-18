@@ -39,9 +39,9 @@ public interface AlgebraND<T, out C : Algebra<T>> {
     public val elementAlgebra: C
 
     /**
-     * Produces a new NDStructure using given initializer function.
+     * Produces a new [StructureND] using given initializer function.
      */
-    public fun produce(shape: Shape, initializer: C.(IntArray) -> T): StructureND<T>
+    public fun structureND(shape: Shape, initializer: C.(IntArray) -> T): StructureND<T>
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.
@@ -149,7 +149,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
 }
 
 public interface GroupND<T, out A : Group<T>> : Group<StructureND<T>>, GroupOpsND<T, A>, WithShape {
-    override val zero: StructureND<T> get() = produce(shape) { elementAlgebra.zero }
+    override val zero: StructureND<T> get() = structureND(shape) { elementAlgebra.zero }
 }
 
 /**
@@ -193,7 +193,7 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
 }
 
 public interface RingND<T, out A : Ring<T>> : Ring<StructureND<T>>, RingOpsND<T, A>, GroupND<T, A>, WithShape {
-    override val one: StructureND<T> get() = produce(shape) { elementAlgebra.one }
+    override val one: StructureND<T> get() = structureND(shape) { elementAlgebra.one }
 }
 
 
@@ -240,5 +240,5 @@ public interface FieldOpsND<T, out A : Field<T>> :
 }
 
 public interface FieldND<T, out A : Field<T>> : Field<StructureND<T>>, FieldOpsND<T, A>, RingND<T, A>, WithShape {
-    override val one: StructureND<T> get() = produce(shape) { elementAlgebra.one }
+    override val one: StructureND<T> get() = structureND(shape) { elementAlgebra.one }
 }

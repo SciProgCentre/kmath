@@ -9,7 +9,12 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
+import org.jetbrains.kotlinx.multik.api.Multik
+import org.jetbrains.kotlinx.multik.api.ones
+import org.jetbrains.kotlinx.multik.ndarray.data.DN
+import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.multik.multikND
+import space.kscience.kmath.multik.multikTensorAlgebra
 import space.kscience.kmath.nd.BufferedFieldOpsND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
@@ -69,6 +74,13 @@ internal class NDFieldBenchmark {
     @Benchmark
     fun tensorInPlaceAdd(blackhole: Blackhole) = with(Double.tensorAlgebra) {
         val res: DoubleTensor = one(shape)
+        repeat(n) { res += 1.0 }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
+    fun multikInPlaceAdd(blackhole: Blackhole) = with(DoubleField.multikTensorAlgebra) {
+        val res = Multik.ones<Double, DN>(shape, DataType.DoubleDataType).wrap()
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }

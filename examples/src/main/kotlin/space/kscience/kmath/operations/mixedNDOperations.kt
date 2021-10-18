@@ -10,7 +10,7 @@ import space.kscience.kmath.viktor.ViktorStructureND
 import space.kscience.kmath.viktor.viktorAlgebra
 
 fun main() {
-    val viktorStructure: ViktorStructureND = DoubleField.viktorAlgebra.produce(Shape(2, 2)) { (i, j) ->
+    val viktorStructure: ViktorStructureND = DoubleField.viktorAlgebra.structureND(Shape(2, 2)) { (i, j) ->
         if (i == j) 2.0 else 0.0
     }
 

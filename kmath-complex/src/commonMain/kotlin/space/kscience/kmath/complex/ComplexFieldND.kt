@@ -67,7 +67,7 @@ public class ComplexFieldND(override val shape: Shape) :
 
     override fun number(value: Number): BufferND<Complex> {
         val d = value.toDouble() // minimize conversions
-        return produce(shape) { d.toComplex() }
+        return structureND(shape) { d.toComplex() }
     }
 }
 

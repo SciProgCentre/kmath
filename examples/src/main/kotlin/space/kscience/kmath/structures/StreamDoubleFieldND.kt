@@ -22,12 +22,12 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
 
     private val strides = DefaultStrides(shape)
     override val elementAlgebra: DoubleField get() = DoubleField
-    override val zero: BufferND<Double> by lazy { produce(shape) { zero } }
-    override val one: BufferND<Double> by lazy { produce(shape) { one } }
+    override val zero: BufferND<Double> by lazy { structureND(shape) { zero } }
+    override val one: BufferND<Double> by lazy { structureND(shape) { one } }
 
     override fun number(value: Number): BufferND<Double> {
         val d = value.toDouble() // minimize conversions
-        return produce(shape) { d }
+        return structureND(shape) { d }
     }
 
     private val StructureND<Double>.buffer: DoubleBuffer
@@ -40,7 +40,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun produce(shape: Shape, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)

@@ -60,7 +60,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         transform: DoubleField.(Double, Double) -> Double
     ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> DoubleField.transform(l, r) }
 
-    override fun produce(shape: Shape, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
+    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
         val indexer = indexerBuilder(shape)
         return DoubleBufferND(
             indexer,
@@ -174,7 +174,7 @@ public class DoubleFieldND(override val shape: Shape) :
 
     override fun number(value: Number): DoubleBufferND {
         val d = value.toDouble() // minimize conversions
-        return produce(shape) { d }
+        return structureND(shape) { d }
     }
 }
 

@@ -11,7 +11,7 @@ import space.kscience.kmath.complex.bufferAlgebra
 import space.kscience.kmath.complex.ndAlgebra
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.produce
+import space.kscience.kmath.nd.structureND
 
 fun main() = Complex.algebra {
     val complex = 2 + 2 * i
@@ -24,14 +24,14 @@ fun main() = Complex.algebra {
     println(buffer)
 
     // 2d element
-    val element: BufferND<Complex> = ndAlgebra.produce(2, 2) { (i, j) ->
+    val element: BufferND<Complex> = ndAlgebra.structureND(2, 2) { (i, j) ->
         Complex(i - j, i + j)
     }
     println(element)
 
     // 1d element operation
     val result: StructureND<Complex> = ndAlgebra{
-        val a = produce(8) { (it) -> i * it - it.toDouble() }
+        val a = structureND(8) { (it) -> i * it - it.toDouble() }
         val b = 3
         val c = Complex(1.0, 1.0)
 

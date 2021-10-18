@@ -12,7 +12,7 @@ import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.ndAlgebra
-import space.kscience.kmath.nd.produce
+import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis
@@ -55,7 +55,7 @@ fun complexExample() {
             val x = one * 2.5
             operator fun Number.plus(other: Complex) = Complex(this.toDouble() + other.re, other.im)
             //a structure generator specific to this context
-            val matrix = produce { (k, l) -> k + l * i }
+            val matrix = structureND { (k, l) -> k + l * i }
             //Perform sum
             val sum = matrix + x + 1.0
 

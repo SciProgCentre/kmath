@@ -22,7 +22,7 @@ import kotlin.math.*
 public open class DoubleTensorAlgebra :
     TensorPartialDivisionAlgebra<Double>,
     AnalyticTensorAlgebra<Double>,
-    LinearOpsTensorAlgebra<Double> {
+    LinearOpsTensorAlgebra<Double>{
 
     public companion object : DoubleTensorAlgebra()
 

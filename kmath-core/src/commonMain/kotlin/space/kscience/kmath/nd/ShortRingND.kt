@@ -23,7 +23,7 @@ public class ShortRingND(
 
     override fun number(value: Number): BufferND<Short> {
         val d = value.toShort() // minimize conversions
-        return produce(shape) { d }
+        return structureND(shape) { d }
     }
 }
 

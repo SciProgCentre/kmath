@@ -32,7 +32,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
      */
     public val StructureND<T>.ndArray: INDArray
 
-    override fun produce(shape: Shape, initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
+    override fun structureND(shape: Shape, initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
         val struct = Nd4j.create(*shape)!!.wrap()
         struct.indicesIterator().forEach { struct[it] = elementAlgebra.initializer(it) }
         return struct

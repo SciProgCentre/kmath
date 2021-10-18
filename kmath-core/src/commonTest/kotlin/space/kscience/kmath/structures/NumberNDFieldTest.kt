@@ -20,8 +20,8 @@ import kotlin.test.assertEquals
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
     val algebra = DoubleField.ndAlgebra
-    val array1 = algebra.produce(3, 3) { (i, j) -> (i + j).toDouble() }
-    val array2 = algebra.produce(3, 3) { (i, j) -> (i - j).toDouble() }
+    val array1 = algebra.structureND(3, 3) { (i, j) -> (i + j).toDouble() }
+    val array2 = algebra.structureND(3, 3) { (i, j) -> (i - j).toDouble() }
 
     @Test
     fun testSum() {

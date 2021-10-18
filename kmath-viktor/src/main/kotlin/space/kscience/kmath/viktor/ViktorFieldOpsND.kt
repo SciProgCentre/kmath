@@ -21,12 +21,12 @@ public open class ViktorFieldOpsND :
     public val StructureND<Double>.f64Buffer: F64Array
         get() = when (this) {
             is ViktorStructureND -> this.f64Buffer
-            else -> produce(shape) { this@f64Buffer[it] }.f64Buffer
+            else -> structureND(shape) { this@f64Buffer[it] }.f64Buffer
         }
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
-    override fun produce(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
+    override fun structureND(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
             DefaultStrides(shape).indices().forEach { index ->
                 set(value = DoubleField.initializer(index), indices = index)

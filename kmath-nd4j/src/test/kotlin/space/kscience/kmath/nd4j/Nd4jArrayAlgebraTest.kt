@@ -9,7 +9,7 @@ import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one
-import space.kscience.kmath.nd.produce
+import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.operations.invoke
@@ -23,7 +23,7 @@ import kotlin.test.fail
 internal class Nd4jArrayAlgebraTest {
     @Test
     fun testProduce() {
-        val res = DoubleField.nd4j.produce(2, 2) { it.sum().toDouble() }
+        val res = DoubleField.nd4j.structureND(2, 2) { it.sum().toDouble() }
         val expected = (Nd4j.create(2, 2) ?: fail()).asDoubleStructure()
         expected[intArrayOf(0, 0)] = 0.0
         expected[intArrayOf(0, 1)] = 1.0
@@ -58,9 +58,9 @@ internal class Nd4jArrayAlgebraTest {
 
     @Test
     fun testSin() = DoubleField.nd4j{
-        val initial = produce(2, 2) { (i, j) -> if (i == j) PI / 2 else 0.0 }
+        val initial = structureND(2, 2) { (i, j) -> if (i == j) PI / 2 else 0.0 }
         val transformed = sin(initial)
-        val expected = produce(2, 2) { (i, j) -> if (i == j) 1.0 else 0.0 }
+        val expected = structureND(2, 2) { (i, j) -> if (i == j) 1.0 else 0.0 }
 
         println(transformed)
         assertTrue { StructureND.contentEquals(transformed, expected) }

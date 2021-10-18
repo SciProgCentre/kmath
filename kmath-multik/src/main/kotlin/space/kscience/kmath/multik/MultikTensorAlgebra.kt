@@ -11,7 +11,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.mapInPlace
-import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
 
@@ -31,7 +31,7 @@ public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) :
 }
 
 
-public abstract class MultikTensorAlgebra<T>(
+public class MultikTensorAlgebra<T> internal constructor(
     public val type: DataType,
     public val elementAlgebra: Ring<T>,
     public val comparator: Comparator<T>
@@ -41,7 +41,7 @@ public abstract class MultikTensorAlgebra<T>(
      * Convert a tensor to [MultikTensor] if necessary. If tensor is converted, changes on the resulting tensor
      * are not reflected back onto the source
      */
-    private fun Tensor<T>.asMultik(): MultikTensor<T> {
+    public fun Tensor<T>.asMultik(): MultikTensor<T> {
         return if (this is MultikTensor) {
             this
         } else {
@@ -53,7 +53,7 @@ public abstract class MultikTensorAlgebra<T>(
         }
     }
 
-    private fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
+    public fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
 
     override fun Tensor<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1)) {
         get(intArrayOf(0))
@@ -197,3 +197,18 @@ public abstract class MultikTensorAlgebra<T>(
         TODO("Not yet implemented")
     }
 }
+
+public val DoubleField.multikTensorAlgebra: MultikTensorAlgebra<Double>
+    get() = MultikTensorAlgebra(DataType.DoubleDataType, DoubleField) { o1, o2 -> o1.compareTo(o2) }
+
+public val FloatField.multikTensorAlgebra: MultikTensorAlgebra<Float>
+    get() = MultikTensorAlgebra(DataType.FloatDataType, FloatField) { o1, o2 -> o1.compareTo(o2) }
+
+public val ShortRing.multikTensorAlgebra: MultikTensorAlgebra<Short>
+    get() = MultikTensorAlgebra(DataType.ShortDataType, ShortRing) { o1, o2 -> o1.compareTo(o2) }
+
+public val IntRing.multikTensorAlgebra: MultikTensorAlgebra<Int>
+    get() = MultikTensorAlgebra(DataType.IntDataType, IntRing) { o1, o2 -> o1.compareTo(o2) }
+
+public val LongRing.multikTensorAlgebra: MultikTensorAlgebra<Long>
+    get() = MultikTensorAlgebra(DataType.LongDataType, LongRing) { o1, o2 -> o1.compareTo(o2) }

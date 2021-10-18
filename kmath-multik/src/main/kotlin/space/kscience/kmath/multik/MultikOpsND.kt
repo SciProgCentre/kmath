@@ -18,9 +18,9 @@ public open class MultikRingOpsND<T, A : Ring<T>> internal constructor(
     override val elementAlgebra: A
 ) : RingOpsND<T, A> {
 
-    protected fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
+    public fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
 
-    override fun produce(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
+    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val res = mk.zeros<T, DN>(shape, type).asDNArray()
         for (index in res.multiIndices) {
             res[index] = elementAlgebra.initializer(index)
@@ -28,10 +28,10 @@ public open class MultikRingOpsND<T, A : Ring<T>> internal constructor(
         return res.wrap()
     }
 
-    protected fun StructureND<T>.asMultik(): MultikTensor<T> = if (this is MultikTensor) {
+    public fun StructureND<T>.asMultik(): MultikTensor<T> = if (this is MultikTensor) {
         this
     } else {
-        produce(shape) { get(it) }
+        structureND(shape) { get(it) }
     }
 
     override fun StructureND<T>.map(transform: A.(T) -> T): MultikTensor<T> {

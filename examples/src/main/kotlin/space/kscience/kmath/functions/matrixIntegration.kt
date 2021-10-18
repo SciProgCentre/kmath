@@ -9,7 +9,7 @@ import space.kscience.kmath.integration.gaussIntegrator
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.produce
+import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.nd.withNdAlgebra
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
@@ -18,7 +18,7 @@ fun main(): Unit = Double.algebra {
     withNdAlgebra(2, 2) {
 
         //Produce a diagonal StructureND
-        fun diagonal(v: Double) = produce {  (i, j) ->
+        fun diagonal(v: Double) = structureND { (i, j) ->
             if (i == j) v else 0.0
         }
 
