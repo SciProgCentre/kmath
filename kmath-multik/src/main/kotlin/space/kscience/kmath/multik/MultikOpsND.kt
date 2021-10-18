@@ -1,5 +1,7 @@
 package space.kscience.kmath.multik
 
+import org.jetbrains.kotlinx.multik.api.math.cos
+import org.jetbrains.kotlinx.multik.api.math.sin
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.api.zeros
 import org.jetbrains.kotlinx.multik.ndarray.data.*
@@ -18,7 +20,7 @@ public open class MultikRingOpsND<T, A : Ring<T>> internal constructor(
     override val elementAlgebra: A
 ) : RingOpsND<T, A> {
 
-    public fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
+    public fun MutableMultiArray<T, *>.wrap(): MultikTensor<T> = MultikTensor(this.asDNArray())
 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val res = mk.zeros<T, DN>(shape, type).asDNArray()
