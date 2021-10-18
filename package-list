@@ -52,6 +52,8 @@ module:kmath-kotlingrad
 space.kscience.kmath.kotlingrad
 module:kmath-memory
 space.kscience.kmath.memory
+module:kmath-multik
+space.kscience.kmath.multik
 module:kmath-nd4j
 space.kscience.kmath.nd4j
 module:kmath-optimization
