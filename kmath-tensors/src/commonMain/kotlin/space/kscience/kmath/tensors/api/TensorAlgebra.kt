@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.api
 
-import space.kscience.kmath.operations.Algebra
+import space.kscience.kmath.operations.RingOps
 
 /**
  * Algebra over a ring on [Tensor].
@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.Algebra
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
+public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
     /**
      * Returns a single tensor value of unit dimension if tensor shape equals to [1].
      *
@@ -53,7 +53,7 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      * @param other tensor to be added.
      * @return the sum of this tensor and [other].
      */
-    public operator fun Tensor<T>.plus(other: Tensor<T>): Tensor<T>
+    override fun Tensor<T>.plus(other: Tensor<T>): Tensor<T>
 
     /**
      * Adds the scalar [value] to each element of this tensor.
@@ -93,7 +93,7 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      * @param other tensor to be subtracted.
      * @return the difference between this tensor and [other].
      */
-    public operator fun Tensor<T>.minus(other: Tensor<T>): Tensor<T>
+    override fun Tensor<T>.minus(other: Tensor<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [value] from each element of this tensor.
@@ -134,7 +134,7 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      * @param other tensor to be multiplied.
      * @return the product of this tensor and [other].
      */
-    public operator fun Tensor<T>.times(other: Tensor<T>): Tensor<T>
+    override fun Tensor<T>.times(other: Tensor<T>): Tensor<T>
 
     /**
      * Multiplies the scalar [value] by each element of this tensor.
@@ -155,7 +155,7 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      *
      * @return tensor negation of the original tensor.
      */
-    public operator fun Tensor<T>.unaryMinus(): Tensor<T>
+    override fun Tensor<T>.unaryMinus(): Tensor<T>
 
     /**
      * Returns the tensor at index i
@@ -323,4 +323,8 @@ public interface TensorAlgebra<T> : Algebra<Tensor<T>> {
      * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
      */
     public fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
+
+    override fun add(left: Tensor<T>, right: Tensor<T>): Tensor<T> = left + right
+
+    override fun multiply(left: Tensor<T>, right: Tensor<T>): Tensor<T> = left * right
 }

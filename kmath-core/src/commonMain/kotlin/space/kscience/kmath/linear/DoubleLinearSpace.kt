@@ -6,11 +6,12 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.DoubleFieldND
+import space.kscience.kmath.nd.DoubleFieldOpsND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.asND
-import space.kscience.kmath.operations.DoubleBufferOperations
+import space.kscience.kmath.operations.DoubleBufferOps
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 
@@ -18,30 +19,27 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
-    private fun ndRing(
-        rows: Int,
-        cols: Int,
-    ): DoubleFieldND = DoubleFieldND(intArrayOf(rows, cols))
-
     override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: DoubleField.(i: Int, j: Int) -> Double
-    ): Matrix<Double> = ndRing(rows, columns).produce { (i, j) -> DoubleField.initializer(i, j) }.as2D()
+    ): Matrix<Double> = DoubleFieldOpsND.structureND(intArrayOf(rows, columns)) { (i, j) ->
+        DoubleField.initializer(i, j)
+    }.as2D()
 
     override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): DoubleBuffer =
         DoubleBuffer(size) { DoubleField.initializer(it) }
 
-    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = ndRing(rowNum, colNum).run {
+    override fun Matrix<Double>.unaryMinus(): Matrix<Double> = DoubleFieldOpsND {
         asND().map { -it }.as2D()
     }
 
-    override fun Matrix<Double>.plus(other: Matrix<Double>): Matrix<Double> = ndRing(rowNum, colNum).run {
+    override fun Matrix<Double>.plus(other: Matrix<Double>): Matrix<Double> = DoubleFieldOpsND {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::plus. Expected $shape but found ${other.shape}" }
         asND().plus(other.asND()).as2D()
     }
 
-    override fun Matrix<Double>.minus(other: Matrix<Double>): Matrix<Double> = ndRing(rowNum, colNum).run {
+    override fun Matrix<Double>.minus(other: Matrix<Double>): Matrix<Double> = DoubleFieldOpsND {
         require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::minus. Expected $shape but found ${other.shape}" }
         asND().minus(other.asND()).as2D()
     }
@@ -84,23 +82,23 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
     }
 
-    override fun Matrix<Double>.times(value: Double): Matrix<Double> = ndRing(rowNum, colNum).run {
+    override fun Matrix<Double>.times(value: Double): Matrix<Double> = DoubleFieldOpsND {
         asND().map { it * value }.as2D()
     }
 
-    public override fun Point<Double>.plus(other: Point<Double>): DoubleBuffer = DoubleBufferOperations.run {
+    public override fun Point<Double>.plus(other: Point<Double>): DoubleBuffer = DoubleBufferOps.run {
         this@plus + other
     }
 
-    public override fun Point<Double>.minus(other: Point<Double>): DoubleBuffer = DoubleBufferOperations.run {
+    public override fun Point<Double>.minus(other: Point<Double>): DoubleBuffer = DoubleBufferOps.run {
         this@minus - other
     }
 
-    public override fun Point<Double>.times(value: Double): DoubleBuffer = DoubleBufferOperations.run {
+    public override fun Point<Double>.times(value: Double): DoubleBuffer = DoubleBufferOps.run {
         scale(this@times, value)
     }
 
-    public operator fun Point<Double>.div(value: Double): DoubleBuffer = DoubleBufferOperations.run {
+    public operator fun Point<Double>.div(value: Double): DoubleBuffer = DoubleBufferOps.run {
         scale(this@div, 1.0 / value)
     }
 

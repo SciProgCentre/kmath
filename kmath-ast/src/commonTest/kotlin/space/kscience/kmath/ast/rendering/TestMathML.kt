@@ -7,7 +7,7 @@ package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.TestUtils.testMathML
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.operations.GroupOperations
+import space.kscience.kmath.operations.GroupOps
 import kotlin.test.Test
 
 internal class TestMathML {
@@ -47,7 +47,7 @@ internal class TestMathML {
 
     @Test
     fun unaryPlus() =
-        testMathML(MST.Unary(GroupOperations.PLUS_OPERATION, MST.Numeric(1)), "<mo>+</mo><mn>1</mn>")
+        testMathML(MST.Unary(GroupOps.PLUS_OPERATION, MST.Numeric(1)), "<mo>+</mo><mn>1</mn>")
 
     @Test
     fun unaryMinus() = testMathML("-x", "<mo>-</mo><mi>x</mi>")

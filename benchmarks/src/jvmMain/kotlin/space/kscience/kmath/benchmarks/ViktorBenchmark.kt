@@ -10,18 +10,17 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.autoNdAlgebra
-import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.viktor.ViktorNDField
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.viktor.ViktorFieldND
 
 @State(Scope.Benchmark)
 internal class ViktorBenchmark {
     @Benchmark
     fun automaticFieldAddition(blackhole: Blackhole) {
         with(autoField) {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -30,7 +29,7 @@ internal class ViktorBenchmark {
     @Benchmark
     fun realFieldAddition(blackhole: Blackhole) {
         with(realField) {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -39,7 +38,7 @@ internal class ViktorBenchmark {
     @Benchmark
     fun viktorFieldAddition(blackhole: Blackhole) {
         with(viktorField) {
-            var res = one
+            var res = one(shape)
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }
@@ -56,10 +55,11 @@ internal class ViktorBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
+        private val shape = Shape(dim, dim)
 
         // automatically build context most suited for given type.
-        private val autoField = DoubleField.autoNdAlgebra(dim, dim)
-        private val realField = DoubleField.ndAlgebra(dim, dim)
-        private val viktorField = ViktorNDField(dim, dim)
+        private val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
+        private val realField = DoubleField.ndAlgebra
+        private val viktorField = ViktorFieldND(dim, dim)
     }
 }

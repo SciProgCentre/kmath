@@ -8,7 +8,7 @@ package space.kscience.kmath.structures
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.NumbersAddOps
 import java.util.*
 import java.util.stream.IntStream
 
@@ -17,17 +17,17 @@ import java.util.stream.IntStream
  * execution.
  */
 class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, DoubleField>,
-    NumbersAddOperations<StructureND<Double>>,
+    NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
     private val strides = DefaultStrides(shape)
-    override val elementContext: DoubleField get() = DoubleField
-    override val zero: BufferND<Double> by lazy { produce { zero } }
-    override val one: BufferND<Double> by lazy { produce { one } }
+    override val elementAlgebra: DoubleField get() = DoubleField
+    override val zero: BufferND<Double> by lazy { structureND(shape) { zero } }
+    override val one: BufferND<Double> by lazy { structureND(shape) { one } }
 
     override fun number(value: Number): BufferND<Double> {
         val d = value.toDouble() // minimize conversions
-        return produce { d }
+        return structureND(shape) { d }
     }
 
     private val StructureND<Double>.buffer: DoubleBuffer
@@ -36,11 +36,11 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
                 this@StreamDoubleFieldND.shape,
                 shape
             )
-            this is BufferND && this.strides == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
+            this is BufferND && this.indexes == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun produce(initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)
@@ -69,13 +69,13 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
-    override fun combine(
-        a: StructureND<Double>,
-        b: StructureND<Double>,
+    override fun zip(
+        left: StructureND<Double>,
+        right: StructureND<Double>,
         transform: DoubleField.(Double, Double) -> Double,
     ): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            DoubleField.transform(a.buffer.array[offset], b.buffer.array[offset])
+            DoubleField.transform(left.buffer.array[offset], right.buffer.array[offset])
         }.toArray()
         return BufferND(strides, array.asBuffer())
     }

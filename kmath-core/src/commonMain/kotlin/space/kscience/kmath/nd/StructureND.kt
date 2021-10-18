@@ -15,7 +15,6 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
 import kotlin.math.abs
-import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
 public interface StructureFeature : Feature<StructureFeature>
@@ -72,7 +71,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
+            if (st1 is BufferND && st2 is BufferND && st1.indexes == st2.indexes)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
@@ -88,7 +87,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
+            if (st1 is BufferND && st2 is BufferND && st1.indexes == st2.indexes)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
@@ -187,11 +186,11 @@ public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
  * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
  */
 @PerformancePitfall
-public fun <T : Comparable<T>> GroupND<T, Ring<T>>.contentEquals(
+public fun <T : Comparable<T>> GroupOpsND<T, Ring<T>>.contentEquals(
     st1: StructureND<T>,
     st2: StructureND<T>,
     absoluteTolerance: T,
-): Boolean = st1.elements().all { (index, value) -> elementContext { (value - st2[index]) } < absoluteTolerance }
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
 
 /**
  * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
@@ -231,107 +230,10 @@ public interface MutableStructureND<T> : StructureND<T> {
  * Transform a structure element-by element in place.
  */
 @OptIn(PerformancePitfall::class)
-public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
+public inline fun <T> MutableStructureND<T>.mapInPlace(action: (index: IntArray, t: T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
-/**
- * A way to convert ND indices to linear one and back.
- */
-public interface Strides {
-    /**
-     * Shape of NDStructure
-     */
-    public val shape: IntArray
-
-    /**
-     * Array strides
-     */
-    public val strides: IntArray
-
-    /**
-     * Get linear index from multidimensional index
-     */
-    public fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-        value * strides[i]
-    }.sum()
-
-    /**
-     * Get multidimensional from linear
-     */
-    public fun index(offset: Int): IntArray
-
-    /**
-     * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
-     */
-    public val linearSize: Int
-
-    // TODO introduce a fast way to calculate index of the next element?
-
-    /**
-     * Iterate over ND indices in a natural order
-     */
-    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
-}
-
-/**
- * Simple implementation of [Strides].
- */
-public class DefaultStrides private constructor(override val shape: IntArray) : Strides {
-    override val linearSize: Int
-        get() = strides[shape.size]
-
-    /**
-     * Strides for memory access
-     */
-    override val strides: IntArray by lazy {
-        sequence {
-            var current = 1
-            yield(1)
-
-            shape.forEach {
-                current *= it
-                yield(current)
-            }
-        }.toList().toIntArray()
-    }
-
-    override fun index(offset: Int): IntArray {
-        val res = IntArray(shape.size)
-        var current = offset
-        var strideIndex = strides.size - 2
-
-        while (strideIndex >= 0) {
-            res[strideIndex] = (current / strides[strideIndex])
-            current %= strides[strideIndex]
-            strideIndex--
-        }
-
-        return res
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is DefaultStrides) return false
-        if (!shape.contentEquals(other.shape)) return false
-        return true
-    }
-
-    override fun hashCode(): Int = shape.contentHashCode()
-
-    @ThreadLocal
-    public companion object {
-        private val defaultStridesCache = HashMap<IntArray, Strides>()
-
-        /**
-         * Cached builder for default strides
-         */
-        public operator fun invoke(shape: IntArray): Strides =
-            defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
-    }
-}
-
-public inline fun <reified T : Any> StructureND<T>.combine(
+public inline fun <reified T : Any> StructureND<T>.zip(
     struct: StructureND<T>,
     crossinline block: (T, T) -> T,
 ): StructureND<T> {

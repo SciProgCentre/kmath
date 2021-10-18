@@ -64,8 +64,8 @@ public fun MST.toIExpr(): IExpr = when (this) {
     }
 
     is MST.Unary -> when (operation) {
-        GroupOperations.PLUS_OPERATION -> value.toIExpr()
-        GroupOperations.MINUS_OPERATION -> F.Negate(value.toIExpr())
+        GroupOps.PLUS_OPERATION -> value.toIExpr()
+        GroupOps.MINUS_OPERATION -> F.Negate(value.toIExpr())
         TrigonometricOperations.SIN_OPERATION -> F.Sin(value.toIExpr())
         TrigonometricOperations.COS_OPERATION -> F.Cos(value.toIExpr())
         TrigonometricOperations.TAN_OPERATION -> F.Tan(value.toIExpr())
@@ -85,10 +85,10 @@ public fun MST.toIExpr(): IExpr = when (this) {
     }
 
     is MST.Binary -> when (operation) {
-        GroupOperations.PLUS_OPERATION -> left.toIExpr() + right.toIExpr()
-        GroupOperations.MINUS_OPERATION -> left.toIExpr() - right.toIExpr()
-        RingOperations.TIMES_OPERATION -> left.toIExpr() * right.toIExpr()
-        FieldOperations.DIV_OPERATION -> F.Divide(left.toIExpr(), right.toIExpr())
+        GroupOps.PLUS_OPERATION -> left.toIExpr() + right.toIExpr()
+        GroupOps.MINUS_OPERATION -> left.toIExpr() - right.toIExpr()
+        RingOps.TIMES_OPERATION -> left.toIExpr() * right.toIExpr()
+        FieldOps.DIV_OPERATION -> F.Divide(left.toIExpr(), right.toIExpr())
         PowerOperations.POW_OPERATION -> F.Power(left.toIExpr(), F.symjify((right as MST.Numeric).value))
         else -> error("Binary operation $operation not defined in $this")
     }

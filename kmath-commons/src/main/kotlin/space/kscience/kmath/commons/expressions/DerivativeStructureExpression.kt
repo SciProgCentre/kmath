@@ -9,7 +9,7 @@ import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.NumbersAddOperations
+import space.kscience.kmath.operations.NumbersAddOps
 
 /**
  * A field over commons-math [DerivativeStructure].
@@ -22,7 +22,7 @@ public class DerivativeStructureField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
-    NumbersAddOperations<DerivativeStructure> {
+    NumbersAddOps<DerivativeStructure> {
     public val numberOfVariables: Int = bindings.size
 
     override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
@@ -70,12 +70,12 @@ public class DerivativeStructureField(
 
     override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
 
-    override fun add(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.add(b)
+    override fun add(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.add(right)
 
     override fun scale(a: DerivativeStructure, value: Double): DerivativeStructure = a.multiply(value)
 
-    override fun multiply(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.multiply(b)
-    override fun divide(a: DerivativeStructure, b: DerivativeStructure): DerivativeStructure = a.divide(b)
+    override fun multiply(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.multiply(right)
+    override fun divide(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.divide(right)
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
     override fun tan(arg: DerivativeStructure): DerivativeStructure = arg.tan()
@@ -99,10 +99,10 @@ public class DerivativeStructureField(
     override fun exp(arg: DerivativeStructure): DerivativeStructure = arg.exp()
     override fun ln(arg: DerivativeStructure): DerivativeStructure = arg.log()
 
-    override operator fun DerivativeStructure.plus(b: Number): DerivativeStructure = add(b.toDouble())
-    override operator fun DerivativeStructure.minus(b: Number): DerivativeStructure = subtract(b.toDouble())
-    override operator fun Number.plus(b: DerivativeStructure): DerivativeStructure = b + this
-    override operator fun Number.minus(b: DerivativeStructure): DerivativeStructure = b - this
+    override operator fun DerivativeStructure.plus(other: Number): DerivativeStructure = add(other.toDouble())
+    override operator fun DerivativeStructure.minus(other: Number): DerivativeStructure = subtract(other.toDouble())
+    override operator fun Number.plus(other: DerivativeStructure): DerivativeStructure = other + this
+    override operator fun Number.minus(other: DerivativeStructure): DerivativeStructure = other - this
 }
 
 /**

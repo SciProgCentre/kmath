@@ -29,6 +29,11 @@ dependencies {
     implementation(project(":kmath-tensors"))
     implementation(project(":kmath-symja"))
     implementation(project(":kmath-for-real"))
+    //jafama
+    implementation(project(":kmath-jafama"))
+    //multik
+    implementation(projects.kmathMultik)
+
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
 
@@ -42,11 +47,12 @@ dependencies {
 //    } else
     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
 
-    implementation("org.slf4j:slf4j-simple:1.7.31")
+    // multik implementation
+    implementation("org.jetbrains.kotlinx:multik-default:0.1.0")
+
+    implementation("org.slf4j:slf4j-simple:1.7.32")
     // plotting
-    implementation("space.kscience:plotlykt-server:0.4.2")
-    //jafama
-    implementation(project(":kmath-jafama"))
+    implementation("space.kscience:plotlykt-server:0.5.0")
 }
 
 kotlin.sourceSets.all {

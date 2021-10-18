@@ -7,10 +7,10 @@ package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess.PostProcessPhase
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.FieldOperations
-import space.kscience.kmath.operations.GroupOperations
+import space.kscience.kmath.operations.FieldOps
+import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations
-import space.kscience.kmath.operations.RingOperations
+import space.kscience.kmath.operations.RingOps
 
 /**
  * Removes unnecessary times (&times;) symbols from [MultiplicationSyntax].
@@ -306,10 +306,10 @@ public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> 
 
                 is BinarySyntax -> when (it.operation) {
                     PowerOperations.POW_OPERATION -> 1
-                    RingOperations.TIMES_OPERATION -> 3
-                    FieldOperations.DIV_OPERATION -> 3
-                    GroupOperations.MINUS_OPERATION -> 4
-                    GroupOperations.PLUS_OPERATION -> 4
+                    RingOps.TIMES_OPERATION -> 3
+                    FieldOps.DIV_OPERATION -> 3
+                    GroupOps.MINUS_OPERATION -> 4
+                    GroupOps.PLUS_OPERATION -> 4
                     else -> 0
                 }
 
