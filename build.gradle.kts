@@ -19,7 +19,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-16"
+    version = "0.3.0-dev-17"
 }
 
 subprojects {
