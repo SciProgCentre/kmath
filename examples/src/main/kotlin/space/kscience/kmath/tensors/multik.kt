@@ -20,5 +20,5 @@ import space.kscience.kmath.operations.DoubleField
 fun main(): Unit = with(DoubleField.multikND) {
     val a = Multik.ndarray(intArrayOf(1, 2, 3)).asType<Double>().wrap()
     val b = Multik.ndarray(doubleArrayOf(1.0, 2.0, 3.0))
-    one(a.shape) - a + power()
+    one(a.shape) - a
 }
