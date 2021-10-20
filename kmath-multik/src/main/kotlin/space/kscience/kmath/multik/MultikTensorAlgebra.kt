@@ -171,8 +171,7 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
 
         val mt = asMultik().array
         return if (mt.shape.contentEquals(shape)) {
-            @Suppress("UNCHECKED_CAST")
-            this as NDArray<T, DN>
+            (this as MultikTensor<T>).array
         } else {
             NDArray(mt.data, mt.offset, shape, dim = DN(shape.size), base = mt.base ?: mt)
         }.wrap()
