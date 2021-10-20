@@ -33,7 +33,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
      * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
-    public val shape: IntArray
+    public val shape: Shape
 
     /**
      * The count of dimensions in this structure. It should be equal to size of [shape].

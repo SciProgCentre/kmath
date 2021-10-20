@@ -13,7 +13,7 @@ import kotlin.contracts.contract
 import kotlin.math.pow
 
 public class DoubleBufferND(
-    indexes: ShapeIndex,
+    indexes: ShapeIndexer,
     override val buffer: DoubleBuffer,
 ) : BufferND<Double>(indexes, buffer)
 

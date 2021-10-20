@@ -19,7 +19,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * @param buffer The underlying buffer.
  */
 public open class BufferND<out T>(
-    public val indexes: ShapeIndex,
+    public val indexes: ShapeIndexer,
     public open val buffer: Buffer<T>,
 ) : StructureND<T> {
 
@@ -58,7 +58,7 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
  * @param buffer The underlying buffer.
  */
 public class MutableBufferND<T>(
-    strides: ShapeIndex,
+    strides: ShapeIndexer,
     override val buffer: MutableBuffer<T>,
 ) : MutableStructureND<T>, BufferND<T>(strides, buffer) {
     override fun set(index: IntArray, value: T) {

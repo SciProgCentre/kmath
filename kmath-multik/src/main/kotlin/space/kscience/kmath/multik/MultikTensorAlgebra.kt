@@ -15,6 +15,7 @@ import org.jetbrains.kotlinx.multik.api.zeros
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.mapInPlace
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
@@ -22,7 +23,7 @@ import space.kscience.kmath.tensors.api.TensorAlgebra
 
 @JvmInline
 public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) : Tensor<T> {
-    override val shape: IntArray get() = array.shape
+    override val shape: Shape get() = array.shape
 
     override fun get(index: IntArray): T = array[index]
 
