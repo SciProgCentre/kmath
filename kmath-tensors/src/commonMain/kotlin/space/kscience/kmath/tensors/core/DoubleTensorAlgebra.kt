@@ -22,7 +22,7 @@ import kotlin.math.*
 public open class DoubleTensorAlgebra :
     TensorPartialDivisionAlgebra<Double>,
     AnalyticTensorAlgebra<Double>,
-    LinearOpsTensorAlgebra<Double>{
+    LinearOpsTensorAlgebra<Double> {
 
     public companion object : DoubleTensorAlgebra()
 
@@ -361,16 +361,16 @@ public open class DoubleTensorAlgebra :
             dotHelper(a.as2D(), b.as2D(), res.as2D(), l, m1, n)
         }
 
-        if (penultimateDim) {
-            return resTensor.view(
+        return if (penultimateDim) {
+            resTensor.view(
                 resTensor.shape.dropLast(2).toIntArray() +
                         intArrayOf(resTensor.shape.last())
             )
+        } else if (lastDim) {
+            resTensor.view(resTensor.shape.dropLast(1).toIntArray())
+        } else {
+            resTensor
         }
-        if (lastDim) {
-            return resTensor.view(resTensor.shape.dropLast(1).toIntArray())
-        }
-        return resTensor
     }
 
     override fun diagonalEmbedding(
