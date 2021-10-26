@@ -19,18 +19,19 @@ public fun Tensor<Double>.toDoubleTensor(): DoubleTensor = this.tensor
 public fun Tensor<Int>.toIntTensor(): IntTensor = this.tensor
 
 /**
- * Returns [DoubleArray] of tensor elements
+ * Returns a copy-protected [DoubleArray] of tensor elements
  */
-public fun DoubleTensor.toDoubleArray(): DoubleArray {
+public fun DoubleTensor.copyArray(): DoubleArray {
+    //TODO use ArrayCopy
     return DoubleArray(numElements) { i ->
         mutableBuffer[bufferStart + i]
     }
 }
 
 /**
- * Returns [IntArray] of tensor elements
+ * Returns a copy-protected [IntArray] of tensor elements
  */
-public fun IntTensor.toIntArray(): IntArray {
+public fun IntTensor.copyArray(): IntArray {
     return IntArray(numElements) { i ->
         mutableBuffer[bufferStart + i]
     }

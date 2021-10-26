@@ -16,6 +16,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.mapInPlace
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
@@ -49,17 +50,17 @@ private fun <T, D : Dimension> MultiArray<T, D>.asD2Array(): D2Array<T> {
     else throw ClassCastException("Cannot cast MultiArray to NDArray.")
 }
 
-public class MultikTensorAlgebra<T : Number> internal constructor(
+public class MultikTensorAlgebra<T : Number, A: Ring<T>> internal constructor(
     public val type: DataType,
-    public val elementAlgebra: Ring<T>,
+    override val elementAlgebra: A,
     public val comparator: Comparator<T>
-) : TensorAlgebra<T> {
+) : TensorAlgebra<T, A> {
 
     /**
      * Convert a tensor to [MultikTensor] if necessary. If tensor is converted, changes on the resulting tensor
      * are not reflected back onto the source
      */
-    public fun Tensor<T>.asMultik(): MultikTensor<T> {
+    public fun StructureND<T>.asMultik(): MultikTensor<T> {
         return if (this is MultikTensor) {
             this
         } else {
@@ -73,17 +74,17 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
 
     public fun MutableMultiArray<T, DN>.wrap(): MultikTensor<T> = MultikTensor(this)
 
-    override fun Tensor<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1)) {
+    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1)) {
         get(intArrayOf(0))
     } else null
 
-    override fun T.plus(other: Tensor<T>): MultikTensor<T> =
+    override fun T.plus(other: StructureND<T>): MultikTensor<T> =
         other.plus(this)
 
-    override fun Tensor<T>.plus(value: T): MultikTensor<T> =
+    override fun StructureND<T>.plus(value: T): MultikTensor<T> =
         asMultik().array.deepCopy().apply { plusAssign(value) }.wrap()
 
-    override fun Tensor<T>.plus(other: Tensor<T>): MultikTensor<T> =
+    override fun StructureND<T>.plus(other: StructureND<T>): MultikTensor<T> =
         asMultik().array.plus(other.asMultik().array).wrap()
 
     override fun Tensor<T>.plusAssign(value: T) {
@@ -94,7 +95,7 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun Tensor<T>.plusAssign(other: Tensor<T>) {
+    override fun Tensor<T>.plusAssign(other: StructureND<T>) {
         if (this is MultikTensor) {
             array.plusAssign(other.asMultik().array)
         } else {
@@ -102,12 +103,12 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun T.minus(other: Tensor<T>): MultikTensor<T> = (-(other.asMultik().array - this)).wrap()
+    override fun T.minus(other: StructureND<T>): MultikTensor<T> = (-(other.asMultik().array - this)).wrap()
 
-    override fun Tensor<T>.minus(value: T): MultikTensor<T> =
-        asMultik().array.deepCopy().apply { minusAssign(value) }.wrap()
+    override fun StructureND<T>.minus(arg: T): MultikTensor<T> =
+        asMultik().array.deepCopy().apply { minusAssign(arg) }.wrap()
 
-    override fun Tensor<T>.minus(other: Tensor<T>): MultikTensor<T> =
+    override fun StructureND<T>.minus(other: StructureND<T>): MultikTensor<T> =
         asMultik().array.minus(other.asMultik().array).wrap()
 
     override fun Tensor<T>.minusAssign(value: T) {
@@ -118,7 +119,7 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun Tensor<T>.minusAssign(other: Tensor<T>) {
+    override fun Tensor<T>.minusAssign(other: StructureND<T>) {
         if (this is MultikTensor) {
             array.minusAssign(other.asMultik().array)
         } else {
@@ -126,13 +127,13 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun T.times(other: Tensor<T>): MultikTensor<T> =
-        other.asMultik().array.deepCopy().apply { timesAssign(this@times) }.wrap()
+    override fun T.times(arg: StructureND<T>): MultikTensor<T> =
+        arg.asMultik().array.deepCopy().apply { timesAssign(this@times) }.wrap()
 
-    override fun Tensor<T>.times(value: T): Tensor<T> =
-        asMultik().array.deepCopy().apply { timesAssign(value) }.wrap()
+    override fun StructureND<T>.times(arg: T): Tensor<T> =
+        asMultik().array.deepCopy().apply { timesAssign(arg) }.wrap()
 
-    override fun Tensor<T>.times(other: Tensor<T>): MultikTensor<T> =
+    override fun StructureND<T>.times(other: StructureND<T>): MultikTensor<T> =
         asMultik().array.times(other.asMultik().array).wrap()
 
     override fun Tensor<T>.timesAssign(value: T) {
@@ -143,7 +144,7 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun Tensor<T>.timesAssign(other: Tensor<T>) {
+    override fun Tensor<T>.timesAssign(other: StructureND<T>) {
         if (this is MultikTensor) {
             array.timesAssign(other.asMultik().array)
         } else {
@@ -151,7 +152,7 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
         }
     }
 
-    override fun Tensor<T>.unaryMinus(): MultikTensor<T> =
+    override fun StructureND<T>.unaryMinus(): MultikTensor<T> =
         asMultik().array.unaryMinus().wrap()
 
     override fun Tensor<T>.get(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
@@ -224,17 +225,17 @@ public class MultikTensorAlgebra<T : Number> internal constructor(
     }
 }
 
-public val DoubleField.multikTensorAlgebra: MultikTensorAlgebra<Double>
+public val DoubleField.multikTensorAlgebra: MultikTensorAlgebra<Double, DoubleField>
     get() = MultikTensorAlgebra(DataType.DoubleDataType, DoubleField) { o1, o2 -> o1.compareTo(o2) }
 
-public val FloatField.multikTensorAlgebra: MultikTensorAlgebra<Float>
+public val FloatField.multikTensorAlgebra: MultikTensorAlgebra<Float, FloatField>
     get() = MultikTensorAlgebra(DataType.FloatDataType, FloatField) { o1, o2 -> o1.compareTo(o2) }
 
-public val ShortRing.multikTensorAlgebra: MultikTensorAlgebra<Short>
+public val ShortRing.multikTensorAlgebra: MultikTensorAlgebra<Short, ShortRing>
     get() = MultikTensorAlgebra(DataType.ShortDataType, ShortRing) { o1, o2 -> o1.compareTo(o2) }
 
-public val IntRing.multikTensorAlgebra: MultikTensorAlgebra<Int>
+public val IntRing.multikTensorAlgebra: MultikTensorAlgebra<Int, IntRing>
     get() = MultikTensorAlgebra(DataType.IntDataType, IntRing) { o1, o2 -> o1.compareTo(o2) }
 
-public val LongRing.multikTensorAlgebra: MultikTensorAlgebra<Long>
+public val LongRing.multikTensorAlgebra: MultikTensorAlgebra<Long, LongRing>
     get() = MultikTensorAlgebra(DataType.LongDataType, LongRing) { o1, o2 -> o1.compareTo(o2) }

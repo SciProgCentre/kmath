@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.operations.Field
+
 
 /**
  * Analytic operations on [Tensor].
  *
  * @param T the type of items closed under analytic functions in the tensors.
  */
-public interface AnalyticTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
+public interface AnalyticTensorAlgebra<T, A : Field<T>> : TensorPartialDivisionAlgebra<T, A> {
 
     /**
      * @return the mean of all elements in the input tensor.

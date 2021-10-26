@@ -51,7 +51,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapInline(
     arg: BufferND<T>,
     crossinline transform: A.(T) -> T
 ): BufferND<T> {
-    val indexes = arg.indexes
+    val indexes = arg.indices
     return BufferND(indexes, bufferAlgebra.mapInline(arg.buffer, transform))
 }
 
@@ -59,7 +59,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapIndexedInline(
     arg: BufferND<T>,
     crossinline transform: A.(index: IntArray, arg: T) -> T
 ): BufferND<T> {
-    val indexes = arg.indexes
+    val indexes = arg.indices
     return BufferND(
         indexes,
         bufferAlgebra.mapIndexedInline(arg.buffer) { offset, value ->
@@ -73,8 +73,8 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     r: BufferND<T>,
     crossinline block: A.(l: T, r: T) -> T
 ): BufferND<T> {
-    require(l.indexes == r.indexes) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
-    val indexes = l.indexes
+    require(l.indices == r.indices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
+    val indexes = l.indices
     return BufferND(indexes, bufferAlgebra.zipInline(l.buffer, r.buffer, block))
 }
 

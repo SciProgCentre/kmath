@@ -5,12 +5,14 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.operations.Field
+
 /**
  * Common linear algebra operations. Operates on [Tensor].
  *
  * @param T the type of items closed under division in the tensors.
  */
-public interface LinearOpsTensorAlgebra<T> : TensorPartialDivisionAlgebra<T> {
+public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivisionAlgebra<T, A> {
 
     /**
      * Computes the determinant of a square matrix input, or of each square matrix in a batched input.
