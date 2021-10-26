@@ -330,7 +330,7 @@ public open class DoubleTensorAlgebra :
         }
     }
 
-    override fun Tensor<Double>.divAssign(other: Tensor<Double>) {
+    override fun Tensor<Double>.divAssign(other: StructureND<Double>) {
         checkShapesCompatible(tensor, other)
         for (i in 0 until tensor.numElements) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] /=
