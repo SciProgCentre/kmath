@@ -41,12 +41,12 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     override operator fun T.plus(other: StructureND<T>): Tensor<T>
 
     /**
-     * Adds the scalar [value] to each element of this tensor and returns a new resulting tensor.
+     * Adds the scalar [arg] to each element of this tensor and returns a new resulting tensor.
      *
-     * @param value the number to be added to each element of this tensor.
-     * @return the sum of this tensor and [value].
+     * @param arg the number to be added to each element of this tensor.
+     * @return the sum of this tensor and [arg].
      */
-    override operator fun StructureND<T>.plus(value: T): Tensor<T>
+    override operator fun StructureND<T>.plus(arg: T): Tensor<T>
 
     /**
      * Each element of the tensor [other] is added to each element of this tensor.
@@ -166,7 +166,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param i index of the extractable tensor
      * @return subtensor of the original tensor with index [i]
      */
-    public operator fun Tensor<T>.get(i: Int): Tensor<T>
+    public operator fun StructureND<T>.get(i: Int): Tensor<T>
 
     /**
      * Returns a tensor that is a transposed version of this tensor. The given dimensions [i] and [j] are swapped.
@@ -176,7 +176,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param j the second dimension to be transposed
      * @return transposed tensor
      */
-    public fun Tensor<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
+    public fun StructureND<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
 
     /**
      * Returns a new tensor with the same data as the self tensor but of a different shape.
@@ -186,7 +186,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param shape the desired size
      * @return tensor with new shape
      */
-    public fun Tensor<T>.view(shape: IntArray): Tensor<T>
+    public fun StructureND<T>.view(shape: IntArray): Tensor<T>
 
     /**
      * View this tensor as the same size as [other].
@@ -196,7 +196,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param other the result tensor has the same size as other.
      * @return the result tensor with the same size as other.
      */
-    public fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T>
+    public fun StructureND<T>.viewAs(other: StructureND<T>): Tensor<T>
 
     /**
      * Matrix product of two tensors.
@@ -227,7 +227,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
      */
-    public infix fun Tensor<T>.dot(other: Tensor<T>): Tensor<T>
+    public infix fun StructureND<T>.dot(other: StructureND<T>): Tensor<T>
 
     /**
      * Creates a tensor whose diagonals of certain 2D planes (specified by [dim1] and [dim2])
@@ -262,7 +262,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     /**
      * @return the sum of all elements in the input tensor.
      */
-    public fun Tensor<T>.sum(): T
+    public fun StructureND<T>.sum(): T
 
     /**
      * Returns the sum of each row of the input tensor in the given dimension [dim].
@@ -275,12 +275,12 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the sum of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.sum(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.sum(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
-     * @return the minimum value of all elements in the input tensor.
+     * @return the minimum value of all elements in the input tensor or null if there are no values
      */
-    public fun Tensor<T>.min(): T
+    public fun StructureND<T>.min(): T?
 
     /**
      * Returns the minimum value of each row of the input tensor in the given dimension [dim].
@@ -293,12 +293,12 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the minimum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
-     * Returns the maximum value of all elements in the input tensor.
+     * Returns the maximum value of all elements in the input tensor or null if there are no values
      */
-    public fun Tensor<T>.max(): T
+    public fun StructureND<T>.max(): T?
 
     /**
      * Returns the maximum value of each row of the input tensor in the given dimension [dim].
@@ -311,7 +311,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the maximum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
      * Returns the index of maximum value of each row of the input tensor in the given dimension [dim].
@@ -324,7 +324,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
 
     override fun add(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left + right
 

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Field
 
 /**
@@ -20,7 +21,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      *
      * @return the determinant.
      */
-    public fun Tensor<T>.det(): Tensor<T>
+    public fun StructureND<T>.det(): Tensor<T>
 
     /**
      * Computes the multiplicative inverse matrix of a square matrix input, or of each square matrix in a batched input.
@@ -30,7 +31,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      *
      * @return the multiplicative inverse of a matrix.
      */
-    public fun Tensor<T>.inv(): Tensor<T>
+    public fun StructureND<T>.inv(): Tensor<T>
 
     /**
      * Cholesky decomposition.
@@ -46,7 +47,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return the batch of `L` matrices.
      */
-    public fun Tensor<T>.cholesky(): Tensor<T>
+    public fun StructureND<T>.cholesky(): Tensor<T>
 
     /**
      * QR decomposition.
@@ -60,7 +61,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return pair of `Q` and `R` tensors.
      */
-    public fun Tensor<T>.qr(): Pair<Tensor<T>, Tensor<T>>
+    public fun StructureND<T>.qr(): Pair<Tensor<T>, Tensor<T>>
 
     /**
      * LUP decomposition
@@ -74,7 +75,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return triple of P, L and U tensors
      */
-    public fun Tensor<T>.lu(): Triple<Tensor<T>, Tensor<T>, Tensor<T>>
+    public fun StructureND<T>.lu(): Triple<Tensor<T>, Tensor<T>, Tensor<T>>
 
     /**
      * Singular Value Decomposition.
@@ -90,7 +91,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return triple `Triple(U, S, V)`.
      */
-    public fun Tensor<T>.svd(): Triple<Tensor<T>, Tensor<T>, Tensor<T>>
+    public fun StructureND<T>.svd(): Triple<Tensor<T>, Tensor<T>, Tensor<T>>
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix `input` or a batch of real symmetric matrices,
@@ -100,6 +101,6 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return a pair `eigenvalues to eigenvectors`
      */
-    public fun Tensor<T>.symEig(): Pair<Tensor<T>, Tensor<T>>
+    public fun StructureND<T>.symEig(): Pair<Tensor<T>, Tensor<T>>
 
 }

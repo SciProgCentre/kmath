@@ -115,7 +115,7 @@ public open class DoubleTensorAlgebra :
         TensorLinearStructure(shape).indices().map { DoubleField.initializer(it) }.toMutableList().toDoubleArray()
     )
 
-    override operator fun Tensor<Double>.get(i: Int): DoubleTensor {
+    override operator fun StructureND<Double>.get(i: Int): DoubleTensor {
         val lastShape = tensor.shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
         val newStart = newShape.reduce(Int::times) * i + tensor.bufferStart
@@ -160,7 +160,7 @@ public open class DoubleTensorAlgebra :
      *
      * @return tensor filled with the scalar value `0.0`, with the same shape as `input` tensor.
      */
-    public fun Tensor<Double>.zeroesLike(): DoubleTensor = tensor.fullLike(0.0)
+    public fun StructureND<Double>.zeroesLike(): DoubleTensor = tensor.fullLike(0.0)
 
     /**
      * Returns a tensor filled with the scalar value `1.0`, with the shape defined by the variable argument [shape].
@@ -198,9 +198,8 @@ public open class DoubleTensorAlgebra :
      *
      * @return a copy of the `input` tensor with a copied buffer.
      */
-    public fun Tensor<Double>.copy(): DoubleTensor {
-        return DoubleTensor(tensor.shape, tensor.mutableBuffer.array().copyOf(), tensor.bufferStart)
-    }
+    public fun StructureND<Double>.copy(): DoubleTensor =
+        DoubleTensor(tensor.shape, tensor.mutableBuffer.array().copyOf(), tensor.bufferStart)
 
     override fun Double.plus(other: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(other.tensor.numElements) { i ->
@@ -209,7 +208,7 @@ public open class DoubleTensorAlgebra :
         return DoubleTensor(other.shape, resBuffer)
     }
 
-    override fun StructureND<Double>.plus(value: Double): DoubleTensor = value + tensor
+    override fun StructureND<Double>.plus(arg: Double): DoubleTensor = arg + tensor
 
     override fun StructureND<Double>.plus(other: StructureND<Double>): DoubleTensor {
         checkShapesCompatible(tensor, other.tensor)
@@ -345,7 +344,7 @@ public open class DoubleTensorAlgebra :
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.transpose(i: Int, j: Int): DoubleTensor {
+    override fun StructureND<Double>.transpose(i: Int, j: Int): DoubleTensor {
         val ii = tensor.minusIndex(i)
         val jj = tensor.minusIndex(j)
         checkTranspose(tensor.dimension, ii, jj)
@@ -369,15 +368,15 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-    override fun Tensor<Double>.view(shape: IntArray): DoubleTensor {
+    override fun StructureND<Double>.view(shape: IntArray): DoubleTensor {
         checkView(tensor, shape)
         return DoubleTensor(shape, tensor.mutableBuffer.array(), tensor.bufferStart)
     }
 
-    override fun Tensor<Double>.viewAs(other: Tensor<Double>): DoubleTensor =
+    override fun StructureND<Double>.viewAs(other: StructureND<Double>): DoubleTensor =
         tensor.view(other.shape)
 
-    override infix fun Tensor<Double>.dot(other: Tensor<Double>): DoubleTensor {
+    override infix fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
         if (tensor.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.mutableBuffer.array().sum()))
         }
@@ -569,10 +568,10 @@ public open class DoubleTensorAlgebra :
      */
     public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { this[it] })
 
-    internal inline fun Tensor<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
+    internal inline fun StructureND<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(tensor.copyArray())
 
-    internal inline fun Tensor<Double>.foldDim(
+    internal inline fun StructureND<Double>.foldDim(
         foldFunction: (DoubleArray) -> Double,
         dim: Int,
         keepDim: Boolean,
@@ -596,30 +595,30 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-    override fun Tensor<Double>.sum(): Double = tensor.fold { it.sum() }
+    override fun StructureND<Double>.sum(): Double = tensor.fold { it.sum() }
 
-    override fun Tensor<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.sum() }, dim, keepDim)
 
-    override fun Tensor<Double>.min(): Double = this.fold { it.minOrNull()!! }
+    override fun StructureND<Double>.min(): Double = this.fold { it.minOrNull()!! }
 
-    override fun Tensor<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
 
-    override fun Tensor<Double>.max(): Double = this.fold { it.maxOrNull()!! }
+    override fun StructureND<Double>.max(): Double = this.fold { it.maxOrNull()!! }
 
-    override fun Tensor<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
 
-    override fun Tensor<Double>.argMax(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Double>.argMax(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim({ x ->
             x.withIndex().maxByOrNull { it.value }?.index!!.toDouble()
         }, dim, keepDim)
 
 
-    override fun Tensor<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
+    override fun StructureND<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
 
-    override fun Tensor<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim(
             { arr ->
                 check(dim < dimension) { "Dimension $dim out of range $dimension" }
@@ -629,12 +628,12 @@ public open class DoubleTensorAlgebra :
             keepDim
         )
 
-    override fun Tensor<Double>.std(): Double = this.fold { arr ->
+    override fun StructureND<Double>.std(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
         sqrt(arr.sumOf { (it - mean) * (it - mean) } / (tensor.numElements - 1))
     }
 
-    override fun Tensor<Double>.std(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
+    override fun StructureND<Double>.std(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
         { arr ->
             check(dim < dimension) { "Dimension $dim out of range $dimension" }
             val mean = arr.sum() / shape[dim]
@@ -644,12 +643,12 @@ public open class DoubleTensorAlgebra :
         keepDim
     )
 
-    override fun Tensor<Double>.variance(): Double = this.fold { arr ->
+    override fun StructureND<Double>.variance(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
         arr.sumOf { (it - mean) * (it - mean) } / (tensor.numElements - 1)
     }
 
-    override fun Tensor<Double>.variance(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
+    override fun StructureND<Double>.variance(dim: Int, keepDim: Boolean): DoubleTensor = foldDim(
         { arr ->
             check(dim < dimension) { "Dimension $dim out of range $dimension" }
             val mean = arr.sum() / shape[dim]
@@ -672,7 +671,7 @@ public open class DoubleTensorAlgebra :
      * @param tensors the [List] of 1-dimensional tensors with same shape
      * @return `M`.
      */
-    public fun cov(tensors: List<Tensor<Double>>): DoubleTensor {
+    public fun cov(tensors: List<StructureND<Double>>): DoubleTensor {
         check(tensors.isNotEmpty()) { "List must have at least 1 element" }
         val n = tensors.size
         val m = tensors[0].shape[0]
@@ -689,43 +688,43 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-    override fun Tensor<Double>.exp(): DoubleTensor = tensor.map { exp(it) }
+    override fun StructureND<Double>.exp(): DoubleTensor = tensor.map { exp(it) }
 
-    override fun Tensor<Double>.ln(): DoubleTensor = tensor.map { ln(it) }
+    override fun StructureND<Double>.ln(): DoubleTensor = tensor.map { ln(it) }
 
-    override fun Tensor<Double>.sqrt(): DoubleTensor = tensor.map { sqrt(it) }
+    override fun StructureND<Double>.sqrt(): DoubleTensor = tensor.map { sqrt(it) }
 
-    override fun Tensor<Double>.cos(): DoubleTensor = tensor.map { cos(it) }
+    override fun StructureND<Double>.cos(): DoubleTensor = tensor.map { cos(it) }
 
-    override fun Tensor<Double>.acos(): DoubleTensor = tensor.map { acos(it) }
+    override fun StructureND<Double>.acos(): DoubleTensor = tensor.map { acos(it) }
 
-    override fun Tensor<Double>.cosh(): DoubleTensor = tensor.map { cosh(it) }
+    override fun StructureND<Double>.cosh(): DoubleTensor = tensor.map { cosh(it) }
 
-    override fun Tensor<Double>.acosh(): DoubleTensor = tensor.map { acosh(it) }
+    override fun StructureND<Double>.acosh(): DoubleTensor = tensor.map { acosh(it) }
 
-    override fun Tensor<Double>.sin(): DoubleTensor = tensor.map { sin(it) }
+    override fun StructureND<Double>.sin(): DoubleTensor = tensor.map { sin(it) }
 
-    override fun Tensor<Double>.asin(): DoubleTensor = tensor.map { asin(it) }
+    override fun StructureND<Double>.asin(): DoubleTensor = tensor.map { asin(it) }
 
-    override fun Tensor<Double>.sinh(): DoubleTensor = tensor.map { sinh(it) }
+    override fun StructureND<Double>.sinh(): DoubleTensor = tensor.map { sinh(it) }
 
-    override fun Tensor<Double>.asinh(): DoubleTensor = tensor.map { asinh(it) }
+    override fun StructureND<Double>.asinh(): DoubleTensor = tensor.map { asinh(it) }
 
-    override fun Tensor<Double>.tan(): DoubleTensor = tensor.map { tan(it) }
+    override fun StructureND<Double>.tan(): DoubleTensor = tensor.map { tan(it) }
 
-    override fun Tensor<Double>.atan(): DoubleTensor = tensor.map { atan(it) }
+    override fun StructureND<Double>.atan(): DoubleTensor = tensor.map { atan(it) }
 
-    override fun Tensor<Double>.tanh(): DoubleTensor = tensor.map { tanh(it) }
+    override fun StructureND<Double>.tanh(): DoubleTensor = tensor.map { tanh(it) }
 
-    override fun Tensor<Double>.atanh(): DoubleTensor = tensor.map { atanh(it) }
+    override fun StructureND<Double>.atanh(): DoubleTensor = tensor.map { atanh(it) }
 
-    override fun Tensor<Double>.ceil(): DoubleTensor = tensor.map { ceil(it) }
+    override fun StructureND<Double>.ceil(): DoubleTensor = tensor.map { ceil(it) }
 
-    override fun Tensor<Double>.floor(): DoubleTensor = tensor.map { floor(it) }
+    override fun StructureND<Double>.floor(): DoubleTensor = tensor.map { floor(it) }
 
-    override fun Tensor<Double>.inv(): DoubleTensor = invLU(1e-9)
+    override fun StructureND<Double>.inv(): DoubleTensor = invLU(1e-9)
 
-    override fun Tensor<Double>.det(): DoubleTensor = detLU(1e-9)
+    override fun StructureND<Double>.det(): DoubleTensor = detLU(1e-9)
 
     /**
      * Computes the LU factorization of a matrix or batches of matrices `input`.
@@ -736,7 +735,7 @@ public open class DoubleTensorAlgebra :
      * The `factorization` has the shape ``(*, m, n)``, where``(*, m, n)`` is the shape of the `input` tensor.
      * The `pivots`  has the shape ``(∗, min(m, n))``. `pivots` stores all the intermediate transpositions of rows.
      */
-    public fun Tensor<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
+    public fun StructureND<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
         computeLU(tensor, epsilon)
             ?: throw IllegalArgumentException("Tensor contains matrices which are singular at precision $epsilon")
 
@@ -749,7 +748,7 @@ public open class DoubleTensorAlgebra :
      * The `factorization` has the shape ``(*, m, n)``, where``(*, m, n)`` is the shape of the `input` tensor.
      * The `pivots`  has the shape ``(∗, min(m, n))``. `pivots` stores all the intermediate transpositions of rows.
      */
-    public fun Tensor<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
+    public fun StructureND<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
 
     /**
      * Unpacks the data and pivots from a LU factorization of a tensor.
@@ -763,7 +762,7 @@ public open class DoubleTensorAlgebra :
      * @return triple of `P`, `L` and `U` tensors
      */
     public fun luPivot(
-        luTensor: Tensor<Double>,
+        luTensor: StructureND<Double>,
         pivotsTensor: Tensor<Int>,
     ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         checkSquareMatrix(luTensor.shape)
@@ -806,7 +805,7 @@ public open class DoubleTensorAlgebra :
      * Used when checking the positive definiteness of the input matrix or matrices.
      * @return a pair of `Q` and `R` tensors.
      */
-    public fun Tensor<Double>.cholesky(epsilon: Double): DoubleTensor {
+    public fun StructureND<Double>.cholesky(epsilon: Double): DoubleTensor {
         checkSquareMatrix(shape)
         checkPositiveDefinite(tensor, epsilon)
 
@@ -819,9 +818,9 @@ public open class DoubleTensorAlgebra :
         return lTensor
     }
 
-    override fun Tensor<Double>.cholesky(): DoubleTensor = cholesky(1e-6)
+    override fun StructureND<Double>.cholesky(): DoubleTensor = cholesky(1e-6)
 
-    override fun Tensor<Double>.qr(): Pair<DoubleTensor, DoubleTensor> {
+    override fun StructureND<Double>.qr(): Pair<DoubleTensor, DoubleTensor> {
         checkSquareMatrix(shape)
         val qTensor = zeroesLike()
         val rTensor = zeroesLike()
@@ -837,7 +836,7 @@ public open class DoubleTensorAlgebra :
         return qTensor to rTensor
     }
 
-    override fun Tensor<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
+    override fun StructureND<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
         svd(epsilon = 1e-10)
 
     /**
@@ -853,7 +852,7 @@ public open class DoubleTensorAlgebra :
      * i.e., the precision with which the cosine approaches 1 in an iterative algorithm.
      * @return a triple `Triple(U, S, V)`.
      */
-    public fun Tensor<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
@@ -886,7 +885,7 @@ public open class DoubleTensorAlgebra :
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
-    override fun Tensor<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEig(epsilon = 1e-15)
+    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEig(epsilon = 1e-15)
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
@@ -896,7 +895,7 @@ public open class DoubleTensorAlgebra :
      * and when the cosine approaches 1 in the SVD algorithm.
      * @return a pair `eigenvalues to eigenvectors`.
      */
-    public fun Tensor<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
 
         fun MutableStructure2D<Double>.cleanSym(n: Int) {
@@ -931,7 +930,7 @@ public open class DoubleTensorAlgebra :
      * with zero.
      * @return the determinant.
      */
-    public fun Tensor<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
+    public fun StructureND<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
         checkSquareMatrix(tensor.shape)
         val luTensor = tensor.copy()
         val pivotsTensor = tensor.setUpPivots()
@@ -964,7 +963,7 @@ public open class DoubleTensorAlgebra :
      * @param epsilon error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix with zero
      * @return the multiplicative inverse of a matrix.
      */
-    public fun Tensor<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
+    public fun StructureND<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
         val (luTensor, pivotsTensor) = luFactor(epsilon)
         val invTensor = luTensor.zeroesLike()
 
@@ -989,12 +988,12 @@ public open class DoubleTensorAlgebra :
      * @param epsilon permissible error when comparing the determinant of a matrix with zero.
      * @return triple of `P`, `L` and `U` tensors.
      */
-    public fun Tensor<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val (lu, pivots) = tensor.luFactor(epsilon)
         return luPivot(lu, pivots)
     }
 
-    override fun Tensor<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
+    override fun StructureND<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra.Companion get() = DoubleTensorAlgebra

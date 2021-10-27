@@ -85,7 +85,7 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.divAssign(other: Tensor<Double>) {
+    override fun Tensor<Double>.divAssign(other: StructureND<Double>) {
         val newOther = broadcastTo(other.tensor, tensor.shape)
         for (i in 0 until tensor.indices.linearSize) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] /=
