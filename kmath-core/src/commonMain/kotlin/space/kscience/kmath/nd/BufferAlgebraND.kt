@@ -12,7 +12,7 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.BufferFactory
 
 public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
-    public val indexerBuilder: (IntArray) -> ShapeIndex
+    public val indexerBuilder: (IntArray) -> ShapeIndexer
     public val bufferAlgebra: BufferAlgebra<T, A>
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
@@ -43,7 +43,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
         zipInline(left.toBufferND(), right.toBufferND(), transform)
 
     public companion object {
-        public val defaultIndexerBuilder: (IntArray) -> ShapeIndex = DefaultStrides.Companion::invoke
+        public val defaultIndexerBuilder: (IntArray) -> ShapeIndexer = DefaultStrides.Companion::invoke
     }
 }
 
@@ -51,7 +51,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapInline(
     arg: BufferND<T>,
     crossinline transform: A.(T) -> T
 ): BufferND<T> {
-    val indexes = arg.indexes
+    val indexes = arg.indices
     return BufferND(indexes, bufferAlgebra.mapInline(arg.buffer, transform))
 }
 
@@ -59,7 +59,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapIndexedInline(
     arg: BufferND<T>,
     crossinline transform: A.(index: IntArray, arg: T) -> T
 ): BufferND<T> {
-    val indexes = arg.indexes
+    val indexes = arg.indices
     return BufferND(
         indexes,
         bufferAlgebra.mapIndexedInline(arg.buffer) { offset, value ->
@@ -73,32 +73,32 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     r: BufferND<T>,
     crossinline block: A.(l: T, r: T) -> T
 ): BufferND<T> {
-    require(l.indexes == r.indexes) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
-    val indexes = l.indexes
+    require(l.indices == r.indices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
+    val indexes = l.indices
     return BufferND(indexes, bufferAlgebra.zipInline(l.buffer, r.buffer, block))
 }
 
 public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
-    override val indexerBuilder: (IntArray) -> ShapeIndex = BufferAlgebraND.defaultIndexerBuilder
+    override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
     override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
 }
 
 public open class BufferedRingOpsND<T, out A : Ring<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndex = BufferAlgebraND.defaultIndexerBuilder
+    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
 ) : BufferedGroupNDOps<T, A>(bufferAlgebra, indexerBuilder), RingOpsND<T, A>
 
 public open class BufferedFieldOpsND<T, out A : Field<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndex = BufferAlgebraND.defaultIndexerBuilder
+    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
 ) : BufferedRingOpsND<T, A>(bufferAlgebra, indexerBuilder), FieldOpsND<T, A> {
 
     public constructor(
         elementAlgebra: A,
         bufferFactory: BufferFactory<T>,
-        indexerBuilder: (IntArray) -> ShapeIndex = BufferAlgebraND.defaultIndexerBuilder
+        indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
     ) : this(BufferFieldOps(elementAlgebra, bufferFactory), indexerBuilder)
 
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { it * value }

@@ -131,19 +131,19 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
      * Adds an element to ND structure of it.
      *
      * @receiver the augend.
-     * @param arg the addend.
+     * @param other the addend.
      * @return the sum.
      */
-    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg + this
+    public operator fun T.plus(other: StructureND<T>): StructureND<T> = other.map { value -> add(this@plus, value) }
 
     /**
      * Subtracts an ND structure from an element of it.
      *
      * @receiver the dividend.
-     * @param arg the divisor.
+     * @param other the divisor.
      * @return the quotient.
      */
-    public operator fun T.minus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(-this@minus, value) }
+    public operator fun T.minus(other: StructureND<T>): StructureND<T> = other.map { value -> add(-this@minus, value) }
 
     public companion object
 }
