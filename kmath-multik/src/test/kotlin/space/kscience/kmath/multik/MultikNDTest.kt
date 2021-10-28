@@ -7,7 +7,7 @@ import space.kscience.kmath.operations.invoke
 
 internal class MultikNDTest {
     @Test
-    fun basicAlgebra(): Unit = DoubleField.multikND{
+    fun basicAlgebra(): Unit = DoubleField.multikAlgebra{
         one(2,2) + 1.0
     }
 }

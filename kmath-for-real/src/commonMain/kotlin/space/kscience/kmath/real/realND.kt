@@ -13,8 +13,8 @@ import space.kscience.kmath.structures.DoubleBuffer
  * Map one [BufferND] using function without indices.
  */
 public inline fun BufferND<Double>.mapInline(crossinline transform: DoubleField.(Double) -> Double): BufferND<Double> {
-    val array = DoubleArray(indexes.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
-    return BufferND(indexes, DoubleBuffer(array))
+    val array = DoubleArray(indices.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
+    return BufferND(indices, DoubleBuffer(array))
 }
 
 /**

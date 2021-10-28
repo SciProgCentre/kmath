@@ -9,7 +9,7 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.toDoubleArray
+import space.kscience.kmath.tensors.core.copyArray
 import kotlin.math.sqrt
 
 const val seed = 100500L
@@ -111,7 +111,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
     private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
         val onesForAnswers = yPred.zeroesLike()
-        yTrue.toDoubleArray().forEachIndexed { index, labelDouble ->
+        yTrue.copyArray().forEachIndexed { index, labelDouble ->
             val label = labelDouble.toInt()
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
