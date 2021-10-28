@@ -228,8 +228,8 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
     override fun norm(arg: Byte): Byte = if (arg > 0) arg else (-arg).toByte()
 
     override inline fun Byte.unaryMinus(): Byte = (-this).toByte()
-    override inline fun Byte.plus(other: Byte): Byte = (this + other).toByte()
-    override inline fun Byte.minus(other: Byte): Byte = (this - other).toByte()
+    override inline fun Byte.plus(arg: Byte): Byte = (this + arg).toByte()
+    override inline fun Byte.minus(arg: Byte): Byte = (this - arg).toByte()
     override inline fun Byte.times(other: Byte): Byte = (this * other).toByte()
 }
 

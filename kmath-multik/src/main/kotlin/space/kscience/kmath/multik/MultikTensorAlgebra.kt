@@ -59,7 +59,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = DefaultStrides(shape)
         val memoryView = initMemoryView<T>(strides.linearSize, type)
-        strides.indices().forEachIndexed { linearIndex, tensorIndex ->
+        strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
             memoryView[linearIndex] = elementAlgebra.initializer(tensorIndex)
         }
         return MultikTensor(NDArray(memoryView, shape = shape, dim = DN(shape.size)))
@@ -131,14 +131,14 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         get(intArrayOf(0))
     } else null
 
-    override fun T.plus(other: StructureND<T>): MultikTensor<T> =
-        other.plus(this)
+    override fun T.plus(arg: StructureND<T>): MultikTensor<T> =
+        arg.plus(this)
 
     override fun StructureND<T>.plus(arg: T): MultikTensor<T> =
         asMultik().array.deepCopy().apply { plusAssign(arg) }.wrap()
 
-    override fun StructureND<T>.plus(other: StructureND<T>): MultikTensor<T> =
-        asMultik().array.plus(other.asMultik().array).wrap()
+    override fun StructureND<T>.plus(arg: StructureND<T>): MultikTensor<T> =
+        asMultik().array.plus(arg.asMultik().array).wrap()
 
     override fun Tensor<T>.plusAssign(value: T) {
         if (this is MultikTensor) {
@@ -148,21 +148,21 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         }
     }
 
-    override fun Tensor<T>.plusAssign(other: StructureND<T>) {
+    override fun Tensor<T>.plusAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
-            array.plusAssign(other.asMultik().array)
+            array.plusAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.add(t, other[index]) }
+            mapInPlace { index, t -> elementAlgebra.add(t, arg[index]) }
         }
     }
 
-    override fun T.minus(other: StructureND<T>): MultikTensor<T> = (-(other.asMultik().array - this)).wrap()
+    override fun T.minus(arg: StructureND<T>): MultikTensor<T> = (-(arg.asMultik().array - this)).wrap()
 
     override fun StructureND<T>.minus(arg: T): MultikTensor<T> =
         asMultik().array.deepCopy().apply { minusAssign(arg) }.wrap()
 
-    override fun StructureND<T>.minus(other: StructureND<T>): MultikTensor<T> =
-        asMultik().array.minus(other.asMultik().array).wrap()
+    override fun StructureND<T>.minus(arg: StructureND<T>): MultikTensor<T> =
+        asMultik().array.minus(arg.asMultik().array).wrap()
 
     override fun Tensor<T>.minusAssign(value: T) {
         if (this is MultikTensor) {
@@ -172,11 +172,11 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         }
     }
 
-    override fun Tensor<T>.minusAssign(other: StructureND<T>) {
+    override fun Tensor<T>.minusAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
-            array.minusAssign(other.asMultik().array)
+            array.minusAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.run { t - other[index] } }
+            mapInPlace { index, t -> elementAlgebra.run { t - arg[index] } }
         }
     }
 
@@ -186,8 +186,8 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
     override fun StructureND<T>.times(arg: T): Tensor<T> =
         asMultik().array.deepCopy().apply { timesAssign(arg) }.wrap()
 
-    override fun StructureND<T>.times(other: StructureND<T>): MultikTensor<T> =
-        asMultik().array.times(other.asMultik().array).wrap()
+    override fun StructureND<T>.times(arg: StructureND<T>): MultikTensor<T> =
+        asMultik().array.times(arg.asMultik().array).wrap()
 
     override fun Tensor<T>.timesAssign(value: T) {
         if (this is MultikTensor) {
@@ -197,11 +197,11 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         }
     }
 
-    override fun Tensor<T>.timesAssign(other: StructureND<T>) {
+    override fun Tensor<T>.timesAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
-            array.timesAssign(other.asMultik().array)
+            array.timesAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.multiply(t, other[index]) }
+            mapInPlace { index, t -> elementAlgebra.multiply(t, arg[index]) }
         }
     }
 
@@ -212,7 +212,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
 
     override fun StructureND<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
-    override fun StructureND<T>.view(shape: IntArray): MultikTensor<T> {
+    override fun Tensor<T>.view(shape: IntArray): MultikTensor<T> {
         require(shape.all { it > 0 })
         require(shape.fold(1, Int::times) == this.shape.size) {
             "Cannot reshape array of size ${this.shape.size} into a new shape ${
@@ -231,7 +231,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         }.wrap()
     }
 
-    override fun StructureND<T>.viewAs(other: StructureND<T>): MultikTensor<T> = view(other.shape)
+    override fun Tensor<T>.viewAs(other: StructureND<T>): MultikTensor<T> = view(other.shape)
 
     override fun StructureND<T>.dot(other: StructureND<T>): MultikTensor<T> =
         if (this.shape.size == 1 && other.shape.size == 1) {
@@ -283,8 +283,8 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
     override fun StructureND<T>.div(arg: T): MultikTensor<T> =
         asMultik().array.deepCopy().apply { divAssign(arg) }.wrap()
 
-    override fun StructureND<T>.div(other: StructureND<T>): MultikTensor<T> =
-        asMultik().array.div(other.asMultik().array).wrap()
+    override fun StructureND<T>.div(arg: StructureND<T>): MultikTensor<T> =
+        asMultik().array.div(arg.asMultik().array).wrap()
 
     override fun Tensor<T>.divAssign(value: T) {
         if (this is MultikTensor) {

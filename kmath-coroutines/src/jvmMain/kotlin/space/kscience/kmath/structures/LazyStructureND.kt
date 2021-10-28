@@ -28,7 +28,7 @@ public class LazyStructureND<out T>(
     @OptIn(PerformancePitfall::class)
     override fun elements(): Sequence<Pair<IntArray, T>> {
         val strides = DefaultStrides(shape)
-        val res = runBlocking { strides.indices().toList().map { index -> index to await(index) } }
+        val res = runBlocking { strides.asSequence().toList().map { index -> index to await(index) } }
         return res.asSequence()
     }
 }

@@ -38,7 +38,7 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
     override val dimension: Int get() = context.shape.size
 
     override val bins: Iterable<Bin<T>>
-        get() = DefaultStrides(context.shape).indices().map {
+        get() = DefaultStrides(context.shape).asSequence().map {
             context.produceBin(it, values[it])
         }.asIterable()
 

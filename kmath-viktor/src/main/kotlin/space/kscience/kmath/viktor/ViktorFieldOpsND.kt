@@ -28,7 +28,7 @@ public open class ViktorFieldOpsND :
 
     override fun structureND(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
-            DefaultStrides(shape).indices().forEach { index ->
+            DefaultStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.initializer(index), indices = index)
             }
         }.asStructure()
@@ -37,7 +37,7 @@ public open class ViktorFieldOpsND :
 
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
-            DefaultStrides(shape).indices().forEach { index ->
+            DefaultStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.transform(this@map[index]), indices = index)
             }
         }.asStructure()
@@ -45,7 +45,7 @@ public open class ViktorFieldOpsND :
     override fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape).apply {
-        DefaultStrides(shape).indices().forEach { index ->
+        DefaultStrides(shape).asSequence().forEach { index ->
             set(value = DoubleField.transform(index, this@mapIndexed[index]), indices = index)
         }
     }.asStructure()
@@ -57,7 +57,7 @@ public open class ViktorFieldOpsND :
     ): ViktorStructureND {
         require(left.shape.contentEquals(right.shape))
         return F64Array(*left.shape).apply {
-            DefaultStrides(left.shape).indices().forEach { index ->
+            DefaultStrides(left.shape).asSequence().forEach { index ->
                 set(value = DoubleField.transform(left[index], right[index]), indices = index)
             }
         }.asStructure()
@@ -69,11 +69,11 @@ public open class ViktorFieldOpsND :
     override fun scale(a: StructureND<Double>, value: Double): ViktorStructureND =
         (a.f64Buffer * value).asStructure()
 
-    override fun StructureND<Double>.plus(other: StructureND<Double>): ViktorStructureND =
-        (f64Buffer + other.f64Buffer).asStructure()
+    override fun StructureND<Double>.plus(arg: StructureND<Double>): ViktorStructureND =
+        (f64Buffer + arg.f64Buffer).asStructure()
 
-    override fun StructureND<Double>.minus(other: StructureND<Double>): ViktorStructureND =
-        (f64Buffer - other.f64Buffer).asStructure()
+    override fun StructureND<Double>.minus(arg: StructureND<Double>): ViktorStructureND =
+        (f64Buffer - arg.f64Buffer).asStructure()
 
     override fun StructureND<Double>.times(k: Number): ViktorStructureND =
         (f64Buffer * k.toDouble()).asStructure()

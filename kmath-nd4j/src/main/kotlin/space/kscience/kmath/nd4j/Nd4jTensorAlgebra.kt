@@ -51,29 +51,29 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
         return structureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }
     }
 
-    override fun T.plus(other: StructureND<T>): Nd4jArrayStructure<T> = other.ndArray.add(this).wrap()
+    override fun T.plus(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.add(this).wrap()
     override fun StructureND<T>.plus(arg: T): Nd4jArrayStructure<T> = ndArray.add(arg).wrap()
 
-    override fun StructureND<T>.plus(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.add(other.ndArray).wrap()
+    override fun StructureND<T>.plus(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.add(arg.ndArray).wrap()
 
     override fun Tensor<T>.plusAssign(value: T) {
         ndArray.addi(value)
     }
 
-    override fun Tensor<T>.plusAssign(other: StructureND<T>) {
-        ndArray.addi(other.ndArray)
+    override fun Tensor<T>.plusAssign(arg: StructureND<T>) {
+        ndArray.addi(arg.ndArray)
     }
 
-    override fun T.minus(other: StructureND<T>): Nd4jArrayStructure<T> = other.ndArray.rsub(this).wrap()
+    override fun T.minus(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.rsub(this).wrap()
     override fun StructureND<T>.minus(arg: T): Nd4jArrayStructure<T> = ndArray.sub(arg).wrap()
-    override fun StructureND<T>.minus(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.sub(other.ndArray).wrap()
+    override fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.sub(arg.ndArray).wrap()
 
     override fun Tensor<T>.minusAssign(value: T) {
         ndArray.rsubi(value)
     }
 
-    override fun Tensor<T>.minusAssign(other: StructureND<T>) {
-        ndArray.subi(other.ndArray)
+    override fun Tensor<T>.minusAssign(arg: StructureND<T>) {
+        ndArray.subi(arg.ndArray)
     }
 
     override fun T.times(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.mul(this).wrap()
@@ -81,14 +81,14 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun StructureND<T>.times(arg: T): Nd4jArrayStructure<T> =
         ndArray.mul(arg).wrap()
 
-    override fun StructureND<T>.times(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mul(other.ndArray).wrap()
+    override fun StructureND<T>.times(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mul(arg.ndArray).wrap()
 
     override fun Tensor<T>.timesAssign(value: T) {
         ndArray.muli(value)
     }
 
-    override fun Tensor<T>.timesAssign(other: StructureND<T>) {
-        ndArray.mmuli(other.ndArray)
+    override fun Tensor<T>.timesAssign(arg: StructureND<T>) {
+        ndArray.mmuli(arg.ndArray)
     }
 
     override fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> = ndArray.neg().wrap()
@@ -105,8 +105,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun StructureND<T>.max(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.max(keepDim, dim).wrap()
 
-    override fun StructureND<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
-    override fun StructureND<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
+    override fun Tensor<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
+    override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
     override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndBase.get().argmax(ndArray, keepDim, dim).wrap()
@@ -142,7 +142,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
 
     override fun T.div(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.rdiv(this).wrap()
     override fun StructureND<T>.div(arg: T): Nd4jArrayStructure<T> = ndArray.div(arg).wrap()
-    override fun StructureND<T>.div(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.div(other.ndArray).wrap()
+    override fun StructureND<T>.div(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.div(arg.ndArray).wrap()
 
     override fun Tensor<T>.divAssign(value: T) {
         ndArray.divi(value)
@@ -172,7 +172,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
     override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape)
         val indices = DefaultStrides(shape)
-        indices.indices().forEach { index ->
+        indices.asSequence().forEach { index ->
             array.putScalar(index, elementAlgebra.initializer(index))
         }
         return array.wrap()

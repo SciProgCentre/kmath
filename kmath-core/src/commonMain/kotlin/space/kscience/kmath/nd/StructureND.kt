@@ -28,12 +28,12 @@ public interface StructureFeature : Feature<StructureFeature>
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> : Featured<StructureFeature> {
+public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
     /**
      * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
-    public val shape: Shape
+    override val shape: Shape
 
     /**
      * The count of dimensions in this structure. It should be equal to size of [shape].
@@ -54,7 +54,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
      * @return the lazy sequence of pairs of indices to values.
      */
     @PerformancePitfall
-    public fun elements(): Sequence<Pair<IntArray, T>>
+    public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
 
     /**
      * Feature is some additional structure information that allows to access it special properties or hints.

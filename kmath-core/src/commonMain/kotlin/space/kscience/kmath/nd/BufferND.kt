@@ -19,7 +19,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * @param buffer The underlying buffer.
  */
 public open class BufferND<out T>(
-    public val indices: ShapeIndexer,
+    override val indices: ShapeIndexer,
     public open val buffer: Buffer<T>,
 ) : StructureND<T> {
 
@@ -28,7 +28,7 @@ public open class BufferND<out T>(
     override val shape: IntArray get() = indices.shape
 
     @PerformancePitfall
-    override fun elements(): Sequence<Pair<IntArray, T>> = indices.indices().map {
+    override fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map {
         it to this[it]
     }
 
