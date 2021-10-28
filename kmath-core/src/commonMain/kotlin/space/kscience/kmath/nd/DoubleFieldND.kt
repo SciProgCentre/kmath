@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.DoubleBuffer
@@ -50,10 +51,12 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         return DoubleBufferND(indexes, DoubleBuffer(indexes.linearSize) { block(lArray[it], rArray[it]) })
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): BufferND<Double> =
         mapInline(toBufferND()) { DoubleField.transform(it) }
 
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
@@ -92,11 +95,11 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
     override fun StructureND<Double>.unaryPlus(): DoubleBufferND = toBufferND()
 
-    override fun StructureND<Double>.plus(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l + r }
+    override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l + r }
 
-    override fun StructureND<Double>.minus(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l - r }
+    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l - r }
 
     override fun StructureND<Double>.times(other: StructureND<Double>): DoubleBufferND =
         zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l * r }
@@ -107,7 +110,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     override fun StructureND<Double>.div(k: Number): DoubleBufferND =
         mapInline(toBufferND()) { it / k.toDouble() }
 
-    override fun Number.times(other: StructureND<Double>): DoubleBufferND = other * this
+    override fun Number.times(arg: StructureND<Double>): DoubleBufferND = arg * this
 
     override fun StructureND<Double>.plus(arg: Double): DoubleBufferND = mapInline(toBufferND()) { it + arg }
 

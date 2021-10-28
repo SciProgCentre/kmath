@@ -35,13 +35,13 @@ public interface TensorPartialDivisionAlgebra<T, A : Field<T>> : TensorAlgebra<T
     override operator fun StructureND<T>.div(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is divided by each element of this tensor.
+     * Each element of the tensor [arg] is divided by each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be divided by.
-     * @return the division of this tensor by [other].
+     * @param arg tensor to be divided by.
+     * @return the division of this tensor by [arg].
      */
-    override operator fun StructureND<T>.div(other: StructureND<T>): Tensor<T>
+    override operator fun StructureND<T>.div(arg: StructureND<T>): Tensor<T>
 
     override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> = left.div(right)
 

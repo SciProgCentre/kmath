@@ -22,7 +22,7 @@ internal fun BufferedTensor<Double>.asTensor(): DoubleTensor =
 internal fun <T> StructureND<T>.copyToBufferedTensor(): BufferedTensor<T> =
     BufferedTensor(
         this.shape,
-        TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().asMutableBuffer(), 0
+        TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().asMutableBuffer(), 0
     )
 
 internal fun <T> StructureND<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {

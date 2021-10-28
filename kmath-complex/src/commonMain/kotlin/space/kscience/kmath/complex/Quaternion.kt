@@ -166,8 +166,8 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     override operator fun Quaternion.plus(other: Number): Quaternion = Quaternion(w + other.toDouble(), x, y, z)
     override operator fun Quaternion.minus(other: Number): Quaternion = Quaternion(w - other.toDouble(), x, y, z)
 
-    override operator fun Number.times(other: Quaternion): Quaternion =
-        Quaternion(toDouble() * other.w, toDouble() * other.x, toDouble() * other.y, toDouble() * other.z)
+    override operator fun Number.times(arg: Quaternion): Quaternion =
+        Quaternion(toDouble() * arg.w, toDouble() * arg.x, toDouble() * arg.y, toDouble() * arg.z)
 
     override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
     override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)

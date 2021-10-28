@@ -149,19 +149,19 @@ public interface GroupOps<T> : Algebra<T> {
      * Addition of two elements.
      *
      * @receiver the augend.
-     * @param other the addend.
+     * @param arg the addend.
      * @return the sum.
      */
-    public operator fun T.plus(other: T): T = add(this, other)
+    public operator fun T.plus(arg: T): T = add(this, arg)
 
     /**
      * Subtraction of two elements.
      *
      * @receiver the minuend.
-     * @param other the subtrahend.
+     * @param arg the subtrahend.
      * @return the difference.
      */
-    public operator fun T.minus(other: T): T = add(this, -other)
+    public operator fun T.minus(arg: T): T = add(this, -arg)
     // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
@@ -219,9 +219,9 @@ public interface RingOps<T> : GroupOps<T> {
      * Multiplies this element by scalar.
      *
      * @receiver the multiplier.
-     * @param other the multiplicand.
+     * @param arg the multiplicand.
      */
-    public operator fun T.times(other: T): T = multiply(this, other)
+    public operator fun T.times(arg: T): T = multiply(this, arg)
 
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         TIMES_OPERATION -> ::multiply

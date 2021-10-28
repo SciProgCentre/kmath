@@ -19,7 +19,7 @@ public object JBigIntegerField : Ring<BigInteger>, NumericAlgebra<BigInteger> {
 
     override fun number(value: Number): BigInteger = BigInteger.valueOf(value.toLong())
     override fun add(left: BigInteger, right: BigInteger): BigInteger = left.add(right)
-    override operator fun BigInteger.minus(other: BigInteger): BigInteger = subtract(other)
+    override operator fun BigInteger.minus(arg: BigInteger): BigInteger = subtract(arg)
     override fun multiply(left: BigInteger, right: BigInteger): BigInteger = left.multiply(right)
 
     override operator fun BigInteger.unaryMinus(): BigInteger = negate()
@@ -40,7 +40,7 @@ public abstract class JBigDecimalFieldBase internal constructor(
         get() = BigDecimal.ONE
 
     override fun add(left: BigDecimal, right: BigDecimal): BigDecimal = left.add(right)
-    override operator fun BigDecimal.minus(other: BigDecimal): BigDecimal = subtract(other)
+    override operator fun BigDecimal.minus(arg: BigDecimal): BigDecimal = subtract(arg)
     override fun number(value: Number): BigDecimal = BigDecimal.valueOf(value.toDouble())
 
     override fun scale(a: BigDecimal, value: Double): BigDecimal =

@@ -76,8 +76,8 @@ public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>
     override fun add(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
         left.ndArray.add(right.ndArray).wrap()
 
-    override operator fun StructureND<T>.minus(other: StructureND<T>): Nd4jArrayStructure<T> =
-        ndArray.sub(other.ndArray).wrap()
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        ndArray.sub(arg.ndArray).wrap()
 
     override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
         ndArray.neg().wrap()

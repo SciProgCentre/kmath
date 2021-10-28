@@ -70,7 +70,7 @@ internal class MultivariateHistogramTest {
             }
             val res = histogram1 - histogram2
             assertTrue {
-                DefaultStrides(shape).indices().all { index ->
+                DefaultStrides(shape).asSequence().all { index ->
                     res.values[index] <= histogram1.values[index]
                 }
             }

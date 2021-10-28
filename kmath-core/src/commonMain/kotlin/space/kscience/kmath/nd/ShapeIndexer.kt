@@ -10,7 +10,7 @@ import kotlin.native.concurrent.ThreadLocal
 /**
  * A converter from linear index to multivariate index
  */
-public interface ShapeIndexer{
+public interface ShapeIndexer: Iterable<IntArray>{
     public val shape: Shape
 
     /**
@@ -33,7 +33,9 @@ public interface ShapeIndexer{
     /**
      * Iterate over ND indices in a natural order
      */
-    public fun indices(): Sequence<IntArray>
+    public fun asSequence(): Sequence<IntArray>
+
+    override fun iterator(): Iterator<IntArray> = asSequence().iterator()
 
     override fun equals(other: Any?): Boolean
     override fun hashCode(): Int
@@ -58,7 +60,7 @@ public abstract class Strides: ShapeIndexer {
     /**
      * Iterate over ND indices in a natural order
      */
-    public override fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
+    public override fun asSequence(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
 }
 
 /**

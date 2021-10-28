@@ -23,8 +23,7 @@ public open class BufferedTensor<T> internal constructor(
     /**
      * Buffer strides based on [TensorLinearStructure] implementation
      */
-    public val indices: Strides
-        get() = TensorLinearStructure(shape)
+    override val indices: Strides get() = TensorLinearStructure(shape)
 
     /**
      * Number of elements in tensor
@@ -39,7 +38,7 @@ public open class BufferedTensor<T> internal constructor(
     }
 
     @PerformancePitfall
-    override fun elements(): Sequence<Pair<IntArray, T>> = indices.indices().map {
+    override fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map {
         it to get(it)
     }
 }

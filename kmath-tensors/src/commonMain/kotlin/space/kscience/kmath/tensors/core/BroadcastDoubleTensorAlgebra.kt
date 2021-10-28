@@ -19,8 +19,8 @@ import space.kscience.kmath.tensors.core.internal.tensor
  */
 public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
-    override fun StructureND<Double>.plus(other: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, other.tensor)
+    override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(tensor, arg.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -29,16 +29,16 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.plusAssign(other: StructureND<Double>) {
-        val newOther = broadcastTo(other.tensor, tensor.shape)
+    override fun Tensor<Double>.plusAssign(arg: StructureND<Double>) {
+        val newOther = broadcastTo(arg.tensor, tensor.shape)
         for (i in 0 until tensor.indices.linearSize) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] +=
                 newOther.mutableBuffer.array()[tensor.bufferStart + i]
         }
     }
 
-    override fun StructureND<Double>.minus(other: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, other.tensor)
+    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(tensor, arg.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -47,16 +47,16 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.minusAssign(other: StructureND<Double>) {
-        val newOther = broadcastTo(other.tensor, tensor.shape)
+    override fun Tensor<Double>.minusAssign(arg: StructureND<Double>) {
+        val newOther = broadcastTo(arg.tensor, tensor.shape)
         for (i in 0 until tensor.indices.linearSize) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] -=
                 newOther.mutableBuffer.array()[tensor.bufferStart + i]
         }
     }
 
-    override fun StructureND<Double>.times(other: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, other.tensor)
+    override fun StructureND<Double>.times(arg: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(tensor, arg.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -66,8 +66,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.timesAssign(other: StructureND<Double>) {
-        val newOther = broadcastTo(other.tensor, tensor.shape)
+    override fun Tensor<Double>.timesAssign(arg: StructureND<Double>) {
+        val newOther = broadcastTo(arg.tensor, tensor.shape)
         for (i in 0 until tensor.indices.linearSize) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] *=
                 newOther.mutableBuffer.array()[tensor.bufferStart + i]

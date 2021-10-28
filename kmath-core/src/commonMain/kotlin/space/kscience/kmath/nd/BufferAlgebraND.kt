@@ -7,6 +7,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.BufferFactory
@@ -34,11 +35,14 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
         }
     }
 
+    @PerformancePitfall
     override fun StructureND<T>.map(transform: A.(T) -> T): BufferND<T> = mapInline(toBufferND(), transform)
 
+    @PerformancePitfall
     override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): BufferND<T> =
         mapIndexedInline(toBufferND(), transform)
 
+    @PerformancePitfall
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): BufferND<T> =
         zipInline(left.toBufferND(), right.toBufferND(), transform)
 
@@ -78,6 +82,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     return BufferND(indexes, bufferAlgebra.zipInline(l.buffer, r.buffer, block))
 }
 
+@OptIn(PerformancePitfall::class)
 public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
     override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
@@ -101,6 +106,7 @@ public open class BufferedFieldOpsND<T, out A : Field<T>>(
         indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
     ) : this(BufferFieldOps(elementAlgebra, bufferFactory), indexerBuilder)
 
+    @OptIn(PerformancePitfall::class)
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { it * value }
 }
 

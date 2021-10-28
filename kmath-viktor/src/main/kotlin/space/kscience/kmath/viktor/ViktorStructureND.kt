@@ -22,7 +22,7 @@ public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructur
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, Double>> =
-        DefaultStrides(shape).indices().map { it to get(it) }
+        DefaultStrides(shape).asSequence().map { it to get(it) }
 }
 
 public fun F64Array.asStructure(): ViktorStructureND = ViktorStructureND(this)

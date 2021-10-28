@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.reflect.KClass
@@ -24,6 +25,8 @@ public fun Shape(shapeFirst: Int, vararg shapeRest: Int): Shape = intArrayOf(sha
 
 public interface WithShape {
     public val shape: Shape
+
+    public val indices: ShapeIndexer get() = DefaultStrides(shape)
 }
 
 /**
@@ -46,21 +49,37 @@ public interface AlgebraND<T, out C : Algebra<T>> {
     /**
      * Maps elements from one structure to another one by applying [transform] to them.
      */
-    public fun StructureND<T>.map(transform: C.(T) -> T): StructureND<T>
+    @PerformancePitfall("Very slow on remote execution algebras")
+    public fun StructureND<T>.map(transform: C.(T) -> T): StructureND<T> = structureND(shape) { index ->
+        elementAlgebra.transform(get(index))
+    }
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them alongside with their indices.
      */
-    public fun StructureND<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): StructureND<T>
+    @PerformancePitfall("Very slow on remote execution algebras")
+    public fun StructureND<T>.mapIndexed(transform: C.(index: IntArray, T) -> T): StructureND<T> =
+        structureND(shape) { index ->
+            elementAlgebra.transform(index, get(index))
+        }
 
     /**
      * Combines two structures into one.
      */
-    public fun zip(left: StructureND<T>, right: StructureND<T>, transform: C.(T, T) -> T): StructureND<T>
+    @PerformancePitfall("Very slow on remote execution algebras")
+    public fun zip(left: StructureND<T>, right: StructureND<T>, transform: C.(T, T) -> T): StructureND<T> {
+        require(left.shape.contentEquals(right.shape)) {
+            "Expected left and right of the same shape, but left - ${left.shape} and right - ${right.shape}"
+        }
+        return structureND(left.shape) { index ->
+            elementAlgebra.transform(left[index], right[index])
+        }
+    }
 
     /**
      * Element-wise invocation of function working on [T] on a [StructureND].
      */
+    @PerformancePitfall
     public operator fun Function1<T, T>.invoke(structure: StructureND<T>): StructureND<T> =
         structure.map { value -> this@invoke(value) }
 
@@ -104,6 +123,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
      * @param right the addend.
      * @return the sum.
      */
+    @OptIn(PerformancePitfall::class)
     override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
@@ -116,6 +136,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
      * @param arg the addend.
      * @return the sum.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun StructureND<T>.plus(arg: T): StructureND<T> = this.map { value -> add(arg, value) }
 
     /**
@@ -125,25 +146,28 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
      * @param arg the divisor.
      * @return the quotient.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun StructureND<T>.minus(arg: T): StructureND<T> = this.map { value -> add(arg, -value) }
 
     /**
      * Adds an element to ND structure of it.
      *
      * @receiver the augend.
-     * @param other the addend.
+     * @param arg the addend.
      * @return the sum.
      */
-    public operator fun T.plus(other: StructureND<T>): StructureND<T> = other.map { value -> add(this@plus, value) }
+    @OptIn(PerformancePitfall::class)
+    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
 
     /**
      * Subtracts an ND structure from an element of it.
      *
      * @receiver the dividend.
-     * @param other the divisor.
+     * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.minus(other: StructureND<T>): StructureND<T> = other.map { value -> add(-this@minus, value) }
+    @OptIn(PerformancePitfall::class)
+    public operator fun T.minus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(-this@minus, value) }
 
     public companion object
 }
@@ -166,6 +190,7 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
      * @param right the multiplier.
      * @return the product.
      */
+    @OptIn(PerformancePitfall::class)
     override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
@@ -178,6 +203,7 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
      * @param arg the multiplier.
      * @return the product.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun StructureND<T>.times(arg: T): StructureND<T> = this.map { value -> multiply(arg, value) }
 
     /**
@@ -187,6 +213,7 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
      * @param arg the multiplier.
      * @return the product.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun T.times(arg: StructureND<T>): StructureND<T> = arg.map { value -> multiply(this@times, value) }
 
     public companion object
@@ -214,6 +241,7 @@ public interface FieldOpsND<T, out A : Field<T>> :
      * @param right the divisor.
      * @return the quotient.
      */
+    @OptIn(PerformancePitfall::class)
     override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
@@ -225,6 +253,7 @@ public interface FieldOpsND<T, out A : Field<T>> :
      * @param arg the divisor.
      * @return the quotient.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun StructureND<T>.div(arg: T): StructureND<T> = this.map { value -> divide(arg, value) }
 
     /**
@@ -234,8 +263,10 @@ public interface FieldOpsND<T, out A : Field<T>> :
      * @param arg the divisor.
      * @return the quotient.
      */
+    @OptIn(PerformancePitfall::class)
     public operator fun T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
 
+    @OptIn(PerformancePitfall::class)
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { scale(it, value) }
 }
 

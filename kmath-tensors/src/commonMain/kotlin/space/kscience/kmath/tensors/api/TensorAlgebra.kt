@@ -32,13 +32,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
         valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
 
     /**
-     * Each element of the tensor [other] is added to this value.
+     * Each element of the tensor [arg] is added to this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be added.
-     * @return the sum of this value and tensor [other].
+     * @param arg tensor to be added.
+     * @return the sum of this value and tensor [arg].
      */
-    override operator fun T.plus(other: StructureND<T>): Tensor<T>
+    override operator fun T.plus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Adds the scalar [arg] to each element of this tensor and returns a new resulting tensor.
@@ -49,13 +49,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     override operator fun StructureND<T>.plus(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is added to each element of this tensor.
+     * Each element of the tensor [arg] is added to each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be added.
-     * @return the sum of this tensor and [other].
+     * @param arg tensor to be added.
+     * @return the sum of this tensor and [arg].
      */
-    override operator fun StructureND<T>.plus(other: StructureND<T>): Tensor<T>
+    override operator fun StructureND<T>.plus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Adds the scalar [value] to each element of this tensor.
@@ -65,20 +65,20 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     public operator fun Tensor<T>.plusAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is added to each element of this tensor.
+     * Each element of the tensor [arg] is added to each element of this tensor.
      *
-     * @param other tensor to be added.
+     * @param arg tensor to be added.
      */
-    public operator fun Tensor<T>.plusAssign(other: StructureND<T>)
+    public operator fun Tensor<T>.plusAssign(arg: StructureND<T>)
 
     /**
-     * Each element of the tensor [other] is subtracted from this value.
+     * Each element of the tensor [arg] is subtracted from this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be subtracted.
-     * @return the difference between this value and tensor [other].
+     * @param arg tensor to be subtracted.
+     * @return the difference between this value and tensor [arg].
      */
-    override operator fun T.minus(other: StructureND<T>): Tensor<T>
+    override operator fun T.minus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [arg] from each element of this tensor and returns a new resulting tensor.
@@ -89,13 +89,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     override operator fun StructureND<T>.minus(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is subtracted from each element of this tensor.
+     * Each element of the tensor [arg] is subtracted from each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be subtracted.
-     * @return the difference between this tensor and [other].
+     * @param arg tensor to be subtracted.
+     * @return the difference between this tensor and [arg].
      */
-    override operator fun StructureND<T>.minus(other: StructureND<T>): Tensor<T>
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [value] from each element of this tensor.
@@ -105,11 +105,11 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     public operator fun Tensor<T>.minusAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is subtracted from each element of this tensor.
+     * Each element of the tensor [arg] is subtracted from each element of this tensor.
      *
-     * @param other tensor to be subtracted.
+     * @param arg tensor to be subtracted.
      */
-    public operator fun Tensor<T>.minusAssign(other: StructureND<T>)
+    public operator fun Tensor<T>.minusAssign(arg: StructureND<T>)
 
 
     /**
@@ -130,13 +130,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     override operator fun StructureND<T>.times(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is multiplied by each element of this tensor.
+     * Each element of the tensor [arg] is multiplied by each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be multiplied.
-     * @return the product of this tensor and [other].
+     * @param arg tensor to be multiplied.
+     * @return the product of this tensor and [arg].
      */
-    override operator fun StructureND<T>.times(other: StructureND<T>): Tensor<T>
+    override operator fun StructureND<T>.times(arg: StructureND<T>): Tensor<T>
 
     /**
      * Multiplies the scalar [value] by each element of this tensor.
@@ -146,11 +146,11 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     public operator fun Tensor<T>.timesAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is multiplied by each element of this tensor.
+     * Each element of the tensor [arg] is multiplied by each element of this tensor.
      *
-     * @param other tensor to be multiplied.
+     * @param arg tensor to be multiplied.
      */
-    public operator fun Tensor<T>.timesAssign(other: StructureND<T>)
+    public operator fun Tensor<T>.timesAssign(arg: StructureND<T>)
 
     /**
      * Numerical negative, element-wise.
@@ -186,7 +186,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param shape the desired size
      * @return tensor with new shape
      */
-    public fun StructureND<T>.view(shape: IntArray): Tensor<T>
+    public fun Tensor<T>.view(shape: IntArray): Tensor<T>
 
     /**
      * View this tensor as the same size as [other].
@@ -196,7 +196,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param other the result tensor has the same size as other.
      * @return the result tensor with the same size as other.
      */
-    public fun StructureND<T>.viewAs(other: StructureND<T>): Tensor<T>
+    public fun Tensor<T>.viewAs(other: StructureND<T>): Tensor<T>
 
     /**
      * Matrix product of two tensors.
