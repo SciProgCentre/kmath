@@ -314,11 +314,11 @@ public open class DoubleTensorAlgebra :
         return DoubleTensor(shape, resBuffer)
     }
 
-    override fun StructureND<Double>.div(other: StructureND<Double>): DoubleTensor {
-        checkShapesCompatible(tensor, other)
+    override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleTensor {
+        checkShapesCompatible(tensor, arg)
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[other.tensor.bufferStart + i] /
-                    other.tensor.mutableBuffer.array()[other.tensor.bufferStart + i]
+            tensor.mutableBuffer.array()[arg.tensor.bufferStart + i] /
+                    arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i]
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
@@ -329,11 +329,11 @@ public open class DoubleTensorAlgebra :
         }
     }
 
-    override fun Tensor<Double>.divAssign(other: StructureND<Double>) {
-        checkShapesCompatible(tensor, other)
+    override fun Tensor<Double>.divAssign(arg: StructureND<Double>) {
+        checkShapesCompatible(tensor, arg)
         for (i in 0 until tensor.numElements) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] /=
-                other.tensor.mutableBuffer.array()[tensor.bufferStart + i]
+                arg.tensor.mutableBuffer.array()[tensor.bufferStart + i]
         }
     }
 

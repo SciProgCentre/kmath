@@ -148,8 +148,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
         ndArray.divi(value)
     }
 
-    override fun Tensor<T>.divAssign(other: StructureND<T>) {
-        ndArray.divi(other.ndArray)
+    override fun Tensor<T>.divAssign(arg: StructureND<T>) {
+        ndArray.divi(arg.ndArray)
     }
 
     override fun StructureND<T>.variance(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =

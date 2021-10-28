@@ -34,18 +34,18 @@ public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<B
         } else DoubleBuffer(DoubleArray(left.size) { left[it] + right[it] })
     }
 
-    override fun Buffer<Double>.plus(other: Buffer<Double>): DoubleBuffer = add(this, other)
+    override fun Buffer<Double>.plus(arg: Buffer<Double>): DoubleBuffer = add(this, arg)
 
-    override fun Buffer<Double>.minus(other: Buffer<Double>): DoubleBuffer {
-        require(other.size == this.size) {
-            "The size of the first buffer ${this.size} should be the same as for second one: ${other.size} "
+    override fun Buffer<Double>.minus(arg: Buffer<Double>): DoubleBuffer {
+        require(arg.size == this.size) {
+            "The size of the first buffer ${this.size} should be the same as for second one: ${arg.size} "
         }
 
-        return if (this is DoubleBuffer && other is DoubleBuffer) {
+        return if (this is DoubleBuffer && arg is DoubleBuffer) {
             val aArray = this.array
-            val bArray = other.array
+            val bArray = arg.array
             DoubleBuffer(DoubleArray(this.size) { aArray[it] - bArray[it] })
-        } else DoubleBuffer(DoubleArray(this.size) { this[it] - other[it] })
+        } else DoubleBuffer(DoubleArray(this.size) { this[it] - arg[it] })
     }
 
     //

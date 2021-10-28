@@ -294,11 +294,11 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
         }
     }
 
-    override fun Tensor<T>.divAssign(other: StructureND<T>) {
+    override fun Tensor<T>.divAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
-            array.divAssign(other.asMultik().array)
+            array.divAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.divide(t, other[index]) }
+            mapInPlace { index, t -> elementAlgebra.divide(t, arg[index]) }
         }
     }
 }

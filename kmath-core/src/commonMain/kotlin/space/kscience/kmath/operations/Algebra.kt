@@ -270,10 +270,10 @@ public interface FieldOps<T> : RingOps<T> {
      * Division of two elements.
      *
      * @receiver the dividend.
-     * @param other the divisor.
+     * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.div(other: T): T = divide(this, other)
+    public operator fun T.div(arg: T): T = divide(this, arg)
 
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         DIV_OPERATION -> ::divide
