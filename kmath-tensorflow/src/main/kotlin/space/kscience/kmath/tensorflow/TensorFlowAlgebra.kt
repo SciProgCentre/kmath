@@ -180,7 +180,9 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A: Ring<T>> internal cons
     }
 
     override fun StructureND<T>.dot(other: StructureND<T>): TensorFlowOutput<T, TT> = biOp(other) { l, r ->
-        ops.linalg.matMul(l, r)
+        ops.linalg.matMul(
+            if (l.asTensor().shape().numDimensions() == 1) ops.expandDims(l,ops.constant(0)) else l,
+            if (r.asTensor().shape().numDimensions() == 1) ops.expandDims(r,ops.constant(-1)) else r)
     }
 
     override fun diagonalEmbedding(diagonalEntries: Tensor<T>, offset: Int, dim1: Int, dim2: Int): Tensor<T> = ops.run {
