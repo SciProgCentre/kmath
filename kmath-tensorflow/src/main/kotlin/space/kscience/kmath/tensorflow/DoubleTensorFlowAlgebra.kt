@@ -3,11 +3,13 @@ package space.kscience.kmath.tensorflow
 import org.tensorflow.Graph
 import org.tensorflow.Output
 import org.tensorflow.ndarray.NdArray
-import org.tensorflow.ndarray.Shape
 import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.tensors.api.Tensor
+import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.DoubleField
 
 public class DoubleTensorFlowOutput(
     graph: Graph,
@@ -18,14 +20,28 @@ public class DoubleTensorFlowOutput(
 
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph
-) : TensorFlowAlgebra<Double, TFloat64>(graph) {
+) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph) {
 
-    override fun Tensor<Double>.asTensorFlow(): TensorFlowOutput<Double, TFloat64> =
+    override val elementAlgebra: DoubleField get() = DoubleField
+
+    override fun structureND(
+        shape: Shape,
+        initializer: DoubleField.(IntArray) -> Double
+    ): StructureND<Double> {
+        val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
+            DefaultStrides(shape).forEach { index ->
+                array.setDouble(elementAlgebra.initializer(index), *index.toLongArray())
+            }
+        }
+        return DoubleTensorFlowOutput(graph, ops.constant(res).asOutput())
+    }
+
+    override fun StructureND<Double>.asTensorFlow(): TensorFlowOutput<Double, TFloat64> =
         if (this is TensorFlowOutput<Double, *> && output.type() == TFloat64::class.java) {
             @Suppress("UNCHECKED_CAST")
             this as TensorFlowOutput<Double, TFloat64>
         } else {
-            val res = TFloat64.tensorOf(Shape.of(*shape.toLongArray())) { array ->
+            val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
                 @OptIn(PerformancePitfall::class)
                 elements().forEach { (index, value) ->
                     array.setDouble(value, *index.toLongArray())
