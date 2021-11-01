@@ -13,6 +13,7 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
+import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
 import kotlin.random.Random
@@ -55,6 +56,16 @@ internal class DotBenchmark {
 
     @Benchmark
     fun ejmlDotWithConversion(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
+        blackhole.consume(matrix1 dot matrix2)
+    }
+
+//    @Benchmark
+//    fun tensorDot(blackhole: Blackhole) = with(Double.tensorAlgebra) {
+//        blackhole.consume(matrix1 dot matrix2)
+//    }
+
+    @Benchmark
+    fun multikDot(blackhole: Blackhole) = with(Double.multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 

@@ -7,11 +7,9 @@
 
 package space.kscience.kmath.multik
 
-import org.jetbrains.kotlinx.multik.api.Multik
-import org.jetbrains.kotlinx.multik.api.linalg.dot
-import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.api.ndarrayOf
-import org.jetbrains.kotlinx.multik.api.zeros
+import org.jetbrains.kotlinx.multik.api.*
+import org.jetbrains.kotlinx.multik.api.linalg.LinAlg
+import org.jetbrains.kotlinx.multik.api.math.Math
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
@@ -52,9 +50,15 @@ private fun <T, D : Dimension> MultiArray<T, D>.asD2Array(): D2Array<T> {
     else throw ClassCastException("Cannot cast MultiArray to NDArray.")
 }
 
-public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> where T : Number, T : Comparable<T> {
+public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
+        where T : Number, T : Comparable<T> {
 
     public abstract val type: DataType
+
+    protected val multikMath: Math = mk.math
+    protected val multikLinAl: LinAlg = mk.linalg
+    protected val multikStat: Statistics = mk.stat
+
 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = DefaultStrides(shape)
@@ -65,6 +69,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         return MultikTensor(NDArray(memoryView, shape = shape, dim = DN(shape.size)))
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): MultikTensor<T> = if (this is MultikTensor) {
         val data = initMemoryView<T>(array.size, type)
         var count = 0
@@ -76,6 +81,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): MultikTensor<T> =
         if (this is MultikTensor) {
             val array = asMultik().array
@@ -96,6 +102,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
             }
         }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): MultikTensor<T> {
         require(left.shape.contentEquals(right.shape)) { "ND array shape mismatch" } //TODO replace by ShapeMismatchException
         val leftArray = left.asMultik().array
@@ -236,12 +243,12 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A> 
     override fun StructureND<T>.dot(other: StructureND<T>): MultikTensor<T> =
         if (this.shape.size == 1 && other.shape.size == 1) {
             Multik.ndarrayOf(
-                asMultik().array.asD1Array() dot other.asMultik().array.asD1Array()
-            ).asDNArray().wrap()
+                multikLinAl.linAlgEx.dotVV(asMultik().array.asD1Array(), other.asMultik().array.asD1Array())
+            ).wrap()
         } else if (this.shape.size == 2 && other.shape.size == 2) {
-            (asMultik().array.asD2Array() dot other.asMultik().array.asD2Array()).asDNArray().wrap()
+            multikLinAl.linAlgEx.dotMM(asMultik().array.asD2Array(), other.asMultik().array.asD2Array()).wrap()
         } else if (this.shape.size == 2 && other.shape.size == 1) {
-            (asMultik().array.asD2Array() dot other.asMultik().array.asD1Array()).asDNArray().wrap()
+            multikLinAl.linAlgEx.dotMV(asMultik().array.asD2Array(), other.asMultik().array.asD1Array()).wrap()
         } else {
             TODO("Not implemented for broadcasting")
         }
@@ -302,14 +309,6 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
         }
     }
 }
-
-public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleField>() {
-    override val elementAlgebra: DoubleField get() = DoubleField
-    override val type: DataType get() = DataType.DoubleDataType
-}
-
-public val Double.Companion.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra
-public val DoubleField.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra
 
 public object MultikFloatAlgebra : MultikDivisionTensorAlgebra<Float, FloatField>() {
     override val elementAlgebra: FloatField get() = FloatField

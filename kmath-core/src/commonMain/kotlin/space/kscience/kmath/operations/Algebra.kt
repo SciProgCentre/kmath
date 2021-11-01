@@ -6,6 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Stub for DSL the [Algebra] is.
@@ -99,6 +100,14 @@ public interface Algebra<T> {
      */
     public fun binaryOperation(operation: String, left: T, right: T): T =
         binaryOperationFunction(operation)(left, right)
+
+    /**
+     * Export an algebra element, so it could be accessed even after algebra scope is closed.
+     * This method must be used on algebras where data is stored externally or any local algebra state is used.
+     * By default (if not overridden), exports the object itself.
+     */
+    @UnstableKMathAPI
+    public fun export(arg: T): T = arg
 }
 
 public fun <T> Algebra<T>.bindSymbolOrNull(symbol: Symbol): T? = bindSymbolOrNull(symbol.identity)
@@ -162,6 +171,7 @@ public interface GroupOps<T> : Algebra<T> {
      * @return the difference.
      */
     public operator fun T.minus(arg: T): T = add(this, -arg)
+
     // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }

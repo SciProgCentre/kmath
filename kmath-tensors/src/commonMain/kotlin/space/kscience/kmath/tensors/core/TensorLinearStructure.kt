@@ -24,9 +24,20 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides() {
     override val linearSize: Int
         get() = shape.reduce(Int::times)
 
-    override fun equals(other: Any?): Boolean = false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
 
-    override fun hashCode(): Int = 0
+        other as TensorLinearStructure
+
+        if (!shape.contentEquals(other.shape)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return shape.contentHashCode()
+    }
 
     public companion object {
 
