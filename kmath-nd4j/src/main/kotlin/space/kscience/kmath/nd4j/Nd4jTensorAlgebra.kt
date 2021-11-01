@@ -108,8 +108,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun Tensor<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
     override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
-    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
-        ndBase.get().argmax(ndArray, keepDim, dim).wrap()
+    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> =
+        ndBase.get().argmax(ndArray, keepDim, dim).asIntStructure()
 
     override fun StructureND<T>.mean(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.mean(keepDim, dim).wrap()

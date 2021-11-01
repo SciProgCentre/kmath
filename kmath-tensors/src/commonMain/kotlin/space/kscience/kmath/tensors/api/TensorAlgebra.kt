@@ -324,7 +324,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int>
 
     override fun add(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left + right
 

@@ -277,7 +277,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         TODO("Not yet implemented")
     }
 
-    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T> {
+    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> {
         TODO("Not yet implemented")
     }
 }

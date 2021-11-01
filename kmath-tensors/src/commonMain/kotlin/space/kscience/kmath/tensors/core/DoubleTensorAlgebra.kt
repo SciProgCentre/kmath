@@ -10,6 +10,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
@@ -571,11 +572,11 @@ public open class DoubleTensorAlgebra :
     internal inline fun StructureND<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(tensor.copyArray())
 
-    internal inline fun StructureND<Double>.foldDim(
-        foldFunction: (DoubleArray) -> Double,
+    internal inline fun <reified R: Any> StructureND<Double>.foldDim(
+        foldFunction: (DoubleArray) -> R,
         dim: Int,
         keepDim: Boolean,
-    ): DoubleTensor {
+    ): BufferedTensor<R> {
         check(dim < dimension) { "Dimension $dim out of range $dimension" }
         val resShape = if (keepDim) {
             shape.take(dim).toIntArray() + intArrayOf(1) + shape.takeLast(dimension - dim - 1).toIntArray()
@@ -583,37 +584,39 @@ public open class DoubleTensorAlgebra :
             shape.take(dim).toIntArray() + shape.takeLast(dimension - dim - 1).toIntArray()
         }
         val resNumElements = resShape.reduce(Int::times)
-        val resTensor = DoubleTensor(resShape, DoubleArray(resNumElements) { 0.0 }, 0)
-        for (index in resTensor.indices.asSequence()) {
+        val init = foldFunction(DoubleArray(1){0.0})
+        val resTensor = BufferedTensor(resShape,
+            MutableBuffer.auto(resNumElements) { init }, 0)
+        for (index in resTensor.indices) {
             val prefix = index.take(dim).toIntArray()
             val suffix = index.takeLast(dimension - dim - 1).toIntArray()
             resTensor[index] = foldFunction(DoubleArray(shape[dim]) { i ->
                 tensor[prefix + intArrayOf(i) + suffix]
             })
         }
-
         return resTensor
     }
 
     override fun StructureND<Double>.sum(): Double = tensor.fold { it.sum() }
 
     override fun StructureND<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.sum() }, dim, keepDim)
+        foldDim({ x -> x.sum() }, dim, keepDim).toDoubleTensor()
 
     override fun StructureND<Double>.min(): Double = this.fold { it.minOrNull()!! }
 
     override fun StructureND<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.minOrNull()!! }, dim, keepDim)
+        foldDim({ x -> x.minOrNull()!! }, dim, keepDim).toDoubleTensor()
 
     override fun StructureND<Double>.max(): Double = this.fold { it.maxOrNull()!! }
 
     override fun StructureND<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim)
+        foldDim({ x -> x.maxOrNull()!! }, dim, keepDim).toDoubleTensor()
 
-    override fun StructureND<Double>.argMax(dim: Int, keepDim: Boolean): DoubleTensor =
+
+    override fun StructureND<Double>.argMax(dim: Int, keepDim: Boolean): IntTensor =
         foldDim({ x ->
-            x.withIndex().maxByOrNull { it.value }?.index!!.toDouble()
-        }, dim, keepDim)
+            x.withIndex().maxByOrNull { it.value }?.index!!
+        }, dim, keepDim).toIntTensor()
 
 
     override fun StructureND<Double>.mean(): Double = this.fold { it.sum() / tensor.numElements }
@@ -626,7 +629,7 @@ public open class DoubleTensorAlgebra :
             },
             dim,
             keepDim
-        )
+        ).toDoubleTensor()
 
     override fun StructureND<Double>.std(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
@@ -641,7 +644,7 @@ public open class DoubleTensorAlgebra :
         },
         dim,
         keepDim
-    )
+    ).toDoubleTensor()
 
     override fun StructureND<Double>.variance(): Double = this.fold { arr ->
         val mean = arr.sum() / tensor.numElements
@@ -656,7 +659,7 @@ public open class DoubleTensorAlgebra :
         },
         dim,
         keepDim
-    )
+    ).toDoubleTensor()
 
     private fun cov(x: DoubleTensor, y: DoubleTensor): Double {
         val n = x.shape[0]

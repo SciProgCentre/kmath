@@ -9,7 +9,6 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.core.internal.TensorLinearStructure
 
 /**
  * Represents [Tensor] over a [MutableBuffer] intended to be used through [DoubleTensor] and [IntTensor]
