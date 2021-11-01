@@ -157,7 +157,6 @@ val configureCpp by tasks.registering {
                 "-DJAVA_HOME=$javaHome",
                 "-DBUILD_JNOA=ON",
                 "-DCMAKE_BUILD_TYPE=Release",
-                "-DBUILD_NOA_CUDA=${if (!cudaFound) "ON" else "OFF"}",
                 "-DBUILD_NOA_TESTS=OFF",
                 "-DBUILD_NOA_BENCHMARKS=OFF",
                 "-DINSTALL_NOA=OFF"
