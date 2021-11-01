@@ -115,7 +115,7 @@ public open class DoubleTensorAlgebra :
         TensorLinearStructure(shape).asSequence().map { DoubleField.initializer(it) }.toMutableList().toDoubleArray()
     )
 
-    override operator fun StructureND<Double>.get(i: Int): DoubleTensor {
+    override operator fun Tensor<Double>.get(i: Int): DoubleTensor {
         val lastShape = tensor.shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
         val newStart = newShape.reduce(Int::times) * i + tensor.bufferStart
@@ -344,7 +344,7 @@ public open class DoubleTensorAlgebra :
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
-    override fun StructureND<Double>.transpose(i: Int, j: Int): DoubleTensor {
+    override fun Tensor<Double>.transpose(i: Int, j: Int): DoubleTensor {
         val ii = tensor.minusIndex(i)
         val jj = tensor.minusIndex(j)
         checkTranspose(tensor.dimension, ii, jj)

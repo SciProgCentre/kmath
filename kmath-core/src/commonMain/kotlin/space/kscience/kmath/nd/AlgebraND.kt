@@ -35,7 +35,7 @@ public interface WithShape {
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
  */
-public interface AlgebraND<T, out C : Algebra<T>> {
+public interface AlgebraND<T, out C : Algebra<T>>: Algebra<StructureND<T>> {
     /**
      * The algebra over elements of ND structure.
      */

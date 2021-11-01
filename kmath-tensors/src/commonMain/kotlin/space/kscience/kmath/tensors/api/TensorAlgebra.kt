@@ -166,7 +166,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param i index of the extractable tensor
      * @return subtensor of the original tensor with index [i]
      */
-    public operator fun StructureND<T>.get(i: Int): Tensor<T>
+    public operator fun Tensor<T>.get(i: Int): Tensor<T>
 
     /**
      * Returns a tensor that is a transposed version of this tensor. The given dimensions [i] and [j] are swapped.
@@ -176,7 +176,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param j the second dimension to be transposed
      * @return transposed tensor
      */
-    public fun StructureND<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
+    public fun Tensor<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
 
     /**
      * Returns a new tensor with the same data as the self tensor but of a different shape.

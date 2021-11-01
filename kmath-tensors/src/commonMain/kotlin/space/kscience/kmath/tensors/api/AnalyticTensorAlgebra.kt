@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Field
 
@@ -122,3 +123,6 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> : TensorPartialDivisionA
     public fun StructureND<T>.floor(): Tensor<T>
 
 }
+
+@UnstableKMathAPI
+public fun <T, ATA : AnalyticTensorAlgebra<T, *>> ATA.exp(arg: StructureND<T>): Tensor<T> = arg.exp()
