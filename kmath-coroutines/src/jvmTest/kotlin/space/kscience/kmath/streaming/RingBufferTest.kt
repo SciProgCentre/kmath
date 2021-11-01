@@ -1,13 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.streaming
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import space.kscience.kmath.structures.asSequence
+import space.kscience.kmath.operations.asSequence
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

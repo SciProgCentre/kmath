@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.asm.internal
@@ -14,9 +14,11 @@ import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
+import java.nio.file.Paths
 import java.util.stream.Collectors.toMap
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.io.path.writeBytes
 
 /**
  * ASM Builder is a structure that abstracts building a class designated to unwrap [MST] to plain Java expression.
@@ -194,15 +196,18 @@ internal class AsmBuilder<T>(
             visitEnd()
         }
 
-        val cls = classLoader.defineClass(className, classWriter.toByteArray())
-        // java.io.File("dump.class").writeBytes(classWriter.toByteArray())
+        val binary = classWriter.toByteArray()
+        val cls = classLoader.defineClass(className, binary)
+
+        if (System.getProperty("space.kscience.communicator.prettyapi.dump.generated.classes") == "1")
+            Paths.get("$className.class").writeBytes(binary)
+
         val l = MethodHandles.publicLookup()
 
-        if (hasConstants)
-            l.findConstructor(cls, MethodType.methodType(Void.TYPE, Array<Any>::class.java))
-                .invoke(constants.toTypedArray()) as Expression<T>
+        (if (hasConstants)
+            l.findConstructor(cls, MethodType.methodType(Void.TYPE, Array<Any>::class.java))(constants.toTypedArray())
         else
-            l.findConstructor(cls, MethodType.methodType(Void.TYPE)).invoke() as Expression<T>
+            l.findConstructor(cls, MethodType.methodType(Void.TYPE))()) as Expression<T>
     }
 
     /**

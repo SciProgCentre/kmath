@@ -1,15 +1,16 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.operations.Algebra
+
 /**
- * Represents expression which structure can be differentiated.
+ * Represents expression, which structure can be differentiated.
  *
  * @param T the type this expression takes as argument and returns.
- * @param R the type of expression this expression can be differentiated to.
  */
 public interface DifferentiableExpression<T> : Expression<T> {
     /**
@@ -24,16 +25,18 @@ public interface DifferentiableExpression<T> : Expression<T> {
 public fun <T> DifferentiableExpression<T>.derivative(symbols: List<Symbol>): Expression<T> =
     derivativeOrNull(symbols) ?: error("Derivative by symbols $symbols not provided")
 
-public fun <T> DifferentiableExpression<T>.derivative(vararg symbols: Symbol):  Expression<T> =
+public fun <T> DifferentiableExpression<T>.derivative(vararg symbols: Symbol): Expression<T> =
     derivative(symbols.toList())
 
-public fun <T> DifferentiableExpression<T>.derivative(name: String):  Expression<T> =
+public fun <T> DifferentiableExpression<T>.derivative(name: String): Expression<T> =
     derivative(StringSymbol(name))
 
 /**
- * A special type of [DifferentiableExpression] which returns typed expressions as derivatives
+ * A special type of [DifferentiableExpression] which returns typed expressions as derivatives.
+ *
+ * @param R the type of expression this expression can be differentiated to.
  */
-public interface SpecialDifferentiableExpression<T, R: Expression<T>>: DifferentiableExpression<T> {
+public interface SpecialDifferentiableExpression<T, out R : Expression<T>> : DifferentiableExpression<T> {
     override fun derivativeOrNull(symbols: List<Symbol>): R?
 }
 
@@ -53,9 +56,9 @@ public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T>
     /**
      * Returns first derivative of this expression by given [symbol].
      */
-    public abstract fun derivativeOrNull(symbol: Symbol):  Expression<T>?
+    public abstract fun derivativeOrNull(symbol: Symbol): Expression<T>?
 
-    public final override fun derivativeOrNull(symbols: List<Symbol>):  Expression<T>? {
+    public final override fun derivativeOrNull(symbols: List<Symbol>): Expression<T>? {
         val dSymbol = symbols.firstOrNull() ?: return null
         return derivativeOrNull(dSymbol)
     }
@@ -63,7 +66,10 @@ public abstract class FirstDerivativeExpression<T> : DifferentiableExpression<T>
 
 /**
  * A factory that converts an expression in autodiff variables to a [DifferentiableExpression]
+ * @param T type of the constants for the expression
+ * @param I type of the actual expression state
+ * @param A type of expression algebra
  */
-public fun interface AutoDiffProcessor<T : Any, I : Any, A : ExpressionAlgebra<T, I>, out R : Expression<T>> {
-    public fun process(function: A.() -> I): DifferentiableExpression<T>
+public fun interface AutoDiffProcessor<T, I, out A : Algebra<I>> {
+    public fun differentiate(function: A.() -> I): DifferentiableExpression<T>
 }

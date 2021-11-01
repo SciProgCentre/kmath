@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.histogram
@@ -8,8 +8,9 @@ package space.kscience.kmath.histogram
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.FieldND
-import space.kscience.kmath.nd.Strides
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
@@ -18,9 +19,9 @@ import space.kscience.kmath.operations.invoke
 /**
  * A simple histogram bin based on domain
  */
-public data class DomainBin<T : Comparable<T>>(
+public data class DomainBin<in T : Comparable<T>>(
     public val domain: Domain<T>,
-    public override val value: Number,
+    override val value: Number,
 ) : Bin<T>, Domain<T> by domain
 
 @OptIn(UnstableKMathAPI::class)
@@ -34,10 +35,10 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
         return context.produceBin(index, values[index])
     }
 
-    override val dimension: Int get() = context.strides.shape.size
+    override val dimension: Int get() = context.shape.size
 
     override val bins: Iterable<Bin<T>>
-        get() = context.strides.indices().map {
+        get() = DefaultStrides(context.shape).asSequence().map {
             context.produceBin(it, values[it])
         }.asIterable()
 
@@ -49,7 +50,7 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
 public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
     : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
     //public val valueSpace: Space<V>
-    public val strides: Strides
+    public val shape: Shape
     public val histogramValueSpace: FieldND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
@@ -66,10 +67,10 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
 
     public fun produce(builder: HistogramBuilder<T>.() -> Unit): IndexedHistogram<T, V>
 
-    override fun add(a: IndexedHistogram<T, V>, b: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
-        require(a.context == this) { "Can't operate on a histogram produced by external space" }
-        require(b.context == this) { "Can't operate on a histogram produced by external space" }
-        return IndexedHistogram(this, histogramValueSpace { a.values + b.values })
+    override fun add(left: IndexedHistogram<T, V>, right: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
+        require(left.context == this) { "Can't operate on a histogram produced by external space" }
+        require(right.context == this) { "Can't operate on a histogram produced by external space" }
+        return IndexedHistogram(this, histogramValueSpace { left.values + right.values })
     }
 
     override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {

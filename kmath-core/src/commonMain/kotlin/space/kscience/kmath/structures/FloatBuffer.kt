@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -34,7 +34,7 @@ public value class FloatBuffer(public val array: FloatArray) : MutableBuffer<Flo
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
- * It should return the value for an buffer element given its index.
+ * It should return the value for a buffer element given its index.
  */
 public inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer = FloatBuffer(FloatArray(size) { init(it) })
 
@@ -44,7 +44,7 @@ public inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer = Fl
 public fun FloatBuffer(vararg floats: Float): FloatBuffer = FloatBuffer(floats)
 
 /**
- * Returns a new [FloatArray] containing all of the elements of this [Buffer].
+ * Returns a new [FloatArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Float>.toFloatArray(): FloatArray = when (this) {
     is FloatBuffer -> array.copyOf()

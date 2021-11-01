@@ -1,14 +1,16 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Norm
+import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
 import kotlin.math.abs
 import kotlin.math.pow
@@ -17,9 +19,9 @@ import kotlin.test.assertEquals
 
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = AlgebraND.real(3, 3)
-    val array1 = algebra.produce { (i, j) -> (i + j).toDouble() }
-    val array2 = algebra.produce { (i, j) -> (i - j).toDouble() }
+    val algebra = DoubleField.ndAlgebra
+    val array1 = algebra.structureND(3, 3) { (i, j) -> (i + j).toDouble() }
+    val array2 = algebra.structureND(3, 3) { (i, j) -> (i - j).toDouble() }
 
     @Test
     fun testSum() {
@@ -38,17 +40,18 @@ class NumberNDFieldTest {
     }
 
     @Test
-    fun testGeneration() {
+    fun testGeneration() = Double.algebra.linearSpace.run {
 
-        val array = LinearSpace.real.buildMatrix(3, 3) { i, j ->
+        val array = buildMatrix(3, 3) { i, j ->
             (i * 10 + j).toDouble()
         }
 
-        for (i in 0..2)
+        for (i in 0..2) {
             for (j in 0..2) {
                 val expected = (i * 10 + j).toDouble()
                 assertEquals(expected, array[i, j], "Error at index [$i, $j]")
             }
+        }
     }
 
     @Test
@@ -71,7 +74,7 @@ class NumberNDFieldTest {
 
     @Test
     fun combineTest() {
-        val division = array1.combine(array2, Double::div)
+        val division = array1.zip(array2, Double::div)
     }
 
     object L2Norm : Norm<StructureND<Number>, Double> {
@@ -83,7 +86,7 @@ class NumberNDFieldTest {
     @Test
     fun testInternalContext() {
         algebra {
-            (AlgebraND.real(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (DoubleField.ndAlgebra(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

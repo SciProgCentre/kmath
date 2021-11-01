@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.functions
@@ -14,7 +14,7 @@ import space.kscience.kmath.operations.Ring
  * @param T the piece key type.
  * @param R the sub-function type.
  */
-public fun interface Piecewise<T, R> {
+public fun interface Piecewise<in T, out R> {
     /**
      * Returns the appropriate sub-function for given piece key.
      */
@@ -23,12 +23,14 @@ public fun interface Piecewise<T, R> {
 
 /**
  * Represents piecewise-defined function where all the sub-functions are polynomials.
- * @param pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no "holes" in it.
+ *
+ * @property pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no
+ * "holes" in it.
  */
 public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomial<T>> {
     public val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>
 
-    public override fun findPiece(arg: T): Polynomial<T>?
+    override fun findPiece(arg: T): Polynomial<T>?
 }
 
 /**
@@ -44,8 +46,8 @@ public fun <T : Comparable<T>> PiecewisePolynomial(
 }
 
 /**
- * An optimized piecewise which uses not separate pieces, but a range separated by delimiters.
- * The pices search is logarithmic
+ * An optimized piecewise that uses not separate pieces, but a range separated by delimiters.
+ * The pieces search is logarithmic.
  */
 private class OrderedPiecewisePolynomial<T : Comparable<T>>(
     override val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
@@ -77,7 +79,7 @@ public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
     /**
      * Dynamically adds a piece to the right side (beyond maximum argument value of previous piece)
      *
-     * @param right new rightmost position. If is less then current rightmost position, an error is thrown.
+     * @param right new rightmost position. If is less than current rightmost position, an error is thrown.
      * @param piece the sub-function.
      */
     public fun putRight(right: T, piece: Polynomial<T>) {
@@ -89,7 +91,7 @@ public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
     /**
      * Dynamically adds a piece to the left side (beyond maximum argument value of previous piece)
      *
-     * @param left the new leftmost position. If is less then current rightmost position, an error is thrown.
+     * @param left the new leftmost position. If is less than current rightmost position, an error is thrown.
      * @param piece the sub-function.
      */
     public fun putLeft(left: T, piece: Polynomial<T>) {
@@ -112,7 +114,7 @@ public fun <T : Comparable<T>> PiecewisePolynomial(
 ): PiecewisePolynomial<T> = PiecewiseBuilder(startingPoint).apply(builder).build()
 
 /**
- * Return a value of polynomial function with given [ring] an given [arg] or null if argument is outside of piecewise
+ * Return a value of polynomial function with given [ring] a given [arg] or null if argument is outside piecewise
  * definition.
  */
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =

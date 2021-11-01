@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.chains
@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.withLock
 
 /**
  * A not-necessary-Markov chain of some type
- * @param T - the chain element type
+ * @param T the chain element type
  */
 public interface Chain<out T> : Flow<T> {
     /**
@@ -22,7 +22,7 @@ public interface Chain<out T> : Flow<T> {
     public suspend fun next(): T
 
     /**
-     * Create a copy of current chain state. Consuming resulting chain does not affect initial chain
+     * Create a copy of current chain state. Consuming resulting chain does not affect initial chain.
      */
     public suspend fun fork(): Chain<T>
 
@@ -39,8 +39,8 @@ public fun <T> Sequence<T>.asChain(): Chain<T> = iterator().asChain()
  * A simple chain of independent tokens. [fork] returns the same chain.
  */
 public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
-    public override suspend fun next(): R = gen()
-    public override suspend fun fork(): Chain<R> = this
+    override suspend fun next(): R = gen()
+    override suspend fun fork(): Chain<R> = this
 }
 
 /**
@@ -52,19 +52,21 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R = mutex.withLock {
+    override suspend fun next(): R = mutex.withLock {
         val newValue = gen(value ?: seed())
         value = newValue
         newValue
     }
 
-    public override suspend fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
+    override suspend fun fork(): Chain<R> = MarkovChain(seed = { value ?: seed() }, gen = gen)
 }
 
 /**
- * A chain with possibly mutable state. The state must not be changed outside the chain. Two chins should never share the state
- * @param S - the state of the chain
- * @param forkState - the function to copy current state without modifying it
+ * A chain with possibly mutable state. The state must not be changed outside the chain. Two chins should never share
+ * the state.
+ *
+ * @param S the state of the chain.
+ * @param forkState the function to copy current state without modifying it.
  */
 public class StatefulChain<S, out R>(
     private val state: S,
@@ -77,26 +79,26 @@ public class StatefulChain<S, out R>(
 
     public fun value(): R? = value
 
-    public override suspend fun next(): R = mutex.withLock {
+    override suspend fun next(): R = mutex.withLock {
         val newValue = state.gen(value ?: state.seed())
         value = newValue
         newValue
     }
 
-    public override suspend fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
+    override suspend fun fork(): Chain<R> = StatefulChain(forkState(state), seed, forkState, gen)
 }
 
 /**
  * A chain that repeats the same value
  */
 public class ConstantChain<out T>(public val value: T) : Chain<T> {
-    public override suspend fun next(): T = value
-    public override suspend fun fork(): Chain<T> = this
+    override suspend fun next(): T = value
+    override suspend fun fork(): Chain<T> = this
 }
 
 /**
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed
- * since mapped chain consumes tokens. Accepts regular transformation function
+ * since mapped chain consumes tokens. Accepts regular transformation function.
  */
 public fun <T, R> Chain<T>.map(func: suspend (T) -> R): Chain<R> = object : Chain<R> {
     override suspend fun next(): R = func(this@map.next())

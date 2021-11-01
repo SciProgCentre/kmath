@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.benchmarks
@@ -75,8 +75,9 @@ internal class ExpressionsInterpretersBenchmark {
         private val algebra = DoubleField
         private const val times = 1_000_000
 
-        private val functional = DoubleField.expressionInExtendedField {
-            bindSymbol(x) * number(2.0) + number(2.0) / bindSymbol(x) - number(16.0) / sin(bindSymbol(x))
+        private val functional = DoubleField.expression {
+            val x = bindSymbol(Symbol.x)
+            x * number(2.0) + 2.0 / x - 16.0 / sin(x)
         }
 
         private val node = MstExtendedField {

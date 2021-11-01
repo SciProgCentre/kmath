@@ -1,20 +1,18 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.real
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Norm
+import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
 import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.fold
 import space.kscience.kmath.structures.indices
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 public typealias DoubleVector = Point<Double>
 
@@ -22,7 +20,7 @@ public typealias DoubleVector = Point<Double>
 public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
 
 /**
- * Fill the vector of given [size] with given [value]
+ * Fill the vector with given [size] with given [value]
  */
 @UnstableKMathAPI
 public fun Buffer.Companion.same(size: Int, value: Number): DoubleVector = double(size) { value.toDouble() }
@@ -105,8 +103,4 @@ public fun DoubleVector.sum(): Double {
     return res
 }
 
-public object VectorL2Norm : Norm<DoubleVector, Double> {
-    override fun norm(arg: DoubleVector): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
-}
-
-public val DoubleVector.norm: Double get() = VectorL2Norm.norm(this)
+public val DoubleVector.norm: Double get() = DoubleL2Norm.norm(this)

@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.noa
 
+import space.kscience.kmath.operations.Field
+
 public fun cudaAvailable(): Boolean {
     return JNoa.cudaIsAvailable()
 }
@@ -21,9 +23,9 @@ public fun setSeed(seed: Int): Unit {
     JNoa.setSeed(seed)
 }
 
-public inline fun <T, ArrayT,
+public inline fun <T, A : Field<T>, ArrayT,
         GradTensorT : NoaTensorOverField<T>,
-        GradAlgebraT : NoaPartialDivisionAlgebra<T, ArrayT, GradTensorT>>
+        GradAlgebraT : NoaPartialDivisionAlgebra<T, A, ArrayT, GradTensorT>>
         GradAlgebraT.withGradAt(
     tensor: GradTensorT,
     block: GradAlgebraT.(GradTensorT) -> GradTensorT

@@ -6,20 +6,22 @@
 package space.kscience.kmath.noa
 
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.noa.memory.NoaScope
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
 import space.kscience.kmath.tensors.core.TensorLinearStructure
 
-typealias Slice = Pair<Int,Int>
+internal typealias Slice = Pair<Int, Int>
 
-public sealed class NoaAlgebra<T, PrimitiveArray, TensorType : NoaTensor<T>>
+public sealed class NoaAlgebra<T, A : Ring<T>, PrimitiveArray, TensorType : NoaTensor<T>>
 protected constructor(protected val scope: NoaScope) :
-    TensorAlgebra<T> {
+    TensorAlgebra<T, A> {
 
-    protected abstract val Tensor<T>.tensor: TensorType
+    protected abstract val StructureND<T>.tensor: TensorType
 
     protected abstract fun wrap(tensorHandle: TensorHandle): TensorType
 
@@ -29,14 +31,14 @@ protected constructor(protected val scope: NoaScope) :
     /**
      * A scalar tensor must have empty shape
      */
-    override fun Tensor<T>.valueOrNull(): T? =
+    override fun StructureND<T>.valueOrNull(): T? =
         try {
             tensor.item()
         } catch (e: NoaException) {
             null
         }
 
-    override fun Tensor<T>.value(): T = tensor.item()
+    override fun StructureND<T>.value(): T = tensor.item()
 
     public abstract fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device = Device.CPU): TensorType
 
@@ -46,43 +48,43 @@ protected constructor(protected val scope: NoaScope) :
 
     public abstract fun full(value: T, shape: IntArray, device: Device = Device.CPU): TensorType
 
-    override operator fun Tensor<T>.times(other: Tensor<T>): TensorType {
-        return wrap(JNoa.timesTensor(tensor.tensorHandle, other.tensor.tensorHandle))
+    override operator fun StructureND<T>.times(arg: StructureND<T>): TensorType {
+        return wrap(JNoa.timesTensor(tensor.tensorHandle, arg.tensor.tensorHandle))
     }
 
-    override operator fun Tensor<T>.timesAssign(other: Tensor<T>): Unit {
-        JNoa.timesTensorAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    override operator fun Tensor<T>.timesAssign(arg: StructureND<T>): Unit {
+        JNoa.timesTensorAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
-    override operator fun Tensor<T>.plus(other: Tensor<T>): TensorType {
-        return wrap(JNoa.plusTensor(tensor.tensorHandle, other.tensor.tensorHandle))
+    override operator fun StructureND<T>.plus(arg: StructureND<T>): TensorType {
+        return wrap(JNoa.plusTensor(tensor.tensorHandle, arg.tensor.tensorHandle))
     }
 
-    override operator fun Tensor<T>.plusAssign(other: Tensor<T>): Unit {
-        JNoa.plusTensorAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    override operator fun Tensor<T>.plusAssign(arg: StructureND<T>): Unit {
+        JNoa.plusTensorAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
-    override operator fun Tensor<T>.minus(other: Tensor<T>): TensorType {
-        return wrap(JNoa.minusTensor(tensor.tensorHandle, other.tensor.tensorHandle))
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): TensorType {
+        return wrap(JNoa.minusTensor(tensor.tensorHandle, arg.tensor.tensorHandle))
     }
 
-    override operator fun Tensor<T>.minusAssign(other: Tensor<T>): Unit {
-        JNoa.minusTensorAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    override operator fun Tensor<T>.minusAssign(arg: StructureND<T>): Unit {
+        JNoa.minusTensorAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
-    override operator fun Tensor<T>.unaryMinus(): TensorType =
+    override operator fun StructureND<T>.unaryMinus(): TensorType =
         wrap(JNoa.unaryMinus(tensor.tensorHandle))
 
-    override infix fun Tensor<T>.dot(other: Tensor<T>): TensorType {
+    override infix fun StructureND<T>.dot(other: StructureND<T>): TensorType {
         return wrap(JNoa.matmul(tensor.tensorHandle, other.tensor.tensorHandle))
     }
 
-    public infix fun Tensor<T>.dotAssign(other: Tensor<T>): Unit {
-        JNoa.matmulAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    public infix fun Tensor<T>.dotAssign(arg: StructureND<T>): Unit {
+        JNoa.matmulAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
-    public infix fun Tensor<T>.dotRightAssign(other: Tensor<T>): Unit {
-        JNoa.matmulRightAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    public infix fun StructureND<T>.dotRightAssign(arg: Tensor<T>): Unit {
+        JNoa.matmulRightAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
     override operator fun Tensor<T>.get(i: Int): TensorType =
@@ -114,28 +116,28 @@ protected constructor(protected val scope: NoaScope) :
         return wrap(JNoa.viewTensor(tensor.tensorHandle, shape))
     }
 
-    override fun Tensor<T>.viewAs(other: Tensor<T>): TensorType {
+    override fun Tensor<T>.viewAs(other: StructureND<T>): TensorType {
         return wrap(JNoa.viewAsTensor(tensor.tensorHandle, other.tensor.tensorHandle))
     }
 
-    public fun Tensor<T>.abs(): TensorType = wrap(JNoa.absTensor(tensor.tensorHandle))
+    public fun StructureND<T>.abs(): TensorType = wrap(JNoa.absTensor(tensor.tensorHandle))
 
-    public fun Tensor<T>.sumAll(): TensorType = wrap(JNoa.sumTensor(tensor.tensorHandle))
-    override fun Tensor<T>.sum(): T = sumAll().item()
-    override fun Tensor<T>.sum(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.sumAll(): TensorType = wrap(JNoa.sumTensor(tensor.tensorHandle))
+    override fun StructureND<T>.sum(): T = sumAll().item()
+    override fun StructureND<T>.sum(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.sumDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    public fun Tensor<T>.minAll(): TensorType = wrap(JNoa.minTensor(tensor.tensorHandle))
-    override fun Tensor<T>.min(): T = minAll().item()
-    override fun Tensor<T>.min(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.minAll(): TensorType = wrap(JNoa.minTensor(tensor.tensorHandle))
+    override fun StructureND<T>.min(): T = minAll().item()
+    override fun StructureND<T>.min(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.minDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    public fun Tensor<T>.maxAll(): TensorType = wrap(JNoa.maxTensor(tensor.tensorHandle))
-    override fun Tensor<T>.max(): T = maxAll().item()
-    override fun Tensor<T>.max(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.maxAll(): TensorType = wrap(JNoa.maxTensor(tensor.tensorHandle))
+    override fun StructureND<T>.max(): T = maxAll().item()
+    override fun StructureND<T>.max(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.maxDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): NoaIntTensor =
+    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): NoaIntTensor =
         NoaIntTensor(scope, JNoa.argMaxTensor(tensor.tensorHandle, dim, keepDim))
 
     public fun Tensor<T>.flatten(startDim: Int, endDim: Int): TensorType =
@@ -175,119 +177,119 @@ protected constructor(protected val scope: NoaScope) :
     public fun NoaJitModule.setBuffer(name: String, buffer: Tensor<T>): Unit =
         JNoa.setModuleBuffer(jitModuleHandle, name, buffer.tensor.tensorHandle)
 
-    public infix fun TensorType.swap(other: TensorType): Unit =
-        JNoa.swapTensors(tensorHandle, other.tensorHandle)
+    public infix fun TensorType.swap(arg: TensorType): Unit =
+        JNoa.swapTensors(tensorHandle, arg.tensorHandle)
 
     public abstract fun TensorType.assignFromArray(array: PrimitiveArray): Unit
 
 }
 
-public sealed class NoaPartialDivisionAlgebra<T, PrimitiveArray, TensorType : NoaTensor<T>>
+public sealed class NoaPartialDivisionAlgebra<T, A : Field<T>, PrimitiveArray, TensorType : NoaTensor<T>>
 protected constructor(scope: NoaScope) :
-    NoaAlgebra<T, PrimitiveArray, TensorType>(scope),
-    LinearOpsTensorAlgebra<T>,
-    AnalyticTensorAlgebra<T> {
+    NoaAlgebra<T, A, PrimitiveArray, TensorType>(scope),
+    LinearOpsTensorAlgebra<T, A>,
+    AnalyticTensorAlgebra<T, A> {
 
-    override operator fun Tensor<T>.div(other: Tensor<T>): TensorType {
-        return wrap(JNoa.divTensor(tensor.tensorHandle, other.tensor.tensorHandle))
+    override operator fun StructureND<T>.div(arg: StructureND<T>): TensorType {
+        return wrap(JNoa.divTensor(tensor.tensorHandle, arg.tensor.tensorHandle))
     }
 
-    override operator fun Tensor<T>.divAssign(other: Tensor<T>): Unit {
-        JNoa.divTensorAssign(tensor.tensorHandle, other.tensor.tensorHandle)
+    override operator fun Tensor<T>.divAssign(arg: StructureND<T>): Unit {
+        JNoa.divTensorAssign(tensor.tensorHandle, arg.tensor.tensorHandle)
     }
 
-    public fun Tensor<T>.meanAll(): TensorType = wrap(JNoa.meanTensor(tensor.tensorHandle))
-    override fun Tensor<T>.mean(): T = meanAll().item()
-    override fun Tensor<T>.mean(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.meanAll(): TensorType = wrap(JNoa.meanTensor(tensor.tensorHandle))
+    override fun StructureND<T>.mean(): T = meanAll().item()
+    override fun StructureND<T>.mean(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.meanDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    public fun Tensor<T>.stdAll(): TensorType = wrap(JNoa.stdTensor(tensor.tensorHandle))
-    override fun Tensor<T>.std(): T = stdAll().item()
-    override fun Tensor<T>.std(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.stdAll(): TensorType = wrap(JNoa.stdTensor(tensor.tensorHandle))
+    override fun StructureND<T>.std(): T = stdAll().item()
+    override fun StructureND<T>.std(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.stdDimTensor(tensor.tensorHandle, dim, keepDim))
 
-    public fun Tensor<T>.varAll(): TensorType = wrap(JNoa.varTensor(tensor.tensorHandle))
-    override fun Tensor<T>.variance(): T = varAll().item()
-    override fun Tensor<T>.variance(dim: Int, keepDim: Boolean): TensorType =
+    public fun StructureND<T>.varAll(): TensorType = wrap(JNoa.varTensor(tensor.tensorHandle))
+    override fun StructureND<T>.variance(): T = varAll().item()
+    override fun StructureND<T>.variance(dim: Int, keepDim: Boolean): TensorType =
         wrap(JNoa.varDimTensor(tensor.tensorHandle, dim, keepDim))
 
     public abstract fun randNormal(shape: IntArray, device: Device = Device.CPU): TensorType
 
     public abstract fun randUniform(shape: IntArray, device: Device = Device.CPU): TensorType
 
-    public fun Tensor<T>.randUniform(): TensorType =
+    public fun StructureND<T>.randUniform(): TensorType =
         wrap(JNoa.randLike(tensor.tensorHandle))
 
-    public fun Tensor<T>.randUniformAssign(): Unit =
+    public fun StructureND<T>.randUniformAssign(): Unit =
         JNoa.randLikeAssign(tensor.tensorHandle)
 
-    public fun Tensor<T>.randNormal(): TensorType =
+    public fun StructureND<T>.randNormal(): TensorType =
         wrap(JNoa.randnLike(tensor.tensorHandle))
 
-    public fun Tensor<T>.randNormalAssign(): Unit =
+    public fun StructureND<T>.randNormalAssign(): Unit =
         JNoa.randnLikeAssign(tensor.tensorHandle)
 
-    override fun Tensor<T>.exp(): TensorType =
+    override fun StructureND<T>.exp(): TensorType =
         wrap(JNoa.expTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.ln(): TensorType =
+    override fun StructureND<T>.ln(): TensorType =
         wrap(JNoa.lnTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.sqrt(): TensorType =
+    override fun StructureND<T>.sqrt(): TensorType =
         wrap(JNoa.sqrtTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.cos(): TensorType =
+    override fun StructureND<T>.cos(): TensorType =
         wrap(JNoa.cosTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.acos(): TensorType =
+    override fun StructureND<T>.acos(): TensorType =
         wrap(JNoa.acosTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.cosh(): TensorType =
+    override fun StructureND<T>.cosh(): TensorType =
         wrap(JNoa.coshTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.acosh(): TensorType =
+    override fun StructureND<T>.acosh(): TensorType =
         wrap(JNoa.acoshTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.sin(): TensorType =
+    override fun StructureND<T>.sin(): TensorType =
         wrap(JNoa.sinTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.asin(): TensorType =
+    override fun StructureND<T>.asin(): TensorType =
         wrap(JNoa.asinTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.sinh(): TensorType =
+    override fun StructureND<T>.sinh(): TensorType =
         wrap(JNoa.sinhTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.asinh(): TensorType =
+    override fun StructureND<T>.asinh(): TensorType =
         wrap(JNoa.asinhTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.tan(): TensorType =
+    override fun StructureND<T>.tan(): TensorType =
         wrap(JNoa.tanTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.atan(): TensorType =
+    override fun StructureND<T>.atan(): TensorType =
         wrap(JNoa.atanTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.tanh(): TensorType =
+    override fun StructureND<T>.tanh(): TensorType =
         wrap(JNoa.tanhTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.atanh(): TensorType =
+    override fun StructureND<T>.atanh(): TensorType =
         wrap(JNoa.atanhTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.ceil(): TensorType =
+    override fun StructureND<T>.ceil(): TensorType =
         wrap(JNoa.ceilTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.floor(): TensorType =
+    override fun StructureND<T>.floor(): TensorType =
         wrap(JNoa.floorTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.det(): Tensor<T> =
+    override fun StructureND<T>.det(): Tensor<T> =
         wrap(JNoa.detTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.inv(): Tensor<T> =
+    override fun StructureND<T>.inv(): Tensor<T> =
         wrap(JNoa.invTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.cholesky(): Tensor<T> =
+    override fun StructureND<T>.cholesky(): Tensor<T> =
         wrap(JNoa.choleskyTensor(tensor.tensorHandle))
 
-    override fun Tensor<T>.qr(): Pair<TensorType, TensorType> {
+    override fun StructureND<T>.qr(): Pair<TensorType, TensorType> {
         val Q = JNoa.emptyTensor()
         val R = JNoa.emptyTensor()
         JNoa.qrTensor(tensor.tensorHandle, Q, R)
@@ -297,7 +299,7 @@ protected constructor(scope: NoaScope) :
     /**
      * this implementation satisfies `tensor = P dot L dot U`
      */
-    override fun Tensor<T>.lu(): Triple<TensorType, TensorType, TensorType> {
+    override fun StructureND<T>.lu(): Triple<TensorType, TensorType, TensorType> {
         val P = JNoa.emptyTensor()
         val L = JNoa.emptyTensor()
         val U = JNoa.emptyTensor()
@@ -305,7 +307,7 @@ protected constructor(scope: NoaScope) :
         return Triple(wrap(P), wrap(L), wrap(U))
     }
 
-    override fun Tensor<T>.svd(): Triple<TensorType, TensorType, TensorType> {
+    override fun StructureND<T>.svd(): Triple<TensorType, TensorType, TensorType> {
         val U = JNoa.emptyTensor()
         val V = JNoa.emptyTensor()
         val S = JNoa.emptyTensor()
@@ -313,7 +315,7 @@ protected constructor(scope: NoaScope) :
         return Triple(wrap(U), wrap(S), wrap(V))
     }
 
-    override fun Tensor<T>.symEig(): Pair<TensorType, TensorType> {
+    override fun StructureND<T>.symEig(): Pair<TensorType, TensorType> {
         val V = JNoa.emptyTensor()
         val S = JNoa.emptyTensor()
         JNoa.symEigTensor(tensor.tensorHandle, S, V)
@@ -344,15 +346,25 @@ protected constructor(scope: NoaScope) :
 
 public sealed class NoaDoubleAlgebra
 protected constructor(scope: NoaScope) :
-    NoaPartialDivisionAlgebra<Double, DoubleArray, NoaDoubleTensor>(scope) {
+    NoaPartialDivisionAlgebra<Double, DoubleField, DoubleArray, NoaDoubleTensor>(scope) {
 
-    private fun Tensor<Double>.castHelper(): NoaDoubleTensor =
+    override val elementAlgebra: DoubleField
+        get() = DoubleField
+
+    override fun structureND(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): NoaDoubleTensor =
         copyFromArray(
-            TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().toDoubleArray(),
+            TensorLinearStructure(shape).asSequence().map { DoubleField.initializer(it) }.toMutableList()
+                .toDoubleArray(),
+            shape, Device.CPU
+        )
+
+    private fun StructureND<Double>.castHelper(): NoaDoubleTensor =
+        copyFromArray(
+            TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().toDoubleArray(),
             this.shape, Device.CPU
         )
 
-    override val Tensor<Double>.tensor: NoaDoubleTensor
+    override val StructureND<Double>.tensor: NoaDoubleTensor
         get() = when (this) {
             is NoaDoubleTensor -> this
             else -> castHelper()
@@ -379,37 +391,37 @@ protected constructor(scope: NoaScope) :
     override fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device): NoaDoubleTensor =
         wrap(JNoa.randintDouble(low, high, shape, device.toInt()))
 
-    override operator fun Double.plus(other: Tensor<Double>): NoaDoubleTensor =
-        wrap(JNoa.plusDouble(this, other.tensor.tensorHandle))
+    override operator fun Double.plus(arg: StructureND<Double>): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Double>.plus(value: Double): NoaDoubleTensor =
+    override fun StructureND<Double>.plus(value: Double): NoaDoubleTensor =
         wrap(JNoa.plusDouble(value, tensor.tensorHandle))
 
     override fun Tensor<Double>.plusAssign(value: Double): Unit =
         JNoa.plusDoubleAssign(value, tensor.tensorHandle)
 
-    override operator fun Double.minus(other: Tensor<Double>): NoaDoubleTensor =
-        wrap(JNoa.plusDouble(-this, other.tensor.tensorHandle))
+    override operator fun Double.minus(arg: StructureND<Double>): NoaDoubleTensor =
+        wrap(JNoa.plusDouble(-this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Double>.minus(value: Double): NoaDoubleTensor =
+    override fun StructureND<Double>.minus(value: Double): NoaDoubleTensor =
         wrap(JNoa.plusDouble(-value, tensor.tensorHandle))
 
     override fun Tensor<Double>.minusAssign(value: Double): Unit =
         JNoa.plusDoubleAssign(-value, tensor.tensorHandle)
 
-    override operator fun Double.times(other: Tensor<Double>): NoaDoubleTensor =
-        wrap(JNoa.timesDouble(this, other.tensor.tensorHandle))
+    override operator fun Double.times(arg: StructureND<Double>): NoaDoubleTensor =
+        wrap(JNoa.timesDouble(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Double>.times(value: Double): NoaDoubleTensor =
+    override fun StructureND<Double>.times(value: Double): NoaDoubleTensor =
         wrap(JNoa.timesDouble(value, tensor.tensorHandle))
 
     override fun Tensor<Double>.timesAssign(value: Double): Unit =
         JNoa.timesDoubleAssign(value, tensor.tensorHandle)
 
-    override fun Double.div(other: Tensor<Double>): NoaDoubleTensor =
-        other.tensor * (1 / this)
+    override fun Double.div(arg: StructureND<Double>): NoaDoubleTensor =
+        arg.tensor * (1 / this)
 
-    override fun Tensor<Double>.div(value: Double): NoaDoubleTensor =
+    override fun StructureND<Double>.div(value: Double): NoaDoubleTensor =
         tensor * (1 / value)
 
     override fun Tensor<Double>.divAssign(value: Double): Unit =
@@ -436,15 +448,25 @@ protected constructor(scope: NoaScope) :
 
 public sealed class NoaFloatAlgebra
 protected constructor(scope: NoaScope) :
-    NoaPartialDivisionAlgebra<Float, FloatArray, NoaFloatTensor>(scope) {
+    NoaPartialDivisionAlgebra<Float, FloatField, FloatArray, NoaFloatTensor>(scope) {
 
-    private fun Tensor<Float>.castHelper(): NoaFloatTensor =
+    override val elementAlgebra: FloatField
+        get() = FloatField
+
+    override fun structureND(shape: IntArray, initializer: FloatField.(IntArray) -> Float): NoaFloatTensor =
         copyFromArray(
-            TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().toFloatArray(),
+            TensorLinearStructure(shape).asSequence().map { FloatField.initializer(it) }.toMutableList()
+                .toFloatArray(),
+            shape, Device.CPU
+        )
+
+    private fun StructureND<Float>.castHelper(): NoaFloatTensor =
+        copyFromArray(
+            TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().toFloatArray(),
             this.shape, Device.CPU
         )
 
-    override val Tensor<Float>.tensor: NoaFloatTensor
+    override val StructureND<Float>.tensor: NoaFloatTensor
         get() = when (this) {
             is NoaFloatTensor -> this
             else -> castHelper()
@@ -471,37 +493,37 @@ protected constructor(scope: NoaScope) :
     override fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device): NoaFloatTensor =
         wrap(JNoa.randintFloat(low, high, shape, device.toInt()))
 
-    override operator fun Float.plus(other: Tensor<Float>): NoaFloatTensor =
-        wrap(JNoa.plusFloat(this, other.tensor.tensorHandle))
+    override operator fun Float.plus(arg: StructureND<Float>): NoaFloatTensor =
+        wrap(JNoa.plusFloat(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Float>.plus(value: Float): NoaFloatTensor =
+    override fun StructureND<Float>.plus(value: Float): NoaFloatTensor =
         wrap(JNoa.plusFloat(value, tensor.tensorHandle))
 
     override fun Tensor<Float>.plusAssign(value: Float): Unit =
         JNoa.plusFloatAssign(value, tensor.tensorHandle)
 
-    override operator fun Float.minus(other: Tensor<Float>): NoaFloatTensor =
-        wrap(JNoa.plusFloat(-this, other.tensor.tensorHandle))
+    override operator fun Float.minus(arg: StructureND<Float>): NoaFloatTensor =
+        wrap(JNoa.plusFloat(-this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Float>.minus(value: Float): NoaFloatTensor =
+    override fun StructureND<Float>.minus(value: Float): NoaFloatTensor =
         wrap(JNoa.plusFloat(-value, tensor.tensorHandle))
 
     override fun Tensor<Float>.minusAssign(value: Float): Unit =
         JNoa.plusFloatAssign(-value, tensor.tensorHandle)
 
-    override operator fun Float.times(other: Tensor<Float>): NoaFloatTensor =
-        wrap(JNoa.timesFloat(this, other.tensor.tensorHandle))
+    override operator fun Float.times(arg: StructureND<Float>): NoaFloatTensor =
+        wrap(JNoa.timesFloat(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Float>.times(value: Float): NoaFloatTensor =
+    override fun StructureND<Float>.times(value: Float): NoaFloatTensor =
         wrap(JNoa.timesFloat(value, tensor.tensorHandle))
 
     override fun Tensor<Float>.timesAssign(value: Float): Unit =
         JNoa.timesFloatAssign(value, tensor.tensorHandle)
 
-    override fun Float.div(other: Tensor<Float>): NoaFloatTensor =
-        other.tensor * (1 / this)
+    override fun Float.div(arg: StructureND<Float>): NoaFloatTensor =
+        arg.tensor * (1 / this)
 
-    override fun Tensor<Float>.div(value: Float): NoaFloatTensor =
+    override fun StructureND<Float>.div(value: Float): NoaFloatTensor =
         tensor * (1 / value)
 
     override fun Tensor<Float>.divAssign(value: Float): Unit =
@@ -529,15 +551,25 @@ protected constructor(scope: NoaScope) :
 
 public sealed class NoaLongAlgebra
 protected constructor(scope: NoaScope) :
-    NoaAlgebra<Long, LongArray, NoaLongTensor>(scope) {
+    NoaAlgebra<Long, LongRing, LongArray, NoaLongTensor>(scope) {
 
-    private fun Tensor<Long>.castHelper(): NoaLongTensor =
+    override val elementAlgebra: LongRing
+        get() = LongRing
+
+    override fun structureND(shape: IntArray, initializer: LongRing.(IntArray) -> Long): NoaLongTensor =
         copyFromArray(
-            TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().toLongArray(),
+            TensorLinearStructure(shape).asSequence().map { LongRing.initializer(it) }.toMutableList()
+                .toLongArray(),
+            shape, Device.CPU
+        )
+
+    private fun StructureND<Long>.castHelper(): NoaLongTensor =
+        copyFromArray(
+            TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().toLongArray(),
             this.shape, Device.CPU
         )
 
-    override val Tensor<Long>.tensor: NoaLongTensor
+    override val StructureND<Long>.tensor: NoaLongTensor
         get() = when (this) {
             is NoaLongTensor -> this
             else -> castHelper()
@@ -558,28 +590,28 @@ protected constructor(scope: NoaScope) :
     override fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device): NoaLongTensor =
         wrap(JNoa.randintLong(low, high, shape, device.toInt()))
 
-    override operator fun Long.plus(other: Tensor<Long>): NoaLongTensor =
-        wrap(JNoa.plusLong(this, other.tensor.tensorHandle))
+    override operator fun Long.plus(arg: StructureND<Long>): NoaLongTensor =
+        wrap(JNoa.plusLong(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Long>.plus(value: Long): NoaLongTensor =
+    override fun StructureND<Long>.plus(value: Long): NoaLongTensor =
         wrap(JNoa.plusLong(value, tensor.tensorHandle))
 
     override fun Tensor<Long>.plusAssign(value: Long): Unit =
         JNoa.plusLongAssign(value, tensor.tensorHandle)
 
-    override operator fun Long.minus(other: Tensor<Long>): NoaLongTensor =
-        wrap(JNoa.plusLong(-this, other.tensor.tensorHandle))
+    override operator fun Long.minus(arg: StructureND<Long>): NoaLongTensor =
+        wrap(JNoa.plusLong(-this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Long>.minus(value: Long): NoaLongTensor =
+    override fun StructureND<Long>.minus(value: Long): NoaLongTensor =
         wrap(JNoa.plusLong(-value, tensor.tensorHandle))
 
     override fun Tensor<Long>.minusAssign(value: Long): Unit =
         JNoa.plusLongAssign(-value, tensor.tensorHandle)
 
-    override operator fun Long.times(other: Tensor<Long>): NoaLongTensor =
-        wrap(JNoa.timesLong(this, other.tensor.tensorHandle))
+    override operator fun Long.times(arg: StructureND<Long>): NoaLongTensor =
+        wrap(JNoa.timesLong(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Long>.times(value: Long): NoaLongTensor =
+    override fun StructureND<Long>.times(value: Long): NoaLongTensor =
         wrap(JNoa.timesLong(value, tensor.tensorHandle))
 
     override fun Tensor<Long>.timesAssign(value: Long): Unit =
@@ -606,15 +638,25 @@ protected constructor(scope: NoaScope) :
 
 public sealed class NoaIntAlgebra
 protected constructor(scope: NoaScope) :
-    NoaAlgebra<Int, IntArray, NoaIntTensor>(scope) {
+    NoaAlgebra<Int, IntRing, IntArray, NoaIntTensor>(scope) {
 
-    private fun Tensor<Int>.castHelper(): NoaIntTensor =
+    override val elementAlgebra: IntRing
+        get() = IntRing
+
+    override fun structureND(shape: IntArray, initializer: IntRing.(IntArray) -> Int): NoaIntTensor =
         copyFromArray(
-            TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().toIntArray(),
+            TensorLinearStructure(shape).asSequence().map { IntRing.initializer(it) }.toMutableList()
+                .toIntArray(),
+            shape, Device.CPU
+        )
+
+    private fun StructureND<Int>.castHelper(): NoaIntTensor =
+        copyFromArray(
+            TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().toIntArray(),
             this.shape, Device.CPU
         )
 
-    override val Tensor<Int>.tensor: NoaIntTensor
+    override val StructureND<Int>.tensor: NoaIntTensor
         get() = when (this) {
             is NoaIntTensor -> this
             else -> castHelper()
@@ -635,28 +677,28 @@ protected constructor(scope: NoaScope) :
     override fun randDiscrete(low: Long, high: Long, shape: IntArray, device: Device): NoaIntTensor =
         wrap(JNoa.randintInt(low, high, shape, device.toInt()))
 
-    override operator fun Int.plus(other: Tensor<Int>): NoaIntTensor =
-        wrap(JNoa.plusInt(this, other.tensor.tensorHandle))
+    override operator fun Int.plus(arg: StructureND<Int>): NoaIntTensor =
+        wrap(JNoa.plusInt(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Int>.plus(value: Int): NoaIntTensor =
+    override fun StructureND<Int>.plus(value: Int): NoaIntTensor =
         wrap(JNoa.plusInt(value, tensor.tensorHandle))
 
     override fun Tensor<Int>.plusAssign(value: Int): Unit =
         JNoa.plusIntAssign(value, tensor.tensorHandle)
 
-    override operator fun Int.minus(other: Tensor<Int>): NoaIntTensor =
-        wrap(JNoa.plusInt(-this, other.tensor.tensorHandle))
+    override operator fun Int.minus(arg: StructureND<Int>): NoaIntTensor =
+        wrap(JNoa.plusInt(-this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Int>.minus(value: Int): NoaIntTensor =
+    override fun StructureND<Int>.minus(value: Int): NoaIntTensor =
         wrap(JNoa.plusInt(-value, tensor.tensorHandle))
 
     override fun Tensor<Int>.minusAssign(value: Int): Unit =
         JNoa.plusIntAssign(-value, tensor.tensorHandle)
 
-    override operator fun Int.times(other: Tensor<Int>): NoaIntTensor =
-        wrap(JNoa.timesInt(this, other.tensor.tensorHandle))
+    override operator fun Int.times(arg: StructureND<Int>): NoaIntTensor =
+        wrap(JNoa.timesInt(this, arg.tensor.tensorHandle))
 
-    override fun Tensor<Int>.times(value: Int): NoaIntTensor =
+    override fun StructureND<Int>.times(value: Int): NoaIntTensor =
         wrap(JNoa.timesInt(value, tensor.tensorHandle))
 
     override fun Tensor<Int>.timesAssign(value: Int): Unit =

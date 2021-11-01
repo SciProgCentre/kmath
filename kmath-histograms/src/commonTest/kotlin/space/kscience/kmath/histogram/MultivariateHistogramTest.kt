@@ -1,10 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.real.DoubleVector
 import kotlin.random.Random
@@ -69,7 +70,7 @@ internal class MultivariateHistogramTest {
             }
             val res = histogram1 - histogram2
             assertTrue {
-                strides.indices().all { index ->
+                DefaultStrides(shape).asSequence().all { index ->
                     res.values[index] <= histogram1.values[index]
                 }
             }

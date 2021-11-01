@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.integration
@@ -13,9 +13,10 @@ import space.kscience.kmath.operations.sum
 
 /**
  * Use double pass Simpson rule integration with a fixed number of points.
- * Requires [UnivariateIntegrandRanges] or [IntegrationRange] and [IntegrandMaxCalls]
- * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
- * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ * Requires [UnivariateIntegrandRanges] or [IntegrationRange] and [IntegrandMaxCalls].
+ * * [IntegrationRange]&mdash;the univariate range of integration. By default, uses `0..1` interval.
+ * * [IntegrandMaxCalls]&mdash;the maximum number of function calls during integration. For non-iterative rules, always
+ * uses the maximum number of points. By default, uses 10 points.
  */
 @UnstableKMathAPI
 public class SimpsonIntegrator<T : Any>(
@@ -43,7 +44,7 @@ public class SimpsonIntegrator<T : Any>(
         return res
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
+    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
         val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
         return if (ranges != null) {
             val res = algebra.sum(ranges.ranges.map { integrateRange(integrand, it.first, it.second) })
@@ -63,12 +64,12 @@ public val <T : Any> Field<T>.simpsonIntegrator: SimpsonIntegrator<T> get() = Si
 
 /**
  * Use double pass Simpson rule integration with a fixed number of points.
- * Requires [UnivariateIntegrandRanges] or [IntegrationRange] and [IntegrandMaxCalls]
- * [IntegrationRange] - the univariate range of integration. By default uses 0..1 interval.
- * [IntegrandMaxCalls] - the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default uses 10 points.
+ * Requires [UnivariateIntegrandRanges] or [IntegrationRange] and [IntegrandMaxCalls].
+ * * [IntegrationRange]&mdash;the univariate range of integration. By default, uses `0.0..1.0` interval.
+ * * [IntegrandMaxCalls]&mdash;the maximum number of function calls during integration. For non-iterative rules, always uses
+ * the maximum number of points. By default, uses 10 points.
  */
 public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
-
     private fun integrateRange(
         integrand: UnivariateIntegrand<Double>, range: ClosedRange<Double>, numPoints: Int,
     ): Double {
@@ -89,7 +90,7 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
         return res
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }

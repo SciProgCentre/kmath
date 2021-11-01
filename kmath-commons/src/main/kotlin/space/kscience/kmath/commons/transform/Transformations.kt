@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.commons.transform
@@ -10,10 +10,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.apache.commons.math3.transform.*
 import space.kscience.kmath.complex.Complex
+import space.kscience.kmath.operations.SuspendBufferTransform
 import space.kscience.kmath.streaming.chunked
 import space.kscience.kmath.streaming.spread
-import space.kscience.kmath.structures.*
-
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.asBuffer
 
 
 /**
@@ -32,7 +35,7 @@ public object Transformations {
     /**
      * Create a virtual buffer on top of array
      */
-    private fun Array<org.apache.commons.math3.complex.Complex>.asBuffer() = VirtualBuffer<Complex>(size) {
+    private fun Array<org.apache.commons.math3.complex.Complex>.asBuffer() = VirtualBuffer(size) {
         val value = get(it)
         Complex(value.real, value.imaginary)
     }

@@ -13,8 +13,10 @@
 - Extended operations for ND4J fields
 - Jupyter Notebook integration module (kmath-jupyter)
 - `@PerformancePitfall` annotation to mark possibly slow API
+- Unified architecture for Integration and Optimization using features.
 - `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
 - Integration between `MST` and Symja `IExpr`
+- Complex power
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -36,8 +38,17 @@
 - Remove Any restriction on polynomials
 - Add `out` variance to type parameters of `StructureND` and its implementations where possible
 - Rename `DifferentiableMstExpression` to `KotlingradExpression`
+- `FeatureSet` now accepts only `Feature`. It is possible to override keys and use interfaces.
+- Use `Symbol` factory function instead of `StringSymbol`
+- New discoverability pattern: `<Type>.algebra.<nd/etc>`
+- Adjusted commons-math API for linear solvers to match conventions.
+- Buffer algebra does not require size anymore
+- Operations -> Ops
+- Default Buffer and ND algebras are now Ops and lack neutral elements (0, 1) as well as algebra-level shapes.
+- Tensor algebra takes read-only structures as input and inherits AlgebraND
 
 ### Deprecated
+- Specialized `DoubleBufferAlgebra`
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
@@ -47,6 +58,7 @@
 - Expression algebra builders
 - Complex and Quaternion no longer are elements.
 - Second generic from DifferentiableExpression
+- Algebra elements are completely removed. Use algebra contexts instead.
 
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.chains
@@ -32,9 +32,9 @@ public interface BlockingBufferChain<out T> : BlockingChain<T>, BufferChain<T> {
 
     public fun nextBufferBlocking(size: Int): Buffer<T>
 
-    public override fun nextBlocking(): T = nextBufferBlocking(1)[0]
+    override fun nextBlocking(): T = nextBufferBlocking(1)[0]
 
-    public override suspend fun nextBuffer(size: Int): Buffer<T> = nextBufferBlocking(size)
+    override suspend fun nextBuffer(size: Int): Buffer<T> = nextBufferBlocking(size)
 
     override suspend fun fork(): BlockingBufferChain<T>
 }

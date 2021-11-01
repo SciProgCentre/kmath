@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
 package space.kscience.kmath.tensors.core
 
 
@@ -17,7 +22,7 @@ internal class TestDoubleTensorAlgebra {
     }
 
     @Test
-    fun TestDoubleDiv() = DoubleTensorAlgebra {
+    fun testDoubleDiv() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
         val res = 2.0/tensor
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(1.0, 0.5))

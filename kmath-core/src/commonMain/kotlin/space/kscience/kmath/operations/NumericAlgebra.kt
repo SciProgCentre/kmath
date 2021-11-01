@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
@@ -26,11 +26,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically dispatches a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [leftSideNumberOperation] overload:
-     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b)`.
+     * 1. If operation is not defined in the structure, then function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [leftSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -41,11 +41,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically invokes a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second [leftSideNumberOperation] overload:
-     * i.e. `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [leftSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `leftSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @param left the first argument of operation.
@@ -58,11 +58,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically dispatches a binary operation with the certain name with numeric first argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
-     * i.e. `rightSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [rightSideNumberOperation]: for any `a`, `b`, and `c`,
+     * `rightSideNumberOperationFunction(a)(b, c) == leftSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -73,11 +73,11 @@ public interface NumericAlgebra<T> : Algebra<T> {
     /**
      * Dynamically invokes a binary operation with the certain name with numeric second argument.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with the other [rightSideNumberOperationFunction] overload:
-     * i.e. `rightSideNumberOperationFunction(a)(b, c) == rightSideNumberOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [rightSideNumberOperationFunction]: for any `a`, `b`, and `c`,
+     * `rightSideNumberOperationFunction(a)(b, c) == rightSideNumberOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @param left the first argument of operation.
@@ -87,7 +87,7 @@ public interface NumericAlgebra<T> : Algebra<T> {
     public fun rightSideNumberOperation(operation: String, left: T, right: Number): T =
         rightSideNumberOperationFunction(operation)(left, right)
 
-    public override fun bindSymbolOrNull(value: String): T? = when (value) {
+    override fun bindSymbolOrNull(value: String): T? = when (value) {
         "pi" -> number(PI)
         "e" -> number(E)
         else -> super.bindSymbolOrNull(value)
@@ -139,10 +139,10 @@ public interface ScaleOperations<T> : Algebra<T> {
      * Multiplication of this number by element.
      *
      * @receiver the multiplier.
-     * @param b the multiplicand.
+     * @param arg the multiplicand.
      * @return the product.
      */
-    public operator fun Number.times(b: T): T = b * this
+    public operator fun Number.times(arg: T): T = arg * this
 }
 
 /**
@@ -150,38 +150,38 @@ public interface ScaleOperations<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface NumbersAddOperations<T> : Ring<T>, NumericAlgebra<T> {
+public interface NumbersAddOps<T> : RingOps<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param other the addend.
      */
-    public operator fun T.plus(b: Number): T = this + number(b)
+    public operator fun T.plus(other: Number): T = this + number(other)
 
     /**
      * Addition of scalar and element.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param other the addend.
      */
-    public operator fun Number.plus(b: T): T = b + this
+    public operator fun Number.plus(other: T): T = other + this
 
     /**
      * Subtraction of element from number.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param other the subtrahend.
      * @receiver the difference.
      */
-    public operator fun T.minus(b: Number): T = this - number(b)
+    public operator fun T.minus(other: Number): T = this - number(other)
 
     /**
      * Subtraction of number from element.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param other the subtrahend.
      * @receiver the difference.
      */
-    public operator fun Number.minus(b: T): T = -b + this
+    public operator fun Number.minus(other: T): T = -other + this
 }

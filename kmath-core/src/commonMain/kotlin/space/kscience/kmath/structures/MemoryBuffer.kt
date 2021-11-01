@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -21,6 +21,8 @@ public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected 
 
     override operator fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MemoryBuffer<T> =
@@ -48,8 +50,8 @@ public class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) :
 
     private val writer: MemoryWriter = memory.writer()
 
-    public override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
-    public override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
+    override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
+    override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MutableMemoryBuffer<T> =

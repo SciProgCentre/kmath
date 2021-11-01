@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.distributions
@@ -19,10 +19,10 @@ public interface Distribution<T : Any> : Sampler<T> {
      */
     public fun probability(arg: T): Double
 
-    public override fun sample(generator: RandomGenerator): Chain<T>
+    override fun sample(generator: RandomGenerator): Chain<T>
 
     /**
-     * An empty companion. Distribution factories should be written as its extensions
+     * An empty companion. Distribution factories should be written as its extensions.
      */
     public companion object
 }

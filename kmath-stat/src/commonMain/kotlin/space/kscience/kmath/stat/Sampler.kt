@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
@@ -12,7 +12,7 @@ import space.kscience.kmath.structures.*
 import kotlin.jvm.JvmName
 
 /**
- * Sampler that generates chains of values of type [T] in a chain of type [C].
+ * Sampler that generates chains of values of type [T].
  */
 public fun interface Sampler<out T : Any> {
     /**

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.real
@@ -13,8 +13,8 @@ import space.kscience.kmath.structures.DoubleBuffer
  * Map one [BufferND] using function without indices.
  */
 public inline fun BufferND<Double>.mapInline(crossinline transform: DoubleField.(Double) -> Double): BufferND<Double> {
-    val array = DoubleArray(strides.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
-    return BufferND(strides, DoubleBuffer(array))
+    val array = DoubleArray(indices.linearSize) { offset -> DoubleField.transform(buffer[offset]) }
+    return BufferND(indices, DoubleBuffer(array))
 }
 
 /**

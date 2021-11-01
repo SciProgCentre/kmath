@@ -10,7 +10,7 @@ Performance and visualization extensions to MST API.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-13`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-14`.
 
 **Gradle:**
 ```gradle
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-13'
+    implementation 'space.kscience:kmath-ast:0.3.0-dev-14'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-13")
+    implementation("space.kscience:kmath-ast:0.3.0-dev-14")
 }
 ```
 
@@ -106,7 +106,7 @@ var executable = function (constants, arguments) {
 };
 ```
 
-JS also supports very experimental expression optimization with [WebAssembly](https://webassembly.org/) IR generation.
+JS also supports experimental expression optimization with [WebAssembly](https://webassembly.org/) IR generation.
 Currently, only expressions inside `DoubleField` and `IntRing` are supported.
 
 ```kotlin
@@ -161,7 +161,10 @@ public fun main() {
 
 Result LaTeX:
 
+<div style="background-color:white;">
+
 ![](https://latex.codecogs.com/gif.latex?%5Coperatorname{exp}%5C,%5Cleft(%5Csqrt{x}%5Cright)-%5Cfrac{%5Cfrac{%5Coperatorname{arcsin}%5C,%5Cleft(2%5C,x%5Cright)}{2%5Ctimes10^{10}%2Bx^{3}}}{12}+x^{2/3})
+</div>
 
 Result MathML (can be used with MathJax or other renderers):
 

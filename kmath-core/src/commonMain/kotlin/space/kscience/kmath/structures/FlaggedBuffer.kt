@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -51,10 +51,12 @@ public fun FlaggedBuffer<*>.hasFlag(index: Int, flag: ValueFlag): Boolean = (get
 public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, ValueFlag.MISSING)
 
 /**
- * A real buffer which supports flags for each value like NaN or Missing
+ * A [Double] buffer that supports flags for each value like `NaN` or Missing.
  */
-public class FlaggedDoubleBuffer(public val values: DoubleArray, public val flags: ByteArray) : FlaggedBuffer<Double?>,
-    Buffer<Double?> {
+public class FlaggedDoubleBuffer(
+    public val values: DoubleArray,
+    public val flags: ByteArray
+) : FlaggedBuffer<Double?>, Buffer<Double?> {
     init {
         require(values.size == flags.size) { "Values and flags must have the same dimensions" }
     }
@@ -68,6 +70,8 @@ public class FlaggedDoubleBuffer(public val values: DoubleArray, public val flag
     override operator fun iterator(): Iterator<Double?> = values.indices.asSequence().map {
         if (isValid(it)) values[it] else null
     }.iterator()
+
+    override fun toString(): String = Buffer.toString(this)
 }
 
 public inline fun FlaggedDoubleBuffer.forEachValid(block: (Double) -> Unit) {

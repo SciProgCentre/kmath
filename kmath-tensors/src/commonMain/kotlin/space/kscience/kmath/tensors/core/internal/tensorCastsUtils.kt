@@ -1,11 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.MutableBufferND
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.asMutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.BufferedTensor
@@ -19,20 +20,24 @@ internal fun BufferedTensor<Int>.asTensor(): IntTensor =
 internal fun BufferedTensor<Double>.asTensor(): DoubleTensor =
     DoubleTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)
 
-internal fun <T> Tensor<T>.copyToBufferedTensor(): BufferedTensor<T> =
+internal fun <T> StructureND<T>.copyToBufferedTensor(): BufferedTensor<T> =
     BufferedTensor(
         this.shape,
-        TensorLinearStructure(this.shape).indices().map(this::get).toMutableList().asMutableBuffer(), 0
+        TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().asMutableBuffer(), 0
     )
 
-internal fun <T> Tensor<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
+internal fun <T> StructureND<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
-    is MutableBufferND<T> -> if (this.strides.strides contentEquals TensorLinearStructure(this.shape).strides)
-        BufferedTensor(this.shape, this.mutableBuffer, 0) else this.copyToBufferedTensor()
+    is MutableBufferND<T> -> if (this.indices == TensorLinearStructure(this.shape)) {
+        BufferedTensor(this.shape, this.buffer, 0)
+    } else {
+        this.copyToBufferedTensor()
+    }
     else -> this.copyToBufferedTensor()
 }
 
-internal val Tensor<Double>.tensor: DoubleTensor
+@PublishedApi
+internal val StructureND<Double>.tensor: DoubleTensor
     get() = when (this) {
         is DoubleTensor -> this
         else -> this.toBufferedTensor().asTensor()

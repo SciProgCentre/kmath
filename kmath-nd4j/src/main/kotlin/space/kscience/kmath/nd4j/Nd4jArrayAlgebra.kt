@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
@@ -15,13 +15,6 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 
-internal fun AlgebraND<*, *>.checkShape(array: INDArray): INDArray {
-    val arrayShape = array.shape().toIntArray()
-    if (!shape.contentEquals(arrayShape)) throw ShapeMismatchException(shape, arrayShape)
-    return array
-}
-
-
 /**
  * Represents [AlgebraND] over [Nd4jArrayAlgebra].
  *
@@ -35,38 +28,39 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
 
     /**
-     * Unwraps to or acquires [INDArray] from [StructureND].
+     * Unwraps to or get [INDArray] from [StructureND].
      */
     public val StructureND<T>.ndArray: INDArray
 
-    public override fun produce(initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
+    override fun structureND(shape: Shape, initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
         val struct = Nd4j.create(*shape)!!.wrap()
-        struct.indicesIterator().forEach { struct[it] = elementContext.initializer(it) }
+        struct.indicesIterator().forEach { struct[it] = elementAlgebra.initializer(it) }
         return struct
     }
 
-    @PerformancePitfall
-    public override fun StructureND<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
+    @OptIn(PerformancePitfall::class)
+    override fun StructureND<T>.map(transform: C.(T) -> T): Nd4jArrayStructure<T> {
         val newStruct = ndArray.dup().wrap()
-        newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementContext.transform(value) }
+        newStruct.elements().forEach { (idx, value) -> newStruct[idx] = elementAlgebra.transform(value) }
         return newStruct
     }
 
-    public override fun StructureND<T>.mapIndexed(
+    override fun StructureND<T>.mapIndexed(
         transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
-        val new = Nd4j.create(*this@Nd4jArrayAlgebra.shape).wrap()
-        new.indicesIterator().forEach { idx -> new[idx] = elementContext.transform(idx, this[idx]) }
+        val new = Nd4j.create(*shape).wrap()
+        new.indicesIterator().forEach { idx -> new[idx] = elementAlgebra.transform(idx, this[idx]) }
         return new
     }
 
-    public override fun combine(
-        a: StructureND<T>,
-        b: StructureND<T>,
+    override fun zip(
+        left: StructureND<T>,
+        right: StructureND<T>,
         transform: C.(T, T) -> T,
     ): Nd4jArrayStructure<T> {
-        val new = Nd4j.create(*shape).wrap()
-        new.indicesIterator().forEach { idx -> new[idx] = elementContext.transform(a[idx], b[idx]) }
+        require(left.shape.contentEquals(right.shape)) { "Can't zip tow structures of shape ${left.shape} and ${right.shape}" }
+        val new = Nd4j.create(*left.shape).wrap()
+        new.indicesIterator().forEach { idx -> new[idx] = elementAlgebra.transform(left[idx], right[idx]) }
         return new
     }
 }
@@ -77,18 +71,15 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
  * @param T the type of the element contained in ND structure.
  * @param S the type of space of structure elements.
  */
-public sealed interface Nd4jArrayGroup<T, out S : Ring<T>> : GroupND<T, S>, Nd4jArrayAlgebra<T, S> {
+public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>, Nd4jArrayAlgebra<T, S> {
 
-    public override val zero: Nd4jArrayStructure<T>
-        get() = Nd4j.zeros(*shape).wrap()
+    override fun add(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.add(right.ndArray).wrap()
 
-    public override fun add(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.add(b.ndArray).wrap()
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        ndArray.sub(arg.ndArray).wrap()
 
-    public override operator fun StructureND<T>.minus(b: StructureND<T>): Nd4jArrayStructure<T> =
-        ndArray.sub(b.ndArray).wrap()
-
-    public override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
+    override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
         ndArray.neg().wrap()
 
     public fun multiply(a: StructureND<T>, k: Number): Nd4jArrayStructure<T> =
@@ -102,45 +93,33 @@ public sealed interface Nd4jArrayGroup<T, out S : Ring<T>> : GroupND<T, S>, Nd4j
  * @param R the type of ring of structure elements.
  */
 @OptIn(UnstableKMathAPI::class)
-public sealed interface Nd4jArrayRing<T, out R : Ring<T>> : RingND<T, R>, Nd4jArrayGroup<T, R> {
+public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, Nd4jArrayGroupOps<T, R> {
 
-    public override val one: Nd4jArrayStructure<T>
-        get() = Nd4j.ones(*shape).wrap()
-
-    public override fun multiply(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.mul(b.ndArray).wrap()
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.mul(right.ndArray).wrap()
 //
-//    public override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
+//    override operator fun Nd4jArrayStructure<T>.minus(b: Number): Nd4jArrayStructure<T> {
 //        check(this)
 //        return ndArray.sub(b).wrap()
 //    }
 //
-//    public override operator fun Nd4jArrayStructure<T>.plus(b: Number): Nd4jArrayStructure<T> {
+//    override operator fun Nd4jArrayStructure<T>.plus(b: Number): Nd4jArrayStructure<T> {
 //        check(this)
 //        return ndArray.add(b).wrap()
 //    }
 //
-//    public override operator fun Number.minus(b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
+//    override operator fun Number.minus(b: Nd4jArrayStructure<T>): Nd4jArrayStructure<T> {
 //        check(b)
 //        return b.ndArray.rsub(this).wrap()
 //    }
 
     public companion object {
-        private val intNd4jArrayRingCache: ThreadLocal<MutableMap<IntArray, IntNd4jArrayRing>> =
-            ThreadLocal.withInitial(::HashMap)
-
-        /**
-         * Creates an [RingND] for [Int] values or pull it from cache if it was created previously.
-         */
-        public fun int(vararg shape: Int): Nd4jArrayRing<Int, IntRing> =
-            intNd4jArrayRingCache.get().getOrPut(shape) { IntNd4jArrayRing(shape) }
-
         /**
          * Creates a most suitable implementation of [RingND] using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Number> auto(vararg shape: Int): Nd4jArrayRing<T, Ring<T>> = when {
-            T::class == Int::class -> int(*shape) as Nd4jArrayRing<T, Ring<T>>
+        public inline fun <reified T : Number> auto(): Nd4jArrayRingOps<T, Ring<T>> = when {
+            T::class == Int::class -> IntRing.nd4j as Nd4jArrayRingOps<T, Ring<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Long type.")
         }
     }
@@ -152,38 +131,21 @@ public sealed interface Nd4jArrayRing<T, out R : Ring<T>> : RingND<T, R>, Nd4jAr
  * @param T the type of the element contained in ND structure.
  * @param F the type field of structure elements.
  */
-public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldND<T, F>, Nd4jArrayRing<T, F> {
-    public override fun divide(a: StructureND<T>, b: StructureND<T>): Nd4jArrayStructure<T> =
-        a.ndArray.div(b.ndArray).wrap()
+public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, Nd4jArrayRingOps<T, F> {
+
+    override fun divide(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.div(right.ndArray).wrap()
 
     public operator fun Number.div(b: StructureND<T>): Nd4jArrayStructure<T> = b.ndArray.rdiv(this).wrap()
 
     public companion object {
-        private val floatNd4jArrayFieldCache: ThreadLocal<MutableMap<IntArray, FloatNd4jArrayField>> =
-            ThreadLocal.withInitial(::HashMap)
-
-        private val doubleNd4JArrayFieldCache: ThreadLocal<MutableMap<IntArray, DoubleNd4jArrayField>> =
-            ThreadLocal.withInitial(::HashMap)
-
-        /**
-         * Creates an [FieldND] for [Float] values or pull it from cache if it was created previously.
-         */
-        public fun float(vararg shape: Int): Nd4jArrayRing<Float, FloatField> =
-            floatNd4jArrayFieldCache.get().getOrPut(shape) { FloatNd4jArrayField(shape) }
-
-        /**
-         * Creates an [FieldND] for [Double] values or pull it from cache if it was created previously.
-         */
-        public fun real(vararg shape: Int): Nd4jArrayRing<Double, DoubleField> =
-            doubleNd4JArrayFieldCache.get().getOrPut(shape) { DoubleNd4jArrayField(shape) }
-
         /**
          * Creates a most suitable implementation of [FieldND] using reified class.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Any> auto(vararg shape: Int): Nd4jArrayField<T, Field<T>> = when {
-            T::class == Float::class -> float(*shape) as Nd4jArrayField<T, Field<T>>
-            T::class == Double::class -> real(*shape) as Nd4jArrayField<T, Field<T>>
+        public inline fun <reified T : Any> auto(): Nd4jArrayField<T, Field<T>> = when {
+            T::class == Float::class -> FloatField.nd4j as Nd4jArrayField<T, Field<T>>
+            T::class == Double::class -> DoubleField.nd4j as Nd4jArrayField<T, Field<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Float and Double types.")
         }
     }
@@ -192,91 +154,90 @@ public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldND<T, F>, Nd4
 /**
  * Represents intersection of [ExtendedField] and [Field] over [Nd4jArrayStructure].
  */
-public sealed interface Nd4jArrayExtendedField<T, out F : ExtendedField<T>> : ExtendedField<StructureND<T>>,
-    Nd4jArrayField<T, F> {
-    public override fun sin(arg: StructureND<T>): StructureND<T> = Transforms.sin(arg.ndArray).wrap()
-    public override fun cos(arg: StructureND<T>): StructureND<T> = Transforms.cos(arg.ndArray).wrap()
-    public override fun asin(arg: StructureND<T>): StructureND<T> = Transforms.asin(arg.ndArray).wrap()
-    public override fun acos(arg: StructureND<T>): StructureND<T> = Transforms.acos(arg.ndArray).wrap()
-    public override fun atan(arg: StructureND<T>): StructureND<T> = Transforms.atan(arg.ndArray).wrap()
+public sealed interface Nd4jArrayExtendedFieldOps<T, out F : ExtendedField<T>> :
+    ExtendedFieldOps<StructureND<T>>, Nd4jArrayField<T, F> {
 
-    public override fun power(arg: StructureND<T>, pow: Number): StructureND<T> =
+    override fun sin(arg: StructureND<T>): StructureND<T> = Transforms.sin(arg.ndArray).wrap()
+    override fun cos(arg: StructureND<T>): StructureND<T> = Transforms.cos(arg.ndArray).wrap()
+    override fun asin(arg: StructureND<T>): StructureND<T> = Transforms.asin(arg.ndArray).wrap()
+    override fun acos(arg: StructureND<T>): StructureND<T> = Transforms.acos(arg.ndArray).wrap()
+    override fun atan(arg: StructureND<T>): StructureND<T> = Transforms.atan(arg.ndArray).wrap()
+
+    override fun power(arg: StructureND<T>, pow: Number): StructureND<T> =
         Transforms.pow(arg.ndArray, pow).wrap()
 
-    public override fun exp(arg: StructureND<T>): StructureND<T> = Transforms.exp(arg.ndArray).wrap()
-    public override fun ln(arg: StructureND<T>): StructureND<T> = Transforms.log(arg.ndArray).wrap()
-    public override fun sqrt(arg: StructureND<T>): StructureND<T> = Transforms.sqrt(arg.ndArray).wrap()
-    public override fun sinh(arg: StructureND<T>): StructureND<T> = Transforms.sinh(arg.ndArray).wrap()
-    public override fun cosh(arg: StructureND<T>): StructureND<T> = Transforms.cosh(arg.ndArray).wrap()
-    public override fun tanh(arg: StructureND<T>): StructureND<T> = Transforms.tanh(arg.ndArray).wrap()
+    override fun exp(arg: StructureND<T>): StructureND<T> = Transforms.exp(arg.ndArray).wrap()
+    override fun ln(arg: StructureND<T>): StructureND<T> = Transforms.log(arg.ndArray).wrap()
+    override fun sqrt(arg: StructureND<T>): StructureND<T> = Transforms.sqrt(arg.ndArray).wrap()
+    override fun sinh(arg: StructureND<T>): StructureND<T> = Transforms.sinh(arg.ndArray).wrap()
+    override fun cosh(arg: StructureND<T>): StructureND<T> = Transforms.cosh(arg.ndArray).wrap()
+    override fun tanh(arg: StructureND<T>): StructureND<T> = Transforms.tanh(arg.ndArray).wrap()
 
-    public override fun asinh(arg: StructureND<T>): StructureND<T> =
+    override fun asinh(arg: StructureND<T>): StructureND<T> =
         Nd4j.getExecutioner().exec(ASinh(arg.ndArray, arg.ndArray.ulike())).wrap()
 
-    public override fun acosh(arg: StructureND<T>): StructureND<T> =
+    override fun acosh(arg: StructureND<T>): StructureND<T> =
         Nd4j.getExecutioner().exec(ACosh(arg.ndArray, arg.ndArray.ulike())).wrap()
 
-    public override fun atanh(arg: StructureND<T>): StructureND<T> = Transforms.atanh(arg.ndArray).wrap()
+    override fun atanh(arg: StructureND<T>): StructureND<T> = Transforms.atanh(arg.ndArray).wrap()
 }
 
 /**
  * Represents [FieldND] over [Nd4jArrayDoubleStructure].
  */
-public class DoubleNd4jArrayField(public override val shape: IntArray) : Nd4jArrayExtendedField<Double, DoubleField> {
-    public override val elementContext: DoubleField get() = DoubleField
+public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, DoubleField> {
+    override val elementAlgebra: DoubleField get() = DoubleField
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = checkShape(this).asDoubleStructure()
+    override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
     @OptIn(PerformancePitfall::class)
     override val StructureND<Double>.ndArray: INDArray
         get() = when (this) {
-            is Nd4jArrayStructure<Double> -> checkShape(ndArray)
+            is Nd4jArrayStructure<Double> -> ndArray
             else -> Nd4j.zeros(*shape).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
         }
 
-    override fun scale(a: StructureND<Double>, value: Double): Nd4jArrayStructure<Double> {
-        return a.ndArray.mul(value).wrap()
-    }
+    override fun scale(a: StructureND<Double>, value: Double): Nd4jArrayStructure<Double> = a.ndArray.mul(value).wrap()
 
-    public override operator fun StructureND<Double>.div(arg: Double): Nd4jArrayStructure<Double> {
-        return ndArray.div(arg).wrap()
-    }
+    override operator fun StructureND<Double>.div(arg: Double): Nd4jArrayStructure<Double> = ndArray.div(arg).wrap()
 
-    public override operator fun StructureND<Double>.plus(arg: Double): Nd4jArrayStructure<Double> {
-        return ndArray.add(arg).wrap()
-    }
+    override operator fun StructureND<Double>.plus(arg: Double): Nd4jArrayStructure<Double> = ndArray.add(arg).wrap()
 
-    public override operator fun StructureND<Double>.minus(arg: Double): Nd4jArrayStructure<Double> {
-        return ndArray.sub(arg).wrap()
-    }
+    override operator fun StructureND<Double>.minus(arg: Double): Nd4jArrayStructure<Double> = ndArray.sub(arg).wrap()
 
-    public override operator fun StructureND<Double>.times(arg: Double): Nd4jArrayStructure<Double> {
-        return ndArray.mul(arg).wrap()
-    }
+    override operator fun StructureND<Double>.times(arg: Double): Nd4jArrayStructure<Double> = ndArray.mul(arg).wrap()
 
-    public override operator fun Double.div(arg: StructureND<Double>): Nd4jArrayStructure<Double> {
-        return arg.ndArray.rdiv(this).wrap()
-    }
+    override operator fun Double.div(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+        arg.ndArray.rdiv(this).wrap()
 
-    public override operator fun Double.minus(arg: StructureND<Double>): Nd4jArrayStructure<Double> {
-        return arg.ndArray.rsub(this).wrap()
-    }
+    override operator fun Double.minus(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+        arg.ndArray.rsub(this).wrap()
+
+    public companion object : DoubleNd4jArrayFieldOps()
 }
+
+public val DoubleField.nd4j: DoubleNd4jArrayFieldOps get() = DoubleNd4jArrayFieldOps
+
+public class DoubleNd4jArrayField(override val shape: Shape) : DoubleNd4jArrayFieldOps(), FieldND<Double, DoubleField>
+
+public fun DoubleField.nd4j(shapeFirst: Int, vararg shapeRest: Int): DoubleNd4jArrayField =
+    DoubleNd4jArrayField(intArrayOf(shapeFirst, * shapeRest))
+
 
 /**
  * Represents [FieldND] over [Nd4jArrayStructure] of [Float].
  */
-public class FloatNd4jArrayField(public override val shape: IntArray) : Nd4jArrayExtendedField<Float, FloatField> {
-    public override val elementContext: FloatField get() = FloatField
+public open class FloatNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Float, FloatField> {
+    override val elementAlgebra: FloatField get() = FloatField
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Float> = checkShape(this).asFloatStructure()
+    override fun INDArray.wrap(): Nd4jArrayStructure<Float> = asFloatStructure()
 
     @OptIn(PerformancePitfall::class)
-    public override val StructureND<Float>.ndArray: INDArray
+    override val StructureND<Float>.ndArray: INDArray
         get() = when (this) {
-            is Nd4jArrayStructure<Float> -> checkShape(ndArray)
+            is Nd4jArrayStructure<Float> -> ndArray
             else -> Nd4j.zeros(*shape).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
@@ -285,52 +246,69 @@ public class FloatNd4jArrayField(public override val shape: IntArray) : Nd4jArra
     override fun scale(a: StructureND<Float>, value: Double): StructureND<Float> =
         a.ndArray.mul(value).wrap()
 
-    public override operator fun StructureND<Float>.div(arg: Float): Nd4jArrayStructure<Float> =
+    override operator fun StructureND<Float>.div(arg: Float): Nd4jArrayStructure<Float> =
         ndArray.div(arg).wrap()
 
-    public override operator fun StructureND<Float>.plus(arg: Float): Nd4jArrayStructure<Float> =
+    override operator fun StructureND<Float>.plus(arg: Float): Nd4jArrayStructure<Float> =
         ndArray.add(arg).wrap()
 
-    public override operator fun StructureND<Float>.minus(arg: Float): Nd4jArrayStructure<Float> =
+    override operator fun StructureND<Float>.minus(arg: Float): Nd4jArrayStructure<Float> =
         ndArray.sub(arg).wrap()
 
-    public override operator fun StructureND<Float>.times(arg: Float): Nd4jArrayStructure<Float> =
+    override operator fun StructureND<Float>.times(arg: Float): Nd4jArrayStructure<Float> =
         ndArray.mul(arg).wrap()
 
-    public override operator fun Float.div(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
+    override operator fun Float.div(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
         arg.ndArray.rdiv(this).wrap()
 
-    public override operator fun Float.minus(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
+    override operator fun Float.minus(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
         arg.ndArray.rsub(this).wrap()
+
+    public companion object : FloatNd4jArrayFieldOps()
 }
+
+public class FloatNd4jArrayField(override val shape: Shape) : FloatNd4jArrayFieldOps(), RingND<Float, FloatField>
+
+public val FloatField.nd4j: FloatNd4jArrayFieldOps get() = FloatNd4jArrayFieldOps
+
+public fun FloatField.nd4j(shapeFirst: Int, vararg shapeRest: Int): FloatNd4jArrayField =
+    FloatNd4jArrayField(intArrayOf(shapeFirst, * shapeRest))
 
 /**
  * Represents [RingND] over [Nd4jArrayIntStructure].
  */
-public class IntNd4jArrayRing(public override val shape: IntArray) : Nd4jArrayRing<Int, IntRing> {
-    public override val elementContext: IntRing
-        get() = IntRing
+public open class IntNd4jArrayRingOps : Nd4jArrayRingOps<Int, IntRing> {
+    override val elementAlgebra: IntRing get() = IntRing
 
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Int> = checkShape(this).asIntStructure()
+    override fun INDArray.wrap(): Nd4jArrayStructure<Int> = asIntStructure()
 
     @OptIn(PerformancePitfall::class)
-    public override val StructureND<Int>.ndArray: INDArray
+    override val StructureND<Int>.ndArray: INDArray
         get() = when (this) {
-            is Nd4jArrayStructure<Int> -> checkShape(ndArray)
+            is Nd4jArrayStructure<Int> -> ndArray
             else -> Nd4j.zeros(*shape).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
         }
 
-    public override operator fun StructureND<Int>.plus(arg: Int): Nd4jArrayStructure<Int> =
+    override operator fun StructureND<Int>.plus(arg: Int): Nd4jArrayStructure<Int> =
         ndArray.add(arg).wrap()
 
-    public override operator fun StructureND<Int>.minus(arg: Int): Nd4jArrayStructure<Int> =
+    override operator fun StructureND<Int>.minus(arg: Int): Nd4jArrayStructure<Int> =
         ndArray.sub(arg).wrap()
 
-    public override operator fun StructureND<Int>.times(arg: Int): Nd4jArrayStructure<Int> =
+    override operator fun StructureND<Int>.times(arg: Int): Nd4jArrayStructure<Int> =
         ndArray.mul(arg).wrap()
 
-    public override operator fun Int.minus(arg: StructureND<Int>): Nd4jArrayStructure<Int> =
+    override operator fun Int.minus(arg: StructureND<Int>): Nd4jArrayStructure<Int> =
         arg.ndArray.rsub(this).wrap()
+
+    public companion object : IntNd4jArrayRingOps()
 }
+
+public val IntRing.nd4j: IntNd4jArrayRingOps get() = IntNd4jArrayRingOps
+
+public class IntNd4jArrayRing(override val shape: Shape) : IntNd4jArrayRingOps(), RingND<Int, IntRing>
+
+public fun IntRing.nd4j(shapeFirst: Int, vararg shapeRest: Int): IntNd4jArrayRing =
+    IntNd4jArrayRing(intArrayOf(shapeFirst, * shapeRest))

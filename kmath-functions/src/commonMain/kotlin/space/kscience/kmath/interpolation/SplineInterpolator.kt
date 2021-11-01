@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.interpolation
@@ -23,13 +23,13 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * https://github.com/apache/commons-math/blob/eb57d6d457002a0bb5336d789a3381a24599affe/src/main/java/org/apache/commons/math4/analysis/interpolation/SplineInterpolator.java
  */
 public class SplineInterpolator<T : Comparable<T>>(
-    public override val algebra: Field<T>,
+    override val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>,
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers
 
     @OptIn(UnstableKMathAPI::class)
-    public override fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T> = algebra {
+    override fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T> = algebra {
         require(points.size >= 3) { "Can't use spline interpolator with less than 3 points" }
         insureSorted(points)
         // Number of intervals.  The number of data points is n + 1.

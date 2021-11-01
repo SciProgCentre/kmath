@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.kotlingrad
@@ -106,8 +106,8 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     is Symbol -> toSVar()
 
     is MST.Unary -> when (operation) {
-        GroupOperations.PLUS_OPERATION -> +value.toSFun<X>()
-        GroupOperations.MINUS_OPERATION -> -value.toSFun<X>()
+        GroupOps.PLUS_OPERATION -> +value.toSFun<X>()
+        GroupOps.MINUS_OPERATION -> -value.toSFun<X>()
         TrigonometricOperations.SIN_OPERATION -> sin(value.toSFun())
         TrigonometricOperations.COS_OPERATION -> cos(value.toSFun())
         TrigonometricOperations.TAN_OPERATION -> tan(value.toSFun())
@@ -124,10 +124,10 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
     }
 
     is MST.Binary -> when (operation) {
-        GroupOperations.PLUS_OPERATION -> left.toSFun<X>() + right.toSFun()
-        GroupOperations.MINUS_OPERATION -> left.toSFun<X>() - right.toSFun()
-        RingOperations.TIMES_OPERATION -> left.toSFun<X>() * right.toSFun()
-        FieldOperations.DIV_OPERATION -> left.toSFun<X>() / right.toSFun()
+        GroupOps.PLUS_OPERATION -> left.toSFun<X>() + right.toSFun()
+        GroupOps.MINUS_OPERATION -> left.toSFun<X>() - right.toSFun()
+        RingOps.TIMES_OPERATION -> left.toSFun<X>() * right.toSFun()
+        FieldOps.DIV_OPERATION -> left.toSFun<X>() / right.toSFun()
         PowerOperations.POW_OPERATION -> left.toSFun<X>() pow (right as MST.Numeric).toSConst()
         else -> error("Binary operation $operation not defined in $this")
     }

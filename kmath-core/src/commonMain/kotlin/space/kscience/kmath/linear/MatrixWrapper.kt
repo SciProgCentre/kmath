@@ -1,13 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.nd.getFeature
 import space.kscience.kmath.operations.Ring
 import kotlin.reflect.KClass
 
@@ -18,19 +18,18 @@ import kotlin.reflect.KClass
  */
 public class MatrixWrapper<out T : Any> internal constructor(
     public val origin: Matrix<T>,
-    public val features: Set<MatrixFeature>,
+    public val features: FeatureSet<StructureFeature>,
 ) : Matrix<T> by origin {
 
     /**
-     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the criteria
+     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the
+     * criteria.
      */
-    @UnstableKMathAPI
     @Suppress("UNCHECKED_CAST")
-    public override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
-        features.singleOrNull(type::isInstance) as? F
-            ?: origin.getFeature(type)
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
+        features.getFeature(type) ?: origin.getFeature(type)
 
-    public override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
+    override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
 }
 
 /**
@@ -44,31 +43,34 @@ public val <T : Any> Matrix<T>.origin: Matrix<T>
 /**
  * Add a single feature to a [Matrix]
  */
-public operator fun <T : Any> Matrix<T>.plus(newFeature: MatrixFeature): MatrixWrapper<T> = if (this is MatrixWrapper) {
-    MatrixWrapper(origin, features + newFeature)
+public fun <T : Any> Matrix<T>.withFeature(newFeature: MatrixFeature): MatrixWrapper<T> = if (this is MatrixWrapper) {
+    MatrixWrapper(origin, features.with(newFeature))
 } else {
-    MatrixWrapper(this, setOf(newFeature))
+    MatrixWrapper(this, FeatureSet.of(newFeature))
 }
+
+@Deprecated("To be replaced by withFeature")
+public operator fun <T : Any> Matrix<T>.plus(newFeature: MatrixFeature): MatrixWrapper<T> = withFeature(newFeature)
 
 /**
  * Add a collection of features to a [Matrix]
  */
-public operator fun <T : Any> Matrix<T>.plus(newFeatures: Collection<MatrixFeature>): MatrixWrapper<T> =
+public fun <T : Any> Matrix<T>.withFeatures(newFeatures: Iterable<MatrixFeature>): MatrixWrapper<T> =
     if (this is MatrixWrapper) {
-        MatrixWrapper(origin, features + newFeatures)
+        MatrixWrapper(origin, features.with(newFeatures))
     } else {
-        MatrixWrapper(this, newFeatures.toSet())
+        MatrixWrapper(this, FeatureSet.of(newFeatures))
     }
 
 /**
- * Diagonal matrix of ones. The matrix is virtual no actual matrix is created
+ * Diagonal matrix of ones. The matrix is virtual no actual matrix is created.
  */
 public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     rows: Int,
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { i, j ->
     if (i == j) elementAlgebra.one else elementAlgebra.zero
-} + UnitFeature
+}.withFeature(UnitFeature)
 
 
 /**
@@ -79,15 +81,14 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { _, _ ->
     elementAlgebra.zero
-} + ZeroFeature
+}.withFeature(ZeroFeature)
 
 public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : MatrixFeature
 
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
+@Suppress("UNCHECKED_CAST")
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature<TransposedFeature<T>>()?.original ?: VirtualMatrix(
-    colNum,
-    rowNum,
-) { i, j -> get(j, i) } + TransposedFeature(this)
+public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature(TransposedFeature::class)?.original as? Matrix<T>
+    ?: VirtualMatrix(colNum, rowNum) { i, j -> get(j, i) }.withFeature(TransposedFeature(this))

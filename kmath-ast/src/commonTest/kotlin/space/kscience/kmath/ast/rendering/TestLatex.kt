@@ -1,13 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.TestUtils.testLatex
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.operations.GroupOperations
+import space.kscience.kmath.operations.GroupOps
 import kotlin.test.Test
 
 internal class TestLatex {
@@ -36,7 +36,7 @@ internal class TestLatex {
     fun unaryOperator() = testLatex("sin(1)", "\\operatorname{sin}\\,\\left(1\\right)")
 
     @Test
-    fun unaryPlus() = testLatex(MST.Unary(GroupOperations.PLUS_OPERATION, MST.Numeric(1)), "+1")
+    fun unaryPlus() = testLatex(MST.Unary(GroupOps.PLUS_OPERATION, MST.Numeric(1)), "+1")
 
     @Test
     fun unaryMinus() = testLatex("-x", "-x")

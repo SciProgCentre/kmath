@@ -6,6 +6,7 @@
 package space.kscience.kmath.noa
 
 import space.kscience.kmath.noa.memory.NoaScope
+import space.kscience.kmath.operations.Ring
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,7 +14,7 @@ import kotlin.test.assertEquals
 internal val SEED = 987654
 internal val TOLERANCE = 1e-6
 
-internal fun <T, ArrayT, TensorT : NoaTensor<T>, AlgebraT : NoaAlgebra<T, ArrayT, TensorT>>
+internal fun <T, A : Ring<T>, ArrayT, TensorT : NoaTensor<T>, AlgebraT : NoaAlgebra<T, A, ArrayT, TensorT>>
         AlgebraT.withCuda(block: AlgebraT.(Device) -> Unit): Unit {
     this.block(Device.CPU)
     if (cudaAvailable()) this.block(Device.CUDA(0))

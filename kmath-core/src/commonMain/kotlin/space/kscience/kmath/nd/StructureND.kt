@@ -1,22 +1,26 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.misc.Feature
+import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
-import kotlin.native.concurrent.ThreadLocal
+import kotlin.math.abs
 import kotlin.reflect.KClass
 
-public interface StructureFeature
+public interface StructureFeature : Feature<StructureFeature>
 
 /**
- * Represents n-dimensional structure, i.e. multidimensional container of items of the same type and size. The number
+ * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
  * of dimensions and items in an array is defined by its shape, which is a sequence of non-negative integers that
  * specify the sizes of each dimension.
  *
@@ -24,12 +28,12 @@ public interface StructureFeature
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> {
+public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
     /**
-     * The shape of structure, i.e. non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
-    public val shape: IntArray
+    override val shape: Shape
 
     /**
      * The count of dimensions in this structure. It should be equal to size of [shape].
@@ -50,14 +54,13 @@ public interface StructureND<out T> {
      * @return the lazy sequence of pairs of indices to values.
      */
     @PerformancePitfall
-    public fun elements(): Sequence<Pair<IntArray, T>>
+    public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
 
     /**
-     * Feature is some additional strucure information which allows to access it special properties or hints.
-     * If the feature is not present, null is returned.
+     * Feature is some additional structure information that allows to access it special properties or hints.
+     * If the feature is not present, `null` is returned.
      */
-    @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
+    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
 
     public companion object {
         /**
@@ -68,11 +71,27 @@ public interface StructureND<out T> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.strides == st2.strides)
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
             return st1.elements().all { (index, value) -> value == st2[index] }
+        }
+
+        @PerformancePitfall
+        public fun contentEquals(
+            st1: StructureND<Double>,
+            st2: StructureND<Double>,
+            tolerance: Double = 1e-11
+        ): Boolean {
+            if (st1 === st2) return true
+
+            // fast comparison of buffers if possible
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
+                return Buffer.contentEquals(st1.buffer, st2.buffer)
+
+            //element by element comparison if it could not be avoided
+            return st1.elements().all { (index, value) -> abs(value - st2[index]) < tolerance }
         }
 
         /**
@@ -146,6 +165,44 @@ public interface StructureND<out T> {
 }
 
 /**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> AlgebraND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one.
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+): Boolean = StructureND.contentEquals(st1, st2)
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> GroupOpsND<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
+
+/**
+ * Indicates whether some [StructureND] is equal to another one with [absoluteTolerance].
+ */
+@PerformancePitfall
+public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
+    st1: StructureND<T>,
+    st2: StructureND<T>,
+    absoluteTolerance: T,
+): Boolean = st1.elements().all { (index, value) -> elementAlgebra { (value - st2[index]) } < absoluteTolerance }
+
+/**
  * Returns the value at the specified indices.
  *
  * @param index the indices.
@@ -153,8 +210,8 @@ public interface StructureND<out T> {
  */
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
-@UnstableKMathAPI
-public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
+//@UnstableKMathAPI
+//public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
 
 /**
  * Represents mutable [StructureND].
@@ -173,107 +230,10 @@ public interface MutableStructureND<T> : StructureND<T> {
  * Transform a structure element-by element in place.
  */
 @OptIn(PerformancePitfall::class)
-public inline fun <T> MutableStructureND<T>.mapInPlace(action: (IntArray, T) -> T): Unit =
+public inline fun <T> MutableStructureND<T>.mapInPlace(action: (index: IntArray, t: T) -> T): Unit =
     elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
 
-/**
- * A way to convert ND index to linear one and back.
- */
-public interface Strides {
-    /**
-     * Shape of NDStructure
-     */
-    public val shape: IntArray
-
-    /**
-     * Array strides
-     */
-    public val strides: IntArray
-
-    /**
-     * Get linear index from multidimensional index
-     */
-    public fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
-        value * strides[i]
-    }.sum()
-
-    /**
-     * Get multidimensional from linear
-     */
-    public fun index(offset: Int): IntArray
-
-    /**
-     * The size of linear buffer to accommodate all elements of ND-structure corresponding to strides
-     */
-    public val linearSize: Int
-
-    // TODO introduce a fast way to calculate index of the next element?
-
-    /**
-     * Iterate over ND indices in a natural order
-     */
-    public fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
-}
-
-/**
- * Simple implementation of [Strides].
- */
-public class DefaultStrides private constructor(override val shape: IntArray) : Strides {
-    override val linearSize: Int
-        get() = strides[shape.size]
-
-    /**
-     * Strides for memory access
-     */
-    override val strides: IntArray by lazy {
-        sequence {
-            var current = 1
-            yield(1)
-
-            shape.forEach {
-                current *= it
-                yield(current)
-            }
-        }.toList().toIntArray()
-    }
-
-    override fun index(offset: Int): IntArray {
-        val res = IntArray(shape.size)
-        var current = offset
-        var strideIndex = strides.size - 2
-
-        while (strideIndex >= 0) {
-            res[strideIndex] = (current / strides[strideIndex])
-            current %= strides[strideIndex]
-            strideIndex--
-        }
-
-        return res
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is DefaultStrides) return false
-        if (!shape.contentEquals(other.shape)) return false
-        return true
-    }
-
-    override fun hashCode(): Int = shape.contentHashCode()
-
-    @ThreadLocal
-    public companion object {
-        private val defaultStridesCache = HashMap<IntArray, Strides>()
-
-        /**
-         * Cached builder for default strides
-         */
-        public operator fun invoke(shape: IntArray): Strides =
-            defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
-    }
-}
-
-public inline fun <reified T : Any> StructureND<T>.combine(
+public inline fun <reified T : Any> StructureND<T>.zip(
     struct: StructureND<T>,
     crossinline block: (T, T) -> T,
 ): StructureND<T> {

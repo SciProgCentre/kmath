@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.core.internal
@@ -10,7 +10,7 @@ import kotlin.math.max
 
 internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {
     for (linearIndex in 0 until linearSize) {
-        val totalMultiIndex = resTensor.linearStructure.index(linearIndex)
+        val totalMultiIndex = resTensor.indices.index(linearIndex)
         val curMultiIndex = tensor.shape.copyOf()
 
         val offset = totalMultiIndex.size - curMultiIndex.size
@@ -23,7 +23,7 @@ internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTenso
             }
         }
 
-        val curLinearIndex = tensor.linearStructure.offset(curMultiIndex)
+        val curLinearIndex = tensor.indices.offset(curMultiIndex)
         resTensor.mutableBuffer.array()[linearIndex] =
             tensor.mutableBuffer.array()[tensor.bufferStart + curLinearIndex]
     }
@@ -112,7 +112,7 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
             val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
 
             for (linearIndex in 0 until n) {
-                val totalMultiIndex = outerTensor.linearStructure.index(linearIndex)
+                val totalMultiIndex = outerTensor.indices.index(linearIndex)
                 var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
@@ -127,13 +127,13 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
                 }
 
                 for (i in 0 until matrixSize) {
-                    val curLinearIndex = newTensor.linearStructure.offset(
+                    val curLinearIndex = newTensor.indices.offset(
                         curMultiIndex +
-                                matrix.linearStructure.index(i)
+                                matrix.indices.index(i)
                     )
-                    val newLinearIndex = resTensor.linearStructure.offset(
+                    val newLinearIndex = resTensor.indices.offset(
                         totalMultiIndex +
-                                matrix.linearStructure.index(i)
+                                matrix.indices.index(i)
                     )
 
                     resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =

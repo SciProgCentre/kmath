@@ -1,6 +1,6 @@
 # Module kmath-kotlingrad
 
-[Kotlin∇](https://www.htmlsymbols.xyz/unicode/U+2207) integration module.
+[Kotlin∇](https://github.com/breandan/kotlingrad) integration module.
 
 ${features}
 

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.functions
@@ -8,8 +8,8 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.structures.map
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.structures
@@ -9,10 +9,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.nd4j.Nd4jArrayField
+import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.viktor.ViktorNDField
+import space.kscience.kmath.viktor.ViktorFieldND
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis
@@ -29,37 +29,39 @@ fun main() {
     Nd4j.zeros(0)
     val dim = 1000
     val n = 1000
+    val shape = Shape(dim, dim)
+
 
     // automatically build context most suited for given type.
-    val autoField = AlgebraND.auto(DoubleField, dim, dim)
-    // specialized nd-field for Double. It works as generic Double field as well
-    val realField = AlgebraND.real(dim, dim)
+    val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
+    // specialized nd-field for Double. It works as generic Double field as well.
+    val realField = DoubleField.ndAlgebra
     //A generic boxing field. It should be used for objects, not primitives.
-    val boxingField = AlgebraND.field(DoubleField, Buffer.Companion::boxing, dim, dim)
+    val boxingField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
     // Nd4j specialized field.
-    val nd4jField = Nd4jArrayField.real(dim, dim)
+    val nd4jField = DoubleField.nd4j
     //viktor field
-    val viktorField = ViktorNDField(dim, dim)
+    val viktorField = ViktorFieldND(dim, dim)
     //parallel processing based on Java Streams
-    val parallelField = AlgebraND.realWithStream(dim, dim)
+    val parallelField = DoubleField.ndStreaming(dim, dim)
 
     measureAndPrint("Boxing addition") {
         boxingField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Specialized addition") {
         realField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
@@ -80,13 +82,13 @@ fun main() {
 
     measureAndPrint("Automatic field addition") {
         autoField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Lazy addition") {
-        val res = realField.one.mapAsync(GlobalScope) {
+        val res = realField.one(shape).mapAsync(GlobalScope) {
             var c = 0.0
             repeat(n) {
                 c += 1.0

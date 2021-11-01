@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast
@@ -13,8 +13,8 @@ import space.kscience.kmath.kotlingrad.toKotlingradExpression
 import space.kscience.kmath.operations.DoubleField
 
 /**
- * In this example, x^2-4*x-44 function is differentiated with Kotlin∇, and the autodiff result is compared with
- * valid derivative in a certain point.
+ * In this example, *x<sup>2</sup> &minus; 4 x &minus; 44* function is differentiated with Kotlin∇, and the
+ * derivation result is compared with valid derivative in a certain point.
  */
 fun main() {
     val actualDerivative = "x^2-4*x-44"

@@ -1,23 +1,23 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.tensorAlgebra
+import space.kscience.kmath.tensors.core.withBroadcast
 
 
 // simple PCA
 
-fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broadcast methods
+fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with broadcast methods
     val seed = 100500L
 
     // assume x is range from 0 until 10
     val x = fromArray(
         intArrayOf(10),
-        (0 until 10).toList().map { it.toDouble() }.toDoubleArray()
+        DoubleArray(10) { it.toDouble() }
     )
 
     // take y dependent on x with noise
@@ -62,11 +62,11 @@ fun main(): Unit = BroadcastDoubleTensorAlgebra {  // work in context with broad
     println("Eigenvector:\n$v")
 
     // reduce dimension of dataset
-    val datasetReduced  = v dot stack(listOf(xScaled, yScaled))
+    val datasetReduced = v dot stack(listOf(xScaled, yScaled))
     println("Reduced data:\n$datasetReduced")
 
-    // we can restore original data from reduced data.
-    // for example, find 7th element of dataset
+    // we can restore original data from reduced data;
+    // for example, find 7th element of dataset.
     val n = 7
     val restored = (datasetReduced[n] dot v.view(intArrayOf(1, 2))) * std + mean
     println("Original value:\n${dataset[n]}")

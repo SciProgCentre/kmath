@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
@@ -23,15 +23,13 @@ public interface Algebra<T> {
      * Wraps a raw string to [T] object. This method is designed for three purposes:
      *
      * 1. Mathematical constants (`e`, `pi`).
-     * 2. Variables for expression-like contexts (`a`, `b`, `c`...).
-     * 3. Literals (`{1, 2}`, (`(3; 4)`)).
+     * 1. Variables for expression-like contexts (`a`, `b`, `c`&hellip;).
+     * 1. Literals (`{1, 2}`, (`(3; 4)`)).
      *
-     * In case if algebra can't parse the string, this method must throw [kotlin.IllegalStateException].
-     *
-     * Returns `null` if symbol could not be bound to the context
+     * If algebra can't parse the string, then this method must throw [kotlin.IllegalStateException].
      *
      * @param value the raw string.
-     * @return an object.
+     * @return an object or `null` if symbol could not be bound to the context.
      */
     public fun bindSymbolOrNull(value: String): T? = null
 
@@ -42,13 +40,12 @@ public interface Algebra<T> {
         bindSymbolOrNull(value) ?: error("Symbol '$value' is not supported in $this")
 
     /**
-     * Dynamically dispatches an unary operation with the certain name.
+     * Dynamically dispatches a unary operation with the certain name.
      *
-     * This function must has two features:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second `unaryOperation` overload:
-     * i.e. `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [unaryOperation]: for any `a` and `b`, `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -57,13 +54,13 @@ public interface Algebra<T> {
         error("Unary operation $operation not defined in $this")
 
     /**
-     * Dynamically invokes an unary operation with the certain name.
+     * Dynamically invokes a unary operation with the certain name.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second [unaryOperationFunction] overload:
-     * i.e. `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [unaryOperationFunction]: i.e., for any `a` and `b`,
+     * `unaryOperationFunction(a)(b) == unaryOperation(a, b)`.
      *
      * @param operation the name of operation.
      * @param arg the argument of operation.
@@ -74,11 +71,11 @@ public interface Algebra<T> {
     /**
      * Dynamically dispatches a binary operation with the certain name.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second [binaryOperationFunction] overload:
-     * i.e. `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [binaryOperation]: for any `a`, `b`, and `c`,
+     * `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @return an operation.
@@ -89,11 +86,11 @@ public interface Algebra<T> {
     /**
      * Dynamically invokes a binary operation with the certain name.
      *
-     * This function must follow two properties:
+     * Implementations must fulfil the following requirements:
      *
-     * 1. In case if operation is not defined in the structure, the function throws [kotlin.IllegalStateException].
-     * 2. This function is symmetric with second [binaryOperationFunction] overload:
-     * i.e. `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
+     * 1. If operation is not defined in the structure, then the function throws [kotlin.IllegalStateException].
+     * 1. Equivalence to [binaryOperationFunction]: for any `a`, `b`, and `c`,
+     * `binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)`.
      *
      * @param operation the name of operation.
      * @param left the first argument of operation.
@@ -115,22 +112,22 @@ public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.iden
 public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
 
 /**
- * Represents group without neutral element (also known as inverse semigroup), i.e. algebraic structure with
+ * Represents group without neutral element (also known as inverse semigroup) i.e., algebraic structure with
  * associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
-public interface GroupOperations<T> : Algebra<T> {
+public interface GroupOps<T> : Algebra<T> {
     /**
      * Addition of two elements.
      *
-     * @param a the augend.
-     * @param b the addend.
+     * @param left the augend.
+     * @param right the addend.
      * @return the sum.
      */
-    public fun add(a: T, b: T): T
+    public fun add(left: T, right: T): T
 
-    // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176
+    // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176.
 
     /**
      * The negation of this element.
@@ -152,27 +149,27 @@ public interface GroupOperations<T> : Algebra<T> {
      * Addition of two elements.
      *
      * @receiver the augend.
-     * @param b the addend.
+     * @param arg the addend.
      * @return the sum.
      */
-    public operator fun T.plus(b: T): T = add(this, b)
+    public operator fun T.plus(arg: T): T = add(this, arg)
 
     /**
      * Subtraction of two elements.
      *
      * @receiver the minuend.
-     * @param b the subtrahend.
+     * @param arg the subtrahend.
      * @return the difference.
      */
-    public operator fun T.minus(b: T): T = add(this, -b)
-
-    public override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
+    public operator fun T.minus(arg: T): T = add(this, -arg)
+    // Dynamic dispatch of operations
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
         MINUS_OPERATION -> { arg -> -arg }
         else -> super.unaryOperationFunction(operation)
     }
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         PLUS_OPERATION -> ::add
         MINUS_OPERATION -> { left, right -> left - right }
         else -> super.binaryOperationFunction(operation)
@@ -192,11 +189,11 @@ public interface GroupOperations<T> : Algebra<T> {
 }
 
 /**
- * Represents group, i.e. algebraic structure with associative, binary operation [add].
+ * Represents group i.e., algebraic structure with associative, binary operation [add].
  *
  * @param T the type of element of this semispace.
  */
-public interface Group<T> : GroupOperations<T> {
+public interface Group<T> : GroupOps<T> {
     /**
      * The neutral element of addition.
      */
@@ -204,29 +201,29 @@ public interface Group<T> : GroupOperations<T> {
 }
 
 /**
- * Represents ring without multiplicative and additive identities, i.e. algebraic structure with
+ * Represents ring without multiplicative and additive identities i.e., algebraic structure with
  * associative, binary, commutative operation [add] and associative, operation [multiply] distributive over [add].
  *
  * @param T the type of element of this semiring.
  */
-public interface RingOperations<T> : GroupOperations<T> {
+public interface RingOps<T> : GroupOps<T> {
     /**
      * Multiplies two elements.
      *
-     * @param a the multiplier.
-     * @param b the multiplicand.
+     * @param left the multiplier.
+     * @param right the multiplicand.
      */
-    public fun multiply(a: T, b: T): T
+    public fun multiply(left: T, right: T): T
 
     /**
      * Multiplies this element by scalar.
      *
      * @receiver the multiplier.
-     * @param b the multiplicand.
+     * @param arg the multiplicand.
      */
-    public operator fun T.times(b: T): T = multiply(this, b)
+    public operator fun T.times(arg: T): T = multiply(this, arg)
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         TIMES_OPERATION -> ::multiply
         else -> super.binaryOperationFunction(operation)
     }
@@ -240,12 +237,12 @@ public interface RingOperations<T> : GroupOperations<T> {
 }
 
 /**
- * Represents ring, i.e. algebraic structure with two associative binary operations called "addition" and
+ * Represents ring i.e., algebraic structure with two associative binary operations called "addition" and
  * "multiplication" and their neutral elements.
  *
  * @param T the type of element of this ring.
  */
-public interface Ring<T> : Group<T>, RingOperations<T> {
+public interface Ring<T> : Group<T>, RingOps<T> {
     /**
      * The neutral element of multiplication
      */
@@ -253,31 +250,32 @@ public interface Ring<T> : Group<T>, RingOperations<T> {
 }
 
 /**
- * Represents field without without multiplicative and additive identities, i.e. algebraic structure with associative, binary, commutative operations
- * [add] and [multiply]; binary operation [divide] as multiplication of left operand by reciprocal of right one.
+ * Represents field without multiplicative and additive identities i.e., algebraic structure with associative, binary,
+ * commutative operations [add] and [multiply]; binary operation [divide] as multiplication of left operand by
+ * reciprocal of right one.
  *
  * @param T the type of element of this semifield.
  */
-public interface FieldOperations<T> : RingOperations<T> {
+public interface FieldOps<T> : RingOps<T> {
     /**
      * Division of two elements.
      *
-     * @param a the dividend.
-     * @param b the divisor.
+     * @param left the dividend.
+     * @param right the divisor.
      * @return the quotient.
      */
-    public fun divide(a: T, b: T): T
+    public fun divide(left: T, right: T): T
 
     /**
      * Division of two elements.
      *
      * @receiver the dividend.
-     * @param b the divisor.
+     * @param arg the divisor.
      * @return the quotient.
      */
-    public operator fun T.div(b: T): T = divide(this, b)
+    public operator fun T.div(arg: T): T = divide(this, arg)
 
-    public override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
+    override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         DIV_OPERATION -> ::divide
         else -> super.binaryOperationFunction(operation)
     }
@@ -291,12 +289,12 @@ public interface FieldOperations<T> : RingOperations<T> {
 }
 
 /**
- * Represents field, i.e. algebraic structure with three operations: associative, commutative addition and
+ * Represents field i.e., algebraic structure with three operations: associative, commutative addition and
  * multiplication, and division. **This interface differs from the eponymous mathematical definition: fields in KMath
  * also support associative multiplication by scalar.**
  *
  * @param T the type of element of this field.
  */
-public interface Field<T> : Ring<T>, FieldOperations<T>, ScaleOperations<T>, NumericAlgebra<T> {
-    public override fun number(value: Number): T = scale(one, value.toDouble())
+public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlgebra<T> {
+    override fun number(value: Number): T = scale(one, value.toDouble())
 }

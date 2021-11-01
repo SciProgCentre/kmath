@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
@@ -13,7 +13,11 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.factory.ops.NDBase
 import org.nd4j.linalg.ops.transforms.Transforms
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Field
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
@@ -22,116 +26,133 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 /**
  * ND4J based [TensorAlgebra] implementation.
  */
-public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T> {
+public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTensorAlgebra<T, A> {
+
     /**
      * Wraps [INDArray] to [Nd4jArrayStructure].
      */
     public fun INDArray.wrap(): Nd4jArrayStructure<T>
 
     /**
-     * Unwraps to or acquires [INDArray] from [StructureND].
+     * Unwraps to or gets [INDArray] from [StructureND].
      */
     public val StructureND<T>.ndArray: INDArray
 
-    public override fun T.plus(other: Tensor<T>): Tensor<T> = other.ndArray.add(this).wrap()
-    public override fun Tensor<T>.plus(value: T): Tensor<T> = ndArray.add(value).wrap()
+    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
 
-    public override fun Tensor<T>.plus(other: Tensor<T>): Tensor<T> = ndArray.add(other.ndArray).wrap()
+    override fun StructureND<T>.map(transform: A.(T) -> T): Nd4jArrayStructure<T> =
+        structureND(shape) { index -> elementAlgebra.transform(get(index)) }
 
-    public override fun Tensor<T>.plusAssign(value: T) {
+    override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): Nd4jArrayStructure<T> =
+        structureND(shape) { index -> elementAlgebra.transform(index, get(index)) }
+
+    override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): Nd4jArrayStructure<T> {
+        require(left.shape.contentEquals(right.shape))
+        return structureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }
+    }
+
+    override fun T.plus(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.add(this).wrap()
+    override fun StructureND<T>.plus(arg: T): Nd4jArrayStructure<T> = ndArray.add(arg).wrap()
+
+    override fun StructureND<T>.plus(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.add(arg.ndArray).wrap()
+
+    override fun Tensor<T>.plusAssign(value: T) {
         ndArray.addi(value)
     }
 
-    public override fun Tensor<T>.plusAssign(other: Tensor<T>) {
-        ndArray.addi(other.ndArray)
+    override fun Tensor<T>.plusAssign(arg: StructureND<T>) {
+        ndArray.addi(arg.ndArray)
     }
 
-    public override fun T.minus(other: Tensor<T>): Tensor<T> = other.ndArray.rsub(this).wrap()
-    public override fun Tensor<T>.minus(value: T): Tensor<T> = ndArray.sub(value).wrap()
-    public override fun Tensor<T>.minus(other: Tensor<T>): Tensor<T> = ndArray.sub(other.ndArray).wrap()
+    override fun T.minus(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.rsub(this).wrap()
+    override fun StructureND<T>.minus(arg: T): Nd4jArrayStructure<T> = ndArray.sub(arg).wrap()
+    override fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.sub(arg.ndArray).wrap()
 
-    public override fun Tensor<T>.minusAssign(value: T) {
+    override fun Tensor<T>.minusAssign(value: T) {
         ndArray.rsubi(value)
     }
 
-    public override fun Tensor<T>.minusAssign(other: Tensor<T>) {
-        ndArray.subi(other.ndArray)
+    override fun Tensor<T>.minusAssign(arg: StructureND<T>) {
+        ndArray.subi(arg.ndArray)
     }
 
-    public override fun T.times(other: Tensor<T>): Tensor<T> = other.ndArray.mul(this).wrap()
+    override fun T.times(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.mul(this).wrap()
 
-    public override fun Tensor<T>.times(value: T): Tensor<T> =
-        ndArray.mul(value).wrap()
+    override fun StructureND<T>.times(arg: T): Nd4jArrayStructure<T> =
+        ndArray.mul(arg).wrap()
 
-    public override fun Tensor<T>.times(other: Tensor<T>): Tensor<T> = ndArray.mul(other.ndArray).wrap()
+    override fun StructureND<T>.times(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mul(arg.ndArray).wrap()
 
-    public override fun Tensor<T>.timesAssign(value: T) {
+    override fun Tensor<T>.timesAssign(value: T) {
         ndArray.muli(value)
     }
 
-    public override fun Tensor<T>.timesAssign(other: Tensor<T>) {
-        ndArray.mmuli(other.ndArray)
+    override fun Tensor<T>.timesAssign(arg: StructureND<T>) {
+        ndArray.mmuli(arg.ndArray)
     }
 
-    public override fun Tensor<T>.unaryMinus(): Tensor<T> = ndArray.neg().wrap()
-    public override fun Tensor<T>.get(i: Int): Tensor<T> = ndArray.slice(i.toLong()).wrap()
-    public override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = ndArray.swapAxes(i, j).wrap()
-    public override fun Tensor<T>.dot(other: Tensor<T>): Tensor<T> = ndArray.mmul(other.ndArray).wrap()
+    override fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> = ndArray.neg().wrap()
+    override fun Tensor<T>.get(i: Int): Nd4jArrayStructure<T> = ndArray.slice(i.toLong()).wrap()
+    override fun Tensor<T>.transpose(i: Int, j: Int): Nd4jArrayStructure<T> = ndArray.swapAxes(i, j).wrap()
+    override fun StructureND<T>.dot(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mmul(other.ndArray).wrap()
 
-    public override fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T> =
+    override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.min(keepDim, dim).wrap()
 
-    public override fun Tensor<T>.sum(dim: Int, keepDim: Boolean): Tensor<T> =
+    override fun StructureND<T>.sum(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.sum(keepDim, dim).wrap()
 
-    public override fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T> =
+    override fun StructureND<T>.max(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.max(keepDim, dim).wrap()
 
-    public override fun Tensor<T>.view(shape: IntArray): Tensor<T> = ndArray.reshape(shape).wrap()
-    public override fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T> = view(other.shape)
+    override fun Tensor<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
+    override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
-    override fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> =
+    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> =
         ndBase.get().argmax(ndArray, keepDim, dim).asIntStructure()
 
-    public override fun Tensor<T>.mean(dim: Int, keepDim: Boolean): Tensor<T> = ndArray.mean(keepDim, dim).wrap()
+    override fun StructureND<T>.mean(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
+        ndArray.mean(keepDim, dim).wrap()
 
-    public override fun Tensor<T>.exp(): Tensor<T> = Transforms.exp(ndArray).wrap()
-    public override fun Tensor<T>.ln(): Tensor<T> = Transforms.log(ndArray).wrap()
-    public override fun Tensor<T>.sqrt(): Tensor<T> = Transforms.sqrt(ndArray).wrap()
-    public override fun Tensor<T>.cos(): Tensor<T> = Transforms.cos(ndArray).wrap()
-    public override fun Tensor<T>.acos(): Tensor<T> = Transforms.acos(ndArray).wrap()
-    public override fun Tensor<T>.cosh(): Tensor<T> = Transforms.cosh(ndArray).wrap()
+    override fun StructureND<T>.exp(): Nd4jArrayStructure<T> = Transforms.exp(ndArray).wrap()
+    override fun StructureND<T>.ln(): Nd4jArrayStructure<T> = Transforms.log(ndArray).wrap()
+    override fun StructureND<T>.sqrt(): Nd4jArrayStructure<T> = Transforms.sqrt(ndArray).wrap()
+    override fun StructureND<T>.cos(): Nd4jArrayStructure<T> = Transforms.cos(ndArray).wrap()
+    override fun StructureND<T>.acos(): Nd4jArrayStructure<T> = Transforms.acos(ndArray).wrap()
+    override fun StructureND<T>.cosh(): Nd4jArrayStructure<T> = Transforms.cosh(ndArray).wrap()
 
-    public override fun Tensor<T>.acosh(): Tensor<T> =
+    override fun StructureND<T>.acosh(): Nd4jArrayStructure<T> =
         Nd4j.getExecutioner().exec(ACosh(ndArray, ndArray.ulike())).wrap()
 
-    public override fun Tensor<T>.sin(): Tensor<T> = Transforms.sin(ndArray).wrap()
-    public override fun Tensor<T>.asin(): Tensor<T> = Transforms.asin(ndArray).wrap()
-    public override fun Tensor<T>.sinh(): Tensor<T> = Transforms.sinh(ndArray).wrap()
+    override fun StructureND<T>.sin(): Nd4jArrayStructure<T> = Transforms.sin(ndArray).wrap()
+    override fun StructureND<T>.asin(): Nd4jArrayStructure<T> = Transforms.asin(ndArray).wrap()
+    override fun StructureND<T>.sinh(): Tensor<T> = Transforms.sinh(ndArray).wrap()
 
-    public override fun Tensor<T>.asinh(): Tensor<T> =
+    override fun StructureND<T>.asinh(): Nd4jArrayStructure<T> =
         Nd4j.getExecutioner().exec(ASinh(ndArray, ndArray.ulike())).wrap()
 
-    public override fun Tensor<T>.tan(): Tensor<T> = Transforms.tan(ndArray).wrap()
-    public override fun Tensor<T>.atan(): Tensor<T> = Transforms.atan(ndArray).wrap()
-    public override fun Tensor<T>.tanh(): Tensor<T> = Transforms.tanh(ndArray).wrap()
-    public override fun Tensor<T>.atanh(): Tensor<T> = Transforms.atanh(ndArray).wrap()
-    public override fun Tensor<T>.ceil(): Tensor<T> = Transforms.ceil(ndArray).wrap()
-    public override fun Tensor<T>.floor(): Tensor<T> = Transforms.floor(ndArray).wrap()
-    public override fun Tensor<T>.std(dim: Int, keepDim: Boolean): Tensor<T> = ndArray.std(true, keepDim, dim).wrap()
-    public override fun T.div(other: Tensor<T>): Tensor<T> = other.ndArray.rdiv(this).wrap()
-    public override fun Tensor<T>.div(value: T): Tensor<T> = ndArray.div(value).wrap()
-    public override fun Tensor<T>.div(other: Tensor<T>): Tensor<T> = ndArray.div(other.ndArray).wrap()
+    override fun StructureND<T>.tan(): Nd4jArrayStructure<T> = Transforms.tan(ndArray).wrap()
+    override fun StructureND<T>.atan(): Nd4jArrayStructure<T> = Transforms.atan(ndArray).wrap()
+    override fun StructureND<T>.tanh(): Nd4jArrayStructure<T> = Transforms.tanh(ndArray).wrap()
+    override fun StructureND<T>.atanh(): Nd4jArrayStructure<T> = Transforms.atanh(ndArray).wrap()
+    override fun StructureND<T>.ceil(): Nd4jArrayStructure<T> = Transforms.ceil(ndArray).wrap()
+    override fun StructureND<T>.floor(): Nd4jArrayStructure<T> = Transforms.floor(ndArray).wrap()
+    override fun StructureND<T>.std(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
+        ndArray.std(true, keepDim, dim).wrap()
 
-    public override fun Tensor<T>.divAssign(value: T) {
+    override fun T.div(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.rdiv(this).wrap()
+    override fun StructureND<T>.div(arg: T): Nd4jArrayStructure<T> = ndArray.div(arg).wrap()
+    override fun StructureND<T>.div(arg: StructureND<T>): Nd4jArrayStructure<T> = ndArray.div(arg.ndArray).wrap()
+
+    override fun Tensor<T>.divAssign(value: T) {
         ndArray.divi(value)
     }
 
-    public override fun Tensor<T>.divAssign(other: Tensor<T>) {
-        ndArray.divi(other.ndArray)
+    override fun Tensor<T>.divAssign(arg: StructureND<T>) {
+        ndArray.divi(arg.ndArray)
     }
 
-    public override fun Tensor<T>.variance(dim: Int, keepDim: Boolean): Tensor<T> =
+    override fun StructureND<T>.variance(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         Nd4j.getExecutioner().exec(Variance(ndArray, true, true, dim)).wrap()
 
     private companion object {
@@ -142,11 +163,24 @@ public sealed interface Nd4jTensorAlgebra<T : Number> : AnalyticTensorAlgebra<T>
 /**
  * [Double] specialization of [Nd4jTensorAlgebra].
  */
-public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double> {
-    public override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
+public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
+
+    override val elementAlgebra: DoubleField get() = DoubleField
+
+    override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
+
+    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
+        val array: INDArray = Nd4j.zeros(*shape)
+        val indices = DefaultStrides(shape)
+        indices.asSequence().forEach { index ->
+            array.putScalar(index, elementAlgebra.initializer(index))
+        }
+        return array.wrap()
+    }
+
 
     @OptIn(PerformancePitfall::class)
-    public override val StructureND<Double>.ndArray: INDArray
+    override val StructureND<Double>.ndArray: INDArray
         get() = when (this) {
             is Nd4jArrayStructure<Double> -> ndArray
             else -> Nd4j.zeros(*shape).also {
@@ -154,22 +188,21 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double> {
             }
         }
 
-    public override fun Tensor<Double>.valueOrNull(): Double? =
+    override fun StructureND<Double>.valueOrNull(): Double? =
         if (shape contentEquals intArrayOf(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
-    @PerformancePitfall
-    public override fun diagonalEmbedding(
+    override fun diagonalEmbedding(
         diagonalEntries: Tensor<Double>,
         offset: Int,
         dim1: Int,
         dim2: Int,
     ): Tensor<Double> = DoubleTensorAlgebra.diagonalEmbedding(diagonalEntries, offset, dim1, dim2)
 
-    public override fun Tensor<Double>.sum(): Double = ndArray.sumNumber().toDouble()
-    public override fun Tensor<Double>.min(): Double = ndArray.minNumber().toDouble()
-    public override fun Tensor<Double>.max(): Double = ndArray.maxNumber().toDouble()
-    public override fun Tensor<Double>.mean(): Double = ndArray.meanNumber().toDouble()
-    public override fun Tensor<Double>.std(): Double = ndArray.stdNumber().toDouble()
-    public override fun Tensor<Double>.variance(): Double = ndArray.varNumber().toDouble()
+    override fun StructureND<Double>.sum(): Double = ndArray.sumNumber().toDouble()
+    override fun StructureND<Double>.min(): Double = ndArray.minNumber().toDouble()
+    override fun StructureND<Double>.max(): Double = ndArray.maxNumber().toDouble()
+    override fun StructureND<Double>.mean(): Double = ndArray.meanNumber().toDouble()
+    override fun StructureND<Double>.std(): Double = ndArray.stdNumber().toDouble()
+    override fun StructureND<Double>.variance(): Double = ndArray.varNumber().toDouble()
 }

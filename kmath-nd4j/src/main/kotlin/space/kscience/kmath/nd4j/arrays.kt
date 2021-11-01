@@ -1,8 +1,10 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.nd4j
 
-internal fun LongArray.toIntArray(): IntArray = IntArray(size) { this[it].toInt() }
+import space.kscience.kmath.misc.toIntExact
+
+internal fun LongArray.toIntArray(): IntArray = IntArray(size) { this[it].toIntExact() }

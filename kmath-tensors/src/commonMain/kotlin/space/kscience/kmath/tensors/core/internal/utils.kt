@@ -1,11 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.operations.toMutableList
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
@@ -14,7 +15,7 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
 /**
- * Returns a reference to [IntArray] containing all of the elements of this [Buffer] or copy the data.
+ * Returns a reference to [IntArray] containing all the elements of this [Buffer] or copy the data.
  */
 internal fun Buffer<Int>.array(): IntArray = when (this) {
     is IntBuffer -> array
@@ -22,8 +23,9 @@ internal fun Buffer<Int>.array(): IntArray = when (this) {
 }
 
 /**
- * Returns a reference to [DoubleArray] containing all of the elements of this [Buffer] or copy the data.
+ * Returns a reference to [DoubleArray] containing all the elements of this [Buffer] or copy the data.
  */
+@PublishedApi
 internal fun Buffer<Double>.array(): DoubleArray = when (this) {
     is DoubleBuffer -> array
     else -> this.toDoubleArray()
@@ -83,7 +85,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
 internal fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
-    val linearStructure = this@toPrettyString.linearStructure
+    val linearStructure = this@toPrettyString.indices
     val vectorSize = shape.last()
     append("DoubleTensor(\n")
     var charOffset = 3

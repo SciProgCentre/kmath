@@ -7,10 +7,9 @@ description = "ND4J NDStructure implementation and according NDAlgebra classes"
 
 dependencies {
     api(project(":kmath-tensors"))
-    api("org.nd4j:nd4j-api:1.0.0-beta7")
-    testImplementation("org.nd4j:nd4j-native:1.0.0-beta7")
-    testImplementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
-    testImplementation("org.slf4j:slf4j-simple:1.7.30")
+    api("org.nd4j:nd4j-api:1.0.0-M1")
+    testImplementation("org.nd4j:nd4j-native-platform:1.0.0-M1")
+    testImplementation("org.slf4j:slf4j-simple:1.7.32")
 }
 
 readme {

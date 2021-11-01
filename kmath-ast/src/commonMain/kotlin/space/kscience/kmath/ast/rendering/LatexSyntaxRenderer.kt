@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
@@ -27,7 +27,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  */
 @UnstableKMathAPI
 public object LatexSyntaxRenderer : SyntaxRenderer {
-    public override fun render(node: MathSyntax, output: Appendable): Unit = output.run {
+    override fun render(node: MathSyntax, output: Appendable): Unit = output.run {
         fun render(syntax: MathSyntax) = render(syntax, output)
 
         when (node) {

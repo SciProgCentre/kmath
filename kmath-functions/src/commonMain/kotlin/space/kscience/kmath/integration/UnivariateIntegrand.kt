@@ -1,37 +1,28 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
-import kotlin.reflect.KClass
 
 public class UnivariateIntegrand<T> internal constructor(
-    private val featureMap: Map<KClass<*>, IntegrandFeature>,
+    override val features: FeatureSet<IntegrandFeature>,
     public val function: (Double) -> T,
 ) : Integrand {
-
-    override val features: Set<IntegrandFeature> get() = featureMap.values.toSet()
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : IntegrandFeature> getFeature(type: KClass<T>): T? = featureMap[type] as? T
-
-    public operator fun <F : IntegrandFeature> plus(pair: Pair<KClass<out F>, F>): UnivariateIntegrand<T> =
-        UnivariateIntegrand(featureMap + pair, function)
-
     public operator fun <F : IntegrandFeature> plus(feature: F): UnivariateIntegrand<T> =
-        plus(feature::class to feature)
+        UnivariateIntegrand(features.with(feature), function)
 }
 
 @Suppress("FunctionName")
 public fun <T : Any> UnivariateIntegrand(
     function: (Double) -> T,
     vararg features: IntegrandFeature,
-): UnivariateIntegrand<T> = UnivariateIntegrand(features.associateBy { it::class }, function)
+): UnivariateIntegrand<T> = UnivariateIntegrand(FeatureSet.of(*features), function)
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
@@ -40,8 +31,8 @@ public class IntegrationRange(public val range: ClosedRange<Double>) : Integrand
 }
 
 /**
- * Set of univariate integration ranges. First components correspond to ranges themselves, second components to number of
- * integration nodes per range
+ * Set of univariate integration ranges. First components correspond to the ranges themselves, second components to
+ * number of integration nodes per range.
  */
 public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
     public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
@@ -79,7 +70,7 @@ public val <T : Any> UnivariateIntegrand<T>.value: T get() = valueOrNull ?: erro
 public fun <T : Any> UnivariateIntegrator<T>.integrate(
     vararg features: IntegrandFeature,
     function: (Double) -> T,
-): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(function, *features))
+): UnivariateIntegrand<T> = process(UnivariateIntegrand(function, *features))
 
 /**
  * A shortcut method to integrate a [function] in [range] with additional [features].
@@ -90,10 +81,10 @@ public fun <T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     vararg features: IntegrandFeature,
     function: (Double) -> T,
-): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(function, IntegrationRange(range), *features))
+): UnivariateIntegrand<T> = process(UnivariateIntegrand(function, IntegrationRange(range), *features))
 
 /**
- * A shortcut method to integrate a [function] in [range] with additional [features].
+ * A shortcut method to integrate a [function] in [range] with additional features.
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
@@ -107,5 +98,5 @@ public fun <T : Any> UnivariateIntegrator<T>.integrate(
         featureBuilder()
         add(IntegrationRange(range))
     }
-    return integrate(UnivariateIntegrand(function, *features.toTypedArray()))
+    return process(UnivariateIntegrand(function, *features.toTypedArray()))
 }

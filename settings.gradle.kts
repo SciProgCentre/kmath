@@ -5,23 +5,23 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val toolsVersion = "0.10.0"
-    val kotlinVersion = "1.5.0"
+    val kotlinVersion = "1.6.0-RC"
+    val toolsVersion = "0.10.5"
 
     plugins {
-        id("ru.mipt.npm.gradle.project") version toolsVersion
-        id("ru.mipt.npm.gradle.mpp") version toolsVersion
-        id("ru.mipt.npm.gradle.jvm") version toolsVersion
-        kotlin("multiplatform") version kotlinVersion
-        kotlin("jvm") version kotlinVersion
-        kotlin("plugin.allopen") version kotlinVersion
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"
-        kotlin("jupyter.api") version "0.10.0-25"
-
+        id("ru.mipt.npm.gradle.project") version toolsVersion
+        id("ru.mipt.npm.gradle.jvm") version toolsVersion
+        id("ru.mipt.npm.gradle.mpp") version toolsVersion
+        kotlin("multiplatform") version kotlinVersion
+        kotlin("plugin.allopen") version kotlinVersion
     }
 }
 
 rootProject.name = "kmath"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("VERSION_CATALOGS")
 
 include(
     ":kmath-memory",
@@ -32,6 +32,8 @@ include(
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
+    ":kmath-multik",
+    ":kmath-optimization",
     ":kmath-stat",
     ":kmath-nd4j",
     ":kmath-dimensions",
@@ -45,7 +47,7 @@ include(
     ":kmath-symja",
     ":kmath-jafama",
     ":examples",
-    ":benchmarks"
+    ":benchmarks",
 )
 
 

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.histogram
@@ -36,9 +36,10 @@ public class TreeHistogram(
 }
 
 @OptIn(UnstableKMathAPI::class)
-private class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
+@PublishedApi
+internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
 
-    private class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
+    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
         ClosedFloatingPointRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()
@@ -80,27 +81,27 @@ private class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain)
  */
 @UnstableKMathAPI
 public class TreeHistogramSpace(
-    private val binFactory: (Double) -> UnivariateDomain,
+    @PublishedApi internal val binFactory: (Double) -> UnivariateDomain,
 ) : Group<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
 
-    public fun fill(block: UnivariateHistogramBuilder.() -> Unit): UnivariateHistogram =
+    public inline fun fill(block: UnivariateHistogramBuilder.() -> Unit): UnivariateHistogram =
         TreeHistogramBuilder(binFactory).apply(block).build()
 
     override fun add(
-        a: UnivariateHistogram,
-        b: UnivariateHistogram,
+        left: UnivariateHistogram,
+        right: UnivariateHistogram,
     ): UnivariateHistogram {
 //        require(a.context == this) { "Histogram $a does not belong to this context" }
 //        require(b.context == this) { "Histogram $b does not belong to this context" }
         val bins = TreeMap<Double, UnivariateBin>().apply {
-            (a.bins.map { it.domain } union b.bins.map { it.domain }).forEach { def ->
+            (left.bins.map { it.domain } union right.bins.map { it.domain }).forEach { def ->
                 put(
                     def.center,
                     UnivariateBin(
                         def,
-                        value = (a[def.center]?.value ?: 0.0) + (b[def.center]?.value ?: 0.0),
-                        standardDeviation = (a[def.center]?.standardDeviation
-                            ?: 0.0) + (b[def.center]?.standardDeviation ?: 0.0)
+                        value = (left[def.center]?.value ?: 0.0) + (right[def.center]?.value ?: 0.0),
+                        standardDeviation = (left[def.center]?.standardDeviation
+                            ?: 0.0) + (right[def.center]?.standardDeviation ?: 0.0)
                     )
                 )
             }
@@ -115,8 +116,8 @@ public class TreeHistogramSpace(
                     bin.domain.center,
                     UnivariateBin(
                         bin.domain,
-                        value = bin.value * value.toDouble(),
-                        standardDeviation = abs(bin.standardDeviation * value.toDouble())
+                        value = bin.value * value,
+                        standardDeviation = abs(bin.standardDeviation * value)
                     )
                 )
             }

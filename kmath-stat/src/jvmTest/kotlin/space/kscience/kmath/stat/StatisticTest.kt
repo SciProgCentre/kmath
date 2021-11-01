@@ -1,15 +1,17 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
 
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import space.kscience.kmath.streaming.chunked
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class StatisticTest {
     //create a random number generator.
@@ -22,12 +24,27 @@ internal class StatisticTest {
     val chunked = data.chunked(1000)
 
     @Test
-    fun testParallelMean() = runBlocking {
-        val average = Mean.double
-            .flow(chunked) //create a flow with results
-            .drop(99) // Skip first 99 values and use one with total data
-            .first() //get 1e5 data samples average
-
-        println(average)
+    fun singleBlockingMean() {
+        val first = runBlocking { chunked.first()}
+        val res = Double.mean(first)
+        assertEquals(0.5,res, 1e-1)
     }
+
+    @Test
+    fun singleSuspendMean() = runBlocking {
+        val first = runBlocking { chunked.first()}
+        val res = Double.mean(first)
+        assertEquals(0.5,res, 1e-1)
+    }
+
+    @Test
+    fun parallelMean() = runBlocking {
+        val average = Double.mean
+            .flow(chunked) //create a flow from evaluated results
+            .take(100) // Take 100 data chunks from the source and accumulate them
+            .last() //get 1e5 data samples average
+
+        assertEquals(0.5,average, 1e-2)
+    }
+
 }

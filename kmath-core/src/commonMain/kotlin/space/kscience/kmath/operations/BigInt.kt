@@ -1,13 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.AlgebraND
-import space.kscience.kmath.nd.BufferedRingND
+import space.kscience.kmath.nd.BufferedRingOpsND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import space.kscience.kmath.structures.Buffer
@@ -27,7 +26,7 @@ private typealias TBase = ULong
  * @author Peter Klimai
  */
 @OptIn(UnstableKMathAPI::class)
-public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOperations<BigInt> {
+public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperations<BigInt> {
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
@@ -35,10 +34,10 @@ public object BigIntField : Field<BigInt>, NumbersAddOperations<BigInt>, ScaleOp
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
     override fun BigInt.unaryMinus(): BigInt = -this
-    override fun add(a: BigInt, b: BigInt): BigInt = a.plus(b)
+    override fun add(left: BigInt, right: BigInt): BigInt = left.plus(right)
     override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
-    override fun multiply(a: BigInt, b: BigInt): BigInt = a.times(b)
-    override fun divide(a: BigInt, b: BigInt): BigInt = a.div(b)
+    override fun multiply(left: BigInt, right: BigInt): BigInt = left.times(right)
+    override fun divide(left: BigInt, right: BigInt): BigInt = left.div(right)
 
     public operator fun String.unaryPlus(): BigInt = this.parseBigInteger() ?: error("Can't parse $this as big integer")
     public operator fun String.unaryMinus(): BigInt =
@@ -49,16 +48,16 @@ public class BigInt internal constructor(
     private val sign: Byte,
     private val magnitude: Magnitude,
 ) : Comparable<BigInt> {
-    public override fun compareTo(other: BigInt): Int = when {
+    override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
         sign < other.sign -> -1
         sign > other.sign -> 1
         else -> sign * compareMagnitudes(magnitude, other.magnitude)
     }
 
-    public override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
+    override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
-    public override fun hashCode(): Int = magnitude.hashCode() + sign
+    override fun hashCode(): Int = magnitude.hashCode() + sign
 
     public fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 
@@ -121,7 +120,7 @@ public class BigInt internal constructor(
         var r = ZERO
 
         val bitSize =
-            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: 0f + 1)).toInt()
+            (BASE_SIZE * (this.magnitude.size - 1) + log2(this.magnitude.lastOrNull()?.toFloat() ?: (0f + 1))).toInt()
 
         for (i in bitSize downTo 0) {
             r = r shl 1
@@ -442,10 +441,10 @@ public fun UIntArray.toBigInt(sign: Byte): BigInt {
 }
 
 /**
- * Returns null if a valid number can not be read from a string
+ * Returns `null` if a valid number cannot be read from a string
  */
 public fun String.parseBigInteger(): BigInt? {
-    if (this.isEmpty()) return null
+    if (isEmpty()) return null
     val sign: Int
 
     val positivePartIndex = when (this[0]) {
@@ -527,11 +526,21 @@ public fun String.parseBigInteger(): BigInt? {
     }
 }
 
+public val BigInt.algebra: BigIntField get() = BigIntField
+
+@Deprecated("Use BigInt::buffer")
 public inline fun Buffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     boxing(size, initializer)
 
+public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    Buffer.boxing(size, initializer)
+
+@Deprecated("Use BigInt::mutableBuffer")
 public inline fun MutableBuffer.Companion.bigInt(size: Int, initializer: (Int) -> BigInt): MutableBuffer<BigInt> =
     boxing(size, initializer)
 
-public fun AlgebraND.Companion.bigInt(vararg shape: Int): BufferedRingND<BigInt, BigIntField> =
-    BufferedRingND(shape, BigIntField, Buffer.Companion::bigInt)
+public inline fun BigInt.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
+    Buffer.boxing(size, initializer)
+
+public val BigIntField.nd: BufferedRingOpsND<BigInt, BigIntField>
+    get() = BufferedRingOpsND(BufferRingOps(BigIntField, BigInt::buffer))

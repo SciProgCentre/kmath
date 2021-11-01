@@ -14,7 +14,7 @@ import kotlin.math.max
  *
  * @param shape the shape of the tensor.
  */
-public class TensorLinearStructure(override val shape: IntArray) : Strides {
+public class TensorLinearStructure(override val shape: IntArray) : Strides() {
     override val strides: IntArray
         get() = stridesFromShape(shape)
 
@@ -23,6 +23,10 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides {
 
     override val linearSize: Int
         get() = shape.reduce(Int::times)
+
+    override fun equals(other: Any?): Boolean = false
+
+    override fun hashCode(): Int = 0
 
     public companion object {
 

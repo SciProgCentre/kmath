@@ -1,16 +1,16 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess.PostProcessPhase
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.FieldOperations
-import space.kscience.kmath.operations.GroupOperations
+import space.kscience.kmath.operations.FieldOps
+import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations
-import space.kscience.kmath.operations.RingOperations
+import space.kscience.kmath.operations.RingOps
 
 /**
  * Removes unnecessary times (&times;) symbols from [MultiplicationSyntax].
@@ -205,7 +205,7 @@ public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
 @UnstableKMathAPI
 public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> Int) :
     PostProcessPhase {
-    public override fun perform(node: MathSyntax): Unit = when (node) {
+    override fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
         is SymbolSyntax -> Unit
         is OperatorNameSyntax -> Unit
@@ -306,10 +306,10 @@ public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> 
 
                 is BinarySyntax -> when (it.operation) {
                     PowerOperations.POW_OPERATION -> 1
-                    RingOperations.TIMES_OPERATION -> 3
-                    FieldOperations.DIV_OPERATION -> 3
-                    GroupOperations.MINUS_OPERATION -> 4
-                    GroupOperations.PLUS_OPERATION -> 4
+                    RingOps.TIMES_OPERATION -> 3
+                    FieldOps.DIV_OPERATION -> 3
+                    GroupOps.MINUS_OPERATION -> 4
+                    GroupOps.PLUS_OPERATION -> 4
                     else -> 0
                 }
 

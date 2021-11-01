@@ -1,11 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import space.kscience.kmath.linear.LinearSolver
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
 
@@ -17,7 +18,7 @@ public enum class CMDecomposition {
     CHOLESKY
 }
 
-public fun CMLinearSpace.solver(
+private fun CMLinearSpace.solver(
     a: Matrix<Double>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
@@ -44,3 +45,14 @@ public fun CMLinearSpace.inverse(
     a: Matrix<Double>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).inverse.wrap()
+
+
+public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Double> = object : LinearSolver<Double> {
+    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> = solver(a, decomposition).solve(b.toCM().origin).wrap()
+
+    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> = solver(a, decomposition).solve(b.toCM().origin).toPoint()
+
+    override fun inverse(matrix: Matrix<Double>): Matrix<Double> = solver(matrix, decomposition).inverse.wrap()
+}
+
+public fun CMLinearSpace.lupSolver(): LinearSolver<Double> = solver((CMDecomposition.LUP))

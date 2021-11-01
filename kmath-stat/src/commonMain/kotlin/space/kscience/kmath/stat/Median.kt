@@ -1,18 +1,18 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.stat
 
+import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asSequence
 
 /**
  * Non-composable median
  */
 public class Median<T>(private val comparator: Comparator<T>) : BlockingStatistic<T, T> {
-    public override fun evaluateBlocking(data: Buffer<T>): T =
+    override fun evaluateBlocking(data: Buffer<T>): T =
         data.asSequence().sortedWith(comparator).toList()[data.size / 2] //TODO check if this is correct
 
     public companion object {

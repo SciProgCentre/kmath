@@ -36,6 +36,7 @@ kotlin {
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-jafama"))
+                implementation(project(":kmath-tensors"))
                 implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
             }
         }
@@ -47,7 +48,8 @@ kotlin {
                 implementation(project(":kmath-nd4j"))
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
-                implementation("org.nd4j:nd4j-native:1.0.0-beta7")
+                implementation(projects.kmathMultik)
+                implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
                 //
@@ -81,6 +83,11 @@ benchmark {
         include("BufferBenchmark")
     }
 
+    configurations.register("nd") {
+        commonConfiguration()
+        include("NDFieldBenchmark")
+    }
+
     configurations.register("dot") {
         commonConfiguration()
         include("DotBenchmark")
@@ -104,6 +111,16 @@ benchmark {
     configurations.register("jafamaDouble") {
         commonConfiguration()
         include("JafamaBenchmark")
+    }
+
+    configurations.register("viktor") {
+        commonConfiguration()
+        include("ViktorBenchmark")
+    }
+
+    configurations.register("viktorLog") {
+        commonConfiguration()
+        include("ViktorLogBenchmark")
     }
 }
 

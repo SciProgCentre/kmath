@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.internal
@@ -110,7 +110,7 @@ internal object InternalGamma {
 
         x <= 8.0 -> {
             val n = floor(x - 1.5).toInt()
-            val prod = (1..n).fold(1.0, { prod, i -> prod * (x - i) })
+            val prod = (1..n).fold(1.0) { prod, i -> prod * (x - i) }
             logGamma1p(x - (n + 1)) + ln(prod)
         }
 

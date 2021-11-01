@@ -1,14 +1,14 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.operations.map
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.map
 import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
@@ -72,7 +72,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         }
 
         // Get previous rule.
-        // If it has not been computed yet it will trigger a recursive call
+        // If it has not been computed, yet it will trigger a recursive call
         // to this method.
         val previousPoints: Buffer<Double> = getOrBuildRule(numPoints - 1).first
 
@@ -146,7 +146,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         }
         // If "numPoints" is odd, 0 is a root.
         // Note: as written, the test for oddness will work for negative
-        // integers too (although it is not necessary here), preventing
+        // integers too (although it is unnecessary here), preventing
         // a FindBugs warning.
         if (numPoints % 2 != 0) {
             var pmc = 1.0

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
 package space.kscience.kmath.jupyter
 
 import kotlinx.html.Unsafe
@@ -6,7 +11,6 @@ import kotlinx.html.stream.createHTML
 import kotlinx.html.unsafe
 import org.jetbrains.kotlinx.jupyter.api.DisplayResult
 import org.jetbrains.kotlinx.jupyter.api.HTML
-import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
@@ -17,16 +21,15 @@ import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asSequence
 
 /**
  * A function for conversion of number to MST for pretty print
  */
 public fun Number.toMst(): MST.Numeric = MST.Numeric(this)
 
-@JupyterLibrary
 internal class KMathJupyter : JupyterIntegration() {
     private val mathRender = FeaturedMathRendererWithPostProcess.Default
     private val syntaxRender = MathMLSyntaxRenderer

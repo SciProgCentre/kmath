@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast
@@ -17,11 +17,11 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseResult
 import com.github.h0tk3y.betterParse.parser.Parser
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.StringSymbol
-import space.kscience.kmath.operations.FieldOperations
-import space.kscience.kmath.operations.GroupOperations
+import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.operations.FieldOps
+import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations
-import space.kscience.kmath.operations.RingOperations
+import space.kscience.kmath.operations.RingOps
 
 /**
  * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
@@ -43,7 +43,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
     private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
-    private val singular: Parser<MST> by id use { StringSymbol(text) }
+    private val singular: Parser<MST> by id use { Symbol(text) }
 
     private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }
@@ -60,7 +60,7 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
-        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(GroupOperations.MINUS_OPERATION, it) })
+        .or(-minus and parser(ArithmeticsEvaluator::term) map { MST.Unary(GroupOps.MINUS_OPERATION, it) })
         .or(-lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
 
     private val powChain: Parser<MST> by leftAssociative(term = term, operator = pow) { a, _, b ->
@@ -72,9 +72,9 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         operator = div or mul use TokenMatch::type
     ) { a, op, b ->
         if (op == div)
-            MST.Binary(FieldOperations.DIV_OPERATION, a, b)
+            MST.Binary(FieldOps.DIV_OPERATION, a, b)
         else
-            MST.Binary(RingOperations.TIMES_OPERATION, a, b)
+            MST.Binary(RingOps.TIMES_OPERATION, a, b)
     }
 
     private val subSumChain: Parser<MST> by leftAssociative(
@@ -82,9 +82,9 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         operator = plus or minus use TokenMatch::type
     ) { a, op, b ->
         if (op == plus)
-            MST.Binary(GroupOperations.PLUS_OPERATION, a, b)
+            MST.Binary(GroupOps.PLUS_OPERATION, a, b)
         else
-            MST.Binary(GroupOperations.MINUS_OPERATION, a, b)
+            MST.Binary(GroupOps.MINUS_OPERATION, a, b)
     }
 
     override val rootParser: Parser<MST> by subSumChain

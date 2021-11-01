@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package space.kscience.kmath.ast
@@ -11,19 +11,21 @@ import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sin
 import kotlin.random.Random
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.time.measureTime
 import space.kscience.kmath.estree.compileToExpression as estreeCompileToExpression
 import space.kscience.kmath.wasm.compileToExpression as wasmCompileToExpression
 
 // TODO move to benchmarks when https://github.com/Kotlin/kotlinx-benchmark/pull/38 or similar feature is merged
+@Ignore
 internal class TestExecutionTime {
     private companion object {
         private const val times = 1_000_000
         private val x by symbol
         private val algebra = DoubleField
 
-        private val functional = DoubleField.expressionInExtendedField {
+        private val functional = algebra.expressionInExtendedField {
             bindSymbol(x) * const(2.0) + const(2.0) / bindSymbol(x) - const(16.0) / sin(bindSymbol(x))
         }
 
@@ -31,9 +33,9 @@ internal class TestExecutionTime {
             x * number(2.0) + number(2.0) / x - number(16.0) / sin(x)
         }
 
-        private val mst = node.toExpression(DoubleField)
-        private val wasm = node.wasmCompileToExpression(DoubleField)
-        private val estree = node.estreeCompileToExpression(DoubleField)
+        private val mst = node.toExpression(algebra)
+        private val wasm = node.wasmCompileToExpression(algebra)
+        private val estree = node.estreeCompileToExpression(algebra)
 
         // In JavaScript, the expression below is implemented like
         //   _no_name_provided__125.prototype.invoke_178 = function (args) {
@@ -44,7 +46,7 @@ internal class TestExecutionTime {
 
         private val raw = Expression<Double> { args ->
             val x = args[x]!!
-            x * 2.0 + 2.0 / x - 16.0 / sin(x)
+            algebra { x * 2.0 + 2.0 / x - 16.0 / sin(x) }
         }
 
         private val justCalculate = { args: dynamic ->
