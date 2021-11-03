@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -34,11 +35,13 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public fun Buffer<T>.zip(other: Buffer<T>, block: A.(left: T, right: T) -> T): Buffer<T> =
         zipInline(this, other, block)
 
+    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.unaryOperationFunction(operation)
         return { arg -> bufferFactory(arg.size) { operationFunction(arg[it]) } }
     }
 
+    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.binaryOperationFunction(operation)
         return { left, right ->
@@ -50,7 +53,7 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
 /**
  * Inline map
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
     buffer: Buffer<T>,
     crossinline block: A.(T) -> T
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(buffer[it]) }
@@ -58,7 +61,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
 /**
  * Inline map
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
     buffer: Buffer<T>,
     crossinline block: A.(index: Int, arg: T) -> T
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(it, buffer[it]) }
@@ -66,7 +69,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
 /**
  * Inline zip
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     l: Buffer<T>,
     r: Buffer<T>,
     crossinline block: A.(l: T, r: T) -> T
@@ -126,7 +129,7 @@ public fun <T, A : ExponentialOperations<T>> BufferAlgebra<T, A>.atanh(arg: Buff
     mapInline(arg) { atanh(it) }
 
 public fun <T, A : PowerOperations<T>> BufferAlgebra<T, A>.pow(arg: Buffer<T>, pow: Number): Buffer<T> =
-    mapInline(arg) { power(it, pow) }
+    mapInline(arg) {it.pow(pow) }
 
 
 public open class BufferRingOps<T, A: Ring<T>>(
@@ -138,9 +141,11 @@ public open class BufferRingOps<T, A: Ring<T>>(
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
+    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> =
         super<BufferAlgebra>.unaryOperationFunction(operation)
 
+    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> =
         super<BufferAlgebra>.binaryOperationFunction(operation)
 }
@@ -160,6 +165,7 @@ public open class BufferFieldOps<T, A : Field<T>>(
     override fun scale(a: Buffer<T>, value: Double): Buffer<T> = a.map { scale(it, value) }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
+    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> =
         super<BufferRingOps>.binaryOperationFunction(operation)
 }

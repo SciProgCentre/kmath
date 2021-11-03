@@ -62,6 +62,6 @@ internal class AdaptingTests {
             .parseMath()
             .compileToExpression(DoubleField)
 
-        assertEquals(actualDerivative(x to 0.1), expectedDerivative(x to 0.1))
+        assertEquals(actualDerivative(x to -0.1), expectedDerivative(x to -0.1))
     }
 }

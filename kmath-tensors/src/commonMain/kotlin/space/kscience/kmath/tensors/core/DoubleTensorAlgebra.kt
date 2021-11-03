@@ -3,8 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
+
+@file:OptIn(PerformancePitfall::class)
+
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as1D
@@ -39,6 +43,7 @@ public open class DoubleTensorAlgebra :
      * @param transform the function to be applied to each element of the tensor.
      * @return the resulting tensor after applying the function.
      */
+    @PerformancePitfall
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): DoubleTensor {
         val tensor = this.tensor
@@ -52,6 +57,7 @@ public open class DoubleTensorAlgebra :
         )
     }
 
+    @PerformancePitfall
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun StructureND<Double>.mapIndexed(transform: DoubleField.(index: IntArray, Double) -> Double): DoubleTensor {
         val tensor = this.tensor
@@ -65,6 +71,7 @@ public open class DoubleTensorAlgebra :
         )
     }
 
+    @PerformancePitfall
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
@@ -377,6 +384,7 @@ public open class DoubleTensorAlgebra :
     override fun Tensor<Double>.viewAs(other: StructureND<Double>): DoubleTensor =
         tensor.view(other.shape)
 
+    @PerformancePitfall
     override infix fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
         if (tensor.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.mutableBuffer.array().sum()))
@@ -691,14 +699,19 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.exp(): DoubleTensor = tensor.map { exp(it) }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.ln(): DoubleTensor = tensor.map { ln(it) }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.sqrt(): DoubleTensor = tensor.map { sqrt(it) }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.cos(): DoubleTensor = tensor.map { cos(it) }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.acos(): DoubleTensor = tensor.map { acos(it) }
 
     override fun StructureND<Double>.cosh(): DoubleTensor = tensor.map { cosh(it) }

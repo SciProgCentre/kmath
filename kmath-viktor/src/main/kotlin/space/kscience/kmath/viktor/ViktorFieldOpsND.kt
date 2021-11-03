@@ -6,17 +6,20 @@
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedFieldOps
 import space.kscience.kmath.operations.NumbersAddOps
+import space.kscience.kmath.operations.PowerOperations
 
 @OptIn(UnstableKMathAPI::class)
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, DoubleField>,
-    ExtendedFieldOps<StructureND<Double>> {
+    ExtendedFieldOps<StructureND<Double>>,
+    PowerOperations<StructureND<Double>> {
 
     public val StructureND<Double>.f64Buffer: F64Array
         get() = when (this) {
@@ -35,6 +38,7 @@ public open class ViktorFieldOpsND :
 
     override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
 
+    @PerformancePitfall
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
             DefaultStrides(shape).asSequence().forEach { index ->
@@ -42,6 +46,7 @@ public open class ViktorFieldOpsND :
             }
         }.asStructure()
 
+    @PerformancePitfall
     override fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape).apply {
@@ -50,6 +55,7 @@ public open class ViktorFieldOpsND :
         }
     }.asStructure()
 
+    @PerformancePitfall
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
@@ -110,7 +116,7 @@ public open class ViktorFieldOpsND :
 public val DoubleField.viktorAlgebra: ViktorFieldOpsND get() = ViktorFieldOpsND
 
 public open class ViktorFieldND(
-    override val shape: Shape
+    override val shape: Shape,
 ) : ViktorFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>> {
     override val zero: ViktorStructureND by lazy { F64Array.full(init = 0.0, shape = shape).asStructure() }
     override val one: ViktorStructureND by lazy { F64Array.full(init = 1.0, shape = shape).asStructure() }

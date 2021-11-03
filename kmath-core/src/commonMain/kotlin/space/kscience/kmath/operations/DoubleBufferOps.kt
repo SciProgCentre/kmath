@@ -6,21 +6,32 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.asBuffer
 
 import kotlin.math.*
 
 /**
  * [ExtendedFieldOps] over [DoubleBuffer].
  */
-public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<Buffer<Double>, Double> {
+public abstract class DoubleBufferOps :
+    BufferAlgebra<Double, DoubleField>, ExtendedFieldOps<Buffer<Double>>, Norm<Buffer<Double>, Double> {
 
-    override fun Buffer<Double>.unaryMinus(): DoubleBuffer = if (this is DoubleBuffer) {
-        DoubleBuffer(size) { -array[it] }
-    } else {
-        DoubleBuffer(size) { -get(it) }
-    }
+    override val elementAlgebra: DoubleField get() = DoubleField
+    override val bufferFactory: BufferFactory<Double> get() = ::DoubleBuffer
+
+    @UnstableKMathAPI
+    override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
+        super<ExtendedFieldOps>.unaryOperationFunction(operation)
+
+    @UnstableKMathAPI
+    override fun binaryOperationFunction(operation: String): (left: Buffer<Double>, right: Buffer<Double>) -> Buffer<Double> =
+        super<ExtendedFieldOps>.binaryOperationFunction(operation)
+
+    override fun Buffer<Double>.unaryMinus(): DoubleBuffer = mapInline { -it }
 
     override fun add(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
         require(right.size == left.size) {
@@ -92,101 +103,46 @@ public abstract class DoubleBufferOps : ExtendedFieldOps<Buffer<Double>>, Norm<B
         } else DoubleBuffer(DoubleArray(left.size) { left[it] / right[it] })
     }
 
-    override fun sin(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { sin(array[it]) })
-    } else DoubleBuffer(DoubleArray(arg.size) { sin(arg[it]) })
+    override fun sin(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::sin)
 
-    override fun cos(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { cos(array[it]) })
-    } else DoubleBuffer(DoubleArray(arg.size) { cos(arg[it]) })
+    override fun cos(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::cos)
 
-    override fun tan(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { tan(array[it]) })
-    } else DoubleBuffer(DoubleArray(arg.size) { tan(arg[it]) })
+    override fun tan(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::tan)
 
-    override fun asin(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { asin(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { asin(arg[it]) })
+    override fun asin(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::asin)
 
-    override fun acos(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { acos(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { acos(arg[it]) })
+    override fun acos(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::acos)
 
-    override fun atan(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { atan(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { atan(arg[it]) })
+    override fun atan(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::atan)
 
-    override fun sinh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { sinh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { sinh(arg[it]) })
+    override fun sinh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::sinh)
 
-    override fun cosh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { cosh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { cosh(arg[it]) })
+    override fun cosh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::cosh)
 
-    override fun tanh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { tanh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { tanh(arg[it]) })
+    override fun tanh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::tanh)
 
-    override fun asinh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { asinh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { asinh(arg[it]) })
+    override fun asinh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::asinh)
 
-    override fun acosh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { acosh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { acosh(arg[it]) })
+    override fun acosh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::acosh)
 
-    override fun atanh(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { atanh(array[it]) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { atanh(arg[it]) })
+    override fun atanh(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::atanh)
 
-    override fun power(arg: Buffer<Double>, pow: Number): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { array[it].pow(pow.toDouble()) })
-    } else
-        DoubleBuffer(DoubleArray(arg.size) { arg[it].pow(pow.toDouble()) })
+    override fun exp(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::exp)
 
-    override fun exp(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { exp(array[it]) })
-    } else DoubleBuffer(DoubleArray(arg.size) { exp(arg[it]) })
-
-    override fun ln(arg: Buffer<Double>): DoubleBuffer = if (arg is DoubleBuffer) {
-        val array = arg.array
-        DoubleBuffer(DoubleArray(arg.size) { ln(array[it]) })
-    } else {
-        DoubleBuffer(DoubleArray(arg.size) { ln(arg[it]) })
-    }
+    override fun ln(arg: Buffer<Double>): DoubleBuffer = arg.mapInline(::ln)
 
     override fun norm(arg: Buffer<Double>): Double = DoubleL2Norm.norm(arg)
 
-    override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = if (a is DoubleBuffer) {
-        val aArray = a.array
-        DoubleBuffer(DoubleArray(a.size) { aArray[it] * value })
-    } else DoubleBuffer(DoubleArray(a.size) { a[it] * value })
+    override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = a.mapInline { it * value }
 
-    public companion object : DoubleBufferOps()
+    public companion object : DoubleBufferOps() {
+        public inline fun Buffer<Double>.mapInline(block: (Double) -> Double): DoubleBuffer =
+            if (this is DoubleBuffer) {
+                DoubleArray(size) { block(array[it]) }.asBuffer()
+            } else {
+                DoubleArray(size) { block(get(it)) }.asBuffer()
+            }
+    }
 }
 
 public object DoubleL2Norm : Norm<Point<Double>, Double> {

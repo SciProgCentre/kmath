@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 
@@ -27,7 +29,20 @@ public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Doub
 
     override fun acosh(arg: Buffer<Double>): DoubleBuffer = super<DoubleBufferOps>.acosh(arg)
 
-    override fun atanh(arg: Buffer<Double>): DoubleBuffer= super<DoubleBufferOps>.atanh(arg)
+    override fun atanh(arg: Buffer<Double>): DoubleBuffer = super<DoubleBufferOps>.atanh(arg)
+
+    override fun power(arg: Buffer<Double>, pow: Number): DoubleBuffer = if (pow.isInteger()) {
+        arg.mapInline { it.pow(pow.toInt()) }
+    } else {
+        arg.mapInline {
+            if(it<0) throw IllegalArgumentException("Negative argument $it could not be raised to the fractional power")
+            it.pow(pow.toDouble())
+        }
+    }
+
+    @UnstableKMathAPI
+    override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
+        super<ExtendedField>.unaryOperationFunction(operation)
 
     //    override fun number(value: Number): Buffer<Double> = DoubleBuffer(size) { value.toDouble() }
 //

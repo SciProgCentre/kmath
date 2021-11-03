@@ -13,9 +13,8 @@ import kotlin.math.pow as kpow
 public interface ExtendedFieldOps<T> :
     FieldOps<T>,
     TrigonometricOperations<T>,
-    PowerOperations<T>,
     ExponentialOperations<T>,
-    ScaleOperations<T>  {
+    ScaleOperations<T> {
     override fun tan(arg: T): T = sin(arg) / cos(arg)
     override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
@@ -26,7 +25,6 @@ public interface ExtendedFieldOps<T> :
         TrigonometricOperations.ACOS_OPERATION -> ::acos
         TrigonometricOperations.ASIN_OPERATION -> ::asin
         TrigonometricOperations.ATAN_OPERATION -> ::atan
-        PowerOperations.SQRT_OPERATION -> ::sqrt
         ExponentialOperations.EXP_OPERATION -> ::exp
         ExponentialOperations.LN_OPERATION -> ::ln
         ExponentialOperations.COSH_OPERATION -> ::cosh
@@ -42,13 +40,18 @@ public interface ExtendedFieldOps<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebra<T>{
+public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, PowerOperations<T>, NumericAlgebra<T> {
     override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
     override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
     override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
     override fun asinh(arg: T): T = ln(sqrt(arg * arg + one) + arg)
     override fun acosh(arg: T): T = ln(arg + sqrt((arg - one) * (arg + one)))
     override fun atanh(arg: T): T = (ln(arg + one) - ln(one - arg)) / 2.0
+
+    override fun unaryOperationFunction(operation: String): (arg: T) -> T {
+        return if (operation == PowerOperations.SQRT_OPERATION) ::sqrt
+        else super<ExtendedFieldOps>.unaryOperationFunction(operation)
+    }
 
     override fun rightSideNumberOperationFunction(operation: String): (left: T, right: Number) -> T =
         when (operation) {
@@ -69,7 +72,7 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
 
     override fun binaryOperationFunction(operation: String): (left: Double, right: Double) -> Double =
         when (operation) {
-            PowerOperations.POW_OPERATION -> ::power
+            PowerOperations.POW_OPERATION -> { l, r -> l.kpow(r) }
             else -> super<ExtendedField>.binaryOperationFunction(operation)
         }
 
@@ -94,8 +97,13 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     override inline fun acosh(arg: Double): Double = kotlin.math.acosh(arg)
     override inline fun atanh(arg: Double): Double = kotlin.math.atanh(arg)
 
-    override inline fun sqrt(arg: Double): Double = kotlin.math.sqrt(arg)
-    override inline fun power(arg: Double, pow: Number): Double = arg.kpow(pow.toDouble())
+    override fun sqrt(arg: Double): Double = kotlin.math.sqrt(arg)
+    override fun power(arg: Double, pow: Number): Double = when {
+        pow.isInteger() -> arg.kpow(pow.toInt())
+        arg < 0 -> throw IllegalArgumentException("Can't raise negative $arg to a fractional power $pow")
+        else -> arg.kpow(pow.toDouble())
+    }
+
     override inline fun exp(arg: Double): Double = kotlin.math.exp(arg)
     override inline fun ln(arg: Double): Double = kotlin.math.ln(arg)
 
@@ -122,7 +130,7 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 
     override fun binaryOperationFunction(operation: String): (left: Float, right: Float) -> Float =
         when (operation) {
-            PowerOperations.POW_OPERATION -> ::power
+            PowerOperations.POW_OPERATION -> { l, r -> l.kpow(r) }
             else -> super.binaryOperationFunction(operation)
         }
 
@@ -149,6 +157,7 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
 
     override inline fun sqrt(arg: Float): Float = kotlin.math.sqrt(arg)
     override inline fun power(arg: Float, pow: Number): Float = arg.kpow(pow.toFloat())
+
     override inline fun exp(arg: Float): Float = kotlin.math.exp(arg)
     override inline fun ln(arg: Float): Float = kotlin.math.ln(arg)
 

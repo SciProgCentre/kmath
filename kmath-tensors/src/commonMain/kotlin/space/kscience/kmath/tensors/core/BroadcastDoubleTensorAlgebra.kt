@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.tensors.api.Tensor
@@ -17,6 +18,8 @@ import space.kscience.kmath.tensors.core.internal.tensor
  * Basic linear algebra operations implemented with broadcasting.
  * For more information: https://pytorch.org/docs/stable/notes/broadcasting.html
  */
+
+@PerformancePitfall
 public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor {
@@ -99,5 +102,6 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
  * Compute a value using broadcast double tensor algebra
  */
 @UnstableKMathAPI
+@PerformancePitfall
 public fun <R> DoubleTensorAlgebra.withBroadcast(block: BroadcastDoubleTensorAlgebra.() -> R): R =
     BroadcastDoubleTensorAlgebra.block()
