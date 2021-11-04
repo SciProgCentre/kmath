@@ -17,11 +17,14 @@ import kotlin.math.*
 /**
  * [ExtendedFieldOps] over [DoubleBuffer].
  */
-public abstract class DoubleBufferOps :
-    BufferAlgebra<Double, DoubleField>, ExtendedFieldOps<Buffer<Double>>, Norm<Buffer<Double>, Double> {
+public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, ExtendedFieldOps<Buffer<Double>>,
+    Norm<Buffer<Double>, Double> {
 
     override val elementAlgebra: DoubleField get() = DoubleField
     override val bufferFactory: BufferFactory<Double> get() = ::DoubleBuffer
+
+    override fun Buffer<Double>.map(block: DoubleField.(Double) -> Double): DoubleBuffer =
+        mapInline { DoubleField.block(it) }
 
     @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
@@ -87,8 +90,7 @@ public abstract class DoubleBufferOps :
             val aArray = left.array
             val bArray = right.array
             DoubleBuffer(DoubleArray(left.size) { aArray[it] * bArray[it] })
-        } else
-            DoubleBuffer(DoubleArray(left.size) { left[it] * right[it] })
+        } else DoubleBuffer(DoubleArray(left.size) { left[it] * right[it] })
     }
 
     override fun divide(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {

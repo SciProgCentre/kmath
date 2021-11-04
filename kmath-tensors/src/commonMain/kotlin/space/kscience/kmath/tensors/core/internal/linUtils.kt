@@ -53,7 +53,7 @@ internal val <T> BufferedTensor<T>.matrices: VirtualBuffer<BufferedTensor<T>>
 
 internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = matrices.asSequence()
 
-internal fun dotHelper(
+internal fun dotTo(
     a: MutableStructure2D<Double>,
     b: MutableStructure2D<Double>,
     res: MutableStructure2D<Double>,
