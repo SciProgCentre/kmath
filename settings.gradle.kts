@@ -5,8 +5,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val kotlinVersion = "1.6.0-RC"
-    val toolsVersion = "0.10.5"
+    val kotlinVersion = "1.6.0-RC2"
+    val toolsVersion = "0.10.6"
 
     plugins {
         id("org.jetbrains.kotlinx.benchmark") version "0.3.1"

@@ -10,7 +10,7 @@ import kotlin.math.max
 
 internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTensor, linearSize: Int) {
     for (linearIndex in 0 until linearSize) {
-        val totalMultiIndex = resTensor.indices.index(linearIndex)
+        val totalMultiIndex = resTensor.shapeIndices.index(linearIndex)
         val curMultiIndex = tensor.shape.copyOf()
 
         val offset = totalMultiIndex.size - curMultiIndex.size
@@ -23,7 +23,7 @@ internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTenso
             }
         }
 
-        val curLinearIndex = tensor.indices.offset(curMultiIndex)
+        val curLinearIndex = tensor.shapeIndices.offset(curMultiIndex)
         resTensor.mutableBuffer.array()[linearIndex] =
             tensor.mutableBuffer.array()[tensor.bufferStart + curLinearIndex]
     }
@@ -112,7 +112,7 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
             val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
 
             for (linearIndex in 0 until n) {
-                val totalMultiIndex = outerTensor.indices.index(linearIndex)
+                val totalMultiIndex = outerTensor.shapeIndices.index(linearIndex)
                 var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
@@ -127,13 +127,13 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
                 }
 
                 for (i in 0 until matrixSize) {
-                    val curLinearIndex = newTensor.indices.offset(
+                    val curLinearIndex = newTensor.shapeIndices.offset(
                         curMultiIndex +
-                                matrix.indices.index(i)
+                                matrix.shapeIndices.index(i)
                     )
-                    val newLinearIndex = resTensor.indices.offset(
+                    val newLinearIndex = resTensor.shapeIndices.offset(
                         totalMultiIndex +
-                                matrix.indices.index(i)
+                                matrix.shapeIndices.index(i)
                     )
 
                     resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =

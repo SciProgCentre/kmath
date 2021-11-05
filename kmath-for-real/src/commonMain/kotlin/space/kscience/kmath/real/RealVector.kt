@@ -11,7 +11,6 @@ import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
 import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.indices
 import kotlin.math.pow
 
 public typealias DoubleVector = Point<Double>

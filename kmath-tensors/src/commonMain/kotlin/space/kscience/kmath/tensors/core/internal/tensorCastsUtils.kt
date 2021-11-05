@@ -28,7 +28,7 @@ internal fun <T> StructureND<T>.copyToBufferedTensor(): BufferedTensor<T> =
 
 internal fun <T> StructureND<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
     is BufferedTensor<T> -> this
-    is MutableBufferND<T> -> if (this.indices == TensorLinearStructure(this.shape)) {
+    is MutableBufferND<T> -> if (this.shapeIndices == TensorLinearStructure(this.shape)) {
         BufferedTensor(this.shape, this.buffer, 0)
     } else {
         this.copyToBufferedTensor()

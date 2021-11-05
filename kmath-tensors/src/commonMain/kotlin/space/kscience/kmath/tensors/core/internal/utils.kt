@@ -85,7 +85,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
 internal fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
-    val linearStructure = this@toPrettyString.indices
+    val linearStructure = this@toPrettyString.shapeIndices
     val vectorSize = shape.last()
     append("DoubleTensor(\n")
     var charOffset = 3

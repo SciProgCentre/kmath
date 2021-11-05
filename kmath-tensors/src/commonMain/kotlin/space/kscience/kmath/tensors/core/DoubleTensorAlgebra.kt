@@ -15,7 +15,6 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
@@ -63,7 +62,7 @@ public open class DoubleTensorAlgebra :
         val tensor = this.tensor
         //TODO remove additional copy
         val sourceArray = tensor.copyArray()
-        val array = DoubleArray(tensor.numElements) { DoubleField.transform(tensor.indices.index(it), sourceArray[it]) }
+        val array = DoubleArray(tensor.numElements) { DoubleField.transform(tensor.shapeIndices.index(it), sourceArray[it]) }
         return DoubleTensor(
             tensor.shape,
             array,
@@ -365,11 +364,11 @@ public open class DoubleTensorAlgebra :
         val resTensor = DoubleTensor(resShape, resBuffer)
 
         for (offset in 0 until n) {
-            val oldMultiIndex = tensor.indices.index(offset)
+            val oldMultiIndex = tensor.shapeIndices.index(offset)
             val newMultiIndex = oldMultiIndex.copyOf()
             newMultiIndex[ii] = newMultiIndex[jj].also { newMultiIndex[jj] = newMultiIndex[ii] }
 
-            val linearIndex = resTensor.indices.offset(newMultiIndex)
+            val linearIndex = resTensor.shapeIndices.offset(newMultiIndex)
             resTensor.mutableBuffer.array()[linearIndex] =
                 tensor.mutableBuffer.array()[tensor.bufferStart + offset]
         }
@@ -467,7 +466,7 @@ public open class DoubleTensorAlgebra :
         val resTensor = zeros(resShape)
 
         for (i in 0 until diagonalEntries.tensor.numElements) {
-            val multiIndex = diagonalEntries.tensor.indices.index(i)
+            val multiIndex = diagonalEntries.tensor.shapeIndices.index(i)
 
             var offset1 = 0
             var offset2 = abs(realOffset)
@@ -592,7 +591,7 @@ public open class DoubleTensorAlgebra :
         val init = foldFunction(DoubleArray(1) { 0.0 })
         val resTensor = BufferedTensor(resShape,
             MutableBuffer.auto(resNumElements) { init }, 0)
-        for (index in resTensor.indices) {
+        for (index in resTensor.shapeIndices) {
             val prefix = index.take(dim).toIntArray()
             val suffix = index.takeLast(dimension - dim - 1).toIntArray()
             resTensor[index] = foldFunction(DoubleArray(shape[dim]) { i ->

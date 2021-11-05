@@ -2,6 +2,7 @@ import java.net.URL
 
 plugins {
     id("ru.mipt.npm.gradle.project")
+    id("org.jetbrains.kotlinx.kover") version "0.4.1"
     kotlin("jupyter.api") apply false
 }
 

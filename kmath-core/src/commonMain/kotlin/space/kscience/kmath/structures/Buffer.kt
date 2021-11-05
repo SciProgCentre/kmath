@@ -48,6 +48,11 @@ public interface Buffer<out T> {
 
     override fun toString(): String
 
+    /**
+     * Returns an [IntRange] of the valid indices for this [Buffer].
+     */
+    public val indices: IntRange get() = 0 until size
+
     public companion object {
 
         public fun toString(buffer: Buffer<*>): String =
@@ -100,10 +105,12 @@ public interface Buffer<out T> {
     }
 }
 
+public operator fun<T> Buffer<T>.get(index: UInt): T = get(index.toInt())
+
 /**
- * Returns an [IntRange] of the valid indices for this [Buffer].
+ * if index is in range of buffer, return the value. Otherwise, return null.
  */
-public val Buffer<*>.indices: IntRange get() = 0 until size
+public fun <T> Buffer<T>.getOrNull(index: Int): T? = if (index in indices) get(index) else null
 
 /**
  * Immutable wrapper for [MutableBuffer].

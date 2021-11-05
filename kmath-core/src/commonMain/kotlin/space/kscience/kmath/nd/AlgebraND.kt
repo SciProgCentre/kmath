@@ -26,7 +26,7 @@ public fun Shape(shapeFirst: Int, vararg shapeRest: Int): Shape = intArrayOf(sha
 public interface WithShape {
     public val shape: Shape
 
-    public val indices: ShapeIndexer get() = DefaultStrides(shape)
+    public val shapeIndices: ShapeIndices get() = DefaultStrides(shape)
 }
 
 /**

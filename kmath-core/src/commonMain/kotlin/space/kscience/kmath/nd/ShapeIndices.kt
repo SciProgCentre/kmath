@@ -10,7 +10,7 @@ import kotlin.native.concurrent.ThreadLocal
 /**
  * A converter from linear index to multivariate index
  */
-public interface ShapeIndexer: Iterable<IntArray>{
+public interface ShapeIndices: Iterable<IntArray>{
     public val shape: Shape
 
     /**
@@ -44,7 +44,7 @@ public interface ShapeIndexer: Iterable<IntArray>{
 /**
  * Linear transformation of indexes
  */
-public abstract class Strides: ShapeIndexer {
+public abstract class Strides: ShapeIndices {
     /**
      * Array strides
      */

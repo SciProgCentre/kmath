@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
+@file:OptIn(PerformancePitfall::class)
+
 package space.kscience.kmath.tensors.core.internal
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D

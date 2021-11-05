@@ -22,22 +22,22 @@ public open class BufferedTensor<T> internal constructor(
     /**
      * Buffer strides based on [TensorLinearStructure] implementation
      */
-    override val indices: Strides get() = TensorLinearStructure(shape)
+    override val shapeIndices: Strides get() = TensorLinearStructure(shape)
 
     /**
      * Number of elements in tensor
      */
     public val numElements: Int
-        get() = indices.linearSize
+        get() = shapeIndices.linearSize
 
-    override fun get(index: IntArray): T = mutableBuffer[bufferStart + indices.offset(index)]
+    override fun get(index: IntArray): T = mutableBuffer[bufferStart + shapeIndices.offset(index)]
 
     override fun set(index: IntArray, value: T) {
-        mutableBuffer[bufferStart + indices.offset(index)] = value
+        mutableBuffer[bufferStart + shapeIndices.offset(index)] = value
     }
 
     @PerformancePitfall
-    override fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map {
+    override fun elements(): Sequence<Pair<IntArray, T>> = shapeIndices.asSequence().map {
         it to get(it)
     }
 }
