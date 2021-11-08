@@ -137,4 +137,4 @@ public class PermutatedBuffer<T>(
 /**
  * Created a permuted view of given buffer using provided [indices]
  */
-public fun <T> Buffer<T>.view(indices: IntArray): PermutatedBuffer<T> = PermutatedBuffer(this, indices)
+public fun <T> Buffer<T>.permute(indices: IntArray): PermutatedBuffer<T> = PermutatedBuffer(this, indices)

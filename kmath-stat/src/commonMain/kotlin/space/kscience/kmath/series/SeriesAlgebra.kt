@@ -14,14 +14,14 @@ internal fun IntRange.intersect(other: IntRange): IntRange =
     max(first, other.first)..min(last, other.last)
 
 @PublishedApi
-internal val IntRange.size
+internal val IntRange.size: Int
     get() = last - first + 1
 
 @PublishedApi
 internal operator fun IntRange.contains(other: IntRange): Boolean = (other.first in this) && (other.last in this)
 
-//TODO add permutated buffer
-//TODO add rank function
+//TODO add permutation sort
+//TODO check rank statistics
 
 
 public interface Series<T> : Buffer<T> {
@@ -88,24 +88,6 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         OffsetBufer(origin, index, size)
     } else {
         OffsetBufer(this, index, size)
-    }
-
-    /**
-     * Create a buffer view using given absolute range
-     */
-    public fun Buffer<T>.slice(range: IntRange): Series<T> {
-        val size = range.size
-        return if (this is Series) {
-            OffsetBufer(this, indices.first + range.first, size)
-        } else {
-            OffsetBufer(this, range.first, size)
-        }
-    }
-
-    public fun Buffer<T>.expand(range: IntRange, defaultValue: T): Series<T> = if (range in indices) {
-        slice(range)
-    } else {
-        TODO()
     }
 
     public val Buffer<T>.offset: Int get() = if (this is Series) position else 0
