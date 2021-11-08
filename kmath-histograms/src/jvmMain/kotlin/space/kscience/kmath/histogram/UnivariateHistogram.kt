@@ -7,8 +7,8 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.UnivariateDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asSequence
 
 
 @UnstableKMathAPI

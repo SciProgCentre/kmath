@@ -7,10 +7,7 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.*
 
 import kotlin.math.*
 

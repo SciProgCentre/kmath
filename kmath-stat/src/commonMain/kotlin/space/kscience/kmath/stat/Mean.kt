@@ -7,6 +7,7 @@ package space.kscience.kmath.stat
 
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.indices
 
 /**
  * Arithmetic mean

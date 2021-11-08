@@ -6,8 +6,8 @@
 package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.internal.InternalErf
 import space.kscience.kmath.samplers.GaussianSampler
+import space.kscience.kmath.samplers.InternalErf
 import space.kscience.kmath.samplers.NormalizedGaussianSampler
 import space.kscience.kmath.samplers.ZigguratNormalizedGaussianSampler
 import space.kscience.kmath.stat.RandomGenerator

@@ -12,9 +12,9 @@ import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.asSequence
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra

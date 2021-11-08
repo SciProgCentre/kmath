@@ -1,37 +1,43 @@
 package space.kscience.kmath.series
 
 
-import net.jafama.StrictFastMath.abs
+import kotlinx.html.FlowContent
+import kotlinx.html.h1
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.operations.toList
 import space.kscience.kmath.structures.Buffer
-import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
-import space.kscience.plotly.scatter
+import space.kscience.kmath.structures.toList
+import space.kscience.plotly.*
 import kotlin.math.PI
-import kotlin.math.max
 
-fun main() = Double.algebra.bufferAlgebra.seriesAlgebra(0..100).invoke {
-    fun Buffer<Double>.plot() {
-        val ls = labels
-        Plotly.plot {
+fun main() = with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
+    fun FlowContent.plotSeries(buffer: Buffer<Double>) {
+        val ls = buffer.labels
+        plot {
             scatter {
                 x.numbers = ls
-                y.numbers = toList()
+                y.numbers = buffer.toList()
             }
-        }.makeFile()
+            layout {
+                xaxis {
+                    range(0.0..100.0)
+                }
+            }
+        }
     }
 
 
-    val s1 = series(100) { sin(2 * PI * it / 100) }
-    val s2 = series(100) { 1.0 }
+    val s1 = series(100) { sin(2 * PI * it / 100) + 1.0 }
+    val s2 = s1.slice(20..50).moveTo(40)
 
-    (s1 - s2).plot()
+    val s3: Buffer<Double> = s1.zip(s2) { l, r -> l + r } //s1 + s2
+    val s4 = ln(s3)
 
-    // Kolmogorov-Smirnov test statistic
-    val kst = (s1 - s2).fold(0.0) { sup, arg -> max(sup, abs(arg))}
-
+    Plotly.page {
+        h1 { +"This is my plot" }
+        plotSeries(s1)
+        plotSeries(s2)
+        plotSeries(s4)
+    }.makeFile()
 
 }

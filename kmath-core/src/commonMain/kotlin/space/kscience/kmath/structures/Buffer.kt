@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.operations.asSequence
+import space.kscience.kmath.operations.WithSize
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
@@ -30,11 +30,11 @@ public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
  *
  * @param T the type of elements contained in the buffer.
  */
-public interface Buffer<out T> {
+public interface Buffer<out T> : WithSize {
     /**
      * The size of this buffer.
      */
-    public val size: Int
+    override val size: Int
 
     /**
      * Gets element at given index.
@@ -44,14 +44,9 @@ public interface Buffer<out T> {
     /**
      * Iterates over all elements.
      */
-    public operator fun iterator(): Iterator<T>
+    public operator fun iterator(): Iterator<T> = indices.asSequence().map(::get).iterator()
 
     override fun toString(): String
-
-    /**
-     * Returns an [IntRange] of the valid indices for this [Buffer].
-     */
-    public val indices: IntRange get() = 0 until size
 
     public companion object {
 
@@ -105,7 +100,12 @@ public interface Buffer<out T> {
     }
 }
 
-public operator fun<T> Buffer<T>.get(index: UInt): T = get(index.toInt())
+/**
+ * Returns an [IntRange] of the valid indices for this [Buffer].
+ */
+public val <T> Buffer<T>.indices: IntRange get() = 0 until size
+
+public operator fun <T> Buffer<T>.get(index: UInt): T = get(index.toInt())
 
 /**
  * if index is in range of buffer, return the value. Otherwise, return null.

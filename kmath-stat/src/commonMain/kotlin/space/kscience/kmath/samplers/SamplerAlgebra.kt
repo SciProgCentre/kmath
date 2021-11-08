@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
-package space.kscience.kmath.stat
+package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.ConstantChain
@@ -12,6 +12,7 @@ import space.kscience.kmath.chains.zip
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.stat.RandomGenerator
 
 /**
  * Implements [Sampler] by sampling only certain [value].

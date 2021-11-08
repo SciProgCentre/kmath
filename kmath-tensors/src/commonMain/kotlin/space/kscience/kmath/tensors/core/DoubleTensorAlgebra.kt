@@ -15,6 +15,7 @@ import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor

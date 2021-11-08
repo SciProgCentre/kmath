@@ -13,8 +13,6 @@ import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.asIterable
-import space.kscience.kmath.operations.toList
 import space.kscience.kmath.optimization.QowOptimizer
 import space.kscience.kmath.optimization.chiSquaredOrNull
 import space.kscience.kmath.optimization.fitWith
@@ -22,6 +20,8 @@ import space.kscience.kmath.optimization.resultPoint
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.structures.asIterable
+import space.kscience.kmath.structures.toList
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import kotlin.math.abs

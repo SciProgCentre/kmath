@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class DoubleBuffer(public val array: DoubleArray) : MutableBuffer<Double> {
+public value class DoubleBuffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Double = array[index]

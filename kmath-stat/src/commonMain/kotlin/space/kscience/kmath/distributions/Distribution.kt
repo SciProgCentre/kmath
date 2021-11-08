@@ -6,8 +6,8 @@
 package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.samplers.Sampler
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
 
 /**
  * A distribution of typed objects.

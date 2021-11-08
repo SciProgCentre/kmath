@@ -3,10 +3,9 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
-package space.kscience.kmath.operations
+package space.kscience.kmath.structures
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.structures.*
 
 /**
  * Typealias for buffer transformations.
@@ -103,4 +102,40 @@ public inline fun <T1, T2, reified R : Any> Buffer<T1>.zip(
 ): Buffer<R> {
     require(size == other.size) { "Buffer size mismatch in zip: expected $size but found ${other.size}" }
     return bufferFactory(size) { transform(get(it), other[it]) }
+}
+
+/**
+ * Simular to https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/binary-search.html.
+ * The implementation is copied from Kotlin stdlib
+ */
+public fun <T : Comparable<T>> Buffer<T>.binarySearch(element: T, fromIndex: Int = 0, toIndex: Int = size): Int {
+    var low = fromIndex
+    var high = toIndex - 1
+
+    while (low <= high) {
+        val mid = (low + high).ushr(1) // safe from overflows
+        val midVal = get(mid)
+        val cmp = compareValues(midVal, element)
+
+        when {
+            cmp < 0 -> low = mid + 1
+            cmp > 0 -> high = mid - 1
+            else -> return mid // key found
+        }
+    }
+    return -(low + 1)  // key not found
+}
+
+/**
+ * Create a buffer containing sorted elements of this buffer.
+ */
+@Suppress("CAST_NEVER_SUCCEEDS")
+public fun <T : Comparable<T>> Buffer<T>.sorted(): Buffer<T> = when (this) {
+    is PrimitiveBuffer -> when (this) {
+        is LongBuffer -> toLongArray().apply { sort() }  as Buffer<T>
+        is FloatBuffer -> toFloatArray().apply { sort() }  as Buffer<T>
+        is IntBuffer -> toIntArray().apply { sort() }  as Buffer<T>
+        is DoubleBuffer -> toDoubleArray().apply { sort() }  as Buffer<T>
+    }
+    else -> asIterable().sorted().asBuffer()
 }

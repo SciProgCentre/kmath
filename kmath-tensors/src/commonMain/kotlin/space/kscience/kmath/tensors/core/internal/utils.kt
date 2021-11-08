@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.operations.toMutableList
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*

@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class LongBuffer(public val array: LongArray) : MutableBuffer<Long> {
+public value class LongBuffer(public val array: LongArray) : PrimitiveBuffer<Long> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Long = array[index]

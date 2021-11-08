@@ -13,6 +13,7 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.indices
 
 
 public class BufferedLinearSpace<T, out A : Ring<T>>(

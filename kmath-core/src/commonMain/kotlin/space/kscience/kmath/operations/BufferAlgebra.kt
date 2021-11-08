@@ -8,7 +8,6 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.ShortBuffer
 
 public interface WithSize {
@@ -183,7 +182,7 @@ public class BufferField<T, A : Field<T>>(
 /**
  * Generate full buffer field from given buffer operations
  */
-public fun <T, A : Field<T>> BufferFieldOps<T, A>.withSize(size: Int): BufferField<T, A> =
+public fun <T, A : Field<T>> BufferAlgebra<T, A>.withSize(size: Int): BufferField<T, A> =
     BufferField(elementAlgebra, bufferFactory, size)
 
 //Double buffer specialization
@@ -196,6 +195,4 @@ public fun BufferField<Double, *>.buffer(vararg elements: Number): Buffer<Double
 public fun <T, A : Field<T>> A.bufferAlgebra(bufferFactory: BufferFactory<T>): BufferFieldOps<T, A> =
     BufferFieldOps(this, bufferFactory)
 
-public val DoubleField.bufferAlgebra: BufferFieldOps<Double, DoubleField>
-    get() = BufferFieldOps(DoubleField, ::DoubleBuffer)
-
+public val DoubleField.bufferAlgebra: DoubleBufferOps get() =  DoubleBufferOps
