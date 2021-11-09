@@ -1,5 +1,6 @@
 package space.kscience.kmath.stat
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -20,12 +21,20 @@ public fun <T : Comparable<T>> StatisticalAlgebra<T, *, *>.ecdf(buffer: Buffer<T
 }
 
 /**
+ * Resulting value of kolmogorov-smirnov two-sample statistic
+ */
+@UnstableKMathAPI
+public data class KMComparisonResult<T : Comparable<T>>(val n: Int, val m: Int, val value: T)
+
+/**
+ * Kolmogorov-Smirnov sample comparison test
  * Implementation copied from https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/index.html?org/apache/commons/math3/stat/inference/KolmogorovSmirnovTest.html
  */
-public fun <T : Comparable<T>, A, BA : BufferAlgebra<T, A>> StatisticalAlgebra<T, A, BA>.kolmogorovSmirnovTest(
+@UnstableKMathAPI
+public fun <T : Comparable<T>, A, BA : BufferAlgebra<T, A>> StatisticalAlgebra<T, A, BA>.ksComparisonStatistic(
     x: Buffer<T>,
     y: Buffer<T>,
-): T where A : Group<T>, A : NumericAlgebra<T> = elementAlgebra.invoke {
+): KMComparisonResult<T> where A : Group<T>, A : NumericAlgebra<T> = elementAlgebra.invoke {
     // Copy and sort the sample arrays
     val sx = x.sorted()
     val sy = y.sorted()
@@ -41,19 +50,19 @@ public fun <T : Comparable<T>, A, BA : BufferAlgebra<T, A>> StatisticalAlgebra<T
     do {
         val z = if (sx[rankX] <= sy[rankY]) sx[rankX] else sy[rankY]
         while (rankX < n && sx[rankX].compareTo(z) == 0) {
-            rankX += 1;
-            curD += number(m);
+            rankX += 1
+            curD += number(m)
         }
 
         while (rankY < m && sy[rankY].compareTo(z) == 0) {
-            rankY += 1;
-            curD -= number(n);
+            rankY += 1
+            curD -= number(n)
         }
 
         when {
             curD > supD -> supD = curD
             -curD > supD -> supD = -curD
         }
-    } while (rankX < n && rankY < m);
-    return supD;
+    } while (rankX < n && rankY < m)
+    return KMComparisonResult(n, m, supD)
 }

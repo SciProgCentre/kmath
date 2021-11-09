@@ -79,11 +79,19 @@ public class BufferExpanded<T>(
 /**
  * Zero-copy select a slice inside the original buffer
  */
-public fun <T> Buffer<T>.slice(range: UIntRange): BufferView<T> = BufferSlice(
-    this,
-    range.first,
-    (range.last - range.first).toInt() + 1
-)
+public fun <T> Buffer<T>.slice(range: UIntRange): BufferView<T> = if (this is BufferSlice) {
+    BufferSlice(
+        origin,
+        this.offset + range.first,
+        (range.last - range.first).toInt() + 1
+    )
+} else {
+    BufferSlice(
+        this,
+        range.first,
+        (range.last - range.first).toInt() + 1
+    )
+}
 
 /**
  * Resize original buffer to a given range using given [range], filling additional segments with [defaultValue].

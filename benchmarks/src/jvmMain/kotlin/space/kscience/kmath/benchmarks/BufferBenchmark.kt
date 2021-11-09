@@ -15,15 +15,48 @@ import space.kscience.kmath.complex.complex
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.getDouble
+import space.kscience.kmath.structures.permute
 
 @State(Scope.Benchmark)
 internal class BufferBenchmark {
+
     @Benchmark
-    fun genericDoubleBufferReadWrite(blackhole: Blackhole) {
+    fun doubleArrayReadWrite(blackhole: Blackhole) {
+        val buffer = DoubleArray(size) { it.toDouble() }
+        var res = 0.0
+        (0 until size).forEach {
+            res += buffer[it]
+        }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
+    fun doubleBufferReadWrite(blackhole: Blackhole) {
         val buffer = DoubleBuffer(size) { it.toDouble() }
         var res = 0.0
         (0 until size).forEach {
             res += buffer[it]
+        }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
+    fun bufferViewReadWrite(blackhole: Blackhole) {
+        val buffer = DoubleBuffer(size) { it.toDouble() }.permute(reversedIndices)
+        var res = 0.0
+        (0 until size).forEach {
+            res += buffer[it]
+        }
+        blackhole.consume(res)
+    }
+
+    @Benchmark
+    fun bufferViewReadWriteSpecialized(blackhole: Blackhole) {
+        val buffer = DoubleBuffer(size) { it.toDouble() }.permute(reversedIndices)
+        var res = 0.0
+        (0 until size).forEach {
+            res += buffer.getDouble(it)
         }
         blackhole.consume(res)
     }
@@ -42,5 +75,6 @@ internal class BufferBenchmark {
 
     private companion object {
         private const val size = 100
+        private val reversedIndices = IntArray(size){it}.apply { reverse() }
     }
 }

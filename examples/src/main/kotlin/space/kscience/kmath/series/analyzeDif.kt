@@ -5,6 +5,7 @@ import kotlinx.html.FlowContent
 import kotlinx.html.h1
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
+import space.kscience.kmath.stat.ksComparisonStatistic
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.slice
 import space.kscience.kmath.structures.toList
@@ -33,6 +34,8 @@ fun main() = with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
 
     val s3: Buffer<Double> = s1.zip(s2) { l, r -> l + r } //s1 + s2
     val s4 = ln(s3)
+
+    val kmTest = ksComparisonStatistic(s1, s2)
 
     Plotly.page {
         h1 { +"This is my plot" }

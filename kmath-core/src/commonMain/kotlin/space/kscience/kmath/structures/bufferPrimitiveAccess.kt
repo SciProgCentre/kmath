@@ -5,7 +5,8 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 /**
  * Non-boxing access to primitive [Double]
  */
-@OptIn(UnstableKMathAPI::class)
+
+@UnstableKMathAPI
 public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView) {
     val originIndex = originIndex(index)
     if( originIndex>=0) {
@@ -22,7 +23,7 @@ public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView
 /**
  * Non-boxing access to primitive [Int]
  */
-@OptIn(UnstableKMathAPI::class)
+@UnstableKMathAPI
 public fun Buffer<Int>.getInt(index: Int): Int = if (this is BufferView) {
     val originIndex = originIndex(index)
     if( originIndex>=0) {
