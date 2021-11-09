@@ -135,6 +135,7 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = a.mapInline { it * value }
 
     public companion object : DoubleBufferOps() {
+
         public inline fun Buffer<Double>.mapInline(block: (Double) -> Double): DoubleBuffer =
             if (this is DoubleBuffer) {
                 DoubleArray(size) { block(array[it]) }.asBuffer()
@@ -142,6 +143,14 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
                 DoubleArray(size) { block(get(it)) }.asBuffer()
             }
     }
+}
+
+public inline fun BufferAlgebra<Double, DoubleField>.buffer(size: Int, init: (Int) -> Double): DoubleBuffer {
+    val res = DoubleArray(size)
+    for (i in 0 until size) {
+        res[i] = init(i)
+    }
+    return res.asBuffer()
 }
 
 public object DoubleL2Norm : Norm<Point<Double>, Double> {

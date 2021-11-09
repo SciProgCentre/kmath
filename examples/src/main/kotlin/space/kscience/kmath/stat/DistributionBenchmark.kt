@@ -10,6 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.rng.sampling.distribution.BoxMullerNormalizedGaussianSampler
 import org.apache.commons.rng.simple.RandomSource
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
 import java.time.Duration
 import java.time.Instant

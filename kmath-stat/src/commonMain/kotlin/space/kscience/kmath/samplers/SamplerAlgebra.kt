@@ -12,7 +12,7 @@ import space.kscience.kmath.chains.zip
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.random.RandomGenerator
 
 /**
  * Implements [Sampler] by sampling only certain [value].

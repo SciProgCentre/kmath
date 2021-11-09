@@ -6,7 +6,7 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.math.ln
 import kotlin.math.pow

@@ -7,7 +7,7 @@ package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.SimpleChain
-import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.random.RandomGenerator
 
 public class UniformDistribution(public val range: ClosedFloatingPointRange<Double>) : UnivariateDistribution<Double> {
     private val length: Double = range.endInclusive - range.start

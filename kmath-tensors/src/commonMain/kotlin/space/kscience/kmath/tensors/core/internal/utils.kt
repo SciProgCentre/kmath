@@ -6,8 +6,8 @@
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
-import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor

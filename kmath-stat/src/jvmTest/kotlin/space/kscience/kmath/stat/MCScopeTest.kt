@@ -6,20 +6,22 @@
 package space.kscience.kmath.stat
 
 import kotlinx.coroutines.*
+import space.kscience.kmath.random.launch
+import space.kscience.kmath.random.mcScope
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 data class RandomResult(val branch: String, val order: Int, val value: Int)
 
-typealias ATest = suspend CoroutineScope.() -> Set<RandomResult>
+internal typealias ATest = suspend () -> Set<RandomResult>
 
-class MCScopeTest {
+internal class MCScopeTest {
     val simpleTest: ATest = {
         mcScope(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
-            launch {
+            launch{
                 //println(random)
                 repeat(10) {
                     delay(10)

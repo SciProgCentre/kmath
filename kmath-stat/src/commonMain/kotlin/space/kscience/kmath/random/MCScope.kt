@@ -22,6 +22,10 @@ public class MCScope(
     public val random: RandomGenerator,
 )
 
+public fun MCScope.asCoroutineScope(): CoroutineScope = object : CoroutineScope {
+    override val coroutineContext: CoroutineContext get() = this@asCoroutineScope.coroutineContext
+}
+
 /**
  * Launches a supervised Monte-Carlo scope
  */
