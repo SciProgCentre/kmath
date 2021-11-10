@@ -252,7 +252,7 @@ public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
  * Generate [AutoDiffProcessor] for [SimpleAutoDiffExpression]
  */
 public fun <T : Any, F : Field<T>> simpleAutoDiff(
-    field: F
+    field: F,
 ): AutoDiffProcessor<T, AutoDiffValue<T>, SimpleAutoDiffField<T, F>> =
     AutoDiffProcessor { function ->
         SimpleAutoDiffExpression(field, function)
@@ -272,8 +272,8 @@ public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.sqrt(x: Aut
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.pow(
     x: AutoDiffValue<T>,
     y: Double,
-): AutoDiffValue<T> = derive(const { power(x.value, y) }) { z ->
-    x.d += z.d * y * power(x.value, y - 1)
+): AutoDiffValue<T> = derive(const { x.value.pow(y)}) { z ->
+    x.d += z.d * y * x.value.pow(y - 1)
 }
 
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.pow(

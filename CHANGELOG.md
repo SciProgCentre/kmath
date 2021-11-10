@@ -17,6 +17,7 @@
 - `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
 - Integration between `MST` and Symja `IExpr`
 - Complex power
+- Separate methods for UInt, Int and Number powers. NaN safety.
 
 ### Changed
 - Exponential operations merged with hyperbolic functions

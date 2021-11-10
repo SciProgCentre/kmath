@@ -53,9 +53,9 @@ public interface TensorPartialDivisionAlgebra<T, A : Field<T>> : TensorAlgebra<T
     public operator fun Tensor<T>.divAssign(value: T)
 
     /**
-     * Each element of this tensor is divided by each element of the [other] tensor.
+     * Each element of this tensor is divided by each element of the [arg] tensor.
      *
-     * @param other tensor to be divided by.
+     * @param arg tensor to be divided by.
      */
-    public operator fun Tensor<T>.divAssign(other: StructureND<T>)
+    public operator fun Tensor<T>.divAssign(arg: StructureND<T>)
 }

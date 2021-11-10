@@ -92,8 +92,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     }
 
     override fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> = ndArray.neg().wrap()
-    override fun StructureND<T>.get(i: Int): Nd4jArrayStructure<T> = ndArray.slice(i.toLong()).wrap()
-    override fun StructureND<T>.transpose(i: Int, j: Int): Nd4jArrayStructure<T> = ndArray.swapAxes(i, j).wrap()
+    override fun Tensor<T>.get(i: Int): Nd4jArrayStructure<T> = ndArray.slice(i.toLong()).wrap()
+    override fun Tensor<T>.transpose(i: Int, j: Int): Nd4jArrayStructure<T> = ndArray.swapAxes(i, j).wrap()
     override fun StructureND<T>.dot(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mmul(other.ndArray).wrap()
 
     override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
@@ -108,8 +108,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun Tensor<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
     override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
-    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
-        ndBase.get().argmax(ndArray, keepDim, dim).wrap()
+    override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> =
+        ndBase.get().argmax(ndArray, keepDim, dim).asIntStructure()
 
     override fun StructureND<T>.mean(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.mean(keepDim, dim).wrap()
@@ -148,8 +148,8 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
         ndArray.divi(value)
     }
 
-    override fun Tensor<T>.divAssign(other: StructureND<T>) {
-        ndArray.divi(other.ndArray)
+    override fun Tensor<T>.divAssign(arg: StructureND<T>) {
+        ndArray.divi(arg.ndArray)
     }
 
     override fun StructureND<T>.variance(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =

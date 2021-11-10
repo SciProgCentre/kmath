@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.tensors.api.Tensor
@@ -17,6 +18,8 @@ import space.kscience.kmath.tensors.core.internal.tensor
  * Basic linear algebra operations implemented with broadcasting.
  * For more information: https://pytorch.org/docs/stable/notes/broadcasting.html
  */
+
+@PerformancePitfall
 public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
     override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor {
@@ -74,8 +77,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         }
     }
 
-    override fun StructureND<Double>.div(other: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, other.tensor)
+    override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(tensor, arg.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -85,8 +88,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         return DoubleTensor(newThis.shape, resBuffer)
     }
 
-    override fun Tensor<Double>.divAssign(other: StructureND<Double>) {
-        val newOther = broadcastTo(other.tensor, tensor.shape)
+    override fun Tensor<Double>.divAssign(arg: StructureND<Double>) {
+        val newOther = broadcastTo(arg.tensor, tensor.shape)
         for (i in 0 until tensor.indices.linearSize) {
             tensor.mutableBuffer.array()[tensor.bufferStart + i] /=
                 newOther.mutableBuffer.array()[tensor.bufferStart + i]
@@ -99,5 +102,6 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
  * Compute a value using broadcast double tensor algebra
  */
 @UnstableKMathAPI
+@PerformancePitfall
 public fun <R> DoubleTensorAlgebra.withBroadcast(block: BroadcastDoubleTensorAlgebra.() -> R): R =
     BroadcastDoubleTensorAlgebra.block()

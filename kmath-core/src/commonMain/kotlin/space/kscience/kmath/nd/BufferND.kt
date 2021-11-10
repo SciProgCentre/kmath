@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.MutableBuffer
@@ -26,11 +25,6 @@ public open class BufferND<out T>(
     override operator fun get(index: IntArray): T = buffer[indices.offset(index)]
 
     override val shape: IntArray get() = indices.shape
-
-    @PerformancePitfall
-    override fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map {
-        it to this[it]
-    }
 
     override fun toString(): String = StructureND.toString(this)
 }

@@ -155,7 +155,7 @@ public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, 
  * Represents intersection of [ExtendedField] and [Field] over [Nd4jArrayStructure].
  */
 public sealed interface Nd4jArrayExtendedFieldOps<T, out F : ExtendedField<T>> :
-    ExtendedFieldOps<StructureND<T>>, Nd4jArrayField<T, F> {
+    ExtendedFieldOps<StructureND<T>>, Nd4jArrayField<T, F>, PowerOperations<StructureND<T>> {
 
     override fun sin(arg: StructureND<T>): StructureND<T> = Transforms.sin(arg.ndArray).wrap()
     override fun cos(arg: StructureND<T>): StructureND<T> = Transforms.cos(arg.ndArray).wrap()

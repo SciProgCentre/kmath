@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.api
 
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.ExtendedFieldOps
 import space.kscience.kmath.operations.Field
 
 
@@ -14,7 +15,8 @@ import space.kscience.kmath.operations.Field
  *
  * @param T the type of items closed under analytic functions in the tensors.
  */
-public interface AnalyticTensorAlgebra<T, A : Field<T>> : TensorPartialDivisionAlgebra<T, A> {
+public interface AnalyticTensorAlgebra<T, A : Field<T>> :
+    TensorPartialDivisionAlgebra<T, A>, ExtendedFieldOps<StructureND<T>> {
 
     /**
      * @return the mean of all elements in the input tensor.
@@ -121,4 +123,27 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> : TensorPartialDivisionA
     //For information: https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
     public fun StructureND<T>.floor(): Tensor<T>
 
+    override fun sin(arg: StructureND<T>): StructureND<T> = arg.sin()
+
+    override fun cos(arg: StructureND<T>): StructureND<T> = arg.cos()
+
+    override fun asin(arg: StructureND<T>): StructureND<T> = arg.asin()
+
+    override fun acos(arg: StructureND<T>): StructureND<T> = arg.acos()
+
+    override fun atan(arg: StructureND<T>): StructureND<T> = arg.atan()
+
+    override fun exp(arg: StructureND<T>): StructureND<T> = arg.exp()
+
+    override fun ln(arg: StructureND<T>): StructureND<T> = arg.ln()
+
+    override fun sinh(arg: StructureND<T>): StructureND<T> = arg.sinh()
+
+    override fun cosh(arg: StructureND<T>): StructureND<T> = arg.cosh()
+
+    override fun asinh(arg: StructureND<T>): StructureND<T> = arg.asinh()
+
+    override fun acosh(arg: StructureND<T>): StructureND<T> = arg.acosh()
+
+    override fun atanh(arg: StructureND<T>): StructureND<T> = arg.atanh()
 }

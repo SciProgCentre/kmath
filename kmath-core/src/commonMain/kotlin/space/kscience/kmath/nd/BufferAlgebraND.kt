@@ -53,21 +53,28 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
 
 public inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapInline(
     arg: BufferND<T>,
-    crossinline transform: A.(T) -> T
+    crossinline transform: A.(T) -> T,
 ): BufferND<T> {
     val indexes = arg.indices
-    return BufferND(indexes, bufferAlgebra.mapInline(arg.buffer, transform))
+    val buffer = arg.buffer
+    return BufferND(
+        indexes,
+        bufferAlgebra.run {
+            bufferFactory(buffer.size) { elementAlgebra.transform(buffer[it]) }
+        }
+    )
 }
 
 internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapIndexedInline(
     arg: BufferND<T>,
-    crossinline transform: A.(index: IntArray, arg: T) -> T
+    crossinline transform: A.(index: IntArray, arg: T) -> T,
 ): BufferND<T> {
     val indexes = arg.indices
+    val buffer = arg.buffer
     return BufferND(
         indexes,
-        bufferAlgebra.mapIndexedInline(arg.buffer) { offset, value ->
-            transform(indexes.index(offset), value)
+        bufferAlgebra.run {
+            bufferFactory(buffer.size) { elementAlgebra.transform(indexes.index(it), buffer[it]) }
         }
     )
 }
@@ -75,35 +82,42 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapIndexedInline(
 internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     l: BufferND<T>,
     r: BufferND<T>,
-    crossinline block: A.(l: T, r: T) -> T
+    crossinline block: A.(l: T, r: T) -> T,
 ): BufferND<T> {
     require(l.indices == r.indices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
     val indexes = l.indices
-    return BufferND(indexes, bufferAlgebra.zipInline(l.buffer, r.buffer, block))
+    val lbuffer = l.buffer
+    val rbuffer = r.buffer
+    return BufferND(
+        indexes,
+        bufferAlgebra.run {
+            bufferFactory(lbuffer.size) { elementAlgebra.block(lbuffer[it], rbuffer[it]) }
+        }
+    )
 }
 
 @OptIn(PerformancePitfall::class)
 public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
-    override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
+    override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
     override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
 }
 
 public open class BufferedRingOpsND<T, out A : Ring<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
+    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : BufferedGroupNDOps<T, A>(bufferAlgebra, indexerBuilder), RingOpsND<T, A>
 
 public open class BufferedFieldOpsND<T, out A : Field<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
+    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : BufferedRingOpsND<T, A>(bufferAlgebra, indexerBuilder), FieldOpsND<T, A> {
 
     public constructor(
         elementAlgebra: A,
         bufferFactory: BufferFactory<T>,
-        indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder
+        indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
     ) : this(BufferFieldOps(elementAlgebra, bufferFactory), indexerBuilder)
 
     @OptIn(PerformancePitfall::class)
@@ -117,11 +131,11 @@ public val <T, A : Field<T>> BufferAlgebra<T, A>.nd: BufferedFieldOpsND<T, A> ge
 
 public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.structureND(
     vararg shape: Int,
-    initializer: A.(IntArray) -> T
+    initializer: A.(IntArray) -> T,
 ): BufferND<T> = structureND(shape, initializer)
 
 public fun <T, EA : Algebra<T>, A> A.structureND(
-    initializer: EA.(IntArray) -> T
+    initializer: EA.(IntArray) -> T,
 ): BufferND<T> where A : BufferAlgebraND<T, EA>, A : WithShape = structureND(shape, initializer)
 
 //// group factories
