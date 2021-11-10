@@ -26,6 +26,7 @@ internal operator fun IntRange.contains(other: IntRange): Boolean = (other.first
 
 public interface Series<T> : Buffer<T> {
     public val origin: Buffer<T>
+
     /**
      * Absolute position of start of this [Series] in [SeriesAlgebra]
      */
@@ -114,7 +115,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     public operator fun Buffer<T>.get(label: L): T? {
         val index = labels.indexOf(label)
         if (index == -1) return null
-        return getAbsolute(index + offset.toInt())
+        return getAbsolute(index + offset)
     }
 
     /**
