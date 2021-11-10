@@ -5,6 +5,7 @@ import org.tensorflow.Output
 import org.tensorflow.ndarray.NdArray
 import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.Shape
@@ -13,20 +14,22 @@ import space.kscience.kmath.operations.DoubleField
 
 public class DoubleTensorFlowOutput(
     graph: Graph,
-    output: Output<TFloat64>
+    output: Output<TFloat64>,
 ) : TensorFlowOutput<Double, TFloat64>(graph, output) {
-    override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Double> = output.asTensor()
+
+    override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Double> = this as TFloat64
+
 }
 
 public class DoubleTensorFlowAlgebra internal constructor(
-    graph: Graph
+    graph: Graph,
 ) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph) {
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
     override fun structureND(
         shape: Shape,
-        initializer: DoubleField.(IntArray) -> Double
+        initializer: DoubleField.(IntArray) -> Double,
     ): StructureND<Double> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
             DefaultStrides(shape).forEach { index ->
@@ -53,4 +56,20 @@ public class DoubleTensorFlowAlgebra internal constructor(
     override fun Output<TFloat64>.wrap(): TensorFlowOutput<Double, TFloat64> = DoubleTensorFlowOutput(graph, this)
 
     override fun const(value: Double): Constant<TFloat64> = ops.constant(value)
+
+
+}
+
+public fun DoubleField.produceWithTF(
+    block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
+): StructureND<Double> = Graph().use { graph ->
+    val scope = DoubleTensorFlowAlgebra(graph)
+    scope.export(scope.block())
+}
+
+public fun DoubleField.produceMapWithTF(
+    block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
+): Map<Symbol, StructureND<Double>> = Graph().use { graph ->
+    val scope = DoubleTensorFlowAlgebra(graph)
+    scope.block().mapValues { scope.export(it.value) }
 }
