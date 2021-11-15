@@ -10,8 +10,7 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.asm.internal.AsmBuilder.ClassLoader
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.*
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
@@ -26,13 +25,14 @@ import kotlin.io.path.writeBytes
  *
  * @property T the type of AsmExpression to unwrap.
  * @property className the unique class name of new loaded class.
- * @property callbackAtInvokeL0 the function to apply to this object when generating invoke method, label 0.
+ * @property expressionResultCallback the function to apply to this object when generating expression value.
  * @author Iaroslav Postovalov
  */
 internal class AsmBuilder<T>(
     classOfT: Class<*>,
     private val className: String,
-    private val callbackAtInvokeL0: AsmBuilder<T>.() -> Unit,
+    private val variablesPrepareCallback: AsmBuilder<T>.() -> Unit,
+    private val expressionResultCallback: AsmBuilder<T>.() -> Unit,
 ) {
     /**
      * Internal classloader of [AsmBuilder] with alias to define class from byte array.
@@ -67,11 +67,16 @@ internal class AsmBuilder<T>(
     private lateinit var invokeMethodVisitor: InstructionAdapter
 
     /**
+     * Local variables indices are indices of symbols in this list.
+     */
+    private val argumentsLocals = mutableListOf<String>()
+
+    /**
      * Subclasses, loads and instantiates [Expression] for given parameters.
      *
      * The built instance is cached.
      */
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST", "UNUSED_VARIABLE")
     val instance: Expression<T> by lazy {
         val hasConstants: Boolean
 
@@ -94,26 +99,28 @@ internal class AsmBuilder<T>(
             ).instructionAdapter {
                 invokeMethodVisitor = this
                 visitCode()
-                val l0 = label()
-                callbackAtInvokeL0()
+                val preparingVariables = label()
+                variablesPrepareCallback()
+                val expressionResult = label()
+                expressionResultCallback()
                 areturn(tType)
-                val l1 = label()
+                val end = label()
 
                 visitLocalVariable(
                     "this",
                     classType.descriptor,
                     null,
-                    l0,
-                    l1,
+                    preparingVariables,
+                    end,
                     0,
                 )
 
                 visitLocalVariable(
                     "arguments",
                     MAP_TYPE.descriptor,
-                    "L${MAP_TYPE.internalName}<${STRING_TYPE.descriptor}+${tType.descriptor}>;",
-                    l0,
-                    l1,
+                    "L${MAP_TYPE.internalName}<${SYMBOL_TYPE.descriptor}+${tType.descriptor}>;",
+                    preparingVariables,
+                    end,
                     1,
                 )
 
@@ -199,7 +206,7 @@ internal class AsmBuilder<T>(
         val binary = classWriter.toByteArray()
         val cls = classLoader.defineClass(className, binary)
 
-        if (System.getProperty("space.kscience.communicator.prettyapi.dump.generated.classes") == "1")
+        if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
             Paths.get("$className.class").writeBytes(binary)
 
         val l = MethodHandles.publicLookup()
@@ -256,9 +263,11 @@ internal class AsmBuilder<T>(
     }
 
     /**
-     * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke].
+     * Stores value variable [name] into a local. Should be called within [variablesPrepareCallback] before using
+     * [loadVariable].
      */
-    fun loadVariable(name: String): Unit = invokeMethodVisitor.run {
+    fun prepareVariable(name: String): Unit = invokeMethodVisitor.run {
+        if (name in argumentsLocals) return@run
         load(1, MAP_TYPE)
         aconst(name)
 
@@ -270,7 +279,21 @@ internal class AsmBuilder<T>(
         )
 
         checkcast(tType)
+        var idx = argumentsLocals.indexOf(name)
+
+        if (idx == -1) {
+            argumentsLocals += name
+            idx = argumentsLocals.lastIndex
+        }
+
+        store(2 + idx, tType)
     }
+
+    /**
+     * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke]. The variable should be stored
+     * with [prepareVariable] first.
+     */
+    fun loadVariable(name: String): Unit = invokeMethodVisitor.load(2 + argumentsLocals.indexOf(name), tType)
 
     inline fun buildCall(function: Function<T>, parameters: AsmBuilder<T>.() -> Unit) {
         contract { callsInPlace(parameters, InvocationKind.EXACTLY_ONCE) }

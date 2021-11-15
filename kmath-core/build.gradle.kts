@@ -5,10 +5,21 @@ plugins {
 //    id("com.xcporter.metaview") version "0.0.5"
 }
 
-kotlin.sourceSets {
-    commonMain {
-        dependencies {
-            api(project(":kmath-memory"))
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                freeCompilerArgs =
+                    freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":kmath-memory"))
+            }
         }
     }
 }

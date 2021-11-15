@@ -29,7 +29,7 @@ public fun interface Expression<T> {
  *
  * @return a value.
  */
-public operator fun <T> Expression<T>.invoke(): T = invoke(emptyMap())
+public operator fun <T> Expression<T>.invoke(): T = this(emptyMap())
 
 /**
  * Calls this expression from arguments.
@@ -38,7 +38,13 @@ public operator fun <T> Expression<T>.invoke(): T = invoke(emptyMap())
  * @return a value.
  */
 @JvmName("callBySymbol")
-public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T = invoke(mapOf(*pairs))
+public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T = this(
+    when (pairs.size) {
+        0 -> emptyMap()
+        1 -> mapOf(pairs[0])
+        else -> hashMapOf(*pairs)
+    }
+)
 
 /**
  * Calls this expression from arguments.
@@ -47,8 +53,21 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<Symbol, T>): T =
  * @return a value.
  */
 @JvmName("callByString")
-public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
-    invoke(mapOf(*pairs).mapKeys { StringSymbol(it.key) })
+public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T = this(
+    when (pairs.size) {
+        0 -> emptyMap()
+
+        1 -> {
+            val (k, v) = pairs[0]
+            mapOf(StringSymbol(k) to v)
+        }
+
+        else -> hashMapOf(*Array<Pair<Symbol, T>>(pairs.size) {
+            val (k, v) = pairs[it]
+            StringSymbol(k) to v
+        })
+    }
+)
 
 
 /**

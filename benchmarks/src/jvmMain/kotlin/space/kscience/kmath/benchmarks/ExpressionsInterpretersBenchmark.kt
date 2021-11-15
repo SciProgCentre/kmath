@@ -62,9 +62,11 @@ internal class ExpressionsInterpretersBenchmark {
     private fun invokeAndSum(expr: Expression<Double>, blackhole: Blackhole) {
         val random = Random(0)
         var sum = 0.0
+        val m = HashMap<Symbol, Double>()
 
         repeat(times) {
-            sum += expr(x to random.nextDouble())
+            m[x] = random.nextDouble()
+            sum += expr(m)
         }
 
         blackhole.consume(sum)
