@@ -72,9 +72,9 @@ benchmark {
     }
 
     fun kotlinx.benchmark.gradle.BenchmarkConfiguration.commonConfiguration() {
-        warmups = 1
+        warmups = 2
         iterations = 5
-        iterationTime = 1000
+        iterationTime = 2000
         iterationTimeUnit = "ms"
     }
 
@@ -143,7 +143,7 @@ kotlin.sourceSets.all {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
     }
 }
 

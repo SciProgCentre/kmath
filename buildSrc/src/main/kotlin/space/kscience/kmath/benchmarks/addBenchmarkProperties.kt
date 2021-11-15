@@ -54,7 +54,7 @@ fun Project.addBenchmarkProperties() {
                         LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
                     }
 
-                    if (resDirectory == null) {
+                    if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
                         "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
                     } else {
                         val reports =

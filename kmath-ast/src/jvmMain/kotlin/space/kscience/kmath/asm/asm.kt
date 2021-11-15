@@ -26,7 +26,19 @@ import space.kscience.kmath.operations.bindSymbolOrNull
  */
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
-    fun AsmBuilder<T>.visit(node: MST): Unit = when (node) {
+    fun AsmBuilder<T>.variablesVisitor(node: MST): Unit = when (node) {
+        is Symbol -> prepareVariable(node.identity)
+        is Unary -> variablesVisitor(node.value)
+
+        is Binary -> {
+            variablesVisitor(node.left)
+            variablesVisitor(node.right)
+        }
+
+        else -> Unit
+    }
+
+    fun AsmBuilder<T>.expressionVisitor(node: MST): Unit = when (node) {
         is Symbol -> {
             val symbol = algebra.bindSymbolOrNull(node)
 
@@ -40,39 +52,47 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
 
         is Unary -> when {
             algebra is NumericAlgebra && node.value is Numeric -> loadObjectConstant(
-                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)))
+                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)),
+            )
 
-            else -> buildCall(algebra.unaryOperationFunction(node.operation)) { visit(node.value) }
+            else -> buildCall(algebra.unaryOperationFunction(node.operation)) { expressionVisitor(node.value) }
         }
 
         is Binary -> when {
             algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> loadObjectConstant(
                 algebra.binaryOperationFunction(node.operation).invoke(
                     algebra.number((node.left as Numeric).value),
-                    algebra.number((node.right as Numeric).value)
+                    algebra.number((node.right as Numeric).value),
                 )
             )
 
             algebra is NumericAlgebra && node.left is Numeric -> buildCall(
-                algebra.leftSideNumberOperationFunction(node.operation)) {
-                visit(node.left)
-                visit(node.right)
+                algebra.leftSideNumberOperationFunction(node.operation),
+            ) {
+                expressionVisitor(node.left)
+                expressionVisitor(node.right)
             }
 
             algebra is NumericAlgebra && node.right is Numeric -> buildCall(
-                algebra.rightSideNumberOperationFunction(node.operation)) {
-                visit(node.left)
-                visit(node.right)
+                algebra.rightSideNumberOperationFunction(node.operation),
+            ) {
+                expressionVisitor(node.left)
+                expressionVisitor(node.right)
             }
 
             else -> buildCall(algebra.binaryOperationFunction(node.operation)) {
-                visit(node.left)
-                visit(node.right)
+                expressionVisitor(node.left)
+                expressionVisitor(node.right)
             }
         }
     }
 
-    return AsmBuilder<T>(type, buildName(this)) { visit(this@compileWith) }.instance
+    return AsmBuilder<T>(
+        type,
+        buildName(this),
+        { variablesVisitor(this@compileWith) },
+        { expressionVisitor(this@compileWith) },
+    ).instance
 }
 
 
