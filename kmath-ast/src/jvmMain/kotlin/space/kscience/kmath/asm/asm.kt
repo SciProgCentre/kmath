@@ -3,18 +3,18 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package space.kscience.kmath.asm
 
-import space.kscience.kmath.asm.internal.AsmBuilder
-import space.kscience.kmath.asm.internal.buildName
+import space.kscience.kmath.asm.internal.*
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MST.*
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.invoke
-import space.kscience.kmath.operations.Algebra
-import space.kscience.kmath.operations.NumericAlgebra
-import space.kscience.kmath.operations.bindSymbolOrNull
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.*
 
 /**
  * Compiles given MST to an Expression using AST compiler.
@@ -26,7 +26,7 @@ import space.kscience.kmath.operations.bindSymbolOrNull
  */
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
-    fun AsmBuilder<T>.variablesVisitor(node: MST): Unit = when (node) {
+    fun GenericAsmBuilder<T>.variablesVisitor(node: MST): Unit = when (node) {
         is Symbol -> prepareVariable(node.identity)
         is Unary -> variablesVisitor(node.value)
 
@@ -38,7 +38,7 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
         else -> Unit
     }
 
-    fun AsmBuilder<T>.expressionVisitor(node: MST): Unit = when (node) {
+    fun GenericAsmBuilder<T>.expressionVisitor(node: MST): Unit = when (node) {
         is Symbol -> {
             val symbol = algebra.bindSymbolOrNull(node)
 
@@ -87,7 +87,7 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
         }
     }
 
-    return AsmBuilder<T>(
+    return GenericAsmBuilder<T>(
         type,
         buildName(this),
         { variablesVisitor(this@compileWith) },
@@ -113,4 +113,78 @@ public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, arguments: 
  * Compile given MST to expression and evaluate it against [arguments]
  */
 public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
+    compileToExpression(algebra).invoke(*arguments)
+
+
+/**
+ * Create a compiled expression with given [MST] and given [algebra].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compileToExpression(algebra: IntRing): Expression<Int> = IntAsmBuilder(this).instance
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int =
+    compileToExpression(algebra).invoke(arguments)
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): Int =
+    compileToExpression(algebra)(*arguments)
+
+
+/**
+ * Create a compiled expression with given [MST] and given [algebra].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compileToExpression(algebra: LongRing): Expression<Long> = LongAsmBuilder(this).instance
+
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: LongRing, arguments: Map<Symbol, Long>): Long =
+    compileToExpression(algebra).invoke(arguments)
+
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: LongRing, vararg arguments: Pair<Symbol, Long>): Long =
+    compileToExpression(algebra)(*arguments)
+
+
+/**
+ * Create a compiled expression with given [MST] and given [algebra].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> = DoubleAsmBuilder(this).instance
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: DoubleField, arguments: Map<Symbol, Double>): Double =
+    compileToExpression(algebra).invoke(arguments)
+
+/**
+ * Compile given MST to expression and evaluate it against [arguments].
+ *
+ * @author Iaroslav Postovalov
+ */
+public fun MST.compile(algebra: DoubleField, vararg arguments: Pair<Symbol, Double>): Double =
     compileToExpression(algebra).invoke(*arguments)

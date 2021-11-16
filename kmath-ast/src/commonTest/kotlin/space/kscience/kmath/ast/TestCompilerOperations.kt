@@ -45,6 +45,30 @@ internal class TestCompilerOperations {
     }
 
     @Test
+    fun testTangent() = runCompilerTest {
+        val expr = MstExtendedField { tan(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
+    }
+
+    @Test
+    fun testArcSine() = runCompilerTest {
+        val expr = MstExtendedField { asin(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
+    }
+
+    @Test
+    fun testArcCosine() = runCompilerTest {
+        val expr = MstExtendedField { acos(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 1.0))
+    }
+
+    @Test
+    fun testAreaHyperbolicSine() = runCompilerTest {
+        val expr = MstExtendedField { asinh(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
+    }
+
+    @Test
     fun testSubtract() = runCompilerTest {
         val expr = MstExtendedField { x - x }.compileToExpression(DoubleField)
         assertEquals(0.0, expr(x to 2.0))

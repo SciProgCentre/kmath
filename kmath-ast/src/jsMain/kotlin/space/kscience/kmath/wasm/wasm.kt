@@ -17,24 +17,6 @@ import space.kscience.kmath.wasm.internal.DoubleWasmBuilder
 import space.kscience.kmath.wasm.internal.IntWasmBuilder
 
 /**
- * Compiles an [MST] to WASM in the context of reals.
- *
- * @author Iaroslav Postovalov
- */
-@UnstableKMathAPI
-public fun DoubleField.expression(mst: MST): Expression<Double> =
-    DoubleWasmBuilder(mst).instance
-
-/**
- * Compiles an [MST] to WASM in the context of integers.
- *
- * @author Iaroslav Postovalov
- */
-@UnstableKMathAPI
-public fun IntRing.expression(mst: MST): Expression<Int> =
-    IntWasmBuilder(mst).instance
-
-/**
  * Create a compiled expression with given [MST] and given [algebra].
  *
  * @author Iaroslav Postovalov
