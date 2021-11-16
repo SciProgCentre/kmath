@@ -18,12 +18,12 @@ import space.kscience.kmath.internal.webassembly.Module as WasmModule
 private val spreader = eval("(obj, args) => obj(...args)")
 
 @Suppress("UnsafeCastFromDynamic")
-internal sealed class WasmBuilder<T>(
-    val binaryenType: Type,
-    val algebra: Algebra<T>,
-    val target: MST,
-) where T : Number {
-    val keys: MutableList<Symbol> = mutableListOf()
+internal sealed class WasmBuilder<T : Number>(
+    protected val binaryenType: Type,
+    protected val algebra: Algebra<T>,
+    protected val target: MST,
+) {
+    protected val keys: MutableList<Symbol> = mutableListOf()
     lateinit var ctx: BinaryenModule
 
     open fun visitSymbolic(mst: Symbol): ExpressionRef {
@@ -41,30 +41,36 @@ internal sealed class WasmBuilder<T>(
 
     abstract fun visitNumeric(mst: Numeric): ExpressionRef
 
-    open fun visitUnary(mst: Unary): ExpressionRef =
+    protected open fun visitUnary(mst: Unary): ExpressionRef =
         error("Unary operation ${mst.operation} not defined in $this")
 
-    open fun visitBinary(mst: Binary): ExpressionRef =
+    protected open fun visitBinary(mst: Binary): ExpressionRef =
         error("Binary operation ${mst.operation} not defined in $this")
 
-    open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
+    protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
 
-    fun visit(mst: MST): ExpressionRef = when (mst) {
+    protected fun visit(mst: MST): ExpressionRef = when (mst) {
         is Symbol -> visitSymbolic(mst)
         is Numeric -> visitNumeric(mst)
 
         is Unary -> when {
             algebra is NumericAlgebra && mst.value is Numeric -> visitNumeric(
-                Numeric(algebra.unaryOperationFunction(mst.operation)(algebra.number((mst.value as Numeric).value))))
+                Numeric(algebra.unaryOperationFunction(mst.operation)(algebra.number((mst.value as Numeric).value)))
+            )
 
             else -> visitUnary(mst)
         }
 
         is Binary -> when {
-            algebra is NumericAlgebra && mst.left is Numeric && mst.right is Numeric -> visitNumeric(Numeric(
-                algebra.binaryOperationFunction(mst.operation)
-                    .invoke(algebra.number((mst.left as Numeric).value), algebra.number((mst.right as Numeric).value))
-            ))
+            algebra is NumericAlgebra && mst.left is Numeric && mst.right is Numeric -> visitNumeric(
+                Numeric(
+                    algebra.binaryOperationFunction(mst.operation)
+                        .invoke(
+                            algebra.number((mst.left as Numeric).value),
+                            algebra.number((mst.right as Numeric).value)
+                        )
+                )
+            )
 
             else -> visitBinary(mst)
         }

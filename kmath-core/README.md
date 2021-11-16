@@ -15,7 +15,7 @@ performance calculations to code generation.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-core:0.3.0-dev-14`.
+The Maven coordinates of this project are `space.kscience:kmath-core:0.3.0-dev-17`.
 
 **Gradle:**
 ```gradle
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-core:0.3.0-dev-14'
+    implementation 'space.kscience:kmath-core:0.3.0-dev-17'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -36,6 +36,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-core:0.3.0-dev-14")
+    implementation("space.kscience:kmath-core:0.3.0-dev-17")
 }
 ```

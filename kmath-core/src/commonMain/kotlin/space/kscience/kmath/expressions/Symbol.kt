@@ -9,8 +9,8 @@ import kotlin.jvm.JvmInline
 import kotlin.properties.ReadOnlyProperty
 
 /**
- * A marker interface for a symbol. A symbol must have an identity.
- * Ic
+ * A marker interface for a symbol. A symbol must have an identity with equality relation based on it.
+ * Other properties are to store additional, transient data only.
  */
 public interface Symbol : MST {
     /**

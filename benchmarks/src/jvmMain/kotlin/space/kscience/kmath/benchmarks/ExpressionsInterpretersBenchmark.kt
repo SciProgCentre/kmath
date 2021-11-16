@@ -11,6 +11,7 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
@@ -35,7 +36,14 @@ internal class ExpressionsInterpretersBenchmark {
      * Benchmark case for [Expression] created with [compileToExpression].
      */
     @Benchmark
-    fun asmExpression(blackhole: Blackhole) = invokeAndSum(asm, blackhole)
+    fun asmGenericExpression(blackhole: Blackhole) = invokeAndSum(asmGeneric, blackhole)
+
+
+    /**
+     * Benchmark case for [Expression] created with [compileToExpression].
+     */
+    @Benchmark
+    fun asmPrimitiveExpression(blackhole: Blackhole) = invokeAndSum(asmPrimitive, blackhole)
 
     /**
      * Benchmark case for [Expression] implemented manually with `kotlin.math` functions.
@@ -87,7 +95,8 @@ internal class ExpressionsInterpretersBenchmark {
         }
 
         private val mst = node.toExpression(DoubleField)
-        private val asm = node.compileToExpression(DoubleField)
+        private val asmPrimitive = node.compileToExpression(DoubleField)
+        private val asmGeneric = node.compileToExpression(DoubleField as Algebra<Double>)
 
         private val raw = Expression<Double> { args ->
             val x = args[x]!!

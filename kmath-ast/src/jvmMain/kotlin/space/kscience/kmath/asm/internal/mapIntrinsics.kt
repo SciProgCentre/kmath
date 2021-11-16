@@ -14,4 +14,5 @@ import space.kscience.kmath.expressions.Symbol
  *
  * @author Iaroslav Postovalov
  */
+@Suppress("unused")
 internal fun <V> Map<Symbol, V>.getOrFail(key: String): V = getValue(Symbol(key))

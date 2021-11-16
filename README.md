@@ -240,6 +240,12 @@ One can still use generic algebras though.
 > **Maturity**: DEVELOPMENT
 <hr/>
 
+* ### [kmath-multik](kmath-multik)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
 * ### [kmath-nd4j](kmath-nd4j)
 > 
 >
@@ -250,6 +256,12 @@ One can still use generic algebras though.
 > - [nd4jarrayrings](kmath-nd4j/#) : Rings over Nd4jArrayStructure of Int and Long
 > - [nd4jarrayfields](kmath-nd4j/#) : Fields over Nd4jArrayStructure of Float and Double
 
+<hr/>
+
+* ### [kmath-optimization](kmath-optimization)
+> 
+>
+> **Maturity**: EXPERIMENTAL
 <hr/>
 
 * ### [kmath-stat](kmath-stat)
@@ -319,8 +331,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-14")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-14") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-17")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-17") for jvm-specific version
 }
 ```
 
