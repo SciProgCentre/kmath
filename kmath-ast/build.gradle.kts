@@ -55,9 +55,10 @@ tasks.dokkaHtml {
     dependsOn(tasks.build)
 }
 
-tasks.jvmTest {
-    jvmArgs = (jvmArgs ?: emptyList()) + listOf("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
-}
+if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
+    tasks.jvmTest {
+        jvmArgs = (jvmArgs ?: emptyList()) + listOf("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
+    }
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
