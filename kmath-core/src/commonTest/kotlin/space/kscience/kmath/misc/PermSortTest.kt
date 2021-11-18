@@ -5,16 +5,23 @@
 
 package space.kscience.kmath.misc
 
-import kotlin.collections.mutableListOf
+import space.kscience.kmath.misc.PermSortTest.Platform.*
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.asBuffer
+import kotlin.test.assertContentEquals
 
 class PermSortTest {
+
+    private enum class Platform {
+        ANDROID, JVM, JS, NATIVE, WASM
+    }
+
+    private val platforms = Platform.values().asBuffer()
 
     /**
      * Permutation on empty buffer should immediately return an empty array.
@@ -24,7 +31,7 @@ class PermSortTest {
         val emptyBuffer = IntBuffer(0) {it}
         var permutations = emptyBuffer.permSort()
         assertTrue(permutations.isEmpty(), "permutation on an empty buffer should return an empty result")
-        permutations = emptyBuffer.permSort(true)
+        permutations = emptyBuffer.permSortDescending()
         assertTrue(permutations.isEmpty(), "permutation on an empty buffer should return an empty result")
     }
 
@@ -34,8 +41,32 @@ class PermSortTest {
     }
 
     @Test
-    public fun testOnSomeValues() {
+    fun testOnSomeValues() {
         testPermutation(10)
+    }
+
+    @Test
+    fun testPermSortBy() {
+        val permutations = platforms.permSortBy { it.name }
+        val expected = listOf(ANDROID, JS, JVM, NATIVE, WASM)
+        assertContentEquals(expected, permutations.map { platforms[it] }, "Ascending PermSort by name")
+    }
+
+    @Test
+    fun testPermSortByDescending() {
+        val permutations = platforms.permSortByDescending { it.name }
+        val expected = listOf(WASM, NATIVE, JVM, JS, ANDROID)
+        assertContentEquals(expected, permutations.map { platforms[it] }, "Descending PermSort by name")
+    }
+
+    @Test
+    fun testPermSortWith() {
+        var permutations = platforms.permSortWith { p1, p2 -> p1.name.length.compareTo(p2.name.length) }
+        val expected = listOf(JS, JVM, WASM, NATIVE, ANDROID)
+        assertContentEquals(expected, permutations.map { platforms[it] }, "PermSort using custom ascending comparator")
+
+        permutations = platforms.permSortWith(compareByDescending { it.name.length })
+        assertContentEquals(expected.reversed(), permutations.map { platforms[it] }, "PermSort using custom descending comparator")
     }
 
     private fun testPermutation(bufferSize: Int) {   
@@ -56,7 +87,7 @@ class PermSortTest {
             assertTrue(current <= next, "Permutation indices not properly sorted")
         }
 
-        val descIndices = buffer.permSort(true)
+        val descIndices = buffer.permSortDescending()
         assertEquals(bufferSize, descIndices.size) 
         // Ensure no doublon is present in indices
         assertEquals(descIndices.toSet().size, descIndices.size)
