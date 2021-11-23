@@ -233,3 +233,5 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
     override fun export(arg: StructureND<T>): StructureND<T> =
         if (arg is TensorFlowOutput<T, *>) arg.actualTensor else arg
 }
+
+//TODO add TensorFlow expressions

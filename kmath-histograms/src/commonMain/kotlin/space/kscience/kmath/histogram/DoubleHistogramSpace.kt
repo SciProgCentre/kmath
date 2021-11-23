@@ -74,7 +74,7 @@ public class DoubleHistogramSpace(
     }
 
     override fun produce(builder: HistogramBuilder<Double>.() -> Unit): IndexedHistogram<Double, Double> {
-        val ndCounter = StructureND.auto(shape) { Counter.real() }
+        val ndCounter = StructureND.auto(shape) { Counter.double() }
         val hBuilder = HistogramBuilder<Double> { point, value ->
             val index = getIndex(point)
             ndCounter[index].add(value.toDouble())

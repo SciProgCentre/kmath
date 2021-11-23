@@ -41,7 +41,6 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
         get() = DefaultStrides(context.shape).asSequence().map {
             context.produceBin(it, values[it])
         }.asIterable()
-
 }
 
 /**

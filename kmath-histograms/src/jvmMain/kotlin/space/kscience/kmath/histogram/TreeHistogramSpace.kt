@@ -39,7 +39,7 @@ public class TreeHistogram(
 @PublishedApi
 internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
 
-    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
+    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.double()) :
         ClosedFloatingPointRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()
