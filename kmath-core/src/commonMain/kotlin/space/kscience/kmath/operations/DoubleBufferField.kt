@@ -40,7 +40,6 @@ public class DoubleBufferField(public val size: Int) : ExtendedField<Buffer<Doub
         }
     }
 
-    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
         super<ExtendedField>.unaryOperationFunction(operation)
 

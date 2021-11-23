@@ -39,7 +39,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        URL("https://github.com/mipt-npm/${rootProject.name}/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
                     )
                 }
 
@@ -64,9 +64,9 @@ subprojects {
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    vcs("https://github.com/mipt-npm/kmath")
-    space(publish = true)
-    sonatype(publish = true)
+    github("kmath", publish = false)
+    space()
+    sonatype()
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")

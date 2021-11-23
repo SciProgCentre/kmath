@@ -384,7 +384,6 @@ public open class DoubleTensorAlgebra :
     override fun Tensor<Double>.viewAs(other: StructureND<Double>): DoubleTensor =
         tensor.view(other.shape)
 
-    @PerformancePitfall
     override infix fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
         if (tensor.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.mutableBuffer.array().sum()))

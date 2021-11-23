@@ -32,7 +32,7 @@ dependencies {
     //jafama
     implementation(project(":kmath-jafama"))
     //multik
-    implementation(projects.kmathMultik)
+    implementation(project(":kmath-multik"))
 
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
@@ -57,9 +57,9 @@ dependencies {
 
 kotlin.sourceSets.all {
     with(languageSettings) {
-        useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-        useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
-        useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
+        optIn("kotlin.contracts.ExperimentalContracts")
+        optIn("kotlin.ExperimentalUnsignedTypes")
+        optIn("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
 

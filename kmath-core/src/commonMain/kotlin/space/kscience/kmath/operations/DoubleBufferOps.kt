@@ -26,11 +26,9 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     override fun Buffer<Double>.map(block: DoubleField.(Double) -> Double): DoubleBuffer =
         mapInline { DoubleField.block(it) }
 
-    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
         super<ExtendedFieldOps>.unaryOperationFunction(operation)
 
-    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<Double>, right: Buffer<Double>) -> Buffer<Double> =
         super<ExtendedFieldOps>.binaryOperationFunction(operation)
 

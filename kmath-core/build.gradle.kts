@@ -5,21 +5,14 @@ plugins {
 //    id("com.xcporter.metaview") version "0.0.5"
 }
 
-kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions {
-                freeCompilerArgs =
-                    freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
-            }
-        }
-    }
+kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach { it.optIn("space.kscience.kmath.misc.PerformancePitfall") }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":kmath-memory"))
-            }
+    commonMain {
+        dependencies {
+            api(project(":kmath-memory"))
         }
     }
 }

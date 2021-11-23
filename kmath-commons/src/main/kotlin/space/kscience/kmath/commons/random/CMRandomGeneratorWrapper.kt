@@ -38,10 +38,7 @@ public class CMRandomGeneratorWrapper(
 
     override fun nextInt(): Int = generator.nextInt()
     override fun nextInt(n: Int): Int = generator.nextInt(n)
-
-    @PerformancePitfall
     override fun nextGaussian(): Double = runBlocking { GaussianSampler(0.0, 1.0).next(generator) }
-
     override fun nextDouble(): Double = generator.nextDouble()
     override fun nextLong(): Long = generator.nextLong()
 }

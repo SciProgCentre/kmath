@@ -8,6 +8,10 @@ kscience {
 }
 
 kotlin.sourceSets {
+    all {
+        languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+    }
+
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
