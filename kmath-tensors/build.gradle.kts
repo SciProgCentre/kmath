@@ -6,8 +6,12 @@ plugins {
 
 kotlin.sourceSets {
     all {
-        languageSettings.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
+        languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
     }
+
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach { it.optIn("space.kscience.kmath.misc.PerformancePitfall") }
 
     commonMain {
         dependencies {

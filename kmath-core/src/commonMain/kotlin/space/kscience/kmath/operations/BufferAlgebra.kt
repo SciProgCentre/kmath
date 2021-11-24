@@ -35,13 +35,11 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public fun Buffer<T>.zip(other: Buffer<T>, block: A.(left: T, right: T) -> T): Buffer<T> =
         zipInline(this, other, block)
 
-    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.unaryOperationFunction(operation)
         return { arg -> bufferFactory(arg.size) { operationFunction(arg[it]) } }
     }
 
-    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.binaryOperationFunction(operation)
         return { left, right ->
@@ -141,11 +139,9 @@ public open class BufferRingOps<T, A: Ring<T>>(
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
-    @UnstableKMathAPI
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> =
         super<BufferAlgebra>.unaryOperationFunction(operation)
 
-    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> =
         super<BufferAlgebra>.binaryOperationFunction(operation)
 }
@@ -165,7 +161,6 @@ public open class BufferFieldOps<T, A : Field<T>>(
     override fun scale(a: Buffer<T>, value: Double): Buffer<T> = a.map { scale(it, value) }
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
-    @UnstableKMathAPI
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> =
         super<BufferRingOps>.binaryOperationFunction(operation)
 }

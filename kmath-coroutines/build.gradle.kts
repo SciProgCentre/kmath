@@ -7,9 +7,9 @@ plugins {
 kotlin.sourceSets {
     all {
         with(languageSettings) {
-            useExperimentalAnnotation("kotlinx.coroutines.InternalCoroutinesApi")
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
+            optIn("kotlinx.coroutines.InternalCoroutinesApi")
+            optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            optIn("kotlinx.coroutines.FlowPreview")
         }
     }
 
