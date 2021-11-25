@@ -8,11 +8,8 @@
 package space.kscience.kmath.asm
 
 import space.kscience.kmath.asm.internal.*
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.expressions.MST.*
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 
@@ -48,7 +45,13 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
                 loadVariable(node.identity)
         }
 
-        is Numeric -> loadNumberConstant(node.value)
+        is Numeric -> if (algebra is NumericAlgebra) {
+            if (Number::class.java.isAssignableFrom(type))
+                loadNumberConstant(algebra.number(node.value) as Number)
+            else
+                loadObjectConstant(algebra.number(node.value))
+        } else
+            error("Numeric nodes are not supported by $this")
 
         is Unary -> when {
             algebra is NumericAlgebra && node.value is Numeric -> loadObjectConstant(
@@ -121,13 +124,15 @@ public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg argu
  *
  * @author Iaroslav Postovalov
  */
-public fun MST.compileToExpression(algebra: IntRing): Expression<Int> = IntAsmBuilder(this).instance
+@UnstableKMathAPI
+public fun MST.compileToExpression(algebra: IntRing): IntExpression = IntAsmBuilder(this).instance
 
 /**
  * Compile given MST to expression and evaluate it against [arguments].
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int =
     compileToExpression(algebra).invoke(arguments)
 
@@ -136,6 +141,7 @@ public fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int =
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): Int =
     compileToExpression(algebra)(*arguments)
 
@@ -145,7 +151,8 @@ public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): I
  *
  * @author Iaroslav Postovalov
  */
-public fun MST.compileToExpression(algebra: LongRing): Expression<Long> = LongAsmBuilder(this).instance
+@UnstableKMathAPI
+public fun MST.compileToExpression(algebra: LongRing): LongExpression = LongAsmBuilder(this).instance
 
 
 /**
@@ -153,6 +160,7 @@ public fun MST.compileToExpression(algebra: LongRing): Expression<Long> = LongAs
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: LongRing, arguments: Map<Symbol, Long>): Long =
     compileToExpression(algebra).invoke(arguments)
 
@@ -162,6 +170,7 @@ public fun MST.compile(algebra: LongRing, arguments: Map<Symbol, Long>): Long =
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: LongRing, vararg arguments: Pair<Symbol, Long>): Long =
     compileToExpression(algebra)(*arguments)
 
@@ -171,13 +180,15 @@ public fun MST.compile(algebra: LongRing, vararg arguments: Pair<Symbol, Long>):
  *
  * @author Iaroslav Postovalov
  */
-public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> = DoubleAsmBuilder(this).instance
+@UnstableKMathAPI
+public fun MST.compileToExpression(algebra: DoubleField): DoubleExpression = DoubleAsmBuilder(this).instance
 
 /**
  * Compile given MST to expression and evaluate it against [arguments].
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: DoubleField, arguments: Map<Symbol, Double>): Double =
     compileToExpression(algebra).invoke(arguments)
 
@@ -186,5 +197,6 @@ public fun MST.compile(algebra: DoubleField, arguments: Map<Symbol, Double>): Do
  *
  * @author Iaroslav Postovalov
  */
+@UnstableKMathAPI
 public fun MST.compile(algebra: DoubleField, vararg arguments: Pair<Symbol, Double>): Double =
     compileToExpression(algebra).invoke(*arguments)

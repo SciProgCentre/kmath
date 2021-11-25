@@ -5,12 +5,11 @@
 
 package space.kscience.kmath.wasm.internal
 
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.expressions.MST.*
-import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.internal.binaryen.Module as BinaryenModule
 import space.kscience.kmath.internal.webassembly.Module as WasmModule
@@ -18,65 +17,17 @@ import space.kscience.kmath.internal.webassembly.Module as WasmModule
 private val spreader = eval("(obj, args) => obj(...args)")
 
 @Suppress("UnsafeCastFromDynamic")
-internal sealed class WasmBuilder<T : Number>(
+internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
     protected val binaryenType: Type,
     protected val algebra: Algebra<T>,
     protected val target: MST,
 ) {
     protected val keys: MutableList<Symbol> = mutableListOf()
-    lateinit var ctx: BinaryenModule
+    protected lateinit var ctx: BinaryenModule
 
-    open fun visitSymbolic(mst: Symbol): ExpressionRef {
-        algebra.bindSymbolOrNull(mst)?.let { return visitNumeric(Numeric(it)) }
+    abstract val instance: E
 
-        var idx = keys.indexOf(mst)
-
-        if (idx == -1) {
-            keys += mst
-            idx = keys.lastIndex
-        }
-
-        return ctx.local.get(idx, binaryenType)
-    }
-
-    abstract fun visitNumeric(mst: Numeric): ExpressionRef
-
-    protected open fun visitUnary(mst: Unary): ExpressionRef =
-        error("Unary operation ${mst.operation} not defined in $this")
-
-    protected open fun visitBinary(mst: Binary): ExpressionRef =
-        error("Binary operation ${mst.operation} not defined in $this")
-
-    protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
-
-    protected fun visit(mst: MST): ExpressionRef = when (mst) {
-        is Symbol -> visitSymbolic(mst)
-        is Numeric -> visitNumeric(mst)
-
-        is Unary -> when {
-            algebra is NumericAlgebra && mst.value is Numeric -> visitNumeric(
-                Numeric(algebra.unaryOperationFunction(mst.operation)(algebra.number((mst.value as Numeric).value)))
-            )
-
-            else -> visitUnary(mst)
-        }
-
-        is Binary -> when {
-            algebra is NumericAlgebra && mst.left is Numeric && mst.right is Numeric -> visitNumeric(
-                Numeric(
-                    algebra.binaryOperationFunction(mst.operation)
-                        .invoke(
-                            algebra.number((mst.left as Numeric).value),
-                            algebra.number((mst.right as Numeric).value)
-                        )
-                )
-            )
-
-            else -> visitBinary(mst)
-        }
-    }
-
-    val instance by lazy {
+    protected val executable = run {
         val c = WasmModule(with(createModule()) {
             ctx = this
             val expr = visit(target)
@@ -97,41 +48,93 @@ internal sealed class WasmBuilder<T : Number>(
             res
         })
 
-        val i = Instance(c, js("{}") as Any)
-        val symbols = keys
-        keys.clear()
+        Instance(c, js("{}")).exports.executable
+    }
 
-        Expression<T> { args ->
-            val params = symbols.map(args::getValue).toTypedArray()
-            spreader(i.exports.asDynamic().executable, params) as T
+    protected open fun visitSymbol(node: Symbol): ExpressionRef {
+        algebra.bindSymbolOrNull(node)?.let { return visitNumeric(Numeric(it)) }
+
+        var idx = keys.indexOf(node)
+
+        if (idx == -1) {
+            keys += node
+            idx = keys.lastIndex
+        }
+
+        return ctx.local.get(idx, binaryenType)
+    }
+
+    protected abstract fun visitNumeric(node: Numeric): ExpressionRef
+
+    protected open fun visitUnary(node: Unary): ExpressionRef =
+        error("Unary operation ${node.operation} not defined in $this")
+
+    protected open fun visitBinary(mst: Binary): ExpressionRef =
+        error("Binary operation ${mst.operation} not defined in $this")
+
+    protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
+
+    protected fun visit(node: MST): ExpressionRef = when (node) {
+        is Symbol -> visitSymbol(node)
+        is Numeric -> visitNumeric(node)
+
+        is Unary -> when {
+            algebra is NumericAlgebra && node.value is Numeric -> visitNumeric(
+                Numeric(algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)))
+            )
+
+            else -> visitUnary(node)
+        }
+
+        is Binary -> when {
+            algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> visitNumeric(
+                Numeric(
+                    algebra.binaryOperationFunction(node.operation)
+                        .invoke(
+                            algebra.number((node.left as Numeric).value),
+                            algebra.number((node.right as Numeric).value)
+                        )
+                )
+            )
+
+            else -> visitBinary(node)
         }
     }
 }
 
-internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double>(f64, DoubleField, target) {
-    override fun createModule(): BinaryenModule = readBinary(f64StandardFunctions)
+@UnstableKMathAPI
+internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpression>(f64, DoubleField, target) {
+    override val instance by lazy {
+        object : DoubleExpression {
+            override val indexer = SimpleSymbolIndexer(keys)
 
-    override fun visitNumeric(mst: Numeric): ExpressionRef = ctx.f64.const(mst.value)
+            override fun invoke(arguments: DoubleArray) = spreader(executable, arguments).unsafeCast<Double>()
+        }
+    }
 
-    override fun visitUnary(mst: Unary): ExpressionRef = when (mst.operation) {
-        GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(mst.value))
-        GroupOps.PLUS_OPERATION -> visit(mst.value)
-        PowerOperations.SQRT_OPERATION -> ctx.f64.sqrt(visit(mst.value))
-        TrigonometricOperations.SIN_OPERATION -> ctx.call("sin", arrayOf(visit(mst.value)), f64)
-        TrigonometricOperations.COS_OPERATION -> ctx.call("cos", arrayOf(visit(mst.value)), f64)
-        TrigonometricOperations.TAN_OPERATION -> ctx.call("tan", arrayOf(visit(mst.value)), f64)
-        TrigonometricOperations.ASIN_OPERATION -> ctx.call("asin", arrayOf(visit(mst.value)), f64)
-        TrigonometricOperations.ACOS_OPERATION -> ctx.call("acos", arrayOf(visit(mst.value)), f64)
-        TrigonometricOperations.ATAN_OPERATION -> ctx.call("atan", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.SINH_OPERATION -> ctx.call("sinh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.COSH_OPERATION -> ctx.call("cosh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.TANH_OPERATION -> ctx.call("tanh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.ASINH_OPERATION -> ctx.call("asinh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.ACOSH_OPERATION -> ctx.call("acosh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.ATANH_OPERATION -> ctx.call("atanh", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.EXP_OPERATION -> ctx.call("exp", arrayOf(visit(mst.value)), f64)
-        ExponentialOperations.LN_OPERATION -> ctx.call("log", arrayOf(visit(mst.value)), f64)
-        else -> super.visitUnary(mst)
+    override fun createModule() = readBinary(f64StandardFunctions)
+
+    override fun visitNumeric(node: Numeric) = ctx.f64.const(node.value)
+
+    override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
+        GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(node.value))
+        GroupOps.PLUS_OPERATION -> visit(node.value)
+        PowerOperations.SQRT_OPERATION -> ctx.f64.sqrt(visit(node.value))
+        TrigonometricOperations.SIN_OPERATION -> ctx.call("sin", arrayOf(visit(node.value)), f64)
+        TrigonometricOperations.COS_OPERATION -> ctx.call("cos", arrayOf(visit(node.value)), f64)
+        TrigonometricOperations.TAN_OPERATION -> ctx.call("tan", arrayOf(visit(node.value)), f64)
+        TrigonometricOperations.ASIN_OPERATION -> ctx.call("asin", arrayOf(visit(node.value)), f64)
+        TrigonometricOperations.ACOS_OPERATION -> ctx.call("acos", arrayOf(visit(node.value)), f64)
+        TrigonometricOperations.ATAN_OPERATION -> ctx.call("atan", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.SINH_OPERATION -> ctx.call("sinh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.COSH_OPERATION -> ctx.call("cosh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.TANH_OPERATION -> ctx.call("tanh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.ASINH_OPERATION -> ctx.call("asinh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.ACOSH_OPERATION -> ctx.call("acosh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.ATANH_OPERATION -> ctx.call("atanh", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.EXP_OPERATION -> ctx.call("exp", arrayOf(visit(node.value)), f64)
+        ExponentialOperations.LN_OPERATION -> ctx.call("log", arrayOf(visit(node.value)), f64)
+        else -> super.visitUnary(node)
     }
 
     override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {
@@ -144,13 +147,22 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double>(f64, DoubleF
     }
 }
 
-internal class IntWasmBuilder(target: MST) : WasmBuilder<Int>(i32, IntRing, target) {
-    override fun visitNumeric(mst: Numeric): ExpressionRef = ctx.i32.const(mst.value)
+@UnstableKMathAPI
+internal class IntWasmBuilder(target: MST) : WasmBuilder<Int, IntExpression>(i32, IntRing, target) {
+    override val instance by lazy {
+        object : IntExpression {
+            override val indexer = SimpleSymbolIndexer(keys)
 
-    override fun visitUnary(mst: Unary): ExpressionRef = when (mst.operation) {
-        GroupOps.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(mst.value))
-        GroupOps.PLUS_OPERATION -> visit(mst.value)
-        else -> super.visitUnary(mst)
+            override fun invoke(arguments: IntArray) = spreader(executable, arguments).unsafeCast<Int>()
+        }
+    }
+
+    override fun visitNumeric(node: Numeric) = ctx.i32.const(node.value)
+
+    override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
+        GroupOps.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(node.value))
+        GroupOps.PLUS_OPERATION -> visit(node.value)
+        else -> super.visitUnary(node)
     }
 
     override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {

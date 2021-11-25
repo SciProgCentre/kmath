@@ -201,8 +201,8 @@ internal open external class Module {
 }
 
 @JsName("Instance")
-internal open external class Instance(module: Module, importObject: Any = definedExternally) {
-    open var exports: Any
+internal open external class Instance(module: Module, importObject: dynamic = definedExternally) {
+    open var exports: dynamic
 }
 
 @JsName("Memory")

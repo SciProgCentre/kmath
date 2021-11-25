@@ -38,6 +38,22 @@ internal class ExpressionsInterpretersBenchmark {
     @Benchmark
     fun asmGenericExpression(blackhole: Blackhole) = invokeAndSum(asmGeneric, blackhole)
 
+    /**
+     * Benchmark case for [Expression] created with [compileToExpression].
+     */
+    @Benchmark
+    fun asmPrimitiveExpressionArray(blackhole: Blackhole) {
+        val random = Random(0)
+        var sum = 0.0
+        val m = DoubleArray(1)
+
+        repeat(times) {
+            m[xIdx] = random.nextDouble()
+            sum += asmPrimitive(m)
+        }
+
+        blackhole.consume(sum)
+    }
 
     /**
      * Benchmark case for [Expression] created with [compileToExpression].
@@ -82,7 +98,6 @@ internal class ExpressionsInterpretersBenchmark {
 
     private companion object {
         private val x by symbol
-        private val algebra = DoubleField
         private const val times = 1_000_000
 
         private val functional = DoubleField.expression {
@@ -95,7 +110,10 @@ internal class ExpressionsInterpretersBenchmark {
         }
 
         private val mst = node.toExpression(DoubleField)
+
         private val asmPrimitive = node.compileToExpression(DoubleField)
+        private val xIdx = asmPrimitive.indexer.indexOf(x)
+
         private val asmGeneric = node.compileToExpression(DoubleField as Algebra<Double>)
 
         private val raw = Expression<Double> { args ->

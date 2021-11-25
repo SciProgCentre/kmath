@@ -145,7 +145,7 @@ internal object InternalGamma {
             }
 
             when {
-                n >= maxIterations -> throw error("Maximal iterations is exceeded $maxIterations")
+                n >= maxIterations -> error("Maximal iterations is exceeded $maxIterations")
                 sum.isInfinite() -> 1.0
                 else -> exp(-x + a * ln(x) - logGamma(a)) * sum
             }

@@ -3,13 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package space.kscience.kmath.wasm
 
 import space.kscience.kmath.estree.compileWith
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
@@ -22,7 +21,7 @@ import space.kscience.kmath.wasm.internal.IntWasmBuilder
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: IntRing): Expression<Int> = compileWith(algebra)
+public fun MST.compileToExpression(algebra: IntRing): IntExpression = IntWasmBuilder(this).instance
 
 
 /**
@@ -50,7 +49,7 @@ public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): I
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> = compileWith(algebra)
+public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> = DoubleWasmBuilder(this).instance
 
 
 /**
