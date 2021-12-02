@@ -22,6 +22,7 @@ import space.kscience.kmath.operations.FieldOps
 import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations
 import space.kscience.kmath.operations.RingOps
+import kotlin.math.floor
 
 /**
  * better-parse implementation of grammar defined in the ArithmeticsEvaluator.g4.
@@ -40,9 +41,22 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
     private val div: Token by literalToken("/")
     private val minus: Token by literalToken("-")
     private val plus: Token by literalToken("+")
+
+    @Suppress("unused")
     private val ws: Token by regexToken("\\s+".toRegex(), ignore = true)
 
-    private val number: Parser<MST> by num use { MST.Numeric(text.toDouble()) }
+    // TODO Rewrite as custom parser to handle numbers with better precision. Currently, numbers like 1e10 are handled while they could be stored as longs without precision loss.
+    private val number: Parser<MST> by num use {
+        val d = text.toDoubleOrNull()
+
+        MST.Numeric(
+            if (d == null || d == floor(d) && !d.isInfinite()) {
+                text.toLongOrNull() ?: text.toDouble()
+            } else
+                d
+        )
+    }
+
     private val singular: Parser<MST> by id use { Symbol(text) }
 
     private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
@@ -91,7 +105,8 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
 }
 
 /**
- * Tries to parse the string into [MST] using [ArithmeticsEvaluator]. Returns [ParseResult] representing expression or error.
+ * Tries to parse the string into [MST] using [ArithmeticsEvaluator]. Returns [ParseResult] representing expression or
+ * error.
  *
  * @receiver the string to parse.
  * @return the [MST] node.
