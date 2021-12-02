@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
@@ -22,6 +23,81 @@ public fun interface Expression<T> {
      * @return the value.
      */
     public operator fun invoke(arguments: Map<Symbol, T>): T
+}
+
+/**
+ * Specialization of [Expression] for [Double] allowing better performance because of using array.
+ */
+@UnstableKMathAPI
+public interface DoubleExpression : Expression<Double> {
+    /**
+     * The indexer of this expression's arguments that should be used to build array for [invoke].
+     *
+     * Implementations must fulfil the following requirement: for any argument symbol `x` and its value `y`,
+     * `indexer.indexOf(x) == arguments.indexOf(y)` if `arguments` is the array passed to [invoke].
+     */
+    public val indexer: SymbolIndexer
+
+    public override operator fun invoke(arguments: Map<Symbol, Double>): Double =
+        this(DoubleArray(indexer.symbols.size) { arguments.getValue(indexer.symbols[it]) })
+
+    /**
+     * Calls this expression from arguments.
+     *
+     * @param arguments the array of arguments.
+     * @return the value.
+     */
+    public operator fun invoke(arguments: DoubleArray): Double
+}
+
+/**
+ * Specialization of [Expression] for [Int] allowing better performance because of using array.
+ */
+@UnstableKMathAPI
+public interface IntExpression : Expression<Int> {
+    /**
+     * The indexer of this expression's arguments that should be used to build array for [invoke].
+     *
+     * Implementations must fulfil the following requirement: for any argument symbol `x` and its value `y`,
+     * `indexer.indexOf(x) == arguments.indexOf(y)` if `arguments` is the array passed to [invoke].
+     */
+    public val indexer: SymbolIndexer
+
+    public override operator fun invoke(arguments: Map<Symbol, Int>): Int =
+        this(IntArray(indexer.symbols.size) { arguments.getValue(indexer.symbols[it]) })
+
+    /**
+     * Calls this expression from arguments.
+     *
+     * @param arguments the array of arguments.
+     * @return the value.
+     */
+    public operator fun invoke(arguments: IntArray): Int
+}
+
+/**
+ * Specialization of [Expression] for [Long] allowing better performance because of using array.
+ */
+@UnstableKMathAPI
+public interface LongExpression : Expression<Long> {
+    /**
+     * The indexer of this expression's arguments that should be used to build array for [invoke].
+     *
+     * Implementations must fulfil the following requirement: for any argument symbol `x` and its value `y`,
+     * `indexer.indexOf(x) == arguments.indexOf(y)` if `arguments` is the array passed to [invoke].
+     */
+    public val indexer: SymbolIndexer
+
+    public override operator fun invoke(arguments: Map<Symbol, Long>): Long =
+        this(LongArray(indexer.symbols.size) { arguments.getValue(indexer.symbols[it]) })
+
+    /**
+     * Calls this expression from arguments.
+     *
+     * @param arguments the array of arguments.
+     * @return the value.
+     */
+    public operator fun invoke(arguments: LongArray): Long
 }
 
 /**
@@ -69,6 +145,62 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
     }
 )
 
+private val EMPTY_DOUBLE_ARRAY = DoubleArray(0)
+
+/**
+ * Calls this expression without providing any arguments.
+ *
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun DoubleExpression.invoke(): Double = this(EMPTY_DOUBLE_ARRAY)
+
+/**
+ * Calls this expression from arguments.
+ *
+ * @param pairs the pairs of arguments to values.
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun DoubleExpression.invoke(vararg arguments: Double): Double = this(arguments)
+
+private val EMPTY_INT_ARRAY = IntArray(0)
+
+/**
+ * Calls this expression without providing any arguments.
+ *
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun IntExpression.invoke(): Int = this(EMPTY_INT_ARRAY)
+
+/**
+ * Calls this expression from arguments.
+ *
+ * @param pairs the pairs of arguments to values.
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun IntExpression.invoke(vararg arguments: Int): Int = this(arguments)
+
+private val EMPTY_LONG_ARRAY = LongArray(0)
+
+/**
+ * Calls this expression without providing any arguments.
+ *
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun LongExpression.invoke(): Long = this(EMPTY_LONG_ARRAY)
+
+/**
+ * Calls this expression from arguments.
+ *
+ * @param pairs the pairs of arguments to values.
+ * @return a value.
+ */
+@UnstableKMathAPI
+public operator fun LongExpression.invoke(vararg arguments: Long): Long = this(arguments)
 
 /**
  * A context for expression construction

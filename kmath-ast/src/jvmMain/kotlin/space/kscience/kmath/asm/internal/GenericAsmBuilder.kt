@@ -78,7 +78,7 @@ internal class GenericAsmBuilder<T>(
             )
 
             visitMethod(
-                ACC_PUBLIC or ACC_FINAL,
+                ACC_PUBLIC,
                 "invoke",
                 getMethodDescriptor(tType, MAP_TYPE),
                 "(L${MAP_TYPE.internalName}<${SYMBOL_TYPE.descriptor}+${tType.descriptor}>;)${tType.descriptor}",
@@ -116,7 +116,7 @@ internal class GenericAsmBuilder<T>(
             }
 
             visitMethod(
-                ACC_PUBLIC or ACC_FINAL or ACC_BRIDGE or ACC_SYNTHETIC,
+                ACC_PUBLIC or ACC_BRIDGE or ACC_SYNTHETIC,
                 "invoke",
                 getMethodDescriptor(OBJECT_TYPE, MAP_TYPE),
                 null,
@@ -156,7 +156,7 @@ internal class GenericAsmBuilder<T>(
                 )
 
             visitMethod(
-                ACC_PUBLIC,
+                ACC_PUBLIC or ACC_SYNTHETIC,
                 "<init>",
                 getMethodDescriptor(VOID_TYPE, *OBJECT_ARRAY_TYPE.wrapToArrayIf { hasConstants }),
                 null,
@@ -176,7 +176,7 @@ internal class GenericAsmBuilder<T>(
                 }
 
                 label()
-                visitInsn(RETURN)
+                areturn(VOID_TYPE)
                 val l4 = label()
                 visitLocalVariable("this", classType.descriptor, null, l0, l4, 0)
 
@@ -209,10 +209,10 @@ internal class GenericAsmBuilder<T>(
      */
     fun loadObjectConstant(value: Any, type: Type = tType): Unit = invokeMethodVisitor.run {
         val idx = if (value in constants) constants.indexOf(value) else constants.also { it += value }.lastIndex
-        invokeMethodVisitor.load(0, classType)
+        load(0, classType)
         getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
         iconst(idx)
-        visitInsn(AALOAD)
+        aload(OBJECT_TYPE)
         if (type != OBJECT_TYPE) checkcast(type)
     }
 
@@ -320,6 +320,6 @@ internal class GenericAsmBuilder<T>(
         /**
          * ASM type for array of [java.lang.Object].
          */
-        val OBJECT_ARRAY_TYPE: Type by lazy { getType("[Ljava/lang/Object;") }
+        val OBJECT_ARRAY_TYPE: Type = getType("[Ljava/lang/Object;")
     }
 }
