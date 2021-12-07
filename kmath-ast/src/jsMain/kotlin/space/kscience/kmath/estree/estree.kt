@@ -28,11 +28,14 @@ internal fun <T> MST.compileWith(algebra: Algebra<T>): Expression<T> {
                 variable(node.identity)
         }
 
-        is Numeric -> constant(node.value)
+        is Numeric -> constant(
+            (algebra as? NumericAlgebra<T>)?.number(node.value) ?: error("Numeric nodes are not supported by $this")
+        )
 
         is Unary -> when {
             algebra is NumericAlgebra && node.value is Numeric -> constant(
-                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)))
+                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value))
+            )
 
             else -> call(algebra.unaryOperationFunction(node.operation), visit(node.value))
         }
