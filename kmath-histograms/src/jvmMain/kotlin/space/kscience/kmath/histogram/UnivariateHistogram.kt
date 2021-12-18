@@ -42,7 +42,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin> {
         /**
          * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
          */
-        public fun uniform(
+        public inline fun uniform(
             binSize: Double,
             start: Double = 0.0,
             builder: UnivariateHistogramBuilder.() -> Unit,
@@ -51,7 +51,7 @@ public interface UnivariateHistogram : Histogram<Double, UnivariateBin> {
         /**
          * Build and fill a histogram with custom borders. Returns a read-only histogram.
          */
-        public fun custom(
+        public inline fun custom(
             borders: DoubleArray,
             builder: UnivariateHistogramBuilder.() -> Unit,
         ): UnivariateHistogram = TreeHistogramSpace.custom(borders).fill(builder)
