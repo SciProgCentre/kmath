@@ -5,12 +5,7 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://repo.kotlin.link")
-    maven("https://clojars.org/repo")
-    maven("https://jitpack.io")
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
-    maven("http://logicrunch.research.it.uu.se/maven") {
-        isAllowInsecureProtocol = true
-    }
 }
 
 dependencies {

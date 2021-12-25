@@ -6,8 +6,8 @@ plugins {
 description = "Kotlin∇ integration module"
 
 dependencies {
-    api("com.github.breandan:kaliningraph:0.1.6")
-    api("com.github.breandan:kotlingrad:0.4.5")
+    api("ai.hypergraph:kaliningraph:0.1.9")
+    api("ai.hypergraph:kotlingrad:0.4.7")
     api(project(":kmath-core"))
     testImplementation(project(":kmath-ast"))
 }

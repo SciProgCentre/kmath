@@ -7,13 +7,6 @@ plugins {
 
 allprojects {
     repositories {
-        maven("https://clojars.org/repo")
-        maven("https://jitpack.io")
-
-        maven("http://logicrunch.research.it.uu.se/maven") {
-            isAllowInsecureProtocol = true
-        }
-
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
