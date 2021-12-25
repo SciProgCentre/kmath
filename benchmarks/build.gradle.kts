@@ -14,12 +14,6 @@ sourceSets.register("benchmarks")
 repositories {
     mavenCentral()
     maven("https://repo.kotlin.link")
-    maven("https://clojars.org/repo")
-    maven("https://jitpack.io")
-
-    maven("http://logicrunch.research.it.uu.se/maven") {
-        isAllowInsecureProtocol = true
-    }
 }
 
 kotlin {

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.api.*
+import ai.hypergraph.kotlingrad.api.*
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.MstExtendedField.unaryMinus

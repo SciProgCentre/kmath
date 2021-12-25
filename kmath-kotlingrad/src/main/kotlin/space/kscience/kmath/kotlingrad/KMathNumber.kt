@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.api.SConst
+import ai.hypergraph.kotlingrad.api.SConst
 import space.kscience.kmath.operations.NumericAlgebra
 
 /**
