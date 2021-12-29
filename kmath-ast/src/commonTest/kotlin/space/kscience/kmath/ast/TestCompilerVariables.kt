@@ -19,8 +19,8 @@ import kotlin.test.assertFailsWith
 internal class TestCompilerVariables {
     @Test
     fun testNoVariables() = runCompilerTest {
-        val expr = "0".parseMath().compileToExpression(IntRing)
-        assertEquals(0, expr())
+        val expr = "0".parseMath().compileToExpression(DoubleField)
+        assertEquals(0.0, expr(), 0.0001)
     }
 
     @Test
