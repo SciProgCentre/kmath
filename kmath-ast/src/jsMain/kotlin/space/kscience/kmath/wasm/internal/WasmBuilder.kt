@@ -114,7 +114,7 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpres
 
     override fun createModule() = readBinary(f64StandardFunctions)
 
-    override fun visitNumeric(node: Numeric) = ctx.f64.const(node.value)
+    override fun visitNumeric(node: Numeric) = ctx.f64.const(node.value.toDouble())
 
     override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
         GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(node.value))
@@ -157,7 +157,7 @@ internal class IntWasmBuilder(target: MST) : WasmBuilder<Int, IntExpression>(i32
         }
     }
 
-    override fun visitNumeric(node: Numeric) = ctx.i32.const(node.value)
+    override fun visitNumeric(node: Numeric) = ctx.i32.const(node.value.toInt())
 
     override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
         GroupOps.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(node.value))
