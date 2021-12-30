@@ -1,8 +1,6 @@
-import java.net.URL
-
 plugins {
     id("ru.mipt.npm.gradle.project")
-    kotlin("jupyter.api") apply false
+    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC"
 }
 
 allprojects {
@@ -32,7 +30,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        java.net.URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
                     )
                 }
 
