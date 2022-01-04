@@ -1,7 +1,10 @@
 plugins {
     `kotlin-dsl`
-    kotlin("plugin.serialization") version "1.5.21"
+    `version-catalog`
+    alias(npmlibs.plugins.kotlin.plugin.serialization)
 }
+
+java.targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
     maven("https://repo.kotlin.link")
@@ -9,12 +12,19 @@ repositories {
     gradlePluginPortal()
 }
 
+val toolsVersion: String by extra
+val kotlinVersion = npmlibs.versions.kotlin.asProvider().get()
+val benchmarksVersion = npmlibs.versions.kotlinx.benchmark.get()
+
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
-    api("ru.mipt.npm:gradle-tools:0.10.7")
-    api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
+    api("ru.mipt.npm:gradle-tools:$toolsVersion")
+    //plugins form benchmarks
+    api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:$benchmarksVersion")
+    api("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+    //to be used inside build-script only
+    implementation(npmlibs.kotlinx.serialization.json)
 }
 
 kotlin.sourceSets.all {
-    languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
+    languageSettings.optIn("kotlin.OptIn")
 }

@@ -7,7 +7,7 @@ package space.kscience.kmath.stat
 
 import kotlinx.coroutines.runBlocking
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.chains.collectWithState
+import space.kscience.kmath.chains.combineWithState
 import space.kscience.kmath.distributions.NormalDistribution
 
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
@@ -15,11 +15,11 @@ private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0
 /**
  * Averaging.
  */
-private fun Chain<Double>.mean(): Chain<Double> = collectWithState(AveragingChainState(), { it.copy() }) { chain ->
+private fun Chain<Double>.mean(): Chain<Double> = combineWithState(AveragingChainState(), { it.copy() }) { chain ->
     val next = chain.next()
     num++
     value += next
-    return@collectWithState value / num
+    return@combineWithState value / num
 }
 
 

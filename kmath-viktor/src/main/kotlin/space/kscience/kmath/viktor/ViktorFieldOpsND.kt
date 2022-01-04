@@ -14,7 +14,7 @@ import space.kscience.kmath.operations.ExtendedFieldOps
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.PowerOperations
 
-@OptIn(UnstableKMathAPI::class)
+@OptIn(UnstableKMathAPI::class, PerformancePitfall::class)
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, DoubleField>,

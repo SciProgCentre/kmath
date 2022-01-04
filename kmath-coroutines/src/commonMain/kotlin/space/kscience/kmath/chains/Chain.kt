@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * A not-necessary-Markov chain of some type
@@ -124,20 +125,22 @@ public fun <T> Chain<T>.filter(block: (T) -> Boolean): Chain<T> = object : Chain
 /**
  * Map the whole chain
  */
-public fun <T, R> Chain<T>.collect(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = mapper(this@collect)
-    override suspend fun fork(): Chain<R> = this@collect.fork().collect(mapper)
+@UnstableKMathAPI
+public fun <T, R> Chain<T>.combine(mapper: suspend (Chain<T>) -> R): Chain<R> = object : Chain<R> {
+    override suspend fun next(): R = mapper(this@combine)
+    override suspend fun fork(): Chain<R> = this@combine.fork().combine(mapper)
 }
 
-public fun <T, S, R> Chain<T>.collectWithState(
+@UnstableKMathAPI
+public fun <T, S, R> Chain<T>.combineWithState(
     state: S,
     stateFork: (S) -> S,
     mapper: suspend S.(Chain<T>) -> R,
 ): Chain<R> = object : Chain<R> {
-    override suspend fun next(): R = state.mapper(this@collectWithState)
+    override suspend fun next(): R = state.mapper(this@combineWithState)
 
     override suspend fun fork(): Chain<R> =
-        this@collectWithState.fork().collectWithState(stateFork(state), stateFork, mapper)
+        this@combineWithState.fork().combineWithState(stateFork(state), stateFork, mapper)
 }
 
 /**
