@@ -16,7 +16,7 @@ allprojects {
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
-    afterEvaluate {
+    plugins.withId("org.jetbrains.dokka"){
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
             dependsOn(tasks["assemble"])
 
