@@ -13,13 +13,22 @@ sourceSets.register("benchmarks")
 
 repositories {
     mavenCentral()
-    maven("https://repo.kotlin.link")
 }
 
 kotlin {
     jvm()
 
+    js(IR) {
+        nodejs()
+    }
+
     sourceSets {
+        all {
+            languageSettings {
+                progressiveMode = true
+            }
+        }
+
         val commonMain by getting {
             dependencies {
                 implementation(project(":kmath-ast"))
@@ -29,9 +38,8 @@ kotlin {
                 implementation(project(":kmath-stat"))
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
-                implementation(project(":kmath-jafama"))
                 implementation(project(":kmath-tensors"))
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.2")
             }
         }
 
@@ -42,6 +50,7 @@ kotlin {
                 implementation(project(":kmath-nd4j"))
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
+                implementation(project(":kmath-jafama"))
                 implementation(project(":kmath-multik"))
                 implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2
@@ -63,6 +72,7 @@ benchmark {
     // Setup configurations
     targets {
         register("jvm")
+        register("js")
     }
 
     fun kotlinx.benchmark.gradle.BenchmarkConfiguration.commonConfiguration() {
@@ -88,7 +98,11 @@ benchmark {
     }
 
     configurations.register("expressions") {
-        commonConfiguration()
+        // Some extra precision
+        warmups = 2
+        iterations = 10
+        iterationTime = 2000
+        iterationTimeUnit = "ms"
         include("ExpressionsInterpretersBenchmark")
     }
 
@@ -125,7 +139,6 @@ afterEvaluate {
     }
 }
 
-
 kotlin.sourceSets.all {
     with(languageSettings) {
         optIn("kotlin.contracts.ExperimentalContracts")
@@ -140,7 +153,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
     }
 }
-
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL

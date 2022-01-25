@@ -14,7 +14,7 @@ repositories {
 
 val toolsVersion: String by extra
 val kotlinVersion = npmlibs.versions.kotlin.asProvider().get()
-val benchmarksVersion = npmlibs.versions.kotlinx.benchmark.get()
+val benchmarksVersion = "0.4.2"
 
 dependencies {
     api("ru.mipt.npm:gradle-tools:$toolsVersion")
