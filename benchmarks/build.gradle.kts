@@ -101,8 +101,9 @@ benchmark {
         // Some extra precision
         warmups = 2
         iterations = 10
-        iterationTime = 2000
-        iterationTimeUnit = "ms"
+        iterationTime = 10
+        iterationTimeUnit = "s"
+        outputTimeUnit = "s"
         include("ExpressionsInterpretersBenchmark")
     }
 
