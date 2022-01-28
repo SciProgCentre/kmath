@@ -29,6 +29,7 @@ include(
     ":kmath-commons",
     ":kmath-viktor",
     ":kmath-multik",
+    ":kmath-tensorflow",
     ":kmath-optimization",
     ":kmath-stat",
     ":kmath-nd4j",

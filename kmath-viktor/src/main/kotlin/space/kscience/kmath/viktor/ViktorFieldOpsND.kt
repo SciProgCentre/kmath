@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(PerformancePitfall::class)
+
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
