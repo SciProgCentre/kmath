@@ -6,8 +6,8 @@ description = "Google tensorflow connector"
 
 dependencies {
     api(project(":kmath-tensors"))
-    api("org.tensorflow:tensorflow-core-api:0.3.3")
-    testImplementation("org.tensorflow:tensorflow-core-platform:0.3.3")
+    api("org.tensorflow:tensorflow-core-api:0.4.0")
+    testImplementation("org.tensorflow:tensorflow-core-platform:0.4.0")
 }
 
 readme {

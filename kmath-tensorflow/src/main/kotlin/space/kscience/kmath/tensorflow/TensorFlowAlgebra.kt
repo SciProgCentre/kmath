@@ -12,6 +12,7 @@ import org.tensorflow.op.core.Max
 import org.tensorflow.op.core.Min
 import org.tensorflow.op.core.Sum
 import org.tensorflow.types.TInt32
+import org.tensorflow.types.family.TNumber
 import org.tensorflow.types.family.TType
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -29,6 +30,9 @@ internal val <T> NdArray<T>.scalar: T get() = getObject()
 
 public sealed interface TensorFlowTensor<T> : Tensor<T>
 
+/**
+ * Static (eager) in-memory TensorFlow tensor
+ */
 @JvmInline
 public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T> {
     override val shape: Shape get() = tensor.shape().asArray().toIntArray()
@@ -42,6 +46,11 @@ public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T>
     }
 }
 
+/**
+ * Lazy graph-based TensorFlow tensor. The tensor is actualized on call.
+ *
+ * If the tensor is used for intermediate operations, actualizing it could impact performance.
+ */
 public abstract class TensorFlowOutput<T, TT : TType>(
     protected val graph: Graph,
     output: Output<TT>,
@@ -72,11 +81,11 @@ public abstract class TensorFlowOutput<T, TT : TType>(
 }
 
 
-public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal constructor(
+public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal constructor(
     protected val graph: Graph,
 ) : TensorAlgebra<T, A> {
 
-    protected val ops: Ops by lazy { Ops.create(graph) }
+    public val ops: Ops by lazy { Ops.create(graph) }
 
     protected abstract fun StructureND<T>.asTensorFlow(): TensorFlowOutput<T, TT>
 
@@ -87,7 +96,10 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
     override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1))
         get(Shape(0)) else null
 
-    private inline fun StructureND<T>.biOp(
+    /**
+     * Perform binary lazy operation on tensor. Both arguments are implicitly converted
+     */
+    public fun StructureND<T>.operate(
         other: StructureND<T>,
         operation: (left: Operand<TT>, right: Operand<TT>) -> Operand<TT>,
     ): TensorFlowOutput<T, TT> {
@@ -96,7 +108,7 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         return operation(left, right).asOutput().wrap()
     }
 
-    private inline fun T.biOp(
+    public fun T.operate(
         other: StructureND<T>,
         operation: (left: Operand<TT>, right: Operand<TT>) -> Operand<TT>,
     ): TensorFlowOutput<T, TT> {
@@ -105,7 +117,7 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         return operation(left, right).asOutput().wrap()
     }
 
-    private inline fun StructureND<T>.biOp(
+    public fun StructureND<T>.operate(
         value: T,
         operation: (left: Operand<TT>, right: Operand<TT>) -> Operand<TT>,
     ): TensorFlowOutput<T, TT> {
@@ -114,7 +126,7 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         return operation(left, right).asOutput().wrap()
     }
 
-    private inline fun Tensor<T>.inPlaceOp(
+    public fun Tensor<T>.operateInPlace(
         other: StructureND<T>,
         operation: (left: Operand<TT>, right: Operand<TT>) -> Operand<TT>,
     ): Unit {
@@ -124,7 +136,7 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         origin.output = operation(left, right).asOutput()
     }
 
-    private inline fun Tensor<T>.inPlaceOp(
+    public fun Tensor<T>.operateInPlace(
         value: T,
         operation: (left: Operand<TT>, right: Operand<TT>) -> Operand<TT>,
     ): Unit {
@@ -134,61 +146,61 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         origin.output = operation(left, right).asOutput()
     }
 
-    private inline fun StructureND<T>.unOp(operation: (Operand<TT>) -> Operand<TT>): TensorFlowOutput<T, TT> =
+    public fun StructureND<T>.operate(operation: (Operand<TT>) -> Operand<TT>): TensorFlowOutput<T, TT> =
         operation(asTensorFlow().output).asOutput().wrap()
 
-    override fun T.plus(arg: StructureND<T>): TensorFlowOutput<T, TT> = biOp(arg, ops.math::add)
+    override fun T.plus(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::add)
 
-    override fun StructureND<T>.plus(arg: T): TensorFlowOutput<T, TT> = biOp(arg, ops.math::add)
+    override fun StructureND<T>.plus(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::add)
 
-    override fun StructureND<T>.plus(arg: StructureND<T>): TensorFlowOutput<T, TT> = biOp(arg, ops.math::add)
+    override fun StructureND<T>.plus(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::add)
 
-    override fun Tensor<T>.plusAssign(value: T): Unit = inPlaceOp(value, ops.math::add)
+    override fun Tensor<T>.plusAssign(value: T): Unit = operateInPlace(value, ops.math::add)
 
-    override fun Tensor<T>.plusAssign(arg: StructureND<T>): Unit = inPlaceOp(arg, ops.math::add)
+    override fun Tensor<T>.plusAssign(arg: StructureND<T>): Unit = operateInPlace(arg, ops.math::add)
 
-    override fun StructureND<T>.minus(arg: T): TensorFlowOutput<T, TT> = biOp(arg, ops.math::sub)
+    override fun StructureND<T>.minus(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::sub)
 
-    override fun StructureND<T>.minus(arg: StructureND<T>): TensorFlowOutput<T, TT> = biOp(arg, ops.math::sub)
+    override fun StructureND<T>.minus(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::sub)
 
-    override fun T.minus(arg: StructureND<T>): Tensor<T> = biOp(arg, ops.math::sub)
+    override fun T.minus(arg: StructureND<T>): Tensor<T> = operate(arg, ops.math::sub)
 
-    override fun Tensor<T>.minusAssign(value: T): Unit = inPlaceOp(value, ops.math::sub)
+    override fun Tensor<T>.minusAssign(value: T): Unit = operateInPlace(value, ops.math::sub)
 
-    override fun Tensor<T>.minusAssign(arg: StructureND<T>): Unit = inPlaceOp(arg, ops.math::sub)
+    override fun Tensor<T>.minusAssign(arg: StructureND<T>): Unit = operateInPlace(arg, ops.math::sub)
 
-    override fun T.times(arg: StructureND<T>): TensorFlowOutput<T, TT> = biOp(arg, ops.math::mul)
+    override fun T.times(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::mul)
 
-    override fun StructureND<T>.times(arg: T): TensorFlowOutput<T, TT> = biOp(arg, ops.math::mul)
+    override fun StructureND<T>.times(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::mul)
 
-    override fun StructureND<T>.times(arg: StructureND<T>): TensorFlowOutput<T, TT> = biOp(arg, ops.math::mul)
+    override fun StructureND<T>.times(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::mul)
 
-    override fun Tensor<T>.timesAssign(value: T): Unit = inPlaceOp(value, ops.math::mul)
+    override fun Tensor<T>.timesAssign(value: T): Unit = operateInPlace(value, ops.math::mul)
 
-    override fun Tensor<T>.timesAssign(arg: StructureND<T>): Unit = inPlaceOp(arg, ops.math::mul)
+    override fun Tensor<T>.timesAssign(arg: StructureND<T>): Unit = operateInPlace(arg, ops.math::mul)
 
-    override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = unOp(ops.math::neg)
+    override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = operate(ops.math::neg)
 
-    override fun Tensor<T>.get(i: Int): Tensor<T> = unOp {
+    override fun Tensor<T>.get(i: Int): Tensor<T> = operate {
         TODO("Not yet implemented")
     }
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = unOp {
+    override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = operate {
         ops.linalg.transpose(it, ops.constant(intArrayOf(i, j)))
     }
 
-    override fun Tensor<T>.view(shape: IntArray): Tensor<T> = unOp {
+    override fun Tensor<T>.view(shape: IntArray): Tensor<T> = operate {
         ops.reshape(it, ops.constant(shape))
     }
 
-    override fun Tensor<T>.viewAs(other: StructureND<T>): Tensor<T> = biOp(other) { l, r ->
+    override fun Tensor<T>.viewAs(other: StructureND<T>): Tensor<T> = operate(other) { l, r ->
         ops.reshape(l, ops.shape(r))
     }
 
-    override fun StructureND<T>.dot(other: StructureND<T>): TensorFlowOutput<T, TT> = biOp(other) { l, r ->
+    override fun StructureND<T>.dot(other: StructureND<T>): TensorFlowOutput<T, TT> = operate(other) { l, r ->
         ops.linalg.matMul(
-            if (l.asTensor().shape().numDimensions() == 1) ops.expandDims(l,ops.constant(0)) else l,
-            if (r.asTensor().shape().numDimensions() == 1) ops.expandDims(r,ops.constant(-1)) else r)
+            if (l.asTensor().shape().numDimensions() == 1) ops.expandDims(l, ops.constant(0)) else l,
+            if (r.asTensor().shape().numDimensions() == 1) ops.expandDims(r, ops.constant(-1)) else r)
     }
 
     override fun diagonalEmbedding(
@@ -196,31 +208,31 @@ public abstract class TensorFlowAlgebra<T, TT : TType, A : Ring<T>> internal con
         offset: Int,
         dim1: Int,
         dim2: Int,
-    ): TensorFlowOutput<T, TT> = diagonalEntries.unOp {
-        TODO()
+    ): TensorFlowOutput<T, TT> = diagonalEntries.operate {
+        TODO("Not yet implemented")
     }
 
-    override fun StructureND<T>.sum(): T = unOp {
+    override fun StructureND<T>.sum(): T = operate {
         ops.sum(it, ops.constant(intArrayOf()))
     }.value()
 
-    override fun StructureND<T>.sum(dim: Int, keepDim: Boolean): TensorFlowOutput<T, TT> = unOp {
+    override fun StructureND<T>.sum(dim: Int, keepDim: Boolean): TensorFlowOutput<T, TT> = operate {
         ops.sum(it, ops.constant(dim), Sum.keepDims(keepDim))
     }
 
-    override fun StructureND<T>.min(): T = unOp {
+    override fun StructureND<T>.min(): T = operate {
         ops.min(it, ops.constant(intArrayOf()))
     }.value()
 
-    override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T> = unOp {
+    override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T> = operate {
         ops.min(it, ops.constant(dim), Min.keepDims(keepDim))
     }
 
-    override fun StructureND<T>.max(): T = unOp {
+    override fun StructureND<T>.max(): T = operate {
         ops.max(it, ops.constant(intArrayOf()))
     }.value()
 
-    override fun StructureND<T>.max(dim: Int, keepDim: Boolean): Tensor<T> = unOp {
+    override fun StructureND<T>.max(dim: Int, keepDim: Boolean): Tensor<T> = operate {
         ops.max(it, ops.constant(dim), Max.keepDims(keepDim))
     }
 

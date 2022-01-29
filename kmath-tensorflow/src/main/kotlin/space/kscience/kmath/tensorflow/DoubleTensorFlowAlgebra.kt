@@ -11,6 +11,7 @@ import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.PowerOperations
 
 public class DoubleTensorFlowOutput(
     graph: Graph,
@@ -23,7 +24,7 @@ public class DoubleTensorFlowOutput(
 
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
-) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph) {
+) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph), PowerOperations<StructureND<Double>> {
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
@@ -57,9 +58,22 @@ public class DoubleTensorFlowAlgebra internal constructor(
 
     override fun const(value: Double): Constant<TFloat64> = ops.constant(value)
 
+    override fun divide(
+        left: StructureND<Double>,
+        right: StructureND<Double>,
+    ): TensorFlowOutput<Double, TFloat64> = left.operate(right) { l, r ->
+        ops.math.div(l, r)
+    }
 
+    override fun power(arg: StructureND<Double>, pow: Number): TensorFlowOutput<Double, TFloat64> =
+        arg.operate { ops.math.pow(it, const(pow.toDouble())) }
 }
 
+/**
+ * Compute a tensor with TensorFlow in a single run.
+ *
+ * The resulting tensor is available outside of scope
+ */
 public fun DoubleField.produceWithTF(
     block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
 ): StructureND<Double> = Graph().use { graph ->
@@ -67,6 +81,11 @@ public fun DoubleField.produceWithTF(
     scope.export(scope.block())
 }
 
+/**
+ * Compute several outputs with TensorFlow in a single run.
+ *
+ * The resulting tensors are available outside of scope
+ */
 public fun DoubleField.produceMapWithTF(
     block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
 ): Map<Symbol, StructureND<Double>> = Graph().use { graph ->
