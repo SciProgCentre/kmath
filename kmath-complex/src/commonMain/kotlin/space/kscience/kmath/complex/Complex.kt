@@ -41,7 +41,7 @@ public val Complex.r: Double
  * An angle between vector represented by complex number and X axis.
  */
 public val Complex.theta: Double
-    get() = atan(im / re)
+    get() = atan2(im, re)
 
 private val PI_DIV_2 = Complex(PI / 2, 0)
 
