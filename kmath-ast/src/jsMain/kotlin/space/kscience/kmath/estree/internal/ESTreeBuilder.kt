@@ -61,7 +61,7 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         }
     }
 
-    fun variable(name: String): BaseExpression = call(getOrFail, Identifier("arguments"), SimpleLiteral(name))
+    fun variable(name: Symbol): BaseExpression = call(getOrFail, Identifier("arguments"), SimpleLiteral(name.identity))
 
     fun call(function: Function<T>, vararg args: BaseExpression): BaseExpression = SimpleCallExpression(
         optional = false,

@@ -247,6 +247,12 @@ One can still use generic algebras though.
 > **Maturity**: PROTOTYPE
 <hr/>
 
+* ### [kmath-tensorflow](kmath-tensorflow)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
 * ### [kmath-tensors](kmath-tensors)
 > 
 >

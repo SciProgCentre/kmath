@@ -34,12 +34,12 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         { left, right ->
             Expression { arguments ->
-                algebra.binaryOperationFunction(operation)(left.invoke(arguments), right.invoke(arguments))
+                algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
             }
         }
 
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
-        Expression { arguments -> algebra.unaryOperationFunction(operation)(arg.invoke(arguments)) }
+        Expression { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
     }
 }
 
