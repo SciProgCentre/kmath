@@ -20,7 +20,7 @@ dependencies {
 
 val home: String = System.getProperty("user.home")
 val javaHome: String = System.getProperty("java.home")
-val thirdPartyDir = "$home/.konan/third-party/noa-v0.0.1"
+val thirdPartyDir = "$home/.kmath/third-party/noa-v0.0.1"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
 val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath"
 
@@ -72,8 +72,8 @@ val downloadClang by tasks.registering(Download::class) {
 }
 
 val downloadTorch by tasks.registering(Download::class) {
-    val torchVersion = "$torchArchive-shared-with-deps-1.9.0%2B"
-    val cudaUrl = "https://download.pytorch.org/libtorch/cu111/${torchVersion}cu111.zip"
+    val torchVersion = "$torchArchive-shared-with-deps-1.10.2%2B"
+    val cudaUrl = "https://download.pytorch.org/libtorch/cu113/${torchVersion}cu113.zip"
     val cpuUrl = "https://download.pytorch.org/libtorch/cpu/${torchVersion}cpu.zip"
     val url = if (cudaFound) cudaUrl else cpuUrl
     src(url)

@@ -26,6 +26,9 @@ $ ./gradlew -Dorg.gradle.java.home=/path/to/local/jdk -q publishToMavenLocal
 ```
 This will fetch and build the `JNI` wrapper `jnoa`. 
 
+The library has been tested with
+[graalvm-ce-java11-linux-amd64-22.0.0.2.](https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-linux-amd64-22.0.0.2.tar.gz)
+
 In your own application add the local dependency:
 ```kotlin
 repositories {
@@ -34,12 +37,12 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-noa:0.3.0-dev-14")
+    implementation("space.kscience:kmath-noa:0.3.0-dev-17")
 }
 ```
 To load the native library you will need to add to the VM options:
 ```
--Djava.library.path=${HOME}/.konan/third-party/noa-v0.0.1/cpp-build/jnoa
+-Djava.library.path=${HOME}/.kmath/third-party/noa-v0.0.1/cpp-build/jnoa
 ```
 
 ## Usage
