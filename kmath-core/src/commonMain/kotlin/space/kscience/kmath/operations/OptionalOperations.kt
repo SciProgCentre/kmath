@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
@@ -75,13 +75,20 @@ public interface TrigonometricOperations<T> : Algebra<T> {
 }
 
 /**
+ * Check if number is an integer from platform point of view
+ */
+public expect fun Number.isInteger(): Boolean
+
+/**
  * A context extension to include power operations based on exponentiation.
  *
  * @param T the type of element of this structure.
  */
-public interface PowerOperations<T> : Algebra<T> {
+public interface PowerOperations<T> : FieldOps<T> {
+
     /**
-     * Raises [arg] to the power [pow].
+     * Raises [arg] to a power if possible (negative number could not be raised to a fractional power).
+     * Throws [IllegalArgumentException] if not possible.
      */
     public fun power(arg: T, pow: Number): T
 
@@ -107,6 +114,7 @@ public interface PowerOperations<T> : Algebra<T> {
         public const val SQRT_OPERATION: String = "sqrt"
     }
 }
+
 
 /**
  * A container for operations related to `exp` and `ln` functions.

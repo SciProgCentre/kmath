@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.benchmarks
@@ -11,6 +11,7 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
@@ -35,7 +36,30 @@ internal class ExpressionsInterpretersBenchmark {
      * Benchmark case for [Expression] created with [compileToExpression].
      */
     @Benchmark
-    fun asmExpression(blackhole: Blackhole) = invokeAndSum(asm, blackhole)
+    fun asmGenericExpression(blackhole: Blackhole) = invokeAndSum(asmGeneric, blackhole)
+
+    /**
+     * Benchmark case for [Expression] created with [compileToExpression].
+     */
+    @Benchmark
+    fun asmPrimitiveExpressionArray(blackhole: Blackhole) {
+        val random = Random(0)
+        var sum = 0.0
+        val m = DoubleArray(1)
+
+        repeat(times) {
+            m[xIdx] = random.nextDouble()
+            sum += asmPrimitive(m)
+        }
+
+        blackhole.consume(sum)
+    }
+
+    /**
+     * Benchmark case for [Expression] created with [compileToExpression].
+     */
+    @Benchmark
+    fun asmPrimitiveExpression(blackhole: Blackhole) = invokeAndSum(asmPrimitive, blackhole)
 
     /**
      * Benchmark case for [Expression] implemented manually with `kotlin.math` functions.
@@ -62,9 +86,11 @@ internal class ExpressionsInterpretersBenchmark {
     private fun invokeAndSum(expr: Expression<Double>, blackhole: Blackhole) {
         val random = Random(0)
         var sum = 0.0
+        val m = HashMap<Symbol, Double>()
 
         repeat(times) {
-            sum += expr(x to random.nextDouble())
+            m[x] = random.nextDouble()
+            sum += expr(m)
         }
 
         blackhole.consume(sum)
@@ -72,7 +98,6 @@ internal class ExpressionsInterpretersBenchmark {
 
     private companion object {
         private val x by symbol
-        private val algebra = DoubleField
         private const val times = 1_000_000
 
         private val functional = DoubleField.expression {
@@ -85,7 +110,11 @@ internal class ExpressionsInterpretersBenchmark {
         }
 
         private val mst = node.toExpression(DoubleField)
-        private val asm = node.compileToExpression(DoubleField)
+
+        private val asmPrimitive = node.compileToExpression(DoubleField)
+        private val xIdx = asmPrimitive.indexer.indexOf(x)
+
+        private val asmGeneric = node.compileToExpression(DoubleField as Algebra<Double>)
 
         private val raw = Expression<Double> { args ->
             val x = args[x]!!

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -50,7 +51,7 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
 /**
  * Inline map
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
     buffer: Buffer<T>,
     crossinline block: A.(T) -> T
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(buffer[it]) }
@@ -58,7 +59,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
 /**
  * Inline map
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
     buffer: Buffer<T>,
     crossinline block: A.(index: Int, arg: T) -> T
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(it, buffer[it]) }
@@ -66,7 +67,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
 /**
  * Inline zip
  */
-public inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
+private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     l: Buffer<T>,
     r: Buffer<T>,
     crossinline block: A.(l: T, r: T) -> T
@@ -126,7 +127,7 @@ public fun <T, A : ExponentialOperations<T>> BufferAlgebra<T, A>.atanh(arg: Buff
     mapInline(arg) { atanh(it) }
 
 public fun <T, A : PowerOperations<T>> BufferAlgebra<T, A>.pow(arg: Buffer<T>, pow: Number): Buffer<T> =
-    mapInline(arg) { power(it, pow) }
+    mapInline(arg) {it.pow(pow) }
 
 
 public open class BufferRingOps<T, A: Ring<T>>(

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.commons.random
@@ -38,10 +38,7 @@ public class CMRandomGeneratorWrapper(
 
     override fun nextInt(): Int = generator.nextInt()
     override fun nextInt(n: Int): Int = generator.nextInt(n)
-
-    @PerformancePitfall
     override fun nextGaussian(): Double = runBlocking { GaussianSampler(0.0, 1.0).next(generator) }
-
     override fun nextDouble(): Double = generator.nextDouble()
     override fun nextLong(): Long = generator.nextLong()
 }

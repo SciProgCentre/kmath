@@ -20,7 +20,7 @@ kotlin.js {
 kotlin.sourceSets {
     filter { it.name.contains("test", true) }
         .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
-        .forEach { it.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI") }
+        .forEach { it.optIn("space.kscience.kmath.misc.UnstableKMathAPI") }
 
     commonMain {
         dependencies {
@@ -54,6 +54,11 @@ kotlin.sourceSets {
 tasks.dokkaHtml {
     dependsOn(tasks.build)
 }
+
+if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
+    tasks.jvmTest {
+        jvmArgs = (jvmArgs ?: emptyList()) + listOf("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
+    }
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL

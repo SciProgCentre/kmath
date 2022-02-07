@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.histogram
@@ -39,7 +39,7 @@ public class TreeHistogram(
 @PublishedApi
 internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
 
-    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.real()) :
+    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.double()) :
         ClosedFloatingPointRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()

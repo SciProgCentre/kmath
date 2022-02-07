@@ -1,12 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 
 /**
  * Stub for DSL the [Algebra] is.
@@ -257,6 +258,40 @@ public interface Ring<T> : Group<T>, RingOps<T> {
      * The neutral element of multiplication
      */
     public val one: T
+
+    /**
+     * Raises [arg] to the integer power [pow].
+     */
+    public fun power(arg: T, pow: UInt): T = optimizedPower(arg, pow)
+
+    public companion object{
+        /**
+         * Raises [arg] to the non-negative integer power [exponent].
+         *
+         * Special case: 0 ^ 0 is 1.
+         *
+         * @receiver the algebra to provide multiplication.
+         * @param arg the base.
+         * @param exponent the exponent.
+         * @return the base raised to the power.
+         * @author Evgeniy Zhelenskiy
+         */
+        internal fun <T> Ring<T>.optimizedPower(arg: T, exponent: UInt): T = when {
+            arg == zero && exponent > 0U -> zero
+            arg == one -> arg
+            arg == -one -> powWithoutOptimization(arg, exponent % 2U)
+            else -> powWithoutOptimization(arg, exponent)
+        }
+
+        private fun <T> Ring<T>.powWithoutOptimization(base: T, exponent: UInt): T = when (exponent) {
+            0U -> one
+            1U -> base
+            else -> {
+                val pre = powWithoutOptimization(base, exponent shr 1).let { it * it }
+                if (exponent and 1U == 0U) pre else pre * base
+            }
+        }
+    }
 }
 
 /**
@@ -307,4 +342,24 @@ public interface FieldOps<T> : RingOps<T> {
  */
 public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlgebra<T> {
     override fun number(value: Number): T = scale(one, value.toDouble())
+
+    public fun power(arg: T, pow: Int): T = optimizedPower(arg, pow)
+
+    public companion object{
+        /**
+         * Raises [arg] to the integer power [exponent].
+         *
+         * Special case: 0 ^ 0 is 1.
+         *
+         * @receiver the algebra to provide multiplication and division.
+         * @param arg the base.
+         * @param exponent the exponent.
+         * @return the base raised to the power.
+         * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
+         */
+        private fun <T> Field<T>.optimizedPower(arg: T, exponent: Int): T = when {
+            exponent < 0 -> one / (this as Ring<T>).optimizedPower(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+            else -> (this as Ring<T>).optimizedPower(arg, exponent.toUInt())
+        }
+    }
 }

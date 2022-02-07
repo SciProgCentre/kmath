@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.api
@@ -208,7 +208,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      *
      * 3. If the first argument is 1-dimensional and the second argument is 2-dimensional,
      * a 1 is prepended to its dimension for the purpose of the matrix multiply.
-     * After the matrix multiply, the prepended dimension is removed.
+     * After the matrix multiply, depending on the implementation the prepended dimension might be removed.
      *
      * 4. If the first argument is 2-dimensional and the second argument is 1-dimensional,
      * the matrix-vector product is returned.

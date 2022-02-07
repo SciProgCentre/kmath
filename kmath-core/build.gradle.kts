@@ -6,6 +6,13 @@ plugins {
 }
 
 kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach {
+            it.optIn("space.kscience.kmath.misc.PerformancePitfall")
+            it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        }
+
     commonMain {
         dependencies {
             api(project(":kmath-memory"))
