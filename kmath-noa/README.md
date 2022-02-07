@@ -27,7 +27,7 @@ $ ./gradlew -Dorg.gradle.java.home=/path/to/local/jdk -q publishToMavenLocal
 This will fetch and build the `JNI` wrapper `jnoa`. 
 
 The library has been tested with
-[graalvm-ce-java11-linux-amd64-22.0.0.2.](https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-linux-amd64-22.0.0.2.tar.gz)
+[graalvm-ce-java11-linux-amd64-22.0.0.2.](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-22.0.0.2)
 
 In your own application add the local dependency:
 ```kotlin
