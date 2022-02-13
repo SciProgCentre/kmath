@@ -241,6 +241,16 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         ops.math.argMax(asTensorFlow().output, ops.constant(dim), TInt32::class.java).output()
     ).actualTensor
 
+//    private val symbolCache = HashMap<String, TensorFlowOutput<T, TT>>()
+//
+//    override fun bindSymbolOrNull(value: String): TensorFlowOutput<T, TT>? {
+//        return symbolCache.getOrPut(value){ops.var}
+//    }
+//
+//    public fun StructureND<T>.grad(
+//
+//    )= operate { ops.gradients() }
+
     @OptIn(UnstableKMathAPI::class)
     override fun export(arg: StructureND<T>): StructureND<T> =
         if (arg is TensorFlowOutput<T, *>) arg.actualTensor else arg
