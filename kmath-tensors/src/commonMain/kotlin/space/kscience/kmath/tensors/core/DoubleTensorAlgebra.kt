@@ -421,7 +421,7 @@ public open class DoubleTensorAlgebra :
 
         for ((res, ab) in resTensor.matrixSequence().zip(newThis.matrixSequence().zip(newOther.matrixSequence()))) {
             val (a, b) = ab
-            dotTo(a.as2D(), b.as2D(), res.as2D(), l, m1, n)
+            dotTo(a, b, res, l, m1, n)
         }
 
         return if (penultimateDim) {
