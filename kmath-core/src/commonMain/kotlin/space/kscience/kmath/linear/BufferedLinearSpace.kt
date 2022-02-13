@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.linear
@@ -29,6 +29,7 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
     override fun buildVector(size: Int, initializer: A.(Int) -> T): Point<T> =
         bufferAlgebra.buffer(size) { elementAlgebra.initializer(it) }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.unaryMinus(): Matrix<T> = ndAlgebra {
         asND().map { -it }.as2D()
     }
@@ -83,6 +84,7 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Matrix<T>.times(value: T): Matrix<T> = ndAlgebra {
         asND().map { it * value }.as2D()
     }

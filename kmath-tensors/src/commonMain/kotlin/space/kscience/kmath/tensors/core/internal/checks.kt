@@ -1,10 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -25,7 +26,7 @@ internal fun checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray) =
         "Inconsistent shape ${shape.toList()} for buffer of size ${buffer.size} provided"
     }
 
-internal fun <T> checkShapesCompatible(a: Tensor<T>, b: Tensor<T>) =
+internal fun <T> checkShapesCompatible(a: StructureND<T>, b: StructureND<T>) =
     check(a.shape contentEquals b.shape) {
         "Incompatible shapes ${a.shape.toList()} and ${b.shape.toList()} "
     }

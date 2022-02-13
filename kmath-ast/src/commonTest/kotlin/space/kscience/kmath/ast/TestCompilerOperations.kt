@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.ast
@@ -42,6 +42,30 @@ internal class TestCompilerOperations {
     fun testCosine() = runCompilerTest {
         val expr = MstExtendedField { cos(x) }.compileToExpression(DoubleField)
         assertEquals(1.0, expr(x to 0.0))
+    }
+
+    @Test
+    fun testTangent() = runCompilerTest {
+        val expr = MstExtendedField { tan(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
+    }
+
+    @Test
+    fun testArcSine() = runCompilerTest {
+        val expr = MstExtendedField { asin(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
+    }
+
+    @Test
+    fun testArcCosine() = runCompilerTest {
+        val expr = MstExtendedField { acos(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 1.0))
+    }
+
+    @Test
+    fun testAreaHyperbolicSine() = runCompilerTest {
+        val expr = MstExtendedField { asinh(x) }.compileToExpression(DoubleField)
+        assertEquals(0.0, expr(x to 0.0))
     }
 
     @Test

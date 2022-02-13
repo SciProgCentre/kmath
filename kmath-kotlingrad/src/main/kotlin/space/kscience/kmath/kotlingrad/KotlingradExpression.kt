@@ -1,12 +1,12 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.api.SFun
-import edu.umontreal.kotlingrad.api.SVar
+import ai.hypergraph.kotlingrad.api.SFun
+import ai.hypergraph.kotlingrad.api.SVar
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.NumericAlgebra
 

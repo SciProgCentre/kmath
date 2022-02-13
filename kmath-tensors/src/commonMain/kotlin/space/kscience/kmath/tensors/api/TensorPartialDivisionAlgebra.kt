@@ -1,9 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.api
+
+import space.kscience.kmath.nd.FieldOpsND
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.Field
 
 /**
  * Algebra over a field with partial division on [Tensor].
@@ -11,33 +15,35 @@ package space.kscience.kmath.tensors.api
  *
  * @param T the type of items closed under division in the tensors.
  */
-public interface TensorPartialDivisionAlgebra<T> : TensorAlgebra<T> {
+public interface TensorPartialDivisionAlgebra<T, A : Field<T>> : TensorAlgebra<T, A>, FieldOpsND<T, A> {
 
     /**
-     * Each element of the tensor [other] is divided by this value.
+     * Each element of the tensor [arg] is divided by this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to divide by.
-     * @return the division of this value by the tensor [other].
+     * @param arg tensor to divide by.
+     * @return the division of this value by the tensor [arg].
      */
-    public operator fun T.div(other: Tensor<T>): Tensor<T>
+    override operator fun T.div(arg: StructureND<T>): Tensor<T>
 
     /**
-     * Divide by the scalar [value] each element of this tensor returns a new resulting tensor.
+     * Divide by the scalar [arg] each element of this tensor returns a new resulting tensor.
      *
-     * @param value the number to divide by each element of this tensor.
-     * @return the division of this tensor by the [value].
+     * @param arg the number to divide by each element of this tensor.
+     * @return the division of this tensor by the [arg].
      */
-    public operator fun Tensor<T>.div(value: T): Tensor<T>
+    override operator fun StructureND<T>.div(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is divided by each element of this tensor.
+     * Each element of the tensor [arg] is divided by each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be divided by.
-     * @return the division of this tensor by [other].
+     * @param arg tensor to be divided by.
+     * @return the division of this tensor by [arg].
      */
-    public operator fun Tensor<T>.div(other: Tensor<T>): Tensor<T>
+    override operator fun StructureND<T>.div(arg: StructureND<T>): Tensor<T>
+
+    override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> = left.div(right)
 
     /**
      * Divides by the scalar [value] each element of this tensor.
@@ -47,9 +53,9 @@ public interface TensorPartialDivisionAlgebra<T> : TensorAlgebra<T> {
     public operator fun Tensor<T>.divAssign(value: T)
 
     /**
-     * Each element of this tensor is divided by each element of the [other] tensor.
+     * Each element of this tensor is divided by each element of the [arg] tensor.
      *
-     * @param other tensor to be divided by.
+     * @param arg tensor to be divided by.
      */
-    public operator fun Tensor<T>.divAssign(other: Tensor<T>)
+    public operator fun Tensor<T>.divAssign(arg: StructureND<T>)
 }

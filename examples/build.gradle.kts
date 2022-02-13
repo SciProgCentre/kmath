@@ -5,12 +5,7 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://repo.kotlin.link")
-    maven("https://clojars.org/repo")
-    maven("https://jitpack.io")
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
-    maven("http://logicrunch.research.it.uu.se/maven") {
-        isAllowInsecureProtocol = true
-    }
 }
 
 dependencies {
@@ -32,7 +27,7 @@ dependencies {
     //jafama
     implementation(project(":kmath-jafama"))
     //multik
-    implementation(projects.kmathMultik)
+    implementation(project(":kmath-multik"))
 
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
@@ -57,16 +52,16 @@ dependencies {
 
 kotlin.sourceSets.all {
     with(languageSettings) {
-        useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-        useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
-        useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
+        optIn("kotlin.contracts.ExperimentalContracts")
+        optIn("kotlin.ExperimentalUnsignedTypes")
+        optIn("space.kscience.kmath.misc.UnstableKMathAPI")
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions{
+    kotlinOptions {
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
     }
 }
 

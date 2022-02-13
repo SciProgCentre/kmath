@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.jafama
@@ -57,10 +57,10 @@ public object JafamaDoubleField : ExtendedField<Double>, Norm<Double, Double>, S
     override inline fun norm(arg: Double): Double = FastMath.abs(arg)
 
     override inline fun Double.unaryMinus(): Double = -this
-    override inline fun Double.plus(other: Double): Double = this + other
-    override inline fun Double.minus(other: Double): Double = this - other
-    override inline fun Double.times(other: Double): Double = this * other
-    override inline fun Double.div(other: Double): Double = this / other
+    override inline fun Double.plus(arg: Double): Double = this + arg
+    override inline fun Double.minus(arg: Double): Double = this - arg
+    override inline fun Double.times(arg: Double): Double = this * arg
+    override inline fun Double.div(arg: Double): Double = this / arg
 }
 
 /**
@@ -108,8 +108,8 @@ public object StrictJafamaDoubleField : ExtendedField<Double>, Norm<Double, Doub
     override inline fun norm(arg: Double): Double = StrictFastMath.abs(arg)
 
     override inline fun Double.unaryMinus(): Double = -this
-    override inline fun Double.plus(other: Double): Double = this + other
-    override inline fun Double.minus(other: Double): Double = this - other
-    override inline fun Double.times(other: Double): Double = this * other
-    override inline fun Double.div(other: Double): Double = this / other
+    override inline fun Double.plus(arg: Double): Double = this + arg
+    override inline fun Double.minus(arg: Double): Double = this - arg
+    override inline fun Double.times(arg: Double): Double = this * arg
+    override inline fun Double.div(arg: Double): Double = this / arg
 }

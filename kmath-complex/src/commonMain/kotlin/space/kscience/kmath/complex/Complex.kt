@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.complex
@@ -41,7 +41,7 @@ public val Complex.r: Double
  * An angle between vector represented by complex number and X axis.
  */
 public val Complex.theta: Double
-    get() = atan(im / re)
+    get() = atan2(im, re)
 
 private val PI_DIV_2 = Complex(PI / 2, 0)
 

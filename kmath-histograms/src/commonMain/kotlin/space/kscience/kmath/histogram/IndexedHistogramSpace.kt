@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.histogram
@@ -38,10 +38,9 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
     override val dimension: Int get() = context.shape.size
 
     override val bins: Iterable<Bin<T>>
-        get() = DefaultStrides(context.shape).indices().map {
+        get() = DefaultStrides(context.shape).asSequence().map {
             context.produceBin(it, values[it])
         }.asIterable()
-
 }
 
 /**

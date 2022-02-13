@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
@@ -38,8 +38,8 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     override operator fun MST.unaryMinus(): MST.Unary =
         unaryOperationFunction(GroupOps.MINUS_OPERATION)(this)
 
-    override operator fun MST.minus(other: MST): MST.Binary =
-        binaryOperationFunction(GroupOps.MINUS_OPERATION)(this, other)
+    override operator fun MST.minus(arg: MST): MST.Binary =
+        binaryOperationFunction(GroupOps.MINUS_OPERATION)(this, arg)
 
     override fun scale(a: MST, value: Double): MST.Binary =
         binaryOperationFunction(RingOps.TIMES_OPERATION)(a, number(value))
@@ -72,7 +72,7 @@ public object MstRing : Ring<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
 
     override operator fun MST.unaryPlus(): MST.Unary = MstGroup { +this@unaryPlus }
     override operator fun MST.unaryMinus(): MST.Unary = MstGroup { -this@unaryMinus }
-    override operator fun MST.minus(other: MST): MST.Binary = MstGroup { this@minus - other }
+    override operator fun MST.minus(arg: MST): MST.Binary = MstGroup { this@minus - arg }
 
     override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstGroup.binaryOperationFunction(operation)
@@ -103,7 +103,7 @@ public object MstField : Field<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
 
     override operator fun MST.unaryPlus(): MST.Unary = MstRing { +this@unaryPlus }
     override operator fun MST.unaryMinus(): MST.Unary = MstRing { -this@unaryMinus }
-    override operator fun MST.minus(other: MST): MST.Binary = MstRing { this@minus - other }
+    override operator fun MST.minus(arg: MST): MST.Binary = MstRing { this@minus - arg }
 
     override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstRing.binaryOperationFunction(operation)
@@ -144,7 +144,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     override fun divide(left: MST, right: MST): MST.Binary = MstField.divide(left, right)
     override operator fun MST.unaryPlus(): MST.Unary = MstField { +this@unaryPlus }
     override operator fun MST.unaryMinus(): MST.Unary = MstField { -this@unaryMinus }
-    override operator fun MST.minus(other: MST): MST.Binary = MstField { this@minus - other }
+    override operator fun MST.minus(arg: MST): MST.Binary = MstField { this@minus - arg }
 
     override fun power(arg: MST, pow: Number): MST.Binary =
         binaryOperationFunction(PowerOperations.POW_OPERATION)(arg, number(pow))

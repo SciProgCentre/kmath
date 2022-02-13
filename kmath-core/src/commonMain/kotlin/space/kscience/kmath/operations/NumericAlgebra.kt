@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
@@ -139,10 +139,10 @@ public interface ScaleOperations<T> : Algebra<T> {
      * Multiplication of this number by element.
      *
      * @receiver the multiplier.
-     * @param other the multiplicand.
+     * @param arg the multiplicand.
      * @return the product.
      */
-    public operator fun Number.times(other: T): T = other * this
+    public operator fun Number.times(arg: T): T = arg * this
 }
 
 /**

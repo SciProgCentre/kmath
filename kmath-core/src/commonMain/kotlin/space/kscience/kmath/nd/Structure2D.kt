@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
@@ -85,7 +85,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      */
     @PerformancePitfall
     override val rows: List<MutableStructure1D<T>>
-        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) })}
+        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) }) }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
@@ -100,7 +100,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  */
 @JvmInline
 private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
-    override val shape: IntArray get() = structure.shape
+    override val shape: Shape get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
@@ -116,9 +116,8 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
 /**
  * A 2D wrapper for a mutable nd-structure
  */
-private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>): MutableStructure2D<T>
-{
-    override val shape: IntArray get() = structure.shape
+private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure2D<T> {
+    override val shape: Shape get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
@@ -129,7 +128,7 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
         structure[index] = value
     }
 
-    override operator fun set(i: Int, j: Int, value: T){
+    override operator fun set(i: Int, j: Int, value: T) {
         structure[intArrayOf(i, j)] = value
     }
 
@@ -152,10 +151,11 @@ public fun <T> StructureND<T>.as2D(): Structure2D<T> = this as? Structure2D<T> ?
 /**
  * Represents a [StructureND] as [Structure2D]. Throws runtime error in case of dimension mismatch.
  */
-public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> = this as? MutableStructure2D<T> ?: when (shape.size) {
-    2 -> MutableStructure2DWrapper(this)
-    else -> error("Can't create 2d-structure from ${shape.size}d-structure")
-}
+public fun <T> MutableStructureND<T>.as2D(): MutableStructure2D<T> =
+    this as? MutableStructure2D<T> ?: when (shape.size) {
+        2 -> MutableStructure2DWrapper(this)
+        else -> error("Can't create 2d-structure from ${shape.size}d-structure")
+    }
 
 /**
  * Expose inner [StructureND] if possible

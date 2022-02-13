@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd4j
@@ -76,8 +76,8 @@ public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>
     override fun add(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
         left.ndArray.add(right.ndArray).wrap()
 
-    override operator fun StructureND<T>.minus(other: StructureND<T>): Nd4jArrayStructure<T> =
-        ndArray.sub(other.ndArray).wrap()
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        ndArray.sub(arg.ndArray).wrap()
 
     override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
         ndArray.neg().wrap()
@@ -155,7 +155,7 @@ public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, 
  * Represents intersection of [ExtendedField] and [Field] over [Nd4jArrayStructure].
  */
 public sealed interface Nd4jArrayExtendedFieldOps<T, out F : ExtendedField<T>> :
-    ExtendedFieldOps<StructureND<T>>, Nd4jArrayField<T, F> {
+    ExtendedFieldOps<StructureND<T>>, Nd4jArrayField<T, F>, PowerOperations<StructureND<T>> {
 
     override fun sin(arg: StructureND<T>): StructureND<T> = Transforms.sin(arg.ndArray).wrap()
     override fun cos(arg: StructureND<T>): StructureND<T> = Transforms.cos(arg.ndArray).wrap()

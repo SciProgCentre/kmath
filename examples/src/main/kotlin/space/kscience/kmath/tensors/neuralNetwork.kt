@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors
@@ -9,7 +9,7 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.toDoubleArray
+import space.kscience.kmath.tensors.core.copyArray
 import kotlin.math.sqrt
 
 const val seed = 100500L
@@ -111,7 +111,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
     private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
         val onesForAnswers = yPred.zeroesLike()
-        yTrue.toDoubleArray().forEachIndexed { index, labelDouble ->
+        yTrue.copyArray().forEachIndexed { index, labelDouble ->
             val label = labelDouble.toInt()
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
@@ -163,7 +163,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
             for ((xBatch, yBatch) in iterBatch(xTrain, yTrain)) {
                 train(xBatch, yBatch)
             }
-            println("Accuracy:${accuracy(yTrain, predict(xTrain).argMax(1, true))}")
+            println("Accuracy:${accuracy(yTrain, predict(xTrain).argMax(1, true).asDouble())}")
         }
     }
 
@@ -230,7 +230,7 @@ fun main() = BroadcastDoubleTensorAlgebra {
     val prediction = model.predict(xTest)
 
     // process raw prediction via argMax
-    val predictionLabels = prediction.argMax(1, true)
+    val predictionLabels = prediction.argMax(1, true).asDouble()
 
     // find out accuracy
     val acc = accuracy(yTest, predictionLabels)

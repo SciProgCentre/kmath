@@ -1,11 +1,11 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.kotlingrad
 
-import edu.umontreal.kotlingrad.api.*
+import ai.hypergraph.kotlingrad.api.*
 import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.ast.parseMath
 import space.kscience.kmath.expressions.MstNumericAlgebra
@@ -22,7 +22,7 @@ internal class AdaptingTests {
     fun symbol() {
         assertEquals(x.identity, x.toSVar<KMathNumber<Double, DoubleField>>().name)
         val c2 = "kitten".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        if (c2 is SVar) assertTrue(c2.name == "kitten") else fail()
+        if (c2 is SVar<*>) assertTrue(c2.name == "kitten") else fail()
     }
 
     @Test
@@ -30,17 +30,17 @@ internal class AdaptingTests {
         val c1 = MstNumericAlgebra.number(12354324)
         assertTrue(c1.toSConst<DReal>().doubleValue == 12354324.0)
         val c2 = "0.234".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        if (c2 is SConst) assertTrue(c2.doubleValue == 0.234) else fail()
+        if (c2 is SConst<*>) assertTrue(c2.doubleValue == 0.234) else fail()
         val c3 = "1e-3".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        if (c3 is SConst) assertEquals(0.001, c3.value) else fail()
+        if (c3 is SConst<*>) assertEquals(0.001, c3.value) else fail()
     }
 
     @Test
     fun simpleFunctionShape() {
         val linear = "2*x+16".parseMath().toSFun<KMathNumber<Double, DoubleField>>()
-        if (linear !is Sum) fail()
-        if (linear.left !is Prod) fail()
-        if (linear.right !is SConst) fail()
+        if (linear !is Sum<*>) fail()
+        if (linear.left !is Prod<*>) fail()
+        if (linear.right !is SConst<*>) fail()
     }
 
     @Test
@@ -62,6 +62,6 @@ internal class AdaptingTests {
             .parseMath()
             .compileToExpression(DoubleField)
 
-        assertEquals(actualDerivative(x to 0.1), expectedDerivative(x to 0.1))
+        assertEquals(actualDerivative(x to -0.1), expectedDerivative(x to -0.1))
     }
 }

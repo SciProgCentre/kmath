@@ -17,6 +17,8 @@
 - `BigInt` operation performance improvement and fixes by @zhelenskiy (#328)
 - Integration between `MST` and Symja `IExpr`
 - Complex power
+- Separate methods for UInt, Int and Number powers. NaN safety.
+- Tensorflow prototype
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -45,6 +47,7 @@
 - Buffer algebra does not require size anymore
 - Operations -> Ops
 - Default Buffer and ND algebras are now Ops and lack neutral elements (0, 1) as well as algebra-level shapes.
+- Tensor algebra takes read-only structures as input and inherits AlgebraND
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`

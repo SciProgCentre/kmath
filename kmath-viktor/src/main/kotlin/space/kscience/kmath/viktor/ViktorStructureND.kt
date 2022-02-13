@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.viktor
@@ -22,7 +22,7 @@ public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructur
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, Double>> =
-        DefaultStrides(shape).indices().map { it to get(it) }
+        DefaultStrides(shape).asSequence().map { it to get(it) }
 }
 
 public fun F64Array.asStructure(): ViktorStructureND = ViktorStructureND(this)

@@ -9,7 +9,7 @@ dependencies {
     api(project(":kmath-for-real"))
 }
 
-kscience{
+kscience {
     useHtml()
 }
 
@@ -18,7 +18,7 @@ readme {
 }
 
 kotlin.sourceSets.all {
-    languageSettings.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
+    languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
 }
 
 tasks.processJupyterApiResources {

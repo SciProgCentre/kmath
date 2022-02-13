@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
@@ -10,7 +10,7 @@ import kotlin.native.concurrent.ThreadLocal
 /**
  * A converter from linear index to multivariate index
  */
-public interface ShapeIndex{
+public interface ShapeIndexer: Iterable<IntArray>{
     public val shape: Shape
 
     /**
@@ -33,7 +33,9 @@ public interface ShapeIndex{
     /**
      * Iterate over ND indices in a natural order
      */
-    public fun indices(): Sequence<IntArray>
+    public fun asSequence(): Sequence<IntArray>
+
+    override fun iterator(): Iterator<IntArray> = asSequence().iterator()
 
     override fun equals(other: Any?): Boolean
     override fun hashCode(): Int
@@ -42,7 +44,7 @@ public interface ShapeIndex{
 /**
  * Linear transformation of indexes
  */
-public abstract class Strides: ShapeIndex {
+public abstract class Strides: ShapeIndexer {
     /**
      * Array strides
      */
@@ -58,7 +60,7 @@ public abstract class Strides: ShapeIndex {
     /**
      * Iterate over ND indices in a natural order
      */
-    public override fun indices(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
+    public override fun asSequence(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
 }
 
 /**

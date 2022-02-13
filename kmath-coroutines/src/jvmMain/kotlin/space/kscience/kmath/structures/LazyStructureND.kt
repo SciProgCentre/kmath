@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
@@ -28,7 +28,7 @@ public class LazyStructureND<out T>(
     @OptIn(PerformancePitfall::class)
     override fun elements(): Sequence<Pair<IntArray, T>> {
         val strides = DefaultStrides(shape)
-        val res = runBlocking { strides.indices().toList().map { index -> index to await(index) } }
+        val res = runBlocking { strides.asSequence().toList().map { index -> index to await(index) } }
         return res.asSequence()
     }
 }

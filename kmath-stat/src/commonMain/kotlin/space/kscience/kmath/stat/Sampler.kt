@@ -1,14 +1,17 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.stat
 
 import kotlinx.coroutines.flow.first
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.chains.collect
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.chains.combine
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.IntBuffer
 import kotlin.jvm.JvmName
 
 /**
@@ -36,7 +39,7 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
     //creating temporary storage once
     val tmp = ArrayList<T>(size)
 
-    return sample(generator).collect { chain ->
+    return sample(generator).combine { chain ->
         //clear list from previous run
         tmp.clear()
         //Fill list

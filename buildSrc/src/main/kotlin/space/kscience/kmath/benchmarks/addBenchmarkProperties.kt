@@ -1,17 +1,20 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.benchmarks
 
 import kotlinx.benchmark.gradle.BenchmarksExtension
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import ru.mipt.npm.gradle.KScienceReadmeExtension
-import java.time.*
-import java.time.format.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.SignStyle
 import java.time.temporal.ChronoField.*
 
 private val ISO_DATE_TIME: DateTimeFormatter = DateTimeFormatterBuilder().run {
@@ -47,14 +50,14 @@ fun Project.addBenchmarkProperties() {
     rootProject.subprojects.forEach { p ->
         p.extensions.findByType(KScienceReadmeExtension::class.java)?.run {
             benchmarksProject.extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
-                property("benchmark${cfg.name.replaceFirstChar(Char::uppercase)}") {
+                property("benchmark${cfg.name.capitalize()}") {
                     val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
 
                     val resDirectory = launches.listFiles()?.maxByOrNull {
                         LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
                     }
 
-                    if (resDirectory == null) {
+                    if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
                         "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
                     } else {
                         val reports =

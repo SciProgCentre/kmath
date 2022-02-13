@@ -1,11 +1,10 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.MutableBuffer
@@ -15,22 +14,17 @@ import space.kscience.kmath.structures.MutableBufferFactory
  * Represents [StructureND] over [Buffer].
  *
  * @param T the type of items.
- * @param indexes The strides to access elements of [Buffer] by linear indices.
+ * @param indices The strides to access elements of [Buffer] by linear indices.
  * @param buffer The underlying buffer.
  */
 public open class BufferND<out T>(
-    public val indexes: ShapeIndex,
+    override val indices: ShapeIndexer,
     public open val buffer: Buffer<T>,
 ) : StructureND<T> {
 
-    override operator fun get(index: IntArray): T = buffer[indexes.offset(index)]
+    override operator fun get(index: IntArray): T = buffer[indices.offset(index)]
 
-    override val shape: IntArray get() = indexes.shape
-
-    @PerformancePitfall
-    override fun elements(): Sequence<Pair<IntArray, T>> = indexes.indices().map {
-        it to this[it]
-    }
+    override val shape: IntArray get() = indices.shape
 
     override fun toString(): String = StructureND.toString(this)
 }
@@ -43,7 +37,7 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
     crossinline transform: (T) -> R,
 ): BufferND<R> {
     return if (this is BufferND<T>)
-        BufferND(this.indexes, factory.invoke(indexes.linearSize) { transform(buffer[it]) })
+        BufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
     else {
         val strides = DefaultStrides(shape)
         BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
@@ -58,11 +52,11 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
  * @param buffer The underlying buffer.
  */
 public class MutableBufferND<T>(
-    strides: ShapeIndex,
+    strides: ShapeIndexer,
     override val buffer: MutableBuffer<T>,
 ) : MutableStructureND<T>, BufferND<T>(strides, buffer) {
     override fun set(index: IntArray, value: T) {
-        buffer[indexes.offset(index)] = value
+        buffer[indices.offset(index)] = value
     }
 }
 
@@ -74,7 +68,7 @@ public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
     crossinline transform: (T) -> R,
 ): MutableBufferND<R> {
     return if (this is MutableBufferND<T>)
-        MutableBufferND(this.indexes, factory.invoke(indexes.linearSize) { transform(buffer[it]) })
+        MutableBufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
     else {
         val strides = DefaultStrides(shape)
         MutableBufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })

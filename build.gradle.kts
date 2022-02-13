@@ -1,31 +1,22 @@
-import java.net.URL
-
 plugins {
     id("ru.mipt.npm.gradle.project")
-    kotlin("jupyter.api") apply false
+    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC"
 }
 
 allprojects {
     repositories {
-        maven("https://clojars.org/repo")
-        maven("https://jitpack.io")
-
-        maven("http://logicrunch.research.it.uu.se/maven") {
-            isAllowInsecureProtocol = true
-        }
-
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-17"
+    version = "0.3.0-dev-18"
 }
 
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
-    afterEvaluate {
+    plugins.withId("org.jetbrains.dokka"){
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
             dependsOn(tasks["assemble"])
 
@@ -39,7 +30,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        URL("https://github.com/mipt-npm/${rootProject.name}/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        java.net.URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
                     )
                 }
 
@@ -64,9 +55,9 @@ subprojects {
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    vcs("https://github.com/mipt-npm/kmath")
-    space(publish = true)
-    sonatype(publish = true)
+    github("kmath")
+    space()
+    sonatype()
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 @file:JvmName("MapIntrinsics")
@@ -14,4 +14,5 @@ import space.kscience.kmath.expressions.Symbol
  *
  * @author Iaroslav Postovalov
  */
+@Suppress("unused")
 internal fun <V> Map<Symbol, V>.getOrFail(key: String): V = getValue(Symbol(key))

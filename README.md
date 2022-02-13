@@ -50,35 +50,6 @@ module definitions below. The module stability could have the following levels:
   with [binary-compatibility-validator](https://github.com/Kotlin/binary-compatibility-validator) tool.
 * **STABLE**. The API stabilized. Breaking changes are allowed only in major releases.
 
-<!--Current feature list is [here](/docs/features.md)-->
-
-
-<!--* **Array-like structures** Full support of many-dimensional array-like structures -->
-<!--including mixed arithmetic operations and function operations over arrays and numbers (with the added benefit of static type checking).-->
-
-<!--* **Histograms** Fast multi-dimensional histograms.-->
-
-<!--* **Streaming** Streaming operations on mathematical objects and objects buffers.-->
-
-<!--* **Type-safe dimensions** Type-safe dimensions for matrix operations.-->
-
-<!--* **Commons-math wrapper** It is planned to gradually wrap most parts of -->
-<!--[Apache commons-math](http://commons.apache.org/proper/commons-math/) library in Kotlin code and maybe rewrite some -->
-<!--parts to better suit the Kotlin programming paradigm, however there is no established roadmap for that. Feel free to -->
-<!--submit a feature request if you want something to be implemented first.-->
-<!--                           -->
-<!--## Planned features-->
-
-<!--* **Messaging** A mathematical notation to support multi-language and multi-node communication for mathematical tasks.-->
-
-<!--* **Array statistics** -->
-
-<!--* **Integration** Univariate and multivariate integration framework.-->
-
-<!--* **Probability and distributions**-->
-
-<!--* **Fitting** Non-linear curve fitting facilities-->
-
 ## Modules
 
 <hr/>
@@ -240,6 +211,12 @@ One can still use generic algebras though.
 > **Maturity**: DEVELOPMENT
 <hr/>
 
+* ### [kmath-multik](kmath-multik)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
 * ### [kmath-nd4j](kmath-nd4j)
 > 
 >
@@ -252,6 +229,12 @@ One can still use generic algebras though.
 
 <hr/>
 
+* ### [kmath-optimization](kmath-optimization)
+> 
+>
+> **Maturity**: EXPERIMENTAL
+<hr/>
+
 * ### [kmath-stat](kmath-stat)
 > 
 >
@@ -259,6 +242,12 @@ One can still use generic algebras though.
 <hr/>
 
 * ### [kmath-symja](kmath-symja)
+> 
+>
+> **Maturity**: PROTOTYPE
+<hr/>
+
+* ### [kmath-tensorflow](kmath-tensorflow)
 > 
 >
 > **Maturity**: PROTOTYPE
@@ -319,8 +308,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-14")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-14") for jvm-specific version
+    api("space.kscience:kmath-core:0.3.0-dev-17")
+    // api("space.kscience:kmath-core-jvm:0.3.0-dev-17") for jvm-specific version
 }
 ```
 

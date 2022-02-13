@@ -1,11 +1,13 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.api
 
-import space.kscience.kmath.operations.RingOps
+import space.kscience.kmath.nd.RingOpsND
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.Ring
 
 /**
  * Algebra over a ring on [Tensor].
@@ -13,47 +15,47 @@ import space.kscience.kmath.operations.RingOps
  *
  * @param T the type of items in the tensors.
  */
-public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
+public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     /**
      * Returns a single tensor value of unit dimension if tensor shape equals to [1].
      *
      * @return a nullable value of a potentially scalar tensor.
      */
-    public fun Tensor<T>.valueOrNull(): T?
+    public fun StructureND<T>.valueOrNull(): T?
 
     /**
      * Returns a single tensor value of unit dimension. The tensor shape must be equal to [1].
      *
      * @return the value of a scalar tensor.
      */
-    public fun Tensor<T>.value(): T =
+    public fun StructureND<T>.value(): T =
         valueOrNull() ?: throw IllegalArgumentException("Inconsistent value for tensor of with $shape shape")
 
     /**
-     * Each element of the tensor [other] is added to this value.
+     * Each element of the tensor [arg] is added to this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be added.
-     * @return the sum of this value and tensor [other].
+     * @param arg tensor to be added.
+     * @return the sum of this value and tensor [arg].
      */
-    public operator fun T.plus(other: Tensor<T>): Tensor<T>
+    override operator fun T.plus(arg: StructureND<T>): Tensor<T>
 
     /**
-     * Adds the scalar [value] to each element of this tensor and returns a new resulting tensor.
+     * Adds the scalar [arg] to each element of this tensor and returns a new resulting tensor.
      *
-     * @param value the number to be added to each element of this tensor.
-     * @return the sum of this tensor and [value].
+     * @param arg the number to be added to each element of this tensor.
+     * @return the sum of this tensor and [arg].
      */
-    public operator fun Tensor<T>.plus(value: T): Tensor<T>
+    override operator fun StructureND<T>.plus(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is added to each element of this tensor.
+     * Each element of the tensor [arg] is added to each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be added.
-     * @return the sum of this tensor and [other].
+     * @param arg tensor to be added.
+     * @return the sum of this tensor and [arg].
      */
-    override fun Tensor<T>.plus(other: Tensor<T>): Tensor<T>
+    override operator fun StructureND<T>.plus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Adds the scalar [value] to each element of this tensor.
@@ -63,37 +65,37 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
     public operator fun Tensor<T>.plusAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is added to each element of this tensor.
+     * Each element of the tensor [arg] is added to each element of this tensor.
      *
-     * @param other tensor to be added.
+     * @param arg tensor to be added.
      */
-    public operator fun Tensor<T>.plusAssign(other: Tensor<T>)
+    public operator fun Tensor<T>.plusAssign(arg: StructureND<T>)
 
     /**
-     * Each element of the tensor [other] is subtracted from this value.
+     * Each element of the tensor [arg] is subtracted from this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be subtracted.
-     * @return the difference between this value and tensor [other].
+     * @param arg tensor to be subtracted.
+     * @return the difference between this value and tensor [arg].
      */
-    public operator fun T.minus(other: Tensor<T>): Tensor<T>
+    override operator fun T.minus(arg: StructureND<T>): Tensor<T>
 
     /**
-     * Subtracts the scalar [value] from each element of this tensor and returns a new resulting tensor.
+     * Subtracts the scalar [arg] from each element of this tensor and returns a new resulting tensor.
      *
-     * @param value the number to be subtracted from each element of this tensor.
-     * @return the difference between this tensor and [value].
+     * @param arg the number to be subtracted from each element of this tensor.
+     * @return the difference between this tensor and [arg].
      */
-    public operator fun Tensor<T>.minus(value: T): Tensor<T>
+    override operator fun StructureND<T>.minus(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is subtracted from each element of this tensor.
+     * Each element of the tensor [arg] is subtracted from each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be subtracted.
-     * @return the difference between this tensor and [other].
+     * @param arg tensor to be subtracted.
+     * @return the difference between this tensor and [arg].
      */
-    override fun Tensor<T>.minus(other: Tensor<T>): Tensor<T>
+    override operator fun StructureND<T>.minus(arg: StructureND<T>): Tensor<T>
 
     /**
      * Subtracts the scalar [value] from each element of this tensor.
@@ -103,38 +105,38 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
     public operator fun Tensor<T>.minusAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is subtracted from each element of this tensor.
+     * Each element of the tensor [arg] is subtracted from each element of this tensor.
      *
-     * @param other tensor to be subtracted.
+     * @param arg tensor to be subtracted.
      */
-    public operator fun Tensor<T>.minusAssign(other: Tensor<T>)
+    public operator fun Tensor<T>.minusAssign(arg: StructureND<T>)
 
 
     /**
-     * Each element of the tensor [other] is multiplied by this value.
+     * Each element of the tensor [arg] is multiplied by this value.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be multiplied.
-     * @return the product of this value and tensor [other].
+     * @param arg tensor to be multiplied.
+     * @return the product of this value and tensor [arg].
      */
-    public operator fun T.times(other: Tensor<T>): Tensor<T>
+    override operator fun T.times(arg: StructureND<T>): Tensor<T>
 
     /**
-     * Multiplies the scalar [value] by each element of this tensor and returns a new resulting tensor.
+     * Multiplies the scalar [arg] by each element of this tensor and returns a new resulting tensor.
      *
-     * @param value the number to be multiplied by each element of this tensor.
-     * @return the product of this tensor and [value].
+     * @param arg the number to be multiplied by each element of this tensor.
+     * @return the product of this tensor and [arg].
      */
-    public operator fun Tensor<T>.times(value: T): Tensor<T>
+    override operator fun StructureND<T>.times(arg: T): Tensor<T>
 
     /**
-     * Each element of the tensor [other] is multiplied by each element of this tensor.
+     * Each element of the tensor [arg] is multiplied by each element of this tensor.
      * The resulting tensor is returned.
      *
-     * @param other tensor to be multiplied.
-     * @return the product of this tensor and [other].
+     * @param arg tensor to be multiplied.
+     * @return the product of this tensor and [arg].
      */
-    override fun Tensor<T>.times(other: Tensor<T>): Tensor<T>
+    override operator fun StructureND<T>.times(arg: StructureND<T>): Tensor<T>
 
     /**
      * Multiplies the scalar [value] by each element of this tensor.
@@ -144,18 +146,18 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
     public operator fun Tensor<T>.timesAssign(value: T)
 
     /**
-     * Each element of the tensor [other] is multiplied by each element of this tensor.
+     * Each element of the tensor [arg] is multiplied by each element of this tensor.
      *
-     * @param other tensor to be multiplied.
+     * @param arg tensor to be multiplied.
      */
-    public operator fun Tensor<T>.timesAssign(other: Tensor<T>)
+    public operator fun Tensor<T>.timesAssign(arg: StructureND<T>)
 
     /**
      * Numerical negative, element-wise.
      *
      * @return tensor negation of the original tensor.
      */
-    override fun Tensor<T>.unaryMinus(): Tensor<T>
+    override operator fun StructureND<T>.unaryMinus(): Tensor<T>
 
     /**
      * Returns the tensor at index i
@@ -194,7 +196,7 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param other the result tensor has the same size as other.
      * @return the result tensor with the same size as other.
      */
-    public fun Tensor<T>.viewAs(other: Tensor<T>): Tensor<T>
+    public fun Tensor<T>.viewAs(other: StructureND<T>): Tensor<T>
 
     /**
      * Matrix product of two tensors.
@@ -206,7 +208,7 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      *
      * 3. If the first argument is 1-dimensional and the second argument is 2-dimensional,
      * a 1 is prepended to its dimension for the purpose of the matrix multiply.
-     * After the matrix multiply, the prepended dimension is removed.
+     * After the matrix multiply, depending on the implementation the prepended dimension might be removed.
      *
      * 4. If the first argument is 2-dimensional and the second argument is 1-dimensional,
      * the matrix-vector product is returned.
@@ -225,7 +227,7 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
      */
-    public infix fun Tensor<T>.dot(other: Tensor<T>): Tensor<T>
+    public infix fun StructureND<T>.dot(other: StructureND<T>): Tensor<T>
 
     /**
      * Creates a tensor whose diagonals of certain 2D planes (specified by [dim1] and [dim2])
@@ -260,7 +262,7 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
     /**
      * @return the sum of all elements in the input tensor.
      */
-    public fun Tensor<T>.sum(): T
+    public fun StructureND<T>.sum(): T
 
     /**
      * Returns the sum of each row of the input tensor in the given dimension [dim].
@@ -273,12 +275,12 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the sum of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.sum(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.sum(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
-     * @return the minimum value of all elements in the input tensor.
+     * @return the minimum value of all elements in the input tensor or null if there are no values
      */
-    public fun Tensor<T>.min(): T
+    public fun StructureND<T>.min(): T?
 
     /**
      * Returns the minimum value of each row of the input tensor in the given dimension [dim].
@@ -291,12 +293,12 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the minimum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
-     * Returns the maximum value of all elements in the input tensor.
+     * Returns the maximum value of all elements in the input tensor or null if there are no values
      */
-    public fun Tensor<T>.max(): T
+    public fun StructureND<T>.max(): T?
 
     /**
      * Returns the maximum value of each row of the input tensor in the given dimension [dim].
@@ -309,7 +311,7 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the maximum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.max(dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
      * Returns the index of maximum value of each row of the input tensor in the given dimension [dim].
@@ -322,9 +324,9 @@ public interface TensorAlgebra<T> : RingOps<Tensor<T>> {
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
      */
-    public fun Tensor<T>.argMax(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int>
 
-    override fun add(left: Tensor<T>, right: Tensor<T>): Tensor<T> = left + right
+    override fun add(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left + right
 
-    override fun multiply(left: Tensor<T>, right: Tensor<T>): Tensor<T> = left * right
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left * right
 }

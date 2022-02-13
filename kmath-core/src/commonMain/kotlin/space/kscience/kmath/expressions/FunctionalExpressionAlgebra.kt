@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
@@ -34,12 +34,12 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         { left, right ->
             Expression { arguments ->
-                algebra.binaryOperationFunction(operation)(left.invoke(arguments), right.invoke(arguments))
+                algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
             }
         }
 
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
-        Expression { arguments -> algebra.unaryOperationFunction(operation)(arg.invoke(arguments)) }
+        Expression { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
     }
 }
 
@@ -164,8 +164,6 @@ public open class FunctionalExpressionExtendedField<T, out A : ExtendedField<T>>
 
     override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionField>.binaryOperationFunction(operation)
-
-    override fun bindSymbol(value: String): Expression<T> = super<FunctionalExpressionField>.bindSymbol(value)
 }
 
 public inline fun <T, A : Group<T>> A.expressionInGroup(

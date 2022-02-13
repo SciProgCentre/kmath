@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 @file:JsQualifier("WebAssembly")
@@ -201,8 +201,8 @@ internal open external class Module {
 }
 
 @JsName("Instance")
-internal open external class Instance(module: Module, importObject: Any = definedExternally) {
-    open var exports: Any
+internal open external class Instance(module: Module, importObject: dynamic = definedExternally) {
+    open var exports: dynamic
 }
 
 @JsName("Memory")

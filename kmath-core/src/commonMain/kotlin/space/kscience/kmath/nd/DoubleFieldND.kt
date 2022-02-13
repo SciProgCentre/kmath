@@ -1,19 +1,20 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.math.pow
+import kotlin.math.pow as kpow
 
 public class DoubleBufferND(
-    indexes: ShapeIndex,
+    indexes: ShapeIndexer,
     override val buffer: DoubleBuffer,
 ) : BufferND<Double>(indexes, buffer)
 
@@ -29,11 +30,11 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         }
     }
 
-    private inline fun mapInline(
+    protected inline fun mapInline(
         arg: DoubleBufferND,
-        transform: (Double) -> Double
+        transform: (Double) -> Double,
     ): DoubleBufferND {
-        val indexes = arg.indexes
+        val indexes = arg.indices
         val array = arg.buffer.array
         return DoubleBufferND(indexes, DoubleBuffer(indexes.linearSize) { transform(array[it]) })
     }
@@ -41,23 +42,25 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     private inline fun zipInline(
         l: DoubleBufferND,
         r: DoubleBufferND,
-        block: (l: Double, r: Double) -> Double
+        block: (l: Double, r: Double) -> Double,
     ): DoubleBufferND {
-        require(l.indexes == r.indexes) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
-        val indexes = l.indexes
+        require(l.indices == r.indices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
+        val indexes = l.indices
         val lArray = l.buffer.array
         val rArray = r.buffer.array
         return DoubleBufferND(indexes, DoubleBuffer(indexes.linearSize) { block(lArray[it], rArray[it]) })
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): BufferND<Double> =
         mapInline(toBufferND()) { DoubleField.transform(it) }
 
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
-        transform: DoubleField.(Double, Double) -> Double
+        transform: DoubleField.(Double, Double) -> Double,
     ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> DoubleField.transform(l, r) }
 
     override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
@@ -78,8 +81,8 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
     override fun StructureND<Double>.unaryMinus(): DoubleBufferND = mapInline(toBufferND()) { -it }
 
-    override fun StructureND<Double>.div(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l, r -> l / r }
+    override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l, r -> l / r }
 
     override fun divide(left: StructureND<Double>, right: StructureND<Double>): DoubleBufferND =
         zipInline(left.toBufferND(), right.toBufferND()) { l: Double, r: Double -> l / r }
@@ -92,14 +95,14 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
     override fun StructureND<Double>.unaryPlus(): DoubleBufferND = toBufferND()
 
-    override fun StructureND<Double>.plus(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l + r }
+    override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l + r }
 
-    override fun StructureND<Double>.minus(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l - r }
+    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l - r }
 
-    override fun StructureND<Double>.times(other: StructureND<Double>): DoubleBufferND =
-        zipInline(toBufferND(), other.toBufferND()) { l: Double, r: Double -> l * r }
+    override fun StructureND<Double>.times(arg: StructureND<Double>): DoubleBufferND =
+        zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l * r }
 
     override fun StructureND<Double>.times(k: Number): DoubleBufferND =
         mapInline(toBufferND()) { it * k.toDouble() }
@@ -107,7 +110,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     override fun StructureND<Double>.div(k: Number): DoubleBufferND =
         mapInline(toBufferND()) { it / k.toDouble() }
 
-    override fun Number.times(other: StructureND<Double>): DoubleBufferND = other * this
+    override fun Number.times(arg: StructureND<Double>): DoubleBufferND = arg * this
 
     override fun StructureND<Double>.plus(arg: Double): DoubleBufferND = mapInline(toBufferND()) { it + arg }
 
@@ -119,9 +122,6 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
     override fun scale(a: StructureND<Double>, value: Double): DoubleBufferND =
         mapInline(a.toBufferND()) { it * value }
-
-    override fun power(arg: StructureND<Double>, pow: Number): DoubleBufferND =
-        mapInline(arg.toBufferND()) { it.pow(pow.toDouble()) }
 
     override fun exp(arg: StructureND<Double>): DoubleBufferND =
         mapInline(arg.toBufferND()) { kotlin.math.exp(it) }
@@ -170,7 +170,38 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
 @OptIn(UnstableKMathAPI::class)
 public class DoubleFieldND(override val shape: Shape) :
-    DoubleFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>> {
+    DoubleFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>>,
+    ExtendedField<StructureND<Double>> {
+
+    override fun power(arg: StructureND<Double>, pow: UInt): DoubleBufferND = mapInline(arg.toBufferND()) {
+        it.kpow(pow.toInt())
+    }
+
+    override fun power(arg: StructureND<Double>, pow: Int): DoubleBufferND = mapInline(arg.toBufferND()) {
+        it.kpow(pow)
+    }
+
+    override fun power(arg: StructureND<Double>, pow: Number): DoubleBufferND = if(pow.isInteger()){
+        power(arg, pow.toInt())
+    } else {
+        val dpow = pow.toDouble()
+        mapInline(arg.toBufferND()) {
+            if (it < 0) throw IllegalArgumentException("Can't raise negative $it to a fractional power")
+            else it.kpow(dpow)
+        }
+    }
+
+    override fun sinh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.sinh(arg)
+
+    override fun cosh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.cosh(arg)
+
+    override fun tanh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.tan(arg)
+
+    override fun asinh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.asinh(arg)
+
+    override fun acosh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.acosh(arg)
+
+    override fun atanh(arg: StructureND<Double>): DoubleBufferND = super<DoubleFieldOpsND>.atanh(arg)
 
     override fun number(value: Number): DoubleBufferND {
         val d = value.toDouble() // minimize conversions

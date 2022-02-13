@@ -23,5 +23,5 @@ readme {
 }
 
 kotlin.sourceSets.all {
-    languageSettings.useExperimentalAnnotation("space.kscience.kmath.misc.UnstableKMathAPI")
+    languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
 }

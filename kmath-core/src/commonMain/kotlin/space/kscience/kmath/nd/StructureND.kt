@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
@@ -28,12 +28,12 @@ public interface StructureFeature : Feature<StructureFeature>
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> : Featured<StructureFeature> {
+public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
     /**
      * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
-    public val shape: IntArray
+    override val shape: Shape
 
     /**
      * The count of dimensions in this structure. It should be equal to size of [shape].
@@ -54,7 +54,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
      * @return the lazy sequence of pairs of indices to values.
      */
     @PerformancePitfall
-    public fun elements(): Sequence<Pair<IntArray, T>>
+    public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
 
     /**
      * Feature is some additional structure information that allows to access it special properties or hints.
@@ -71,7 +71,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.indexes == st2.indexes)
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
@@ -87,7 +87,7 @@ public interface StructureND<out T> : Featured<StructureFeature> {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.indexes == st2.indexes)
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.histogram
@@ -70,7 +70,7 @@ internal class MultivariateHistogramTest {
             }
             val res = histogram1 - histogram2
             assertTrue {
-                DefaultStrides(shape).indices().all { index ->
+                DefaultStrides(shape).asSequence().all { index ->
                     res.values[index] <= histogram1.values[index]
                 }
             }

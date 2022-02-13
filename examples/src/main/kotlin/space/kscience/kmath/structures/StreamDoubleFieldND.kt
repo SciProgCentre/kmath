@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
@@ -36,7 +36,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
                 this@StreamDoubleFieldND.shape,
                 shape
             )
-            this is BufferND && this.indexes == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
+            this is BufferND && this.indices == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 

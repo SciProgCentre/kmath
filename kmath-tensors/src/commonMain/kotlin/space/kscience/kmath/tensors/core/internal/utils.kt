@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core.internal
@@ -85,7 +85,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
 internal fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
-    val linearStructure = this@toPrettyString.linearStructure
+    val linearStructure = this@toPrettyString.indices
     val vectorSize = shape.last()
     append("DoubleTensor(\n")
     var charOffset = 3
