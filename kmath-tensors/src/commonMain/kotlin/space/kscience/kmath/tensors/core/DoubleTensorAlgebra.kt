@@ -895,7 +895,7 @@ public open class DoubleTensorAlgebra :
      * and when the cosine approaches 1 in the SVD algorithm.
      * @return a pair `eigenvalues to eigenvectors`.
      */
-    public fun StructureND<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.symEigSvd(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
 
         fun MutableStructure2D<Double>.cleanSym(n: Int) {
@@ -920,6 +920,102 @@ public open class DoubleTensorAlgebra :
 
         val eig = (utv dot s.view(shp)).view(s.shape)
         return eig to v
+    }
+
+    // TODO
+    // 1. Cyclic method
+    // 2. Sort eigenvalues
+    public fun StructureND<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+        checkSymmetric(tensor, epsilon)
+
+        val ii = tensor.minusIndex(-2)
+        val jj = tensor.minusIndex(-1)
+        val n = tensor.numElements
+
+        val size = this.dimension
+        val commonShape = this.shape.sliceArray(0 until size - 2) + intArrayOf(1, 1)
+
+        var d = this.copy()
+        var s = diagonalEmbedding(ones(this.shape.sliceArray(0 until size - 1)))
+
+        do {
+            // 1. Find max element by abs value that is not on diagonal
+            val buffer = MutableBuffer.boxing(commonShape.reduce(Int::times)) { Triple(0.0, 0, 0) }
+            val maxOffDiagonalElements = BufferedTensor(commonShape, buffer, 0)
+            for (offset in 0 until n) {
+                val multiIndex = d.linearStructure.index(offset)
+                if (multiIndex[ii] != multiIndex[jj]) {
+                    val value = d.mutableBuffer.array()[offset]
+
+                    val commonIndex = multiIndex.sliceArray(0 until size - 2) + intArrayOf(0, 0)
+                    if (abs(value) > maxOffDiagonalElements[commonIndex].first) {
+                        maxOffDiagonalElements[commonIndex] = Triple(abs(value), multiIndex[ii], multiIndex[jj])
+                    }
+                }
+            }
+
+            // 2. Evaluate "rotation" angle
+            val angles = zeros(commonShape)
+            for (offset in 0 until maxOffDiagonalElements.numElements) {
+                val (_, i, j) = maxOffDiagonalElements.mutableBuffer[offset]
+                val multiIndex = maxOffDiagonalElements.linearStructure.index(offset)
+
+                val dIJ = d.mutableBuffer[d.linearStructure.offset(multiIndex.also { it[ii] = i; it[jj] = j })]
+                val dII = d.mutableBuffer[d.linearStructure.offset(multiIndex.also { it[ii] = i; it[jj] = i })]
+                val dJJ = d.mutableBuffer[d.linearStructure.offset(multiIndex.also { it[ii] = j; it[jj] = j })]
+
+                angles.mutableBuffer.array()[offset] = if (dII == dJJ) {
+                    if (dIJ > 0) PI / 4 else -PI / 4
+                } else {
+                    0.5 * atan(2 * dIJ / (dJJ - dII))
+                }
+            }
+
+            // 3. Build rotation tensor `s1`
+            val s1 = diagonalEmbedding(ones(this.shape.sliceArray(0 until size - 1)))
+            for (offset in 0 until n) {
+                val multiIndex = d.linearStructure.index(offset)
+
+                val commonIndex = multiIndex.sliceArray(0 until size - 2) + intArrayOf(0, 0)
+                val (_, i, j) = maxOffDiagonalElements[commonIndex]
+                val angleValue = angles[commonIndex]
+                s1.mutableBuffer.array()[offset] = when {
+                    multiIndex[ii] == i && multiIndex[jj] == i || multiIndex[ii] == j && multiIndex[jj] == j -> cos(angleValue)
+                    multiIndex[ii] == i && multiIndex[jj] == j -> sin(angleValue)
+                    multiIndex[ii] == j && multiIndex[jj] == i -> -sin(angleValue)
+                    else -> s1.mutableBuffer.array()[offset]
+                }
+            }
+
+            // 4. Evaluate new tensor
+            d = (s1.transpose() dot d) dot s1
+            s = s dot s1
+            if (d.isDiagonal(epsilon)) break
+        } while(true)
+
+        val eigenvalues = zeros(d.shape.sliceArray(0 until size - 1))
+        for (offset in 0 until n) {
+            val multiIndex = d.linearStructure.index(offset)
+            if (multiIndex[ii] == multiIndex[jj]) {
+                eigenvalues[multiIndex.sliceArray(0 until size - 1)] = d.mutableBuffer.array()[offset]
+            }
+        }
+
+        return eigenvalues to s
+    }
+
+    public fun StructureND<Double>.isDiagonal(epsilon: Double = 1e-9): Boolean {
+        val ii = tensor.minusIndex(-2)
+        val jj = tensor.minusIndex(-1)
+
+        for (offset in 0 until tensor.numElements) {
+            val multiIndex = tensor.linearStructure.index(offset)
+            if (multiIndex[ii] != multiIndex[jj] && abs(tensor.mutableBuffer.array()[offset]) > epsilon) {
+                return false
+            }
+        }
+
+        return true
     }
 
     /**
