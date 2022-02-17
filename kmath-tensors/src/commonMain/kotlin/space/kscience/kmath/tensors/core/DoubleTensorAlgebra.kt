@@ -997,5 +997,6 @@ public open class DoubleTensorAlgebra :
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra.Companion get() = DoubleTensorAlgebra
+public val DoubleField.tensorAlgebra: DoubleTensorAlgebra.Companion get() = DoubleTensorAlgebra
 
 

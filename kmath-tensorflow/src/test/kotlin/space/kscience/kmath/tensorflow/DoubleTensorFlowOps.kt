@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
+import kotlin.random.Random
 import kotlin.test.assertEquals
 
 class DoubleTensorFlowOps {
@@ -16,6 +19,19 @@ class DoubleTensorFlowOps {
         }
         //println(StructureND.toString(res))
         assertEquals(3.0, res[0, 0])
+    }
+
+    @Test
+    fun dot(){
+        val random = Random(12224)
+        val dim = 1000
+
+        val tensor1 = DoubleTensorAlgebra.randomNormal(shape = intArrayOf(dim, dim), 12224)
+        val tensor2 = DoubleTensorAlgebra.randomNormal(shape = intArrayOf(dim, dim), 12225)
+
+        DoubleField.produceWithTF {
+            tensor1 dot tensor2
+        }.sum()
     }
 
     @Test

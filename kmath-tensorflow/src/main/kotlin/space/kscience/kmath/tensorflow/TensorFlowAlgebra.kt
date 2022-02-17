@@ -199,8 +199,9 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.dot(other: StructureND<T>): TensorFlowOutput<T, TT> = operate(other) { l, r ->
         ops.linalg.matMul(
-            if (l.asTensor().shape().numDimensions() == 1) ops.expandDims(l, ops.constant(0)) else l,
-            if (r.asTensor().shape().numDimensions() == 1) ops.expandDims(r, ops.constant(-1)) else r)
+            if (l.shape().numDimensions() == 1) ops.expandDims(l, ops.constant(0)) else l,
+            if (r.shape().numDimensions() == 1) ops.expandDims(r, ops.constant(-1)) else r
+        )
     }
 
     override fun diagonalEmbedding(

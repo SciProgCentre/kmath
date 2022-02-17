@@ -17,7 +17,9 @@ import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -44,6 +46,16 @@ internal class DotBenchmark {
         val ejmlMatrix2 = EjmlLinearSpaceDDRM { matrix2.toEjml() }
     }
 
+
+    @Benchmark
+    fun tfDot(blackhole: Blackhole){
+        blackhole.consume(
+            DoubleField.produceWithTF {
+                tensor1 dot tensor2
+            }
+        )
+    }
+
     @Benchmark
     fun cmDotWithConversion(blackhole: Blackhole) = CMLinearSpace {
         blackhole.consume(matrix1 dot matrix2)
@@ -64,13 +76,13 @@ internal class DotBenchmark {
         blackhole.consume(matrix1 dot matrix2)
     }
 
-//    @Benchmark
-//    fun tensorDot(blackhole: Blackhole) = with(Double.tensorAlgebra) {
-//        blackhole.consume(matrix1 dot matrix2)
-//    }
+    @Benchmark
+    fun tensorDot(blackhole: Blackhole) = with(DoubleField.tensorAlgebra) {
+        blackhole.consume(matrix1 dot matrix2)
+    }
 
     @Benchmark
-    fun multikDot(blackhole: Blackhole) = with(Double.multikAlgebra) {
+    fun multikDot(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
