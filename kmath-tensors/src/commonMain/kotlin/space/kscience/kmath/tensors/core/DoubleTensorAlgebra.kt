@@ -953,23 +953,33 @@ public open class DoubleTensorAlgebra :
         maxIteration: Int,
         epsilon: Double
     ): Pair<Structure1D<Double>, Structure2D<Double>> {
-        val A_ = this.copy().as2D()
-        val V = eye(this.shape[0]).as2D()
-        val D = DoubleTensor(intArrayOf(this.shape[0]), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
-        val B = DoubleTensor(intArrayOf(this.shape[0]), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
-        val Z = zeros(intArrayOf(this.shape[0])).as1D()
+        val n = this.shape[0]
+        val A_ = this.copy()
+        val V = eye(n)
+        val D = DoubleTensor(intArrayOf(n), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
+        val B = DoubleTensor(intArrayOf(n), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
+        val Z = zeros(intArrayOf(n)).as1D()
 
-        fun maxOffDiagonal(matrix: MutableStructure2D<Double>): Double {
+        // assume that buffered tensor is square matrix
+        operator fun BufferedTensor<Double>.get(i: Int, j: Int): Double {
+            return this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j]
+        }
+
+        operator fun BufferedTensor<Double>.set(i: Int, j: Int, value: Double) {
+            this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j] = value
+        }
+
+        fun maxOffDiagonal(matrix: BufferedTensor<Double>): Double {
             var maxOffDiagonalElement = 0.0
-            for (i in 0 until matrix.rowNum - 1) {
-                for (j in i + 1 until matrix.colNum) {
+            for (i in 0 until n - 1) {
+                for (j in i + 1 until n) {
                     maxOffDiagonalElement = max(maxOffDiagonalElement, abs(matrix[i, j]))
                 }
             }
             return maxOffDiagonalElement
         }
 
-        fun rotate(a: MutableStructure2D<Double>, s: Double, tau: Double, i: Int, j: Int, k: Int, l: Int) {
+        fun rotate(a: BufferedTensor<Double>, s: Double, tau: Double, i: Int, j: Int, k: Int, l: Int) {
             val g = a[i, j]
             val h = a[k, l]
             a[i, j] = g - s * (h + g * tau)
@@ -977,13 +987,13 @@ public open class DoubleTensorAlgebra :
         }
 
         fun jacobiIteration(
-            a: MutableStructure2D<Double>,
-            v: MutableStructure2D<Double>,
+            a: BufferedTensor<Double>,
+            v: BufferedTensor<Double>,
             d: MutableStructure1D<Double>,
             z: MutableStructure1D<Double>,
         ) {
-            for (ip in 0 until a.rowNum - 1) {
-                for (iq in ip + 1 until a.colNum) {
+            for (ip in 0 until n - 1) {
+                for (iq in ip + 1 until n) {
                     val g = 100.0 * abs(a[ip, iq])
 
                     if (g <= epsilon * abs(d[ip]) && g <= epsilon * abs(d[iq])) {
@@ -1017,10 +1027,10 @@ public open class DoubleTensorAlgebra :
                     for (j in (ip + 1) until iq) {
                         rotate(a, s, tau, ip, j, j, iq)
                     }
-                    for (j in (iq + 1) until a.rowNum) {
+                    for (j in (iq + 1) until n) {
                         rotate(a, s, tau, ip, j, iq, j)
                     }
-                    for (j in 0 until a.rowNum) {
+                    for (j in 0 until n) {
                         rotate(v, s, tau, j, ip, j, iq)
                     }
                 }
@@ -1051,7 +1061,7 @@ public open class DoubleTensorAlgebra :
         }
 
         // TODO sort eigenvalues
-        return D to V
+        return D to V.as2D()
     }
 
     /**
