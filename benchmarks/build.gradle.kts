@@ -124,6 +124,11 @@ benchmark {
         include("JafamaBenchmark")
     }
 
+    configurations.register("tensorAlgebra") {
+        commonConfiguration()
+        include("TensorAlgebraBenchmark")
+    }
+
     configurations.register("viktor") {
         commonConfiguration()
         include("ViktorBenchmark")
