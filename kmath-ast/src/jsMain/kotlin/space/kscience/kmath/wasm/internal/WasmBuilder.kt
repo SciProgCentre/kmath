@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.wasm.internal
 
+import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.expressions.MST.*
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -16,11 +16,12 @@ import space.kscience.kmath.internal.webassembly.Module as WasmModule
 
 private val spreader = eval("(obj, args) => obj(...args)")
 
+@OptIn(UnstableKMathAPI::class)
 @Suppress("UnsafeCastFromDynamic")
 internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
     protected val binaryenType: Type,
     protected val algebra: Algebra<T>,
-    protected val target: MST,
+    protected val target: TypedMst<T>,
 ) {
     protected val keys: MutableList<Symbol> = mutableListOf()
     protected lateinit var ctx: BinaryenModule
@@ -51,59 +52,41 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
         Instance(c, js("{}")).exports.executable
     }
 
-    protected open fun visitSymbol(node: Symbol): ExpressionRef {
-        algebra.bindSymbolOrNull(node)?.let { return visitNumeric(Numeric(it)) }
+    protected abstract fun visitNumber(number: Number): ExpressionRef
 
-        var idx = keys.indexOf(node)
+    protected open fun visitVariable(node: TypedMst.Variable<T>): ExpressionRef {
+        var idx = keys.indexOf(node.symbol)
 
         if (idx == -1) {
-            keys += node
+            keys += node.symbol
             idx = keys.lastIndex
         }
 
         return ctx.local.get(idx, binaryenType)
     }
 
-    protected abstract fun visitNumeric(node: Numeric): ExpressionRef
-
-    protected open fun visitUnary(node: Unary): ExpressionRef =
+    protected open fun visitUnary(node: TypedMst.Unary<T>): ExpressionRef =
         error("Unary operation ${node.operation} not defined in $this")
 
-    protected open fun visitBinary(mst: Binary): ExpressionRef =
+    protected open fun visitBinary(mst: TypedMst.Binary<T>): ExpressionRef =
         error("Binary operation ${mst.operation} not defined in $this")
 
     protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
 
-    protected fun visit(node: MST): ExpressionRef = when (node) {
-        is Symbol -> visitSymbol(node)
-        is Numeric -> visitNumeric(node)
+    protected fun visit(node: TypedMst<T>): ExpressionRef = when (node) {
+        is TypedMst.Constant -> visitNumber(
+            node.number ?: error("Object constants are not supported by pritimive ASM builder"),
+        )
 
-        is Unary -> when {
-            algebra is NumericAlgebra && node.value is Numeric -> visitNumeric(
-                Numeric(algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as Numeric).value)))
-            )
-
-            else -> visitUnary(node)
-        }
-
-        is Binary -> when {
-            algebra is NumericAlgebra && node.left is Numeric && node.right is Numeric -> visitNumeric(
-                Numeric(
-                    algebra.binaryOperationFunction(node.operation)
-                        .invoke(
-                            algebra.number((node.left as Numeric).value),
-                            algebra.number((node.right as Numeric).value)
-                        )
-                )
-            )
-
-            else -> visitBinary(node)
-        }
+        is TypedMst.Variable -> visitVariable(node)
+        is TypedMst.Unary -> visitUnary(node)
+        is TypedMst.Binary -> visitBinary(node)
     }
 }
 
 @UnstableKMathAPI
-internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpression>(f64, DoubleField, target) {
+internal class DoubleWasmBuilder(target: TypedMst<Double>) :
+    WasmBuilder<Double, DoubleExpression>(f64, DoubleField, target) {
     override val instance by lazy {
         object : DoubleExpression {
             override val indexer = SimpleSymbolIndexer(keys)
@@ -114,9 +97,9 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpres
 
     override fun createModule() = readBinary(f64StandardFunctions)
 
-    override fun visitNumeric(node: Numeric) = ctx.f64.const(node.value.toDouble())
+    override fun visitNumber(number: Number) = ctx.f64.const(number.toDouble())
 
-    override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
+    override fun visitUnary(node: TypedMst.Unary<Double>): ExpressionRef = when (node.operation) {
         GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(node.value))
         GroupOps.PLUS_OPERATION -> visit(node.value)
         PowerOperations.SQRT_OPERATION -> ctx.f64.sqrt(visit(node.value))
@@ -137,7 +120,7 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpres
         else -> super.visitUnary(node)
     }
 
-    override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {
+    override fun visitBinary(mst: TypedMst.Binary<Double>): ExpressionRef = when (mst.operation) {
         GroupOps.PLUS_OPERATION -> ctx.f64.add(visit(mst.left), visit(mst.right))
         GroupOps.MINUS_OPERATION -> ctx.f64.sub(visit(mst.left), visit(mst.right))
         RingOps.TIMES_OPERATION -> ctx.f64.mul(visit(mst.left), visit(mst.right))
@@ -148,7 +131,7 @@ internal class DoubleWasmBuilder(target: MST) : WasmBuilder<Double, DoubleExpres
 }
 
 @UnstableKMathAPI
-internal class IntWasmBuilder(target: MST) : WasmBuilder<Int, IntExpression>(i32, IntRing, target) {
+internal class IntWasmBuilder(target: TypedMst<Int>) : WasmBuilder<Int, IntExpression>(i32, IntRing, target) {
     override val instance by lazy {
         object : IntExpression {
             override val indexer = SimpleSymbolIndexer(keys)
@@ -157,15 +140,15 @@ internal class IntWasmBuilder(target: MST) : WasmBuilder<Int, IntExpression>(i32
         }
     }
 
-    override fun visitNumeric(node: Numeric) = ctx.i32.const(node.value.toInt())
+    override fun visitNumber(number: Number) = ctx.i32.const(number.toInt())
 
-    override fun visitUnary(node: Unary): ExpressionRef = when (node.operation) {
+    override fun visitUnary(node: TypedMst.Unary<Int>): ExpressionRef = when (node.operation) {
         GroupOps.MINUS_OPERATION -> ctx.i32.sub(ctx.i32.const(0), visit(node.value))
         GroupOps.PLUS_OPERATION -> visit(node.value)
         else -> super.visitUnary(node)
     }
 
-    override fun visitBinary(mst: Binary): ExpressionRef = when (mst.operation) {
+    override fun visitBinary(mst: TypedMst.Binary<Int>): ExpressionRef = when (mst.operation) {
         GroupOps.PLUS_OPERATION -> ctx.i32.add(visit(mst.left), visit(mst.right))
         GroupOps.MINUS_OPERATION -> ctx.i32.sub(visit(mst.left), visit(mst.right))
         RingOps.TIMES_OPERATION -> ctx.i32.mul(visit(mst.left), visit(mst.right))

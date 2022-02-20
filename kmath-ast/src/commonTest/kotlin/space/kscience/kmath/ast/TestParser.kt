@@ -7,7 +7,7 @@ package space.kscience.kmath.ast
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
-import space.kscience.kmath.expressions.evaluate
+import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import kotlin.test.Test
@@ -17,14 +17,14 @@ internal class TestParser {
     @Test
     fun evaluateParsedMst() {
         val mst = "2+2*(2+2)".parseMath()
-        val res = ComplexField.evaluate(mst)
+        val res = mst.interpret(ComplexField)
         assertEquals(Complex(10.0, 0.0), res)
     }
 
     @Test
     fun evaluateMstSymbol() {
         val mst = "i".parseMath()
-        val res = ComplexField.evaluate(mst)
+        val res = mst.interpret(ComplexField)
         assertEquals(ComplexField.i, res)
     }
 
@@ -32,7 +32,7 @@ internal class TestParser {
     @Test
     fun evaluateMstUnary() {
         val mst = "sin(0)".parseMath()
-        val res = DoubleField.evaluate(mst)
+        val res = mst.interpret(DoubleField)
         assertEquals(0.0, res)
     }
 
@@ -53,7 +53,7 @@ internal class TestParser {
         }
 
         val mst = "magic(a, b)".parseMath()
-        val res = magicalAlgebra.evaluate(mst)
+        val res = mst.interpret(magicalAlgebra)
         assertEquals("a ★ b", res)
     }
 }
