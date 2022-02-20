@@ -85,10 +85,8 @@ internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
 
     override fun item(): Double = JNoa.getItemDouble(tensorHandle)
 
-    @PerformancePitfall
     override fun get(index: IntArray): Double = JNoa.getDouble(tensorHandle, index)
 
-    @PerformancePitfall
     override fun set(index: IntArray, value: Double) {
         JNoa.setDouble(tensorHandle, index, value)
     }
@@ -100,10 +98,10 @@ internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
 
     override fun item(): Float = JNoa.getItemFloat(tensorHandle)
 
-    @PerformancePitfall
+
     override fun get(index: IntArray): Float = JNoa.getFloat(tensorHandle, index)
 
-    @PerformancePitfall
+
     override fun set(index: IntArray, value: Float) {
         JNoa.setFloat(tensorHandle, index, value)
     }
@@ -115,10 +113,8 @@ internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
 
     override fun item(): Long = JNoa.getItemLong(tensorHandle)
 
-    @PerformancePitfall
     override fun get(index: IntArray): Long = JNoa.getLong(tensorHandle, index)
 
-    @PerformancePitfall
     override fun set(index: IntArray, value: Long) {
         JNoa.setLong(tensorHandle, index, value)
     }
@@ -130,10 +126,8 @@ internal constructor(scope: NoaScope, tensorHandle: TensorHandle) :
 
     override fun item(): Int = JNoa.getItemInt(tensorHandle)
 
-    @PerformancePitfall
     override fun get(index: IntArray): Int = JNoa.getInt(tensorHandle, index)
 
-    @PerformancePitfall
     override fun set(index: IntArray, value: Int) {
         JNoa.setInt(tensorHandle, index, value)
     }
