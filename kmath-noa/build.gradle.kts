@@ -22,11 +22,11 @@ val home: String = System.getProperty("user.home")
 val javaHome: String = System.getProperty("java.home")
 val thirdPartyDir = "$home/.kmath/third-party/noa-v0.0.1"
 val cppBuildDir = "$thirdPartyDir/cpp-build"
-val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath"
+val jNoaDir = "$thirdPartyDir/jnoa/noa-kmath" //"$home/devspace/noa"
 
 val cudaHome: String? = System.getenv("CUDA_HOME")
 val cudaDefault = file("/usr/local/cuda").exists()
-val cudaFound = (cudaHome?.isNotEmpty() ?: false) or cudaDefault
+val cudaFound = (cudaHome?.isNotEmpty() ?: false) or cudaDefault //false
 
 val cmakeArchive = "cmake-3.20.5-linux-x86_64"
 val torchArchive = "libtorch"
@@ -191,7 +191,7 @@ tasks {
     withType<Test>{
         systemProperty("java.library.path", "$cppBuildDir/jnoa")
         //systemProperty("java.library.path",
-        //    "${System.getProperty("user.home")}/devspace/noa/cmake-build-release/jnoa")
+        //    "${System.getProperty("user.home")}/devspace/noa/build/jnoa")
     }
 }
 
