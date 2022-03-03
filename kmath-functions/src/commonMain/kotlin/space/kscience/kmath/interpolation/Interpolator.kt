@@ -9,7 +9,7 @@ package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
-import space.kscience.kmath.functions.value
+import space.kscience.kmath.functions.substitute
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.Buffer
@@ -33,7 +33,7 @@ public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, 
     public fun interpolatePolynomials(points: XYColumnarData<T, T, T>): PiecewisePolynomial<T>
 
     override fun interpolate(points: XYColumnarData<T, T, T>): (T) -> T = { x ->
-        interpolatePolynomials(points).value(algebra, x) ?: getDefaultValue()
+        interpolatePolynomials(points).substitute(algebra, x) ?: getDefaultValue()
     }
 }
 
