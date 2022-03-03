@@ -117,16 +117,16 @@ public fun <T : Comparable<T>> PiecewisePolynomial(
  * Return a value of polynomial function with given [ring] a given [arg] or null if argument is outside piecewise
  * definition.
  */
-public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.value(ring: C, arg: T): T? =
-    findPiece(arg)?.value(ring, arg)
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.substitute(ring: C, arg: T): T? =
+    findPiece(arg)?.substitute(ring, arg)
 
 /**
  * Convert this polynomial to a function returning nullable value (null if argument is outside piecewise range).
  */
-public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { value(ring, it) }
+public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C): (T) -> T? = { substitute(ring, it) }
 
 /**
  * Convert this polynomial to a function using [defaultValue] for arguments outside the piecewise range.
  */
 public fun <T : Comparable<T>, C : Ring<T>> PiecewisePolynomial<T>.asFunction(ring: C, defaultValue: T): (T) -> T =
-    { value(ring, it) ?: defaultValue }
+    { substitute(ring, it) ?: defaultValue }

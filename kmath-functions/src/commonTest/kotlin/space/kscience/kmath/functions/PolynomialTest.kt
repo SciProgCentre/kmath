@@ -5,13 +5,22 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.operations.algebra
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PolynomialTest {
     @Test
+    fun simple_polynomial_test() {
+        Double.algebra.scalablePolynomial {
+            val x = Polynomial(listOf(0.0, 1.0))
+            val polynomial = x * x - 2 * x + 1
+            assertEquals(0.0, polynomial.substitute(1.0), 0.001)
+        }
+    }
+    @Test
     fun testIntegration() {
         val polynomial = Polynomial(1.0, -2.0, 1.0)
-        assertEquals(0.0, polynomial.value(1.0), 0.001)
+        assertEquals(0.0, polynomial.substitute(1.0), 0.001)
     }
 }
