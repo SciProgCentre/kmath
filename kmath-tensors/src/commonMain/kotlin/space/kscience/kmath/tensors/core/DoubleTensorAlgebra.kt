@@ -9,10 +9,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.indices
@@ -885,7 +882,7 @@ public open class DoubleTensorAlgebra :
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
-    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEig(epsilon = 1e-15)
+    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEigJacobi(maxIteration = 50, epsilon = 1e-15)
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
@@ -895,7 +892,7 @@ public open class DoubleTensorAlgebra :
      * and when the cosine approaches 1 in the SVD algorithm.
      * @return a pair `eigenvalues to eigenvectors`.
      */
-    public fun StructureND<Double>.symEig(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.symEigSvd(epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
         checkSymmetric(tensor, epsilon)
 
         fun MutableStructure2D<Double>.cleanSym(n: Int) {
@@ -920,6 +917,151 @@ public open class DoubleTensorAlgebra :
 
         val eig = (utv dot s.view(shp)).view(s.shape)
         return eig to v
+    }
+
+    public fun StructureND<Double>.symEigJacobi(maxIteration: Int, epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
+        checkSymmetric(tensor, epsilon)
+
+        val size = this.dimension
+        val eigenvectors = zeros(this.shape)
+        val eigenvalues = zeros(this.shape.sliceArray(0 until size - 1))
+
+        var eigenvalueStart = 0
+        var eigenvectorStart = 0
+        for (matrix in tensor.matrixSequence()) {
+            val matrix2D = matrix.as2D()
+            val (d, v) = matrix2D.jacobiHelper(maxIteration, epsilon)
+
+            for (i in 0 until matrix2D.rowNum) {
+                for (j in 0 until matrix2D.colNum) {
+                    eigenvectors.mutableBuffer.array()[eigenvectorStart + i * matrix2D.rowNum + j] = v[i, j]
+                }
+            }
+
+            for (i in 0 until matrix2D.rowNum) {
+                eigenvalues.mutableBuffer.array()[eigenvalueStart + i] = d[i]
+            }
+
+            eigenvalueStart += this.shape.last()
+            eigenvectorStart += this.shape.last() * this.shape.last()
+        }
+
+        return eigenvalues to eigenvectors
+    }
+
+    private fun MutableStructure2D<Double>.jacobiHelper(
+        maxIteration: Int,
+        epsilon: Double
+    ): Pair<Structure1D<Double>, Structure2D<Double>> {
+        val n = this.shape[0]
+        val A_ = this.copy()
+        val V = eye(n)
+        val D = DoubleTensor(intArrayOf(n), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
+        val B = DoubleTensor(intArrayOf(n), (0 until this.rowNum).map { this[it, it] }.toDoubleArray()).as1D()
+        val Z = zeros(intArrayOf(n)).as1D()
+
+        // assume that buffered tensor is square matrix
+        operator fun BufferedTensor<Double>.get(i: Int, j: Int): Double {
+            return this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j]
+        }
+
+        operator fun BufferedTensor<Double>.set(i: Int, j: Int, value: Double) {
+            this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j] = value
+        }
+
+        fun maxOffDiagonal(matrix: BufferedTensor<Double>): Double {
+            var maxOffDiagonalElement = 0.0
+            for (i in 0 until n - 1) {
+                for (j in i + 1 until n) {
+                    maxOffDiagonalElement = max(maxOffDiagonalElement, abs(matrix[i, j]))
+                }
+            }
+            return maxOffDiagonalElement
+        }
+
+        fun rotate(a: BufferedTensor<Double>, s: Double, tau: Double, i: Int, j: Int, k: Int, l: Int) {
+            val g = a[i, j]
+            val h = a[k, l]
+            a[i, j] = g - s * (h + g * tau)
+            a[k, l] = h + s * (g - h * tau)
+        }
+
+        fun jacobiIteration(
+            a: BufferedTensor<Double>,
+            v: BufferedTensor<Double>,
+            d: MutableStructure1D<Double>,
+            z: MutableStructure1D<Double>,
+        ) {
+            for (ip in 0 until n - 1) {
+                for (iq in ip + 1 until n) {
+                    val g = 100.0 * abs(a[ip, iq])
+
+                    if (g <= epsilon * abs(d[ip]) && g <= epsilon * abs(d[iq])) {
+                        a[ip, iq] = 0.0
+                        continue
+                    }
+
+                    var h = d[iq] - d[ip]
+                    val t = when {
+                        g <= epsilon * abs(h) -> (a[ip, iq]) / h
+                        else -> {
+                            val theta = 0.5 * h / (a[ip, iq])
+                            val denominator = abs(theta) + sqrt(1.0 + theta * theta)
+                            if (theta < 0.0) -1.0 / denominator else 1.0 / denominator
+                        }
+                    }
+
+                    val c = 1.0 / sqrt(1 + t * t)
+                    val s = t * c
+                    val tau = s / (1.0 + c)
+                    h = t * a[ip, iq]
+                    z[ip] -= h
+                    z[iq] += h
+                    d[ip] -= h
+                    d[iq] += h
+                    a[ip, iq] = 0.0
+
+                    for (j in 0 until ip) {
+                        rotate(a, s, tau, j, ip, j, iq)
+                    }
+                    for (j in (ip + 1) until iq) {
+                        rotate(a, s, tau, ip, j, j, iq)
+                    }
+                    for (j in (iq + 1) until n) {
+                        rotate(a, s, tau, ip, j, iq, j)
+                    }
+                    for (j in 0 until n) {
+                        rotate(v, s, tau, j, ip, j, iq)
+                    }
+                }
+            }
+        }
+
+        fun updateDiagonal(
+            d: MutableStructure1D<Double>,
+            z: MutableStructure1D<Double>,
+            b: MutableStructure1D<Double>,
+        ) {
+            for (ip in 0 until d.size) {
+                b[ip] += z[ip]
+                d[ip] = b[ip]
+                z[ip] = 0.0
+            }
+        }
+
+        var sm = maxOffDiagonal(A_)
+        for (iteration in 0 until maxIteration) {
+            if (sm < epsilon) {
+                break
+            }
+
+            jacobiIteration(A_, V, D, Z)
+            updateDiagonal(D, Z, B)
+            sm = maxOffDiagonal(A_)
+        }
+
+        // TODO sort eigenvalues
+        return D to V.as2D()
     }
 
     /**
@@ -997,5 +1139,6 @@ public open class DoubleTensorAlgebra :
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra.Companion get() = DoubleTensorAlgebra
+public val DoubleField.tensorAlgebra: DoubleTensorAlgebra.Companion get() = DoubleTensorAlgebra
 
 

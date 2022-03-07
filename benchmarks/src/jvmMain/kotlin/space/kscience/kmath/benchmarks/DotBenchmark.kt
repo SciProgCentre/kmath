@@ -17,7 +17,9 @@ import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -34,14 +36,21 @@ internal class DotBenchmark {
             random.nextDouble()
         }
 
-        val tensor1 = DoubleTensorAlgebra.randomNormal(shape = intArrayOf(dim, dim), 12224)
-        val tensor2 = DoubleTensorAlgebra.randomNormal(shape = intArrayOf(dim, dim), 12225)
-
         val cmMatrix1 = CMLinearSpace { matrix1.toCM() }
         val cmMatrix2 = CMLinearSpace { matrix2.toCM() }
 
         val ejmlMatrix1 = EjmlLinearSpaceDDRM { matrix1.toEjml() }
         val ejmlMatrix2 = EjmlLinearSpaceDDRM { matrix2.toEjml() }
+    }
+
+
+    @Benchmark
+    fun tfDot(blackhole: Blackhole) {
+        blackhole.consume(
+            DoubleField.produceWithTF {
+                matrix1 dot matrix1
+            }
+        )
     }
 
     @Benchmark
@@ -64,13 +73,13 @@ internal class DotBenchmark {
         blackhole.consume(matrix1 dot matrix2)
     }
 
-//    @Benchmark
-//    fun tensorDot(blackhole: Blackhole) = with(Double.tensorAlgebra) {
-//        blackhole.consume(matrix1 dot matrix2)
-//    }
+    @Benchmark
+    fun tensorDot(blackhole: Blackhole) = with(DoubleField.tensorAlgebra) {
+        blackhole.consume(matrix1 dot matrix2)
+    }
 
     @Benchmark
-    fun multikDot(blackhole: Blackhole) = with(Double.multikAlgebra) {
+    fun multikDot(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
@@ -86,6 +95,6 @@ internal class DotBenchmark {
 
     @Benchmark
     fun doubleTensorDot(blackhole: Blackhole) = DoubleTensorAlgebra.invoke {
-        blackhole.consume(tensor1 dot tensor2)
+        blackhole.consume(matrix1 dot matrix2)
     }
 }
