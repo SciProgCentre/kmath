@@ -6,7 +6,6 @@ import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
-import kotlin.random.Random
 import kotlin.test.assertEquals
 
 class DoubleTensorFlowOps {
@@ -23,7 +22,6 @@ class DoubleTensorFlowOps {
 
     @Test
     fun dot(){
-        val random = Random(12224)
         val dim = 1000
 
         val tensor1 = DoubleTensorAlgebra.randomNormal(shape = intArrayOf(dim, dim), 12224)
