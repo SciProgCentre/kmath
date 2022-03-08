@@ -1,16 +1,17 @@
 plugins {
     id("ru.mipt.npm.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC"
+    id("org.jetbrains.kotlinx.kover") version "0.5.0"
 }
 
 allprojects {
     repositories {
+        maven("https://repo.kotlin.link")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-19"
+    version = "0.3.0-dev-20"
 }
 
 subprojects {
