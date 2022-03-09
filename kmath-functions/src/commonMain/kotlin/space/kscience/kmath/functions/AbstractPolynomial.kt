@@ -70,19 +70,19 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
 
     // region Polynomial-integer relation
     /**
-     * Returns sum of the constant and the integer represented as polynomial.
+     * Returns sum of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
     public operator fun P.plus(other: Int): P = optimizedAddMultiplied(this, one, other)
     /**
-     * Returns difference between the constant and the integer represented as polynomial.
+     * Returns difference between the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
     public operator fun P.minus(other: Int): P = optimizedAddMultiplied(this, one, -other)
     /**
-     * Returns product of the constant and the integer represented as polynomial.
+     * Returns product of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
@@ -91,19 +91,19 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
 
     // region Integer-polynomial relation
     /**
-     * Returns sum of the integer represented as polynomial and the constant.
+     * Returns sum of the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
     public operator fun Int.plus(other: P): P = optimizedAddMultiplied(other, one, this)
     /**
-     * Returns difference between the integer represented as polynomial and the constant.
+     * Returns difference between the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public operator fun Int.minus(other: P): P = optimizedAddMultiplied(-other, one, this)
     /**
-     * Returns product of the integer represented as polynomial and the constant.
+     * Returns product of the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -254,11 +254,11 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
      */
-    override val zero: P
+    public override val zero: P
     /**
      * Instance of unit polynomial (unit of the polynomial ring).
      */
-    override val one: P
+    public override val one: P
 
     /**
      * Checks equality of the polynomials.
