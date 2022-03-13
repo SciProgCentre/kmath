@@ -121,7 +121,7 @@ public fun <C, A> Polynomial<C>.antiderivative(
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
     val integratedCoefficients = buildList(coefficients.size + 1) {
         add(zero)
-        coefficients.forEachIndexed{ index, t -> add(t / (number(index) + one)) }
+        coefficients.forEachIndexed{ index, t -> add(t / number(index + 1)) }
     }
     Polynomial(integratedCoefficients)
 }
@@ -137,3 +137,5 @@ public fun <C : Comparable<C>> Polynomial<C>.integrate(
     val integral = antiderivative(algebra)
     integral.substitute(algebra, range.endInclusive) - integral.substitute(algebra, range.start)
 }
+
+// endregion

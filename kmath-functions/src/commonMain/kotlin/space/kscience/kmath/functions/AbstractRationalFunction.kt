@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.functions.AbstractPolynomialSpace.Companion.optimizedAddMultiplied
-import space.kscience.kmath.functions.AbstractPolynomialSpace.Companion.optimizedMultiply
 import space.kscience.kmath.operations.*
 import kotlin.js.JsName
 import kotlin.jvm.JvmName
