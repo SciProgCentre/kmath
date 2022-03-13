@@ -11,7 +11,7 @@ Functions and interpolations.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-functions:0.3.0-dev-17`.
+The Maven coordinates of this project are `space.kscience:kmath-functions:0.3.0-dev-19`.
 
 **Gradle:**
 ```gradle
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-functions:0.3.0-dev-17'
+    implementation 'space.kscience:kmath-functions:0.3.0-dev-19'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -32,6 +32,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-functions:0.3.0-dev-17")
+    implementation("space.kscience:kmath-functions:0.3.0-dev-19")
 }
 ```
