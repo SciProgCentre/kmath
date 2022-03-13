@@ -5,43 +5,38 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.functions.AbstractPolynomialSpace.Companion.optimizedAddMultiplied
-import space.kscience.kmath.functions.AbstractPolynomialSpace.Companion.optimizedMultiply
 import space.kscience.kmath.operations.*
 import kotlin.jvm.JvmName
 import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Polynomial coefficients model without fixation on specific context they are applied to.
+ * Polynomial model without fixation on specific context they are applied to.
  *
  * @param coefficients constant is the leftmost coefficient.
  */
 public class Polynomial<T>(public val coefficients: List<T>) : AbstractPolynomial<T> {
     override fun toString(): String = "Polynomial$coefficients"
-
-//    public companion object {
-//        /**
-//         * Default name of variables used in string representations.
-//         *
-//         * @see Polynomial.toString
-//         */
-//        public var defaultVariableName: String = "x"
-//
-//        /**
-//         * Represents result of division with remainder.
-//         */
-//        public data class DividingResult<C>(
-//            val quotient: Polynomial<C>,
-//            val reminder: Polynomial<C>
-//        )
-//    }
 }
+
+// region Internal utilities
 
 /**
  * Represents internal [Polynomial] errors.
  */
-internal class PolynomialError(message: String): Error(message)
+internal class PolynomialError : Error {
+    constructor(): super()
+    constructor(message: String): super(message)
+    constructor(message: String?, cause: Throwable?): super(message, cause)
+    constructor(cause: Throwable?): super(cause)
+}
+
+/**
+ * Throws an [PolynomialError] with the given [message].
+ */
+internal fun polynomialError(message: Any): Nothing = throw PolynomialError(message.toString())
+
+// endregion
 
 // region Constructors and converters
 
@@ -66,16 +61,16 @@ public fun <T> T.asPolynomial() : Polynomial<T> = Polynomial(listOf(this))
 // endregion
 
 /**
- * Space of polynomials constructed over ring.
+ * Space of univariate polynomials constructed over ring.
  *
  * @param C the type of constants. Polynomials have them as a coefficients in their terms.
  * @param A type of underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-@Suppress("INAPPLICABLE_JVM_NAME") // KT-31420
+@Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
 public open class PolynomialSpace<C, A : Ring<C>>(
     public val ring: A,
-) : AbstractPolynomialSpace<C, Polynomial<C>>{
+) : AbstractPolynomialSpace<C, Polynomial<C>> {
     // region Constant-integer relation
     @JvmName("constantIntPlus")
     public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
@@ -102,8 +97,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 coefficients
                     .toMutableList()
                     .apply {
-                        if (isEmpty()) this[0] = ring.zero + other
-                        else this[0] = this[0]!! + other
+                        val result = getOrElse(0) { ring.zero } + other
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
     public override operator fun Polynomial<C>.minus(other: Int): Polynomial<C> =
@@ -113,8 +114,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 coefficients
                     .toMutableList()
                     .apply {
-                        if (isEmpty()) this[0] = ring.zero - other
-                        else this[0] = this[0]!! - other
+                        val result = getOrElse(0) { ring.zero } - other
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
     public override operator fun Polynomial<C>.times(other: Int): Polynomial<C> =
@@ -134,8 +141,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 other.coefficients
                     .toMutableList()
                     .apply {
-                        if (isEmpty()) this[0] = ring.zero + this@plus
-                        else this[0] = this[0]!! + this@plus
+                        val result = this@plus + getOrElse(0) { ring.zero }
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
     public override operator fun Int.minus(other: Polynomial<C>): Polynomial<C> =
@@ -145,8 +158,16 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 other.coefficients
                     .toMutableList()
                     .apply {
-                        if (isEmpty()) this[0] = ring.zero - this@minus
-                        else this[0] = this[0]!! - this@minus
+                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
+
+                        val result = this@minus - getOrElse(0) { ring.zero }
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
     public override operator fun Int.times(other: Polynomial<C>): Polynomial<C> =
@@ -183,12 +204,20 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 
     // region Constant-polynomial relation
     public override operator fun C.plus(other: Polynomial<C>): Polynomial<C> =
-        with(other.coefficients) {
+        if (this.isZero()) other
+        else with(other.coefficients) {
             if (isEmpty()) Polynomial(listOf(this@plus))
             else Polynomial(
                 toMutableList()
                     .apply {
-                        this[0] += this@plus
+                        val result = if (size == 0) this@plus else this@plus + get(0)
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
         }
@@ -196,12 +225,22 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 //            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
 //        )
     public override operator fun C.minus(other: Polynomial<C>): Polynomial<C> =
-        with(other.coefficients) {
+        if (this.isZero()) other
+        else with(other.coefficients) {
             if (isEmpty()) Polynomial(listOf(-this@minus))
             else Polynomial(
                 toMutableList()
                     .apply {
-                        this[0] -= this@minus
+                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
+
+                        val result = if (size == 0) this@minus else this@minus - get(0)
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
         }
@@ -209,9 +248,10 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 //            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
 //        )
     public override operator fun C.times(other: Polynomial<C>): Polynomial<C> =
-        Polynomial(
+        if (this.isZero()) other
+        else Polynomial(
             other.coefficients
-//                .subList(0, other.degree + 1)
+                .subList(0, other.degree + 1)
                 .map { it * this }
         )
     // endregion
@@ -224,7 +264,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
             else Polynomial(
                 toMutableList()
                     .apply {
-                        this[0] += other
+                        val result = if (size == 0) other else get(0) + other
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
         }
@@ -232,12 +279,20 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 //            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
 //        )
     public override operator fun Polynomial<C>.minus(other: C): Polynomial<C> =
-        with(coefficients) {
+        if (other.isZero()) this
+        else with(coefficients) {
             if (isEmpty()) Polynomial(listOf(other))
             else Polynomial(
                 toMutableList()
                     .apply {
-                        this[0] -= other
+                        val result = if (size == 0) other else get(0) - other
+                        val isResultZero = result.isZero()
+
+                        when {
+                            size == 0 && !isResultZero -> add(result)
+                            size > 1 || !isResultZero -> this[0] = result
+                            else -> clear()
+                        }
                     }
             )
         }
@@ -245,9 +300,10 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 //            listOf(coefficients[0] - other) + coefficients.subList(1, degree + 1)
 //        )
     public override operator fun Polynomial<C>.times(other: C): Polynomial<C> =
-        Polynomial(
+        if (other.isZero()) this
+        else Polynomial(
             coefficients
-//                .subList(0, degree + 1)
+                .subList(0, degree + 1)
                 .map { it * other }
         )
     // endregion
@@ -283,8 +339,8 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         val thisDegree = degree
         val otherDegree = other.degree
         return when {
-            thisDegree == -1 -> this
-            otherDegree == -1 -> other
+            thisDegree == -1 -> zero
+            otherDegree == -1 -> zero
             else ->
                 Polynomial(
                     (0..(thisDegree + otherDegree))
@@ -293,6 +349,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                                 .map { coefficients[it] * other.coefficients[d - it] }
                                 .reduce { acc, rational -> acc + rational }
                         }
+                        .run { subList(0, indexOfLast { it.isNotZero() } + 1) }
                 )
         }
     }
@@ -321,8 +378,8 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         }
     // endregion
 
-    // Not sure is it necessary...
     // region Polynomial properties
+
     public override val Polynomial<C>.degree: Int get() = coefficients.indexOfLast { it != ring.zero }
 
     public override fun Polynomial<C>.asConstantOrNull(): C? =
@@ -354,8 +411,8 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     public inline operator fun Polynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
     @Suppress("NOTHING_TO_INLINE")
     public inline operator fun Polynomial<C>.invoke(argument: Polynomial<C>): Polynomial<C> = this.substitute(ring, argument)
-    // endregion
 
+    // endregion
 }
 
 /**
