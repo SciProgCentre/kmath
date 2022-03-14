@@ -6,7 +6,6 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
-import kotlin.jvm.JvmName
 import kotlin.math.max
 import kotlin.math.min
 
