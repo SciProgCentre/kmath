@@ -105,34 +105,58 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
-    public override operator fun Int.plus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Int.plus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
     /**
      * Returns difference between the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
-    public override operator fun Int.minus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Int.minus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
     /**
      * Returns product of the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public override operator fun Int.times(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Int.times(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
     // endregion
 
     // region Constant-rational relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
-    public override operator fun C.plus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun C.plus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
     /**
      * Returns difference between the constant represented as polynomial and the rational function.
      */
-    public override operator fun C.minus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun C.minus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
     /**
      * Returns product of the constant represented as polynomial and the rational function.
      */
-    public override operator fun C.times(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun C.times(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
     // endregion
 
     // region Rational-constant relation
@@ -166,15 +190,27 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
-    public override operator fun Polynomial<C>.plus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Polynomial<C>.plus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
     /**
      * Returns difference between the polynomial represented as polynomial and the rational function.
      */
-    public override operator fun Polynomial<C>.minus(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Polynomial<C>.minus(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
     /**
      * Returns product of the polynomial represented as polynomial and the rational function.
      */
-    public override operator fun Polynomial<C>.times(other: RationalFunction<C>): RationalFunction<C> = TODO()
+    public override operator fun Polynomial<C>.times(other: RationalFunction<C>): RationalFunction<C> =
+        RationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
     // endregion
 
     // region Rational-polynomial relation
