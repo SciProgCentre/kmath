@@ -28,21 +28,18 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    @JvmName("constantIntPlus")
     public operator fun C.plus(other: Int): C
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    @JvmName("constantIntMinus")
     public operator fun C.minus(other: Int): C
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    @JvmName("constantIntTimes")
     public operator fun C.times(other: Int): C
     // endregion
 
@@ -52,21 +49,18 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    @JvmName("intConstantPlus")
     public operator fun Int.plus(other: C): C
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    @JvmName("intConstantMinus")
     public operator fun Int.minus(other: C): C
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    @JvmName("intConstantTimes")
     public operator fun Int.times(other: C): C
     // endregion
 
@@ -189,32 +183,26 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     /**
      * Check if the instant is zero constant.
      */
-    @JvmName("constantIsZero")
     public fun C.isZero(): Boolean = this == constantZero
     /**
      * Check if the instant is NOT zero constant.
      */
-    @JvmName("constantIsNotZero")
     public fun C.isNotZero(): Boolean = !isZero()
     /**
      * Check if the instant is unit constant.
      */
-    @JvmName("constantIsOne")
     public fun C.isOne(): Boolean =  this == constantOne
     /**
      * Check if the instant is NOT unit constant.
      */
-    @JvmName("constantIsNotOne")
     public fun C.isNotOne(): Boolean = !isOne()
     /**
      * Check if the instant is minus unit constant.
      */
-    @JvmName("constantIsMinusOne")
     public fun C.isMinusOne(): Boolean =  this == -constantOne
     /**
      * Check if the instant is NOT minus unit constant.
      */
-    @JvmName("constantIsNotMinusOne")
     public fun C.isNotMinusOne(): Boolean = !isMinusOne()
 
     /**
@@ -520,7 +508,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     // endregion
 }
 
-@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+@Suppress("INAPPLICABLE_JVM_NAME")
 public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>, A: Ring<C>> : AbstractRationalFunctionalSpace<C, P, R> {
 
     public val ring: A
@@ -531,21 +519,18 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    @JvmName("constantIntPlus")
     public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    @JvmName("constantIntMinus")
     public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    @JvmName("constantIntTimes")
     public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
     // endregion
 
@@ -555,21 +540,18 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    @JvmName("intConstantPlus")
     public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    @JvmName("intConstantMinus")
     public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    @JvmName("intConstantTimes")
     public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
     // endregion
 
@@ -611,7 +593,7 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
     // endregion
 }
 
-@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+@Suppress("INAPPLICABLE_JVM_NAME")
 public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>, A: Ring<C>> : AbstractRationalFunctionalSpace<C, P, R> {
 
     public val polynomialRing: AbstractPolynomialSpace<C, P>
@@ -622,21 +604,18 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: Abstra
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    @JvmName("constantIntPlus")
     public override operator fun C.plus(other: Int): C = polynomialRing { this@plus + other }
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    @JvmName("constantIntMinus")
     public override operator fun C.minus(other: Int): C = polynomialRing { this@minus - other }
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    @JvmName("constantIntTimes")
     public override operator fun C.times(other: Int): C = polynomialRing { this@times * other }
     // endregion
 
@@ -646,21 +625,18 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: Abstra
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    @JvmName("intConstantPlus")
     public override operator fun Int.plus(other: C): C = polynomialRing { this@plus + other }
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    @JvmName("intConstantMinus")
     public override operator fun Int.minus(other: C): C = polynomialRing { this@minus - other }
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    @JvmName("intConstantTimes")
     public override operator fun Int.times(other: C): C = polynomialRing { this@times * other }
     // endregion
 
@@ -736,32 +712,26 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: Abstra
     /**
      * Check if the instant is zero constant.
      */
-    @JvmName("constantIsZero")
     public override fun C.isZero(): Boolean = polynomialRing { this@isZero.isZero() }
     /**
      * Check if the instant is NOT zero constant.
      */
-    @JvmName("constantIsNotZero")
     public override fun C.isNotZero(): Boolean = polynomialRing { this@isNotZero.isNotZero() }
     /**
      * Check if the instant is unit constant.
      */
-    @JvmName("constantIsOne")
     public override fun C.isOne(): Boolean = polynomialRing { this@isOne.isOne() }
     /**
      * Check if the instant is NOT unit constant.
      */
-    @JvmName("constantIsNotOne")
     public override fun C.isNotOne(): Boolean = polynomialRing { this@isNotOne.isNotOne() }
     /**
      * Check if the instant is minus unit constant.
      */
-    @JvmName("constantIsMinusOne")
     public override fun C.isMinusOne(): Boolean = polynomialRing { this@isMinusOne.isMinusOne() }
     /**
      * Check if the instant is NOT minus unit constant.
      */
-    @JvmName("constantIsNotMinusOne")
     public override fun C.isNotMinusOne(): Boolean = polynomialRing { this@isNotMinusOne.isNotMinusOne() }
 
     /**

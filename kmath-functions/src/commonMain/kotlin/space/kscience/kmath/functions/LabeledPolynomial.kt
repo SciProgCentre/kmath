@@ -331,7 +331,6 @@ internal fun Map<Variable, UInt>.cleanUp() = filterValues { it > 0U }
  * @param A the intersection of [Ring] of [C] and [ScaleOperations] of [C].
  * @param ring the [A] instance.
  */
-@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "INAPPLICABLE_JVM_NAME")
 public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, LabeledPolynomial<C>, A> {
@@ -768,7 +767,6 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     override val one: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to constantOne))
 
     // TODO: Docs
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     override infix fun LabeledPolynomial<C>.equalsTo(other: LabeledPolynomial<C>): Boolean =
         when {
             this === other -> true

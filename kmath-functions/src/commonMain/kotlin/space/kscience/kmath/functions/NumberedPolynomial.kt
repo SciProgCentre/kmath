@@ -263,7 +263,6 @@ public fun <C, A: Ring<C>> C.asNumberedPolynomial() : NumberedPolynomial<C> = Nu
  * @param A the intersection of [Ring] of [C] and [ScaleOperations] of [C].
  * @param ring the [A] instance.
  */
-@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "INAPPLICABLE_JVM_NAME")
 public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public final override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
@@ -532,7 +531,6 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         )
 
     // TODO: Docs
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     override infix fun NumberedPolynomial<C>.equalsTo(other: NumberedPolynomial<C>): Boolean =
         when {
             this === other -> true

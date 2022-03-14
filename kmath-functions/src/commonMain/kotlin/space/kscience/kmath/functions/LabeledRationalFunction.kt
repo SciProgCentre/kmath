@@ -305,7 +305,6 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     /**
      * Checks equality of the rational functions.
      */
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     public override infix fun LabeledRationalFunction<C>.equalsTo(other: LabeledRationalFunction<C>): Boolean {
         if (this === other) return true
 

@@ -302,7 +302,6 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     /**
      * Checks equality of the rational functions.
      */
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     public override infix fun NumberedRationalFunction<C>.equalsTo(other: NumberedRationalFunction<C>): Boolean {
         if (this === other) return true
 

@@ -6,6 +6,7 @@ import kotlin.contracts.*
 import kotlin.jvm.JvmName
 
 
+
 // TODO: Docs
 
 // region Sort of legacy
@@ -485,8 +486,8 @@ public fun NumberedPolynomial<Double>.substitute(args: Map<Int, Double>): Number
             val deg = degs.getOrElse(variable) { 0u }
             if (deg == 0u) product else product * substitutor.pow(deg.toInt())
         }
-        if (newDegs !in acc) acc[newDegs] = c
-        else acc[newDegs] = acc[newDegs]!! + c
+        if (newDegs !in acc) acc[newDegs] = newC
+        else acc[newDegs] = acc[newDegs]!! + newC
     }
     return NumberedPolynomial<Double>(acc)
 }
@@ -504,8 +505,8 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>
             val deg = degs.getOrElse(variable) { 0u }
             if (deg == 0u) product else product * power(substitutor, deg)
         }
-        if (newDegs !in acc) acc[newDegs] = c
-        else acc[newDegs] = acc[newDegs]!! + c
+        if (newDegs !in acc) acc[newDegs] = newC
+        else acc[newDegs] = acc[newDegs]!! + newC
     }
     return NumberedPolynomial<C>(acc)
 }

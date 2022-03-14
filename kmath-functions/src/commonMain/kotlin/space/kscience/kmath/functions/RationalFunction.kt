@@ -287,7 +287,6 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
     /**
      * Checks equality of the rational functions.
      */
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     public override infix fun RationalFunction<C>.equalsTo(other: RationalFunction<C>): Boolean =
         when {
             this === other -> true

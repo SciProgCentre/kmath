@@ -66,7 +66,7 @@ public fun <T> T.asPolynomial() : Polynomial<T> = Polynomial(listOf(this))
  * @param A type of underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-@Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
+//@Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
 public open class PolynomialSpace<C, A : Ring<C>>(
     public final override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {
@@ -322,7 +322,6 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     override val zero: Polynomial<C> = Polynomial(emptyList())
     override val one: Polynomial<C> = Polynomial(listOf(constantZero))
 
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
         when {
             this === other -> true
