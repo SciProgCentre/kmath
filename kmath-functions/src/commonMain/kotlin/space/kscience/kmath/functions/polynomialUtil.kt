@@ -109,16 +109,44 @@ public fun <C, A : Ring<C>> Polynomial<C>.asPolynomialFunctionOver(ring: A): (Po
 public fun <C, A> Polynomial<C>.derivative(
     algebra: A,
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(coefficients.drop(1).mapIndexed { index, t -> number(index) * t })
+    Polynomial(coefficients.drop(1).mapIndexed { index, c -> number(index) * c })
 }
 
 /**
- * Create a polynomial witch represents indefinite integral version of this polynomial
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A> Polynomial<C>.nthDerivative(
+    algebra: A,
+    order: UInt,
+): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
+    TODO()
+    Polynomial(coefficients.drop(order.toInt()).mapIndexed { index, c ->  number(index) * c })
+}
+
+/**
+ * Returns algebraic antiderivative of received polynomial.
  */
 @UnstableKMathAPI
 public fun <C, A> Polynomial<C>.antiderivative(
     algebra: A,
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
+    val integratedCoefficients = buildList(coefficients.size + 1) {
+        add(zero)
+        coefficients.forEachIndexed{ index, t -> add(t / number(index + 1)) }
+    }
+    Polynomial(integratedCoefficients)
+}
+
+/**
+ * Returns algebraic antiderivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A> Polynomial<C>.nthAntiderivative(
+    algebra: A,
+    order: UInt,
+): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
+    TODO()
     val integratedCoefficients = buildList(coefficients.size + 1) {
         add(zero)
         coefficients.forEachIndexed{ index, t -> add(t / number(index + 1)) }

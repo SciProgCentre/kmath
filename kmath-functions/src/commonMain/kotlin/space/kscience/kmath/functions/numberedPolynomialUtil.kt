@@ -545,62 +545,169 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.asPolynomialFunctionOver(ring:
  * Returns algebraic derivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.derivativeBy(
+public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
     algebra: A,
     variable: Int,
-): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg ->
+                        when {
+                            index != variable -> deg
+                            deg > 0u -> deg - 1u
+                            else -> return@forEach
+                        }
+                    },
+                    optimizedMultiply(c, degs.getOrElse(variable) { 1u }.toInt())
+                )
+            }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */ // TODO: This one does not work!!!
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
+    algebra: A,
+    variables: IntArray,
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg ->
+                        when {
+                            index !in variables -> deg
+                            deg > 0u -> deg - 1u
+                            else -> return@forEach
+                        }
+                    },
+                    optimizedMultiply(c, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
+                )
+            }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */ // TODO: This one does not work!!!
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
+    algebra: A,
+    variables: Collection<Int>,
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg ->
+                        when {
+                            index !in variables -> deg
+                            deg > 0u -> deg - 1u
+                            else -> return@forEach
+                        }
+                    },
+                    optimizedMultiply(c, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
+                )
+            }
+        }
+    )
 }
 
 /**
  * Returns algebraic derivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.derivativeBy(
-    algebra: A,
-    variables: IntArray,
-): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
-}
-
-/**
- * Returns algebraic derivative of received polynomial.
- */
-@UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.derivativeBy(
-    algebra: A,
-    variables: Collection<Int>,
-): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = derivativeBy(algebra, variables.toIntArray())
-
-/**
- * Create a polynomial witch represents indefinite integral version of this polynomial
- */
-@UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.antiderivativeBy(
+public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
     algebra: A,
     variable: Int,
-): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
+    order: UInt
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg ->
+                        when {
+                            index != variable -> deg
+                            deg >= order -> deg - order
+                            else -> return@forEach
+                        }
+                    },
+                    degs.getOrElse(variable) { 1u }.toInt().let {
+                        (0u until order).fold(c) { acc, ord ->
+                            optimizedMultiply(acc, ord.toInt())
+                        }
+                    }
+                )
+            }
+        }
+    )
 }
 
 /**
- * Create a polynomial witch represents indefinite integral version of this polynomial
+ * Returns algebraic antiderivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.antiderivativeBy(
+public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
+    algebra: A,
+    variable: Int,
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg -> if(index != variable) deg else deg + 1u },
+                    c / optimizedMultiply(one, degs.getOrElse(variable) { 1u }.toInt())
+                )
+            }
+        }
+    )
+}
+
+/**
+ * Returns algebraic antiderivative of received polynomial.
+ */ // TODO: This one does not work!!!
+@UnstableKMathAPI
+public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
     algebra: A,
     variables: IntArray,
-): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg -> if(index !in variables) deg else deg + 1u },
+                    c / optimizedMultiply(one, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
+                )
+            }
+        }
+    )
 }
 
 /**
- * Create a polynomial witch represents indefinite integral version of this polynomial
- */
+ * Returns algebraic antiderivative of received polynomial.
+ */ // TODO: This one does not work!!!
 @UnstableKMathAPI
-public fun <C, A> NumberedPolynomial<C>.antiderivativeBy(
+public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
     algebra: A,
     variables: Collection<Int>,
-): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = antiderivativeBy(algebra, variables.toIntArray())
+): NumberedPolynomial<C> = algebra {
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients.forEach { (degs, c) ->
+                put(
+                    degs.mapIndexed { index, deg -> if(index !in variables) deg else deg + 1u },
+                    c / optimizedMultiply(one, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
+                )
+            }
+        }
+    )
+}
 
 // endregion
