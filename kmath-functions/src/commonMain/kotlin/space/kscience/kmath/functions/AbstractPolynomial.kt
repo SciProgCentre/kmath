@@ -154,7 +154,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is NOT zero constant.
      */
     @JvmName("constantIsNotZero")
-    public fun C.isNotZero(): Boolean
+    public fun C.isNotZero(): Boolean = !isZero()
     /**
      * Check if the instant is unit constant.
      */
@@ -164,7 +164,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is NOT unit constant.
      */
     @JvmName("constantIsNotOne")
-    public fun C.isNotOne(): Boolean
+    public fun C.isNotOne(): Boolean = !isOne()
     /**
      * Check if the instant is minus unit constant.
      */
@@ -174,7 +174,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is NOT minus unit constant.
      */
     @JvmName("constantIsNotMinusOne")
-    public fun C.isNotMinusOne(): Boolean
+    public fun C.isNotMinusOne(): Boolean = !isMinusOne()
     // endregion
 
     // region Constant-polynomial relation
@@ -232,27 +232,27 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
     /**
      * Check if the instant is zero polynomial.
      */
-    public fun P.isZero(): Boolean = this == zero
+    public fun P.isZero(): Boolean = this equalsTo zero
     /**
      * Check if the instant is NOT zero polynomial.
      */
-    public fun P.isNotZero(): Boolean = this != zero
+    public fun P.isNotZero(): Boolean = !isZero()
     /**
      * Check if the instant is unit polynomial.
      */
-    public fun P.isOne(): Boolean = this == one
+    public fun P.isOne(): Boolean = this equalsTo one
     /**
      * Check if the instant is NOT unit polynomial.
      */
-    public fun P.isNotOne(): Boolean = this != one
+    public fun P.isNotOne(): Boolean = !isOne()
     /**
      * Check if the instant is minus unit polynomial.
      */
-    public fun P.isMinusOne(): Boolean = this == -one
+    public fun P.isMinusOne(): Boolean = this equalsTo -one
     /**
      * Check if the instant is NOT minus unit polynomial.
      */
-    public fun P.isNotMinusOne(): Boolean = this != -one
+    public fun P.isNotMinusOne(): Boolean = !isMinusOne()
 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
@@ -266,8 +266,11 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
     /**
      * Checks equality of the polynomials.
      */
-    @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
-    public fun P.equals(other: P): Boolean
+    public infix fun P.equalsTo(other: P): Boolean
+    /**
+     * Checks NOT equality of the polynomials.
+     */
+    public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
     // endregion
 
     // Not sure is it necessary...
@@ -309,5 +312,108 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
     // region Legacy of Ring interface
     override fun add(left: P, right: P): P = left + right
     override fun multiply(left: P, right: P): P = left * right
+    // endregion
+}
+
+/**
+ * Abstraction of ring of polynomials of type [P] over ring of constants of type [C].
+ *
+ * @param C the type of constants. Polynomials have them as a coefficients in their terms.
+ * @param P the type of polynomials.
+ */
+@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A: Ring<C>> : AbstractPolynomialSpace<C, P> {
+
+    public val ring: A
+
+    // region Constant-integer relation
+    /**
+     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
+     */
+    @JvmName("constantIntPlus")
+    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
+    /**
+     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
+     */
+    @JvmName("constantIntMinus")
+    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
+    /**
+     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
+    @JvmName("constantIntTimes")
+    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
+    // endregion
+
+    // region Integer-constant relation
+    /**
+     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
+     */
+    @JvmName("intConstantPlus")
+    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
+    /**
+     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
+     */
+    @JvmName("intConstantMinus")
+    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
+    /**
+     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
+    @JvmName("intConstantTimes")
+    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
+    // endregion
+
+    // region Constant-constant relation
+    /**
+     * Returns negation of the constant.
+     */
+    @JvmName("constantUnaryMinus")
+    @JsName("constantUnaryMinus")
+    public override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
+    /**
+     * Returns sum of the constants.
+     */
+    @JvmName("constantPlus")
+    @JsName("constantPlus")
+    public override operator fun C.plus(other: C): C = ring { this@plus + other }
+    /**
+     * Returns difference of the constants.
+     */
+    @JvmName("constantMinus")
+    @JsName("constantMinus")
+    public override operator fun C.minus(other: C): C = ring { this@minus - other }
+    /**
+     * Returns product of the constants.
+     */
+    @JvmName("constantTimes")
+    @JsName("constantTimes")
+    public override operator fun C.times(other: C): C = ring { this@times * other }
+
+    /**
+     * Check if the instant is zero constant.
+     */
+    @JvmName("constantIsZero")
+    public override fun C.isZero(): Boolean = ring { this == zero }
+    /**
+     * Check if the instant is unit constant.
+     */
+    @JvmName("constantIsOne")
+    public override fun C.isOne(): Boolean = ring { this == one }
+    /**
+     * Check if the instant is minus unit constant.
+     */
+    @JvmName("constantIsMinusOne")
+    public override fun C.isMinusOne(): Boolean = ring { this == -one }
     // endregion
 }

@@ -15,7 +15,7 @@ import kotlin.math.min
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public class Polynomial<T>(public val coefficients: List<T>) : AbstractPolynomial<T> {
+public data class Polynomial<T>(public val coefficients: List<T>) : AbstractPolynomial<T> {
     override fun toString(): String = "Polynomial$coefficients"
 }
 
@@ -69,25 +69,8 @@ public fun <T> T.asPolynomial() : Polynomial<T> = Polynomial(listOf(this))
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
 public open class PolynomialSpace<C, A : Ring<C>>(
-    public val ring: A,
-) : AbstractPolynomialSpace<C, Polynomial<C>> {
-    // region Constant-integer relation
-    @JvmName("constantIntPlus")
-    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
-    @JvmName("constantIntMinus")
-    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
-    @JvmName("constantIntTimes")
-    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
-    // endregion
-
-    // region Integer-constant relation
-    @JvmName("intConstantPlus")
-    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
-    @JvmName("intConstantMinus")
-    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
-    @JvmName("intConstantTimes")
-    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
-    // endregion
+    public final override val ring: A,
+) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {
 
     // region Polynomial-integer relation
     public override operator fun Polynomial<C>.plus(other: Int): Polynomial<C> =
@@ -177,29 +160,6 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 .subList(0, other.degree + 1)
                 .map { it * this }
         )
-    // endregion
-
-    // region Constant-constant relation
-    @JvmName("constantUnaryMinus")
-    public override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
-    @JvmName("constantPlus")
-    public override operator fun C.plus(other: C): C = ring { this@plus + other }
-    @JvmName("constantMinus")
-    public override operator fun C.minus(other: C): C = ring { this@minus - other }
-    @JvmName("constantTimes")
-    public override operator fun C.times(other: C): C = ring { this@times * other }
-    @JvmName("constantIsZero")
-    public override fun C.isZero(): Boolean = ring { this == zero }
-    @JvmName("constantIsNotZero")
-    public override fun C.isNotZero(): Boolean = ring { this != zero }
-    @JvmName("constantIsOne")
-    public override fun C.isOne(): Boolean = ring { this == one }
-    @JvmName("constantIsNotOne")
-    public override fun C.isNotOne(): Boolean = ring { this != one }
-    @JvmName("constantIsMinusOne")
-    public override fun C.isMinusOne(): Boolean = ring { this == -one }
-    @JvmName("constantIsNotMinusOne")
-    public override fun C.isNotMinusOne(): Boolean = ring { this != -one }
     // endregion
 
     // region Constant-polynomial relation
@@ -355,19 +315,16 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     }
 
     public override fun Polynomial<C>.isZero(): Boolean = coefficients.all { it.isZero() }
-    public override fun Polynomial<C>.isNotZero(): Boolean = coefficients.any { it.isNotZero() }
     public override fun Polynomial<C>.isOne(): Boolean =
         with(coefficients) { isNotEmpty() && asSequence().withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() } } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
-    public override fun Polynomial<C>.isNotOne(): Boolean = !isOne()
     public override fun Polynomial<C>.isMinusOne(): Boolean =
         with(coefficients) { isNotEmpty() && asSequence().withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() } } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
-    public override fun Polynomial<C>.isNotMinusOne(): Boolean = !isMinusOne()
 
     override val zero: Polynomial<C> = Polynomial(emptyList())
     override val one: Polynomial<C> = Polynomial(listOf(ring.one))
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
-    public override fun Polynomial<C>.equals(other: Polynomial<C>): Boolean =
+    public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
         when {
             this === other -> true
             else -> {

@@ -13,7 +13,7 @@ import kotlin.math.max
  *
  * @param C the type of constants.
  */
-public class NumberedPolynomial<C>
+public data class NumberedPolynomial<C>
 internal constructor(
     /**
      * Map that collects coefficients of the polynomial. Every monomial `a x_1^{d_1} ... x_n^{d_n}` is represented as
@@ -259,27 +259,9 @@ public fun <C, A: Ring<C>> C.asNumberedPolynomial() : NumberedPolynomial<C> = Nu
  * @param ring the [A] instance.
  */
 @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "INAPPLICABLE_JVM_NAME")
-public class NumberedPolynomialSpace<C, A : Ring<C>>(
-    public val ring: A,
-) : AbstractPolynomialSpace<C, NumberedPolynomial<C>> {
-    // region Constant-integer relation
-    @JvmName("constantIntPlus")
-    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
-    @JvmName("constantIntMinus")
-    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
-    @JvmName("constantIntTimes")
-    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
-    // endregion
-
-    // region Integer-constant relation
-    @JvmName("intConstantPlus")
-    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
-    @JvmName("intConstantMinus")
-    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
-    @JvmName("intConstantTimes")
-    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
-    // endregion
-
+public open class NumberedPolynomialSpace<C, A : Ring<C>>(
+    public final override val ring: A,
+) : AbstractPolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
     // region Polynomial-integer relation
     public override operator fun NumberedPolynomial<C>.plus(other: Int): NumberedPolynomial<C> =
         if (other == 0) this
@@ -360,29 +342,6 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> this@times * c }
                 }
         )
-    // endregion
-
-    // region Constant-constant relation
-    @JvmName("constantUnaryMinus")
-    override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
-    @JvmName("constantPlus")
-    override operator fun C.plus(other: C): C = ring { this@plus + other }
-    @JvmName("constantMinus")
-    override operator fun C.minus(other: C): C = ring { this@minus - other }
-    @JvmName("constantTimes")
-    override operator fun C.times(other: C): C = ring { this@times * other }
-    @JvmName("constantIsZero")
-    public override fun C.isZero(): Boolean = ring { this == zero }
-    @JvmName("constantIsNotZero")
-    public override fun C.isNotZero(): Boolean = ring { this != zero }
-    @JvmName("constantIsOne")
-    public override fun C.isOne(): Boolean = ring { this == one }
-    @JvmName("constantIsNotOne")
-    public override fun C.isNotOne(): Boolean = ring { this != one }
-    @JvmName("constantIsMinusOne")
-    public override fun C.isMinusOne(): Boolean = ring { this == -one }
-    @JvmName("constantIsNotMinusOne")
-    public override fun C.isNotMinusOne(): Boolean = ring { this != -one }
     // endregion
 
     // region Constant-polynomial relation
@@ -521,7 +480,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             other.isZero() -> zero
             else ->
                 NumberedPolynomial<C>(
-                    buildCoefficients {
+                    buildCoefficients(coefficients.size * other.coefficients.size) {
                         for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
                             val degs =
                                 (0..max(degs1.lastIndex, degs2.lastIndex))
@@ -534,7 +493,6 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         }
 
     public override fun NumberedPolynomial<C>.isZero(): Boolean = coefficients.values.all { it.isZero() }
-    public override fun NumberedPolynomial<C>.isNotZero(): Boolean = coefficients.values.any { it.isNotZero() }
     public override fun NumberedPolynomial<C>.isOne(): Boolean =
         with(coefficients) {
             var foundAbsoluteTermAndItIsOne = false
@@ -547,7 +505,6 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             }
             foundAbsoluteTermAndItIsOne
         }
-    public override fun NumberedPolynomial<C>.isNotOne(): Boolean = !isOne()
     public override fun NumberedPolynomial<C>.isMinusOne(): Boolean =
         with(coefficients) {
             var foundAbsoluteTermAndItIsMinusOne = false
@@ -560,7 +517,6 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             }
             foundAbsoluteTermAndItIsMinusOne
         }
-    public override fun NumberedPolynomial<C>.isNotMinusOne(): Boolean = !isMinusOne()
 
     override val zero: NumberedPolynomial<C> = NumberedPolynomial<C>(emptyMap())
     override val one: NumberedPolynomial<C> =
@@ -572,7 +528,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     // TODO: Docs
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
-    override fun NumberedPolynomial<C>.equals(other: NumberedPolynomial<C>): Boolean =
+    override infix fun NumberedPolynomial<C>.equalsTo(other: NumberedPolynomial<C>): Boolean =
         when {
             this === other -> true
             else -> coefficients.size == other.coefficients.size &&
@@ -658,15 +614,9 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     public inline operator fun NumberedPolynomial<C>.invoke(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = this.substitute(ring, argument)
     // endregion
 
-    // region Legacy
-    @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun add(left: NumberedPolynomial<C>, right: NumberedPolynomial<C>): NumberedPolynomial<C> = left + right
-    @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun multiply(left: NumberedPolynomial<C>, right: NumberedPolynomial<C>): NumberedPolynomial<C> = left * right
-    // endregion
-
     // region Utilities
     // TODO: Move to region internal utilities with context receiver
+    @JvmName("applyAndRemoveZerosInternal")
     internal fun MutableMap<List<UInt>, C>.applyAndRemoveZeros(block: MutableMap<List<UInt>, C>.() -> Unit) : MutableMap<List<UInt>, C> {
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
@@ -678,9 +628,17 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     internal fun Map<List<UInt>, C>.applyAndRemoveZeros(block: MutableMap<List<UInt>, C>.() -> Unit) : Map<List<UInt>, C> =
         toMutableMap().applyAndRemoveZeros(block)
     @OptIn(ExperimentalTypeInference::class)
-    internal fun buildCoefficients(@BuilderInference builderAction: MutableMap<List<UInt>, C>.() -> Unit): Map<List<UInt>, C> {
+    internal inline fun buildCoefficients(@BuilderInference builderAction: MutableMap<List<UInt>, C>.() -> Unit): Map<List<UInt>, C> {
         contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
         return buildMap {
+            builderAction()
+            for ((degs, c) in this) if (c.isZero()) this.remove(degs)
+        }
+    }
+    @OptIn(ExperimentalTypeInference::class)
+    internal inline fun buildCoefficients(capacity: Int, @BuilderInference builderAction: MutableMap<List<UInt>, C>.() -> Unit): Map<List<UInt>, C> {
+        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
+        return buildMap(capacity) {
             builderAction()
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }

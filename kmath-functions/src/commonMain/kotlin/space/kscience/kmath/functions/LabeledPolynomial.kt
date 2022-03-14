@@ -13,7 +13,7 @@ import kotlin.math.max
  *
  * @param C Ring in which the polynomial is considered.
  */
-public class LabeledPolynomial<C>
+public data class LabeledPolynomial<C>
 internal constructor(
     /**
      * Map that collects coefficients of the polynomial. Every non-zero monomial
@@ -788,7 +788,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             isZero() -> zero
             other.isZero() -> zero
             else -> LabeledPolynomial<C>(
-                buildCoefficients {
+                buildCoefficients(coefficients.size * other.coefficients.size) {
                     for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
                         val degs = degs1.toMutableMap()
                         degs2.mapValuesTo(degs) { (variable, deg) -> degs.getOrElse(variable) { 0u } + deg }
@@ -804,7 +804,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
     // TODO: Docs
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
-    override fun LabeledPolynomial<C>.equals(other: LabeledPolynomial<C>): Boolean =
+    override infix fun LabeledPolynomial<C>.equalsTo(other: LabeledPolynomial<C>): Boolean =
         when {
             this === other -> true
             else -> coefficients.size == other.coefficients.size &&
@@ -896,15 +896,9 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 //    public inline operator fun LabeledPolynomial<C>.invoke(argument: Map<Variable, LabeledPolynomial<C>>): LabeledPolynomial<C> = this.substitute(ring, argument)
     // endregion
 
-    // region Legacy
-    @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun add(left: LabeledPolynomial<C>, right: LabeledPolynomial<C>): LabeledPolynomial<C> = left + right
-    @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun multiply(left: LabeledPolynomial<C>, right: LabeledPolynomial<C>): LabeledPolynomial<C> = left * right
-    // endregion
-
     // region Utilities
     // TODO: Move to region internal utilities with context receiver
+    @JvmName("applyAndRemoveZerosInternal")
     internal fun MutableMap<Map<Variable, UInt>, C>.applyAndRemoveZeros(block: MutableMap<Map<Variable, UInt>, C>.() -> Unit) : MutableMap<Map<Variable, UInt>, C> {
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
@@ -916,9 +910,17 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     internal fun Map<Map<Variable, UInt>, C>.applyAndRemoveZeros(block: MutableMap<Map<Variable, UInt>, C>.() -> Unit) : Map<Map<Variable, UInt>, C> =
         toMutableMap().applyAndRemoveZeros(block)
     @OptIn(ExperimentalTypeInference::class)
-    internal fun buildCoefficients(@BuilderInference builderAction: MutableMap<Map<Variable, UInt>, C>.() -> Unit): Map<Map<Variable, UInt>, C> {
+    internal inline fun buildCoefficients(@BuilderInference builderAction: MutableMap<Map<Variable, UInt>, C>.() -> Unit): Map<Map<Variable, UInt>, C> {
         contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
         return buildMap {
+            builderAction()
+            for ((degs, c) in this) if (c.isZero()) this.remove(degs)
+        }
+    }
+    @OptIn(ExperimentalTypeInference::class)
+    internal inline fun buildCoefficients(capacity: Int, @BuilderInference builderAction: MutableMap<Map<Variable, UInt>, C>.() -> Unit): Map<Map<Variable, UInt>, C> {
+        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
+        return buildMap(capacity) {
             builderAction()
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
