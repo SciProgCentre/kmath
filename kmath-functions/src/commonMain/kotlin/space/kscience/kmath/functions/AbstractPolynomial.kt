@@ -149,7 +149,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is zero constant.
      */
     @JvmName("constantIsZero")
-    public fun C.isZero(): Boolean
+    public fun C.isZero(): Boolean = this == constantZero
     /**
      * Check if the instant is NOT zero constant.
      */
@@ -159,7 +159,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is unit constant.
      */
     @JvmName("constantIsOne")
-    public fun C.isOne(): Boolean
+    public fun C.isOne(): Boolean = this == constantOne
     /**
      * Check if the instant is NOT unit constant.
      */
@@ -169,12 +169,21 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Check if the instant is minus unit constant.
      */
     @JvmName("constantIsMinusOne")
-    public fun C.isMinusOne(): Boolean
+    public fun C.isMinusOne(): Boolean = this == -constantOne
     /**
      * Check if the instant is NOT minus unit constant.
      */
     @JvmName("constantIsNotMinusOne")
     public fun C.isNotMinusOne(): Boolean = !isMinusOne()
+
+    /**
+     * Instance of zero constant (zero of the underlying ring).
+     */
+    public val constantZero: C
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
+    public val constantOne: C
     // endregion
 
     // region Constant-polynomial relation
@@ -401,19 +410,12 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
     public override operator fun C.times(other: C): C = ring { this@times * other }
 
     /**
-     * Check if the instant is zero constant.
+     * Instance of zero constant (zero of the underlying ring).
      */
-    @JvmName("constantIsZero")
-    public override fun C.isZero(): Boolean = ring { this == zero }
+    public override val constantZero: C get() = ring.zero
     /**
-     * Check if the instant is unit constant.
+     * Instance of unit constant (unit of the underlying ring).
      */
-    @JvmName("constantIsOne")
-    public override fun C.isOne(): Boolean = ring { this == one }
-    /**
-     * Check if the instant is minus unit constant.
-     */
-    @JvmName("constantIsMinusOne")
-    public override fun C.isMinusOne(): Boolean = ring { this == -one }
+    public override val constantOne: C get() = ring.one
     // endregion
 }

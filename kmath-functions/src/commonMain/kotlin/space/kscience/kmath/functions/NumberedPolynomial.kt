@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
@@ -272,7 +277,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } + other
+                        val result = getOrElse(degs) { constantZero } + other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -287,7 +292,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } - other
+                        val result = getOrElse(degs) { constantZero } - other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -313,7 +318,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@plus + getOrElse(degs) { ring.zero }
+                        val result = this@plus + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -328,7 +333,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@minus - getOrElse(degs) { ring.zero }
+                        val result = this@minus - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -354,7 +359,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@plus + getOrElse(degs) { ring.zero }
+                        val result = this@plus + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -372,7 +377,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
                         val degs = emptyList<UInt>()
 
-                        val result = this@minus - getOrElse(degs) { ring.zero }
+                        val result = this@minus - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -402,7 +407,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } + other
+                        val result = getOrElse(degs) { constantZero } + other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -421,7 +426,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } - other
+                        val result = getOrElse(degs) { constantZero } - other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -522,7 +527,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     override val one: NumberedPolynomial<C> =
         NumberedPolynomial<C>(
             mapOf(
-                listOf<UInt>() to ring.one // 1 * x_1^0 * x_2^0 * ...
+                listOf<UInt>() to constantOne // 1 * x_1^0 * x_2^0 * ...
             )
         )
 
@@ -538,6 +543,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     // Not sure is it necessary...
     // region Polynomial properties
+    // TODO: Replace `countOfVariables` with `lastVariable` and create new `countOfVariables`
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
@@ -590,7 +596,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     override fun NumberedPolynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
-            if(isConstant()) getOrElse(emptyList()) { ring.zero }
+            if(isConstant()) getOrElse(emptyList()) { constantZero }
             else null
         }
 

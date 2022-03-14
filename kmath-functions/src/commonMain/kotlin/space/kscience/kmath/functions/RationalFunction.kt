@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
@@ -269,19 +274,6 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             numerator * other.numerator,
             denominator * other.denominator
         )
-
-    /**
-     * Check if the instant is zero rational function.
-     */
-    public override fun RationalFunction<C>.isZero(): Boolean = numerator.isZero()
-    /**
-     * Check if the instant is unit rational function.
-     */
-    public override fun RationalFunction<C>.isOne(): Boolean = numerator.equalsTo(denominator)
-    /**
-     * Check if the instant is minus unit rational function.
-     */
-    public override fun RationalFunction<C>.isMinusOne(): Boolean = (numerator + denominator).isZero()
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).

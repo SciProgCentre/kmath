@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
@@ -305,7 +310,7 @@ internal fun Map<Variable, UInt>.cleanUp() = filterValues { it > 0U }
 //fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to one))
 //
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to ring.one))
+//fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to constantOne))
 //
 //context(A)
 //fun <C, A: Ring<C>> Variable.asLabeledPolynomial(c: C) : LabeledPolynomial<C> =
@@ -328,71 +333,54 @@ internal fun Map<Variable, UInt>.cleanUp() = filterValues { it > 0U }
  */
 @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "INAPPLICABLE_JVM_NAME")
 public class LabeledPolynomialSpace<C, A : Ring<C>>(
-    public val ring: A,
-) : AbstractPolynomialSpace<C, LabeledPolynomial<C>> {
-    // region Constant-integer relation
-    @JvmName("constantIntPlus")
-    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
-    @JvmName("constantIntMinus")
-    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
-    @JvmName("constantIntTimes")
-    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
-    // endregion
-
-    // region Integer-constant relation
-    @JvmName("intConstantPlus")
-    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
-    @JvmName("intConstantMinus")
-    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
-    @JvmName("intConstantTimes")
-    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
-    // endregion
+    public override val ring: A,
+) : AbstractPolynomialSpaceOverRing<C, LabeledPolynomial<C>, A> {
 
     // region Variable-integer relation
     public operator fun Variable.plus(other: Int): LabeledPolynomial<C> =
         if (other == 0) LabeledPolynomial<C>(mapOf(
-            mapOf(this@plus to 1U) to ring.one,
+            mapOf(this@plus to 1U) to constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this@plus to 1U) to ring.one,
-            emptyMap<Variable, UInt>() to ring.one * other,
+            mapOf(this@plus to 1U) to constantOne,
+            emptyMap<Variable, UInt>() to constantOne * other,
         ))
     public operator fun Variable.minus(other: Int): LabeledPolynomial<C> =
         if (other == 0) LabeledPolynomial<C>(mapOf(
-            mapOf(this@minus to 1U) to -ring.one,
+            mapOf(this@minus to 1U) to -constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this@minus to 1U) to -ring.one,
-            emptyMap<Variable, UInt>() to ring.one * other,
+            mapOf(this@minus to 1U) to -constantOne,
+            emptyMap<Variable, UInt>() to constantOne * other,
         ))
     public operator fun Variable.times(other: Int): LabeledPolynomial<C> =
         if (other == 0) zero
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this to 1U) to ring.one * other,
+            mapOf(this to 1U) to constantOne * other,
         ))
     // endregion
 
     // region Integer-variable relation
     public operator fun Int.plus(other: Variable): LabeledPolynomial<C> =
         if (this == 0) LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to ring.one,
+            mapOf(other to 1U) to constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to ring.one,
-            emptyMap<Variable, UInt>() to ring.one * this@plus,
+            mapOf(other to 1U) to constantOne,
+            emptyMap<Variable, UInt>() to constantOne * this@plus,
         ))
     public operator fun Int.minus(other: Variable): LabeledPolynomial<C> =
         if (this == 0) LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to -ring.one,
+            mapOf(other to 1U) to -constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to -ring.one,
-            emptyMap<Variable, UInt>() to ring.one * this@minus,
+            mapOf(other to 1U) to -constantOne,
+            emptyMap<Variable, UInt>() to constantOne * this@minus,
         ))
     public operator fun Int.times(other: Variable): LabeledPolynomial<C> =
         if (this == 0) zero
         else LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to ring.one * this@times,
+            mapOf(other to 1U) to constantOne * this@times,
         ))
     // endregion
 
@@ -406,7 +394,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } + other
+                        val result = getOrElse(degs) { constantZero } + other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -421,7 +409,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } - other
+                        val result = getOrElse(degs) { constantZero } - other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -447,7 +435,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = this@plus + getOrElse(degs) { ring.zero }
+                        val result = this@plus + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -462,7 +450,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = this@minus - getOrElse(degs) { ring.zero }
+                        val result = this@minus - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -478,44 +466,21 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         )
     // endregion
 
-    // region Constant-constant relation
-    @JvmName("constantUnaryMinus")
-    override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
-    @JvmName("constantPlus")
-    override operator fun C.plus(other: C): C = ring { this@plus + other }
-    @JvmName("constantMinus")
-    override operator fun C.minus(other: C): C = ring { this@minus - other }
-    @JvmName("constantTimes")
-    override operator fun C.times(other: C): C = ring { this@times * other }
-    @JvmName("constantIsZero")
-    public override fun C.isZero(): Boolean = ring { this == zero }
-    @JvmName("constantIsNotZero")
-    public override fun C.isNotZero(): Boolean = ring { this != zero }
-    @JvmName("constantIsOne")
-    public override fun C.isOne(): Boolean = ring { this == one }
-    @JvmName("constantIsNotOne")
-    public override fun C.isNotOne(): Boolean = ring { this != one }
-    @JvmName("constantIsMinusOne")
-    public override fun C.isMinusOne(): Boolean = ring { this == -one }
-    @JvmName("constantIsNotMinusOne")
-    public override fun C.isNotMinusOne(): Boolean = ring { this != -one }
-    // endregion
-
     // region Constant-variable relation
     public operator fun C.plus(other: Variable): LabeledPolynomial<C> =
         if (isZero()) LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to ring.one,
+            mapOf(other to 1U) to constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to ring.one,
+            mapOf(other to 1U) to constantOne,
             emptyMap<Variable, UInt>() to this@plus,
         ))
     public operator fun C.minus(other: Variable): LabeledPolynomial<C> =
         if (isZero()) LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to -ring.one,
+            mapOf(other to 1U) to -constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(other to 1U) to -ring.one,
+            mapOf(other to 1U) to -constantOne,
             emptyMap<Variable, UInt>() to this@minus,
         ))
     public operator fun C.times(other: Variable): LabeledPolynomial<C> =
@@ -528,18 +493,18 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // region Variable-constant relation
     public operator fun Variable.plus(other: C): LabeledPolynomial<C> =
         if (other.isZero()) LabeledPolynomial<C>(mapOf(
-            mapOf(this@plus to 1U) to ring.one,
+            mapOf(this@plus to 1U) to constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this@plus to 1U) to ring.one,
+            mapOf(this@plus to 1U) to constantOne,
             emptyMap<Variable, UInt>() to other,
         ))
     public operator fun Variable.minus(other: C): LabeledPolynomial<C> =
         if (other.isZero()) LabeledPolynomial<C>(mapOf(
-            mapOf(this@minus to 1U) to -ring.one,
+            mapOf(this@minus to 1U) to -constantOne,
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this@minus to 1U) to -ring.one,
+            mapOf(this@minus to 1U) to -constantOne,
             emptyMap<Variable, UInt>() to other,
         ))
     public operator fun Variable.times(other: C): LabeledPolynomial<C> =
@@ -559,7 +524,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = this@plus + getOrElse(degs) { ring.zero }
+                        val result = this@plus + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -577,7 +542,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = this@minus - getOrElse(degs) { ring.zero }
+                        val result = this@minus - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -607,7 +572,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } + other
+                        val result = getOrElse(degs) { constantZero } + other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -628,7 +593,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
                         val degs = emptyMap<Variable, UInt>()
 
-                        val result = getOrElse(degs) { ring.zero } - other
+                        val result = getOrElse(degs) { constantZero } - other
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -651,37 +616,37 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // region Variable-variable relation
     public operator fun Variable.plus(other: Variable): LabeledPolynomial<C> =
         if (this == other) LabeledPolynomial<C>(mapOf(
-            mapOf(this to 1U) to ring.one * 2
+            mapOf(this to 1U) to constantOne * 2
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this to 1U) to ring.one,
-            mapOf(other to 1U) to ring.one,
+            mapOf(this to 1U) to constantOne,
+            mapOf(other to 1U) to constantOne,
         ))
     public operator fun Variable.minus(other: Variable): LabeledPolynomial<C> =
         if (this == other) zero
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this to 1U) to ring.one,
-            mapOf(other to 1U) to -ring.one,
+            mapOf(this to 1U) to constantOne,
+            mapOf(other to 1U) to -constantOne,
         ))
     public operator fun Variable.times(other: Variable): LabeledPolynomial<C> =
         if (this == other) LabeledPolynomial<C>(mapOf(
-            mapOf(this to 2U) to ring.one
+            mapOf(this to 2U) to constantOne
         ))
         else LabeledPolynomial<C>(mapOf(
-            mapOf(this to 1U, other to 1U) to ring.one,
+            mapOf(this to 1U, other to 1U) to constantOne,
         ))
     // endregion
 
     // region Variable-polynomial relation
     public operator fun Variable.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         with(other.coefficients) {
-            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(this@plus to 1u) to ring.one))
+            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(this@plus to 1u) to constantOne))
             else LabeledPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = mapOf(this@plus to 1U)
 
-                        val result = ring.one + getOrElse(degs) { ring.zero }
+                        val result = constantOne + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -690,7 +655,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         }
     public operator fun Variable.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         with(other.coefficients) {
-            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(this@minus to 1u) to ring.one))
+            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(this@minus to 1u) to constantOne))
             else LabeledPolynomial<C>(
                 toMutableMap()
                     .apply {
@@ -698,7 +663,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
                         val degs = mapOf(this@minus to 1U)
 
-                        val result = ring.one - getOrElse(degs) { ring.zero }
+                        val result = constantOne - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -715,13 +680,13 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // region Polynomial-variable relation
     public operator fun LabeledPolynomial<C>.plus(other: Variable): LabeledPolynomial<C> =
         with(coefficients) {
-            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(other to 1u) to ring.one))
+            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(other to 1u) to constantOne))
             else LabeledPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = mapOf(other to 1U)
 
-                        val result = ring.one + getOrElse(degs) { ring.zero }
+                        val result = constantOne + getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -730,13 +695,13 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         }
     public operator fun LabeledPolynomial<C>.minus(other: Variable): LabeledPolynomial<C> =
         with(coefficients) {
-            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(other to 1u) to ring.one))
+            if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(other to 1u) to constantOne))
             else LabeledPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = mapOf(other to 1U)
 
-                        val result = ring.one - getOrElse(degs) { ring.zero }
+                        val result = constantOne - getOrElse(degs) { constantZero }
 
                         if (result.isZero()) remove(degs)
                         else this[degs] = result
@@ -799,8 +764,8 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             )
         }
 
-    override val zero: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to ring.zero))
-    override val one: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to ring.one))
+    override val zero: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to constantZero))
+    override val one: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to constantOne))
 
     // TODO: Docs
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
@@ -872,7 +837,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
     override fun LabeledPolynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
-            if(isConstant()) getOrElse(emptyMap()) { ring.zero }
+            if(isConstant()) getOrElse(emptyMap()) { constantZero }
             else null
         }
 

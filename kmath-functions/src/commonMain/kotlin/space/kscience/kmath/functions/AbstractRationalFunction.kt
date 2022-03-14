@@ -190,7 +190,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Check if the instant is zero constant.
      */
     @JvmName("constantIsZero")
-    public fun C.isZero(): Boolean
+    public fun C.isZero(): Boolean = this == constantZero
     /**
      * Check if the instant is NOT zero constant.
      */
@@ -200,7 +200,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Check if the instant is unit constant.
      */
     @JvmName("constantIsOne")
-    public fun C.isOne(): Boolean
+    public fun C.isOne(): Boolean =  this == constantOne
     /**
      * Check if the instant is NOT unit constant.
      */
@@ -210,12 +210,21 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Check if the instant is minus unit constant.
      */
     @JvmName("constantIsMinusOne")
-    public fun C.isMinusOne(): Boolean
+    public fun C.isMinusOne(): Boolean =  this == -constantOne
     /**
      * Check if the instant is NOT minus unit constant.
      */
     @JvmName("constantIsNotMinusOne")
     public fun C.isNotMinusOne(): Boolean = !isMinusOne()
+
+    /**
+     * Instance of zero constant (zero of the underlying ring).
+     */
+    public val constantZero: C
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
+    public val constantOne: C
     // endregion
 
     // region Constant-polynomial relation
@@ -399,7 +408,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     /**
      * Check if the instant is zero rational function.
      */
-    public fun R.isZero(): Boolean = this equalsTo zero
+    public fun R.isZero(): Boolean = numerator equalsTo polynomialZero
     /**
      * Check if the instant is NOT zero rational function.
      */
@@ -407,7 +416,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     /**
      * Check if the instant is unit rational function.
      */
-    public fun R.isOne(): Boolean = this equalsTo one
+    public fun R.isOne(): Boolean = numerator equalsTo denominator
     /**
      * Check if the instant is NOT unit rational function.
      */
@@ -415,7 +424,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     /**
      * Check if the instant is minus unit rational function.
      */
-    public fun R.isMinusOne(): Boolean = this equalsTo -one
+    public fun R.isMinusOne(): Boolean = (numerator + denominator).isZero()
     /**
      * Check if the instant is NOT minus unit rational function.
      */
@@ -597,35 +606,13 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
     public override operator fun C.times(other: C): C = ring { this@times * other }
 
     /**
-     * Check if the instant is zero constant.
+     * Instance of zero constant (zero of the underlying ring).
      */
-    @JvmName("constantIsZero")
-    public override fun C.isZero(): Boolean = ring { this@isZero.isZero() }
+    public override val constantZero: C get() = ring.zero
     /**
-     * Check if the instant is NOT zero constant.
+     * Instance of unit constant (unit of the underlying ring).
      */
-    @JvmName("constantIsNotZero")
-    public override fun C.isNotZero(): Boolean = ring { this@isNotZero.isNotZero() }
-    /**
-     * Check if the instant is unit constant.
-     */
-    @JvmName("constantIsOne")
-    public override fun C.isOne(): Boolean = ring { this@isOne.isOne() }
-    /**
-     * Check if the instant is NOT unit constant.
-     */
-    @JvmName("constantIsNotOne")
-    public override fun C.isNotOne(): Boolean = ring { this@isNotOne.isNotOne() }
-    /**
-     * Check if the instant is minus unit constant.
-     */
-    @JvmName("constantIsMinusOne")
-    public override fun C.isMinusOne(): Boolean = ring { this@isMinusOne.isMinusOne() }
-    /**
-     * Check if the instant is NOT minus unit constant.
-     */
-    @JvmName("constantIsNotMinusOne")
-    public override fun C.isNotMinusOne(): Boolean = ring { this@isNotMinusOne.isNotMinusOne() }
+    public override val constantOne: C get() = ring.one
     // endregion
 }
 
@@ -786,6 +773,15 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: Abstra
      */
     @JvmName("constantIsNotMinusOne")
     public override fun C.isNotMinusOne(): Boolean = polynomialRing { this@isNotMinusOne.isNotMinusOne() }
+
+    /**
+     * Instance of zero constant (zero of the underlying ring).
+     */
+    public override val constantZero: C get() = polynomialRing.constantZero
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
+    public override val constantOne: C get() = polynomialRing.constantOne
     // endregion
 
     // region Constant-polynomial relation

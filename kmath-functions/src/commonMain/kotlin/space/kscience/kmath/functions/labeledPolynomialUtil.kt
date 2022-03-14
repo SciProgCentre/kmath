@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
@@ -30,7 +35,7 @@ import kotlin.contracts.*
 //fun <C, A: Ring<C>> power(arg: Variable, pow: UInt): LabeledPolynomial<C> =
 //    if (pow == 0U) one
 //    else LabeledPolynomial<C>(mapOf(
-//        mapOf(arg to pow) to ring.one
+//        mapOf(arg to pow) to constantOne
 //    ))
 //
 //// endregion

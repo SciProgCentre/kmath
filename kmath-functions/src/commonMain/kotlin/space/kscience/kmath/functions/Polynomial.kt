@@ -80,7 +80,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 coefficients
                     .toMutableList()
                     .apply {
-                        val result = getOrElse(0) { ring.zero } + other
+                        val result = getOrElse(0) { constantZero } + other
                         val isResultZero = result.isZero()
 
                         when {
@@ -97,7 +97,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 coefficients
                     .toMutableList()
                     .apply {
-                        val result = getOrElse(0) { ring.zero } - other
+                        val result = getOrElse(0) { constantZero } - other
                         val isResultZero = result.isZero()
 
                         when {
@@ -124,7 +124,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 other.coefficients
                     .toMutableList()
                     .apply {
-                        val result = this@plus + getOrElse(0) { ring.zero }
+                        val result = this@plus + getOrElse(0) { constantZero }
                         val isResultZero = result.isZero()
 
                         when {
@@ -143,7 +143,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         forEachIndexed { index, c -> if (index != 0) this[index] = -c }
 
-                        val result = this@minus - getOrElse(0) { ring.zero }
+                        val result = this@minus - getOrElse(0) { constantZero }
                         val isResultZero = result.isZero()
 
                         when {
@@ -281,7 +281,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         else -> coefficients[it] + other.coefficients[it]
                     }
                 }
-                .ifEmpty { listOf(ring.zero) }
+                .ifEmpty { listOf(constantZero) }
         )
     public override operator fun Polynomial<C>.minus(other: Polynomial<C>): Polynomial<C> =
         Polynomial(
@@ -293,7 +293,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         else -> coefficients[it] - other.coefficients[it]
                     }
                 }
-                .ifEmpty { listOf(ring.zero) }
+                .ifEmpty { listOf(constantZero) }
         )
     public override operator fun Polynomial<C>.times(other: Polynomial<C>): Polynomial<C> {
         val thisDegree = degree
@@ -321,7 +321,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         with(coefficients) { isNotEmpty() && asSequence().withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() } } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
 
     override val zero: Polynomial<C> = Polynomial(emptyList())
-    override val one: Polynomial<C> = Polynomial(listOf(ring.one))
+    override val one: Polynomial<C> = Polynomial(listOf(constantZero))
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
     public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
@@ -337,12 +337,12 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 
     // region Polynomial properties
 
-    public override val Polynomial<C>.degree: Int get() = coefficients.indexOfLast { it != ring.zero }
+    public override val Polynomial<C>.degree: Int get() = coefficients.indexOfLast { it != constantZero }
 
     public override fun Polynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
             when {
-                isEmpty() -> ring.zero
+                isEmpty() -> constantZero
                 degree > 0 -> null
                 else -> first()
             }
