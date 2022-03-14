@@ -578,31 +578,26 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      * Returns the same constant.
      */
     @JvmName("constantUnaryPlus")
-    @JsName("constantUnaryPlus")
     public override operator fun C.unaryPlus(): C = ring { +this@unaryPlus }
     /**
      * Returns negation of the constant.
      */
     @JvmName("constantUnaryMinus")
-    @JsName("constantUnaryMinus")
     public override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
     /**
      * Returns sum of the constants.
      */
     @JvmName("constantPlus")
-    @JsName("constantPlus")
     public override operator fun C.plus(other: C): C = ring { this@plus + other }
     /**
      * Returns difference of the constants.
      */
     @JvmName("constantMinus")
-    @JsName("constantMinus")
     public override operator fun C.minus(other: C): C = ring { this@minus - other }
     /**
      * Returns product of the constants.
      */
     @JvmName("constantTimes")
-    @JsName("constantTimes")
     public override operator fun C.times(other: C): C = ring { this@times * other }
 
     /**
@@ -716,31 +711,26 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: Abstra
      * Returns the same constant.
      */
     @JvmName("constantUnaryPlus")
-    @JsName("constantUnaryPlus")
     public override operator fun C.unaryPlus(): C = polynomialRing { +this@unaryPlus }
     /**
      * Returns negation of the constant.
      */
     @JvmName("constantUnaryMinus")
-    @JsName("constantUnaryMinus")
     public override operator fun C.unaryMinus(): C = polynomialRing { -this@unaryMinus }
     /**
      * Returns sum of the constants.
      */
     @JvmName("constantPlus")
-    @JsName("constantPlus")
     public override operator fun C.plus(other: C): C = polynomialRing { this@plus + other }
     /**
      * Returns difference of the constants.
      */
     @JvmName("constantMinus")
-    @JsName("constantMinus")
     public override operator fun C.minus(other: C): C = polynomialRing { this@minus - other }
     /**
      * Returns product of the constants.
      */
     @JvmName("constantTimes")
-    @JsName("constantTimes")
     public override operator fun C.times(other: C): C = polynomialRing { this@times * other }
 
     /**
