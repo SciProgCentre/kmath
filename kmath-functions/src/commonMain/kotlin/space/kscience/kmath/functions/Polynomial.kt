@@ -14,7 +14,7 @@ import kotlin.math.min
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public data class Polynomial<T>(public val coefficients: List<T>) : AbstractPolynomial<T> {
+public data class Polynomial<C>(public val coefficients: List<C>) : AbstractPolynomial<C> {
     override fun toString(): String = "Polynomial$coefficients"
 }
 
@@ -44,7 +44,7 @@ internal fun polynomialError(message: Any): Nothing = throw PolynomialError(mess
  * [reverse] parameter is true.
  */
 @Suppress("FunctionName")
-public fun <T> Polynomial(coefficients: List<T>, reverse: Boolean = false): Polynomial<T> =
+public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else this })
 
 /**
@@ -52,10 +52,10 @@ public fun <T> Polynomial(coefficients: List<T>, reverse: Boolean = false): Poly
  * [reverse] parameter is true.
  */
 @Suppress("FunctionName")
-public fun <T> Polynomial(vararg coefficients: T, reverse: Boolean = false): Polynomial<T> =
+public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else toList() })
 
-public fun <T> T.asPolynomial() : Polynomial<T> = Polynomial(listOf(this))
+public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))
 
 // endregion
 
@@ -352,7 +352,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 Polynomial(
                     (0..(thisDegree + otherDegree))
                         .map { d ->
-                            (max(0, d - otherDegree)..(min(thisDegree, d)))
+                            (max(0, d - otherDegree)..min(thisDegree, d))
                                 .map { coefficients[it] * other.coefficients[d - it] }
                                 .reduce { acc, rational -> acc + rational }
                         }
@@ -370,16 +370,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
      */
     public override fun Polynomial<C>.isOne(): Boolean =
         with(coefficients) {
-            isNotEmpty() &&
-                    asSequence().withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+            isNotEmpty() && withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() }
         }
     /**
      * Check if the instant is minus unit polynomial.
      */
     public override fun Polynomial<C>.isMinusOne(): Boolean =
         with(coefficients) {
-            isNotEmpty() &&
-                    asSequence().withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+            isNotEmpty() && withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() }
         }
 
     /**

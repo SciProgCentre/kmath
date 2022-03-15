@@ -9,7 +9,8 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.jvm.JvmName
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.pow
 
 
@@ -77,15 +78,32 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
     return result
 }
 
-// TODO: (Waiting for hero) Replace with optimisation: the [result] may be unboxed, and all operations may be performed
-//  as soon as possible on it
 public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Polynomial<C> = ring.polynomial {
     if (coefficients.isEmpty()) return zero
-    var result: Polynomial<C> = coefficients.last().asPolynomial()
-    for (j in coefficients.size - 2 downTo 0) {
-        result = (arg * result) + coefficients[j]
+
+    val thisDegree = degree
+    if (thisDegree == -1) return zero
+    val argDegree = arg.degree
+    if (argDegree == -1) return coefficients[0].asPolynomial()
+    val constantZero = constantZero
+    val resultCoefs: MutableList<C> = MutableList(thisDegree + argDegree + 1) { constantZero }
+    val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree + argDegree + 1) { constantZero }
+    var resultDegree = 0
+    for (deg in thisDegree downTo 0) {
+        resultCoefsUpdate[0] = coefficients[deg]
+        for (updateDeg in 0 .. resultDegree + argDegree) {
+            var newC = resultCoefsUpdate[updateDeg]
+            for (deg1 in max(0, updateDeg - argDegree)..min(resultDegree, updateDeg))
+                newC += resultCoefs[deg1] * arg.coefficients[updateDeg - deg1]
+            resultCoefsUpdate[updateDeg] = newC
+        }
+        resultDegree += argDegree
+        for (updateDeg in 0 .. resultDegree + argDegree) {
+            resultCoefs[updateDeg] = resultCoefsUpdate[updateDeg]
+            resultCoefsUpdate[updateDeg] = constantZero
+        }
     }
-    return result
+    return Polynomial<C>(resultCoefs)
 }
 
 /**
@@ -109,7 +127,7 @@ public fun <C, A : Ring<C>> Polynomial<C>.asPolynomialFunctionOver(ring: A): (Po
 public fun <C, A> Polynomial<C>.derivative(
     algebra: A,
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(coefficients.drop(1).mapIndexed { index, c -> number(index) * c })
+    Polynomial(coefficients.drop(1).mapIndexed { index, c -> number(index + 1) * c })
 }
 
 /**
@@ -120,8 +138,7 @@ public fun <C, A> Polynomial<C>.nthDerivative(
     algebra: A,
     order: UInt,
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
-    Polynomial(coefficients.drop(order.toInt()).mapIndexed { index, c ->  number(index) * c })
+    Polynomial(coefficients.drop(order.toInt()).mapIndexed { index, c -> (1..order.toInt()).fold(c) { acc, i -> acc * number(index + i) } })
 }
 
 /**
@@ -133,7 +150,7 @@ public fun <C, A> Polynomial<C>.antiderivative(
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
     val integratedCoefficients = buildList(coefficients.size + 1) {
         add(zero)
-        coefficients.forEachIndexed{ index, t -> add(t / number(index + 1)) }
+        coefficients.mapIndexedTo(this) { index, t -> t / number(index + 1) }
     }
     Polynomial(integratedCoefficients)
 }
@@ -146,12 +163,11 @@ public fun <C, A> Polynomial<C>.nthAntiderivative(
     algebra: A,
     order: UInt,
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    TODO()
-    val integratedCoefficients = buildList(coefficients.size + 1) {
-        add(zero)
-        coefficients.forEachIndexed{ index, t -> add(t / number(index + 1)) }
+    val newCoefficients = buildList(coefficients.size + order.toInt()) {
+        repeat(order.toInt()) { add(zero) }
+        coefficients.mapIndexedTo(this) { index, c -> (1..order.toInt()).fold(c) { acc, i -> acc / number(index + i) } }
     }
-    Polynomial(integratedCoefficients)
+    return Polynomial(newCoefficients)
 }
 
 /**
