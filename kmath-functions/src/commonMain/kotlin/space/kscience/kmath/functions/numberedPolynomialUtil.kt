@@ -38,7 +38,7 @@ import kotlin.jvm.JvmName
 //        else -> multiplyWithPowerInternalLogic(base, arg, pow)
 //    }
 //
-//// Trivial but slow as duck
+//// Trivial but very slow
 //context(NumberedPolynomialSpace<C, A>)
 //internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: NumberedPolynomial<C>, arg: NumberedPolynomial<C>, exponent: UInt): NumberedPolynomial<C> =
 //    when {
@@ -55,7 +55,15 @@ import kotlin.jvm.JvmName
 
 // region Utilities
 
-// TODO: Docs
+/**
+ * Crates a [NumberedPolynomialSpace] over received ring.
+ */
+public fun <C, A : Ring<C>> A.numberedPolynomial(): NumberedPolynomialSpace<C, A> =
+    NumberedPolynomialSpace(this)
+
+/**
+ * Crates a [NumberedPolynomialSpace]'s scope over received ring.
+ */
 @OptIn(ExperimentalContracts::class)
 public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolynomialSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -282,64 +290,6 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 
 //// region Field case
 //
-//operator fun <T: Field<T>> Polynomial<T>.div(other: Polynomial<T>): Polynomial<T> {
-//    if (other.isZero()) throw ArithmeticException("/ by zero")
-//    if (isZero()) return this
-//
-//    fun Map<List<Int>, T>.leadingTerm() =
-//        this
-//            .asSequence()
-//            .map { Pair(it.key, it.value) }
-//            .reduce { (accDegs, accC), (listDegs, listC) ->
-//                for (i in 0..accDegs.lastIndex) {
-//                    if (accDegs[i] > listDegs.getOrElse(i) { 0 }) return@reduce accDegs to accC
-//                    if (accDegs[i] < listDegs.getOrElse(i) { 0 }) return@reduce listDegs to listC
-//                }
-//                if (accDegs.size < listDegs.size) listDegs to listC else accDegs to accC
-//            }
-//
-//    var thisCoefficients = coefficients.toMutableMap()
-//    val otherCoefficients = other.coefficients
-//    val quotientCoefficients = HashMap<List<Int>, T>()
-//
-//    var (thisLeadingTermDegs, thisLeadingTermC) = thisCoefficients.leadingTerm()
-//    val (otherLeadingTermDegs, otherLeadingTermC) = otherCoefficients.leadingTerm()
-//
-//    while (
-//        thisLeadingTermDegs.size >= otherLeadingTermDegs.size &&
-//        (0..otherLeadingTermDegs.lastIndex).all { thisLeadingTermDegs[it] >= otherLeadingTermDegs[it] }
-//    ) {
-//        val multiplierDegs =
-//            thisLeadingTermDegs
-//                .mapIndexed { index, deg -> deg - otherLeadingTermDegs.getOrElse(index) { 0 } }
-//                .cleanUp()
-//        val multiplierC = thisLeadingTermC / otherLeadingTermC
-//
-//        quotientCoefficients[multiplierDegs] = multiplierC
-//
-//        for ((degs, t) in otherCoefficients) {
-//            val productDegs =
-//                (0..max(degs.lastIndex, multiplierDegs.lastIndex))
-//                    .map { degs.getOrElse(it) { 0 } + multiplierDegs.getOrElse(it) { 0 } }
-//                    .cleanUp()
-//            val productC = t * multiplierC
-//            thisCoefficients[productDegs] =
-//                if (productDegs in thisCoefficients) thisCoefficients[productDegs]!! - productC else -productC
-//        }
-//
-//        thisCoefficients = thisCoefficients.filterValues { it.isNotZero() }.toMutableMap()
-//
-//        if (thisCoefficients.isEmpty())
-//            return Polynomial(quotientCoefficients, toCheckInput = false)
-//
-//        val t = thisCoefficients.leadingTerm()
-//        thisLeadingTermDegs = t.first
-//        thisLeadingTermC = t.second
-//    }
-//
-//    return Polynomial(quotientCoefficients, toCheckInput = false)
-//}
-//
 //operator fun <T: Field<T>> Polynomial<T>.div(other: T): Polynomial<T> =
 //    if (other.isZero()) throw ArithmeticException("/ by zero")
 //    else
@@ -348,125 +298,6 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 //                .mapValues { it.value / other },
 //            toCheckInput = false
 //        )
-//
-//operator fun <T: Field<T>> Polynomial<T>.rem(other: Polynomial<T>): Polynomial<T> {
-//    if (other.isZero()) throw ArithmeticException("/ by zero")
-//    if (isZero()) return this
-//
-//    fun Map<List<Int>, T>.leadingTerm() =
-//        this
-//            .asSequence()
-//            .map { Pair(it.key, it.value) }
-//            .reduce { (accDegs, accC), (listDegs, listC) ->
-//                for (i in 0..accDegs.lastIndex) {
-//                    if (accDegs[i] > listDegs.getOrElse(i) { 0 }) return@reduce accDegs to accC
-//                    if (accDegs[i] < listDegs.getOrElse(i) { 0 }) return@reduce listDegs to listC
-//                }
-//                if (accDegs.size < listDegs.size) listDegs to listC else accDegs to accC
-//            }
-//
-//    var thisCoefficients = coefficients.toMutableMap()
-//    val otherCoefficients = other.coefficients
-//
-//    var (thisLeadingTermDegs, thisLeadingTermC) = thisCoefficients.leadingTerm()
-//    val (otherLeadingTermDegs, otherLeadingTermC) = otherCoefficients.leadingTerm()
-//
-//    while (
-//        thisLeadingTermDegs.size >= otherLeadingTermDegs.size &&
-//        (0..otherLeadingTermDegs.lastIndex).all { thisLeadingTermDegs[it] >= otherLeadingTermDegs[it] }
-//    ) {
-//        val multiplierDegs =
-//            thisLeadingTermDegs
-//                .mapIndexed { index, deg -> deg - otherLeadingTermDegs.getOrElse(index) { 0 } }
-//                .cleanUp()
-//        val multiplierC = thisLeadingTermC / otherLeadingTermC
-//
-//        for ((degs, t) in otherCoefficients) {
-//            val productDegs =
-//                (0..max(degs.lastIndex, multiplierDegs.lastIndex))
-//                    .map { degs.getOrElse(it) { 0 } + multiplierDegs.getOrElse(it) { 0 } }
-//                    .cleanUp()
-//            val productC = t * multiplierC
-//            thisCoefficients[productDegs] =
-//                if (productDegs in thisCoefficients) thisCoefficients[productDegs]!! - productC else -productC
-//        }
-//
-//        thisCoefficients = thisCoefficients.filterValues { it.isNotZero() }.toMutableMap()
-//
-//        if (thisCoefficients.isEmpty())
-//            return Polynomial(thisCoefficients, toCheckInput = false)
-//
-//        val t = thisCoefficients.leadingTerm()
-//        thisLeadingTermDegs = t.first
-//        thisLeadingTermC = t.second
-//    }
-//
-//    return Polynomial(thisCoefficients, toCheckInput = false)
-//}
-//
-//infix fun <T: Field<T>> Polynomial<T>.divrem(other: Polynomial<T>): Polynomial.Companion.DividingResult<T> {
-//    if (other.isZero()) throw ArithmeticException("/ by zero")
-//    if (isZero()) return Polynomial.Companion.DividingResult(this, this)
-//
-//    fun Map<List<Int>, T>.leadingTerm() =
-//        this
-//            .asSequence()
-//            .map { Pair(it.key, it.value) }
-//            .reduce { (accDegs, accC), (listDegs, listC) ->
-//                for (i in 0..accDegs.lastIndex) {
-//                    if (accDegs[i] > listDegs.getOrElse(i) { 0 }) return@reduce accDegs to accC
-//                    if (accDegs[i] < listDegs.getOrElse(i) { 0 }) return@reduce listDegs to listC
-//                }
-//                if (accDegs.size < listDegs.size) listDegs to listC else accDegs to accC
-//            }
-//
-//    var thisCoefficients = coefficients.toMutableMap()
-//    val otherCoefficients = other.coefficients
-//    val quotientCoefficients = HashMap<List<Int>, T>()
-//
-//    var (thisLeadingTermDegs, thisLeadingTermC) = thisCoefficients.leadingTerm()
-//    val (otherLeadingTermDegs, otherLeadingTermC) = otherCoefficients.leadingTerm()
-//
-//    while (
-//        thisLeadingTermDegs.size >= otherLeadingTermDegs.size &&
-//        (0..otherLeadingTermDegs.lastIndex).all { thisLeadingTermDegs[it] >= otherLeadingTermDegs[it] }
-//    ) {
-//        val multiplierDegs =
-//            thisLeadingTermDegs
-//                .mapIndexed { index, deg -> deg - otherLeadingTermDegs.getOrElse(index) { 0 } }
-//                .cleanUp()
-//        val multiplierC = thisLeadingTermC / otherLeadingTermC
-//
-//        quotientCoefficients[multiplierDegs] = multiplierC
-//
-//        for ((degs, t) in otherCoefficients) {
-//            val productDegs =
-//                (0..max(degs.lastIndex, multiplierDegs.lastIndex))
-//                    .map { degs.getOrElse(it) { 0 } + multiplierDegs.getOrElse(it) { 0 } }
-//                    .cleanUp()
-//            val productC = t * multiplierC
-//            thisCoefficients[productDegs] =
-//                if (productDegs in thisCoefficients) thisCoefficients[productDegs]!! - productC else -productC
-//        }
-//
-//        thisCoefficients = thisCoefficients.filterValues { it.isNotZero() }.toMutableMap()
-//
-//        if (thisCoefficients.isEmpty())
-//            return Polynomial.Companion.DividingResult(
-//                Polynomial(quotientCoefficients, toCheckInput = false),
-//                Polynomial(thisCoefficients, toCheckInput = false)
-//            )
-//
-//        val t = thisCoefficients.leadingTerm()
-//        thisLeadingTermDegs = t.first
-//        thisLeadingTermC = t.second
-//    }
-//
-//    return Polynomial.Companion.DividingResult(
-//        Polynomial(quotientCoefficients, toCheckInput = false),
-//        Polynomial(thisCoefficients, toCheckInput = false)
-//    )
-//}
 //
 //// endregion
 
