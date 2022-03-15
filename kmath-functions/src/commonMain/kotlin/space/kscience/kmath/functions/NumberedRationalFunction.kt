@@ -82,7 +82,12 @@ internal fun numberedRationalFunctionError(message: Any): Nothing = throw Number
 
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
-) : AbstractRationalFunctionalSpaceOverPolynomialSpace<C, NumberedPolynomial<C>, NumberedRationalFunction<C>, A> {
+) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
+        C,
+        NumberedPolynomial<C>,
+        NumberedRationalFunction<C>,
+        NumberedPolynomialSpace<C, A>,
+        > {
 
     override val polynomialRing : NumberedPolynomialSpace<C, A> = NumberedPolynomialSpace(ring)
 

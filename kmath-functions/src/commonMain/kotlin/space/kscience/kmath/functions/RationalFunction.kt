@@ -67,7 +67,12 @@ internal fun rationalFunctionError(message: Any): Nothing = throw RationalFuncti
 
 public class RationalFunctionSpace<C, A : Ring<C>> (
     public val ring: A,
-) : AbstractRationalFunctionalSpaceOverPolynomialSpace<C, Polynomial<C>, RationalFunction<C>, A> {
+) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
+        C,
+        Polynomial<C>,
+        RationalFunction<C>,
+        PolynomialSpace<C, A>,
+        > {
 
     override val polynomialRing : PolynomialSpace<C, A> = PolynomialSpace(ring)
 

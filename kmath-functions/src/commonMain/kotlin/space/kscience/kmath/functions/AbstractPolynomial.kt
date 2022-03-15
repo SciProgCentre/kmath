@@ -18,7 +18,7 @@ public interface AbstractPolynomial<C>
 /**
  * Abstraction of ring of polynomials of type [P] over ring of constants of type [C].
  *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials.
  */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
@@ -313,10 +313,12 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
 }
 
 /**
- * Abstraction of ring of polynomials of type [P] over ring of constants of type [C].
+ * Abstraction of ring of polynomials of type [P] over ring of constants of type [C]. It also assumes that there is
+ * provided [ring] (of type [A]), that provides constant-wise operations.
  *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials.
+ * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A: Ring<C>> : AbstractPolynomialSpace<C, P> {

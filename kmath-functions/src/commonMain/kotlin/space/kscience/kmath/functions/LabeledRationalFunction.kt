@@ -85,7 +85,12 @@ internal fun labeledRationalFunctionError(message: Any): Nothing = throw Labeled
 
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
-) : AbstractRationalFunctionalSpaceOverPolynomialSpace<C, LabeledPolynomial<C>, LabeledRationalFunction<C>, A> {
+) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
+        C,
+        LabeledPolynomial<C>,
+        LabeledRationalFunction<C>,
+        LabeledPolynomialSpace<C, A>,
+        > {
 
     override val polynomialRing : LabeledPolynomialSpace<C, A> = LabeledPolynomialSpace(ring)
 

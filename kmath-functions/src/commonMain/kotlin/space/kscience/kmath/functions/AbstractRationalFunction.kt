@@ -20,6 +20,14 @@ public interface AbstractRationalFunction<C, P: AbstractPolynomial<C>> {
     public operator fun component2(): P = denominator
 }
 
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
+ * [C].
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ */ // TODO: Add support of field
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>> : Ring<R> {
     // region Constant-integer relation
@@ -508,6 +516,15 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     // endregion
 }
 
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
+ * [C]. It also assumes that there is provided [ring] (of type [A]), that provides constant-wise operations.
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ * @param A the type of algebraic structure (precisely, of ring) provided for constants.
+ */ // TODO: Add support of field
 @Suppress("INAPPLICABLE_JVM_NAME")
 public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>, A: Ring<C>> : AbstractRationalFunctionalSpace<C, P, R> {
 
@@ -593,10 +610,25 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
     // endregion
 }
 
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
+ * [C]. It also assumes that there is provided [polynomialRing] (of type [AP]), that provides constant- and
+ * polynomial-wise operations.
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
+ */ // TODO: Add support of field
 @Suppress("INAPPLICABLE_JVM_NAME")
-public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>, A: Ring<C>> : AbstractRationalFunctionalSpace<C, P, R> {
+public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
+        C,
+        P: AbstractPolynomial<C>,
+        R: AbstractRationalFunction<C, P>,
+        AP: AbstractPolynomialSpace<C, P>,
+        > : AbstractRationalFunctionalSpace<C, P, R> {
 
-    public val polynomialRing: AbstractPolynomialSpace<C, P>
+    public val polynomialRing: AP
 
     // region Constant-integer relation
     /**

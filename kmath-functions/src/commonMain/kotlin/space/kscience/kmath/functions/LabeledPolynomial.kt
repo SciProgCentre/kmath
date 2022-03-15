@@ -384,6 +384,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Polynomial-integer relation
+    /**
+     * Returns sum of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
+     */
     public override operator fun LabeledPolynomial<C>.plus(other: Int): LabeledPolynomial<C> =
         if (other == 0) this
         else
@@ -399,6 +404,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns difference between the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
+     */
     public override operator fun LabeledPolynomial<C>.minus(other: Int): LabeledPolynomial<C> =
         if (other == 0) this
         else
@@ -414,6 +424,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns product of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
     public override operator fun LabeledPolynomial<C>.times(other: Int): LabeledPolynomial<C> =
         if (other == 0) zero
         else LabeledPolynomial(
@@ -425,6 +440,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Integer-polynomial relation
+    /**
+     * Returns sum of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
+     */
     public override operator fun Int.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this == 0) other
         else
@@ -440,6 +460,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns difference between the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
+     */
     public override operator fun Int.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this == 0) other
         else
@@ -455,6 +480,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns product of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
     public override operator fun Int.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this == 0) zero
         else LabeledPolynomial(
@@ -514,6 +544,9 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Constant-polynomial relation
+    /**
+     * Returns sum of the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
@@ -530,6 +563,9 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
+    /**
+     * Returns difference between the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
@@ -548,6 +584,9 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
+    /**
+     * Returns product of the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (this.isZero()) zero
         else LabeledPolynomial<C>(
@@ -560,7 +599,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 
     // region Polynomial-constant relation
     /**
-     * Returns sum of the polynomials. [other] is interpreted as [UnivariatePolynomial].
+     * Returns sum of the constant represented as polynomial and the polynomial.
      */
     override operator fun LabeledPolynomial<C>.plus(other: C): LabeledPolynomial<C> =
         if (other.isZero()) this
@@ -579,7 +618,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns difference of the polynomials. [other] is interpreted as [UnivariatePolynomial].
+     * Returns difference between the constant represented as polynomial and the polynomial.
      */
     override operator fun LabeledPolynomial<C>.minus(other: C): LabeledPolynomial<C> =
         if (other.isZero()) this
@@ -600,7 +639,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns product of the polynomials. [other] is interpreted as [UnivariatePolynomial].
+     * Returns product of the constant represented as polynomial and the polynomial.
      */
     override operator fun LabeledPolynomial<C>.times(other: C): LabeledPolynomial<C> =
         if (other.isZero()) zero
@@ -763,10 +802,18 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             )
         }
 
+    /**
+     * Instance of zero polynomial (zero of the polynomial ring).
+     */
     override val zero: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to constantZero))
+    /**
+     * Instance of unit polynomial (unit of the polynomial ring).
+     */
     override val one: LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to constantOne))
 
-    // TODO: Docs
+    /**
+     * Checks equality of the polynomials.
+     */
     override infix fun LabeledPolynomial<C>.equalsTo(other: LabeledPolynomial<C>): Boolean =
         when {
             this === other -> true
@@ -832,7 +879,10 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             }
             foundAbsoluteTermAndItIsNotZero
         }
-
+    /**
+     * If polynomial is a constant polynomial represents and returns it as constant.
+     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
+     */
     override fun LabeledPolynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
             if(isConstant()) getOrElse(emptyMap()) { constantZero }

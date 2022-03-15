@@ -267,6 +267,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public final override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
     // region Polynomial-integer relation
+    /**
+     * Returns sum of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
+     */
     public override operator fun NumberedPolynomial<C>.plus(other: Int): NumberedPolynomial<C> =
         if (other == 0) this
         else
@@ -282,6 +287,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns difference between the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
+     */
     public override operator fun NumberedPolynomial<C>.minus(other: Int): NumberedPolynomial<C> =
         if (other == 0) this
         else
@@ -297,6 +307,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns product of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
     public override operator fun NumberedPolynomial<C>.times(other: Int): NumberedPolynomial<C> =
         if (other == 0) zero
         else NumberedPolynomial(
@@ -308,6 +323,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Integer-polynomial relation
+    /**
+     * Returns sum of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
+     */
     public override operator fun Int.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this == 0) other
         else
@@ -323,6 +343,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns difference between the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
+     */
     public override operator fun Int.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this == 0) other
         else
@@ -338,6 +363,11 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                         else this[degs] = result
                     }
             )
+    /**
+     * Returns product of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
     public override operator fun Int.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this == 0) zero
         else NumberedPolynomial(
@@ -349,6 +379,9 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Constant-polynomial relation
+    /**
+     * Returns sum of the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
@@ -365,6 +398,9 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
+    /**
+     * Returns difference between the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) -other
         else with(other.coefficients) {
@@ -383,6 +419,9 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
+    /**
+     * Returns product of the constant represented as polynomial and the polynomial.
+     */
     override operator fun C.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) zero
         else NumberedPolynomial<C>(
@@ -395,7 +434,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     // region Polynomial-constant relation
     /**
-     * Returns sum of the polynomials. [other] is interpreted as [NumberedPolynomial].
+     * Returns sum of the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.plus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
@@ -414,7 +453,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns difference of the polynomials. [other] is interpreted as [NumberedPolynomial].
+     * Returns difference between the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.minus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
@@ -433,7 +472,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns product of the polynomials. [other] is interpreted as [NumberedPolynomial].
+     * Returns product of the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.times(other: C): NumberedPolynomial<C> =
         if (other.isZero()) zero
@@ -496,7 +535,13 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                 )
         }
 
+    /**
+     * Check if the instant is zero polynomial.
+     */
     public override fun NumberedPolynomial<C>.isZero(): Boolean = coefficients.values.all { it.isZero() }
+    /**
+     * Check if the instant is unit polynomial.
+     */
     public override fun NumberedPolynomial<C>.isOne(): Boolean =
         with(coefficients) {
             var foundAbsoluteTermAndItIsOne = false
@@ -509,6 +554,9 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             }
             foundAbsoluteTermAndItIsOne
         }
+    /**
+     * Check if the instant is minus unit polynomial.
+     */
     public override fun NumberedPolynomial<C>.isMinusOne(): Boolean =
         with(coefficients) {
             var foundAbsoluteTermAndItIsMinusOne = false
@@ -522,7 +570,13 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             foundAbsoluteTermAndItIsMinusOne
         }
 
+    /**
+     * Instance of zero polynomial (zero of the polynomial ring).
+     */
     override val zero: NumberedPolynomial<C> = NumberedPolynomial<C>(emptyMap())
+    /**
+     * Instance of unit polynomial (unit of the polynomial ring).
+     */
     override val one: NumberedPolynomial<C> =
         NumberedPolynomial<C>(
             mapOf(
@@ -530,7 +584,9 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             )
         )
 
-    // TODO: Docs
+    /**
+     * Checks equality of the polynomials.
+     */
     override infix fun NumberedPolynomial<C>.equalsTo(other: NumberedPolynomial<C>): Boolean =
         when {
             this === other -> true
@@ -591,7 +647,10 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             }
             foundAbsoluteTermAndItIsNotZero
         }
-
+    /**
+     * If polynomial is a constant polynomial represents and returns it as constant.
+     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
+     */
     override fun NumberedPolynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
             if(isConstant()) getOrElse(emptyList()) { constantZero }

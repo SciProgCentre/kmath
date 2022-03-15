@@ -68,10 +68,15 @@ public fun <T> T.asPolynomial() : Polynomial<T> = Polynomial(listOf(this))
  */
 //@Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
 public open class PolynomialSpace<C, A : Ring<C>>(
-    public final override val ring: A,
+    public override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {
 
     // region Polynomial-integer relation
+    /**
+     * Returns sum of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
+     */
     public override operator fun Polynomial<C>.plus(other: Int): Polynomial<C> =
         if (other == 0) this
         else
@@ -89,6 +94,11 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         }
                     }
             )
+    /**
+     * Returns difference between the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
+     */
     public override operator fun Polynomial<C>.minus(other: Int): Polynomial<C> =
         if (other == 0) this
         else
@@ -106,6 +116,11 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         }
                     }
             )
+    /**
+     * Returns product of the polynomial and the integer represented as polynomial.
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
     public override operator fun Polynomial<C>.times(other: Int): Polynomial<C> =
         if (other == 0) zero
         else Polynomial(
@@ -116,6 +131,11 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Integer-polynomial relation
+    /**
+     * Returns sum of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
+     */
     public override operator fun Int.plus(other: Polynomial<C>): Polynomial<C> =
         if (this == 0) other
         else
@@ -133,6 +153,11 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         }
                     }
             )
+    /**
+     * Returns difference between the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
+     */
     public override operator fun Int.minus(other: Polynomial<C>): Polynomial<C> =
         if (this == 0) other
         else
@@ -152,6 +177,11 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                         }
                     }
             )
+    /**
+     * Returns product of the integer represented as polynomial and the polynomial.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
     public override operator fun Int.times(other: Polynomial<C>): Polynomial<C> =
         if (this == 0) zero
         else Polynomial(
@@ -162,6 +192,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Constant-polynomial relation
+    /**
+     * Returns sum of the constant represented as polynomial and the polynomial.
+     */
     public override operator fun C.plus(other: Polynomial<C>): Polynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
@@ -180,9 +213,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-//        if (degree == -1) UnivariatePolynomial(other) else UnivariatePolynomial(
-//            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
-//        )
+    /**
+     * Returns difference between the constant represented as polynomial and the polynomial.
+     */
     public override operator fun C.minus(other: Polynomial<C>): Polynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
@@ -203,9 +236,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-//        if (degree == -1) UnivariatePolynomial(other) else UnivariatePolynomial(
-//            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
-//        )
+    /**
+     * Returns product of the constant represented as polynomial and the polynomial.
+     */
     public override operator fun C.times(other: Polynomial<C>): Polynomial<C> =
         if (this.isZero()) other
         else Polynomial(
@@ -216,6 +249,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Polynomial-constant relation
+    /**
+     * Returns sum of the constant represented as polynomial and the polynomial.
+     */
     public override operator fun Polynomial<C>.plus(other: C): Polynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
@@ -234,9 +270,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-//        if (degree == -1) UnivariatePolynomial(other) else UnivariatePolynomial(
-//            listOf(coefficients[0] + other) + coefficients.subList(1, degree + 1)
-//        )
+    /**
+     * Returns difference between the constant represented as polynomial and the polynomial.
+     */
     public override operator fun Polynomial<C>.minus(other: C): Polynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
@@ -255,9 +291,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-//        if (degree == -1) UnivariatePolynomial(-other) else UnivariatePolynomial(
-//            listOf(coefficients[0] - other) + coefficients.subList(1, degree + 1)
-//        )
+    /**
+     * Returns product of the constant represented as polynomial and the polynomial.
+     */
     public override operator fun Polynomial<C>.times(other: C): Polynomial<C> =
         if (other.isZero()) this
         else Polynomial(
@@ -268,8 +304,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Polynomial-polynomial relation
+    /**
+     * Returns negation of the polynomial.
+     */
     public override operator fun Polynomial<C>.unaryMinus(): Polynomial<C> =
         Polynomial(coefficients.map { -it })
+    /**
+     * Returns sum of the polynomials.
+     */
     public override operator fun Polynomial<C>.plus(other: Polynomial<C>): Polynomial<C> =
         Polynomial(
             (0..max(degree, other.degree))
@@ -282,6 +324,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 }
                 .ifEmpty { listOf(constantZero) }
         )
+    /**
+     * Returns difference of the polynomials.
+     */
     public override operator fun Polynomial<C>.minus(other: Polynomial<C>): Polynomial<C> =
         Polynomial(
             (0..max(degree, other.degree))
@@ -294,6 +339,9 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 }
                 .ifEmpty { listOf(constantZero) }
         )
+    /**
+     * Returns product of the polynomials.
+     */
     public override operator fun Polynomial<C>.times(other: Polynomial<C>): Polynomial<C> {
         val thisDegree = degree
         val otherDegree = other.degree
@@ -313,15 +361,39 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         }
     }
 
+    /**
+     * Check if the instant is zero polynomial.
+     */
     public override fun Polynomial<C>.isZero(): Boolean = coefficients.all { it.isZero() }
+    /**
+     * Check if the instant is unit polynomial.
+     */
     public override fun Polynomial<C>.isOne(): Boolean =
-        with(coefficients) { isNotEmpty() && asSequence().withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() } } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+        with(coefficients) {
+            isNotEmpty() &&
+                    asSequence().withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+        }
+    /**
+     * Check if the instant is minus unit polynomial.
+     */
     public override fun Polynomial<C>.isMinusOne(): Boolean =
-        with(coefficients) { isNotEmpty() && asSequence().withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() } } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+        with(coefficients) {
+            isNotEmpty() &&
+                    asSequence().withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() } // TODO: It's better to write new methods like `anyIndexed`. But what's better way to do it?
+        }
 
+    /**
+     * Instance of zero polynomial (zero of the polynomial ring).
+     */
     override val zero: Polynomial<C> = Polynomial(emptyList())
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
     override val one: Polynomial<C> = Polynomial(listOf(constantZero))
 
+    /**
+     * Checks equality of the polynomials.
+     */
     public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
         when {
             this === other -> true
@@ -334,9 +406,16 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Polynomial properties
-
+    /**
+     * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
+     * zero, degree is -1.
+     */
     public override val Polynomial<C>.degree: Int get() = coefficients.indexOfLast { it != constantZero }
 
+    /**
+     * If polynomial is a constant polynomial represents and returns it as constant.
+     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
+     */
     public override fun Polynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
             when {
@@ -345,7 +424,6 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 else -> first()
             }
         }
-    public override fun Polynomial<C>.asConstant(): C = asConstantOrNull() ?: error("Can not represent non-constant polynomial as a constant")
 
     @Suppress("NOTHING_TO_INLINE")
     public inline fun Polynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
