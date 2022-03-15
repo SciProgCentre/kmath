@@ -4,7 +4,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.contracts.*
 import kotlin.jvm.JvmName
-
+import kotlin.math.max
 
 
 // TODO: Docs
@@ -382,70 +382,51 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
 ): NumberedPolynomial<C> = algebra {
     NumberedPolynomial<C>(
         buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg ->
-                        when {
-                            index != variable -> deg
-                            deg > 0u -> deg - 1u
-                            else -> return@forEach
-                        }
-                    },
-                    optimizedMultiply(c, degs.getOrElse(variable) { 1u }.toInt())
-                )
-            }
+            coefficients
+                .forEach { (degs, c) ->
+                    if (degs.size > variable) return@forEach
+                    put(
+                        degs.mapIndexed { index, deg ->
+                            when {
+                                index != variable -> deg
+                                deg > 0u -> deg - 1u
+                                else -> return@forEach
+                            }
+                        }.cleanUp(),
+                        optimizedMultiply(c, degs[variable])
+                    )
+                }
         }
     )
 }
 
 /**
  * Returns algebraic derivative of received polynomial.
- */ // TODO: This one does not work!!!
-@UnstableKMathAPI
-public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
-    algebra: A,
-    variables: IntArray,
-): NumberedPolynomial<C> = algebra {
-    NumberedPolynomial<C>(
-        buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg ->
-                        when {
-                            index !in variables -> deg
-                            deg > 0u -> deg - 1u
-                            else -> return@forEach
-                        }
-                    },
-                    optimizedMultiply(c, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
-                )
-            }
-        }
-    )
-}
-
-/**
- * Returns algebraic derivative of received polynomial.
- */ // TODO: This one does not work!!!
+ */
 @UnstableKMathAPI
 public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
     algebra: A,
     variables: Collection<Int>,
 ): NumberedPolynomial<C> = algebra {
+    val cleanedVariables = variables.toSet()
+    if (cleanedVariables.isEmpty()) return this@derivativeWithRespectTo
+    val maxRespectedVariable = cleanedVariables.maxOrNull()!!
     NumberedPolynomial<C>(
         buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg ->
-                        when {
-                            index !in variables -> deg
-                            deg > 0u -> deg - 1u
-                            else -> return@forEach
-                        }
-                    },
-                    optimizedMultiply(c, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
-                )
-            }
+            coefficients
+                .forEach { (degs, c) ->
+                    if (degs.size > maxRespectedVariable) return@forEach
+                    put(
+                        degs.mapIndexed { index, deg ->
+                            when {
+                                index !in cleanedVariables -> deg
+                                deg > 0u -> deg - 1u
+                                else -> return@forEach
+                            }
+                        }.cleanUp(),
+                        cleanedVariables.fold(c) { acc, variable -> optimizedMultiply(acc, degs[variable]) }
+                    )
+                }
         }
     )
 }
@@ -459,24 +440,60 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
     variable: Int,
     order: UInt
 ): NumberedPolynomial<C> = algebra {
+    if (order == 0u) return this@nthDerivativeWithRespectTo
     NumberedPolynomial<C>(
         buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg ->
-                        when {
-                            index != variable -> deg
-                            deg >= order -> deg - order
-                            else -> return@forEach
+            coefficients
+                .forEach { (degs, c) ->
+                    if (degs.size > variable) return@forEach
+                    put(
+                        degs.mapIndexed { index, deg ->
+                            when {
+                                index != variable -> deg
+                                deg >= order -> deg - order
+                                else -> return@forEach
+                            }
+                        }.cleanUp(),
+                        degs[variable].let { deg ->
+                            (deg downTo deg - order + 1u)
+                                .fold(c) { acc, ord -> optimizedMultiply(acc, ord) }
                         }
-                    },
-                    degs.getOrElse(variable) { 1u }.toInt().let {
-                        (0u until order).fold(c) { acc, ord ->
-                            optimizedMultiply(acc, ord.toInt())
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
+    algebra: A,
+    variablesAndOrders: Map<Int, UInt>,
+): NumberedPolynomial<C> = algebra {
+    val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
+    if (filteredVariablesAndOrders.isEmpty()) return this@nthDerivativeWithRespectTo
+    val maxRespectedVariable = filteredVariablesAndOrders.keys.maxOrNull()!!
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    if (degs.size > maxRespectedVariable) return@forEach
+                    put(
+                        degs.mapIndexed { index, deg ->
+                            if (index !in filteredVariablesAndOrders) return@mapIndexed deg
+                            val order = filteredVariablesAndOrders[index]!!
+                            if (deg >= order) deg - order else return@forEach
+                        }.cleanUp(),
+                        filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
+                            degs[index].let { deg ->
+                                (deg downTo deg - order + 1u)
+                                    .fold(acc1) { acc2, ord -> optimizedMultiply(acc2, ord) }
+                            }
                         }
-                    }
-                )
-            }
+                    )
+                }
         }
     )
 }
@@ -491,52 +508,92 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
 ): NumberedPolynomial<C> = algebra {
     NumberedPolynomial<C>(
         buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg -> if(index != variable) deg else deg + 1u },
-                    c / optimizedMultiply(one, degs.getOrElse(variable) { 1u }.toInt())
-                )
-            }
+            coefficients
+                .forEach { (degs, c) ->
+                    put(
+                        List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + 1u },
+                        c / optimizedMultiply(one, degs[variable])
+                    )
+                }
         }
     )
 }
 
 /**
  * Returns algebraic antiderivative of received polynomial.
- */ // TODO: This one does not work!!!
-@UnstableKMathAPI
-public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
-    algebra: A,
-    variables: IntArray,
-): NumberedPolynomial<C> = algebra {
-    NumberedPolynomial<C>(
-        buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg -> if(index !in variables) deg else deg + 1u },
-                    c / optimizedMultiply(one, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
-                )
-            }
-        }
-    )
-}
-
-/**
- * Returns algebraic antiderivative of received polynomial.
- */ // TODO: This one does not work!!!
+ */
 @UnstableKMathAPI
 public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
     algebra: A,
     variables: Collection<Int>,
 ): NumberedPolynomial<C> = algebra {
+    val cleanedVariables = variables.toSet()
+    if (cleanedVariables.isEmpty()) return this@antiderivativeWithRespectTo
+    val maxRespectedVariable = cleanedVariables.maxOrNull()!!
     NumberedPolynomial<C>(
         buildMap(coefficients.size) {
-            coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg -> if(index !in variables) deg else deg + 1u },
-                    c / optimizedMultiply(one, variables.fold(1u) { acc, variable -> acc * degs.getOrElse(variable) { 1u } }.toInt())
-                )
-            }
+            coefficients
+                .forEach { (degs, c) ->
+                    put(
+                        List(max(maxRespectedVariable + 1, degs.size)) { if (it !in variables) degs[it] else degs[it] + 1u },
+                        cleanedVariables.fold(c) { acc, variable -> acc / optimizedMultiply(one, degs[variable]) }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectTo(
+    algebra: A,
+    variable: Int,
+    order: UInt
+): NumberedPolynomial<C> = algebra {
+    if (order == 0u) return this@nthAntiderivativeWithRespectTo
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    put(
+                        List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + order },
+                        degs[variable].let { deg ->
+                            (deg downTo deg - order + 1u)
+                                .fold(c) { acc, ord -> acc / optimizedMultiply(one, ord) }
+                        }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectTo(
+    algebra: A,
+    variablesAndOrders: Map<Int, UInt>,
+): NumberedPolynomial<C> = algebra {
+    val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
+    if (filteredVariablesAndOrders.isEmpty()) return this@nthAntiderivativeWithRespectTo
+    val maxRespectedVariable = filteredVariablesAndOrders.keys.maxOrNull()!!
+    NumberedPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    put(
+                        List(max(maxRespectedVariable + 1, degs.size)) { degs[it] + filteredVariablesAndOrders.getOrElse(it) { 0u } },
+                        filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
+                            degs[index].let { deg ->
+                                (deg downTo deg - order + 1u)
+                                    .fold(acc1) { acc2, ord -> acc2 / optimizedMultiply(one, ord) }
+                            }
+                        }
+                    )
+                }
         }
     )
 }

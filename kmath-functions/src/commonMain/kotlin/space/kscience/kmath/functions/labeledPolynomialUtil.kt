@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.contracts.*
+import kotlin.math.max
 
 
 // TODO: Docs
@@ -321,6 +323,251 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //
 //// endregion
 
-//// region Algebraic derivative and antiderivative
-//// TODO
-//// endregion
+// region Algebraic derivative and antiderivative
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
+    algebra: A,
+    variable: Variable,
+): LabeledPolynomial<C> = algebra {
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    if (variable !in degs) return@forEach
+                    put(
+                        buildMap {
+                            degs.forEach { (vari, deg) ->
+                                when {
+                                    vari != variable -> put(vari, deg)
+                                    deg > 1u -> put(vari, deg - 1u)
+                                }
+                            }
+                        },
+                        optimizedMultiply(c, degs[variable]!!)
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
+    algebra: A,
+    variables: Collection<Variable>,
+): LabeledPolynomial<C> = algebra {
+    val cleanedVariables = variables.toSet()
+    if (cleanedVariables.isEmpty()) return this@derivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    if (!degs.keys.containsAll(cleanedVariables)) return@forEach
+                    put(
+                        buildMap {
+                            degs.forEach { (vari, deg) ->
+                                when {
+                                    vari !in cleanedVariables -> put(vari, deg)
+                                    deg > 1u -> put(vari, deg - 1u)
+                                }
+                            }
+                        },
+                        cleanedVariables.fold(c) { acc, variable -> optimizedMultiply(acc, degs[variable]!!) }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
+    algebra: A,
+    variable: Variable,
+    order: UInt
+): LabeledPolynomial<C> = algebra {
+    if (order == 0u) return this@nthDerivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    if (degs.getOrElse(variable) { 0u } < order) return@forEach
+                    put(
+                        buildMap {
+                            degs.forEach { (vari, deg) ->
+                                when {
+                                    vari != variable -> put(vari, deg)
+                                    deg > order -> put(vari, deg - order)
+                                }
+                            }
+                        },
+                        degs[variable]!!.let { deg ->
+                            (deg downTo deg - order + 1u)
+                                .fold(c) { acc, ord -> optimizedMultiply(acc, ord) }
+                        }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
+    algebra: A,
+    variablesAndOrders: Map<Variable, UInt>,
+): LabeledPolynomial<C> = algebra {
+    val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
+    if (filteredVariablesAndOrders.isEmpty()) return this@nthDerivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    if (filteredVariablesAndOrders.any { (variable, order) -> degs.getOrElse(variable) { 0u } < order }) return@forEach
+                    put(
+                        buildMap {
+                            degs.forEach { (vari, deg) ->
+                                if (vari !in filteredVariablesAndOrders) put(vari, deg)
+                                else {
+                                    val order = filteredVariablesAndOrders[vari]!!
+                                    if (deg > order) put(vari, deg - order)
+                                }
+                            }
+                        },
+                        filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
+                            degs[index]!!.let { deg ->
+                                (deg downTo deg - order + 1u)
+                                    .fold(acc1) { acc2, ord -> optimizedMultiply(acc2, ord) }
+                            }
+                        }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic antiderivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
+    algebra: A,
+    variable: Variable,
+): LabeledPolynomial<C> = algebra {
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                        put(variable, 1u)
+                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
+                    }
+                    put(
+                        newDegs,
+                        c / optimizedMultiply(one, newDegs[variable]!!)
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic antiderivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
+    algebra: A,
+    variables: Collection<Variable>,
+): LabeledPolynomial<C> = algebra {
+    val cleanedVariables = variables.toSet()
+    if (cleanedVariables.isEmpty()) return this@antiderivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                        for (variable in cleanedVariables) put(variable, 1u)
+                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
+                    }
+                    put(
+                        newDegs,
+                        cleanedVariables.fold(c) { acc, variable -> acc / optimizedMultiply(one, newDegs[variable]!!) }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo(
+    algebra: A,
+    variable: Variable,
+    order: UInt
+): LabeledPolynomial<C> = algebra {
+    if (order == 0u) return this@nthAntiderivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                        put(variable, order)
+                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
+                    }
+                    put(
+                        newDegs,
+                        newDegs[variable]!!.let { deg ->
+                            (deg downTo  deg - order + 1u)
+                                .fold(c) { acc, ord -> acc / optimizedMultiply(one, ord) }
+                        }
+                    )
+                }
+        }
+    )
+}
+
+/**
+ * Returns algebraic derivative of received polynomial.
+ */
+@UnstableKMathAPI
+public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo(
+    algebra: A,
+    variablesAndOrders: Map<Variable, UInt>,
+): LabeledPolynomial<C> = algebra {
+    val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
+    if (filteredVariablesAndOrders.isEmpty()) return this@nthAntiderivativeWithRespectTo
+    LabeledPolynomial<C>(
+        buildMap(coefficients.size) {
+            coefficients
+                .forEach { (degs, c) ->
+                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                        for ((variable, order) in filteredVariablesAndOrders) put(variable, order)
+                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
+                    }
+                    put(
+                        newDegs,
+                        filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
+                            newDegs[index]!!.let { deg ->
+                                (deg downTo deg - order + 1u)
+                                    .fold(acc1) { acc2, ord -> acc2 / optimizedMultiply(one, ord) }
+                            }
+                        }
+                    )
+                }
+        }
+    )
+}
+
+// endregion
