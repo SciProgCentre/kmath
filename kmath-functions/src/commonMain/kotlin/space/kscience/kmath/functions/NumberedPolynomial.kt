@@ -72,100 +72,10 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 // endregion
 
 // region Constructors and converters
-// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
-//context(A)
+//context(NumberedPolynomialSpace<C, Ring<C>>)
 //@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> {
-//    if (!toCheckInput) return NumberedPolynomial<C>(coefs)
-//
-//    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-//
-//    for (entry in coefs) {
-//        val key = entry.key.cleanUp()
-//        val value = entry.value
-//        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-//    }
-//
-//    return NumberedPolynomial<C>(
-//        fixedCoefs
-//            .filter { it.value.isNotZero() }
-//    )
-//}
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(A)
-//@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): NumberedPolynomial<C> {
-//    if (!toCheckInput) return NumberedPolynomial(pairs.toMap())
-//
-//    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-//
-//    for (entry in pairs) {
-//        val key = entry.first.cleanUp()
-//        val value = entry.second
-//        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-//    }
-//
-//    return NumberedPolynomial<C>(
-//        fixedCoefs
-//            .filter { it.value.isNotZero() }
-//    )
-//}
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(A)
-//@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> =
-//    NumberedPolynomial(pairs.toMap(), toCheckInput)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param coefs Coefficients of the instants.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(A)
-//public fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>) = NumberedPolynomial(coefs, toCheckInput = true)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(A)
-//public fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = NumberedPolynomial(pairs, toCheckInput = true)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(A)
-//public fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) = NumberedPolynomial(*pairs, toCheckInput = true)
-//
-//context(NumberedPolynomialSpace<C, A>)
-//@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> {
+//internal fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
 //    if (!toCheckInput) return NumberedPolynomial(coefs)
 //
 //    val fixedCoefs = mutableMapOf<List<UInt>, C>()
@@ -176,23 +86,14 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 //        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
 //    }
 //
-//    return NumberedPolynomial<C>(
-//        fixedCoefs
-//            .filter { it.value.isNotZero() }
+//    return NumberedPolynomial(
+//        fixedCoefs.filterValues { it.isNotZero() }
 //    )
 //}
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(NumberedPolynomialSpace<C, A>)
+//
+//context(NumberedPolynomialSpace<C, Ring<C>>)
 //@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): NumberedPolynomial<C> {
+//internal fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
 //    if (!toCheckInput) return NumberedPolynomial(pairs.toMap())
 //
 //    val fixedCoefs = mutableMapOf<List<UInt>, C>()
@@ -203,56 +104,25 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 //        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
 //    }
 //
-//    return NumberedPolynomial<C>(
-//        fixedCoefs
-//            .filter { it.value.isNotZero() }
+//    return NumberedPolynomial(
+//        fixedCoefs.filterValues { it.isNotZero() }
 //    )
 //}
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(NumberedPolynomialSpace<C, A>)
+//
+//// TODO: Do not know how to make it without context receivers
+//context(NumberedPolynomialSpace<C, Ring<C>>)
 //@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> =
-//    NumberedPolynomial(pairs.toList(), toCheckInput)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param coefs Coefficients of the instants.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>) = NumberedPolynomial(coefs, toCheckInput = true)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = NumberedPolynomial(pairs, toCheckInput = true)
-///**
-// * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
-// * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
-// *
-// * @param pairs Collection of pairs that represent monomials.
-// *
-// * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
-// */
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) = NumberedPolynomial(*pairs, toCheckInput = true)
+//public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
+//
+//context(NumberedPolynomialSpace<C, Ring<C>>)
+//@Suppress("FunctionName")
+//public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
+//
+//context(NumberedPolynomialSpace<C, Ring<C>>)
+//@Suppress("FunctionName")
+//public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(pairs.toList(), toCheckInput = true)
 
-public fun <C, A: Ring<C>> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
+public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial(mapOf(emptyList<UInt>() to this))
 
 // endregion
 
@@ -314,7 +184,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun NumberedPolynomial<C>.times(other: Int): NumberedPolynomial<C> =
         if (other == 0) zero
-        else NumberedPolynomial(
+        else NumberedPolynomial<C>(
             coefficients
                 .applyAndRemoveZeros {
                     mapValues { (_, c) -> c * other }
@@ -706,5 +576,52 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
     }
+    // endregion
+
+    // region Constructors and converters
+
+    @Suppress("FunctionName")
+    internal fun NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
+        if (!toCheckInput) return NumberedPolynomial<C>(coefs)
+
+        val fixedCoefs = mutableMapOf<List<UInt>, C>()
+
+        for (entry in coefs) {
+            val key = entry.key.cleanUp()
+            val value = entry.value
+            fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+        }
+
+        return NumberedPolynomial(
+            fixedCoefs.filterValues { it.isNotZero() }
+        )
+    }
+
+    @Suppress("FunctionName")
+    internal fun NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
+        if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
+
+        val fixedCoefs = mutableMapOf<List<UInt>, C>()
+
+        for (entry in pairs) {
+            val key = entry.first.cleanUp()
+            val value = entry.second
+            fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+        }
+
+        return NumberedPolynomial(
+            fixedCoefs.filterValues { it.isNotZero() }
+        )
+    }
+
+    @Suppress("FunctionName")
+    public fun NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
+
+    @Suppress("FunctionName")
+    public fun NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
+
+    @Suppress("FunctionName")
+    public fun NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(pairs.toList(), toCheckInput = true)
+
     // endregion
 }

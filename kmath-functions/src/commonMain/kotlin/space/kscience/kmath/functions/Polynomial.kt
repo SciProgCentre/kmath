@@ -14,7 +14,32 @@ import kotlin.math.min
  *
  * @param coefficients constant is the leftmost coefficient.
  */
-public data class Polynomial<C>(public val coefficients: List<C>) : AbstractPolynomial<C> {
+public data class Polynomial<C>(
+    /**
+     * List that collects coefficients of the polynomial. Every monomial `a x^d` is represented as a coefficients
+     * `a` placed into the list with index `d`. For example coefficients of polynomial `5 x^2 - 6` can be represented as
+     * ```
+     * listOf(
+     *     -6, // -6 +
+     *     0,  // 0 x +
+     *     5,  // 5 x^2
+     * )
+     * ```
+     * and also as
+     * ```
+     * listOf(
+     *     -6, // -6 +
+     *     0,  // 0 x +
+     *     5,  // 5 x^2
+     *     0,  // 0 x^3
+     *     0,  // 0 x^4
+     * )
+     * ```
+     * It is recommended not to put extra zeros at end of the list (as for `0x^3` and `0x^4` in the example), but is not
+     * prohibited.
+     */
+    public val coefficients: List<C>
+) : AbstractPolynomial<C> {
     override fun toString(): String = "Polynomial$coefficients"
 }
 
