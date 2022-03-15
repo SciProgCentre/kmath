@@ -33,7 +33,7 @@ internal fun <C> Group<C>.optimizedMultiply(arg: C, other: Int): C =
  * @return sum of the augend [base] and product of the multiplicand [arg] and the multiplier [multiplier].
  * @author Gleb Minaev
  */
-internal tailrec fun <C> Group<C>.optimizedAddMultiplied(base: C, arg: C, multiplier: Int): C =
+internal fun <C> Group<C>.optimizedAddMultiplied(base: C, arg: C, multiplier: Int): C =
     if (multiplier >= 0) optimizedAddMultiplied(base, arg, multiplier.toUInt())
     else optimizedAddMultiplied(base, arg, (-multiplier).toUInt())
 
