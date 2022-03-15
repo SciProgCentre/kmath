@@ -5,10 +5,14 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.*
-import kotlin.contracts.*
-import kotlin.math.max
+import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 
 // TODO: Docs
@@ -31,10 +35,10 @@ import kotlin.math.max
 //
 //// endregion
 
-//// region Variables
+//// region Symbols
 //
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> power(arg: Variable, pow: UInt): LabeledPolynomial<C> =
+//fun <C, A: Ring<C>> power(arg: Symbol, pow: UInt): LabeledPolynomial<C> =
 //    if (pow == 0U) one
 //    else LabeledPolynomial<C>(mapOf(
 //        mapOf(arg to pow) to constantOne
@@ -45,7 +49,7 @@ import kotlin.math.max
 //// region Polynomials
 //
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> number(value: Int): LabeledPolynomial<C> = ring { LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to number<C>(value))) }
+//fun <C, A: Ring<C>> number(value: Int): LabeledPolynomial<C> = ring { LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to number<C>(value))) }
 //
 //context(LabeledPolynomialSpace<C, A>)
 //fun <C, A: Ring<C>> multiplyWithPower(base: LabeledPolynomial<C>, arg: LabeledPolynomial<C>, pow: UInt): LabeledPolynomial<C> =
@@ -97,7 +101,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.represent(names: Map<Variable, String> = emptyMap()): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.represent(names: Map<Symbol, String> = emptyMap()): String =
 //    coefficients.entries
 //        .sortedWith { o1, o2 -> LabeledPolynomial.monomialComparator.compare(o1.key, o2.key) }
 //        .asSequence()
@@ -130,7 +134,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.represent(namer: (Variable) -> String): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.represent(namer: (Symbol) -> String): String =
 //    coefficients.entries
 //        .sortedWith { o1, o2 -> LabeledPolynomial.monomialComparator.compare(o1.key, o2.key) }
 //        .asSequence()
@@ -163,7 +167,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representWithBrackets(names: Map<Variable, String> = emptyMap()): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
 //    with(represent(names)) { if (coefficients.count() == 1) this else "($this)" }
 //
 ///**
@@ -172,7 +176,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representWithBrackets(namer: (Variable) -> String): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representWithBrackets(namer: (Symbol) -> String): String =
 //    with(represent(namer)) { if (coefficients.count() == 1) this else "($this)" }
 //
 ///**
@@ -180,7 +184,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in **reversed** lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversed(names: Map<Variable, String> = emptyMap()): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversed(names: Map<Symbol, String> = emptyMap()): String =
 //    coefficients.entries
 //        .sortedWith { o1, o2 -> -LabeledPolynomial.monomialComparator.compare(o1.key, o2.key) }
 //        .asSequence()
@@ -213,7 +217,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in **reversed** lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversed(namer: (Variable) -> String): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversed(namer: (Symbol) -> String): String =
 //    coefficients.entries
 //        .sortedWith { o1, o2 -> -LabeledPolynomial.monomialComparator.compare(o1.key, o2.key) }
 //        .asSequence()
@@ -246,7 +250,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in **reversed** lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversedWithBrackets(names: Map<Variable, String> = emptyMap()): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversedWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
 //    with(representReversed(names)) { if (coefficients.count() == 1) this else "($this)" }
 //
 ///**
@@ -255,7 +259,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 // * Consider that monomials are sorted in **reversed** lexicographic order.
 // */
 //context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversedWithBrackets(namer: (Variable) -> String): String =
+//fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversedWithBrackets(namer: (Symbol) -> String): String =
 //    with(representReversed(namer)) { if (coefficients.count() == 1) this else "($this)" }
 //
 //// endregion
@@ -279,7 +283,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 
 //// region Polynomial substitution and functional representation
 //
-//public fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, args: Map<Variable, C>): LabeledPolynomial<C> = ring {
+//public fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, args: Map<Symbol, C>): LabeledPolynomial<C> = ring {
 //    if (coefficients.isEmpty()) return this@substitute
 //    LabeledPolynomial<C>(
 //        buildMap {
@@ -297,7 +301,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //// TODO: Replace with optimisation: the [result] may be unboxed, and all operations may be performed as soon as
 ////  possible on it
 //@JvmName("substitutePolynomial")
-//fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, arg: Map<Variable, LabeledPolynomial<C>>) : LabeledPolynomial<C> =
+//fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, arg: Map<Symbol, LabeledPolynomial<C>>) : LabeledPolynomial<C> =
 //    ring.labeledPolynomial {
 //        if (coefficients.isEmpty()) return zero
 //        coefficients
@@ -315,10 +319,10 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //
 //// TODO: Substitute rational function
 //
-//fun <C, A : Ring<C>> LabeledPolynomial<C>.asFunctionOver(ring: A): (Map<Variable, C>) -> LabeledPolynomial<C> =
+//fun <C, A : Ring<C>> LabeledPolynomial<C>.asFunctionOver(ring: A): (Map<Symbol, C>) -> LabeledPolynomial<C> =
 //    { substitute(ring, it) }
 //
-//fun <C, A : Ring<C>> LabeledPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Variable, LabeledPolynomial<C>>) -> LabeledPolynomial<C> =
+//fun <C, A : Ring<C>> LabeledPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Symbol, LabeledPolynomial<C>>) -> LabeledPolynomial<C> =
 //    { substitute(ring, it) }
 //
 //// endregion
@@ -331,7 +335,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 @UnstableKMathAPI
 public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
     algebra: A,
-    variable: Variable,
+    variable: Symbol,
 ): LabeledPolynomial<C> = algebra {
     LabeledPolynomial<C>(
         buildMap(coefficients.size) {
@@ -360,7 +364,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
     algebra: A,
-    variables: Collection<Variable>,
+    variables: Collection<Symbol>,
 ): LabeledPolynomial<C> = algebra {
     val cleanedVariables = variables.toSet()
     if (cleanedVariables.isEmpty()) return this@derivativeWithRespectTo
@@ -391,7 +395,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
     algebra: A,
-    variable: Variable,
+    variable: Symbol,
     order: UInt
 ): LabeledPolynomial<C> = algebra {
     if (order == 0u) return this@nthDerivativeWithRespectTo
@@ -425,7 +429,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
     algebra: A,
-    variablesAndOrders: Map<Variable, UInt>,
+    variablesAndOrders: Map<Symbol, UInt>,
 ): LabeledPolynomial<C> = algebra {
     val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
     if (filteredVariablesAndOrders.isEmpty()) return this@nthDerivativeWithRespectTo
@@ -462,13 +466,13 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
     algebra: A,
-    variable: Variable,
+    variable: Symbol,
 ): LabeledPolynomial<C> = algebra {
     LabeledPolynomial<C>(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
                         put(variable, 1u)
                         for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
                     }
@@ -487,7 +491,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
     algebra: A,
-    variables: Collection<Variable>,
+    variables: Collection<Symbol>,
 ): LabeledPolynomial<C> = algebra {
     val cleanedVariables = variables.toSet()
     if (cleanedVariables.isEmpty()) return this@antiderivativeWithRespectTo
@@ -495,7 +499,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
                         for (variable in cleanedVariables) put(variable, 1u)
                         for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
                     }
@@ -514,7 +518,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
 @UnstableKMathAPI
 public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo(
     algebra: A,
-    variable: Variable,
+    variable: Symbol,
     order: UInt
 ): LabeledPolynomial<C> = algebra {
     if (order == 0u) return this@nthAntiderivativeWithRespectTo
@@ -522,7 +526,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
                         put(variable, order)
                         for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
                     }
@@ -544,7 +548,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
 @UnstableKMathAPI
 public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo(
     algebra: A,
-    variablesAndOrders: Map<Variable, UInt>,
+    variablesAndOrders: Map<Symbol, UInt>,
 ): LabeledPolynomial<C> = algebra {
     val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
     if (filteredVariablesAndOrders.isEmpty()) return this@nthAntiderivativeWithRespectTo
@@ -552,7 +556,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Variable, UInt>(degs.size + 1) {
+                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
                         for ((variable, order) in filteredVariablesAndOrders) put(variable, order)
                         for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
                     }

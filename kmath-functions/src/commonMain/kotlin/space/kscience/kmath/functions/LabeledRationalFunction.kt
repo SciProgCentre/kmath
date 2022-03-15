@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 
@@ -62,22 +63,22 @@ internal fun labeledRationalFunctionError(message: Any): Nothing = throw Labeled
 //    )
 
 // TODO: Rewrite former constructors as fabrics
-//constructor(numeratorCoefficients: Map<Map<Variable, Int>, C>, denominatorCoefficients: Map<Map<Variable, Int>, C>) : this(
+//constructor(numeratorCoefficients: Map<Map<Symbol, Int>, C>, denominatorCoefficients: Map<Map<Symbol, Int>, C>) : this(
 //LabeledPolynomial(numeratorCoefficients),
 //LabeledPolynomial(denominatorCoefficients)
 //)
 //
-//constructor(numeratorCoefficients: Collection<Pair<Map<Variable, Int>, C>>, denominatorCoefficients: Collection<Pair<Map<Variable, Int>, C>>) : this(
+//constructor(numeratorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>, denominatorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>) : this(
 //LabeledPolynomial(numeratorCoefficients),
 //LabeledPolynomial(denominatorCoefficients)
 //)
 //
 //constructor(numerator: LabeledPolynomial<C>) : this(numerator, numerator.getOne())
-//constructor(numeratorCoefficients: Map<Map<Variable, Int>, C>) : this(
+//constructor(numeratorCoefficients: Map<Map<Symbol, Int>, C>) : this(
 //LabeledPolynomial(numeratorCoefficients)
 //)
 //
-//constructor(numeratorCoefficients: Collection<Pair<Map<Variable, Int>, C>>) : this(
+//constructor(numeratorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>) : this(
 //LabeledPolynomial(numeratorCoefficients)
 //)
 
@@ -338,11 +339,11 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
      * As consequence all values in the map are positive integers. Also, if the polynomial is constant, the map is empty.
      * And keys of the map is the same as in [variables].
      */
-    public val LabeledPolynomial<C>.degrees: Map<Variable, UInt> get() = polynomialRing { degrees }
+    public val LabeledPolynomial<C>.degrees: Map<Symbol, UInt> get() = polynomialRing { degrees }
     /**
      * Set of all variables that appear in the polynomial in positive exponents.
      */
-    public val LabeledPolynomial<C>.variables: Set<Variable> get() = polynomialRing { variables }
+    public val LabeledPolynomial<C>.variables: Set<Symbol> get() = polynomialRing { variables }
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
@@ -353,7 +354,7 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
-    public val LabeledRationalFunction<C>.variables: Set<Variable>
+    public val LabeledRationalFunction<C>.variables: Set<Symbol>
         get() = numerator.variables union denominator.variables
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
@@ -381,21 +382,21 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
             denominator * other
         )
 
-//    operator fun invoke(arg: Map<Variable, C>): LabeledRationalFunction<C> =
+//    operator fun invoke(arg: Map<Symbol, C>): LabeledRationalFunction<C> =
 //        LabeledRationalFunction(
 //            numerator(arg),
 //            denominator(arg)
 //        )
 //
 //    @JvmName("invokeLabeledPolynomial")
-//    operator fun invoke(arg: Map<Variable, LabeledPolynomial<C>>): LabeledRationalFunction<C> =
+//    operator fun invoke(arg: Map<Symbol, LabeledPolynomial<C>>): LabeledRationalFunction<C> =
 //        LabeledRationalFunction(
 //            numerator(arg),
 //            denominator(arg)
 //        )
 //
 //    @JvmName("invokeLabeledRationalFunction")
-//    operator fun invoke(arg: Map<Variable, LabeledRationalFunction<C>>): LabeledRationalFunction<C> {
+//    operator fun invoke(arg: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> {
 //        var num = numerator invokeRFTakeNumerator arg
 //        var den = denominator invokeRFTakeNumerator arg
 //        for (variable in variables) if (variable in arg) {
@@ -410,56 +411,56 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
 //
 //    override fun toString(): String = toString(emptyMap())
 //
-//    fun toString(names: Map<Variable, String> = emptyMap()): String =
+//    fun toString(names: Map<Symbol, String> = emptyMap()): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toString(names)
 //            else -> "${numerator.toStringWithBrackets(names)}/${denominator.toStringWithBrackets(names)}"
 //        }
 //
-//    fun toString(namer: (Variable) -> String): String =
+//    fun toString(namer: (Symbol) -> String): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toString(namer)
 //            else -> "${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)}"
 //        }
 //
-//    fun toStringWithBrackets(names: Map<Variable, String> = emptyMap()): String =
+//    fun toStringWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toStringWithBrackets(names)
 //            else -> "(${numerator.toStringWithBrackets(names)}/${denominator.toStringWithBrackets(names)})"
 //        }
 //
-//    fun toStringWithBrackets(namer: (Variable) -> String): String =
+//    fun toStringWithBrackets(namer: (Symbol) -> String): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toStringWithBrackets(namer)
 //            else -> "(${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)})"
 //        }
 //
-//    fun toReversedString(names: Map<Variable, String> = emptyMap()): String =
+//    fun toReversedString(names: Map<Symbol, String> = emptyMap()): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toReversedString(names)
 //            else -> "${numerator.toReversedStringWithBrackets(names)}/${denominator.toReversedStringWithBrackets(names)}"
 //        }
 //
-//    fun toReversedString(namer: (Variable) -> String): String =
+//    fun toReversedString(namer: (Symbol) -> String): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toReversedString(namer)
 //            else -> "${numerator.toReversedStringWithBrackets(namer)}/${denominator.toReversedStringWithBrackets(namer)}"
 //        }
 //
-//    fun toReversedStringWithBrackets(names: Map<Variable, String> = emptyMap()): String =
+//    fun toReversedStringWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toReversedStringWithBrackets(names)
 //            else -> "(${numerator.toReversedStringWithBrackets(names)}/${denominator.toReversedStringWithBrackets(names)})"
 //        }
 //
-//    fun toReversedStringWithBrackets(namer: (Variable) -> String): String =
+//    fun toReversedStringWithBrackets(namer: (Symbol) -> String): String =
 //        when (true) {
 //            numerator.isZero() -> "0"
 //            denominator.isOne() -> numerator.toReversedStringWithBrackets(namer)
