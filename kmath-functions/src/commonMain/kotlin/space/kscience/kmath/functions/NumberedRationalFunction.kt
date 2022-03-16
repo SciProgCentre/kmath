@@ -301,7 +301,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * exponents in which the variables are appeared in the polynomial.
      *
      * As consequence all values in the list are non-negative integers. Also, if the polynomial is constant, the list is empty.
-     * And size of the list is [countOfVariables].
+     * And last index of the list is [lastVariable].
      */
     public val NumberedPolynomial<C>.degrees: List<UInt> get() = polynomialRing { degrees }
     /**
