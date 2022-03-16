@@ -49,7 +49,7 @@ internal constructor(
 }
 
 /**
- * Returns the same degrees description of the monomial, but without zero degrees.
+ * Returns the same degrees' description of the monomial, but without zero degrees.
  */
 internal fun Map<Symbol, UInt>.cleanUp() = filterValues { it > 0U }
 

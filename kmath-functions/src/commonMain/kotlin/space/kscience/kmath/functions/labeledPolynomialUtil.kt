@@ -65,13 +65,13 @@ import kotlin.contracts.contract
 //
 
 /**
- * Crates a [LabeledPolynomialSpace] over received ring.
+ * Creates a [LabeledPolynomialSpace] over a received ring.
  */
 public fun <C, A : Ring<C>> A.labeledPolynomial(): LabeledPolynomialSpace<C, A> =
     LabeledPolynomialSpace(this)
 
 /**
- * Crates a [LabeledPolynomialSpace]'s scope over received ring.
+ * Creates a [LabeledPolynomialSpace]'s scope over a received ring.
  */
 @OptIn(ExperimentalContracts::class)
 public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomialSpace<C, A>.() -> R): R {

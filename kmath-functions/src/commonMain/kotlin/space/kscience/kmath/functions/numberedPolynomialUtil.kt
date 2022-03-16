@@ -42,13 +42,13 @@ import kotlin.math.max
 //    }
 
 /**
- * Crates a [NumberedPolynomialSpace] over received ring.
+ * Creates a [NumberedPolynomialSpace] over a received ring.
  */
 public fun <C, A : Ring<C>> A.numberedPolynomial(): NumberedPolynomialSpace<C, A> =
     NumberedPolynomialSpace(this)
 
 /**
- * Crates a [NumberedPolynomialSpace]'s scope over received ring.
+ * Creates a [NumberedPolynomialSpace]'s scope over a received ring.
  */
 @OptIn(ExperimentalContracts::class)
 public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolynomialSpace<C, A>.() -> R): R {
@@ -279,9 +279,9 @@ public fun NumberedPolynomial<Double>.substitute(args: Map<Int, Double>): Number
     val acc = LinkedHashMap<List<UInt>, Double>(coefficients.size)
     for ((degs, c) in coefficients) {
         val newDegs = degs.mapIndexed { index, deg -> if (index !in args) deg else 0u }.cleanUp()
-        val newC = args.entries.fold(c) { product, (variable, substitutor) ->
+        val newC = args.entries.fold(c) { product, (variable, substitution) ->
             val deg = degs.getOrElse(variable) { 0u }
-            if (deg == 0u) product else product * substitutor.pow(deg.toInt())
+            if (deg == 0u) product else product * substitution.pow(deg.toInt())
         }
         if (newDegs !in acc) acc[newDegs] = newC
         else acc[newDegs] = acc[newDegs]!! + newC
@@ -298,9 +298,9 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>
     val acc = LinkedHashMap<List<UInt>, C>(coefficients.size)
     for ((degs, c) in coefficients) {
         val newDegs = degs.mapIndexed { index, deg -> if (index !in args) deg else 0u }.cleanUp()
-        val newC = args.entries.fold(c) { product, (variable, substitutor) ->
+        val newC = args.entries.fold(c) { product, (variable, substitution) ->
             val deg = degs.getOrElse(variable) { 0u }
-            if (deg == 0u) product else product * power(substitutor, deg)
+            if (deg == 0u) product else product * power(substitution, deg)
         }
         if (newDegs !in acc) acc[newDegs] = newC
         else acc[newDegs] = acc[newDegs]!! + newC
@@ -315,9 +315,9 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, Nu
     val acc = LinkedHashMap<List<UInt>, NumberedPolynomial<C>>(coefficients.size)
     for ((degs, c) in coefficients) {
         val newDegs = degs.mapIndexed { index, deg -> if (index !in args) deg else 0u }.cleanUp()
-        val newC = args.entries.fold(c.asNumberedPolynomial()) { product, (variable, substitutor) ->
+        val newC = args.entries.fold(c.asNumberedPolynomial()) { product, (variable, substitution) ->
             val deg = degs.getOrElse(variable) { 0u }
-            if (deg == 0u) product else product * power(substitutor, deg)
+            if (deg == 0u) product else product * power(substitution, deg)
         }
         if (newDegs !in acc) acc[newDegs] = c.asNumberedPolynomial()
         else acc[newDegs] = acc[newDegs]!! + c

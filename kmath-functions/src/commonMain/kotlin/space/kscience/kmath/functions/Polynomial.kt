@@ -425,7 +425,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     public inline fun Polynomial<C>.asFunctionOnPolynomials(): (Polynomial<C>) -> Polynomial<C> = { this.substitute(ring, it) }
 
     /**
-     * Evaluates the polynomial for the given value [arg].
+     * Evaluates the polynomial for the given value [argument].
      */
     @Suppress("NOTHING_TO_INLINE")
     public inline operator fun Polynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)

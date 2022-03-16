@@ -22,13 +22,13 @@ import kotlin.math.pow
 //    if (degree > -1) Polynomial(coefficients.subList(0, degree + 1)) else zero
 
 /**
- * Crates a [PolynomialSpace] over received ring.
+ * Creates a [PolynomialSpace] over a received ring.
  */
 public fun <C, A : Ring<C>> A.polynomial(): PolynomialSpace<C, A> =
     PolynomialSpace(this)
 
 /**
- * Crates a [PolynomialSpace]'s scope over received ring.
+ * Creates a [PolynomialSpace]'s scope over a received ring.
  */
 public inline fun <C, A : Ring<C>, R> A.polynomial(block: PolynomialSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
@@ -36,13 +36,13 @@ public inline fun <C, A : Ring<C>, R> A.polynomial(block: PolynomialSpace<C, A>.
 }
 
 /**
- * Crates a [ScalablePolynomialSpace] over received scalable ring.
+ * Creates a [ScalablePolynomialSpace] over a received scalable ring.
  */
 public fun <C, A> A.scalablePolynomial(): ScalablePolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C> =
     ScalablePolynomialSpace(this)
 
 /**
- * Crates a [ScalablePolynomialSpace]'s scope over received scalable ring.
+ * Creates a [ScalablePolynomialSpace]'s scope over a received scalable ring.
  */
 public inline fun <C, A, R> A.scalablePolynomial(block: ScalablePolynomialSpace<C, A>.() -> R): R where A : Ring<C>, A : ScaleOperations<C> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
