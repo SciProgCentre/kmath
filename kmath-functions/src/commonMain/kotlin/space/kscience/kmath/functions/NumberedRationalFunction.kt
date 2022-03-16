@@ -277,12 +277,12 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
 
         if ( !(numerator.isZero() xor other.numerator.isZero()) ) return false
 
-        val countOfVariables = max(this.countOfVariables, other.countOfVariables)
+        val countOfVariables = max(this.lastVariable, other.lastVariable)
         val thisNumeratorDegrees = this.numerator.degrees
         val thisDenominatorDegrees = this.denominator.degrees
         val otherNumeratorDegrees = other.numerator.degrees
         val otherDenominatorDegrees = other.denominator.degrees
-        for (variable in 0 until countOfVariables)
+        for (variable in 0 .. countOfVariables)
             if (
                 thisNumeratorDegrees.getOrElse(variable) { 0u } + otherDenominatorDegrees.getOrElse(variable) { 0u }
                 != thisDenominatorDegrees.getOrElse(variable) { 0u } + otherNumeratorDegrees.getOrElse(variable) { 0u }
@@ -292,9 +292,10 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     }
 
     /**
-     * Count of all variables that appear in the polynomial in positive exponents.
+     * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
+     * the result is `-1`.
      */
-    public val NumberedPolynomial<C>.countOfVariables: Int get() = polynomialRing { countOfVariables }
+    public val NumberedPolynomial<C>.lastVariable: Int get() = polynomialRing { lastVariable }
     /**
      * List that associates indices of variables (that appear in the polynomial in positive exponents) with their most
      * exponents in which the variables are appeared in the polynomial.
@@ -303,12 +304,35 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * And size of the list is [countOfVariables].
      */
     public val NumberedPolynomial<C>.degrees: List<UInt> get() = polynomialRing { degrees }
+    /**
+     * Count of variables occurring in the polynomial with positive power. If there is no such variable,
+     * the result is `0`.
+     */
+    public val NumberedPolynomial<C>.countOfVariables: Int get() = polynomialRing { countOfVariables }
 
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
+    public val NumberedRationalFunction<C>.lastVariable: Int
+        get() = polynomialRing { max(numerator.lastVariable, denominator.lastVariable) }
+    /**
+     * Count of variables occurring in the rational function with positive power. If there is no such variable,
+     * the result is `0`.
+     */
     public val NumberedRationalFunction<C>.countOfVariables: Int
-        get() = polynomialRing { max(numerator.countOfVariables, denominator.countOfVariables) }
+        get() =
+            MutableList(lastVariable + 1) { false }.apply {
+                numerator.coefficients.entries.forEach { (degs, c) ->
+                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                        if (deg != 0u) this[index] = true
+                    }
+                }
+                denominator.coefficients.entries.forEach { (degs, c) ->
+                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                        if (deg != 0u) this[index] = true
+                    }
+                }
+            }.count { it }
 
     // TODO: Разобрать
 

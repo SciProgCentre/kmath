@@ -432,12 +432,12 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     coefficients.all { (key, value) -> with(other.coefficients) { key in this && this[key] == value } }
         }
 
-    // TODO: Replace `countOfVariables` with `lastVariable` and create new `countOfVariables`
     /**
-     * Count of all variables that appear in the polynomial in positive exponents.
+     * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
+     * the result is `-1`.
      */
-    public val NumberedPolynomial<C>.countOfVariables: Int
-        get() = coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) 0 else degs.size } ?: 0
+    public val NumberedPolynomial<C>.lastVariable: Int
+        get() = coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) -1 else degs.lastIndex } ?: -1
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -449,18 +449,30 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * exponents in which the variables are appeared in the polynomial.
      *
      * As consequence all values in the list are non-negative integers. Also, if the polynomial is constant, the list is empty.
-     * And size of the list is [countOfVariables].
+     * And last index of the list is [lastVariable].
      */
     public val NumberedPolynomial<C>.degrees: List<UInt>
         get() =
-            buildList(countOfVariables) {
-                repeat(countOfVariables) { add(0U) }
+            MutableList(lastVariable + 1) { 0u }.apply {
                 coefficients.entries.forEach { (degs, c) ->
                     if (c.isNotZero()) degs.forEachIndexed { index, deg ->
                         this[index] = max(this[index], deg)
                     }
                 }
             }
+    /**
+     * Count of variables occurring in the polynomial with positive power. If there is no such variable,
+     * the result is `0`.
+     */
+    public val NumberedPolynomial<C>.countOfVariables: Int
+        get() =
+            MutableList(lastVariable + 1) { false }.apply {
+                coefficients.entries.forEach { (degs, c) ->
+                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                        if (deg != 0u) this[index] = true
+                    }
+                }
+            }.count { it }
 
     /**
      * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
