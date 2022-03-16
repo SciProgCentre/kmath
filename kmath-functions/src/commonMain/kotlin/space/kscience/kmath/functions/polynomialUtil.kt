@@ -137,7 +137,7 @@ public fun <C, A> Polynomial<C>.derivative(
 public fun <C, A> Polynomial<C>.nthDerivative(
     algebra: A,
     order: UInt,
-): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
+): Polynomial<C> where A : Ring<C>, A : NumericAlgebra<C> = algebra {
     Polynomial(coefficients.drop(order.toInt()).mapIndexed { index, c -> (index + 1..index + order.toInt()).fold(c) { acc, i -> acc * number(i) } })
 }
 

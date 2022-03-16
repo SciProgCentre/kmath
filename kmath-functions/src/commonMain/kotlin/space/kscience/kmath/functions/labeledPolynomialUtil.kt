@@ -351,7 +351,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
                                 }
                             }
                         },
-                        optimizedMultiply(c, degs[variable]!!)
+                        multiplyBySquaring(c, degs[variable]!!)
                     )
                 }
         }
@@ -382,7 +382,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
                                 }
                             }
                         },
-                        cleanedVariables.fold(c) { acc, variable -> optimizedMultiply(acc, degs[variable]!!) }
+                        cleanedVariables.fold(c) { acc, variable -> multiplyBySquaring(acc, degs[variable]!!) }
                     )
                 }
         }
@@ -415,7 +415,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
                         },
                         degs[variable]!!.let { deg ->
                             (deg downTo deg - order + 1u)
-                                .fold(c) { acc, ord -> optimizedMultiply(acc, ord) }
+                                .fold(c) { acc, ord -> multiplyBySquaring(acc, ord) }
                         }
                     )
                 }
@@ -451,7 +451,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
                         filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
                             degs[index]!!.let { deg ->
                                 (deg downTo deg - order + 1u)
-                                    .fold(acc1) { acc2, ord -> optimizedMultiply(acc2, ord) }
+                                    .fold(acc1) { acc2, ord -> multiplyBySquaring(acc2, ord) }
                             }
                         }
                     )
@@ -478,7 +478,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
                     }
                     put(
                         newDegs,
-                        c / optimizedMultiply(one, newDegs[variable]!!)
+                        c / multiplyBySquaring(one, newDegs[variable]!!)
                     )
                 }
         }
@@ -505,7 +505,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
                     }
                     put(
                         newDegs,
-                        cleanedVariables.fold(c) { acc, variable -> acc / optimizedMultiply(one, newDegs[variable]!!) }
+                        cleanedVariables.fold(c) { acc, variable -> acc / multiplyBySquaring(one, newDegs[variable]!!) }
                     )
                 }
         }
@@ -534,7 +534,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
                         newDegs,
                         newDegs[variable]!!.let { deg ->
                             (deg downTo  deg - order + 1u)
-                                .fold(c) { acc, ord -> acc / optimizedMultiply(one, ord) }
+                                .fold(c) { acc, ord -> acc / multiplyBySquaring(one, ord) }
                         }
                     )
                 }
@@ -565,7 +565,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
                         filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
                             newDegs[index]!!.let { deg ->
                                 (deg downTo deg - order + 1u)
-                                    .fold(acc1) { acc2, ord -> acc2 / optimizedMultiply(one, ord) }
+                                    .fold(acc1) { acc2, ord -> acc2 / multiplyBySquaring(one, ord) }
                             }
                         }
                     )

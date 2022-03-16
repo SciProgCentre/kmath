@@ -71,19 +71,19 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
-    public operator fun P.plus(other: Int): P = optimizedAddMultiplied(this, one, other)
+    public operator fun P.plus(other: Int): P = addMultipliedBySquaring(this, one, other)
     /**
      * Returns difference between the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
-    public operator fun P.minus(other: Int): P = optimizedAddMultiplied(this, one, -other)
+    public operator fun P.minus(other: Int): P = addMultipliedBySquaring(this, one, -other)
     /**
      * Returns product of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public operator fun P.times(other: Int): P = optimizedMultiply(this, other)
+    public operator fun P.times(other: Int): P = multiplyBySquaring(this, other)
     // endregion
 
     // region Integer-polynomial relation
@@ -92,19 +92,19 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
-    public operator fun Int.plus(other: P): P = optimizedAddMultiplied(other, one, this)
+    public operator fun Int.plus(other: P): P = addMultipliedBySquaring(other, one, this)
     /**
      * Returns difference between the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
-    public operator fun Int.minus(other: P): P = optimizedAddMultiplied(-other, one, this)
+    public operator fun Int.minus(other: P): P = addMultipliedBySquaring(-other, one, this)
     /**
      * Returns product of the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public operator fun Int.times(other: P): P = optimizedMultiply(other, this)
+    public operator fun Int.times(other: P): P = multiplyBySquaring(other, this)
     // endregion
 
     // region Constant-constant relation
@@ -138,6 +138,12 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
     @JvmName("constantTimes")
     @JsName("constantTimes")
     public operator fun C.times(other: C): C
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    @JsName("constantPower")
+    public fun power(arg: C, exponent: UInt) : C
 
     /**
      * Check if the instant is zero constant.
@@ -225,6 +231,10 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Returns product of the polynomials.
      */
     public override operator fun P.times(other: P): P
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: P, exponent: UInt) : P = exponentiationBySquaring(arg, exponent)
 
     /**
      * Check if the instant is zero polynomial.
@@ -331,19 +341,19 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
+    public override operator fun C.plus(other: Int): C = ring { addMultipliedBySquaring(this@plus, one, other) }
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
+    public override operator fun C.minus(other: Int): C = ring { addMultipliedBySquaring(this@minus, one, -other) }
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
+    public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
     // endregion
 
     // region Integer-constant relation
@@ -352,19 +362,19 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
+    public override operator fun Int.plus(other: C): C = ring { addMultipliedBySquaring(other, one, this@plus) }
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
+    public override operator fun Int.minus(other: C): C = ring { addMultipliedBySquaring(-other, one, this@minus) }
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
+    public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
     // endregion
 
     // region Constant-constant relation
@@ -388,6 +398,11 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      */
     @JvmName("constantTimes")
     public override operator fun C.times(other: C): C = ring { this@times * other }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    override fun power(arg: C, exponent: UInt): C = ring { power(arg, exponent) }
 
     /**
      * Instance of zero constant (zero of the underlying ring).

@@ -120,19 +120,19 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
-    public operator fun R.plus(other: Int): R = optimizedAddMultiplied(this, one, other)
+    public operator fun R.plus(other: Int): R = addMultipliedBySquaring(this, one, other)
     /**
      * Returns difference between the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
-    public operator fun R.minus(other: Int): R = optimizedAddMultiplied(this, one, -other)
+    public operator fun R.minus(other: Int): R = addMultipliedBySquaring(this, one, -other)
     /**
      * Returns product of the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public operator fun R.times(other: Int): R = optimizedMultiply(this, other)
+    public operator fun R.times(other: Int): R = multiplyBySquaring(this, other)
     // endregion
 
     // region Integer-Rational relation
@@ -141,19 +141,19 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
-    public operator fun Int.plus(other: R): R = optimizedAddMultiplied(other, one, this)
+    public operator fun Int.plus(other: R): R = addMultipliedBySquaring(other, one, this)
     /**
      * Returns difference between the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
-    public operator fun Int.minus(other: R): R = optimizedAddMultiplied(-other, one, this)
+    public operator fun Int.minus(other: R): R = addMultipliedBySquaring(-other, one, this)
     /**
      * Returns product of the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public operator fun Int.times(other: R): R = optimizedMultiply(other, this)
+    public operator fun Int.times(other: R): R = multiplyBySquaring(other, this)
     // endregion
 
     // region Constant-constant relation
@@ -187,6 +187,12 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     @JvmName("constantTimes")
     @JsName("constantTimes")
     public operator fun C.times(other: C): C
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    @JsName("constantPower")
+    public fun power(arg: C, exponent: UInt) : C
 
     /**
      * Check if the instant is zero constant.
@@ -274,6 +280,10 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the polynomials.
      */
     public operator fun P.times(other: P): P
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public fun power(arg: P, exponent: UInt) : P
 
     /**
      * Check if the instant is zero polynomial.
@@ -400,6 +410,10 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the rational functions.
      */
     public override operator fun R.times(other: R): R
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: R, exponent: UInt) : R = exponentiationBySquaring(arg, exponent)
 
     /**
      * Check if the instant is zero rational function.
@@ -536,19 +550,19 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    public override operator fun C.plus(other: Int): C = ring { optimizedAddMultiplied(this@plus, one, other) }
+    public override operator fun C.plus(other: Int): C = ring { addMultipliedBySquaring(this@plus, one, other) }
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    public override operator fun C.minus(other: Int): C = ring { optimizedAddMultiplied(this@minus, one, -other) }
+    public override operator fun C.minus(other: Int): C = ring { addMultipliedBySquaring(this@minus, one, -other) }
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public override operator fun C.times(other: Int): C = ring { optimizedMultiply(this@times, other) }
+    public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
     // endregion
 
     // region Integer-constant relation
@@ -557,19 +571,19 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    public override operator fun Int.plus(other: C): C = ring { optimizedAddMultiplied(other, one, this@plus) }
+    public override operator fun Int.plus(other: C): C = ring { addMultipliedBySquaring(other, one, this@plus) }
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    public override operator fun Int.minus(other: C): C = ring { optimizedAddMultiplied(-other, one, this@minus) }
+    public override operator fun Int.minus(other: C): C = ring { addMultipliedBySquaring(-other, one, this@minus) }
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public override operator fun Int.times(other: C): C = ring { optimizedMultiply(other, this@times) }
+    public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
     // endregion
 
     // region Constant-constant relation
@@ -598,6 +612,11 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      */
     @JvmName("constantTimes")
     public override operator fun C.times(other: C): C = ring { this@times * other }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    public override fun power(arg: C, exponent: UInt) : C = ring { power(arg, exponent) }
 
     /**
      * Instance of zero constant (zero of the underlying ring).
@@ -740,6 +759,11 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      */
     @JvmName("constantTimes")
     public override operator fun C.times(other: C): C = polynomialRing { this@times * other }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    public override fun power(arg: C, exponent: UInt) : C = polynomialRing { power(arg, exponent) }
 
     /**
      * Check if the instant is zero constant.
@@ -827,6 +851,10 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Returns product of the polynomials.
      */
     public override operator fun P.times(other: P): P = polynomialRing { this@times * other }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: P, exponent: UInt) : P = polynomialRing { power(arg, exponent) }
 
     /**
      * Check if the instant is zero polynomial.

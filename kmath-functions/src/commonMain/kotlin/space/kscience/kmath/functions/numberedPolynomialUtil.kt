@@ -393,7 +393,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
                                 else -> return@forEach
                             }
                         }.cleanUp(),
-                        optimizedMultiply(c, degs[variable])
+                        multiplyBySquaring(c, degs[variable])
                     )
                 }
         }
@@ -424,7 +424,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
                                 else -> return@forEach
                             }
                         }.cleanUp(),
-                        cleanedVariables.fold(c) { acc, variable -> optimizedMultiply(acc, degs[variable]) }
+                        cleanedVariables.fold(c) { acc, variable -> multiplyBySquaring(acc, degs[variable]) }
                     )
                 }
         }
@@ -456,7 +456,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
                         }.cleanUp(),
                         degs[variable].let { deg ->
                             (deg downTo deg - order + 1u)
-                                .fold(c) { acc, ord -> optimizedMultiply(acc, ord) }
+                                .fold(c) { acc, ord -> multiplyBySquaring(acc, ord) }
                         }
                     )
                 }
@@ -489,7 +489,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
                         filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
                             degs[index].let { deg ->
                                 (deg downTo deg - order + 1u)
-                                    .fold(acc1) { acc2, ord -> optimizedMultiply(acc2, ord) }
+                                    .fold(acc1) { acc2, ord -> multiplyBySquaring(acc2, ord) }
                             }
                         }
                     )
@@ -512,7 +512,7 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
                 .forEach { (degs, c) ->
                     put(
                         List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + 1u },
-                        c / optimizedMultiply(one, degs[variable])
+                        c / multiplyBySquaring(one, degs[variable])
                     )
                 }
         }
@@ -536,7 +536,7 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
                 .forEach { (degs, c) ->
                     put(
                         List(max(maxRespectedVariable + 1, degs.size)) { if (it !in variables) degs[it] else degs[it] + 1u },
-                        cleanedVariables.fold(c) { acc, variable -> acc / optimizedMultiply(one, degs[variable]) }
+                        cleanedVariables.fold(c) { acc, variable -> acc / multiplyBySquaring(one, degs[variable]) }
                     )
                 }
         }
@@ -561,7 +561,7 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectT
                         List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + order },
                         degs[variable].let { deg ->
                             (deg downTo deg - order + 1u)
-                                .fold(c) { acc, ord -> acc / optimizedMultiply(one, ord) }
+                                .fold(c) { acc, ord -> acc / multiplyBySquaring(one, ord) }
                         }
                     )
                 }
@@ -589,7 +589,7 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectT
                         filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
                             degs[index].let { deg ->
                                 (deg downTo deg - order + 1u)
-                                    .fold(acc1) { acc2, ord -> acc2 / optimizedMultiply(one, ord) }
+                                    .fold(acc1) { acc2, ord -> acc2 / multiplyBySquaring(one, ord) }
                             }
                         }
                     )
