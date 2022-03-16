@@ -47,8 +47,6 @@ internal constructor(
     override fun toString(): String = "NumberedPolynomial$coefficients"
 }
 
-// region Internal utilities
-
 /**
  * Represents internal [Polynomial] errors.
  */
@@ -68,10 +66,6 @@ internal fun numberedPolynomialError(message: Any): Nothing = throw PolynomialEr
  * Returns the same degrees description of the monomial, but without extra zero degrees on the end.
  */
 internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
-
-// endregion
-
-// region Constructors and converters
 
 //context(NumberedPolynomialSpace<C, Ring<C>>)
 //@Suppress("FunctionName")
@@ -124,8 +118,6 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 
 public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial(mapOf(emptyList<UInt>() to this))
 
-// endregion
-
 /**
  * Space of polynomials.
  *
@@ -136,7 +128,6 @@ public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolyno
 public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public final override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
-    // region Polynomial-integer relation
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
@@ -190,9 +181,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> c * other }
                 }
         )
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the polynomial.
      *
@@ -246,9 +235,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> this@times * c }
                 }
         )
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -300,9 +287,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> this@times * c }
                 }
         )
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -352,9 +337,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> c * other }
                 }
         )
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns negation of the polynomial.
      */
@@ -463,10 +446,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             else -> coefficients.size == other.coefficients.size &&
                     coefficients.all { (key, value) -> with(other.coefficients) { key in this && this[key] == value } }
         }
-    // endregion
 
-    // Not sure is it necessary...
-    // region Polynomial properties
     // TODO: Replace `countOfVariables` with `lastVariable` and create new `countOfVariables`
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
@@ -545,10 +525,8 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokePolynomial")
     public inline operator fun NumberedPolynomial<C>.invoke(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = this.substitute(ring, argument)
-    // endregion
 
-    // region Utilities
-    // TODO: Move to region internal utilities with context receiver
+    // TODO: Move to other internal utilities with context receiver
     @JvmName("applyAndRemoveZerosInternal")
     internal fun MutableMap<List<UInt>, C>.applyAndRemoveZeros(block: MutableMap<List<UInt>, C>.() -> Unit) : MutableMap<List<UInt>, C> {
         contract {
@@ -576,9 +554,6 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
     }
-    // endregion
-
-    // region Constructors and converters
 
     @Suppress("FunctionName")
     internal fun NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
@@ -622,6 +597,4 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     @Suppress("FunctionName")
     public fun NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(pairs.toList(), toCheckInput = true)
-
-    // endregion
 }

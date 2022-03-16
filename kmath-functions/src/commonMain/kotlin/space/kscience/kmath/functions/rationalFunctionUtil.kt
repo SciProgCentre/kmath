@@ -6,10 +6,6 @@
 package space.kscience.kmath.functions
 
 
-// region Operator extensions
-
-// region Field case
-
 //operator fun <T: Field<T>> RationalFunction<T>.invoke(arg: T): T = numerator(arg) / denominator(arg)
 //
 //fun <T: Field<T>> RationalFunction<T>.reduced(): RationalFunction<T> =
@@ -20,11 +16,6 @@ package space.kscience.kmath.functions
 //        )
 //    }
 
-// endregion
-
-// endregion
-
-// region Derivatives
 ///**
 // * Returns result of applying formal derivative to the polynomial.
 // *
@@ -36,4 +27,3 @@ package space.kscience.kmath.functions
 //        numerator.derivative() * denominator - denominator.derivative() * numerator,
 //        denominator * denominator
 //    )
-// endregion

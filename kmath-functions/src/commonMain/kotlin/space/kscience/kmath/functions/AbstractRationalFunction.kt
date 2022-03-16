@@ -30,7 +30,6 @@ public interface AbstractRationalFunction<C, P: AbstractPolynomial<C>> {
  */ // TODO: Add support of field
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R: AbstractRationalFunction<C, P>> : Ring<R> {
-    // region Constant-integer relation
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
      *
@@ -49,9 +48,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun C.times(other: Int): C
-    // endregion
 
-    // region Integer-constant relation
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
@@ -70,9 +67,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: C): C
-    // endregion
 
-    // region Polynomial-integer relation
     /**
      * Returns sum of the constant and the integer represented as polynomial.
      *
@@ -91,9 +86,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun P.times(other: Int): P
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the constant.
      *
@@ -112,9 +105,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: P): P
-    // endregion
 
-    // region Rational-integer relation
     /**
      * Returns sum of the rational function and the integer represented as rational function.
      *
@@ -133,9 +124,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun R.times(other: Int): R = multiplyBySquaring(this, other)
-    // endregion
 
-    // region Integer-Rational relation
     /**
      * Returns sum of the integer represented as rational function and the rational function.
      *
@@ -154,9 +143,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: R): R = multiplyBySquaring(other, this)
-    // endregion
 
-    // region Constant-constant relation
     /**
      * Returns the same constant.
      */
@@ -227,9 +214,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Instance of unit constant (unit of the underlying ring).
      */
     public val constantOne: C
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -242,9 +227,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public operator fun C.times(other: P): P
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -257,9 +240,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public operator fun P.times(other: C): P
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns the same polynomial.
      */
@@ -327,9 +308,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Checks NOT equality of the polynomials.
      */
     public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
-    // endregion
 
-    // region Constant-rational relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -342,9 +321,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the constant represented as polynomial and the rational function.
      */
     public operator fun C.times(other: R): R
-    // endregion
 
-    // region Rational-constant relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -357,9 +334,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the constant represented as rational function and the rational function.
      */
     public operator fun R.times(other: C): R
-    // endregion
 
-    // region Polynomial-rational relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -372,9 +347,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the polynomial represented as polynomial and the rational function.
      */
     public operator fun P.times(other: R): R
-    // endregion
 
-    // region Rational-polynomial relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -387,9 +360,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Returns product of the polynomial represented as rational function and the rational function.
      */
     public operator fun R.times(other: P): R
-    // endregion
 
-    // region Rational-rational relation
     /**
      * Returns the same rational function.
      */
@@ -457,10 +428,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * Checks NOT equality of the polynomials.
      */
     public infix fun R.notEqualsTo(other: R): Boolean = !(this equalsTo other)
-    // endregion
 
-    // Not sure is it necessary...
-    // region Polynomial properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -494,10 +462,6 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      */
     public fun P.asConstant(): C = asConstantOrNull() ?: error("Can not represent non-constant polynomial as a constant")
 
-    // endregion
-
-    // Not sure is it necessary...
-    // region Rational properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -509,25 +473,8 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      */
     public val R.denominatorDegree: Int get() = denominator.degree
 
-    // TODO: Перенести в реализацию
-//    fun R.substitute(argument: C): C
-//    fun R.substitute(argument: P): R
-//    fun R.substitute(argument: R): R
-//
-//    fun R.asFunction(): (C) -> C = /*this::substitute*/ { this.substitute(it) }
-//    fun R.asFunctionOnConstants(): (C) -> C = /*this::substitute*/ { this.substitute(it) }
-//    fun P.asFunctionOnPolynomials(): (P) -> R = /*this::substitute*/ { this.substitute(it) }
-//    fun R.asFunctionOnRationalFunctions(): (R) -> R = /*this::substitute*/ { this.substitute(it) }
-//
-//    operator fun R.invoke(argument: C): C = this.substitute(argument)
-//    operator fun R.invoke(argument: P): R = this.substitute(argument)
-//    operator fun R.invoke(argument: R): R = this.substitute(argument)
-    // endregion
-
-    // region Legacy
     override fun add(left: R, right: R): R = left + right
     override fun multiply(left: R, right: R): R = left * right
-    // endregion
 }
 
 /**
@@ -544,7 +491,6 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
 
     public val ring: A
 
-    // region Constant-integer relation
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
      *
@@ -563,9 +509,7 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
-    // endregion
 
-    // region Integer-constant relation
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
@@ -584,9 +528,7 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
-    // endregion
 
-    // region Constant-constant relation
     /**
      * Returns the same constant.
      */
@@ -626,7 +568,6 @@ public interface AbstractRationalFunctionalSpaceOverRing<C, P: AbstractPolynomia
      * Instance of unit constant (unit of the underlying ring).
      */
     public override val constantOne: C get() = ring.one
-    // endregion
 }
 
 /**
@@ -649,7 +590,6 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
 
     public val polynomialRing: AP
 
-    // region Constant-integer relation
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
      *
@@ -668,9 +608,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun C.times(other: Int): C = polynomialRing { this@times * other }
-    // endregion
 
-    // region Integer-constant relation
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
@@ -689,9 +627,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: C): C = polynomialRing { this@times * other }
-    // endregion
 
-    // region Polynomial-integer relation
     /**
      * Returns sum of the constant and the integer represented as polynomial.
      *
@@ -710,9 +646,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun P.times(other: Int): P = polynomialRing { this@times * other }
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the constant.
      *
@@ -731,9 +665,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: P): P = polynomialRing { this@times * other }
-    // endregion
 
-    // region Constant-constant relation
     /**
      * Returns the same constant.
      */
@@ -798,9 +730,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Instance of unit constant (unit of the underlying ring).
      */
     public override val constantOne: C get() = polynomialRing.constantOne
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -813,9 +743,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public override operator fun C.times(other: P): P = polynomialRing { this@times * other }
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -828,9 +756,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public override operator fun P.times(other: C): P = polynomialRing { this@times * other }
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns the same polynomial.
      */
@@ -898,10 +824,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Checks NOT equality of the polynomials.
      */
     public override infix fun P.notEqualsTo(other: P): Boolean = polynomialRing { this@notEqualsTo notEqualsTo other }
-    // endregion
 
-    // Not sure is it necessary...
-    // region Polynomial properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -934,6 +857,4 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
     public override fun P.asConstant(): C = polynomialRing { this@asConstant.asConstant() }
-
-    // endregion
 }

@@ -18,8 +18,6 @@ public data class RationalFunction<C> internal constructor (
     override fun toString(): String = "RationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-// region Internal utilities
-
 /**
  * Represents internal [RationalFunction] errors.
  */
@@ -35,9 +33,6 @@ internal class RationalFunctionError : Error {
  */
 internal fun rationalFunctionError(message: Any): Nothing = throw RationalFunctionError(message.toString())
 
-// endregion
-
-// region Constructors and converters
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 //context(RationalFunctionSpace<C, A>)
@@ -63,8 +58,6 @@ internal fun rationalFunctionError(message: Any): Nothing = throw RationalFuncti
 //        Polynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } )
 //    )
 
-// endregion
-
 public class RationalFunctionSpace<C, A : Ring<C>> (
     public val ring: A,
 ) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
@@ -76,7 +69,6 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
 
     override val polynomialRing : PolynomialSpace<C, A> = PolynomialSpace(ring)
 
-    // region Rational-integer relation
     /**
      * Returns sum of the rational function and the integer represented as rational function.
      *
@@ -107,9 +99,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Integer-Rational relation
     /**
      * Returns sum of the integer represented as rational function and the rational function.
      *
@@ -140,9 +130,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Constant-rational relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -167,9 +155,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Rational-constant relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -194,9 +180,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Polynomial-rational relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -221,9 +205,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Rational-polynomial relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -248,9 +230,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Rational-rational relation
     /**
      * Returns negation of the rational function.
      */
@@ -298,9 +278,8 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             numeratorDegree - denominatorDegree != with(other) { numeratorDegree - denominatorDegree } -> false
             else -> numerator * other.denominator equalsTo other.numerator * denominator
         }
-    // endregion
 
-    // region REST TODO: Разобрать
+    // TODO: Разобрать
 
     public operator fun RationalFunction<C>.div(other: RationalFunction<C>): RationalFunction<C> =
         RationalFunction(
@@ -383,5 +362,4 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
 //            numerator.removeZeros(),
 //            denominator.removeZeros()
 //        )
-    // endregion
 }

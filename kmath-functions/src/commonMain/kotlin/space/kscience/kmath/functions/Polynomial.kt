@@ -91,7 +91,6 @@ public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))
  * @param A type of underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-//@Suppress("INAPPLICABLE_JVM_NAME") // TODO: KT-31420
 public open class PolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {

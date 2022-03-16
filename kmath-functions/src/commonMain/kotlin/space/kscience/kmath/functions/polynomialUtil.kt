@@ -14,8 +14,6 @@ import kotlin.math.min
 import kotlin.math.pow
 
 
-// region Utilities
-
 /**
  * Removes zeros on the end of the coefficient list of polynomial.
  */
@@ -50,10 +48,6 @@ public inline fun <C, A, R> A.scalablePolynomial(block: ScalablePolynomialSpace<
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return ScalablePolynomialSpace(this).block()
 }
-
-// endregion
-
-// region Polynomial substitution and functional representation
 
 // TODO: May be apply Horner's method too?
 /**
@@ -116,10 +110,6 @@ public fun <C, A : Ring<C>> Polynomial<C>.asFunction(ring: A): (C) -> C = { subs
  */
 public fun <C, A : Ring<C>> Polynomial<C>.asPolynomialFunctionOver(ring: A): (Polynomial<C>) -> Polynomial<C> = { substitute(ring, it) }
 
-// endregion
-
-// region Algebraic derivative and antiderivative
-
 /**
  * Returns algebraic derivative of received polynomial.
  */
@@ -181,5 +171,3 @@ public fun <C : Comparable<C>> Polynomial<C>.integrate(
     val integral = antiderivative(algebra)
     integral.substitute(algebra, range.endInclusive) - integral.substitute(algebra, range.start)
 }
-
-// endregion

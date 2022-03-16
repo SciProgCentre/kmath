@@ -17,10 +17,6 @@ import kotlin.contracts.contract
 
 // TODO: Docs
 
-// region Sort of legacy
-
-//// region Constants
-//
 //// TODO: Reuse underlying ring extensions
 //
 //context(LabeledPolynomialSpace<C, A>)
@@ -33,9 +29,7 @@ import kotlin.contracts.contract
 //context(LabeledPolynomialSpace<C, A>)
 //fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
 //
-//// endregion
 
-//// region Symbols
 //
 //context(LabeledPolynomialSpace<C, A>)
 //fun <C, A: Ring<C>> power(arg: Symbol, pow: UInt): LabeledPolynomial<C> =
@@ -44,9 +38,7 @@ import kotlin.contracts.contract
 //        mapOf(arg to pow) to constantOne
 //    ))
 //
-//// endregion
 
-//// region Polynomials
 //
 //context(LabeledPolynomialSpace<C, A>)
 //fun <C, A: Ring<C>> number(value: Int): LabeledPolynomial<C> = ring { LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to number<C>(value))) }
@@ -71,11 +63,6 @@ import kotlin.contracts.contract
 //        else -> error("Error in raising ring instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
 //    }
 //
-//// endregion
-
-// endregion
-
-// region Utilities
 
 /**
  * Crates a [LabeledPolynomialSpace] over received ring.
@@ -92,10 +79,6 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
     return LabeledPolynomialSpace(this).block()
 }
 
-// endregion
-
-//// region String representations
-//
 ///**
 // * Represents the polynomial as a [String] with names of variables substituted with names from [names].
 // * Consider that monomials are sorted in lexicographic order.
@@ -261,13 +244,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //context(LabeledPolynomialSpace<C, A>)
 //fun <C, A: Ring<C>> LabeledPolynomial<C>.representReversedWithBrackets(namer: (Symbol) -> String): String =
 //    with(representReversed(namer)) { if (coefficients.count() == 1) this else "($this)" }
-//
-//// endregion
 
-// region Operator extensions
-
-//// region Field case
-//
 //operator fun <T: Field<T>> Polynomial<T>.div(other: T): Polynomial<T> =
 //    if (other.isZero()) throw ArithmeticException("/ by zero")
 //    else
@@ -276,13 +253,7 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //                .mapValues { it.value / other },
 //            toCheckInput = false
 //        )
-//
-//// endregion
 
-// endregion
-
-//// region Polynomial substitution and functional representation
-//
 //public fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, args: Map<Symbol, C>): LabeledPolynomial<C> = ring {
 //    if (coefficients.isEmpty()) return this@substitute
 //    LabeledPolynomial<C>(
@@ -324,10 +295,6 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomial(block: LabeledPolynomi
 //
 //fun <C, A : Ring<C>> LabeledPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Symbol, LabeledPolynomial<C>>) -> LabeledPolynomial<C> =
 //    { substitute(ring, it) }
-//
-//// endregion
-
-// region Algebraic derivative and antiderivative
 
 /**
  * Returns algebraic derivative of received polynomial.
@@ -573,5 +540,3 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
         }
     )
 }
-
-// endregion

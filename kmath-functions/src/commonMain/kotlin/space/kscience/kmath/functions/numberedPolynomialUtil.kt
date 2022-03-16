@@ -9,10 +9,6 @@ import kotlin.math.max
 
 // TODO: Docs
 
-// region Sort of legacy
-
-//// region Constants
-//
 //// TODO: Reuse underlying ring extensions
 //
 //context(NumberedPolynomialSpace<C, A>)
@@ -21,11 +17,7 @@ import kotlin.math.max
 //
 //context(NumberedPolynomialSpace<C, A>)
 //public fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
-//
-//// endregion
 
-//// region Polynomials
-//
 //context(NumberedPolynomialSpace<C, A>)
 //public fun <C, A: Ring<C>> number(value: Int): NumberedPolynomial<C> = ring { NumberedPolynomial<C>(mapOf(emptyList<UInt>() to number<C>(value))) }
 //
@@ -48,12 +40,6 @@ import kotlin.math.max
 //        exponent % 2U == 1U -> multiplyWithPowerInternalLogic(base * arg, arg * arg, exponent / 2U)
 //        else -> error("Error in raising ring instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
 //    }
-//
-//// endregion
-
-// endregion
-
-// region Utilities
 
 /**
  * Crates a [NumberedPolynomialSpace] over received ring.
@@ -70,10 +56,6 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
     return NumberedPolynomialSpace(this).block()
 }
 
-// endregion
-
-//// region String representations
-//
 ///**
 // * Represents the polynomial as a [String] where name of variable with index `i` is [withVariableName] + `"_${i+1}"`.
 // * Consider that monomials are sorted in lexicographic order.
@@ -237,11 +219,7 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 //context(NumberedPolynomialSpace<C, A>)
 //public fun <C, A: Ring<C>> NumberedPolynomial<C>.representReversedWithBrackets(namer: (Int) -> String): String =
 //    with(representReversed(namer)) { if (coefficients.count() == 1) this else "($this)" }
-//
-//// endregion
 
-//// region Polynomial substitution and functional representation
-//
 //public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): NumberedPolynomial<C> = ring {
 //    if (coefficients.isEmpty()) return this@substitute
 //    NumberedPolynomial<C>(
@@ -283,13 +261,7 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 //
 //public fun <C, A : Ring<C>> NumberedPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Int, NumberedPolynomial<C>>) -> NumberedPolynomial<C> =
 //    { substitute(ring, it) }
-//
-//// endregion
 
-// region Operator extensions
-
-//// region Field case
-//
 //operator fun <T: Field<T>> Polynomial<T>.div(other: T): Polynomial<T> =
 //    if (other.isZero()) throw ArithmeticException("/ by zero")
 //    else
@@ -298,12 +270,6 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 //                .mapValues { it.value / other },
 //            toCheckInput = false
 //        )
-//
-//// endregion
-
-// endregion
-
-// region Polynomial substitution and functional representation
 
 // TODO: May be apply Horner's method too?
 /**
@@ -367,10 +333,6 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.asFunction(ring: A): (Map<Int,
  * Represent the polynomial as a regular context-less function.
  */
 public fun <C, A : Ring<C>> NumberedPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Int, NumberedPolynomial<C>>) -> NumberedPolynomial<C> = { substitute(ring, it) }
-
-// endregion
-
-// region Algebraic derivative and antiderivative
 
 /**
  * Returns algebraic derivative of received polynomial.
@@ -597,5 +559,3 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectT
         }
     )
 }
-
-// endregion

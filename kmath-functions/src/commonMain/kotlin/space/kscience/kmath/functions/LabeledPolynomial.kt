@@ -48,8 +48,6 @@ internal constructor(
     override fun toString(): String = "LabeledPolynomial$coefficients"
 }
 
-// region Internal utilities
-
 /**
  * Represents internal [LabeledPolynomial] errors.
  */
@@ -69,10 +67,6 @@ internal fun labeledPolynomialError(message: Any): Nothing = throw LabeledPolyno
  * Returns the same degrees description of the monomial, but without zero degrees.
  */
 internal fun Map<Symbol, UInt>.cleanUp() = filterValues { it > 0U }
-
-// endregion
-
-// region Constructors and converters
 
 //context(LabeledPolynomialSpace<C, Ring<C>>)
 //@Suppress("FunctionName")
@@ -128,8 +122,6 @@ internal fun Map<Symbol, UInt>.cleanUp() = filterValues { it > 0U }
 
 public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to this))
 
-// endregion
-
 /**
  * Space of polynomials.
  *
@@ -140,8 +132,6 @@ public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomia
 public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, LabeledPolynomial<C>, A> {
-
-    // region Symbol-integer relation
     public operator fun Symbol.plus(other: Int): LabeledPolynomial<C> =
         if (other == 0) LabeledPolynomial<C>(mapOf(
             mapOf(this@plus to 1U) to constantOne,
@@ -163,9 +153,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else LabeledPolynomial<C>(mapOf(
             mapOf(this to 1U) to constantOne * other,
         ))
-    // endregion
 
-    // region Integer-variable relation
     public operator fun Int.plus(other: Symbol): LabeledPolynomial<C> =
         if (this == 0) LabeledPolynomial<C>(mapOf(
             mapOf(other to 1U) to constantOne,
@@ -187,9 +175,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else LabeledPolynomial<C>(mapOf(
             mapOf(other to 1U) to constantOne * this@times,
         ))
-    // endregion
 
-    // region Polynomial-integer relation
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
@@ -243,9 +229,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> c * other }
                 }
         )
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the polynomial.
      *
@@ -299,9 +283,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> this@times * c }
                 }
         )
-    // endregion
 
-    // region Constant-variable relation
     public operator fun C.plus(other: Symbol): LabeledPolynomial<C> =
         if (isZero()) LabeledPolynomial<C>(mapOf(
             mapOf(other to 1U) to constantOne,
@@ -323,9 +305,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else LabeledPolynomial<C>(mapOf(
             mapOf(other to 1U) to this@times,
         ))
-    // endregion
 
-    // region Symbol-constant relation
     public operator fun Symbol.plus(other: C): LabeledPolynomial<C> =
         if (other.isZero()) LabeledPolynomial<C>(mapOf(
             mapOf(this@plus to 1U) to constantOne,
@@ -347,9 +327,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else LabeledPolynomial<C>(mapOf(
             mapOf(this@times to 1U) to other,
         ))
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -401,9 +379,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> this@times * c }
                 }
         )
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -455,9 +431,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     mapValues { (_, c) -> c * other }
                 }
         )
-    // endregion
 
-    // region Symbol-variable relation
     public operator fun Symbol.plus(other: Symbol): LabeledPolynomial<C> =
         if (this == other) LabeledPolynomial<C>(mapOf(
             mapOf(this to 1U) to constantOne * 2
@@ -479,9 +453,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else LabeledPolynomial<C>(mapOf(
             mapOf(this to 1U, other to 1U) to constantOne,
         ))
-    // endregion
 
-    // region Symbol-polynomial relation
     public operator fun Symbol.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         with(other.coefficients) {
             if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(this@plus to 1u) to constantOne))
@@ -519,9 +491,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             other.coefficients
                 .mapKeys { (degs, _) -> degs.toMutableMap().also{ it[this] = if (this in it) it[this]!! + 1U else 1U } }
         )
-    // endregion
 
-    // region Polynomial-variable relation
     public operator fun LabeledPolynomial<C>.plus(other: Symbol): LabeledPolynomial<C> =
         with(coefficients) {
             if (isEmpty()) LabeledPolynomial<C>(mapOf(mapOf(other to 1u) to constantOne))
@@ -557,9 +527,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             coefficients
                 .mapKeys { (degs, _) -> degs.toMutableMap().also{ it[other] = if (other in it) it[other]!! + 1U else 1U } }
         )
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns negation of the polynomial.
      */
@@ -626,10 +594,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             else -> coefficients.size == other.coefficients.size &&
                     coefficients.all { (key, value) -> with(other.coefficients) { key in this && this[key] == value } }
         }
-    // endregion
 
-    // Not sure is it necessary...
-    // region Polynomial properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -713,10 +678,8 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
 //    @Suppress("NOTHING_TO_INLINE")
 //    @JvmName("invokePolynomial")
 //    public inline operator fun LabeledPolynomial<C>.invoke(argument: Map<Symbol, LabeledPolynomial<C>>): LabeledPolynomial<C> = this.substitute(ring, argument)
-    // endregion
 
-    // region Utilities
-    // TODO: Move to region internal utilities with context receiver
+    // TODO: Move to other internal utilities with context receiver
     @JvmName("applyAndRemoveZerosInternal")
     internal fun MutableMap<Map<Symbol, UInt>, C>.applyAndRemoveZeros(block: MutableMap<Map<Symbol, UInt>, C>.() -> Unit) : MutableMap<Map<Symbol, UInt>, C> {
         contract {
@@ -744,5 +707,4 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
     }
-    // endregion
 }

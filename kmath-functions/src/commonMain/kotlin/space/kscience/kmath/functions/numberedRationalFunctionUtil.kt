@@ -6,10 +6,6 @@
 package space.kscience.kmath.functions
 
 
-//// region Operator extensions
-//
-//// region Field case
-//
 //fun <T: Field<T>> NumberedRationalFunction<T>.reduced(): NumberedRationalFunction<T> {
 //    val greatestCommonDivider = polynomialGCD(numerator, denominator)
 //    return NumberedRationalFunction(
@@ -17,7 +13,3 @@ package space.kscience.kmath.functions
 //        denominator / greatestCommonDivider
 //    )
 //}
-//
-//// endregion
-//
-//// endregion

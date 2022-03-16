@@ -16,8 +16,6 @@ public class NumberedRationalFunction<C> internal constructor(
     override fun toString(): String = "NumberedRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-// region Internal utilities
-
 /**
  * Represents internal [NumberedRationalFunction] errors.
  */
@@ -33,9 +31,6 @@ internal class NumberedRationalFunctionError : Error {
  */
 internal fun numberedRationalFunctionError(message: Any): Nothing = throw NumberedRationalFunctionError(message.toString())
 
-// endregion
-
-// region Constructors and converters
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 //context(RationalFunctionSpace<C, A>)
@@ -78,8 +73,6 @@ internal fun numberedRationalFunctionError(message: Any): Nothing = throw Number
 //Polynomial(numeratorCoefficients)
 //)
 
-// endregion
-
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
 ) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
@@ -91,7 +84,6 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
 
     override val polynomialRing : NumberedPolynomialSpace<C, A> = NumberedPolynomialSpace(ring)
 
-    // region Rational-integer relation
     /**
      * Returns sum of the rational function and the integer represented as rational function.
      *
@@ -122,9 +114,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Integer-Rational relation
     /**
      * Returns sum of the integer represented as rational function and the rational function.
      *
@@ -155,9 +145,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Constant-rational relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -182,9 +170,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Rational-constant relation
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -209,9 +195,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Polynomial-rational relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -236,9 +220,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             this * other.numerator,
             other.denominator
         )
-    // endregion
 
-    // region Rational-polynomial relation
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -263,9 +245,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             numerator * other,
             denominator
         )
-    // endregion
 
-    // region Rational-rational relation
     /**
      * Returns negation of the rational function.
      */
@@ -325,9 +305,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
 
         return numerator * other.denominator equalsTo other.numerator * denominator
     }
-    // endregion
 
-    // region Polynomial properties
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
@@ -340,17 +318,14 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * And size of the list is [countOfVariables].
      */
     public val NumberedPolynomial<C>.degrees: List<UInt> get() = polynomialRing { degrees }
-    // endregion
 
-    // region Rational properties
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
     public val NumberedRationalFunction<C>.countOfVariables: Int
         get() = polynomialRing { max(numerator.countOfVariables, denominator.countOfVariables) }
-    // endregion
 
-    // region REST TODO: Разобрать
+    // TODO: Разобрать
 
     public operator fun NumberedRationalFunction<C>.div(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
         NumberedRationalFunction(

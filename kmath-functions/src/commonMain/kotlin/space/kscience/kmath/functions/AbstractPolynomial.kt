@@ -23,7 +23,6 @@ public interface AbstractPolynomial<C>
  */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> {
-    // region Constant-integer relation
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
      *
@@ -42,9 +41,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun C.times(other: Int): C
-    // endregion
 
-    // region Integer-constant relation
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
@@ -63,9 +60,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: C): C
-    // endregion
 
-    // region Polynomial-integer relation
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
@@ -84,9 +79,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun P.times(other: Int): P = multiplyBySquaring(this, other)
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the polynomial.
      *
@@ -105,9 +98,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: P): P = multiplyBySquaring(other, this)
-    // endregion
 
-    // region Constant-constant relation
     /**
      * Returns the same constant.
      */
@@ -178,9 +169,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Instance of unit constant (unit of the underlying ring).
      */
     public val constantOne: C
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -193,9 +182,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public operator fun C.times(other: P): P
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -208,9 +195,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public operator fun P.times(other: C): P
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns the same polynomial.
      */
@@ -278,10 +263,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Checks NOT equality of the polynomials.
      */
     public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
-    // endregion
 
-    // Not sure is it necessary...
-    // region Polynomial properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -314,12 +296,9 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
     public fun P.asConstant(): C = asConstantOrNull() ?: error("Can not represent non-constant polynomial as a constant")
-    // endregion
 
-    // region Legacy of Ring interface
     override fun add(left: P, right: P): P = left + right
     override fun multiply(left: P, right: P): P = left * right
-    // endregion
 }
 
 /**
@@ -335,7 +314,6 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
 
     public val ring: A
 
-    // region Constant-integer relation
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
      *
@@ -354,9 +332,7 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
-    // endregion
 
-    // region Integer-constant relation
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
@@ -375,9 +351,7 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
-    // endregion
 
-    // region Constant-constant relation
     /**
      * Returns negation of the constant.
      */
@@ -412,5 +386,4 @@ public interface AbstractPolynomialSpaceOverRing<C, P: AbstractPolynomial<C>, A:
      * Instance of unit constant (unit of the underlying ring).
      */
     public override val constantOne: C get() = ring.one
-    // endregion
 }
