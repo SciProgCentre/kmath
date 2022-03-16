@@ -17,21 +17,6 @@ public class LabeledRationalFunction<C>(
     override fun toString(): String = "LabeledRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-/**
- * Represents internal [LabeledRationalFunction] errors.
- */
-internal class LabeledRationalFunctionError : Error {
-    constructor(): super()
-    constructor(message: String): super(message)
-    constructor(message: String?, cause: Throwable?): super(message, cause)
-    constructor(cause: Throwable?): super(cause)
-}
-
-/**
- * Throws an [LabeledRationalFunctionError] with the given [message].
- */
-internal fun labeledRationalFunctionError(message: Any): Nothing = throw LabeledRationalFunctionError(message.toString())
-
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 //context(RationalFunctionSpace<C, A>)

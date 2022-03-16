@@ -43,27 +43,6 @@ public data class Polynomial<C>(
     override fun toString(): String = "Polynomial$coefficients"
 }
 
-// region Internal utilities
-
-/**
- * Represents internal [Polynomial] errors.
- */
-internal class PolynomialError : Error {
-    constructor(): super()
-    constructor(message: String): super(message)
-    constructor(message: String?, cause: Throwable?): super(message, cause)
-    constructor(cause: Throwable?): super(cause)
-}
-
-/**
- * Throws an [PolynomialError] with the given [message].
- */
-internal fun polynomialError(message: Any): Nothing = throw PolynomialError(message.toString())
-
-// endregion
-
-// region Constructors and converters
-
 /**
  * Returns a [Polynomial] instance with given [coefficients]. The collection of coefficients will be reversed if
  * [reverse] parameter is true.
@@ -82,8 +61,6 @@ public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Pol
 
 public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))
 
-// endregion
-
 /**
  * Space of univariate polynomials constructed over ring.
  *
@@ -94,8 +71,6 @@ public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))
 public open class PolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
 ) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {
-
-    // region Polynomial-integer relation
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
@@ -152,9 +127,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 .subList(0, degree + 1)
                 .map { it * other }
         )
-    // endregion
 
-    // region Integer-polynomial relation
     /**
      * Returns sum of the integer represented as polynomial and the polynomial.
      *
@@ -213,9 +186,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 .subList(0, other.degree + 1)
                 .map { it * this }
         )
-    // endregion
 
-    // region Constant-polynomial relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -270,9 +241,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 .subList(0, other.degree + 1)
                 .map { it * this }
         )
-    // endregion
 
-    // region Polynomial-constant relation
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
@@ -325,9 +294,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 .subList(0, degree + 1)
                 .map { it * other }
         )
-    // endregion
 
-    // region Polynomial-polynomial relation
     /**
      * Returns negation of the polynomial.
      */
@@ -425,9 +392,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
                 else false
             }
         }
-    // endregion
 
-    // region Polynomial properties
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
@@ -466,8 +431,6 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     public inline operator fun Polynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
     @Suppress("NOTHING_TO_INLINE")
     public inline operator fun Polynomial<C>.invoke(argument: Polynomial<C>): Polynomial<C> = this.substitute(ring, argument)
-
-    // endregion
 }
 
 /**

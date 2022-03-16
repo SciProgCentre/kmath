@@ -48,22 +48,7 @@ internal constructor(
 }
 
 /**
- * Represents internal [Polynomial] errors.
- */
-internal class NumberedPolynomialError : Error {
-    constructor(): super()
-    constructor(message: String): super(message)
-    constructor(message: String?, cause: Throwable?): super(message, cause)
-    constructor(cause: Throwable?): super(cause)
-}
-
-/**
- * Throws an [PolynomialError] with the given [message].
- */
-internal fun numberedPolynomialError(message: Any): Nothing = throw PolynomialError(message.toString())
-
-/**
- * Returns the same degrees description of the monomial, but without extra zero degrees on the end.
+ * Returns the same degrees' description of the monomial, but without extra zero degrees on the end.
  */
 internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 

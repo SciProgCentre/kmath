@@ -18,21 +18,6 @@ public data class RationalFunction<C> internal constructor (
     override fun toString(): String = "RationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-/**
- * Represents internal [RationalFunction] errors.
- */
-internal class RationalFunctionError : Error {
-    constructor(): super()
-    constructor(message: String): super(message)
-    constructor(message: String?, cause: Throwable?): super(message, cause)
-    constructor(cause: Throwable?): super(cause)
-}
-
-/**
- * Throws an [RationalFunction] with the given [message].
- */
-internal fun rationalFunctionError(message: Any): Nothing = throw RationalFunctionError(message.toString())
-
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 //context(RationalFunctionSpace<C, A>)
