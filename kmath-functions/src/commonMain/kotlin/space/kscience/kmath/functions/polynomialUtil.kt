@@ -50,24 +50,36 @@ public inline fun <C, A, R> A.scalablePolynomial(block: ScalablePolynomialSpace<
 }
 
 @Suppress("NOTHING_TO_INLINE")
-internal inline fun <C> iadd(
-    ring: Ring<C>,
-    augend: MutableList<C>,
-    addend: List<C>,
-    degree: Int
-) = ring {
-    for (deg in 0 .. degree) augend[deg] += addend[deg]
+internal inline fun <C> copyTo(
+    origin: List<C>,
+    originDegree: Int,
+    target: MutableList<C>,
+) {
+    for (deg in 0 .. originDegree) target[deg] = origin[deg]
 }
 
 @Suppress("NOTHING_TO_INLINE")
-internal inline fun <C> addTo(
+internal inline fun <C> multiplyAddingToUpdater(
     ring: Ring<C>,
-    augend: List<C>,
-    addend: List<C>,
-    degree: Int,
-    target: MutableList<C>
-) = ring {
-    for (deg in 0 .. degree) target[deg] = augend[deg] + addend[deg]
+    multiplicand: MutableList<C>,
+    multiplicandDegree: Int,
+    multiplier: List<C>,
+    multiplierDegree: Int,
+    updater: MutableList<C>,
+    zero: C,
+) {
+    multiplyAddingTo(
+        ring = ring,
+        multiplicand = multiplicand,
+        multiplicandDegree = multiplicandDegree,
+        multiplier = multiplier,
+        multiplierDegree = multiplierDegree,
+        target = updater
+    )
+    for (updateDeg in 0 .. multiplicandDegree + multiplierDegree) {
+        multiplicand[updateDeg] = updater[updateDeg]
+        updater[updateDeg] = zero
+    }
 }
 
 @Suppress("NOTHING_TO_INLINE")
@@ -107,32 +119,29 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
     return result
 }
 
-public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Polynomial<C> = ring.polynomial {
-    if (coefficients.isEmpty()) return zero
+public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Polynomial<C> = ring {
+    if (coefficients.isEmpty()) return Polynomial(emptyList())
 
-    val thisDegree = degree
-    if (thisDegree == -1) return zero
-    val argDegree = arg.degree
+    val thisDegree = coefficients.indexOfLast { it != zero }
+    if (thisDegree == -1) return Polynomial(emptyList())
+    val argDegree = arg.coefficients.indexOfLast { it != zero }
     if (argDegree == -1) return coefficients[0].asPolynomial()
-    val constantZero = constantZero
+    val constantZero = zero
     val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
     val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
     var resultDegree = 0
     for (deg in thisDegree downTo 0) {
         resultCoefsUpdate[0] = coefficients[deg]
-        multiplyAddingTo(
-            ring=ring,
+        multiplyAddingToUpdater(
+            ring = ring,
             multiplicand = resultCoefs,
             multiplicandDegree = resultDegree,
             multiplier = arg.coefficients,
             multiplierDegree = argDegree,
-            target = resultCoefsUpdate
+            updater = resultCoefsUpdate,
+            zero = constantZero
         )
         resultDegree += argDegree
-        for (updateDeg in 0 .. resultDegree) {
-            resultCoefs[updateDeg] = resultCoefsUpdate[updateDeg]
-            resultCoefsUpdate[updateDeg] = constantZero
-        }
     }
     return Polynomial<C>(resultCoefs)
 }
