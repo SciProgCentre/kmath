@@ -49,6 +49,41 @@ public inline fun <C, A, R> A.scalablePolynomial(block: ScalablePolynomialSpace<
     return ScalablePolynomialSpace(this).block()
 }
 
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> iadd(
+    ring: Ring<C>,
+    augend: MutableList<C>,
+    addend: List<C>,
+    degree: Int
+) = ring {
+    for (deg in 0 .. degree) augend[deg] += addend[deg]
+}
+
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> addTo(
+    ring: Ring<C>,
+    augend: List<C>,
+    addend: List<C>,
+    degree: Int,
+    target: MutableList<C>
+) = ring {
+    for (deg in 0 .. degree) target[deg] = augend[deg] + addend[deg]
+}
+
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> multiplyAddingTo(
+    ring: Ring<C>,
+    multiplicand: List<C>,
+    multiplicandDegree: Int,
+    multiplier: List<C>,
+    multiplierDegree: Int,
+    target: MutableList<C>
+) = ring {
+    for (d in 0 .. multiplicandDegree + multiplierDegree)
+        for (k in max(0, d - multiplierDegree)..min(multiplicandDegree, d))
+            target[d] += multiplicand[k] * multiplier[d - k]
+}
+
 // TODO: May be apply Horner's method too?
 /**
  * Evaluates the value of the given double polynomial for given double argument.
@@ -80,19 +115,21 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Pol
     val argDegree = arg.degree
     if (argDegree == -1) return coefficients[0].asPolynomial()
     val constantZero = constantZero
-    val resultCoefs: MutableList<C> = MutableList(thisDegree + argDegree + 1) { constantZero }
-    val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree + argDegree + 1) { constantZero }
+    val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
+    val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
     var resultDegree = 0
     for (deg in thisDegree downTo 0) {
         resultCoefsUpdate[0] = coefficients[deg]
-        for (updateDeg in 0 .. resultDegree + argDegree) {
-            var newC = resultCoefsUpdate[updateDeg]
-            for (deg1 in max(0, updateDeg - argDegree)..min(resultDegree, updateDeg))
-                newC += resultCoefs[deg1] * arg.coefficients[updateDeg - deg1]
-            resultCoefsUpdate[updateDeg] = newC
-        }
+        multiplyAddingTo(
+            ring=ring,
+            multiplicand = resultCoefs,
+            multiplicandDegree = resultDegree,
+            multiplier = arg.coefficients,
+            multiplierDegree = argDegree,
+            target = resultCoefsUpdate
+        )
         resultDegree += argDegree
-        for (updateDeg in 0 .. resultDegree + argDegree) {
+        for (updateDeg in 0 .. resultDegree) {
             resultCoefs[updateDeg] = resultCoefsUpdate[updateDeg]
             resultCoefsUpdate[updateDeg] = constantZero
         }
