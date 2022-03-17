@@ -5,6 +5,24 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.operations.Ring
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+
+
+/**
+ * Creates a [RationalFunctionSpace] over a received ring.
+ */
+public fun <C, A : Ring<C>> A.rationalFunction(): RationalFunctionSpace<C, A> =
+    RationalFunctionSpace(this)
+
+/**
+ * Creates a [RationalFunctionSpace]'s scope over a received ring.
+ */
+public inline fun <C, A : Ring<C>, R> A.rationalFunction(block: RationalFunctionSpace<C, A>.() -> R): R {
+    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    return RationalFunctionSpace(this).block()
+}
 
 //operator fun <T: Field<T>> RationalFunction<T>.invoke(arg: T): T = numerator(arg) / denominator(arg)
 //
