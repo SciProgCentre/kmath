@@ -139,7 +139,7 @@ internal tailrec fun <C> Ring<C>.exponentiationBySquaring(arg: C, exponent: UInt
 internal tailrec fun <C> RingOps<C>.multiplyExponentiationBySquaring(base: C, arg: C, exponent: UInt): C =
     when {
         exponent == 0u -> base
-        exponent == 1u -> base + arg
+        exponent == 1u -> base * arg
         exponent and 1u == 0u -> multiplyExponentiationBySquaring(base, arg * arg, exponent shr 1)
         exponent and 1u == 1u -> multiplyExponentiationBySquaring(base * arg, arg * arg, exponent shr 1)
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
