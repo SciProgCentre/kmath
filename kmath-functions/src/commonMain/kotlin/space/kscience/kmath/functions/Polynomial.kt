@@ -129,7 +129,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         else Polynomial(
             coefficients
                 .applyAndRemoveZeros {
-                    map { it * other }
+                    for (deg in indices) this[deg] = this[deg] * other
                 }
         )
 
@@ -189,7 +189,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         else Polynomial(
             other.coefficients
                 .applyAndRemoveZeros {
-                    map { it * this@times }
+                    for (deg in indices) this[deg] = this@times * this[deg]
                 }
         )
 
@@ -245,7 +245,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         else Polynomial(
             other.coefficients
                 .applyAndRemoveZeros {
-                    map { it * this@times }
+                    for (deg in indices) this[deg] = this@times * this[deg]
                 }
         )
 
@@ -299,7 +299,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         else Polynomial(
             coefficients
                 .applyAndRemoveZeros {
-                    map { it * other }
+                    for (deg in indices) this[deg] = this[deg] * other
                 }
         )
 
@@ -452,12 +452,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     }
     internal inline fun List<C>.applyAndRemoveZeros(block: MutableList<C>.() -> Unit) : List<C> =
         toMutableList().applyAndRemoveZeros(block)
+    @Suppress("FunctionName")
     internal inline fun MutableCoefficients(size: Int, init: (index: Int) -> C): MutableList<C> {
         val list = ArrayList<C>(size)
         repeat(size) { index -> list.add(init(index)) }
         with(list) { while (elementAt(lastIndex).isZero()) removeAt(lastIndex) }
         return list
     }
+    @Suppress("FunctionName")
     internal inline fun Coefficients(size: Int, init: (index: Int) -> C): List<C> = MutableCoefficients(size, init)
     @OptIn(ExperimentalTypeInference::class)
     internal inline fun buildCoefficients(@BuilderInference builderAction: MutableList<C>.() -> Unit): List<C> {

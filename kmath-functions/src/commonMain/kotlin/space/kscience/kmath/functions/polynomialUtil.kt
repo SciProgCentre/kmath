@@ -96,7 +96,6 @@ internal inline fun <C> multiplyAddingTo(
             target[d] += multiplicand[k] * multiplier[d - k]
 }
 
-// TODO: May be apply Horner's method too?
 /**
  * Evaluates the value of the given double polynomial for given double argument.
  */

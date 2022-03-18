@@ -163,7 +163,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         else NumberedPolynomial<C>(
             coefficients
                 .applyAndRemoveZeros {
-                    mapValues { (_, c) -> c * other }
+                    for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
 
@@ -217,7 +217,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         else NumberedPolynomial(
             other.coefficients
                 .applyAndRemoveZeros {
-                    mapValues { (_, c) -> this@times * c }
+                    for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
 
@@ -269,7 +269,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         else NumberedPolynomial<C>(
             other.coefficients
                 .applyAndRemoveZeros {
-                    mapValues { (_, c) -> this@times * c }
+                    for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
 
@@ -319,7 +319,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         else NumberedPolynomial<C>(
             coefficients
                 .applyAndRemoveZeros {
-                    mapValues { (_, c) -> c * other }
+                    for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
 
@@ -335,22 +335,20 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun NumberedPolynomial<C>.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomial<C>(
-            coefficients
-                .applyAndRemoveZeros {
-                    other.coefficients
-                        .mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
-                }
+            buildCoefficients(coefficients.size + other.coefficients.size) {
+                other.coefficients.mapValuesTo(this) { it.value }
+                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
+            }
         )
     /**
      * Returns difference of the polynomials.
      */
     override operator fun NumberedPolynomial<C>.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomial<C>(
-            coefficients
-                .applyAndRemoveZeros {
-                    other.coefficients
-                        .mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
-                }
+            buildCoefficients(coefficients.size + other.coefficients.size) {
+                other.coefficients.mapValuesTo(this) { it.value }
+                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
+            }
         )
     /**
      * Returns product of the polynomials.
