@@ -246,7 +246,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun C.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) -other
         else with(other.coefficients) {
-            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to this@minus))
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this@minus))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
@@ -279,7 +279,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun NumberedPolynomial<C>.plus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
-            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to other))
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
@@ -298,7 +298,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun NumberedPolynomial<C>.minus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
-            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to other))
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
@@ -416,7 +416,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     override val one: NumberedPolynomial<C> =
         NumberedPolynomial<C>(
             mapOf(
-                listOf<UInt>() to constantOne // 1 * x_1^0 * x_2^0 * ...
+                emptyList<UInt>() to constantOne // 1 * x_1^0 * x_2^0 * ...
             )
         )
 
