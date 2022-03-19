@@ -6,10 +6,10 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.test.misc.Rational
-import space.kscience.kmath.test.misc.RationalField
+import space.kscience.kmath.test.misc.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+
 
 class PolynomialTest {
     @Test
@@ -93,6 +93,116 @@ class PolynomialTest {
         }
     }
     @Test
+    fun test_Polynomial_Int_times() {
+        IntModuloRing(35).polynomial {
+            assertEquals(
+                Polynomial(34, 2, 1, 20, 2),
+                Polynomial(22, 26, 13, 15, 26) * 27,
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(),
+                Polynomial(7, 0, 49, 21, 14) * 15,
+                "test 2"
+            )
+        }
+    }
+    @Test
+    fun test_Int_Polynomial_plus() {
+        RationalField.polynomial {
+            assertEquals(
+                Polynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
+                -3 + Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(Rational(0), Rational(0), Rational(0), Rational(0)),
+                2 + Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 2"
+            )
+            assertEquals(
+                Polynomial(),
+                2 + Polynomial(Rational(-2)),
+                "test 3"
+            )
+            assertEquals(
+                Polynomial(),
+                0 + Polynomial(),
+                "test 4"
+            )
+            assertEquals(
+                Polynomial(Rational(-1), Rational(0), Rational(0), Rational(0)),
+                1 + Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 5"
+            )
+            assertEquals(
+                Polynomial(Rational(-1)),
+                1 + Polynomial(Rational(-2)),
+                "test 6"
+            )
+            assertEquals(
+                Polynomial(Rational(2)),
+                2 + Polynomial(),
+                "test 7"
+            )
+        }
+    }
+    @Test
+    fun test_Int_Polynomial_minus() {
+        RationalField.polynomial {
+            assertEquals(
+                Polynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
+                3 - Polynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(Rational(0), Rational(0), Rational(0), Rational(0)),
+                -2 - Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 2"
+            )
+            assertEquals(
+                Polynomial(),
+                -2 - Polynomial(Rational(-2)),
+                "test 3"
+            )
+            assertEquals(
+                Polynomial(),
+                0 - Polynomial(),
+                "test 4"
+            )
+            assertEquals(
+                Polynomial(Rational(1), Rational(0), Rational(0), Rational(0)),
+                -1 - Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 5"
+            )
+            assertEquals(
+                Polynomial(Rational(1)),
+                -1 - Polynomial(Rational(-2)),
+                "test 6"
+            )
+            assertEquals(
+                Polynomial(Rational(-2)),
+                -2 - Polynomial(),
+                "test 7"
+            )
+        }
+    }
+    @Test
+    fun test_Int_Polynomial_times() {
+        IntModuloRing(35).polynomial {
+            assertEquals(
+                Polynomial(34, 2, 1, 20, 2),
+                27 * Polynomial(22, 26, 13, 15, 26),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(),
+                15 * Polynomial(7, 0, 49, 21, 14),
+                "test 2"
+            )
+        }
+    }
+    @Test
     fun test_Polynomial_Constant_plus() {
         RationalField.polynomial {
             assertEquals(
@@ -169,6 +279,116 @@ class PolynomialTest {
                 Polynomial(Rational(-2)),
                 Polynomial<Rational>() - Rational(2),
                 "test 7"
+            )
+        }
+    }
+    @Test
+    fun test_Polynomial_Constant_times() {
+        IntModuloRing(35).polynomial {
+            assertEquals(
+                Polynomial(34, 2, 1, 20, 2),
+                Polynomial(22, 26, 13, 15, 26) * number(27),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(),
+                Polynomial(7, 0, 49, 21, 14) * number(15),
+                "test 2"
+            )
+        }
+    }
+    @Test
+    fun test_Constant_Polynomial_plus() {
+        RationalField.polynomial {
+            assertEquals(
+                Polynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
+                Rational(-3) + Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(Rational(0), Rational(0), Rational(0), Rational(0)),
+                Rational(2) + Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 2"
+            )
+            assertEquals(
+                Polynomial(),
+                Rational(2) + Polynomial(Rational(-2)),
+                "test 3"
+            )
+            assertEquals(
+                Polynomial(),
+                Rational(0) + Polynomial(),
+                "test 4"
+            )
+            assertEquals(
+                Polynomial(Rational(-1), Rational(0), Rational(0), Rational(0)),
+                Rational(1) + Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 5"
+            )
+            assertEquals(
+                Polynomial(Rational(-1)),
+                Rational(1) + Polynomial(Rational(-2)),
+                "test 6"
+            )
+            assertEquals(
+                Polynomial(Rational(2)),
+                Rational(2) + Polynomial(),
+                "test 7"
+            )
+        }
+    }
+    @Test
+    fun test_Constant_Polynomial_minus() {
+        RationalField.polynomial {
+            assertEquals(
+                Polynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
+                Rational(3) - Polynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(Rational(0), Rational(0), Rational(0), Rational(0)),
+                Rational(-2) - Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 2"
+            )
+            assertEquals(
+                Polynomial(),
+                Rational(-2) - Polynomial(Rational(-2)),
+                "test 3"
+            )
+            assertEquals(
+                Polynomial(),
+                Rational(0) - Polynomial(),
+                "test 4"
+            )
+            assertEquals(
+                Polynomial(Rational(1), Rational(0), Rational(0), Rational(0)),
+                Rational(-1) - Polynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
+                "test 5"
+            )
+            assertEquals(
+                Polynomial(Rational(1)),
+                Rational(-1) - Polynomial(Rational(-2)),
+                "test 6"
+            )
+            assertEquals(
+                Polynomial(Rational(-2)),
+                Rational(-2) - Polynomial(),
+                "test 7"
+            )
+        }
+    }
+    @Test
+    fun test_Constant_Polynomial_times() {
+        IntModuloRing(35).polynomial {
+            assertEquals(
+                Polynomial(34, 2, 1, 20, 2),
+                27 * Polynomial(22, 26, 13, 15, 26),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(),
+                15 * Polynomial(7, 0, 49, 21, 14),
+                "test 2"
             )
         }
     }

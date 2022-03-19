@@ -114,10 +114,6 @@ class Rational {
     override fun toString(): String = if (denominator == 1L) "$numerator" else "$numerator/$denominator"
 }
 
-
-/**
- * Algebraic structure for rational numbers.
- */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 @OptIn(UnstableKMathAPI::class)
 object RationalField : Field<Rational>, NumbersAddOps<Rational> {

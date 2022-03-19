@@ -220,7 +220,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     public override operator fun C.minus(other: Polynomial<C>): Polynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
-            if (isEmpty()) Polynomial(listOf(-this@minus))
+            if (isEmpty()) Polynomial(listOf(this@minus))
             else Polynomial(
                 toMutableList()
                     .apply {
