@@ -447,7 +447,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
         block()
-        while (elementAt(lastIndex).isZero()) removeAt(lastIndex)
+        while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
         return this
     }
     internal inline fun List<C>.applyAndRemoveZeros(block: MutableList<C>.() -> Unit) : List<C> =
@@ -456,7 +456,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     internal inline fun MutableCoefficients(size: Int, init: (index: Int) -> C): MutableList<C> {
         val list = ArrayList<C>(size)
         repeat(size) { index -> list.add(init(index)) }
-        with(list) { while (elementAt(lastIndex).isZero()) removeAt(lastIndex) }
+        with(list) { while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex) }
         return list
     }
     @Suppress("FunctionName")
@@ -466,7 +466,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
         return buildList {
             builderAction()
-            while (elementAt(lastIndex).isZero()) removeAt(lastIndex)
+            while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
         }
     }
     @OptIn(ExperimentalTypeInference::class)
@@ -474,7 +474,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
         return buildList(capacity) {
             builderAction()
-            while (elementAt(lastIndex).isZero()) removeAt(lastIndex)
+            while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
         }
     }
 }
