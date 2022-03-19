@@ -49,7 +49,9 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain
     fun createBin(value: Double): BinCounter {
         val binDefinition = binFactory(value)
         val newBin = BinCounter(binDefinition)
-        synchronized(this) { bins[binDefinition.center] = newBin }
+        synchronized(this) {
+            bins[binDefinition.center] = newBin
+        }
         return newBin
     }
 
@@ -131,6 +133,24 @@ public class TreeHistogramSpace(
     override val zero: UnivariateHistogram by lazy { fill { } }
 
     public companion object {
+        /**
+         * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
+         */
+        public inline fun uniform(
+            binSize: Double,
+            start: Double = 0.0,
+            builder: UnivariateHistogramBuilder.() -> Unit,
+        ): UnivariateHistogram = uniform(binSize, start).fill(builder)
+
+        /**
+         * Build and fill a histogram with custom borders. Returns a read-only histogram.
+         */
+        public inline fun custom(
+            borders: DoubleArray,
+            builder: UnivariateHistogramBuilder.() -> Unit,
+        ): UnivariateHistogram = custom(borders).fill(builder)
+
+
         /**
          * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
          */

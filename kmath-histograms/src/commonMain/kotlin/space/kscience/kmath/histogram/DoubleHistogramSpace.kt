@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.histogram
 
-import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.domains.HyperSquareDomain
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
@@ -13,6 +12,9 @@ import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
+/**
+ * Multivariate histogram space for hyper-square real-field bins.
+ */
 public class DoubleHistogramSpace(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
@@ -47,7 +49,7 @@ public class DoubleHistogramSpace(
     }
 
     @OptIn(UnstableKMathAPI::class)
-    override fun getDomain(index: IntArray): Domain<Double> {
+    override fun getDomain(index: IntArray): HyperSquareDomain {
         val lowerBoundary = index.mapIndexed { axis, i ->
             when (i) {
                 0 -> Double.NEGATIVE_INFINITY
@@ -67,8 +69,13 @@ public class DoubleHistogramSpace(
         return HyperSquareDomain(lowerBoundary, upperBoundary)
     }
 
+    @OptIn(UnstableKMathAPI::class)
+    public val Bin<Double>.domain: HyperSquareDomain
+        get() = (this as? DomainBin<Double>)?.domain as? HyperSquareDomain
+            ?: error("Im a teapot. This is not my bin")
 
-    override fun produceBin(index: IntArray, value: Double): Bin<Double> {
+    @OptIn(UnstableKMathAPI::class)
+    override fun produceBin(index: IntArray, value: Double): DomainBin<Double> {
         val domain = getDomain(index)
         return DomainBin(domain, value)
     }
@@ -96,7 +103,9 @@ public class DoubleHistogramSpace(
          *)
          *```
          */
-        public fun fromRanges(vararg ranges: ClosedFloatingPointRange<Double>): DoubleHistogramSpace = DoubleHistogramSpace(
+        public fun fromRanges(
+            vararg ranges: ClosedFloatingPointRange<Double>,
+        ): DoubleHistogramSpace = DoubleHistogramSpace(
             ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
             ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asBuffer()
         )
@@ -110,21 +119,22 @@ public class DoubleHistogramSpace(
          *)
          *```
          */
-        public fun fromRanges(vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>): DoubleHistogramSpace =
-            DoubleHistogramSpace(
-                ListBuffer(
-                    ranges
-                        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-                        .map(ClosedFloatingPointRange<Double>::start)
-                ),
+        public fun fromRanges(
+            vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
+        ): DoubleHistogramSpace = DoubleHistogramSpace(
+            ListBuffer(
+                ranges
+                    .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+                    .map(ClosedFloatingPointRange<Double>::start)
+            ),
 
-                ListBuffer(
-                    ranges
-                        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-                        .map(ClosedFloatingPointRange<Double>::endInclusive)
-                ),
+            ListBuffer(
+                ranges
+                    .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+                    .map(ClosedFloatingPointRange<Double>::endInclusive)
+            ),
 
-                ranges.map(Pair<ClosedFloatingPointRange<Double>, Int>::second).toIntArray()
-            )
+            ranges.map(Pair<ClosedFloatingPointRange<Double>, Int>::second).toIntArray()
+        )
     }
 }

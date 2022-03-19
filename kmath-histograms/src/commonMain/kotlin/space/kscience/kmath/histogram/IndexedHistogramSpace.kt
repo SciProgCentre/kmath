@@ -7,7 +7,6 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.FieldND
 import space.kscience.kmath.nd.Shape
@@ -24,22 +23,21 @@ public data class DomainBin<in T : Comparable<T>>(
     override val value: Number,
 ) : Bin<T>, Domain<T> by domain
 
-@OptIn(UnstableKMathAPI::class)
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
-    public val context: IndexedHistogramSpace<T, V>,
+    public val histogramSpace: IndexedHistogramSpace<T, V>,
     public val values: StructureND<V>,
 ) : Histogram<T, Bin<T>> {
 
     override fun get(point: Point<T>): Bin<T>? {
-        val index = context.getIndex(point) ?: return null
-        return context.produceBin(index, values[index])
+        val index = histogramSpace.getIndex(point) ?: return null
+        return histogramSpace.produceBin(index, values[index])
     }
 
-    override val dimension: Int get() = context.shape.size
+    override val dimension: Int get() = histogramSpace.shape.size
 
     override val bins: Iterable<Bin<T>>
-        get() = DefaultStrides(context.shape).asSequence().map {
-            context.produceBin(it, values[it])
+        get() = DefaultStrides(histogramSpace.shape).asSequence().map {
+            histogramSpace.produceBin(it, values[it])
         }.asIterable()
 }
 
@@ -67,13 +65,13 @@ public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
     public fun produce(builder: HistogramBuilder<T>.() -> Unit): IndexedHistogram<T, V>
 
     override fun add(left: IndexedHistogram<T, V>, right: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
-        require(left.context == this) { "Can't operate on a histogram produced by external space" }
-        require(right.context == this) { "Can't operate on a histogram produced by external space" }
+        require(left.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
+        require(right.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
         return IndexedHistogram(this, histogramValueSpace { left.values + right.values })
     }
 
     override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {
-        require(a.context == this) { "Can't operate on a histogram produced by external space" }
+        require(a.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
         return IndexedHistogram(this, histogramValueSpace { a.values * value })
     }
 

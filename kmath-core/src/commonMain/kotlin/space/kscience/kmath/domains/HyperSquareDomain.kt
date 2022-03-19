@@ -7,6 +7,7 @@ package space.kscience.kmath.domains
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.indices
 
 /**
@@ -16,8 +17,16 @@ import space.kscience.kmath.structures.indices
  * @author Alexander Nozik
  */
 @UnstableKMathAPI
-public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : DoubleDomain {
+public class HyperSquareDomain(public val lower: Buffer<Double>, public val upper: Buffer<Double>) : DoubleDomain {
+    init {
+        require(lower.size == upper.size) {
+            "Domain borders size mismatch. Lower borders size is ${lower.size}, but upper borders size is ${upper.size}"
+        }
+    }
+
     override val dimension: Int get() = lower.size
+
+    public val center: DoubleBuffer get() = DoubleBuffer(dimension) { (lower[it] + upper[it]) / 2.0 }
 
     override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]

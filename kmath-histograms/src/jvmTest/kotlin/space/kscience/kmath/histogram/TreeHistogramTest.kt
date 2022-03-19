@@ -13,7 +13,7 @@ class TreeHistogramTest {
 
     @Test
     fun normalFill() {
-        val histogram = UnivariateHistogram.uniform(0.1) {
+        val histogram = TreeHistogramSpace.uniform(0.1) {
             repeat(100_000) {
                 putValue(Random.nextDouble())
             }
