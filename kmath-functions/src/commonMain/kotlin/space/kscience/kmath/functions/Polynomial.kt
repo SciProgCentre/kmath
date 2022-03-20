@@ -386,7 +386,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     /**
      * Instance of unit constant (unit of the underlying ring).
      */
-    override val one: Polynomial<C> = Polynomial(listOf(constantZero))
+    override val one: Polynomial<C> = Polynomial(listOf(constantOne))
 
     /**
      * Checks equality of the polynomials.
@@ -394,11 +394,8 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
         when {
             this === other -> true
-            else -> {
-                if (this.degree == other.degree)
-                    (0..degree).all { coefficients[it] == other.coefficients[it] }
-                else false
-            }
+            this.degree == other.degree -> (0..degree).all { coefficients[it] == other.coefficients[it] }
+            else -> false
         }
 
     /**
@@ -415,8 +412,8 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             when {
                 isEmpty() -> constantZero
-                withIndex().any { (index, c) -> index == 0 || c.isZero() } -> null
-                else -> first()
+                withIndex().all { (index, c) -> index == 0 || c.isZero() } -> first()
+                else -> null
             }
         }
 
@@ -489,8 +486,6 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 public class ScalablePolynomialSpace<C, A>(
     ring: A,
 ) : PolynomialSpace<C, A>(ring), ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
-
     override fun scale(a: Polynomial<C>, value: Double): Polynomial<C> =
-        ring { Polynomial(List(a.coefficients.size) { index -> a.coefficients[index] * value }) }
-
+        ring { Polynomial(a.coefficients.map { scale(it, value) }) }
 }

@@ -127,9 +127,10 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Pol
     if (argDegree == -1) return coefficients[0].asPolynomial()
     val constantZero = zero
     val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
+    resultCoefs[0] = coefficients[thisDegree]
     val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
     var resultDegree = 0
-    for (deg in thisDegree downTo 0) {
+    for (deg in thisDegree - 1 downTo 0) {
         resultCoefsUpdate[0] = coefficients[deg]
         multiplyAddingToUpdater(
             ring = ring,
@@ -142,6 +143,8 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Pol
         )
         resultDegree += argDegree
     }
+
+    with(resultCoefs) { while (isNotEmpty() && elementAt(lastIndex) == constantZero) removeAt(lastIndex) }
     return Polynomial<C>(resultCoefs)
 }
 
@@ -162,7 +165,12 @@ public fun <C, A : Ring<C>> Polynomial<C>.asPolynomialFunctionOver(ring: A): (Po
 public fun <C, A> Polynomial<C>.derivative(
     algebra: A,
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(coefficients.drop(1).mapIndexed { index, c -> number(index + 1) * c })
+    Polynomial(
+        buildList(max(0, coefficients.size - 1)) {
+            for (deg in 1 .. coefficients.lastIndex) add(number(deg) * coefficients[deg])
+            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
+        }
+    )
 }
 
 /**
@@ -171,9 +179,16 @@ public fun <C, A> Polynomial<C>.derivative(
 @UnstableKMathAPI
 public fun <C, A> Polynomial<C>.nthDerivative(
     algebra: A,
-    order: UInt,
+    order: Int,
 ): Polynomial<C> where A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(coefficients.drop(order.toInt()).mapIndexed { index, c -> (index + 1..index + order.toInt()).fold(c) { acc, i -> acc * number(i) } })
+    require(order >= 0) { "Order of derivative must be non-negative" }
+    Polynomial(
+        buildList(max(0, coefficients.size - order)) {
+            for (deg in order.. coefficients.lastIndex)
+                add((deg - order + 1 .. deg).fold(coefficients[deg]) { acc, d -> acc * number(d) })
+            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
+        }
+    )
 }
 
 /**
@@ -183,11 +198,13 @@ public fun <C, A> Polynomial<C>.nthDerivative(
 public fun <C, A> Polynomial<C>.antiderivative(
     algebra: A,
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    val integratedCoefficients = buildList(coefficients.size + 1) {
-        add(zero)
-        coefficients.mapIndexedTo(this) { index, t -> t / number(index + 1) }
-    }
-    Polynomial(integratedCoefficients)
+    Polynomial(
+        buildList(coefficients.size + 1) {
+            add(zero)
+            coefficients.mapIndexedTo(this) { index, t -> t / number(index + 1) }
+            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
+        }
+    )
 }
 
 /**
@@ -196,13 +213,16 @@ public fun <C, A> Polynomial<C>.antiderivative(
 @UnstableKMathAPI
 public fun <C, A> Polynomial<C>.nthAntiderivative(
     algebra: A,
-    order: UInt,
+    order: Int,
 ): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    val newCoefficients = buildList(coefficients.size + order.toInt()) {
-        repeat(order.toInt()) { add(zero) }
-        coefficients.mapIndexedTo(this) { index, c -> (1..order.toInt()).fold(c) { acc, i -> acc / number(index + i) } }
-    }
-    return Polynomial(newCoefficients)
+    require(order >= 0) { "Order of antiderivative must be non-negative" }
+    Polynomial(
+        buildList(coefficients.size + order) {
+            repeat(order) { add(zero) }
+            coefficients.mapIndexedTo(this) { index, c -> (1..order).fold(c) { acc, i -> acc / number(index + i) } }
+            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
+        }
+    )
 }
 
 /**

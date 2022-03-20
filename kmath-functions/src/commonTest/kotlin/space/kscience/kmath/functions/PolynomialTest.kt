@@ -534,4 +534,158 @@ class PolynomialTest {
             assertFalse("test 12") { Polynomial(Rational(-1), Rational(5, -5), Rational(0)).isMinusOne() }
         }
     }
+    @Test
+    fun test_Polynomial_equalsTo() {
+        RationalField.polynomial {
+            assertTrue("test 1") {
+                Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) equalsTo
+                        Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7))
+            }
+            assertTrue("test 2") {
+                Polynomial(Rational(5, 9), Rational(0), Rational(-8, 7)) equalsTo
+                        Polynomial(Rational(5, 9), Rational(0), Rational(-8, 7))
+            }
+            assertTrue("test 3") {
+                Polynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)) equalsTo
+                        Polynomial(Rational(0), Rational(0), Rational(-8, 7))
+            }
+            assertFalse("test 4") {
+                Polynomial(Rational(5, 9), Rational(5, 7), Rational(-8, 7)) equalsTo
+                        Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7))
+            }
+            assertFalse("test 5") {
+                Polynomial(Rational(8, 3), Rational(0), Rational(-8, 7)) equalsTo
+                        Polynomial(Rational(5, 9), Rational(0), Rational(-8, 7))
+            }
+            assertFalse("test 6") {
+                Polynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)) equalsTo
+                        Polynomial(Rational(0), Rational(0), Rational(8, 7))
+            }
+        }
+    }
+    @Test
+    fun test_Polynomial_degree() {
+        RationalField.polynomial {
+            assertEquals(
+                2,
+                Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)).degree,
+                "test 1"
+            )
+            assertEquals(
+                -1,
+                Polynomial<Rational>().degree,
+                "test 2"
+            )
+            assertEquals(
+                -1,
+                Polynomial(Rational(0)).degree,
+                "test 3"
+            )
+            assertEquals(
+                -1,
+                Polynomial(Rational(0), Rational(0)).degree,
+                "test 4"
+            )
+            assertEquals(
+                -1,
+                Polynomial(Rational(0), Rational(0), Rational(0)).degree,
+                "test 5"
+            )
+            assertEquals(
+                0,
+                Polynomial(Rational(5, 9)).degree,
+                "test 6"
+            )
+            assertEquals(
+                0,
+                Polynomial(Rational(5, 9), Rational(0)).degree,
+                "test 7"
+            )
+            assertEquals(
+                0,
+                Polynomial(Rational(5, 9), Rational(0), Rational(0)).degree,
+                "test 8"
+            )
+            assertEquals(
+                2,
+                Polynomial(Rational(0), Rational(0), Rational(-8, 7)).degree,
+                "test 9"
+            )
+            assertEquals(
+                2,
+                Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7), Rational(0), Rational(0)).degree,
+                "test 10"
+            )
+            assertEquals(
+                2,
+                Polynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)).degree,
+                "test 11"
+            )
+        }
+    }
+    @Test
+    fun test_Polynomial_asConstantOrNull() {
+        RationalField.polynomial {
+            assertEquals(
+                Rational(0),
+                Polynomial<Rational>().asConstantOrNull(),
+                "test 1"
+            )
+            assertEquals(
+                Rational(0),
+                Polynomial(Rational(0)).asConstantOrNull(),
+                "test 2"
+            )
+            assertEquals(
+                Rational(0),
+                Polynomial(Rational(0), Rational(0)).asConstantOrNull(),
+                "test 3"
+            )
+            assertEquals(
+                Rational(0),
+                Polynomial(Rational(0), Rational(0), Rational(0)).asConstantOrNull(),
+                "test 4"
+            )
+            assertEquals(
+                Rational(-7, 9),
+                Polynomial(Rational(-7, 9)).asConstantOrNull(),
+                "test 5"
+            )
+            assertEquals(
+                Rational(-7, 9),
+                Polynomial(Rational(-7, 9), Rational(0)).asConstantOrNull(),
+                "test 6"
+            )
+            assertEquals(
+                Rational(-7, 9),
+                Polynomial(Rational(-7, 9), Rational(0), Rational(0)).asConstantOrNull(),
+                "test 7"
+            )
+            assertEquals(
+                null,
+                Polynomial(Rational(0), Rational(-7, 9)).asConstantOrNull(),
+                "test 8"
+            )
+            assertEquals(
+                null,
+                Polynomial(Rational(0), Rational(-7, 9), Rational(0)).asConstantOrNull(),
+                "test 9"
+            )
+            assertEquals(
+                null,
+                Polynomial(Rational(0), Rational(0), Rational(-7, 9)).asConstantOrNull(),
+                "test 10"
+            )
+            assertEquals(
+                null,
+                Polynomial(Rational(4, 15), Rational(0), Rational(-7, 9)).asConstantOrNull(),
+                "test 11"
+            )
+            assertEquals(
+                null,
+                Polynomial(Rational(4, 15), Rational(0), Rational(-7, 9), Rational(0)).asConstantOrNull(),
+                "test 12"
+            )
+        }
+    }
 }
