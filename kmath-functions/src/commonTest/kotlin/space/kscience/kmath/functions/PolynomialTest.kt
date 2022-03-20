@@ -5,10 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.test.misc.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 
 class PolynomialTest {
@@ -393,6 +391,21 @@ class PolynomialTest {
         }
     }
     @Test
+    fun test_Polynomial_unaryMinus() {
+        RationalField.polynomial {
+            assertEquals(
+                Polynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
+                -Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
+                "test 1"
+            )
+            assertEquals(
+                Polynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7), Rational(0), Rational(0)),
+                -Polynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7), Rational(0), Rational(0)),
+                "test 2"
+            )
+        }
+    }
+    @Test
     fun test_Polynomial_Polynomial_plus() {
         RationalField.polynomial {
             // (5/9 - 8/9 x - 8/7 x^2) + (-5/7 + 5/1 x + 5/8 x^2) ?= -10/63 + 37/9 x - 29/56 x^2
@@ -459,17 +472,66 @@ class PolynomialTest {
         }
     }
     @Test
-    fun simple_polynomial_test() {
-        val polynomial : Polynomial<Double>
-        Double.algebra.scalablePolynomial {
-            val x = Polynomial(listOf(0.0, 1.0))
-            polynomial = x * x - 2 * x + 1
+    fun test_Polynomial_Polynomial_times() {
+        IntModuloRing(35).polynomial {
+            // (1 + x + x^2) * (1 - x + x^2) ?= 1 + x^2 + x^4
+            assertEquals(
+                Polynomial(1, 0, 1, 0, 1),
+                Polynomial(1, -1, 1) * Polynomial(1, 1, 1),
+                "test 1"
+            )
+            // Spoiler: 5 * 7 = 0
+            assertEquals(
+                Polynomial(),
+                Polynomial(5, -25, 10) * Polynomial(21, 14, -7),
+                "test 2"
+            )
         }
-        assertEquals(0.0, polynomial.substitute(1.0), 0.001)
     }
     @Test
-    fun testIntegration() {
-        val polynomial = Polynomial(1.0, -2.0, 1.0)
-        assertEquals(0.0, polynomial.substitute(1.0), 0.001)
+    fun test_Polynomial_isZero() {
+        RationalField.polynomial {
+            assertTrue("test 1") { Polynomial<Rational>().isZero() }
+            assertTrue("test 2") { Polynomial<Rational>(Rational(0)).isZero() }
+            assertTrue("test 3") { Polynomial<Rational>(Rational(0), Rational(0)).isZero() }
+            assertTrue("test 4") { Polynomial<Rational>(Rational(0), Rational(0), Rational(0)).isZero() }
+            assertFalse("test 5") { Polynomial<Rational>(Rational(3, 5)).isZero() }
+            assertFalse("test 6") { Polynomial<Rational>(Rational(3, 5), Rational(0)).isZero() }
+            assertFalse("test 7") { Polynomial<Rational>(Rational(0), Rational(3, 5), Rational(0)).isZero() }
+        }
+    }
+    @Test
+    fun test_Polynomial_isOne() {
+        RationalField.polynomial {
+            assertFalse("test 1") { Polynomial<Rational>().isOne() }
+            assertFalse("test 2") { Polynomial(Rational(0)).isOne() }
+            assertFalse("test 3") { Polynomial(Rational(0), Rational(0)).isOne() }
+            assertFalse("test 4") { Polynomial(Rational(0), Rational(0), Rational(0)).isOne() }
+            assertFalse("test 5") { Polynomial(Rational(3, 5)).isOne() }
+            assertTrue("test 6") { Polynomial(Rational(5, 5)).isOne() }
+            assertFalse("test 7") { Polynomial(Rational(3, 5), Rational(0)).isOne() }
+            assertTrue("test 8") { Polynomial(Rational(3, 3), Rational(0)).isOne() }
+            assertFalse("test 9") { Polynomial(Rational(0), Rational(3, 5), Rational(0)).isOne() }
+            assertFalse("test 10") { Polynomial(Rational(0), Rational(5, 5), Rational(0)).isOne() }
+            assertFalse("test 11") { Polynomial(Rational(1), Rational(3, 5), Rational(0)).isOne() }
+            assertFalse("test 12") { Polynomial(Rational(1), Rational(5, 5), Rational(0)).isOne() }
+        }
+    }
+    @Test
+    fun test_Polynomial_isMinusOne() {
+        RationalField.polynomial {
+            assertFalse("test 1") { Polynomial<Rational>().isMinusOne() }
+            assertFalse("test 2") { Polynomial(Rational(0)).isMinusOne() }
+            assertFalse("test 3") { Polynomial(Rational(0), Rational(0)).isMinusOne() }
+            assertFalse("test 4") { Polynomial(Rational(0), Rational(0), Rational(0)).isMinusOne() }
+            assertFalse("test 5") { Polynomial(Rational(3, 5)).isMinusOne() }
+            assertTrue("test 6") { Polynomial(Rational(-5, 5)).isMinusOne() }
+            assertFalse("test 7") { Polynomial(Rational(3, 5), Rational(0)).isMinusOne() }
+            assertTrue("test 8") { Polynomial(Rational(-3, 3), Rational(0)).isMinusOne() }
+            assertFalse("test 9") { Polynomial(Rational(0), Rational(3, 5), Rational(0)).isMinusOne() }
+            assertFalse("test 10") { Polynomial(Rational(0), Rational(5, -5), Rational(0)).isMinusOne() }
+            assertFalse("test 11") { Polynomial(Rational(-1), Rational(3, 5), Rational(0)).isMinusOne() }
+            assertFalse("test 12") { Polynomial(Rational(-1), Rational(5, -5), Rational(0)).isMinusOne() }
+        }
     }
 }

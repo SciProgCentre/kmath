@@ -369,14 +369,14 @@ public open class PolynomialSpace<C, A : Ring<C>>(
      */
     public override fun Polynomial<C>.isOne(): Boolean =
         with(coefficients) {
-            isNotEmpty() && withIndex().any { (index, c) -> if (index == 0) c.isOne() else c.isZero() }
+            isNotEmpty() && withIndex().all { (index, c) -> if (index == 0) c.isOne() else c.isZero() }
         }
     /**
      * Check if the instant is minus unit polynomial.
      */
     public override fun Polynomial<C>.isMinusOne(): Boolean =
         with(coefficients) {
-            isNotEmpty() && withIndex().any { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() }
+            isNotEmpty() && withIndex().all { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() }
         }
 
     /**
@@ -415,7 +415,7 @@ public open class PolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             when {
                 isEmpty() -> constantZero
-                degree > 0 -> null
+                withIndex().any { (index, c) -> index == 0 || c.isZero() } -> null
                 else -> first()
             }
         }
