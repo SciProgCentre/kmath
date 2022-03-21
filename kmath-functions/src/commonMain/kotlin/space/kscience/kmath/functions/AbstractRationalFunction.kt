@@ -460,7 +460,7 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
      * If polynomial is a constant polynomial represents and returns it as constant.
      * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
-    public fun P.asConstant(): C = asConstantOrNull() ?: error("Can not represent non-constant polynomial as a constant")
+    public fun P.asConstant(): C = requireNotNull(asConstantOrNull()) { "Can not represent non-constant polynomial as a constant" }
 
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is

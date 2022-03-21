@@ -295,7 +295,7 @@ public interface AbstractPolynomialSpace<C, P: AbstractPolynomial<C>> : Ring<P> 
      * If polynomial is a constant polynomial represents and returns it as constant.
      * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
-    public fun P.asConstant(): C = asConstantOrNull() ?: error("Can not represent non-constant polynomial as a constant")
+    public fun P.asConstant(): C = requireNotNull(asConstantOrNull()) { "Can not represent non-constant polynomial as a constant" }
 
     override fun add(left: P, right: P): P = left + right
     override fun multiply(left: P, right: P): P = left * right
