@@ -49,7 +49,7 @@ public class RationalFunctionSpace<C, A : Ring<C>> (
             RationalFunction<C>,
             PolynomialSpace<C, A>,
             >,
-    AbstractPolynomialFractionsSpace<
+    PolynomialSpaceOfFractions<
             C,
             Polynomial<C>,
             RationalFunction<C>,

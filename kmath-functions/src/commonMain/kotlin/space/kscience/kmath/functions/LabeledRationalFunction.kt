@@ -71,7 +71,7 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
             LabeledRationalFunction<C>,
             LabeledPolynomialSpace<C, A>,
             >,
-    AbstractPolynomialFractionsSpace<
+    PolynomialSpaceOfFractions<
             C,
             LabeledPolynomial<C>,
             LabeledRationalFunction<C>,

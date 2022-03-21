@@ -67,7 +67,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             NumberedRationalFunction<C>,
             NumberedPolynomialSpace<C, A>,
             >,
-    AbstractPolynomialFractionsSpace<
+    PolynomialSpaceOfFractions<
             C,
             NumberedPolynomial<C>,
             NumberedRationalFunction<C>,

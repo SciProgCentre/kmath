@@ -867,8 +867,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
 
 /**
  * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
- * [C]. It also assumes that there is provided [polynomialRing] (of type [AP]), that provides constant- and
- * polynomial-wise operations.
+ * [C]. It also assumes that there is provided constructor
  *
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
@@ -876,7 +875,7 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
  * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
  */ // TODO: Add support of field
 @Suppress("INAPPLICABLE_JVM_NAME")
-public abstract class AbstractPolynomialFractionsSpace<
+public abstract class PolynomialSpaceOfFractions<
         C,
         P: AbstractPolynomial<C>,
         R: AbstractRationalFunction<C, P>,
