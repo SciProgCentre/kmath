@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.test.misc
 
-import space.kscience.kmath.functions.Polynomial
-import space.kscience.kmath.functions.PolynomialSpace
+import space.kscience.kmath.functions.ListPolynomial
+import space.kscience.kmath.functions.ListPolynomialSpace
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
@@ -134,9 +134,9 @@ class IntModuloRing : Ring<IntModulo> {
     inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
 }
 
-fun PolynomialSpace<IntModulo, IntModuloRing>.number(arg: Int) = IntModulo(arg, ring.modulus, toCheckInput = false)
+fun ListPolynomialSpace<IntModulo, IntModuloRing>.number(arg: Int) = IntModulo(arg, ring.modulus, toCheckInput = false)
 
-fun PolynomialSpace<IntModulo, IntModuloRing>.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
-    Polynomial(coefs.map { IntModulo(it, ring.modulus) })
-fun IntModuloRing.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
-    Polynomial(coefs.map { IntModulo(it, modulus) })
+fun ListPolynomialSpace<IntModulo, IntModuloRing>.ListPolynomial(vararg coefs: Int): ListPolynomial<IntModulo> =
+    ListPolynomial(coefs.map { IntModulo(it, ring.modulus) })
+fun IntModuloRing.ListPolynomial(vararg coefs: Int): ListPolynomial<IntModulo> =
+    ListPolynomial(coefs.map { IntModulo(it, modulus) })

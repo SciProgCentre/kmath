@@ -12,7 +12,7 @@ import kotlin.math.max
 public class NumberedRationalFunction<C> internal constructor(
     public override val numerator: NumberedPolynomial<C>,
     public override val denominator: NumberedPolynomial<C>
-) : AbstractRationalFunction<C, NumberedPolynomial<C>> {
+) : RationalFunction<C, NumberedPolynomial<C>> {
     override fun toString(): String = "NumberedRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
@@ -61,7 +61,7 @@ public class NumberedRationalFunction<C> internal constructor(
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
 ) :
-    AbstractRationalFunctionalSpaceOverPolynomialSpace<
+    RationalFunctionalSpaceOverPolynomialSpace<
             C,
             NumberedPolynomial<C>,
             NumberedRationalFunction<C>,

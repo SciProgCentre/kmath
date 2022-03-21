@@ -22,31 +22,31 @@ import kotlin.math.pow
 //    if (degree > -1) Polynomial(coefficients.subList(0, degree + 1)) else zero
 
 /**
- * Creates a [PolynomialSpace] over a received ring.
+ * Creates a [ListPolynomialSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.polynomial(): PolynomialSpace<C, A> =
-    PolynomialSpace(this)
+public fun <C, A : Ring<C>> A.listPolynomial(): ListPolynomialSpace<C, A> =
+    ListPolynomialSpace(this)
 
 /**
- * Creates a [PolynomialSpace]'s scope over a received ring.
+ * Creates a [ListPolynomialSpace]'s scope over a received ring.
  */
-public inline fun <C, A : Ring<C>, R> A.polynomial(block: PolynomialSpace<C, A>.() -> R): R {
+public inline fun <C, A : Ring<C>, R> A.listPolynomial(block: ListPolynomialSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return PolynomialSpace(this).block()
+    return ListPolynomialSpace(this).block()
 }
 
 /**
- * Creates a [ScalablePolynomialSpace] over a received scalable ring.
+ * Creates a [ScalableListPolynomialSpace] over a received scalable ring.
  */
-public fun <C, A> A.scalablePolynomial(): ScalablePolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C> =
-    ScalablePolynomialSpace(this)
+public fun <C, A> A.scalableListPolynomial(): ScalableListPolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C> =
+    ScalableListPolynomialSpace(this)
 
 /**
- * Creates a [ScalablePolynomialSpace]'s scope over a received scalable ring.
+ * Creates a [ScalableListPolynomialSpace]'s scope over a received scalable ring.
  */
-public inline fun <C, A, R> A.scalablePolynomial(block: ScalablePolynomialSpace<C, A>.() -> R): R where A : Ring<C>, A : ScaleOperations<C> {
+public inline fun <C, A, R> A.scalableListPolynomial(block: ScalableListPolynomialSpace<C, A>.() -> R): R where A : Ring<C>, A : ScaleOperations<C> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return ScalablePolynomialSpace(this).block()
+    return ScalableListPolynomialSpace(this).block()
 }
 
 @Suppress("NOTHING_TO_INLINE")
@@ -99,7 +99,7 @@ internal inline fun <C> multiplyAddingTo(
 /**
  * Evaluates the value of the given double polynomial for given double argument.
  */
-public fun Polynomial<Double>.substitute(arg: Double): Double =
+public fun ListPolynomial<Double>.substitute(arg: Double): Double =
     coefficients.reduceIndexedOrNull { index, acc, c ->
         acc + c * arg.pow(index)
     } ?: .0
@@ -109,7 +109,7 @@ public fun Polynomial<Double>.substitute(arg: Double): Double =
  *
  * It is an implementation of [Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method).
  */
-public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
+public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
     if (coefficients.isEmpty()) return@ring zero
     var result: C = coefficients.last()
     for (j in coefficients.size - 2 downTo 0) {
@@ -118,11 +118,11 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
     return result
 }
 
-public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Polynomial<C> = ring {
-    if (coefficients.isEmpty()) return Polynomial(emptyList())
+public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: ListPolynomial<C>) : ListPolynomial<C> = ring {
+    if (coefficients.isEmpty()) return ListPolynomial(emptyList())
 
     val thisDegree = coefficients.indexOfLast { it != zero }
-    if (thisDegree == -1) return Polynomial(emptyList())
+    if (thisDegree == -1) return ListPolynomial(emptyList())
     val argDegree = arg.coefficients.indexOfLast { it != zero }
     if (argDegree == -1) return coefficients[0].asPolynomial()
     val constantZero = zero
@@ -145,27 +145,27 @@ public fun <C> Polynomial<C>.substitute(ring: Ring<C>, arg: Polynomial<C>) : Pol
     }
 
     with(resultCoefs) { while (isNotEmpty() && elementAt(lastIndex) == constantZero) removeAt(lastIndex) }
-    return Polynomial<C>(resultCoefs)
+    return ListPolynomial<C>(resultCoefs)
 }
 
 /**
  * Represent the polynomial as a regular context-less function.
  */
-public fun <C, A : Ring<C>> Polynomial<C>.asFunction(ring: A): (C) -> C = { substitute(ring, it) }
+public fun <C, A : Ring<C>> ListPolynomial<C>.asFunction(ring: A): (C) -> C = { substitute(ring, it) }
 
 /**
  * Represent the polynomial as a regular context-less function.
  */
-public fun <C, A : Ring<C>> Polynomial<C>.asPolynomialFunctionOver(ring: A): (Polynomial<C>) -> Polynomial<C> = { substitute(ring, it) }
+public fun <C, A : Ring<C>> ListPolynomial<C>.asPolynomialFunctionOver(ring: A): (ListPolynomial<C>) -> ListPolynomial<C> = { substitute(ring, it) }
 
 /**
  * Returns algebraic derivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> Polynomial<C>.derivative(
+public fun <C, A> ListPolynomial<C>.derivative(
     algebra: A,
-): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(
+): ListPolynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = algebra {
+    ListPolynomial(
         buildList(max(0, coefficients.size - 1)) {
             for (deg in 1 .. coefficients.lastIndex) add(number(deg) * coefficients[deg])
             while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
@@ -177,12 +177,12 @@ public fun <C, A> Polynomial<C>.derivative(
  * Returns algebraic derivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> Polynomial<C>.nthDerivative(
+public fun <C, A> ListPolynomial<C>.nthDerivative(
     algebra: A,
     order: Int,
-): Polynomial<C> where A : Ring<C>, A : NumericAlgebra<C> = algebra {
+): ListPolynomial<C> where A : Ring<C>, A : NumericAlgebra<C> = algebra {
     require(order >= 0) { "Order of derivative must be non-negative" }
-    Polynomial(
+    ListPolynomial(
         buildList(max(0, coefficients.size - order)) {
             for (deg in order.. coefficients.lastIndex)
                 add((deg - order + 1 .. deg).fold(coefficients[deg]) { acc, d -> acc * number(d) })
@@ -195,10 +195,10 @@ public fun <C, A> Polynomial<C>.nthDerivative(
  * Returns algebraic antiderivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> Polynomial<C>.antiderivative(
+public fun <C, A> ListPolynomial<C>.antiderivative(
     algebra: A,
-): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
-    Polynomial(
+): ListPolynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
+    ListPolynomial(
         buildList(coefficients.size + 1) {
             add(zero)
             coefficients.mapIndexedTo(this) { index, t -> t / number(index + 1) }
@@ -211,12 +211,12 @@ public fun <C, A> Polynomial<C>.antiderivative(
  * Returns algebraic antiderivative of received polynomial.
  */
 @UnstableKMathAPI
-public fun <C, A> Polynomial<C>.nthAntiderivative(
+public fun <C, A> ListPolynomial<C>.nthAntiderivative(
     algebra: A,
     order: Int,
-): Polynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
+): ListPolynomial<C> where  A : Field<C>, A : NumericAlgebra<C> = algebra {
     require(order >= 0) { "Order of antiderivative must be non-negative" }
-    Polynomial(
+    ListPolynomial(
         buildList(coefficients.size + order) {
             repeat(order) { add(zero) }
             coefficients.mapIndexedTo(this) { index, c -> (1..order).fold(c) { acc, i -> acc / number(index + i) } }
@@ -229,7 +229,7 @@ public fun <C, A> Polynomial<C>.nthAntiderivative(
  * Compute a definite integral of a given polynomial in a [range]
  */
 @UnstableKMathAPI
-public fun <C : Comparable<C>> Polynomial<C>.integrate(
+public fun <C : Comparable<C>> ListPolynomial<C>.integrate(
     algebra: Field<C>,
     range: ClosedRange<C>,
 ): C = algebra {

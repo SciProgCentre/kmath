@@ -6,486 +6,384 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.*
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.experimental.ExperimentalTypeInference
+import kotlin.js.JsName
 import kotlin.jvm.JvmName
-import kotlin.math.max
-import kotlin.math.min
+
 
 /**
- * Polynomial model without fixation on specific context they are applied to.
- *
- * @param coefficients constant is the leftmost coefficient.
+ * Abstraction of polynomials.
  */
-public data class Polynomial<C>(
+public interface Polynomial<C>
+
+/**
+ * Abstraction of ring of polynomials of type [P] over ring of constants of type [C].
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials.
+ */
+@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     /**
-     * List that collects coefficients of the polynomial. Every monomial `a x^d` is represented as a coefficients
-     * `a` placed into the list with index `d`. For example coefficients of polynomial `5 x^2 - 6` can be represented as
-     * ```
-     * listOf(
-     *     -6, // -6 +
-     *     0,  // 0 x +
-     *     5,  // 5 x^2
-     * )
-     * ```
-     * and also as
-     * ```
-     * listOf(
-     *     -6, // -6 +
-     *     0,  // 0 x +
-     *     5,  // 5 x^2
-     *     0,  // 0 x^3
-     *     0,  // 0 x^4
-     * )
-     * ```
-     * It is recommended not to put extra zeros at end of the list (as for `0x^3` and `0x^4` in the example), but is not
-     * prohibited.
+     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    public val coefficients: List<C>
-) : AbstractPolynomial<C> {
-    override fun toString(): String = "Polynomial$coefficients"
-}
+    public operator fun C.plus(other: Int): C
+    /**
+     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
+     */
+    public operator fun C.minus(other: Int): C
+    /**
+     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
+    public operator fun C.times(other: Int): C
 
-/**
- * Returns a [Polynomial] instance with given [coefficients]. The collection of coefficients will be reversed if
- * [reverse] parameter is true.
- */
-@Suppress("FunctionName")
-public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Polynomial<C> =
-    Polynomial(with(coefficients) { if (reverse) reversed() else this })
+    /**
+     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
+     */
+    public operator fun Int.plus(other: C): C
+    /**
+     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
+     */
+    public operator fun Int.minus(other: C): C
+    /**
+     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
+    public operator fun Int.times(other: C): C
 
-/**
- * Returns a [Polynomial] instance with given [coefficients]. The collection of coefficients will be reversed if
- * [reverse] parameter is true.
- */
-@Suppress("FunctionName")
-public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
-    Polynomial(with(coefficients) { if (reverse) reversed() else toList() })
-
-public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))
-
-/**
- * Space of univariate polynomials constructed over ring.
- *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
- * @param A type of underlying ring of constants. It's [Ring] of [C].
- * @param ring underlying ring of constants of type [A].
- */
-public open class PolynomialSpace<C, A : Ring<C>>(
-    public override val ring: A,
-) : AbstractPolynomialSpaceOverRing<C, Polynomial<C>, A> {
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
-    public override operator fun Polynomial<C>.plus(other: Int): Polynomial<C> =
-        if (other == 0) this
-        else
-            Polynomial(
-                coefficients
-                    .toMutableList()
-                    .apply {
-                        val result = getOrElse(0) { constantZero } + other
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
+    public operator fun P.plus(other: Int): P = addMultipliedBySquaring(this, one, other)
     /**
      * Returns difference between the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
-    public override operator fun Polynomial<C>.minus(other: Int): Polynomial<C> =
-        if (other == 0) this
-        else
-            Polynomial(
-                coefficients
-                    .toMutableList()
-                    .apply {
-                        val result = getOrElse(0) { constantZero } - other
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
+    public operator fun P.minus(other: Int): P = addMultipliedBySquaring(this, one, -other)
     /**
      * Returns product of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public override operator fun Polynomial<C>.times(other: Int): Polynomial<C> =
-        if (other == 0) zero
-        else Polynomial(
-            coefficients
-                .applyAndRemoveZeros {
-                    for (deg in indices) this[deg] = this[deg] * other
-                }
-        )
+    public operator fun P.times(other: Int): P = multiplyBySquaring(this, other)
 
     /**
      * Returns sum of the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
-    public override operator fun Int.plus(other: Polynomial<C>): Polynomial<C> =
-        if (this == 0) other
-        else
-            Polynomial(
-                other.coefficients
-                    .toMutableList()
-                    .apply {
-                        val result = this@plus + getOrElse(0) { constantZero }
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
+    public operator fun Int.plus(other: P): P = addMultipliedBySquaring(other, one, this)
     /**
      * Returns difference between the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
-    public override operator fun Int.minus(other: Polynomial<C>): Polynomial<C> =
-        if (this == 0) other
-        else
-            Polynomial(
-                other.coefficients
-                    .toMutableList()
-                    .apply {
-                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
-
-                        val result = this@minus - getOrElse(0) { constantZero }
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
+    public operator fun Int.minus(other: P): P = addMultipliedBySquaring(-other, one, this)
     /**
      * Returns product of the integer represented as polynomial and the polynomial.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public override operator fun Int.times(other: Polynomial<C>): Polynomial<C> =
-        if (this == 0) zero
-        else Polynomial(
-            other.coefficients
-                .applyAndRemoveZeros {
-                    for (deg in indices) this[deg] = this@times * this[deg]
-                }
-        )
+    public operator fun Int.times(other: P): P = multiplyBySquaring(other, this)
+
+    /**
+     * Returns the same constant.
+     */
+    @JvmName("constantUnaryPlus")
+    @JsName("constantUnaryPlus")
+    public operator fun C.unaryPlus(): C = this
+    /**
+     * Returns negation of the constant.
+     */
+    @JvmName("constantUnaryMinus")
+    @JsName("constantUnaryMinus")
+    public operator fun C.unaryMinus(): C
+    /**
+     * Returns sum of the constants.
+     */
+    @JvmName("constantPlus")
+    @JsName("constantPlus")
+    public operator fun C.plus(other: C): C
+    /**
+     * Returns difference of the constants.
+     */
+    @JvmName("constantMinus")
+    @JsName("constantMinus")
+    public operator fun C.minus(other: C): C
+    /**
+     * Returns product of the constants.
+     */
+    @JvmName("constantTimes")
+    @JsName("constantTimes")
+    public operator fun C.times(other: C): C
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    @JsName("constantPower")
+    public fun power(arg: C, exponent: UInt) : C
+
+    /**
+     * Check if the instant is zero constant.
+     */
+    public fun C.isZero(): Boolean = this == constantZero
+    /**
+     * Check if the instant is NOT zero constant.
+     */
+    public fun C.isNotZero(): Boolean = !isZero()
+    /**
+     * Check if the instant is unit constant.
+     */
+    public fun C.isOne(): Boolean = this == constantOne
+    /**
+     * Check if the instant is NOT unit constant.
+     */
+    public fun C.isNotOne(): Boolean = !isOne()
+    /**
+     * Check if the instant is minus unit constant.
+     */
+    public fun C.isMinusOne(): Boolean = this == -constantOne
+    /**
+     * Check if the instant is NOT minus unit constant.
+     */
+    public fun C.isNotMinusOne(): Boolean = !isMinusOne()
+
+    /**
+     * Instance of zero constant (zero of the underlying ring).
+     */
+    public val constantZero: C
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
+    public val constantOne: C
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
-    public override operator fun C.plus(other: Polynomial<C>): Polynomial<C> =
-        if (this.isZero()) other
-        else with(other.coefficients) {
-            if (isEmpty()) Polynomial(listOf(this@plus))
-            else Polynomial(
-                toMutableList()
-                    .apply {
-                        val result = if (size == 0) this@plus else this@plus + get(0)
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
-        }
+    public operator fun C.plus(other: P): P
     /**
      * Returns difference between the constant represented as polynomial and the polynomial.
      */
-    public override operator fun C.minus(other: Polynomial<C>): Polynomial<C> =
-        if (this.isZero()) other
-        else with(other.coefficients) {
-            if (isEmpty()) Polynomial(listOf(this@minus))
-            else Polynomial(
-                toMutableList()
-                    .apply {
-                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
-
-                        val result = if (size == 0) this@minus else this@minus - get(0)
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
-        }
+    public operator fun C.minus(other: P): P
     /**
      * Returns product of the constant represented as polynomial and the polynomial.
      */
-    public override operator fun C.times(other: Polynomial<C>): Polynomial<C> =
-        if (this.isZero()) other
-        else Polynomial(
-            other.coefficients
-                .applyAndRemoveZeros {
-                    for (deg in indices) this[deg] = this@times * this[deg]
-                }
-        )
+    public operator fun C.times(other: P): P
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
-    public override operator fun Polynomial<C>.plus(other: C): Polynomial<C> =
-        if (other.isZero()) this
-        else with(coefficients) {
-            if (isEmpty()) Polynomial(listOf(other))
-            else Polynomial(
-                toMutableList()
-                    .apply {
-                        val result = if (size == 0) other else get(0) + other
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
-        }
+    public operator fun P.plus(other: C): P
     /**
      * Returns difference between the constant represented as polynomial and the polynomial.
      */
-    public override operator fun Polynomial<C>.minus(other: C): Polynomial<C> =
-        if (other.isZero()) this
-        else with(coefficients) {
-            if (isEmpty()) Polynomial(listOf(-other))
-            else Polynomial(
-                toMutableList()
-                    .apply {
-                        val result = if (size == 0) other else get(0) - other
-                        val isResultZero = result.isZero()
-
-                        when {
-                            size == 0 && !isResultZero -> add(result)
-                            size > 1 || !isResultZero -> this[0] = result
-                            else -> clear()
-                        }
-                    }
-            )
-        }
+    public operator fun P.minus(other: C): P
     /**
      * Returns product of the constant represented as polynomial and the polynomial.
      */
-    public override operator fun Polynomial<C>.times(other: C): Polynomial<C> =
-        if (other.isZero()) this
-        else Polynomial(
-            coefficients
-                .applyAndRemoveZeros {
-                    for (deg in indices) this[deg] = this[deg] * other
-                }
-        )
+    public operator fun P.times(other: C): P
 
+    /**
+     * Returns the same polynomial.
+     */
+    public override operator fun P.unaryPlus(): P = this
     /**
      * Returns negation of the polynomial.
      */
-    public override operator fun Polynomial<C>.unaryMinus(): Polynomial<C> =
-        Polynomial(coefficients.map { -it })
+    public override operator fun P.unaryMinus(): P
     /**
      * Returns sum of the polynomials.
      */
-    public override operator fun Polynomial<C>.plus(other: Polynomial<C>): Polynomial<C> {
-        val thisDegree = degree
-        val otherDegree = other.degree
-        return Polynomial(
-            Coefficients(max(thisDegree, otherDegree) + 1) {
-                when {
-                    it > thisDegree -> other.coefficients[it]
-                    it > otherDegree -> coefficients[it]
-                    else -> coefficients[it] + other.coefficients[it]
-                }
-            }
-        )
-    }
+    public override operator fun P.plus(other: P): P
     /**
      * Returns difference of the polynomials.
      */
-    public override operator fun Polynomial<C>.minus(other: Polynomial<C>): Polynomial<C> {
-        val thisDegree = degree
-        val otherDegree = other.degree
-        return Polynomial(
-            Coefficients(max(thisDegree, otherDegree) + 1) {
-                when {
-                    it > thisDegree -> -other.coefficients[it]
-                    it > otherDegree -> coefficients[it]
-                    else -> coefficients[it] - other.coefficients[it]
-                }
-            }
-        )
-    }
+    public override operator fun P.minus(other: P): P
     /**
      * Returns product of the polynomials.
      */
-    public override operator fun Polynomial<C>.times(other: Polynomial<C>): Polynomial<C> {
-        val thisDegree = degree
-        val otherDegree = other.degree
-        return when {
-            thisDegree == -1 -> zero
-            otherDegree == -1 -> zero
-            else ->
-                Polynomial(
-                    Coefficients(thisDegree + otherDegree + 1) { d ->
-                        (max(0, d - otherDegree)..min(thisDegree, d))
-                            .map { coefficients[it] * other.coefficients[d - it] }
-                            .reduce { acc, rational -> acc + rational }
-                    }
-                )
-        }
-    }
+    public override operator fun P.times(other: P): P
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: P, exponent: UInt) : P = exponentiationBySquaring(arg, exponent)
 
     /**
      * Check if the instant is zero polynomial.
      */
-    public override fun Polynomial<C>.isZero(): Boolean = coefficients.all { it.isZero() }
+    public fun P.isZero(): Boolean = this equalsTo zero
+    /**
+     * Check if the instant is NOT zero polynomial.
+     */
+    public fun P.isNotZero(): Boolean = !isZero()
     /**
      * Check if the instant is unit polynomial.
      */
-    public override fun Polynomial<C>.isOne(): Boolean =
-        with(coefficients) {
-            isNotEmpty() && withIndex().all { (index, c) -> if (index == 0) c.isOne() else c.isZero() }
-        }
+    public fun P.isOne(): Boolean = this equalsTo one
+    /**
+     * Check if the instant is NOT unit polynomial.
+     */
+    public fun P.isNotOne(): Boolean = !isOne()
     /**
      * Check if the instant is minus unit polynomial.
      */
-    public override fun Polynomial<C>.isMinusOne(): Boolean =
-        with(coefficients) {
-            isNotEmpty() && withIndex().all { (index, c) -> if (index == 0) c.isMinusOne() else c.isZero() }
-        }
+    public fun P.isMinusOne(): Boolean = this equalsTo -one
+    /**
+     * Check if the instant is NOT minus unit polynomial.
+     */
+    public fun P.isNotMinusOne(): Boolean = !isMinusOne()
 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
      */
-    override val zero: Polynomial<C> = Polynomial(emptyList())
+    public override val zero: P
     /**
-     * Instance of unit constant (unit of the underlying ring).
+     * Instance of unit polynomial (unit of the polynomial ring).
      */
-    override val one: Polynomial<C> = Polynomial(listOf(constantOne))
+    public override val one: P
 
     /**
      * Checks equality of the polynomials.
      */
-    public override infix fun Polynomial<C>.equalsTo(other: Polynomial<C>): Boolean =
-        when {
-            this === other -> true
-            this.degree == other.degree -> (0..degree).all { coefficients[it] == other.coefficients[it] }
-            else -> false
-        }
+    public infix fun P.equalsTo(other: P): Boolean
+    /**
+     * Checks NOT equality of the polynomials.
+     */
+    public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
 
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
-    public override val Polynomial<C>.degree: Int get() = coefficients.indexOfLast { it != constantZero }
+    public val P.degree: Int
 
+    /**
+     * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
+     */
+    public fun P.isConstant(): Boolean = degree <= 0
+    /**
+     * Checks if the instant is **not** constant polynomial (of degree no more than 0) over considered ring.
+     */
+    public fun P.isNotConstant(): Boolean = !isConstant()
+    /**
+     * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
+     */
+    public fun P.isNonZeroConstant(): Boolean = degree == 0
+    /**
+     * Checks if the instant is **not** constant non-zero polynomial (of degree no more than 0) over considered ring.
+     */
+    public fun P.isNotNonZeroConstant(): Boolean = !isNonZeroConstant()
     /**
      * If polynomial is a constant polynomial represents and returns it as constant.
      * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
      */
-    public override fun Polynomial<C>.asConstantOrNull(): C? =
-        with(coefficients) {
-            when {
-                isEmpty() -> constantZero
-                withIndex().all { (index, c) -> index == 0 || c.isZero() } -> first()
-                else -> null
-            }
-        }
-
-    @Suppress("NOTHING_TO_INLINE")
-    public inline fun Polynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
-    @Suppress("NOTHING_TO_INLINE")
-    public inline fun Polynomial<C>.substitute(argument: Polynomial<C>): Polynomial<C> = this.substitute(ring, argument)
-
-    @Suppress("NOTHING_TO_INLINE")
-    public inline fun Polynomial<C>.asFunction(): (C) -> C = { this.substitute(ring, it) }
-    @Suppress("NOTHING_TO_INLINE")
-    public inline fun Polynomial<C>.asFunctionOnConstants(): (C) -> C = { this.substitute(ring, it) }
-    @Suppress("NOTHING_TO_INLINE")
-    public inline fun Polynomial<C>.asFunctionOnPolynomials(): (Polynomial<C>) -> Polynomial<C> = { this.substitute(ring, it) }
-
+    public fun P.asConstantOrNull(): C?
     /**
-     * Evaluates the polynomial for the given value [argument].
+     * If polynomial is a constant polynomial represents and returns it as constant.
+     * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
-    @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun Polynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
-    @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun Polynomial<C>.invoke(argument: Polynomial<C>): Polynomial<C> = this.substitute(ring, argument)
+    public fun P.asConstant(): C = requireNotNull(asConstantOrNull()) { "Can not represent non-constant polynomial as a constant" }
 
-    // TODO: Move to other internal utilities with context receiver
-    @JvmName("applyAndRemoveZerosInternal")
-    internal inline fun MutableList<C>.applyAndRemoveZeros(block: MutableList<C>.() -> Unit) : MutableList<C> {
-        contract {
-            callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-        }
-        block()
-        while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
-        return this
-    }
-    internal inline fun List<C>.applyAndRemoveZeros(block: MutableList<C>.() -> Unit) : List<C> =
-        toMutableList().applyAndRemoveZeros(block)
-    @Suppress("FunctionName")
-    internal inline fun MutableCoefficients(size: Int, init: (index: Int) -> C): MutableList<C> {
-        val list = ArrayList<C>(size)
-        repeat(size) { index -> list.add(init(index)) }
-        with(list) { while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex) }
-        return list
-    }
-    @Suppress("FunctionName")
-    internal inline fun Coefficients(size: Int, init: (index: Int) -> C): List<C> = MutableCoefficients(size, init)
-    @OptIn(ExperimentalTypeInference::class)
-    internal inline fun buildCoefficients(@BuilderInference builderAction: MutableList<C>.() -> Unit): List<C> {
-        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
-        return buildList {
-            builderAction()
-            while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
-        }
-    }
-    @OptIn(ExperimentalTypeInference::class)
-    internal inline fun buildCoefficients(capacity: Int, @BuilderInference builderAction: MutableList<C>.() -> Unit): List<C> {
-        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
-        return buildList(capacity) {
-            builderAction()
-            while (isNotEmpty() && elementAt(lastIndex).isZero()) removeAt(lastIndex)
-        }
-    }
+    override fun add(left: P, right: P): P = left + right
+    override fun multiply(left: P, right: P): P = left * right
 }
 
 /**
- * Space of polynomials constructed over ring.
+ * Abstraction of ring of polynomials of type [P] over ring of constants of type [C]. It also assumes that there is
+ * provided [ring] (of type [A]), that provides constant-wise operations.
  *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
- * @param A type of underlying ring of constants. It's [Ring] of [C].
- * @param ring underlying ring of constants of type [A].
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials.
+ * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
-public class ScalablePolynomialSpace<C, A>(
-    ring: A,
-) : PolynomialSpace<C, A>(ring), ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
-    override fun scale(a: Polynomial<C>, value: Double): Polynomial<C> =
-        ring { Polynomial(a.coefficients.map { scale(it, value) }) }
+@Suppress("INAPPLICABLE_JVM_NAME")
+public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, A: Ring<C>> : PolynomialSpace<C, P> {
+
+    public val ring: A
+
+    /**
+     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
+     */
+    public override operator fun C.plus(other: Int): C = ring { addMultipliedBySquaring(this@plus, one, other) }
+    /**
+     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
+     */
+    public override operator fun C.minus(other: Int): C = ring { addMultipliedBySquaring(this@minus, one, -other) }
+    /**
+     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
+    public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
+
+    /**
+     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
+     */
+    public override operator fun Int.plus(other: C): C = ring { addMultipliedBySquaring(other, one, this@plus) }
+    /**
+     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
+     */
+    public override operator fun Int.minus(other: C): C = ring { addMultipliedBySquaring(-other, one, this@minus) }
+    /**
+     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
+    public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
+
+    /**
+     * Returns negation of the constant.
+     */
+    @JvmName("constantUnaryMinus")
+    public override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
+    /**
+     * Returns sum of the constants.
+     */
+    @JvmName("constantPlus")
+    public override operator fun C.plus(other: C): C = ring { this@plus + other }
+    /**
+     * Returns difference of the constants.
+     */
+    @JvmName("constantMinus")
+    public override operator fun C.minus(other: C): C = ring { this@minus - other }
+    /**
+     * Returns product of the constants.
+     */
+    @JvmName("constantTimes")
+    public override operator fun C.times(other: C): C = ring { this@times * other }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    @JvmName("constantPower")
+    override fun power(arg: C, exponent: UInt): C = ring { power(arg, exponent) }
+
+    /**
+     * Instance of zero constant (zero of the underlying ring).
+     */
+    public override val constantZero: C get() = ring.zero
+    /**
+     * Instance of unit constant (unit of the underlying ring).
+     */
+    public override val constantOne: C get() = ring.one
 }

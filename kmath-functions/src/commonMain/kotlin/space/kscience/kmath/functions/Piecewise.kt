@@ -27,10 +27,10 @@ public fun interface Piecewise<in T, out R> {
  * @property pieces An ordered list of range-polynomial pairs. The list does not in general guarantee that there are no
  * "holes" in it.
  */
-public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomial<T>> {
-    public val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>
+public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, ListPolynomial<T>> {
+    public val pieces: Collection<Pair<ClosedRange<T>, ListPolynomial<T>>>
 
-    override fun findPiece(arg: T): Polynomial<T>?
+    override fun findPiece(arg: T): ListPolynomial<T>?
 }
 
 /**
@@ -38,11 +38,11 @@ public interface PiecewisePolynomial<T : Comparable<T>> : Piecewise<T, Polynomia
  */
 @PerformancePitfall("findPiece method of resulting piecewise is slow")
 public fun <T : Comparable<T>> PiecewisePolynomial(
-    pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>>,
+    pieces: Collection<Pair<ClosedRange<T>, ListPolynomial<T>>>,
 ): PiecewisePolynomial<T> = object : PiecewisePolynomial<T> {
-    override val pieces: Collection<Pair<ClosedRange<T>, Polynomial<T>>> = pieces
+    override val pieces: Collection<Pair<ClosedRange<T>, ListPolynomial<T>>> = pieces
 
-    override fun findPiece(arg: T): Polynomial<T>? = pieces.firstOrNull { arg in it.first }?.second
+    override fun findPiece(arg: T): ListPolynomial<T>? = pieces.firstOrNull { arg in it.first }?.second
 }
 
 /**
@@ -50,10 +50,10 @@ public fun <T : Comparable<T>> PiecewisePolynomial(
  * The pieces search is logarithmic.
  */
 private class OrderedPiecewisePolynomial<T : Comparable<T>>(
-    override val pieces: List<Pair<ClosedRange<T>, Polynomial<T>>>,
+    override val pieces: List<Pair<ClosedRange<T>, ListPolynomial<T>>>,
 ) : PiecewisePolynomial<T> {
 
-    override fun findPiece(arg: T): Polynomial<T>? {
+    override fun findPiece(arg: T): ListPolynomial<T>? {
         val index = pieces.binarySearch { (range, _) ->
             when {
                 arg >= range.endInclusive -> -1
@@ -74,7 +74,7 @@ private class OrderedPiecewisePolynomial<T : Comparable<T>>(
  */
 public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
     private val delimiters: MutableList<T> = arrayListOf(delimiter)
-    private val pieces: MutableList<Polynomial<T>> = arrayListOf()
+    private val pieces: MutableList<ListPolynomial<T>> = arrayListOf()
 
     /**
      * Dynamically adds a piece to the right side (beyond maximum argument value of previous piece)
@@ -82,7 +82,7 @@ public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
      * @param right new rightmost position. If is less than current rightmost position, an error is thrown.
      * @param piece the sub-function.
      */
-    public fun putRight(right: T, piece: Polynomial<T>) {
+    public fun putRight(right: T, piece: ListPolynomial<T>) {
         require(right > delimiters.last()) { "New delimiter should be to the right of old one" }
         delimiters += right
         pieces += piece
@@ -94,7 +94,7 @@ public class PiecewiseBuilder<T : Comparable<T>>(delimiter: T) {
      * @param left the new leftmost position. If is less than current rightmost position, an error is thrown.
      * @param piece the sub-function.
      */
-    public fun putLeft(left: T, piece: Polynomial<T>) {
+    public fun putLeft(left: T, piece: ListPolynomial<T>) {
         require(left < delimiters.first()) { "New delimiter should be to the left of old one" }
         delimiters.add(0, left)
         pieces.add(0, piece)

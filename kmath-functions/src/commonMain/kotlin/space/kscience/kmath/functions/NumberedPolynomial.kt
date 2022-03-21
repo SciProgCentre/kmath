@@ -43,7 +43,7 @@ internal constructor(
      * contain any zeros on end, but can contain zeros on start or anywhere in middle.
      */
     public val coefficients: Map<List<UInt>, C>
-) : AbstractPolynomial<C> {
+) : Polynomial<C> {
     override fun toString(): String = "NumberedPolynomial$coefficients"
 }
 
@@ -112,7 +112,7 @@ public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolyno
  */
 public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public final override val ring: A,
-) : AbstractPolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
+) : PolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *

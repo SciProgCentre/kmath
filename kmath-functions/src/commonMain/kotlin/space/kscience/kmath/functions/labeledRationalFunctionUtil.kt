@@ -17,7 +17,7 @@ public fun <C, A : Ring<C>> A.labeledRationalFunction(): LabeledRationalFunction
     LabeledRationalFunctionSpace(this)
 
 /**
- * Creates a [RationalFunctionSpace]'s scope over a received ring.
+ * Creates a [LabeledRationalFunctionSpace]'s scope over a received ring.
  */
 public inline fun <C, A : Ring<C>, R> A.labeledRationalFunction(block: LabeledRationalFunctionSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }

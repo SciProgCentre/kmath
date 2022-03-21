@@ -17,7 +17,7 @@ public fun <C, A : Ring<C>> A.numberedRationalFunction(): NumberedRationalFuncti
     NumberedRationalFunctionSpace(this)
 
 /**
- * Creates a [RationalFunctionSpace]'s scope over a received ring.
+ * Creates a [NumberedRationalFunctionSpace]'s scope over a received ring.
  */
 public inline fun <C, A : Ring<C>, R> A.numberedRationalFunction(block: NumberedRationalFunctionSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }

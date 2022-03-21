@@ -7,7 +7,7 @@ package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
-import space.kscience.kmath.functions.Polynomial
+import space.kscience.kmath.functions.ListPolynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke
@@ -32,7 +32,7 @@ public class LinearInterpolator<T : Comparable<T>>(override val algebra: Field<T
             for (i in 0 until points.size - 1) {
                 val slope = (points.y[i + 1] - points.y[i]) / (points.x[i + 1] - points.x[i])
                 val const = points.y[i] - slope * points.x[i]
-                val polynomial = Polynomial(const, slope)
+                val polynomial = ListPolynomial(const, slope)
                 putRight(points.x[i + 1], polynomial)
             }
         }

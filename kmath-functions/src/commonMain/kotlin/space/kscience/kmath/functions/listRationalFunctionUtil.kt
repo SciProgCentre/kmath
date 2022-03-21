@@ -14,23 +14,23 @@ import kotlin.math.max
 
 
 /**
- * Creates a [RationalFunctionSpace] over a received ring.
+ * Creates a [ListRationalFunctionSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.rationalFunction(): RationalFunctionSpace<C, A> =
-    RationalFunctionSpace(this)
+public fun <C, A : Ring<C>> A.listRationalFunction(): ListRationalFunctionSpace<C, A> =
+    ListRationalFunctionSpace(this)
 
 /**
- * Creates a [RationalFunctionSpace]'s scope over a received ring.
+ * Creates a [ListRationalFunctionSpace]'s scope over a received ring.
  */
-public inline fun <C, A : Ring<C>, R> A.rationalFunction(block: RationalFunctionSpace<C, A>.() -> R): R {
+public inline fun <C, A : Ring<C>, R> A.listRationalFunction(block: ListRationalFunctionSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return RationalFunctionSpace(this).block()
+    return ListRationalFunctionSpace(this).block()
 }
 
 /**
  * Evaluates the value of the given double polynomial for given double argument.
  */
-public fun RationalFunction<Double>.substitute(arg: Double): Double =
+public fun ListRationalFunction<Double>.substitute(arg: Double): Double =
     numerator.substitute(arg) / denominator.substitute(arg)
 
 /**
@@ -38,7 +38,7 @@ public fun RationalFunction<Double>.substitute(arg: Double): Double =
  *
  * It is an implementation of [Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method).
  */
-public fun <C> RationalFunction<C>.substitute(ring: Field<C>, arg: C): C = ring {
+public fun <C> ListRationalFunction<C>.substitute(ring: Field<C>, arg: C): C = ring {
     numerator.substitute(ring, arg) / denominator.substitute(ring, arg)
 }
 
@@ -50,13 +50,13 @@ public fun <C> RationalFunction<C>.substitute(ring: Field<C>, arg: C): C = ring 
  * ```
  * is returned.
  *
- * Used in [Polynomial.substitute] and [RationalFunction.substitute] for performance optimisation.
+ * Used in [ListPolynomial.substitute] and [ListRationalFunction.substitute] for performance optimisation.
  */ // TODO: Дописать
-internal fun <C> Polynomial<C>.substituteRationalFunctionTakeNumerator(ring: Ring<C>, arg: RationalFunction<C>): Polynomial<C> = ring {
-    if (coefficients.isEmpty()) return Polynomial(emptyList())
+internal fun <C> ListPolynomial<C>.substituteRationalFunctionTakeNumerator(ring: Ring<C>, arg: ListRationalFunction<C>): ListPolynomial<C> = ring {
+    if (coefficients.isEmpty()) return ListPolynomial(emptyList())
 
     val thisDegree = coefficients.indexOfLast { it != zero }
-    if (thisDegree == -1) return Polynomial(emptyList())
+    if (thisDegree == -1) return ListPolynomial(emptyList())
     val thisDegreeLog2 = 31 - thisDegree.countLeadingZeroBits()
     val numeratorDegree = arg.numerator.coefficients.indexOfLast { it != zero }
     val denominatorDegree = arg.denominator.coefficients.indexOfLast { it != zero }
@@ -189,7 +189,7 @@ internal fun <C> Polynomial<C>.substituteRationalFunctionTakeNumerator(ring: Rin
         return levelResultCoefs
     }
 
-    return Polynomial(
+    return ListPolynomial(
         processLevelEdged(
             level = thisDegreeLog2,
             start = 0,

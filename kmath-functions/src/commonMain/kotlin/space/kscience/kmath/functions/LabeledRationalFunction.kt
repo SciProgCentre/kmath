@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.invoke
 public class LabeledRationalFunction<C>(
     public override val numerator: LabeledPolynomial<C>,
     public override val denominator: LabeledPolynomial<C>
-) : AbstractRationalFunction<C, LabeledPolynomial<C>> {
+) : RationalFunction<C, LabeledPolynomial<C>> {
     override fun toString(): String = "LabeledRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
@@ -65,7 +65,7 @@ public class LabeledRationalFunction<C>(
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
 ) :
-    AbstractRationalFunctionalSpaceOverPolynomialSpace<
+    RationalFunctionalSpaceOverPolynomialSpace<
             C,
             LabeledPolynomial<C>,
             LabeledRationalFunction<C>,

@@ -44,7 +44,7 @@ internal constructor(
      * where `a`, `b` and `c` are corresponding [Symbol] objects.
      */
     public val coefficients: Map<Map<Symbol, UInt>, C>
-) : AbstractPolynomial<C> {
+) : Polynomial<C> {
     override fun toString(): String = "LabeledPolynomial$coefficients"
 }
 
@@ -116,7 +116,7 @@ public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomia
  */
 public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
-) : AbstractPolynomialSpaceOverRing<C, LabeledPolynomial<C>, A> {
+) : PolynomialSpaceOverRing<C, LabeledPolynomial<C>, A> {
     public operator fun Symbol.plus(other: Int): LabeledPolynomial<C> =
         if (other == 0) LabeledPolynomial<C>(mapOf(
             mapOf(this@plus to 1U) to constantOne,

@@ -7,7 +7,7 @@ package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
-import space.kscience.kmath.functions.Polynomial
+import space.kscience.kmath.functions.ListPolynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
@@ -61,7 +61,7 @@ public class SplineInterpolator<T : Comparable<T>>(
                 val x02 = x0 * x0
                 val x03 = x02 * x0
                 //Shift coefficients to represent absolute polynomial instead of one with an offset
-                val polynomial = Polynomial(
+                val polynomial = ListPolynomial(
                     a - b * x0 + c * x02 - d * x03,
                     b - 2 * c * x0 + 3 * d * x02,
                     c - 3 * d * x0,

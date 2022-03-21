@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.functions.Polynomial
+import space.kscience.kmath.functions.ListPolynomial
 import space.kscience.kmath.functions.integrate
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
@@ -19,7 +19,7 @@ class SplineIntegralTest {
 
     @Test
     fun integratePolynomial(){
-        val polynomial = Polynomial(1.0, 2.0, 3.0)
+        val polynomial = ListPolynomial(1.0, 2.0, 3.0)
         val integral = polynomial.integrate(DoubleField,1.0..2.0)
         assertEquals(11.0, integral, 0.001)
     }
