@@ -64,205 +64,25 @@ public class LabeledRationalFunction<C>(
 
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
-) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
-        C,
-        LabeledPolynomial<C>,
-        LabeledRationalFunction<C>,
-        LabeledPolynomialSpace<C, A>,
-        > {
+) :
+    AbstractRationalFunctionalSpaceOverPolynomialSpace<
+            C,
+            LabeledPolynomial<C>,
+            LabeledRationalFunction<C>,
+            LabeledPolynomialSpace<C, A>,
+            >,
+    AbstractPolynomialFractionsSpace<
+            C,
+            LabeledPolynomial<C>,
+            LabeledRationalFunction<C>,
+            >() {
 
     override val polynomialRing : LabeledPolynomialSpace<C, A> = LabeledPolynomialSpace(ring)
-
-    /**
-     * Returns sum of the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
-     */
-    public override operator fun LabeledRationalFunction<C>.plus(other: Int): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
-     */
-    public override operator fun LabeledRationalFunction<C>.minus(other: Int): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to sum of [other] copies of [this].
-     */
-    public override operator fun LabeledRationalFunction<C>.times(other: Int): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns sum of the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
-     */
-    public override operator fun Int.plus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
-     */
-    public override operator fun Int.minus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to sum of [this] copies of [other].
-     */
-    public override operator fun Int.times(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the constant represented as rational function and the rational function.
-     */
-    public override operator fun C.plus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the constant represented as polynomial and the rational function.
-     */
-    public override operator fun C.minus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the constant represented as polynomial and the rational function.
-     */
-    public override operator fun C.times(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the constant represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.plus(other: C): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the constant represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.minus(other: C): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the constant represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.times(other: C): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun LabeledPolynomial<C>.plus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the polynomial represented as polynomial and the rational function.
-     */
-    public override operator fun LabeledPolynomial<C>.minus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the polynomial represented as polynomial and the rational function.
-     */
-    public override operator fun LabeledPolynomial<C>.times(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.plus(other: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.minus(other: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.times(other: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns negation of the rational function.
-     */
-    public override operator fun LabeledRationalFunction<C>.unaryMinus(): LabeledRationalFunction<C> = LabeledRationalFunction(-numerator, denominator)
-    /**
-     * Returns sum of the rational functions.
-     */
-    public override operator fun LabeledRationalFunction<C>.plus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other.denominator + denominator * other.numerator,
-            denominator * other.denominator
-        )
-    /**
-     * Returns difference of the rational functions.
-     */
-    public override operator fun LabeledRationalFunction<C>.minus(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other.denominator - denominator * other.numerator,
-            denominator * other.denominator
-        )
-    /**
-     * Returns product of the rational functions.
-     */
-    public override operator fun LabeledRationalFunction<C>.times(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other.numerator,
-            denominator * other.denominator
-        )
+    override fun constructRationalFunction(
+        numerator: LabeledPolynomial<C>,
+        denominator: LabeledPolynomial<C>
+    ): LabeledRationalFunction<C> =
+        LabeledRationalFunction(numerator, denominator)
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).
@@ -279,7 +99,7 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public override infix fun LabeledRationalFunction<C>.equalsTo(other: LabeledRationalFunction<C>): Boolean {
         if (this === other) return true
 
-        if ( !(numerator.isZero() xor other.numerator.isZero()) ) return false
+        if (numerator.isZero() != other.numerator.isZero()) return false
 
         val variables = this.variables union other.variables
         val thisNumeratorDegrees = this.numerator.degrees

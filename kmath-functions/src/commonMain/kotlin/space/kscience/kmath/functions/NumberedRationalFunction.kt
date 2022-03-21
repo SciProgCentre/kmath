@@ -60,205 +60,25 @@ public class NumberedRationalFunction<C> internal constructor(
 
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
-) : AbstractRationalFunctionalSpaceOverPolynomialSpace<
-        C,
-        NumberedPolynomial<C>,
-        NumberedRationalFunction<C>,
-        NumberedPolynomialSpace<C, A>,
-        > {
+) :
+    AbstractRationalFunctionalSpaceOverPolynomialSpace<
+            C,
+            NumberedPolynomial<C>,
+            NumberedRationalFunction<C>,
+            NumberedPolynomialSpace<C, A>,
+            >,
+    AbstractPolynomialFractionsSpace<
+            C,
+            NumberedPolynomial<C>,
+            NumberedRationalFunction<C>,
+            >() {
 
     override val polynomialRing : NumberedPolynomialSpace<C, A> = NumberedPolynomialSpace(ring)
-
-    /**
-     * Returns sum of the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
-     */
-    public override operator fun NumberedRationalFunction<C>.plus(other: Int): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
-     */
-    public override operator fun NumberedRationalFunction<C>.minus(other: Int): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the rational function and the integer represented as rational function.
-     *
-     * The operation is equivalent to sum of [other] copies of [this].
-     */
-    public override operator fun NumberedRationalFunction<C>.times(other: Int): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns sum of the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
-     */
-    public override operator fun Int.plus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
-     */
-    public override operator fun Int.minus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the integer represented as rational function and the rational function.
-     *
-     * The operation is equivalent to sum of [this] copies of [other].
-     */
-    public override operator fun Int.times(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the constant represented as rational function and the rational function.
-     */
-    public override operator fun C.plus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the constant represented as polynomial and the rational function.
-     */
-    public override operator fun C.minus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the constant represented as polynomial and the rational function.
-     */
-    public override operator fun C.times(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the constant represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.plus(other: C): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the constant represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.minus(other: C): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the constant represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.times(other: C): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun NumberedPolynomial<C>.plus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this + other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns difference between the polynomial represented as polynomial and the rational function.
-     */
-    public override operator fun NumberedPolynomial<C>.minus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            other.denominator * this - other.numerator,
-            other.denominator
-        )
-    /**
-     * Returns product of the polynomial represented as polynomial and the rational function.
-     */
-    public override operator fun NumberedPolynomial<C>.times(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            this * other.numerator,
-            other.denominator
-        )
-
-    /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.plus(other: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator + denominator * other,
-            denominator
-        )
-    /**
-     * Returns difference between the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.minus(other: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator - denominator * other,
-            denominator
-        )
-    /**
-     * Returns product of the polynomial represented as rational function and the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.times(other: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other,
-            denominator
-        )
-
-    /**
-     * Returns negation of the rational function.
-     */
-    public override operator fun NumberedRationalFunction<C>.unaryMinus(): NumberedRationalFunction<C> = NumberedRationalFunction(-numerator, denominator)
-    /**
-     * Returns sum of the rational functions.
-     */
-    public override operator fun NumberedRationalFunction<C>.plus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other.denominator + denominator * other.numerator,
-            denominator * other.denominator
-        )
-    /**
-     * Returns difference of the rational functions.
-     */
-    public override operator fun NumberedRationalFunction<C>.minus(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other.denominator - denominator * other.numerator,
-            denominator * other.denominator
-        )
-    /**
-     * Returns product of the rational functions.
-     */
-    public override operator fun NumberedRationalFunction<C>.times(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other.numerator,
-            denominator * other.denominator
-        )
+    override fun constructRationalFunction(
+        numerator: NumberedPolynomial<C>,
+        denominator: NumberedPolynomial<C>
+    ): NumberedRationalFunction<C> =
+        NumberedRationalFunction(numerator, denominator)
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).
@@ -275,7 +95,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public override infix fun NumberedRationalFunction<C>.equalsTo(other: NumberedRationalFunction<C>): Boolean {
         if (this === other) return true
 
-        if ( !(numerator.isZero() xor other.numerator.isZero()) ) return false
+        if (numerator.isZero() != other.numerator.isZero()) return false
 
         val countOfVariables = max(this.lastVariable, other.lastVariable)
         val thisNumeratorDegrees = this.numerator.degrees

@@ -423,7 +423,13 @@ public interface AbstractRationalFunctionalSpace<C, P: AbstractPolynomial<C>, R:
     /**
      * Checks equality of the rational functions.
      */
-    public infix fun R.equalsTo(other: R): Boolean
+    public infix fun R.equalsTo(other: R): Boolean =
+        when {
+            this === other -> true
+            numerator.isZero() != other.numerator.isZero() -> false
+            numeratorDegree - denominatorDegree != with(other) { numeratorDegree - denominatorDegree } -> false
+            else -> numerator * other.denominator equalsTo other.numerator * denominator
+        }
     /**
      * Checks NOT equality of the polynomials.
      */
@@ -857,4 +863,224 @@ public interface AbstractRationalFunctionalSpaceOverPolynomialSpace<
      * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
      */
     public override fun P.asConstant(): C = polynomialRing { this@asConstant.asConstant() }
+}
+
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
+ * [C]. It also assumes that there is provided [polynomialRing] (of type [AP]), that provides constant- and
+ * polynomial-wise operations.
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
+ */ // TODO: Add support of field
+@Suppress("INAPPLICABLE_JVM_NAME")
+public abstract class AbstractPolynomialFractionsSpace<
+        C,
+        P: AbstractPolynomial<C>,
+        R: AbstractRationalFunction<C, P>,
+        > : AbstractRationalFunctionalSpace<C, P, R> {
+    protected abstract fun constructRationalFunction(numerator: P, denominator: P) : R
+
+    /**
+     * Returns sum of the rational function and the integer represented as rational function.
+     *
+     * The operation is equivalent to adding [other] copies of unit polynomial to [this].
+     */
+    public override operator fun R.plus(other: Int): R =
+        constructRationalFunction(
+            numerator + denominator * other,
+            denominator
+        )
+    /**
+     * Returns difference between the rational function and the integer represented as rational function.
+     *
+     * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
+     */
+    public override operator fun R.minus(other: Int): R =
+        constructRationalFunction(
+            numerator - denominator * other,
+            denominator
+        )
+    /**
+     * Returns product of the rational function and the integer represented as rational function.
+     *
+     * The operation is equivalent to sum of [other] copies of [this].
+     */
+    public override operator fun R.times(other: Int): R =
+        constructRationalFunction(
+            numerator * other,
+            denominator
+        )
+
+    /**
+     * Returns sum of the integer represented as rational function and the rational function.
+     *
+     * The operation is equivalent to adding [this] copies of unit polynomial to [other].
+     */
+    public override operator fun Int.plus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns difference between the integer represented as rational function and the rational function.
+     *
+     * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
+     */
+    public override operator fun Int.minus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns product of the integer represented as rational function and the rational function.
+     *
+     * The operation is equivalent to sum of [this] copies of [other].
+     */
+    public override operator fun Int.times(other: R): R =
+        constructRationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
+
+    /**
+     * Returns sum of the constant represented as rational function and the rational function.
+     */
+    public override operator fun C.plus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns difference between the constant represented as polynomial and the rational function.
+     */
+    public override operator fun C.minus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns product of the constant represented as polynomial and the rational function.
+     */
+    public override operator fun C.times(other: R): R =
+        constructRationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
+
+    /**
+     * Returns sum of the constant represented as rational function and the rational function.
+     */
+    public override operator fun R.plus(other: C): R =
+        constructRationalFunction(
+            numerator + denominator * other,
+            denominator
+        )
+    /**
+     * Returns difference between the constant represented as rational function and the rational function.
+     */
+    public override operator fun R.minus(other: C): R =
+        constructRationalFunction(
+            numerator - denominator * other,
+            denominator
+        )
+    /**
+     * Returns product of the constant represented as rational function and the rational function.
+     */
+    public override operator fun R.times(other: C): R =
+        constructRationalFunction(
+            numerator * other,
+            denominator
+        )
+
+    /**
+     * Returns sum of the polynomial represented as rational function and the rational function.
+     */
+    public override operator fun P.plus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this + other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns difference between the polynomial represented as polynomial and the rational function.
+     */
+    public override operator fun P.minus(other: R): R =
+        constructRationalFunction(
+            other.denominator * this - other.numerator,
+            other.denominator
+        )
+    /**
+     * Returns product of the polynomial represented as polynomial and the rational function.
+     */
+    public override operator fun P.times(other: R): R =
+        constructRationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
+
+    /**
+     * Returns sum of the polynomial represented as rational function and the rational function.
+     */
+    public override operator fun R.plus(other: P): R =
+        constructRationalFunction(
+            numerator + denominator * other,
+            denominator
+        )
+    /**
+     * Returns difference between the polynomial represented as rational function and the rational function.
+     */
+    public override operator fun R.minus(other: P): R =
+        constructRationalFunction(
+            numerator - denominator * other,
+            denominator
+        )
+    /**
+     * Returns product of the polynomial represented as rational function and the rational function.
+     */
+    public override operator fun R.times(other: P): R =
+        constructRationalFunction(
+            numerator * other,
+            denominator
+        )
+
+    /**
+     * Returns negation of the rational function.
+     */
+    public override operator fun R.unaryMinus(): R = constructRationalFunction(-numerator, denominator)
+    /**
+     * Returns sum of the rational functions.
+     */
+    public override operator fun R.plus(other: R): R =
+        constructRationalFunction(
+            numerator * other.denominator + denominator * other.numerator,
+            denominator * other.denominator
+        )
+    /**
+     * Returns difference of the rational functions.
+     */
+    public override operator fun R.minus(other: R): R =
+        constructRationalFunction(
+            numerator * other.denominator - denominator * other.numerator,
+            denominator * other.denominator
+        )
+    /**
+     * Returns product of the rational functions.
+     */
+    public override operator fun R.times(other: R): R =
+        constructRationalFunction(
+            numerator * other.numerator,
+            denominator * other.denominator
+        )
+
+    /**
+     * Instance of zero rational function (zero of the rational functions ring).
+     */
+    public override val zero: R get() = constructRationalFunction(polynomialZero, polynomialOne)
+
+    /**
+     * Instance of unit polynomial (unit of the rational functions ring).
+     */
+    public override val one: R get() = constructRationalFunction(polynomialOne, polynomialOne)
 }
