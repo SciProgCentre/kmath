@@ -62,6 +62,11 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     public operator fun Int.times(other: C): C
 
     /**
+     * Converts the integer [value] to constant.
+     */
+    public fun constantNumber(value: Int): C = constantOne * value
+
+    /**
      * Returns sum of the polynomial and the integer represented as polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
@@ -98,6 +103,11 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: P): P = multiplyBySquaring(other, this)
+
+    /**
+     * Converts the integer [value] to polynomial.
+     */
+    public fun number(value: Int): P = one * value
 
     /**
      * Returns the same constant.

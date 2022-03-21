@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
@@ -220,6 +221,13 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
+
+    /**
+     * Converts the integer [value] to polynomial.
+     */
+    public override fun number(value: Int): NumberedPolynomial<C> =
+        if (value == 0) zero
+        else NumberedPolynomial(mapOf(emptyList<UInt>() to constantNumber(value)))
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.

@@ -69,6 +69,11 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public operator fun Int.times(other: C): C
 
     /**
+     * Converts the integer [value] to constant.
+     */
+    public fun constantNumber(value: Int): C = constantOne * value
+
+    /**
      * Returns sum of the constant and the integer represented as polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
@@ -107,6 +112,11 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public operator fun Int.times(other: P): P
 
     /**
+     * Converts the integer [value] to polynomial.
+     */
+    public fun polynomialNumber(value: Int): P = polynomialOne * value
+
+    /**
      * Returns sum of the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
@@ -143,6 +153,11 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: R): R = multiplyBySquaring(other, this)
+
+    /**
+     * Converts the integer [value] to rational function.
+     */
+    public fun number(value: Int): R = one * value
 
     /**
      * Returns the same constant.
@@ -673,6 +688,11 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override operator fun Int.times(other: P): P = polynomialRing { this@times * other }
 
     /**
+     * Converts the integer [value] to polynomial.
+     */
+    public override fun polynomialNumber(value: Int): P = polynomialRing { number(value) }
+
+    /**
      * Returns the same constant.
      */
     @JvmName("constantUnaryPlus")
@@ -880,7 +900,7 @@ public abstract class PolynomialSpaceOfFractions<
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         > : RationalFunctionalSpace<C, P, R> {
-    protected abstract fun constructRationalFunction(numerator: P, denominator: P) : R
+    protected abstract fun constructRationalFunction(numerator: P, denominator: P = polynomialOne) : R
 
     /**
      * Returns sum of the rational function and the integer represented as rational function.
@@ -943,6 +963,11 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
+
+    /**
+     * Converts the integer [value] to rational function.
+     */
+    public override fun number(value: Int): R = constructRationalFunction(polynomialNumber(value))
 
     /**
      * Returns sum of the constant represented as rational function and the rational function.
@@ -1076,10 +1101,10 @@ public abstract class PolynomialSpaceOfFractions<
     /**
      * Instance of zero rational function (zero of the rational functions ring).
      */
-    public override val zero: R get() = constructRationalFunction(polynomialZero, polynomialOne)
+    public override val zero: R get() = constructRationalFunction(polynomialZero)
 
     /**
      * Instance of unit polynomial (unit of the rational functions ring).
      */
-    public override val one: R get() = constructRationalFunction(polynomialOne, polynomialOne)
+    public override val one: R get() = constructRationalFunction(polynomialOne)
 }

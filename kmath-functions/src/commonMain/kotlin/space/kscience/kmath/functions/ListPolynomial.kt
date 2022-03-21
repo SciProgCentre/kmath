@@ -5,13 +5,16 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.operations.invoke
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 import kotlin.jvm.JvmName
 import kotlin.math.max
 import kotlin.math.min
+
 
 /**
  * Polynomial model without fixation on specific context they are applied to.
@@ -192,6 +195,13 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     for (deg in indices) this[deg] = this@times * this[deg]
                 }
         )
+
+    /**
+     * Converts the integer [value] to polynomial.
+     */
+    public override fun number(value: Int): ListPolynomial<C> =
+        if (value == 0) zero
+        else ListPolynomial(constantNumber(value))
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.

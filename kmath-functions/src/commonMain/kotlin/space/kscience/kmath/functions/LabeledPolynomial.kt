@@ -6,7 +6,8 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
@@ -268,6 +269,13 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
+
+    /**
+     * Converts the integer [value] to polynomial.
+     */
+    public override fun number(value: Int): LabeledPolynomial<C> =
+        if (value == 0) zero
+        else LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to constantNumber(value)))
 
     public operator fun C.plus(other: Symbol): LabeledPolynomial<C> =
         if (isZero()) LabeledPolynomial<C>(mapOf(
