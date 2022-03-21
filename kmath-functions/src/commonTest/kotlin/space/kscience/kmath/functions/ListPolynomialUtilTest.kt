@@ -15,8 +15,36 @@ import kotlin.test.assertFailsWith
 class ListPolynomialUtilTest {
     @Test
     fun test_substitute_Double() {
-        val polynomial = ListPolynomial(1.0, -2.0, 1.0)
-        assertEquals(0.0, polynomial.substitute(1.0), 0.001)
+        assertEquals(
+            0.0,
+            ListPolynomial(1.0, -2.0, 1.0).substitute(1.0),
+            0.001,
+            "test 1"
+        )
+        assertEquals(
+            1.1931904761904761,
+            ListPolynomial(0.625, 2.6666666666666665, 0.5714285714285714, 1.5).substitute(0.2),
+            0.001,
+            "test 2"
+        )
+        assertEquals(
+            0.5681904761904762,
+            ListPolynomial(0.0, 2.6666666666666665, 0.5714285714285714, 1.5).substitute(0.2),
+            0.001,
+            "test 3"
+        )
+        assertEquals(
+            1.1811904761904761,
+            ListPolynomial(0.625, 2.6666666666666665, 0.5714285714285714, 0.0).substitute(0.2),
+            0.001,
+            "test 4"
+        )
+        assertEquals(
+            1.1703333333333332,
+            ListPolynomial(0.625, 2.6666666666666665, 0.0, 1.5).substitute(0.2),
+            0.001,
+            "test 5"
+        )
     }
     @Test
     fun test_substitute_Constant() {
