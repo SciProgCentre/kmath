@@ -299,4 +299,14 @@ internal class TestDoubleAnalyticTensorAlgebra {
             doubleArrayOf(1.5, 0.5)
         )}
     }
+
+    @Test
+    fun testStd() = DoubleTensorAlgebra {
+        assertTrue { floor(tensor5.std() * 10000 ) / 10000 == 2.9439 }
+    }
+
+    @Test
+    fun testVariance() = DoubleTensorAlgebra {
+        assertTrue { floor(tensor5.variance() * 10000 ) / 10000 == 8.6666 }
+    }
 }
