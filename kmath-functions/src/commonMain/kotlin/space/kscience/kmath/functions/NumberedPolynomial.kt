@@ -53,56 +53,86 @@ internal constructor(
  */
 internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 
-//context(NumberedPolynomialSpace<C, Ring<C>>)
-//@Suppress("FunctionName")
-//internal fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
-//    if (!toCheckInput) return NumberedPolynomial(coefs)
-//
-//    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-//
-//    for (entry in coefs) {
-//        val key = entry.key.cleanUp()
-//        val value = entry.value
-//        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-//    }
-//
-//    return NumberedPolynomial(
-//        fixedCoefs.filterValues { it.isNotZero() }
-//    )
-//}
-//
-//context(NumberedPolynomialSpace<C, Ring<C>>)
-//@Suppress("FunctionName")
-//internal fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
-//    if (!toCheckInput) return NumberedPolynomial(pairs.toMap())
-//
-//    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-//
-//    for (entry in pairs) {
-//        val key = entry.first.cleanUp()
-//        val value = entry.second
-//        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-//    }
-//
-//    return NumberedPolynomial(
-//        fixedCoefs.filterValues { it.isNotZero() }
-//    )
-//}
-//
-//// TODO: Do not know how to make it without context receivers
-//context(NumberedPolynomialSpace<C, Ring<C>>)
-//@Suppress("FunctionName")
-//public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
-//
-//context(NumberedPolynomialSpace<C, Ring<C>>)
-//@Suppress("FunctionName")
-//public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
-//
-//context(NumberedPolynomialSpace<C, Ring<C>>)
-//@Suppress("FunctionName")
-//public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(pairs.toList(), toCheckInput = true)
+// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
-public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial(mapOf(emptyList<UInt>() to this))
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(coefs, toCheckInput)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial<C>(coefs)
+
+    val fixedCoefs = mutableMapOf<List<UInt>, C>()
+
+    for (entry in coefs) {
+        val key = entry.key.cleanUp()
+        val value = entry.value
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    return NumberedPolynomial<C>(
+        fixedCoefs.filterValues { it != zero }
+    )
+}
+
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs, toCheckInput)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
+
+    val fixedCoefs = mutableMapOf<List<UInt>, C>()
+
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    return NumberedPolynomial<C>(
+        fixedCoefs.filterValues { it != zero }
+    )
+}
+
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs = pairs, toCheckInput = toCheckInput)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
+
+    val fixedCoefs = mutableMapOf<List<UInt>, C>()
+
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    return NumberedPolynomial<C>(
+        fixedCoefs.filterValues { it != zero }
+    )
+}
+
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
+
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
+
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs, toCheckInput = true)
+
+//context(A)
+//public fun <C, A: Ring<C>> Symbol.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(mapOf(this to 1u) to one))
+//context(NumberedPolynomialSpace<C, A>)
+//public fun <C, A: Ring<C>> Symbol.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
+
+public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
 
 /**
  * Space of polynomials.
@@ -574,47 +604,4 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
     }
-
-    @Suppress("FunctionName")
-    internal fun NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
-        if (!toCheckInput) return NumberedPolynomial<C>(coefs)
-
-        val fixedCoefs = mutableMapOf<List<UInt>, C>()
-
-        for (entry in coefs) {
-            val key = entry.key.cleanUp()
-            val value = entry.value
-            fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-        }
-
-        return NumberedPolynomial(
-            fixedCoefs.filterValues { it.isNotZero() }
-        )
-    }
-
-    @Suppress("FunctionName")
-    internal fun NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = false) : NumberedPolynomial<C> {
-        if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
-
-        val fixedCoefs = mutableMapOf<List<UInt>, C>()
-
-        for (entry in pairs) {
-            val key = entry.first.cleanUp()
-            val value = entry.second
-            fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-        }
-
-        return NumberedPolynomial(
-            fixedCoefs.filterValues { it.isNotZero() }
-        )
-    }
-
-    @Suppress("FunctionName")
-    public fun NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
-
-    @Suppress("FunctionName")
-    public fun NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
-
-    @Suppress("FunctionName")
-    public fun NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(pairs.toList(), toCheckInput = true)
 }
