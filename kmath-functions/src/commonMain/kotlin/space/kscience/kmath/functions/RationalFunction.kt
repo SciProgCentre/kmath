@@ -72,6 +72,10 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Converts the integer [value] to constant.
      */
     public fun constantNumber(value: Int): C = constantOne * value
+    /**
+     * Converts the integer to constant.
+     */
+    public fun Int.asConstant(): C = constantNumber(this)
 
     /**
      * Returns sum of the constant and the integer represented as polynomial.
@@ -115,6 +119,10 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Converts the integer [value] to polynomial.
      */
     public fun polynomialNumber(value: Int): P = polynomialOne * value
+    /**
+     * Converts the integer to polynomial.
+     */
+    public fun Int.asPolynomial(): P = polynomialNumber(this)
 
     /**
      * Returns sum of the rational function and the integer represented as rational function.
@@ -134,6 +142,13 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun R.times(other: Int): R = multiplyBySquaring(this, other)
+    /**
+     * Returns quotient of the rational function and the integer represented as rational function.
+     *
+     * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
+     * multiplication denominator of [this] to [other].
+     */
+    public operator fun R.div(other: Int): R = this / multiplyBySquaring(one, other)
 
     /**
      * Returns sum of the integer represented as rational function and the rational function.
@@ -153,11 +168,22 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: R): R = multiplyBySquaring(other, this)
+    /**
+     * Returns quotient of the integer represented as rational function and the rational function.
+     *
+     * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
+     * [other] and which denominator is [other]'s numerator.
+     */
+    public operator fun Int.div(other: R): R = multiplyBySquaring(one / other, this)
 
     /**
      * Converts the integer [value] to rational function.
      */
     public fun number(value: Int): R = one * value
+    /**
+     * Converts the integer to rational function.
+     */
+    public fun Int.asRationalFunction(): R = number(this)
 
     /**
      * Returns the same constant.
@@ -257,6 +283,15 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public operator fun P.times(other: C): P
 
     /**
+     * Converts the constant [value] to polynomial.
+     */
+    public fun polynomialNumber(value: C): P = polynomialOne * value
+    /**
+     * Converts the constant to polynomial.
+     */
+    public fun C.asPolynomial(): P = polynomialNumber(this)
+
+    /**
      * Returns the same polynomial.
      */
     public operator fun P.unaryPlus(): P = this
@@ -276,6 +311,10 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Returns product of the polynomials.
      */
     public operator fun P.times(other: P): P
+    /**
+     * Returns quotient of the polynomials as rational function.
+     */
+    public operator fun P.div(other: P): R
     /**
      * Raises [arg] to the integer power [exponent].
      */
@@ -336,19 +375,36 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Returns product of the constant represented as polynomial and the rational function.
      */
     public operator fun C.times(other: R): R
+    /**
+     * Returns quotient of the constant represented as polynomial and the rational function.
+     */
+    public operator fun C.div(other: R): R
 
     /**
-     * Returns sum of the constant represented as rational function and the rational function.
+     * Returns sum of the rational function and the constant represented as rational function.
      */
     public operator fun R.plus(other: C): R
     /**
-     * Returns difference between the constant represented as rational function and the rational function.
+     * Returns difference between the rational function and the constant represented as rational function.
      */
     public operator fun R.minus(other: C): R
     /**
-     * Returns product of the constant represented as rational function and the rational function.
+     * Returns product of the rational function and the constant represented as rational function.
      */
     public operator fun R.times(other: C): R
+    /**
+     * Returns quotient of the rational function and the constant represented as rational function.
+     */
+    public operator fun R.div(other: C): R
+
+    /**
+     * Converts the constant [value] to rational function.
+     */
+    public fun number(value: C): R = one * value
+    /**
+     * Converts the constant to rational function.
+     */
+    public fun C.asRationalFunction(): R = number(this)
 
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
@@ -362,19 +418,36 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Returns product of the polynomial represented as polynomial and the rational function.
      */
     public operator fun P.times(other: R): R
+    /**
+     * Returns quotient of the polynomial represented as polynomial and the rational function.
+     */
+    public operator fun P.div(other: R): R
 
     /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
+     * Returns sum of the rational function and the polynomial represented as rational function.
      */
     public operator fun R.plus(other: P): R
     /**
-     * Returns difference between the polynomial represented as rational function and the rational function.
+     * Returns difference between the rational function and the polynomial represented as rational function.
      */
     public operator fun R.minus(other: P): R
     /**
-     * Returns product of the polynomial represented as rational function and the rational function.
+     * Returns product of the rational function and the polynomial represented as rational function.
      */
     public operator fun R.times(other: P): R
+    /**
+     * Returns quotient of the rational function and the polynomial represented as rational function.
+     */
+    public operator fun R.div(other: P): R
+
+    /**
+     * Converts the polynomial [value] to rational function.
+     */
+    public fun number(value: P): R = one * value
+    /**
+     * Converts the polynomial to rational function.
+     */
+    public fun P.asRationalFunction(): R = number(this)
 
     /**
      * Returns the same rational function.
@@ -396,6 +469,10 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Returns product of the rational functions.
      */
     public override operator fun R.times(other: R): R
+    /**
+     * Returns quotient of the rational functions.
+     */
+    public operator fun R.div(other: R): R
     /**
      * Raises [arg] to the integer power [exponent].
      */
@@ -650,6 +727,15 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override operator fun Int.times(other: C): C = polynomialRing { this@times * other }
 
     /**
+     * Converts the integer [value] to constant.
+     */
+    public override fun constantNumber(value: Int): C = polynomialRing { constantNumber(value) }
+    /**
+     * Converts the integer to constant.
+     */
+    override fun Int.asConstant(): C = polynomialRing { asConstant() }
+
+    /**
      * Returns sum of the constant and the integer represented as polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
@@ -691,6 +777,10 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
      * Converts the integer [value] to polynomial.
      */
     public override fun polynomialNumber(value: Int): P = polynomialRing { number(value) }
+    /**
+     * Converts the integer to polynomial.
+     */
+    public override fun Int.asPolynomial(): P = polynomialRing { asPolynomial() }
 
     /**
      * Returns the same constant.
@@ -782,6 +872,15 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public override operator fun P.times(other: C): P = polynomialRing { this@times * other }
+
+    /**
+     * Converts the constant [value] to polynomial.
+     */
+    public override fun polynomialNumber(value: C): P = polynomialRing { number(value) }
+    /**
+     * Converts the constant to polynomial.
+     */
+    public override fun C.asPolynomial(): P = polynomialRing { asPolynomial() }
 
     /**
      * Returns the same polynomial.
@@ -933,6 +1032,19 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
 
+    public override operator fun R.div(other: Int): R {
+        val otherAsConstant = constantNumber(other)
+        require(otherAsConstant.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            numerator,
+            (denominator * other).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during division of rational functions to constant. It means underlying ring of polynomials is not integral domain."
+                }
+            }
+        )
+    }
+
     /**
      * Returns sum of the integer represented as rational function and the rational function.
      *
@@ -964,10 +1076,23 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
+    public override operator fun Int.div(other: R): R {
+        require(other.numerator.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            this * other.denominator,
+            other.numerator
+        )
+    }
+
     /**
      * Converts the integer [value] to rational function.
      */
     public override fun number(value: Int): R = constructRationalFunction(polynomialNumber(value))
+
+    /**
+     * Returns quotient of the polynomials as rational function.
+     */
+    public override operator fun P.div(other: P): R = constructRationalFunction(this, other)
 
     /**
      * Returns sum of the constant represented as rational function and the rational function.
@@ -994,6 +1119,14 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
+    public override operator fun C.div(other: R): R {
+        require(other.numerator.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            this * other.denominator,
+            other.numerator
+        )
+    }
+
     /**
      * Returns sum of the constant represented as rational function and the rational function.
      */
@@ -1018,6 +1151,23 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
+
+    public override operator fun R.div(other: C): R {
+        require(other.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            numerator,
+            (denominator * other).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during division of rational functions to constant. It means underlying ring of polynomials is not integral domain."
+                }
+            }
+        )
+    }
+
+    /**
+     * Converts the constant [value] to rational function.
+     */
+    public override fun number(value: C): R = constructRationalFunction(polynomialNumber(value))
 
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
@@ -1044,6 +1194,14 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
+    public override operator fun P.div(other: R): R {
+        require(other.numerator.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            this * other.denominator,
+            other.numerator
+        )
+    }
+
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
      */
@@ -1069,6 +1227,23 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
 
+    public override operator fun R.div(other: P): R {
+        require(other.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            numerator,
+            (denominator * other).also {
+                require(it.isNotZero()) {
+                    "Got zero denominator during division of rational functions to polynomial. It means underlying ring of polynomials is not integral domain."
+                }
+            }
+        )
+    }
+
+    /**
+     * Converts the polynomial [value] to rational function.
+     */
+    public override fun number(value: P): R = constructRationalFunction(value)
+
     /**
      * Returns negation of the rational function.
      */
@@ -1079,7 +1254,11 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.plus(other: R): R =
         constructRationalFunction(
             numerator * other.denominator + denominator * other.numerator,
-            denominator * other.denominator
+            (denominator * other.denominator).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during addition of rational functions. It means underlying ring of polynomials is not integral domain."
+                }
+            }
         )
     /**
      * Returns difference of the rational functions.
@@ -1087,7 +1266,11 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.minus(other: R): R =
         constructRationalFunction(
             numerator * other.denominator - denominator * other.numerator,
-            denominator * other.denominator
+            (denominator * other.denominator).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during subtraction of rational functions. It means underlying ring of polynomials is not integral domain."
+                }
+            }
         )
     /**
      * Returns product of the rational functions.
@@ -1095,8 +1278,24 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.times(other: R): R =
         constructRationalFunction(
             numerator * other.numerator,
-            denominator * other.denominator
+            (denominator * other.denominator).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during multiplication of rational functions. It means underlying ring of polynomials is not integral domain."
+                }
+            }
         )
+
+    public override operator fun R.div(other: R): R {
+        require(other.isNotZero()) { "/ by zero." }
+        return constructRationalFunction(
+            numerator * other.denominator,
+            (denominator * other.numerator).also {
+                check(it.isNotZero()) {
+                    "Got zero denominator during division of rational functions. It means underlying ring of polynomials is not integral domain."
+                }
+            }
+        )
+    }
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).

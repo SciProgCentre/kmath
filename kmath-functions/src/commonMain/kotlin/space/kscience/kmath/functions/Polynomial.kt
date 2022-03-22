@@ -65,6 +65,10 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
      * Converts the integer [value] to constant.
      */
     public fun constantNumber(value: Int): C = constantOne * value
+    /**
+     * Converts the integer to constant.
+     */
+    public fun Int.asConstant(): C = constantNumber(this)
 
     /**
      * Returns sum of the polynomial and the integer represented as polynomial.
@@ -108,6 +112,10 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
      * Converts the integer [value] to polynomial.
      */
     public fun number(value: Int): P = one * value
+    /**
+     * Converts the integer to polynomial.
+     */
+    public fun Int.asPolynomial(): P = number(this)
 
     /**
      * Returns the same constant.
@@ -205,6 +213,15 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     public operator fun P.times(other: C): P
+
+    /**
+     * Converts the constant [value] to polynomial.
+     */
+    public fun number(value: C): P = one * value
+    /**
+     * Converts the constant to polynomial.
+     */
+    public fun C.asPolynomial(): P = number(this)
 
     /**
      * Returns the same polynomial.

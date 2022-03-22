@@ -70,30 +70,6 @@ public class ListRationalFunctionSpace<C, A : Ring<C>> (
 
     // TODO: Разобрать
 
-    public operator fun ListRationalFunction<C>.div(other: ListRationalFunction<C>): ListRationalFunction<C> =
-        ListRationalFunction(
-            numerator * other.denominator,
-            denominator * other.numerator
-        )
-
-    public operator fun ListRationalFunction<C>.div(other: ListPolynomial<C>): ListRationalFunction<C> =
-        ListRationalFunction(
-            numerator,
-            denominator * other
-        )
-
-    public operator fun ListRationalFunction<C>.div(other: C): ListRationalFunction<C> =
-        ListRationalFunction(
-            numerator,
-            denominator * other
-        )
-
-    public operator fun ListRationalFunction<C>.div(other: Int): ListRationalFunction<C> =
-        ListRationalFunction(
-            numerator,
-            denominator * other
-        )
-
 //    operator fun invoke(arg: UnivariatePolynomial<T>): RationalFunction<T> =
 //        RationalFunction(
 //            numerator(arg),

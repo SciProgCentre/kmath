@@ -273,9 +273,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     /**
      * Converts the integer [value] to polynomial.
      */
-    public override fun number(value: Int): LabeledPolynomial<C> =
-        if (value == 0) zero
-        else LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to constantNumber(value)))
+    public override fun number(value: Int): LabeledPolynomial<C> = number(constantNumber(value))
 
     public operator fun C.plus(other: Symbol): LabeledPolynomial<C> =
         if (isZero()) LabeledPolynomial<C>(mapOf(
@@ -424,6 +422,13 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
                     for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
+
+    /**
+     * Converts the constant [value] to polynomial.
+     */
+    public override fun number(value: C): LabeledPolynomial<C> =
+        if (value == 0) zero
+        else LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to value))
 
     public operator fun Symbol.plus(other: Symbol): LabeledPolynomial<C> =
         if (this == other) LabeledPolynomial<C>(mapOf(

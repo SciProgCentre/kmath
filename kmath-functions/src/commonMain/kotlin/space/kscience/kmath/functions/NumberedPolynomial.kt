@@ -225,9 +225,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Converts the integer [value] to polynomial.
      */
-    public override fun number(value: Int): NumberedPolynomial<C> =
-        if (value == 0) zero
-        else NumberedPolynomial(mapOf(emptyList<UInt>() to constantNumber(value)))
+    public override fun number(value: Int): NumberedPolynomial<C> = number(constantNumber(value))
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
@@ -330,6 +328,13 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
+
+    /**
+     * Converts the constant [value] to polynomial.
+     */
+    public override fun number(value: C): NumberedPolynomial<C> =
+        if (value == 0) zero
+        else NumberedPolynomial(mapOf(emptyList<UInt>() to value))
 
     /**
      * Returns negation of the polynomial.

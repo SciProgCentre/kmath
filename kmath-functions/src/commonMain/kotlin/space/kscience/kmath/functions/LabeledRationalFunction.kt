@@ -144,24 +144,6 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
 
     // TODO: Разобрать
 
-    public operator fun LabeledRationalFunction<C>.div(other: LabeledRationalFunction<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator * other.denominator,
-            denominator * other.numerator
-        )
-
-    public operator fun LabeledRationalFunction<C>.div(other: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator,
-            denominator * other
-        )
-
-    public operator fun LabeledRationalFunction<C>.div(other: C): LabeledRationalFunction<C> =
-        LabeledRationalFunction(
-            numerator,
-            denominator * other
-        )
-
 //    operator fun invoke(arg: Map<Symbol, C>): LabeledRationalFunction<C> =
 //        LabeledRationalFunction(
 //            numerator(arg),

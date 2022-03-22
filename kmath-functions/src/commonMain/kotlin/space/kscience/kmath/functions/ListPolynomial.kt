@@ -66,7 +66,7 @@ public fun <C> ListPolynomial(coefficients: List<C>, reverse: Boolean = false): 
 public fun <C> ListPolynomial(vararg coefficients: C, reverse: Boolean = false): ListPolynomial<C> =
     ListPolynomial(with(coefficients) { if (reverse) reversed() else toList() })
 
-public fun <C> C.asPolynomial() : ListPolynomial<C> = ListPolynomial(listOf(this))
+public fun <C> C.asListPolynomial() : ListPolynomial<C> = ListPolynomial(listOf(this))
 
 /**
  * Space of univariate polynomials constructed over ring.
@@ -199,9 +199,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
     /**
      * Converts the integer [value] to polynomial.
      */
-    public override fun number(value: Int): ListPolynomial<C> =
-        if (value == 0) zero
-        else ListPolynomial(constantNumber(value))
+    public override fun number(value: Int): ListPolynomial<C> = number(constantNumber(value))
 
     /**
      * Returns sum of the constant represented as polynomial and the polynomial.
@@ -312,6 +310,13 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     for (deg in indices) this[deg] = this[deg] * other
                 }
         )
+
+    /**
+     * Converts the constant [value] to polynomial.
+     */
+    public override fun number(value: C): ListPolynomial<C> =
+        if (value.isZero()) zero
+        else ListPolynomial(value)
 
     /**
      * Returns negation of the polynomial.
