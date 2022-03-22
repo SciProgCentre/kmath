@@ -416,35 +416,59 @@ public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, A: Ring<C>> : Poly
     public override val constantOne: C get() = ring.one
 }
 
+@Suppress("INAPPLICABLE_JVM_NAME")
 public interface MultivariatePolynomialSpace<C, V, P: Polynomial<C>>: PolynomialSpace<C, P> {
+    @JvmName("VariableIntPlus")
     public operator fun V.plus(other: Int): P
+    @JvmName("VariableIntMinus")
     public operator fun V.minus(other: Int): P
+    @JvmName("VariableIntMinusTimes")
     public operator fun V.times(other: Int): P
 
+    @JvmName("IntVariablePlus")
     public operator fun Int.plus(other: V): P
+    @JvmName("IntVariableMinus")
     public operator fun Int.minus(other: V): P
+    @JvmName("IntVariableTimes")
     public operator fun Int.times(other: V): P
 
+    @JvmName("ConstantVariablePlus")
     public operator fun C.plus(other: V): P
+    @JvmName("ConstantVariableMinus")
     public operator fun C.minus(other: V): P
+    @JvmName("ConstantVariableTimes")
     public operator fun C.times(other: V): P
 
+    @JvmName("VariableConstantPlus")
     public operator fun V.plus(other: C): P
+    @JvmName("VariableConstantMinus")
     public operator fun V.minus(other: C): P
+    @JvmName("VariableConstantTimes")
     public operator fun V.times(other: C): P
 
+    @JvmName("VariableUnaryPlus")
     public operator fun V.unaryPlus(): P
+    @JvmName("VariableUnaryMinus")
     public operator fun V.unaryMinus(): P
+    @JvmName("VariablePlus")
     public operator fun V.plus(other: V): P
+    @JvmName("VariableMinus")
     public operator fun V.minus(other: V): P
+    @JvmName("VariableTimes")
     public operator fun V.times(other: V): P
 
+    @JvmName("VariablePolynomialPlus")
     public operator fun V.plus(other: P): P
+    @JvmName("VariablePolynomialMinus")
     public operator fun V.minus(other: P): P
+    @JvmName("VariablePolynomialTimes")
     public operator fun V.times(other: P): P
 
+    @JvmName("PolynomialVariablePlus")
     public operator fun P.plus(other: V): P
+    @JvmName("PolynomialVariableMinus")
     public operator fun P.minus(other: V): P
+    @JvmName("PolynomialVariableTimes")
     public operator fun P.times(other: V): P
 
     /**
