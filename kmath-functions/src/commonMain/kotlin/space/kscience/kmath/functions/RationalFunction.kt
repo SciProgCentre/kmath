@@ -1307,3 +1307,200 @@ public abstract class PolynomialSpaceOfFractions<
      */
     public override val one: R get() = constructRationalFunction(polynomialOne)
 }
+
+public interface MultivariateRationalFunctionalSpace<
+        C,
+        V,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>
+        >: RationalFunctionalSpace<C, P, R> {
+    public operator fun V.plus(other: Int): P
+    public operator fun V.minus(other: Int): P
+    public operator fun V.times(other: Int): P
+
+    public operator fun Int.plus(other: V): P
+    public operator fun Int.minus(other: V): P
+    public operator fun Int.times(other: V): P
+
+    public operator fun C.plus(other: V): P
+    public operator fun C.minus(other: V): P
+    public operator fun C.times(other: V): P
+
+    public operator fun V.plus(other: C): P
+    public operator fun V.minus(other: C): P
+    public operator fun V.times(other: C): P
+
+    public operator fun V.unaryPlus(): P
+    public operator fun V.unaryMinus(): P
+    public operator fun V.plus(other: V): P
+    public operator fun V.minus(other: V): P
+    public operator fun V.times(other: V): P
+
+    public operator fun V.plus(other: P): P
+    public operator fun V.minus(other: P): P
+    public operator fun V.times(other: P): P
+
+    public operator fun P.plus(other: V): P
+    public operator fun P.minus(other: V): P
+    public operator fun P.times(other: V): P
+
+    public operator fun V.plus(other: R): R
+    public operator fun V.minus(other: R): R
+    public operator fun V.times(other: R): R
+
+    public operator fun R.plus(other: V): R
+    public operator fun R.minus(other: V): R
+    public operator fun R.times(other: V): R
+
+    /**
+     * Map that associates variables (that appear in the polynomial in positive exponents) with their most exponents
+     * in which they are appeared in the polynomial.
+     *
+     * As consequence all values in the map are positive integers. Also, if the polynomial is constant, the map is empty.
+     * And keys of the map is the same as in [variables].
+     */
+    public val P.degrees: Map<V, UInt>
+    /**
+     * Counts degree of the polynomial by the specified [variable].
+     */
+    public fun P.degreeBy(variable: V): UInt = degrees.getOrElse(variable) { 0u }
+    /**
+     * Counts degree of the polynomial by the specified [variables].
+     */
+    public fun P.degreeBy(variables: Collection<V>): UInt
+    /**
+     * Set of all variables that appear in the polynomial in positive exponents.
+     */
+    public val P.variables: Set<V> get() = degrees.keys
+    /**
+     * Count of all variables that appear in the polynomial in positive exponents.
+     */
+    public val P.countOfVariables: Int get() = variables.size
+
+    /**
+     * Set of all variables that appear in the polynomial in positive exponents.
+     */
+    public val R.variables: Set<V> get() = numerator.variables union denominator.variables
+    /**
+     * Count of all variables that appear in the polynomial in positive exponents.
+     */
+    public val R.countOfVariables: Int get() = variables.size
+}
+
+public interface MultivariateRationalFunctionalSpaceOverRing<
+        C,
+        V,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>,
+        A: Ring<C>
+        > : RationalFunctionalSpaceOverRing<C, P, R, A>, MultivariateRationalFunctionalSpace<C, V, P, R>
+
+public interface MultivariateRationalFunctionalSpaceOverPolynomialSpace<
+        C,
+        V,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>,
+        AP: PolynomialSpace<C, P>,
+        > : RationalFunctionalSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionalSpace<C, V, P, R>
+
+public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSpace<
+        C,
+        V,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>,
+        AP: MultivariatePolynomialSpace<C, V, P>,
+        > : MultivariateRationalFunctionalSpaceOverPolynomialSpace<C, V, P, R, AP> {
+    public override operator fun V.plus(other: Int): P = polynomialRing { this@plus + other }
+    public override operator fun V.minus(other: Int): P = polynomialRing { this@minus - other }
+    public override operator fun V.times(other: Int): P = polynomialRing { this@times * other }
+
+    public override operator fun Int.plus(other: V): P = polynomialRing { this@plus + other }
+    public override operator fun Int.minus(other: V): P = polynomialRing { this@minus - other }
+    public override operator fun Int.times(other: V): P = polynomialRing { this@times * other }
+
+    public override operator fun C.plus(other: V): P = polynomialRing { this@plus + other }
+    public override operator fun C.minus(other: V): P = polynomialRing { this@minus - other }
+    public override operator fun C.times(other: V): P = polynomialRing { this@times * other }
+
+    public override operator fun V.plus(other: C): P = polynomialRing { this@plus + other }
+    public override operator fun V.minus(other: C): P = polynomialRing { this@minus - other }
+    public override operator fun V.times(other: C): P = polynomialRing { this@times * other }
+
+    public override operator fun V.unaryPlus(): P = polynomialRing { +this@unaryPlus }
+    public override operator fun V.unaryMinus(): P = polynomialRing { -this@unaryMinus }
+    public override operator fun V.plus(other: V): P = polynomialRing { this@plus + other }
+    public override operator fun V.minus(other: V): P = polynomialRing { this@minus - other }
+    public override operator fun V.times(other: V): P = polynomialRing { this@times * other }
+
+    public override operator fun V.plus(other: P): P = polynomialRing { this@plus + other }
+    public override operator fun V.minus(other: P): P = polynomialRing { this@minus - other }
+    public override operator fun V.times(other: P): P = polynomialRing { this@times * other }
+
+    public override operator fun P.plus(other: V): P = polynomialRing { this@plus + other }
+    public override operator fun P.minus(other: V): P = polynomialRing { this@minus - other }
+    public override operator fun P.times(other: V): P = polynomialRing { this@times * other }
+
+    /**
+     * Map that associates variables (that appear in the polynomial in positive exponents) with their most exponents
+     * in which they are appeared in the polynomial.
+     *
+     * As consequence all values in the map are positive integers. Also, if the polynomial is constant, the map is empty.
+     * And keys of the map is the same as in [variables].
+     */
+    public override val P.degrees: Map<V, UInt> get() = polynomialRing { degrees }
+    /**
+     * Counts degree of the polynomial by the specified [variable].
+     */
+    public override fun P.degreeBy(variable: V): UInt = polynomialRing { degreeBy(variable) }
+    /**
+     * Counts degree of the polynomial by the specified [variables].
+     */
+    public override fun P.degreeBy(variables: Collection<V>): UInt = polynomialRing { degreeBy(variables) }
+    /**
+     * Set of all variables that appear in the polynomial in positive exponents.
+     */
+    public override val P.variables: Set<V> get() = polynomialRing { variables }
+    /**
+     * Count of all variables that appear in the polynomial in positive exponents.
+     */
+    public override val P.countOfVariables: Int get() = polynomialRing { countOfVariables }
+}
+
+public abstract class MultivariatePolynomialSpaceOfFractions<
+        C,
+        V,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>,
+        > : MultivariateRationalFunctionalSpace<C, V, P, R>,  PolynomialSpaceOfFractions<C, P, R>() {
+    public override operator fun V.plus(other: R): R =
+        constructRationalFunction(
+            this * other.denominator + other.numerator,
+            other.denominator
+        )
+    public override operator fun V.minus(other: R): R =
+        constructRationalFunction(
+            this * other.denominator - other.numerator,
+            other.denominator
+        )
+    public override operator fun V.times(other: R): R =
+        constructRationalFunction(
+            this * other.numerator,
+            other.denominator
+        )
+
+    public override operator fun R.plus(other: V): R =
+        constructRationalFunction(
+            numerator + denominator * other,
+            denominator
+        )
+    public override operator fun R.minus(other: V): R =
+        constructRationalFunction(
+            numerator - denominator * other,
+            denominator
+        )
+    public override operator fun R.times(other: V): R =
+        constructRationalFunction(
+            numerator * other,
+            denominator
+        )
+}

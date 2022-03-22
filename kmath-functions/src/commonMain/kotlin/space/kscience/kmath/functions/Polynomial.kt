@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import kotlin.js.JsName
 import kotlin.jvm.JvmName
 
@@ -413,4 +414,61 @@ public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, A: Ring<C>> : Poly
      * Instance of unit constant (unit of the underlying ring).
      */
     public override val constantOne: C get() = ring.one
+}
+
+public interface MultivariatePolynomialSpace<C, V, P: Polynomial<C>>: PolynomialSpace<C, P> {
+    public operator fun V.plus(other: Int): P
+    public operator fun V.minus(other: Int): P
+    public operator fun V.times(other: Int): P
+
+    public operator fun Int.plus(other: V): P
+    public operator fun Int.minus(other: V): P
+    public operator fun Int.times(other: V): P
+
+    public operator fun C.plus(other: V): P
+    public operator fun C.minus(other: V): P
+    public operator fun C.times(other: V): P
+
+    public operator fun V.plus(other: C): P
+    public operator fun V.minus(other: C): P
+    public operator fun V.times(other: C): P
+
+    public operator fun V.unaryPlus(): P
+    public operator fun V.unaryMinus(): P
+    public operator fun V.plus(other: V): P
+    public operator fun V.minus(other: V): P
+    public operator fun V.times(other: V): P
+
+    public operator fun V.plus(other: P): P
+    public operator fun V.minus(other: P): P
+    public operator fun V.times(other: P): P
+
+    public operator fun P.plus(other: V): P
+    public operator fun P.minus(other: V): P
+    public operator fun P.times(other: V): P
+
+    /**
+     * Map that associates variables (that appear in the polynomial in positive exponents) with their most exponents
+     * in which they are appeared in the polynomial.
+     *
+     * As consequence all values in the map are positive integers. Also, if the polynomial is constant, the map is empty.
+     * And keys of the map is the same as in [variables].
+     */
+    public val P.degrees: Map<V, UInt>
+    /**
+     * Counts degree of the polynomial by the specified [variable].
+     */
+    public fun P.degreeBy(variable: V): UInt = degrees.getOrElse(variable) { 0u }
+    /**
+     * Counts degree of the polynomial by the specified [variables].
+     */
+    public fun P.degreeBy(variables: Collection<V>): UInt
+    /**
+     * Set of all variables that appear in the polynomial in positive exponents.
+     */
+    public val P.variables: Set<V> get() = degrees.keys
+    /**
+     * Count of all variables that appear in the polynomial in positive exponents.
+     */
+    public val P.countOfVariables: Int get() = variables.size
 }

@@ -63,14 +63,16 @@ public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
 ) :
-    RationalFunctionalSpaceOverPolynomialSpace<
+    MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSpace<
             C,
+            Symbol,
             LabeledPolynomial<C>,
             LabeledRationalFunction<C>,
             LabeledPolynomialSpace<C, A>,
             >,
-    PolynomialSpaceOfFractions<
+    MultivariatePolynomialSpaceOfFractions<
             C,
+            Symbol,
             LabeledPolynomial<C>,
             LabeledRationalFunction<C>,
             >() {
@@ -112,33 +114,6 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
 
         return numerator * other.denominator equalsTo other.numerator * denominator
     }
-
-    /**
-     * Map that associates variables (that appear in the polynomial in positive exponents) with their most exponents
-     * in which they are appeared in the polynomial.
-     *
-     * As consequence all values in the map are positive integers. Also, if the polynomial is constant, the map is empty.
-     * And keys of the map is the same as in [variables].
-     */
-    public val LabeledPolynomial<C>.degrees: Map<Symbol, UInt> get() = polynomialRing { degrees }
-    /**
-     * Set of all variables that appear in the polynomial in positive exponents.
-     */
-    public val LabeledPolynomial<C>.variables: Set<Symbol> get() = polynomialRing { variables }
-    /**
-     * Count of all variables that appear in the polynomial in positive exponents.
-     */
-    public val LabeledPolynomial<C>.countOfVariables: Int get() = polynomialRing { countOfVariables }
-
-    /**
-     * Count of all variables that appear in the polynomial in positive exponents.
-     */
-    public val LabeledRationalFunction<C>.variables: Set<Symbol>
-        get() = numerator.variables union denominator.variables
-    /**
-     * Count of all variables that appear in the polynomial in positive exponents.
-     */
-    public val LabeledRationalFunction<C>.countOfVariables: Int get() = variables.size
 
     // TODO: Разобрать
 
