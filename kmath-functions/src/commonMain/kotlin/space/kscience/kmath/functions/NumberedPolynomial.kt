@@ -472,6 +472,18 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                 }
             }
     /**
+     * Counts degree of the polynomial by the specified [variable].
+     */
+    public fun NumberedPolynomial<C>.degreeBy(variable: Int): UInt =
+        coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) 0u else degs.getOrElse(variable) { 0u } } ?: 0u
+    /**
+     * Counts degree of the polynomial by the specified [variables].
+     */
+    public fun NumberedPolynomial<C>.degreeBy(variables: Collection<Int>): UInt =
+        coefficients.entries.maxOfOrNull { (degs, c) ->
+            if (c.isZero()) 0u else degs.withIndex().filter { (index, _) -> index in variables }.sumOf { it.value }
+        } ?: 0u
+    /**
      * Count of variables occurring in the polynomial with positive power. If there is no such variable,
      * the result is `0`.
      */
