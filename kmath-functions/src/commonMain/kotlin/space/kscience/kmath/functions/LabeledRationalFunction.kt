@@ -19,48 +19,46 @@ public class LabeledRationalFunction<C>(
 
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> RationalFunction(numerator: Polynomial<C>, denominator: Polynomial<C>): RationalFunction<C> =
-//    if (denominator.isZero()) throw ArithmeticException("/ by zero")
-//    else RationalFunction<C>(numerator, denominator)
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): RationalFunction<C> =
-//    RationalFunction<C>(
-//        Polynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-//        Polynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } ).also { if (it.isZero()) }
-//    )
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numerator: Polynomial<C>): RationalFunction<C> =
-//    RationalFunction(numerator, onePolynomial)
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numeratorCoefficients: List<C>, reverse: Boolean = false): RationalFunction<C> =
-//    RationalFunction(
-//        Polynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } )
-//    )
-
-// TODO: Rewrite former constructors as fabrics
-//constructor(numeratorCoefficients: Map<Map<Symbol, Int>, C>, denominatorCoefficients: Map<Map<Symbol, Int>, C>) : this(
-//LabeledPolynomial(numeratorCoefficients),
-//LabeledPolynomial(denominatorCoefficients)
-//)
-//
-//constructor(numeratorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>, denominatorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>) : this(
-//LabeledPolynomial(numeratorCoefficients),
-//LabeledPolynomial(denominatorCoefficients)
-//)
-//
-//constructor(numerator: LabeledPolynomial<C>) : this(numerator, numerator.getOne())
-//constructor(numeratorCoefficients: Map<Map<Symbol, Int>, C>) : this(
-//LabeledPolynomial(numeratorCoefficients)
-//)
-//
-//constructor(numeratorCoefficients: Collection<Pair<Map<Symbol, Int>, C>>) : this(
-//LabeledPolynomial(numeratorCoefficients)
-//)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numerator: LabeledPolynomial<C>, denominator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
+    if (denominator.isZero()) throw ArithmeticException("/ by zero")
+    else LabeledRationalFunction<C>(numerator, denominator)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> A.LabeledRationalFunction(numerator: LabeledPolynomial<C>, denominator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
+    if (denominator.coefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else LabeledRationalFunction<C>(numerator, denominator)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
+    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else LabeledRationalFunction<C>(
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomial(denominatorCoefficients)
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
+    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else LabeledRationalFunction<C>(
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomial(denominatorCoefficients)
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(numerator, polynomialOne)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(numerator, LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one)))
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(
+        LabeledPolynomial(numeratorCoefficients),
+        polynomialOne
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one))
+    )
 
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,

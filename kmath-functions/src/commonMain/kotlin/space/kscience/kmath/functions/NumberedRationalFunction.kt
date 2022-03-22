@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import kotlin.math.max
 
 
@@ -18,45 +19,46 @@ public class NumberedRationalFunction<C> internal constructor(
 
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//internal fun <C, A: Ring<C>> RationalFunction(numerator: Polynomial<C>, denominator: Polynomial<C>): RationalFunction<C> =
-//    if (denominator.isZero()) throw ArithmeticException("/ by zero")
-//    else RationalFunction<C>(numerator, denominator)
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): RationalFunction<C> =
-//    RationalFunction<C>(
-//        Polynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-//        Polynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } ).also { if (it.isZero()) }
-//    )
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numerator: Polynomial<C>): RationalFunction<C> =
-//    RationalFunction(numerator, onePolynomial)
-//context(RationalFunctionSpace<C, A>)
-//@Suppress("FunctionName")
-//public fun <C, A: Ring<C>> RationalFunction(numeratorCoefficients: List<C>, reverse: Boolean = false): RationalFunction<C> =
-//    RationalFunction(
-//        Polynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } )
-//    )
-
-// TODO: Rewrite former constructors as fabrics
-//constructor(numeratorCoefficients: Map<List<Int>, C>, denominatorCoefficients: Map<List<Int>, C>) : this(
-//Polynomial(numeratorCoefficients),
-//Polynomial(denominatorCoefficients)
-//)
-//constructor(numeratorCoefficients: Collection<Pair<List<Int>, C>>, denominatorCoefficients: Collection<Pair<List<Int>, C>>) : this(
-//Polynomial(numeratorCoefficients),
-//Polynomial(denominatorCoefficients)
-//)
-//constructor(numerator: Polynomial<C>) : this(numerator, numerator.getOne())
-//constructor(numeratorCoefficients: Map<List<Int>, C>) : this(
-//Polynomial(numeratorCoefficients)
-//)
-//constructor(numeratorCoefficients: Collection<Pair<List<Int>, C>>) : this(
-//Polynomial(numeratorCoefficients)
-//)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>, denominator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
+    if (denominator.isZero()) throw ArithmeticException("/ by zero")
+    else NumberedRationalFunction<C>(numerator, denominator)
+@Suppress("FunctionName")
+internal fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>, denominator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
+    if (denominator.coefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else NumberedRationalFunction<C>(numerator, denominator)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
+    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients),
+        NumberedPolynomial(denominatorCoefficients)
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
+    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
+    else NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients),
+        NumberedPolynomial(denominatorCoefficients)
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
+    NumberedRationalFunction<C>(numerator, polynomialOne)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
+    NumberedRationalFunction<C>(numerator, NumberedPolynomial(mapOf(emptyList<UInt>() to one)))
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
+    NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients),
+        polynomialOne
+    )
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
+    NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients),
+        NumberedPolynomial(mapOf(emptyList<UInt>() to one))
+    )
 
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
@@ -155,24 +157,6 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             }.count { it }
 
     // TODO: Разобрать
-
-    public operator fun NumberedRationalFunction<C>.div(other: NumberedRationalFunction<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator * other.denominator,
-            denominator * other.numerator
-        )
-
-    public operator fun NumberedRationalFunction<C>.div(other: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator,
-            denominator * other
-        )
-
-    public operator fun NumberedRationalFunction<C>.div(other: C): NumberedRationalFunction<C> =
-        NumberedRationalFunction(
-            numerator,
-            denominator * other
-        )
 
 //    operator fun invoke(arg: Map<Int, C>): NumberedRationalFunction<C> =
 //        NumberedRationalFunction(
