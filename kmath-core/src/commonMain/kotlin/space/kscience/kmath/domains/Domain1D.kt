@@ -9,16 +9,21 @@ import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 @UnstableKMathAPI
-public class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>) : DoubleDomain {
+public abstract class Domain1D<T : Comparable<T>>(public val range: ClosedRange<T>) : Domain<T> {
     override val dimension: Int get() = 1
 
-    public operator fun contains(d: Double): Boolean = range.contains(d)
+    public operator fun contains(value: T): Boolean = range.contains(value)
 
-    override operator fun contains(point: Point<Double>): Boolean {
+    override operator fun contains(point: Point<T>): Boolean {
         require(point.size == 0)
         return contains(point[0])
     }
+}
 
+@UnstableKMathAPI
+public class DoubleDomain1D(
+    @Suppress("CanBeParameter") public val doubleRange: ClosedFloatingPointRange<Double>,
+) : Domain1D<Double>(doubleRange), DoubleDomain {
     override fun getLowerBound(num: Int): Double {
         require(num == 0)
         return range.start
@@ -31,3 +36,7 @@ public class UnivariateDomain(public val range: ClosedFloatingPointRange<Double>
 
     override fun volume(): Double = range.endInclusive - range.start
 }
+
+@UnstableKMathAPI
+public val DoubleDomain1D.center: Double
+    get() = (range.endInclusive + range.start) / 2

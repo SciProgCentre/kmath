@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.histogram
 
-import space.kscience.kmath.domains.UnivariateDomain
+import space.kscience.kmath.domains.DoubleDomain1D
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
@@ -15,7 +15,7 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
 
-private fun <B : ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
+private fun <B : ClosedRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
     // check ceiling entry and return it if it is what needed
     val ceil = ceilingEntry(value)?.value
     if (ceil != null && value in ceil) return ceil
@@ -28,19 +28,18 @@ private fun <B : ClosedFloatingPointRange<Double>> TreeMap<Double, B>.getBin(val
 
 @UnstableKMathAPI
 public class TreeHistogram(
-    private val binMap: TreeMap<Double, out UnivariateBin>,
-) : UnivariateHistogram {
-    override fun get(value: Double): UnivariateBin? = binMap.getBin(value)
-    override val dimension: Int get() = 1
-    override val bins: Collection<UnivariateBin> get() = binMap.values
+    private val binMap: TreeMap<Double, out Bin1D<Double, Double>>,
+) : Histogram1D<Double, Double> {
+    override fun get(value: Double): Bin1D<Double, Double>? = binMap.getBin(value)
+    override val bins: Collection<Bin1D<Double, Double>> get() = binMap.values
 }
 
 @OptIn(UnstableKMathAPI::class)
 @PublishedApi
-internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain) : UnivariateHistogramBuilder {
+internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) : Histogram1DBuilder<Double, Double> {
 
-    internal class BinCounter(val domain: UnivariateDomain, val counter: Counter<Double> = Counter.double()) :
-        ClosedFloatingPointRange<Double> by domain.range
+    internal class BinCounter(val domain: DoubleDomain1D, val counter: Counter<Double> = Counter.double()) :
+        ClosedRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()
 
@@ -64,15 +63,15 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain
         }
     }
 
-    override fun putValue(point: Buffer<Double>, value: Number) {
+    override fun putValue(point: Buffer<Double>, value: Double) {
         require(point.size == 1) { "Only points with single value could be used in univariate histogram" }
         putValue(point[0], value.toDouble())
     }
 
     fun build(): TreeHistogram {
-        val map = bins.mapValuesTo(TreeMap<Double, UnivariateBin>()) { (_, binCounter) ->
+        val map = bins.mapValuesTo(TreeMap<Double, Bin1D<Double,Double>>()) { (_, binCounter) ->
             val count = binCounter.counter.value
-            UnivariateBin(binCounter.domain, count, sqrt(count))
+            Bin1D(binCounter.domain, count, sqrt(count))
         }
         return TreeHistogram(map)
     }
@@ -83,23 +82,23 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> UnivariateDomain
  */
 @UnstableKMathAPI
 public class TreeHistogramSpace(
-    @PublishedApi internal val binFactory: (Double) -> UnivariateDomain,
-) : Group<UnivariateHistogram>, ScaleOperations<UnivariateHistogram> {
+    @PublishedApi internal val binFactory: (Double) -> DoubleDomain1D,
+) : Group<Histogram1D<Double,Double>>, ScaleOperations<Histogram1D<Double,Double>> {
 
-    public inline fun fill(block: UnivariateHistogramBuilder.() -> Unit): UnivariateHistogram =
+    public inline fun fill(block: Histogram1DBuilder<Double,Double>.() -> Unit): Histogram1D<Double,Double> =
         TreeHistogramBuilder(binFactory).apply(block).build()
 
     override fun add(
-        left: UnivariateHistogram,
-        right: UnivariateHistogram,
-    ): UnivariateHistogram {
+        left: Histogram1D<Double,Double>,
+        right: Histogram1D<Double,Double>,
+    ): Histogram1D<Double,Double> {
 //        require(a.context == this) { "Histogram $a does not belong to this context" }
 //        require(b.context == this) { "Histogram $b does not belong to this context" }
-        val bins = TreeMap<Double, UnivariateBin>().apply {
+        val bins = TreeMap<Double, Bin1D<Double,Double>>().apply {
             (left.bins.map { it.domain } union right.bins.map { it.domain }).forEach { def ->
                 put(
                     def.center,
-                    UnivariateBin(
+                    Bin1D(
                         def,
                         value = (left[def.center]?.value ?: 0.0) + (right[def.center]?.value ?: 0.0),
                         standardDeviation = (left[def.center]?.standardDeviation
@@ -111,12 +110,12 @@ public class TreeHistogramSpace(
         return TreeHistogram(bins)
     }
 
-    override fun scale(a: UnivariateHistogram, value: Double): UnivariateHistogram {
-        val bins = TreeMap<Double, UnivariateBin>().apply {
+    override fun scale(a: Histogram1D<Double,Double>, value: Double): Histogram1D<Double,Double> {
+        val bins = TreeMap<Double, Bin1D<Double,Double>>().apply {
             a.bins.forEach { bin ->
                 put(
                     bin.domain.center,
-                    UnivariateBin(
+                    Bin1D(
                         bin.domain,
                         value = bin.value * value,
                         standardDeviation = abs(bin.standardDeviation * value)
@@ -128,38 +127,38 @@ public class TreeHistogramSpace(
         return TreeHistogram(bins)
     }
 
-    override fun UnivariateHistogram.unaryMinus(): UnivariateHistogram = this * (-1)
+    override fun Histogram1D<Double,Double>.unaryMinus(): Histogram1D<Double,Double> = this * (-1)
 
-    override val zero: UnivariateHistogram by lazy { fill { } }
+    override val zero: Histogram1D<Double,Double> by lazy { fill { } }
 
     public companion object {
         /**
-         * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
+         * Build and fill a [DoubleHistogram1D]. Returns a read-only histogram.
          */
         public inline fun uniform(
             binSize: Double,
             start: Double = 0.0,
-            builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = uniform(binSize, start).fill(builder)
+            builder: Histogram1DBuilder<Double,Double>.() -> Unit,
+        ): Histogram1D<Double,Double> = uniform(binSize, start).fill(builder)
 
         /**
          * Build and fill a histogram with custom borders. Returns a read-only histogram.
          */
         public inline fun custom(
             borders: DoubleArray,
-            builder: UnivariateHistogramBuilder.() -> Unit,
-        ): UnivariateHistogram = custom(borders).fill(builder)
+            builder: Histogram1DBuilder<Double,Double>.() -> Unit,
+        ): Histogram1D<Double,Double> = custom(borders).fill(builder)
 
 
         /**
-         * Build and fill a [UnivariateHistogram]. Returns a read-only histogram.
+         * Build and fill a [DoubleHistogram1D]. Returns a read-only histogram.
          */
         public fun uniform(
             binSize: Double,
             start: Double = 0.0,
         ): TreeHistogramSpace = TreeHistogramSpace { value ->
             val center = start + binSize * floor((value - start) / binSize + 0.5)
-            UnivariateDomain((center - binSize / 2)..(center + binSize / 2))
+            DoubleDomain1D((center - binSize / 2)..(center + binSize / 2))
         }
 
         /**
@@ -170,11 +169,11 @@ public class TreeHistogramSpace(
 
             return TreeHistogramSpace { value ->
                 when {
-                    value < sorted.first() -> UnivariateDomain(
+                    value < sorted.first() -> DoubleDomain1D(
                         Double.NEGATIVE_INFINITY..sorted.first()
                     )
 
-                    value > sorted.last() -> UnivariateDomain(
+                    value > sorted.last() -> DoubleDomain1D(
                         sorted.last()..Double.POSITIVE_INFINITY
                     )
 
@@ -182,7 +181,7 @@ public class TreeHistogramSpace(
                         val index = sorted.indices.first { value > sorted[it] }
                         val left = sorted[index]
                         val right = sorted[index + 1]
-                        UnivariateDomain(left..right)
+                        DoubleDomain1D(left..right)
                     }
                 }
             }

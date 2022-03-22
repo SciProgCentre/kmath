@@ -13,14 +13,14 @@ import space.kscience.kmath.structures.asBuffer
 /**
  * The binned data element. Could be a histogram bin with a number of counts or an artificial construct.
  */
-public interface Bin<in T : Any> : Domain<T> {
+public interface Bin<in T : Any, out V> : Domain<T> {
     /**
      * The value of this bin.
      */
-    public val value: Number
+    public val value: V
 }
 
-public interface Histogram<in T : Any, out B : Bin<T>> {
+public interface Histogram<in T : Any, out V, out B : Bin<T, V>> {
     /**
      * Find existing bin, corresponding to given coordinates
      */
@@ -32,29 +32,38 @@ public interface Histogram<in T : Any, out B : Bin<T>> {
     public val dimension: Int
 
     public val bins: Iterable<B>
+
+    public companion object {
+        //A discoverability root
+    }
 }
 
-public fun interface HistogramBuilder<in T : Any> {
+public interface HistogramBuilder<in T : Any, V : Any> {
 
     /**
-     * Increment appropriate bin
+     * The default value increment for a bin
      */
-    public fun putValue(point: Point<out T>, value: Number)
+    public val defaultValue: V
+
+    /**
+     * Increment appropriate bin with given value
+     */
+    public fun putValue(point: Point<out T>, value: V = defaultValue)
 
 }
 
-public fun <T : Any, B : Bin<T>> HistogramBuilder<T>.put(point: Point<out T>): Unit = putValue(point, 1.0)
+public fun <T : Any> HistogramBuilder<T, *>.put(point: Point<out T>): Unit = putValue(point)
 
-public fun <T : Any> HistogramBuilder<T>.put(vararg point: T): Unit = put(point.asBuffer())
+public fun <T : Any> HistogramBuilder<T, *>.put(vararg point: T): Unit = put(point.asBuffer())
 
-public fun HistogramBuilder<Double>.put(vararg point: Number): Unit =
+public fun HistogramBuilder<Double, *>.put(vararg point: Number): Unit =
     put(DoubleBuffer(point.map { it.toDouble() }.toDoubleArray()))
 
-public fun HistogramBuilder<Double>.put(vararg point: Double): Unit = put(DoubleBuffer(point))
-public fun <T : Any> HistogramBuilder<T>.fill(sequence: Iterable<Point<T>>): Unit = sequence.forEach { put(it) }
+public fun HistogramBuilder<Double, *>.put(vararg point: Double): Unit = put(DoubleBuffer(point))
+public fun <T : Any> HistogramBuilder<T, *>.fill(sequence: Iterable<Point<T>>): Unit = sequence.forEach { put(it) }
 
 /**
  * Pass a sequence builder into histogram
  */
-public fun <T : Any> HistogramBuilder<T>.fill(block: suspend SequenceScope<Point<T>>.() -> Unit): Unit =
+public fun <T : Any> HistogramBuilder<T, *>.fill(block: suspend SequenceScope<Point<T>>.() -> Unit): Unit =
     fill(sequence(block).asIterable())

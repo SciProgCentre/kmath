@@ -6,6 +6,7 @@
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.HyperSquareDomain
+import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
@@ -31,7 +32,7 @@ public class DoubleHistogramSpace(
     public val dimension: Int get() = lower.size
 
     override val shape: IntArray = IntArray(binNums.size) { binNums[it] + 2 }
-    override val histogramValueSpace: DoubleFieldND = DoubleField.ndAlgebra(*shape)
+    override val histogramValueAlgebra: DoubleFieldND = DoubleField.ndAlgebra(*shape)
 
     private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
@@ -70,21 +71,20 @@ public class DoubleHistogramSpace(
     }
 
     @OptIn(UnstableKMathAPI::class)
-    public val Bin<Double>.domain: HyperSquareDomain
-        get() = (this as? DomainBin<Double>)?.domain as? HyperSquareDomain
-            ?: error("Im a teapot. This is not my bin")
-
-    @OptIn(UnstableKMathAPI::class)
-    override fun produceBin(index: IntArray, value: Double): DomainBin<Double> {
+    override fun produceBin(index: IntArray, value: Double): DomainBin<Double, Double> {
         val domain = getDomain(index)
         return DomainBin(domain, value)
     }
 
-    override fun produce(builder: HistogramBuilder<Double>.() -> Unit): IndexedHistogram<Double, Double> {
+    override fun produce(builder: HistogramBuilder<Double, Double>.() -> Unit): IndexedHistogram<Double, Double> {
         val ndCounter = StructureND.auto(shape) { Counter.double() }
-        val hBuilder = HistogramBuilder<Double> { point, value ->
-            val index = getIndex(point)
-            ndCounter[index].add(value.toDouble())
+        val hBuilder = object : HistogramBuilder<Double, Double> {
+            override val defaultValue: Double get() = 1.0
+
+            override fun putValue(point: Point<out Double>, value: Double) {
+                val index = getIndex(point)
+                ndCounter[index].add(value)
+            }
         }
         hBuilder.apply(builder)
         val values: BufferND<Double> = ndCounter.mapToBuffer { it.value }
