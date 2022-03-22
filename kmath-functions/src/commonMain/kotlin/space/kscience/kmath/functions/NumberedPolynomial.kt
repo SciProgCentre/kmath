@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import kotlin.contracts.InvocationKind
@@ -132,7 +133,59 @@ public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vara
 //context(NumberedPolynomialSpace<C, A>)
 //public fun <C, A: Ring<C>> Symbol.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
 
-public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
+//context(A)
+//public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
+
+@DslMarker
+internal annotation class NumberedPolynomialConstructorDSL
+
+@NumberedPolynomialConstructorDSL
+public class NumberedPolynomialTermSignatureBuilder {
+    private val signature: MutableList<UInt> = ArrayList()
+    public fun build(): List<UInt> = signature
+    public infix fun Int.inPowerOf(deg: UInt) {
+        if (this > signature.lastIndex) {
+            signature.addAll(List(this - signature.lastIndex - 1) { 0u })
+            signature.add(deg)
+        } else {
+            signature[this] = deg
+        }
+    }
+    public infix fun Int.to(deg: UInt): Unit = this inPowerOf deg
+}
+
+@NumberedPolynomialConstructorDSL
+public class NumberedPolynomialBuilderOverRing<C> internal constructor(internal val context: Ring<C>, capacity: Int = 0) {
+    private val coefficients: MutableMap<List<UInt>, C> = LinkedHashMap(capacity)
+    public fun build(): NumberedPolynomial<C> = NumberedPolynomial<C>(coefficients)
+    public operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit) {
+        val signature = NumberedPolynomialTermSignatureBuilder().apply(block).build()
+        coefficients[signature] = context { coefficients.getOrElse(signature) { zero } + this@invoke }
+    }
+}
+
+@NumberedPolynomialConstructorDSL
+public class NumberedPolynomialBuilderOverPolynomialSpace<C> internal constructor(internal val context: NumberedPolynomialSpace<C, *>, capacity: Int = 0) {
+    private val coefficients: MutableMap<List<UInt>, C> = LinkedHashMap(capacity)
+    public fun build(): NumberedPolynomial<C> = NumberedPolynomial<C>(coefficients)
+    public operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit) {
+        val signature = NumberedPolynomialTermSignatureBuilder().apply(block).build()
+        coefficients[signature] = context { coefficients.getOrElse(signature) { constantZero } + this@invoke }
+    }
+}
+
+@NumberedPolynomialConstructorDSL
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedPolynomial(block: NumberedPolynomialBuilderOverRing<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverRing(this).apply(block).build()
+@NumberedPolynomialConstructorDSL
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> A.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilderOverRing<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverRing(this, capacity).apply(block).build()
+@NumberedPolynomialConstructorDSL
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(block: NumberedPolynomialBuilderOverPolynomialSpace<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverPolynomialSpace(this).apply(block).build()
+@NumberedPolynomialConstructorDSL
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilderOverPolynomialSpace<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverPolynomialSpace(this, capacity).apply(block).build()
 
 /**
  * Space of polynomials.
@@ -604,4 +657,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
             for ((degs, c) in this) if (c.isZero()) this.remove(degs)
         }
     }
+
+    // TODO: Move to other constructors with context receiver
+    public fun C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
 }

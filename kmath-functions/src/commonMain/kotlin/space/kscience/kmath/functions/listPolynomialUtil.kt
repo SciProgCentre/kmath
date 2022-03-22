@@ -124,7 +124,7 @@ public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: ListPolynomial<C
     val thisDegree = coefficients.indexOfLast { it != zero }
     if (thisDegree == -1) return ListPolynomial(emptyList())
     val argDegree = arg.coefficients.indexOfLast { it != zero }
-    if (argDegree == -1) return coefficients[0].asPolynomial()
+    if (argDegree == -1) return coefficients[0].asListPolynomial()
     val constantZero = zero
     val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
     resultCoefs[0] = coefficients[thisDegree]

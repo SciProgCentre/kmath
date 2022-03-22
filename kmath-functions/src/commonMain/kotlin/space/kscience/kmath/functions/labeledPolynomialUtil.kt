@@ -17,53 +17,6 @@ import kotlin.contracts.contract
 
 // TODO: Docs
 
-//// TODO: Reuse underlying ring extensions
-//
-//context(LabeledPolynomialSpace<C, A>)
-//@Suppress("NOTHING_TO_INLINE")
-//fun <C, A: Ring<C>> numberConstant(value: Int): C = ring { number<C>(value) }
-//
-//context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> power(arg: C, pow: UInt): C = ring { power(arg, pow) }
-//
-//context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
-//
-
-//
-//context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> power(arg: Symbol, pow: UInt): LabeledPolynomial<C> =
-//    if (pow == 0U) one
-//    else LabeledPolynomial<C>(mapOf(
-//        mapOf(arg to pow) to constantOne
-//    ))
-//
-
-//
-//context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> number(value: Int): LabeledPolynomial<C> = ring { LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to number<C>(value))) }
-//
-//context(LabeledPolynomialSpace<C, A>)
-//fun <C, A: Ring<C>> multiplyWithPower(base: LabeledPolynomial<C>, arg: LabeledPolynomial<C>, pow: UInt): LabeledPolynomial<C> =
-//    when {
-//        arg.isZero() && pow > 0U -> base
-//        arg.isOne() -> base
-//        arg.isMinusOne() -> if (pow % 2U == 0U) base else -base
-//        else -> multiplyWithPowerInternalLogic(base, arg, pow)
-//    }
-//
-//// Trivial but very slow
-//context(LabeledPolynomialSpace<C, A>)
-//internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: LabeledPolynomial<C>, arg: LabeledPolynomial<C>, exponent: UInt): LabeledPolynomial<C> =
-//    when {
-//        exponent == 0U -> base
-//        exponent == 1U -> base * arg
-//        exponent % 2U == 0U -> multiplyWithPowerInternalLogic(base, arg * arg, exponent / 2U)
-//        exponent % 2U == 1U -> multiplyWithPowerInternalLogic(base * arg, arg * arg, exponent / 2U)
-//        else -> error("Error in raising ring instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
-//    }
-//
-
 /**
  * Creates a [LabeledPolynomialSpace] over a received ring.
  */
