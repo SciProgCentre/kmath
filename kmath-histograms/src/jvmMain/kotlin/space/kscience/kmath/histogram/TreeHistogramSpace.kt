@@ -6,6 +6,7 @@
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.DoubleDomain1D
+import space.kscience.kmath.domains.center
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
@@ -26,17 +27,23 @@ private fun <B : ClosedRange<Double>> TreeMap<Double, B>.getBin(value: Double): 
     return null
 }
 
+public data class ValueAndError(val value: Double, val error: Double)
+
+public typealias WeightedBin1D = Bin1D<Double, ValueAndError>
+
 @UnstableKMathAPI
 public class TreeHistogram(
-    private val binMap: TreeMap<Double, out Bin1D<Double, Double>>,
-) : Histogram1D<Double, Double> {
-    override fun get(value: Double): Bin1D<Double, Double>? = binMap.getBin(value)
-    override val bins: Collection<Bin1D<Double, Double>> get() = binMap.values
+    private val binMap: TreeMap<Double, WeightedBin1D>,
+) : Histogram1D<Double, ValueAndError> {
+    override fun get(value: Double): WeightedBin1D? = binMap.getBin(value)
+    override val bins: Collection<WeightedBin1D> get() = binMap.values
 }
 
 @OptIn(UnstableKMathAPI::class)
 @PublishedApi
 internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) : Histogram1DBuilder<Double, Double> {
+
+    override val defaultValue: Double get() = 1.0
 
     internal class BinCounter(val domain: DoubleDomain1D, val counter: Counter<Double> = Counter.double()) :
         ClosedRange<Double> by domain.range
@@ -46,7 +53,7 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) 
     fun get(value: Double): BinCounter? = bins.getBin(value)
 
     fun createBin(value: Double): BinCounter {
-        val binDefinition = binFactory(value)
+        val binDefinition: DoubleDomain1D = binFactory(value)
         val newBin = BinCounter(binDefinition)
         synchronized(this) {
             bins[binDefinition.center] = newBin
@@ -69,9 +76,9 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) 
     }
 
     fun build(): TreeHistogram {
-        val map = bins.mapValuesTo(TreeMap<Double, Bin1D<Double,Double>>()) { (_, binCounter) ->
-            val count = binCounter.counter.value
-            Bin1D(binCounter.domain, count, sqrt(count))
+        val map = bins.mapValuesTo(TreeMap<Double, WeightedBin1D>()) { (_, binCounter) ->
+            val count: Double = binCounter.counter.value
+            WeightedBin1D(binCounter.domain, ValueAndError(count, sqrt(count)))
         }
         return TreeHistogram(map)
     }
@@ -83,26 +90,27 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) 
 @UnstableKMathAPI
 public class TreeHistogramSpace(
     @PublishedApi internal val binFactory: (Double) -> DoubleDomain1D,
-) : Group<Histogram1D<Double,Double>>, ScaleOperations<Histogram1D<Double,Double>> {
+) : Group<TreeHistogram>, ScaleOperations<TreeHistogram> {
 
-    public inline fun fill(block: Histogram1DBuilder<Double,Double>.() -> Unit): Histogram1D<Double,Double> =
+    public inline fun fill(block: Histogram1DBuilder<Double, Double>.() -> Unit): TreeHistogram =
         TreeHistogramBuilder(binFactory).apply(block).build()
 
     override fun add(
-        left: Histogram1D<Double,Double>,
-        right: Histogram1D<Double,Double>,
-    ): Histogram1D<Double,Double> {
+        left: TreeHistogram,
+        right: TreeHistogram,
+    ): TreeHistogram {
 //        require(a.context == this) { "Histogram $a does not belong to this context" }
 //        require(b.context == this) { "Histogram $b does not belong to this context" }
-        val bins = TreeMap<Double, Bin1D<Double,Double>>().apply {
+        val bins = TreeMap<Double, WeightedBin1D>().apply {
             (left.bins.map { it.domain } union right.bins.map { it.domain }).forEach { def ->
                 put(
                     def.center,
-                    Bin1D(
+                    WeightedBin1D(
                         def,
-                        value = (left[def.center]?.value ?: 0.0) + (right[def.center]?.value ?: 0.0),
-                        standardDeviation = (left[def.center]?.standardDeviation
-                            ?: 0.0) + (right[def.center]?.standardDeviation ?: 0.0)
+                        ValueAndError(
+                            (left[def.center]?.binValue?.value ?: 0.0) + (right[def.center]?.binValue?.value ?: 0.0),
+                            (left[def.center]?.binValue?.error ?: 0.0) + (right[def.center]?.binValue?.error ?: 0.0)
+                        )
                     )
                 )
             }
@@ -110,15 +118,17 @@ public class TreeHistogramSpace(
         return TreeHistogram(bins)
     }
 
-    override fun scale(a: Histogram1D<Double,Double>, value: Double): Histogram1D<Double,Double> {
-        val bins = TreeMap<Double, Bin1D<Double,Double>>().apply {
+    override fun scale(a: TreeHistogram, value: Double): TreeHistogram {
+        val bins = TreeMap<Double, WeightedBin1D>().apply {
             a.bins.forEach { bin ->
                 put(
                     bin.domain.center,
-                    Bin1D(
+                    WeightedBin1D(
                         bin.domain,
-                        value = bin.value * value,
-                        standardDeviation = abs(bin.standardDeviation * value)
+                        ValueAndError(
+                            bin.binValue.value * value,
+                            abs(bin.binValue.error * value)
+                        )
                     )
                 )
             }
@@ -127,27 +137,27 @@ public class TreeHistogramSpace(
         return TreeHistogram(bins)
     }
 
-    override fun Histogram1D<Double,Double>.unaryMinus(): Histogram1D<Double,Double> = this * (-1)
+    override fun TreeHistogram.unaryMinus(): TreeHistogram = this * (-1)
 
-    override val zero: Histogram1D<Double,Double> by lazy { fill { } }
+    override val zero: TreeHistogram by lazy { fill { } }
 
     public companion object {
         /**
-         * Build and fill a [DoubleHistogram1D]. Returns a read-only histogram.
+         * Build and fill a [TreeHistogram]. Returns a read-only histogram.
          */
         public inline fun uniform(
             binSize: Double,
             start: Double = 0.0,
-            builder: Histogram1DBuilder<Double,Double>.() -> Unit,
-        ): Histogram1D<Double,Double> = uniform(binSize, start).fill(builder)
+            builder: Histogram1DBuilder<Double, Double>.() -> Unit,
+        ): TreeHistogram = uniform(binSize, start).fill(builder)
 
         /**
          * Build and fill a histogram with custom borders. Returns a read-only histogram.
          */
         public inline fun custom(
             borders: DoubleArray,
-            builder: Histogram1DBuilder<Double,Double>.() -> Unit,
-        ): Histogram1D<Double,Double> = custom(borders).fill(builder)
+            builder: Histogram1DBuilder<Double, Double>.() -> Unit,
+        ): TreeHistogram = custom(borders).fill(builder)
 
 
         /**

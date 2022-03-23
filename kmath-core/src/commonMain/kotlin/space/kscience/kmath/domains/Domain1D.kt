@@ -38,5 +38,5 @@ public class DoubleDomain1D(
 }
 
 @UnstableKMathAPI
-public val DoubleDomain1D.center: Double
+public val Domain1D<Double>.center: Double
     get() = (range.endInclusive + range.start) / 2

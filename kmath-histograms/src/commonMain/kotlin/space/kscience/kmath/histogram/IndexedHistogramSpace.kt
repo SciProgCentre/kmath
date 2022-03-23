@@ -20,7 +20,7 @@ import space.kscience.kmath.operations.invoke
  */
 public data class DomainBin<in T : Comparable<T>, out V>(
     public val domain: Domain<T>,
-    override val value: V,
+    override val binValue: V,
 ) : Bin<T, V>, Domain<T> by domain
 
 /**

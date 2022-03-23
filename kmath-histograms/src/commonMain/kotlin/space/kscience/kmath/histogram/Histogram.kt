@@ -17,7 +17,7 @@ public interface Bin<in T : Any, out V> : Domain<T> {
     /**
      * The value of this bin.
      */
-    public val value: V
+    public val binValue: V
 }
 
 public interface Histogram<in T : Any, out V, out B : Bin<T, V>> {

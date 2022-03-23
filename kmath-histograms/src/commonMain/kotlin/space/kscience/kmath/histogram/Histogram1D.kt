@@ -14,13 +14,13 @@ import space.kscience.kmath.structures.Buffer
 /**
  * A univariate bin based on a range
  *
- * @property value The value of histogram including weighting
+ * @property binValue The value of histogram including weighting
  * @property standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
  */
 @UnstableKMathAPI
 public class Bin1D<T : Comparable<T>, out V>(
     public val domain: Domain1D<T>,
-    override val value: V,
+    override val binValue: V,
 ) : Bin<T, V>, ClosedRange<T> by domain.range {
 
     override val dimension: Int get() = 1

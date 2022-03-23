@@ -21,7 +21,7 @@ internal class MultivariateHistogramTest {
         val histogram = hSpace.produce {
             put(0.55, 0.55)
         }
-        val bin = histogram.bins.find { it.value.toInt() > 0 } ?: fail()
+        val bin = histogram.bins.find { it.binValue.toInt() > 0 } ?: fail()
         assertTrue { bin.contains(DoubleVector(0.55, 0.55)) }
         assertTrue { bin.contains(DoubleVector(0.6, 0.5)) }
         assertFalse { bin.contains(DoubleVector(-0.55, 0.55)) }
@@ -44,7 +44,7 @@ internal class MultivariateHistogramTest {
                 put(nextDouble(), nextDouble(), nextDouble())
             }
         }
-        assertEquals(n, histogram.bins.sumOf { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumOf { it.binValue.toInt() })
     }
 
     @Test
@@ -77,7 +77,7 @@ internal class MultivariateHistogramTest {
             assertTrue {
                 res.bins.count() >= histogram1.bins.count()
             }
-            assertEquals(0.0, res.bins.sumOf { it.value.toDouble() })
+            assertEquals(0.0, res.bins.sumOf { it.binValue.toDouble() })
         }
     }
 }
