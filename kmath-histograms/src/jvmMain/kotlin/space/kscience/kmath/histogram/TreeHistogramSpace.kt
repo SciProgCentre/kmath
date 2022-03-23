@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.DoubleDomain1D
@@ -31,7 +33,6 @@ public data class ValueAndError(val value: Double, val error: Double)
 
 public typealias WeightedBin1D = Bin1D<Double, ValueAndError>
 
-@UnstableKMathAPI
 public class TreeHistogram(
     private val binMap: TreeMap<Double, WeightedBin1D>,
 ) : Histogram1D<Double, ValueAndError> {
@@ -39,7 +40,6 @@ public class TreeHistogram(
     override val bins: Collection<WeightedBin1D> get() = binMap.values
 }
 
-@OptIn(UnstableKMathAPI::class)
 @PublishedApi
 internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) : Histogram1DBuilder<Double, Double> {
 
@@ -87,7 +87,6 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) 
 /**
  * A space for univariate histograms with variable bin borders based on a tree map
  */
-@UnstableKMathAPI
 public class TreeHistogramSpace(
     @PublishedApi internal val binFactory: (Double) -> DoubleDomain1D,
 ) : Group<TreeHistogram>, ScaleOperations<TreeHistogram> {

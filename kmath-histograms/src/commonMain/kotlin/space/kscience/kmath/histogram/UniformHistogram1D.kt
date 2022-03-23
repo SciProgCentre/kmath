@@ -5,5 +5,8 @@
 
 package space.kscience.kmath.histogram
 
-//class UniformDoubleHistogram1D: DoubleHistogram1D {
+//class UniformHistogram1D(
+//    public val borders: Buffer<Double>,
+//    public val values: Buffer<Long>,
+//) : Histogram1D<Double, Long> {
 //}
