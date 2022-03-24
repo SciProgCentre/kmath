@@ -157,7 +157,8 @@ public class NumberedPolynomialTermSignatureBuilder {
             signature[this] = deg
         }
     }
-    public infix fun Int.to(deg: UInt): Unit = this inPowerOf deg
+    public infix fun Int.pow(deg: UInt): Unit = this inPowerOf deg
+    public infix fun Int.of(deg: UInt): Unit = this inPowerOf deg
 }
 
 @NumberedPolynomialConstructorDSL
@@ -168,6 +169,7 @@ public class NumberedPolynomialBuilderOverRing<C> internal constructor(internal 
         val signature = NumberedPolynomialTermSignatureBuilder().apply(block).build()
         coefficients[signature] = context { coefficients.getOrElse(signature) { zero } + this@invoke }
     }
+    public infix fun C.with(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
 }
 
 @NumberedPolynomialConstructorDSL
