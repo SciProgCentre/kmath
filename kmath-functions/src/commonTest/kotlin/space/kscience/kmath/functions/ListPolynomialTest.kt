@@ -9,7 +9,7 @@ import space.kscience.kmath.test.misc.*
 import kotlin.test.*
 
 
-class ListPolynomialTest {
+class ListPolynomialTest { // TODO: Adapt tests to changes
     @Test
     fun test_Polynomial_Int_plus() {
         RationalField.listPolynomial {
@@ -489,94 +489,6 @@ class ListPolynomialTest {
         }
     }
     @Test
-    fun test_Polynomial_isZero() {
-        RationalField.listPolynomial {
-            assertTrue("test 1") { ListPolynomial<Rational>().isZero() }
-            assertTrue("test 2") { ListPolynomial<Rational>(Rational(0)).isZero() }
-            assertTrue("test 3") { ListPolynomial<Rational>(Rational(0), Rational(0)).isZero() }
-            assertTrue("test 4") { ListPolynomial<Rational>(Rational(0), Rational(0), Rational(0))
-                .isZero() }
-            assertFalse("test 5") { ListPolynomial<Rational>(Rational(3, 5)).isZero() }
-            assertFalse("test 6") { ListPolynomial<Rational>(Rational(3, 5), Rational(0))
-                .isZero() }
-            assertFalse("test 7") { ListPolynomial<Rational>(Rational(0), Rational(3, 5), Rational(0))
-                .isZero() }
-        }
-    }
-    @Test
-    fun test_Polynomial_isOne() {
-        RationalField.listPolynomial {
-            assertFalse("test 1") { ListPolynomial<Rational>().isOne() }
-            assertFalse("test 2") { ListPolynomial(Rational(0)).isOne() }
-            assertFalse("test 3") { ListPolynomial(Rational(0), Rational(0)).isOne() }
-            assertFalse("test 4") { ListPolynomial(Rational(0), Rational(0), Rational(0))
-                .isOne() }
-            assertFalse("test 5") { ListPolynomial(Rational(3, 5)).isOne() }
-            assertTrue("test 6") { ListPolynomial(Rational(5, 5)).isOne() }
-            assertFalse("test 7") { ListPolynomial(Rational(3, 5), Rational(0)).isOne() }
-            assertTrue("test 8") { ListPolynomial(Rational(3, 3), Rational(0)).isOne() }
-            assertFalse("test 9") { ListPolynomial(Rational(0), Rational(3, 5), Rational(0))
-                .isOne() }
-            assertFalse("test 10") { ListPolynomial(Rational(0), Rational(5, 5), Rational(0))
-                .isOne() }
-            assertFalse("test 11") { ListPolynomial(Rational(1), Rational(3, 5), Rational(0))
-                .isOne() }
-            assertFalse("test 12") { ListPolynomial(Rational(1), Rational(5, 5), Rational(0))
-                .isOne() }
-        }
-    }
-    @Test
-    fun test_Polynomial_isMinusOne() {
-        RationalField.listPolynomial {
-            assertFalse("test 1") { ListPolynomial<Rational>().isMinusOne() }
-            assertFalse("test 2") { ListPolynomial(Rational(0)).isMinusOne() }
-            assertFalse("test 3") { ListPolynomial(Rational(0), Rational(0)).isMinusOne() }
-            assertFalse("test 4") { ListPolynomial(Rational(0), Rational(0), Rational(0))
-                .isMinusOne() }
-            assertFalse("test 5") { ListPolynomial(Rational(3, 5)).isMinusOne() }
-            assertTrue("test 6") { ListPolynomial(Rational(-5, 5)).isMinusOne() }
-            assertFalse("test 7") { ListPolynomial(Rational(3, 5), Rational(0)).isMinusOne() }
-            assertTrue("test 8") { ListPolynomial(Rational(-3, 3), Rational(0)).isMinusOne() }
-            assertFalse("test 9") { ListPolynomial(Rational(0), Rational(3, 5), Rational(0))
-                .isMinusOne() }
-            assertFalse("test 10") { ListPolynomial(Rational(0), Rational(5, -5), Rational(0))
-                .isMinusOne() }
-            assertFalse("test 11") { ListPolynomial(Rational(-1), Rational(3, 5), Rational(0))
-                .isMinusOne() }
-            assertFalse("test 12") { ListPolynomial(Rational(-1), Rational(5, -5), Rational(0))
-                .isMinusOne() }
-        }
-    }
-    @Test
-    fun test_Polynomial_Polynomial_equalsTo() {
-        RationalField.listPolynomial {
-            assertTrue("test 1") {
-                ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) equalsTo
-                        ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7))
-            }
-            assertTrue("test 2") {
-                ListPolynomial(Rational(5, 9), Rational(0), Rational(-8, 7)) equalsTo
-                        ListPolynomial(Rational(5, 9), Rational(0), Rational(-8, 7))
-            }
-            assertTrue("test 3") {
-                ListPolynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)) equalsTo
-                        ListPolynomial(Rational(0), Rational(0), Rational(-8, 7))
-            }
-            assertFalse("test 4") {
-                ListPolynomial(Rational(5, 9), Rational(5, 7), Rational(-8, 7)) equalsTo
-                        ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7))
-            }
-            assertFalse("test 5") {
-                ListPolynomial(Rational(8, 3), Rational(0), Rational(-8, 7)) equalsTo
-                        ListPolynomial(Rational(5, 9), Rational(0), Rational(-8, 7))
-            }
-            assertFalse("test 6") {
-                ListPolynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)) equalsTo
-                        ListPolynomial(Rational(0), Rational(0), Rational(8, 7))
-            }
-        }
-    }
-    @Test
     fun test_Polynomial_degree() {
         RationalField.listPolynomial {
             assertEquals(
@@ -633,72 +545,6 @@ class ListPolynomialTest {
                 2,
                 ListPolynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)).degree,
                 "test 11"
-            )
-        }
-    }
-    @Test
-    fun test_Polynomial_asConstantOrNull() {
-        RationalField.listPolynomial {
-            assertEquals(
-                Rational(0),
-                ListPolynomial<Rational>().asConstantOrNull(),
-                "test 1"
-            )
-            assertEquals(
-                Rational(0),
-                ListPolynomial(Rational(0)).asConstantOrNull(),
-                "test 2"
-            )
-            assertEquals(
-                Rational(0),
-                ListPolynomial(Rational(0), Rational(0)).asConstantOrNull(),
-                "test 3"
-            )
-            assertEquals(
-                Rational(0),
-                ListPolynomial(Rational(0), Rational(0), Rational(0)).asConstantOrNull(),
-                "test 4"
-            )
-            assertEquals(
-                Rational(-7, 9),
-                ListPolynomial(Rational(-7, 9)).asConstantOrNull(),
-                "test 5"
-            )
-            assertEquals(
-                Rational(-7, 9),
-                ListPolynomial(Rational(-7, 9), Rational(0)).asConstantOrNull(),
-                "test 6"
-            )
-            assertEquals(
-                Rational(-7, 9),
-                ListPolynomial(Rational(-7, 9), Rational(0), Rational(0)).asConstantOrNull(),
-                "test 7"
-            )
-            assertEquals(
-                null,
-                ListPolynomial(Rational(0), Rational(-7, 9)).asConstantOrNull(),
-                "test 8"
-            )
-            assertEquals(
-                null,
-                ListPolynomial(Rational(0), Rational(-7, 9), Rational(0)).asConstantOrNull(),
-                "test 9"
-            )
-            assertEquals(
-                null,
-                ListPolynomial(Rational(0), Rational(0), Rational(-7, 9)).asConstantOrNull(),
-                "test 10"
-            )
-            assertEquals(
-                null,
-                ListPolynomial(Rational(4, 15), Rational(0), Rational(-7, 9)).asConstantOrNull(),
-                "test 11"
-            )
-            assertEquals(
-                null,
-                ListPolynomial(Rational(4, 15), Rational(0), Rational(-7, 9), Rational(0))
-                    .asConstantOrNull(),
-                "test 12"
             )
         }
     }

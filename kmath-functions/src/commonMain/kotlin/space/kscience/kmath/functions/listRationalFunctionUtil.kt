@@ -55,11 +55,11 @@ public fun <C> ListRationalFunction<C>.substitute(ring: Field<C>, arg: C): C = r
 internal fun <C> ListPolynomial<C>.substituteRationalFunctionTakeNumerator(ring: Ring<C>, arg: ListRationalFunction<C>): ListPolynomial<C> = ring {
     if (coefficients.isEmpty()) return ListPolynomial(emptyList())
 
-    val thisDegree = coefficients.indexOfLast { it != zero }
+    val thisDegree = coefficients.lastIndex
     if (thisDegree == -1) return ListPolynomial(emptyList())
     val thisDegreeLog2 = 31 - thisDegree.countLeadingZeroBits()
-    val numeratorDegree = arg.numerator.coefficients.indexOfLast { it != zero }
-    val denominatorDegree = arg.denominator.coefficients.indexOfLast { it != zero }
+    val numeratorDegree = arg.numerator.coefficients.lastIndex
+    val denominatorDegree = arg.denominator.coefficients.lastIndex
     val argDegree = max(numeratorDegree, denominatorDegree)
     val constantZero = zero
     val powersOf2 = buildList<Int>(thisDegreeLog2 + 1) {

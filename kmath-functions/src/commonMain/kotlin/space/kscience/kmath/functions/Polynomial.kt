@@ -156,31 +156,6 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     public fun power(arg: C, exponent: UInt) : C
 
     /**
-     * Check if the instant is zero constant.
-     */
-    public fun C.isZero(): Boolean = this == constantZero
-    /**
-     * Check if the instant is NOT zero constant.
-     */
-    public fun C.isNotZero(): Boolean = !isZero()
-    /**
-     * Check if the instant is unit constant.
-     */
-    public fun C.isOne(): Boolean = this == constantOne
-    /**
-     * Check if the instant is NOT unit constant.
-     */
-    public fun C.isNotOne(): Boolean = !isOne()
-    /**
-     * Check if the instant is minus unit constant.
-     */
-    public fun C.isMinusOne(): Boolean = this == -constantOne
-    /**
-     * Check if the instant is NOT minus unit constant.
-     */
-    public fun C.isNotMinusOne(): Boolean = !isMinusOne()
-
-    /**
      * Instance of zero constant (zero of the underlying ring).
      */
     public val constantZero: C
@@ -250,31 +225,6 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     public override fun power(arg: P, exponent: UInt) : P = exponentiationBySquaring(arg, exponent)
 
     /**
-     * Check if the instant is zero polynomial.
-     */
-    public fun P.isZero(): Boolean = this equalsTo zero
-    /**
-     * Check if the instant is NOT zero polynomial.
-     */
-    public fun P.isNotZero(): Boolean = !isZero()
-    /**
-     * Check if the instant is unit polynomial.
-     */
-    public fun P.isOne(): Boolean = this equalsTo one
-    /**
-     * Check if the instant is NOT unit polynomial.
-     */
-    public fun P.isNotOne(): Boolean = !isOne()
-    /**
-     * Check if the instant is minus unit polynomial.
-     */
-    public fun P.isMinusOne(): Boolean = this equalsTo -one
-    /**
-     * Check if the instant is NOT minus unit polynomial.
-     */
-    public fun P.isNotMinusOne(): Boolean = !isMinusOne()
-
-    /**
      * Instance of zero polynomial (zero of the polynomial ring).
      */
     public override val zero: P
@@ -284,46 +234,10 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     public override val one: P
 
     /**
-     * Checks equality of the polynomials.
-     */
-    public infix fun P.equalsTo(other: P): Boolean
-    /**
-     * Checks NOT equality of the polynomials.
-     */
-    public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
-
-    /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
     public val P.degree: Int
-
-    /**
-     * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isConstant(): Boolean = degree <= 0
-    /**
-     * Checks if the instant is **not** constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNotConstant(): Boolean = !isConstant()
-    /**
-     * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNonZeroConstant(): Boolean = degree == 0
-    /**
-     * Checks if the instant is **not** constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNotNonZeroConstant(): Boolean = !isNonZeroConstant()
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
-     */
-    public fun P.asConstantOrNull(): C?
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
-     */
-    public fun P.asConstant(): C = requireNotNull(asConstantOrNull()) { "Can not represent non-constant polynomial as a constant" }
 
     override fun add(left: P, right: P): P = left + right
     override fun multiply(left: P, right: P): P = left * right

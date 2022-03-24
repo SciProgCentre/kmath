@@ -58,6 +58,8 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 
 @Suppress("FunctionName", "NOTHING_TO_INLINE")
 internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(coefs, toCheckInput)
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(coefs, toCheckInput)
 @Suppress("FunctionName")
 internal fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
     if (!toCheckInput) return NumberedPolynomial<C>(coefs)
@@ -70,13 +72,13 @@ internal fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>, toC
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return NumberedPolynomial<C>(
-        fixedCoefs.filterValues { it != zero }
-    )
+    return NumberedPolynomial<C>(fixedCoefs)
 }
 
 @Suppress("FunctionName", "NOTHING_TO_INLINE")
 internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs, toCheckInput)
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs, toCheckInput)
 @Suppress("FunctionName")
 internal fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
     if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
@@ -89,13 +91,13 @@ internal fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UI
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return NumberedPolynomial<C>(
-        fixedCoefs.filterValues { it != zero }
-    )
+    return NumberedPolynomial<C>(fixedCoefs)
 }
 
 @Suppress("FunctionName", "NOTHING_TO_INLINE")
 internal inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs = pairs, toCheckInput = toCheckInput)
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+internal inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> = ring.NumberedPolynomial(pairs = pairs, toCheckInput = toCheckInput)
 @Suppress("FunctionName")
 internal fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean = true) : NumberedPolynomial<C> {
     if (!toCheckInput) return NumberedPolynomial<C>(pairs.toMap())
@@ -108,25 +110,29 @@ internal fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>,
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return NumberedPolynomial<C>(
-        fixedCoefs.filterValues { it != zero }
-    )
+    return NumberedPolynomial<C>(fixedCoefs)
 }
 
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, toCheckInput = true)
 
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, toCheckInput = true)
 
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs, toCheckInput = true)
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs, toCheckInput = true)
+@Suppress("FunctionName")
+public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs, toCheckInput = true)
 
 //context(A)
 //public fun <C, A: Ring<C>> Symbol.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(mapOf(this to 1u) to one))
@@ -211,10 +217,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { constantZero } + other
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = getOrElse(degs) { constantZero } + other
                     }
             )
     /**
@@ -231,10 +234,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { constantZero } - other
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = getOrElse(degs) { constantZero } - other
                     }
             )
     /**
@@ -246,7 +246,8 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         if (other == 0) zero
         else NumberedPolynomial<C>(
             coefficients
-                .applyAndRemoveZeros {
+                .toMutableMap()
+                .apply {
                     for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
@@ -265,10 +266,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@plus + getOrElse(degs) { constantZero }
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = this@plus + getOrElse(degs) { constantZero }
                     }
             )
     /**
@@ -285,10 +283,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@minus - getOrElse(degs) { constantZero }
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = this@minus - getOrElse(degs) { constantZero }
                     }
             )
     /**
@@ -300,7 +295,8 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         if (this == 0) zero
         else NumberedPolynomial(
             other.coefficients
-                .applyAndRemoveZeros {
+                .toMutableMap()
+                .apply {
                     for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
@@ -314,18 +310,14 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
     override operator fun C.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        if (this.isZero()) other
-        else with(other.coefficients) {
+        with(other.coefficients) {
             if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this@plus))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = this@plus + getOrElse(degs) { constantZero }
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = this@plus + getOrElse(degs) { constantZero }
                     }
             )
         }
@@ -333,8 +325,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns difference between the constant represented as polynomial and the polynomial.
      */
     override operator fun C.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        if (this.isZero()) -other
-        else with(other.coefficients) {
+        with(other.coefficients) {
             if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this@minus))
             else NumberedPolynomial<C>(
                 toMutableMap()
@@ -343,10 +334,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
 
                         val degs = emptyList<UInt>()
 
-                        val result = this@minus - getOrElse(degs) { constantZero }
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = this@minus - getOrElse(degs) { constantZero }
                     }
             )
         }
@@ -354,10 +342,10 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     override operator fun C.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        if (this.isZero()) zero
-        else NumberedPolynomial<C>(
+        NumberedPolynomial<C>(
             other.coefficients
-                .applyAndRemoveZeros {
+                .toMutableMap()
+                .apply {
                     for (degs in keys) this[degs] = this@times * this[degs]!!
                 }
         )
@@ -366,18 +354,14 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.plus(other: C): NumberedPolynomial<C> =
-        if (other.isZero()) this
-        else with(coefficients) {
+        with(coefficients) {
             if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { constantZero } + other
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = getOrElse(degs) { constantZero } + other
                     }
             )
         }
@@ -385,18 +369,14 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns difference between the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.minus(other: C): NumberedPolynomial<C> =
-        if (other.isZero()) this
-        else with(coefficients) {
+        with(coefficients) {
             if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         val degs = emptyList<UInt>()
 
-                        val result = getOrElse(degs) { constantZero } - other
-
-                        if (result.isZero()) remove(degs)
-                        else this[degs] = result
+                        this[degs] = getOrElse(degs) { constantZero } - other
                     }
             )
         }
@@ -404,10 +384,10 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns product of the constant represented as polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.times(other: C): NumberedPolynomial<C> =
-        if (other.isZero()) zero
-        else NumberedPolynomial<C>(
+        NumberedPolynomial<C>(
             coefficients
-                .applyAndRemoveZeros {
+                .toMutableMap()
+                .apply {
                     for (degs in keys) this[degs] = this[degs]!! * other
                 }
         )
@@ -416,8 +396,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Converts the constant [value] to polynomial.
      */
     public override fun number(value: C): NumberedPolynomial<C> =
-        if (value == 0) zero
-        else NumberedPolynomial(mapOf(emptyList<UInt>() to value))
+        NumberedPolynomial(mapOf(emptyList<UInt>() to value))
 
     /**
      * Returns negation of the polynomial.
@@ -431,7 +410,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun NumberedPolynomial<C>.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomial<C>(
-            buildCoefficients(coefficients.size + other.coefficients.size) {
+            buildMap(coefficients.size + other.coefficients.size) {
                 other.coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
             }
@@ -441,7 +420,7 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun NumberedPolynomial<C>.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomial<C>(
-            buildCoefficients(coefficients.size + other.coefficients.size) {
+            buildMap(coefficients.size + other.coefficients.size) {
                 other.coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
             }
@@ -450,57 +429,17 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns product of the polynomials.
      */
     override operator fun NumberedPolynomial<C>.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        when {
-            isZero() -> zero
-            other.isZero() -> zero
-            else ->
-                NumberedPolynomial<C>(
-                    buildCoefficients(coefficients.size * other.coefficients.size) {
-                        for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
-                            val degs =
-                                (0..max(degs1.lastIndex, degs2.lastIndex))
-                                    .map { degs1.getOrElse(it) { 0U } + degs2.getOrElse(it) { 0U } }
-                            val c = c1 * c2
-                            this[degs] = if (degs in this) this[degs]!! + c else c
-                        }
-                    }
-                )
-        }
-
-    /**
-     * Check if the instant is zero polynomial.
-     */
-    public override fun NumberedPolynomial<C>.isZero(): Boolean = coefficients.values.all { it.isZero() }
-    /**
-     * Check if the instant is unit polynomial.
-     */
-    public override fun NumberedPolynomial<C>.isOne(): Boolean =
-        with(coefficients) {
-            var foundAbsoluteTermAndItIsOne = false
-            for ((degs, c) in this) {
-                if (degs.isNotEmpty()) if (c.isNotZero()) return@with false
-                else {
-                    if (c.isNotOne()) return@with false
-                    else foundAbsoluteTermAndItIsOne = true
+        NumberedPolynomial<C>(
+            buildMap(coefficients.size * other.coefficients.size) {
+                for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
+                    val degs =
+                        (0..max(degs1.lastIndex, degs2.lastIndex))
+                            .map { degs1.getOrElse(it) { 0U } + degs2.getOrElse(it) { 0U } }
+                    val c = c1 * c2
+                    this[degs] = if (degs in this) this[degs]!! + c else c
                 }
             }
-            foundAbsoluteTermAndItIsOne
-        }
-    /**
-     * Check if the instant is minus unit polynomial.
-     */
-    public override fun NumberedPolynomial<C>.isMinusOne(): Boolean =
-        with(coefficients) {
-            var foundAbsoluteTermAndItIsMinusOne = false
-            for ((degs, c) in this) {
-                if (degs.isNotEmpty()) if (c.isNotZero()) return@with false
-                else {
-                    if (c.isNotMinusOne()) return@with false
-                    else foundAbsoluteTermAndItIsMinusOne = true
-                }
-            }
-            foundAbsoluteTermAndItIsMinusOne
-        }
+        )
 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
@@ -517,27 +456,17 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
         )
 
     /**
-     * Checks equality of the polynomials.
-     */
-    override infix fun NumberedPolynomial<C>.equalsTo(other: NumberedPolynomial<C>): Boolean =
-        when {
-            this === other -> true
-            else -> coefficients.size == other.coefficients.size &&
-                    coefficients.all { (key, value) -> with(other.coefficients) { key in this && this[key] == value } }
-        }
-
-    /**
      * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
      * the result is `-1`.
      */
     public val NumberedPolynomial<C>.lastVariable: Int
-        get() = coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) -1 else degs.lastIndex } ?: -1
+        get() = coefficients.entries.maxOfOrNull { (degs, _) -> degs.lastIndex } ?: -1
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
     override val NumberedPolynomial<C>.degree: Int
-        get() = coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) -1 else degs.sum().toInt() } ?: -1
+        get() = coefficients.entries.maxOfOrNull { (degs, _) -> degs.sum().toInt() } ?: -1
     /**
      * List that associates indices of variables (that appear in the polynomial in positive exponents) with their most
      * exponents in which the variables are appeared in the polynomial.
@@ -548,8 +477,8 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public val NumberedPolynomial<C>.degrees: List<UInt>
         get() =
             MutableList(lastVariable + 1) { 0u }.apply {
-                coefficients.entries.forEach { (degs, c) ->
-                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                coefficients.entries.forEach { (degs, _) ->
+                    degs.forEachIndexed { index, deg ->
                         this[index] = max(this[index], deg)
                     }
                 }
@@ -558,13 +487,13 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Counts degree of the polynomial by the specified [variable].
      */
     public fun NumberedPolynomial<C>.degreeBy(variable: Int): UInt =
-        coefficients.entries.maxOfOrNull { (degs, c) -> if (c.isZero()) 0u else degs.getOrElse(variable) { 0u } } ?: 0u
+        coefficients.entries.maxOfOrNull { (degs, _) -> degs.getOrElse(variable) { 0u } } ?: 0u
     /**
      * Counts degree of the polynomial by the specified [variables].
      */
     public fun NumberedPolynomial<C>.degreeBy(variables: Collection<Int>): UInt =
-        coefficients.entries.maxOfOrNull { (degs, c) ->
-            if (c.isZero()) 0u else degs.withIndex().filter { (index, _) -> index in variables }.sumOf { it.value }
+        coefficients.entries.maxOfOrNull { (degs, _) ->
+            degs.withIndex().filter { (index, _) -> index in variables }.sumOf { it.value }
         } ?: 0u
     /**
      * Count of variables occurring in the polynomial with positive power. If there is no such variable,
@@ -573,42 +502,12 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     public val NumberedPolynomial<C>.countOfVariables: Int
         get() =
             MutableList(lastVariable + 1) { false }.apply {
-                coefficients.entries.forEach { (degs, c) ->
-                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                coefficients.entries.forEach { (degs, _) ->
+                    degs.forEachIndexed { index, deg ->
                         if (deg != 0u) this[index] = true
                     }
                 }
             }.count { it }
-
-    /**
-     * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
-     */
-    override fun NumberedPolynomial<C>.isConstant(): Boolean =
-        coefficients.all { (degs, c) -> degs.isEmpty() || c.isZero() }
-    /**
-     * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    override fun NumberedPolynomial<C>.isNonZeroConstant(): Boolean =
-        with(coefficients) {
-            var foundAbsoluteTermAndItIsNotZero = false
-            for ((degs, c) in this) {
-                if (degs.isNotEmpty()) if (c.isNotZero()) return@with false
-                else {
-                    if (c.isZero()) return@with false
-                    else foundAbsoluteTermAndItIsNotZero = true
-                }
-            }
-            foundAbsoluteTermAndItIsNotZero
-        }
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
-     */
-    override fun NumberedPolynomial<C>.asConstantOrNull(): C? =
-        with(coefficients) {
-            if(isConstant()) getOrElse(emptyList()) { constantZero }
-            else null
-        }
 
     @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, C>): NumberedPolynomial<C> = this.substitute(ring, argument)
@@ -628,35 +527,6 @@ public open class NumberedPolynomialSpace<C, A : Ring<C>>(
     @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokePolynomial")
     public inline operator fun NumberedPolynomial<C>.invoke(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = this.substitute(ring, argument)
-
-    // TODO: Move to other internal utilities with context receiver
-    @JvmName("applyAndRemoveZerosInternal")
-    internal fun MutableMap<List<UInt>, C>.applyAndRemoveZeros(block: MutableMap<List<UInt>, C>.() -> Unit) : MutableMap<List<UInt>, C> {
-        contract {
-            callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-        }
-        block()
-        for ((degs, c) in this) if (c.isZero()) this.remove(degs)
-        return this
-    }
-    internal fun Map<List<UInt>, C>.applyAndRemoveZeros(block: MutableMap<List<UInt>, C>.() -> Unit) : Map<List<UInt>, C> =
-        toMutableMap().applyAndRemoveZeros(block)
-    @OptIn(ExperimentalTypeInference::class)
-    internal inline fun buildCoefficients(@BuilderInference builderAction: MutableMap<List<UInt>, C>.() -> Unit): Map<List<UInt>, C> {
-        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
-        return buildMap {
-            builderAction()
-            for ((degs, c) in this) if (c.isZero()) this.remove(degs)
-        }
-    }
-    @OptIn(ExperimentalTypeInference::class)
-    internal inline fun buildCoefficients(capacity: Int, @BuilderInference builderAction: MutableMap<List<UInt>, C>.() -> Unit): Map<List<UInt>, C> {
-        contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
-        return buildMap(capacity) {
-            builderAction()
-            for ((degs, c) in this) if (c.isZero()) this.remove(degs)
-        }
-    }
 
     // TODO: Move to other constructors with context receiver
     public fun C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))

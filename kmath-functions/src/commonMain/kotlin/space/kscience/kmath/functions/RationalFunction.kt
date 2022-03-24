@@ -223,31 +223,6 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public fun power(arg: C, exponent: UInt) : C
 
     /**
-     * Check if the instant is zero constant.
-     */
-    public fun C.isZero(): Boolean = this == constantZero
-    /**
-     * Check if the instant is NOT zero constant.
-     */
-    public fun C.isNotZero(): Boolean = !isZero()
-    /**
-     * Check if the instant is unit constant.
-     */
-    public fun C.isOne(): Boolean =  this == constantOne
-    /**
-     * Check if the instant is NOT unit constant.
-     */
-    public fun C.isNotOne(): Boolean = !isOne()
-    /**
-     * Check if the instant is minus unit constant.
-     */
-    public fun C.isMinusOne(): Boolean =  this == -constantOne
-    /**
-     * Check if the instant is NOT minus unit constant.
-     */
-    public fun C.isNotMinusOne(): Boolean = !isMinusOne()
-
-    /**
      * Instance of zero constant (zero of the underlying ring).
      */
     public val constantZero: C
@@ -321,31 +296,6 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public fun power(arg: P, exponent: UInt) : P
 
     /**
-     * Check if the instant is zero polynomial.
-     */
-    public fun P.isZero(): Boolean = this equalsTo polynomialZero
-    /**
-     * Check if the instant is NOT zero polynomial.
-     */
-    public fun P.isNotZero(): Boolean = !isZero()
-    /**
-     * Check if the instant is unit polynomial.
-     */
-    public fun P.isOne(): Boolean = this equalsTo polynomialOne
-    /**
-     * Check if the instant is NOT unit polynomial.
-     */
-    public fun P.isNotOne(): Boolean = !isOne()
-    /**
-     * Check if the instant is minus unit polynomial.
-     */
-    public fun P.isMinusOne(): Boolean = this equalsTo -polynomialOne
-    /**
-     * Check if the instant is NOT minus unit polynomial.
-     */
-    public fun P.isNotMinusOne(): Boolean = !isMinusOne()
-
-    /**
      * Instance of zero polynomial (zero of the polynomial ring).
      */
     public val polynomialZero: P
@@ -353,15 +303,6 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      * Instance of unit polynomial (unit of the polynomial ring).
      */
     public val polynomialOne: P
-
-    /**
-     * Checks equality of the polynomials.
-     */
-    public infix fun P.equalsTo(other: P): Boolean
-    /**
-     * Checks NOT equality of the polynomials.
-     */
-    public infix fun P.notEqualsTo(other: P): Boolean = !(this equalsTo other)
 
     /**
      * Returns sum of the constant represented as rational function and the rational function.
@@ -479,31 +420,6 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public override fun power(arg: R, exponent: UInt) : R = exponentiationBySquaring(arg, exponent)
 
     /**
-     * Check if the instant is zero rational function.
-     */
-    public fun R.isZero(): Boolean = numerator equalsTo polynomialZero
-    /**
-     * Check if the instant is NOT zero rational function.
-     */
-    public fun R.isNotZero(): Boolean = !isZero()
-    /**
-     * Check if the instant is unit rational function.
-     */
-    public fun R.isOne(): Boolean = numerator equalsTo denominator
-    /**
-     * Check if the instant is NOT unit rational function.
-     */
-    public fun R.isNotOne(): Boolean = !isOne()
-    /**
-     * Check if the instant is minus unit rational function.
-     */
-    public fun R.isMinusOne(): Boolean = (numerator + denominator).isZero()
-    /**
-     * Check if the instant is NOT minus unit rational function.
-     */
-    public fun R.isNotMinusOne(): Boolean = !isMinusOne()
-
-    /**
      * Instance of zero rational function (zero of the rational functions ring).
      */
     public override val zero: R
@@ -513,52 +429,10 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public override val one: R
 
     /**
-     * Checks equality of the rational functions.
-     */
-    public infix fun R.equalsTo(other: R): Boolean =
-        when {
-            this === other -> true
-            numerator.isZero() != other.numerator.isZero() -> false
-            numeratorDegree - denominatorDegree != with(other) { numeratorDegree - denominatorDegree } -> false
-            else -> numerator * other.denominator equalsTo other.numerator * denominator
-        }
-    /**
-     * Checks NOT equality of the polynomials.
-     */
-    public infix fun R.notEqualsTo(other: R): Boolean = !(this equalsTo other)
-
-    /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
     public val P.degree: Int
-
-    /**
-     * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isConstant(): Boolean = degree <= 0
-    /**
-     * Checks if the instant is **not** constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNotConstant(): Boolean = !isConstant()
-    /**
-     * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNonZeroConstant(): Boolean = degree == 0
-    /**
-     * Checks if the instant is **not** constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public fun P.isNotNonZeroConstant(): Boolean = !isNonZeroConstant()
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
-     */
-    public fun P.asConstantOrNull(): C?
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
-     */
-    public fun P.asConstant(): C = requireNotNull(asConstantOrNull()) { "Can not represent non-constant polynomial as a constant" }
 
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
@@ -814,31 +688,6 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override fun power(arg: C, exponent: UInt) : C = polynomialRing { power(arg, exponent) }
 
     /**
-     * Check if the instant is zero constant.
-     */
-    public override fun C.isZero(): Boolean = polynomialRing { this@isZero.isZero() }
-    /**
-     * Check if the instant is NOT zero constant.
-     */
-    public override fun C.isNotZero(): Boolean = polynomialRing { this@isNotZero.isNotZero() }
-    /**
-     * Check if the instant is unit constant.
-     */
-    public override fun C.isOne(): Boolean = polynomialRing { this@isOne.isOne() }
-    /**
-     * Check if the instant is NOT unit constant.
-     */
-    public override fun C.isNotOne(): Boolean = polynomialRing { this@isNotOne.isNotOne() }
-    /**
-     * Check if the instant is minus unit constant.
-     */
-    public override fun C.isMinusOne(): Boolean = polynomialRing { this@isMinusOne.isMinusOne() }
-    /**
-     * Check if the instant is NOT minus unit constant.
-     */
-    public override fun C.isNotMinusOne(): Boolean = polynomialRing { this@isNotMinusOne.isNotMinusOne() }
-
-    /**
      * Instance of zero constant (zero of the underlying ring).
      */
     public override val constantZero: C get() = polynomialRing.constantZero
@@ -908,31 +757,6 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override fun power(arg: P, exponent: UInt) : P = polynomialRing { power(arg, exponent) }
 
     /**
-     * Check if the instant is zero polynomial.
-     */
-    public override fun P.isZero(): Boolean = polynomialRing { this@isZero.isZero() }
-    /**
-     * Check if the instant is NOT zero polynomial.
-     */
-    public override fun P.isNotZero(): Boolean = polynomialRing { this@isNotZero.isNotZero() }
-    /**
-     * Check if the instant is unit polynomial.
-     */
-    public override fun P.isOne(): Boolean = polynomialRing { this@isOne.isOne() }
-    /**
-     * Check if the instant is NOT unit polynomial.
-     */
-    public override fun P.isNotOne(): Boolean = polynomialRing { this@isNotOne.isNotOne() }
-    /**
-     * Check if the instant is minus unit polynomial.
-     */
-    public override fun P.isMinusOne(): Boolean = polynomialRing { this@isMinusOne.isMinusOne() }
-    /**
-     * Check if the instant is NOT minus unit polynomial.
-     */
-    public override fun P.isNotMinusOne(): Boolean = polynomialRing { this@isNotMinusOne.isNotMinusOne() }
-
-    /**
      * Instance of zero polynomial (zero of the polynomial ring).
      */
     public override val polynomialZero: P get() = polynomialRing.zero
@@ -942,46 +766,10 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override val polynomialOne: P get() = polynomialRing.one
 
     /**
-     * Checks equality of the polynomials.
-     */
-    public override infix fun P.equalsTo(other: P): Boolean = polynomialRing { this@equalsTo equalsTo other }
-    /**
-     * Checks NOT equality of the polynomials.
-     */
-    public override infix fun P.notEqualsTo(other: P): Boolean = polynomialRing { this@notEqualsTo notEqualsTo other }
-
-    /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
     public override val P.degree: Int get() = polynomialRing { this@degree.degree }
-
-    /**
-     * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public override fun P.isConstant(): Boolean = polynomialRing { this@isConstant.isConstant() }
-    /**
-     * Checks if the instant is **not** constant polynomial (of degree no more than 0) over considered ring.
-     */
-    public override fun P.isNotConstant(): Boolean = polynomialRing { this@isNotConstant.isNotConstant() }
-    /**
-     * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public override fun P.isNonZeroConstant(): Boolean = polynomialRing { this@isNonZeroConstant.isNonZeroConstant() }
-    /**
-     * Checks if the instant is **not** constant non-zero polynomial (of degree no more than 0) over considered ring.
-     */
-    public override fun P.isNotNonZeroConstant(): Boolean = polynomialRing { this@isNotNonZeroConstant.isNotNonZeroConstant() }
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) returns `null`.
-     */
-    public override fun P.asConstantOrNull(): C? = polynomialRing { this@asConstantOrNull.asConstantOrNull() }
-    /**
-     * If polynomial is a constant polynomial represents and returns it as constant.
-     * Otherwise, (when the polynomial is not constant polynomial) raises corresponding exception.
-     */
-    public override fun P.asConstant(): C = polynomialRing { this@asConstant.asConstant() }
 }
 
 /**
@@ -1032,18 +820,11 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
 
-    public override operator fun R.div(other: Int): R {
-        val otherAsConstant = constantNumber(other)
-        require(otherAsConstant.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun R.div(other: Int): R =
+        constructRationalFunction(
             numerator,
-            (denominator * other).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during division of rational functions to constant. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other
         )
-    }
 
     /**
      * Returns sum of the integer represented as rational function and the rational function.
@@ -1076,13 +857,11 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
-    public override operator fun Int.div(other: R): R {
-        require(other.numerator.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun Int.div(other: R): R =
+        constructRationalFunction(
             this * other.denominator,
             other.numerator
         )
-    }
 
     /**
      * Converts the integer [value] to rational function.
@@ -1119,13 +898,11 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
-    public override operator fun C.div(other: R): R {
-        require(other.numerator.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun C.div(other: R): R =
+        constructRationalFunction(
             this * other.denominator,
             other.numerator
         )
-    }
 
     /**
      * Returns sum of the constant represented as rational function and the rational function.
@@ -1152,17 +929,11 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
 
-    public override operator fun R.div(other: C): R {
-        require(other.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun R.div(other: C): R =
+        constructRationalFunction(
             numerator,
-            (denominator * other).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during division of rational functions to constant. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other
         )
-    }
 
     /**
      * Converts the constant [value] to rational function.
@@ -1194,13 +965,11 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
 
-    public override operator fun P.div(other: R): R {
-        require(other.numerator.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun P.div(other: R): R =
+        constructRationalFunction(
             this * other.denominator,
             other.numerator
         )
-    }
 
     /**
      * Returns sum of the polynomial represented as rational function and the rational function.
@@ -1227,17 +996,11 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
 
-    public override operator fun R.div(other: P): R {
-        require(other.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun R.div(other: P): R =
+        constructRationalFunction(
             numerator,
-            (denominator * other).also {
-                require(it.isNotZero()) {
-                    "Got zero denominator during division of rational functions to polynomial. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other
         )
-    }
 
     /**
      * Converts the polynomial [value] to rational function.
@@ -1254,11 +1017,7 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.plus(other: R): R =
         constructRationalFunction(
             numerator * other.denominator + denominator * other.numerator,
-            (denominator * other.denominator).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during addition of rational functions. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other.denominator
         )
     /**
      * Returns difference of the rational functions.
@@ -1266,11 +1025,7 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.minus(other: R): R =
         constructRationalFunction(
             numerator * other.denominator - denominator * other.numerator,
-            (denominator * other.denominator).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during subtraction of rational functions. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other.denominator
         )
     /**
      * Returns product of the rational functions.
@@ -1278,24 +1033,14 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun R.times(other: R): R =
         constructRationalFunction(
             numerator * other.numerator,
-            (denominator * other.denominator).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during multiplication of rational functions. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other.denominator
         )
 
-    public override operator fun R.div(other: R): R {
-        require(other.isNotZero()) { "/ by zero." }
-        return constructRationalFunction(
+    public override operator fun R.div(other: R): R =
+        constructRationalFunction(
             numerator * other.denominator,
-            (denominator * other.numerator).also {
-                check(it.isNotZero()) {
-                    "Got zero denominator during division of rational functions. It means underlying ring of polynomials is not integral domain."
-                }
-            }
+            denominator * other.numerator
         )
-    }
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).

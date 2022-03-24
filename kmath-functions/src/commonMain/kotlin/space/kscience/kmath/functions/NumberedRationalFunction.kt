@@ -20,44 +20,34 @@ public class NumberedRationalFunction<C> internal constructor(
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>, denominator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-    if (denominator.isZero()) throw ArithmeticException("/ by zero")
-    else NumberedRationalFunction<C>(numerator, denominator)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>, denominator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-    if (denominator.coefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
-    else NumberedRationalFunction<C>(numerator, denominator)
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
-    else NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients),
-        NumberedPolynomial(denominatorCoefficients)
+    NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
+        NumberedPolynomial(denominatorCoefficients, toCheckInput = true)
     )
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    if (denominatorCoefficients.values.all { it == zero }) throw ArithmeticException("/ by zero")
-    else NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients),
-        NumberedPolynomial(denominatorCoefficients)
+    NumberedRationalFunction<C>(
+        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
+        NumberedPolynomial(denominatorCoefficients, toCheckInput = true)
     )
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(numerator, polynomialOne)
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(numerator, NumberedPolynomial(mapOf(emptyList<UInt>() to one)))
+    NumberedRationalFunction<C>(numerator, NumberedPolynomial(mapOf(emptyList<UInt>() to one), toCheckInput = false))
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients),
+        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
         polynomialOne
     )
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients),
-        NumberedPolynomial(mapOf(emptyList<UInt>() to one))
+        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
+        NumberedPolynomial(mapOf(emptyList<UInt>() to one), toCheckInput = false)
     )
 
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
@@ -90,28 +80,6 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Instance of unit polynomial (unit of the rational functions ring).
      */
     public override val one: NumberedRationalFunction<C> = NumberedRationalFunction(polynomialOne, polynomialOne)
-
-    /**
-     * Checks equality of the rational functions.
-     */
-    public override infix fun NumberedRationalFunction<C>.equalsTo(other: NumberedRationalFunction<C>): Boolean {
-        if (this === other) return true
-
-        if (numerator.isZero() != other.numerator.isZero()) return false
-
-        val countOfVariables = max(this.lastVariable, other.lastVariable)
-        val thisNumeratorDegrees = this.numerator.degrees
-        val thisDenominatorDegrees = this.denominator.degrees
-        val otherNumeratorDegrees = other.numerator.degrees
-        val otherDenominatorDegrees = other.denominator.degrees
-        for (variable in 0 .. countOfVariables)
-            if (
-                thisNumeratorDegrees.getOrElse(variable) { 0u } + otherDenominatorDegrees.getOrElse(variable) { 0u }
-                != thisDenominatorDegrees.getOrElse(variable) { 0u } + otherNumeratorDegrees.getOrElse(variable) { 0u }
-            ) return false
-
-        return numerator * other.denominator equalsTo other.numerator * denominator
-    }
 
     /**
      * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
@@ -152,13 +120,13 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val NumberedRationalFunction<C>.countOfVariables: Int
         get() =
             MutableList(lastVariable + 1) { false }.apply {
-                numerator.coefficients.entries.forEach { (degs, c) ->
-                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                numerator.coefficients.entries.forEach { (degs, _) ->
+                    degs.forEachIndexed { index, deg ->
                         if (deg != 0u) this[index] = true
                     }
                 }
-                denominator.coefficients.entries.forEach { (degs, c) ->
-                    if (c.isNotZero()) degs.forEachIndexed { index, deg ->
+                denominator.coefficients.entries.forEach { (degs, _) ->
+                    degs.forEachIndexed { index, deg ->
                         if (deg != 0u) this[index] = true
                     }
                 }

@@ -8,7 +8,7 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.Ring
 
 
-public data class ListRationalFunction<C> internal constructor (
+public data class ListRationalFunction<C>(
     public override val numerator: ListPolynomial<C>,
     public override val denominator: ListPolynomial<C>
 ) : RationalFunction<C, ListPolynomial<C>> {
@@ -18,24 +18,14 @@ public data class ListRationalFunction<C> internal constructor (
 // Waiting for context receivers :( TODO: Replace with context receivers when they will be available
 
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> ListRationalFunctionSpace<C, A>.ListRationalFunction(numerator: ListPolynomial<C>, denominator: ListPolynomial<C>): ListRationalFunction<C> =
-    if (denominator.isZero()) throw ArithmeticException("/ by zero")
-    else ListRationalFunction<C>(numerator, denominator)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.ListRationalFunction(numerator: ListPolynomial<C>, denominator: ListPolynomial<C>): ListRationalFunction<C> =
-    if (denominator.coefficients.all { it == zero }) throw ArithmeticException("/ by zero")
-    else ListRationalFunction<C>(numerator, denominator)
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> ListRationalFunctionSpace<C, A>.ListRationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    if (denominatorCoefficients.all { it == zero }) throw ArithmeticException("/ by zero")
-    else ListRationalFunction<C>(
+    ListRationalFunction<C>(
         ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
         ListPolynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } )
     )
 @Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.ListRationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    if (denominatorCoefficients.all { it == zero }) throw ArithmeticException("/ by zero")
-    else ListRationalFunction<C>(
+    ListRationalFunction<C>(
         ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
         ListPolynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } )
     )

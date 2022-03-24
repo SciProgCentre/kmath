@@ -121,9 +121,9 @@ public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: C): C = ring {
 public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: ListPolynomial<C>) : ListPolynomial<C> = ring {
     if (coefficients.isEmpty()) return ListPolynomial(emptyList())
 
-    val thisDegree = coefficients.indexOfLast { it != zero }
+    val thisDegree = coefficients.lastIndex
     if (thisDegree == -1) return ListPolynomial(emptyList())
-    val argDegree = arg.coefficients.indexOfLast { it != zero }
+    val argDegree = arg.coefficients.lastIndex
     if (argDegree == -1) return coefficients[0].asListPolynomial()
     val constantZero = zero
     val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
@@ -144,7 +144,6 @@ public fun <C> ListPolynomial<C>.substitute(ring: Ring<C>, arg: ListPolynomial<C
         resultDegree += argDegree
     }
 
-    with(resultCoefs) { while (isNotEmpty() && elementAt(lastIndex) == constantZero) removeAt(lastIndex) }
     return ListPolynomial<C>(resultCoefs)
 }
 
@@ -168,7 +167,6 @@ public fun <C, A> ListPolynomial<C>.derivative(
     ListPolynomial(
         buildList(max(0, coefficients.size - 1)) {
             for (deg in 1 .. coefficients.lastIndex) add(number(deg) * coefficients[deg])
-            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
         }
     )
 }
@@ -186,7 +184,6 @@ public fun <C, A> ListPolynomial<C>.nthDerivative(
         buildList(max(0, coefficients.size - order)) {
             for (deg in order.. coefficients.lastIndex)
                 add((deg - order + 1 .. deg).fold(coefficients[deg]) { acc, d -> acc * number(d) })
-            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
         }
     )
 }
@@ -202,7 +199,6 @@ public fun <C, A> ListPolynomial<C>.antiderivative(
         buildList(coefficients.size + 1) {
             add(zero)
             coefficients.mapIndexedTo(this) { index, t -> t / number(index + 1) }
-            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
         }
     )
 }
@@ -220,7 +216,6 @@ public fun <C, A> ListPolynomial<C>.nthAntiderivative(
         buildList(coefficients.size + order) {
             repeat(order) { add(zero) }
             coefficients.mapIndexedTo(this) { index, c -> (1..order).fold(c) { acc, i -> acc / number(index + i) } }
-            while (isNotEmpty() && elementAt(lastIndex) == algebra.zero) removeAt(lastIndex)
         }
     )
 }

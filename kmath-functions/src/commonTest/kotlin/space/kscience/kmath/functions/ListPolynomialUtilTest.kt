@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 
-class ListPolynomialUtilTest {
+class ListPolynomialUtilTest { // TODO: Adapt tests to changes
     @Test
     fun test_substitute_Double() {
         assertEquals(
