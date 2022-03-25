@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 
-class ListPolynomialUtilTest { // TODO: Adapt tests to changes
+class ListPolynomialUtilTest {
     @Test
     fun test_substitute_Double() {
         assertEquals(
@@ -81,7 +81,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
     @Test
     fun test_substitute_Polynomial() {
         assertEquals(
-            ListPolynomial(),
+            ListPolynomial(Rational(0)),
             ListPolynomial(Rational(1), Rational(-2), Rational(1)).substitute(RationalField, ListPolynomial(Rational(1))),
             "test 1"
         )
@@ -98,7 +98,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 3"
         )
         assertEquals(
-            ListPolynomial(Rational(677, 378), Rational(97, 180), Rational(1, 75)),
+            ListPolynomial(Rational(677, 378), Rational(97, 180), Rational(1, 75), Rational(0)),
             ListPolynomial(Rational(1, 7), Rational(9, 4), Rational(1, 3), Rational(0))
                 .substitute(RationalField, ListPolynomial(Rational(6, 9), Rational(1, 5))),
             "test 4"
@@ -110,7 +110,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 5"
         )
         assertEquals(
-            ListPolynomial(Rational(89, 54)),
+            ListPolynomial(Rational(89, 54), Rational(0), Rational(0), Rational(0)),
             ListPolynomial(Rational(0), Rational(9, 4), Rational(1, 3), Rational(0))
                 .substitute(RationalField, ListPolynomial(Rational(6, 9), Rational(0))),
             "test 6"
@@ -134,7 +134,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 3"
         )
         assertEquals(
-            ListPolynomial(Rational(-8, 3), Rational(8, 9), Rational(15, 7)),
+            ListPolynomial(Rational(-8, 3), Rational(8, 9), Rational(15, 7), Rational(0)),
             ListPolynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).derivative(RationalField),
             "test 4"
         )
@@ -180,7 +180,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 8"
         )
         assertEquals(
-            ListPolynomial(Rational(8, 9), Rational(30, 7)),
+            ListPolynomial(Rational(8, 9), Rational(30, 7), Rational(0)),
             ListPolynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).nthDerivative(RationalField, 2),
             "test 9"
         )
@@ -203,7 +203,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 3"
         )
         assertEquals(
-            ListPolynomial(Rational(0), Rational(1, 5), Rational(-4, 3), Rational(4, 27), Rational(5, 28)),
+            ListPolynomial(Rational(0), Rational(1, 5), Rational(-4, 3), Rational(4, 27), Rational(5, 28), Rational(0)),
             ListPolynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).antiderivative(RationalField),
             "test 4"
         )
@@ -249,7 +249,7 @@ class ListPolynomialUtilTest { // TODO: Adapt tests to changes
             "test 8"
         )
         assertEquals(
-            ListPolynomial(Rational(0), Rational(0), Rational(1, 10), Rational(-4, 9), Rational(1, 27), Rational(1, 28)),
+            ListPolynomial(Rational(0), Rational(0), Rational(1, 10), Rational(-4, 9), Rational(1, 27), Rational(1, 28), Rational(0)),
             ListPolynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).nthAntiderivative(RationalField, 2),
             "test 9"
         )

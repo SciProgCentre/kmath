@@ -120,7 +120,7 @@ class IntModuloRing : Ring<IntModulo> {
     }
 
     override inline val zero: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
-    override inline val one: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
+    override inline val one: IntModulo get() = IntModulo(1, modulus, toCheckInput = false)
 
     fun number(arg: Int) = IntModulo(arg, modulus, toCheckInput = false)
 

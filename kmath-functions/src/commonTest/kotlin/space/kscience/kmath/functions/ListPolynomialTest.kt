@@ -9,7 +9,7 @@ import space.kscience.kmath.test.misc.*
 import kotlin.test.*
 
 
-class ListPolynomialTest { // TODO: Adapt tests to changes
+class ListPolynomialTest {
     @Test
     fun test_Polynomial_Int_plus() {
         RationalField.listPolynomial {
@@ -24,7 +24,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial(Rational(-2)) + 2,
                 "test 3"
             )
@@ -64,7 +64,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial(Rational(2)) - 2,
                 "test 3"
             )
@@ -99,7 +99,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 1"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(0, 0, 0, 0, 0),
                 ListPolynomial(7, 0, 49, 21, 14) * 15,
                 "test 2"
             )
@@ -119,7 +119,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 2 + ListPolynomial(Rational(-2)),
                 "test 3"
             )
@@ -159,7 +159,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 -2 - ListPolynomial(Rational(-2)),
                 "test 3"
             )
@@ -194,7 +194,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 1"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(0, 0, 0, 0, 0),
                 15 * ListPolynomial(7, 0, 49, 21, 14),
                 "test 2"
             )
@@ -214,12 +214,12 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial(Rational(-2)) + Rational(2),
                 "test 3"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial<Rational>() + Rational(0),
                 "test 4"
             )
@@ -254,12 +254,12 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial(Rational(2)) - Rational(2),
                 "test 3"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 ListPolynomial<Rational>() - Rational(0),
                 "test 4"
             )
@@ -285,12 +285,12 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
         IntModuloRing(35).listPolynomial {
             assertEquals(
                 ListPolynomial(34, 2, 1, 20, 2),
-                ListPolynomial(22, 26, 13, 15, 26) * number(27),
+                ListPolynomial(22, 26, 13, 15, 26) * 27.asConstant(),
                 "test 1"
             )
             assertEquals(
-                ListPolynomial(),
-                ListPolynomial(7, 0, 49, 21, 14) * number(15),
+                ListPolynomial(0, 0, 0, 0, 0),
+                ListPolynomial(7, 0, 49, 21, 14) * 15.asConstant(),
                 "test 2"
             )
         }
@@ -309,12 +309,12 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 Rational(2) + ListPolynomial(Rational(-2)),
                 "test 3"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 Rational(0) + ListPolynomial(),
                 "test 4"
             )
@@ -349,12 +349,12 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 2"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 Rational(-2) - ListPolynomial(Rational(-2)),
                 "test 3"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0)),
                 Rational(0) - ListPolynomial(),
                 "test 4"
             )
@@ -384,7 +384,7 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
                 "test 1"
             )
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(0, 0, 0, 0, 0),
                 15 * ListPolynomial(7, 0, 49, 21, 14),
                 "test 2"
             )
@@ -424,14 +424,14 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
             )
             // (-4/7 - 2/6 x + 0 x^2 + 0 x^3) + (-6/3 - 7/2 x + 2/3 x^2) ?= -18/7 - 23/6 x + 2/3 x^2
             assertEquals(
-                ListPolynomial(Rational(-18, 7), Rational(-23, 6), Rational(2, 3)),
+                ListPolynomial(Rational(-18, 7), Rational(-23, 6), Rational(2, 3), Rational(0)),
                 ListPolynomial(Rational(-4, 7), Rational(-2, 6), Rational(0), Rational(0)) +
                         ListPolynomial(Rational(-6, 3), Rational(-7, 2), Rational(2, 3)),
                 "test 3"
             )
             // (-2/4 - 6/9 x - 4/9 x^2) + (2/4 + 6/9 x + 4/9 x^2) ?= 0
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0), Rational(0), Rational(0)),
                 ListPolynomial(Rational(-2, 4), Rational(-6, 9), Rational(-4, 9)) +
                         ListPolynomial(Rational(2, 4), Rational(6, 9), Rational(4, 9)),
                 "test 4"
@@ -457,14 +457,14 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
             )
             // (-4/7 - 2/6 x + 0 x^2 + 0 x^3) - (-6/3 - 7/2 x + 2/3 x^2) ?= 10/7 + 19/6 x - 2/3 x^2
             assertEquals(
-                ListPolynomial(Rational(10, 7), Rational(19, 6), Rational(-2, 3)),
+                ListPolynomial(Rational(10, 7), Rational(19, 6), Rational(-2, 3), Rational(0)),
                 ListPolynomial(Rational(-4, 7), Rational(-2, 6), Rational(0), Rational(0)) -
                         ListPolynomial(Rational(-6, 3), Rational(-7, 2), Rational(2, 3)),
                 "test 3"
             )
             // (-2/4 - 6/9 x - 4/9 x^2) - (-2/4 - 6/9 x - 4/9 x^2) ?= 0
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(Rational(0), Rational(0), Rational(0)),
                 ListPolynomial(Rational(-2, 4), Rational(-6, 9), Rational(-4, 9)) -
                         ListPolynomial(Rational(-2, 4), Rational(-6, 9), Rational(-4, 9)),
                 "test 4"
@@ -482,69 +482,9 @@ class ListPolynomialTest { // TODO: Adapt tests to changes
             )
             // Spoiler: 5 * 7 = 0
             assertEquals(
-                ListPolynomial(),
+                ListPolynomial(0, 0, 0, 0, 0),
                 ListPolynomial(5, -25, 10) * ListPolynomial(21, 14, -7),
                 "test 2"
-            )
-        }
-    }
-    @Test
-    fun test_Polynomial_degree() {
-        RationalField.listPolynomial {
-            assertEquals(
-                2,
-                ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)).degree,
-                "test 1"
-            )
-            assertEquals(
-                -1,
-                ListPolynomial<Rational>().degree,
-                "test 2"
-            )
-            assertEquals(
-                -1,
-                ListPolynomial(Rational(0)).degree,
-                "test 3"
-            )
-            assertEquals(
-                -1,
-                ListPolynomial(Rational(0), Rational(0)).degree,
-                "test 4"
-            )
-            assertEquals(
-                -1,
-                ListPolynomial(Rational(0), Rational(0), Rational(0)).degree,
-                "test 5"
-            )
-            assertEquals(
-                0,
-                ListPolynomial(Rational(5, 9)).degree,
-                "test 6"
-            )
-            assertEquals(
-                0,
-                ListPolynomial(Rational(5, 9), Rational(0)).degree,
-                "test 7"
-            )
-            assertEquals(
-                0,
-                ListPolynomial(Rational(5, 9), Rational(0), Rational(0)).degree,
-                "test 8"
-            )
-            assertEquals(
-                2,
-                ListPolynomial(Rational(0), Rational(0), Rational(-8, 7)).degree,
-                "test 9"
-            )
-            assertEquals(
-                2,
-                ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7), Rational(0), Rational(0)).degree,
-                "test 10"
-            )
-            assertEquals(
-                2,
-                ListPolynomial(Rational(0), Rational(0), Rational(-8, 7), Rational(0), Rational(0)).degree,
-                "test 11"
             )
         }
     }
