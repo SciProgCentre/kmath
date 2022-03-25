@@ -17,39 +17,6 @@ public class NumberedRationalFunction<C> internal constructor(
     override fun toString(): String = "NumberedRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
-        NumberedPolynomial(denominatorCoefficients, toCheckInput = true)
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
-        NumberedPolynomial(denominatorCoefficients, toCheckInput = true)
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(numerator, polynomialOne)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(numerator, NumberedPolynomial(mapOf(emptyList<UInt>() to one), toCheckInput = false))
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
-        polynomialOne
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
-    NumberedRationalFunction<C>(
-        NumberedPolynomial(numeratorCoefficients, toCheckInput = true),
-        NumberedPolynomial(mapOf(emptyList<UInt>() to one), toCheckInput = false)
-    )
-
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
 ) :

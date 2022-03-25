@@ -17,39 +17,6 @@ public class LabeledRationalFunction<C>(
     override fun toString(): String = "LabeledRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(denominatorCoefficients, toCheckInput = true)
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(denominatorCoefficients, toCheckInput = true)
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(numerator, polynomialOne)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(numerator, LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one), toCheckInput = false))
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        polynomialOne
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one), toCheckInput = false)
-    )
-
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
 ) :

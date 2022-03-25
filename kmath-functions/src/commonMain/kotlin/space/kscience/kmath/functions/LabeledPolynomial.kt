@@ -8,10 +8,6 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.experimental.ExperimentalTypeInference
-import kotlin.jvm.JvmName
 import kotlin.math.max
 
 
@@ -48,98 +44,6 @@ internal constructor(
 ) : Polynomial<C> {
     override fun toString(): String = "LabeledPolynomial$coefficients"
 }
-
-/**
- * Returns the same degrees' description of the monomial, but without zero degrees.
- */
-internal fun Map<Symbol, UInt>.cleanUp() = filterValues { it > 0U }
-
-// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
-
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(coefs, toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(coefs, toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(coefs)
-
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in coefs) {
-        val key = entry.key.cleanUp()
-        val value = entry.value
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
-
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs, toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs, toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
-
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
-
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs = pairs, toCheckInput = toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs = pairs, toCheckInput = toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
-
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
-
-//context(A)
-//public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to one))
-//context(LabeledPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
-
-public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to this))
 
 /**
  * Space of polynomials.

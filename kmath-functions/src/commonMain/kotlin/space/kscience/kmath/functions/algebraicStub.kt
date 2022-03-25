@@ -9,7 +9,7 @@ import space.kscience.kmath.operations.*
 
 
 // TODO: All of this should be moved to algebraic structures' place for utilities
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Returns product of [arg] and integer [multiplier].
  *
@@ -22,7 +22,7 @@ internal fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: Int): C =
     if (multiplier >= 0) multiplyBySquaring(arg, multiplier.toUInt())
     else multiplyBySquaring(-arg, (-multiplier).toUInt())
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Adds product of [arg] and [multiplier] to [base].
  *
@@ -36,7 +36,7 @@ internal fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, multiplier
     if (multiplier >= 0) addMultipliedBySquaring(base, arg, multiplier.toUInt())
     else addMultipliedBySquaring(base, -arg, (-multiplier).toUInt())
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Returns product of [arg] and integer [multiplier].
  *
@@ -56,7 +56,7 @@ internal tailrec fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: UInt): 
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Adds product of [arg] and [multiplier] to [base].
  *
@@ -77,7 +77,7 @@ internal tailrec fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, mu
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Raises [arg] to the integer power [exponent].
  *
@@ -90,7 +90,7 @@ internal fun <C> Field<C>.exponentiationBySquaring(arg: C, exponent: Int): C =
     if (exponent >= 0) exponentiationBySquaring(arg, exponent.toUInt())
     else exponentiationBySquaring(one / arg, (-exponent).toUInt())
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Multiplies [base] and [arg] raised to the integer power [exponent].
  *
@@ -104,7 +104,7 @@ internal fun <C> Field<C>.multiplyExponentiationBySquaring(base: C, arg: C, expo
     if (exponent >= 0) multiplyExponentiationBySquaring(base, arg, exponent.toUInt())
     else multiplyExponentiationBySquaring(base, one / arg, (-exponent).toUInt())
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Raises [arg] to the integer power [exponent].
  *
@@ -124,7 +124,7 @@ internal tailrec fun <C> Ring<C>.exponentiationBySquaring(arg: C, exponent: UInt
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
-// TODO: Move receiver to context receiver
+// FIXME: Move receiver to context receiver
 /**
  * Multiplies [base] and [arg] raised to the integer power [exponent].
  *

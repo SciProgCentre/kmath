@@ -9,38 +9,6 @@ import kotlin.math.max
 
 // TODO: Docs
 
-//// TODO: Reuse underlying ring extensions
-//
-//context(NumberedPolynomialSpace<C, A>)
-//@Suppress("NOTHING_TO_INLINE")
-//public fun <C, A: Ring<C>> numberConstant(value: Int): C = ring { number<C>(value) }
-//
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
-
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> number(value: Int): NumberedPolynomial<C> = ring { NumberedPolynomial<C>(mapOf(emptyList<UInt>() to number<C>(value))) }
-//
-//context(NumberedPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> multiplyWithPower(base: NumberedPolynomial<C>, arg: NumberedPolynomial<C>, pow: UInt): NumberedPolynomial<C> =
-//    when {
-//        arg.isZero() && pow > 0U -> base
-//        arg.isOne() -> base
-//        arg.isMinusOne() -> if (pow % 2U == 0U) base else -base
-//        else -> multiplyWithPowerInternalLogic(base, arg, pow)
-//    }
-//
-//// Trivial but very slow
-//context(NumberedPolynomialSpace<C, A>)
-//internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: NumberedPolynomial<C>, arg: NumberedPolynomial<C>, exponent: UInt): NumberedPolynomial<C> =
-//    when {
-//        exponent == 0U -> base
-//        exponent == 1U -> base * arg
-//        exponent % 2U == 0U -> multiplyWithPowerInternalLogic(base, arg * arg, exponent / 2U)
-//        exponent % 2U == 1U -> multiplyWithPowerInternalLogic(base * arg, arg * arg, exponent / 2U)
-//        else -> error("Error in raising ring instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
-//    }
-
 /**
  * Creates a [NumberedPolynomialSpace] over a received ring.
  */
@@ -271,7 +239,6 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomial(block: NumberedPolyno
 //            toCheckInput = false
 //        )
 
-// TODO: May be apply Horner's method too?
 /**
  * Evaluates the value of the given double polynomial for given double argument.
  */

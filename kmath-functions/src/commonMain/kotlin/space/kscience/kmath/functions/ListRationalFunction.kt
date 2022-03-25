@@ -15,39 +15,6 @@ public data class ListRationalFunction<C>(
     override fun toString(): String = "RationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
-// Waiting for context receivers :( TODO: Replace with context receivers when they will be available
-
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> ListRationalFunctionSpace<C, A>.ListRationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    ListRationalFunction<C>(
-        ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-        ListPolynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } )
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.ListRationalFunction(numeratorCoefficients: List<C>, denominatorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    ListRationalFunction<C>(
-        ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-        ListPolynomial( with(denominatorCoefficients) { if (reverse) reversed() else this } )
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> ListRationalFunctionSpace<C, A>.ListRationalFunction(numerator: ListPolynomial<C>): ListRationalFunction<C> =
-    ListRationalFunction<C>(numerator, polynomialOne)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.ListRationalFunction(numerator: ListPolynomial<C>): ListRationalFunction<C> =
-    ListRationalFunction<C>(numerator, ListPolynomial(listOf(one)))
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> ListRationalFunctionSpace<C, A>.ListRationalFunction(numeratorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    ListRationalFunction<C>(
-        ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-        polynomialOne
-    )
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.ListRationalFunction(numeratorCoefficients: List<C>, reverse: Boolean = false): ListRationalFunction<C> =
-    ListRationalFunction<C>(
-        ListPolynomial( with(numeratorCoefficients) { if (reverse) reversed() else this } ),
-        ListPolynomial(listOf(one))
-    )
-
 public class ListRationalFunctionSpace<C, A : Ring<C>> (
     public val ring: A,
 ) :

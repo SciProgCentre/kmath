@@ -51,24 +51,6 @@ public data class ListPolynomial<C>(
 }
 
 /**
- * Returns a [ListPolynomial] instance with given [coefficients]. The collection of coefficients will be reversed if
- * [reverse] parameter is true.
- */
-@Suppress("FunctionName")
-public fun <C> ListPolynomial(coefficients: List<C>, reverse: Boolean = false): ListPolynomial<C> =
-    ListPolynomial(with(coefficients) { if (reverse) reversed() else this })
-
-/**
- * Returns a [ListPolynomial] instance with given [coefficients]. The collection of coefficients will be reversed if
- * [reverse] parameter is true.
- */
-@Suppress("FunctionName")
-public fun <C> ListPolynomial(vararg coefficients: C, reverse: Boolean = false): ListPolynomial<C> =
-    ListPolynomial(with(coefficients) { if (reverse) reversed() else toList() })
-
-public fun <C> C.asListPolynomial() : ListPolynomial<C> = ListPolynomial(listOf(this))
-
-/**
  * Space of univariate polynomials constructed over ring.
  *
  * @param C the type of constants. Polynomials have them as a coefficients in their terms.

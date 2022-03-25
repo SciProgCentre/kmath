@@ -27,7 +27,7 @@ public interface RationalFunction<C, P: Polynomial<C>> {
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
- */ // TODO: Add support of field
+ */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunction<C, P>> : Ring<R> {
     /**
@@ -457,7 +457,7 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
- */ // TODO: Add support of field
+ */
 @Suppress("INAPPLICABLE_JVM_NAME")
 public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: RationalFunction<C, P>, A: Ring<C>> : RationalFunctionalSpace<C, P, R> {
 
@@ -551,7 +551,7 @@ public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: Rationa
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
  * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
- */ // TODO: Add support of field
+ */
 @Suppress("INAPPLICABLE_JVM_NAME")
 public interface RationalFunctionalSpaceOverPolynomialSpace<
         C,
@@ -779,8 +779,7 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
- * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
- */ // TODO: Add support of field
+ */
 @Suppress("INAPPLICABLE_JVM_NAME")
 public abstract class PolynomialSpaceOfFractions<
         C,
