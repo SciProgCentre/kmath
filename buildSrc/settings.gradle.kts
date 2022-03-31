@@ -4,7 +4,6 @@
  */
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
 
 dependencyResolutionManagement {
     val toolsVersion: String by extra
@@ -17,7 +16,7 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("npmlibs") {
+        create("miptNpmLibs") {
             from("ru.mipt.npm:version-catalog:$toolsVersion")
         }
     }
