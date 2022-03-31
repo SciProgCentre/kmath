@@ -14,13 +14,13 @@ jobs:
         os: [ macOS-latest, windows-latest ]
     runs-on: ${{matrix.os}}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2.5.0
+      - uses: actions/checkout@v3.0.0
+      - uses: actions/setup-java@v3.0.0
         with:
           java-version: 11
           distribution: liberica
       - name: Cache gradle
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         with:
           path: |
             ~/.gradle/caches
@@ -29,14 +29,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Cache konan
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         with:
           path: ~/.konan
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.4
+      - uses: gradle/wrapper-validation-action@v1.0.4
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
         shell: cmd
