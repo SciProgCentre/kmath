@@ -14,15 +14,6 @@ jobs:
         with:
           java-version: 11
           distribution: liberica
-      - name: Cache gradle
-        uses: actions/cache@v3.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Cache konan
         uses: actions/cache@v3.0.1
         with:
@@ -30,7 +21,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - run: ./gradlew dokkaHtmlMultiModule --build-cache --no-daemon --no-parallel --stacktrace
+      - uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: dokkaHtmlMultiModule --no-parallel
       - uses: JamesIves/github-pages-deploy-action@4.2.5
         with:
           branch: gh-pages

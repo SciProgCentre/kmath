@@ -18,15 +18,6 @@ jobs:
         with:
           java-version: 11
           distribution: liberica
-      - name: Cache gradle
-        uses: actions/cache@v3.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Cache konan
         uses: actions/cache@v3.0.1
         with:
@@ -36,5 +27,6 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.4
-      - name: Build
-        run: ./gradlew build --build-cache --no-daemon --stacktrace
+      - uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: build
