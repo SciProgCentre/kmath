@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.invoke
 
 
 /**
@@ -97,8 +97,10 @@ public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomia
 public fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
 
 @DslMarker
+@UnstableKMathAPI
 internal annotation class NumberedPolynomialConstructorDSL
 
+@UnstableKMathAPI
 @NumberedPolynomialConstructorDSL
 public class NumberedPolynomialTermSignatureBuilder {
     private val signature: MutableList<UInt> = ArrayList()
@@ -111,43 +113,48 @@ public class NumberedPolynomialTermSignatureBuilder {
             signature[this] = deg
         }
     }
-    public infix fun Int.pow(deg: UInt): Unit = this inPowerOf deg
-    public infix fun Int.of(deg: UInt): Unit = this inPowerOf deg
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Int.pow(deg: UInt): Unit = this inPowerOf deg
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Int.`in`(deg: UInt): Unit = this inPowerOf deg
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Int.of(deg: UInt): Unit = this inPowerOf deg
 }
 
-@NumberedPolynomialConstructorDSL
-public class NumberedPolynomialBuilderOverRing<C> internal constructor(internal val context: Ring<C>, capacity: Int = 0) {
+@UnstableKMathAPI
+public class NumberedPolynomialBuilder<C>(private val zero: C, private val add: (C, C) -> C, capacity: Int = 0) {
     private val coefficients: MutableMap<List<UInt>, C> = LinkedHashMap(capacity)
     public fun build(): NumberedPolynomial<C> = NumberedPolynomial<C>(coefficients)
     public operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit) {
         val signature = NumberedPolynomialTermSignatureBuilder().apply(block).build()
-        coefficients[signature] = context { coefficients.getOrElse(signature) { zero } + this@invoke }
+        coefficients[signature] = add(coefficients.getOrElse(signature) { zero }, this@invoke)
     }
-    public infix fun C.with(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun C.with(noinline block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun (NumberedPolynomialTermSignatureBuilder.() -> Unit).with(coef: C): Unit = coef.invoke(this)
+    @Suppress("NOTHING_TO_INLINE")
+    public infix fun sig(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): NumberedPolynomialTermSignatureBuilder.() -> Unit = block
 }
 
-@NumberedPolynomialConstructorDSL
-public class NumberedPolynomialBuilderOverPolynomialSpace<C> internal constructor(internal val context: NumberedPolynomialSpace<C, *>, capacity: Int = 0) {
-    private val coefficients: MutableMap<List<UInt>, C> = LinkedHashMap(capacity)
-    public fun build(): NumberedPolynomial<C> = NumberedPolynomial<C>(coefficients)
-    public operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit) {
-        val signature = NumberedPolynomialTermSignatureBuilder().apply(block).build()
-        coefficients[signature] = context { coefficients.getOrElse(signature) { constantZero } + this@invoke }
-    }
-}
+// Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
+@UnstableKMathAPI
 @NumberedPolynomialConstructorDSL
 @Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.NumberedPolynomial(block: NumberedPolynomialBuilderOverRing<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverRing(this).apply(block).build()
+public inline fun <C, A: Ring<C>> A.NumberedPolynomial(block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(zero, ::add).apply(block).build()
+@UnstableKMathAPI
 @NumberedPolynomialConstructorDSL
 @Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilderOverRing<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverRing(this, capacity).apply(block).build()
+public inline fun <C, A: Ring<C>> A.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(zero, ::add, capacity).apply(block).build()
+@UnstableKMathAPI
 @NumberedPolynomialConstructorDSL
 @Suppress("FunctionName")
-public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(block: NumberedPolynomialBuilderOverPolynomialSpace<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverPolynomialSpace(this).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(constantZero, { left: C, right: C -> left + right}).apply(block).build()
+@UnstableKMathAPI
 @NumberedPolynomialConstructorDSL
 @Suppress("FunctionName")
-public fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilderOverPolynomialSpace<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilderOverPolynomialSpace(this, capacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(capacity: Int, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(constantZero, { left: C, right: C -> left + right}, capacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 

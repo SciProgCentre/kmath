@@ -6,6 +6,7 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
 
@@ -102,6 +103,61 @@ public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(
 //public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
 
 public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to this))
+
+@DslMarker
+@UnstableKMathAPI
+internal annotation class LabeledPolynomialConstructorDSL
+
+@UnstableKMathAPI
+@LabeledPolynomialConstructorDSL
+public class LabeledPolynomialTermSignatureBuilder {
+    private val signature: MutableMap<Symbol, UInt> = LinkedHashMap()
+    public fun build(): Map<Symbol, UInt> = signature
+    public infix fun Symbol.inPowerOf(deg: UInt) {
+        signature[this] = deg
+    }
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Symbol.pow(deg: UInt): Unit = this inPowerOf deg
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Symbol.`in`(deg: UInt): Unit = this inPowerOf deg
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun Symbol.of(deg: UInt): Unit = this inPowerOf deg
+}
+
+@UnstableKMathAPI
+public class LabeledPolynomialBuilder<C>(private val zero: C, private val add: (C, C) -> C, capacity: Int = 0) {
+    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = LinkedHashMap(capacity)
+    public fun build(): LabeledPolynomial<C> = LabeledPolynomial<C>(coefficients)
+    public operator fun C.invoke(block: LabeledPolynomialTermSignatureBuilder.() -> Unit) {
+        val signature = LabeledPolynomialTermSignatureBuilder().apply(block).build()
+        coefficients[signature] = add(coefficients.getOrElse(signature) { zero }, this@invoke)
+    }
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun C.with(noinline block: LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline infix fun (LabeledPolynomialTermSignatureBuilder.() -> Unit).with(coef: C): Unit = coef.invoke(this)
+    @Suppress("NOTHING_TO_INLINE")
+    public infix fun sig(block: LabeledPolynomialTermSignatureBuilder.() -> Unit): LabeledPolynomialTermSignatureBuilder.() -> Unit = block
+}
+
+// Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
+
+@UnstableKMathAPI
+@LabeledPolynomialConstructorDSL
+@Suppress("FunctionName")
+public inline fun <C, A: Ring<C>> A.LabeledPolynomial(block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(zero, ::add).apply(block).build()
+@UnstableKMathAPI
+@LabeledPolynomialConstructorDSL
+@Suppress("FunctionName")
+public inline fun <C, A: Ring<C>> A.LabeledPolynomial(capacity: Int, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(zero, ::add, capacity).apply(block).build()
+@UnstableKMathAPI
+@LabeledPolynomialConstructorDSL
+@Suppress("FunctionName")
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(constantZero, { left: C, right: C -> left + right}).apply(block).build()
+@UnstableKMathAPI
+@LabeledPolynomialConstructorDSL
+@Suppress("FunctionName")
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(capacity: Int, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(constantZero, { left: C, right: C -> left + right}, capacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
