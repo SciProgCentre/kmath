@@ -80,6 +80,7 @@ public object StrictJafamaDoubleField : ExtendedField<Double>, Norm<Double, Doub
         }
 
     override inline fun add(left: Double, right: Double): Double = left + right
+    override inline fun negate(arg: Double): Double = -arg
 
     override inline fun multiply(left: Double, right: Double): Double = left * right
     override inline fun divide(left: Double, right: Double): Double = left / right
@@ -107,7 +108,6 @@ public object StrictJafamaDoubleField : ExtendedField<Double>, Norm<Double, Doub
 
     override inline fun norm(arg: Double): Double = StrictFastMath.abs(arg)
 
-    override inline fun Double.unaryMinus(): Double = -this
     override inline fun Double.plus(arg: Double): Double = this + arg
     override inline fun Double.minus(arg: Double): Double = this - arg
     override inline fun Double.times(arg: Double): Double = this * arg

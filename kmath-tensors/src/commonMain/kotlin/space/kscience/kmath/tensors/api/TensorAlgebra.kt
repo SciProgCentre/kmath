@@ -153,13 +153,6 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     public operator fun Tensor<T>.timesAssign(arg: StructureND<T>)
 
     /**
-     * Numerical negative, element-wise.
-     *
-     * @return tensor negation of the original tensor.
-     */
-    override operator fun StructureND<T>.unaryMinus(): Tensor<T>
-
-    /**
      * Returns the tensor at index i
      * For more information: https://pytorch.org/cppdocs/notes/tensor_indexing.html
      *
@@ -327,6 +320,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
     public fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int>
 
     override fun add(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left + right
+
+    /**
+     * Numerical negative, element-wise.
+     *
+     * @return tensor negation of the original tensor.
+     */
+    override fun negate(arg: StructureND<T>): Tensor<T>
 
     override fun multiply(left: StructureND<T>, right: StructureND<T>): Tensor<T> = left * right
 }

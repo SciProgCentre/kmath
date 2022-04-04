@@ -179,7 +179,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun Tensor<T>.timesAssign(arg: StructureND<T>): Unit = operateInPlace(arg, ops.math::mul)
 
-    override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = operate(ops.math::neg)
+    override fun negate(arg: StructureND<T>): TensorFlowOutput<T, TT> = arg.operate(ops.math::neg)
 
     override fun Tensor<T>.get(i: Int): Tensor<T> = operate {
         TODO("Not yet implemented")

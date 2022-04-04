@@ -51,5 +51,5 @@ public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler
         }
     }
 
-    override fun Sampler<T>.unaryMinus(): Sampler<T> = scale(this, -1.0)
+    override fun negate(arg: Sampler<T>): Sampler<T> = scale(arg, -1.0)
 }

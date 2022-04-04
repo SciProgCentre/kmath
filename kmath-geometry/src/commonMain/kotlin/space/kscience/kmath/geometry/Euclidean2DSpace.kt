@@ -44,7 +44,7 @@ public object Euclidean2DSpace : GeometrySpace<Vector2D>, ScaleOperations<Vector
     override val zero: Vector2D by lazy { Vector2D(0.0, 0.0) }
 
     public fun Vector2D.norm(): Double = sqrt(x * x + y * y)
-    override fun Vector2D.unaryMinus(): Vector2D = Vector2D(-x, -y)
+    override fun negate(arg: Vector2D): Vector2D = Vector2D(-arg.x, -arg.y)
 
     override fun Vector2D.distanceTo(other: Vector2D): Double = (this - other).norm()
     override fun add(left: Vector2D, right: Vector2D): Vector2D = Vector2D(left.x + right.x, left.y + right.y)

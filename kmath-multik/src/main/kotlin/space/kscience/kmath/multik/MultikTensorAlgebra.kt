@@ -212,8 +212,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         }
     }
 
-    override fun StructureND<T>.unaryMinus(): MultikTensor<T> =
-        asMultik().array.unaryMinus().wrap()
+    override fun negate(arg: StructureND<T>): MultikTensor<T> = arg.asMultik().array.unaryMinus().wrap()
 
     override fun Tensor<T>.get(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 

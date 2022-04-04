@@ -79,7 +79,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     override fun multiply(left: StructureND<Double>, right: StructureND<Double>): DoubleBufferND =
         zipInline(left.toBufferND(), right.toBufferND()) { l, r -> l * r }
 
-    override fun StructureND<Double>.unaryMinus(): DoubleBufferND = mapInline(toBufferND()) { -it }
+    override fun negate(arg:StructureND<Double>): DoubleBufferND = mapInline(arg.toBufferND()) { -it }
 
     override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleBufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l, r -> l / r }
@@ -92,8 +92,6 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
     override fun Double.div(arg: StructureND<Double>): DoubleBufferND =
         mapInline(arg.toBufferND()) { this / it }
-
-    override fun StructureND<Double>.unaryPlus(): DoubleBufferND = toBufferND()
 
     override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleBufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l + r }

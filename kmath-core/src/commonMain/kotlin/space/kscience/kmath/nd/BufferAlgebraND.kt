@@ -101,7 +101,7 @@ public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
     override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
-    override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
+    override fun negate(arg: StructureND<T>): StructureND<T> = arg.map { -it }
 }
 
 public open class BufferedRingOpsND<T, out A : Ring<T>>(

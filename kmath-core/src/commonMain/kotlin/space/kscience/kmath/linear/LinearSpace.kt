@@ -10,10 +10,7 @@ import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.operations.BufferRingOps
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer

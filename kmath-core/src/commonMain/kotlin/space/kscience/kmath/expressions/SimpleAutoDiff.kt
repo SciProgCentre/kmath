@@ -163,8 +163,8 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 //        derive(const { this@minus.value - one * b.toDouble() }) { z -> d += z.d }
 
 
-    override fun AutoDiffValue<T>.unaryMinus(): AutoDiffValue<T> =
-        derive(const { -value }) { z -> d -= z.d }
+    override fun negate(arg: AutoDiffValue<T>): AutoDiffValue<T> =
+        derive(const { -arg.value }) { z -> arg.d -= z.d }
 
     // Basic math (+, -, *, /)
 

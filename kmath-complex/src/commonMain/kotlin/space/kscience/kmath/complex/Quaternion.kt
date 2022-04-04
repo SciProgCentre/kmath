@@ -169,7 +169,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     override operator fun Number.times(arg: Quaternion): Quaternion =
         Quaternion(toDouble() * arg.w, toDouble() * arg.x, toDouble() * arg.y, toDouble() * arg.z)
 
-    override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
+    override fun negate(arg: Quaternion): Quaternion = Quaternion(-arg.w, -arg.x, -arg.y, -arg.z)
     override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
 
     override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {

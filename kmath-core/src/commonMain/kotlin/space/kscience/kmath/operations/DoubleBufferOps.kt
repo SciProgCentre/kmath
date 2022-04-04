@@ -32,7 +32,7 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     override fun binaryOperationFunction(operation: String): (left: Buffer<Double>, right: Buffer<Double>) -> Buffer<Double> =
         super<ExtendedFieldOps>.binaryOperationFunction(operation)
 
-    override fun Buffer<Double>.unaryMinus(): DoubleBuffer = mapInline { -it }
+    override fun negate(arg: Buffer<Double>): DoubleBuffer = arg.mapInline { -it }
 
     override fun add(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
         require(right.size == left.size) {

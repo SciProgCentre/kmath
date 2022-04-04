@@ -10,12 +10,6 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 
 /**
- * Stub for DSL the [Algebra] is.
- */
-@DslMarker
-public annotation class KMathContext
-
-/**
  * Represents an algebraic structure.
  *
  * @param T the type of element of this structure.
@@ -137,23 +131,13 @@ public interface GroupOps<T> : Algebra<T> {
      */
     public fun add(left: T, right: T): T
 
-    // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176.
-
     /**
      * The negation of this element.
      *
-     * @receiver this value.
+     * @param arg the element.
      * @return the additive inverse of this value.
      */
-    public operator fun T.unaryMinus(): T
-
-    /**
-     * Returns this value.
-     *
-     * @receiver this value.
-     * @return this value.
-     */
-    public operator fun T.unaryPlus(): T = this
+    public fun negate(arg: T): T
 
     /**
      * Addition of two elements.
@@ -173,10 +157,9 @@ public interface GroupOps<T> : Algebra<T> {
      */
     public operator fun T.minus(arg: T): T = add(this, -arg)
 
-    // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
         PLUS_OPERATION -> { arg -> +arg }
-        MINUS_OPERATION -> { arg -> -arg }
+        MINUS_OPERATION -> ::negate
         else -> super.unaryOperationFunction(operation)
     }
 
@@ -198,6 +181,24 @@ public interface GroupOps<T> : Algebra<T> {
         public const val MINUS_OPERATION: String = "-"
     }
 }
+
+/**
+ * The negation of this element.
+ *
+ * @receiver the element.
+ * @return the additive inverse of this value.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.unaryMinus(): T = negate(this)
+
+/**
+ * Returns this value.
+ *
+ * @receiver this value.
+ * @return this value.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.unaryPlus(): T = this
 
 /**
  * Represents group i.e., algebraic structure with associative, binary operation [add].
@@ -264,7 +265,7 @@ public interface Ring<T> : Group<T>, RingOps<T> {
      */
     public fun power(arg: T, pow: UInt): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the non-negative integer power [exponent].
          *
@@ -345,7 +346,7 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
 
     public fun power(arg: T, pow: Int): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the integer power [exponent].
          *
@@ -358,7 +359,10 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
          * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
          */
         private fun <T> Field<T>.optimizedPower(arg: T, exponent: Int): T = when {
-            exponent < 0 -> one / (this as Ring<T>).optimizedPower(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+            exponent < 0 -> one / (this as Ring<T>).optimizedPower(
+                arg,
+                if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt()
+            )
             else -> (this as Ring<T>).optimizedPower(arg, exponent.toUInt())
         }
     }

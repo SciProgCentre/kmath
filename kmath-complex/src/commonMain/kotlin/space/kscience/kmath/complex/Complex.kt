@@ -71,14 +71,13 @@ public object ComplexField :
      */
     public val i: Complex by lazy { Complex(0.0, 1.0) }
 
-    override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
 
     override fun number(value: Number): Complex = Complex(value.toDouble(), 0.0)
 
     override fun scale(a: Complex, value: Double): Complex = Complex(a.re * value, a.im * value)
 
     override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
-//    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
+    override fun negate(arg: Complex): Complex = Complex(-arg.re, -arg.im)
 
     override fun multiply(left: Complex, right: Complex): Complex =
         Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)

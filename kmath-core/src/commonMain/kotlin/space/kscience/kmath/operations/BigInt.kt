@@ -33,7 +33,7 @@ public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperation
     override fun number(value: Number): BigInt = value.toLong().toBigInt()
 
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-    override fun BigInt.unaryMinus(): BigInt = -this
+    override fun negate(arg: BigInt): BigInt = -arg
     override fun add(left: BigInt, right: BigInt): BigInt = left.plus(right)
     override fun scale(a: BigInt, value: Double): BigInt = a.times(number(value))
     override fun multiply(left: BigInt, right: BigInt): BigInt = left.times(right)

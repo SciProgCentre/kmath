@@ -51,8 +51,8 @@ public open class FunctionalExpressionGroup<T, out A : Group<T>>(
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
     override val zero: Expression<T> get() = const(algebra.zero)
 
-    override fun Expression<T>.unaryMinus(): Expression<T> =
-        unaryOperation(GroupOps.MINUS_OPERATION, this)
+    override fun negate(arg: Expression<T>): Expression<T> =
+        unaryOperation(GroupOps.MINUS_OPERATION, arg)
 
     /**
      * Builds an Expression of addition of two another expressions.
