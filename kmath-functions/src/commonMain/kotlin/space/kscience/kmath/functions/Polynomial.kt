@@ -71,7 +71,7 @@ public fun <T, A> Polynomial<T>.integrate(
 ): Polynomial<T> where  A : Field<T>, A : NumericAlgebra<T> = algebra {
     val integratedCoefficients = buildList(coefficients.size + 1) {
         add(zero)
-        coefficients.forEachIndexed{ index, t -> add(t / (number(index) + one)) }
+        coefficients.forEachIndexed { index, t -> add(t / (number(index) + one)) }
     }
     Polynomial(integratedCoefficients)
 }
@@ -100,8 +100,8 @@ public class PolynomialSpace<T, C>(
 ) : Group<Polynomial<T>>, ScaleOperations<Polynomial<T>> where C : Ring<T>, C : ScaleOperations<T> {
     override val zero: Polynomial<T> = Polynomial(emptyList())
 
-    override fun Polynomial<T>.unaryMinus(): Polynomial<T> = ring {
-        Polynomial(coefficients.map { -it })
+    override fun negate(arg: Polynomial<T>): Polynomial<T> = ring {
+        Polynomial(arg.coefficients.map { -it })
     }
 
     override fun add(left: Polynomial<T>, right: Polynomial<T>): Polynomial<T> {

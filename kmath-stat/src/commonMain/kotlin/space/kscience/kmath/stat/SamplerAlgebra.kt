@@ -9,9 +9,7 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.ConstantChain
 import space.kscience.kmath.chains.map
 import space.kscience.kmath.chains.zip
-import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 
 /**
  * Implements [Sampler] by sampling only certain [value].
@@ -51,5 +49,5 @@ public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler
         }
     }
 
-    override fun Sampler<T>.unaryMinus(): Sampler<T> = scale(this, -1.0)
+    override fun negate(arg: Sampler<T>): Sampler<T> = scale(arg, -1.0)
 }

@@ -5,8 +5,7 @@
 
 package space.kscience.kmath.testutils
 
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 

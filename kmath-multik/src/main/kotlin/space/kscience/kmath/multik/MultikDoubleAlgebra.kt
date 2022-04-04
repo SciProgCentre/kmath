@@ -7,28 +7,29 @@ package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.ExponentialOperations
-import space.kscience.kmath.operations.TrigonometricOperations
+import space.kscience.kmath.operations.*
 
 public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleField>(),
     TrigonometricOperations<StructureND<Double>>, ExponentialOperations<StructureND<Double>> {
     override val elementAlgebra: DoubleField get() = DoubleField
     override val type: DataType get() = DataType.DoubleDataType
 
-    override fun sin(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.sin(arg.asMultik().array).wrap()
+    override fun sin(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.sin(arg.asMultik().array).wrap()
 
-    override fun cos(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.cos(arg.asMultik().array).wrap()
+    override fun cos(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.cos(arg.asMultik().array).wrap()
 
     override fun tan(arg: StructureND<Double>): MultikTensor<Double> = sin(arg) / cos(arg)
 
-    override fun asin(arg: StructureND<Double>): MultikTensor<Double>  = arg.map { asin(it) }
+    override fun asin(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asin(it) }
 
     override fun acos(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acos(it) }
 
     override fun atan(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atan(it) }
 
-    override fun exp(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.exp(arg.asMultik().array).wrap()
+    override fun exp(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.exp(arg.asMultik().array).wrap()
 
     override fun ln(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.log(arg.asMultik().array).wrap()
 
@@ -39,7 +40,7 @@ public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleFi
     override fun tanh(arg: StructureND<Double>): MultikTensor<Double> {
         val expPlus = exp(arg)
         val expMinus = exp(-arg)
-        return (expPlus - expMinus) / (expPlus + expMinus)
+        return divide((expPlus - expMinus), (expPlus + expMinus))
     }
 
     override fun asinh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asinh(it) }
@@ -51,4 +52,3 @@ public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleFi
 
 public val Double.Companion.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra
 public val DoubleField.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra
-

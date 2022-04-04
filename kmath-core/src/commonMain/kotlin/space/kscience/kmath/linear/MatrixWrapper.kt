@@ -89,6 +89,5 @@ public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : Ma
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
 @Suppress("UNCHECKED_CAST")
-@OptIn(UnstableKMathAPI::class)
 public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature(TransposedFeature::class)?.original as? Matrix<T>
     ?: VirtualMatrix(colNum, rowNum) { i, j -> get(j, i) }.withFeature(TransposedFeature(this))

@@ -6,6 +6,8 @@
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.minus
+import space.kscience.kmath.operations.plus
 import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals

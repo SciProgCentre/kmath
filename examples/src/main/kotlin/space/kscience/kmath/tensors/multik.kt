@@ -10,6 +10,8 @@ import org.jetbrains.kotlinx.multik.api.ndarray
 import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.minus
+import space.kscience.kmath.operations.plus
 
 fun main(): Unit = with(DoubleField.multikAlgebra) {
     val a = Multik.ndarray(intArrayOf(1, 2, 3)).asType<Double>().wrap()

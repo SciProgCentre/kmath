@@ -7,6 +7,7 @@ package space.kscience.kmath.misc
 
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.plus
 import kotlin.jvm.JvmName
 
 /**

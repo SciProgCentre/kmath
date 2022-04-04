@@ -14,6 +14,8 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import space.kscience.kmath.operations.toList
 import space.kscience.kmath.optimization.QowOptimizer
 import space.kscience.kmath.optimization.chiSquaredOrNull

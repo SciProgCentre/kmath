@@ -22,8 +22,8 @@ import space.kscience.kmath.tensors.core.internal.tensor
 @PerformancePitfall
 public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
 
-    override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, arg.tensor)
+    override fun add(left: StructureND<Double>, right: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(left.tensor, right.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -40,8 +40,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         }
     }
 
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, arg.tensor)
+    override fun subtract(left: StructureND<Double>, right: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(left.tensor, right.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -58,8 +58,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         }
     }
 
-    override fun StructureND<Double>.times(arg: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, arg.tensor)
+    override fun multiply(left: StructureND<Double>, right: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(left.tensor, right.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->
@@ -77,8 +77,8 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         }
     }
 
-    override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleTensor {
-        val broadcast = broadcastTensors(tensor, arg.tensor)
+    override fun divide(left: StructureND<Double>, right: StructureND<Double>): DoubleTensor {
+        val broadcast = broadcastTensors(left.tensor, right.tensor)
         val newThis = broadcast[0]
         val newOther = broadcast[1]
         val resBuffer = DoubleArray(newThis.indices.linearSize) { i ->

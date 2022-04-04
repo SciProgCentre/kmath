@@ -11,9 +11,7 @@ import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.FieldOpsND
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 
 /**
  * @param T the type of the argument space

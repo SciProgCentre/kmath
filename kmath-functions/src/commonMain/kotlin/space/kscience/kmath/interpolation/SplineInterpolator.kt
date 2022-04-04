@@ -9,9 +9,7 @@ import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
 

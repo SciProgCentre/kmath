@@ -80,7 +80,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
-    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = map { -it }
+    override fun negate(arg: StructureND<Double>): StructureND<Double> = arg.map { -it }
 
     override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
 

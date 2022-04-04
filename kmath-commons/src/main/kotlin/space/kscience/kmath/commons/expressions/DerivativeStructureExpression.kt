@@ -68,7 +68,7 @@ public class DerivativeStructureField(
 
     public fun DerivativeStructure.derivative(vararg symbols: Symbol): Double = derivative(symbols.toList())
 
-    override fun DerivativeStructure.unaryMinus(): DerivativeStructure = negate()
+    override fun negate(arg: DerivativeStructure): DerivativeStructure = arg.negate()
 
     override fun add(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.add(right)
 

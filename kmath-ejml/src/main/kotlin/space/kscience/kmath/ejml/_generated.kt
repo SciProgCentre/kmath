@@ -208,7 +208,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
-        return when (type) {
+        return type.cast(when (type) {
             InverseMatrixFeature::class -> object : InverseMatrixFeature<Double> {
                 override val inverse: Matrix<Double> by lazy {
                     val res = origin.copy()
@@ -270,8 +270,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
                 override val p: Matrix<Double> by lazy { lup.getRowPivot(null).wrapMatrix() }
             }
 
-            else -> null
-        }?.let(type::cast)
+            else -> return null
+        })
     }
 
     /**
@@ -442,7 +442,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
-        return when (type) {
+        return type.cast(when (type) {
             InverseMatrixFeature::class -> object : InverseMatrixFeature<Float> {
                 override val inverse: Matrix<Float> by lazy {
                     val res = origin.copy()
@@ -504,8 +504,8 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
                 override val p: Matrix<Float> by lazy { lup.getRowPivot(null).wrapMatrix() }
             }
 
-            else -> null
-        }?.let(type::cast)
+            else -> return null
+        })
     }
 
     /**
@@ -684,7 +684,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
-        return when (type) {
+        return type.cast(when (type) {
             QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
                 private val qr by lazy {
                     DecompositionFactory_DSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
@@ -733,8 +733,8 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
                 override val determinant: Double by lazy { elementAlgebra.number(lu.computeDeterminant().real) }
             }
 
-            else -> null
-        }?.let(type::cast)
+            else -> return null
+        })
     }
 
     /**
@@ -913,7 +913,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
-        return when (type) {
+        return type.cast(when (type) {
             QRDecompositionFeature::class -> object : QRDecompositionFeature<Float> {
                 private val qr by lazy {
                     DecompositionFactory_FSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
@@ -962,8 +962,8 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
                 override val determinant: Float by lazy { elementAlgebra.number(lu.computeDeterminant().real) }
             }
 
-            else -> null
-        }?.let(type::cast)
+            else -> return null
+        })
     }
 
     /**

@@ -5,9 +5,10 @@
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.operations.div
+import space.kscience.kmath.operations.minus
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import space.kscience.kmath.tensors.core.withBroadcast
-
 
 // Dataset normalization
 

@@ -5,6 +5,11 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.operations.div
+import space.kscience.kmath.operations.minus
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
+
 /**
  * Project vector onto a line.
  * @param vector to project

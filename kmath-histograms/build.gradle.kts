@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 }
 
 kscience {
@@ -9,6 +9,12 @@ kscience {
 }
 
 kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach {
+            it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        }
+
     commonMain {
         dependencies {
             api(project(":kmath-core"))
@@ -25,4 +31,9 @@ kotlin.sourceSets {
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

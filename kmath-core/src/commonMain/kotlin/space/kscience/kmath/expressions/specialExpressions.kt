@@ -5,8 +5,7 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.asIterable
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName

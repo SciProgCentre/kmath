@@ -9,15 +9,11 @@ package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.ExtendedFieldOps
-import space.kscience.kmath.operations.NumbersAddOps
-import space.kscience.kmath.operations.PowerOperations
+import space.kscience.kmath.operations.*
 
-@OptIn(UnstableKMathAPI::class, PerformancePitfall::class)
-@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@OptIn(PerformancePitfall::class)
+@Suppress("OVERRIDE_BY_INLINE")
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, DoubleField>,
     ExtendedFieldOps<StructureND<Double>>,
@@ -37,8 +33,6 @@ public open class ViktorFieldOpsND :
                 set(value = DoubleField.initializer(index), indices = index)
             }
         }.asStructure()
-
-    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
 
     @PerformancePitfall
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
@@ -74,20 +68,13 @@ public open class ViktorFieldOpsND :
     override fun add(left: StructureND<Double>, right: StructureND<Double>): ViktorStructureND =
         (left.f64Buffer + right.f64Buffer).asStructure()
 
+    override fun negate(arg: StructureND<Double>): StructureND<Double> = -1 * arg
+
+    override fun subtract(left: StructureND<Double>, right: StructureND<Double>): ViktorStructureND =
+        (left.f64Buffer - right.f64Buffer).asStructure()
+
     override fun scale(a: StructureND<Double>, value: Double): ViktorStructureND =
         (a.f64Buffer * value).asStructure()
-
-    override fun StructureND<Double>.plus(arg: StructureND<Double>): ViktorStructureND =
-        (f64Buffer + arg.f64Buffer).asStructure()
-
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): ViktorStructureND =
-        (f64Buffer - arg.f64Buffer).asStructure()
-
-    override fun StructureND<Double>.times(k: Number): ViktorStructureND =
-        (f64Buffer * k.toDouble()).asStructure()
-
-    override fun StructureND<Double>.plus(arg: Double): ViktorStructureND =
-        (f64Buffer.plus(arg)).asStructure()
 
     override fun sin(arg: StructureND<Double>): ViktorStructureND = arg.map { sin(it) }
     override fun cos(arg: StructureND<Double>): ViktorStructureND = arg.map { cos(it) }

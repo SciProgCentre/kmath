@@ -9,15 +9,14 @@ import org.jetbrains.bio.viktor.F64FlatArray
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 
-@Suppress("NOTHING_TO_INLINE", "OVERRIDE_BY_INLINE")
 @JvmInline
 public value class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBuffer<Double> {
     override val size: Int
         get() = flatArray.size
 
-    override inline fun get(index: Int): Double = flatArray[index]
+    override fun get(index: Int): Double = flatArray[index]
 
-    override inline fun set(index: Int, value: Double) {
+    override fun set(index: Int, value: Double) {
         flatArray[index] = value
     }
 

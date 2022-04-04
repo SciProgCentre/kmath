@@ -10,6 +10,7 @@ import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.times
 import space.kscience.kmath.testutils.FieldVerifier
 import kotlin.test.Test
 import kotlin.test.assertEquals

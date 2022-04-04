@@ -32,14 +32,12 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
     override fun number(value: Number): MST.Numeric = MstNumericAlgebra.number(value)
     override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
     override fun add(left: MST, right: MST): MST.Binary = binaryOperationFunction(GroupOps.PLUS_OPERATION)(left, right)
-    override operator fun MST.unaryPlus(): MST.Unary =
-        unaryOperationFunction(GroupOps.PLUS_OPERATION)(this)
 
-    override operator fun MST.unaryMinus(): MST.Unary =
-        unaryOperationFunction(GroupOps.MINUS_OPERATION)(this)
+    override fun negate(arg: MST): MST.Unary =
+        unaryOperationFunction(GroupOps.MINUS_OPERATION)(arg)
 
-    override operator fun MST.minus(arg: MST): MST.Binary =
-        binaryOperationFunction(GroupOps.MINUS_OPERATION)(this, arg)
+    override fun subtract(left: MST, right: MST): MST.Binary =
+        binaryOperationFunction(GroupOps.MINUS_OPERATION)(left, right)
 
     override fun scale(a: MST, value: Double): MST.Binary =
         binaryOperationFunction(RingOps.TIMES_OPERATION)(a, number(value))
@@ -70,9 +68,8 @@ public object MstRing : Ring<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
     override fun multiply(left: MST, right: MST): MST.Binary =
         binaryOperationFunction(RingOps.TIMES_OPERATION)(left, right)
 
-    override operator fun MST.unaryPlus(): MST.Unary = MstGroup { +this@unaryPlus }
-    override operator fun MST.unaryMinus(): MST.Unary = MstGroup { -this@unaryMinus }
-    override operator fun MST.minus(arg: MST): MST.Binary = MstGroup { this@minus - arg }
+    override fun negate(arg: MST): MST.Unary = MstGroup.negate(arg)
+    override fun subtract(left: MST, right: MST): MST.Binary = MstGroup.subtract(left, right)
 
     override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstGroup.binaryOperationFunction(operation)
@@ -101,9 +98,8 @@ public object MstField : Field<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
     override fun divide(left: MST, right: MST): MST.Binary =
         binaryOperationFunction(FieldOps.DIV_OPERATION)(left, right)
 
-    override operator fun MST.unaryPlus(): MST.Unary = MstRing { +this@unaryPlus }
-    override operator fun MST.unaryMinus(): MST.Unary = MstRing { -this@unaryMinus }
-    override operator fun MST.minus(arg: MST): MST.Binary = MstRing { this@minus - arg }
+    override fun negate(arg: MST): MST.Unary = MstRing.negate(arg)
+    override fun subtract(left: MST, right: MST): MST.Binary = MstRing.subtract(left, right)
 
     override fun binaryOperationFunction(operation: String): (left: MST, right: MST) -> MST.Binary =
         MstRing.binaryOperationFunction(operation)
@@ -142,9 +138,8 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
 
     override fun multiply(left: MST, right: MST): MST.Binary = MstField.multiply(left, right)
     override fun divide(left: MST, right: MST): MST.Binary = MstField.divide(left, right)
-    override operator fun MST.unaryPlus(): MST.Unary = MstField { +this@unaryPlus }
-    override operator fun MST.unaryMinus(): MST.Unary = MstField { -this@unaryMinus }
-    override operator fun MST.minus(arg: MST): MST.Binary = MstField { this@minus - arg }
+    override fun negate(arg: MST): MST.Unary = MstField.negate(arg)
+    override fun subtract(left: MST, right: MST): MST.Binary = MstField.subtract(left, right)
 
     override fun power(arg: MST, pow: Number): MST.Binary =
         binaryOperationFunction(PowerOperations.POW_OPERATION)(arg, number(pow))

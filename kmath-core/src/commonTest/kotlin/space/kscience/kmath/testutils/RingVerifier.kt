@@ -5,9 +5,7 @@
 
 package space.kscience.kmath.testutils
 
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import kotlin.test.assertEquals
 
 internal open class RingVerifier<T, out A>(algebra: A, a: T, b: T, c: T, x: Number) :

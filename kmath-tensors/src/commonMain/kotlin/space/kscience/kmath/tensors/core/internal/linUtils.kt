@@ -12,10 +12,7 @@ import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.VirtualBuffer
-import space.kscience.kmath.tensors.core.BufferedTensor
-import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.IntTensor
+import space.kscience.kmath.tensors.core.*
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -316,7 +313,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
                     outerProduct[i * v.shape[0] + j] = u[i].value() * v[j].value()
                 }
             }
-            a = a - singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct))
+            a = subtract(a, singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct)))
         }
         var v: DoubleTensor
         var u: DoubleTensor

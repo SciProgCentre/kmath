@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 }
 
 kotlin.sourceSets.commonMain {
@@ -12,4 +12,9 @@ kotlin.sourceSets.commonMain {
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

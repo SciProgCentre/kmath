@@ -5,8 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
-
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.core.internal.array
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -24,7 +23,7 @@ internal class TestDoubleTensorAlgebra {
     @Test
     fun testDoubleDiv() = DoubleTensorAlgebra {
         val tensor = fromArray(intArrayOf(2), doubleArrayOf(2.0, 4.0))
-        val res = 2.0/tensor
+        val res = 2.0 / tensor
         assertTrue(res.mutableBuffer.array() contentEquals doubleArrayOf(1.0, 0.5))
     }
 
@@ -127,10 +126,12 @@ internal class TestDoubleTensorAlgebra {
         assertTrue(res11.shape contentEquals intArrayOf(2, 2))
 
         val res45 = tensor4.dot(tensor5)
-        assertTrue(res45.mutableBuffer.array() contentEquals doubleArrayOf(
-            36.0, 42.0, 48.0, 81.0, 96.0, 111.0, 126.0, 150.0, 174.0,
-            468.0, 501.0, 534.0, 594.0, 636.0, 678.0, 720.0, 771.0, 822.0
-        ))
+        assertTrue(
+            res45.mutableBuffer.array() contentEquals doubleArrayOf(
+                36.0, 42.0, 48.0, 81.0, 96.0, 111.0, 126.0, 150.0, 174.0,
+                468.0, 501.0, 534.0, 594.0, 636.0, 678.0, 720.0, 771.0, 822.0
+            )
+        )
         assertTrue(res45.shape contentEquals intArrayOf(2, 3, 3))
     }
 
@@ -140,31 +141,44 @@ internal class TestDoubleTensorAlgebra {
         val tensor2 = fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = zeros(intArrayOf(2, 3, 4, 5))
 
-        assertTrue(diagonalEmbedding(tensor3, 0, 3, 4).shape contentEquals
-                intArrayOf(2, 3, 4, 5, 5))
-        assertTrue(diagonalEmbedding(tensor3, 1, 3, 4).shape contentEquals
-                intArrayOf(2, 3, 4, 6, 6))
-        assertTrue(diagonalEmbedding(tensor3, 2, 0, 3).shape contentEquals
-                intArrayOf(7, 2, 3, 7, 4))
+        assertTrue(
+            diagonalEmbedding(tensor3, 0, 3, 4).shape contentEquals
+                    intArrayOf(2, 3, 4, 5, 5)
+        )
+        assertTrue(
+            diagonalEmbedding(tensor3, 1, 3, 4).shape contentEquals
+                    intArrayOf(2, 3, 4, 6, 6)
+        )
+        assertTrue(
+            diagonalEmbedding(tensor3, 2, 0, 3).shape contentEquals
+                    intArrayOf(7, 2, 3, 7, 4)
+        )
 
         val diagonal1 = diagonalEmbedding(tensor1, 0, 1, 0)
         assertTrue(diagonal1.shape contentEquals intArrayOf(3, 3))
-        assertTrue(diagonal1.mutableBuffer.array() contentEquals
-                doubleArrayOf(10.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 30.0))
+        assertTrue(
+            diagonal1.mutableBuffer.array() contentEquals
+                    doubleArrayOf(10.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 30.0)
+        )
 
         val diagonal1Offset = diagonalEmbedding(tensor1, 1, 1, 0)
         assertTrue(diagonal1Offset.shape contentEquals intArrayOf(4, 4))
-        assertTrue(diagonal1Offset.mutableBuffer.array() contentEquals
-                doubleArrayOf(0.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 30.0, 0.0))
+        assertTrue(
+            diagonal1Offset.mutableBuffer.array() contentEquals
+                    doubleArrayOf(0.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 30.0, 0.0)
+        )
 
         val diagonal2 = diagonalEmbedding(tensor2, 1, 0, 2)
         assertTrue(diagonal2.shape contentEquals intArrayOf(4, 2, 4))
-        assertTrue(diagonal2.mutableBuffer.array() contentEquals
-                doubleArrayOf(
-                    0.0, 1.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0,
-                    0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 5.0, 0.0,
-                    0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 6.0,
-                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+        assertTrue(
+            diagonal2.mutableBuffer.array() contentEquals
+                    doubleArrayOf(
+                        0.0, 1.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0,
+                        0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 5.0, 0.0,
+                        0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 6.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+                    )
+        )
     }
 
     @Test

@@ -9,8 +9,7 @@ import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 
 @OptIn(UnstableKMathAPI::class)
 internal fun <T : Comparable<T>> insureSorted(points: XYColumnarData<*, T, *>) {

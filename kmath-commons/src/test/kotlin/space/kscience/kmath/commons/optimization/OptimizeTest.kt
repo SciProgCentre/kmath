@@ -13,7 +13,7 @@ import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.Symbol.Companion.y
 import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer

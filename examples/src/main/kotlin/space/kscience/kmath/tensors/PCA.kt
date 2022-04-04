@@ -5,9 +5,10 @@
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import space.kscience.kmath.tensors.core.withBroadcast
-
 
 // simple PCA
 

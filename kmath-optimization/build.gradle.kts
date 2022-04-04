@@ -1,6 +1,6 @@
 plugins {
     id("ru.mipt.npm.gradle.mpp")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 }
 
 kscience {
@@ -21,4 +21,9 @@ kotlin.sourceSets {
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

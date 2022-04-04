@@ -33,10 +33,19 @@ readme {
     ) { "LinearSpace implementations." }
 }
 
-kotlin.sourceSets.main {
-    val codegen by tasks.creating {
-        ejmlCodegen(kotlin.srcDirs.first().absolutePath + "/space/kscience/kmath/ejml/_generated.kt")
-    }
+kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach {
+            it.optIn("space.kscience.kmath.misc.PerformancePitfall")
+            it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        }
 
-    kotlin.srcDirs(files().builtBy(codegen))
+    main {
+        val codegen by tasks.creating {
+            ejmlCodegen(kotlin.srcDirs.first().absolutePath + "/space/kscience/kmath/ejml/_generated.kt")
+        }
+
+        kotlin.srcDirs(files().builtBy(codegen))
+    }
 }

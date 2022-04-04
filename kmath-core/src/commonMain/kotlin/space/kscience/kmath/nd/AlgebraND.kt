@@ -127,50 +127,53 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
     override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
-    // TODO move to extensions after KEEP-176
-
-    /**
-     * Adds an ND structure to an element of it.
-     *
-     * @receiver the augend.
-     * @param arg the addend.
-     * @return the sum.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun StructureND<T>.plus(arg: T): StructureND<T> = this.map { value -> add(arg, value) }
-
-    /**
-     * Subtracts an element from ND structure of it.
-     *
-     * @receiver the dividend.
-     * @param arg the divisor.
-     * @return the quotient.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun StructureND<T>.minus(arg: T): StructureND<T> = this.map { value -> add(arg, -value) }
-
-    /**
-     * Adds an element to ND structure of it.
-     *
-     * @receiver the augend.
-     * @param arg the addend.
-     * @return the sum.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
-
-    /**
-     * Subtracts an ND structure from an element of it.
-     *
-     * @receiver the dividend.
-     * @param arg the divisor.
-     * @return the quotient.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun T.minus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(-this@minus, value) }
-
     public companion object
 }
+
+/**
+ * Adds an ND structure to an element of it.
+ *
+ * @receiver the augend.
+ * @param arg the addend.
+ * @return the sum.
+ */
+context(GroupOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : GroupOps<T>> StructureND<T>.plus(arg: T): StructureND<T> = this.map { value -> add(arg, value) }
+
+/**
+ * Subtracts an element from ND structure of it.
+ *
+ * @receiver the dividend.
+ * @param arg the divisor.
+ * @return the quotient.
+ */
+context(GroupOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : GroupOps<T>> StructureND<T>.minus(arg: T): StructureND<T> = this.map { value -> add(arg, -value) }
+
+/**
+ * Adds an element to ND structure of it.
+ *
+ * @receiver the augend.
+ * @param arg the addend.
+ * @return the sum.
+ */
+context(GroupOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : GroupOps<T>> T.plus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(this@plus, value) }
+
+/**
+ * Subtracts an ND structure from an element of it.
+ *
+ * @receiver the dividend.
+ * @param arg the divisor.
+ * @return the quotient.
+ */
+context(GroupOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : GroupOps<T>> T.minus(arg: StructureND<T>): StructureND<T> = arg.map { value -> add(-this@minus, value) }
+
 
 public interface GroupND<T, out A : Group<T>> : Group<StructureND<T>>, GroupOpsND<T, A>, WithShape {
     override val zero: StructureND<T> get() = structureND(shape) { elementAlgebra.zero }
@@ -194,30 +197,33 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
     override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
-    //TODO move to extensions with context receivers
-
-    /**
-     * Multiplies an ND structure by an element of it.
-     *
-     * @receiver the multiplicand.
-     * @param arg the multiplier.
-     * @return the product.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun StructureND<T>.times(arg: T): StructureND<T> = this.map { value -> multiply(arg, value) }
-
-    /**
-     * Multiplies an element by a ND structure of it.
-     *
-     * @receiver the multiplicand.
-     * @param arg the multiplier.
-     * @return the product.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun T.times(arg: StructureND<T>): StructureND<T> = arg.map { value -> multiply(this@times, value) }
 
     public companion object
 }
+
+/**
+ * Multiplies an ND structure by an element of it.
+ *
+ * @receiver the multiplicand.
+ * @param arg the multiplier.
+ * @return the product.
+ */
+context(RingOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : RingOps<T>> StructureND<T>.times(arg: T): StructureND<T> =
+    this.map { value -> multiply(arg, value) }
+
+/**
+ * Multiplies an element by a ND structure of it.
+ *
+ * @receiver the multiplicand.
+ * @param arg the multiplier.
+ * @return the product.
+ */
+context(RingOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : RingOps<T>> T.times(arg: StructureND<T>): StructureND<T> =
+    arg.map { value -> multiply(this@times, value) }
 
 public interface RingND<T, out A : Ring<T>> : Ring<StructureND<T>>, RingOpsND<T, A>, GroupND<T, A>, WithShape {
     override val one: StructureND<T> get() = structureND(shape) { elementAlgebra.one }
@@ -245,30 +251,32 @@ public interface FieldOpsND<T, out A : Field<T>> :
     override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
-    //TODO move to extensions after https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md
-    /**
-     * Divides an ND structure by an element of it.
-     *
-     * @receiver the dividend.
-     * @param arg the divisor.
-     * @return the quotient.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun StructureND<T>.div(arg: T): StructureND<T> = this.map { value -> divide(arg, value) }
-
-    /**
-     * Divides an element by an ND structure of it.
-     *
-     * @receiver the dividend.
-     * @param arg the divisor.
-     * @return the quotient.
-     */
-    @OptIn(PerformancePitfall::class)
-    public operator fun T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
-
     @OptIn(PerformancePitfall::class)
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { scale(it, value) }
 }
+
+/**
+ * Divides an ND structure by an element of it.
+ *
+ * @receiver the dividend.
+ * @param arg the divisor.
+ * @return the quotient.
+ */
+context(FieldOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : Field<T>> StructureND<T>.div(arg: T): StructureND<T> = this.map { value -> divide(arg, value) }
+
+/**
+ * Divides an element by an ND structure of it.
+ *
+ * @receiver the dividend.
+ * @param arg the divisor.
+ * @return the quotient.
+ */
+context(FieldOpsND<T, A>)
+@OptIn(PerformancePitfall::class)
+public operator fun <T, A : Field<T>> T.div(arg: StructureND<T>): StructureND<T> = arg.map { divide(it, this@div) }
+
 
 public interface FieldND<T, out A : Field<T>> : Field<StructureND<T>>, FieldOpsND<T, A>, RingND<T, A>, WithShape {
     override val one: StructureND<T> get() = structureND(shape) { elementAlgebra.one }

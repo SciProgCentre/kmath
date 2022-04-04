@@ -5,11 +5,9 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.DoubleTensor
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.copyArray
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.operations.*
+import space.kscience.kmath.tensors.core.*
 import kotlin.math.sqrt
 
 const val seed = 100500L
@@ -27,13 +25,10 @@ open class Activation(
     val activation: (DoubleTensor) -> DoubleTensor,
     val activationDer: (DoubleTensor) -> DoubleTensor,
 ) : Layer {
-    override fun forward(input: DoubleTensor): DoubleTensor {
-        return activation(input)
-    }
+    override fun forward(input: DoubleTensor): DoubleTensor = activation(input)
 
-    override fun backward(input: DoubleTensor, outputError: DoubleTensor): DoubleTensor {
-        return DoubleTensorAlgebra { outputError * activationDer(input) }
-    }
+    override fun backward(input: DoubleTensor, outputError: DoubleTensor): DoubleTensor =
+        DoubleTensorAlgebra { outputError * activationDer(input) }
 }
 
 fun relu(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
@@ -106,8 +101,8 @@ fun accuracy(yPred: DoubleTensor, yTrue: DoubleTensor): Double {
 }
 
 // neural network class
-@OptIn(ExperimentalStdlibApi::class)
 class NeuralNetwork(private val layers: List<Layer>) {
+    @OptIn(PerformancePitfall::class)
     private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
         val onesForAnswers = yPred.zeroesLike()
@@ -174,7 +169,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
 }
 
 
-@OptIn(ExperimentalStdlibApi::class)
+@OptIn(PerformancePitfall::class)
 fun main() = BroadcastDoubleTensorAlgebra {
     val features = 5
     val sampleSize = 250

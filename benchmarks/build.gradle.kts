@@ -18,9 +18,10 @@ repositories {
 kotlin {
     jvm()
 
-    js(IR) {
-        nodejs()
-    }
+// Testing multi-receiver!
+//    js(IR) {
+//        nodejs()
+//    }
 
     sourceSets {
         all {
@@ -74,7 +75,8 @@ benchmark {
     // Setup configurations
     targets {
         register("jvm")
-        register("js")
+    // Testing multi-receiver!
+    //        register("js")
     }
 
     fun kotlinx.benchmark.gradle.BenchmarkConfiguration.commonConfiguration() {
@@ -158,7 +160,7 @@ kotlin.sourceSets.all {
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy" + "-Xcontext-receivers"
     }
 }
 

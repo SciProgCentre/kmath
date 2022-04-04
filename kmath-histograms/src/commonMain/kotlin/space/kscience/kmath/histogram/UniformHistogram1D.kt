@@ -7,10 +7,7 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.DoubleDomain1D
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import kotlin.math.floor
 
@@ -69,8 +66,8 @@ public class UniformHistogram1DGroup<V : Any, A>(
         )
     }
 
-    override fun Histogram1D<Double, V>.unaryMinus(): UniformHistogram1D<V> = valueAlgebra {
-        UniformHistogram1D(this@UniformHistogram1DGroup, produceFrom(this@unaryMinus).values.mapValues { -it.value })
+    override fun negate(arg: Histogram1D<Double, V>): UniformHistogram1D<V> = valueAlgebra {
+        UniformHistogram1D(this@UniformHistogram1DGroup, produceFrom(arg).values.mapValues { -it.value })
     }
 
     override fun scale(

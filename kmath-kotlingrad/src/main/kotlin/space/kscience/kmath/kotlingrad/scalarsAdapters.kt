@@ -8,7 +8,6 @@ package space.kscience.kmath.kotlingrad
 import ai.hypergraph.kotlingrad.api.*
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstExtendedField
-import space.kscience.kmath.expressions.MstExtendedField.unaryMinus
 import space.kscience.kmath.expressions.MstNumericAlgebra
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.*

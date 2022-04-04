@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 //    id("com.xcporter.metaview") version "0.0.5"
 }
 
@@ -71,4 +71,9 @@ readme {
         id = "autodiff",
         ref = "src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt"
     ) { "Automatic differentiation" }
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

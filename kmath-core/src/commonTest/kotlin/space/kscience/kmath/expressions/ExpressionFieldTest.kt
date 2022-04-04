@@ -6,6 +6,8 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails

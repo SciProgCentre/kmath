@@ -6,7 +6,6 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -32,8 +31,6 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     override fun binaryOperationFunction(operation: String): (left: Buffer<Double>, right: Buffer<Double>) -> Buffer<Double> =
         super<ExtendedFieldOps>.binaryOperationFunction(operation)
 
-    override fun Buffer<Double>.unaryMinus(): DoubleBuffer = mapInline { -it }
-
     override fun add(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
         require(right.size == left.size) {
             "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
@@ -46,18 +43,17 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
         } else DoubleBuffer(DoubleArray(left.size) { left[it] + right[it] })
     }
 
-    override fun Buffer<Double>.plus(arg: Buffer<Double>): DoubleBuffer = add(this, arg)
+    override fun negate(arg: Buffer<Double>): DoubleBuffer = arg.mapInline { -it }
 
-    override fun Buffer<Double>.minus(arg: Buffer<Double>): DoubleBuffer {
-        require(arg.size == this.size) {
-            "The size of the first buffer ${this.size} should be the same as for second one: ${arg.size} "
+    override fun subtract(left: Buffer<Double>, right: Buffer<Double>): DoubleBuffer {
+        require(left.size == right.size) {
+            "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
 
-        return if (this is DoubleBuffer && arg is DoubleBuffer) {
-            val aArray = this.array
-            val bArray = arg.array
-            DoubleBuffer(DoubleArray(this.size) { aArray[it] - bArray[it] })
-        } else DoubleBuffer(DoubleArray(this.size) { this[it] - arg[it] })
+        return if (left is DoubleBuffer && right is DoubleBuffer)
+            DoubleBuffer(DoubleArray(left.size) { left.array[it] - right.array[it] })
+        else
+            DoubleBuffer(DoubleArray(left.size) { left[it] - right[it] })
     }
 
     //

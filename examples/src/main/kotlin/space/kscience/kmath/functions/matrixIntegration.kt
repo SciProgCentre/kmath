@@ -13,6 +13,7 @@ import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.nd.withNdAlgebra
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.times
 
 fun main(): Unit = Double.algebra {
     withNdAlgebra(2, 2) {

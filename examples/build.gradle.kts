@@ -61,7 +61,8 @@ kotlin.sourceSets.all {
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
+        freeCompilerArgs =
+            freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy" + "-Xcontext-receivers"
     }
 }
 

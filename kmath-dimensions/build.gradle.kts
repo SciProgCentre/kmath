@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 }
 
 description = "A proof of concept module for adding type-safe dimensions to structures"
@@ -22,4 +22,9 @@ kotlin.sourceSets {
 
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

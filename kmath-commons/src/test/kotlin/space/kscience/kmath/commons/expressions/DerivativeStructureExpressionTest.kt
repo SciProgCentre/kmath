@@ -6,6 +6,9 @@
 package space.kscience.kmath.commons.expressions
 
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
+import space.kscience.kmath.operations.unaryMinus
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.test.Test

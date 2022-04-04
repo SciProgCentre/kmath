@@ -6,12 +6,11 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.minus
 import kotlin.math.sqrt
 
-@OptIn(UnstableKMathAPI::class)
 public interface Vector3D : Point<Double>, Vector {
     public val x: Double
     public val y: Double
@@ -43,7 +42,7 @@ public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector
     override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
 
     public fun Vector3D.norm(): Double = sqrt(x * x + y * y + z * z)
-    override fun Vector3D.unaryMinus(): Vector3D = Vector3D(-x, -y, -z)
+    override fun negate(arg: Vector3D): Vector3D = Vector3D(-arg.x, -arg.y, -arg.z)
 
     override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
 

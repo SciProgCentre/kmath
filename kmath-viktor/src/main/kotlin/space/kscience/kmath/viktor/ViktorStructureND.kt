@@ -10,13 +10,12 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.MutableStructureND
 
-@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
     override val shape: IntArray get() = f64Buffer.shape
 
-    override inline fun get(index: IntArray): Double = f64Buffer.get(*index)
+    override fun get(index: IntArray): Double = f64Buffer.get(*index)
 
-    override inline fun set(index: IntArray, value: Double) {
+    override fun set(index: IntArray, value: Double) {
         f64Buffer.set(*index, value = value)
     }
 
@@ -26,5 +25,3 @@ public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructur
 }
 
 public fun F64Array.asStructure(): ViktorStructureND = ViktorStructureND(this)
-
-

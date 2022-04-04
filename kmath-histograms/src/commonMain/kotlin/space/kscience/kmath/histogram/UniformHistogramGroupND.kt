@@ -14,6 +14,7 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.unaryMinus
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
@@ -98,8 +99,8 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         return HistogramND(this, values)
     }
 
-    override fun HistogramND<Double, HyperSquareDomain, V>.unaryMinus(): HistogramND<Double, HyperSquareDomain, V> =
-        this * (-1)
+    override fun negate(arg: HistogramND<Double, HyperSquareDomain, V>): HistogramND<Double, HyperSquareDomain, V> =
+        HistogramND(this, valueAlgebraND { -arg.values })
 }
 
 /**

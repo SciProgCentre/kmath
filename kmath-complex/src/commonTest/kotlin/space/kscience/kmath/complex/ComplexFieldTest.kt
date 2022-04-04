@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.complex
 
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.test.Test

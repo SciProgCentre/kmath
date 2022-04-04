@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+//    id("ru.mipt.npm.gradle.native")
 }
 
 kotlin.sourceSets.commonMain {
@@ -39,4 +39,9 @@ readme {
     ){
         "Uniform grid generators"
     }
+}
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
 }

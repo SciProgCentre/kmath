@@ -15,7 +15,7 @@ import space.kscience.kmath.operations.Field
  *
  * @param T the type of items closed under analytic functions in the tensors.
  */
-public interface AnalyticTensorAlgebra<T, A : Field<T>> :
+public interface AnalyticTensorAlgebra<T, out A : Field<T>> :
     TensorPartialDivisionAlgebra<T, A>, ExtendedFieldOps<StructureND<T>> {
 
     /**

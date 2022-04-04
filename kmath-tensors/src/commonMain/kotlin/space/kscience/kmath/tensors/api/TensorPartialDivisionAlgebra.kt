@@ -15,35 +15,16 @@ import space.kscience.kmath.operations.Field
  *
  * @param T the type of items closed under division in the tensors.
  */
-public interface TensorPartialDivisionAlgebra<T, A : Field<T>> : TensorAlgebra<T, A>, FieldOpsND<T, A> {
-
+public interface TensorPartialDivisionAlgebra<T, out A : Field<T>> : TensorAlgebra<T, A>, FieldOpsND<T, A> {
     /**
-     * Each element of the tensor [arg] is divided by this value.
+     * Each element of the tensor [right] is divided by each element of [left] tensor.
      * The resulting tensor is returned.
      *
-     * @param arg tensor to divide by.
-     * @return the division of this value by the tensor [arg].
+     * @param left tensor to be divided by.
+     * @param right tensor to be divided by.
+     * @return the division of [left] tensor by [right] one.
      */
-    override operator fun T.div(arg: StructureND<T>): Tensor<T>
-
-    /**
-     * Divide by the scalar [arg] each element of this tensor returns a new resulting tensor.
-     *
-     * @param arg the number to divide by each element of this tensor.
-     * @return the division of this tensor by the [arg].
-     */
-    override operator fun StructureND<T>.div(arg: T): Tensor<T>
-
-    /**
-     * Each element of the tensor [arg] is divided by each element of this tensor.
-     * The resulting tensor is returned.
-     *
-     * @param arg tensor to be divided by.
-     * @return the division of this tensor by [arg].
-     */
-    override operator fun StructureND<T>.div(arg: StructureND<T>): Tensor<T>
-
-    override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> = left.div(right)
+    override fun divide(left: StructureND<T>, right: StructureND<T>): Tensor<T>
 
     /**
      * Divides by the scalar [value] each element of this tensor.

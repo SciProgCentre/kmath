@@ -13,6 +13,8 @@ import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import space.kscience.kmath.operations.toList
 import space.kscience.kmath.optimization.FunctionOptimizationTarget
 import space.kscience.kmath.optimization.optimizeWith

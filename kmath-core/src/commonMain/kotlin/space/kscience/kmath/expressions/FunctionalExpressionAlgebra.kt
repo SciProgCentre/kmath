@@ -51,8 +51,8 @@ public open class FunctionalExpressionGroup<T, out A : Group<T>>(
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
     override val zero: Expression<T> get() = const(algebra.zero)
 
-    override fun Expression<T>.unaryMinus(): Expression<T> =
-        unaryOperation(GroupOps.MINUS_OPERATION, this)
+    override fun negate(arg: Expression<T>): Expression<T> =
+        unaryOperation(GroupOps.MINUS_OPERATION, arg)
 
     /**
      * Builds an Expression of addition of two another expressions.
@@ -60,25 +60,24 @@ public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     override fun add(left: Expression<T>, right: Expression<T>): Expression<T> =
         binaryOperation(GroupOps.PLUS_OPERATION, left, right)
 
-//    /**
-//     * Builds an Expression of multiplication of expression by number.
-//     */
-//    override fun multiply(a: Expression<T>, k: Number): Expression<T> = Expression { arguments ->
-//        algebra.multiply(a.invoke(arguments), k)
-//    }
-
-    public operator fun Expression<T>.plus(arg: T): Expression<T> = this + const(arg)
-    public operator fun Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
-    public operator fun T.plus(arg: Expression<T>): Expression<T> = arg + this
-    public operator fun T.minus(arg: Expression<T>): Expression<T> = arg - this
-
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionAlgebra>.unaryOperationFunction(operation)
 
     override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionAlgebra>.binaryOperationFunction(operation)
-
 }
+
+context(FunctionalExpressionGroup<T, A>)
+public operator fun <T, A : Group<T>> Expression<T>.plus(arg: T): Expression<T> = this + const(arg)
+
+context(FunctionalExpressionGroup<T, A>)
+public operator fun <T, A : Group<T>> Expression<T>.minus(arg: T): Expression<T> = this - const(arg)
+
+context(FunctionalExpressionGroup<T, A>)
+public operator fun <T, A : Group<T>> T.plus(arg: Expression<T>): Expression<T> = arg + this
+
+context(FunctionalExpressionGroup<T, A>)
+public operator fun <T, A : Group<T>> T.minus(arg: Expression<T>): Expression<T> = arg - this
 
 public open class FunctionalExpressionRing<T, out A : Ring<T>>(
     algebra: A,
@@ -91,15 +90,18 @@ public open class FunctionalExpressionRing<T, out A : Ring<T>>(
     override fun multiply(left: Expression<T>, right: Expression<T>): Expression<T> =
         binaryOperationFunction(RingOps.TIMES_OPERATION)(left, right)
 
-    public operator fun Expression<T>.times(arg: T): Expression<T> = this * const(arg)
-    public operator fun T.times(arg: Expression<T>): Expression<T> = arg * this
-
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionGroup>.unaryOperationFunction(operation)
 
     override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionGroup>.binaryOperationFunction(operation)
 }
+
+context(FunctionalExpressionRing<T, A>)
+public operator fun <T, A : Ring<T>> Expression<T>.times(arg: T): Expression<T> = this * const(arg)
+
+context(FunctionalExpressionRing<T, A>)
+public operator fun <T, A : Ring<T>> T.times(arg: Expression<T>): Expression<T> = arg * this
 
 public open class FunctionalExpressionField<T, out A : Field<T>>(
     algebra: A,
@@ -109,9 +111,6 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
      */
     override fun divide(left: Expression<T>, right: Expression<T>): Expression<T> =
         binaryOperationFunction(FieldOps.DIV_OPERATION)(left, right)
-
-    public operator fun Expression<T>.div(arg: T): Expression<T> = this / const(arg)
-    public operator fun T.div(arg: Expression<T>): Expression<T> = arg / this
 
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> =
         super<FunctionalExpressionRing>.unaryOperationFunction(operation)
@@ -126,6 +125,12 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
     override fun bindSymbolOrNull(value: String): Expression<T>? =
         super<FunctionalExpressionRing>.bindSymbolOrNull(value)
 }
+
+context(FunctionalExpressionField<T, A>)
+public operator fun <T, A : Field<T>> Expression<T>.div(arg: T): Expression<T> = this / const(arg)
+
+context(FunctionalExpressionField<T, A>)
+public operator fun <T, A : Field<T>> T.div(arg: Expression<T>): Expression<T> = arg / this
 
 public open class FunctionalExpressionExtendedField<T, out A : ExtendedField<T>>(
     algebra: A,

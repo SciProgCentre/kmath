@@ -11,6 +11,7 @@ import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.minus
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName

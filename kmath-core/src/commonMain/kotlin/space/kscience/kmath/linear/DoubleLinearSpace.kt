@@ -9,9 +9,7 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.DoubleFieldOpsND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.asND
-import space.kscience.kmath.operations.DoubleBufferOps
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 

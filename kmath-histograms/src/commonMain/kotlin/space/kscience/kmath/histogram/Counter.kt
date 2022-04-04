@@ -9,6 +9,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.plus
 
 /**
  * Common representation for atomic counters
@@ -72,5 +73,3 @@ public class ObjectCounter<T : Any>(private val group: Group<T>) : Counter<T> {
 
     override val value: T get() = innerValue.value
 }
-
-

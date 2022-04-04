@@ -137,7 +137,7 @@ public open class BufferRingOps<T, A: Ring<T>>(
 
     override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
-    override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
+    override fun negate(arg: Buffer<T>): Buffer<T> = arg.map { negate(it) }
 
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> =
         super<BufferAlgebra>.unaryOperationFunction(operation)
@@ -159,7 +159,7 @@ public open class BufferFieldOps<T, A : Field<T>>(
     override fun divide(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l / r }
 
     override fun scale(a: Buffer<T>, value: Double): Buffer<T> = a.map { scale(it, value) }
-    override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
+    override fun negate(arg: Buffer<T>): Buffer<T> = arg.map { -it }
 
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> =
         super<BufferRingOps>.binaryOperationFunction(operation)

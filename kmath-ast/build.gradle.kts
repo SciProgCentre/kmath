@@ -84,3 +84,8 @@ readme {
         ref = "src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt"
     ) { "Extendable MST rendering" }
 }
+
+// Testing multi-receiver!
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
+    enabled = false
+}

@@ -45,6 +45,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return newStruct
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(
         transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
@@ -53,6 +54,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return new
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<T>,
         right: StructureND<T>,
@@ -72,15 +74,14 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
  * @param S the type of space of structure elements.
  */
 public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>, Nd4jArrayAlgebra<T, S> {
-
     override fun add(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
         left.ndArray.add(right.ndArray).wrap()
 
-    override operator fun StructureND<T>.minus(arg: StructureND<T>): Nd4jArrayStructure<T> =
-        ndArray.sub(arg.ndArray).wrap()
+    override fun subtract(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
+        left.ndArray.sub(right.ndArray).wrap()
 
-    override operator fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> =
-        ndArray.neg().wrap()
+    override fun negate(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        arg.ndArray.neg().wrap()
 
     public fun multiply(a: StructureND<T>, k: Number): Nd4jArrayStructure<T> =
         a.ndArray.mul(k).wrap()
@@ -92,7 +93,6 @@ public sealed interface Nd4jArrayGroupOps<T, out S : Ring<T>> : GroupOpsND<T, S>
  * @param T the type of the element contained in ND structure.
  * @param R the type of ring of structure elements.
  */
-@OptIn(UnstableKMathAPI::class)
 public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, Nd4jArrayGroupOps<T, R> {
 
     override fun multiply(left: StructureND<T>, right: StructureND<T>): Nd4jArrayStructure<T> =
@@ -201,22 +201,28 @@ public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, Do
 
     override fun scale(a: StructureND<Double>, value: Double): Nd4jArrayStructure<Double> = a.ndArray.mul(value).wrap()
 
-    override operator fun StructureND<Double>.div(arg: Double): Nd4jArrayStructure<Double> = ndArray.div(arg).wrap()
-
-    override operator fun StructureND<Double>.plus(arg: Double): Nd4jArrayStructure<Double> = ndArray.add(arg).wrap()
-
-    override operator fun StructureND<Double>.minus(arg: Double): Nd4jArrayStructure<Double> = ndArray.sub(arg).wrap()
-
-    override operator fun StructureND<Double>.times(arg: Double): Nd4jArrayStructure<Double> = ndArray.mul(arg).wrap()
-
-    override operator fun Double.div(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
-        arg.ndArray.rdiv(this).wrap()
-
-    override operator fun Double.minus(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
-        arg.ndArray.rsub(this).wrap()
-
     public companion object : DoubleNd4jArrayFieldOps()
 }
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun StructureND<Double>.div(arg: Double): Nd4jArrayStructure<Double> = ndArray.div(arg).wrap()
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun StructureND<Double>.plus(arg: Double): Nd4jArrayStructure<Double> = ndArray.add(arg).wrap()
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun StructureND<Double>.minus(arg: Double): Nd4jArrayStructure<Double> = ndArray.sub(arg).wrap()
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun StructureND<Double>.times(arg: Double): Nd4jArrayStructure<Double> = ndArray.mul(arg).wrap()
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun Double.div(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+    arg.ndArray.rdiv(this).wrap()
+
+context(DoubleNd4jArrayFieldOps)
+public operator fun Double.minus(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+    arg.ndArray.rsub(this).wrap()
 
 public val DoubleField.nd4j: DoubleNd4jArrayFieldOps get() = DoubleNd4jArrayFieldOps
 
@@ -246,26 +252,32 @@ public open class FloatNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Float, Floa
     override fun scale(a: StructureND<Float>, value: Double): StructureND<Float> =
         a.ndArray.mul(value).wrap()
 
-    override operator fun StructureND<Float>.div(arg: Float): Nd4jArrayStructure<Float> =
-        ndArray.div(arg).wrap()
-
-    override operator fun StructureND<Float>.plus(arg: Float): Nd4jArrayStructure<Float> =
-        ndArray.add(arg).wrap()
-
-    override operator fun StructureND<Float>.minus(arg: Float): Nd4jArrayStructure<Float> =
-        ndArray.sub(arg).wrap()
-
-    override operator fun StructureND<Float>.times(arg: Float): Nd4jArrayStructure<Float> =
-        ndArray.mul(arg).wrap()
-
-    override operator fun Float.div(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
-        arg.ndArray.rdiv(this).wrap()
-
-    override operator fun Float.minus(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
-        arg.ndArray.rsub(this).wrap()
-
     public companion object : FloatNd4jArrayFieldOps()
 }
+
+context(FloatNd4jArrayFieldOps)
+public operator fun StructureND<Float>.div(arg: Float): Nd4jArrayStructure<Float> =
+    ndArray.div(arg).wrap()
+
+context(FloatNd4jArrayFieldOps)
+public operator fun StructureND<Float>.plus(arg: Float): Nd4jArrayStructure<Float> =
+    ndArray.add(arg).wrap()
+
+context(FloatNd4jArrayFieldOps)
+public operator fun StructureND<Float>.minus(arg: Float): Nd4jArrayStructure<Float> =
+    ndArray.sub(arg).wrap()
+
+context(FloatNd4jArrayFieldOps)
+public operator fun StructureND<Float>.times(arg: Float): Nd4jArrayStructure<Float> =
+    ndArray.mul(arg).wrap()
+
+context(FloatNd4jArrayFieldOps)
+public operator fun Float.div(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
+    arg.ndArray.rdiv(this).wrap()
+
+context(FloatNd4jArrayFieldOps)
+public operator fun Float.minus(arg: StructureND<Float>): Nd4jArrayStructure<Float> =
+    arg.ndArray.rsub(this).wrap()
 
 public class FloatNd4jArrayField(override val shape: Shape) : FloatNd4jArrayFieldOps(), RingND<Float, FloatField>
 
@@ -291,20 +303,24 @@ public open class IntNd4jArrayRingOps : Nd4jArrayRingOps<Int, IntRing> {
             }
         }
 
-    override operator fun StructureND<Int>.plus(arg: Int): Nd4jArrayStructure<Int> =
-        ndArray.add(arg).wrap()
-
-    override operator fun StructureND<Int>.minus(arg: Int): Nd4jArrayStructure<Int> =
-        ndArray.sub(arg).wrap()
-
-    override operator fun StructureND<Int>.times(arg: Int): Nd4jArrayStructure<Int> =
-        ndArray.mul(arg).wrap()
-
-    override operator fun Int.minus(arg: StructureND<Int>): Nd4jArrayStructure<Int> =
-        arg.ndArray.rsub(this).wrap()
-
     public companion object : IntNd4jArrayRingOps()
 }
+
+context(IntNd4jArrayRingOps)
+public operator fun StructureND<Int>.plus(arg: Int): Nd4jArrayStructure<Int> =
+    ndArray.add(arg).wrap()
+
+context(IntNd4jArrayRingOps)
+public operator fun StructureND<Int>.minus(arg: Int): Nd4jArrayStructure<Int> =
+    ndArray.sub(arg).wrap()
+
+context(IntNd4jArrayRingOps)
+public operator fun StructureND<Int>.times(arg: Int): Nd4jArrayStructure<Int> =
+    ndArray.mul(arg).wrap()
+
+context(IntNd4jArrayRingOps)
+public operator fun Int.minus(arg: StructureND<Int>): Nd4jArrayStructure<Int> =
+    arg.ndArray.rsub(this).wrap()
 
 public val IntRing.nd4j: IntNd4jArrayRingOps get() = IntNd4jArrayRingOps
 

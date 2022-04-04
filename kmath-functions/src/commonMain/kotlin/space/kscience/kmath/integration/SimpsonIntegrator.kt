@@ -6,10 +6,7 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.operations.sum
+import space.kscience.kmath.operations.*
 
 /**
  * Use double pass Simpson rule integration with a fixed number of points.
@@ -60,7 +57,8 @@ public class SimpsonIntegrator<T : Any>(
 }
 
 @UnstableKMathAPI
-public val <T : Any> Field<T>.simpsonIntegrator: SimpsonIntegrator<T> get() = SimpsonIntegrator(this)
+public val <T : Any> Field<T>.simpsonIntegrator: SimpsonIntegrator<T>
+    get() = SimpsonIntegrator(this)
 
 /**
  * Use double pass Simpson rule integration with a fixed number of points.

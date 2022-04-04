@@ -23,6 +23,8 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import space.kscience.kmath.structures.Buffer
 
 /**

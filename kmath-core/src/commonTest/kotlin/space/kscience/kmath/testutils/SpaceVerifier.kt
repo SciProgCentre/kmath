@@ -5,9 +5,7 @@
 
 package space.kscience.kmath.testutils
 
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 

@@ -20,8 +20,7 @@ internal class ByteBufferMemory(
     val startOffset: Int = 0,
     override val size: Int = buffer.limit(),
 ) : Memory {
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun position(o: Int): Int = startOffset + o
+    private fun position(o: Int): Int = startOffset + o
 
     override fun view(offset: Int, length: Int): Memory {
         require(offset >= 0) { "offset shouldn't be negative: $offset" }

@@ -207,7 +207,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
         structure.getFeature(type)?.let { return it }
         val origin = structure.toEjml().origin
 
-        return when (type) {
+        return type.cast(when (type) {
         ${
         if (isDense)
             """    InverseMatrixFeature::class -> object : InverseMatrixFeature<${type}> {
@@ -318,8 +318,8 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
             }"""
     }
 
-            else -> null
-        }?.let(type::cast)
+            else -> return null
+        })
     }
 
     /**

@@ -62,10 +62,6 @@ val c2 = ComplexField { c1 - 1.0 } // Returns: Complex(re=0.0, im=2.0)
 val c3 = ComplexField { c1 - i * 2.0 }
 ```
 
-**Note**: In theory it is possible to add behaviors directly to the context, but as for now Kotlin does not support
-that. Watch [KT-10468](https://youtrack.jetbrains.com/issue/KT-10468) and
-[KEEP-176](https://github.com/Kotlin/KEEP/pull/176) for updates.
-
 ## Nested fields
 
 Contexts allow one to build more complex structures. For example, it is possible to create a `Matrix` from complex

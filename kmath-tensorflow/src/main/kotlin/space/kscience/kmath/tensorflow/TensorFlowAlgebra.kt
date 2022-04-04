@@ -153,7 +153,8 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.plus(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::add)
 
-    override fun StructureND<T>.plus(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::add)
+    override fun add(left: StructureND<T>, right: StructureND<T>): TensorFlowOutput<T, TT> =
+        left.operate(right, ops.math::add)
 
     override fun Tensor<T>.plusAssign(value: T): Unit = operateInPlace(value, ops.math::add)
 
@@ -161,7 +162,8 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.minus(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::sub)
 
-    override fun StructureND<T>.minus(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::sub)
+    override fun subtract(left: StructureND<T>, right: StructureND<T>): TensorFlowOutput<T, TT> =
+        left.operate(right, ops.math::sub)
 
     override fun T.minus(arg: StructureND<T>): Tensor<T> = operate(arg, ops.math::sub)
 
@@ -173,19 +175,19 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.times(arg: T): TensorFlowOutput<T, TT> = operate(arg, ops.math::mul)
 
-    override fun StructureND<T>.times(arg: StructureND<T>): TensorFlowOutput<T, TT> = operate(arg, ops.math::mul)
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): TensorFlowOutput<T, TT> = left.operate(right, ops.math::mul)
 
     override fun Tensor<T>.timesAssign(value: T): Unit = operateInPlace(value, ops.math::mul)
 
     override fun Tensor<T>.timesAssign(arg: StructureND<T>): Unit = operateInPlace(arg, ops.math::mul)
 
-    override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = operate(ops.math::neg)
+    override fun negate(arg: StructureND<T>): TensorFlowOutput<T, TT> = arg.operate(ops.math::neg)
 
     override fun Tensor<T>.get(i: Int): Tensor<T> = operate {
         TODO("Not yet implemented")
     }
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = operate {
+    override fun StructureND<T>.transpose(i: Int, j: Int): Tensor<T> = operate {
         ops.linalg.transpose(it, ops.constant(intArrayOf(i, j)))
     }
 

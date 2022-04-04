@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.complex
 
+import space.kscience.kmath.complex.ComplexField.plus
 import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
@@ -71,14 +72,13 @@ public object ComplexField :
      */
     public val i: Complex by lazy { Complex(0.0, 1.0) }
 
-    override fun Complex.unaryMinus(): Complex = Complex(-re, -im)
 
     override fun number(value: Number): Complex = Complex(value.toDouble(), 0.0)
 
     override fun scale(a: Complex, value: Double): Complex = Complex(a.re * value, a.im * value)
 
     override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
-//    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
+    override fun negate(arg: Complex): Complex = Complex(-arg.re, -arg.im)
 
     override fun multiply(left: Complex, right: Complex): Complex =
         Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)
@@ -106,8 +106,6 @@ public object ComplexField :
                 Complex((left.re * wr + left.im) / wd, (left.im * wr - left.re) / wd)
         }
     }
-
-    override operator fun Complex.div(k: Number): Complex = Complex(re / k.toDouble(), im / k.toDouble())
 
     override fun sin(arg: Complex): Complex = i * (exp(-i * arg) - exp(i * arg)) / 2.0
     override fun cos(arg: Complex): Complex = (exp(-i * arg) + exp(i * arg)) / 2.0
@@ -139,53 +137,58 @@ public object ComplexField :
 
     override fun ln(arg: Complex): Complex = ln(arg.r) + i * atan2(arg.im, arg.re)
 
-    /**
-     * Adds complex number to real one.
-     *
-     * @receiver the augend.
-     * @param c the addend.
-     * @return the sum.
-     */
-    public operator fun Double.plus(c: Complex): Complex = add(this.toComplex(), c)
-
-    /**
-     * Subtracts complex number from real one.
-     *
-     * @receiver the minuend.
-     * @param c the subtrahend.
-     * @return the difference.
-     */
-    public operator fun Double.minus(c: Complex): Complex = add(this.toComplex(), -c)
-
-    /**
-     * Adds real number to complex one.
-     *
-     * @receiver the augend.
-     * @param d the addend.
-     * @return the sum.
-     */
-    public operator fun Complex.plus(d: Double): Complex = d + this
-
-    /**
-     * Subtracts real number from complex one.
-     *
-     * @receiver the minuend.
-     * @param d the subtrahend.
-     * @return the difference.
-     */
-    public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
-
-    /**
-     * Multiplies real number by complex one.
-     *
-     * @receiver the multiplier.
-     * @param c the multiplicand.
-     * @receiver the product.
-     */
-    public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
-
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 }
+
+/**
+ * Adds complex number to real one.
+ *
+ * @receiver the augend.
+ * @param c the addend.
+ * @return the sum.
+ */
+context(ComplexField)
+public operator fun Double.plus(c: Complex): Complex = add(toComplex(), c)
+
+/**
+ * Adds real number to complex one.
+ *
+ * @receiver the augend.
+ * @param d the addend.
+ * @return the sum.
+ */
+context(ComplexField)
+public operator fun Complex.plus(d: Double): Complex = d + this
+
+/**
+ * Subtracts complex number from real one.
+ *
+ * @receiver the minuend.
+ * @param c the subtrahend.
+ * @return the difference.
+ */
+context(ComplexField)
+public operator fun Double.minus(c: Complex): Complex = add(toComplex(), -c)
+
+/**
+ * Subtracts real number from complex one.
+ *
+ * @receiver the minuend.
+ * @param d the subtrahend.
+ * @return the difference.
+ */
+context(ComplexField)
+public operator fun Complex.minus(d: Double): Complex = add(this, -d.toComplex())
+
+/**
+ * Multiplies real number by complex one.
+ *
+ * @receiver the multiplier.
+ * @param c the multiplicand.
+ * @receiver the product.
+ */
+context(ComplexField)
+public operator fun Double.times(c: Complex): Complex = Complex(c.re * this, c.im * this)
 
 /**
  * Represents `double`-based complex number.
@@ -193,7 +196,6 @@ public object ComplexField :
  * @property re The real part.
  * @property im The imaginary part.
  */
-@OptIn(UnstableKMathAPI::class)
 public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)

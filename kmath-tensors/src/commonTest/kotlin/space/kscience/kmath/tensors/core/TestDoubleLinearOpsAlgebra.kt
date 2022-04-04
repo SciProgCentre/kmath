@@ -5,9 +5,10 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.svd1d
+import space.kscience.kmath.tensors.core.internal.tensor
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -147,7 +148,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         )
         val low = sigma.cholesky()
         val sigmChol = low dot low.transpose()
-        assertTrue(sigma.eq(sigmChol))
+        assertTrue(sigma.tensor.eq(sigmChol))
     }
 
     @Test
@@ -162,7 +163,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     }
 
     @Test
-    fun testSVD() = DoubleTensorAlgebra{
+    fun testSVD() = DoubleTensorAlgebra {
         testSVDFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
         testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
     }
@@ -181,10 +182,8 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
         val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
-        assertTrue(tensorSigma.eq(tensorSigmaCalc))
+        assertTrue(tensorSigma.tensor.eq(tensorSigmaCalc))
     }
-
-
 }
 
 

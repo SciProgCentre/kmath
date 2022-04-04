@@ -11,9 +11,7 @@ import space.kscience.kmath.domains.DoubleDomain1D
 import space.kscience.kmath.domains.center
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.misc.sorted
-import space.kscience.kmath.operations.Group
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.first
 import space.kscience.kmath.structures.indices
@@ -123,7 +121,18 @@ public class TreeHistogramGroup<V : Any, A>(
         return TreeHistogram(bins)
     }
 
-    override fun TreeHistogram<V>.unaryMinus(): TreeHistogram<V> = this * (-1)
+    override fun negate(arg: TreeHistogram<V>): TreeHistogram<V> {
+        val bins = TreeMap<Double, Bin1D<Double, V>>().apply {
+            arg.bins.forEach { bin ->
+                put(
+                    bin.domain.center,
+                    Bin1D(bin.domain, valueAlgebra { -bin.binValue })
+                )
+            }
+        }
+
+        return TreeHistogram(bins)
+    }
 
     override val zero: TreeHistogram<V> = produce { }
 }

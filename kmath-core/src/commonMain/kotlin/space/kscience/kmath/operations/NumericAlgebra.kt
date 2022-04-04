@@ -116,34 +116,38 @@ public interface ScaleOperations<T> : Algebra<T> {
      * @return the produce.
      */
     public fun scale(a: T, value: Double): T
-
-    /**
-     * Multiplication of this element by a scalar.
-     *
-     * @receiver the multiplier.
-     * @param k the multiplicand.
-     * @return the product.
-     */
-    public operator fun T.times(k: Number): T = scale(this, k.toDouble())
-
-    /**
-     * Division of this element by scalar.
-     *
-     * @receiver the dividend.
-     * @param k the divisor.
-     * @return the quotient.
-     */
-    public operator fun T.div(k: Number): T = scale(this, 1.0 / k.toDouble())
-
-    /**
-     * Multiplication of this number by element.
-     *
-     * @receiver the multiplier.
-     * @param arg the multiplicand.
-     * @return the product.
-     */
-    public operator fun Number.times(arg: T): T = arg * this
 }
+
+
+/**
+ * Multiplication of this element by a scalar.
+ *
+ * @receiver the multiplier.
+ * @param k the multiplicand.
+ * @return the product.
+ */
+context(ScaleOperations<T>)
+public operator fun <T> T.times(k: Number): T = scale(this, k.toDouble())
+
+/**
+ * Division of this element by scalar.
+ *
+ * @receiver the dividend.
+ * @param k the divisor.
+ * @return the quotient.
+ */
+context(ScaleOperations<T>)
+public operator fun <T> T.div(k: Number): T = scale(this, 1.0 / k.toDouble())
+
+/**
+ * Multiplication of this number by element.
+ *
+ * @receiver the multiplier.
+ * @param arg the multiplicand.
+ * @return the product.
+ */
+context(ScaleOperations<T>)
+public operator fun <T> Number.times(arg: T): T = arg * this
 
 /**
  * A combination of [NumericAlgebra] and [Ring] that adds intrinsic simple operations on numbers like `T+1`

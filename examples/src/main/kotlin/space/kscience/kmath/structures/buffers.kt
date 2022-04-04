@@ -5,10 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.buffer
-import space.kscience.kmath.operations.bufferAlgebra
-import space.kscience.kmath.operations.withSize
+import space.kscience.kmath.operations.*
 
 inline fun <reified R : Any> MutableBuffer.Companion.same(
     n: Int,

@@ -10,6 +10,7 @@ package space.kscience.kmath.histogram
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.minus
 import space.kscience.kmath.real.DoubleVector
 import kotlin.random.Random
 import kotlin.test.*

@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.plus
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.nextBuffer
 import kotlin.native.concurrent.ThreadLocal
@@ -36,7 +37,7 @@ internal class UniformHistogram1DTest {
     @Test
     fun rebinDown() = runTest {
         val h1 = Histogram.uniform1D(DoubleField, 0.01).produce(generator.nextDoubleBuffer(10000))
-        val h2 = Histogram.uniform1D(DoubleField,0.03).produceFrom(h1)
+        val h2 = Histogram.uniform1D(DoubleField, 0.03).produceFrom(h1)
 
         assertEquals(10000, h2.bins.sumOf { it.binValue }.toInt())
     }
@@ -44,13 +45,13 @@ internal class UniformHistogram1DTest {
     @Test
     fun rebinUp() = runTest {
         val h1 = Histogram.uniform1D(DoubleField, 0.03).produce(generator.nextDoubleBuffer(10000))
-        val h2 = Histogram.uniform1D(DoubleField,0.01).produceFrom(h1)
+        val h2 = Histogram.uniform1D(DoubleField, 0.01).produceFrom(h1)
 
         assertEquals(10000, h2.bins.sumOf { it.binValue }.toInt())
     }
 
     @ThreadLocal
-    companion object{
+    companion object {
         private val generator = RandomGenerator.default(123)
     }
 }

@@ -9,6 +9,8 @@ import space.kscience.kmath.expressions.FunctionalExpressionField
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.bindSymbol
+import space.kscience.kmath.operations.plus
+import space.kscience.kmath.operations.times
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

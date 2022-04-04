@@ -39,15 +39,11 @@ public fun <T> StructureND<T>.deferred(index: IntArray): Deferred<T> =
 public suspend fun <T> StructureND<T>.await(index: IntArray): T =
     if (this is LazyStructureND<T>) await(index) else get(index)
 
-/**
- * PENDING would benefit from KEEP-176
- */
+context(CoroutineScope)
 public inline fun <T, R> StructureND<T>.mapAsyncIndexed(
-    scope: CoroutineScope,
     crossinline function: suspend (T, index: IntArray) -> R,
-): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index), index) }
+): LazyStructureND<R> = LazyStructureND(this@CoroutineScope, shape) { index -> function(get(index), index) }
 
-public inline fun <T, R> StructureND<T>.mapAsync(
-    scope: CoroutineScope,
-    crossinline function: suspend (T) -> R,
-): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index)) }
+context(CoroutineScope)
+public inline fun <T, R> StructureND<T>.mapAsync(crossinline function: suspend (T) -> R): LazyStructureND<R> =
+    LazyStructureND(this@CoroutineScope, shape) { index -> function(get(index)) }

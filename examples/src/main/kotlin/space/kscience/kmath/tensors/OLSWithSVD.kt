@@ -5,11 +5,12 @@
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.abs
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.DoubleTensor
+import space.kscience.kmath.operations.minus
+import space.kscience.kmath.operations.plus
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-
-import kotlin.math.abs
 
 // OLS estimator using SVD
 
@@ -48,14 +49,16 @@ fun main() {
 
 
         // inverse Sigma matrix can be restored from singular values with diagonalEmbedding function
-        val sigma = diagonalEmbedding(singValues.map{ if (abs(it) < 1e-3) 0.0 else 1.0/it })
+        val sigma = diagonalEmbedding(singValues.map { if (abs(it) < 1e-3) 0.0 else 1.0 / it })
 
         val alphaOLS = v dot sigma dot u.transpose() dot y
-        println("Estimated alpha:\n" +
-                "$alphaOLS")
+        println(
+            "Estimated alpha:\n" +
+                    "$alphaOLS"
+        )
 
         // figure out MSE of approximation
-        fun mse(yTrue: DoubleTensor, yPred: DoubleTensor): Double {
+        fun mse(yTrue: StructureND<Double>, yPred: StructureND<Double>): Double {
             require(yTrue.shape.size == 1)
             require(yTrue.shape contentEquals yPred.shape)
 

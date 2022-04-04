@@ -10,12 +10,6 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 
 /**
- * Stub for DSL the [Algebra] is.
- */
-@DslMarker
-public annotation class KMathContext
-
-/**
  * Represents an algebraic structure.
  *
  * @param T the type of element of this structure.
@@ -137,46 +131,26 @@ public interface GroupOps<T> : Algebra<T> {
      */
     public fun add(left: T, right: T): T
 
-    // Operations to be performed in this context. Could be moved to extensions in case of KEEP-176.
-
     /**
      * The negation of this element.
      *
-     * @receiver this value.
+     * @param arg the element.
      * @return the additive inverse of this value.
      */
-    public operator fun T.unaryMinus(): T
-
-    /**
-     * Returns this value.
-     *
-     * @receiver this value.
-     * @return this value.
-     */
-    public operator fun T.unaryPlus(): T = this
-
-    /**
-     * Addition of two elements.
-     *
-     * @receiver the augend.
-     * @param arg the addend.
-     * @return the sum.
-     */
-    public operator fun T.plus(arg: T): T = add(this, arg)
+    public fun negate(arg: T): T
 
     /**
      * Subtraction of two elements.
      *
-     * @receiver the minuend.
-     * @param arg the subtrahend.
+     * @parm left the minuend.
+     * @param right the subtrahend.
      * @return the difference.
      */
-    public operator fun T.minus(arg: T): T = add(this, -arg)
+    public fun subtract(left: T, right: T): T = add(left, -right)
 
-    // Dynamic dispatch of operations
     override fun unaryOperationFunction(operation: String): (arg: T) -> T = when (operation) {
-        PLUS_OPERATION -> { arg -> +arg }
-        MINUS_OPERATION -> { arg -> -arg }
+        PLUS_OPERATION -> { arg -> arg }
+        MINUS_OPERATION -> ::negate
         else -> super.unaryOperationFunction(operation)
     }
 
@@ -198,6 +172,44 @@ public interface GroupOps<T> : Algebra<T> {
         public const val MINUS_OPERATION: String = "-"
     }
 }
+
+/**
+ * The negation of this element.
+ *
+ * @receiver the element.
+ * @return the additive inverse of this value.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.unaryMinus(): T = negate(this)
+
+/**
+ * Returns this value.
+ *
+ * @receiver this value.
+ * @return this value.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.unaryPlus(): T = this
+
+/**
+ * Addition of two elements.
+ *
+ * @receiver the augend.
+ * @param arg the addend.
+ * @return the sum.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.plus(arg: T): T = add(this, arg)
+
+/**
+ * Subtraction of two elements.
+ *
+ * @receiver the minuend.
+ * @param arg the subtrahend.
+ * @return the difference.
+ */
+context(GroupOps<T>)
+public operator fun <T> T.minus(arg: T): T = subtract(this, arg)
 
 /**
  * Represents group i.e., algebraic structure with associative, binary operation [add].
@@ -226,14 +238,6 @@ public interface RingOps<T> : GroupOps<T> {
      */
     public fun multiply(left: T, right: T): T
 
-    /**
-     * Multiplies this element by scalar.
-     *
-     * @receiver the multiplier.
-     * @param arg the multiplicand.
-     */
-    public operator fun T.times(arg: T): T = multiply(this, arg)
-
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         TIMES_OPERATION -> ::multiply
         else -> super.binaryOperationFunction(operation)
@@ -246,6 +250,15 @@ public interface RingOps<T> : GroupOps<T> {
         public const val TIMES_OPERATION: String = "*"
     }
 }
+
+/**
+ * Multiplies two elements.
+ *
+ * @receiver the multiplier.
+ * @param arg the multiplicand.
+ */
+context(RingOps<T>)
+public operator fun <T> T.times(arg: T): T = multiply(this, arg)
 
 /**
  * Represents ring i.e., algebraic structure with two associative binary operations called "addition" and
@@ -264,7 +277,7 @@ public interface Ring<T> : Group<T>, RingOps<T> {
      */
     public fun power(arg: T, pow: UInt): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the non-negative integer power [exponent].
          *
@@ -311,15 +324,6 @@ public interface FieldOps<T> : RingOps<T> {
      */
     public fun divide(left: T, right: T): T
 
-    /**
-     * Division of two elements.
-     *
-     * @receiver the dividend.
-     * @param arg the divisor.
-     * @return the quotient.
-     */
-    public operator fun T.div(arg: T): T = divide(this, arg)
-
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = when (operation) {
         DIV_OPERATION -> ::divide
         else -> super.binaryOperationFunction(operation)
@@ -334,6 +338,16 @@ public interface FieldOps<T> : RingOps<T> {
 }
 
 /**
+ * Division of two elements.
+ *
+ * @receiver the dividend.
+ * @param arg the divisor.
+ * @return the quotient.
+ */
+context(FieldOps<T>)
+public operator fun <T> T.div(arg: T): T = divide(this, arg)
+
+/**
  * Represents field i.e., algebraic structure with three operations: associative, commutative addition and
  * multiplication, and division. **This interface differs from the eponymous mathematical definition: fields in KMath
  * also support associative multiplication by scalar.**
@@ -345,7 +359,7 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
 
     public fun power(arg: T, pow: Int): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the integer power [exponent].
          *
@@ -358,7 +372,10 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
          * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
          */
         private fun <T> Field<T>.optimizedPower(arg: T, exponent: Int): T = when {
-            exponent < 0 -> one / (this as Ring<T>).optimizedPower(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+            exponent < 0 -> one / (this as Ring<T>).optimizedPower(
+                arg,
+                if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt()
+            )
             else -> (this as Ring<T>).optimizedPower(arg, exponent.toUInt())
         }
     }

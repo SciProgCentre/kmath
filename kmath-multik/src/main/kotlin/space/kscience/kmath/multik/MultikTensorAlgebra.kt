@@ -50,7 +50,7 @@ private fun <T, D : Dimension> MultiArray<T, D>.asD2Array(): D2Array<T> {
     else throw ClassCastException("Cannot cast MultiArray to NDArray.")
 }
 
-public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
+public abstract class MultikTensorAlgebra<T, out A : Ring<T>> : TensorAlgebra<T, A>
         where T : Number, T : Comparable<T> {
 
     public abstract val type: DataType
@@ -138,14 +138,8 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         get(intArrayOf(0))
     } else null
 
-    override fun T.plus(arg: StructureND<T>): MultikTensor<T> =
-        arg.plus(this)
-
-    override fun StructureND<T>.plus(arg: T): MultikTensor<T> =
-        asMultik().array.deepCopy().apply { plusAssign(arg) }.wrap()
-
-    override fun StructureND<T>.plus(arg: StructureND<T>): MultikTensor<T> =
-        asMultik().array.plus(arg.asMultik().array).wrap()
+    override fun add(left: StructureND<T>, right: StructureND<T>): MultikTensor<T> =
+        left.asMultik().array.plus(right.asMultik().array).wrap()
 
     override fun Tensor<T>.plusAssign(value: T) {
         if (this is MultikTensor) {
@@ -163,13 +157,8 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         }
     }
 
-    override fun T.minus(arg: StructureND<T>): MultikTensor<T> = (-(arg.asMultik().array - this)).wrap()
-
-    override fun StructureND<T>.minus(arg: T): MultikTensor<T> =
-        asMultik().array.deepCopy().apply { minusAssign(arg) }.wrap()
-
-    override fun StructureND<T>.minus(arg: StructureND<T>): MultikTensor<T> =
-        asMultik().array.minus(arg.asMultik().array).wrap()
+    override fun subtract(left: StructureND<T>, right: StructureND<T>): MultikTensor<T> =
+        left.asMultik().array.minus(right.asMultik().array).wrap()
 
     override fun Tensor<T>.minusAssign(value: T) {
         if (this is MultikTensor) {
@@ -187,14 +176,8 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         }
     }
 
-    override fun T.times(arg: StructureND<T>): MultikTensor<T> =
-        arg.asMultik().array.deepCopy().apply { timesAssign(this@times) }.wrap()
-
-    override fun StructureND<T>.times(arg: T): Tensor<T> =
-        asMultik().array.deepCopy().apply { timesAssign(arg) }.wrap()
-
-    override fun StructureND<T>.times(arg: StructureND<T>): MultikTensor<T> =
-        asMultik().array.times(arg.asMultik().array).wrap()
+    override fun multiply(left: StructureND<T>, right: StructureND<T>): MultikTensor<T> =
+        left.asMultik().array.times(right.asMultik().array).wrap()
 
     override fun Tensor<T>.timesAssign(value: T) {
         if (this is MultikTensor) {
@@ -212,12 +195,11 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
         }
     }
 
-    override fun StructureND<T>.unaryMinus(): MultikTensor<T> =
-        asMultik().array.unaryMinus().wrap()
+    override fun negate(arg: StructureND<T>): MultikTensor<T> = (-arg.asMultik().array).wrap()
 
     override fun Tensor<T>.get(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
+    override fun StructureND<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
     override fun Tensor<T>.view(shape: IntArray): MultikTensor<T> {
         require(shape.all { it > 0 })
@@ -282,16 +264,36 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
     }
 }
 
-public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> T.plus(arg: StructureND<T>): MultikTensor<T> where T : Comparable<T>, T : Number =
+    arg.plus(this)
+
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> StructureND<T>.plus(arg: T): MultikTensor<T> where T : Comparable<T>, T : Number =
+    asMultik().array.deepCopy().apply { plusAssign(arg) }.wrap()
+
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> T.minus(arg: StructureND<T>): MultikTensor<T> where T : Comparable<T>, T : Number =
+    (-(arg.asMultik().array - this)).wrap()
+
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> StructureND<T>.minus(arg: T): MultikTensor<T> where T : Comparable<T>, T : Number =
+    asMultik().array.deepCopy().apply { minusAssign(arg) }.wrap()
+
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> T.times(arg: StructureND<T>): MultikTensor<T> where T : Comparable<T>, T : Number =
+    arg.asMultik().array.deepCopy().apply { timesAssign(this@times) }.wrap()
+
+context(MultikTensorAlgebra<T, A>)
+public operator fun <T, A : Ring<T>> StructureND<T>.times(arg: T): Tensor<T> where T : Comparable<T>, T : Number =
+    asMultik().array.deepCopy().apply { timesAssign(arg) }.wrap()
+
+
+public abstract class MultikDivisionTensorAlgebra<T, out A : Field<T>>
     : MultikTensorAlgebra<T, A>(), TensorPartialDivisionAlgebra<T, A> where T : Number, T : Comparable<T> {
 
-    override fun T.div(arg: StructureND<T>): MultikTensor<T> = arg.map { elementAlgebra.divide(this@div, it) }
-
-    override fun StructureND<T>.div(arg: T): MultikTensor<T> =
-        asMultik().array.deepCopy().apply { divAssign(arg) }.wrap()
-
-    override fun StructureND<T>.div(arg: StructureND<T>): MultikTensor<T> =
-        asMultik().array.div(arg.asMultik().array).wrap()
+    override fun divide(left: StructureND<T>, right: StructureND<T>): MultikTensor<T> =
+        left.asMultik().array.div(right.asMultik().array).wrap()
 
     override fun Tensor<T>.divAssign(value: T) {
         if (this is MultikTensor) {
@@ -309,6 +311,18 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
         }
     }
 }
+
+context(MultikDivisionTensorAlgebra<T, A>)
+public operator fun <T, A : Field<T>> StructureND<T>.div(arg: StructureND<T>): MultikTensor<T> where T : Number, T : Comparable<T> =
+    divide(this, arg)
+
+context(MultikDivisionTensorAlgebra<T, A>)
+public operator fun <T, A : Field<T>> T.div(arg: StructureND<T>): MultikTensor<T> where T : Number, T : Comparable<T> =
+    arg.map { elementAlgebra.divide(this@div, it) }
+
+context(MultikDivisionTensorAlgebra<T, A>)
+public operator fun <T, A : Field<T>> StructureND<T>.div(arg: T): MultikTensor<T> where T : Number, T : Comparable<T> =
+    asMultik().array.deepCopy().apply { divAssign(arg) }.wrap()
 
 public object MultikFloatAlgebra : MultikDivisionTensorAlgebra<Float, FloatField>() {
     override val elementAlgebra: FloatField get() = FloatField
