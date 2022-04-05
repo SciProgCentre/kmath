@@ -35,6 +35,23 @@ public class DoubleDomain1D(
     }
 
     override fun volume(): Double = range.endInclusive - range.start
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as DoubleDomain1D
+
+        if (doubleRange != other.doubleRange) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = doubleRange.hashCode()
+
+    override fun toString(): String = doubleRange.toString()
+
+
 }
 
 @UnstableKMathAPI

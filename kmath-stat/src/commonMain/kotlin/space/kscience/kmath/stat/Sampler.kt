@@ -67,3 +67,12 @@ public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): 
 @JvmName("sampleIntBuffer")
 public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
     sampleBuffer(generator, size, ::IntBuffer)
+
+
+/**
+ * Samples a [Buffer] of values from this [Sampler].
+ */
+public suspend fun Sampler<Double>.nextBuffer(generator: RandomGenerator, size: Int): Buffer<Double> =
+    sampleBuffer(generator, size).first()
+
+//TODO add `context(RandomGenerator) Sampler.nextBuffer

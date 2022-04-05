@@ -14,7 +14,7 @@ import kotlin.test.*
 internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val hSpace = DoubleHistogramSpace.fromRanges(
+        val hSpace = DoubleHistogramGroup.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
@@ -29,7 +29,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testSequentialPut() {
-        val hSpace = DoubleHistogramSpace.fromRanges(
+        val hSpace = DoubleHistogramGroup.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -49,7 +49,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testHistogramAlgebra() {
-        DoubleHistogramSpace.fromRanges(
+        DoubleHistogramGroup.fromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)

@@ -16,11 +16,11 @@ import kotlin.math.floor
 /**
  * Multivariate histogram space for hyper-square real-field bins.
  */
-public class DoubleHistogramSpace(
+public class DoubleHistogramGroup(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 },
-) : IndexedHistogramSpace<Double, Double> {
+) : IndexedHistogramGroup<Double, Double> {
 
     init {
         // argument checks
@@ -105,7 +105,7 @@ public class DoubleHistogramSpace(
          */
         public fun fromRanges(
             vararg ranges: ClosedFloatingPointRange<Double>,
-        ): DoubleHistogramSpace = DoubleHistogramSpace(
+        ): DoubleHistogramGroup = DoubleHistogramGroup(
             ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
             ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asBuffer()
         )
@@ -121,7 +121,7 @@ public class DoubleHistogramSpace(
          */
         public fun fromRanges(
             vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
-        ): DoubleHistogramSpace = DoubleHistogramSpace(
+        ): DoubleHistogramGroup = DoubleHistogramGroup(
             ListBuffer(
                 ranges
                     .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)

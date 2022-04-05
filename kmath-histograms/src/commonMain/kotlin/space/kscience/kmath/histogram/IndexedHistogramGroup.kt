@@ -28,7 +28,7 @@ public data class DomainBin<in T : Comparable<T>, out V>(
  * @param V the type of bin value
  */
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
-    public val histogramSpace: IndexedHistogramSpace<T, V>,
+    public val histogramSpace: IndexedHistogramGroup<T, V>,
     public val values: StructureND<V>,
 ) : Histogram<T, V, DomainBin<T, V>> {
 
@@ -48,8 +48,8 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
 /**
  * A space for producing histograms with values in a NDStructure
  */
-public interface IndexedHistogramSpace<T : Comparable<T>, V : Any>
-    : Group<IndexedHistogram<T, V>>, ScaleOperations<IndexedHistogram<T, V>> {
+public interface IndexedHistogramGroup<T : Comparable<T>, V : Any> : Group<IndexedHistogram<T, V>>,
+    ScaleOperations<IndexedHistogram<T, V>> {
     public val shape: Shape
     public val histogramValueAlgebra: FieldND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
