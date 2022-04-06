@@ -810,7 +810,7 @@ public open class DoubleTensorAlgebra :
         val lTensor = zeroesLike()
 
         for ((a, l) in tensor.matrixSequence().zip(lTensor.matrixSequence()))
-            for (i in 0 until n) choleskyHelper(a.as2D(), l.as2D(), n)
+            choleskyHelper(a.as2D(), l.as2D(), n)
 
         return lTensor
     }

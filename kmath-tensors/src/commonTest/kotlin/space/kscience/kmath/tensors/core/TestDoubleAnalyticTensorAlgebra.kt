@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.operations.invoke
 import kotlin.math.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class TestDoubleAnalyticTensorAlgebra {
@@ -302,11 +303,11 @@ internal class TestDoubleAnalyticTensorAlgebra {
 
     @Test
     fun testStd() = DoubleTensorAlgebra {
-        assertTrue { floor(tensor5.std() * 10000 ) / 10000 == 2.9439 }
+        assertEquals(2.9439, floor(tensor5.std() * 10000 ) / 10000)
     }
 
     @Test
     fun testVariance() = DoubleTensorAlgebra {
-        assertTrue { floor(tensor5.variance() * 10000 ) / 10000 == 8.6666 }
+        assertEquals(8.6666, floor(tensor5.variance() * 10000 ) / 10000)
     }
 }
