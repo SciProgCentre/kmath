@@ -81,6 +81,30 @@ public class UniformHistogram1DGroup<V : Any, A>(
         builder.block()
         return UniformHistogram1D(this, map)
     }
+
+    /**
+     * Re-bin given histogram to be compatible if exiting bin fully falls inside existing bin, this bin value
+     * is increased by one. If not, all bins including values from this bin are increased by fraction
+     * (conserving the norming).
+     */
+    @UnstableKMathAPI
+    public fun produceFrom(histogram: Histogram1D<Double, V>): UniformHistogram1D<V> =
+        if ((histogram as? UniformHistogram1D)?.group == this) histogram
+        else {
+            val map = HashMap<Int, V>()
+            histogram.bins.forEach { bin ->
+                val range = bin.domain.range
+                val indexOfLeft = getIndex(range.start)
+                val indexOfRight = getIndex(range.endInclusive)
+                val numBins = indexOfRight - indexOfLeft + 1
+                for (i in indexOfLeft..indexOfRight) {
+                    map[indexOfLeft] = with(valueAlgebra) {
+                        (map[indexOfLeft] ?: zero) + bin.binValue / numBins
+                    }
+                }
+            }
+            UniformHistogram1D(this, map)
+        }
 }
 
 public fun <V : Any, A> Histogram.Companion.uniform1D(

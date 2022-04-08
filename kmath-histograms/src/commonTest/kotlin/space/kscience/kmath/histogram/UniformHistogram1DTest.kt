@@ -12,14 +12,15 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.nextBuffer
+import kotlin.native.concurrent.ThreadLocal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class, UnstableKMathAPI::class)
 internal class UniformHistogram1DTest {
+
     @Test
     fun normal() = runTest {
-        val generator = RandomGenerator.default(123)
         val distribution = NormalDistribution(0.0, 1.0)
         with(Histogram.uniform1D(DoubleField, 0.1)) {
             val h1 = produce(distribution.nextBuffer(generator, 10000))
@@ -30,5 +31,18 @@ internal class UniformHistogram1DTest {
 
             assertEquals(60000, h3.bins.sumOf { it.binValue }.toInt())
         }
+    }
+
+    @Test
+    fun rebin() = runTest {
+        val h1 = Histogram.uniform1D(DoubleField, 0.1).produce(generator.nextDoubleBuffer(10000))
+        val h2 = Histogram.uniform1D(DoubleField,0.3).produceFrom(h1)
+
+        assertEquals(10000, h2.bins.sumOf { it.binValue }.toInt())
+    }
+
+    @ThreadLocal
+    companion object{
+        private val generator = RandomGenerator.default(123)
     }
 }
