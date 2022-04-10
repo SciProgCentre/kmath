@@ -19,6 +19,7 @@
 - Complex power
 - Separate methods for UInt, Int and Number powers. NaN safety.
 - Tensorflow prototype
+- `ValueAndErrorField`
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -50,6 +51,7 @@
 - Tensor algebra takes read-only structures as input and inherits AlgebraND
 - `UnivariateDistribution` renamed to `Distribution1D`
 - Rework of histograms.
+- `UnivariateFunction` -> `Function1D`, `MultivariateFunction` -> `FunctionND`
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`
