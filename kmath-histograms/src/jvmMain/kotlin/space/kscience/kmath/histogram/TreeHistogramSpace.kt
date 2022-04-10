@@ -45,7 +45,7 @@ internal class TreeHistogramBuilder(val binFactory: (Double) -> DoubleDomain1D) 
 
     override val defaultValue: Double get() = 1.0
 
-    internal class BinCounter(val domain: DoubleDomain1D, val counter: Counter<Double> = Counter.double()) :
+    internal class BinCounter(val domain: DoubleDomain1D, val counter: Counter<Double> = Counter.ofDouble()) :
         ClosedRange<Double> by domain.range
 
     private val bins: TreeMap<Double, BinCounter> = TreeMap()

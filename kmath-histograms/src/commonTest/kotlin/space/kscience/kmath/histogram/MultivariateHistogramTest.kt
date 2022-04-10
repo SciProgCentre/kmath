@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.real.DoubleVector
@@ -14,7 +17,7 @@ import kotlin.test.*
 internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val hSpace = DoubleHistogramGroup.fromRanges(
+        val hSpace = Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
@@ -29,7 +32,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testSequentialPut() {
-        val hSpace = DoubleHistogramGroup.fromRanges(
+        val hSpace = Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -49,7 +52,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testHistogramAlgebra() {
-        DoubleHistogramGroup.fromRanges(
+        Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)

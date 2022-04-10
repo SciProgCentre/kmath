@@ -20,6 +20,15 @@ public interface Bin<in T : Any, out V> : Domain<T> {
     public val binValue: V
 }
 
+/**
+ * A simple histogram bin based on domain
+ */
+public data class DomainBin<in T : Comparable<T>, D : Domain<T>, out V>(
+    public val domain: D,
+    override val binValue: V,
+) : Bin<T, V>, Domain<T> by domain
+
+
 public interface Histogram<in T : Any, out V, out B : Bin<T, V>> {
     /**
      * Find existing bin, corresponding to given coordinates
