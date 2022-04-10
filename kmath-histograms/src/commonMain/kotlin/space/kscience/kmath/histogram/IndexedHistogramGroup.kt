@@ -28,20 +28,20 @@ public data class DomainBin<in T : Comparable<T>, out V>(
  * @param V the type of bin value
  */
 public class IndexedHistogram<T : Comparable<T>, V : Any>(
-    public val histogramSpace: IndexedHistogramGroup<T, V>,
+    public val histogramGroup: IndexedHistogramGroup<T, V>,
     public val values: StructureND<V>,
 ) : Histogram<T, V, DomainBin<T, V>> {
 
     override fun get(point: Point<T>): DomainBin<T, V>? {
-        val index = histogramSpace.getIndex(point) ?: return null
-        return histogramSpace.produceBin(index, values[index])
+        val index = histogramGroup.getIndex(point) ?: return null
+        return histogramGroup.produceBin(index, values[index])
     }
 
-    override val dimension: Int get() = histogramSpace.shape.size
+    override val dimension: Int get() = histogramGroup.shape.size
 
     override val bins: Iterable<DomainBin<T, V>>
-        get() = DefaultStrides(histogramSpace.shape).asSequence().map {
-            histogramSpace.produceBin(it, values[it])
+        get() = DefaultStrides(histogramGroup.shape).asSequence().map {
+            histogramGroup.produceBin(it, values[it])
         }.asIterable()
 }
 
@@ -68,14 +68,14 @@ public interface IndexedHistogramGroup<T : Comparable<T>, V : Any> : Group<Index
     public fun produce(builder: HistogramBuilder<T, V>.() -> Unit): IndexedHistogram<T, V>
 
     override fun add(left: IndexedHistogram<T, V>, right: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
-        require(left.histogramSpace == this && right.histogramSpace == this) {
+        require(left.histogramGroup == this && right.histogramGroup == this) {
             "A histogram belonging to a different group cannot be operated."
         }
         return IndexedHistogram(this, histogramValueAlgebra { left.values + right.values })
     }
 
     override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {
-        require(a.histogramSpace == this) { "A histogram belonging to a different group cannot be operated." }
+        require(a.histogramGroup == this) { "A histogram belonging to a different group cannot be operated." }
         return IndexedHistogram(this, histogramValueAlgebra { a.values * value })
     }
 

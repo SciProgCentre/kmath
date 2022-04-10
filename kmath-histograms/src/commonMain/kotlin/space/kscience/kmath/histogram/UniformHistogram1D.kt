@@ -46,7 +46,7 @@ public class UniformHistogram1DGroup<V : Any, A>(
     public val startPoint: Double = 0.0,
 ) : Group<Histogram1D<Double, V>>, ScaleOperations<Histogram1D<Double, V>> where A : Ring<V>, A : ScaleOperations<V> {
 
-    override val zero: UniformHistogram1D<V> by lazy { UniformHistogram1D(this, emptyMap()) }
+    override val zero: UniformHistogram1D<V> = UniformHistogram1D(this, emptyMap())
 
     /**
      * Get index of a bin
