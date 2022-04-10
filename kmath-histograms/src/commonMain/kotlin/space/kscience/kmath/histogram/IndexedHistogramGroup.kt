@@ -33,7 +33,7 @@ public class IndexedHistogram<T : Comparable<T>, V : Any>(
 ) : Histogram<T, V, DomainBin<T, V>> {
 
     override fun get(point: Point<T>): DomainBin<T, V>? {
-        val index = histogramGroup.getIndex(point) ?: return null
+        val index = histogramGroup.getIndexOrNull(point) ?: return null
         return histogramGroup.produceBin(index, values[index])
     }
 
@@ -54,9 +54,9 @@ public interface IndexedHistogramGroup<T : Comparable<T>, V : Any> : Group<Index
     public val histogramValueAlgebra: FieldND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
-     * Resolve index of the bin including given [point]
+     * Resolve index of the bin including given [point]. Return null if point is outside histogram area
      */
-    public fun getIndex(point: Point<T>): IntArray?
+    public fun getIndexOrNull(point: Point<T>): IntArray?
 
     /**
      * Get a bin domain represented by given index

@@ -45,7 +45,7 @@ public class DoubleHistogramGroup(
         else -> floor((value - lower[axis]) / binSize[axis]).toInt()
     }
 
-    override fun getIndex(point: Buffer<Double>): IntArray = IntArray(dimension) {
+    override fun getIndexOrNull(point: Buffer<Double>): IntArray = IntArray(dimension) {
         getIndex(it, point[it])
     }
 
@@ -82,7 +82,7 @@ public class DoubleHistogramGroup(
             override val defaultValue: Double get() = 1.0
 
             override fun putValue(point: Point<out Double>, value: Double) {
-                val index = getIndex(point)
+                val index = getIndexOrNull(point)
                 ndCounter[index].add(value)
             }
         }
