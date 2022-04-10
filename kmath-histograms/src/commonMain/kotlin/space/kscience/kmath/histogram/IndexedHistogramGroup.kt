@@ -68,8 +68,9 @@ public interface IndexedHistogramGroup<T : Comparable<T>, V : Any> : Group<Index
     public fun produce(builder: HistogramBuilder<T, V>.() -> Unit): IndexedHistogram<T, V>
 
     override fun add(left: IndexedHistogram<T, V>, right: IndexedHistogram<T, V>): IndexedHistogram<T, V> {
-        require(left.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
-        require(right.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
+        require(left.histogramSpace == this && right.histogramSpace == this) {
+            "A histogram belonging to a different group cannot be operated."
+        }
         return IndexedHistogram(this, histogramValueAlgebra { left.values + right.values })
     }
 
