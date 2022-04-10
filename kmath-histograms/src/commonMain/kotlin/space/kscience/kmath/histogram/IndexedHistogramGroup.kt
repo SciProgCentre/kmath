@@ -75,7 +75,7 @@ public interface IndexedHistogramGroup<T : Comparable<T>, V : Any> : Group<Index
     }
 
     override fun scale(a: IndexedHistogram<T, V>, value: Double): IndexedHistogram<T, V> {
-        require(a.histogramSpace == this) { "Can't operate on a histogram produced by external space" }
+        require(a.histogramSpace == this) { "A histogram belonging to a different group cannot be operated." }
         return IndexedHistogram(this, histogramValueAlgebra { a.values * value })
     }
 
