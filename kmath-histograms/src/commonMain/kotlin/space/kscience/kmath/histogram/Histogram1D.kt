@@ -43,6 +43,7 @@ public interface Histogram1DBuilder<in T : Any, V : Any> : HistogramBuilder<T, V
     public fun putValue(at: T, value: V = defaultValue)
 
     override fun putValue(point: Point<out T>, value: V) {
+        require(point.size == 1) { "Only points with single value could be used in Histogram1D" }
         putValue(point[0], value)
     }
 }

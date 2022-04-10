@@ -126,11 +126,11 @@ public class UniformHistogram1DGroup<V : Any, A>(
 }
 
 public fun <V : Any, A> Histogram.Companion.uniform1D(
-    algebra: A,
+    valueAlgebra: A,
     binSize: Double,
     startPoint: Double = 0.0,
 ): UniformHistogram1DGroup<V, A> where A : Ring<V>, A : ScaleOperations<V> =
-    UniformHistogram1DGroup(algebra, binSize, startPoint)
+    UniformHistogram1DGroup(valueAlgebra, binSize, startPoint)
 
 @UnstableKMathAPI
 public fun <V : Any> UniformHistogram1DGroup<V, *>.produce(

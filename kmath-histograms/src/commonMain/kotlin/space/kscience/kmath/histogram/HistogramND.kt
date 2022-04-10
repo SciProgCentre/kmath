@@ -43,7 +43,7 @@ public class HistogramND<T : Comparable<T>, D : Domain<T>, V : Any>(
 public interface HistogramGroupND<T : Comparable<T>, D : Domain<T>, V : Any> :
     Group<HistogramND<T, D, V>>, ScaleOperations<HistogramND<T, D, V>> {
     public val shape: Shape
-    public val valueAlgebra: FieldOpsND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
+    public val valueAlgebraND: FieldOpsND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**
      * Resolve index of the bin including given [point]. Return null if point is outside histogram area
@@ -63,12 +63,12 @@ public interface HistogramGroupND<T : Comparable<T>, D : Domain<T>, V : Any> :
         require(left.group == this && right.group == this) {
             "A histogram belonging to a different group cannot be operated."
         }
-        return HistogramND(this, valueAlgebra { left.values + right.values })
+        return HistogramND(this, valueAlgebraND { left.values + right.values })
     }
 
     override fun scale(a: HistogramND<T, D, V>, value: Double): HistogramND<T, D, V> {
         require(a.group == this) { "A histogram belonging to a different group cannot be operated." }
-        return HistogramND(this, valueAlgebra { a.values * value })
+        return HistogramND(this, valueAlgebraND { a.values * value })
     }
 
     override val zero: HistogramND<T, D, V> get() = produce { }
