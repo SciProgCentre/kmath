@@ -17,7 +17,7 @@ import kotlin.math.floor
 @OptIn(UnstableKMathAPI::class)
 public class UniformHistogram1D<V : Any>(
     public val group: UniformHistogram1DGroup<V, *>,
-    public val values: Map<Int, V>,
+    internal val values: Map<Int, V>,
 ) : Histogram1D<Double, V> {
 
     private val startPoint get() = group.startPoint
@@ -82,7 +82,7 @@ public class UniformHistogram1DGroup<V : Any, A>(
     )
 
     /**
-     *
+     * Fill histogram.
      */
     public inline fun produce(block: Histogram1DBuilder<Double, V>.() -> Unit): UniformHistogram1D<V> {
         val map = HashMap<Int, V>()
@@ -104,23 +104,25 @@ public class UniformHistogram1DGroup<V : Any, A>(
      * (conserving the norming).
      */
     @OptIn(UnstableKMathAPI::class)
-    public fun produceFrom(histogram: Histogram1D<Double, V>): UniformHistogram1D<V> =
-        if ((histogram as? UniformHistogram1D)?.group == this) histogram
-        else {
-            val map = HashMap<Int, V>()
-            histogram.bins.forEach { bin ->
-                val range = bin.domain.range
-                val indexOfLeft = getIndex(range.start)
-                val indexOfRight = getIndex(range.endInclusive)
-                val numBins = indexOfRight - indexOfLeft + 1
-                for (i in indexOfLeft..indexOfRight) {
-                    map[indexOfLeft] = with(valueAlgebra) {
-                        (map[indexOfLeft] ?: zero) + bin.binValue / numBins
-                    }
+    public fun produceFrom(
+        histogram: Histogram1D<Double, V>,
+    ): UniformHistogram1D<V> = if ((histogram as? UniformHistogram1D)?.group == this) {
+        histogram
+    } else {
+        val map = HashMap<Int, V>()
+        histogram.bins.forEach { bin ->
+            val range = bin.domain.range
+            val indexOfLeft = getIndex(range.start)
+            val indexOfRight = getIndex(range.endInclusive)
+            val numBins = indexOfRight - indexOfLeft + 1
+            for (i in indexOfLeft..indexOfRight) {
+                map[indexOfLeft] = with(valueAlgebra) {
+                    (map[indexOfLeft] ?: zero) + bin.binValue / numBins
                 }
             }
-            UniformHistogram1D(this, map)
         }
+        UniformHistogram1D(this, map)
+    }
 }
 
 public fun <V : Any, A> Histogram.Companion.uniform1D(
@@ -134,3 +136,21 @@ public fun <V : Any, A> Histogram.Companion.uniform1D(
 public fun <V : Any> UniformHistogram1DGroup<V, *>.produce(
     buffer: Buffer<Double>,
 ): UniformHistogram1D<V> = produce { fill(buffer) }
+
+/**
+ * Map of bin centers to bin values
+ */
+@OptIn(UnstableKMathAPI::class)
+public val <V : Any> UniformHistogram1D<V>.binValues: Map<Double, V>
+    get() = bins.associate { it.center to it.binValue }
+
+
+//TODO add normalized values inside Field-based histogram spaces with context receivers
+///**
+// * Map of bin centers to normalized bin values (bin size as normalization)
+// */
+//@OptIn(UnstableKMathAPI::class)
+//public val <V : Any> UniformHistogram1D<V>.binValuesNormalized: Map<Double, V>
+//    get() = group.valueAlgebra {
+//        bins.associate { it.center to it.binValue / group.binSize }
+//    }

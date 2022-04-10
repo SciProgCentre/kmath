@@ -6,6 +6,7 @@
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain1D
+import space.kscience.kmath.domains.center
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.asSequence
@@ -16,7 +17,6 @@ import space.kscience.kmath.structures.Buffer
  * A univariate bin based on a range
  *
  * @property binValue The value of histogram including weighting
- * @property standardDeviation Standard deviation of the bin value. Zero or negative if not applicable
  */
 @UnstableKMathAPI
 public data class Bin1D<T : Comparable<T>, out V>(
@@ -56,5 +56,8 @@ public fun Histogram1DBuilder<Double, *>.fill(array: DoubleArray): Unit =
     array.forEach(this::putValue)
 
 @UnstableKMathAPI
-public fun <T: Any> Histogram1DBuilder<T, *>.fill(buffer: Buffer<T>): Unit =
+public fun <T : Any> Histogram1DBuilder<T, *>.fill(buffer: Buffer<T>): Unit =
     buffer.asSequence().forEach(this::putValue)
+
+@OptIn(UnstableKMathAPI::class)
+public val Bin1D<Double, *>.center: Double get() = domain.center
