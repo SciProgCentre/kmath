@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.real.DoubleVector
@@ -14,14 +17,14 @@ import kotlin.test.*
 internal class MultivariateHistogramTest {
     @Test
     fun testSinglePutHistogram() {
-        val hSpace = DoubleHistogramSpace.fromRanges(
+        val hSpace = Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0)
         )
         val histogram = hSpace.produce {
             put(0.55, 0.55)
         }
-        val bin = histogram.bins.find { it.value.toInt() > 0 } ?: fail()
+        val bin = histogram.bins.find { it.binValue.toInt() > 0 } ?: fail()
         assertTrue { bin.contains(DoubleVector(0.55, 0.55)) }
         assertTrue { bin.contains(DoubleVector(0.6, 0.5)) }
         assertFalse { bin.contains(DoubleVector(-0.55, 0.55)) }
@@ -29,7 +32,7 @@ internal class MultivariateHistogramTest {
 
     @Test
     fun testSequentialPut() {
-        val hSpace = DoubleHistogramSpace.fromRanges(
+        val hSpace = Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -44,12 +47,12 @@ internal class MultivariateHistogramTest {
                 put(nextDouble(), nextDouble(), nextDouble())
             }
         }
-        assertEquals(n, histogram.bins.sumOf { it.value.toInt() })
+        assertEquals(n, histogram.bins.sumOf { it.binValue.toInt() })
     }
 
     @Test
     fun testHistogramAlgebra() {
-        DoubleHistogramSpace.fromRanges(
+        Histogram.uniformDoubleNDFromRanges(
             (-1.0..1.0),
             (-1.0..1.0),
             (-1.0..1.0)
@@ -77,7 +80,7 @@ internal class MultivariateHistogramTest {
             assertTrue {
                 res.bins.count() >= histogram1.bins.count()
             }
-            assertEquals(0.0, res.bins.sumOf { it.value.toDouble() })
+            assertEquals(0.0, res.bins.sumOf { it.binValue.toDouble() })
         }
     }
 }

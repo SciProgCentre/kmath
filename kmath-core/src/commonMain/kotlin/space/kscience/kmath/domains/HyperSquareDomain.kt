@@ -7,17 +7,27 @@ package space.kscience.kmath.domains
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.indices
 
 /**
- *
- * HyperSquareDomain class.
- *
- * @author Alexander Nozik
+ * A hyper-square (or hyper-cube) real-space domain. It is formed by a [Buffer] of [lower] boundaries
+ * and a [Buffer] of upper boundaries. Upper should be greater or equals than lower.
  */
 @UnstableKMathAPI
-public class HyperSquareDomain(private val lower: Buffer<Double>, private val upper: Buffer<Double>) : DoubleDomain {
+public class HyperSquareDomain(public val lower: Buffer<Double>, public val upper: Buffer<Double>) : DoubleDomain {
+    init {
+        require(lower.size == upper.size) {
+            "Domain borders size mismatch. Lower borders size is ${lower.size}, but upper borders size is ${upper.size}."
+        }
+        require(lower.indices.all { lower[it] <= upper[it] }) {
+            "Domain borders order mismatch. Lower borders must be less or equals than upper borders."
+        }
+    }
+
     override val dimension: Int get() = lower.size
+
+    public val center: DoubleBuffer get() = DoubleBuffer(dimension) { (lower[it] + upper[it]) / 2.0 }
 
     override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]

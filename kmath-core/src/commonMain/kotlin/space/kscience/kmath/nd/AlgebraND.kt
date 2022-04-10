@@ -194,7 +194,7 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
     override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
-    //TODO move to extensions after KEEP-176
+    //TODO move to extensions with context receivers
 
     /**
      * Multiplies an ND structure by an element of it.

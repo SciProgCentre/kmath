@@ -105,6 +105,16 @@ public interface Buffer<out T> {
  */
 public val Buffer<*>.indices: IntRange get() = 0 until size
 
+public fun <T> Buffer<T>.first(): T {
+    require(size > 0) { "Can't get the first element of empty buffer" }
+    return get(0)
+}
+
+public fun <T> Buffer<T>.last(): T {
+    require(size > 0) { "Can't get the last element of empty buffer" }
+    return get(size - 1)
+}
+
 /**
  * Immutable wrapper for [MutableBuffer].
  *

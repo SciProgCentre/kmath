@@ -27,7 +27,7 @@ public interface Distribution<T : Any> : Sampler<T> {
     public companion object
 }
 
-public interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
+public interface Distribution1D<T : Comparable<T>> : Distribution<T> {
     /**
      * Cumulative distribution for ordered parameter (CDF)
      */
@@ -37,7 +37,7 @@ public interface UnivariateDistribution<T : Comparable<T>> : Distribution<T> {
 /**
  * Compute probability integral in an interval
  */
-public fun <T : Comparable<T>> UnivariateDistribution<T>.integral(from: T, to: T): Double {
+public fun <T : Comparable<T>> Distribution1D<T>.integral(from: T, to: T): Double {
     require(to > from)
     return cumulative(to) - cumulative(from)
 }

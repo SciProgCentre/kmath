@@ -48,6 +48,8 @@
 - Operations -> Ops
 - Default Buffer and ND algebras are now Ops and lack neutral elements (0, 1) as well as algebra-level shapes.
 - Tensor algebra takes read-only structures as input and inherits AlgebraND
+- `UnivariateDistribution` renamed to `Distribution1D`
+- Rework of histograms.
 
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`

@@ -18,7 +18,8 @@ public interface Counter<T : Any> {
     public val value: T
 
     public companion object {
-        public fun double(): ObjectCounter<Double> = ObjectCounter(DoubleField)
+        public fun ofDouble(): ObjectCounter<Double> = ObjectCounter(DoubleField)
+        public fun <T: Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
     }
 }
 
