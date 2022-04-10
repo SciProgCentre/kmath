@@ -56,7 +56,7 @@ subprojects {
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    github("kmath")
+    github("kmath", addToRelease = false)
     space()
     sonatype()
 }
