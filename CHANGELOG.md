@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.3.0]
+### Added
 - `ScaleOperations` interface
 - `Field` extends `ScaleOperations`
 - Basic integration API
@@ -20,6 +33,7 @@
 - Separate methods for UInt, Int and Number powers. NaN safety.
 - Tensorflow prototype
 - `ValueAndErrorField`
+
 
 ### Changed
 - Exponential operations merged with hyperbolic functions
@@ -53,8 +67,10 @@
 - Rework of histograms.
 - `UnivariateFunction` -> `Function1D`, `MultivariateFunction` -> `FunctionND`
 
+
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`
+
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
@@ -66,9 +82,11 @@
 - Second generic from DifferentiableExpression
 - Algebra elements are completely removed. Use algebra contexts instead.
 
+
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations
 - Univariate histogram filling
+
 
 ### Security
 
@@ -91,6 +109,7 @@
 - Generic operation result parameter to `MatrixContext`
 - New `MatrixFeature` interfaces for matrix decompositions
 - Basic Quaternion vector support in `kmath-complex`.
+
 
 ### Changed
 - Package changed from `scientifik` to `space.kscience`
@@ -116,7 +135,6 @@
 - `symbol` method in `Algebra` renamed to `bindSymbol` to avoid ambiguity
 - Add `out` projection to `Buffer` generic
 
-### Deprecated
 
 ### Removed
 - `kmath-koma` module because it doesn't support Kotlin 1.4.
@@ -126,13 +144,11 @@
 - `Real` class
 - StructureND identity and equals
 
+
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
 
-### Security
-
 ## [0.1.4]
-
 ### Added
 - Functional Expressions API
 - Mathematical Syntax Tree, its interpreter and API
@@ -150,6 +166,7 @@
 - Full hyperbolic functions support and default implementations within `ExtendedField`
 - Norm support for `Complex`
 
+
 ### Changed
 - `readAsMemory` now has `throws IOException` in JVM signature.
 - Several functions taking functional types were made `inline`.
@@ -160,6 +177,7 @@
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
 - Gradle version: 6.3 -> 6.6
 - Moved probability distributions to commons-rng and to `kmath-prob`
+
 
 ### Fixed
 - Missing copy method in Memory implementation on JS (https://github.com/mipt-npm/kmath/pull/106)

@@ -1,40 +1,69 @@
 public final class space/kscience/kmath/viktor/ViktorBuffer : space/kscience/kmath/structures/MutableBuffer {
-	public fun <init> (Lorg/jetbrains/bio/viktor/F64FlatArray;)V
+	public static final synthetic fun box-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lspace/kscience/kmath/viktor/ViktorBuffer;
+	public static fun constructor-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lorg/jetbrains/bio/viktor/F64FlatArray;
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public static fun copy-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lorg/jetbrains/bio/viktor/F64FlatArray;Lorg/jetbrains/bio/viktor/F64FlatArray;)Z
 	public fun get (I)Ljava/lang/Double;
 	public synthetic fun get (I)Ljava/lang/Object;
+	public static fun get-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;I)Ljava/lang/Double;
 	public final fun getFlatArray ()Lorg/jetbrains/bio/viktor/F64FlatArray;
 	public fun getSize ()I
+	public static fun getSize-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)I
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)I
 	public fun iterator ()Ljava/util/Iterator;
+	public static fun iterator-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Ljava/util/Iterator;
 	public fun set (ID)V
 	public synthetic fun set (ILjava/lang/Object;)V
+	public static fun set-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;ID)V
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lorg/jetbrains/bio/viktor/F64FlatArray;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lorg/jetbrains/bio/viktor/F64FlatArray;
 }
 
-public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/kmath/nd/FieldND, space/kscience/kmath/operations/ExtendedField, space/kscience/kmath/operations/NumbersAddOperations, space/kscience/kmath/operations/ScaleOperations {
+public class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/kmath/viktor/ViktorFieldOpsND, space/kscience/kmath/nd/FieldND, space/kscience/kmath/operations/NumbersAddOps {
 	public fun <init> ([I)V
+	public synthetic fun getOne ()Ljava/lang/Object;
+	public synthetic fun getOne ()Lspace/kscience/kmath/nd/StructureND;
+	public fun getOne ()Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public fun getShape ()[I
+	public synthetic fun getZero ()Ljava/lang/Object;
+	public synthetic fun getZero ()Lspace/kscience/kmath/nd/StructureND;
+	public fun getZero ()Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+}
+
+public class space/kscience/kmath/viktor/ViktorFieldOpsND : space/kscience/kmath/nd/FieldOpsND, space/kscience/kmath/operations/ExtendedFieldOps, space/kscience/kmath/operations/PowerOperations {
+	public static final field Companion Lspace/kscience/kmath/viktor/ViktorFieldOpsND$Companion;
+	public fun <init> ()V
 	public synthetic fun acos (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun acos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public synthetic fun add (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public fun add (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun asin (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun asin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun atan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun atan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public synthetic fun combine (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
-	public fun combine (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun cos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun exp (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public synthetic fun getElementContext ()Lspace/kscience/kmath/operations/Algebra;
-	public fun getElementContext ()Lspace/kscience/kmath/operations/DoubleField;
+	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/DoubleField;
 	public final fun getF64Buffer (Lspace/kscience/kmath/nd/StructureND;)Lorg/jetbrains/bio/viktor/F64Array;
-	public synthetic fun getOne ()Ljava/lang/Object;
-	public fun getOne ()Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public fun getShape ()[I
-	public synthetic fun getZero ()Ljava/lang/Object;
-	public fun getZero ()Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun ln (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
@@ -43,26 +72,38 @@ public final class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/km
 	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun minus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
-	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun plus (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
 	public fun plus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
 	public fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public synthetic fun produce (Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
-	public fun produce (Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public synthetic fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/StructureND;
 	public fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
 	public fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
+	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+}
+
+public final class space/kscience/kmath/viktor/ViktorFieldOpsND$Companion : space/kscience/kmath/viktor/ViktorFieldOpsND {
+}
+
+public final class space/kscience/kmath/viktor/ViktorFieldOpsNDKt {
+	public static final fun ViktorFieldND ([I)Lspace/kscience/kmath/viktor/ViktorFieldND;
+	public static final fun getViktorAlgebra (Lspace/kscience/kmath/operations/DoubleField;)Lspace/kscience/kmath/viktor/ViktorFieldOpsND;
+	public static final fun viktorAlgebra (Lspace/kscience/kmath/operations/DoubleField;[I)Lspace/kscience/kmath/viktor/ViktorFieldND;
 }
 
 public final class space/kscience/kmath/viktor/ViktorStructureND : space/kscience/kmath/nd/MutableStructureND {
@@ -77,7 +118,6 @@ public final class space/kscience/kmath/viktor/ViktorStructureND : space/kscienc
 }
 
 public final class space/kscience/kmath/viktor/ViktorStructureNDKt {
-	public static final fun ViktorNDField ([I)Lspace/kscience/kmath/viktor/ViktorFieldND;
 	public static final fun asStructure (Lorg/jetbrains/bio/viktor/F64Array;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 }
 

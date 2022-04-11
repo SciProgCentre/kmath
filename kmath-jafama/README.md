@@ -7,7 +7,7 @@ Integration with [Jafama](https://github.com/jeffhain/jafama).
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-jafama:0.3.0-dev-20`.
+The Maven coordinates of this project are `space.kscience:kmath-jafama:0.3.0`.
 
 **Gradle Groovy:**
 ```groovy
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-jafama:0.3.0-dev-20'
+    implementation 'space.kscience:kmath-jafama:0.3.0'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-jafama:0.3.0-dev-20")
+    implementation("space.kscience:kmath-jafama:0.3.0")
 }
 ```
 
