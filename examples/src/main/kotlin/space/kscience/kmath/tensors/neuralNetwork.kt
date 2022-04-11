@@ -48,7 +48,7 @@ fun reluDer(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
 class ReLU : Activation(::relu, ::reluDer)
 
 fun sigmoid(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
-    1.0 / (1.0 + (-x).exp())
+    1.0 / (1.0 + exp(-x))
 }
 
 fun sigmoidDer(x: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
@@ -116,7 +116,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
 
-        val softmaxValue = yPred.exp() / yPred.exp().sum(dim = 1, keepDim = true)
+        val softmaxValue = exp(yPred) / exp(yPred).sum(dim = 1, keepDim = true)
 
         (-onesForAnswers + softmaxValue) / (yPred.shape[0].toDouble())
     }

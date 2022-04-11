@@ -685,35 +685,35 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-    override fun StructureND<Double>.exp(): DoubleTensor = tensor.map { exp(it) }
+    override fun exp(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { exp(it) }
 
-    override fun StructureND<Double>.ln(): DoubleTensor = tensor.map { ln(it) }
+    override fun ln(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { ln(it) }
 
     override fun StructureND<Double>.sqrt(): DoubleTensor = tensor.map { sqrt(it) }
 
-    override fun StructureND<Double>.cos(): DoubleTensor = tensor.map { cos(it) }
+    override fun cos(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { cos(it) }
 
-    override fun StructureND<Double>.acos(): DoubleTensor = tensor.map { acos(it) }
+    override fun acos(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { acos(it) }
 
-    override fun StructureND<Double>.cosh(): DoubleTensor = tensor.map { cosh(it) }
+    override fun cosh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { cosh(it) }
 
-    override fun StructureND<Double>.acosh(): DoubleTensor = tensor.map { acosh(it) }
+    override fun acosh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { acosh(it) }
 
-    override fun StructureND<Double>.sin(): DoubleTensor = tensor.map { sin(it) }
+    override fun sin(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { sin(it) }
 
-    override fun StructureND<Double>.asin(): DoubleTensor = tensor.map { asin(it) }
+    override fun asin(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { asin(it) }
 
-    override fun StructureND<Double>.sinh(): DoubleTensor = tensor.map { sinh(it) }
+    override fun sinh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { sinh(it) }
 
-    override fun StructureND<Double>.asinh(): DoubleTensor = tensor.map { asinh(it) }
+    override fun asinh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { asinh(it) }
 
-    override fun StructureND<Double>.tan(): DoubleTensor = tensor.map { tan(it) }
+    override fun tan(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { tan(it) }
 
-    override fun StructureND<Double>.atan(): DoubleTensor = tensor.map { atan(it) }
+    override fun atan(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { atan(it) }
 
-    override fun StructureND<Double>.tanh(): DoubleTensor = tensor.map { tanh(it) }
+    override fun tanh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { tanh(it) }
 
-    override fun StructureND<Double>.atanh(): DoubleTensor = tensor.map { atanh(it) }
+    override fun atanh(arg: StructureND<Double>): DoubleTensor = arg.tensor.map { atanh(it) }
 
     override fun StructureND<Double>.ceil(): DoubleTensor = tensor.map { ceil(it) }
 

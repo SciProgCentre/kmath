@@ -72,50 +72,36 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
      */
     public fun StructureND<T>.variance(dim: Int, keepDim: Boolean): Tensor<T>
 
-    //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
-    public fun StructureND<T>.exp(): Tensor<T>
+    override fun sin(arg: StructureND<T>): Tensor<T>
 
-    //For information: https://pytorch.org/docs/stable/generated/torch.log.html
-    public fun StructureND<T>.ln(): Tensor<T>
+    override fun cos(arg: StructureND<T>): Tensor<T>
+
+    override fun asin(arg: StructureND<T>): Tensor<T>
+
+    override fun acos(arg: StructureND<T>): Tensor<T>
+
+    override fun tan(arg: StructureND<T>): Tensor<T>
+
+    override fun atan(arg: StructureND<T>): Tensor<T>
+
+    override fun exp(arg: StructureND<T>): Tensor<T>
+
+    override fun ln(arg: StructureND<T>): Tensor<T>
+
+    override fun sinh(arg: StructureND<T>): Tensor<T>
+
+    override fun cosh(arg: StructureND<T>): Tensor<T>
+
+    override fun tanh(arg: StructureND<T>): Tensor<T>
+
+    override fun asinh(arg: StructureND<T>): Tensor<T>
+
+    override fun acosh(arg: StructureND<T>): Tensor<T>
+
+    override fun atanh(arg: StructureND<T>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.sqrt.html
     public fun StructureND<T>.sqrt(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.cos
-    public fun StructureND<T>.cos(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.acos
-    public fun StructureND<T>.acos(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.cosh
-    public fun StructureND<T>.cosh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.acosh
-    public fun StructureND<T>.acosh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sin
-    public fun StructureND<T>.sin(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asin
-    public fun StructureND<T>.asin(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sinh
-    public fun StructureND<T>.sinh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asinh
-    public fun StructureND<T>.asinh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.atan.html#torch.tan
-    public fun StructureND<T>.tan(): Tensor<T>
-
-    //https://pytorch.org/docs/stable/generated/torch.atan.html#torch.atan
-    public fun StructureND<T>.atan(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.tanh
-    public fun StructureND<T>.tanh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.atanh
-    public fun StructureND<T>.atanh(): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.ceil.html#torch.ceil
     public fun StructureND<T>.ceil(): Tensor<T>
@@ -123,27 +109,58 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
     //For information: https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
     public fun StructureND<T>.floor(): Tensor<T>
 
-    override fun sin(arg: StructureND<T>): Tensor<T> = arg.sin()
-
-    override fun cos(arg: StructureND<T>): Tensor<T> = arg.cos()
-
-    override fun asin(arg: StructureND<T>): Tensor<T> = arg.asin()
-
-    override fun acos(arg: StructureND<T>): Tensor<T> = arg.acos()
-
-    override fun atan(arg: StructureND<T>): Tensor<T> = arg.atan()
-
-    override fun exp(arg: StructureND<T>): Tensor<T> = arg.exp()
-
-    override fun ln(arg: StructureND<T>): Tensor<T> = arg.ln()
-
-    override fun sinh(arg: StructureND<T>): Tensor<T> = arg.sinh()
-
-    override fun cosh(arg: StructureND<T>): Tensor<T> = arg.cosh()
-
-    override fun asinh(arg: StructureND<T>): Tensor<T> = arg.asinh()
-
-    override fun acosh(arg: StructureND<T>): Tensor<T> = arg.acosh()
-
-    override fun atanh(arg: StructureND<T>): Tensor<T> = arg.atanh()
+//    //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
+//    public fun StructureND<T>.exp(): Tensor<T> = exp(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.log.html
+//    @JvmName("lnChain")
+//    public fun StructureND<T>.ln(): Tensor<T> = ln(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.cos
+//    @JvmName("cosChain")
+//    public fun StructureND<T>.cos(): Tensor<T> = cos(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.acos
+//    @JvmName("acosChain")
+//    public fun StructureND<T>.acos(): Tensor<T> = acos(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.cosh
+//    @JvmName("coshChain")
+//    public fun StructureND<T>.cosh(): Tensor<T> = cosh(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.acosh
+//    @JvmName("acoshChain")
+//    public fun StructureND<T>.acosh(): Tensor<T> = acosh(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sin
+//    @JvmName("sinChain")
+//    public fun StructureND<T>.sin(): Tensor<T> = sin(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asin
+//    @JvmName("asinChain")
+//    public fun StructureND<T>.asin(): Tensor<T> = asin(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sinh
+//    @JvmName("sinhChain")
+//    public fun StructureND<T>.sinh(): Tensor<T> = sinh(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asinh
+//    @JvmName("asinhChain")
+//    public fun StructureND<T>.asinh(): Tensor<T> = asinh(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.atan.html#torch.tan
+//    @JvmName("tanChain")
+//    public fun StructureND<T>.tan(): Tensor<T> = tan(this)
+//
+//    //https://pytorch.org/docs/stable/generated/torch.atan.html#torch.atan
+//    @JvmName("atanChain")
+//    public fun StructureND<T>.atan(): Tensor<T> = atan(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.tanh
+//    @JvmName("tanhChain")
+//    public fun StructureND<T>.tanh(): Tensor<T> = tanh(this)
+//
+//    //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.atanh
+//    @JvmName("atanhChain")
+//    public fun StructureND<T>.atanh(): Tensor<T> = atanh(this)
 }

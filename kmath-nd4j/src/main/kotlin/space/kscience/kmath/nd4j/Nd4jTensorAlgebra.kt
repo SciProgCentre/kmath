@@ -114,27 +114,29 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun StructureND<T>.mean(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.mean(keepDim, dim).wrap()
 
-    override fun StructureND<T>.exp(): Nd4jArrayStructure<T> = Transforms.exp(ndArray).wrap()
-    override fun StructureND<T>.ln(): Nd4jArrayStructure<T> = Transforms.log(ndArray).wrap()
     override fun StructureND<T>.sqrt(): Nd4jArrayStructure<T> = Transforms.sqrt(ndArray).wrap()
-    override fun StructureND<T>.cos(): Nd4jArrayStructure<T> = Transforms.cos(ndArray).wrap()
-    override fun StructureND<T>.acos(): Nd4jArrayStructure<T> = Transforms.acos(ndArray).wrap()
-    override fun StructureND<T>.cosh(): Nd4jArrayStructure<T> = Transforms.cosh(ndArray).wrap()
 
-    override fun StructureND<T>.acosh(): Nd4jArrayStructure<T> =
-        Nd4j.getExecutioner().exec(ACosh(ndArray, ndArray.ulike())).wrap()
+    override fun exp(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.exp(arg.ndArray).wrap()
+    override fun ln(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.log(arg.ndArray).wrap()
+    override fun cos(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.cos(arg.ndArray).wrap()
+    override fun acos(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.acos(arg.ndArray).wrap()
+    override fun cosh(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.cosh(arg.ndArray).wrap()
 
-    override fun StructureND<T>.sin(): Nd4jArrayStructure<T> = Transforms.sin(ndArray).wrap()
-    override fun StructureND<T>.asin(): Nd4jArrayStructure<T> = Transforms.asin(ndArray).wrap()
-    override fun StructureND<T>.sinh(): Tensor<T> = Transforms.sinh(ndArray).wrap()
+    override fun acosh(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        Nd4j.getExecutioner().exec(ACosh(arg.ndArray, arg.ndArray.ulike())).wrap()
 
-    override fun StructureND<T>.asinh(): Nd4jArrayStructure<T> =
-        Nd4j.getExecutioner().exec(ASinh(ndArray, ndArray.ulike())).wrap()
+    override fun sin(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.sin(arg.ndArray).wrap()
+    override fun asin(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.asin(arg.ndArray).wrap()
+    override fun sinh(arg: StructureND<T>): Tensor<T> = Transforms.sinh(arg.ndArray).wrap()
 
-    override fun StructureND<T>.tan(): Nd4jArrayStructure<T> = Transforms.tan(ndArray).wrap()
-    override fun StructureND<T>.atan(): Nd4jArrayStructure<T> = Transforms.atan(ndArray).wrap()
-    override fun StructureND<T>.tanh(): Nd4jArrayStructure<T> = Transforms.tanh(ndArray).wrap()
-    override fun StructureND<T>.atanh(): Nd4jArrayStructure<T> = Transforms.atanh(ndArray).wrap()
+    override fun asinh(arg: StructureND<T>): Nd4jArrayStructure<T> =
+        Nd4j.getExecutioner().exec(ASinh(arg.ndArray, arg.ndArray.ulike())).wrap()
+
+    override fun tan(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.tan(arg.ndArray).wrap()
+    override fun atan(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.atan(arg.ndArray).wrap()
+    override fun tanh(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.tanh(arg.ndArray).wrap()
+    override fun atanh(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.atanh(arg.ndArray).wrap()
+
     override fun StructureND<T>.ceil(): Nd4jArrayStructure<T> = Transforms.ceil(ndArray).wrap()
     override fun StructureND<T>.floor(): Nd4jArrayStructure<T> = Transforms.floor(ndArray).wrap()
     override fun StructureND<T>.std(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
@@ -177,7 +179,6 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
         }
         return array.wrap()
     }
-
 
     @OptIn(PerformancePitfall::class)
     override val StructureND<Double>.ndArray: INDArray

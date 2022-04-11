@@ -32,12 +32,12 @@ internal class TestDoubleAnalyticTensorAlgebra {
 
     @Test
     fun testExp() = DoubleTensorAlgebra {
-        assertTrue { tensor.exp() eq expectedTensor(::exp) }
+        assertTrue { exp(tensor) eq expectedTensor(::exp) }
     }
 
     @Test
     fun testLog() = DoubleTensorAlgebra {
-        assertTrue { tensor.ln() eq expectedTensor(::ln) }
+        assertTrue { ln(tensor) eq expectedTensor(::ln) }
     }
 
     @Test
@@ -47,48 +47,48 @@ internal class TestDoubleAnalyticTensorAlgebra {
 
     @Test
     fun testCos() = DoubleTensorAlgebra {
-        assertTrue { tensor.cos() eq expectedTensor(::cos) }
+        assertTrue { cos(tensor) eq expectedTensor(::cos) }
     }
 
 
     @Test
     fun testCosh() = DoubleTensorAlgebra {
-        assertTrue { tensor.cosh() eq expectedTensor(::cosh) }
+        assertTrue { cosh(tensor) eq expectedTensor(::cosh) }
     }
 
     @Test
     fun testAcosh() = DoubleTensorAlgebra {
-        assertTrue { tensor.acosh() eq expectedTensor(::acosh) }
+        assertTrue { acosh(tensor) eq expectedTensor(::acosh) }
     }
 
     @Test
     fun testSin() = DoubleTensorAlgebra {
-        assertTrue { tensor.sin() eq expectedTensor(::sin) }
+        assertTrue { sin(tensor) eq expectedTensor(::sin) }
     }
 
     @Test
     fun testSinh() = DoubleTensorAlgebra {
-        assertTrue { tensor.sinh() eq expectedTensor(::sinh) }
+        assertTrue { sinh(tensor) eq expectedTensor(::sinh) }
     }
 
     @Test
     fun testAsinh() = DoubleTensorAlgebra {
-        assertTrue { tensor.asinh() eq expectedTensor(::asinh) }
+        assertTrue { asinh(tensor) eq expectedTensor(::asinh) }
     }
 
     @Test
     fun testTan() = DoubleTensorAlgebra {
-        assertTrue { tensor.tan() eq expectedTensor(::tan) }
+        assertTrue { tan(tensor) eq expectedTensor(::tan) }
     }
 
     @Test
     fun testAtan() = DoubleTensorAlgebra {
-        assertTrue { tensor.atan() eq expectedTensor(::atan) }
+        assertTrue { atan(tensor) eq expectedTensor(::atan) }
     }
 
     @Test
     fun testTanh() = DoubleTensorAlgebra {
-        assertTrue { tensor.tanh() eq expectedTensor(::tanh) }
+        assertTrue { tanh(tensor) eq expectedTensor(::tanh) }
     }
 
     @Test
