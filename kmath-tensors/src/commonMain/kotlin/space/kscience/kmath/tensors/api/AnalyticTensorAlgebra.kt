@@ -123,27 +123,27 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
     //For information: https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
     public fun StructureND<T>.floor(): Tensor<T>
 
-    override fun sin(arg: StructureND<T>): StructureND<T> = arg.sin()
+    override fun sin(arg: StructureND<T>): Tensor<T> = arg.sin()
 
-    override fun cos(arg: StructureND<T>): StructureND<T> = arg.cos()
+    override fun cos(arg: StructureND<T>): Tensor<T> = arg.cos()
 
-    override fun asin(arg: StructureND<T>): StructureND<T> = arg.asin()
+    override fun asin(arg: StructureND<T>): Tensor<T> = arg.asin()
 
-    override fun acos(arg: StructureND<T>): StructureND<T> = arg.acos()
+    override fun acos(arg: StructureND<T>): Tensor<T> = arg.acos()
 
-    override fun atan(arg: StructureND<T>): StructureND<T> = arg.atan()
+    override fun atan(arg: StructureND<T>): Tensor<T> = arg.atan()
 
-    override fun exp(arg: StructureND<T>): StructureND<T> = arg.exp()
+    override fun exp(arg: StructureND<T>): Tensor<T> = arg.exp()
 
-    override fun ln(arg: StructureND<T>): StructureND<T> = arg.ln()
+    override fun ln(arg: StructureND<T>): Tensor<T> = arg.ln()
 
-    override fun sinh(arg: StructureND<T>): StructureND<T> = arg.sinh()
+    override fun sinh(arg: StructureND<T>): Tensor<T> = arg.sinh()
 
-    override fun cosh(arg: StructureND<T>): StructureND<T> = arg.cosh()
+    override fun cosh(arg: StructureND<T>): Tensor<T> = arg.cosh()
 
-    override fun asinh(arg: StructureND<T>): StructureND<T> = arg.asinh()
+    override fun asinh(arg: StructureND<T>): Tensor<T> = arg.asinh()
 
-    override fun acosh(arg: StructureND<T>): StructureND<T> = arg.acosh()
+    override fun acosh(arg: StructureND<T>): Tensor<T> = arg.acosh()
 
-    override fun atanh(arg: StructureND<T>): StructureND<T> = arg.atanh()
+    override fun atanh(arg: StructureND<T>): Tensor<T> = arg.atanh()
 }
