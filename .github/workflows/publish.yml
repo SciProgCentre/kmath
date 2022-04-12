@@ -34,6 +34,7 @@ jobs:
           arguments: |
             releaseAll
             -Ppublishing.enabled=true
+            -Ppublishing.sonatype=false
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
@@ -45,5 +46,6 @@ jobs:
             releaseIosArm64
             releaseIosX64
             -Ppublishing.enabled=true
+            -Ppublishing.sonatype=false            
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
