@@ -33,6 +33,10 @@
 - Separate methods for UInt, Int and Number powers. NaN safety.
 - Tensorflow prototype
 - `ValueAndErrorField`
+- MST compilation to WASM: #286
+- Jafama integration: #176
+- `contentEquals` with tolerance: #364
+- Compilation to TeX for MST: #254
 
 
 ### Changed
