@@ -2,29 +2,36 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>FlaggedDoubleBuffer</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
   
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
+      <div></div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
         <div class="main-content" id="content" pageids="kmath-core::space.kscience.kmath.structures/FlaggedDoubleBuffer///PointingToDeclaration//244675578">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.structures</a>/<a href="index.html">FlaggedDoubleBuffer</a></div>
-            <div class="pull-right d-flex">
-              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
-              <div id="searchBar"></div>
-            </div>
-          </div>
+          <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.structures</a>/<a href="index.html">FlaggedDoubleBuffer</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>Flagged</span><wbr><span>Double</span><wbr><span>Buffer</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">class <a href="index.html">FlaggedDoubleBuffer</a>(values: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a>, flags: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>) : <a href="../-flagged-buffer/index.html">FlaggedBuffer</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>?&gt; , <a href="../-buffer/index.html">Buffer</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>?&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> buffer that supports flags for each value like <code>NaN</code> or Missing.</p></div></div>
+            <h1 class="cover"><span>Flagged</span><wbr><span>Double</span><wbr><span><span>Buffer</span></span></h1>
+            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">FlaggedDoubleBuffer</a><span class="token punctuation">(</span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span>flags<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span> : <a href="../-flagged-buffer/index.html">FlaggedBuffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator">&gt; </span>, <a href="../-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> buffer that supports flags for each value like <code class="lang-kotlin">NaN</code> or Missing.</p></div>            </div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
@@ -33,15 +40,16 @@
               <div class="table" data-togglable="Constructors"><a data-name="-796497031%2FConstructors%2F244675578" anchor-label="FlaggedDoubleBuffer" id="-796497031%2FConstructors%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-flagged-double-buffer.html">FlaggedDoubleBuffer</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-796497031%2FConstructors%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-flagged-double-buffer.html"><span>Flagged</span><wbr><span>Double</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-796497031%2FConstructors%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="-flagged-double-buffer.html">FlaggedDoubleBuffer</a>(values: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a>, flags: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-flagged-double-buffer.html"><span class="token function">FlaggedDoubleBuffer</span></a><span class="token punctuation">(</span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span>flags<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -51,80 +59,68 @@
               <div class="table" data-togglable="Functions"><a data-name="-1721412816%2FFunctions%2F244675578" anchor-label="get" id="-1721412816%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="get.html">get</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1721412816%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="get.html"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1721412816%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span>index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Gets element at given index.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator override fun <a href="get.html">get</a>(index: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1721412816%2FFunctions%2F244675578" anchor-label="get" id="-1721412816%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-1721412816%2FFunctions%2F244675578" anchor-label="get" id="-1721412816%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Gets element at given index.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1875034532%2FFunctions%2F244675578" anchor-label="getFlag" id="1875034532%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="get-flag.html">getFlag</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1875034532%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="get-flag.html"><span>get</span><wbr><span><span>Flag</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1875034532%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-flag.html"><span class="token function">getFlag</span></a><span class="token punctuation">(</span>index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte/index.html">Byte</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="get-flag.html">getFlag</a>(index: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte/index.html">Byte</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-126155004%2FFunctions%2F244675578" anchor-label="iterator" id="-126155004%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="iterator.html">iterator</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-126155004%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="iterator.html"><span><span>iterator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-126155004%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="iterator.html"><span class="token function">iterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html">Iterator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Iterates over all elements.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator override fun <a href="iterator.html">iterator</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html">Iterator</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>?&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-126155004%2FFunctions%2F244675578" anchor-label="iterator" id="-126155004%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-126155004%2FFunctions%2F244675578" anchor-label="iterator" id="-126155004%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Iterates over all elements.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1484084934%2FFunctions%2F244675578" anchor-label="toString" id="1484084934%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="to-string.html">toString</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1484084934%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1484084934%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="to-string.html">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -133,15 +129,16 @@
               <div class="table" data-togglable="Properties"><a data-name="-1173740735%2FProperties%2F244675578" anchor-label="flags" id="-1173740735%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="flags.html">flags</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1173740735%2FProperties%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="flags.html">flags</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1173740735%2FProperties%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="-1173740735%2FProperties%2F244675578" anchor-label="flags" id="-1173740735%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace">val <a href="flags.html">flags</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="-1173740735%2FProperties%2F244675578" anchor-label="flags" id="-1173740735%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="flags.html">flags</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -149,15 +146,16 @@
 <a data-name="1937116497%2FProperties%2F244675578" anchor-label="size" id="1937116497%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="size.html">size</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1937116497%2FProperties%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="size.html">size</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1937116497%2FProperties%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="1937116497%2FProperties%2F244675578" anchor-label="size" id="1937116497%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace">open override val <a href="size.html">size</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1937116497%2FProperties%2F244675578" anchor-label="size" id="1937116497%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>The size of this buffer.</div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="1937116497%2FProperties%2F244675578" anchor-label="size" id="1937116497%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="size.html">size</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1937116497%2FProperties%2F244675578" anchor-label="size" id="1937116497%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><p class="paragraph">The size of this buffer.</p></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -165,15 +163,16 @@
 <a data-name="-81469936%2FProperties%2F244675578" anchor-label="values" id="-81469936%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="values.html">values</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-81469936%2FProperties%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="values.html">values</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-81469936%2FProperties%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="-81469936%2FProperties%2F244675578" anchor-label="values" id="-81469936%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace">val <a href="values.html">values</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><a data-name="-81469936%2FProperties%2F244675578" anchor-label="values" id="-81469936%2FProperties%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="values.html">values</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -183,20 +182,17 @@
               <div class="table" data-togglable="Extensions"><a data-name="-787461797%2FExtensions%2F244675578" anchor-label="forEachValid" id="-787461797%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="../for-each-valid.html">forEachValid</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-787461797%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="../for-each-valid.html"><span>for</span><wbr><span>Each</span><wbr><span><span>Valid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-787461797%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">FlaggedDoubleBuffer</a><span class="token punctuation">.</span><a href="../for-each-valid.html"><span class="token function">forEachValid</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">inline fun <a href="index.html">FlaggedDoubleBuffer</a>.<a href="../for-each-valid.html">forEachValid</a>(block: (<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -205,7 +201,9 @@
               <div class="table" data-togglable="Sources"><a data-name="829441901%2FSource%2F244675578" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/FlaggedBuffer.kt#L53" id="829441901%2FSource%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/FlaggedBuffer.kt#L53">common source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="829441901%2FSource%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/FlaggedBuffer.kt#L53">common source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="829441901%2FSource%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div></div>
@@ -215,7 +213,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   

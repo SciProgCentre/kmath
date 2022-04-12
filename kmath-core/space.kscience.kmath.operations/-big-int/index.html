@@ -2,29 +2,36 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>BigInt</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
   
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
+      <div></div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
         <div class="main-content" id="content" pageids="kmath-core::space.kscience.kmath.operations/BigInt///PointingToDeclaration//244675578">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.operations</a>/<a href="index.html">BigInt</a></div>
-            <div class="pull-right d-flex">
-              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
-              <div id="searchBar"></div>
-            </div>
-          </div>
+          <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.operations</a>/<a href="index.html">BigInt</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>Big</span><wbr><span>Int</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">class <a href="index.html">BigInt</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a>&lt;<a href="index.html">BigInt</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+            <h1 class="cover"><span>Big</span><wbr><span><span>Int</span></span></h1>
+            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">BigInt</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">BigInt</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>            </div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
@@ -33,20 +40,17 @@
               <div class="table" data-togglable="Types"><a data-name="199961961%2FClasslikes%2F244675578" anchor-label="Companion" id="199961961%2FClasslikes%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-companion/index.html">Companion</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="199961961%2FClasslikes%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="199961961%2FClasslikes%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">object <a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -55,340 +59,289 @@
               <div class="table" data-togglable="Functions"><a data-name="-868067408%2FFunctions%2F244675578" anchor-label="abs" id="-868067408%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="abs.html">abs</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-868067408%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="abs.html"><span><span>abs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-868067408%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="abs.html"><span class="token function">abs</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="abs.html">abs</a>(): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="446932930%2FFunctions%2F244675578" anchor-label="and" id="446932930%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="and.html">and</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="446932930%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="and.html"><span><span>and</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="446932930%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="and.html"><span class="token function">and</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">infix fun <a href="and.html">and</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1566144121%2FFunctions%2F244675578" anchor-label="compareTo" id="1566144121%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="compare-to.html">compareTo</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1566144121%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="compare-to.html"><span>compare</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1566144121%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="compare-to.html"><span class="token function">compareTo</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator override fun <a href="compare-to.html">compareTo</a>(other: <a href="index.html">BigInt</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-533372985%2FFunctions%2F244675578" anchor-label="div" id="-533372985%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="div.html">div</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-533372985%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="div.html"><span><span>div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-533372985%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="div.html"><span class="token function">div</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="div.html"><span class="token function">div</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="div.html"><span class="token function">div</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="div.html">div</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace">operator fun <a href="div.html">div</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace">operator fun <a href="div.html">div</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1894699063%2FFunctions%2F244675578" anchor-label="equals" id="-1894699063%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="equals.html">equals</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1894699063%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="equals.html"><span><span>equals</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1894699063%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="equals.html"><span class="token function">equals</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator override fun <a href="equals.html">equals</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-2086837507%2FFunctions%2F244675578" anchor-label="hashCode" id="-2086837507%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="hash-code.html">hashCode</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2086837507%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="hash-code.html"><span>hash</span><wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2086837507%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="hash-code.html"><span class="token function">hashCode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="hash-code.html">hashCode</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1589757129%2FFunctions%2F244675578" anchor-label="minus" id="1589757129%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="minus.html">minus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1589757129%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="minus.html"><span><span>minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1589757129%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="minus.html"><span class="token function">minus</span></a><span class="token punctuation">(</span>b<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="minus.html">minus</a>(b: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1786797149%2FFunctions%2F244675578" anchor-label="modPow" id="1786797149%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="mod-pow.html">modPow</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1786797149%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="mod-pow.html"><span>mod</span><wbr><span><span>Pow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1786797149%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="mod-pow.html"><span class="token function">modPow</span></a><span class="token punctuation">(</span>exponent<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">, </span>m<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="mod-pow.html">modPow</a>(exponent: <a href="index.html">BigInt</a>, m: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1418307380%2FFunctions%2F244675578" anchor-label="or" id="-1418307380%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="or.html">or</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1418307380%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="or.html"><span><span>or</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1418307380%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="or.html"><span class="token function">or</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">infix fun <a href="or.html">or</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="873786229%2FFunctions%2F244675578" anchor-label="plus" id="873786229%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="plus.html">plus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="873786229%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="plus.html"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="873786229%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="plus.html"><span class="token function">plus</span></a><span class="token punctuation">(</span>b<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="plus.html">plus</a>(b: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-395733519%2FFunctions%2F244675578" anchor-label="pow" id="-395733519%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="pow.html">pow</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-395733519%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="pow.html"><span><span>pow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-395733519%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="pow.html"><span class="token function">pow</span></a><span class="token punctuation">(</span>exponent<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="pow.html">pow</a>(exponent: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1377486395%2FFunctions%2F244675578" anchor-label="rem" id="-1377486395%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="rem.html">rem</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1377486395%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="rem.html"><span><span>rem</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1377486395%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="rem.html"><span class="token function">rem</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="rem.html"><span class="token function">rem</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="rem.html">rem</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace">operator fun <a href="rem.html">rem</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-689577239%2FFunctions%2F244675578" anchor-label="shl" id="-689577239%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="shl.html">shl</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-689577239%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="shl.html"><span><span>shl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-689577239%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="shl.html"><span class="token function">shl</span></a><span class="token punctuation">(</span>i<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">infix fun <a href="shl.html">shl</a>(i: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1872677597%2FFunctions%2F244675578" anchor-label="shr" id="-1872677597%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="shr.html">shr</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1872677597%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="shr.html"><span><span>shr</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1872677597%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="shr.html"><span class="token function">shr</span></a><span class="token punctuation">(</span>i<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">infix fun <a href="shr.html">shr</a>(i: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1446002286%2FFunctions%2F244675578" anchor-label="times" id="-1446002286%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="times.html">times</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1446002286%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="times.html"><span><span>times</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1446002286%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="times.html"><span class="token function">times</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="times.html"><span class="token function">times</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="times.html"><span class="token function">times</span></a><span class="token punctuation">(</span>b<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="times.html">times</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace">operator fun <a href="times.html">times</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-u-int/index.html">UInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace">operator fun <a href="times.html">times</a>(b: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="2029963724%2FFunctions%2F244675578" anchor-label="toString" id="2029963724%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="to-string.html">toString</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2029963724%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2029963724%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="to-string.html">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1807632745%2FFunctions%2F244675578" anchor-label="unaryMinus" id="-1807632745%2FFunctions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="unary-minus.html">unaryMinus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1807632745%2FFunctions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="unary-minus.html"><span>unary</span><wbr><span><span>Minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1807632745%2FFunctions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="unary-minus.html"><span class="token function">unaryMinus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">operator fun <a href="unary-minus.html">unaryMinus</a>(): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -397,184 +350,136 @@
               <div class="table" data-togglable="Extensions"><a data-name="-1195829934%2FExtensions%2F244675578" anchor-label="algebra" id="-1195829934%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="../algebra.html">algebra</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1195829934%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="../algebra.html"><span><span>algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1195829934%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="../algebra.html">algebra</a><span class="token operator">: </span><a href="../-big-int-field/index.html">BigIntField</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">val <a href="index.html">BigInt</a>.<a href="../algebra.html">algebra</a>: <a href="../-big-int-field/index.html">BigIntField</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1253285927%2FExtensions%2F244675578" anchor-label="div" id="1253285927%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-268323160%2FExtensions%2F244675578">div</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1253285927%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-268323160%2FExtensions%2F244675578"><span><span>div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1253285927%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-268323160%2FExtensions%2F244675578"><span class="token function">div</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Division of two elements.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-375831101%2FExtensions%2F244675578"><span class="token function">div</span></a><span class="token punctuation">(</span>k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Division of this element by scalar.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-268323160%2FExtensions%2F244675578">div</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-268323160%2FExtensions%2F244675578" anchor-label="div" id="-268323160%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-268323160%2FExtensions%2F244675578" anchor-label="div" id="-268323160%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Division of two elements.</div></div>
-<div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-375831101%2FExtensions%2F244675578">div</a>(k: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-375831101%2FExtensions%2F244675578" anchor-label="div" id="-375831101%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-375831101%2FExtensions%2F244675578" anchor-label="div" id="-375831101%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Division of this element by scalar.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-828895131%2FExtensions%2F244675578" anchor-label="minus" id="-828895131%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1816520722%2FExtensions%2F244675578">minus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-828895131%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-1816520722%2FExtensions%2F244675578"><span><span>minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-828895131%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-1816520722%2FExtensions%2F244675578"><span class="token function">minus</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Subtraction of two elements.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-728002937%2FExtensions%2F244675578"><span class="token function">minus</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Subtraction of element from number.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-1816520722%2FExtensions%2F244675578">minus</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1816520722%2FExtensions%2F244675578" anchor-label="minus" id="-1816520722%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-1816520722%2FExtensions%2F244675578" anchor-label="minus" id="-1816520722%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Subtraction of two elements.</div></div>
-<div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-728002937%2FExtensions%2F244675578">minus</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-728002937%2FExtensions%2F244675578" anchor-label="minus" id="-728002937%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-728002937%2FExtensions%2F244675578" anchor-label="minus" id="-728002937%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Subtraction of element from number.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-1241681700%2FExtensions%2F244675578" anchor-label="mutableBuffer" id="-1241681700%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="../mutable-buffer.html">mutableBuffer</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1241681700%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="../mutable-buffer.html"><span>mutable</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1241681700%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="../mutable-buffer.html"><span class="token function">mutableBuffer</span></a><span class="token punctuation">(</span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>initializer<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">BigInt</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">inline fun <a href="index.html">BigInt</a>.<a href="../mutable-buffer.html">mutableBuffer</a>(size: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, initializer: (<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>) -&gt; <a href="index.html">BigInt</a>): <a href="../../space.kscience.kmath.structures/-buffer/index.html">Buffer</a>&lt;<a href="index.html">BigInt</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-478630587%2FExtensions%2F244675578" anchor-label="plus" id="-478630587%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1094554782%2FExtensions%2F244675578">plus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-478630587%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-1094554782%2FExtensions%2F244675578"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-478630587%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-1094554782%2FExtensions%2F244675578"><span class="token function">plus</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Addition of two elements.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-461451409%2FExtensions%2F244675578"><span class="token function">plus</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Addition of element and scalar.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-1094554782%2FExtensions%2F244675578">plus</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1094554782%2FExtensions%2F244675578" anchor-label="plus" id="-1094554782%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-1094554782%2FExtensions%2F244675578" anchor-label="plus" id="-1094554782%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Addition of two elements.</div></div>
-<div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-461451409%2FExtensions%2F244675578">plus</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-461451409%2FExtensions%2F244675578" anchor-label="plus" id="-461451409%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-461451409%2FExtensions%2F244675578" anchor-label="plus" id="-461451409%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Addition of element and scalar.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-669720507%2FExtensions%2F244675578" anchor-label="times" id="-669720507%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1888437855%2FExtensions%2F244675578">times</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-669720507%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#1888437855%2FExtensions%2F244675578"><span><span>times</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-669720507%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#1888437855%2FExtensions%2F244675578"><span class="token function">times</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">BigInt</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Multiplies this element by scalar.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-440934920%2FExtensions%2F244675578"><span class="token function">times</span></a><span class="token punctuation">(</span>k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Multiplication of this element by a scalar.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#1888437855%2FExtensions%2F244675578">times</a>(other: <a href="index.html">BigInt</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1888437855%2FExtensions%2F244675578" anchor-label="times" id="1888437855%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="1888437855%2FExtensions%2F244675578" anchor-label="times" id="1888437855%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Multiplies this element by scalar.</div></div>
-<div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-440934920%2FExtensions%2F244675578">times</a>(k: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a>): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-440934920%2FExtensions%2F244675578" anchor-label="times" id="-440934920%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-440934920%2FExtensions%2F244675578" anchor-label="times" id="-440934920%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Multiplication of this element by a scalar.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-763762330%2FExtensions%2F244675578" anchor-label="unaryMinus" id="-763762330%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="../-big-int-field/unary-minus.html">unaryMinus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-763762330%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="../-big-int-field/unary-minus.html"><span>unary</span><wbr><span><span>Minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-763762330%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="../-big-int-field/unary-minus.html"><span class="token function">unaryMinus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">The negation of this element.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator override fun <a href="index.html">BigInt</a>.<a href="../-big-int-field/unary-minus.html">unaryMinus</a>(): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-763762330%2FExtensions%2F244675578" anchor-label="unaryMinus" id="-763762330%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-763762330%2FExtensions%2F244675578" anchor-label="unaryMinus" id="-763762330%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>The negation of this element.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="-2075382658%2FExtensions%2F244675578" anchor-label="unaryPlus" id="-2075382658%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-2075382658%2FExtensions%2F244675578">unaryPlus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2075382658%2FExtensions%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-2075382658%2FExtensions%2F244675578"><span>unary</span><wbr><span><span>Plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2075382658%2FExtensions%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag common-like">common</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">BigInt</a><span class="token punctuation">.</span><a href="index.html#-2075382658%2FExtensions%2F244675578"><span class="token function">unaryPlus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns this value.</p></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open operator fun <a href="index.html">BigInt</a>.<a href="index.html#-2075382658%2FExtensions%2F244675578">unaryPlus</a>(): <a href="index.html">BigInt</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-2075382658%2FExtensions%2F244675578" anchor-label="unaryPlus" id="-2075382658%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-2075382658%2FExtensions%2F244675578" anchor-label="unaryPlus" id="-2075382658%2FExtensions%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>Returns this value.</div></div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -583,7 +488,9 @@
               <div class="table" data-togglable="Sources"><a data-name="-497666649%2FSource%2F244675578" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/BigInt.kt#L47" id="-497666649%2FSource%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/BigInt.kt#L47">common source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-497666649%2FSource%2F244675578"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/BigInt.kt#L47">common source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-497666649%2FSource%2F244675578"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div></div>
@@ -593,7 +500,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   

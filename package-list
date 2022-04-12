@@ -64,6 +64,8 @@ space.kscience.kmath.samplers
 space.kscience.kmath.stat
 module:kmath-symja
 space.kscience.kmath.symja
+module:kmath-tensorflow
+space.kscience.kmath.tensorflow
 module:kmath-tensors
 space.kscience.kmath.tensors.api
 space.kscience.kmath.tensors.core

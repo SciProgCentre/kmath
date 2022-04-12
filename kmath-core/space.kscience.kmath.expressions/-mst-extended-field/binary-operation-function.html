@@ -2,40 +2,44 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>binaryOperationFunction</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
   
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
+      <div></div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
         <div class="main-content" id="content" pageids="kmath-core::space.kscience.kmath.expressions/MstExtendedField/binaryOperationFunction/#kotlin.String/PointingToDeclaration//244675578">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.expressions</a>/<a href="index.html">MstExtendedField</a>/<a href="binary-operation-function.html">binaryOperationFunction</a></div>
-            <div class="pull-right d-flex">
-              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
-              <div id="searchBar"></div>
-            </div>
-          </div>
+          <div class="breadcrumbs"><a href="../../index.html">kmath-core</a>/<a href="../index.html">space.kscience.kmath.expressions</a>/<a href="index.html">MstExtendedField</a>/<a href="binary-operation-function.html">binaryOperationFunction</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>binary</span><wbr><span>Operation</span><wbr><span>Function</span></h1>
+            <h1 class="cover"><span>binary</span><wbr><span>Operation</span><wbr><span><span>Function</span></span></h1>
           </div>
-<div class="divergent-group" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="binary-operation-function.html">binaryOperationFunction</a>(operation: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): (left: <a href="../-m-s-t/index.html">MST</a>, right: <a href="../-m-s-t/index.html">MST</a>) -&gt; <a href="../-m-s-t/-binary/index.html">MST.Binary</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<p class="paragraph">Dynamically dispatches a binary operation with the certain name.</p><p class="paragraph">Implementations must fulfil the following requirements:</p><ol><li><p class="paragraph">If operation is not defined in the structure, then the function throws <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">kotlin.IllegalStateException</a>.</p></li><li><p class="paragraph">Equivalence to <a href="../../../kmath-core/space.kscience.kmath.expressions/-mst-extended-field/binary-operation.html">binaryOperation</a>: for any <code>a</code>, <code>b</code>, and <code>c</code>, <code>binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)</code>.</p></li></ol><h4 class="">Return</h4><p class="paragraph">an operation.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">operation</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the name of operation.</p></div></div></div></div></div></div></div></div></div></div></div>
+          <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+            <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-core:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-core:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="binary-operation-function.html"><span class="token function">binaryOperationFunction</span></a><span class="token punctuation">(</span>operation<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>left<span class="token operator">: </span><a href="../-m-s-t/index.html">MST</a><span class="token punctuation">, </span><span class="token keyword"></span>right<span class="token operator">: </span><a href="../-m-s-t/index.html">MST</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../-m-s-t/-binary/index.html">MST.Binary</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Dynamically dispatches a binary operation with the certain name.</p><p class="paragraph">Implementations must fulfil the following requirements:</p><ol><li><p class="paragraph">If operation is not defined in the structure, then the function throws <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">kotlin.IllegalStateException</a>.</p></li><li><p class="paragraph">Equivalence to <a href="../../../kmath-core/space.kscience.kmath.expressions/-mst-extended-field/binary-operation.html">binaryOperation</a>: for any <code class="lang-kotlin">a</code>, <code class="lang-kotlin">b</code>, and <code class="lang-kotlin">c</code>, <code class="lang-kotlin">binaryOperationFunction(a)(b, c) == binaryOperation(a, b, c)</code>.</p></li></ol><h4 class="">Return</h4><p class="paragraph">an operation.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span><span>operation</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the name of operation.</p></div></div></div></div></div></div></div></div>          </div>
           <h2 class="">Sources</h2>
           <div class="table" data-togglable="Sources"><a data-name="1584003333%2FSource%2F244675578" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt#L155" id="1584003333%2FSource%2F244675578" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain"></a>
             <div class="table-row" data-filterable-current=":kmath-core:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-core:dokkaHtmlPartial/commonMain">
               <div class="main-subrow keyValue ">
-                <div class=""><span class="inline-flex"><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt#L155">common source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1584003333%2FSource%2F244675578"></span>
+                <div class=""><span class="inline-flex">
+                    <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/MstAlgebra.kt#L155">common source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1584003333%2FSource%2F244675578"></span>
                       <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                     </span></span></div>
                 <div></div>
@@ -43,7 +47,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   

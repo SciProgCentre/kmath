@@ -2,39 +2,40 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>dot</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
   
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
+      <div></div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="kmath-tensors::space.kscience.kmath.tensors.api/TensorAlgebra/dot/space.kscience.kmath.nd.MutableStructureND[TypeParam(bounds=[kotlin.Any?])]#space.kscience.kmath.nd.MutableStructureND[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration//-1345790395">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">kmath-tensors</a>/<a href="../index.html">space.kscience.kmath.tensors.api</a>/<a href="index.html">TensorAlgebra</a>/<a href="dot.html">dot</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
+        <div class="main-content" id="content" pageids="kmath-tensors::space.kscience.kmath.tensors.api/TensorAlgebra/dot/space.kscience.kmath.nd.StructureND[TypeParam(bounds=[kotlin.Any?])]#space.kscience.kmath.nd.StructureND[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration//-1345790395">
+          <div class="breadcrumbs"><a href="../../index.html">kmath-tensors</a>/<a href="../index.html">space.kscience.kmath.tensors.api</a>/<a href="index.html">TensorAlgebra</a>/<a href="dot.html">dot</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>dot</span></h1>
+            <h1 class="cover"><span><span>dot</span></span></h1>
           </div>
-<div class="divergent-group" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace">abstract infix fun <a href="../index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a>&lt;<a href="index.html">T</a>&gt;.<a href="dot.html">dot</a>(other: <a href="../index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a>&lt;<a href="index.html">T</a>&gt;): <a href="../index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a>&lt;<a href="index.html">T</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<p class="paragraph">Matrix product of two tensors.</p><p class="paragraph">The behavior depends on the dimensionality of the tensors as follows:</p><ol><li><p class="paragraph">If both tensors are 1-dimensional, the dot product (scalar) is returned.</p></li><li><p class="paragraph">If both arguments are 2-dimensional, the matrix-matrix product is returned.</p></li><li><p class="paragraph">If the first argument is 1-dimensional and the second argument is 2-dimensional, a 1 is prepended to its dimension for the purpose of the matrix multiply. After the matrix multiply, the prepended dimension is removed.</p></li><li><p class="paragraph">If the first argument is 2-dimensional and the second argument is 1-dimensional, the matrix-vector product is returned.</p></li><li><p class="paragraph">If both arguments are at least 1-dimensional and at least one argument is N-dimensional (where N 2), then a batched matrix multiply is returned. If the first argument is 1-dimensional, a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after. If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix multiple and removed after. The non-matrix (i.e., batch) dimensions are broadcast (and thus must be broadcastable). For example, if <code>input</code> is a (j &amp;times; 1 &amp;times; n &amp;times; n) tensor and <code>other</code> is a (k &amp;times; n &amp;times; n) tensor, out will be a (j &amp;times; k &amp;times; n &amp;times; n) tensor.</p></li></ol><p class="paragraph">For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html</p><h4 class="">Return</h4><p class="paragraph">a mathematical product of two tensors.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">other</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">tensor to be multiplied.</p></div></div></div></div></div></div></div></div></div></div></div>
+          <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="dot.html"><span class="token function">dot</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Matrix product of two tensors.</p><p class="paragraph">The behavior depends on the dimensionality of the tensors as follows:</p><ol><li><p class="paragraph">If both tensors are 1-dimensional, the dot product (scalar) is returned.</p></li><li><p class="paragraph">If both arguments are 2-dimensional, the matrix-matrix product is returned.</p></li><li><p class="paragraph">If the first argument is 1-dimensional and the second argument is 2-dimensional, a 1 is prepended to its dimension for the purpose of the matrix multiply. After the matrix multiply, depending on the implementation the prepended dimension might be removed.</p></li><li><p class="paragraph">If the first argument is 2-dimensional and the second argument is 1-dimensional, the matrix-vector product is returned.</p></li><li><p class="paragraph">If both arguments are at least 1-dimensional and at least one argument is N-dimensional (where N 2), then a batched matrix multiply is returned. If the first argument is 1-dimensional, a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after. If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix multiple and removed after. The non-matrix (i.e., batch) dimensions are broadcast (and thus must be broadcastable). For example, if <code class="lang-kotlin">input</code> is a (j × 1 × n × n) tensor and <code class="lang-kotlin">other</code> is a (k × n × n) tensor, out will be a (j × k × n × n) tensor.</p></li></ol><p class="paragraph">For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html</p><h4 class="">Return</h4><p class="paragraph">a mathematical product of two tensors.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span><span>other</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">tensor to be multiplied.</p></div></div></div></div></div></div></div></div></div>
           <h2 class="">Sources</h2>
-          <div class="table" data-togglable="Sources"><a data-name="1622973833%2FSource%2F-1345790395" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt#L199" id="1622973833%2FSource%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table" data-togglable="Sources"><a data-name="-272150587%2FSource%2F-1345790395" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt#L201" id="-272150587%2FSource%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
             <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
               <div class="main-subrow keyValue ">
-                <div class=""><span class="inline-flex"><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt#L199">common source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1622973833%2FSource%2F-1345790395"></span>
+                <div class=""><span class="inline-flex">
+                    <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/TensorAlgebra.kt#L201">common source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-272150587%2FSource%2F-1345790395"></span>
                       <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                     </span></span></div>
                 <div></div>
@@ -42,7 +43,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   

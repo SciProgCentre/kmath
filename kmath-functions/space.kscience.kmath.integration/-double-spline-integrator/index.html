@@ -2,28 +2,32 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>DoubleSplineIntegrator</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
   
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
+      <div></div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
         <div class="main-content" id="content" pageids="kmath-functions::space.kscience.kmath.integration/DoubleSplineIntegrator///PointingToDeclaration//-597741372">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">kmath-functions</a>/<a href="../index.html">space.kscience.kmath.integration</a>/<a href="index.html">DoubleSplineIntegrator</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
+          <div class="breadcrumbs"><a href="../../index.html">kmath-functions</a>/<a href="../index.html">space.kscience.kmath.integration</a>/<a href="index.html">DoubleSplineIntegrator</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>Double</span><wbr><span>Spline</span><wbr><span>Integrator</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block">@<a href="../../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html">UnstableKMathAPI</a>()</div></div>object <a href="index.html">DoubleSplineIntegrator</a> : <a href="../-integrator/index.html">Integrator</a>&lt;<a href="../-univariate-integrand/index.html">UnivariateIntegrand</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>&gt;&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A simplified double-based spline-interpolation-based analytic integration</p><ul><li><p class="paragraph"><a href="../-integration-range/index.html">IntegrationRange</a>&amp;mdash;the univariate range of integration. By default, uses <code>0.0..1.0</code> interval.</p></li><li><p class="paragraph"><a href="../-integrand-max-calls/index.html">IntegrandMaxCalls</a>&amp;mdash;the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default, uses 10 points.</p></li></ul></div></div>
+            <h1 class="cover"><span>Double</span><wbr><span>Spline</span><wbr><span><span>Integrator</span></span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html"><span class="token annotation">UnstableKMathAPI</span></a></div></div><span class="token keyword">object </span><a href="index.html">DoubleSplineIntegrator</a> : <a href="../-integrator/index.html">Integrator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-univariate-integrand/index.html">UnivariateIntegrand</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A simplified double-based spline-interpolation-based analytic integration</p><ul><li><p class="paragraph"><a href="../-integration-range/index.html">IntegrationRange</a>—the univariate range of integration. By default, uses <code class="lang-kotlin">0.0..1.0</code> interval.</p></li><li><p class="paragraph"><a href="../-integrand-max-calls/index.html">IntegrandMaxCalls</a>—the maximum number of function calls during integration. For non-iterative rules, always uses the maximum number of points. By default, uses 10 points.</p></li></ul></div></div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
@@ -32,26 +36,26 @@
               <div class="table" data-togglable="Functions"><a data-name="-540984293%2FFunctions%2F-597741372" anchor-label="process" id="-540984293%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="process.html">process</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-540984293%2FFunctions%2F-597741372"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="process.html"><span><span>process</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-540984293%2FFunctions%2F-597741372"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace">open override fun <a href="process.html">process</a>(integrand: <a href="../-univariate-integrand/index.html">UnivariateIntegrand</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>&gt;): <a href="../-univariate-integrand/index.html">UnivariateIntegrand</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-540984293%2FFunctions%2F-597741372" anchor-label="process" id="-540984293%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a><div class="brief "><a data-name="-540984293%2FFunctions%2F-597741372" anchor-label="process" id="-540984293%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>Runs one integration pass and return a new <a href="../-integrand/index.html">Integrand</a> with a new set of features.</div></div>
-</div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="process.html"><span class="token function">process</span></a><span class="token punctuation">(</span>integrand<span class="token operator">: </span><a href="../-univariate-integrand/index.html">UnivariateIntegrand</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-univariate-integrand/index.html">UnivariateIntegrand</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Runs one integration pass and return a new <a href="../-integrand/index.html">Integrand</a> with a new set of features.</p></div></div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="1494974997%2FSource%2F-597741372" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/integration/SplineIntegrator.kt#L76" id="1494974997%2FSource%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+              <div class="table" data-togglable="Sources"><a data-name="1494974997%2FSource%2F-597741372" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/integration/SplineIntegrator.kt#L78" id="1494974997%2FSource%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/integration/SplineIntegrator.kt#L76">common source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1494974997%2FSource%2F-597741372"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/integration/SplineIntegrator.kt#L78">common source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1494974997%2FSource%2F-597741372"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div></div>
@@ -61,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   
