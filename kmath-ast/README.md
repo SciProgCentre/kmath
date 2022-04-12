@@ -10,17 +10,17 @@ Extensions to MST API: transformations, dynamic compilation and visualization.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0-dev-17`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.3.0`.
 
-**Gradle:**
-```gradle
+**Gradle Groovy:**
+```groovy
 repositories {
     maven { url 'https://repo.kotlin.link' }
     mavenCentral()
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-ast:0.3.0-dev-17'
+    implementation 'space.kscience:kmath-ast:0.3.0'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.3.0-dev-17")
+    implementation("space.kscience:kmath-ast:0.3.0")
 }
 ```
 
@@ -66,20 +66,19 @@ For example, the following code:
 
 ```kotlin
 import space.kscience.kmath.asm.compileToExpression
-import space.kscience.kmath.complex.ComplexField
+import space.kscience.kmath.operations.DoubleField
 
-"x+2".parseMath().compileToExpression(ComplexField)
+"x^3-x+3".parseMath().compileToExpression(DoubleField)
 ```
 
 &mldr; leads to generation of bytecode, which can be decompiled to the following Java class:
 
 ```java
-import java.util.Map;
-import kotlin.jvm.functions.Function2;
-import space.kscience.kmath.asm.internal.MapIntrinsics;
-import space.kscience.kmath.complex.Complex;
-import space.kscience.kmath.expressions.Expression;
-import space.kscience.kmath.expressions.Symbol;
+import java.util.*;
+import kotlin.jvm.functions.*;
+import space.kscience.kmath.asm.internal.*;
+import space.kscience.kmath.complex.*;
+import space.kscience.kmath.expressions.*;
 
 public final class CompiledExpression_45045_0 implements Expression<Complex> {
     private final Object[] constants;
@@ -87,6 +86,32 @@ public final class CompiledExpression_45045_0 implements Expression<Complex> {
     public Complex invoke(Map<Symbol, ? extends Complex> arguments) {
         Complex var2 = (Complex)MapIntrinsics.getOrFail(arguments, "x");
         return (Complex)((Function2)this.constants[0]).invoke(var2, (Complex)this.constants[1]);
+    }
+}
+```
+
+For `LongRing`, `IntRing`, and `DoubleField` specialization is supported for better performance:
+
+```java
+import java.util.*;
+import space.kscience.kmath.asm.internal.*;
+import space.kscience.kmath.expressions.*;
+
+public final class CompiledExpression_-386104628_0 implements DoubleExpression {
+    private final SymbolIndexer indexer;
+
+    public SymbolIndexer getIndexer() {
+        return this.indexer;
+    }
+
+    public double invoke(double[] arguments) {
+        double var2 = arguments[0];
+        return Math.pow(var2, 3.0D) - var2 + 3.0D;
+    }
+
+    public final Double invoke(Map<Symbol, ? extends Double> arguments) {
+        double var2 = ((Double)MapIntrinsics.getOrFail(arguments, "x")).doubleValue();
+        return Math.pow(var2, 3.0D) - var2 + 3.0D;
     }
 }
 ```
@@ -134,9 +159,9 @@ MstField { x + 2 }.compileToExpression(DoubleField)
 An example of emitted Wasm IR in the form of WAT:
 
 ```lisp
-(func $executable (param $0 f64) (result f64)
+(func \$executable (param \$0 f64) (result f64)
   (f64.add
-    (local.get $0)
+    (local.get \$0)
     (f64.const 2)
   )
 )

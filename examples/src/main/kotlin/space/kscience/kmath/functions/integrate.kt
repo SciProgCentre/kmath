@@ -13,7 +13,7 @@ import kotlin.math.pow
 
 fun main() {
     //Define a function
-    val function: UnivariateFunction<Double> = { x -> 3 * x.pow(2) + 2 * x + 1 }
+    val function: Function1D<Double> = { x -> 3 * x.pow(2) + 2 * x + 1 }
 
     //get the result of the integration
     val result = DoubleField.gaussIntegrator.integrate(0.0..10.0, function = function)

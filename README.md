@@ -52,21 +52,18 @@ module definitions below. The module stability could have the following levels:
 
 ## Modules
 
-<hr/>
 
-* ### [benchmarks](benchmarks)
+### [benchmarks](benchmarks)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [examples](examples)
+### [examples](examples)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [kmath-ast](kmath-ast)
+### [kmath-ast](kmath-ast)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -77,15 +74,13 @@ module definitions below. The module stability could have the following levels:
 > - [mst-js-codegen](kmath-ast/src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
 > - [rendering](kmath-ast/src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
 
-<hr/>
 
-* ### [kmath-commons](kmath-commons)
+### [kmath-commons](kmath-commons)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [kmath-complex](kmath-complex)
+### [kmath-complex](kmath-complex)
 > Complex numbers and quaternions.
 >
 > **Maturity**: PROTOTYPE
@@ -94,9 +89,8 @@ module definitions below. The module stability could have the following levels:
 > - [complex](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex Numbers
 > - [quaternion](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions
 
-<hr/>
 
-* ### [kmath-core](kmath-core)
+### [kmath-core](kmath-core)
 > Core classes, algebra definitions, basic linear algebra
 >
 > **Maturity**: DEVELOPMENT
@@ -112,21 +106,18 @@ performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
 > - [autodiff](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 
-<hr/>
 
-* ### [kmath-coroutines](kmath-coroutines)
+### [kmath-coroutines](kmath-coroutines)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [kmath-dimensions](kmath-dimensions)
+### [kmath-dimensions](kmath-dimensions)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-ejml](kmath-ejml)
+### [kmath-ejml](kmath-ejml)
 > 
 >
 > **Maturity**: PROTOTYPE
@@ -136,9 +127,8 @@ performance calculations to code generation.
 > - [ejml-matrix](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt) : Matrix implementation.
 > - [ejml-linear-space](kmath-ejml/src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt) : LinearSpace implementations.
 
-<hr/>
 
-* ### [kmath-for-real](kmath-for-real)
+### [kmath-for-real](kmath-for-real)
 > Extension module that should be used to achieve numpy-like behavior.
 All operations are specialized to work with `Double` numbers without declaring algebraic contexts.
 One can still use generic algebras though.
@@ -150,9 +140,8 @@ One can still use generic algebras though.
 > - [DoubleMatrix](kmath-for-real/src/commonMain/kotlin/space/kscience/kmath/real/DoubleMatrix.kt) : Numpy-like operations for 2d real structures
 > - [grids](kmath-for-real/src/commonMain/kotlin/space/kscience/kmath/structures/grids.kt) : Uniform grid generators
 
-<hr/>
 
-* ### [kmath-functions](kmath-functions)
+### [kmath-functions](kmath-functions)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -164,21 +153,18 @@ One can still use generic algebras though.
 > - [spline interpolation](kmath-functions/src/commonMain/kotlin/space/kscience/kmath/interpolation/SplineInterpolator.kt) : Cubic spline XY interpolator.
 > - [integration](kmath-functions/#) : Univariate and multivariate quadratures
 
-<hr/>
 
-* ### [kmath-geometry](kmath-geometry)
+### [kmath-geometry](kmath-geometry)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-histograms](kmath-histograms)
+### [kmath-histograms](kmath-histograms)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-jafama](kmath-jafama)
+### [kmath-jafama](kmath-jafama)
 > 
 >
 > **Maturity**: PROTOTYPE
@@ -186,15 +172,13 @@ One can still use generic algebras though.
 > **Features:**
 > - [jafama-double](kmath-jafama/src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
 
-<hr/>
 
-* ### [kmath-jupyter](kmath-jupyter)
+### [kmath-jupyter](kmath-jupyter)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-kotlingrad](kmath-kotlingrad)
+### [kmath-kotlingrad](kmath-kotlingrad)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -203,21 +187,18 @@ One can still use generic algebras though.
 > - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt) : MST based DifferentiableExpression.
 > - [scalars-adapters](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt) : Conversions between Kotlin∇'s SFun and MST
 
-<hr/>
 
-* ### [kmath-memory](kmath-memory)
+### [kmath-memory](kmath-memory)
 > An API and basic implementation for arranging objects in a continuous memory block.
 >
 > **Maturity**: DEVELOPMENT
-<hr/>
 
-* ### [kmath-multik](kmath-multik)
+### [kmath-multik](kmath-multik)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-nd4j](kmath-nd4j)
+### [kmath-nd4j](kmath-nd4j)
 > 
 >
 > **Maturity**: EXPERIMENTAL
@@ -227,33 +208,28 @@ One can still use generic algebras though.
 > - [nd4jarrayrings](kmath-nd4j/#) : Rings over Nd4jArrayStructure of Int and Long
 > - [nd4jarrayfields](kmath-nd4j/#) : Fields over Nd4jArrayStructure of Float and Double
 
-<hr/>
 
-* ### [kmath-optimization](kmath-optimization)
+### [kmath-optimization](kmath-optimization)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [kmath-stat](kmath-stat)
+### [kmath-stat](kmath-stat)
 > 
 >
 > **Maturity**: EXPERIMENTAL
-<hr/>
 
-* ### [kmath-symja](kmath-symja)
+### [kmath-symja](kmath-symja)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-tensorflow](kmath-tensorflow)
+### [kmath-tensorflow](kmath-tensorflow)
 > 
 >
 > **Maturity**: PROTOTYPE
-<hr/>
 
-* ### [kmath-tensors](kmath-tensors)
+### [kmath-tensors](kmath-tensors)
 > 
 >
 > **Maturity**: PROTOTYPE
@@ -263,13 +239,11 @@ One can still use generic algebras though.
 > - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
 > - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
 
-<hr/>
 
-* ### [kmath-viktor](kmath-viktor)
+### [kmath-viktor](kmath-viktor)
 > 
 >
 > **Maturity**: DEVELOPMENT
-<hr/>
 
 
 ## Multi-platform support
@@ -308,8 +282,8 @@ repositories {
 }
 
 dependencies {
-    api("space.kscience:kmath-core:0.3.0-dev-17")
-    // api("space.kscience:kmath-core-jvm:0.3.0-dev-17") for jvm-specific version
+    api("space.kscience:kmath-core:$version")
+    // api("space.kscience:kmath-core-jvm:$version") for jvm-specific version
 }
 ```
 

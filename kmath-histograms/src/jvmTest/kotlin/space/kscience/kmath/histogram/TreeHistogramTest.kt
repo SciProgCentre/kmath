@@ -6,19 +6,24 @@
 package space.kscience.kmath.histogram
 
 import org.junit.jupiter.api.Test
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.real.step
 import kotlin.random.Random
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TreeHistogramTest {
 
     @Test
     fun normalFill() {
-        val histogram = UnivariateHistogram.uniform(0.1) {
+        val random  = Random(123)
+        val histogram = Histogram.custom1D(DoubleField, 0.0..1.0 step 0.1).produce {
             repeat(100_000) {
-                putValue(Random.nextDouble())
+                putValue(random.nextDouble())
             }
         }
 
-        assertTrue { histogram.bins.count() > 10 }
+        assertTrue { histogram.bins.count() > 8}
+        assertEquals(100_000, histogram.bins.sumOf { it.binValue }.toInt())
     }
 }
