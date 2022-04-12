@@ -1,8 +1,9 @@
 name: Dokka publication
 
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:
+  release:
+    types: [ created ]
 
 jobs:
   build:
