@@ -43,4 +43,57 @@ internal class Vector3DTest {
     fun z() {
         assertEquals(0.001, vector.z)
     }
+
+    @Test
+    fun equality() {
+        val vector2 = AlternativeVector3D(1.0, -7.999, 0.001)
+
+        // reflexive
+        assertEquals(vector, vector)
+        assertEquals(vector2, vector2)
+
+        // symmetric
+        assertEquals(vector, vector2)
+        assertEquals(vector2, vector)
+
+        // transitive
+        val vector3 = AlternativeVector3D(1.0, -7.999, 0.001)
+        assertEquals(vector, vector2)
+        assertEquals(vector2, vector3)
+        assertEquals(vector3, vector)
+    }
+
+    @Test
+    fun hash() {
+        val vector2 = AlternativeVector3D(1.0, -7.999, 0.001)
+
+        assertEquals(vector, vector2)
+        assertEquals(vector.hashCode(), vector2.hashCode())
+    }
+
+    private data class AlternativeVector3D(
+        override val x: Double,
+        override val y: Double,
+        override val z: Double,
+    ) : Vector3D {
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || other !is Vector3D) return false
+
+            if (x != other.x) return false
+            if (y != other.y) return false
+            if (z != other.z) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = 1
+            result = 31 * result + x.hashCode()
+            result = 31 * result + y.hashCode()
+            result = 31 * result + z.hashCode()
+            return result
+        }
+    }
 }

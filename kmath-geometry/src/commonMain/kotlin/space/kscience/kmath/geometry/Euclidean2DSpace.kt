@@ -24,6 +24,19 @@ public interface Vector2D : Point<Double>, Vector {
     }
 
     override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
+
+    /**
+     * Indicates whether some other vector is "equal to" this one.
+     * Any [Vector3D] is considered equal, if it contains the same components.
+     */
+    override fun equals(other: Any?): Boolean
+
+    /**
+     * Returns a hash code value for this vector.
+     * The hash code is generated as if all the input values were placed into
+     * a list, and that list were hashed by calling `listOf(x, y).hashCode()`.
+     */
+    override fun hashCode(): Int
 }
 
 public val Vector2D.r: Double
@@ -35,7 +48,16 @@ public fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
 private data class Vector2DImpl(
     override val x: Double,
     override val y: Double,
-) : Vector2D
+) : Vector2D {
+
+    override fun equals(other: Any?) = when (other) {
+        this -> true
+        is Vector2D -> x == other.x && y == other.y
+        else -> false
+    }
+
+    override fun hashCode(): Int = listOf(x, y).hashCode()
+}
 
 /**
  * 2D Euclidean space

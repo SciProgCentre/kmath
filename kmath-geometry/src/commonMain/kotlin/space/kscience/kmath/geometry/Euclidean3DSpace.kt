@@ -26,6 +26,19 @@ public interface Vector3D : Point<Double>, Vector {
     }
 
     override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
+
+    /**
+     * Indicates whether some other vector is "equal to" this one.
+     * Any [Vector3D] is considered equal, if it contains the same components.
+     */
+    override fun equals(other: Any?): Boolean
+
+    /**
+     * Returns a hash code value for this vector.
+     * The hash code is generated as if all the input values were placed into
+     * a list, and that list were hashed by calling `listOf(x, y, z).hashCode()`.
+     */
+    override fun hashCode(): Int
 }
 
 @Suppress("FunctionName")
@@ -37,7 +50,16 @@ private data class Vector3DImpl(
     override val x: Double,
     override val y: Double,
     override val z: Double,
-) : Vector3D
+) : Vector3D {
+
+    override fun equals(other: Any?) = when (other) {
+        this -> true
+        is Vector3D -> x == other.x && y == other.y && z == other.z
+        else -> false
+    }
+
+    override fun hashCode() = listOf(x, y, z).hashCode()
+}
 
 public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector3D> {
     override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
