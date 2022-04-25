@@ -315,6 +315,38 @@ class JNoa {
     public static native void stepAdamOptim(long adamOptHandle);
 
     public static native void zeroGradAdamOptim(long adamOptHandle);
+    
+    public static native long rmsOptim(long jitModuleHandle, double learningRate);
+
+    public static native void disposeRmsOptim(long rmsOptHandle);
+
+    public static native void stepRmsOptim(long rmsOptHandle);
+
+    public static native void zeroGradRmsOptim(long rmsOptHandle);
+
+    public static native long adamWOptim(long jitModuleHandle, double learningRate);
+
+    public static native void disposeAdamWOptim(long adamWOptHandle);
+
+    public static native void stepAdamWOptim(long adamWOptHandle);
+
+    public static native void zeroGradAdamWOptim(long adamWOptHandle);
+
+    public static native long adagradOptim(long jitModuleHandle, double learningRate);
+
+    public static native void disposeAdagradOptim(long adagradOptHandle);
+
+    public static native void stepAdagradOptim(long adagradOptHandle);
+
+    public static native void zeroGradAdagradOptim(long adagradOptHandle);
+
+    public static native long sgdOptim(long jitModuleHandle, double learningRate);
+
+    public static native void disposeSgdOptim(long sgdOptHandle);
+
+    public static native void stepSgdOptim(long sgdOptHandle);
+
+    public static native void zeroGradSgdOptim(long sgdOptHandle);
 
     public static native void swapTensors(long lhsHandle, long rhsHandle);
 

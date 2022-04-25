@@ -17,7 +17,7 @@ class TestJitModules {
     private val lossPath = resources.resolve("loss.pt").absolutePath
 
     @Test
-    fun testOptimisation() = NoaFloat {
+    fun testOptimisationAdam() = NoaFloat {
 
         setSeed(SEED)
 
@@ -52,4 +52,147 @@ class TestJitModules {
         assertTrue(loss.value() < 0.1)
     }!!
 
+    @Test
+    fun testOptimisationRms() = NoaFloat {
+
+        setSeed(SEED)
+
+        val dataModule = loadJitModule(dataPath)
+        val netModule = loadJitModule(netPath)
+        val lossModule = loadJitModule(lossPath)
+
+        val xTrain = dataModule.getBuffer("x_train")
+        val yTrain = dataModule.getBuffer("y_train")
+        val xVal = dataModule.getBuffer("x_val")
+        val yVal = dataModule.getBuffer("y_val")
+
+        netModule.train(true)
+        lossModule.setBuffer("target", yTrain)
+
+        val yPred = netModule.forward(xTrain)
+        val loss = lossModule.forward(yPred)
+        val optimiser = netModule.rmsOptimiser(0.005)
+
+        repeat(250){
+            optimiser.zeroGrad()
+            netModule.forwardAssign(xTrain, yPred)
+            lossModule.forwardAssign(yPred, loss)
+            loss.backward()
+            optimiser.step()
+        }
+
+        netModule.forwardAssign(xVal, yPred)
+        lossModule.setBuffer("target", yVal)
+        lossModule.forwardAssign(yPred, loss)
+
+        assertTrue(loss.value() < 0.1)
+    }!!
+
+    @Test
+    fun testOptimisationAdamW() = NoaFloat {
+
+        setSeed(SEED)
+
+        val dataModule = loadJitModule(dataPath)
+        val netModule = loadJitModule(netPath)
+        val lossModule = loadJitModule(lossPath)
+
+        val xTrain = dataModule.getBuffer("x_train")
+        val yTrain = dataModule.getBuffer("y_train")
+        val xVal = dataModule.getBuffer("x_val")
+        val yVal = dataModule.getBuffer("y_val")
+
+        netModule.train(true)
+        lossModule.setBuffer("target", yTrain)
+
+        val yPred = netModule.forward(xTrain)
+        val loss = lossModule.forward(yPred)
+        val optimiser = netModule.adamWOptimiser(0.005)
+
+        repeat(250){
+            optimiser.zeroGrad()
+            netModule.forwardAssign(xTrain, yPred)
+            lossModule.forwardAssign(yPred, loss)
+            loss.backward()
+            optimiser.step()
+        }
+
+        netModule.forwardAssign(xVal, yPred)
+        lossModule.setBuffer("target", yVal)
+        lossModule.forwardAssign(yPred, loss)
+
+        assertTrue(loss.value() < 0.1)
+    }!!
+
+    @Test
+    fun testOptimisationAdagrad() = NoaFloat {
+
+        setSeed(SEED)
+
+        val dataModule = loadJitModule(dataPath)
+        val netModule = loadJitModule(netPath)
+        val lossModule = loadJitModule(lossPath)
+
+        val xTrain = dataModule.getBuffer("x_train")
+        val yTrain = dataModule.getBuffer("y_train")
+        val xVal = dataModule.getBuffer("x_val")
+        val yVal = dataModule.getBuffer("y_val")
+
+        netModule.train(true)
+        lossModule.setBuffer("target", yTrain)
+
+        val yPred = netModule.forward(xTrain)
+        val loss = lossModule.forward(yPred)
+        val optimiser = netModule.adagradOptimiser(0.005)
+
+        repeat(250){
+            optimiser.zeroGrad()
+            netModule.forwardAssign(xTrain, yPred)
+            lossModule.forwardAssign(yPred, loss)
+            loss.backward()
+            optimiser.step()
+        }
+
+        netModule.forwardAssign(xVal, yPred)
+        lossModule.setBuffer("target", yVal)
+        lossModule.forwardAssign(yPred, loss)
+
+        assertTrue(loss.value() < 0.1)
+    }!!
+
+    @Test
+    fun testOptimisationSgd() = NoaFloat {
+
+        setSeed(SEED)
+
+        val dataModule = loadJitModule(dataPath)
+        val netModule = loadJitModule(netPath)
+        val lossModule = loadJitModule(lossPath)
+
+        val xTrain = dataModule.getBuffer("x_train")
+        val yTrain = dataModule.getBuffer("y_train")
+        val xVal = dataModule.getBuffer("x_val")
+        val yVal = dataModule.getBuffer("y_val")
+
+        netModule.train(true)
+        lossModule.setBuffer("target", yTrain)
+
+        val yPred = netModule.forward(xTrain)
+        val loss = lossModule.forward(yPred)
+        val optimiser = netModule.sgdOptimiser(0.005)
+
+        repeat(250){
+            optimiser.zeroGrad()
+            netModule.forwardAssign(xTrain, yPred)
+            lossModule.forwardAssign(yPred, loss)
+            loss.backward()
+            optimiser.step()
+        }
+
+        netModule.forwardAssign(xVal, yPred)
+        lossModule.setBuffer("target", yVal)
+        lossModule.forwardAssign(yPred, loss)
+
+        assertTrue(loss.value() < 0.1)
+    }!!
 }

@@ -342,6 +342,18 @@ protected constructor(scope: NoaScope) :
 
     public fun NoaJitModule.adamOptimiser(learningRate: Double): AdamOptimiser =
         AdamOptimiser(scope, JNoa.adamOptim(jitModuleHandle, learningRate))
+
+    public fun NoaJitModule.rmsOptimiser(learningRate: Double): RMSpropOptimiser =
+        RMSpropOptimiser(scope, JNoa.rmsOptim(jitModuleHandle, learningRate))
+
+    public fun NoaJitModule.adamWOptimiser(learningRate: Double): AdamWOptimiser =
+        AdamWOptimiser(scope, JNoa.adamWOptim(jitModuleHandle, learningRate))
+
+    public fun NoaJitModule.adagradOptimiser(learningRate: Double): AdagradOptimiser =
+        AdagradOptimiser(scope, JNoa.adagradOptim(jitModuleHandle, learningRate))
+
+    public fun NoaJitModule.sgdOptimiser(learningRate: Double): SgdOptimiser =
+        SgdOptimiser(scope, JNoa.sgdOptim(jitModuleHandle, learningRate))
 }
 
 public sealed class NoaDoubleAlgebra
@@ -722,3 +734,4 @@ protected constructor(scope: NoaScope) :
     override fun NoaIntTensor.set(dim: Int, slice: Slice, array: IntArray): Unit =
         JNoa.setSliceBlobInt(tensorHandle, dim, slice.first, slice.second, array)
 }
+
