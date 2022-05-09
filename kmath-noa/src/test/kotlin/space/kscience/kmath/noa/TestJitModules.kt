@@ -71,7 +71,7 @@ class TestJitModules {
 
         val yPred = netModule.forward(xTrain)
         val loss = lossModule.forward(yPred)
-        val optimiser = netModule.rmsOptimiser(0.005)
+        val optimiser = netModule.rmsOptimiser(0.005, 0.99, 1e-08, 0.0, 0.0, false)
 
         repeat(250){
             optimiser.zeroGrad()
@@ -107,7 +107,7 @@ class TestJitModules {
 
         val yPred = netModule.forward(xTrain)
         val loss = lossModule.forward(yPred)
-        val optimiser = netModule.adamWOptimiser(0.005)
+        val optimiser = netModule.adamWOptimiser(0.005, 0.9, 0.999, 1e-08, 0.01, false)
 
         repeat(250){
             optimiser.zeroGrad()
@@ -143,7 +143,7 @@ class TestJitModules {
 
         val yPred = netModule.forward(xTrain)
         val loss = lossModule.forward(yPred)
-        val optimiser = netModule.adagradOptimiser(0.005)
+        val optimiser = netModule.adagradOptimiser(0.05, 0.0, 0.0, 0.0, 1e-10)
 
         repeat(250){
             optimiser.zeroGrad()
@@ -179,9 +179,9 @@ class TestJitModules {
 
         val yPred = netModule.forward(xTrain)
         val loss = lossModule.forward(yPred)
-        val optimiser = netModule.sgdOptimiser(0.005)
+        val optimiser = netModule.sgdOptimiser(0.01, 0.9, 0.0, 0.0, false)
 
-        repeat(250){
+        repeat(400){
             optimiser.zeroGrad()
             netModule.forwardAssign(xTrain, yPred)
             lossModule.forwardAssign(yPred, loss)

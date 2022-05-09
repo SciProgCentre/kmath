@@ -343,17 +343,59 @@ protected constructor(scope: NoaScope) :
     public fun NoaJitModule.adamOptimiser(learningRate: Double): AdamOptimiser =
         AdamOptimiser(scope, JNoa.adamOptim(jitModuleHandle, learningRate))
 
-    public fun NoaJitModule.rmsOptimiser(learningRate: Double): RMSpropOptimiser =
-        RMSpropOptimiser(scope, JNoa.rmsOptim(jitModuleHandle, learningRate))
+    /**
+     * Implements RMSprop algorithm. Receive `learning rate`, `alpha` (smoothing constant),
+     * `eps` (term added to the denominator to improve numerical stability), `weight_decay`,
+     * `momentum` factor, `centered` (if True, compute the centered RMSProp).
+     * For more information: https://pytorch.org/docs/stable/generated/torch.optim.RMSprop.html
+     *
+     * @receiver the `learning rate`, `alpha`, `eps`, `weight_decay`, `momentum`, `centered`.
+     * @return RMSpropOptimiser.
+     */
+    public fun NoaJitModule.rmsOptimiser(learningRate: Double, alpha: Double, 
+        eps: Double, weightDecay: Double, momentum: Double, centered: Boolean): RMSpropOptimiser =
+        RMSpropOptimiser(scope, JNoa.rmsOptim(jitModuleHandle, learningRate, alpha, 
+        eps, weightDecay, momentum, centered))
 
-    public fun NoaJitModule.adamWOptimiser(learningRate: Double): AdamWOptimiser =
-        AdamWOptimiser(scope, JNoa.adamWOptim(jitModuleHandle, learningRate))
+    /**
+     * Implements AdamW algorithm. Receive `learning rate`, `beta1` and `beta2` (coefficients used
+     * for computing running averages of gradient and its square), `eps` (term added to the denominator
+     * to improve numerical stability), `weight_decay`, `amsgrad`.
+     * For more information: https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html
+     *
+     * @receiver the `learning rate`, `beta1`, `beta2`, `eps`, `weight_decay`, `amsgrad`.
+     * @return AdamWOptimiser.
+     */
+    public fun NoaJitModule.adamWOptimiser(learningRate: Double, beta1: Double,
+        beta2: Double, eps: Double, weightDecay: Double, amsgrad: Boolean): AdamWOptimiser =
+        AdamWOptimiser(scope, JNoa.adamWOptim(jitModuleHandle, learningRate, beta1,
+        beta2, eps, weightDecay, amsgrad))
 
-    public fun NoaJitModule.adagradOptimiser(learningRate: Double): AdagradOptimiser =
-        AdagradOptimiser(scope, JNoa.adagradOptim(jitModuleHandle, learningRate))
+    /**
+     * Implements Adagrad algorithm. Receive `learning rate`, `weight_decay`,
+     * `learning rate decay`, `initial accumulator value`, `eps`.
+     * For more information: https://pytorch.org/docs/stable/generated/torch.optim.Adagrad.html
+     *
+     * @receiver the `learning rate`, `weight_decay`, `learning rate decay`, `initial accumulator value`, `eps`.
+     * @return AdagradOptimiser.
+     */
+    public fun NoaJitModule.adagradOptimiser(learningRate: Double, weightDecay: Double,
+        lrDecay: Double, initialAccumulatorValue: Double, eps: Double): AdagradOptimiser =
+        AdagradOptimiser(scope, JNoa.adagradOptim(jitModuleHandle, learningRate, weightDecay,
+        lrDecay, initialAccumulatorValue, eps))
 
-    public fun NoaJitModule.sgdOptimiser(learningRate: Double): SgdOptimiser =
-        SgdOptimiser(scope, JNoa.sgdOptim(jitModuleHandle, learningRate))
+    /**
+     * Implements stochastic gradient descent. Receive `learning rate`, `momentum` factor,
+     * `dampening` for momentum, `weight_decay`, `nesterov` (enables Nesterov momentum).
+     * For more information: https://pytorch.org/docs/stable/generated/torch.optim.SGD.html
+     *
+     * @receiver the `learning rate`, `momentum`, `dampening`, `weight_decay`, `nesterov`.
+     * @return SgdOptimiser.
+     */
+    public fun NoaJitModule.sgdOptimiser(learningRate: Double, momentum: Double,
+        dampening: Double, weightDecay: Double, nesterov: Boolean): SgdOptimiser =
+        SgdOptimiser(scope, JNoa.sgdOptim(jitModuleHandle, learningRate, momentum,
+        dampening, weightDecay, nesterov))
 }
 
 public sealed class NoaDoubleAlgebra
@@ -734,4 +776,3 @@ protected constructor(scope: NoaScope) :
     override fun NoaIntTensor.set(dim: Int, slice: Slice, array: IntArray): Unit =
         JNoa.setSliceBlobInt(tensorHandle, dim, slice.first, slice.second, array)
 }
-

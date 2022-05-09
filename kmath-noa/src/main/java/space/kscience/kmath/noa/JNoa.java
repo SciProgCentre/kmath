@@ -315,8 +315,9 @@ class JNoa {
     public static native void stepAdamOptim(long adamOptHandle);
 
     public static native void zeroGradAdamOptim(long adamOptHandle);
-    
-    public static native long rmsOptim(long jitModuleHandle, double learningRate);
+
+    public static native long rmsOptim(long jitModuleHandle, double learningRate, double alpha, 
+        double eps, double weight_decay, double momentum, boolean centered);
 
     public static native void disposeRmsOptim(long rmsOptHandle);
 
@@ -324,7 +325,8 @@ class JNoa {
 
     public static native void zeroGradRmsOptim(long rmsOptHandle);
 
-    public static native long adamWOptim(long jitModuleHandle, double learningRate);
+    public static native long adamWOptim(long jitModuleHandle, double learningRate, double beta1,
+        double beta2, double eps, double weight_decay, boolean amsgrad);
 
     public static native void disposeAdamWOptim(long adamWOptHandle);
 
@@ -332,7 +334,8 @@ class JNoa {
 
     public static native void zeroGradAdamWOptim(long adamWOptHandle);
 
-    public static native long adagradOptim(long jitModuleHandle, double learningRate);
+    public static native long adagradOptim(long jitModuleHandle, double learningRate, double weight_decay,
+        double lr_decay, double initial_accumulator_value, double eps);
 
     public static native void disposeAdagradOptim(long adagradOptHandle);
 
@@ -340,7 +343,8 @@ class JNoa {
 
     public static native void zeroGradAdagradOptim(long adagradOptHandle);
 
-    public static native long sgdOptim(long jitModuleHandle, double learningRate);
+    public static native long sgdOptim(long jitModuleHandle, double learningRate, double momentum,
+        double dampening, double weight_decay, boolean nesterov);
 
     public static native void disposeSgdOptim(long sgdOptHandle);
 
