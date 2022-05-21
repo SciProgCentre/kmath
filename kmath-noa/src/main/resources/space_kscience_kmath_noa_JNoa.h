@@ -1193,6 +1193,134 @@ JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradAdamOptim
 
 /*
  * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    rmsOptim
+ * Signature: (JDDDDDZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_rmsOptim
+  (JNIEnv *, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jdouble, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeRmsOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeRmsOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stepRmsOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_stepRmsOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    zeroGradRmsOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradRmsOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    adamWOptim
+ * Signature: (JDDDDDZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_adamWOptim
+  (JNIEnv *, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jdouble, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeAdamWOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeAdamWOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stepAdamWOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_stepAdamWOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    zeroGradAdamWOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradAdamWOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    adagradOptim
+ * Signature: (JDDDDD)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_adagradOptim
+  (JNIEnv *, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jdouble);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeAdagradOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeAdagradOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stepAdagradOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_stepAdagradOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    zeroGradAdagradOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradAdagradOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    sgdOptim
+ * Signature: (JDDDDZ)J
+ */
+JNIEXPORT jlong JNICALL Java_space_kscience_kmath_noa_JNoa_sgdOptim
+  (JNIEnv *, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jboolean);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    disposeSgdOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_disposeSgdOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    stepSgdOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_stepSgdOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
+ * Method:    zeroGradSgdOptim
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_space_kscience_kmath_noa_JNoa_zeroGradSgdOptim
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     space_kscience_kmath_noa_JNoa
  * Method:    swapTensors
  * Signature: (JJ)V
  */

@@ -191,7 +191,7 @@ tasks {
     withType<Test>{
         systemProperty("java.library.path", "$cppBuildDir/jnoa")
         //systemProperty("java.library.path",
-        //    "${System.getProperty("user.home")}/devspace/noa/build/jnoa")
+        //    "${System.getProperty("user.home")}/devspace/noa/cmake-build-release/jnoa")
     }
 }
 
