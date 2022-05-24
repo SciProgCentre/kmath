@@ -164,26 +164,18 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
         l = i
     }
 
-    // тут все правильно считается
-
-
-//    println("w")
-//    w.print()
-//
-    val eps = 0.000000001
-//    println("1.0 / w[2, 0] " + 1.0 / w[2, 0])
-//    println("w[2, 0] " + w[2, 0])
+    // до этого момента все правильно считается
+    // дальше - нет
 
     for (i in min(n, m) - 1 downTo 0) {
         l = i + 1
         g = w[i, 0]
-//        println("w[i, 0] " + w[i, 0])
         for (j in l  until n) {
             this[i, j] = 0.0
         }
         if (g != 0.0) {
+            // !!!!! вот тут деление на почти ноль
             g = 1.0 / g
-//            println("g " + g)
             for (j in l until n) {
                 s = 0.0
                 for (k in l until m) {
@@ -204,21 +196,16 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
             }
         }
         this[i, i] += 1.0
-//        println("matrix")
-//        this.print()
     }
 
     println("matrix")
     this.print()
-
-    // тут матрица должна выглядеть так:
-
+//    тут матрица должна выглядеть так:
 //    0.134840   -0.762770    0.522117
 //    -0.269680   -0.476731   -0.245388
 //    -0.404520   -0.190693   -0.527383
 //    -0.539360    0.095346   -0.297540
 //    -0.674200    0.381385    0.548193
-
 
 
 //    var flag = 0
@@ -227,50 +214,125 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
 //    var h = 0.0
 //    var y = 0.0
 //    var z = 0.0
+//    var x = 0.0
+//    println("L = " + l)
 //    for (k in n - 1 downTo  0) {
-//        for (its in 0 until 30) {
-//            flag = 0
-//            for (l in k downTo 0) {
-//                nm = l - 1
-//                if (abs(rv1[l]) < eps) {
+//        for (its in 1 until 30) {
+//            flag = 1
+//
+//            for (newl in k downTo 0) {
+//                nm = newl - 1
+//                if (abs(rv1[newl]) + anorm ==  anorm) {
 //                    flag = 0
-////                    println("break1")
+//                    l = newl
+////                    println("newl before break1 = " + newl)
+//                    println("break1")
 //                    break
 //                }
-//                if (abs(w[nm, 0]) < eps) {
+//                if (abs(w[nm, 0] +  anorm) == anorm) {
+//                    l = newl
 //                    println("break2")
 //                    break
 //                }
 //            }
 //
-//            // l = 1 тут
+////            println("NEWL = " + l)
+//
+////            l = 0
 //
 //            if (flag != 0) {
 //                c = 0.0
-//                s = 0.0
-//                for (i in l until k) { // а точно ли такие границы? там немного отличается
-//                    f=s*rv1[i]
-//                    rv1[i]=c*rv1[i]
-//                    if (abs(f) < eps) {
+//                s = 1.0
+//                for (i in l until k) {
+//                    f = s * rv1[i]
+//                    rv1[i] = c * rv1[i]
+//                    if (abs(f) + anorm == anorm) {
 //                        println("break3")
 //                        break
 //                    }
-//                    g=w[i, 0]
-//                    h=pythag(f,g)
-//                    w[i, 0]=h
-//                    h=1.0/h
-//                    c=g*h
-//                    s = -f*h
-//                    for (j in 0 until m) { // точно ли такие границы?
-//                        y=this[j, nm]
-//                        z=this[j, i]
-//                        this[j, nm]=y*c+z*s
-//                        this[j, i]=z*c-y*s
+//                    h = pythag(f, g)
+//                    w[i, 0] = h
+//                    h = 1.0 / h
+//                    c = g * h
+//                    s = (-f) * h
+//                    for (j in 0 until m) {
+//                        y = this[j, nm]
+//                        z = this[j, i]
+//                        this[j, nm] = y * c + z * s
+//                        this[j, i] = z * c - y * s
 //                    }
 //                }
 //            }
 //
+//            z = w[k, 0]
+////            println("l = " + l)
+////            println("k = " + k)
+//            if (l == k) {
+//                if (z < 0.0) {
+//                    w[k, 0] = -z
+//                    for (j in 0 until n)
+//                        v[j, k] = -v[j, k]
+//                }
+//                println("break4")
+//                break
+//            }
 //
+//            if (its == 30) {
+//                return
+//            }
+//
+//            x = w[l, 0]
+//            nm = k - 1
+////            println("nm = " + nm)
+//            y = w[nm, 0]
+//            g = rv1[nm]
+//            h = rv1[k]
+//            f = ((y-z)*(y+z)+(g-h)*(g+h))/(2.0*h*y)
+//            g = pythag(f,1.0)
+//            f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x
+//            c = 1.0
+//            s = 1.0
+//
+//            var i = 0 // непонятно, где она должна быть объявлена
+//            for (j in l until nm) {
+//                i = j + 1
+//                g = rv1[i]
+//                y = w[i, 0]
+//                h = s * g
+//                g = c * g
+//                z = pythag(f,h)
+//                rv1[j] = z
+//                c = f / z
+//                s = h / z
+//                f = x * c + g * s
+//                g = g * c - x * s
+//                h = y * s
+//                y *= c
+//                for (jj in 0 until n) {
+//                    x=v[jj, j];
+//                    z=v[jj, i];
+//                    v[jj, j] = x * c + z * s;
+//                    v[jj, i] = z * c - x * s;
+//                }
+//                z = pythag(f,h)
+//                w[j, 0] = z
+//                if (z != 0.0) {
+//                    z = 1.0 / z
+//                    c = f * z
+//                    s = h * z
+//                }
+//                f = c * g + s * y
+//                x = c * y - s * g
+//                for (jj in 0 until m) {
+//                    y = this[jj, j]
+//                    z = this[jj, i]
+//                    this[jj, j] = y * c + z * s
+//                    this[jj, i] = z * c - y * s
+//                }
+//            }
+//            rv1[l] = 0.0
+//            rv1[k] = f
+//            w[k, 0] = x
 //        }
 //    }
 }
