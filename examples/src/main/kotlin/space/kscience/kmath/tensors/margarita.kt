@@ -59,15 +59,12 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {
     val buffer2 = doubleArrayOf(
         0.000000, 0.000000, 0.000000,
         0.000000, 0.000000, 0.000000,
-        0.000000, 0.000000, 0.000000,
-        0.000000, 0.000000, 0.000000,
         0.000000, 0.000000, 0.000000
     )
     val tensor = fromArray(shape, buffer).as2D()
-    val v = fromArray(shape, buffer2).as2D()
+    val v = fromArray(intArrayOf(3, 3), buffer2).as2D()
     tensor.print()
     tensor.svdcmp(v)
-//    tensor.print()
 
 
 
