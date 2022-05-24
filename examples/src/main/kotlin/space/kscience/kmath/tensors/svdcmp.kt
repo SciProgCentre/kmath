@@ -65,8 +65,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
                 f = this[i, i]
                 if (f >= 0) {
                     g = (-1) * abs(sqrt(s))
-                }
-                else {
+                } else {
                     g = abs(sqrt(s))
                 }
                 val h = f * g - s
@@ -106,8 +105,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
                 f = this[i, l]
                 if (f >= 0) {
                     g = (-1) * abs(sqrt(s))
-                }
-                else {
+                } else {
                     g = abs(sqrt(s))
                 }
                 val h = f * g - s
@@ -140,7 +138,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
                 for (j in l until n) {
                     v[j, i] = (this[i, j] / this[i, l]) / g
                 }
-                for (j in l until  n) {
+                for (j in l until n) {
                     s = 0.0
                     for (k in l until n)
                         s += this[i, k] * v[k, j]
@@ -164,7 +162,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
     for (i in min(n, m) - 1 downTo 0) {
         l = i + 1
         g = w[i, 0]
-        for (j in l  until n) {
+        for (j in l until n) {
             this[i, j] = 0.0
         }
         if (g != 0.0) {
@@ -183,8 +181,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
             for (j in i until m) {
                 this[j, i] *= g
             }
-        }
-        else {
+        } else {
             for (j in i until m) {
                 this[j, i] = 0.0
             }
@@ -217,17 +214,17 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
     var y = 0.0
     var z = 0.0
     var x = 0.0
-    for (k in n - 1 downTo  0) {
+    for (k in n - 1 downTo 0) {
         for (its in 1 until 30) {
             flag = 1
             for (newl in k downTo 0) {
                 nm = newl - 1
-                if (abs(rv1[newl]) + anorm ==  anorm) {
+                if (abs(rv1[newl]) + anorm == anorm) {
                     flag = 0
                     l = newl
                     break
                 }
-                if (abs(w[nm, 0]) +  anorm == anorm) {
+                if (abs(w[nm, 0]) + anorm == anorm) {
                     l = newl
                     break
                 }
@@ -276,9 +273,9 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
             y = w[nm, 0]
             g = rv1[nm]
             h = rv1[k]
-            f = ((y-z)*(y+z)+(g-h)*(g+h))/(2.0*h*y)
-            g = pythag(f,1.0)
-            f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x
+            f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y)
+            g = pythag(f, 1.0)
+            f = ((x - z) * (x + z) + h * ((y / (f + SIGN(g, f))) - h)) / x
             c = 1.0
             s = 1.0
 
@@ -289,7 +286,7 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
                 y = w[i, 0]
                 h = s * g
                 g = c * g
-                z = pythag(f,h)
+                z = pythag(f, h)
                 rv1[j] = z
                 c = f / z
                 s = h / z
@@ -299,12 +296,12 @@ internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Doub
                 y *= c
 
                 for (jj in 0 until n) {
-                    x=v[jj, j];
-                    z=v[jj, i];
+                    x = v[jj, j];
+                    z = v[jj, i];
                     v[jj, j] = x * c + z * s;
                     v[jj, i] = z * c - x * s;
                 }
-                z = pythag(f,h)
+                z = pythag(f, h)
                 w[j, 0] = z
                 if (z != 0.0) {
                     z = 1.0 / z
