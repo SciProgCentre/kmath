@@ -1,7 +1,6 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -34,10 +33,12 @@ fun SIGN(a: Double, b: Double): Double {
         return -abs(a)
 }
 
-internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
+// matrix v is not transposed at the output
+
+internal fun MutableStructure2D<Double>.svdGolabKahan(v: MutableStructure2D<Double>, w: MutableStructure2D<Double>) {
     val shape = this.shape
-    val n = shape.component2()
     val m = shape.component1()
+    val n = shape.component2()
     var f = 0.0
     val rv1 = DoubleArray(n)
     var s = 0.0
@@ -45,12 +46,6 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
     var anorm = 0.0
     var g = 0.0
     var l = 0
-    val w_shape = intArrayOf(n, 1)
-    var w_buffer = doubleArrayOf(0.000000)
-    for (i in 0 until n - 1) {
-        w_buffer += doubleArrayOf(0.000000)
-    }
-    val w = BroadcastDoubleTensorAlgebra.fromArray(w_shape, w_buffer).as2D()
     for (i in 0 until n) {
         /* left-hand reduction */
         l = i + 1
@@ -212,6 +207,9 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
     this[3, 2] = -0.297540
     this[4, 2] = 0.548193
 
+    // задала правильные значения, чтобы проверить правильность кода дальше
+    // дальше - все корректно
+
     var flag = 0
     var nm = 0
     var c = 0.0
@@ -268,9 +266,10 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
                 break
             }
 
-            if (its == 30) {
-                return
-            }
+//            надо придумать, что сделать - выкинуть ошибку?
+//            if (its == 30) {
+//                return
+//            }
 
             x = w[l, 0]
             nm = k - 1
@@ -326,11 +325,4 @@ internal fun MutableStructure2D<Double>.svdcmp(v: MutableStructure2D<Double>) {
             w[k, 0] = x
         }
     }
-
-    println("u")
-    this.print()
-    println("w")
-    w.print()
-    println("v")
-    v.print()
 }

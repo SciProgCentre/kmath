@@ -11,27 +11,8 @@ import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.tensors.core.*
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.dot
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.mapIndexed
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.minus
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.math.*
-
-fun DoubleArray.fmap(transform: (Double) -> Double): DoubleArray {
-    return this.map(transform).toDoubleArray()
-}
-
-fun scalarProduct(v1: Structure2D<Double>, v2: Structure2D<Double>): Double {
-    return v1.mapIndexed { index, d -> d * v2[index] }.sum()
-}
-
-internal fun diagonal(shape: IntArray, v: Double) : DoubleTensor {
-    val matrix = zeros(shape)
-    return matrix.mapIndexed { index, _ -> if (index.component1() == index.component2()) v else 0.0 }
-}
-
 
 fun MutableStructure2D<Double>.print() {
     val n = this.shape.component1()
@@ -63,11 +44,22 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {
     )
     val tensor = fromArray(shape, buffer).as2D()
     val v = fromArray(intArrayOf(3, 3), buffer2).as2D()
+    val w_shape = intArrayOf(3, 1)
+    var w_buffer = doubleArrayOf(0.000000)
+    for (i in 0 until 3 - 1) {
+        w_buffer += doubleArrayOf(0.000000)
+    }
+    val w = BroadcastDoubleTensorAlgebra.fromArray(w_shape, w_buffer).as2D()
     tensor.print()
-    tensor.svdcmp(v)
+    var ans = Pair(w, v)
+    tensor.svdGolabKahan(v, w)
 
-
-
+    println("u")
+    tensor.print()
+    println("w")
+    w.print()
+    println("v")
+    v.print()
 
 
 }
