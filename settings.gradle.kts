@@ -1,24 +1,6 @@
 rootProject.name = "kmath"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
-
-dependencyResolutionManagement {
-
-    val toolsVersion: String by extra
-
-    repositories {
-        maven("https://repo.kotlin.link")
-        mavenCentral()
-    }
-
-    versionCatalogs {
-        create("npmlibs") {
-            from("ru.mipt.npm:version-catalog:$toolsVersion")
-        }
-    }
-}
-
 include(
     ":kmath-memory",
     ":kmath-complex",

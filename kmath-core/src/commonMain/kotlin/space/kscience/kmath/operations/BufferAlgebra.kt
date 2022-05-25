@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -53,7 +52,7 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
  */
 private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
     buffer: Buffer<T>,
-    crossinline block: A.(T) -> T
+    crossinline block: A.(T) -> T,
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(buffer[it]) }
 
 /**
@@ -61,7 +60,7 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
  */
 private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
     buffer: Buffer<T>,
-    crossinline block: A.(index: Int, arg: T) -> T
+    crossinline block: A.(index: Int, arg: T) -> T,
 ): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(it, buffer[it]) }
 
 /**
@@ -70,7 +69,7 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
 private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     l: Buffer<T>,
     r: Buffer<T>,
-    crossinline block: A.(l: T, r: T) -> T
+    crossinline block: A.(l: T, r: T) -> T,
 ): Buffer<T> {
     require(l.size == r.size) { "Incompatible buffer sizes. left: ${l.size}, right: ${r.size}" }
     return bufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
@@ -127,13 +126,13 @@ public fun <T, A : ExponentialOperations<T>> BufferAlgebra<T, A>.atanh(arg: Buff
     mapInline(arg) { atanh(it) }
 
 public fun <T, A : PowerOperations<T>> BufferAlgebra<T, A>.pow(arg: Buffer<T>, pow: Number): Buffer<T> =
-    mapInline(arg) {it.pow(pow) }
+    mapInline(arg) { it.pow(pow) }
 
 
-public open class BufferRingOps<T, A: Ring<T>>(
+public open class BufferRingOps<T, A : Ring<T>>(
     override val elementAlgebra: A,
     override val bufferFactory: BufferFactory<T>,
-) : BufferAlgebra<T, A>, RingOps<Buffer<T>>{
+) : BufferAlgebra<T, A>, RingOps<Buffer<T>> {
 
     override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
@@ -152,10 +151,11 @@ public val ShortRing.bufferAlgebra: BufferRingOps<Short, ShortRing>
 public open class BufferFieldOps<T, A : Field<T>>(
     elementAlgebra: A,
     bufferFactory: BufferFactory<T>,
-) : BufferRingOps<T, A>(elementAlgebra, bufferFactory), BufferAlgebra<T, A>, FieldOps<Buffer<T>>, ScaleOperations<Buffer<T>> {
+) : BufferRingOps<T, A>(elementAlgebra, bufferFactory), BufferAlgebra<T, A>, FieldOps<Buffer<T>>,
+    ScaleOperations<Buffer<T>> {
 
-    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
-    override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
+//    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
+//    override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
     override fun divide(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l / r }
 
     override fun scale(a: Buffer<T>, value: Double): Buffer<T> = a.map { scale(it, value) }
@@ -168,7 +168,7 @@ public open class BufferFieldOps<T, A : Field<T>>(
 public class BufferField<T, A : Field<T>>(
     elementAlgebra: A,
     bufferFactory: BufferFactory<T>,
-    override val size: Int
+    override val size: Int,
 ) : BufferFieldOps<T, A>(elementAlgebra, bufferFactory), Field<Buffer<T>>, WithSize {
 
     override val zero: Buffer<T> = bufferFactory(size) { elementAlgebra.zero }

@@ -63,8 +63,8 @@ public class SplineInterpolator<T : Comparable<T>>(
                 //Shift coefficients to represent absolute polynomial instead of one with an offset
                 val polynomial = Polynomial(
                     a - b * x0 + c * x02 - d * x03,
-                    b - 2*c*x0 + 3*d*x02,
-                    c - 3*d*x0,
+                    b - 2 * c * x0 + 3 * d * x02,
+                    c - 3 * d * x0,
                     d
                 )
                 cOld = c
@@ -72,8 +72,12 @@ public class SplineInterpolator<T : Comparable<T>>(
             }
         }
     }
-
-    public companion object {
-        public val double: SplineInterpolator<Double> = SplineInterpolator(DoubleField, ::DoubleBuffer)
-    }
 }
+
+
+public fun <T : Comparable<T>> Field<T>.splineInterpolator(
+    bufferFactory: MutableBufferFactory<T>,
+): SplineInterpolator<T> = SplineInterpolator(this, bufferFactory)
+
+public val DoubleField.splineInterpolator: SplineInterpolator<Double>
+    get() = SplineInterpolator(this, ::DoubleBuffer)
