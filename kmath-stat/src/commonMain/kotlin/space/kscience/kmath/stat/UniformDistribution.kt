@@ -8,9 +8,9 @@ package space.kscience.kmath.stat
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.SimpleChain
 import space.kscience.kmath.distributions.Distribution
-import space.kscience.kmath.distributions.UnivariateDistribution
+import space.kscience.kmath.distributions.Distribution1D
 
-public class UniformDistribution(public val range: ClosedFloatingPointRange<Double>) : UnivariateDistribution<Double> {
+public class UniformDistribution(public val range: ClosedFloatingPointRange<Double>) : Distribution1D<Double> {
     private val length: Double = range.endInclusive - range.start
 
     override fun probability(arg: Double): Double = if (arg in range) 1.0 / length else 0.0

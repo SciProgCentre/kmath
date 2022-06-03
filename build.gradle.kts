@@ -11,7 +11,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-20"
+    version = "0.3.0"
 }
 
 subprojects {
@@ -56,7 +56,7 @@ subprojects {
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    github("kmath")
+    github("kmath", addToRelease = false)
     space()
     sonatype()
 }

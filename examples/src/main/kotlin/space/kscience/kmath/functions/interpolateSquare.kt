@@ -18,7 +18,7 @@ import space.kscience.plotly.scatter
 
 @OptIn(UnstablePlotlyAPI::class)
 fun main() {
-    val function: UnivariateFunction<Double> = { x ->
+    val function: Function1D<Double> = { x ->
         if (x in 30.0..50.0) {
             1.0
         } else {

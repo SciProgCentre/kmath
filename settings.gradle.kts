@@ -1,8 +1,6 @@
 rootProject.name = "kmath"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
-
 include(
     ":kmath-memory",
     ":kmath-complex",
