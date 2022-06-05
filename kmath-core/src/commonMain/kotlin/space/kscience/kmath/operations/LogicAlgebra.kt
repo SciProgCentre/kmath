@@ -5,16 +5,13 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * An algebra for generic boolean logic
  */
 @UnstableKMathAPI
-public interface LogicAlgebra<T : Any> : Algebra<T> {
-
+public interface LogicAlgebra<T : Any> : Algebra<T>, BinaryLogic<T> {
     /**
      * Represent constant [Boolean] as [T]
      */
@@ -37,32 +34,6 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 
     override fun binaryOperationFunction(operation: String): (left: T, right: T) -> T = { l, r ->
         binaryOperation(operation, l, r)
-    }
-
-    /**
-     * Logic 'not'
-     */
-    public operator fun T.not(): T
-
-    /**
-     * Logic 'and'
-     */
-    public infix fun T.and(other: T): T
-
-    /**
-     * Logic 'or'
-     */
-    public infix fun T.or(other: T): T
-
-    /**
-     * Logic 'xor'
-     */
-    public infix fun T.xor(other: T): T
-
-
-    public companion object {
-        public val TRUE: Symbol by symbol
-        public val FALSE: Symbol by symbol
     }
 }
 

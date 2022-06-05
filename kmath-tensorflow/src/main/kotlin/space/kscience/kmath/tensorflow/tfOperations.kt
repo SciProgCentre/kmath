@@ -21,3 +21,11 @@ public fun <T, TT : TNumber, A> TensorFlowAlgebra<T, TT, A>.sin(
 public fun <T, TT : TNumber, A> TensorFlowAlgebra<T, TT, A>.cos(
     arg: StructureND<T>,
 ): TensorFlowOutput<T, TT> where A : TrigonometricOperations<T>, A : Ring<T> = arg.operate { ops.math.cos(it) }
+
+public fun <T, TT : TNumber, A> TensorFlowAlgebra<T, TT, A>.tan(
+    arg: StructureND<T>,
+): TensorFlowOutput<T, TT> where A : TrigonometricOperations<T>, A : Ring<T> = arg.operate { ops.math.tan(it) }
+
+public fun <T, TT : TNumber, A> TensorFlowAlgebra<T, TT, A>.abs(
+    arg: StructureND<T>,
+): TensorFlowOutput<T, TT> where A : TrigonometricOperations<T>, A : Ring<T> = arg.operate { ops.math.abs(it) }
