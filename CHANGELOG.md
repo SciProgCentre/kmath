@@ -4,6 +4,8 @@
 ### Added
 
 ### Changed
+- Kotlin 1.7
+- `LazyStructure` `deffered` -> `async` to comply with coroutines code style
 
 ### Deprecated
 

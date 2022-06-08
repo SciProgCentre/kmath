@@ -1,4 +1,5 @@
 plugins {
+    kotlin("jvm") version "1.7.0-RC"
     `kotlin-dsl`
     `version-catalog`
     alias(miptNpmLibs.plugins.kotlin.plugin.serialization)
