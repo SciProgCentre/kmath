@@ -199,7 +199,7 @@ public fun main() {
 
 Result LaTeX:
 
-$$\operatorname{exp}\\,\left(\sqrt{x}\right)-\frac{\frac{\operatorname{arcsin}\\,\left(2\,x\right)}{2\times10^{10}%2Bx^{3}}}{12}+x^{2/3}$$
+$$\operatorname{exp}\\,\left(\sqrt{x}\right)-\frac{\frac{\operatorname{arcsin}\\,\left(2\\,x\right)}{2\times10^{10}+x^{3}}}{12}+x^{2/3}$$
 
 Result MathML (can be used with MathJax or other renderers):
 
