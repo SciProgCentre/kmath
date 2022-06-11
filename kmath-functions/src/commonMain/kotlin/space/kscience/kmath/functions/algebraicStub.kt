@@ -18,9 +18,9 @@ import space.kscience.kmath.operations.*
  * @return product of the multiplicand [arg] and the multiplier [multiplier].
  * @author Gleb Minaev
  */
-internal fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: Int): C =
-    if (multiplier >= 0) multiplyBySquaring(arg, multiplier.toUInt())
-    else multiplyBySquaring(-arg, (-multiplier).toUInt())
+internal fun <C> Group<C>.multiplyByDoubling(arg: C, multiplier: Int): C =
+    if (multiplier >= 0) multiplyByDoubling(arg, multiplier.toUInt())
+    else multiplyByDoubling(-arg, (-multiplier).toUInt())
 
 // FIXME: Move receiver to context receiver
 /**
@@ -32,9 +32,9 @@ internal fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: Int): C =
  * @return sum of the augend [base] and product of the multiplicand [arg] and the multiplier [multiplier].
  * @author Gleb Minaev
  */
-internal fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, multiplier: Int): C =
-    if (multiplier >= 0) addMultipliedBySquaring(base, arg, multiplier.toUInt())
-    else addMultipliedBySquaring(base, -arg, (-multiplier).toUInt())
+internal fun <C> GroupOps<C>.addMultipliedByDoubling(base: C, arg: C, multiplier: Int): C =
+    if (multiplier >= 0) addMultipliedByDoubling(base, arg, multiplier.toUInt())
+    else addMultipliedByDoubling(base, -arg, (-multiplier).toUInt())
 
 // FIXME: Move receiver to context receiver
 /**
@@ -47,12 +47,12 @@ internal fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, multiplier
  * @return product of the multiplicand [arg] and the multiplier [multiplier].
  * @author Gleb Minaev
  */
-internal tailrec fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: UInt): C =
+internal tailrec fun <C> Group<C>.multiplyByDoubling(arg: C, multiplier: UInt): C =
     when {
         multiplier == 0u -> zero
         multiplier == 1u -> arg
-        multiplier and 1u == 0u -> multiplyBySquaring(arg + arg, multiplier shr 1)
-        multiplier and 1u == 1u -> addMultipliedBySquaring(arg, arg + arg, multiplier shr 1)
+        multiplier and 1u == 0u -> multiplyByDoubling(arg + arg, multiplier shr 1)
+        multiplier and 1u == 1u -> addMultipliedByDoubling(arg, arg + arg, multiplier shr 1)
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
@@ -68,12 +68,12 @@ internal tailrec fun <C> Group<C>.multiplyBySquaring(arg: C, multiplier: UInt): 
  * @return sum of the augend [base] and product of the multiplicand [arg] and the multiplier [multiplier].
  * @author Gleb Minaev
  */
-internal tailrec fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, multiplier: UInt): C =
+internal tailrec fun <C> GroupOps<C>.addMultipliedByDoubling(base: C, arg: C, multiplier: UInt): C =
     when {
         multiplier == 0u -> base
         multiplier == 1u -> base + arg
-        multiplier and 1u == 0u -> addMultipliedBySquaring(base, arg + arg, multiplier shr 1)
-        multiplier and 1u == 1u -> addMultipliedBySquaring(base + arg, arg + arg, multiplier shr 1)
+        multiplier and 1u == 0u -> addMultipliedByDoubling(base, arg + arg, multiplier shr 1)
+        multiplier and 1u == 1u -> addMultipliedByDoubling(base + arg, arg + arg, multiplier shr 1)
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
@@ -86,9 +86,9 @@ internal tailrec fun <C> GroupOps<C>.addMultipliedBySquaring(base: C, arg: C, mu
  * @return [arg] raised to the power [exponent].
  * @author Gleb Minaev
  */
-internal fun <C> Field<C>.exponentiationBySquaring(arg: C, exponent: Int): C =
-    if (exponent >= 0) exponentiationBySquaring(arg, exponent.toUInt())
-    else exponentiationBySquaring(one / arg, (-exponent).toUInt())
+internal fun <C> Field<C>.exponentiateBySquaring(arg: C, exponent: Int): C =
+    if (exponent >= 0) exponentiateBySquaring(arg, exponent.toUInt())
+    else exponentiateBySquaring(one / arg, (-exponent).toUInt())
 
 // FIXME: Move receiver to context receiver
 /**
@@ -100,9 +100,9 @@ internal fun <C> Field<C>.exponentiationBySquaring(arg: C, exponent: Int): C =
  * @return product of [base] and [arg] raised to the power [exponent].
  * @author Gleb Minaev
  */
-internal fun <C> Field<C>.multiplyExponentiationBySquaring(base: C, arg: C, exponent: Int): C =
-    if (exponent >= 0) multiplyExponentiationBySquaring(base, arg, exponent.toUInt())
-    else multiplyExponentiationBySquaring(base, one / arg, (-exponent).toUInt())
+internal fun <C> Field<C>.multiplyExponentiatedBySquaring(base: C, arg: C, exponent: Int): C =
+    if (exponent >= 0) multiplyExponentiatedBySquaring(base, arg, exponent.toUInt())
+    else multiplyExponentiatedBySquaring(base, one / arg, (-exponent).toUInt())
 
 // FIXME: Move receiver to context receiver
 /**
@@ -115,12 +115,12 @@ internal fun <C> Field<C>.multiplyExponentiationBySquaring(base: C, arg: C, expo
  * @return [arg] raised to the power [exponent].
  * @author Gleb Minaev
  */
-internal tailrec fun <C> Ring<C>.exponentiationBySquaring(arg: C, exponent: UInt): C =
+internal tailrec fun <C> Ring<C>.exponentiateBySquaring(arg: C, exponent: UInt): C =
     when {
         exponent == 0u -> zero
         exponent == 1u -> arg
-        exponent and 1u == 0u -> exponentiationBySquaring(arg * arg, exponent shr 1)
-        exponent and 1u == 1u -> multiplyExponentiationBySquaring(arg, arg * arg, exponent shr 1)
+        exponent and 1u == 0u -> exponentiateBySquaring(arg * arg, exponent shr 1)
+        exponent and 1u == 1u -> multiplyExponentiatedBySquaring(arg, arg * arg, exponent shr 1)
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }
 
@@ -136,11 +136,11 @@ internal tailrec fun <C> Ring<C>.exponentiationBySquaring(arg: C, exponent: UInt
  * @return product of [base] and [arg] raised to the power [exponent].
  * @author Gleb Minaev
  */
-internal tailrec fun <C> RingOps<C>.multiplyExponentiationBySquaring(base: C, arg: C, exponent: UInt): C =
+internal tailrec fun <C> RingOps<C>.multiplyExponentiatedBySquaring(base: C, arg: C, exponent: UInt): C =
     when {
         exponent == 0u -> base
         exponent == 1u -> base * arg
-        exponent and 1u == 0u -> multiplyExponentiationBySquaring(base, arg * arg, exponent shr 1)
-        exponent and 1u == 1u -> multiplyExponentiationBySquaring(base * arg, arg * arg, exponent shr 1)
+        exponent and 1u == 0u -> multiplyExponentiatedBySquaring(base, arg * arg, exponent shr 1)
+        exponent and 1u == 1u -> multiplyExponentiatedBySquaring(base * arg, arg * arg, exponent shr 1)
         else -> error("Error in multiplication group instant by unsigned integer: got reminder by division by 2 different from 0 and 1")
     }

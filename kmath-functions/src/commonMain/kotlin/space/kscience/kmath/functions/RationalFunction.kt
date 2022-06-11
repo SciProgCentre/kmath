@@ -28,7 +28,7 @@ public interface RationalFunction<C, P: Polynomial<C>> {
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
  */
-@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+@Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE") // FIXME: Waiting for KT-31420
 public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunction<C, P>> : Ring<R> {
     /**
      * Returns sum of the constant and the integer represented as constant (member of underlying ring).
@@ -129,52 +129,52 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
-    public operator fun R.plus(other: Int): R = addMultipliedBySquaring(this, one, other)
+    public operator fun R.plus(other: Int): R = addMultipliedByDoubling(this, one, other)
     /**
      * Returns difference between the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
-    public operator fun R.minus(other: Int): R = addMultipliedBySquaring(this, one, -other)
+    public operator fun R.minus(other: Int): R = addMultipliedByDoubling(this, one, -other)
     /**
      * Returns product of the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public operator fun R.times(other: Int): R = multiplyBySquaring(this, other)
+    public operator fun R.times(other: Int): R = multiplyByDoubling(this, other)
     /**
      * Returns quotient of the rational function and the integer represented as rational function.
      *
      * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
      * multiplication denominator of [this] to [other].
      */
-    public operator fun R.div(other: Int): R = this / multiplyBySquaring(one, other)
+    public operator fun R.div(other: Int): R = this / multiplyByDoubling(one, other)
 
     /**
      * Returns sum of the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
-    public operator fun Int.plus(other: R): R = addMultipliedBySquaring(other, one, this)
+    public operator fun Int.plus(other: R): R = addMultipliedByDoubling(other, one, this)
     /**
      * Returns difference between the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
-    public operator fun Int.minus(other: R): R = addMultipliedBySquaring(-other, one, this)
+    public operator fun Int.minus(other: R): R = addMultipliedByDoubling(-other, one, this)
     /**
      * Returns product of the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public operator fun Int.times(other: R): R = multiplyBySquaring(other, this)
+    public operator fun Int.times(other: R): R = multiplyByDoubling(other, this)
     /**
      * Returns quotient of the integer represented as rational function and the rational function.
      *
      * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
      * [other] and which denominator is [other]'s numerator.
      */
-    public operator fun Int.div(other: R): R = multiplyBySquaring(one / other, this)
+    public operator fun Int.div(other: R): R = multiplyByDoubling(one / other, this)
 
     /**
      * Converts the integer [value] to rational function.
@@ -188,38 +188,38 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     /**
      * Returns the same constant.
      */
-    @JvmName("constantUnaryPlus")
-    @JsName("constantUnaryPlus")
+    @JvmName("unaryPlusConstant")
+    @JsName("unaryPlusConstant")
     public operator fun C.unaryPlus(): C = this
     /**
      * Returns negation of the constant.
      */
-    @JvmName("constantUnaryMinus")
-    @JsName("constantUnaryMinus")
+    @JvmName("unaryMinusConstant")
+    @JsName("unaryMinusConstant")
     public operator fun C.unaryMinus(): C
     /**
      * Returns sum of the constants.
      */
-    @JvmName("constantPlus")
-    @JsName("constantPlus")
+    @JvmName("plusConstantConstant")
+    @JsName("plusConstantConstant")
     public operator fun C.plus(other: C): C
     /**
      * Returns difference of the constants.
      */
-    @JvmName("constantMinus")
-    @JsName("constantMinus")
+    @JvmName("minusConstantConstant")
+    @JsName("minusConstantConstant")
     public operator fun C.minus(other: C): C
     /**
      * Returns product of the constants.
      */
-    @JvmName("constantTimes")
-    @JsName("constantTimes")
+    @JvmName("timesConstantConstant")
+    @JsName("timesConstantConstant")
     public operator fun C.times(other: C): C
     /**
      * Raises [arg] to the integer power [exponent].
      */
-    @JvmName("constantPower")
-    @JsName("constantPower")
+    @JvmName("powerConstant")
+    @JsName("powerConstant")
     public fun power(arg: C, exponent: UInt) : C
 
     /**
@@ -417,7 +417,7 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     /**
      * Raises [arg] to the integer power [exponent].
      */
-    public override fun power(arg: R, exponent: UInt) : R = exponentiationBySquaring(arg, exponent)
+    public override fun power(arg: R, exponent: UInt) : R = exponentiateBySquaring(arg, exponent)
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).
@@ -458,7 +458,7 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
  * @param R the type of rational functions.
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: RationalFunction<C, P>, A: Ring<C>> : RationalFunctionalSpace<C, P, R> {
 
     public val ring: A
@@ -468,68 +468,68 @@ public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: Rationa
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
-    public override operator fun C.plus(other: Int): C = ring { addMultipliedBySquaring(this@plus, one, other) }
+    public override operator fun C.plus(other: Int): C = ring { addMultipliedByDoubling(this@plus, one, other) }
     /**
      * Returns difference between the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
-    public override operator fun C.minus(other: Int): C = ring { addMultipliedBySquaring(this@minus, one, -other) }
+    public override operator fun C.minus(other: Int): C = ring { addMultipliedByDoubling(this@minus, one, -other) }
     /**
      * Returns product of the constant and the integer represented as constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
-    public override operator fun C.times(other: Int): C = ring { multiplyBySquaring(this@times, other) }
+    public override operator fun C.times(other: Int): C = ring { multiplyByDoubling(this@times, other) }
 
     /**
      * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
-    public override operator fun Int.plus(other: C): C = ring { addMultipliedBySquaring(other, one, this@plus) }
+    public override operator fun Int.plus(other: C): C = ring { addMultipliedByDoubling(other, one, this@plus) }
     /**
      * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
-    public override operator fun Int.minus(other: C): C = ring { addMultipliedBySquaring(-other, one, this@minus) }
+    public override operator fun Int.minus(other: C): C = ring { addMultipliedByDoubling(-other, one, this@minus) }
     /**
      * Returns product of the integer represented as constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
-    public override operator fun Int.times(other: C): C = ring { multiplyBySquaring(other, this@times) }
+    public override operator fun Int.times(other: C): C = ring { multiplyByDoubling(other, this@times) }
 
     /**
      * Returns the same constant.
      */
-    @JvmName("constantUnaryPlus")
+    @JvmName("unaryPlusConstant")
     public override operator fun C.unaryPlus(): C = ring { +this@unaryPlus }
     /**
      * Returns negation of the constant.
      */
-    @JvmName("constantUnaryMinus")
+    @JvmName("unaryMinusConstant")
     public override operator fun C.unaryMinus(): C = ring { -this@unaryMinus }
     /**
      * Returns sum of the constants.
      */
-    @JvmName("constantPlus")
+    @JvmName("plusConstantConstant")
     public override operator fun C.plus(other: C): C = ring { this@plus + other }
     /**
      * Returns difference of the constants.
      */
-    @JvmName("constantMinus")
+    @JvmName("minusConstantConstant")
     public override operator fun C.minus(other: C): C = ring { this@minus - other }
     /**
      * Returns product of the constants.
      */
-    @JvmName("constantTimes")
+    @JvmName("timesConstantConstant")
     public override operator fun C.times(other: C): C = ring { this@times * other }
     /**
      * Raises [arg] to the integer power [exponent].
      */
-    @JvmName("constantPower")
+    @JvmName("powerConstant")
     public override fun power(arg: C, exponent: UInt) : C = ring { power(arg, exponent) }
 
     /**
@@ -552,7 +552,7 @@ public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: Rationa
  * @param R the type of rational functions.
  * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface RationalFunctionalSpaceOverPolynomialSpace<
         C,
         P: Polynomial<C>,
@@ -659,32 +659,32 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     /**
      * Returns the same constant.
      */
-    @JvmName("constantUnaryPlus")
+    @JvmName("unaryPlusConstant")
     public override operator fun C.unaryPlus(): C = polynomialRing { +this@unaryPlus }
     /**
      * Returns negation of the constant.
      */
-    @JvmName("constantUnaryMinus")
+    @JvmName("unaryMinusConstant")
     public override operator fun C.unaryMinus(): C = polynomialRing { -this@unaryMinus }
     /**
      * Returns sum of the constants.
      */
-    @JvmName("constantPlus")
+    @JvmName("plusConstantConstant")
     public override operator fun C.plus(other: C): C = polynomialRing { this@plus + other }
     /**
      * Returns difference of the constants.
      */
-    @JvmName("constantMinus")
+    @JvmName("minusConstantConstant")
     public override operator fun C.minus(other: C): C = polynomialRing { this@minus - other }
     /**
      * Returns product of the constants.
      */
-    @JvmName("constantTimes")
+    @JvmName("timesConstantConstant")
     public override operator fun C.times(other: C): C = polynomialRing { this@times * other }
     /**
      * Raises [arg] to the integer power [exponent].
      */
-    @JvmName("constantPower")
+    @JvmName("powerConstant")
     public override fun power(arg: C, exponent: UInt) : C = polynomialRing { power(arg, exponent) }
 
     /**
@@ -780,7 +780,7 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
  * @param R the type of rational functions.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public abstract class PolynomialSpaceOfFractions<
         C,
         P: Polynomial<C>,
@@ -1052,78 +1052,78 @@ public abstract class PolynomialSpaceOfFractions<
     public override val one: R get() = constructRationalFunction(polynomialOne)
 }
 
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface MultivariateRationalFunctionalSpace<
         C,
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>
         >: RationalFunctionalSpace<C, P, R> {
-    @JvmName("VariableIntPlus")
+    @JvmName("plusVariableInt")
     public operator fun V.plus(other: Int): P
-    @JvmName("VariableIntMinus")
+    @JvmName("minusVariableInt")
     public operator fun V.minus(other: Int): P
-    @JvmName("VariableIntMinusTimes")
+    @JvmName("timesVariableInt")
     public operator fun V.times(other: Int): P
 
-    @JvmName("IntVariablePlus")
+    @JvmName("plusIntVariable")
     public operator fun Int.plus(other: V): P
-    @JvmName("IntVariableMinus")
+    @JvmName("minusIntVariable")
     public operator fun Int.minus(other: V): P
-    @JvmName("IntVariableTimes")
+    @JvmName("timesIntVariable")
     public operator fun Int.times(other: V): P
 
-    @JvmName("ConstantVariablePlus")
+    @JvmName("plusConstantVariable")
     public operator fun C.plus(other: V): P
-    @JvmName("ConstantVariableMinus")
+    @JvmName("minusConstantVariable")
     public operator fun C.minus(other: V): P
-    @JvmName("ConstantVariableTimes")
+    @JvmName("timesConstantVariable")
     public operator fun C.times(other: V): P
 
-    @JvmName("VariableConstantPlus")
+    @JvmName("plusVariableConstant")
     public operator fun V.plus(other: C): P
-    @JvmName("VariableConstantMinus")
+    @JvmName("minusVariableConstant")
     public operator fun V.minus(other: C): P
-    @JvmName("VariableConstantTimes")
+    @JvmName("timesVariableConstant")
     public operator fun V.times(other: C): P
 
-    @JvmName("VariableUnaryPlus")
+    @JvmName("unaryPlusVariable")
     public operator fun V.unaryPlus(): P
-    @JvmName("VariableUnaryMinus")
+    @JvmName("unaryMinusVariable")
     public operator fun V.unaryMinus(): P
-    @JvmName("VariablePlus")
+    @JvmName("plusVariableVariable")
     public operator fun V.plus(other: V): P
-    @JvmName("VariableMinus")
+    @JvmName("minusVariableVariable")
     public operator fun V.minus(other: V): P
-    @JvmName("VariableTimes")
+    @JvmName("timesVariableVariable")
     public operator fun V.times(other: V): P
 
-    @JvmName("VariablePolynomialPlus")
+    @JvmName("plusVariablePolynomial")
     public operator fun V.plus(other: P): P
-    @JvmName("VariablePolynomialMinus")
+    @JvmName("minusVariablePolynomial")
     public operator fun V.minus(other: P): P
-    @JvmName("VariablePolynomialTimes")
+    @JvmName("timesVariablePolynomial")
     public operator fun V.times(other: P): P
 
-    @JvmName("PolynomialVariablePlus")
+    @JvmName("plusPolynomialVariable")
     public operator fun P.plus(other: V): P
-    @JvmName("PolynomialVariableMinus")
+    @JvmName("minusPolynomialVariable")
     public operator fun P.minus(other: V): P
-    @JvmName("PolynomialVariableTimes")
+    @JvmName("timesPolynomialVariable")
     public operator fun P.times(other: V): P
 
-    @JvmName("VariableRationalFunctionPlus")
+    @JvmName("plusVariableRational")
     public operator fun V.plus(other: R): R
-    @JvmName("VariableRationalFunctionMinus")
+    @JvmName("minusVariableRational")
     public operator fun V.minus(other: R): R
-    @JvmName("VariableRationalFunctionTimes")
+    @JvmName("timesVariableRational")
     public operator fun V.times(other: R): R
 
-    @JvmName("RationalFunctionVariablePlus")
+    @JvmName("plusRationalVariable")
     public operator fun R.plus(other: V): R
-    @JvmName("RationalFunctionVariableMinus")
+    @JvmName("minusRationalVariable")
     public operator fun R.minus(other: V): R
-    @JvmName("RationalFunctionVariableTimes")
+    @JvmName("timesRationalVariable")
     public operator fun R.times(other: V): R
 
     /**
@@ -1177,7 +1177,7 @@ public interface MultivariateRationalFunctionalSpaceOverPolynomialSpace<
         AP: PolynomialSpace<C, P>,
         > : RationalFunctionalSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionalSpace<C, V, P, R>
 
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSpace<
         C,
         V,
@@ -1185,57 +1185,57 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
         R: RationalFunction<C, P>,
         AP: MultivariatePolynomialSpace<C, V, P>,
         > : MultivariateRationalFunctionalSpaceOverPolynomialSpace<C, V, P, R, AP> {
-    @JvmName("VariableIntPlus")
+    @JvmName("plusVariableInt")
     public override operator fun V.plus(other: Int): P = polynomialRing { this@plus + other }
-    @JvmName("VariableIntMinus")
+    @JvmName("minusVariableInt")
     public override operator fun V.minus(other: Int): P = polynomialRing { this@minus - other }
-    @JvmName("VariableIntMinusTimes")
+    @JvmName("timesVariableInt")
     public override operator fun V.times(other: Int): P = polynomialRing { this@times * other }
 
-    @JvmName("IntVariablePlus")
+    @JvmName("plusIntVariable")
     public override operator fun Int.plus(other: V): P = polynomialRing { this@plus + other }
-    @JvmName("IntVariableMinus")
+    @JvmName("minusIntVariable")
     public override operator fun Int.minus(other: V): P = polynomialRing { this@minus - other }
-    @JvmName("IntVariableTimes")
+    @JvmName("timesIntVariable")
     public override operator fun Int.times(other: V): P = polynomialRing { this@times * other }
 
-    @JvmName("ConstantVariablePlus")
+    @JvmName("plusConstantVariable")
     public override operator fun C.plus(other: V): P = polynomialRing { this@plus + other }
-    @JvmName("ConstantVariableMinus")
+    @JvmName("minusConstantVariable")
     public override operator fun C.minus(other: V): P = polynomialRing { this@minus - other }
-    @JvmName("ConstantVariableTimes")
+    @JvmName("timesConstantVariable")
     public override operator fun C.times(other: V): P = polynomialRing { this@times * other }
 
-    @JvmName("VariableConstantPlus")
+    @JvmName("plusVariableConstant")
     public override operator fun V.plus(other: C): P = polynomialRing { this@plus + other }
-    @JvmName("VariableConstantMinus")
+    @JvmName("minusVariableConstant")
     public override operator fun V.minus(other: C): P = polynomialRing { this@minus - other }
-    @JvmName("VariableConstantTimes")
+    @JvmName("timesVariableConstant")
     public override operator fun V.times(other: C): P = polynomialRing { this@times * other }
 
-    @JvmName("VariableUnaryPlus")
+    @JvmName("unaryPlusVariable")
     public override operator fun V.unaryPlus(): P = polynomialRing { +this@unaryPlus }
-    @JvmName("VariableUnaryMinus")
+    @JvmName("unaryMinusVariable")
     public override operator fun V.unaryMinus(): P = polynomialRing { -this@unaryMinus }
-    @JvmName("VariablePlus")
+    @JvmName("plusVariableVariable")
     public override operator fun V.plus(other: V): P = polynomialRing { this@plus + other }
-    @JvmName("VariableMinus")
+    @JvmName("minusVariableVariable")
     public override operator fun V.minus(other: V): P = polynomialRing { this@minus - other }
-    @JvmName("VariableTimes")
+    @JvmName("timesVariableVariable")
     public override operator fun V.times(other: V): P = polynomialRing { this@times * other }
 
-    @JvmName("VariablePolynomialPlus")
+    @JvmName("plusVariablePolynomial")
     public override operator fun V.plus(other: P): P = polynomialRing { this@plus + other }
-    @JvmName("VariablePolynomialMinus")
+    @JvmName("minusVariablePolynomial")
     public override operator fun V.minus(other: P): P = polynomialRing { this@minus - other }
-    @JvmName("VariablePolynomialTimes")
+    @JvmName("timesVariablePolynomial")
     public override operator fun V.times(other: P): P = polynomialRing { this@times * other }
 
-    @JvmName("PolynomialVariablePlus")
+    @JvmName("plusPolynomialVariable")
     public override operator fun P.plus(other: V): P = polynomialRing { this@plus + other }
-    @JvmName("PolynomialVariableMinus")
+    @JvmName("minusPolynomialVariable")
     public override operator fun P.minus(other: V): P = polynomialRing { this@minus - other }
-    @JvmName("PolynomialVariableTimes")
+    @JvmName("timesPolynomialVariable")
     public override operator fun P.times(other: V): P = polynomialRing { this@times * other }
 
     /**
@@ -1264,45 +1264,45 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
     public override val P.countOfVariables: Int get() = polynomialRing { countOfVariables }
 }
 
-@Suppress("INAPPLICABLE_JVM_NAME")
+@Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public abstract class MultivariatePolynomialSpaceOfFractions<
         C,
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         > : MultivariateRationalFunctionalSpace<C, V, P, R>,  PolynomialSpaceOfFractions<C, P, R>() {
-    @JvmName("VariableRationalFunctionPlus")
+    @JvmName("plusVariableRational")
     public override operator fun V.plus(other: R): R =
         constructRationalFunction(
             this * other.denominator + other.numerator,
             other.denominator
         )
-    @JvmName("VariableRationalFunctionMinus")
+    @JvmName("minusVariableRational")
     public override operator fun V.minus(other: R): R =
         constructRationalFunction(
             this * other.denominator - other.numerator,
             other.denominator
         )
-    @JvmName("VariableRationalFunctionTimes")
+    @JvmName("timesVariableRational")
     public override operator fun V.times(other: R): R =
         constructRationalFunction(
             this * other.numerator,
             other.denominator
         )
 
-    @JvmName("RationalFunctionVariablePlus")
+    @JvmName("plusRationalVariable")
     public override operator fun R.plus(other: V): R =
         constructRationalFunction(
             numerator + denominator * other,
             denominator
         )
-    @JvmName("RationalFunctionVariableMinus")
+    @JvmName("minusRationalVariable")
     public override operator fun R.minus(other: V): R =
         constructRationalFunction(
             numerator - denominator * other,
             denominator
         )
-    @JvmName("RationalFunctionVariableTimes")
+    @JvmName("timesRationalVariable")
     public override operator fun R.times(other: V): R =
         constructRationalFunction(
             numerator * other,

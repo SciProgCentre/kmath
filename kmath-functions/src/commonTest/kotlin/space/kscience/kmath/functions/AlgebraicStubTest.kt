@@ -31,47 +31,47 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "57",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 0u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 0u).expr,
                 "tried addMultipliedBySquaring(57, 179, 0u)"
             )
             assertEquals(
                 "(57 + 179)",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 1u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 1u).expr,
                 "tried addMultipliedBySquaring(57, 179, 1u)"
             )
             assertEquals(
                 "(57 + (179 + 179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 2u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 2u).expr,
                 "tried addMultipliedBySquaring(57, 179, 2u)"
             )
             assertEquals(
                 "((57 + 179) + (179 + 179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 3u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 3u).expr,
                 "tried addMultipliedBySquaring(57, 179, 3u)"
             )
             assertEquals(
                 "(57 + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 4u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 4u).expr,
                 "tried addMultipliedBySquaring(57, 179, 4u)"
             )
             assertEquals(
                 "((57 + 179) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 5u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 5u).expr,
                 "tried addMultipliedBySquaring(57, 179, 5u)"
             )
             assertEquals(
                 "((57 + (179 + 179)) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 6u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 6u).expr,
                 "tried addMultipliedBySquaring(57, 179, 6u)"
             )
             assertEquals(
                 "(((57 + 179) + (179 + 179)) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 7u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 7u).expr,
                 "tried addMultipliedBySquaring(57, 179, 7u)"
             )
             assertEquals(
                 "(57 + (((179 + 179) + (179 + 179)) + ((179 + 179) + (179 + 179))))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 8u).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 8u).expr,
                 "tried addMultipliedBySquaring(57, 179, 8u)"
             )
         }
@@ -81,47 +81,47 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "0",
-                multiplyBySquaring(Expr("57"), 0u).expr,
+                multiplyByDoubling(Expr("57"), 0u).expr,
                 "tried multiplyBySquaring(57, 0u)"
             )
             assertEquals(
                 "57",
-                multiplyBySquaring(Expr("57"), 1u).expr,
+                multiplyByDoubling(Expr("57"), 1u).expr,
                 "tried multiplyBySquaring(57, 1u)"
             )
             assertEquals(
                 "(57 + 57)",
-                multiplyBySquaring(Expr("57"), 2u).expr,
+                multiplyByDoubling(Expr("57"), 2u).expr,
                 "tried multiplyBySquaring(57, 2u)"
             )
             assertEquals(
                 "(57 + (57 + 57))",
-                multiplyBySquaring(Expr("57"), 3u).expr,
+                multiplyByDoubling(Expr("57"), 3u).expr,
                 "tried multiplyBySquaring(57, 3u)"
             )
             assertEquals(
                 "((57 + 57) + (57 + 57))",
-                multiplyBySquaring(Expr("57"), 4u).expr,
+                multiplyByDoubling(Expr("57"), 4u).expr,
                 "tried multiplyBySquaring(57, 4u)"
             )
             assertEquals(
                 "(57 + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 5u).expr,
+                multiplyByDoubling(Expr("57"), 5u).expr,
                 "tried multiplyBySquaring(57, 5u)"
             )
             assertEquals(
                 "((57 + 57) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 6u).expr,
+                multiplyByDoubling(Expr("57"), 6u).expr,
                 "tried multiplyBySquaring(57, 6u)"
             )
             assertEquals(
                 "((57 + (57 + 57)) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 7u).expr,
+                multiplyByDoubling(Expr("57"), 7u).expr,
                 "tried multiplyBySquaring(57, 7u)"
             )
             assertEquals(
                 "(((57 + 57) + (57 + 57)) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 8u).expr,
+                multiplyByDoubling(Expr("57"), 8u).expr,
                 "tried multiplyBySquaring(57, 8u)"
             )
         }
@@ -131,87 +131,87 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "57",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 0).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 0).expr,
                 "tried addMultipliedBySquaring(57, 179, 0)"
             )
             assertEquals(
                 "(57 + 179)",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 1).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 1).expr,
                 "tried addMultipliedBySquaring(57, 179, 1)"
             )
             assertEquals(
                 "(57 + -179)",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -1).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -1).expr,
                 "tried addMultipliedBySquaring(57, 179, -1)"
             )
             assertEquals(
                 "(57 + (179 + 179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 2).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 2).expr,
                 "tried addMultipliedBySquaring(57, 179, 2)"
             )
             assertEquals(
                 "(57 + (-179 + -179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -2).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -2).expr,
                 "tried addMultipliedBySquaring(57, 179, -2)"
             )
             assertEquals(
                 "((57 + 179) + (179 + 179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 3).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 3).expr,
                 "tried addMultipliedBySquaring(57, 179, 3)"
             )
             assertEquals(
                 "((57 + -179) + (-179 + -179))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -3).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -3).expr,
                 "tried addMultipliedBySquaring(57, 179, -3)"
             )
             assertEquals(
                 "(57 + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 4).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 4).expr,
                 "tried addMultipliedBySquaring(57, 179, 4)"
             )
             assertEquals(
                 "(57 + ((-179 + -179) + (-179 + -179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -4).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -4).expr,
                 "tried addMultipliedBySquaring(57, 179, -4)"
             )
             assertEquals(
                 "((57 + 179) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 5).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 5).expr,
                 "tried addMultipliedBySquaring(57, 179, 5)"
             )
             assertEquals(
                 "((57 + -179) + ((-179 + -179) + (-179 + -179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -5).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -5).expr,
                 "tried addMultipliedBySquaring(57, 179, -5)"
             )
             assertEquals(
                 "((57 + (179 + 179)) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 6).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 6).expr,
                 "tried addMultipliedBySquaring(57, 179, 6)"
             )
             assertEquals(
                 "((57 + (-179 + -179)) + ((-179 + -179) + (-179 + -179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -6).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -6).expr,
                 "tried addMultipliedBySquaring(57, 179, -6)"
             )
             assertEquals(
                 "(((57 + 179) + (179 + 179)) + ((179 + 179) + (179 + 179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 7).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 7).expr,
                 "tried addMultipliedBySquaring(57, 179, 7)"
             )
             assertEquals(
                 "(((57 + -179) + (-179 + -179)) + ((-179 + -179) + (-179 + -179)))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -7).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -7).expr,
                 "tried addMultipliedBySquaring(57, 179, -7)"
             )
             assertEquals(
                 "(57 + (((179 + 179) + (179 + 179)) + ((179 + 179) + (179 + 179))))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), 8).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), 8).expr,
                 "tried addMultipliedBySquaring(57, 179, 8)"
             )
             assertEquals(
                 "(57 + (((-179 + -179) + (-179 + -179)) + ((-179 + -179) + (-179 + -179))))",
-                addMultipliedBySquaring(Expr("57"), Expr("179"), -8).expr,
+                addMultipliedByDoubling(Expr("57"), Expr("179"), -8).expr,
                 "tried addMultipliedBySquaring(57, 179, -8)"
             )
         }
@@ -221,87 +221,87 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "0",
-                multiplyBySquaring(Expr("57"), 0).expr,
+                multiplyByDoubling(Expr("57"), 0).expr,
                 "tried multiplyBySquaring(57, 0)"
             )
             assertEquals(
                 "57",
-                multiplyBySquaring(Expr("57"), 1).expr,
+                multiplyByDoubling(Expr("57"), 1).expr,
                 "tried multiplyBySquaring(57, 1)"
             )
             assertEquals(
                 "-57",
-                multiplyBySquaring(Expr("57"), -1).expr,
+                multiplyByDoubling(Expr("57"), -1).expr,
                 "tried multiplyBySquaring(57, -1)"
             )
             assertEquals(
                 "(57 + 57)",
-                multiplyBySquaring(Expr("57"), 2).expr,
+                multiplyByDoubling(Expr("57"), 2).expr,
                 "tried multiplyBySquaring(57, 2)"
             )
             assertEquals(
                 "(-57 + -57)",
-                multiplyBySquaring(Expr("57"), -2).expr,
+                multiplyByDoubling(Expr("57"), -2).expr,
                 "tried multiplyBySquaring(57, -2)"
             )
             assertEquals(
                 "(57 + (57 + 57))",
-                multiplyBySquaring(Expr("57"), 3).expr,
+                multiplyByDoubling(Expr("57"), 3).expr,
                 "tried multiplyBySquaring(57, 3)"
             )
             assertEquals(
                 "(-57 + (-57 + -57))",
-                multiplyBySquaring(Expr("57"), -3).expr,
+                multiplyByDoubling(Expr("57"), -3).expr,
                 "tried multiplyBySquaring(57, -3)"
             )
             assertEquals(
                 "((57 + 57) + (57 + 57))",
-                multiplyBySquaring(Expr("57"), 4).expr,
+                multiplyByDoubling(Expr("57"), 4).expr,
                 "tried multiplyBySquaring(57, 4)"
             )
             assertEquals(
                 "((-57 + -57) + (-57 + -57))",
-                multiplyBySquaring(Expr("57"), -4).expr,
+                multiplyByDoubling(Expr("57"), -4).expr,
                 "tried multiplyBySquaring(57, -4)"
             )
             assertEquals(
                 "(57 + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 5).expr,
+                multiplyByDoubling(Expr("57"), 5).expr,
                 "tried multiplyBySquaring(57, 5)"
             )
             assertEquals(
                 "(-57 + ((-57 + -57) + (-57 + -57)))",
-                multiplyBySquaring(Expr("57"), -5).expr,
+                multiplyByDoubling(Expr("57"), -5).expr,
                 "tried multiplyBySquaring(57, -5)"
             )
             assertEquals(
                 "((57 + 57) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 6).expr,
+                multiplyByDoubling(Expr("57"), 6).expr,
                 "tried multiplyBySquaring(57, 6)"
             )
             assertEquals(
                 "((-57 + -57) + ((-57 + -57) + (-57 + -57)))",
-                multiplyBySquaring(Expr("57"), -6).expr,
+                multiplyByDoubling(Expr("57"), -6).expr,
                 "tried multiplyBySquaring(57, -6)"
             )
             assertEquals(
                 "((57 + (57 + 57)) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 7).expr,
+                multiplyByDoubling(Expr("57"), 7).expr,
                 "tried multiplyBySquaring(57, 7)"
             )
             assertEquals(
                 "((-57 + (-57 + -57)) + ((-57 + -57) + (-57 + -57)))",
-                multiplyBySquaring(Expr("57"), -7).expr,
+                multiplyByDoubling(Expr("57"), -7).expr,
                 "tried multiplyBySquaring(57, -7)"
             )
             assertEquals(
                 "(((57 + 57) + (57 + 57)) + ((57 + 57) + (57 + 57)))",
-                multiplyBySquaring(Expr("57"), 8).expr,
+                multiplyByDoubling(Expr("57"), 8).expr,
                 "tried multiplyBySquaring(57, 8)"
             )
             assertEquals(
                 "(((-57 + -57) + (-57 + -57)) + ((-57 + -57) + (-57 + -57)))",
-                multiplyBySquaring(Expr("57"), -8).expr,
+                multiplyByDoubling(Expr("57"), -8).expr,
                 "tried multiplyBySquaring(57, -8)"
             )
         }
@@ -311,47 +311,47 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "57",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 0u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 0u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 0u)"
             )
             assertEquals(
                 "(57 * 179)",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 1u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 1u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 1u)"
             )
             assertEquals(
                 "(57 * (179 * 179))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 2u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 2u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 2u)"
             )
             assertEquals(
                 "((57 * 179) * (179 * 179))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 3u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 3u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 3u)"
             )
             assertEquals(
                 "(57 * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 4u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 4u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 4u)"
             )
             assertEquals(
                 "((57 * 179) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 5u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 5u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 5u)"
             )
             assertEquals(
                 "((57 * (179 * 179)) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 6u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 6u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 6u)"
             )
             assertEquals(
                 "(((57 * 179) * (179 * 179)) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 7u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 7u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 7u)"
             )
             assertEquals(
                 "(57 * (((179 * 179) * (179 * 179)) * ((179 * 179) * (179 * 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 8u).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 8u).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 8u)"
             )
         }
@@ -361,47 +361,47 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "0",
-                exponentiationBySquaring(Expr("57"), 0u).expr,
+                exponentiateBySquaring(Expr("57"), 0u).expr,
                 "tried exponentiationBySquaring(57, 0u)"
             )
             assertEquals(
                 "57",
-                exponentiationBySquaring(Expr("57"), 1u).expr,
+                exponentiateBySquaring(Expr("57"), 1u).expr,
                 "tried exponentiationBySquaring(57, 1u)"
             )
             assertEquals(
                 "(57 * 57)",
-                exponentiationBySquaring(Expr("57"), 2u).expr,
+                exponentiateBySquaring(Expr("57"), 2u).expr,
                 "tried exponentiationBySquaring(57, 2u)"
             )
             assertEquals(
                 "(57 * (57 * 57))",
-                exponentiationBySquaring(Expr("57"), 3u).expr,
+                exponentiateBySquaring(Expr("57"), 3u).expr,
                 "tried exponentiationBySquaring(57, 3u)"
             )
             assertEquals(
                 "((57 * 57) * (57 * 57))",
-                exponentiationBySquaring(Expr("57"), 4u).expr,
+                exponentiateBySquaring(Expr("57"), 4u).expr,
                 "tried exponentiationBySquaring(57, 4u)"
             )
             assertEquals(
                 "(57 * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 5u).expr,
+                exponentiateBySquaring(Expr("57"), 5u).expr,
                 "tried exponentiationBySquaring(57, 5u)"
             )
             assertEquals(
                 "((57 * 57) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 6u).expr,
+                exponentiateBySquaring(Expr("57"), 6u).expr,
                 "tried exponentiationBySquaring(57, 6u)"
             )
             assertEquals(
                 "((57 * (57 * 57)) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 7u).expr,
+                exponentiateBySquaring(Expr("57"), 7u).expr,
                 "tried exponentiationBySquaring(57, 7u)"
             )
             assertEquals(
                 "(((57 * 57) * (57 * 57)) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 8u).expr,
+                exponentiateBySquaring(Expr("57"), 8u).expr,
                 "tried exponentiationBySquaring(57, 8u)"
             )
         }
@@ -411,87 +411,87 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "57",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 0).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 0).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 0)"
             )
             assertEquals(
                 "(57 * 179)",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 1).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 1).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 1)"
             )
             assertEquals(
                 "(57 * (1 / 179))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -1).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -1).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -1)"
             )
             assertEquals(
                 "(57 * (179 * 179))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 2).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 2).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 2)"
             )
             assertEquals(
                 "(57 * ((1 / 179) * (1 / 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -2).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -2).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -2)"
             )
             assertEquals(
                 "((57 * 179) * (179 * 179))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 3).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 3).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 3)"
             )
             assertEquals(
                 "((57 * (1 / 179)) * ((1 / 179) * (1 / 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -3).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -3).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -3)"
             )
             assertEquals(
                 "(57 * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 4).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 4).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 4)"
             )
             assertEquals(
                 "(57 * (((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -4).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -4).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -4)"
             )
             assertEquals(
                 "((57 * 179) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 5).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 5).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 5)"
             )
             assertEquals(
                 "((57 * (1 / 179)) * (((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -5).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -5).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -5)"
             )
             assertEquals(
                 "((57 * (179 * 179)) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 6).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 6).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 6)"
             )
             assertEquals(
                 "((57 * ((1 / 179) * (1 / 179))) * (((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -6).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -6).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -6)"
             )
             assertEquals(
                 "(((57 * 179) * (179 * 179)) * ((179 * 179) * (179 * 179)))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 7).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 7).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 7)"
             )
             assertEquals(
                 "(((57 * (1 / 179)) * ((1 / 179) * (1 / 179))) * (((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -7).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -7).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -7)"
             )
             assertEquals(
                 "(57 * (((179 * 179) * (179 * 179)) * ((179 * 179) * (179 * 179))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), 8).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), 8).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, 8)"
             )
             assertEquals(
                 "(57 * ((((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179))) * (((1 / 179) * (1 / 179)) * ((1 / 179) * (1 / 179)))))",
-                multiplyExponentiationBySquaring(Expr("57"), Expr("179"), -8).expr,
+                multiplyExponentiatedBySquaring(Expr("57"), Expr("179"), -8).expr,
                 "tried multiplyExponentiationBySquaring(57, 179, -8)"
             )
         }
@@ -501,87 +501,87 @@ class AlgebraicStubTest {
         ExprRing {
             assertEquals(
                 "0",
-                exponentiationBySquaring(Expr("57"), 0).expr,
+                exponentiateBySquaring(Expr("57"), 0).expr,
                 "tried exponentiationBySquaring(57, 0)"
             )
             assertEquals(
                 "57",
-                exponentiationBySquaring(Expr("57"), 1).expr,
+                exponentiateBySquaring(Expr("57"), 1).expr,
                 "tried exponentiationBySquaring(57, 1)"
             )
             assertEquals(
                 "(1 / 57)",
-                exponentiationBySquaring(Expr("57"), -1).expr,
+                exponentiateBySquaring(Expr("57"), -1).expr,
                 "tried exponentiationBySquaring(57, -1)"
             )
             assertEquals(
                 "(57 * 57)",
-                exponentiationBySquaring(Expr("57"), 2).expr,
+                exponentiateBySquaring(Expr("57"), 2).expr,
                 "tried exponentiationBySquaring(57, 2)"
             )
             assertEquals(
                 "((1 / 57) * (1 / 57))",
-                exponentiationBySquaring(Expr("57"), -2).expr,
+                exponentiateBySquaring(Expr("57"), -2).expr,
                 "tried exponentiationBySquaring(57, -2)"
             )
             assertEquals(
                 "(57 * (57 * 57))",
-                exponentiationBySquaring(Expr("57"), 3).expr,
+                exponentiateBySquaring(Expr("57"), 3).expr,
                 "tried exponentiationBySquaring(57, 3)"
             )
             assertEquals(
                 "((1 / 57) * ((1 / 57) * (1 / 57)))",
-                exponentiationBySquaring(Expr("57"), -3).expr,
+                exponentiateBySquaring(Expr("57"), -3).expr,
                 "tried exponentiationBySquaring(57, -3)"
             )
             assertEquals(
                 "((57 * 57) * (57 * 57))",
-                exponentiationBySquaring(Expr("57"), 4).expr,
+                exponentiateBySquaring(Expr("57"), 4).expr,
                 "tried exponentiationBySquaring(57, 4)"
             )
             assertEquals(
                 "(((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57)))",
-                exponentiationBySquaring(Expr("57"), -4).expr,
+                exponentiateBySquaring(Expr("57"), -4).expr,
                 "tried exponentiationBySquaring(57, -4)"
             )
             assertEquals(
                 "(57 * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 5).expr,
+                exponentiateBySquaring(Expr("57"), 5).expr,
                 "tried exponentiationBySquaring(57, 5)"
             )
             assertEquals(
                 "((1 / 57) * (((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57))))",
-                exponentiationBySquaring(Expr("57"), -5).expr,
+                exponentiateBySquaring(Expr("57"), -5).expr,
                 "tried exponentiationBySquaring(57, -5)"
             )
             assertEquals(
                 "((57 * 57) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 6).expr,
+                exponentiateBySquaring(Expr("57"), 6).expr,
                 "tried exponentiationBySquaring(57, 6)"
             )
             assertEquals(
                 "(((1 / 57) * (1 / 57)) * (((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57))))",
-                exponentiationBySquaring(Expr("57"), -6).expr,
+                exponentiateBySquaring(Expr("57"), -6).expr,
                 "tried exponentiationBySquaring(57, -6)"
             )
             assertEquals(
                 "((57 * (57 * 57)) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 7).expr,
+                exponentiateBySquaring(Expr("57"), 7).expr,
                 "tried exponentiationBySquaring(57, 7)"
             )
             assertEquals(
                 "(((1 / 57) * ((1 / 57) * (1 / 57))) * (((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57))))",
-                exponentiationBySquaring(Expr("57"), -7).expr,
+                exponentiateBySquaring(Expr("57"), -7).expr,
                 "tried exponentiationBySquaring(57, -7)"
             )
             assertEquals(
                 "(((57 * 57) * (57 * 57)) * ((57 * 57) * (57 * 57)))",
-                exponentiationBySquaring(Expr("57"), 8).expr,
+                exponentiateBySquaring(Expr("57"), 8).expr,
                 "tried exponentiationBySquaring(57, 8)"
             )
             assertEquals(
                 "((((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57))) * (((1 / 57) * (1 / 57)) * ((1 / 57) * (1 / 57))))",
-                exponentiationBySquaring(Expr("57"), -8).expr,
+                exponentiateBySquaring(Expr("57"), -8).expr,
                 "tried exponentiationBySquaring(57, -8)"
             )
         }
