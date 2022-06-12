@@ -834,7 +834,12 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the integer represented as a rational function.
+     *
+     * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
+     * multiplication denominator of [this] to [other].
+     */
     public override operator fun R.div(other: Int): R =
         constructRationalFunction(
             numerator,
@@ -871,7 +876,12 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the integer represented as a rational function and the rational function.
+     *
+     * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
+     * [other] and which denominator is [other]'s numerator.
+     */
     public override operator fun Int.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -912,7 +922,9 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the constant represented as a polynomial and the rational function.
+     */
     public override operator fun C.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -943,7 +955,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the constant represented as a rational function.
+     */
     public override operator fun R.div(other: C): R =
         constructRationalFunction(
             numerator,
@@ -979,7 +993,9 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the polynomial represented as a polynomial and the rational function.
+     */
     public override operator fun P.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -1010,7 +1026,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the polynomial represented as a rational function.
+     */
     public override operator fun R.div(other: P): R =
         constructRationalFunction(
             numerator,
@@ -1050,7 +1068,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other.numerator,
             denominator * other.denominator
         )
-
+    /**
+     * Returns quotient of the rational functions.
+     */
     public override operator fun R.div(other: R): R =
         constructRationalFunction(
             numerator * other.denominator,
@@ -1060,12 +1080,12 @@ public abstract class PolynomialSpaceOfFractions<
     /**
      * Instance of zero rational function (zero of the rational functions ring).
      */
-    public override val zero: R get() = constructRationalFunction(polynomialZero)
+    public override val zero: R by lazy { constructRationalFunction(polynomialZero) }
 
     /**
      * Instance of unit polynomial (unit of the rational functions ring).
      */
-    public override val one: R get() = constructRationalFunction(polynomialOne)
+    public override val one: R by lazy { constructRationalFunction(polynomialOne) }
 }
 
 /**
@@ -1177,19 +1197,23 @@ public interface MultivariateRationalFunctionalSpace<
     /**
      * Represents the [variable] as a monic monomial.
      */
+    @JvmName("polynomialNumberVariable")
     public fun polynomialNumber(variable: V): P = +variable
     /**
      * Represents the variable as a monic monomial.
      */
+    @JvmName("asPolynomialVariable")
     public fun V.asPolynomial(): P = polynomialNumber(this)
 
     /**
      * Represents the [variable] as a rational function.
      */
+    @JvmName("numberVariable")
     public fun number(variable: V): R = number(polynomialNumber(variable))
     /**
      * Represents the variable as a rational function.
      */
+    @JvmName("asRationalFunctionVariable")
     public fun V.asRationalFunction(): R = number(this)
 
     /**
@@ -1403,10 +1427,12 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
     /**
      * Represents the [variable] as a monic monomial.
      */
+    @JvmName("polynomialNumberVariable")
     public override fun polynomialNumber(variable: V): P = polynomialRing { number(variable) }
     /**
      * Represents the variable as a monic monomial.
      */
+    @JvmName("asPolynomialVariable")
     public override fun V.asPolynomial(): P = polynomialRing { this@asPolynomial.asPolynomial() }
 
     /**

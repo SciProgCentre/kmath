@@ -435,10 +435,12 @@ public interface MultivariatePolynomialSpace<C, V, P: Polynomial<C>>: Polynomial
     /**
      * Represents the [variable] as a monic monomial.
      */
+    @JvmName("numberVariable")
     public fun number(variable: V): P = +variable
     /**
      * Represents the variable as a monic monomial.
      */
+    @JvmName("asPolynomialVariable")
     public fun V.asPolynomial(): P = number(this)
 
     /**
