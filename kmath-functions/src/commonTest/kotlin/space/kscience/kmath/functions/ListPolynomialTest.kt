@@ -12,7 +12,7 @@ import kotlin.test.*
 class ListPolynomialTest {
     @Test
     fun test_Polynomial_Int_plus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
                 ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) + -3,
@@ -52,7 +52,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Int_minus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
                 ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) - -3,
@@ -92,7 +92,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Int_times() {
-        IntModuloRing(35).listPolynomial {
+        IntModuloRing(35).listPolynomialSpace {
             assertEquals(
                 ListPolynomial(34, 2, 1, 20, 2),
                 ListPolynomial(22, 26, 13, 15, 26) * 27,
@@ -107,7 +107,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Int_Polynomial_plus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
                 -3 + ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
@@ -147,7 +147,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Int_Polynomial_minus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
                 3 - ListPolynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
@@ -187,7 +187,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Int_Polynomial_times() {
-        IntModuloRing(35).listPolynomial {
+        IntModuloRing(35).listPolynomialSpace {
             assertEquals(
                 ListPolynomial(34, 2, 1, 20, 2),
                 27 * ListPolynomial(22, 26, 13, 15, 26),
@@ -202,7 +202,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Constant_plus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
                 ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) + Rational(-3),
@@ -242,7 +242,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Constant_minus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
                 ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)) - Rational(-3),
@@ -282,7 +282,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Constant_times() {
-        IntModuloRing(35).listPolynomial {
+        IntModuloRing(35).listPolynomialSpace {
             assertEquals(
                 ListPolynomial(34, 2, 1, 20, 2),
                 ListPolynomial(22, 26, 13, 15, 26) * 27.asConstant(),
@@ -297,7 +297,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Constant_Polynomial_plus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7)),
                 Rational(-3) + ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
@@ -337,7 +337,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Constant_Polynomial_minus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
                 Rational(3) - ListPolynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
@@ -377,7 +377,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Constant_Polynomial_times() {
-        IntModuloRing(35).listPolynomial {
+        IntModuloRing(35).listPolynomialSpace {
             assertEquals(
                 ListPolynomial(34, 2, 1, 20, 2),
                 27 * ListPolynomial(22, 26, 13, 15, 26),
@@ -392,7 +392,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_unaryMinus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             assertEquals(
                 ListPolynomial(Rational(-5, 9), Rational(8, 9), Rational(8, 7)),
                 -ListPolynomial(Rational(5, 9), Rational(-8, 9), Rational(-8, 7)),
@@ -407,7 +407,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Polynomial_plus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             // (5/9 - 8/9 x - 8/7 x^2) + (-5/7 + 5/1 x + 5/8 x^2) ?= -10/63 + 37/9 x - 29/56 x^2
             assertEquals(
                 ListPolynomial(Rational(-10, 63), Rational(37, 9), Rational(-29, 56)),
@@ -440,7 +440,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Polynomial_minus() {
-        RationalField.listPolynomial {
+        RationalField.listPolynomialSpace {
             // (5/9 - 8/9 x - 8/7 x^2) - (-5/7 + 5/1 x + 5/8 x^2) ?= 80/63 - 53/9 x - 99/56 x^2
             assertEquals(
                 ListPolynomial(Rational(80, 63), Rational(-53, 9), Rational(-99, 56)),
@@ -473,7 +473,7 @@ class ListPolynomialTest {
     }
     @Test
     fun test_Polynomial_Polynomial_times() {
-        IntModuloRing(35).listPolynomial {
+        IntModuloRing(35).listPolynomialSpace {
             // (1 + x + x^2) * (1 - x + x^2) ?= 1 + x^2 + x^4
             assertEquals(
                 ListPolynomial(1, 0, 1, 0, 1),
