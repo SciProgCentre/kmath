@@ -8,13 +8,23 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.Ring
 
 
+/**
+ * Represents rational function that stores its numerator and denominator as [ListPolynomial]s.
+ */
 public data class ListRationalFunction<C>(
     public override val numerator: ListPolynomial<C>,
     public override val denominator: ListPolynomial<C>
 ) : RationalFunction<C, ListPolynomial<C>> {
-    override fun toString(): String = "RationalFunction${numerator.coefficients}/${denominator.coefficients}"
+    override fun toString(): String = "ListRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
+/**
+ * Arithmetic context for univariate rational functions with numerator and denominator represented as [ListPolynomial]s.
+ *
+ * @param C the type of constants. Polynomials have them a coefficients in their terms.
+ * @param A type of provided underlying ring of constants. It's [Ring] of [C].
+ * @param ring underlying ring of constants of type [A].
+ */
 public class ListRationalFunctionSpace<C, A : Ring<C>> (
     public val ring: A,
 ) :
@@ -30,76 +40,98 @@ public class ListRationalFunctionSpace<C, A : Ring<C>> (
             ListRationalFunction<C>,
             >() {
 
+    /**
+     * Underlying polynomial ring. Its polynomial operations are inherited by local polynomial operations.
+     */
     override val polynomialRing : ListPolynomialSpace<C, A> = ListPolynomialSpace(ring)
+    /**
+     * Constructor of [ListRationalFunction] from numerator and denominator [ListPolynomial].
+     */
     override fun constructRationalFunction(numerator: ListPolynomial<C>, denominator: ListPolynomial<C>): ListRationalFunction<C> =
         ListRationalFunction(numerator, denominator)
 
+    // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
+    //  [ListPolynomialSpace] as a context receiver
     /**
-     * Instance of zero rational function (zero of the rational functions ring).
+     * Evaluates value of [this] polynomial on provided argument.
      */
-    public override val zero: ListRationalFunction<C> = ListRationalFunction(polynomialZero, polynomialOne)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
     /**
-     * Instance of unit polynomial (unit of the rational functions ring).
+     * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    public override val one: ListRationalFunction<C> = ListRationalFunction(polynomialOne, polynomialOne)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.substitute(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.substitute(argument: ListRationalFunction<C>): ListRationalFunction<C> = this.substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListRationalFunction<C>.substitute(argument: ListPolynomial<C>): ListRationalFunction<C> = this.substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListRationalFunction<C>.substitute(argument: ListRationalFunction<C>): ListRationalFunction<C> = this.substitute(ring, argument)
 
-    // TODO: Разобрать
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.asFunction(): (C) -> C = { this.substitute(ring, it) }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.asFunctionOfConstant(): (C) -> C = { this.substitute(ring, it) }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListPolynomial<C> = { this.substitute(ring, it) }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListPolynomial<C>.asFunctionOfRationalFunction(): (ListRationalFunction<C>) -> ListRationalFunction<C> = { this.substitute(ring, it) }
+    /**
+     * Represent [this] rational function as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListRationalFunction<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListRationalFunction<C> = { this.substitute(ring, it) }
+    /**
+     * Represent [this] rational function as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun ListRationalFunction<C>.asFunctionOfRationalFunction(): (ListRationalFunction<C>) -> ListRationalFunction<C> = { this.substitute(ring, it) }
 
-//    operator fun invoke(arg: UnivariatePolynomial<T>): RationalFunction<T> =
-//        RationalFunction(
-//            numerator(arg),
-//            denominator(arg)
-//        )
-//
-//    operator fun invoke(arg: RationalFunction<T>): RationalFunction<T> {
-//        val num = numerator invokeRFTakeNumerator arg
-//        val den = denominator invokeRFTakeNumerator arg
-//        val degreeDif = numeratorDegree - denominatorDegree
-//        return if (degreeDif > 0)
-//            RationalFunction(
-//                num,
-//                multiplyByPower(den, arg.denominator, degreeDif)
-//            )
-//        else
-//            RationalFunction(
-//                multiplyByPower(num, arg.denominator, -degreeDif),
-//                den
-//            )
-//    }
-//
-//    override fun toString(): String = toString(UnivariatePolynomial.variableName)
-//
-//    fun toString(withVariableName: String = UnivariatePolynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toString(withVariableName)
-//            else -> "${numerator.toStringWithBrackets(withVariableName)}/${denominator.toStringWithBrackets(withVariableName)}"
-//        }
-//
-//    fun toStringWithBrackets(withVariableName: String = UnivariatePolynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toStringWithBrackets(withVariableName)
-//            else -> "(${numerator.toStringWithBrackets(withVariableName)}/${denominator.toStringWithBrackets(withVariableName)})"
-//        }
-//
-//    fun toReversedString(withVariableName: String = UnivariatePolynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedString(withVariableName)
-//            else -> "${numerator.toReversedStringWithBrackets(withVariableName)}/${denominator.toReversedStringWithBrackets(withVariableName)}"
-//        }
-//
-//    fun toReversedStringWithBrackets(withVariableName: String = UnivariatePolynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedStringWithBrackets(withVariableName)
-//            else -> "(${numerator.toReversedStringWithBrackets(withVariableName)}/${denominator.toReversedStringWithBrackets(withVariableName)})"
-//        }
-//
-//    fun removeZeros() =
-//        RationalFunction(
-//            numerator.removeZeros(),
-//            denominator.removeZeros()
-//        )
+    /**
+     * Evaluates value of [this] polynomial on provided argument.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun ListPolynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
+    /**
+     * Evaluates value of [this] polynomial on provided argument.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun ListPolynomial<C>.invoke(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
+    /**
+     * Evaluates value of [this] polynomial on provided argument.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun ListPolynomial<C>.invoke(argument: ListRationalFunction<C>): ListRationalFunction<C> = this.substitute(ring, argument)
+    /**
+     * Evaluates value of [this] rational function on provided argument.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun ListRationalFunction<C>.invoke(argument: ListPolynomial<C>): ListRationalFunction<C> = this.substitute(ring, argument)
+    /**
+     * Evaluates value of [this] rational function on provided argument.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun ListRationalFunction<C>.invoke(argument: ListRationalFunction<C>): ListRationalFunction<C> = this.substitute(ring, argument)
 }
