@@ -117,6 +117,7 @@ public open class ViktorFieldOpsND :
 
 public val DoubleField.viktorAlgebra: ViktorFieldOpsND get() = ViktorFieldOpsND
 
+@OptIn(UnstableKMathAPI::class)
 public open class ViktorFieldND(
     override val shape: Shape,
 ) : ViktorFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>> {

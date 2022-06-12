@@ -1,6 +1,24 @@
 rootProject.name = "kmath"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+dependencyResolutionManagement {
+    val toolsVersion: String by extra
+
+    repositories {
+        mavenLocal()
+        maven("https://repo.kotlin.link")
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    versionCatalogs {
+        create("npmlibs") {
+            from("ru.mipt.npm:version-catalog:$toolsVersion")
+        }
+    }
+}
+
 include(
     ":kmath-memory",
     ":kmath-complex",

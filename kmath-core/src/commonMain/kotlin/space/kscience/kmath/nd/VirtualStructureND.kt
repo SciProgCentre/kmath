@@ -5,12 +5,26 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.UnstableKMathAPI
+
 public open class VirtualStructureND<T>(
     override val shape: Shape,
     public val producer: (IntArray) -> T,
 ) : StructureND<T> {
     override fun get(index: IntArray): T {
-        require(check that index is in the shape boundaries)
+        requireIndexInShape(index, shape)
         return producer(index)
     }
 }
+
+@UnstableKMathAPI
+public class VirtualDoubleStructureND(
+    shape: Shape,
+    producer: (IntArray) -> Double,
+) : VirtualStructureND<Double>(shape, producer)
+
+@UnstableKMathAPI
+public class VirtualIntStructureND(
+    shape: Shape,
+    producer: (IntArray) -> Int,
+) : VirtualStructureND<Int>(shape, producer)

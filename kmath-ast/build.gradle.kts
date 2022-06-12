@@ -57,7 +57,7 @@ tasks.dokkaHtml {
 
 if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
     tasks.jvmTest {
-        jvmArgs = (jvmArgs ?: emptyList()) + listOf("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
+        jvmArgs("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
     }
 
 readme {

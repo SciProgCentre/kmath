@@ -3,10 +3,6 @@ plugins {
     id("ru.mipt.npm.gradle.native")
 }
 
-kscience {
-    useAtomic()
-}
-
 kotlin.sourceSets {
     all {
         languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
@@ -15,6 +11,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
+            api(npmlibs.atomicfu)
         }
     }
 }

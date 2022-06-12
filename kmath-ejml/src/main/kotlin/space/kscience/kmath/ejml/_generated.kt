@@ -271,7 +271,9 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
             }
 
             else -> null
-        }?.let(type::cast)
+        }?.let{
+            type.cast(it)
+        }
     }
 
     /**
@@ -505,7 +507,9 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
             }
 
             else -> null
-        }?.let(type::cast)
+        }?.let{
+            type.cast(it)
+        }
     }
 
     /**
@@ -734,7 +738,9 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
             }
 
             else -> null
-        }?.let(type::cast)
+        }?.let{
+            type.cast(it)
+        }
     }
 
     /**
@@ -963,7 +969,9 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
             }
 
             else -> null
-        }?.let(type::cast)
+        }?.let{
+            type.cast(it)
+        }
     }
 
     /**
