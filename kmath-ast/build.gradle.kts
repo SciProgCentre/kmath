@@ -24,7 +24,7 @@ kotlin.sourceSets {
 
     commonMain {
         dependencies {
-            api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
+            api("com.github.h0tk3y.betterParse:better-parse:0.4.4")
             api(project(":kmath-core"))
         }
     }
