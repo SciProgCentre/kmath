@@ -7,7 +7,6 @@ package space.kscience.kmath.test.misc
 
 import space.kscience.kmath.functions.ListPolynomial
 import space.kscience.kmath.functions.ListPolynomialSpace
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
 
@@ -109,7 +108,6 @@ class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-@OptIn(UnstableKMathAPI::class)
 class IntModuloRing : Ring<IntModulo> {
 
     val modulus: Int

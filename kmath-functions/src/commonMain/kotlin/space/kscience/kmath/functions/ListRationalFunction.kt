@@ -50,15 +50,6 @@ public class ListRationalFunctionSpace<C, A : Ring<C>> (
     override fun constructRationalFunction(numerator: ListPolynomial<C>, denominator: ListPolynomial<C>): ListRationalFunction<C> =
         ListRationalFunction(numerator, denominator)
 
-    /**
-     * Instance of zero rational function (zero of the rational functions ring).
-     */
-    public override val zero: ListRationalFunction<C> = ListRationalFunction(polynomialZero, polynomialOne)
-    /**
-     * Instance of unit polynomial (unit of the rational functions ring).
-     */
-    public override val one: ListRationalFunction<C> = ListRationalFunction(polynomialOne, polynomialOne)
-
     // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
     //  [ListPolynomialSpace] as a context receiver
     /**

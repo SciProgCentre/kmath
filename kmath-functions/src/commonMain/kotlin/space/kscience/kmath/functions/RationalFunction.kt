@@ -834,7 +834,12 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the integer represented as a rational function.
+     *
+     * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
+     * multiplication denominator of [this] to [other].
+     */
     public override operator fun R.div(other: Int): R =
         constructRationalFunction(
             numerator,
@@ -871,7 +876,12 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the integer represented as a rational function and the rational function.
+     *
+     * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
+     * [other] and which denominator is [other]'s numerator.
+     */
     public override operator fun Int.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -912,7 +922,9 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the constant represented as a polynomial and the rational function.
+     */
     public override operator fun C.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -943,7 +955,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the constant represented as a rational function.
+     */
     public override operator fun R.div(other: C): R =
         constructRationalFunction(
             numerator,
@@ -979,7 +993,9 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the polynomial represented as a polynomial and the rational function.
+     */
     public override operator fun P.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -1010,7 +1026,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the polynomial represented as a rational function.
+     */
     public override operator fun R.div(other: P): R =
         constructRationalFunction(
             numerator,
@@ -1050,7 +1068,9 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other.numerator,
             denominator * other.denominator
         )
-
+    /**
+     * Returns quotient of the rational functions.
+     */
     public override operator fun R.div(other: R): R =
         constructRationalFunction(
             numerator * other.denominator,
