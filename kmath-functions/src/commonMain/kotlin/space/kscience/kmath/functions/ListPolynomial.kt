@@ -8,23 +8,19 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.experimental.ExperimentalTypeInference
-import kotlin.jvm.JvmName
 import kotlin.math.max
 import kotlin.math.min
 
 
 /**
- * Polynomial model without fixation on specific context they are applied to.
+ * Represents univariate polynomial that stores its coefficients in a [List].
  *
  * @param coefficients constant is the leftmost coefficient.
  */
 public data class ListPolynomial<C>(
     /**
-     * List that collects coefficients of the polynomial. Every monomial `a x^d` is represented as a coefficients
-     * `a` placed into the list with index `d`. For example coefficients of polynomial `5 x^2 - 6` can be represented as
+     * List that contains coefficients of the polynomial. Every monomial `a x^d` is stored as a coefficient `a` placed
+     * into the list at index `d`. For example, coefficients of a polynomial `5 x^2 - 6` can be represented as
      * ```
      * listOf(
      *     -6, // -6 +
@@ -42,26 +38,28 @@ public data class ListPolynomial<C>(
      *     0,  // 0 x^4
      * )
      * ```
-     * It is recommended not to put extra zeros at end of the list (as for `0x^3` and `0x^4` in the example), but is not
-     * prohibited.
+     * It is not prohibited to put extra zeros at end of the list (as for `0x^3` and `0x^4` in the example). But the
+     * longer the coefficients list the worse performance of arithmetical operations performed on it. Thus, it is
+     * recommended not to put (or even to remove) extra (or useless) coefficients at the end of the coefficients list.
      */
     public val coefficients: List<C>
 ) : Polynomial<C> {
-    override fun toString(): String = "Polynomial$coefficients"
+    override fun toString(): String = "ListPolynomial$coefficients"
 }
 
 /**
- * Space of univariate polynomials constructed over ring.
+ * Arithmetic context for univariate polynomials with coefficients stored as a [List] constructed with the given [ring]
+ * of constants.
  *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
- * @param A type of underlying ring of constants. It's [Ring] of [C].
+ * @param C the type of constants. Polynomials have them a coefficients in their terms.
+ * @param A type of provided underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
 public open class ListPolynomialSpace<C, A : Ring<C>>(
     public override val ring: A,
 ) : PolynomialSpaceOverRing<C, ListPolynomial<C>, A> {
     /**
-     * Returns sum of the polynomial and the integer represented as polynomial.
+     * Returns sum of the polynomial and the integer represented as a polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
@@ -79,7 +77,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     }
             )
     /**
-     * Returns difference between the polynomial and the integer represented as polynomial.
+     * Returns difference between the polynomial and the integer represented as a polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
@@ -97,7 +95,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     }
             )
     /**
-     * Returns product of the polynomial and the integer represented as polynomial.
+     * Returns product of the polynomial and the integer represented as a polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
@@ -112,7 +110,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
         )
 
     /**
-     * Returns sum of the integer represented as polynomial and the polynomial.
+     * Returns sum of the integer represented as a polynomial and the polynomial.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
@@ -130,7 +128,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     }
             )
     /**
-     * Returns difference between the integer represented as polynomial and the polynomial.
+     * Returns difference between the integer represented as a polynomial and the polynomial.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
@@ -150,7 +148,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
                     }
             )
     /**
-     * Returns product of the integer represented as polynomial and the polynomial.
+     * Returns product of the integer represented as a polynomial and the polynomial.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -170,7 +168,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
     public override fun number(value: Int): ListPolynomial<C> = number(constantNumber(value))
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.plus(other: ListPolynomial<C>): ListPolynomial<C> =
         with(other.coefficients) {
@@ -186,7 +184,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.minus(other: ListPolynomial<C>): ListPolynomial<C> =
         with(other.coefficients) {
@@ -204,7 +202,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.times(other: ListPolynomial<C>): ListPolynomial<C> =
         ListPolynomial(
@@ -216,7 +214,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
         )
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun ListPolynomial<C>.plus(other: C): ListPolynomial<C> =
         with(coefficients) {
@@ -232,7 +230,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public override operator fun ListPolynomial<C>.minus(other: C): ListPolynomial<C> =
         with(coefficients) {
@@ -248,7 +246,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             )
         }
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun ListPolynomial<C>.times(other: C): ListPolynomial<C> =
         ListPolynomial(
@@ -262,7 +260,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
     /**
      * Converts the constant [value] to polynomial.
      */
-    public override fun number(value: C): ListPolynomial<C> = ListPolynomial(value)
+    public override fun number(value: C): ListPolynomial<C> = ListPolynomial(listOf(value))
 
     /**
      * Returns negation of the polynomial.
@@ -321,9 +319,9 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      */
     override val zero: ListPolynomial<C> = ListPolynomial(emptyList())
     /**
-     * Instance of unit constant (unit of the underlying ring).
+     * Instance of unit polynomial (unit of the polynomial ring).
      */
-    override val one: ListPolynomial<C> = ListPolynomial(listOf(constantOne))
+    override val one: ListPolynomial<C> by lazy { ListPolynomial(listOf(constantOne)) }
 
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
@@ -331,23 +329,43 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      */
     public override val ListPolynomial<C>.degree: Int get() = coefficients.lastIndex
 
+    // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
+    //  [ListPolynomialSpace] as a context receiver
+    /**
+     * Evaluates value of [this] polynomial on provided argument.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] polynomial.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.substitute(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
 
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.asFunction(): (C) -> C = { this.substitute(ring, it) }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.asFunctionOnConstants(): (C) -> C = { this.substitute(ring, it) }
+    public inline fun ListPolynomial<C>.asFunctionOfConstant(): (C) -> C = { this.substitute(ring, it) }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.asFunctionOnPolynomials(): (ListPolynomial<C>) -> ListPolynomial<C> = { this.substitute(ring, it) }
+    public inline fun ListPolynomial<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListPolynomial<C> = { this.substitute(ring, it) }
 
     /**
-     * Evaluates the polynomial for the given value [argument].
+     * Evaluates value of [this] polynomial on provided [argument].
      */
     @Suppress("NOTHING_TO_INLINE")
     public inline operator fun ListPolynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
+    /**
+     * Evaluates value of [this] polynomial on provided [argument].
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline operator fun ListPolynomial<C>.invoke(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
 }

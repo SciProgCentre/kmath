@@ -1060,12 +1060,12 @@ public abstract class PolynomialSpaceOfFractions<
     /**
      * Instance of zero rational function (zero of the rational functions ring).
      */
-    public override val zero: R get() = constructRationalFunction(polynomialZero)
+    public override val zero: R by lazy { constructRationalFunction(polynomialZero) }
 
     /**
      * Instance of unit polynomial (unit of the rational functions ring).
      */
-    public override val one: R get() = constructRationalFunction(polynomialOne)
+    public override val one: R by lazy { constructRationalFunction(polynomialOne) }
 }
 
 /**
@@ -1177,19 +1177,23 @@ public interface MultivariateRationalFunctionalSpace<
     /**
      * Represents the [variable] as a monic monomial.
      */
+    @JvmName("polynomialNumberVariable")
     public fun polynomialNumber(variable: V): P = +variable
     /**
      * Represents the variable as a monic monomial.
      */
+    @JvmName("asPolynomialVariable")
     public fun V.asPolynomial(): P = polynomialNumber(this)
 
     /**
      * Represents the [variable] as a rational function.
      */
+    @JvmName("numberVariable")
     public fun number(variable: V): R = number(polynomialNumber(variable))
     /**
      * Represents the variable as a rational function.
      */
+    @JvmName("asRationalFunctionVariable")
     public fun V.asRationalFunction(): R = number(this)
 
     /**
@@ -1403,10 +1407,12 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
     /**
      * Represents the [variable] as a monic monomial.
      */
+    @JvmName("polynomialNumberVariable")
     public override fun polynomialNumber(variable: V): P = polynomialRing { number(variable) }
     /**
      * Represents the variable as a monic monomial.
      */
+    @JvmName("asPolynomialVariable")
     public override fun V.asPolynomial(): P = polynomialRing { this@asPolynomial.asPolynomial() }
 
     /**
