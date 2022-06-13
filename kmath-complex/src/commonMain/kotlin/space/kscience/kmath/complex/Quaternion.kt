@@ -17,6 +17,52 @@ import space.kscience.kmath.structures.MutableMemoryBuffer
 import kotlin.math.*
 
 /**
+ * Represents `double`-based quaternion.
+ *
+ * @property w The first component.
+ * @property x The second component.
+ * @property y The third component.
+ * @property z The fourth component.
+ */
+public data class Quaternion(
+    val w: Double, val x: Double, val y: Double, val z: Double,
+) {
+    init {
+        require(!w.isNaN()) { "w-component of quaternion is not-a-number" }
+        require(!x.isNaN()) { "x-component of quaternion is not-a-number" }
+        require(!y.isNaN()) { "y-component of quaternion is not-a-number" }
+        require(!z.isNaN()) { "z-component of quaternion is not-a-number" }
+    }
+
+    /**
+     * Returns a string representation of this quaternion.
+     */
+    override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
+
+    public companion object : MemorySpec<Quaternion> {
+        override val objectSize: Int
+            get() = 32
+
+        override fun MemoryReader.read(offset: Int): Quaternion =
+            Quaternion(readDouble(offset), readDouble(offset + 8), readDouble(offset + 16), readDouble(offset + 24))
+
+        override fun MemoryWriter.write(offset: Int, value: Quaternion) {
+            writeDouble(offset, value.w)
+            writeDouble(offset + 8, value.x)
+            writeDouble(offset + 16, value.y)
+            writeDouble(offset + 24, value.z)
+        }
+    }
+}
+
+public fun Quaternion(w: Number, x: Number = 0.0, y: Number = 0.0, z: Number = 0.0): Quaternion = Quaternion(
+    w.toDouble(),
+    x.toDouble(),
+    y.toDouble(),
+    z.toDouble(),
+)
+
+/**
  * This quaternion's conjugate.
  */
 public val Quaternion.conjugate: Quaternion
@@ -45,23 +91,23 @@ public val Quaternion.r: Double
 @OptIn(UnstableKMathAPI::class)
 public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
     ExponentialOperations<Quaternion>, NumbersAddOps<Quaternion>, ScaleOperations<Quaternion> {
-    override val zero: Quaternion = 0.toQuaternion()
-    override val one: Quaternion = 1.toQuaternion()
+    override val zero: Quaternion = Quaternion(0.0)
+    override val one: Quaternion = Quaternion(1.0)
 
     /**
      * The `i` quaternion unit.
      */
-    public val i: Quaternion = Quaternion(0, 1)
+    public val i: Quaternion = Quaternion(0.0, 1.0, 0.0, 0.0)
 
     /**
      * The `j` quaternion unit.
      */
-    public val j: Quaternion = Quaternion(0, 0, 1)
+    public val j: Quaternion = Quaternion(0.0, 0.0, 1.0, 0.0)
 
     /**
      * The `k` quaternion unit.
      */
-    public val k: Quaternion = Quaternion(0, 0, 0, 1)
+    public val k: Quaternion = Quaternion(0.0, 0.0, 0.0, 1.0)
 
     override fun add(left: Quaternion, right: Quaternion): Quaternion =
         Quaternion(left.w + right.w, left.x + right.x, left.y + right.y, left.z + right.z)
@@ -133,7 +179,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
 
     override fun exp(arg: Quaternion): Quaternion {
         val un = arg.x * arg.x + arg.y * arg.y + arg.z * arg.z
-        if (un == 0.0) return exp(arg.w).toQuaternion()
+        if (un == 0.0) return Quaternion(exp(arg.w))
         val n1 = sqrt(un)
         val ea = exp(arg.w)
         val n2 = ea * sin(n1) / n1
@@ -158,7 +204,8 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         return Quaternion(ln(n), th * arg.x, th * arg.y, th * arg.z)
     }
 
-    override operator fun Number.plus(other: Quaternion): Quaternion = Quaternion(toDouble() + other.w, other.x, other.y, other.z)
+    override operator fun Number.plus(other: Quaternion): Quaternion =
+        Quaternion(toDouble() + other.w, other.x, other.y, other.z)
 
     override operator fun Number.minus(other: Quaternion): Quaternion =
         Quaternion(toDouble() - other.w, -other.x, -other.y, -other.z)
@@ -179,7 +226,7 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         else -> null
     }
 
-    override fun number(value: Number): Quaternion = value.toQuaternion()
+    override fun number(value: Number): Quaternion = Quaternion(value)
 
     override fun sinh(arg: Quaternion): Quaternion = (exp(arg) - exp(-arg)) / 2.0
     override fun cosh(arg: Quaternion): Quaternion = (exp(arg) + exp(-arg)) / 2.0
@@ -188,76 +235,6 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
     override fun acosh(arg: Quaternion): Quaternion = ln(arg + sqrt((arg - one) * (arg + one)))
     override fun atanh(arg: Quaternion): Quaternion = (ln(arg + one) - ln(one - arg)) / 2.0
 }
-
-/**
- * Represents `double`-based quaternion.
- *
- * @property w The first component.
- * @property x The second component.
- * @property y The third component.
- * @property z The fourth component.
- */
-@OptIn(UnstableKMathAPI::class)
-public data class Quaternion(
-    val w: Double, val x: Double, val y: Double, val z: Double,
-) {
-    public constructor(w: Number, x: Number, y: Number, z: Number) : this(
-        w.toDouble(),
-        x.toDouble(),
-        y.toDouble(),
-        z.toDouble(),
-    )
-
-    public constructor(w: Number, x: Number, y: Number) : this(w.toDouble(), x.toDouble(), y.toDouble(), 0.0)
-    public constructor(w: Number, x: Number) : this(w.toDouble(), x.toDouble(), 0.0, 0.0)
-    public constructor(w: Number) : this(w.toDouble(), 0.0, 0.0, 0.0)
-    public constructor(wx: Complex, yz: Complex) : this(wx.re, wx.im, yz.re, yz.im)
-    public constructor(wx: Complex) : this(wx.re, wx.im, 0, 0)
-
-    init {
-        require(!w.isNaN()) { "w-component of quaternion is not-a-number" }
-        require(!x.isNaN()) { "x-component of quaternion is not-a-number" }
-        require(!y.isNaN()) { "x-component of quaternion is not-a-number" }
-        require(!z.isNaN()) { "x-component of quaternion is not-a-number" }
-    }
-
-    /**
-     * Returns a string representation of this quaternion.
-     */
-    override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
-
-    public companion object : MemorySpec<Quaternion> {
-        override val objectSize: Int
-            get() = 32
-
-        override fun MemoryReader.read(offset: Int): Quaternion =
-            Quaternion(readDouble(offset), readDouble(offset + 8), readDouble(offset + 16), readDouble(offset + 24))
-
-        override fun MemoryWriter.write(offset: Int, value: Quaternion) {
-            writeDouble(offset, value.w)
-            writeDouble(offset + 8, value.x)
-            writeDouble(offset + 16, value.y)
-            writeDouble(offset + 24, value.z)
-        }
-    }
-}
-
-/**
- * Creates a quaternion with real part equal to this real.
- *
- * @receiver the real part.
- * @return a new quaternion.
- */
-public fun Number.toQuaternion(): Quaternion = Quaternion(this)
-
-/**
- * Creates a quaternion with `w`-component equal to `re`-component of given complex and `x`-component equal to
- * `im`-component of given complex.
- *
- * @receiver the complex number.
- * @return a new quaternion.
- */
-public fun Complex.toQuaternion(): Quaternion = Quaternion(this)
 
 /**
  * Creates a new buffer of quaternions with the specified [size], where each element is calculated by calling the

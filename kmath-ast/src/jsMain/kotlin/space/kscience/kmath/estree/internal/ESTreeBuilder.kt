@@ -14,11 +14,12 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
         @Suppress("UNUSED_VARIABLE")
         override fun invoke(arguments: Map<Symbol, T>): T {
-            val e = executable
-            val c = constants
+            //val e = executable
+            //val c = constants
             val a = js("{}")
             arguments.forEach { (key, value) -> a[key.identity] = value }
-            return js("e(c, a)").unsafeCast<T>()
+            return executable.call(constants, a).unsafeCast<T>()
+            //return js("e(c, a)").unsafeCast<T>()
         }
     }
 
