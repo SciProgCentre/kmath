@@ -36,7 +36,7 @@ public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T>
         )
     }
 
-    return ESTreeBuilder<T> { visit(typed) }.instance
+    return ESTreeBuilder { visit(typed) }.instance
 }
 
 /**
