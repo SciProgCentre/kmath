@@ -24,9 +24,12 @@ import kotlin.math.*
  * @property y The third component.
  * @property z The fourth component.
  */
-public data class Quaternion(
-    val w: Double, val x: Double, val y: Double, val z: Double,
-) {
+public class Quaternion(
+    public val w: Double,
+    public val x: Double,
+    public val y: Double,
+    public val z: Double,
+) : Buffer<Double> {
     init {
         require(!w.isNaN()) { "w-component of quaternion is not-a-number" }
         require(!x.isNaN()) { "x-component of quaternion is not-a-number" }
@@ -39,12 +42,49 @@ public data class Quaternion(
      */
     override fun toString(): String = "($w + $x * i + $y * j + $z * k)"
 
-    public companion object : MemorySpec<Quaternion> {
-        override val objectSize: Int
-            get() = 32
+    override val size: Int get() = 4
 
-        override fun MemoryReader.read(offset: Int): Quaternion =
-            Quaternion(readDouble(offset), readDouble(offset + 8), readDouble(offset + 16), readDouble(offset + 24))
+    override fun get(index: Int): Double = when (index) {
+        0 -> w
+        1 -> x
+        2 -> y
+        3 -> z
+        else -> error("Index $index out of bounds [0,3]")
+    }
+
+    override fun iterator(): Iterator<Double> = listOf(w, x, y, z).iterator()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as Quaternion
+
+        if (w != other.w) return false
+        if (x != other.x) return false
+        if (y != other.y) return false
+        if (z != other.z) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = w.hashCode()
+        result = 31 * result + x.hashCode()
+        result = 31 * result + y.hashCode()
+        result = 31 * result + z.hashCode()
+        return result
+    }
+
+    public companion object : MemorySpec<Quaternion> {
+        override val objectSize: Int get() = 32
+
+        override fun MemoryReader.read(offset: Int): Quaternion = Quaternion(
+            readDouble(offset),
+            readDouble(offset + 8),
+            readDouble(offset + 16),
+            readDouble(offset + 24)
+        )
 
         override fun MemoryWriter.write(offset: Int, value: Quaternion) {
             writeDouble(offset, value.w)
@@ -66,30 +106,22 @@ public fun Quaternion(w: Number, x: Number = 0.0, y: Number = 0.0, z: Number = 0
  * This quaternion's conjugate.
  */
 public val Quaternion.conjugate: Quaternion
-    get() = QuaternionField { z - x * i - y * j - z * k }
+    get() = Quaternion(w, -x, -y, -z)
 
 /**
  * This quaternion's reciprocal.
  */
 public val Quaternion.reciprocal: Quaternion
     get() {
-        QuaternionField {
-            val n = norm(this@reciprocal)
-            return conjugate / (n * n)
-        }
+        val norm2 = (w * w + x * x + y * y + z * z)
+        return Quaternion(w / norm2, -x / norm2, -y / norm2, -z / norm2)
     }
-
-/**
- * Absolute value of the quaternion.
- */
-public val Quaternion.r: Double
-    get() = sqrt(w * w + x * x + y * y + z * z)
 
 /**
  * A field of [Quaternion].
  */
 @OptIn(UnstableKMathAPI::class)
-public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>, PowerOperations<Quaternion>,
+public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Double>, PowerOperations<Quaternion>,
     ExponentialOperations<Quaternion>, NumbersAddOps<Quaternion>, ScaleOperations<Quaternion> {
     override val zero: Quaternion = Quaternion(0.0)
     override val one: Quaternion = Quaternion(1.0)
@@ -217,7 +249,12 @@ public object QuaternionField : Field<Quaternion>, Norm<Quaternion, Quaternion>,
         Quaternion(toDouble() * arg.w, toDouble() * arg.x, toDouble() * arg.y, toDouble() * arg.z)
 
     override fun Quaternion.unaryMinus(): Quaternion = Quaternion(-w, -x, -y, -z)
-    override fun norm(arg: Quaternion): Quaternion = sqrt(arg.conjugate * arg)
+    override fun norm(arg: Quaternion): Double = sqrt(
+        arg.w.pow(2) +
+                arg.x.pow(2) +
+                arg.y.pow(2) +
+                arg.z.pow(2)
+    )
 
     override fun bindSymbolOrNull(value: String): Quaternion? = when (value) {
         "i" -> i

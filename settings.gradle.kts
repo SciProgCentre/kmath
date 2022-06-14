@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 include(
+    ":test-utils",
     ":kmath-memory",
     ":kmath-complex",
     ":kmath-core",
