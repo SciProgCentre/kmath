@@ -1076,6 +1076,14 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other.denominator,
             denominator * other.numerator
         )
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: R, exponent: UInt): R =
+        constructRationalFunction(
+            power(arg.numerator, exponent),
+            power(arg.denominator, exponent),
+        )
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).

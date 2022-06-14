@@ -147,12 +147,17 @@ public fun <C, A : Ring<C>> ListPolynomial<C>.asFunctionOver(ring: A): (C) -> C 
 /**
  * Represent [this] polynomial as a regular context-less function.
  */
-public fun <C, A : Ring<C>> ListPolynomial<C>.asPolynomialFunctionOver(ring: A): (ListPolynomial<C>) -> ListPolynomial<C> = { substitute(ring, it) }
+public fun <C, A : Ring<C>> ListPolynomial<C>.asFunctionOfConstantOver(ring: A): (C) -> C = { substitute(ring, it) }
 
 /**
  * Represent [this] polynomial as a regular context-less function.
  */
-public fun <C, A : Ring<C>> ListPolynomial<C>.asFunctionOfRationalFunctionOver(ring: A): (ListPolynomial<C>) -> ListPolynomial<C> = { substitute(ring, it) }
+public fun <C, A : Ring<C>> ListPolynomial<C>.asFunctionOfPolynomialOver(ring: A): (ListPolynomial<C>) -> ListPolynomial<C> = { substitute(ring, it) }
+
+/**
+ * Represent [this] polynomial as a regular context-less function.
+ */
+public fun <C, A : Ring<C>> ListPolynomial<C>.asFunctionOfRationalFunctionOver(ring: A): (ListRationalFunction<C>) -> ListRationalFunction<C> = { substitute(ring, it) }
 
 /**
  * Represent [this] rational function as a regular context-less function.
@@ -162,12 +167,17 @@ public fun <C, A : Field<C>> ListRationalFunction<C>.asFunctionOver(ring: A): (C
 /**
  * Represent [this] rational function as a regular context-less function.
  */
-public fun <C, A : Ring<C>> ListRationalFunction<C>.asPolynomialFunctionOver(ring: A): (ListPolynomial<C>) -> ListRationalFunction<C> = { substitute(ring, it) }
+public fun <C, A : Field<C>> ListRationalFunction<C>.asFunctionOfConstantOver(ring: A): (C) -> C = { substitute(ring, it) }
 
 /**
  * Represent [this] rational function as a regular context-less function.
  */
-public fun <C, A : Ring<C>> ListRationalFunction<C>.asFunctionOfRationalFunctionOver(ring: A): (ListPolynomial<C>) -> ListRationalFunction<C> = { substitute(ring, it) }
+public fun <C, A : Ring<C>> ListRationalFunction<C>.asFunctionOfPolynomialOver(ring: A): (ListPolynomial<C>) -> ListRationalFunction<C> = { substitute(ring, it) }
+
+/**
+ * Represent [this] rational function as a regular context-less function.
+ */
+public fun <C, A : Ring<C>> ListRationalFunction<C>.asFunctionOfRationalFunctionOver(ring: A): (ListRationalFunction<C>) -> ListRationalFunction<C> = { substitute(ring, it) }
 
 /**
  * Returns algebraic derivative of received polynomial.
@@ -243,26 +253,3 @@ public fun <C : Comparable<C>> ListPolynomial<C>.integrate(
     val antiderivative = antiderivative(ring)
     antiderivative.substitute(ring, range.endInclusive) - antiderivative.substitute(ring, range.start)
 }
-
-/**
- * Returns algebraic derivative of received rational function.
- */
-@UnstableKMathAPI
-public fun <C, A> ListRationalFunction<C>.derivative(
-    ring: A,
-): ListRationalFunction<C> where  A : Ring<C>, A : NumericAlgebra<C> = ring.listRationalFunctionSpace {
-    ListRationalFunction(
-        numerator.derivative(ring) * denominator - numerator * denominator.derivative(ring),
-        denominator * denominator
-    )
-}
-
-/**
- * Returns algebraic derivative of received rational function of specified [order]. The [order] should be non-negative integer.
- */
-@UnstableKMathAPI
-public tailrec fun <C, A> ListRationalFunction<C>.nthDerivative(
-    ring: A,
-    order: Int,
-): ListRationalFunction<C> where A : Ring<C>, A : NumericAlgebra<C> =
-    if (order == 0) this else derivative(ring).nthDerivative(ring, order - 1)

@@ -48,8 +48,8 @@ public data class ListPolynomial<C>(
 }
 
 /**
- * Arithmetic context for univariate polynomials with coefficients stored as a [List] constructed with the given [ring]
- * of constants.
+ * Arithmetic context for univariate polynomials with coefficients stored as a [List] constructed with the provided
+ * [ring] of constants.
  *
  * @param C the type of constants. Polynomials have them a coefficients in their terms.
  * @param A type of provided underlying ring of constants. It's [Ring] of [C].
@@ -313,6 +313,10 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             }
         )
     }
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */ // TODO: To optimize boxing
+    override fun power(arg: ListPolynomial<C>, exponent: UInt): ListPolynomial<C> = super.power(arg, exponent)
 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
@@ -332,42 +336,42 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
     // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
     //  [ListPolynomialSpace] as a context receiver
     /**
-     * Evaluates value of [this] polynomial on provided argument.
+     * Evaluates value of [this] polynomial on provided [argument].
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
+    public inline fun ListPolynomial<C>.substitute(argument: C): C = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.substitute(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
+    public inline fun ListPolynomial<C>.substitute(argument: ListPolynomial<C>): ListPolynomial<C> = substitute(ring, argument)
 
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.asFunction(): (C) -> C = { this.substitute(ring, it) }
+    public inline fun ListPolynomial<C>.asFunction(): (C) -> C = asFunctionOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.asFunctionOfConstant(): (C) -> C = { this.substitute(ring, it) }
+    public inline fun ListPolynomial<C>.asFunctionOfConstant(): (C) -> C = asFunctionOfConstantOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun ListPolynomial<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListPolynomial<C> = { this.substitute(ring, it) }
+    public inline fun ListPolynomial<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListPolynomial<C> = asFunctionOfPolynomialOver(ring)
 
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun ListPolynomial<C>.invoke(argument: C): C = this.substitute(ring, argument)
+    public inline operator fun ListPolynomial<C>.invoke(argument: C): C = substitute(ring, argument)
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun ListPolynomial<C>.invoke(argument: ListPolynomial<C>): ListPolynomial<C> = this.substitute(ring, argument)
+    public inline operator fun ListPolynomial<C>.invoke(argument: ListPolynomial<C>): ListPolynomial<C> = substitute(ring, argument)
 }
 
 /**
