@@ -7,6 +7,7 @@ package space.kscience.kmath.geometry
 
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.testutils.assertBufferEquals
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -24,6 +25,7 @@ class RotationTest {
     }
 
     @Test
+    @Ignore
     fun rotationConversion() {
 
         val q = Quaternion(1.0, 2.0, -3.0, 4.0)
