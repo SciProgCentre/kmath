@@ -170,10 +170,7 @@ public fun main() {
 
 Result LaTeX:
 
-<div style="background-color:white;">
-
-![](https://latex.codecogs.com/gif.latex?%5Coperatorname{exp}%5C,%5Cleft(%5Csqrt{x}%5Cright)-%5Cfrac{%5Cfrac{%5Coperatorname{arcsin}%5C,%5Cleft(2%5C,x%5Cright)}{2%5Ctimes10^{10}%2Bx^{3}}}{12}+x^{2/3})
-</div>
+$$\operatorname{exp}\\,\left(\sqrt{x}\right)-\frac{\frac{\operatorname{arcsin}\\,\left(2\\,x\right)}{2\times10^{10}+x^{3}}}{12}+x^{2/3}$$
 
 Result MathML (can be used with MathJax or other renderers):
 

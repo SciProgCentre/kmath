@@ -11,13 +11,13 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.0"
+    version = "0.3.1-dev-1"
 }
 
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
-    plugins.withId("org.jetbrains.dokka"){
+    plugins.withId("org.jetbrains.dokka") {
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
             dependsOn(tasks["assemble"])
 
@@ -48,6 +48,18 @@ subprojects {
                     "https://breandan.net/kotlingrad/kotlingrad/",
                     "https://breandan.net/kotlingrad/kotlingrad/kotlingrad/package-list",
                 )
+            }
+        }
+    }
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+            sourceSets {
+                val commonTest by getting {
+                    dependencies {
+                        implementation(projects.testUtils)
+                    }
+                }
             }
         }
     }

@@ -319,7 +319,9 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
     }
 
             else -> null
-        }?.let(type::cast)
+        }?.let{
+            type.cast(it)
+        }
     }
 
     /**

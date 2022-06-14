@@ -71,7 +71,7 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
     protected open fun visitBinary(mst: TypedMst.Binary<T>): ExpressionRef =
         error("Binary operation ${mst.operation} not defined in $this")
 
-    protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
+    protected open fun createModule(): BinaryenModule = space.kscience.kmath.internal.binaryen.Module()
 
     protected fun visit(node: TypedMst<T>): ExpressionRef = when (node) {
         is TypedMst.Constant -> visitNumber(

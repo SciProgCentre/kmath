@@ -6,10 +6,23 @@
 package space.kscience.kmath.complex
 
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class QuaternionFieldTest {
+internal class QuaternionTest {
+
+    @Test
+    fun testNorm() {
+        assertEquals(2.0, QuaternionField.norm(Quaternion(1.0, 1.0, 1.0, 1.0)))
+    }
+
+    @Test
+    fun testInverse() = QuaternionField {
+        val q = Quaternion(1.0, 2.0, -3.0, 4.0)
+        assertBufferEquals(one, q * q.reciprocal, 1e-4)
+    }
+
     @Test
     fun testAddition() {
         assertEquals(Quaternion(42, 42), QuaternionField { Quaternion(16, 16) + Quaternion(26, 26) })

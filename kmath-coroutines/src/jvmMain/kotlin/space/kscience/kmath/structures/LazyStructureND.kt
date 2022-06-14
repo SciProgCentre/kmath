@@ -18,12 +18,12 @@ public class LazyStructureND<out T>(
 ) : StructureND<T> {
     private val cache: MutableMap<IntArray, Deferred<T>> = HashMap()
 
-    public fun deferred(index: IntArray): Deferred<T> = cache.getOrPut(index) {
+    public fun async(index: IntArray): Deferred<T> = cache.getOrPut(index) {
         scope.async(context = Dispatchers.Math) { function(index) }
     }
 
-    public suspend fun await(index: IntArray): T = deferred(index).await()
-    override operator fun get(index: IntArray): T = runBlocking { deferred(index).await() }
+    public suspend fun await(index: IntArray): T = async(index).await()
+    override operator fun get(index: IntArray): T = runBlocking { async(index).await() }
 
     @OptIn(PerformancePitfall::class)
     override fun elements(): Sequence<Pair<IntArray, T>> {
@@ -33,8 +33,8 @@ public class LazyStructureND<out T>(
     }
 }
 
-public fun <T> StructureND<T>.deferred(index: IntArray): Deferred<T> =
-    if (this is LazyStructureND<T>) deferred(index) else CompletableDeferred(get(index))
+public fun <T> StructureND<T>.async(index: IntArray): Deferred<T> =
+    if (this is LazyStructureND<T>) this@async.async(index) else CompletableDeferred(get(index))
 
 public suspend fun <T> StructureND<T>.await(index: IntArray): T =
     if (this is LazyStructureND<T>) await(index) else get(index)

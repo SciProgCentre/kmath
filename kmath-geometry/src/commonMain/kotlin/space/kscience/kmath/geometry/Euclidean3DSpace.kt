@@ -6,12 +6,11 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Buffer
 import kotlin.math.sqrt
 
-@OptIn(UnstableKMathAPI::class)
 public interface Vector3D : Point<Double>, Vector {
     public val x: Double
     public val y: Double
@@ -30,6 +29,19 @@ public interface Vector3D : Point<Double>, Vector {
 
 @Suppress("FunctionName")
 public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
+
+public fun Buffer<Double>.asVector3D(): Vector3D = object : Vector3D {
+    init {
+        require(this@asVector3D.size == 3) { "Buffer of size 3 is required for Vector3D" }
+    }
+
+    override val x: Double get() = this@asVector3D[0]
+    override val y: Double get() = this@asVector3D[1]
+    override val z: Double get() = this@asVector3D[2]
+
+    override fun toString(): String = this@asVector3D.toString()
+
+}
 
 public val Vector3D.r: Double get() = Euclidean3DSpace { norm() }
 
