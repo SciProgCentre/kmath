@@ -138,6 +138,10 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
     override fun equals(other: Any?): Boolean = false
 
     override fun hashCode(): Int = 0
+
+    override fun toString(): String {
+        return StructureND.toString(structure)
+    }
 }
 
 /**

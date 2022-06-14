@@ -14,7 +14,6 @@ import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.invoke
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -33,9 +32,9 @@ public val Quaternion.vector: Vector3D
         val sint2 = sqrt(1 - w * w)
 
         return object : Vector3D {
-            override val x: Double get() = this@vector.x/sint2
-            override val y: Double get() = this@vector.y/sint2
-            override val z: Double get() = this@vector.z/sint2
+            override val x: Double get() = this@vector.x / sint2
+            override val y: Double get() = this@vector.y / sint2
+            override val z: Double get() = this@vector.z / sint2
             override fun toString(): String = listOf(x, y, z).toString()
         }
     }
@@ -75,26 +74,43 @@ public fun Quaternion.toRotationMatrix(
 }
 
 /**
- * taken from https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
+ * taken from https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
  */
 public fun Quaternion.Companion.fromRotationMatrix(matrix: Matrix<Double>): Quaternion {
-    val t: Double
-    val q = if (matrix[2, 2] < 0) {
-        if (matrix[0, 0] > matrix[1, 1]) {
-            t = 1 + matrix[0, 0] - matrix[1, 1] - matrix[2, 2]
-            Quaternion(t, matrix[0, 1] + matrix[1, 0], matrix[2, 0] + matrix[0, 2], matrix[1, 2] - matrix[2, 1])
-        } else {
-            t = 1 - matrix[0, 0] + matrix[1, 1] - matrix[2, 2]
-            Quaternion(matrix[0, 1] + matrix[1, 0], t, matrix[1, 2] + matrix[2, 1], matrix[2, 0] - matrix[0, 2])
-        }
+    require(matrix.colNum == 3 && matrix.rowNum == 3) { "Rotation matrix should be 3x3 but is ${matrix.rowNum}x${matrix.colNum}" }
+    val trace = matrix[0, 0] + matrix[1, 1] + matrix[2, 2]
+
+    return if (trace > 0) {
+        val s = sqrt(trace + 1.0) * 2 // S=4*qw
+        Quaternion(
+            w = 0.25 * s,
+            x = (matrix[2, 1] - matrix[1, 2]) / s,
+            y = (matrix[0, 2] - matrix[2, 0]) / s,
+            z = (matrix[1, 0] - matrix[0, 1]) / s,
+        )
+    } else if ((matrix[0, 0] > matrix[1, 1]) && (matrix[0, 0] > matrix[2, 2])) {
+        val s = sqrt(1.0 + matrix[0, 0] - matrix[1, 1] - matrix[2, 2]) * 2 // S=4*qx
+        Quaternion(
+            w = (matrix[2, 1] - matrix[1, 2]) / s,
+            x = 0.25 * s,
+            y = (matrix[0, 1] + matrix[1, 0]) / s,
+            z = (matrix[0, 2] + matrix[2, 0]) / s,
+        )
+    } else if (matrix[1, 1] > matrix[2, 2]) {
+        val s = sqrt(1.0 + matrix[1, 1] - matrix[0, 0] - matrix[2, 2]) * 2 // S=4*qy
+        Quaternion(
+            w = (matrix[0, 2] - matrix[2, 0]) / s,
+            x = (matrix[0, 1] + matrix[1, 0]) / s,
+            y = 0.25 * s,
+            z = (matrix[1, 2] + matrix[2, 1]) / s,
+        )
     } else {
-        if (matrix[0, 0] < -matrix[1, 1]) {
-            t = 1 - matrix[0, 0] - matrix[1, 1] + matrix[2, 2]
-            Quaternion(matrix[2, 0] + matrix[0, 2], matrix[1, 2] + matrix[2, 1], t, matrix[0, 1] - matrix[1, 0])
-        } else {
-            t = 1 + matrix[0, 0] + matrix[1, 1] + matrix[2, 2]
-            Quaternion(matrix[1, 2] - matrix[2, 1], matrix[2, 0] - matrix[0, 2], matrix[0, 1] - matrix[1, 0], t)
-        }
+        val s = sqrt(1.0 + matrix[2, 2] - matrix[0, 0] - matrix[1, 1]) * 2 // S=4*qz
+        Quaternion(
+            w = (matrix[1, 0] - matrix[0, 1]) / s,
+            x = (matrix[0, 2] + matrix[2, 0]) / s,
+            y = (matrix[1, 2] + matrix[2, 1]) / s,
+            z = 0.25 * s,
+        )
     }
-    return QuaternionField.invoke { q * (0.5 / sqrt(t)) }
 }
