@@ -14,37 +14,28 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
     private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
         @Suppress("UNUSED_VARIABLE")
         override fun invoke(arguments: Map<Symbol, T>): T {
-            //val e = executable
-            //val c = constants
+            val e = executable
+            val c = constants
             val a = js("{}")
             arguments.forEach { (key, value) -> a[key.identity] = value }
-            return executable.call(constants, a).unsafeCast<T>()
-            //return js("e(c, a)").unsafeCast<T>()
+            return js("e(c, a)").unsafeCast<T>()
         }
     }
 
+    @Suppress("UNUSED_VARIABLE")
     val instance: Expression<T> by lazy {
         val node = Program(
             sourceType = "script",
-            VariableDeclaration(
-                kind = "var",
-                VariableDeclarator(
-                    id = Identifier("executable"),
-                    init = FunctionExpression(
-                        params = arrayOf(Identifier("constants"), Identifier("arguments")),
-                        body = BlockStatement(ReturnStatement(bodyCallback())),
-                    ),
-                ),
-            ),
+            ReturnStatement(bodyCallback())
         )
 
-        eval(generate(node))
-        GeneratedExpression(js("executable"), constants.toTypedArray())
+        val code = generate(node)
+        GeneratedExpression(js("new Function('constants', 'arguments_0', code)"), constants.toTypedArray())
     }
 
     private val constants = mutableListOf<Any>()
 
-    fun constant(value: Any?) = when {
+    fun constant(value: Any?): BaseExpression = when {
         value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" ->
             SimpleLiteral(value)
 
@@ -62,7 +53,8 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         }
     }
 
-    fun variable(name: Symbol): BaseExpression = call(getOrFail, Identifier("arguments"), SimpleLiteral(name.identity))
+    fun variable(name: Symbol): BaseExpression =
+        call(getOrFail, Identifier("arguments_0"), SimpleLiteral(name.identity))
 
     fun call(function: Function<T>, vararg args: BaseExpression): BaseExpression = SimpleCallExpression(
         optional = false,
