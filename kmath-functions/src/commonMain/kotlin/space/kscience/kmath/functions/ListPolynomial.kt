@@ -100,14 +100,17 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun ListPolynomial<C>.times(other: Int): ListPolynomial<C> =
-        if (other == 0) zero
-        else ListPolynomial(
-            coefficients
-                .toMutableList()
-                .apply {
-                    for (deg in indices) this[deg] = this[deg] * other
-                }
-        )
+        when (other) {
+            0 -> zero
+            1 -> this
+            else -> ListPolynomial(
+                coefficients
+                    .toMutableList()
+                    .apply {
+                        for (deg in indices) this[deg] = this[deg] * other
+                    }
+            )
+        }
 
     /**
      * Returns sum of the integer represented as a polynomial and the polynomial.
@@ -133,34 +136,39 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: ListPolynomial<C>): ListPolynomial<C> =
-        if (this == 0) other
-        else
-            ListPolynomial(
-                other.coefficients
-                    .toMutableList()
-                    .apply {
-                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
+        ListPolynomial(
+            other.coefficients
+                .toMutableList()
+                .apply {
+                    if (this@minus == 0) {
+                        indices.forEach { this[it] = -this[it] }
+                    } else {
+                        (1..lastIndex).forEach { this[it] = -this[it] }
 
                         val result = this@minus - getOrElse(0) { constantZero }
 
-                        if(size == 0) add(result)
+                        if (size == 0) add(result)
                         else this[0] = result
                     }
-            )
+                }
+        )
     /**
      * Returns product of the integer represented as a polynomial and the polynomial.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: ListPolynomial<C>): ListPolynomial<C> =
-        if (this == 0) zero
-        else ListPolynomial(
-            other.coefficients
-                .toMutableList()
-                .apply {
-                    for (deg in indices) this[deg] = this@times * this[deg]
-                }
-        )
+        when (this) {
+            0 -> zero
+            1 -> other
+            else -> ListPolynomial(
+                other.coefficients
+                    .toMutableList()
+                    .apply {
+                        for (deg in indices) this[deg] = this@times * this[deg]
+                    }
+            )
+        }
 
     /**
      * Converts the integer [value] to polynomial.
@@ -192,7 +200,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             else ListPolynomial(
                 toMutableList()
                     .apply {
-                        forEachIndexed { index, c -> if (index != 0) this[index] = -c }
+                        (1 .. lastIndex).forEach { this[it] = -this[it] }
 
                         val result = if (size == 0) this@minus else this@minus - get(0)
 

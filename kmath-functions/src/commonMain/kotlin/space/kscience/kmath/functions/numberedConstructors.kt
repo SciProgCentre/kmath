@@ -38,6 +38,38 @@ internal inline fun <C> NumberedPolynomialAsIs(pairs: Collection<Pair<List<UInt>
 internal inline fun <C> NumberedPolynomialAsIs(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
 
 /**
+ * Constructs [NumberedPolynomial] with provided coefficients map [coefs]. The map is used as is.
+ *
+ * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+@DelicatePolynomialAPI
+public inline fun <C> NumberedPolynomialWithoutCheck(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(coefs)
+
+/**
+ * Constructs [NumberedPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The collections will be transformed to map with [toMap] and then will be used as is.
+ *
+ * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+@DelicatePolynomialAPI
+public inline fun <C> NumberedPolynomialWithoutCheck(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
+
+/**
+ * Constructs [NumberedPolynomial] with provided array of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The array will be transformed to map with [toMap] and then will be used as is.
+ *
+ * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@Suppress("FunctionName", "NOTHING_TO_INLINE")
+@DelicatePolynomialAPI
+public inline fun <C> NumberedPolynomialWithoutCheck(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
+
+/**
  * Constructs [NumberedPolynomial] with provided coefficients map [coefs].
  *
  * [coefs] will be "cleaned up":
@@ -245,11 +277,12 @@ public class NumberedPolynomialTermSignatureBuilder {
      * Declaring another power of the same variable will increase its degree by received degree.
      */
     public infix fun Int.inPowerOf(deg: UInt) {
-        if (this > signature.lastIndex) {
-            signature.addAll(List(this - signature.lastIndex - 1) { 0u })
+        val index = this - 1
+        if (index > signature.lastIndex) {
+            signature.addAll(List(index - signature.lastIndex - 1) { 0u })
             signature.add(deg)
         } else {
-            signature[this] += deg
+            signature[index] += deg
         }
     }
     /**
@@ -334,22 +367,26 @@ public class NumberedPolynomialBuilder<C>(
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
-/**
- * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of constants.
- *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
- * ```
- * Int.algebra {
- *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
- *     }
- * }
- * ```
- */
-@UnstableKMathAPI
-@Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> A.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
+///**
+// * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of constants.
+// *
+// * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+// * ```
+// * Int.algebra {
+// *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
+// *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
+// *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+// *     }
+// * }
+// * ```
+// */
+// FIXME: For now this fabric does not let next two fabrics work. (See KT-52803.) Possible feature solutions:
+//  1. `LowPriorityInOverloadResolution` becomes public. Then it should be applied to this function.
+//  2. Union types are implemented. Then all three functions should be rewritten
+//     as one with single union type as a (context) receiver.
+//@UnstableKMathAPI
+//@Suppress("FunctionName")
+//public inline fun <C, A: Ring<C>> A.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of [NumberedPolynomial]s.
  *
@@ -365,7 +402,7 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(initialCapacity: Int = 0,
  */
 @UnstableKMathAPI
 @Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(initialCapacity: Int, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] field of [NumberedRationalFunction]s.
  *
@@ -381,7 +418,7 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  */
 @UnstableKMathAPI
 @Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(initialCapacity: Int, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 

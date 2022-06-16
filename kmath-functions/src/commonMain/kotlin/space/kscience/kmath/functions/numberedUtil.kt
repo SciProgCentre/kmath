@@ -86,7 +86,7 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>
 
 /**
  * Substitutes provided arguments [args] into [this] polynomial.
-     */ // TODO: To optimize boxing
+ */ // TODO: To optimize boxing
 @JvmName("substitutePolynomial")
 public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, NumberedPolynomial<C>>) : NumberedPolynomial<C> =
     ring.numberedPolynomialSpace {

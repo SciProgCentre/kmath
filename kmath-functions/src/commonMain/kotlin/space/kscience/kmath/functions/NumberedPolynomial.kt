@@ -98,14 +98,17 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun NumberedPolynomial<C>.times(other: Int): NumberedPolynomial<C> =
-        if (other == 0) zero
-        else NumberedPolynomialAsIs(
-            coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this[degs]!! * other
-                }
-        )
+        when (other) {
+            0 -> zero
+            1 -> this
+            else -> NumberedPolynomialAsIs(
+                coefficients
+                    .toMutableMap()
+                    .apply {
+                        for (degs in keys) this[degs] = this[degs]!! * other
+                    }
+            )
+        }
 
     /**
      * Returns sum of the integer represented as a polynomial and the polynomial.
@@ -130,16 +133,20 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        if (this == 0) other
-        else
-            NumberedPolynomialAsIs(
-                other.coefficients
-                    .toMutableMap()
-                    .apply {
+        NumberedPolynomialAsIs(
+            other.coefficients
+                .toMutableMap()
+                .apply {
+                    if (this@minus == 0) {
+                        forEach { (key, value) -> this[key] = -value }
+                    } else {
+                        forEach { (key, value) -> if (key.isNotEmpty()) this[key] = -value }
+
                         val degs = emptyList<UInt>()
 
                         this[degs] = this@minus - getOrElse(degs) { constantZero }
                     }
+                }
             )
     /**
      * Returns product of the integer represented as a polynomial and the polynomial.
@@ -147,14 +154,17 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        if (this == 0) zero
-        else NumberedPolynomialAsIs(
-            other.coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this@times * this[degs]!!
-                }
-        )
+        when (this) {
+            0 -> zero
+            1 -> other
+            else -> NumberedPolynomialAsIs(
+                other.coefficients
+                    .toMutableMap()
+                    .apply {
+                        for (degs in keys) this[degs] = this@times * this[degs]!!
+                    }
+            )
+        }
 
     /**
      * Converts the integer [value] to polynomial.
@@ -185,7 +195,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             else NumberedPolynomialAsIs(
                 toMutableMap()
                     .apply {
-                        forEach { (degs, c) -> if(degs.isNotEmpty()) this[degs] = -c }
+                        forEach { (degs, c) -> if (degs.isNotEmpty()) this[degs] = -c }
 
                         val degs = emptyList<UInt>()
 
@@ -266,7 +276,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun NumberedPolynomial<C>.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                other.coefficients.mapValuesTo(this) { it.value }
+                coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
             }
         )
@@ -276,7 +286,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun NumberedPolynomial<C>.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                other.coefficients.mapValuesTo(this) { it.value }
+                coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
             }
         )

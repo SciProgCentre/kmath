@@ -7,6 +7,7 @@ package space.kscience.kmath.test.misc
 
 import space.kscience.kmath.functions.ListPolynomial
 import space.kscience.kmath.functions.ListPolynomialSpace
+import space.kscience.kmath.functions.PolynomialSpaceOverRing
 import space.kscience.kmath.operations.Ring
 
 
@@ -136,3 +137,6 @@ fun ListPolynomialSpace<IntModulo, IntModuloRing>.ListPolynomial(vararg coefs: I
     ListPolynomial(coefs.map { IntModulo(it, ring.modulus) })
 fun IntModuloRing.ListPolynomial(vararg coefs: Int): ListPolynomial<IntModulo> =
     ListPolynomial(coefs.map { IntModulo(it, modulus) })
+
+fun IntModuloRing.m(arg: Int) = IntModulo(arg, modulus)
+fun PolynomialSpaceOverRing<IntModulo, *, IntModuloRing>.m(arg: Int) = IntModulo(arg, ring.modulus)

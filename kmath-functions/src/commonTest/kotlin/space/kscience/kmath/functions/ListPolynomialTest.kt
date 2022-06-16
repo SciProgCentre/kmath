@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("LocalVariableName")
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.test.misc.*
@@ -28,25 +30,32 @@ class ListPolynomialTest {
                 ListPolynomial(Rational(-2)) + 2,
                 "test 3"
             )
-            assertEquals(
-                ListPolynomial(),
-                ListPolynomial<Rational>() + 0,
+            val polynomial_4 = ListPolynomial<Rational>()
+            assertSame(
+                polynomial_4,
+                polynomial_4 + 0,
                 "test 4"
+            )
+            val polynomial_5 = ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7))
+            assertSame(
+                polynomial_5,
+                polynomial_5 + 0,
+                "test 5"
             )
             assertEquals(
                 ListPolynomial(Rational(-1), Rational(0), Rational(0), Rational(0)),
                 ListPolynomial(Rational(-2), Rational(0), Rational(0), Rational(0)) + 1,
-                "test 5"
+                "test 6"
             )
             assertEquals(
                 ListPolynomial(Rational(-1)),
                 ListPolynomial(Rational(-2)) + 1,
-                "test 6"
+                "test 7"
             )
             assertEquals(
                 ListPolynomial(Rational(2)),
                 ListPolynomial<Rational>() + 2,
-                "test 7"
+                "test 8"
             )
         }
     }
@@ -68,25 +77,32 @@ class ListPolynomialTest {
                 ListPolynomial(Rational(2)) - 2,
                 "test 3"
             )
-            assertEquals(
-                ListPolynomial(),
-                ListPolynomial<Rational>() - 0,
+            val polynomial_4 = ListPolynomial<Rational>()
+            assertSame(
+                polynomial_4,
+                polynomial_4 - 0,
                 "test 4"
+            )
+            val polynomial_5 = ListPolynomial(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7))
+            assertEquals(
+                polynomial_5,
+                polynomial_5 - 0,
+                "test 5"
             )
             assertEquals(
                 ListPolynomial(Rational(1), Rational(0), Rational(0), Rational(0)),
                 ListPolynomial(Rational(2), Rational(0), Rational(0), Rational(0)) - 1,
-                "test 5"
+                "test 6"
             )
             assertEquals(
                 ListPolynomial(Rational(1)),
                 ListPolynomial(Rational(2)) - 1,
-                "test 6"
+                "test 7"
             )
             assertEquals(
                 ListPolynomial(Rational(-2)),
                 ListPolynomial<Rational>() - 2,
-                "test 7"
+                "test 8"
             )
         }
     }
@@ -102,6 +118,17 @@ class ListPolynomialTest {
                 ListPolynomial(0, 0, 0, 0, 0),
                 ListPolynomial(7, 0, 49, 21, 14) * 15,
                 "test 2"
+            )
+            val polynomial = ListPolynomial(22, 26, 13, 15, 26)
+            assertSame(
+                zero,
+                polynomial * 0,
+                "test 3"
+            )
+            assertSame(
+                polynomial,
+                polynomial * 1,
+                "test 4"
             )
         }
     }
@@ -123,25 +150,32 @@ class ListPolynomialTest {
                 2 + ListPolynomial(Rational(-2)),
                 "test 3"
             )
-            assertEquals(
-                ListPolynomial(),
-                0 + ListPolynomial(),
+            val polynomial_4 = ListPolynomial<Rational>()
+            assertSame(
+                polynomial_4,
+                0 + polynomial_4,
                 "test 4"
+            )
+            val polynomial_5 = ListPolynomial<Rational>(Rational(-22, 9), Rational(-8, 9), Rational(-8, 7))
+            assertSame(
+                polynomial_5,
+                0 + polynomial_5,
+                "test 5"
             )
             assertEquals(
                 ListPolynomial(Rational(-1), Rational(0), Rational(0), Rational(0)),
                 1 + ListPolynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
-                "test 5"
+                "test 6"
             )
             assertEquals(
                 ListPolynomial(Rational(-1)),
                 1 + ListPolynomial(Rational(-2)),
-                "test 6"
+                "test 7"
             )
             assertEquals(
                 ListPolynomial(Rational(2)),
                 2 + ListPolynomial(),
-                "test 7"
+                "test 8"
             )
         }
     }
@@ -164,24 +198,29 @@ class ListPolynomialTest {
                 "test 3"
             )
             assertEquals(
+                ListPolynomial(Rational(-32, 9), Rational(-8, -9), Rational(8, 7)),
+                0 - ListPolynomial(Rational(32, 9), Rational(-8, 9), Rational(-8, 7)),
+                "test 4"
+            )
+            assertEquals(
                 ListPolynomial(),
                 0 - ListPolynomial(),
-                "test 4"
+                "test 5"
             )
             assertEquals(
                 ListPolynomial(Rational(1), Rational(0), Rational(0), Rational(0)),
                 -1 - ListPolynomial(Rational(-2), Rational(0), Rational(0), Rational(0)),
-                "test 5"
+                "test 6"
             )
             assertEquals(
                 ListPolynomial(Rational(1)),
                 -1 - ListPolynomial(Rational(-2)),
-                "test 6"
+                "test 7"
             )
             assertEquals(
                 ListPolynomial(Rational(-2)),
                 -2 - ListPolynomial(),
-                "test 7"
+                "test 8"
             )
         }
     }
@@ -197,6 +236,17 @@ class ListPolynomialTest {
                 ListPolynomial(0, 0, 0, 0, 0),
                 15 * ListPolynomial(7, 0, 49, 21, 14),
                 "test 2"
+            )
+            val polynomial = ListPolynomial(22, 26, 13, 15, 26)
+            assertSame(
+                zero,
+                0 * polynomial,
+                "test 3"
+            )
+            assertSame(
+                polynomial,
+                1 * polynomial,
+                "test 4"
             )
         }
     }

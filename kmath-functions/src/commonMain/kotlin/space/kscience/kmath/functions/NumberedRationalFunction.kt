@@ -119,11 +119,13 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] rational function.
@@ -134,11 +136,13 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided polynomial [argument] into [this] rational function.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] rational function.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] polynomial.
@@ -149,11 +153,13 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
     public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
     public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] rational function.
@@ -164,11 +170,13 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided polynomial [arguments] into [this] rational function.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
     public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided rational function [arguments] into [this] rational function.
      */
     @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
     public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided constant [arguments] into [this] polynomial.
@@ -222,7 +230,7 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided [arguments] into [this] polynomial.
      */
     @Suppress("NOTHING_TO_INLINE")
-    @JvmName("invokePolynomial")
+    @JvmName("invokeRationalFunction")
     public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided [arguments] into [this] rational function.
@@ -234,6 +242,6 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
      * Substitutes provided [arguments] into [this] rational function.
      */
     @Suppress("NOTHING_TO_INLINE")
-    @JvmName("invokePolynomial")
+    @JvmName("invokeRationalFunction")
     public inline operator fun NumberedRationalFunction<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
 }
