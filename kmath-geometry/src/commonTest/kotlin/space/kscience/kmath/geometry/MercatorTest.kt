@@ -6,19 +6,35 @@
 package space.kscience.kmath.geometry
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class MercatorTest {
 
     @Test
-    fun mercatorOffset(){
+    fun boundaries() {
+        assertEquals(GeodeticCoordinates.ofDegrees(45.0, 20.0), GeodeticCoordinates.ofDegrees(45.0, 200.0))
+    }
+
+    @Test
+    fun webMercatorConversion() = with(WebMercatorAlgebra) {
+        val mskCoordinates = GeodeticCoordinates.ofDegrees(55.7558, 37.6173)
+        val m = mskCoordinates.toMercator(2.0)
+        val r = m.toGeodetic()
+
+        assertEquals(mskCoordinates.longitude, r.longitude,1e-4)
+        assertEquals(mskCoordinates.latitude, r.latitude,1e-4)
+    }
+
+    @Test
+    fun webMercatorOffset() {
         val mskCoordinates = GeodeticCoordinates.ofDegrees(55.7558, 37.6173)
         val spbCoordinates = GeodeticCoordinates.ofDegrees(59.9311, 30.3609)
 
-        val offset =  WebMercatorAlgebra.computeOffset(mskCoordinates, spbCoordinates)
+        val offset = WebMercatorAlgebra.computeOffset(mskCoordinates, spbCoordinates)
 
         assertTrue { offset.x in -127.0..128.0 }
         assertTrue { offset.y in -127.0..128.0 }
-        assertTrue { offset.zoom > 1.0 }
+        assertTrue { offset.zoom > 0.0 }
     }
 }
