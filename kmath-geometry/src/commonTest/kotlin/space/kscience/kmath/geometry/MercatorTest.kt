@@ -22,8 +22,8 @@ class MercatorTest {
         val m = mskCoordinates.toMercator()
         val r = m.toGeodetic()
 
-        assertEquals(mskCoordinates.longitude, r.longitude,1e-4)
-        assertEquals(mskCoordinates.latitude, r.latitude,1e-4)
+        assertEquals(mskCoordinates.longitude, r.longitude, 1e-4)
+        assertEquals(mskCoordinates.latitude, r.latitude, 1e-4)
     }
 
     @Test
@@ -32,8 +32,8 @@ class MercatorTest {
         val m = mskCoordinates.toMercator(2.0)
         val r = m.toGeodetic()
 
-        assertEquals(mskCoordinates.longitude, r.longitude,1e-4)
-        assertEquals(mskCoordinates.latitude, r.latitude,1e-4)
+        assertEquals(mskCoordinates.longitude, r.longitude, 1e-4)
+        assertEquals(mskCoordinates.latitude, r.latitude, 1e-4)
     }
 
     @Test
@@ -46,5 +46,13 @@ class MercatorTest {
         assertTrue { offset.x in -127.0..128.0 }
         assertTrue { offset.y in -127.0..128.0 }
         assertTrue { offset.zoom > 0.0 }
+    }
+
+    @Test
+    fun webMercatorAbsolute() {
+        val mskCoordinates = GeodeticCoordinates.ofDegrees(55.7558, 37.6173)
+        val wmc = with(WebMercatorAlgebra) { mskCoordinates.toMercator(13.0) }
+        assertEquals(wmc.x, 1267712.0, 50.0)
+        assertEquals(wmc.y, 655616.0, 50.0)
     }
 }
