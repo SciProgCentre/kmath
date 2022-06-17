@@ -7,9 +7,12 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.invoke
+import kotlin.jvm.JvmName
 
 
+/**
+ * Represents multivariate rational function that stores its numerator and denominator as [LabeledPolynomial]s.
+ */
 public class LabeledRationalFunction<C>(
     public override val numerator: LabeledPolynomial<C>,
     public override val denominator: LabeledPolynomial<C>
@@ -17,6 +20,13 @@ public class LabeledRationalFunction<C>(
     override fun toString(): String = "LabeledRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
+/**
+ * Arithmetic context for univariate rational functions with numerator and denominator represented as [LabeledPolynomial]s.
+ *
+ * @param C the type of constants. Polynomials have them a coefficients in their terms.
+ * @param A type of provided underlying ring of constants. It's [Ring] of [C].
+ * @param ring underlying ring of constants of type [A].
+ */
 public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     public val ring: A,
 ) :
@@ -34,106 +44,53 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
             LabeledRationalFunction<C>,
             >() {
 
+    /**
+     * Underlying polynomial ring. Its polynomial operations are inherited by local polynomial operations.
+     */
     override val polynomialRing : LabeledPolynomialSpace<C, A> = LabeledPolynomialSpace(ring)
+    /**
+     * Constructor of rational functions (of type [LabeledRationalFunction]) from numerator and denominator (of type [LabeledPolynomial]).
+     */
     override fun constructRationalFunction(
         numerator: LabeledPolynomial<C>,
         denominator: LabeledPolynomial<C>
     ): LabeledRationalFunction<C> =
         LabeledRationalFunction<C>(numerator, denominator)
 
+    // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
+    //  [ListPolynomialSpace] as a context receiver
     /**
-     * Instance of zero rational function (zero of the rational functions ring).
+     * Substitutes provided constant [argument] into [this] polynomial.
      */
-    public override val zero: LabeledRationalFunction<C> = LabeledRationalFunction<C>(polynomialZero, polynomialOne)
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, C>): LabeledPolynomial<C> = substitute(ring, argument)
     /**
-     * Instance of unit polynomial (unit of the rational functions ring).
+     * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    public override val one: LabeledRationalFunction<C> = LabeledRationalFunction<C>(polynomialOne, polynomialOne)
-
-    // TODO: Разобрать
-
-//    operator fun invoke(arg: Map<Symbol, C>): LabeledRationalFunction<C> =
-//        LabeledRationalFunction(
-//            numerator(arg),
-//            denominator(arg)
-//        )
-//
-//    @JvmName("invokeLabeledPolynomial")
-//    operator fun invoke(arg: Map<Symbol, LabeledPolynomial<C>>): LabeledRationalFunction<C> =
-//        LabeledRationalFunction(
-//            numerator(arg),
-//            denominator(arg)
-//        )
-//
-//    @JvmName("invokeLabeledRationalFunction")
-//    operator fun invoke(arg: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> {
-//        var num = numerator invokeRFTakeNumerator arg
-//        var den = denominator invokeRFTakeNumerator arg
-//        for (variable in variables) if (variable in arg) {
-//            val degreeDif = degrees[variable]!!
-//            if (degreeDif > 0)
-//                den = multiplyByPower(den, arg[variable]!!.denominator, degreeDif)
-//            else
-//                num = multiplyByPower(num, arg[variable]!!.denominator, -degreeDif)
-//        }
-//        return LabeledRationalFunction(num, den)
-//    }
-//
-//    override fun toString(): String = toString(emptyMap())
-//
-//    fun toString(names: Map<Symbol, String> = emptyMap()): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toString(names)
-//            else -> "${numerator.toStringWithBrackets(names)}/${denominator.toStringWithBrackets(names)}"
-//        }
-//
-//    fun toString(namer: (Symbol) -> String): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toString(namer)
-//            else -> "${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)}"
-//        }
-//
-//    fun toStringWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toStringWithBrackets(names)
-//            else -> "(${numerator.toStringWithBrackets(names)}/${denominator.toStringWithBrackets(names)})"
-//        }
-//
-//    fun toStringWithBrackets(namer: (Symbol) -> String): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toStringWithBrackets(namer)
-//            else -> "(${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)})"
-//        }
-//
-//    fun toReversedString(names: Map<Symbol, String> = emptyMap()): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedString(names)
-//            else -> "${numerator.toReversedStringWithBrackets(names)}/${denominator.toReversedStringWithBrackets(names)}"
-//        }
-//
-//    fun toReversedString(namer: (Symbol) -> String): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedString(namer)
-//            else -> "${numerator.toReversedStringWithBrackets(namer)}/${denominator.toReversedStringWithBrackets(namer)}"
-//        }
-//
-//    fun toReversedStringWithBrackets(names: Map<Symbol, String> = emptyMap()): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedStringWithBrackets(names)
-//            else -> "(${numerator.toReversedStringWithBrackets(names)}/${denominator.toReversedStringWithBrackets(names)})"
-//        }
-//
-//    fun toReversedStringWithBrackets(namer: (Symbol) -> String): String =
-//        when (true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedStringWithBrackets(namer)
-//            else -> "(${numerator.toReversedStringWithBrackets(namer)}/${denominator.toReversedStringWithBrackets(namer)})"
-//        }
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, LabeledPolynomial<C>>): LabeledPolynomial<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided constant [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, C>): LabeledRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, LabeledPolynomial<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
 }

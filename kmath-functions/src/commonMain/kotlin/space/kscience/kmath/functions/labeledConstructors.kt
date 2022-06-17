@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("FunctionName", "NOTHING_TO_INLINE")
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
@@ -15,189 +17,502 @@ import space.kscience.kmath.operations.Ring
  */
 internal fun Map<Symbol, UInt>.cleanUp() = filterValues { it > 0U }
 
-// Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs]. The map is used as is.
+ */
+@PublishedApi
+internal inline fun <C> LabeledPolynomialAsIs(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial<C>(coefs)
 
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(coefs, toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(coefs, toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(coefs)
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The collections will be transformed to map with [toMap] and then will be used as is.
+ */
+@PublishedApi
+internal inline fun <C> LabeledPolynomialAsIs(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial<C>(pairs.toMap())
 
-    val fixedCoefs = LinkedHashMap<Map<Symbol, UInt>, C>(coefs.size)
+/**
+ * Constructs [LabeledPolynomial] with provided array of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The array will be transformed to map with [toMap] and then will be used as is.
+ */
+@PublishedApi
+internal inline fun <C> LabeledPolynomialAsIs(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial<C>(pairs.toMap())
+
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs]. The map is used as is.
+ *
+ * **Be sure you read description of [LabeledPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@DelicatePolynomialAPI
+public inline fun <C> LabeledPolynomialWithoutCheck(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial<C>(coefs)
+
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The collections will be transformed to map with [toMap] and then will be used as is.
+ *
+ * **Be sure you read description of [LabeledPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@DelicatePolynomialAPI
+public inline fun <C> LabeledPolynomialWithoutCheck(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial<C>(pairs.toMap())
+
+/**
+ * Constructs [LabeledPolynomial] with provided array of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ * The array will be transformed to map with [toMap] and then will be used as is.
+ *
+ * **Be sure you read description of [LabeledPolynomial.coefficients]. Otherwise, you may make a mistake that will
+ * cause wrong computation result or even runtime error.**
+ */
+@DelicatePolynomialAPI
+public inline fun <C> LabeledPolynomialWithoutCheck(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial<C>(pairs.toMap())
+
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs].
+ *
+ * [coefs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
+    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
 
     for (entry in coefs) {
         val key = entry.key.cleanUp()
         val value = entry.value
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
     }
 
     return LabeledPolynomial<C>(fixedCoefs)
 }
 
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs, toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs, toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
-
-    val fixedCoefs = LinkedHashMap<Map<Symbol, UInt>, C>(pairs.size)
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, add: (C, C) -> C) : LabeledPolynomial<C> {
+    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
 
     for (entry in pairs) {
         val key = entry.first.cleanUp()
         val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
     }
 
     return LabeledPolynomial<C>(fixedCoefs)
 }
 
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs = pairs, toCheckInput = toCheckInput)
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
-internal inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> = ring.LabeledPolynomial(pairs = pairs, toCheckInput = toCheckInput)
-@Suppress("FunctionName")
-internal fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, toCheckInput: Boolean = true) : LabeledPolynomial<C> {
-    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
-
-    val fixedCoefs = LinkedHashMap<Map<Symbol, UInt>, C>(pairs.size)
+/**
+ * Constructs [LabeledPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public fun <C> LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
+    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
 
     for (entry in pairs) {
         val key = entry.first.cleanUp()
         val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
     }
 
     return LabeledPolynomial<C>(fixedCoefs)
 }
 
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
+// Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs].
+ *
+ * [coefs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, ::add)
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs].
+ *
+ * [coefs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs) { left: C, right: C -> left + right }
 
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
+/**
+ * Constructs [LabeledPolynomial] with provided coefficients map [coefs].
+ *
+ * [coefs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs) { left: C, right: C -> left + right }
 
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, ::add)
+
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs) { left: C, right: C -> left + right }
+/**
+ * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs) { left: C, right: C -> left + right }
+
+/**
+ * Constructs [LabeledPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
+/**
+ * Constructs [LabeledPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
+/**
+ * Constructs [LabeledPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
+ *
+ * [pairs] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
+
+/**
+ * Converts [this] constant to [LabeledPolynomial].
+ */
+public inline fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to this))
+
+///**
+//// * Converts [this] variable to [LabeledPolynomial].
+//// */
 //context(A)
-//public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to one))
+//public inline fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to one))
+///**
+// * Converts [this] variable to [LabeledPolynomial].
+// */
 //context(LabeledPolynomialSpace<C, A>)
-//public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
+//public inline fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
+///**
+// * Converts [this] variable to [LabeledPolynomial].
+// */
 //context(LabeledRationalFunctionSpace<C, A>)
-//public fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
+//public inline fun <C, A: Ring<C>> Symbol.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf(this to 1u) to constantOne))
 
-public fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Symbol, UInt>() to this))
-
+/**
+ * Marks DSL that allows to more simply create [LabeledPolynomial]s with good performance.
+ *
+ * For example, polynomial `5 a^2 c^3 - 6 b` can be described as
+ * ```
+ * Int.algebra {
+ *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
+ *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
+ *         (-6) { b inPowerOf 1u }              // (-6) b^1
+ *     }
+ * }
+ * ```
+ */
 @DslMarker
 @UnstableKMathAPI
 internal annotation class LabeledPolynomialConstructorDSL
 
+/**
+ * Builder of [LabeledPolynomial] signature. It should be used as an implicit context for lambdas that describe term signature.
+ */
 @UnstableKMathAPI
 @LabeledPolynomialConstructorDSL
 public class LabeledPolynomialTermSignatureBuilder {
+    /**
+     * Signature storage. Any declaration of any variable's power updates the storage by increasing corresponding value.
+     * Afterward the storage will be used as a resulting signature.
+     */
     private val signature: MutableMap<Symbol, UInt> = LinkedHashMap()
-    public fun build(): Map<Symbol, UInt> = signature
+
+    /**
+     * Builds the resulting signature.
+     *
+     * In fact, it just returns [signature] as regular signature of type `List<UInt>`.
+     */
+    @PublishedApi
+    internal fun build(): Map<Symbol, UInt> = signature
+
+    /**
+     * Declares power of [this] variable of degree [deg].
+     *
+     * Declaring another power of the same variable will increase its degree by received degree.
+     */
     public infix fun Symbol.inPowerOf(deg: UInt) {
         signature[this] = deg
     }
+    /**
+     * Declares power of [this] variable of degree [deg].
+     *
+     * Declaring another power of the same variable will increase its degree by received degree.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Symbol.pow(deg: UInt): Unit = this inPowerOf deg
+    /**
+     * Declares power of [this] variable of degree [deg].
+     *
+     * Declaring another power of the same variable will increase its degree by received degree.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Symbol.`in`(deg: UInt): Unit = this inPowerOf deg
+    /**
+     * Declares power of [this] variable of degree [deg].
+     *
+     * Declaring another power of the same variable will increase its degree by received degree.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Symbol.of(deg: UInt): Unit = this inPowerOf deg
 }
 
+/**
+ * Builder of [LabeledPolynomial]. It should be used as an implicit context for lambdas that describe [LabeledPolynomial].
+ */
 @UnstableKMathAPI
-public class LabeledPolynomialBuilder<C>(private val zero: C, private val add: (C, C) -> C, capacity: Int = 0) {
-    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = LinkedHashMap(capacity)
-    public fun build(): LabeledPolynomial<C> = LabeledPolynomial<C>(coefficients)
-    public operator fun C.invoke(block: LabeledPolynomialTermSignatureBuilder.() -> Unit) {
-        val signature = LabeledPolynomialTermSignatureBuilder().apply(block).build()
-        coefficients[signature] = add(coefficients.getOrElse(signature) { zero }, this@invoke)
+public class LabeledPolynomialBuilder<C>(
+    /**
+     * Summation operation that will be used to sum coefficients of monomials of same signatures.
+     */
+    private val add: (C, C) -> C,
+    /**
+     * Initial capacity of coefficients map.
+     */
+    initialCapacity: Int = 0
+) {
+    /**
+     * Coefficients storage. Any declaration of any monomial updates the storage.
+     * Afterward the storage will be used as a resulting coefficients map.
+     */
+    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = LinkedHashMap(initialCapacity)
+
+    /**
+     * Builds the resulting coefficients map.
+     *
+     * In fact, it just returns [coefficients] as regular coefficients map of type `Map<List<UInt>, C>`.
+     */
+    @PublishedApi
+    internal fun build(): LabeledPolynomial<C> = LabeledPolynomial<C>(coefficients)
+
+    /**
+     * Declares monomial with [this] coefficient and provided [signature].
+     *
+     * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
+     * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
+     */
+    public infix fun C.with(signature: Map<Symbol, UInt>) {
+        coefficients[signature] = if (signature in coefficients) add(coefficients[signature]!!, this@with) else this@with
     }
+    /**
+     * Declares monomial with [this] coefficient and signature constructed by [block].
+     *
+     * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
+     * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
+     */
     @Suppress("NOTHING_TO_INLINE")
     public inline infix fun C.with(noinline block: LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
-    @Suppress("NOTHING_TO_INLINE")
-    public inline infix fun (LabeledPolynomialTermSignatureBuilder.() -> Unit).with(coef: C): Unit = coef.invoke(this)
-    @Suppress("NOTHING_TO_INLINE")
-    public infix fun sig(block: LabeledPolynomialTermSignatureBuilder.() -> Unit): LabeledPolynomialTermSignatureBuilder.() -> Unit = block
+    /**
+     * Declares monomial with [this] coefficient and signature constructed by [block].
+     *
+     * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
+     * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
+     */
+    public inline operator fun C.invoke(block: LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit =
+        this with LabeledPolynomialTermSignatureBuilder().apply(block).build()
 }
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
+///**
+// * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of constants.
+// *
+// * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+// * ```
+// * Int.algebra {
+// *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
+// *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
+// *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+// *     }
+// * }
+// * ```
+// */
+// FIXME: For now this fabric does not let next two fabrics work. (See KT-52803.) Possible feature solutions:
+//  1. `LowPriorityInOverloadResolution` becomes public. Then it should be applied to this function.
+//  2. Union types are implemented. Then all three functions should be rewritten
+//     as one with single union type as a (context) receiver.
+//@UnstableKMathAPI
+//public inline fun <C, A: Ring<C>> A.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(::add, initialCapacity).apply(block).build()
+/**
+ * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of [LabeledPolynomial]s.
+ *
+ * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * ```
+ * Int.algebra {
+ *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
+ *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
+ *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *     }
+ * }
+ * ```
+ */
 @UnstableKMathAPI
-@LabeledPolynomialConstructorDSL
-@Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> A.LabeledPolynomial(block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(zero, ::add).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+/**
+ * Creates [LabeledPolynomial] with lambda [block] in context of [this] field of [LabeledRationalFunction]s.
+ *
+ * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * ```
+ * Int.algebra {
+ *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
+ *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
+ *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *     }
+ * }
+ * ```
+ */
 @UnstableKMathAPI
-@LabeledPolynomialConstructorDSL
-@Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> A.LabeledPolynomial(capacity: Int, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(zero, ::add, capacity).apply(block).build()
-@UnstableKMathAPI
-@LabeledPolynomialConstructorDSL
-@Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(constantZero, { left: C, right: C -> left + right}).apply(block).build()
-@UnstableKMathAPI
-@LabeledPolynomialConstructorDSL
-@Suppress("FunctionName")
-public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(capacity: Int, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(constantZero, { left: C, right: C -> left + right}, capacity).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(denominatorCoefficients, toCheckInput = true)
-    )
-@Suppress("FunctionName")
+/**
+ * Constructs [LabeledRationalFunction] with provided coefficients maps [numeratorCoefficients] and [denominatorCoefficients].
+ *
+ * The maps will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. the maps' keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
 public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
     LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(denominatorCoefficients, toCheckInput = true)
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomial(denominatorCoefficients)
     )
-@Suppress("FunctionName")
+/**
+ * Constructs [LabeledRationalFunction] with provided coefficients maps [numeratorCoefficients] and [denominatorCoefficients].
+ *
+ * The maps will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. the maps' keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
+public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>, denominatorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomial(denominatorCoefficients)
+    )
+
+/**
+ * Constructs [LabeledRationalFunction] with provided [numerator] and unit denominator.
+ */
+public fun <C, A: Ring<C>> A.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
+    LabeledRationalFunction<C>(numerator, LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one)))
+/**
+ * Constructs [LabeledRationalFunction] with provided [numerator] and unit denominator.
+ */
 public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
     LabeledRationalFunction<C>(numerator, polynomialOne)
-@Suppress("FunctionName")
-public fun <C, A: Ring<C>> A.LabeledRationalFunction(numerator: LabeledPolynomial<C>): LabeledRationalFunction<C> =
-    LabeledRationalFunction<C>(numerator, LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one), toCheckInput = false))
-@Suppress("FunctionName")
+
+/**
+ * Constructs [LabeledRationalFunction] with provided coefficients map [numeratorCoefficients] for numerator and unit
+ * denominator.
+ *
+ * [numeratorCoefficients] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [numeratorCoefficients]'s keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
 public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
     LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
+        LabeledPolynomial(numeratorCoefficients),
         polynomialOne
     )
-@Suppress("FunctionName")
+/**
+ * Constructs [LabeledRationalFunction] with provided coefficients map [numeratorCoefficients] for numerator and unit
+ * denominator.
+ *
+ * [numeratorCoefficients] will be "cleaned up":
+ * 1. Zeros at the ends of terms' signatures (e.g. [numeratorCoefficients]'s keys) will be removed. (See [cleanUp].)
+ * 1. Terms that happen to have the same signature will be summed up.
+ * 1. New map will be formed of resulting terms.
+ */
 public fun <C, A: Ring<C>> A.LabeledRationalFunction(numeratorCoefficients: Map<Map<Symbol, UInt>, C>): LabeledRationalFunction<C> =
     LabeledRationalFunction<C>(
-        LabeledPolynomial(numeratorCoefficients, toCheckInput = true),
-        LabeledPolynomial(mapOf(emptyMap<Symbol, UInt>() to one), toCheckInput = false)
+        LabeledPolynomial(numeratorCoefficients),
+        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to one))
     )
 
+///**
+// * Converts [this] constant to [LabeledRationalFunction].
+// */
 //context(A)
-//public fun <C, A: Ring<C>> Symbol.asLabeledRationalFunction() : LabeledRationalFunction<C> = LabeledRationalFunction(asLabeledPolynomial())
+//public fun <C, A: Ring<C>> C.asLabeledRationalFunction() : LabeledRationalFunction<C> =
+//    LabeledRationalFunction(
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to this)),
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to one))
+//    )
+///**
+// * Converts [this] constant to [LabeledRationalFunction].
+// */
 //context(LabeledRationalFunctionSpace<C, A>)
-//public fun <C, A: Ring<C>> Symbol.asLabeledRationalFunction() : LabeledRationalFunction<C> = LabeledRationalFunction(asLabeledPolynomial())
+//public fun <C, A: Ring<C>> C.asLabeledRationalFunction() : LabeledRationalFunction<C> =
+//    LabeledRationalFunction(
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to this)),
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to constantOne))
+//    )
 
+///**
+// * Converts [this] variable to [LabeledRationalFunction].
+// */
 //context(A)
-//public fun <C, A: Ring<C>> C.asLabeledRationalFunction() : LabeledRationalFunction<C> = LabeledRationalFunction(asLabeledPolynomial())
+//public fun <C, A: Ring<C>> Symbol.asLabeledRationalFunction() : LabeledRationalFunction<C> =
+//    LabeledRationalFunction(
+//        LabeledPolynomialAsIs(mapOf(mapOf(this to 1u) to one)),
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to one))
+//    )
+///**
+// * Converts [this] variable to [LabeledRationalFunction].
+// */
 //context(LabeledRationalFunctionSpace<C, A>)
-//public fun <C, A: Ring<C>> C.asLabeledRationalFunction() : LabeledRationalFunction<C> = LabeledRationalFunction(asLabeledPolynomial())
+//public fun <C, A: Ring<C>> Symbol.asLabeledRationalFunction() : LabeledRationalFunction<C> =
+//    LabeledRationalFunction(
+//        LabeledPolynomialAsIs(mapOf(mapOf(this to 1u) to constantOne)),
+//        LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to constantOne))
+//    )

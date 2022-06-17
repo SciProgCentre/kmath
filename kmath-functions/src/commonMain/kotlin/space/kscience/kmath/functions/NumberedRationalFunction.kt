@@ -7,9 +7,14 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Buffer
+import kotlin.jvm.JvmName
 import kotlin.math.max
 
 
+/**
+ * Represents multivariate rational function that stores its numerator and denominator as [NumberedPolynomial]s.
+ */
 public class NumberedRationalFunction<C> internal constructor(
     public override val numerator: NumberedPolynomial<C>,
     public override val denominator: NumberedPolynomial<C>
@@ -17,6 +22,13 @@ public class NumberedRationalFunction<C> internal constructor(
     override fun toString(): String = "NumberedRationalFunction${numerator.coefficients}/${denominator.coefficients}"
 }
 
+/**
+ * Arithmetic context for univariate rational functions with numerator and denominator represented as [NumberedPolynomial]s.
+ *
+ * @param C the type of constants. Polynomials have them a coefficients in their terms.
+ * @param A type of provided underlying ring of constants. It's [Ring] of [C].
+ * @param ring underlying ring of constants of type [A].
+ */
 public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     public val ring: A,
 ) :
@@ -32,21 +44,18 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
             NumberedRationalFunction<C>,
             >() {
 
-    override val polynomialRing : NumberedPolynomialSpace<C, A> = NumberedPolynomialSpace(ring)
-    override fun constructRationalFunction(
+    /**
+     * Underlying polynomial ring. Its polynomial operations are inherited by local polynomial operations.
+     */
+    public override val polynomialRing : NumberedPolynomialSpace<C, A> = NumberedPolynomialSpace(ring)
+    /**
+     * Constructor of rational functions (of type [NumberedRationalFunction]) from numerator and denominator (of type [NumberedPolynomial]).
+     */
+    protected override fun constructRationalFunction(
         numerator: NumberedPolynomial<C>,
         denominator: NumberedPolynomial<C>
     ): NumberedRationalFunction<C> =
         NumberedRationalFunction(numerator, denominator)
-
-    /**
-     * Instance of zero rational function (zero of the rational functions ring).
-     */
-    public override val zero: NumberedRationalFunction<C> = NumberedRationalFunction(polynomialZero, polynomialOne)
-    /**
-     * Instance of unit polynomial (unit of the rational functions ring).
-     */
-    public override val one: NumberedRationalFunction<C> = NumberedRationalFunction(polynomialOne, polynomialOne)
 
     /**
      * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
@@ -99,90 +108,140 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
                 }
             }.count { it }
 
-    // TODO: Разобрать
+    // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
+    //  [ListPolynomialSpace] as a context receiver
+    /**
+     * Substitutes provided constant [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, C>): NumberedPolynomial<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided constant [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, C>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided constant [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<C>): NumberedPolynomial<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided rational function [argument] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided constant [argument] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedRationalFunction<C>.substitute(argument: Buffer<C>): NumberedRationalFunction<C> = substitute(ring, argument)
+    /**
+     * Substitutes provided polynomial [arguments] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substitutePolynomial")
+    public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
+    /**
+     * Substitutes provided rational function [arguments] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("substituteRationalFunction")
+    public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
+    /**
+     * Substitutes provided constant [arguments] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.substituteFully(arguments: Buffer<C>): C = substituteFully(ring, arguments)
 
-//    operator fun invoke(arg: Map<Int, C>): NumberedRationalFunction<C> =
-//        NumberedRationalFunction(
-//            numerator(arg),
-//            denominator(arg)
-//        )
-//
-//    @JvmName("invokePolynomial")
-//    operator fun invoke(arg: Map<Int, Polynomial<C>>): NumberedRationalFunction<C> =
-//        NumberedRationalFunction(
-//            numerator(arg),
-//            denominator(arg)
-//        )
-//
-//    @JvmName("invokeRationalFunction")
-//    operator fun invoke(arg: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> {
-//        var num = numerator invokeRFTakeNumerator arg
-//        var den = denominator invokeRFTakeNumerator arg
-//        for (variable in 0 until max(numerator.countOfVariables, denominator.countOfVariables)) if (variable in arg) {
-//            val degreeDif = numerator.degrees.getOrElse(variable) { 0 } - denominator.degrees.getOrElse(variable) { 0 }
-//            if (degreeDif > 0)
-//                den = multiplyByPower(den, arg[variable]!!.denominator, degreeDif)
-//            else
-//                num = multiplyByPower(num, arg[variable]!!.denominator, -degreeDif)
-//        }
-//        return NumberedRationalFunction(num, den)
-//    }
-//
-//    override fun toString(): String = toString(Polynomial.variableName)
-//
-//    fun toString(withVariableName: String = Polynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toString(withVariableName)
-//            else -> "${numerator.toStringWithBrackets(withVariableName)}/${denominator.toStringWithBrackets(withVariableName)}"
-//        }
-//
-//    fun toString(namer: (Int) -> String): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toString(namer)
-//            else -> "${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)}"
-//        }
-//
-//    fun toStringWithBrackets(withVariableName: String = Polynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toStringWithBrackets(withVariableName)
-//            else -> "(${numerator.toStringWithBrackets(withVariableName)}/${denominator.toStringWithBrackets(withVariableName)})"
-//        }
-//
-//    fun toStringWithBrackets(namer: (Int) -> String): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toStringWithBrackets(namer)
-//            else -> "(${numerator.toStringWithBrackets(namer)}/${denominator.toStringWithBrackets(namer)})"
-//        }
-//
-//    fun toReversedString(withVariableName: String = Polynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedString(withVariableName)
-//            else -> "${numerator.toReversedStringWithBrackets(withVariableName)}/${denominator.toReversedStringWithBrackets(withVariableName)}"
-//        }
-//
-//    fun toReversedString(namer: (Int) -> String): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedString(namer)
-//            else -> "${numerator.toReversedStringWithBrackets(namer)}/${denominator.toReversedStringWithBrackets(namer)}"
-//        }
-//
-//    fun toReversedStringWithBrackets(withVariableName: String = Polynomial.variableName): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedStringWithBrackets(withVariableName)
-//            else -> "(${numerator.toReversedStringWithBrackets(withVariableName)}/${denominator.toReversedStringWithBrackets(withVariableName)})"
-//        }
-//
-//    fun toReversedStringWithBrackets(namer: (Int) -> String): String =
-//        when(true) {
-//            numerator.isZero() -> "0"
-//            denominator.isOne() -> numerator.toReversedStringWithBrackets(namer)
-//            else -> "(${numerator.toReversedStringWithBrackets(namer)}/${denominator.toReversedStringWithBrackets(namer)})"
-//        }
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.asFunction(): (Buffer<C>) -> C = asFunctionOver(ring)
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.asFunctionOfConstant(): (Buffer<C>) -> C = asFunctionOfConstantOver(ring)
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.asFunctionOfPolynomial(): (Buffer<NumberedPolynomial<C>>) -> NumberedPolynomial<C> = asFunctionOfPolynomialOver(ring)
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedPolynomial<C>.asFunctionOfRationalFunction(): (Buffer<NumberedRationalFunction<C>>) -> NumberedRationalFunction<C> = asFunctionOfRationalFunctionOver(ring)
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedRationalFunction<C>.asFunctionOfPolynomial(): (Buffer<NumberedPolynomial<C>>) -> NumberedRationalFunction<C> = asFunctionOfPolynomialOver(ring)
+    /**
+     * Represent [this] polynomial as a regular context-less function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun NumberedRationalFunction<C>.asFunctionOfRationalFunction(): (Buffer<NumberedRationalFunction<C>>) -> NumberedRationalFunction<C> = asFunctionOfRationalFunctionOver(ring)
+
+    /**
+     * Evaluates value of [this] polynomial on provided [arguments].
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<C>): C = substituteFully(ring, arguments)
+    /**
+     * Substitutes provided [arguments] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("invokePolynomial")
+    public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, arguments)
+    /**
+     * Substitutes provided [arguments] into [this] polynomial.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("invokeRationalFunction")
+    public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
+    /**
+     * Substitutes provided [arguments] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("invokePolynomial")
+    public inline operator fun NumberedRationalFunction<C>.invoke(arguments: Buffer<NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
+    /**
+     * Substitutes provided [arguments] into [this] rational function.
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    @JvmName("invokeRationalFunction")
+    public inline operator fun NumberedRationalFunction<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
 }

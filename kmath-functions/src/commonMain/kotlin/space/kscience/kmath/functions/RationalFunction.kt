@@ -25,44 +25,44 @@ public interface RationalFunction<C, P: Polynomial<C>> {
  * [C].
  *
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
- * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators.
  * @param R the type of rational functions.
  */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE") // FIXME: Waiting for KT-31420
 public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunction<C, P>> : Ring<R> {
     /**
-     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     * Returns sum of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
     public operator fun C.plus(other: Int): C
     /**
-     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     * Returns difference between the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
     public operator fun C.minus(other: Int): C
     /**
-     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     * Returns product of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun C.times(other: Int): C
 
     /**
-     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns sum of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
     public operator fun Int.plus(other: C): C
     /**
-     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     * Returns difference between the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
     public operator fun Int.minus(other: C): C
     /**
-     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns product of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -78,38 +78,38 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public fun Int.asConstant(): C = constantNumber(this)
 
     /**
-     * Returns sum of the constant and the integer represented as polynomial.
+     * Returns sum of the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
     public operator fun P.plus(other: Int): P
     /**
-     * Returns difference between the constant and the integer represented as polynomial.
+     * Returns difference between the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
     public operator fun P.minus(other: Int): P
     /**
-     * Returns product of the constant and the integer represented as polynomial.
+     * Returns product of the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun P.times(other: Int): P
 
     /**
-     * Returns sum of the integer represented as polynomial and the constant.
+     * Returns sum of the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
     public operator fun Int.plus(other: P): P
     /**
-     * Returns difference between the integer represented as polynomial and the constant.
+     * Returns difference between the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public operator fun Int.minus(other: P): P
     /**
-     * Returns product of the integer represented as polynomial and the constant.
+     * Returns product of the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -125,25 +125,25 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public fun Int.asPolynomial(): P = polynomialNumber(this)
 
     /**
-     * Returns sum of the rational function and the integer represented as rational function.
+     * Returns sum of the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
     public operator fun R.plus(other: Int): R = addMultipliedByDoubling(this, one, other)
     /**
-     * Returns difference between the rational function and the integer represented as rational function.
+     * Returns difference between the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
     public operator fun R.minus(other: Int): R = addMultipliedByDoubling(this, one, -other)
     /**
-     * Returns product of the rational function and the integer represented as rational function.
+     * Returns product of the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public operator fun R.times(other: Int): R = multiplyByDoubling(this, other)
     /**
-     * Returns quotient of the rational function and the integer represented as rational function.
+     * Returns quotient of the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
      * multiplication denominator of [this] to [other].
@@ -151,25 +151,25 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public operator fun R.div(other: Int): R = this / multiplyByDoubling(one, other)
 
     /**
-     * Returns sum of the integer represented as rational function and the rational function.
+     * Returns sum of the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
     public operator fun Int.plus(other: R): R = addMultipliedByDoubling(other, one, this)
     /**
-     * Returns difference between the integer represented as rational function and the rational function.
+     * Returns difference between the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public operator fun Int.minus(other: R): R = addMultipliedByDoubling(-other, one, this)
     /**
-     * Returns product of the integer represented as rational function and the rational function.
+     * Returns product of the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public operator fun Int.times(other: R): R = multiplyByDoubling(other, this)
     /**
-     * Returns quotient of the integer represented as rational function and the rational function.
+     * Returns quotient of the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
      * [other] and which denominator is [other]'s numerator.
@@ -232,28 +232,28 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public val constantOne: C
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public operator fun C.plus(other: P): P
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public operator fun C.minus(other: P): P
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public operator fun C.times(other: P): P
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public operator fun P.plus(other: C): P
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public operator fun P.minus(other: C): P
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public operator fun P.times(other: C): P
 
@@ -305,36 +305,36 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public val polynomialOne: P
 
     /**
-     * Returns sum of the constant represented as rational function and the rational function.
+     * Returns sum of the constant represented as a rational function and the rational function.
      */
     public operator fun C.plus(other: R): R
     /**
-     * Returns difference between the constant represented as polynomial and the rational function.
+     * Returns difference between the constant represented as a polynomial and the rational function.
      */
     public operator fun C.minus(other: R): R
     /**
-     * Returns product of the constant represented as polynomial and the rational function.
+     * Returns product of the constant represented as a polynomial and the rational function.
      */
     public operator fun C.times(other: R): R
     /**
-     * Returns quotient of the constant represented as polynomial and the rational function.
+     * Returns quotient of the constant represented as a polynomial and the rational function.
      */
     public operator fun C.div(other: R): R
 
     /**
-     * Returns sum of the rational function and the constant represented as rational function.
+     * Returns sum of the rational function and the constant represented as a rational function.
      */
     public operator fun R.plus(other: C): R
     /**
-     * Returns difference between the rational function and the constant represented as rational function.
+     * Returns difference between the rational function and the constant represented as a rational function.
      */
     public operator fun R.minus(other: C): R
     /**
-     * Returns product of the rational function and the constant represented as rational function.
+     * Returns product of the rational function and the constant represented as a rational function.
      */
     public operator fun R.times(other: C): R
     /**
-     * Returns quotient of the rational function and the constant represented as rational function.
+     * Returns quotient of the rational function and the constant represented as a rational function.
      */
     public operator fun R.div(other: C): R
 
@@ -348,36 +348,36 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
     public fun C.asRationalFunction(): R = number(this)
 
     /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
+     * Returns sum of the polynomial represented as a rational function and the rational function.
      */
     public operator fun P.plus(other: R): R
     /**
-     * Returns difference between the polynomial represented as polynomial and the rational function.
+     * Returns difference between the polynomial represented as a polynomial and the rational function.
      */
     public operator fun P.minus(other: R): R
     /**
-     * Returns product of the polynomial represented as polynomial and the rational function.
+     * Returns product of the polynomial represented as a polynomial and the rational function.
      */
     public operator fun P.times(other: R): R
     /**
-     * Returns quotient of the polynomial represented as polynomial and the rational function.
+     * Returns quotient of the polynomial represented as a polynomial and the rational function.
      */
     public operator fun P.div(other: R): R
 
     /**
-     * Returns sum of the rational function and the polynomial represented as rational function.
+     * Returns sum of the rational function and the polynomial represented as a rational function.
      */
     public operator fun R.plus(other: P): R
     /**
-     * Returns difference between the rational function and the polynomial represented as rational function.
+     * Returns difference between the rational function and the polynomial represented as a rational function.
      */
     public operator fun R.minus(other: P): R
     /**
-     * Returns product of the rational function and the polynomial represented as rational function.
+     * Returns product of the rational function and the polynomial represented as a rational function.
      */
     public operator fun R.times(other: P): R
     /**
-     * Returns quotient of the rational function and the polynomial represented as rational function.
+     * Returns quotient of the rational function and the polynomial represented as a rational function.
      */
     public operator fun R.div(other: P): R
 
@@ -459,43 +459,51 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface RationalFunctionalSpaceOverRing<C, P: Polynomial<C>, R: RationalFunction<C, P>, A: Ring<C>> : RationalFunctionalSpace<C, P, R> {
+public interface RationalFunctionalSpaceOverRing<
+        C,
+        P: Polynomial<C>,
+        R: RationalFunction<C, P>,
+        A: Ring<C>
+        > : RationalFunctionalSpace<C, P, R> {
 
+    /**
+     * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
+     */
     public val ring: A
 
     /**
-     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     * Returns sum of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
     public override operator fun C.plus(other: Int): C = ring { addMultipliedByDoubling(this@plus, one, other) }
     /**
-     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     * Returns difference between the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
     public override operator fun C.minus(other: Int): C = ring { addMultipliedByDoubling(this@minus, one, -other) }
     /**
-     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     * Returns product of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun C.times(other: Int): C = ring { multiplyByDoubling(this@times, other) }
 
     /**
-     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns sum of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
     public override operator fun Int.plus(other: C): C = ring { addMultipliedByDoubling(other, one, this@plus) }
     /**
-     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     * Returns difference between the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
     public override operator fun Int.minus(other: C): C = ring { addMultipliedByDoubling(-other, one, this@minus) }
     /**
-     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns product of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -560,41 +568,44 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
         AP: PolynomialSpace<C, P>,
         > : RationalFunctionalSpace<C, P, R> {
 
+    /**
+     * Underlying polynomial ring. Its polynomial operations are inherited by local polynomial operations.
+     */
     public val polynomialRing: AP
 
     /**
-     * Returns sum of the constant and the integer represented as constant (member of underlying ring).
+     * Returns sum of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
     public override operator fun C.plus(other: Int): C = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the constant and the integer represented as constant (member of underlying ring).
+     * Returns difference between the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
     public override operator fun C.minus(other: Int): C = polynomialRing { this@minus - other }
     /**
-     * Returns product of the constant and the integer represented as constant (member of underlying ring).
+     * Returns product of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun C.times(other: Int): C = polynomialRing { this@times * other }
 
     /**
-     * Returns sum of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns sum of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
     public override operator fun Int.plus(other: C): C = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the integer represented as constant (member of underlying ring) and the constant.
+     * Returns difference between the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
     public override operator fun Int.minus(other: C): C = polynomialRing { this@minus - other }
     /**
-     * Returns product of the integer represented as constant (member of underlying ring) and the constant.
+     * Returns product of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -610,38 +621,38 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     override fun Int.asConstant(): C = polynomialRing { asConstant() }
 
     /**
-     * Returns sum of the constant and the integer represented as polynomial.
+     * Returns sum of the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
     public override operator fun P.plus(other: Int): P = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the constant and the integer represented as polynomial.
+     * Returns difference between the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
     public override operator fun P.minus(other: Int): P = polynomialRing { this@minus - other }
     /**
-     * Returns product of the constant and the integer represented as polynomial.
+     * Returns product of the constant and the integer represented as a polynomial.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun P.times(other: Int): P = polynomialRing { this@times * other }
 
     /**
-     * Returns sum of the integer represented as polynomial and the constant.
+     * Returns sum of the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
     public override operator fun Int.plus(other: P): P = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the integer represented as polynomial and the constant.
+     * Returns difference between the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: P): P = polynomialRing { this@minus - other }
     /**
-     * Returns product of the integer represented as polynomial and the constant.
+     * Returns product of the integer represented as a polynomial and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -697,28 +708,28 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
     public override val constantOne: C get() = polynomialRing.constantOne
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.plus(other: P): P = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.minus(other: P): P = polynomialRing { this@minus - other }
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.times(other: P): P = polynomialRing { this@times * other }
 
     /**
-     * Returns sum of the constant represented as polynomial and the polynomial.
+     * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun P.plus(other: C): P = polynomialRing { this@plus + other }
     /**
-     * Returns difference between the constant represented as polynomial and the polynomial.
+     * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     public override operator fun P.minus(other: C): P = polynomialRing { this@minus - other }
     /**
-     * Returns product of the constant represented as polynomial and the polynomial.
+     * Returns product of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun P.times(other: C): P = polynomialRing { this@times * other }
 
@@ -774,7 +785,8 @@ public interface RationalFunctionalSpaceOverPolynomialSpace<
 
 /**
  * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] and constants of type
- * [C]. It also assumes that there is provided constructor
+ * [C]. It also assumes that there is provided constructor [constructRationalFunction] of rational functions from
+ * polynomial numerator and denominator.
  *
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
@@ -786,10 +798,14 @@ public abstract class PolynomialSpaceOfFractions<
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         > : RationalFunctionalSpace<C, P, R> {
+
+    /**
+     * Constructor of rational functions (of type [R]) from numerator and denominator (of type [P]).
+     */
     protected abstract fun constructRationalFunction(numerator: P, denominator: P = polynomialOne) : R
 
     /**
-     * Returns sum of the rational function and the integer represented as rational function.
+     * Returns sum of the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
@@ -799,7 +815,7 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns difference between the rational function and the integer represented as rational function.
+     * Returns difference between the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
@@ -809,7 +825,7 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns product of the rational function and the integer represented as rational function.
+     * Returns product of the rational function and the integer represented as a rational function.
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
@@ -818,7 +834,12 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the integer represented as a rational function.
+     *
+     * The operation is equivalent to creating a new rational function by preserving numerator of [this] and
+     * multiplication denominator of [this] to [other].
+     */
     public override operator fun R.div(other: Int): R =
         constructRationalFunction(
             numerator,
@@ -826,7 +847,7 @@ public abstract class PolynomialSpaceOfFractions<
         )
 
     /**
-     * Returns sum of the integer represented as rational function and the rational function.
+     * Returns sum of the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
@@ -836,7 +857,7 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns difference between the integer represented as rational function and the rational function.
+     * Returns difference between the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
@@ -846,7 +867,7 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns product of the integer represented as rational function and the rational function.
+     * Returns product of the integer represented as a rational function and the rational function.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
@@ -855,7 +876,12 @@ public abstract class PolynomialSpaceOfFractions<
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the integer represented as a rational function and the rational function.
+     *
+     * The operation is equivalent to creating a new rational function which numerator is [this] times denominator of
+     * [other] and which denominator is [other]'s numerator.
+     */
     public override operator fun Int.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -873,7 +899,7 @@ public abstract class PolynomialSpaceOfFractions<
     public override operator fun P.div(other: P): R = constructRationalFunction(this, other)
 
     /**
-     * Returns sum of the constant represented as rational function and the rational function.
+     * Returns sum of the constant represented as a rational function and the rational function.
      */
     public override operator fun C.plus(other: R): R =
         constructRationalFunction(
@@ -881,7 +907,7 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns difference between the constant represented as polynomial and the rational function.
+     * Returns difference between the constant represented as a polynomial and the rational function.
      */
     public override operator fun C.minus(other: R): R =
         constructRationalFunction(
@@ -889,14 +915,16 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns product of the constant represented as polynomial and the rational function.
+     * Returns product of the constant represented as a polynomial and the rational function.
      */
     public override operator fun C.times(other: R): R =
         constructRationalFunction(
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the constant represented as a polynomial and the rational function.
+     */
     public override operator fun C.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -904,7 +932,7 @@ public abstract class PolynomialSpaceOfFractions<
         )
 
     /**
-     * Returns sum of the constant represented as rational function and the rational function.
+     * Returns sum of the constant represented as a rational function and the rational function.
      */
     public override operator fun R.plus(other: C): R =
         constructRationalFunction(
@@ -912,7 +940,7 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns difference between the constant represented as rational function and the rational function.
+     * Returns difference between the constant represented as a rational function and the rational function.
      */
     public override operator fun R.minus(other: C): R =
         constructRationalFunction(
@@ -920,14 +948,16 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns product of the constant represented as rational function and the rational function.
+     * Returns product of the constant represented as a rational function and the rational function.
      */
     public override operator fun R.times(other: C): R =
         constructRationalFunction(
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the constant represented as a rational function.
+     */
     public override operator fun R.div(other: C): R =
         constructRationalFunction(
             numerator,
@@ -940,7 +970,7 @@ public abstract class PolynomialSpaceOfFractions<
     public override fun number(value: C): R = constructRationalFunction(polynomialNumber(value))
 
     /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
+     * Returns sum of the polynomial represented as a rational function and the rational function.
      */
     public override operator fun P.plus(other: R): R =
         constructRationalFunction(
@@ -948,7 +978,7 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns difference between the polynomial represented as polynomial and the rational function.
+     * Returns difference between the polynomial represented as a polynomial and the rational function.
      */
     public override operator fun P.minus(other: R): R =
         constructRationalFunction(
@@ -956,14 +986,16 @@ public abstract class PolynomialSpaceOfFractions<
             other.denominator
         )
     /**
-     * Returns product of the polynomial represented as polynomial and the rational function.
+     * Returns product of the polynomial represented as a polynomial and the rational function.
      */
     public override operator fun P.times(other: R): R =
         constructRationalFunction(
             this * other.numerator,
             other.denominator
         )
-
+    /**
+     * Returns quotient of the polynomial represented as a polynomial and the rational function.
+     */
     public override operator fun P.div(other: R): R =
         constructRationalFunction(
             this * other.denominator,
@@ -971,7 +1003,7 @@ public abstract class PolynomialSpaceOfFractions<
         )
 
     /**
-     * Returns sum of the polynomial represented as rational function and the rational function.
+     * Returns sum of the polynomial represented as a rational function and the rational function.
      */
     public override operator fun R.plus(other: P): R =
         constructRationalFunction(
@@ -979,7 +1011,7 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns difference between the polynomial represented as rational function and the rational function.
+     * Returns difference between the polynomial represented as a rational function and the rational function.
      */
     public override operator fun R.minus(other: P): R =
         constructRationalFunction(
@@ -987,14 +1019,16 @@ public abstract class PolynomialSpaceOfFractions<
             denominator
         )
     /**
-     * Returns product of the polynomial represented as rational function and the rational function.
+     * Returns product of the polynomial represented as a rational function and the rational function.
      */
     public override operator fun R.times(other: P): R =
         constructRationalFunction(
             numerator * other,
             denominator
         )
-
+    /**
+     * Returns quotient of the rational function and the polynomial represented as a rational function.
+     */
     public override operator fun R.div(other: P): R =
         constructRationalFunction(
             numerator,
@@ -1034,24 +1068,43 @@ public abstract class PolynomialSpaceOfFractions<
             numerator * other.numerator,
             denominator * other.denominator
         )
-
+    /**
+     * Returns quotient of the rational functions.
+     */
     public override operator fun R.div(other: R): R =
         constructRationalFunction(
             numerator * other.denominator,
             denominator * other.numerator
         )
+    /**
+     * Raises [arg] to the integer power [exponent].
+     */
+    public override fun power(arg: R, exponent: UInt): R =
+        constructRationalFunction(
+            power(arg.numerator, exponent),
+            power(arg.denominator, exponent),
+        )
 
     /**
      * Instance of zero rational function (zero of the rational functions ring).
      */
-    public override val zero: R get() = constructRationalFunction(polynomialZero)
+    public override val zero: R by lazy { constructRationalFunction(polynomialZero) }
 
     /**
      * Instance of unit polynomial (unit of the rational functions ring).
      */
-    public override val one: R get() = constructRationalFunction(polynomialOne)
+    public override val one: R by lazy { constructRationalFunction(polynomialOne) }
 }
 
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] of variables of type
+ * [V] and over ring of constants of type [C].
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param V the type of variables. Polynomials have them in representations of terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface MultivariateRationalFunctionalSpace<
         C,
@@ -1059,70 +1112,179 @@ public interface MultivariateRationalFunctionalSpace<
         P: Polynomial<C>,
         R: RationalFunction<C, P>
         >: RationalFunctionalSpace<C, P, R> {
+    /**
+     * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("plusVariableInt")
     public operator fun V.plus(other: Int): P
+    /**
+     * Returns difference between the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("minusVariableInt")
     public operator fun V.minus(other: Int): P
+    /**
+     * Returns product of the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("timesVariableInt")
     public operator fun V.times(other: Int): P
 
+    /**
+     * Returns sum of the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("plusIntVariable")
     public operator fun Int.plus(other: V): P
+    /**
+     * Returns difference between the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("minusIntVariable")
     public operator fun Int.minus(other: V): P
+    /**
+     * Returns product of the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("timesIntVariable")
     public operator fun Int.times(other: V): P
 
-    @JvmName("plusConstantVariable")
-    public operator fun C.plus(other: V): P
-    @JvmName("minusConstantVariable")
-    public operator fun C.minus(other: V): P
-    @JvmName("timesConstantVariable")
-    public operator fun C.times(other: V): P
-
+    /**
+     * Returns sum of the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("plusVariableConstant")
     public operator fun V.plus(other: C): P
+    /**
+     * Returns difference between the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("minusVariableConstant")
     public operator fun V.minus(other: C): P
+    /**
+     * Returns product of the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("timesVariableConstant")
     public operator fun V.times(other: C): P
 
+    /**
+     * Returns sum of the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("plusConstantVariable")
+    public operator fun C.plus(other: V): P
+    /**
+     * Returns difference between the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("minusConstantVariable")
+    public operator fun C.minus(other: V): P
+    /**
+     * Returns product of the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("timesConstantVariable")
+    public operator fun C.times(other: V): P
+
+    /**
+     * Represents the variable as a monic monomial.
+     */
     @JvmName("unaryPlusVariable")
     public operator fun V.unaryPlus(): P
+    /**
+     * Returns negation of representation of the variable as a monic monomial.
+     */
     @JvmName("unaryMinusVariable")
     public operator fun V.unaryMinus(): P
+    /**
+     * Returns sum of the variables represented as monic monomials.
+     */
     @JvmName("plusVariableVariable")
     public operator fun V.plus(other: V): P
+    /**
+     * Returns difference between the variables represented as monic monomials.
+     */
     @JvmName("minusVariableVariable")
     public operator fun V.minus(other: V): P
+    /**
+     * Returns product of the variables represented as monic monomials.
+     */
     @JvmName("timesVariableVariable")
     public operator fun V.times(other: V): P
 
+    /**
+     * Represents the [variable] as a monic monomial.
+     */
+    @JvmName("polynomialNumberVariable")
+    public fun polynomialNumber(variable: V): P = +variable
+    /**
+     * Represents the variable as a monic monomial.
+     */
+    @JvmName("asPolynomialVariable")
+    public fun V.asPolynomial(): P = polynomialNumber(this)
+
+    /**
+     * Represents the [variable] as a rational function.
+     */
+    @JvmName("numberVariable")
+    public fun number(variable: V): R = number(polynomialNumber(variable))
+    /**
+     * Represents the variable as a rational function.
+     */
+    @JvmName("asRationalFunctionVariable")
+    public fun V.asRationalFunction(): R = number(this)
+
+    /**
+     * Returns sum of the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("plusVariablePolynomial")
     public operator fun V.plus(other: P): P
+    /**
+     * Returns difference between the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("minusVariablePolynomial")
     public operator fun V.minus(other: P): P
+    /**
+     * Returns product of the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("timesVariablePolynomial")
     public operator fun V.times(other: P): P
 
+    /**
+     * Returns sum of the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("plusPolynomialVariable")
     public operator fun P.plus(other: V): P
+    /**
+     * Returns difference between the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("minusPolynomialVariable")
     public operator fun P.minus(other: V): P
+    /**
+     * Returns product of the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("timesPolynomialVariable")
     public operator fun P.times(other: V): P
 
+    /**
+     * Returns sum of the variable represented as a rational function and the rational function.
+     */
     @JvmName("plusVariableRational")
     public operator fun V.plus(other: R): R
+    /**
+     * Returns difference between the variable represented as a rational function and the rational function.
+     */
     @JvmName("minusVariableRational")
     public operator fun V.minus(other: R): R
+    /**
+     * Returns product of the variable represented as a rational function and the rational function.
+     */
     @JvmName("timesVariableRational")
     public operator fun V.times(other: R): R
 
+    /**
+     * Returns sum of the rational function and the variable represented as a rational function.
+     */
     @JvmName("plusRationalVariable")
     public operator fun R.plus(other: V): R
+    /**
+     * Returns difference between the rational function and the variable represented as a rational function.
+     */
     @JvmName("minusRationalVariable")
     public operator fun R.minus(other: V): R
+    /**
+     * Returns product of the rational function and the variable represented as a rational function.
+     */
     @JvmName("timesRationalVariable")
     public operator fun R.times(other: V): R
 
@@ -1161,22 +1323,17 @@ public interface MultivariateRationalFunctionalSpace<
     public val R.countOfVariables: Int get() = variables.size
 }
 
-public interface MultivariateRationalFunctionalSpaceOverRing<
-        C,
-        V,
-        P: Polynomial<C>,
-        R: RationalFunction<C, P>,
-        A: Ring<C>
-        > : RationalFunctionalSpaceOverRing<C, P, R, A>, MultivariateRationalFunctionalSpace<C, V, P, R>
-
-public interface MultivariateRationalFunctionalSpaceOverPolynomialSpace<
-        C,
-        V,
-        P: Polynomial<C>,
-        R: RationalFunction<C, P>,
-        AP: PolynomialSpace<C, P>,
-        > : RationalFunctionalSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionalSpace<C, V, P, R>
-
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] of variables of type
+ * [V] and over ring of constants of type [C]. It also assumes that there is provided [polynomialRing] (of type [AP]),
+ * that provides constant-, variable- and polynomial-wise operations.
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param V the type of variables. Polynomials have them in representations of terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
+ */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSpace<
         C,
@@ -1184,57 +1341,137 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         AP: MultivariatePolynomialSpace<C, V, P>,
-        > : MultivariateRationalFunctionalSpaceOverPolynomialSpace<C, V, P, R, AP> {
+        > : RationalFunctionalSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionalSpace<C, V, P, R> {
+    /**
+     * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("plusVariableInt")
     public override operator fun V.plus(other: Int): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("minusVariableInt")
     public override operator fun V.minus(other: Int): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the variable represented as a monic monomial and the integer represented as a constant polynomial.
+     */
     @JvmName("timesVariableInt")
     public override operator fun V.times(other: Int): P = polynomialRing { this@times * other }
 
+    /**
+     * Returns sum of the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("plusIntVariable")
     public override operator fun Int.plus(other: V): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("minusIntVariable")
     public override operator fun Int.minus(other: V): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the integer represented as a constant polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("timesIntVariable")
     public override operator fun Int.times(other: V): P = polynomialRing { this@times * other }
 
-    @JvmName("plusConstantVariable")
-    public override operator fun C.plus(other: V): P = polynomialRing { this@plus + other }
-    @JvmName("minusConstantVariable")
-    public override operator fun C.minus(other: V): P = polynomialRing { this@minus - other }
-    @JvmName("timesConstantVariable")
-    public override operator fun C.times(other: V): P = polynomialRing { this@times * other }
-
+    /**
+     * Returns sum of the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("plusVariableConstant")
     public override operator fun V.plus(other: C): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("minusVariableConstant")
     public override operator fun V.minus(other: C): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the variable represented as a monic monomial and the constant represented as a constant polynomial.
+     */
     @JvmName("timesVariableConstant")
     public override operator fun V.times(other: C): P = polynomialRing { this@times * other }
 
+    /**
+     * Returns sum of the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("plusConstantVariable")
+    public override operator fun C.plus(other: V): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("minusConstantVariable")
+    public override operator fun C.minus(other: V): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the constant represented as a constant polynomial and the variable represented as a monic monomial.
+     */
+    @JvmName("timesConstantVariable")
+    public override operator fun C.times(other: V): P = polynomialRing { this@times * other }
+
+    /**
+     * Represents the variable as a monic monomial.
+     */
     @JvmName("unaryPlusVariable")
     public override operator fun V.unaryPlus(): P = polynomialRing { +this@unaryPlus }
+    /**
+     * Returns negation of representation of the variable as a monic monomial.
+     */
     @JvmName("unaryMinusVariable")
     public override operator fun V.unaryMinus(): P = polynomialRing { -this@unaryMinus }
+    /**
+     * Returns sum of the variables represented as monic monomials.
+     */
     @JvmName("plusVariableVariable")
     public override operator fun V.plus(other: V): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the variables represented as monic monomials.
+     */
     @JvmName("minusVariableVariable")
     public override operator fun V.minus(other: V): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the variables represented as monic monomials.
+     */
     @JvmName("timesVariableVariable")
     public override operator fun V.times(other: V): P = polynomialRing { this@times * other }
 
+    /**
+     * Represents the [variable] as a monic monomial.
+     */
+    @JvmName("polynomialNumberVariable")
+    public override fun polynomialNumber(variable: V): P = polynomialRing { number(variable) }
+    /**
+     * Represents the variable as a monic monomial.
+     */
+    @JvmName("asPolynomialVariable")
+    public override fun V.asPolynomial(): P = polynomialRing { this@asPolynomial.asPolynomial() }
+
+    /**
+     * Returns sum of the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("plusVariablePolynomial")
     public override operator fun V.plus(other: P): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("minusVariablePolynomial")
     public override operator fun V.minus(other: P): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the variable represented as a monic monomial and the polynomial.
+     */
     @JvmName("timesVariablePolynomial")
     public override operator fun V.times(other: P): P = polynomialRing { this@times * other }
 
+    /**
+     * Returns sum of the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("plusPolynomialVariable")
     public override operator fun P.plus(other: V): P = polynomialRing { this@plus + other }
+    /**
+     * Returns difference between the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("minusPolynomialVariable")
     public override operator fun P.minus(other: V): P = polynomialRing { this@minus - other }
+    /**
+     * Returns product of the polynomial and the variable represented as a monic monomial.
+     */
     @JvmName("timesPolynomialVariable")
     public override operator fun P.times(other: V): P = polynomialRing { this@times * other }
 
@@ -1264,6 +1501,16 @@ public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSp
     public override val P.countOfVariables: Int get() = polynomialRing { countOfVariables }
 }
 
+/**
+ * Abstraction of field of rational functions of type [R] with respect to polynomials of type [P] of variables of type
+ * [V] and over ring of constants of type [C]. It also assumes that there is provided constructor
+ * [constructRationalFunction] of rational functions from polynomial numerator and denominator.
+ *
+ * @param C the type of constants. Polynomials have them as coefficients in their terms.
+ * @param V the type of variables. Polynomials have them in representations of terms.
+ * @param P the type of polynomials. Rational functions have them as numerators and denominators in them.
+ * @param R the type of rational functions.
+ */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
 public abstract class MultivariatePolynomialSpaceOfFractions<
         C,
@@ -1271,18 +1518,27 @@ public abstract class MultivariatePolynomialSpaceOfFractions<
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         > : MultivariateRationalFunctionalSpace<C, V, P, R>,  PolynomialSpaceOfFractions<C, P, R>() {
+    /**
+     * Returns sum of the variable represented as a rational function and the rational function.
+     */
     @JvmName("plusVariableRational")
     public override operator fun V.plus(other: R): R =
         constructRationalFunction(
             this * other.denominator + other.numerator,
             other.denominator
         )
+    /**
+     * Returns difference between the variable represented as a rational function and the rational function.
+     */
     @JvmName("minusVariableRational")
     public override operator fun V.minus(other: R): R =
         constructRationalFunction(
             this * other.denominator - other.numerator,
             other.denominator
         )
+    /**
+     * Returns product of the variable represented as a rational function and the rational function.
+     */
     @JvmName("timesVariableRational")
     public override operator fun V.times(other: R): R =
         constructRationalFunction(
@@ -1290,18 +1546,27 @@ public abstract class MultivariatePolynomialSpaceOfFractions<
             other.denominator
         )
 
+    /**
+     * Returns sum of the rational function and the variable represented as a rational function.
+     */
     @JvmName("plusRationalVariable")
     public override operator fun R.plus(other: V): R =
         constructRationalFunction(
             numerator + denominator * other,
             denominator
         )
+    /**
+     * Returns difference between the rational function and the variable represented as a rational function.
+     */
     @JvmName("minusRationalVariable")
     public override operator fun R.minus(other: V): R =
         constructRationalFunction(
             numerator - denominator * other,
             denominator
         )
+    /**
+     * Returns product of the rational function and the variable represented as a rational function.
+     */
     @JvmName("timesRationalVariable")
     public override operator fun R.times(other: V): R =
         constructRationalFunction(

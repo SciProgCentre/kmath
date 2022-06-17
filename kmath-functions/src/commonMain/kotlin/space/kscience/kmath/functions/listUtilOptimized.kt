@@ -5,41 +5,91 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.math.max
+import kotlin.math.min
 
 
-/**
- * Creates a [ListRationalFunctionSpace] over a received ring.
- */
-public fun <C, A : Ring<C>> A.listRationalFunction(): ListRationalFunctionSpace<C, A> =
-    ListRationalFunctionSpace(this)
-
-/**
- * Creates a [ListRationalFunctionSpace]'s scope over a received ring.
- */
-public inline fun <C, A : Ring<C>, R> A.listRationalFunction(block: ListRationalFunctionSpace<C, A>.() -> R): R {
-    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return ListRationalFunctionSpace(this).block()
+// TODO: Optimized copies of substitution and invocation
+@UnstablePolynomialBoxingOptimization
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> copyTo(
+    origin: List<C>,
+    originDegree: Int,
+    target: MutableList<C>,
+) {
+    for (deg in 0 .. originDegree) target[deg] = origin[deg]
 }
 
-/**
- * Evaluates the value of the given double polynomial for given double argument.
- */
-public fun ListRationalFunction<Double>.substitute(arg: Double): Double =
-    numerator.substitute(arg) / denominator.substitute(arg)
+@UnstablePolynomialBoxingOptimization
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> multiplyAddingToUpdater(
+    ring: Ring<C>,
+    multiplicand: MutableList<C>,
+    multiplicandDegree: Int,
+    multiplier: List<C>,
+    multiplierDegree: Int,
+    updater: MutableList<C>,
+    zero: C,
+) {
+    multiplyAddingTo(
+        ring = ring,
+        multiplicand = multiplicand,
+        multiplicandDegree = multiplicandDegree,
+        multiplier = multiplier,
+        multiplierDegree = multiplierDegree,
+        target = updater
+    )
+    for (updateDeg in 0 .. multiplicandDegree + multiplierDegree) {
+        multiplicand[updateDeg] = updater[updateDeg]
+        updater[updateDeg] = zero
+    }
+}
 
-/**
- * Evaluates the value of the given polynomial for given argument.
- *
- * It is an implementation of [Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method).
- */
-public fun <C> ListRationalFunction<C>.substitute(ring: Field<C>, arg: C): C = ring {
-    numerator.substitute(ring, arg) / denominator.substitute(ring, arg)
+@UnstablePolynomialBoxingOptimization
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <C> multiplyAddingTo(
+    ring: Ring<C>,
+    multiplicand: List<C>,
+    multiplicandDegree: Int,
+    multiplier: List<C>,
+    multiplierDegree: Int,
+    target: MutableList<C>
+) = ring {
+    for (d in 0 .. multiplicandDegree + multiplierDegree)
+        for (k in max(0, d - multiplierDegree)..min(multiplicandDegree, d))
+            target[d] += multiplicand[k] * multiplier[d - k]
+}
+
+@UnstablePolynomialBoxingOptimization
+public fun <C> ListPolynomial<C>.substitute2(ring: Ring<C>, arg: ListPolynomial<C>) : ListPolynomial<C> = ring {
+    if (coefficients.isEmpty()) return ListPolynomial(emptyList())
+
+    val thisDegree = coefficients.lastIndex
+    if (thisDegree == -1) return ListPolynomial(emptyList())
+    val argDegree = arg.coefficients.lastIndex
+    if (argDegree == -1) return coefficients[0].asListPolynomial()
+    val constantZero = zero
+    val resultCoefs: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
+    resultCoefs[0] = coefficients[thisDegree]
+    val resultCoefsUpdate: MutableList<C> = MutableList(thisDegree * argDegree + 1) { constantZero }
+    var resultDegree = 0
+    for (deg in thisDegree - 1 downTo 0) {
+        resultCoefsUpdate[0] = coefficients[deg]
+        multiplyAddingToUpdater(
+            ring = ring,
+            multiplicand = resultCoefs,
+            multiplicandDegree = resultDegree,
+            multiplier = arg.coefficients,
+            multiplierDegree = argDegree,
+            updater = resultCoefsUpdate,
+            zero = constantZero
+        )
+        resultDegree += argDegree
+    }
+
+    return ListPolynomial<C>(resultCoefs)
 }
 
 /**
@@ -52,6 +102,7 @@ public fun <C> ListRationalFunction<C>.substitute(ring: Field<C>, arg: C): C = r
  *
  * Used in [ListPolynomial.substitute] and [ListRationalFunction.substitute] for performance optimisation.
  */ // TODO: Дописать
+@UnstablePolynomialBoxingOptimization
 internal fun <C> ListPolynomial<C>.substituteRationalFunctionTakeNumerator(ring: Ring<C>, arg: ListRationalFunction<C>): ListPolynomial<C> = ring {
     if (coefficients.isEmpty()) return ListPolynomial(emptyList())
 
@@ -197,25 +248,3 @@ internal fun <C> ListPolynomial<C>.substituteRationalFunctionTakeNumerator(ring:
         )
     )
 }
-
-//operator fun <T: Field<T>> RationalFunction<T>.invoke(arg: T): T = numerator(arg) / denominator(arg)
-//
-//fun <T: Field<T>> RationalFunction<T>.reduced(): RationalFunction<T> =
-//    polynomialGCD(numerator, denominator).let {
-//        RationalFunction(
-//            numerator / it,
-//            denominator / it
-//        )
-//    }
-
-///**
-// * Returns result of applying formal derivative to the polynomial.
-// *
-// * @param T Field where we are working now.
-// * @return Result of the operator.
-// */
-//fun <T: Ring<T>> RationalFunction<T>.derivative() =
-//    RationalFunction(
-//        numerator.derivative() * denominator - denominator.derivative() * numerator,
-//        denominator * denominator
-//    )

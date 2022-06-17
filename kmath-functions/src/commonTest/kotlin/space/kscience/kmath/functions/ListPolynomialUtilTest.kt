@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.functions
 
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.test.misc.Rational
 import space.kscience.kmath.test.misc.RationalField
 import kotlin.test.Test
@@ -12,6 +13,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 
+@OptIn(UnstableKMathAPI::class)
 class ListPolynomialUtilTest {
     @Test
     fun test_substitute_Double() {
