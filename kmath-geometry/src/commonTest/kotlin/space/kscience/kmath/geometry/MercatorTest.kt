@@ -17,6 +17,16 @@ class MercatorTest {
     }
 
     @Test
+    fun mercatorConversion() = with(MercatorAlgebra) {
+        val mskCoordinates = GeodeticCoordinates.ofDegrees(55.7558, 37.6173)
+        val m = mskCoordinates.toMercator()
+        val r = m.toGeodetic()
+
+        assertEquals(mskCoordinates.longitude, r.longitude,1e-4)
+        assertEquals(mskCoordinates.latitude, r.latitude,1e-4)
+    }
+
+    @Test
     fun webMercatorConversion() = with(WebMercatorAlgebra) {
         val mskCoordinates = GeodeticCoordinates.ofDegrees(55.7558, 37.6173)
         val m = mskCoordinates.toMercator(2.0)

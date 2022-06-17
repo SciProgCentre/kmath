@@ -8,51 +8,13 @@ package space.kscience.kmath.geometry
 import space.kscience.kmath.operations.Algebra
 import kotlin.math.*
 
-public class GeodeticCoordinates private constructor(public val latitude: Double, public val longitude: Double) {
+public data class TileWebMercatorCoordinates(val zoom: Double, val x: Double, val y: Double)
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
-
-        other as GeodeticCoordinates
-
-        if (latitude != other.latitude) return false
-        if (longitude != other.longitude) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = latitude.hashCode()
-        result = 31 * result + longitude.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "GeodeticCoordinates(latitude=$latitude, longitude=$longitude)"
-    }
-
-
-    public companion object {
-        public fun ofRadians(latitude: Double, longitude: Double): GeodeticCoordinates {
-            require(longitude in (-PI)..(PI)) { "Longitude $longitude is not in (-PI)..(PI)" }
-            return GeodeticCoordinates(latitude, longitude.rem(PI / 2))
-        }
-
-        public fun ofDegrees(latitude: Double, longitude: Double): GeodeticCoordinates {
-            require(latitude in (-90.0)..(90.0)) { "Latitude $latitude is not in -90..90" }
-            return GeodeticCoordinates(latitude * PI / 180, (longitude.rem(180) * PI / 180))
-        }
-    }
-}
-
-public data class WebMercatorCoordinates(val zoom: Double, val x: Double, val y: Double)
-
-public object WebMercatorAlgebra : Algebra<WebMercatorCoordinates> {
+public object WebMercatorAlgebra : Algebra<TileWebMercatorCoordinates> {
 
     private fun scaleFactor(zoom: Double) = 256.0 / 2 / PI * 2.0.pow(zoom)
 
-    public fun WebMercatorCoordinates.toGeodetic(): GeodeticCoordinates {
+    public fun TileWebMercatorCoordinates.toGeodetic(): GeodeticCoordinates {
         val scaleFactor = scaleFactor(zoom)
         val longitude = x / scaleFactor - PI
         val latitude = (atan(exp(PI - y / scaleFactor)) - PI / 4) * 2
@@ -62,11 +24,11 @@ public object WebMercatorAlgebra : Algebra<WebMercatorCoordinates> {
     /**
      * https://en.wikipedia.org/wiki/Web_Mercator_projection#Formulas
      */
-    public fun GeodeticCoordinates.toMercator(zoom: Double): WebMercatorCoordinates {
-        require(abs(latitude) <= 2 * atan(E.pow(PI)) - PI / 2) { "Latitude exceeds the maximum latitude for mercator coordinates" }
+    public fun GeodeticCoordinates.toMercator(zoom: Double): TileWebMercatorCoordinates {
+        require(abs(latitude) <= MercatorAlgebra.MAXIMUM_LATITUDE) { "Latitude exceeds the maximum latitude for mercator coordinates" }
 
         val scaleFactor = scaleFactor(zoom)
-        return WebMercatorCoordinates(
+        return TileWebMercatorCoordinates(
             zoom = zoom,
             x = scaleFactor * (longitude + PI),
             y = scaleFactor * (PI - ln(tan(PI / 4 + latitude / 2)))
@@ -81,7 +43,7 @@ public object WebMercatorAlgebra : Algebra<WebMercatorCoordinates> {
         base: GeodeticCoordinates,
         target: GeodeticCoordinates,
         zoom: Double? = null,
-    ): WebMercatorCoordinates {
+    ): TileWebMercatorCoordinates {
         val xOffsetUnscaled = target.longitude - base.longitude
         val yOffsetUnscaled = ln(
             tan(PI / 4 + target.latitude / 2) / tan(PI / 4 + base.latitude / 2)
@@ -89,7 +51,7 @@ public object WebMercatorAlgebra : Algebra<WebMercatorCoordinates> {
 
         val computedZoom = zoom ?: floor(log2(PI / max(abs(xOffsetUnscaled), abs(yOffsetUnscaled))))
         val scaleFactor = scaleFactor(computedZoom)
-        return WebMercatorCoordinates(
+        return TileWebMercatorCoordinates(
             computedZoom,
             x = scaleFactor * xOffsetUnscaled,
             y = scaleFactor * yOffsetUnscaled
