@@ -51,15 +51,14 @@ public inline fun <C, A : Ring<C>, R> A.numberedRationalFunctionSpace(block: Num
  */
 public fun NumberedPolynomial<Double>.substitute(args: Map<Int, Double>): NumberedPolynomial<Double> = Double.algebra {
     NumberedPolynomial<Double>(
-        buildMap<List<UInt>, Double>(coefficients.size) {
+        buildMap(coefficients.size) {
             for ((degs, c) in coefficients) {
                 val newDegs = degs.mapIndexed { index, deg -> if (index !in args) deg else 0u }.cleanUp()
                 val newC = args.entries.fold(c) { product, (variable, substitution) ->
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * substitution.pow(deg.toInt())
                 }
-                if (newDegs !in this) this[newDegs] = newC
-                else this[newDegs] = this[newDegs]!! + newC
+                this[newDegs] = if (newDegs !in this) newC else this[newDegs]!! + newC
             }
         }
     )
@@ -70,15 +69,14 @@ public fun NumberedPolynomial<Double>.substitute(args: Map<Int, Double>): Number
  */
 public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): NumberedPolynomial<C> = ring {
     NumberedPolynomial<C>(
-        buildMap<List<UInt>, C>(coefficients.size) {
+        buildMap(coefficients.size) {
             for ((degs, c) in coefficients) {
                 val newDegs = degs.mapIndexed { index, deg -> if (index !in args) deg else 0u }.cleanUp()
                 val newC = args.entries.fold(c) { product, (variable, substitution) ->
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * power(substitution, deg)
                 }
-                if (newDegs !in this) this[newDegs] = newC
-                else this[newDegs] = this[newDegs]!! + newC
+                this[newDegs] = if (newDegs !in this) newC else this[newDegs]!! + newC
             }
         }
     )
@@ -128,14 +126,14 @@ public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Map<I
 
 /**
  * Substitutes provided arguments [args] into [this] rational function.
- */ // TODO: To optimize boxing
+ */ // TODO: To optimize calculation
 @JvmName("substitutePolynomial")
 public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Map<Int, NumberedPolynomial<C>>) : NumberedRationalFunction<C> =
     NumberedRationalFunction(numerator.substitute(ring, args), denominator.substitute(ring, args))
 
 /**
  * Substitutes provided arguments [args] into [this] rational function.
- */ // TODO: To optimize boxing
+ */ // TODO: To optimize calculation
 @JvmName("substituteRationalFunction")
 public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Map<Int, NumberedRationalFunction<C>>) : NumberedRationalFunction<C> =
     ring.numberedRationalFunctionSpace {
@@ -250,14 +248,14 @@ public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Buffe
 
 /**
  * Substitutes provided arguments [args] into [this] rational function.
- */ // TODO: To optimize boxing
+ */ // TODO: To optimize calculation
 @JvmName("substitutePolynomial")
 public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Buffer<NumberedPolynomial<C>>) : NumberedRationalFunction<C> =
     NumberedRationalFunction(numerator.substitute(ring, args), denominator.substitute(ring, args))
 
 /**
  * Substitutes provided arguments [args] into [this] rational function.
- */ // TODO: To optimize boxing
+ */ // TODO: To optimize calculation
 @JvmName("substituteRationalFunction")
 public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Buffer<NumberedRationalFunction<C>>) : NumberedRationalFunction<C> =
     ring.numberedRationalFunctionSpace {

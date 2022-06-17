@@ -15,7 +15,7 @@ import kotlin.math.min
 /**
  * Represents univariate polynomial that stores its coefficients in a [List].
  *
- * @param coefficients constant is the leftmost coefficient.
+ * @param C the type of constants.
  */
 public data class ListPolynomial<C>(
     /**

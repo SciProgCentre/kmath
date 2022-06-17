@@ -12,7 +12,7 @@ import kotlin.math.max
 
 
 /**
- * Represents univariate polynomial that stores its coefficients in a [Map] and terms' signatures in a [List].
+ * Represents multivariate polynomial that stores its coefficients in a [Map] and terms' signatures in a [List].
  *
  * @param C the type of constants.
  */
@@ -20,10 +20,11 @@ public data class NumberedPolynomial<C>
 @PublishedApi
 internal constructor(
     /**
-     * Map that contains coefficients of the polynomial. Every monomial `a x_1^{d_1} ... x_n^{d_n}` is stored as pair
-     * "key-value" in the map, where the value is the coefficients `a` and the key is a list that associates index of
-     * every variable in the monomial with multiplicity of the variable occurring in the monomial. For example
-     * coefficients of a polynomial `5 x_1^2 x_3^3 - 6 x_2` can be represented as
+     * Map that contains coefficients of the polynomial.
+     *
+     * Every monomial `a x_1^{d_1} ... x_n^{d_n}` is stored as a pair "key-value" in the map, where the value is the
+     * coefficient `a` and the key is a list that associates index of every variable in the monomial with their degree
+     * in the monomial. For example, coefficients of a polynomial `5 x_1^2 x_3^3 - 6 x_2` can be represented as
      * ```
      * mapOf(
      *      listOf(2, 0, 3) to 5, // 5 x_1^2 x_3^3 +

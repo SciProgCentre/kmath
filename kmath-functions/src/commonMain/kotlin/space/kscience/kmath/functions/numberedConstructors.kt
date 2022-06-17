@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("FunctionName", "NOTHING_TO_INLINE")
+
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
@@ -17,7 +19,6 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 /**
  * Constructs [NumberedPolynomial] with provided coefficients map [coefs]. The map is used as is.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @PublishedApi
 internal inline fun <C> NumberedPolynomialAsIs(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(coefs)
 
@@ -25,7 +26,6 @@ internal inline fun <C> NumberedPolynomialAsIs(coefs: Map<List<UInt>, C>) : Numb
  * Constructs [NumberedPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
  * The collections will be transformed to map with [toMap] and then will be used as is.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @PublishedApi
 internal inline fun <C> NumberedPolynomialAsIs(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
 
@@ -33,7 +33,6 @@ internal inline fun <C> NumberedPolynomialAsIs(pairs: Collection<Pair<List<UInt>
  * Constructs [NumberedPolynomial] with provided array of [pairs] of pairs "term's signature &mdash; term's coefficient".
  * The array will be transformed to map with [toMap] and then will be used as is.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @PublishedApi
 internal inline fun <C> NumberedPolynomialAsIs(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
 
@@ -43,7 +42,6 @@ internal inline fun <C> NumberedPolynomialAsIs(vararg pairs: Pair<List<UInt>, C>
  * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
  * cause wrong computation result or even runtime error.**
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @DelicatePolynomialAPI
 public inline fun <C> NumberedPolynomialWithoutCheck(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(coefs)
 
@@ -54,7 +52,6 @@ public inline fun <C> NumberedPolynomialWithoutCheck(coefs: Map<List<UInt>, C>) 
  * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
  * cause wrong computation result or even runtime error.**
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @DelicatePolynomialAPI
 public inline fun <C> NumberedPolynomialWithoutCheck(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
 
@@ -65,7 +62,6 @@ public inline fun <C> NumberedPolynomialWithoutCheck(pairs: Collection<Pair<List
  * **Be sure you read description of [NumberedPolynomial.coefficients]. Otherwise, you may make a mistake that will
  * cause wrong computation result or even runtime error.**
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 @DelicatePolynomialAPI
 public inline fun <C> NumberedPolynomialWithoutCheck(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial<C>(pairs.toMap())
 
@@ -77,7 +73,6 @@ public inline fun <C> NumberedPolynomialWithoutCheck(vararg pairs: Pair<List<UIn
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -98,7 +93,6 @@ public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) :
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -119,7 +113,6 @@ public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -142,7 +135,6 @@ public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, ::add)
 /**
  * Constructs [NumberedPolynomial] with provided coefficients map [coefs].
@@ -152,7 +144,6 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs) { left: C, right: C -> left + right }
 
 /**
@@ -163,7 +154,6 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs) { left: C, right: C -> left + right }
 
 /**
@@ -174,7 +164,6 @@ public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPo
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, ::add)
 
 /**
@@ -185,7 +174,6 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<Li
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs) { left: C, right: C -> left + right }
 /**
  * Constructs [NumberedPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -195,7 +183,6 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs) { left: C, right: C -> left + right }
 
 /**
@@ -206,7 +193,6 @@ public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPo
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
  * Constructs [NumberedPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -216,7 +202,6 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<U
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
  * Constructs [NumberedPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -226,13 +211,11 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName", "NOTHING_TO_INLINE")
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 
 /**
  * Converts [this] constant to [NumberedPolynomial].
  */
-@Suppress("NOTHING_TO_INLINE")
 public inline fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to this))
 
 /**
@@ -269,6 +252,7 @@ public class NumberedPolynomialTermSignatureBuilder {
      *
      * In fact, it just returns [signature] as regular signature of type `List<UInt>`.
      */
+    @PublishedApi
     internal fun build(): List<UInt> = signature
 
     /**
@@ -344,8 +328,7 @@ public class NumberedPolynomialBuilder<C>(
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
     public infix fun C.with(signature: List<UInt>) {
-        if (signature in coefficients) coefficients[signature] = add(coefficients[signature]!!, this@with)
-        else coefficients[signature] = this@with
+        coefficients[signature] = if (signature in coefficients) add(coefficients[signature]!!, this@with) else this@with
     }
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].
@@ -361,7 +344,7 @@ public class NumberedPolynomialBuilder<C>(
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    public operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit =
+    public inline operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit =
         this with NumberedPolynomialTermSignatureBuilder().apply(block).build()
 }
 
@@ -385,7 +368,6 @@ public class NumberedPolynomialBuilder<C>(
 //  2. Union types are implemented. Then all three functions should be rewritten
 //     as one with single union type as a (context) receiver.
 //@UnstableKMathAPI
-//@Suppress("FunctionName")
 //public inline fun <C, A: Ring<C>> A.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of [NumberedPolynomial]s.
@@ -401,7 +383,6 @@ public class NumberedPolynomialBuilder<C>(
  * ```
  */
 @UnstableKMathAPI
-@Suppress("FunctionName")
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] field of [NumberedRationalFunction]s.
@@ -417,7 +398,6 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * ```
  */
 @UnstableKMathAPI
-@Suppress("FunctionName")
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
@@ -430,7 +410,6 @@ public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPo
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
         NumberedPolynomial(numeratorCoefficients),
@@ -444,7 +423,6 @@ public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>, denominatorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
         NumberedPolynomial(numeratorCoefficients),
@@ -454,13 +432,11 @@ public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalF
 /**
  * Constructs [NumberedRationalFunction] with provided [numerator] and unit denominator.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(numerator, NumberedPolynomial(mapOf(emptyList<UInt>() to one)))
 /**
  * Constructs [NumberedRationalFunction] with provided [numerator] and unit denominator.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numerator: NumberedPolynomial<C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(numerator, polynomialOne)
 
@@ -473,7 +449,6 @@ public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalF
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
         NumberedPolynomial(numeratorCoefficients),
@@ -488,7 +463,6 @@ public fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedRationalF
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
  */
-@Suppress("FunctionName")
 public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map<List<UInt>, C>): NumberedRationalFunction<C> =
     NumberedRationalFunction<C>(
         NumberedPolynomial(numeratorCoefficients),
@@ -496,7 +470,7 @@ public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map
     )
 
 ///**
-// * Converts [this] coefficient to [NumberedRationalFunction].
+// * Converts [this] constant to [NumberedRationalFunction].
 // */
 //context(A)
 //public fun <C, A: Ring<C>> C.asNumberedRationalFunction() : NumberedRationalFunction<C> =
@@ -505,7 +479,7 @@ public fun <C, A: Ring<C>> A.NumberedRationalFunction(numeratorCoefficients: Map
 //        NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to one))
 //    )
 ///**
-// * Converts [this] coefficient to [NumberedRationalFunction].
+// * Converts [this] constant to [NumberedRationalFunction].
 // */
 //context(NumberedRationalFunctionSpace<C, A>)
 //public fun <C, A: Ring<C>> C.asNumberedRationalFunction() : NumberedRationalFunction<C> =
