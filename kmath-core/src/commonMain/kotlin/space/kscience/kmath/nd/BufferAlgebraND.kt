@@ -47,7 +47,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
         zipInline(left.toBufferND(), right.toBufferND(), transform)
 
     public companion object {
-        public val defaultIndexerBuilder: (IntArray) -> ShapeIndexer = DefaultStrides.Companion::invoke
+        public val defaultIndexerBuilder: (IntArray) -> ShapeIndexer = ::Strides
     }
 }
 

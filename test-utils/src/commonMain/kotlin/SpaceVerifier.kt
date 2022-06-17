@@ -11,12 +11,12 @@ import space.kscience.kmath.operations.invoke
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-internal open class SpaceVerifier<T, out S>(
+public open class SpaceVerifier<T, out S>(
     override val algebra: S,
-    val a: T,
-    val b: T,
-    val c: T,
-    val x: Number,
+    public val a: T,
+    public val b: T,
+    public val c: T,
+    public val x: Number,
 ) : AlgebraicVerifier<T, Ring<T>> where S : Ring<T>, S : ScaleOperations<T> {
     override fun verify() {
         algebra {

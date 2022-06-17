@@ -1,8 +1,6 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
+    id("ru.mipt.npm.gradle.mpp")
     id("ru.mipt.npm.gradle.native")
-//    id("com.xcporter.metaview") version "0.0.5"
 }
 
 kotlin.sourceSets {

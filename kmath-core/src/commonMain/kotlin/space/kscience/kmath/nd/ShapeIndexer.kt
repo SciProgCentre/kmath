@@ -10,7 +10,7 @@ import kotlin.native.concurrent.ThreadLocal
 /**
  * A converter from linear index to multivariate index
  */
-public interface ShapeIndexer: Iterable<IntArray>{
+public interface ShapeIndexer : Iterable<IntArray> {
     public val shape: Shape
 
     /**
@@ -44,7 +44,7 @@ public interface ShapeIndexer: Iterable<IntArray>{
 /**
  * Linear transformation of indexes
  */
-public abstract class Strides: ShapeIndexer {
+public abstract class Strides : ShapeIndexer {
     /**
      * Array strides
      */
@@ -66,7 +66,7 @@ public abstract class Strides: ShapeIndexer {
 /**
  * Simple implementation of [Strides].
  */
-public class DefaultStrides private constructor(override val shape: IntArray) : Strides() {
+public class DefaultStrides(override val shape: IntArray) : Strides() {
     override val linearSize: Int get() = strides[shape.size]
 
     /**
@@ -112,6 +112,7 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
         /**
          * Cached builder for default strides
          */
+        @Deprecated("Replace by Strides(shape)")
         public operator fun invoke(shape: IntArray): Strides =
             defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
     }
@@ -119,3 +120,8 @@ public class DefaultStrides private constructor(override val shape: IntArray) : 
 
 @ThreadLocal
 private val defaultStridesCache = HashMap<IntArray, Strides>()
+
+/**
+ * Cached builder for default strides
+ */
+public fun Strides(shape: IntArray): Strides = defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }

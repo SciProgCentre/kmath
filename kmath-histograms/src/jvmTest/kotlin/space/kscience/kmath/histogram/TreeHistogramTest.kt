@@ -6,12 +6,14 @@
 package space.kscience.kmath.histogram
 
 import org.junit.jupiter.api.Test
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.real.step
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(UnstableKMathAPI::class)
 class TreeHistogramTest {
 
     @Test
