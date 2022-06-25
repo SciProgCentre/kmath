@@ -117,6 +117,8 @@ public val Quaternion.reciprocal: Quaternion
         return Quaternion(w / norm2, -x / norm2, -y / norm2, -z / norm2)
     }
 
+public fun Quaternion.normalized(): Quaternion = with(QuaternionField){ this@normalized / norm(this@normalized) }
+
 /**
  * A field of [Quaternion].
  */

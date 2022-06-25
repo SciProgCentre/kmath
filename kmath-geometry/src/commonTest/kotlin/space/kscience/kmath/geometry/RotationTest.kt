@@ -6,17 +6,16 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.complex.Quaternion
+import space.kscience.kmath.complex.normalized
 import space.kscience.kmath.testutils.assertBufferEquals
-import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class RotationTest {
 
     @Test
     fun rotations() = with(Euclidean3DSpace) {
         val vector = Vector3D(1.0, 1.0, 1.0)
-        val q = Quaternion(1.0, 2.0, -3.0, 4.0)
+        val q = Quaternion(1.0, 2.0, -3.0, 4.0).normalized()
         val rotatedByQ = rotate(vector, q)
         val matrix = q.toRotationMatrix()
         val rotatedByM = rotate(vector,matrix)
@@ -25,13 +24,12 @@ class RotationTest {
     }
 
     @Test
-    @Ignore
     fun rotationConversion() {
 
-        val q = Quaternion(1.0, 2.0, -3.0, 4.0)
+        val q = Quaternion(1.0, 2.0, -3.0, 4.0).normalized()
 
         val matrix = q.toRotationMatrix()
 
-        assertEquals(q, Quaternion.fromRotationMatrix(matrix))
+        assertBufferEquals(q, Quaternion.fromRotationMatrix(matrix))
     }
 }
