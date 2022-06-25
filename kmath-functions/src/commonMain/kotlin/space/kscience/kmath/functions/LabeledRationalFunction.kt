@@ -13,7 +13,7 @@ import kotlin.jvm.JvmName
 /**
  * Represents multivariate rational function that stores its numerator and denominator as [LabeledPolynomial]s.
  */
-public class LabeledRationalFunction<C>(
+public data class LabeledRationalFunction<C>(
     public override val numerator: LabeledPolynomial<C>,
     public override val denominator: LabeledPolynomial<C>
 ) : RationalFunction<C, LabeledPolynomial<C>> {

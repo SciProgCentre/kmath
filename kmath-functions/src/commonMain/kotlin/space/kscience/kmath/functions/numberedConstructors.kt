@@ -72,6 +72,8 @@ public inline fun <C> NumberedPolynomialWithoutCheck(vararg pairs: Pair<List<UIn
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
@@ -92,6 +94,8 @@ public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) :
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
@@ -112,6 +116,8 @@ public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
@@ -134,6 +140,8 @@ public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C)
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs, ::add)
 /**
@@ -143,6 +151,8 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(coefs: Map<List<UInt>, C>
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs) { left: C, right: C -> left + right }
 
@@ -153,6 +163,8 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(coefs: Map<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(coefs) { left: C, right: C -> left + right }
 
@@ -163,6 +175,8 @@ public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPo
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs, ::add)
 
@@ -173,6 +187,8 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(pairs: Collection<Pair<Li
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) : NumberedPolynomial<C> = NumberedPolynomial(pairs) { left: C, right: C -> left + right }
 /**
@@ -192,6 +208,8 @@ public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPo
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
@@ -201,6 +219,8 @@ public inline fun <C, A: Ring<C>> A.NumberedPolynomial(vararg pairs: Pair<List<U
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
@@ -210,6 +230,8 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see NumberedPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) : NumberedPolynomial<C> = NumberedPolynomial(*pairs) { left: C, right: C -> left + right }
 

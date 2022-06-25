@@ -73,6 +73,8 @@ public inline fun <C> LabeledPolynomialWithoutCheck(vararg pairs: Pair<Map<Symbo
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
     val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
@@ -93,6 +95,8 @@ public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, add: (C, C) -> C) : LabeledPolynomial<C> {
     val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
@@ -113,6 +117,8 @@ public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, 
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public fun <C> LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
     val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
@@ -135,6 +141,8 @@ public fun <C> LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, add: 
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs, ::add)
 /**
@@ -144,6 +152,8 @@ public inline fun <C, A: Ring<C>> A.LabeledPolynomial(coefs: Map<Map<Symbol, UIn
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs) { left: C, right: C -> left + right }
 
@@ -154,6 +164,8 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
  * 1. Zeros at the ends of terms' signatures (e.g. [coefs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(coefs) { left: C, right: C -> left + right }
 
@@ -164,6 +176,8 @@ public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPoly
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs, ::add)
 
@@ -174,6 +188,8 @@ public inline fun <C, A: Ring<C>> A.LabeledPolynomial(pairs: Collection<Pair<Map
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs) { left: C, right: C -> left + right }
 /**
@@ -183,6 +199,8 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>) : LabeledPolynomial<C> = LabeledPolynomial(pairs) { left: C, right: C -> left + right }
 
@@ -193,6 +211,8 @@ public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPoly
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
@@ -202,6 +222,8 @@ public inline fun <C, A: Ring<C>> A.LabeledPolynomial(vararg pairs: Pair<Map<Sym
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
 /**
@@ -211,6 +233,8 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
  * 1. Zeros at the ends of terms' signatures (e.g. [pairs] keys) will be removed. (See [cleanUp].)
  * 1. Terms that happen to have the same signature will be summed up.
  * 1. New map will be formed of resulting terms.
+ *
+ * @see LabeledPolynomialWithoutCheck
  */
 public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>) : LabeledPolynomial<C> = LabeledPolynomial(*pairs) { left: C, right: C -> left + right }
 

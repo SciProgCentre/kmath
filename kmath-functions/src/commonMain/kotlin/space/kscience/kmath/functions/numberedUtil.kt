@@ -353,7 +353,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    if (degs.size > variable) return@forEach
+                    if (degs.lastIndex < variable) return@forEach
                     put(
                         degs.mapIndexed { index, deg ->
                             when {
@@ -383,7 +383,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    if (degs.size > variable) return@forEach
+                    if (degs.lastIndex < variable) return@forEach
                     put(
                         degs.mapIndexed { index, deg ->
                             when {
@@ -417,7 +417,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    if (degs.size > maxRespectedVariable) return@forEach
+                    if (degs.lastIndex < maxRespectedVariable) return@forEach
                     put(
                         degs.mapIndexed { index, deg ->
                             if (index !in filteredVariablesAndOrders) return@mapIndexed deg

@@ -15,7 +15,7 @@ import kotlin.math.max
 /**
  * Represents multivariate rational function that stores its numerator and denominator as [NumberedPolynomial]s.
  */
-public class NumberedRationalFunction<C> internal constructor(
+public data class NumberedRationalFunction<C>(
     public override val numerator: NumberedPolynomial<C>,
     public override val denominator: NumberedPolynomial<C>
 ) : RationalFunction<C, NumberedPolynomial<C>> {

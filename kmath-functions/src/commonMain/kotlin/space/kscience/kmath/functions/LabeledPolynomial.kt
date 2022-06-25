@@ -522,7 +522,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     override operator fun LabeledPolynomial<C>.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                other.coefficients.mapValuesTo(this) { it.value }
+                coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
             }
         )
@@ -532,7 +532,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     override operator fun LabeledPolynomial<C>.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                other.coefficients.mapValuesTo(this) { it.value }
+                coefficients.mapValuesTo(this) { it.value }
                 other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
             }
         )
