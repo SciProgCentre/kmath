@@ -28,7 +28,7 @@ public data class ListRationalFunction<C>(
 public class ListRationalFunctionSpace<C, A : Ring<C>> (
     public val ring: A,
 ) :
-    RationalFunctionalSpaceOverPolynomialSpace<
+    RationalFunctionSpaceOverPolynomialSpace<
             C,
             ListPolynomial<C>,
             ListRationalFunction<C>,

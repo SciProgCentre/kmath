@@ -16,8 +16,8 @@ import kotlin.math.pow
 /**
  * Creates a [ListPolynomialSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.listPolynomialSpace(): ListPolynomialSpace<C, A> =
-    ListPolynomialSpace(this)
+public inline val <C, A : Ring<C>> A.listPolynomialSpace: ListPolynomialSpace<C, A>
+    get() = ListPolynomialSpace(this)
 
 /**
  * Creates a [ListPolynomialSpace]'s scope over a received ring.
@@ -30,8 +30,8 @@ public inline fun <C, A : Ring<C>, R> A.listPolynomialSpace(block: ListPolynomia
 /**
  * Creates a [ScalableListPolynomialSpace] over a received scalable ring.
  */
-public fun <C, A> A.scalableListPolynomialSpace(): ScalableListPolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C> =
-    ScalableListPolynomialSpace(this)
+public inline val <C, A> A.scalableListPolynomialSpace: ScalableListPolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C>
+    get() = ScalableListPolynomialSpace(this)
 
 /**
  * Creates a [ScalableListPolynomialSpace]'s scope over a received scalable ring.
@@ -44,8 +44,8 @@ public inline fun <C, A, R> A.scalableListPolynomialSpace(block: ScalableListPol
 /**
  * Creates a [ListRationalFunctionSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.listRationalFunctionSpace(): ListRationalFunctionSpace<C, A> =
-    ListRationalFunctionSpace(this)
+public inline val <C, A : Ring<C>> A.listRationalFunctionSpace: ListRationalFunctionSpace<C, A>
+    get() = ListRationalFunctionSpace(this)
 
 /**
  * Creates a [ListRationalFunctionSpace]'s scope over a received ring.

@@ -19,8 +19,8 @@ import kotlin.jvm.JvmName
 /**
  * Creates a [LabeledPolynomialSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.labeledPolynomialSpace(): LabeledPolynomialSpace<C, A> =
-    LabeledPolynomialSpace(this)
+public inline val <C, A : Ring<C>> A.labeledPolynomialSpace: LabeledPolynomialSpace<C, A>
+    get() = LabeledPolynomialSpace(this)
 
 /**
  * Creates a [LabeledPolynomialSpace]'s scope over a received ring.
@@ -32,8 +32,8 @@ public inline fun <C, A : Ring<C>, R> A.labeledPolynomialSpace(block: LabeledPol
 /**
  * Creates a [LabeledRationalFunctionSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.labeledRationalFunctionSpace(): LabeledRationalFunctionSpace<C, A> =
-    LabeledRationalFunctionSpace(this)
+public inline val <C, A : Ring<C>> A.labeledRationalFunctionSpace: LabeledRationalFunctionSpace<C, A>
+    get() = LabeledRationalFunctionSpace(this)
 
 /**
  * Creates a [LabeledRationalFunctionSpace]'s scope over a received ring.

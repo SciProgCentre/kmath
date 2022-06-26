@@ -29,7 +29,7 @@ public interface RationalFunction<C, P: Polynomial<C>> {
  * @param R the type of rational functions.
  */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE") // FIXME: Waiting for KT-31420
-public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunction<C, P>> : Ring<R> {
+public interface RationalFunctionSpace<C, P: Polynomial<C>, R: RationalFunction<C, P>> : Ring<R> {
     /**
      * Returns sum of the constant and the integer represented as a constant (member of underlying ring).
      *
@@ -459,12 +459,12 @@ public interface RationalFunctionalSpace<C, P: Polynomial<C>, R: RationalFunctio
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface RationalFunctionalSpaceOverRing<
+public interface RationalFunctionSpaceOverRing<
         C,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         A: Ring<C>
-        > : RationalFunctionalSpace<C, P, R> {
+        > : RationalFunctionSpace<C, P, R> {
 
     /**
      * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
@@ -561,12 +561,12 @@ public interface RationalFunctionalSpaceOverRing<
  * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface RationalFunctionalSpaceOverPolynomialSpace<
+public interface RationalFunctionSpaceOverPolynomialSpace<
         C,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         AP: PolynomialSpace<C, P>,
-        > : RationalFunctionalSpace<C, P, R> {
+        > : RationalFunctionSpace<C, P, R> {
 
     /**
      * Underlying polynomial ring. Its polynomial operations are inherited by local polynomial operations.
@@ -797,7 +797,7 @@ public abstract class PolynomialSpaceOfFractions<
         C,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
-        > : RationalFunctionalSpace<C, P, R> {
+        > : RationalFunctionSpace<C, P, R> {
 
     /**
      * Constructor of rational functions (of type [R]) from numerator and denominator (of type [P]).
@@ -1106,12 +1106,12 @@ public abstract class PolynomialSpaceOfFractions<
  * @param R the type of rational functions.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface MultivariateRationalFunctionalSpace<
+public interface MultivariateRationalFunctionSpace<
         C,
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>
-        >: RationalFunctionalSpace<C, P, R> {
+        >: RationalFunctionSpace<C, P, R> {
     /**
      * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.
      */
@@ -1335,13 +1335,13 @@ public interface MultivariateRationalFunctionalSpace<
  * @param AP the type of algebraic structure (precisely, of ring) provided for polynomials.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface MultivariateRationalFunctionalSpaceOverMultivariatePolynomialSpace<
+public interface MultivariateRationalFunctionSpaceOverMultivariatePolynomialSpace<
         C,
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
         AP: MultivariatePolynomialSpace<C, V, P>,
-        > : RationalFunctionalSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionalSpace<C, V, P, R> {
+        > : RationalFunctionSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionSpace<C, V, P, R> {
     /**
      * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.
      */
@@ -1517,7 +1517,7 @@ public abstract class MultivariatePolynomialSpaceOfFractions<
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
-        > : MultivariateRationalFunctionalSpace<C, V, P, R>,  PolynomialSpaceOfFractions<C, P, R>() {
+        > : MultivariateRationalFunctionSpace<C, V, P, R>,  PolynomialSpaceOfFractions<C, P, R>() {
     /**
      * Returns sum of the variable represented as a rational function and the rational function.
      */

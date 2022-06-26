@@ -21,8 +21,8 @@ import kotlin.math.min
 /**
  * Creates a [NumberedPolynomialSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.numberedPolynomialSpace(): NumberedPolynomialSpace<C, A> =
-    NumberedPolynomialSpace(this)
+public inline val <C, A : Ring<C>> A.numberedPolynomialSpace: NumberedPolynomialSpace<C, A>
+    get() = NumberedPolynomialSpace(this)
 
 /**
  * Creates a [NumberedPolynomialSpace]'s scope over a received ring.
@@ -35,8 +35,8 @@ public inline fun <C, A : Ring<C>, R> A.numberedPolynomialSpace(block: NumberedP
 /**
  * Creates a [NumberedRationalFunctionSpace] over a received ring.
  */
-public fun <C, A : Ring<C>> A.numberedRationalFunctionSpace(): NumberedRationalFunctionSpace<C, A> =
-    NumberedRationalFunctionSpace(this)
+public inline val <C, A : Ring<C>> A.numberedRationalFunctionSpace: NumberedRationalFunctionSpace<C, A>
+    get() = NumberedRationalFunctionSpace(this)
 
 /**
  * Creates a [NumberedRationalFunctionSpace]'s scope over a received ring.
