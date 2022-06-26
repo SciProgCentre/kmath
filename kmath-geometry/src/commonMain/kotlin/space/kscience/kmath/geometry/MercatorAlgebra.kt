@@ -58,7 +58,7 @@ public data class MercatorCoordinates(val x: Double, val y: Double)
  */
 public open class MercatorAlgebra(
     public val baseLongitude: Double = 0.0,
-    private val radius: Double = DEFAULT_EARTH_RADIUS,
+    protected val radius: Double = DEFAULT_EARTH_RADIUS,
     private val correctedRadius: ((GeodeticCoordinates) -> Double)? = null,
 ) : Algebra<TileWebMercatorCoordinates> {
 
@@ -90,8 +90,8 @@ public open class MercatorAlgebra(
         )
     }
 
-    public companion object : MercatorAlgebra() {
+    public companion object : MercatorAlgebra(0.0, 6378137.0) {
         public const val MAXIMUM_LATITUDE: Double = 85.05113
-        public const val DEFAULT_EARTH_RADIUS: Double = 6378137.0
+        public val DEFAULT_EARTH_RADIUS: Double = radius
     }
 }
