@@ -610,12 +610,10 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     /**
      * Substitutes provided arguments [arguments] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun LabeledPolynomial<C>.substitute(arguments: Map<Symbol, C>): LabeledPolynomial<C> = substitute(ring, arguments)
     /**
      * Substitutes provided arguments [arguments] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun LabeledPolynomial<C>.substitute(arguments: Map<Symbol, LabeledPolynomial<C>>) : LabeledPolynomial<C> = substitute(ring, arguments)
 }

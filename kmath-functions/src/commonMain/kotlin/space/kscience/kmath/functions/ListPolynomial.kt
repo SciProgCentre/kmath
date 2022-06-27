@@ -346,39 +346,32 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.substitute(argument: C): C = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.substitute(argument: ListPolynomial<C>): ListPolynomial<C> = substitute(ring, argument)
 
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.asFunction(): (C) -> C = asFunctionOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.asFunctionOfConstant(): (C) -> C = asFunctionOfConstantOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun ListPolynomial<C>.asFunctionOfPolynomial(): (ListPolynomial<C>) -> ListPolynomial<C> = asFunctionOfPolynomialOver(ring)
 
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline operator fun ListPolynomial<C>.invoke(argument: C): C = substitute(ring, argument)
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline operator fun ListPolynomial<C>.invoke(argument: ListPolynomial<C>): ListPolynomial<C> = substitute(ring, argument)
 }
 

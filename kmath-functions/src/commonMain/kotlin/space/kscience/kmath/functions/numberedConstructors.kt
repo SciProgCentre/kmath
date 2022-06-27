@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE")
+@file:Suppress("FunctionName")
 
 package space.kscience.kmath.functions
 
@@ -296,21 +296,18 @@ public class NumberedPolynomialTermSignatureBuilder {
      *
      * Declaring another power of the same variable will increase its degree by received degree.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Int.pow(deg: UInt): Unit = this inPowerOf deg
     /**
      * Declares power of variable #[this] of degree [deg].
      *
      * Declaring another power of the same variable will increase its degree by received degree.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Int.`in`(deg: UInt): Unit = this inPowerOf deg
     /**
      * Declares power of variable #[this] of degree [deg].
      *
      * Declaring another power of the same variable will increase its degree by received degree.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline infix fun Int.of(deg: UInt): Unit = this inPowerOf deg
 }
 
@@ -358,7 +355,6 @@ public class NumberedPolynomialBuilder<C>(
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline infix fun C.with(noinline block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].

@@ -113,135 +113,111 @@ public class NumberedRationalFunctionSpace<C, A: Ring<C>> (
     /**
      * Substitutes provided constant [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, C>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, C>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Map<Int, NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<C>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun NumberedPolynomial<C>.substitute(argument: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedRationalFunction<C>.substitute(argument: Buffer<C>): NumberedRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [arguments] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided rational function [arguments] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun NumberedRationalFunction<C>.substitute(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided constant [arguments] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.substituteFully(arguments: Buffer<C>): C = substituteFully(ring, arguments)
 
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.asFunction(): (Buffer<C>) -> C = asFunctionOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.asFunctionOfConstant(): (Buffer<C>) -> C = asFunctionOfConstantOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.asFunctionOfPolynomial(): (Buffer<NumberedPolynomial<C>>) -> NumberedPolynomial<C> = asFunctionOfPolynomialOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedPolynomial<C>.asFunctionOfRationalFunction(): (Buffer<NumberedRationalFunction<C>>) -> NumberedRationalFunction<C> = asFunctionOfRationalFunctionOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedRationalFunction<C>.asFunctionOfPolynomial(): (Buffer<NumberedPolynomial<C>>) -> NumberedRationalFunction<C> = asFunctionOfPolynomialOver(ring)
     /**
      * Represent [this] polynomial as a regular context-less function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun NumberedRationalFunction<C>.asFunctionOfRationalFunction(): (Buffer<NumberedRationalFunction<C>>) -> NumberedRationalFunction<C> = asFunctionOfRationalFunctionOver(ring)
 
     /**
      * Evaluates value of [this] polynomial on provided [arguments].
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<C>): C = substituteFully(ring, arguments)
     /**
      * Substitutes provided [arguments] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokePolynomial")
     public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<NumberedPolynomial<C>>): NumberedPolynomial<C> = substitute(ring, arguments)
     /**
      * Substitutes provided [arguments] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokeRationalFunction")
     public inline operator fun NumberedPolynomial<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided [arguments] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokePolynomial")
     public inline operator fun NumberedRationalFunction<C>.invoke(arguments: Buffer<NumberedPolynomial<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
     /**
      * Substitutes provided [arguments] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokeRationalFunction")
     public inline operator fun NumberedRationalFunction<C>.invoke(arguments: Buffer<NumberedRationalFunction<C>>): NumberedRationalFunction<C> = substitute(ring, arguments)
 }

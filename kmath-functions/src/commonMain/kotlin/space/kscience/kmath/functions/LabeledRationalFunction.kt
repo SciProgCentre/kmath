@@ -62,35 +62,29 @@ public class LabeledRationalFunctionSpace<C, A: Ring<C>>(
     /**
      * Substitutes provided constant [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, C>): LabeledPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, LabeledPolynomial<C>>): LabeledPolynomial<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] polynomial.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun LabeledPolynomial<C>.substitute(argument: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided constant [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, C>): LabeledRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided polynomial [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
     public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, LabeledPolynomial<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
     /**
      * Substitutes provided rational function [argument] into [this] rational function.
      */
-    @Suppress("NOTHING_TO_INLINE")
     @JvmName("substituteRationalFunction")
     public inline fun LabeledRationalFunction<C>.substitute(argument: Map<Symbol, LabeledRationalFunction<C>>): LabeledRationalFunction<C> = substitute(ring, argument)
 }
