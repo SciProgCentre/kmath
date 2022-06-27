@@ -283,6 +283,7 @@ public class NumberedPolynomialTermSignatureBuilder {
      * Declaring another power of the same variable will increase its degree by received degree.
      */
     public infix fun Int.inPowerOf(deg: UInt) {
+        if (deg == 0u) return
         val index = this - 1
         if (index > signature.lastIndex) {
             signature.addAll(List(index - signature.lastIndex - 1) { 0u })

@@ -331,13 +331,13 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * the result is `-1`.
      */
     public val NumberedPolynomial<C>.lastVariable: Int
-        get() = coefficients.entries.maxOfOrNull { (degs, _) -> degs.lastIndex } ?: -1
+        get() = coefficients.keys.maxOfOrNull { degs -> degs.lastIndex } ?: -1
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
     override val NumberedPolynomial<C>.degree: Int
-        get() = coefficients.entries.maxOfOrNull { (degs, _) -> degs.sum().toInt() } ?: -1
+        get() = coefficients.keys.maxOfOrNull { degs -> degs.sum().toInt() } ?: -1
     /**
      * List that associates indices of variables (that appear in the polynomial in positive exponents) with their most
      * exponents in which the variables are appeared in the polynomial.
@@ -348,7 +348,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     public val NumberedPolynomial<C>.degrees: List<UInt>
         get() =
             MutableList(lastVariable + 1) { 0u }.apply {
-                coefficients.entries.forEach { (degs, _) ->
+                coefficients.keys.forEach { degs ->
                     degs.forEachIndexed { index, deg ->
                         this[index] = max(this[index], deg)
                     }
@@ -358,13 +358,13 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Counts degree of the polynomial by the specified [variable].
      */
     public fun NumberedPolynomial<C>.degreeBy(variable: Int): UInt =
-        coefficients.entries.maxOfOrNull { (degs, _) -> degs.getOrElse(variable) { 0u } } ?: 0u
+        coefficients.keys.maxOfOrNull { degs -> degs.getOrElse(variable) { 0u } } ?: 0u
     /**
      * Counts degree of the polynomial by the specified [variables].
      */
     public fun NumberedPolynomial<C>.degreeBy(variables: Collection<Int>): UInt =
-        coefficients.entries.maxOfOrNull { (degs, _) ->
-            degs.withIndex().filter { (index, _) -> index in variables }.sumOf { it.value }
+        coefficients.keys.maxOfOrNull { degs ->
+            degs.withIndex().fold(0u) { acc, (index, value) -> if (index in variables) acc + value else acc }
         } ?: 0u
     /**
      * Count of variables occurring in the polynomial with positive power. If there is no such variable,

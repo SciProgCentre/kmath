@@ -23,8 +23,8 @@ class NumberedConstructorsTest {
             ),
             Int.algebra.numberedPolynomialSpace {
                 NumberedPolynomial {
-                    5 { 1 inPowerOf 2u; 3 inPowerOf 3u }
-                    (-6) { 2 inPowerOf 1u }
+                    5 { 1 pow 2u; 3 pow 3u }
+                    (-6) { 2 pow 1u }
                 }
             },
             "test 1"
@@ -47,8 +47,20 @@ class NumberedConstructorsTest {
             ),
             Int.algebra.numberedPolynomialSpace {
                 NumberedPolynomial {
-                    5 { 1 inPowerOf 1u; 1 inPowerOf 1u }
-                    (-6) { 1 inPowerOf 2u }
+                    5 { 1 pow 1u; 1 pow 1u }
+                    (-6) { 1 pow 2u }
+                }
+            },
+            "test 3"
+        )
+        assertEquals(
+            NumberedPolynomialAsIs(
+                listOf(2u) to -1,
+            ),
+            Int.algebra.numberedPolynomialSpace {
+                NumberedPolynomial {
+                    5 { 1 pow 1u; 1 pow 1u }
+                    (-6) { 1 pow 2u; 3 pow 0u }
                 }
             },
             "test 3"

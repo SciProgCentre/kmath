@@ -9,9 +9,7 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.test.misc.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertSame
+import kotlin.test.*
 
 
 @UnstableKMathAPI
@@ -1362,6 +1360,306 @@ class NumberedPolynomialTest {
                     m(-7) with { 3 pow 1u }
                 },
                 "test 2"
+            )
+        }
+    }
+    @Test
+    fun test_lastVariable() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            assertEquals(
+                -1,
+                NumberedPolynomial {}.lastVariable,
+                "test 1"
+            )
+            assertEquals(
+                -1,
+                NumberedPolynomial {
+                    o {}
+                }.lastVariable,
+                "test 2"
+            )
+            assertEquals(
+                2,
+                NumberedPolynomial {
+                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                }.lastVariable,
+                "test 3"
+            )
+            assertEquals(
+                3,
+                NumberedPolynomial {
+                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+                }.also { println(it) }.lastVariable,
+                "test 4"
+            )
+            assertEquals(
+                2,
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                }.lastVariable,
+                "test 5"
+            )
+        }
+    }
+    @Test
+    fun test_degree() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            assertEquals(
+                -1,
+                NumberedPolynomial {}.degree,
+                "test 1"
+            )
+            assertEquals(
+                0,
+                NumberedPolynomial {
+                    o {}
+                }.degree,
+                "test 2"
+            )
+            assertEquals(
+                6,
+                NumberedPolynomial {
+                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                }.degree,
+                "test 3"
+            )
+            assertEquals(
+                4,
+                NumberedPolynomial {
+                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+                }.degree,
+                "test 4"
+            )
+            assertEquals(
+                3,
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                }.degree,
+                "test 5"
+            )
+            assertEquals(
+                4,
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                    o { 4 pow 4u }
+                }.degree,
+                "test 6"
+            )
+        }
+    }
+    @Test
+    fun test_countOfVariables() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            assertEquals(
+                listOf(),
+                NumberedPolynomial {}.degrees,
+                "test 1"
+            )
+            assertEquals(
+                listOf(),
+                NumberedPolynomial {
+                    o {}
+                }.degrees,
+                "test 2"
+            )
+            assertEquals(
+                listOf(1u, 2u, 3u),
+                NumberedPolynomial {
+                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                }.degrees,
+                "test 3"
+            )
+            assertEquals(
+                listOf(0u, 1u, 2u, 1u),
+                NumberedPolynomial {
+                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+                }.degrees,
+                "test 4"
+            )
+            assertEquals(
+                listOf(2u, 1u, 1u),
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                }.degrees,
+                "test 5"
+            )
+            assertEquals(
+                listOf(2u, 2u, 2u, 4u),
+                NumberedPolynomial {
+                    o {}
+                    o { 1 pow 1u; 2 pow 2u }
+                    o { 2 pow 1u; 3 pow 2u }
+                    o { 1 pow 2u; 3 pow 1u }
+                    o { 4 pow 4u }
+                }.degrees,
+                "test 6"
+            )
+        }
+    }
+    @Test
+    fun test_degreeBy() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            fun NumberedPolynomial<Rational>.collectDegrees(limit: Int = lastVariable + 2): List<UInt> = List(limit) { degreeBy(it) }
+            assertEquals(
+                listOf(0u),
+                NumberedPolynomial {}.collectDegrees(),
+                "test 1"
+            )
+            assertEquals(
+                listOf(0u),
+                NumberedPolynomial {
+                    o {}
+                }.collectDegrees(),
+                "test 2"
+            )
+            assertEquals(
+                listOf(1u, 2u, 3u, 0u),
+                NumberedPolynomial {
+                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                }.collectDegrees(),
+                "test 3"
+            )
+            assertEquals(
+                listOf(0u, 1u, 2u, 1u, 0u),
+                NumberedPolynomial {
+                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+                }.collectDegrees(),
+                "test 4"
+            )
+            assertEquals(
+                listOf(2u, 1u, 1u, 0u),
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                }.collectDegrees(),
+                "test 5"
+            )
+            assertEquals(
+                listOf(2u, 2u, 2u, 4u, 0u),
+                NumberedPolynomial {
+                    o {}
+                    o { 1 pow 1u; 2 pow 2u }
+                    o { 2 pow 1u; 3 pow 2u }
+                    o { 1 pow 2u; 3 pow 1u }
+                    o { 4 pow 4u }
+                }.collectDegrees(),
+                "test 6"
+            )
+        }
+    }
+    @Test
+    fun test_degreeBy_Collection() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            fun NumberedPolynomial<Rational>.checkDegreeBy(message: String? = null) {
+                val lastVariable = lastVariable
+                val indexCollectionSequence: Sequence<List<Int>> = sequence {
+                    val appearances = MutableList(lastVariable + 2) { 0 }
+                    while (true) {
+                        yield(
+                            buildList {
+                                for ((variable, count) in appearances.withIndex()) repeat(count) { add(variable) }
+                            }
+                        )
+                        val indexChange = appearances.indexOfFirst { it < 4 }
+                        if (indexChange == -1) break
+                        appearances[indexChange] += 1
+                        for (index in 0 until indexChange) appearances[index] = 0
+                    }
+                }
+                for (indexCollection in indexCollectionSequence) {
+                    val expected = coefficients.keys.maxOfOrNull { degs -> degs.slice(indexCollection.distinct().filter { it in degs.indices }).sum() } ?: 0u
+                    val actual = degreeBy(indexCollection)
+                    if (actual != expected)
+                        fail("${message ?: ""} Incorrect answer for variable collection $indexCollection: expected $expected, actual $actual")
+                }
+            }
+            NumberedPolynomial {}.checkDegreeBy("test 1")
+            NumberedPolynomial {
+                o {}
+            }.checkDegreeBy("test 2")
+            NumberedPolynomial {
+                o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+            }.checkDegreeBy("test 3")
+            NumberedPolynomial {
+                o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+            }.checkDegreeBy("test 4")
+            NumberedPolynomial {
+                o {}
+                o { 2 pow 1u }
+                o { 1 pow 2u; 3 pow 1u }
+            }.checkDegreeBy("test 5")
+            NumberedPolynomial {
+                o {}
+                o { 1 pow 1u; 2 pow 2u }
+                o { 2 pow 1u; 3 pow 2u }
+                o { 1 pow 2u; 3 pow 1u }
+                o { 4 pow 4u }
+            }.checkDegreeBy("test 6")
+        }
+    }
+    @Test
+    fun test_degrees() {
+        val o = Rational(0)
+        RationalField.numberedPolynomialSpace {
+            assertEquals(
+                0,
+                NumberedPolynomial {}.countOfVariables,
+                "test 1"
+            )
+            assertEquals(
+                0,
+                NumberedPolynomial {
+                    o {}
+                }.countOfVariables,
+                "test 2"
+            )
+            assertEquals(
+                3,
+                NumberedPolynomial {
+                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                }.countOfVariables,
+                "test 3"
+            )
+            assertEquals(
+                3,
+                NumberedPolynomial {
+                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
+                }.countOfVariables,
+                "test 4"
+            )
+            assertEquals(
+                3,
+                NumberedPolynomial {
+                    o {}
+                    o { 2 pow 1u }
+                    o { 1 pow 2u; 3 pow 1u }
+                }.countOfVariables,
+                "test 5"
+            )
+            assertEquals(
+                4,
+                NumberedPolynomial {
+                    o {}
+                    o { 1 pow 1u; 2 pow 2u }
+                    o { 2 pow 1u; 3 pow 2u }
+                    o { 1 pow 2u; 3 pow 1u }
+                    o { 4 pow 4u }
+                }.countOfVariables,
+                "test 6"
             )
         }
     }
