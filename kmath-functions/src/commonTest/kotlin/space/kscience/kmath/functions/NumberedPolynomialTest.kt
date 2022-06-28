@@ -1456,7 +1456,7 @@ class NumberedPolynomialTest {
         }
     }
     @Test
-    fun test_countOfVariables() {
+    fun test_degrees() {
         val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
@@ -1612,7 +1612,7 @@ class NumberedPolynomialTest {
         }
     }
     @Test
-    fun test_degrees() {
+    fun test_countOfVariables() {
         val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
@@ -1660,6 +1660,82 @@ class NumberedPolynomialTest {
                     o { 4 pow 4u }
                 }.countOfVariables,
                 "test 6"
+            )
+        }
+    }
+    @Test
+    fun test_RF_countOfVariables() {
+        val o = Rational(0)
+        RationalField.numberedRationalFunctionSpace {
+            assertEquals(
+                0,
+                NumberedRationalFunction(
+                    NumberedPolynomial {}
+                ).countOfVariables,
+                "test 1"
+            )
+            assertEquals(
+                0,
+                NumberedRationalFunction(
+                    NumberedPolynomial {},
+                    NumberedPolynomial {}
+                ).countOfVariables,
+                "test 2"
+            )
+            assertEquals(
+                0,
+                NumberedRationalFunction(
+                    NumberedPolynomial {
+                        o {}
+                    }
+                ).countOfVariables,
+                "test 3"
+            )
+            assertEquals(
+                3,
+                NumberedRationalFunction(
+                    NumberedPolynomial {
+                        o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
+                    }
+                ).countOfVariables,
+                "test 4"
+            )
+            assertEquals(
+                3,
+                NumberedRationalFunction(
+                    NumberedPolynomial {
+                        o { 2 pow 1u; 4 pow 1u }
+                    },
+                    NumberedPolynomial {
+                        o { 1 pow 0u; 3 pow 2u; 5 pow 0u }
+                    }
+                ).countOfVariables,
+                "test 5"
+            )
+            assertEquals(
+                3,
+                NumberedRationalFunction(
+                    NumberedPolynomial {
+                        o {}
+                        o { 2 pow 1u }
+                        o { 1 pow 2u; 3 pow 1u }
+                    }
+                ).countOfVariables,
+                "test 6"
+            )
+            assertEquals(
+                4,
+                NumberedRationalFunction(
+                    NumberedPolynomial {
+                        o {}
+                        o { 1 pow 1u; 2 pow 2u }
+                        o { 1 pow 2u; 3 pow 1u }
+                    }, NumberedPolynomial {
+                        o { 2 pow 1u; 3 pow 2u }
+                        o { 4 pow 4u }
+                    }
+                ).countOfVariables,
+                "test 7"
             )
         }
     }
