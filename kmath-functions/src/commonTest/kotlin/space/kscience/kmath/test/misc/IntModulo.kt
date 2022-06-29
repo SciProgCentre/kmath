@@ -108,7 +108,7 @@ class IntModulo {
     override fun toString(): String = "$residue mod $modulus"
 }
 
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 class IntModuloRing : Ring<IntModulo> {
 
     val modulus: Int
