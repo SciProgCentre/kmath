@@ -17,6 +17,6 @@ package space.kscience.kmath.functions
             "But at the same time makes it easy to make a mistake " +
             "that will cause wrong computation result or even runtime error. " +
             "Make sure you fully read and understand documentation.",
-    level = RequiresOptIn.Level.WARNING
+    level = RequiresOptIn.Level.ERROR
 )
-internal annotation class DelicatePolynomialAPI
+public annotation class DelicatePolynomialAPI
