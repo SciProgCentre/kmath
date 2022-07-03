@@ -8,16 +8,22 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.test.misc.Rational
 import space.kscience.kmath.test.misc.RationalField
+import space.kscience.kmath.test.misc.assertFailsWithTypeAndMessage
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 
 @OptIn(UnstableKMathAPI::class)
 class ListPolynomialUtilTest {
     @Test
     fun test_Polynomial_substitute_Double() {
+        assertEquals(
+            0.0,
+            ListPolynomial(1.0, -2.0, 1.0).substitute(1.0),
+            0.001,
+            "test 1"
+        )
         assertEquals(
             0.0,
             ListPolynomial(1.0, -2.0, 1.0).substitute(1.0),
@@ -859,7 +865,10 @@ class ListPolynomialUtilTest {
             ListPolynomial(Rational(1), Rational(-2), Rational(1)).nthDerivative(RationalField, 1),
             "test 1"
         )
-        assertFailsWith<IllegalArgumentException>("test2") {
+        assertFailsWithTypeAndMessage<IllegalArgumentException>(
+            "Order of derivative must be non-negative",
+            "test2"
+        ) {
             ListPolynomial(Rational(1), Rational(-2), Rational(1)).nthDerivative(RationalField, -1)
         }
         assertEquals(
@@ -928,7 +937,10 @@ class ListPolynomialUtilTest {
             ListPolynomial(Rational(1), Rational(-2), Rational(1)).nthAntiderivative(RationalField, 1),
             "test 1"
         )
-        assertFailsWith<IllegalArgumentException>("test2") {
+        assertFailsWithTypeAndMessage<IllegalArgumentException>(
+            "Order of antiderivative must be non-negative",
+            "test2"
+        ) {
             ListPolynomial(Rational(1), Rational(-2), Rational(1)).nthAntiderivative(RationalField, -1)
         }
         assertEquals(
