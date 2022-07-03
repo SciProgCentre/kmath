@@ -121,7 +121,7 @@ class ListPolynomialUtilTest {
     }
     @Test
     @Ignore // FIXME: This tests work only for sane realisations of the substitutions. Currently, it is not.
-            //  Sane algorithm for substitution p(q/r) (p, q, and r are polynomials) should make denominator r^deg(p),
+            //  Sane algorithm for substitution p(q/r) (p, q, and r are polynomials) should return denominator r^deg(p),
             //  not r^(deg(p)(deg(p)+1)/2) as it is now.
     fun test_Polynomial_substitute_RationalFunction() {
         assertEquals(
@@ -589,7 +589,7 @@ class ListPolynomialUtilTest {
     }
     @Test
     @Ignore // FIXME: This tests work only for sane realisations of the substitutions. Currently, it is not.
-            //  Sane algorithm for substitution p(q/r) (p, q, and r are polynomials) should make denominator r^deg(p),
+            //  Sane algorithm for substitution p(q/r) (p, q, and r are polynomials) should return denominator r^deg(p),
             //  not r^(deg(p)(deg(p)+1)/2) as it is now.
     fun test_RationalFunction_substitute_RationalFunction() {
         assertEquals(
