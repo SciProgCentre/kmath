@@ -262,12 +262,14 @@ public fun <C> NumberedRationalFunction<C>.substitute(ring: Ring<C>, args: Buffe
         numerator.substitute(ring, args) / denominator.substitute(ring, args)
     }
 
+internal const val fullSubstitutionExceptionMessage: String = "Fully substituting buffer should cover all variables of the polynomial."
+
 /**
  * Substitutes provided Double arguments [args] into [this] Double polynomial.
  */
 public fun NumberedPolynomial<Double>.substituteFully(args: Buffer<Double>): Double = Double.algebra {
     val lastSubstitutionVariable = args.size - 1
-    require(coefficients.keys.all { it.lastIndex <= lastSubstitutionVariable }) { "Fully substituting buffer should cover all variables of the polynomial." }
+    require(coefficients.keys.all { it.lastIndex <= lastSubstitutionVariable }) { fullSubstitutionExceptionMessage }
     coefficients.entries.fold(.0) { acc, (degs, c) ->
         acc + degs.foldIndexed(c) { variable, product, deg ->
             if (deg == 0u) product else product * args[variable].pow(deg.toInt())
@@ -280,7 +282,7 @@ public fun NumberedPolynomial<Double>.substituteFully(args: Buffer<Double>): Dou
  */
 public fun <C> NumberedPolynomial<C>.substituteFully(ring: Ring<C>, args: Buffer<C>): C = ring {
     val lastSubstitutionVariable = args.size - 1
-    require(coefficients.keys.all { it.lastIndex <= lastSubstitutionVariable }) { "Fully substituting buffer should cover all variables of the polynomial." }
+    require(coefficients.keys.all { it.lastIndex <= lastSubstitutionVariable }) { fullSubstitutionExceptionMessage }
     coefficients.entries.fold(zero) { acc, (degs, c) ->
         acc + degs.foldIndexed(c) { variable, product, deg ->
             if (deg == 0u) product else product * power(args[variable], deg)

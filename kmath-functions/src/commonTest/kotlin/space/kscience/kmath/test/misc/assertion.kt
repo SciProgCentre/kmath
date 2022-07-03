@@ -8,6 +8,7 @@ package space.kscience.kmath.test.misc
 import space.kscience.kmath.functions.NumberedPolynomial
 import space.kscience.kmath.functions.NumberedRationalFunction
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 
 fun <T> assertContentEquals(expected: Map<T, Double>, actual: Map<T, Double>, absoluteTolerance: Double, message: String? = null) {
@@ -46,3 +47,14 @@ fun assertEquals(
         message
     )
 }
+
+inline fun <reified T : Throwable> assertFailsWithTypeAndMessage(
+    expectedMessage: String? = null,
+    assertionMessage: String? = null,
+    block: () -> Unit
+) =
+    assertEquals(
+        expectedMessage,
+        assertFailsWith(T::class, assertionMessage, block).message,
+        assertionMessage
+    )
