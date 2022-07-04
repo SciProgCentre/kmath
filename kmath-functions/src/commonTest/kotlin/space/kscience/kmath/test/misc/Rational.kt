@@ -9,6 +9,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.NumbersAddOps
 
+@Suppress("NAME_SHADOWING")
 class Rational {
     companion object {
         val ZERO: Rational = Rational(0L)
