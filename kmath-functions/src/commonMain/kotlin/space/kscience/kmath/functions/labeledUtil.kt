@@ -148,7 +148,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.derivativeWithRespectTo(
     variable: Symbol,
 ): LabeledPolynomial<C> = algebra {
     LabeledPolynomial<C>(
-        buildMap(coefficients.size) {
+        buildMap(coefficients.count { it.key.getOrElse(variable) { 0u } >= 1u }) {
             coefficients
                 .forEach { (degs, c) ->
                     if (variable !in degs) return@forEach
@@ -179,7 +179,7 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
 ): LabeledPolynomial<C> = algebra {
     if (order == 0u) return this@nthDerivativeWithRespectTo
     LabeledPolynomial<C>(
-        buildMap(coefficients.size) {
+        buildMap(coefficients.count { it.key.getOrElse(variable) { 0u } >= order }) {
             coefficients
                 .forEach { (degs, c) ->
                     if (degs.getOrElse(variable) { 0u } < order) return@forEach
@@ -213,7 +213,13 @@ public fun <C, A : Ring<C>> LabeledPolynomial<C>.nthDerivativeWithRespectTo(
     val filteredVariablesAndOrders = variablesAndOrders.filterValues { it != 0u }
     if (filteredVariablesAndOrders.isEmpty()) return this@nthDerivativeWithRespectTo
     LabeledPolynomial<C>(
-        buildMap(coefficients.size) {
+        buildMap(
+            coefficients.count {
+                variablesAndOrders.all { (variable, order) ->
+                    it.key.getOrElse(variable) { 0u } >= order
+                }
+            }
+        ) {
             coefficients
                 .forEach { (degs, c) ->
                     if (filteredVariablesAndOrders.any { (variable, order) -> degs.getOrElse(variable) { 0u } < order }) return@forEach

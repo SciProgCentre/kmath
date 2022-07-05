@@ -352,7 +352,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.derivativeWithRespectTo(
     variable: Int,
 ): NumberedPolynomial<C> = ring {
     NumberedPolynomial<C>(
-        buildMap(coefficients.size) {
+        buildMap(coefficients.count { it.key.getOrElse(variable) { 0u } >= 1u }) {
             coefficients
                 .forEach { (degs, c) ->
                     if (degs.lastIndex < variable) return@forEach
@@ -382,7 +382,7 @@ public fun <C, A : Ring<C>> NumberedPolynomial<C>.nthDerivativeWithRespectTo(
 ): NumberedPolynomial<C> = ring {
     if (order == 0u) return this@nthDerivativeWithRespectTo
     NumberedPolynomial<C>(
-        buildMap(coefficients.size) {
+        buildMap(coefficients.count { it.key.getOrElse(variable) { 0u } >= order }) {
             coefficients
                 .forEach { (degs, c) ->
                     if (degs.lastIndex < variable) return@forEach
@@ -451,8 +451,8 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.antiderivativeWithRespectTo(
             coefficients
                 .forEach { (degs, c) ->
                     put(
-                        List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + 1u },
-                        c / multiplyByDoubling(one, degs[variable])
+                        List(max(variable + 1, degs.size)) { degs.getOrElse(it) { 0u } + if (it != variable) 0u else 1u },
+                        c / multiplyByDoubling(one, degs.getOrElse(variable) { 0u } + 1u)
                     )
                 }
         }
@@ -474,9 +474,9 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectT
             coefficients
                 .forEach { (degs, c) ->
                     put(
-                        List(max(variable + 1, degs.size)) { if (it != variable) degs[it] else degs[it] + order },
-                        degs[variable].let { deg ->
-                            (deg downTo deg - order + 1u)
+                        List(max(variable + 1, degs.size)) { degs.getOrElse(it) { 0u } + if (it != variable) 0u else order },
+                        degs.getOrElse(variable) { 0u }.let { deg ->
+                            (deg + 1u .. deg + order)
                                 .fold(c) { acc, ord -> acc / multiplyByDoubling(one, ord) }
                         }
                     )
@@ -501,11 +501,11 @@ public fun <C, A : Field<C>> NumberedPolynomial<C>.nthAntiderivativeWithRespectT
             coefficients
                 .forEach { (degs, c) ->
                     put(
-                        List(max(maxRespectedVariable + 1, degs.size)) { degs[it] + filteredVariablesAndOrders.getOrElse(it) { 0u } },
-                        filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->
-                            degs[index].let { deg ->
-                                (deg downTo deg - order + 1u)
-                                    .fold(acc1) { acc2, ord -> acc2 / multiplyByDoubling(one, ord) }
+                        List(max(maxRespectedVariable + 1, degs.size)) { degs.getOrElse(it) { 0u } + filteredVariablesAndOrders.getOrElse(it) { 0u } },
+                        filteredVariablesAndOrders.entries.fold(c) { acc1, (variable, order) ->
+                            degs.getOrElse(variable) { 0u }.let { deg ->
+                                (deg + 1u .. deg + order)
+                                    .fold(acc1) { acc, ord -> acc / multiplyByDoubling(one, ord) }
                             }
                         }
                     )
