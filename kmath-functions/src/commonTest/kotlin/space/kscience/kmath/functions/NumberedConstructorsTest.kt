@@ -15,14 +15,14 @@ import kotlin.test.assertEquals
 class NumberedConstructorsTest {
     @Test
     @UnstableKMathAPI
-    fun testBuilder() {
+    fun testDSL1() {
         assertEquals(
             NumberedPolynomialAsIs(
                 listOf(2u, 0u, 3u) to 5,
                 listOf(0u, 1u) to -6,
             ),
             Int.algebra.numberedPolynomialSpace {
-                NumberedPolynomial {
+                NumberedPolynomialDSL1 {
                     5 { 1 pow 2u; 3 pow 3u }
                     (-6) { 2 pow 1u }
                 }
@@ -34,7 +34,7 @@ class NumberedConstructorsTest {
                 listOf<UInt>() to -1,
             ),
             Int.algebra.numberedPolynomialSpace {
-                NumberedPolynomial {
+                NumberedPolynomialDSL1 {
                     5 { }
                     (-6) { }
                 }
@@ -46,7 +46,7 @@ class NumberedConstructorsTest {
                 listOf(2u) to -1,
             ),
             Int.algebra.numberedPolynomialSpace {
-                NumberedPolynomial {
+                NumberedPolynomialDSL1 {
                     5 { 1 pow 1u; 1 pow 1u }
                     (-6) { 1 pow 2u }
                 }
@@ -58,7 +58,7 @@ class NumberedConstructorsTest {
                 listOf(2u) to -1,
             ),
             Int.algebra.numberedPolynomialSpace {
-                NumberedPolynomial {
+                NumberedPolynomialDSL1 {
                     5 { 1 pow 1u; 1 pow 1u }
                     (-6) { 1 pow 2u; 3 pow 0u }
                 }

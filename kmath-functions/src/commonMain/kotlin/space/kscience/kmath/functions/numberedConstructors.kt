@@ -255,14 +255,14 @@ public inline fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = Numbere
  */
 @DslMarker
 @UnstableKMathAPI
-internal annotation class NumberedPolynomialConstructorDSL
+internal annotation class NumberedPolynomialConstructorDSL1
 
 /**
  * Builder of [NumberedPolynomial] signature. It should be used as an implicit context for lambdas that describe term signature.
  */
 @UnstableKMathAPI
-@NumberedPolynomialConstructorDSL
-public class NumberedPolynomialTermSignatureBuilder {
+@NumberedPolynomialConstructorDSL1
+public class DSL1NumberedPolynomialTermSignatureBuilder {
     /**
      * Signature storage. Any declaration of any variable's power updates the storage by increasing corresponding value.
      * Afterward the storage will be used as a resulting signature.
@@ -316,8 +316,8 @@ public class NumberedPolynomialTermSignatureBuilder {
  * Builder of [NumberedPolynomial]. It should be used as an implicit context for lambdas that describe [NumberedPolynomial].
  */
 @UnstableKMathAPI
-@NumberedPolynomialConstructorDSL
-public class NumberedPolynomialBuilder<C>(
+@NumberedPolynomialConstructorDSL1
+public class DSL1NumberedPolynomialBuilder<C>(
     /**
      * Summation operation that will be used to sum coefficients of monomials of same signatures.
      */
@@ -356,15 +356,15 @@ public class NumberedPolynomialBuilder<C>(
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    public inline infix fun C.with(noinline block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
+    public inline infix fun C.with(noinline block: DSL1NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].
      *
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    public inline operator fun C.invoke(block: NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit =
-        this with NumberedPolynomialTermSignatureBuilder().apply(block).build()
+    public inline operator fun C.invoke(block: DSL1NumberedPolynomialTermSignatureBuilder.() -> Unit): Unit =
+        this with DSL1NumberedPolynomialTermSignatureBuilder().apply(block).build()
 }
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
@@ -387,7 +387,7 @@ public class NumberedPolynomialBuilder<C>(
 //  2. Union types are implemented. Then all three functions should be rewritten
 //     as one with single union type as a (context) receiver.
 //@UnstableKMathAPI
-//public inline fun <C, A: Ring<C>> A.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
+//public inline fun <C, A: Ring<C>> A.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of [NumberedPolynomial]s.
  *
@@ -402,7 +402,7 @@ public class NumberedPolynomialBuilder<C>(
  * ```
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] field of [NumberedRationalFunction]s.
  *
@@ -417,7 +417,7 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  * ```
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomial(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 

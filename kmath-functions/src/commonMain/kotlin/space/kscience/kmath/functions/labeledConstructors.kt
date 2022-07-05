@@ -274,14 +274,14 @@ public inline fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPo
  */
 @DslMarker
 @UnstableKMathAPI
-internal annotation class LabeledPolynomialConstructorDSL
+internal annotation class LabeledPolynomialConstructorDSL1
 
 /**
  * Builder of [LabeledPolynomial] signature. It should be used as an implicit context for lambdas that describe term signature.
  */
 @UnstableKMathAPI
-@LabeledPolynomialConstructorDSL
-public class LabeledPolynomialTermSignatureBuilder {
+@LabeledPolynomialConstructorDSL1
+public class DSL1LabeledPolynomialTermSignatureBuilder {
     /**
      * Signature storage. Any declaration of any variable's power updates the storage by increasing corresponding value.
      * Afterward the storage will be used as a resulting signature.
@@ -302,7 +302,7 @@ public class LabeledPolynomialTermSignatureBuilder {
      * Declaring another power of the same variable will increase its degree by received degree.
      */
     public infix fun Symbol.inPowerOf(deg: UInt) {
-        signature[this] = deg
+        signature[this] = signature.getOrElse(this) { 0u } + deg
     }
     /**
      * Declares power of [this] variable of degree [deg].
@@ -328,7 +328,8 @@ public class LabeledPolynomialTermSignatureBuilder {
  * Builder of [LabeledPolynomial]. It should be used as an implicit context for lambdas that describe [LabeledPolynomial].
  */
 @UnstableKMathAPI
-public class LabeledPolynomialBuilder<C>(
+@LabeledPolynomialConstructorDSL1
+public class DSL1LabeledPolynomialBuilder<C>(
     /**
      * Summation operation that will be used to sum coefficients of monomials of same signatures.
      */
@@ -367,15 +368,15 @@ public class LabeledPolynomialBuilder<C>(
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    public inline infix fun C.with(noinline block: LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
+    public inline infix fun C.with(noinline block: DSL1LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit = this.invoke(block)
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].
      *
      * Declaring another monomial with the same signature will add [this] coefficient to existing one. If the sum of such
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
-    public inline operator fun C.invoke(block: LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit =
-        this with LabeledPolynomialTermSignatureBuilder().apply(block).build()
+    public inline operator fun C.invoke(block: DSL1LabeledPolynomialTermSignatureBuilder.() -> Unit): Unit =
+        this with DSL1LabeledPolynomialTermSignatureBuilder().apply(block).build()
 }
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
@@ -398,7 +399,7 @@ public class LabeledPolynomialBuilder<C>(
 //  2. Union types are implemented. Then all three functions should be rewritten
 //     as one with single union type as a (context) receiver.
 //@UnstableKMathAPI
-//public inline fun <C, A: Ring<C>> A.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(::add, initialCapacity).apply(block).build()
+//public inline fun <C, A: Ring<C>> A.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of [LabeledPolynomial]s.
  *
@@ -413,7 +414,7 @@ public class LabeledPolynomialBuilder<C>(
  * ```
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] field of [LabeledRationalFunction]s.
  *
@@ -428,7 +429,7 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
  * ```
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomial(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 

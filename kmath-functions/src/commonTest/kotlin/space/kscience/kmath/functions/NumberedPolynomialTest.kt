@@ -14,84 +14,85 @@ import kotlin.test.*
 
 @UnstableKMathAPI
 class NumberedPolynomialTest {
+    private val o = Rational(0)
     @Test
     fun test_Polynomial_Int_plus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + -3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + -3,
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + -3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + -3,
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + -3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + -3,
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + -3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ) + -3,
                 "test 4"
             )
-            val polynomial_5 = NumberedPolynomial {
-                Rational(-22, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_5 = NumberedPolynomial(
+                listOf<UInt>() to Rational(-22, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_5,
                 polynomial_5 + 0,
                 "test 5"
             )
-            val polynomial_6 = NumberedPolynomial {
-                Rational(0, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_6 = NumberedPolynomial(
+                listOf<UInt>() to Rational(0, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_6,
                 polynomial_6 + 0,
                 "test 6"
             )
-            val polynomial_7 = NumberedPolynomial {
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_7 = NumberedPolynomial(
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_7,
                 polynomial_7 + 0,
@@ -103,80 +104,80 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Int_minus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - 3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - 3,
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - 3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - 3,
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - 3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - 3,
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - 3,
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ) - 3,
                 "test 4"
             )
-            val polynomial_5 = NumberedPolynomial {
-                Rational(-22, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_5 = NumberedPolynomial(
+                listOf<UInt>() to Rational(-22, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_5,
                 polynomial_5 - 0,
                 "test 5"
             )
-            val polynomial_6 = NumberedPolynomial {
-                Rational(0, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_6 = NumberedPolynomial(
+                listOf<UInt>() to Rational(0, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_6,
                 polynomial_6 - 0,
                 "test 6"
             )
-            val polynomial_7 = NumberedPolynomial {
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_7 = NumberedPolynomial(
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_7,
                 polynomial_7 - 0,
@@ -188,46 +189,46 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Int_times() {
         IntModuloRing(35).numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    m(34) with {}
-                    m(2) with { 1 pow 3u }
-                    m(1) with { 2 pow 1u }
-                    m(20) with { 1 pow 1u }
-                    m(2) with { 3 pow 2u }
-               },
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                } * 27,
+                NumberedPolynomial(
+                    listOf<UInt>() to m(34),
+                    listOf(3u) to m(2),
+                    listOf(0u, 1u) to m(1),
+                    listOf(1u) to m(20),
+                    listOf(0u, 0u, 2u) to m(2),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ) * 27,
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                NumberedPolynomial {
-                    m(7) with {}
-                    m(0) with { 1 pow 3u }
-                    m(49) with { 2 pow 1u }
-                    m(21) with { 1 pow 1u }
-                    m(14) with { 3 pow 2u }
-                } * 15,
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(7),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(49),
+                    listOf(1u) to m(21),
+                    listOf(0u, 0u, 2u) to m(14),
+                ) * 15,
                 "test 2"
             )
-            val polynomial = NumberedPolynomial {
-                m(22) with {}
-                m(26) with { 1 pow 3u }
-                m(13) with { 2 pow 1u }
-                m(15) with { 1 pow 1u }
-                m(26) with { 3 pow 2u }
-            }
+            val polynomial = NumberedPolynomial(
+                listOf<UInt>() to m(22),
+                listOf(3u) to m(26),
+                listOf(0u, 1u) to m(13),
+                listOf(1u) to m(15),
+                listOf(0u, 0u, 2u) to m(26),
+            )
             assertSame(
                 zero,
                 polynomial * 0,
@@ -244,80 +245,80 @@ class NumberedPolynomialTest {
     fun test_Int_Polynomial_plus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                -3 + NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                -3 + NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                -3 + NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                -3 + NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                -3 + NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                -3 + NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                -3 + NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                -3 + NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
                 "test 4"
             )
-            val polynomial_5 = NumberedPolynomial {
-                Rational(-22, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_5 = NumberedPolynomial(
+                listOf<UInt>() to Rational(-22, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_5,
                 0 + polynomial_5,
                 "test 5"
             )
-            val polynomial_6 = NumberedPolynomial {
-                Rational(0, 9) with {}
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_6 = NumberedPolynomial(
+                listOf<UInt>() to Rational(0, 9),
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_6,
                 0 + polynomial_6,
                 "test 6"
             )
-            val polynomial_7 = NumberedPolynomial {
-                Rational(-8, 9) with { 1 pow 3u }
-                Rational(-8, 7) with { 2 pow 4u }
-            }
+            val polynomial_7 = NumberedPolynomial(
+                listOf(3u) to Rational(-8, 9),
+                listOf(0u, 4u) to Rational(-8, 7),
+            )
             assertSame(
                 polynomial_7,
                 0 + polynomial_7,
@@ -329,91 +330,91 @@ class NumberedPolynomialTest {
     fun test_Int_Polynomial_minus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(22, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                3 - NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(22, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                3 - NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(3, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                3 - NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(3, 1),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                3 - NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                3 - NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                3 - NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                3 - NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                3 - NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
                 "test 4"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(22, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                0 - NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(22, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                0 - NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 5"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                0 - NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                0 - NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 6"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                0 - NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                0 - NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 7"
             )
         }
@@ -422,46 +423,46 @@ class NumberedPolynomialTest {
     fun test_Int_Polynomial_times() {
         IntModuloRing(35).numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    m(34) with {}
-                    m(2) with { 1 pow 3u }
-                    m(1) with { 2 pow 1u }
-                    m(20) with { 1 pow 1u }
-                    m(2) with { 3 pow 2u }
-                },
-                27 * NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(34),
+                    listOf(3u) to m(2),
+                    listOf(0u, 1u) to m(1),
+                    listOf(1u) to m(20),
+                    listOf(0u, 0u, 2u) to m(2),
+                ),
+                27 * NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                15 * NumberedPolynomial {
-                    m(7) with {}
-                    m(0) with { 1 pow 3u }
-                    m(49) with { 2 pow 1u }
-                    m(21) with { 1 pow 1u }
-                    m(14) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                15 * NumberedPolynomial(
+                    listOf<UInt>() to m(7),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(49),
+                    listOf(1u) to m(21),
+                    listOf(0u, 0u, 2u) to m(14),
+                ),
                 "test 2"
             )
-            val polynomial = NumberedPolynomial {
-                m(22) with {}
-                m(26) with { 1 pow 3u }
-                m(13) with { 2 pow 1u }
-                m(15) with { 1 pow 1u }
-                m(26) with { 3 pow 2u }
-            }
+            val polynomial = NumberedPolynomial(
+                listOf<UInt>() to m(22),
+                listOf(3u) to m(26),
+                listOf(0u, 1u) to m(13),
+                listOf(1u) to m(15),
+                listOf(0u, 0u, 2u) to m(26),
+            )
             assertSame(
                 zero,
                 0 * polynomial,
@@ -478,92 +479,91 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Constant_plus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(-3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(-3),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(-3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(-3),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(-3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(-3),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(-3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ) + Rational(-3),
                 "test 4"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(0),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(0),
                 "test 5"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(0),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(0),
                 "test 6"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } + Rational(0),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) + Rational(0),
                 "test 7"
             )
         }
@@ -572,92 +572,91 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Constant_minus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(3),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(3),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(3),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(3),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ) - Rational(3),
                 "test 4"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(0),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(0),
                 "test 5"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(0),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(0),
                 "test 6"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                } - Rational(0),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ) - Rational(0),
                 "test 7"
             )
         }
@@ -666,71 +665,71 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Constant_times() {
         IntModuloRing(35).numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    m(34) with {}
-                    m(2) with { 1 pow 3u }
-                    m(1) with { 2 pow 1u }
-                    m(20) with { 1 pow 1u }
-                    m(2) with { 3 pow 2u }
-                },
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                } * m(27),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(34),
+                    listOf(3u) to m(2),
+                    listOf(0u, 1u) to m(1),
+                    listOf(1u) to m(20),
+                    listOf(0u, 0u, 2u) to m(2),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ) * m(27),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                NumberedPolynomial {
-                    m(7) with {}
-                    m(0) with { 1 pow 3u }
-                    m(49) with { 2 pow 1u }
-                    m(21) with { 1 pow 1u }
-                    m(14) with { 3 pow 2u }
-                } * m(15),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(7),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(49),
+                    listOf(1u) to m(21),
+                    listOf(0u, 0u, 2u) to m(14),
+                ) * m(15),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                } * m(0),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ) * m(0),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                } * m(1),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ) * m(1),
                 "test 4"
             )
         }
@@ -739,92 +738,91 @@ class NumberedPolynomialTest {
     fun test_Constant_Polynomial_plus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(-3) + NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(-3) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-3, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(-3) + NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-3, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(-3) + NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(-3) + NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(-3) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(-3) + NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                Rational(-3) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
                 "test 4"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(0) + NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(0) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 5"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(0) + NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(0) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 6"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
-                Rational(0) + NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
+                Rational(0) + NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 7"
             )
         }
@@ -833,92 +831,92 @@ class NumberedPolynomialTest {
     fun test_Constant_Polynomial_minus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(22, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(3) - NumberedPolynomial {
-                    Rational(5, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(22, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(3) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(5, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(3, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(3) - NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(3, 1),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(3) - NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(3) - NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 1),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(3) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 1) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(3) - NumberedPolynomial {
-                    Rational(27, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
+                Rational(3) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(27, 9),
+                    listOf(3u) to Rational(0),
+                    listOf(0u, 4u) to Rational(0),
+                ),
                 "test 4"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(22, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(0) - NumberedPolynomial {
-                    Rational(-22, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(22, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(0) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(-22, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 5"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(0) - NumberedPolynomial {
-                    Rational(0, 9) with {}
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(0) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(0, 9),
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 6"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(8, 9) with { 1 pow 3u }
-                    Rational(8, 7) with { 2 pow 4u }
-                },
-                Rational(0) - NumberedPolynomial {
-                    Rational(-8, 9) with { 1 pow 3u }
-                    Rational(-8, 7) with { 2 pow 4u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(3u) to Rational(8, 9),
+                    listOf(0u, 4u) to Rational(8, 7),
+                ),
+                Rational(0) - NumberedPolynomial(
+                    listOf(3u) to Rational(-8, 9),
+                    listOf(0u, 4u) to Rational(-8, 7),
+                ),
                 "test 7"
             )
         }
@@ -927,71 +925,71 @@ class NumberedPolynomialTest {
     fun test_Constant_Polynomial_times() {
         IntModuloRing(35).numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    m(34) with {}
-                    m(2) with { 1 pow 3u }
-                    m(1) with { 2 pow 1u }
-                    m(20) with { 1 pow 1u }
-                    m(2) with { 3 pow 2u }
-                },
-                m(27) * NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(34),
+                    listOf(3u) to m(2),
+                    listOf(0u, 1u) to m(1),
+                    listOf(1u) to m(20),
+                    listOf(0u, 0u, 2u) to m(2),
+                ),
+                m(27) * NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                m(15) * NumberedPolynomial {
-                    m(7) with {}
-                    m(0) with { 1 pow 3u }
-                    m(49) with { 2 pow 1u }
-                    m(21) with { 1 pow 1u }
-                    m(14) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                m(15) * NumberedPolynomial(
+                    listOf<UInt>() to m(7),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(49),
+                    listOf(1u) to m(21),
+                    listOf(0u, 0u, 2u) to m(14),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with {}
-                    m(0) with { 1 pow 3u }
-                    m(0) with { 2 pow 1u }
-                    m(0) with { 1 pow 1u }
-                    m(0) with { 3 pow 2u }
-                },
-                m(0) * NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(0),
+                    listOf(3u) to m(0),
+                    listOf(0u, 1u) to m(0),
+                    listOf(1u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                ),
+                m(0) * NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
-                m(1) * NumberedPolynomial {
-                    m(22) with {}
-                    m(26) with { 1 pow 3u }
-                    m(13) with { 2 pow 1u }
-                    m(15) with { 1 pow 1u }
-                    m(26) with { 3 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
+                m(1) * NumberedPolynomial(
+                    listOf<UInt>() to m(22),
+                    listOf(3u) to m(26),
+                    listOf(0u, 1u) to m(13),
+                    listOf(1u) to m(15),
+                    listOf(0u, 0u, 2u) to m(26),
+                ),
                 "test 4"
             )
         }
@@ -1000,33 +998,33 @@ class NumberedPolynomialTest {
     fun test_Polynomial_unaryMinus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-5, 9) with { 1 pow 5u }
-                    Rational(8, 9) with {}
-                    Rational(8, 7) with { 7 pow 13u }
-                },
-                -NumberedPolynomial {
-                    Rational(5, 9) with { 1 pow 5u }
-                    Rational(-8, 9) with {}
-                    Rational(-8, 7) with { 7 pow 13u }
-                },
+                NumberedPolynomial(
+                    listOf(5u) to Rational(-5, 9),
+                    listOf<UInt>() to Rational(8, 9),
+                    listOf(0u, 0u, 0u, 0u, 0u, 0u, 13u) to Rational(8, 7),
+                ),
+                -NumberedPolynomial(
+                    listOf(5u) to Rational(5, 9),
+                    listOf<UInt>() to Rational(-8, 9),
+                    listOf(0u, 0u, 0u, 0u, 0u, 0u, 13u) to Rational(-8, 7),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-5, 9) with { 3 pow 7u }
-                    Rational(8, 9) with {}
-                    Rational(8, 7) with { 1 pow 3u }
-                    Rational(0) with { 2 pow 4u }
-                    Rational(0) with { 1 pow 5u }
-                },
-                -NumberedPolynomial {
-                    Rational(5, 9) with { 3 pow 7u }
-                    Rational(-8, 9) with {}
-                    Rational(-8, 7) with { 1 pow 3u }
-                    Rational(0) with { 2 pow 4u }
-                    Rational(0) with { 1 pow 5u }
-                },
+                NumberedPolynomial(
+                    listOf(5u) to Rational(-5, 9),
+                    listOf<UInt>() to Rational(8, 9),
+                    listOf(0u, 0u, 0u, 0u, 0u, 0u, 13u) to Rational(8, 7),
+                    listOf(0u, 4u) to Rational(0),
+                    listOf(5u) to Rational(0),
+                ),
+                -NumberedPolynomial(
+                    listOf(5u) to Rational(5, 9),
+                    listOf<UInt>() to Rational(-8, 9),
+                    listOf(0u, 0u, 0u, 0u, 0u, 0u, 13u) to Rational(-8, 7),
+                    listOf(0u, 4u) to Rational(0),
+                    listOf(5u) to Rational(0),
+                ),
                 "test 2"
             )
         }
@@ -1035,137 +1033,137 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Polynomial_plus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(146, 63) with { 2 pow 1u }
-                    Rational(-3, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(61, 15) with { 1 pow 2u; 2 pow 1u }
-                    Rational(157, 63) with { 2 pow 2u }
-                    Rational(-55, 21) with { 1 pow 1u; 2 pow 2u }
-                    Rational(11, 24) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(17, 7) with { 2 pow 1u }
-                    Rational(-7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } + NumberedPolynomial {
-                    Rational(-20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(-20, 7) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(7, 9) with { 2 pow 2u }
-                    Rational(5, 7) with { 1 pow 1u; 2 pow 2u }
-                    Rational(-2, 3) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(146, 63),
+                    listOf(1u, 1u) to Rational(-3, 5),
+                    listOf(2u, 1u) to Rational(61, 15),
+                    listOf(0u, 2u) to Rational(157, 63),
+                    listOf(1u, 2u) to Rational(-55, 21),
+                    listOf(2u, 2u) to Rational(11, 24),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 1u) to Rational(17, 7),
+                    listOf(1u, 1u) to Rational(-7, 7),
+                    listOf(2u, 1u) to Rational(12, 5),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(-20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(-20, 7),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(7, 9),
+                    listOf(1u, 2u) to Rational(5, 7),
+                    listOf(2u, 2u) to Rational(-2, 3),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(157, 63) with { 2 pow 2u }
-                    Rational(-55, 21) with { 1 pow 1u; 2 pow 2u }
-                    Rational(11, 24) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } + NumberedPolynomial {
-                    Rational(-20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(-20, 7) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(7, 9) with { 2 pow 2u }
-                    Rational(5, 7) with { 1 pow 1u; 2 pow 2u }
-                    Rational(-2, 3) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(157, 63),
+                    listOf(1u, 2u) to Rational(-55, 21),
+                    listOf(2u, 2u) to Rational(11, 24),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(-20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(-20, 7),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(7, 9),
+                    listOf(1u, 2u) to Rational(5, 7),
+                    listOf(2u, 2u) to Rational(-2, 3),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } + NumberedPolynomial {
-                    Rational(-20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(-20, 7) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(0) with { 2 pow 2u }
-                    Rational(0) with { 1 pow 1u; 2 pow 2u }
-                    Rational(0) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(-20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(-20, 7),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(0),
+                    listOf(1u, 2u) to Rational(0),
+                    listOf(2u, 2u) to Rational(0),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(0) with { 1 pow 1u }
-                    Rational(0) with { 1 pow 2u }
-                    Rational(0) with { 2 pow 1u }
-                    Rational(0) with { 1 pow 1u; 2 pow 1u }
-                    Rational(0) with { 1 pow 2u; 2 pow 1u }
-                    Rational(0) with { 2 pow 2u }
-                    Rational(0) with { 1 pow 1u; 2 pow 2u }
-                    Rational(0) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(17, 7) with { 2 pow 1u }
-                    Rational(-7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } + NumberedPolynomial {
-                    Rational(-6, 4) with {}
-                    Rational(2, 6) with { 1 pow 1u }
-                    Rational(-10, 6) with { 1 pow 2u }
-                    Rational(-17, 7) with { 2 pow 1u }
-                    Rational(7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(-12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(-12, 7) with { 2 pow 2u }
-                    Rational(10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(-9, 8) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(1u) to Rational(0),
+                    listOf(2u) to Rational(0),
+                    listOf(0u, 1u) to Rational(0),
+                    listOf(1u, 1u) to Rational(0),
+                    listOf(2u, 1u) to Rational(0),
+                    listOf(0u, 2u) to Rational(0),
+                    listOf(1u, 2u) to Rational(0),
+                    listOf(2u, 2u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 1u) to Rational(17, 7),
+                    listOf(1u, 1u) to Rational(-7, 7),
+                    listOf(2u, 1u) to Rational(12, 5),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) + NumberedPolynomial(
+                    listOf<UInt>() to Rational(-6, 4),
+                    listOf(1u) to Rational(2, 6),
+                    listOf(2u) to Rational(-10, 6),
+                    listOf(0u, 1u) to Rational(-17, 7),
+                    listOf(1u, 1u) to Rational(7, 7),
+                    listOf(2u, 1u) to Rational(-12, 5),
+                    listOf(0u, 2u) to Rational(-12, 7),
+                    listOf(1u, 2u) to Rational(10, 3),
+                    listOf(2u, 2u) to Rational(-9, 8),
+                ),
                 "test 4"
             )
         }
@@ -1174,137 +1172,137 @@ class NumberedPolynomialTest {
     fun test_Polynomial_Polynomial_minus() {
         RationalField.numberedPolynomialSpace {
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(146, 63) with { 2 pow 1u }
-                    Rational(-3, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(61, 15) with { 1 pow 2u; 2 pow 1u }
-                    Rational(157, 63) with { 2 pow 2u }
-                    Rational(-55, 21) with { 1 pow 1u; 2 pow 2u }
-                    Rational(11, 24) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(17, 7) with { 2 pow 1u }
-                    Rational(-7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } - NumberedPolynomial {
-                    Rational(20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(20, 7) with { 1 pow 2u }
-                    Rational(1, 9) with { 2 pow 1u }
-                    Rational(-2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(-10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(-7, 9) with { 2 pow 2u }
-                    Rational(-5, 7) with { 1 pow 1u; 2 pow 2u }
-                    Rational(2, 3) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(146, 63),
+                    listOf(1u, 1u) to Rational(-3, 5),
+                    listOf(2u, 1u) to Rational(61, 15),
+                    listOf(0u, 2u) to Rational(157, 63),
+                    listOf(1u, 2u) to Rational(-55, 21),
+                    listOf(2u, 2u) to Rational(11, 24),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 1u) to Rational(17, 7),
+                    listOf(1u, 1u) to Rational(-7, 7),
+                    listOf(2u, 1u) to Rational(12, 5),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(20, 7),
+                    listOf(0u, 1u) to Rational(1, 9),
+                    listOf(1u, 1u) to Rational(-2, 5),
+                    listOf(2u, 1u) to Rational(-10, 6),
+                    listOf(0u, 2u) to Rational(-7, 9),
+                    listOf(1u, 2u) to Rational(-5, 7),
+                    listOf(2u, 2u) to Rational(2, 3),
+                ),
                 "test 1"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(157, 63) with { 2 pow 2u }
-                    Rational(-55, 21) with { 1 pow 1u; 2 pow 2u }
-                    Rational(11, 24) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } - NumberedPolynomial {
-                    Rational(20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(20, 7) with { 1 pow 2u }
-                    Rational(1, 9) with { 2 pow 1u }
-                    Rational(-2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(-10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(-7, 9) with { 2 pow 2u }
-                    Rational(-5, 7) with { 1 pow 1u; 2 pow 2u }
-                    Rational(2, 3) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(157, 63),
+                    listOf(1u, 2u) to Rational(-55, 21),
+                    listOf(2u, 2u) to Rational(11, 24),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(20, 7),
+                    listOf(0u, 1u) to Rational(1, 9),
+                    listOf(1u, 1u) to Rational(-2, 5),
+                    listOf(2u, 1u) to Rational(-10, 6),
+                    listOf(0u, 2u) to Rational(-7, 9),
+                    listOf(1u, 2u) to Rational(-5, 7),
+                    listOf(2u, 2u) to Rational(2, 3),
+                ),
                 "test 2"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(-17, 2) with {}
-                    Rational(-1, 3) with { 1 pow 1u }
-                    Rational(-25, 21) with { 1 pow 2u }
-                    Rational(-1, 9) with { 2 pow 1u }
-                    Rational(2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } - NumberedPolynomial {
-                    Rational(20, 2) with {}
-                    Rational(0, 9) with { 1 pow 1u }
-                    Rational(20, 7) with { 1 pow 2u }
-                    Rational(1, 9) with { 2 pow 1u }
-                    Rational(-2, 5) with { 1 pow 1u; 2 pow 1u }
-                    Rational(-10, 6) with { 1 pow 2u; 2 pow 1u }
-                    Rational(0) with { 2 pow 2u }
-                    Rational(0) with { 1 pow 1u; 2 pow 2u }
-                    Rational(0) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(-17, 2),
+                    listOf(1u) to Rational(-1, 3),
+                    listOf(2u) to Rational(-25, 21),
+                    listOf(0u, 1u) to Rational(-1, 9),
+                    listOf(1u, 1u) to Rational(2, 5),
+                    listOf(2u, 1u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(20, 2),
+                    listOf(1u) to Rational(0, 9),
+                    listOf(2u) to Rational(20, 7),
+                    listOf(0u, 1u) to Rational(1, 9),
+                    listOf(1u, 1u) to Rational(-2, 5),
+                    listOf(2u, 1u) to Rational(-10, 6),
+                    listOf(0u, 2u) to Rational(0),
+                    listOf(1u, 2u) to Rational(0),
+                    listOf(2u, 2u) to Rational(0),
+                ),
                 "test 3"
             )
             assertEquals(
-                NumberedPolynomial {
-                    Rational(0) with {}
-                    Rational(0) with { 1 pow 1u }
-                    Rational(0) with { 1 pow 2u }
-                    Rational(0) with { 2 pow 1u }
-                    Rational(0) with { 1 pow 1u; 2 pow 1u }
-                    Rational(0) with { 1 pow 2u; 2 pow 1u }
-                    Rational(0) with { 2 pow 2u }
-                    Rational(0) with { 1 pow 1u; 2 pow 2u }
-                    Rational(0) with { 1 pow 2u; 2 pow 2u }
-                },
-                NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(17, 7) with { 2 pow 1u }
-                    Rational(-7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                } - NumberedPolynomial {
-                    Rational(6, 4) with {}
-                    Rational(-2, 6) with { 1 pow 1u }
-                    Rational(10, 6) with { 1 pow 2u }
-                    Rational(17, 7) with { 2 pow 1u }
-                    Rational(-7, 7) with { 1 pow 1u; 2 pow 1u }
-                    Rational(12, 5) with { 1 pow 2u; 2 pow 1u }
-                    Rational(12, 7) with { 2 pow 2u }
-                    Rational(-10, 3) with { 1 pow 1u; 2 pow 2u }
-                    Rational(9, 8) with { 1 pow 2u; 2 pow 2u }
-                },
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
+                    listOf(1u) to Rational(0),
+                    listOf(2u) to Rational(0),
+                    listOf(0u, 1u) to Rational(0),
+                    listOf(1u, 1u) to Rational(0),
+                    listOf(2u, 1u) to Rational(0),
+                    listOf(0u, 2u) to Rational(0),
+                    listOf(1u, 2u) to Rational(0),
+                    listOf(2u, 2u) to Rational(0),
+                ),
+                NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 1u) to Rational(17, 7),
+                    listOf(1u, 1u) to Rational(-7, 7),
+                    listOf(2u, 1u) to Rational(12, 5),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ) - NumberedPolynomial(
+                    listOf<UInt>() to Rational(6, 4),
+                    listOf(1u) to Rational(-2, 6),
+                    listOf(2u) to Rational(10, 6),
+                    listOf(0u, 1u) to Rational(17, 7),
+                    listOf(1u, 1u) to Rational(-7, 7),
+                    listOf(2u, 1u) to Rational(12, 5),
+                    listOf(0u, 2u) to Rational(12, 7),
+                    listOf(1u, 2u) to Rational(-10, 3),
+                    listOf(2u, 2u) to Rational(9, 8),
+                ),
                 "test 4"
             )
         }
@@ -1314,255 +1312,250 @@ class NumberedPolynomialTest {
         IntModuloRing(35).numberedPolynomialSpace {
             // (p + q + r) * (p^2 + q^2 + r^2 - pq - pr - qr) = p^3 + q^3 + r^3 - 3pqr
             assertEquals(
-                NumberedPolynomial {
-                    m(1) with { 1 pow 3u }
-                    m(1) with { 2 pow 3u }
-                    m(1) with { 3 pow 3u }
-                    m(0) with { 1 pow 1u; 2 pow 2u }
-                    m(0) with { 2 pow 1u; 3 pow 2u }
-                    m(0) with { 3 pow 1u; 1 pow 2u }
-                    m(0) with { 1 pow 1u; 3 pow 2u }
-                    m(0) with { 2 pow 1u; 1 pow 2u }
-                    m(0) with { 3 pow 1u; 2 pow 2u }
-                    m(-3) with { 1 pow 1u; 2 pow 1u; 3 pow 1u }
-                },
-                NumberedPolynomial {
-                    m(1) with { 1 pow 1u }
-                    m(1) with { 2 pow 1u }
-                    m(1) with { 3 pow 1u }
-                } * NumberedPolynomial {
-                    m(1) with { 1 pow 2u }
-                    m(1) with { 2 pow 2u }
-                    m(1) with { 3 pow 2u }
-                    m(-1) with { 1 pow 1u; 2 pow 1u }
-                    m(-1) with { 2 pow 1u; 3 pow 1u }
-                    m(-1) with { 3 pow 1u; 1 pow 1u }
-                },
+                NumberedPolynomial(
+                    listOf(3u) to m(1),
+                    listOf(0u, 3u) to m(1),
+                    listOf(0u, 0u, 3u) to m(1),
+                    listOf(1u, 2u) to m(0),
+                    listOf(0u, 1u, 2u) to m(0),
+                    listOf(2u, 0u, 1u) to m(0),
+                    listOf(1u, 0u, 2u) to m(0),
+                    listOf(2u, 1u) to m(0),
+                    listOf(0u, 2u, 1u) to m(0),
+                    listOf(1u, 1u, 1u) to m(-3),
+                ),
+                NumberedPolynomial(
+                    listOf(1u) to m(1),
+                    listOf(0u, 1u) to m(1),
+                    listOf(0u, 0u, 1u) to m(1),
+                ) * NumberedPolynomial(
+                    listOf(2u) to m(1),
+                    listOf(0u, 2u) to m(1),
+                    listOf(0u, 0u, 2u) to m(1),
+                    listOf(1u, 1u) to m(-1),
+                    listOf(0u, 1u, 1u) to m(-1),
+                    listOf(1u, 0u, 1u) to m(-1),
+                ),
                 "test 1"
             )
             // Spoiler: 5 * 7 = 0
             assertEquals(
-                NumberedPolynomial {
-                    m(0) with { 1 pow 2u }
-                    m(0) with { 2 pow 2u }
-                    m(0) with { 3 pow 2u }
-                    m(0) with { 1 pow 1u; 2 pow 1u }
-                    m(0) with { 2 pow 1u; 3 pow 1u }
-                    m(0) with { 3 pow 1u; 1 pow 1u }
-                },
-                NumberedPolynomial {
-                    m(5) with { 1 pow 1u }
-                    m(-25) with { 2 pow 1u }
-                    m(10) with { 3 pow 1u }
-                } * NumberedPolynomial {
-                    m(21) with { 1 pow 1u }
-                    m(14) with { 2 pow 1u }
-                    m(-7) with { 3 pow 1u }
-                },
+                NumberedPolynomial(
+                    listOf(2u) to m(0),
+                    listOf(0u, 2u) to m(0),
+                    listOf(0u, 0u, 2u) to m(0),
+                    listOf(1u, 1u) to m(0),
+                    listOf(0u, 1u, 1u) to m(0),
+                    listOf(1u, 0u, 1u) to m(0),
+                ),
+                NumberedPolynomial(
+                    listOf(1u) to m(5),
+                    listOf(0u, 1u) to m(-25),
+                    listOf(0u, 0u, 1u) to m(10),
+                ) * NumberedPolynomial(
+                    listOf(1u) to m(21),
+                    listOf(0u, 1u) to m(14),
+                    listOf(0u, 0u, 1u) to m(-7),
+                ),
                 "test 2"
             )
         }
     }
     @Test
     fun test_lastVariable() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
                 -1,
-                NumberedPolynomial {}.lastVariable,
+                NumberedPolynomial().lastVariable,
                 "test 1"
             )
             assertEquals(
                 -1,
-                NumberedPolynomial {
-                    o {}
-                }.lastVariable,
+                NumberedPolynomial(
+                    listOf<UInt>() to o
+                ).lastVariable,
                 "test 2"
             )
             assertEquals(
                 2,
-                NumberedPolynomial {
-                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                }.lastVariable,
+                NumberedPolynomial(
+                    listOf(1u, 2u, 3u) to o
+                ).lastVariable,
                 "test 3"
             )
             assertEquals(
                 3,
-                NumberedPolynomial {
-                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-                }.also { println(it) }.lastVariable,
+                NumberedPolynomial(
+                    listOf(0u, 1u, 2u, 1u, 0u) to o
+                ).also { println(it) }.lastVariable,
                 "test 4"
             )
             assertEquals(
                 2,
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                }.lastVariable,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                ).lastVariable,
                 "test 5"
             )
         }
     }
     @Test
     fun test_degree() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
                 -1,
-                NumberedPolynomial {}.degree,
+                NumberedPolynomial().degree,
                 "test 1"
             )
             assertEquals(
                 0,
-                NumberedPolynomial {
-                    o {}
-                }.degree,
+                NumberedPolynomial(
+                    listOf<UInt>() to o
+                ).degree,
                 "test 2"
             )
             assertEquals(
                 6,
-                NumberedPolynomial {
-                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                }.degree,
+                NumberedPolynomial(
+                    listOf(1u, 2u, 3u) to o
+                ).degree,
                 "test 3"
             )
             assertEquals(
                 4,
-                NumberedPolynomial {
-                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-                }.degree,
+                NumberedPolynomial(
+                    listOf(0u, 1u, 2u, 1u, 0u) to o
+                ).degree,
                 "test 4"
             )
             assertEquals(
                 3,
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                }.degree,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                ).degree,
                 "test 5"
             )
             assertEquals(
                 4,
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                    o { 4 pow 4u }
-                }.degree,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                    listOf(0u, 0u, 0u, 4u) to o,
+                ).degree,
                 "test 6"
             )
         }
     }
     @Test
     fun test_degrees() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
                 listOf(),
-                NumberedPolynomial {}.degrees,
+                NumberedPolynomial().degrees,
                 "test 1"
             )
             assertEquals(
                 listOf(),
-                NumberedPolynomial {
-                    o {}
-                }.degrees,
+                NumberedPolynomial(
+                    listOf<UInt>() to o
+                ).degrees,
                 "test 2"
             )
             assertEquals(
                 listOf(1u, 2u, 3u),
-                NumberedPolynomial {
-                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                }.degrees,
+                NumberedPolynomial(
+                    listOf(1u, 2u, 3u) to o
+                ).degrees,
                 "test 3"
             )
             assertEquals(
                 listOf(0u, 1u, 2u, 1u),
-                NumberedPolynomial {
-                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-                }.degrees,
+                NumberedPolynomial(
+                    listOf(0u, 1u, 2u, 1u, 0u) to o
+                ).degrees,
                 "test 4"
             )
             assertEquals(
                 listOf(2u, 1u, 1u),
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                }.degrees,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                ).degrees,
                 "test 5"
             )
             assertEquals(
                 listOf(2u, 2u, 2u, 4u),
-                NumberedPolynomial {
-                    o {}
-                    o { 1 pow 1u; 2 pow 2u }
-                    o { 2 pow 1u; 3 pow 2u }
-                    o { 1 pow 2u; 3 pow 1u }
-                    o { 4 pow 4u }
-                }.degrees,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(1u, 2u) to o,
+                    listOf(0u, 1u, 2u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                    listOf(0u, 0u, 0u, 4u) to o,
+                ).degrees,
                 "test 6"
             )
         }
     }
     @Test
     fun test_degreeBy() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             fun NumberedPolynomial<Rational>.collectDegrees(limit: Int = lastVariable + 2): List<UInt> = List(limit) { degreeBy(it) }
             assertEquals(
                 listOf(0u),
-                NumberedPolynomial {}.collectDegrees(),
+                NumberedPolynomial().collectDegrees(),
                 "test 1"
             )
             assertEquals(
                 listOf(0u),
-                NumberedPolynomial {
-                    o {}
-                }.collectDegrees(),
+                NumberedPolynomial(
+                    listOf<UInt>() to o
+                ).collectDegrees(),
                 "test 2"
             )
             assertEquals(
                 listOf(1u, 2u, 3u, 0u),
-                NumberedPolynomial {
-                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                }.collectDegrees(),
+                NumberedPolynomial(
+                    listOf(1u, 2u, 3u) to o
+                ).collectDegrees(),
                 "test 3"
             )
             assertEquals(
                 listOf(0u, 1u, 2u, 1u, 0u),
-                NumberedPolynomial {
-                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-                }.collectDegrees(),
+                NumberedPolynomial(
+                    listOf(0u, 1u, 2u, 1u, 0u) to o
+                ).collectDegrees(),
                 "test 4"
             )
             assertEquals(
                 listOf(2u, 1u, 1u, 0u),
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                }.collectDegrees(),
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                ).collectDegrees(),
                 "test 5"
             )
             assertEquals(
                 listOf(2u, 2u, 2u, 4u, 0u),
-                NumberedPolynomial {
-                    o {}
-                    o { 1 pow 1u; 2 pow 2u }
-                    o { 2 pow 1u; 3 pow 2u }
-                    o { 1 pow 2u; 3 pow 1u }
-                    o { 4 pow 4u }
-                }.collectDegrees(),
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(1u, 2u) to o,
+                    listOf(0u, 1u, 2u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                    listOf(0u, 0u, 0u, 4u) to o,
+                ).collectDegrees(),
                 "test 6"
             )
         }
     }
     @Test
     fun test_degreeBy_Collection() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             fun NumberedPolynomial<Rational>.checkDegreeBy(message: String? = null) {
                 val lastVariable = lastVariable
@@ -1587,153 +1580,151 @@ class NumberedPolynomialTest {
                         fail("${message ?: ""} Incorrect answer for variable collection $indexCollection: expected $expected, actual $actual")
                 }
             }
-            NumberedPolynomial {}.checkDegreeBy("test 1")
-            NumberedPolynomial {
-                o {}
-            }.checkDegreeBy("test 2")
-            NumberedPolynomial {
-                o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-            }.checkDegreeBy("test 3")
-            NumberedPolynomial {
-                o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-            }.checkDegreeBy("test 4")
-            NumberedPolynomial {
-                o {}
-                o { 2 pow 1u }
-                o { 1 pow 2u; 3 pow 1u }
-            }.checkDegreeBy("test 5")
-            NumberedPolynomial {
-                o {}
-                o { 1 pow 1u; 2 pow 2u }
-                o { 2 pow 1u; 3 pow 2u }
-                o { 1 pow 2u; 3 pow 1u }
-                o { 4 pow 4u }
-            }.checkDegreeBy("test 6")
+            NumberedPolynomial().checkDegreeBy("test 1")
+            NumberedPolynomial(
+                listOf<UInt>() to o
+            ).checkDegreeBy("test 2")
+            NumberedPolynomial(
+                listOf(1u, 2u, 3u) to o
+            ).checkDegreeBy("test 3")
+            NumberedPolynomial(
+                listOf(0u, 1u, 2u, 1u, 0u) to o
+            ).checkDegreeBy("test 4")
+            NumberedPolynomial(
+                listOf<UInt>() to o,
+                listOf(0u, 1u) to o,
+                listOf(2u, 0u, 1u) to o,
+            ).checkDegreeBy("test 5")
+            NumberedPolynomial(
+                listOf<UInt>() to o,
+                listOf(1u, 2u) to o,
+                listOf(0u, 1u, 2u) to o,
+                listOf(2u, 0u, 1u) to o,
+                listOf(0u, 0u, 0u, 4u) to o,
+            ).checkDegreeBy("test 6")
         }
     }
     @Test
     fun test_countOfVariables() {
-        val o = Rational(0)
         RationalField.numberedPolynomialSpace {
             assertEquals(
                 0,
-                NumberedPolynomial {}.countOfVariables,
+                NumberedPolynomial().countOfVariables,
                 "test 1"
             )
             assertEquals(
                 0,
-                NumberedPolynomial {
-                    o {}
-                }.countOfVariables,
+                NumberedPolynomial(
+                    listOf<UInt>() to o
+                ).countOfVariables,
                 "test 2"
             )
             assertEquals(
                 3,
-                NumberedPolynomial {
-                    o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                }.countOfVariables,
+                NumberedPolynomial(
+                    listOf(1u, 2u, 3u) to o
+                ).countOfVariables,
                 "test 3"
             )
             assertEquals(
                 3,
-                NumberedPolynomial {
-                    o { 1 pow 0u; 2 pow 1u; 3 pow 2u; 4 pow 1u; 5 pow 0u }
-                }.countOfVariables,
+                NumberedPolynomial(
+                    listOf(0u, 1u, 2u, 1u, 0u) to o
+                ).countOfVariables,
                 "test 4"
             )
             assertEquals(
                 3,
-                NumberedPolynomial {
-                    o {}
-                    o { 2 pow 1u }
-                    o { 1 pow 2u; 3 pow 1u }
-                }.countOfVariables,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(0u, 1u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                ).countOfVariables,
                 "test 5"
             )
             assertEquals(
                 4,
-                NumberedPolynomial {
-                    o {}
-                    o { 1 pow 1u; 2 pow 2u }
-                    o { 2 pow 1u; 3 pow 2u }
-                    o { 1 pow 2u; 3 pow 1u }
-                    o { 4 pow 4u }
-                }.countOfVariables,
+                NumberedPolynomial(
+                    listOf<UInt>() to o,
+                    listOf(1u, 2u) to o,
+                    listOf(0u, 1u, 2u) to o,
+                    listOf(2u, 0u, 1u) to o,
+                    listOf(0u, 0u, 0u, 4u) to o,
+                ).countOfVariables,
                 "test 6"
             )
         }
     }
     @Test
     fun test_RF_countOfVariables() {
-        val o = Rational(0)
         RationalField.numberedRationalFunctionSpace {
             assertEquals(
                 0,
                 NumberedRationalFunction(
-                    NumberedPolynomial {}
+                    NumberedPolynomial()
                 ).countOfVariables,
                 "test 1"
             )
             assertEquals(
                 0,
                 NumberedRationalFunction(
-                    NumberedPolynomial {},
-                    NumberedPolynomial {}
+                    NumberedPolynomial(),
+                    NumberedPolynomial()
                 ).countOfVariables,
                 "test 2"
             )
             assertEquals(
                 0,
                 NumberedRationalFunction(
-                    NumberedPolynomial {
-                        o {}
-                    }
+                    NumberedPolynomial(
+                        listOf<UInt>() to o
+                    )
                 ).countOfVariables,
                 "test 3"
             )
             assertEquals(
                 3,
                 NumberedRationalFunction(
-                    NumberedPolynomial {
-                        o { 1 pow 1u; 2 pow 2u; 3 pow 3u }
-                    }
+                    NumberedPolynomial(
+                        listOf(1u, 2u, 3u) to o
+                    )
                 ).countOfVariables,
                 "test 4"
             )
             assertEquals(
                 3,
                 NumberedRationalFunction(
-                    NumberedPolynomial {
-                        o { 2 pow 1u; 4 pow 1u }
-                    },
-                    NumberedPolynomial {
-                        o { 1 pow 0u; 3 pow 2u; 5 pow 0u }
-                    }
+                    NumberedPolynomial(
+                        listOf(0u, 1u, 0u, 1u) to o
+                    ),
+                    NumberedPolynomial(
+                        listOf(0u, 0u, 2u) to o
+                    )
                 ).countOfVariables,
                 "test 5"
             )
             assertEquals(
                 3,
                 NumberedRationalFunction(
-                    NumberedPolynomial {
-                        o {}
-                        o { 2 pow 1u }
-                        o { 1 pow 2u; 3 pow 1u }
-                    }
+                    NumberedPolynomial(
+                        listOf<UInt>() to o,
+                        listOf(0u, 1u) to o,
+                        listOf(2u, 0u, 1u) to o,
+                    )
                 ).countOfVariables,
                 "test 6"
             )
             assertEquals(
                 4,
                 NumberedRationalFunction(
-                    NumberedPolynomial {
-                        o {}
-                        o { 1 pow 1u; 2 pow 2u }
-                        o { 1 pow 2u; 3 pow 1u }
-                    }, NumberedPolynomial {
-                        o { 2 pow 1u; 3 pow 2u }
-                        o { 4 pow 4u }
-                    }
+                    NumberedPolynomial(
+                        listOf<UInt>() to o,
+                        listOf(1u, 2u) to o,
+                        listOf(2u, 0u, 1u) to o,
+                    ), NumberedPolynomial(
+                        listOf(0u, 1u, 2u) to o,
+                        listOf(0u, 0u, 0u, 4u) to o,
+                    )
                 ).countOfVariables,
                 "test 7"
             )

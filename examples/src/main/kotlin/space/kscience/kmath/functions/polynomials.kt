@@ -8,6 +8,7 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.operations.invoke
 
 
 /**
@@ -102,7 +103,7 @@ fun numberedPolynomialsExample() {
 
         numberedPolynomialSpace {
             // Also there is DSL for constructing NumberedPolynomials:
-            val polynomial5: NumberedPolynomial<Int> = NumberedPolynomial {
+            val polynomial5: NumberedPolynomial<Int> = NumberedPolynomialDSL1 {
                 3 {}
                 5 { 2 inPowerOf 1u }
                 -7 with { 1 pow 2u; 3 pow 1u }
@@ -116,7 +117,7 @@ fun numberedPolynomialsExample() {
         }
     }
 
-    val polynomial6: NumberedPolynomial<Int> = with(Int.algebra) {
+    val polynomial6: NumberedPolynomial<Int> = Int.algebra {
         NumberedPolynomial(
             listOf<UInt>() to 7,
             listOf(0u, 1u) to -5,
@@ -127,28 +128,28 @@ fun numberedPolynomialsExample() {
     // For every ring there can be provided a polynomial ring:
     Int.algebra.numberedPolynomialSpace {
         println(
-            -polynomial6 == NumberedPolynomial {
-                (-7) {}
-                5 { 2 pow 1u }
-                0 { 1 pow 2u; 3 pow 1u }
-                (-4) { 4 pow 4u }
-            }
+            -polynomial6 == NumberedPolynomial(
+                listOf<UInt>() to -7,
+                listOf(0u, 1u) to 5,
+                listOf(2u, 0u, 1u) to 0,
+                listOf(0u, 0u, 0u, 4u) to (-4),
+            )
         ) // true
         println(
-            polynomial1 + polynomial6 == NumberedPolynomial {
-                10 {}
-                0 { 2 pow 1u }
-                (-7) { 1 pow 2u; 3 pow 1u }
-                4 { 4 pow 4u }
-            }
+            polynomial1 + polynomial6 == NumberedPolynomial(
+                listOf<UInt>() to 10,
+                listOf(0u, 1u) to 0,
+                listOf(2u, 0u, 1u) to -7,
+                listOf(0u, 0u, 0u, 4u) to 4,
+            )
         ) // true
         println(
-            polynomial1 - polynomial6 == NumberedPolynomial {
-                (-4) {}
-                10 { 2 pow 1u }
-                (-7) { 1 pow 2u; 3 pow 1u }
-                (-4) { 4 pow 4u }
-            }
+            polynomial1 - polynomial6 == NumberedPolynomial(
+                listOf<UInt>() to -4,
+                listOf(0u, 1u) to 10,
+                listOf(2u, 0u, 1u) to -7,
+                listOf(0u, 0u, 0u, 4u) to -4,
+            )
         ) // true
 
         polynomial1 * polynomial6 // Multiplication works too
@@ -156,14 +157,14 @@ fun numberedPolynomialsExample() {
 
     Double.algebra.numberedPolynomialSpace {
         // You can even write
-        val x_1: NumberedPolynomial<Double> = NumberedPolynomial { 1.0 { 1 pow 1u } }
-        val x_2: NumberedPolynomial<Double> = NumberedPolynomial { 1.0 { 2 pow 1u } }
-        val x_3: NumberedPolynomial<Double> = NumberedPolynomial { 1.0 { 3 pow 1u } }
-        val polynomial7: NumberedPolynomial<Double> = NumberedPolynomial {
-            3.0 {}
-            5.0 { 2 pow 1u }
-            (-7.0) { 1 pow 2u; 3 pow 1u }
-        }
+        val x_1: NumberedPolynomial<Double> = NumberedPolynomial(listOf(1u) to 1.0)
+        val x_2: NumberedPolynomial<Double> = NumberedPolynomial(listOf(0u, 1u) to 1.0)
+        val x_3: NumberedPolynomial<Double> = NumberedPolynomial(listOf(0u, 0u, 1u) to 1.0)
+        val polynomial7: NumberedPolynomial<Double> = NumberedPolynomial(
+            listOf<UInt>() to 3.0,
+            listOf(0u, 1u) to 5.0,
+            listOf(2u, 0u, 1u) to -7.0,
+        )
         Double.algebra.listPolynomialSpace {
             println(3 + 5 * x_2 - 7 * x_1 * x_1 * x_3 == polynomial7)
             println(3.0 + 5.0 * x_2 - 7.0 * x_1 * x_1 * x_3 == polynomial7)
@@ -171,49 +172,49 @@ fun numberedPolynomialsExample() {
     }
 
     Int.algebra.numberedPolynomialSpace {
-        val x_4: NumberedPolynomial<Int> = NumberedPolynomial { 1 { 4 pow 1u } }
+        val x_4: NumberedPolynomial<Int> = NumberedPolynomial(listOf(0u, 0u, 0u, 4u) to 1)
         // Also there are some utilities for polynomials:
         println(polynomial1.substitute(mapOf(0 to 1, 1 to -2, 2 to -1)) == 0.asNumberedPolynomial()) // true,
             // because it's substitution x_1 -> 1, x_2 -> -2, x_3 -> -1,
             // so 3 + 5 x_2 - 7 x_1^2 x_3 = 3 + 5 * (-2) - 7 * 1^2 * (-1) = 3 - 10 + 7 = 0
         println(
-            polynomial1.substitute(mapOf(1 to x_4)) == NumberedPolynomial {
-                3 {}
-                5 { 4 pow 1u }
-                (-7) { 1 pow 2u; 3 pow 1u }
-            }
+            polynomial1.substitute(mapOf(1 to x_4)) == NumberedPolynomial(
+                listOf<UInt>() to 3,
+                listOf(0u, 1u) to 5,
+                listOf(2u, 0u, 1u) to -7,
+            )
         ) // true, because it's substitution x_2 -> x_4, so result is 3 + 5 x_4 - 7 x_1^2 x_3
         println(
             polynomial1.derivativeWithRespectTo(Int.algebra, 1) ==
-                    NumberedPolynomial { 5 {} }
+                    NumberedPolynomial(listOf<UInt>() to 5)
         ) // true, d/dx_2 (3 + 5 x_2 - 7 x_1^2 x_3) = 5
     }
 
     // Lastly, there are rational functions and some other utilities:
     Double.algebra.numberedRationalFunctionSpace {
         val rationalFunction1: NumberedRationalFunction<Double> = NumberedRationalFunction(
-            NumberedPolynomial {
-                2.0 {}
-                (-3.0) { 1 pow 1u }
-                1.0 { 1 pow 2u }
-            },
-            NumberedPolynomial {
-                3.0 {}
-                (-1.0) { 1 pow 1u }
-            }
+            NumberedPolynomial(
+                listOf<UInt>() to 2.0,
+                listOf(1u) to -3.0,
+                listOf(2u) to 1.0,
+            ),
+            NumberedPolynomial(
+                listOf<UInt>() to 3.0,
+                listOf(1u) to -1.0,
+            )
         )
         // It's just (2 - 3x + x^2)/(3 - x) where x = x_1
 
         val rationalFunction2: NumberedRationalFunction<Double> = NumberedRationalFunction(
-            NumberedPolynomial {
-                5.0 {}
-                (-4.0) { 1 pow 1u }
-                1.0 { 1 pow 2u }
-            },
-            NumberedPolynomial {
-                3.0 {}
-                (-1.0) { 1 pow 1u }
-            }
+            NumberedPolynomial(
+                listOf<UInt>() to 5.0,
+                listOf(1u) to -4.0,
+                listOf(2u) to 1.0,
+            ),
+            NumberedPolynomial(
+                listOf<UInt>() to 3.0,
+                listOf(1u) to -1.0,
+            )
         )
         // It's just (5 - 4x + x^2)/(3 - x) where x = x_1
 
@@ -267,7 +268,7 @@ fun labeledPolynomialsExample() {
 
         labeledPolynomialSpace {
             // Also there is DSL for constructing NumberedPolynomials:
-            val polynomial5: LabeledPolynomial<Int> = LabeledPolynomial {
+            val polynomial5: LabeledPolynomial<Int> = LabeledPolynomialDSL1 {
                 3 {}
                 5 { y inPowerOf 1u }
                 -7 with { x pow 2u; z pow 1u }
@@ -281,7 +282,7 @@ fun labeledPolynomialsExample() {
         }
     }
 
-    val polynomial6: LabeledPolynomial<Int> = with(Int.algebra) {
+    val polynomial6: LabeledPolynomial<Int> = Int.algebra {
         LabeledPolynomial(
             mapOf<Symbol, UInt>() to 7,
             mapOf(y to 1u) to -5,
@@ -292,28 +293,28 @@ fun labeledPolynomialsExample() {
     // For every ring there can be provided a polynomial ring:
     Int.algebra.labeledPolynomialSpace {
         println(
-            -polynomial6 == LabeledPolynomial {
-                (-7) {}
-                5 { y pow 1u }
-                0 { x pow 2u; z pow 1u }
-                (-4) { t pow 4u }
-            }
+            -polynomial6 == LabeledPolynomial(
+                mapOf<Symbol, UInt>() to -7,
+                mapOf(y to 1u) to 5,
+                mapOf(x to 2u, z to 1u) to 0,
+                mapOf(t to 4u) to -4,
+            )
         ) // true
         println(
-            polynomial1 + polynomial6 == LabeledPolynomial {
-                10 {}
-                0 { y pow 1u }
-                (-7) { x pow 2u; z pow 1u }
-                4 { t pow 4u }
-            }
+            polynomial1 + polynomial6 == LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 10,
+                mapOf(y to 1u) to 0,
+                mapOf(x to 2u, z to 1u) to -7,
+                mapOf(t to 4u) to 4,
+            )
         ) // true
         println(
-            polynomial1 - polynomial6 == LabeledPolynomial {
-                (-4) {}
-                10 { y pow 1u }
-                (-7) { x pow 2u; z pow 1u }
-                (-4) { t pow 4u }
-            }
+            polynomial1 - polynomial6 == LabeledPolynomial(
+                mapOf<Symbol, UInt>() to -4,
+                mapOf(y to 1u) to 10,
+                mapOf(x to 2u, z to 1u) to -7,
+                mapOf(t to 4u) to -4,
+            )
         ) // true
 
         polynomial1 * polynomial6 // Multiplication works too
@@ -321,11 +322,11 @@ fun labeledPolynomialsExample() {
 
     Double.algebra.labeledPolynomialSpace {
         // You can even write
-        val polynomial7: LabeledPolynomial<Double> = LabeledPolynomial {
-            3.0 {}
-            5.0 { y pow 1u }
-            (-7.0) { x pow 2u; z pow 1u }
-        }
+        val polynomial7: LabeledPolynomial<Double> = LabeledPolynomial(
+            mapOf<Symbol, UInt>() to 3.0,
+            mapOf(y to 1u) to 5.0,
+            mapOf(x to 2u, z to 1u) to -7.0,
+        )
         Double.algebra.listPolynomialSpace {
             println(3 + 5 * y - 7 * x * x * z == polynomial7)
             println(3.0 + 5.0 * y - 7.0 * x * x * z == polynomial7)
@@ -338,42 +339,42 @@ fun labeledPolynomialsExample() {
         // because it's substitution x -> 1, y -> -2, z -> -1,
         // so 3 + 5 y - 7 x^2 z = 3 + 5 * (-2) - 7 * 1^2 * (-1) = 3 - 10 + 7 = 0
         println(
-            polynomial1.substitute(mapOf(y to t.asPolynomial())) == LabeledPolynomial {
-                3 {}
-                5 { t pow 1u }
-                (-7) { x pow 2u; z pow 1u }
-            }
+            polynomial1.substitute(mapOf(y to t.asPolynomial())) == LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 3,
+                mapOf(t to 1u) to 5,
+                mapOf(x to 2u, z to 1u) to -7,
+                )
         ) // true, because it's substitution y -> t, so result is 3 + 5 t - 7 x^2 z
         println(
-            polynomial1.derivativeWithRespectTo(Int.algebra, y) == LabeledPolynomial { 5 {} }
+            polynomial1.derivativeWithRespectTo(Int.algebra, y) == LabeledPolynomial(mapOf<Symbol, UInt>() to 5)
         ) // true, d/dy (3 + 5 y - 7 x^2 z) = 5
     }
 
     // Lastly, there are rational functions and some other utilities:
     Double.algebra.labeledRationalFunctionSpace {
         val rationalFunction1: LabeledRationalFunction<Double> = LabeledRationalFunction(
-            LabeledPolynomial {
-                2.0 {}
-                (-3.0) { x pow 1u }
-                1.0 { x pow 2u }
-            },
-            LabeledPolynomial {
-                3.0 {}
-                (-1.0) { x pow 1u }
-            }
+            LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 2.0,
+                mapOf(x to 1u) to -3.0,
+                mapOf(x to 2u) to 1.0,
+            ),
+            LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 3.0,
+                mapOf(x to 1u) to -1.0,
+            )
         )
         // It's just (2 - 3x + x^2)/(3 - x)
 
         val rationalFunction2: LabeledRationalFunction<Double> = LabeledRationalFunction(
-            LabeledPolynomial {
-                5.0 {}
-                (-4.0) { x pow 1u }
-                1.0 { x pow 2u }
-            },
-            LabeledPolynomial {
-                3.0 {}
-                (-1.0) { x pow 1u }
-            }
+            LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 5.0,
+                mapOf(x to 1u) to -4.0,
+                mapOf(x to 2u) to 1.0,
+            ),
+            LabeledPolynomial(
+                mapOf<Symbol, UInt>() to 3.0,
+                mapOf(x to 1u) to -1.0,
+            )
         )
         // It's just (5 - 4x + x^2)/(3 - x)
 
