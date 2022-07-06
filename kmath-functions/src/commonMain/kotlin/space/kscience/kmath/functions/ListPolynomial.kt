@@ -173,11 +173,6 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
         }
 
     /**
-     * Converts the integer [value] to polynomial.
-     */
-    public override fun number(value: Int): ListPolynomial<C> = number(constantNumber(value))
-
-    /**
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     public override operator fun C.plus(other: ListPolynomial<C>): ListPolynomial<C> =

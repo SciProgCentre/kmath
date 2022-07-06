@@ -112,7 +112,7 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     /**
      * Converts the integer [value] to polynomial.
      */
-    public fun number(value: Int): P = one * value
+    public fun number(value: Int): P = number(constantNumber(value))
     /**
      * Converts the integer to polynomial.
      */

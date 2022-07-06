@@ -170,11 +170,6 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         }
 
     /**
-     * Converts the integer [value] to polynomial.
-     */
-    public override fun number(value: Int): NumberedPolynomial<C> = number(constantNumber(value))
-
-    /**
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
