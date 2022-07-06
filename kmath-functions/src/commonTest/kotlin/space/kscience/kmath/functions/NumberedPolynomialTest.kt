@@ -7,14 +7,19 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.test.misc.*
-import kotlin.test.*
+import space.kscience.kmath.test.misc.IntModuloRing
+import space.kscience.kmath.test.misc.Rational
+import space.kscience.kmath.test.misc.RationalField
+import space.kscience.kmath.test.misc.m
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertSame
+import kotlin.test.fail
 
 
-@UnstableKMathAPI
 class NumberedPolynomialTest {
-    private val o = Rational(0)
+    val o = Rational(0)
+
     @Test
     fun test_Polynomial_Int_plus() {
         RationalField.numberedPolynomialSpace {
@@ -557,6 +562,7 @@ class NumberedPolynomialTest {
             )
             assertEquals(
                 NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
                     listOf(3u) to Rational(-8, 9),
                     listOf(0u, 4u) to Rational(-8, 7),
                 ),
@@ -650,6 +656,7 @@ class NumberedPolynomialTest {
             )
             assertEquals(
                 NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
                     listOf(3u) to Rational(-8, 9),
                     listOf(0u, 4u) to Rational(-8, 7),
                 ),
@@ -816,6 +823,7 @@ class NumberedPolynomialTest {
             )
             assertEquals(
                 NumberedPolynomial(
+                    listOf<UInt>() to Rational(0),
                     listOf(3u) to Rational(-8, 9),
                     listOf(0u, 4u) to Rational(-8, 7),
                 ),

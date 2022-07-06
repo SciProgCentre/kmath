@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.test.misc
 
+import space.kscience.kmath.functions.LabeledPolynomial
+import space.kscience.kmath.functions.LabeledRationalFunction
 import space.kscience.kmath.functions.NumberedPolynomial
 import space.kscience.kmath.functions.NumberedRationalFunction
 import kotlin.test.assertEquals
@@ -29,8 +31,40 @@ fun assertEquals(
 )
 
 fun assertEquals(
+    expected: LabeledPolynomial<Double>,
+    actual: LabeledPolynomial<Double>,
+    absoluteTolerance: Double,
+    message: String? = null
+) = assertContentEquals(
+    expected.coefficients,
+    actual.coefficients,
+    absoluteTolerance,
+    message
+)
+
+fun assertEquals(
     expected: NumberedRationalFunction<Double>,
     actual: NumberedRationalFunction<Double>,
+    absoluteTolerance: Double,
+    message: String? = null
+) {
+    assertEquals(
+        expected.numerator,
+        actual.numerator,
+        absoluteTolerance,
+        message
+    )
+    assertEquals(
+        expected.denominator,
+        actual.denominator,
+        absoluteTolerance,
+        message
+    )
+}
+
+fun assertEquals(
+    expected: LabeledRationalFunction<Double>,
+    actual: LabeledRationalFunction<Double>,
     absoluteTolerance: Double,
     message: String? = null
 ) {

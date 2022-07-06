@@ -302,6 +302,7 @@ public class DSL1LabeledPolynomialTermSignatureBuilder {
      * Declaring another power of the same variable will increase its degree by received degree.
      */
     public infix fun Symbol.inPowerOf(deg: UInt) {
+        if (deg == 0u) return
         signature[this] = signature.getOrElse(this) { 0u } + deg
     }
     /**

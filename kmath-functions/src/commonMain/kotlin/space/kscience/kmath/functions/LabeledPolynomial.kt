@@ -177,14 +177,17 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to sum of [other] copies of [this].
      */
     public override operator fun LabeledPolynomial<C>.times(other: Int): LabeledPolynomial<C> =
-        if (other == 0) zero
-        else LabeledPolynomial(
-            coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this[degs]!! * other
-                }
-        )
+        when(other) {
+            0 -> zero
+            1 -> this
+            else -> LabeledPolynomial(
+                coefficients
+                    .toMutableMap()
+                    .apply {
+                        for (degs in keys) this[degs] = this[degs]!! * other
+                    }
+            )
+        }
 
     /**
      * Returns sum of the integer represented as a polynomial and the polynomial.
@@ -210,7 +213,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        if (this == 0) other
+        if (this == 0) -other
         else with(other.coefficients) {
             if (isEmpty()) LabeledPolynomialAsIs(mapOf(emptyMap<Symbol, UInt>() to this@minus.asConstant()))
             else LabeledPolynomialAsIs(
@@ -230,14 +233,17 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to sum of [this] copies of [other].
      */
     public override operator fun Int.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        if (this == 0) zero
-        else LabeledPolynomial(
-            other.coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this@times * this[degs]!!
-                }
-        )
+        when(this) {
+            0 -> zero
+            1 -> other
+            else -> LabeledPolynomial(
+                other.coefficients
+                    .toMutableMap()
+                    .apply {
+                        for (degs in keys) this[degs] = this@times * this[degs]!!
+                    }
+            )
+        }
 
     /**
      * Converts the integer [value] to polynomial.
@@ -360,8 +366,6 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             else LabeledPolynomialAsIs(
                 toMutableMap()
                     .apply {
-                        forEach { (degs, c) -> if(degs.isNotEmpty()) this[degs] = -c }
-
                         val degs = emptyMap<Symbol, UInt>()
 
                         this[degs] = getOrElse(degs) { constantZero } - other
