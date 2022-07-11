@@ -6,19 +6,17 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.functions.testUtils.t
+import space.kscience.kmath.functions.testUtils.x
+import space.kscience.kmath.functions.testUtils.y
+import space.kscience.kmath.functions.testUtils.z
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class LabeledConstructorsTest {
-    val x by symbol
-    val y by symbol
-    val z by symbol
-    val t by symbol
-    
     @Test
     @UnstableKMathAPI
     fun testDSL1() {

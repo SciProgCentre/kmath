@@ -5,40 +5,37 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress")
 
-package space.kscience.kmath.test.misc
+package space.kscience.kmath.functions.testUtils
 
-import space.kscience.kmath.functions.ListPolynomial
-import space.kscience.kmath.functions.ListPolynomialSpace
-import space.kscience.kmath.functions.PolynomialSpaceOverRing
 import space.kscience.kmath.operations.Ring
 
 
-class IntModulo {
-    val residue: Int
-    val modulus: Int
+public class IntModulo {
+    public val residue: Int
+    public val modulus: Int
 
     @PublishedApi
     internal constructor(residue: Int, modulus: Int, toCheckInput: Boolean = true) {
         if (toCheckInput) {
             require(modulus != 0) { "modulus can not be zero" }
             this.modulus = if (modulus < 0) -modulus else modulus
-            this.residue = residue.mod(modulus)
+            this.residue = residue.mod(this.modulus)
         } else {
             this.residue = residue
             this.modulus = modulus
         }
     }
 
-    constructor(residue: Int, modulus: Int) : this(residue, modulus, true)
+    public constructor(residue: Int, modulus: Int) : this(residue, modulus, true)
 
-    operator fun unaryPlus(): IntModulo = this
-    operator fun unaryMinus(): IntModulo =
+    public operator fun unaryPlus(): IntModulo = this
+    public operator fun unaryMinus(): IntModulo =
         IntModulo(
             if (residue == 0) 0 else modulus - residue,
             modulus,
             toCheckInput = false
         )
-    operator fun plus(other: IntModulo): IntModulo {
+    public operator fun plus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not add two residue different modulo" }
         return IntModulo(
             (residue + other.residue) % modulus,
@@ -46,13 +43,13 @@ class IntModulo {
             toCheckInput = false
         )
     }
-    operator fun plus(other: Int): IntModulo =
+    public operator fun plus(other: Int): IntModulo =
         IntModulo(
             (residue + other) % modulus,
             modulus,
             toCheckInput = false
         )
-    operator fun minus(other: IntModulo): IntModulo {
+    public operator fun minus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not subtract two residue different modulo" }
         return IntModulo(
             (residue - other.residue) % modulus,
@@ -60,13 +57,13 @@ class IntModulo {
             toCheckInput = false
         )
     }
-    operator fun minus(other: Int): IntModulo =
+    public operator fun minus(other: Int): IntModulo =
         IntModulo(
             (residue - other) % modulus,
             modulus,
             toCheckInput = false
         )
-    operator fun times(other: IntModulo): IntModulo {
+    public operator fun times(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not multiply two residue different modulo" }
         return IntModulo(
             (residue * other.residue) % modulus,
@@ -74,13 +71,13 @@ class IntModulo {
             toCheckInput = false
         )
     }
-    operator fun times(other: Int): IntModulo =
+    public operator fun times(other: Int): IntModulo =
         IntModulo(
             (residue * other) % modulus,
             modulus,
             toCheckInput = false
         )
-    operator fun div(other: IntModulo): IntModulo {
+    public operator fun div(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not divide two residue different modulo" }
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other.residue, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
@@ -90,7 +87,7 @@ class IntModulo {
             toCheckInput = false
         )
     }
-    operator fun div(other: Int): IntModulo {
+    public operator fun div(other: Int): IntModulo {
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
         return IntModulo(
@@ -111,11 +108,11 @@ class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-class IntModuloRing : Ring<IntModulo> {
+public class IntModuloRing : Ring<IntModulo> {
 
-    val modulus: Int
+    public val modulus: Int
 
-    constructor(modulus: Int) {
+    public constructor(modulus: Int) {
         require(modulus != 0) { "modulus can not be zero" }
         this.modulus = if (modulus < 0) -modulus else modulus
     }
@@ -123,7 +120,7 @@ class IntModuloRing : Ring<IntModulo> {
     override inline val zero: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
     override inline val one: IntModulo get() = IntModulo(1, modulus, toCheckInput = false)
 
-    fun number(arg: Int) = IntModulo(arg, modulus, toCheckInput = false)
+    public fun number(arg: Int): IntModulo = IntModulo(arg, modulus, toCheckInput = false)
 
     override inline fun add(left: IntModulo, right: IntModulo): IntModulo = left + right
     override inline fun multiply(left: IntModulo, right: IntModulo): IntModulo = left * right
@@ -132,13 +129,5 @@ class IntModuloRing : Ring<IntModulo> {
     override inline fun IntModulo.plus(arg: IntModulo): IntModulo = this + arg
     override inline fun IntModulo.minus(arg: IntModulo): IntModulo = this - arg
     override inline fun IntModulo.times(arg: IntModulo): IntModulo = this * arg
-    inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
+    public inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
 }
-
-fun ListPolynomialSpace<IntModulo, IntModuloRing>.ListPolynomial(vararg coefs: Int): ListPolynomial<IntModulo> =
-    ListPolynomial(coefs.map { IntModulo(it, ring.modulus) })
-fun IntModuloRing.ListPolynomial(vararg coefs: Int): ListPolynomial<IntModulo> =
-    ListPolynomial(coefs.map { IntModulo(it, modulus) })
-
-fun IntModuloRing.m(arg: Int) = IntModulo(arg, modulus)
-fun PolynomialSpaceOverRing<IntModulo, *, IntModuloRing>.m(arg: Int) = IntModulo(arg, ring.modulus)

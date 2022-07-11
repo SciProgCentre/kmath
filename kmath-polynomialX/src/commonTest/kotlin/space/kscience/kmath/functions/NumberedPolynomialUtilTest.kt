@@ -6,18 +6,15 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.test.misc.Rational
-import space.kscience.kmath.test.misc.RationalField
-import space.kscience.kmath.test.misc.assertEquals
-import space.kscience.kmath.test.misc.assertFailsWithTypeAndMessage
+import space.kscience.kmath.functions.testUtils.Rational
+import space.kscience.kmath.functions.testUtils.RationalField
+import space.kscience.kmath.functions.testUtils.assertFailsWithTypeAndMessage
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import space.kscience.kmath.functions.testUtils.bufferOf
+import space.kscience.kmath.functions.testUtils.assertEquals
 
-
-fun <T> bufferOf(vararg elements: T): Buffer<T> = elements.asBuffer()
 
 class NumberedPolynomialUtilTest {
     @Test

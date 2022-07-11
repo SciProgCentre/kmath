@@ -8,25 +8,22 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.test.misc.IntModuloRing
-import space.kscience.kmath.test.misc.Rational
-import space.kscience.kmath.test.misc.RationalField
-import space.kscience.kmath.test.misc.m
+import space.kscience.kmath.functions.testUtils.IntModuloRing
+import space.kscience.kmath.functions.testUtils.Rational
+import space.kscience.kmath.functions.testUtils.RationalField
+import space.kscience.kmath.functions.testUtils.o
+import space.kscience.kmath.functions.testUtils.m
 import kotlin.test.*
+import space.kscience.kmath.functions.testUtils.x
+import space.kscience.kmath.functions.testUtils.y
+import space.kscience.kmath.functions.testUtils.z
+import space.kscience.kmath.functions.testUtils.t
+import space.kscience.kmath.functions.testUtils.s
+import space.kscience.kmath.functions.testUtils.iota
 
 
 // TODO: Тесты на конвертацию.
 class LabeledPolynomialTest {
-    val x by symbol
-    val y by symbol
-    val z by symbol
-    val t by symbol
-    val s by symbol
-    val iota by symbol
-    
-    val o = Rational(0)
-
     @Test
     fun test_Variable_Int_plus() {
         RationalField.labeledPolynomialSpace {

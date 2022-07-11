@@ -6,9 +6,16 @@ plugins {
 
 description = "Functions, integration and interpolation"
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
+    }
+    commonTest {
+        dependencies {
+            api(projects.testUtilsFunctions)
+        }
     }
 }
 

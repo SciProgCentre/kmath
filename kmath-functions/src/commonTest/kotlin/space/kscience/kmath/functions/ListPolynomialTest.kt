@@ -7,7 +7,10 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.test.misc.*
+import space.kscience.kmath.functions.testUtils.IntModuloRing
+import space.kscience.kmath.functions.testUtils.ListPolynomial
+import space.kscience.kmath.functions.testUtils.Rational
+import space.kscience.kmath.functions.testUtils.RationalField
 import kotlin.test.*
 
 

@@ -5,21 +5,21 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress")
 
-package space.kscience.kmath.test.misc
+package space.kscience.kmath.functions.testUtils
 
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.NumbersAddOps
 
 @Suppress("NAME_SHADOWING")
-class Rational {
-    companion object {
-        val ZERO: Rational = Rational(0L)
-        val ONE: Rational = Rational(1L)
+public class Rational {
+    public companion object {
+        public val ZERO: Rational = Rational(0L)
+        public val ONE: Rational = Rational(1L)
     }
 
-    val numerator: Long
-    val denominator: Long
+    public val numerator: Long
+    public val denominator: Long
 
     internal constructor(numerator: Long, denominator: Long, toCheckInput: Boolean = true) {
         if (toCheckInput) {
@@ -35,16 +35,16 @@ class Rational {
         }
     }
 
-    constructor(numerator: Int, denominator: Int) : this(numerator.toLong(), denominator.toLong(), true)
-    constructor(numerator: Int, denominator: Long) : this(numerator.toLong(), denominator, true)
-    constructor(numerator: Long, denominator: Int) : this(numerator, denominator.toLong(), true)
-    constructor(numerator: Long, denominator: Long) : this(numerator, denominator, true)
-    constructor(numerator: Int) : this(numerator.toLong(), 1L, false)
-    constructor(numerator: Long) : this(numerator, 1L, false)
+    public constructor(numerator: Int, denominator: Int) : this(numerator.toLong(), denominator.toLong(), true)
+    public constructor(numerator: Int, denominator: Long) : this(numerator.toLong(), denominator, true)
+    public constructor(numerator: Long, denominator: Int) : this(numerator, denominator.toLong(), true)
+    public constructor(numerator: Long, denominator: Long) : this(numerator, denominator, true)
+    public constructor(numerator: Int) : this(numerator.toLong(), 1L, false)
+    public constructor(numerator: Long) : this(numerator, 1L, false)
 
-    operator fun unaryPlus(): Rational = this
-    operator fun unaryMinus(): Rational = Rational(-this.numerator, this.denominator)
-    operator fun plus(other: Rational): Rational {
+    public operator fun unaryPlus(): Rational = this
+    public operator fun unaryMinus(): Rational = Rational(-this.numerator, this.denominator)
+    public operator fun plus(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val dividedThisDenominator = denominator / denominatorsGcd
         val dividedOtherDenominator = other.denominator / denominatorsGcd
@@ -56,19 +56,19 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun plus(other: Int): Rational =
+    public operator fun plus(other: Int): Rational =
         Rational(
             numerator + denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
-    operator fun plus(other: Long): Rational =
+    public operator fun plus(other: Long): Rational =
         Rational(
             numerator + denominator * other,
             denominator,
             toCheckInput = false
         )
-    operator fun minus(other: Rational): Rational {
+    public operator fun minus(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val dividedThisDenominator = denominator / denominatorsGcd
         val dividedOtherDenominator = other.denominator / denominatorsGcd
@@ -80,19 +80,19 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun minus(other: Int): Rational =
+    public operator fun minus(other: Int): Rational =
         Rational(
             numerator - denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
-    operator fun minus(other: Long): Rational =
+    public operator fun minus(other: Long): Rational =
         Rational(
             numerator - denominator * other,
             denominator,
             toCheckInput = false
         )
-    operator fun times(other: Rational): Rational {
+    public operator fun times(other: Rational): Rational {
         val thisDenominatorAndOtherNumeratorGcd = gcd(denominator, other.numerator)
         val otherDenominatorAndThisNumeratorGcd = gcd(other.denominator, numerator)
         return Rational(
@@ -101,7 +101,7 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun times(other: Int): Rational {
+    public operator fun times(other: Int): Rational {
         val other = other.toLong()
         val denominatorAndOtherGcd = gcd(denominator, other)
         return Rational(
@@ -110,7 +110,7 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun times(other: Long): Rational {
+    public operator fun times(other: Long): Rational {
         val denominatorAndOtherGcd = gcd(denominator, other)
         return Rational(
             numerator * (other / denominatorAndOtherGcd),
@@ -118,7 +118,7 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun div(other: Rational): Rational {
+    public operator fun div(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val numeratorsGcd = gcd(numerator, other.numerator)
         return Rational(
@@ -126,7 +126,7 @@ class Rational {
             (denominator / denominatorsGcd) * (other.numerator / numeratorsGcd)
         )
     }
-    operator fun div(other: Int): Rational {
+    public operator fun div(other: Int): Rational {
         val other = other.toLong()
         val numeratorAndOtherGcd = gcd(numerator, other)
         return Rational(
@@ -135,7 +135,7 @@ class Rational {
             toCheckInput = false
         )
     }
-    operator fun div(other: Long): Rational {
+    public operator fun div(other: Long): Rational {
         val numeratorAndOtherGcd = gcd(numerator, other)
         return Rational(
             numerator / numeratorAndOtherGcd,
@@ -158,7 +158,7 @@ class Rational {
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
-object RationalField : Field<Rational>, NumbersAddOps<Rational> {
+public object RationalField : Field<Rational>, NumbersAddOps<Rational> {
     override inline val zero: Rational get() = Rational.ZERO
     override inline val one: Rational get() = Rational.ONE
 

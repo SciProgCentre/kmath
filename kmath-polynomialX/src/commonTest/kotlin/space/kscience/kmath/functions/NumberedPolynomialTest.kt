@@ -7,10 +7,11 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.test.misc.IntModuloRing
-import space.kscience.kmath.test.misc.Rational
-import space.kscience.kmath.test.misc.RationalField
-import space.kscience.kmath.test.misc.m
+import space.kscience.kmath.functions.testUtils.IntModuloRing
+import space.kscience.kmath.functions.testUtils.Rational
+import space.kscience.kmath.functions.testUtils.RationalField
+import space.kscience.kmath.functions.testUtils.m
+import space.kscience.kmath.functions.testUtils.o
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -18,8 +19,6 @@ import kotlin.test.fail
 
 
 class NumberedPolynomialTest {
-    val o = Rational(0)
-
     @Test
     fun test_Polynomial_Int_plus() {
         RationalField.numberedPolynomialSpace {

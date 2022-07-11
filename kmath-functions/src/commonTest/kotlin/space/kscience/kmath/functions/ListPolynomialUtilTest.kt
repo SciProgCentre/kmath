@@ -6,9 +6,9 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.test.misc.Rational
-import space.kscience.kmath.test.misc.RationalField
-import space.kscience.kmath.test.misc.assertFailsWithTypeAndMessage
+import space.kscience.kmath.functions.testUtils.Rational
+import space.kscience.kmath.functions.testUtils.RationalField
+import space.kscience.kmath.functions.testUtils.assertFailsWithTypeAndMessage
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -64,7 +64,7 @@ class ListPolynomialUtilTest {
         )
         assertEquals(
             Rational(25057, 21000),
-            ListPolynomial(Rational(5,8), Rational(8, 3), Rational(4, 7), Rational(3, 2))
+            ListPolynomial(Rational(5, 8), Rational(8, 3), Rational(4, 7), Rational(3, 2))
                 .substitute(RationalField, Rational(1, 5)),
             "test 2"
         )
@@ -76,13 +76,13 @@ class ListPolynomialUtilTest {
         )
         assertEquals(
             Rational(4961, 4200),
-            ListPolynomial(Rational(5,8), Rational(8, 3), Rational(4, 7), Rational(0))
+            ListPolynomial(Rational(5, 8), Rational(8, 3), Rational(4, 7), Rational(0))
                 .substitute(RationalField, Rational(1, 5)),
             "test 4"
         )
         assertEquals(
             Rational(3511, 3000),
-            ListPolynomial(Rational(5,8), Rational(8, 3), Rational(0), Rational(3, 2))
+            ListPolynomial(Rational(5, 8), Rational(8, 3), Rational(0), Rational(3, 2))
                 .substitute(RationalField, Rational(1, 5)),
             "test 5"
         )
@@ -233,7 +233,7 @@ class ListPolynomialUtilTest {
                 ListPolynomial(
                     Rational(-13, 9),
                     Rational(5, 3),
-                    Rational(-5, 4) ,
+                    Rational(-5, 4),
                     Rational(0),
                     Rational(0),
                     Rational(0),

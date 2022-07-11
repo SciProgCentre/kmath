@@ -3,16 +3,16 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.test.misc
+package space.kscience.kmath.functions.testUtils
 
 import kotlin.math.abs
 
 
-data class BezoutIdentityWithGCD<T>(val first: T, val second: T, val gcd: T)
+internal data class BezoutIdentityWithGCD<T>(val first: T, val second: T, val gcd: T)
 
-tailrec fun gcd(a: Long, b: Long): Long = if (a == 0L) abs(b) else gcd(b % a, a)
+internal tailrec fun gcd(a: Long, b: Long): Long = if (a == 0L) abs(b) else gcd(b % a, a)
 
-fun bezoutIdentityWithGCD(a: Int, b: Int): BezoutIdentityWithGCD<Int> =
+internal fun bezoutIdentityWithGCD(a: Int, b: Int): BezoutIdentityWithGCD<Int> =
     when {
         a < 0 && b < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, -b, 1, 0, 0, 1)) { BezoutIdentityWithGCD(-first, -second, gcd) }
         a < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, b, 1, 0, 0, 1)) { BezoutIdentityWithGCD(-first, second, gcd) }
