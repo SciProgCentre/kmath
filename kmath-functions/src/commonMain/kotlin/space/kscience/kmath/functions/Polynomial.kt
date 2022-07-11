@@ -59,12 +59,12 @@ public value class Polynomial<C>(
  * @param A type of provided underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public open class PolynomialSpace<C, A : Ring<C>>(
+public open class PolynomialSpace<C, A>(
     /**
      * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
      */
     public val ring: A,
-) : Ring<Polynomial<C>> {
+) : Ring<Polynomial<C>>, ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
 
     /**
      * Instance of zero constant (zero of the underlying ring).
@@ -267,13 +267,15 @@ public open class PolynomialSpace<C, A : Ring<C>>(
 
     override fun add(left: Polynomial<C>, right: Polynomial<C>): Polynomial<C> = left + right
     override fun multiply(left: Polynomial<C>, right: Polynomial<C>): Polynomial<C> = left * right
+    override fun scale(a: Polynomial<C>, value: Double): Polynomial<C> =
+        ring { Polynomial(a.coefficients.map { scale(it, value) }) }
 
     // TODO: When context receivers will be ready move all of this substitutions and invocations to utilities with
     //  [ListPolynomialSpace] as a context receiver
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
-    public inline fun Polynomial<C>.substitute(argument: C): C = substitute(ring, argument)
+    public inline fun Polynomial<C>.substitute(argument: C): C = value(ring, argument)
 
     /**
      * Represent [this] polynomial as a regular context-less function.
@@ -283,19 +285,5 @@ public open class PolynomialSpace<C, A : Ring<C>>(
     /**
      * Evaluates value of [this] polynomial on provided [argument].
      */
-    public inline operator fun Polynomial<C>.invoke(argument: C): C = substitute(ring, argument)
-}
-
-/**
- * Space of polynomials constructed over ring.
- *
- * @param C the type of constants. Polynomials have them as a coefficients in their terms.
- * @param A type of underlying ring of constants. It's [Ring] of [C].
- * @param ring underlying ring of constants of type [A].
- */
-public class ScalablePolynomialSpace<C, A>(
-    ring: A,
-) : PolynomialSpace<C, A>(ring), ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
-    override fun scale(a: Polynomial<C>, value: Double): Polynomial<C> =
-        ring { Polynomial(a.coefficients.map { scale(it, value) }) }
+    public inline operator fun Polynomial<C>.invoke(argument: C): C = value(ring, argument)
 }

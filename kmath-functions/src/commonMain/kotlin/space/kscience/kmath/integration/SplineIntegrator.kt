@@ -7,7 +7,6 @@ package space.kscience.kmath.integration
 
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.integrate
-import space.kscience.kmath.functions.antiderivative
 import space.kscience.kmath.interpolation.PolynomialInterpolator
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
@@ -24,7 +23,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
 @OptIn(PerformancePitfall::class)
 @UnstableKMathAPI
 public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(algebra: Field<T>): PiecewisePolynomial<T> =
-    PiecewisePolynomial(pieces.map { it.first to it.second.antiderivative(algebra) })
+    PiecewisePolynomial(pieces.map { it.first to it.second.integrate(algebra) })
 
 /**
  * Compute definite integral of given [PiecewisePolynomial] piece by piece in a given [range]
