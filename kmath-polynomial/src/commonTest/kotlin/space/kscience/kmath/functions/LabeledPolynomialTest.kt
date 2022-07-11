@@ -11,15 +11,15 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.functions.testUtils.IntModuloRing
 import space.kscience.kmath.functions.testUtils.Rational
 import space.kscience.kmath.functions.testUtils.RationalField
-import space.kscience.kmath.functions.testUtils.o
+import space.kscience.kmath.functions.testUtils.iota
 import space.kscience.kmath.functions.testUtils.m
-import kotlin.test.*
+import space.kscience.kmath.functions.testUtils.o
+import space.kscience.kmath.functions.testUtils.s
+import space.kscience.kmath.functions.testUtils.t
 import space.kscience.kmath.functions.testUtils.x
 import space.kscience.kmath.functions.testUtils.y
 import space.kscience.kmath.functions.testUtils.z
-import space.kscience.kmath.functions.testUtils.t
-import space.kscience.kmath.functions.testUtils.s
-import space.kscience.kmath.functions.testUtils.iota
+import kotlin.test.*
 
 
 // TODO: Тесты на конвертацию.

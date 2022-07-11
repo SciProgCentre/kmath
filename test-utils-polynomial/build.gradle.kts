@@ -7,9 +7,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(projects.kmathCore)
-            api(projects.kmathFunctions)
-            api(projects.testUtilsFunctions)
-            api(projects.kmathPolynomialX)
+            api(projects.kmathPolynomial)
             api(kotlin("test"))
         }
     }

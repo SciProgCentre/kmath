@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 import kotlin.js.JsName
 import kotlin.jvm.JvmName
 

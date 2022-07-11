@@ -6,16 +6,15 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.functions.testUtils.Rational
 import space.kscience.kmath.functions.testUtils.RationalField
+import space.kscience.kmath.functions.testUtils.iota
+import space.kscience.kmath.functions.testUtils.x
+import space.kscience.kmath.functions.testUtils.y
+import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import space.kscience.kmath.functions.testUtils.x
-import space.kscience.kmath.functions.testUtils.y
-import space.kscience.kmath.functions.testUtils.iota
-import space.kscience.kmath.functions.testUtils.assertEquals
 
 class LabeledPolynomialUtilTest {
     @Test

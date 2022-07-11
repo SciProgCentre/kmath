@@ -10,13 +10,11 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(projects.kmathCore)
-            api(projects.kmathFunctions)
         }
     }
     commonTest {
         dependencies {
-            api(projects.testUtilsFunctions)
-            api(projects.testUtilsPolynomialX)
+            api(projects.testUtilsPolynomial)
             api(kotlin("test"))
         }
     }
