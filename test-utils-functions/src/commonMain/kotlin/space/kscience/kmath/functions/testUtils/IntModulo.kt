@@ -8,6 +8,7 @@
 package space.kscience.kmath.functions.testUtils
 
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.ScaleOperations
 
 
 public class IntModulo {
@@ -108,7 +109,7 @@ public class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public class IntModuloRing : Ring<IntModulo> {
+public class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
 
     public val modulus: Int
 
@@ -130,4 +131,6 @@ public class IntModuloRing : Ring<IntModulo> {
     override inline fun IntModulo.minus(arg: IntModulo): IntModulo = this - arg
     override inline fun IntModulo.times(arg: IntModulo): IntModulo = this * arg
     public inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
+
+    override fun scale(a: IntModulo, value: Double): IntModulo = a * value.toInt()
 }
