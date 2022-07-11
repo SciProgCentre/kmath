@@ -91,7 +91,6 @@ public fun assertEquals(
     )
 }
 
-// FIXME: Don't understand why but the same function from test-utils-functions module can not be used
 public inline fun <reified T : Throwable> assertFailsWithTypeAndMessage(
     expectedMessage: String? = null,
     assertionMessage: String? = null,

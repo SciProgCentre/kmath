@@ -11,7 +11,7 @@ package space.kscience.kmath.functions
  * if [reverse] parameter is true.
  */
 @Suppress("FunctionName")
-public fun <C> ListPolynomial(coefficients: List<C>, reverse: Boolean = false): Polynomial<C> =
+public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else this })
 
 /**
@@ -19,10 +19,10 @@ public fun <C> ListPolynomial(coefficients: List<C>, reverse: Boolean = false): 
  * if [reverse] parameter is true.
  */
 @Suppress("FunctionName")
-public fun <C> ListPolynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
+public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else toList() })
 
 /**
  * Represents [this] constant as a [Polynomial].
  */
-public fun <C> C.asListPolynomial() : Polynomial<C> = Polynomial(listOf(this))
+public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))

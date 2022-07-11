@@ -59,7 +59,7 @@ public value class Polynomial<C>(
  * @param A type of provided underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public open class ListPolynomialSpace<C, A : Ring<C>>(
+public open class PolynomialSpace<C, A : Ring<C>>(
     /**
      * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
      */
@@ -293,9 +293,9 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
  * @param A type of underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public class ScalableListPolynomialSpace<C, A>(
+public class ScalablePolynomialSpace<C, A>(
     ring: A,
-) : ListPolynomialSpace<C, A>(ring), ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
+) : PolynomialSpace<C, A>(ring), ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
     override fun scale(a: Polynomial<C>, value: Double): Polynomial<C> =
         ring { Polynomial(a.coefficients.map { scale(it, value) }) }
 }

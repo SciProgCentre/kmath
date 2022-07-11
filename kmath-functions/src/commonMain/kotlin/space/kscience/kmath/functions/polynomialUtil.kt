@@ -14,31 +14,31 @@ import kotlin.math.pow
 
 
 /**
- * Creates a [ListPolynomialSpace] over a received ring.
+ * Creates a [PolynomialSpace] over a received ring.
  */
-public inline val <C, A : Ring<C>> A.listPolynomialSpace: ListPolynomialSpace<C, A>
-    get() = ListPolynomialSpace(this)
+public inline val <C, A : Ring<C>> A.polynomialSpace: PolynomialSpace<C, A>
+    get() = PolynomialSpace(this)
 
 /**
- * Creates a [ListPolynomialSpace]'s scope over a received ring.
+ * Creates a [PolynomialSpace]'s scope over a received ring.
  */ // TODO: When context will be ready move [ListPolynomialSpace] and add [A] to context receivers of [block]
-public inline fun <C, A : Ring<C>, R> A.listPolynomialSpace(block: ListPolynomialSpace<C, A>.() -> R): R {
+public inline fun <C, A : Ring<C>, R> A.polynomialSpace(block: PolynomialSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return ListPolynomialSpace(this).block()
+    return PolynomialSpace(this).block()
 }
 
 /**
- * Creates a [ScalableListPolynomialSpace] over a received scalable ring.
+ * Creates a [ScalablePolynomialSpace] over a received scalable ring.
  */
-public inline val <C, A> A.scalableListPolynomialSpace: ScalableListPolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C>
-    get() = ScalableListPolynomialSpace(this)
+public inline val <C, A> A.scalablePolynomialSpace: ScalablePolynomialSpace<C, A> where A : Ring<C>, A : ScaleOperations<C>
+    get() = ScalablePolynomialSpace(this)
 
 /**
- * Creates a [ScalableListPolynomialSpace]'s scope over a received scalable ring.
+ * Creates a [ScalablePolynomialSpace]'s scope over a received scalable ring.
  */ // TODO: When context will be ready move [ListPolynomialSpace] and add [A] to context receivers of [block]
-public inline fun <C, A, R> A.scalableListPolynomialSpace(block: ScalableListPolynomialSpace<C, A>.() -> R): R where A : Ring<C>, A : ScaleOperations<C> {
+public inline fun <C, A, R> A.scalablePolynomialSpace(block: ScalablePolynomialSpace<C, A>.() -> R): R where A : Ring<C>, A : ScaleOperations<C> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return ScalableListPolynomialSpace(this).block()
+    return ScalablePolynomialSpace(this).block()
 }
 
 
