@@ -882,6 +882,34 @@ public open class DoubleTensorAlgebra :
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
+    public fun StructureND<Double>.svdGolabKahan(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        val size = tensor.dimension
+        val commonShape = tensor.shape.sliceArray(0 until size - 2)
+        val (n, m) = tensor.shape.sliceArray(size - 2 until size)
+        val uTensor = zeros(commonShape + intArrayOf(min(n, m), n))
+        val sTensor = zeros(commonShape + intArrayOf(min(n, m)))
+        val vTensor = zeros(commonShape + intArrayOf(min(n, m), m))
+
+        val matrices = tensor.matrices
+        val uTensors = uTensor.matrices
+        val sTensorVectors = sTensor.vectors
+        val vTensors = vTensor.matrices
+
+        for (index in matrices.indices) {
+            val matrix = matrices[index]
+            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
+            val curMatrix = DoubleTensor(
+                matrix.shape,
+                matrix.mutableBuffer.array()
+                    .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
+                    .toDoubleArray()
+            )
+            curMatrix.as2D().svdGolabKahanHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D())
+        }
+
+        return Triple(uTensor.transpose(), sTensor, vTensor)
+    }
+
     override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEigJacobi(maxIteration = 50, epsilon = 1e-15)
 
     /**
