@@ -21,8 +21,10 @@ import kotlin.math.min
  */
 public data class ListPolynomial<C>(
     /**
-     * List that contains coefficients of the polynomial. Every monomial `a x^d` is stored as a coefficient `a` placed
-     * into the list at index `d`. For example, coefficients of a polynomial `5 x^2 - 6` can be represented as
+     * List that contains coefficients of the polynomial.
+     *
+     * Every monomial \(a x^d\) is stored as a coefficient \(a\) placed
+     * into the list at index \(d\). For example, coefficients of a polynomial \(5 x^2 - 6\) can be represented as
      * ```
      * listOf(
      *     -6, // -6 +
@@ -40,9 +42,10 @@ public data class ListPolynomial<C>(
      *     0,  // 0 x^4
      * )
      * ```
-     * It is not prohibited to put extra zeros at end of the list (as for `0x^3` and `0x^4` in the example). But the
+     * It is not prohibited to put extra zeros at end of the list (as for \(0x^3\) and \(0x^4\) in the example). But the
      * longer the coefficients list the worse performance of arithmetical operations performed on it. Thus, it is
      * recommended not to put (or even to remove) extra (or useless) coefficients at the end of the coefficients list.
+     * @usesMathJax
      */
     public val coefficients: List<C>
 ) : Polynomial<C> {

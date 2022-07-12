@@ -24,9 +24,9 @@ internal constructor(
     /**
      * Map that contains coefficients of the polynomial.
      *
-     * Every monomial `a x_1^{d_1} ... x_n^{d_n}` is stored as a pair "key-value" in the map, where the value is the
-     * coefficient `a` and the key is a list that associates index of every variable in the monomial with their degree
-     * in the monomial. For example, coefficients of a polynomial `5 x_1^2 x_3^3 - 6 x_2` can be represented as
+     * Every monomial \(a x_1^{d_1} ... x_n^{d_n}\) is stored as a pair "key-value" in the map, where the value is the
+     * coefficient \(a\) and the key is a list that associates index of every variable in the monomial with their degree
+     * in the monomial. For example, coefficients of a polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be represented as
      * ```
      * mapOf(
      *      listOf(2, 0, 3) to 5, // 5 x_1^2 x_3^3 +
@@ -41,9 +41,10 @@ internal constructor(
      *      listOf(0, 1, 1) to 0, // 0 x_2^1 x_3^1
      * )
      * ```
-     * It is not prohibited to put extra zero monomials into the map (as for `0 x_2 x_3` in the example). But the
+     * It is not prohibited to put extra zero monomials into the map (as for \(0 x_2 x_3\) in the example). But the
      * bigger the coefficients map the worse performance of arithmetical operations performed on it. Thus, it is
      * recommended not to put (or even to remove) extra (or useless) monomials in the coefficients map.
+     * @usesMathJax
      */
     public val coefficients: Map<List<UInt>, C>
 ) : Polynomial<C> {
@@ -325,7 +326,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
 
     /**
      * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,
-     * the result is `-1`.
+     * the result is -1.
      */
     public val NumberedPolynomial<C>.lastVariable: Int
         get() = coefficients.keys.maxOfOrNull { degs -> degs.lastIndex } ?: -1
@@ -365,7 +366,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         } ?: 0u
     /**
      * Count of variables occurring in the polynomial with positive power. If there is no such variable,
-     * the result is `0`.
+     * the result is 0.
      */
     public val NumberedPolynomial<C>.countOfVariables: Int
         get() =

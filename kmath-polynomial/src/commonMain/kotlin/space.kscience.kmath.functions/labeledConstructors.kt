@@ -262,7 +262,7 @@ public inline fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPo
 /**
  * Marks DSL that allows to more simply create [LabeledPolynomial]s with good performance.
  *
- * For example, polynomial `5 a^2 c^3 - 6 b` can be described as
+ * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
@@ -271,6 +271,7 @@ public inline fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPo
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @DslMarker
 @UnstableKMathAPI
@@ -385,7 +386,7 @@ public class DSL1LabeledPolynomialBuilder<C>(
 ///**
 // * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of constants.
 // *
-// * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+// * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
 // * ```
 // * Int.algebra {
 // *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
@@ -394,6 +395,7 @@ public class DSL1LabeledPolynomialBuilder<C>(
 // *     }
 // * }
 // * ```
+// * @usesMathJax
 // */
 // FIXME: For now this fabric does not let next two fabrics work. (See KT-52803.) Possible feature solutions:
 //  1. `LowPriorityInOverloadResolution` becomes public. Then it should be applied to this function.
@@ -404,7 +406,7 @@ public class DSL1LabeledPolynomialBuilder<C>(
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of [LabeledPolynomial]s.
  *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
  * ```
  * Int.algebra {
  *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
@@ -413,14 +415,15 @@ public class DSL1LabeledPolynomialBuilder<C>(
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @UnstableKMathAPI
 public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] field of [LabeledRationalFunction]s.
  *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
- * ```
+ * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+ * ``
  * Int.algebra {
  *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
  *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
@@ -428,6 +431,7 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @UnstableKMathAPI
 public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()

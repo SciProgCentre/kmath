@@ -243,7 +243,7 @@ public inline fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = Numbere
 /**
  * Marks DSL that allows to more simply create [NumberedPolynomial]s with good performance.
  *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
@@ -252,6 +252,7 @@ public inline fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = Numbere
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @DslMarker
 @UnstableKMathAPI
@@ -372,7 +373,7 @@ public class DSL1NumberedPolynomialBuilder<C>(
 ///**
 // * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of constants.
 // *
-// * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+// * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
 // * ```
 // * Int.algebra {
 // *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
@@ -381,6 +382,7 @@ public class DSL1NumberedPolynomialBuilder<C>(
 // *     }
 // * }
 // * ```
+// * @usesMathJax
 // */
 // FIXME: For now this fabric does not let next two fabrics work. (See KT-52803.) Possible feature solutions:
 //  1. `LowPriorityInOverloadResolution` becomes public. Then it should be applied to this function.
@@ -391,7 +393,7 @@ public class DSL1NumberedPolynomialBuilder<C>(
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of [NumberedPolynomial]s.
  *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
@@ -400,13 +402,14 @@ public class DSL1NumberedPolynomialBuilder<C>(
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @UnstableKMathAPI
 public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] field of [NumberedRationalFunction]s.
  *
- * For example, polynomial `5 x_1^2 x_3^3 - 6 x_2` can be described as
+ * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
@@ -415,6 +418,7 @@ public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomi
  *     }
  * }
  * ```
+ * @usesMathJax
  */
 @UnstableKMathAPI
 public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()

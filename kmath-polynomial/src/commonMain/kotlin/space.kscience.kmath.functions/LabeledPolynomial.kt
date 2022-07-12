@@ -25,9 +25,9 @@ internal constructor(
     /**
      * Map that contains coefficients of the polynomial.
      *
-     * Every monomial `a x_1^{d_1} ... x_n^{d_n}` is stored as a pair "key-value" in the map, where the value is the
-     * coefficient `a` and the key is a map that associates variables in the monomial with their degree in the monomial.
-     * For example, coefficients of a polynomial `5 a^2 c^3 - 6 b` can be represented as
+     * Every monomial \(a x_1^{d_1} ... x_n^{d_n}\) is stored as a pair "key-value" in the map, where the value is the
+     * coefficient \(a\) and the key is a map that associates variables in the monomial with their degree in the monomial.
+     * For example, coefficients of a polynomial \(5 a^2 c^3 - 6 b\) can be represented as
      * ```
      * mapOf(
      *      mapOf(
@@ -55,7 +55,12 @@ internal constructor(
      *      ) to 0
      * )
      * ```
-     * where `a`, `b` and `c` are corresponding [Symbol] objects.
+     * where \(a\), \(b\) and \(c\) are corresponding [Symbol] objects.
+     *
+     * It is not prohibited to put extra zero monomials into the map (as for \(0 b c\) in the example). But the
+     * bigger the coefficients map the worse performance of arithmetical operations performed on it. Thus, it is
+     * recommended not to put (or even to remove) extra (or useless) monomials in the coefficients map.
+     * @usesMathJax
      */
     public val coefficients: Map<Map<Symbol, UInt>, C>
 ) : Polynomial<C> {

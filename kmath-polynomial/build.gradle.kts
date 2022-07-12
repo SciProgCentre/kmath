@@ -20,6 +20,10 @@ kotlin.sourceSets {
     }
 }
 
+dependencies {
+    dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${versionCatalogs.named("npmlibs").findVersion("dokka").get().requiredVersion}")
+}
+
 readme {
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
