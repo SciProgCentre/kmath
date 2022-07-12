@@ -886,9 +886,9 @@ public open class DoubleTensorAlgebra :
         val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
-        val uTensor = zeros(commonShape + intArrayOf(min(n, m), n))
-        val sTensor = zeros(commonShape + intArrayOf(min(n, m)))
-        val vTensor = zeros(commonShape + intArrayOf(min(n, m), m))
+        val uTensor = zeros(commonShape + intArrayOf(m, n))
+        val sTensor = zeros(commonShape + intArrayOf(m))
+        val vTensor = zeros(commonShape + intArrayOf(m, m))
 
         val matrices = tensor.matrices
         val uTensors = uTensor.matrices
