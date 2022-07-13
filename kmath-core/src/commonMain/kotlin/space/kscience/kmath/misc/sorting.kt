@@ -3,43 +3,71 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
+
 package space.kscience.kmath.misc
 
-import kotlin.comparisons.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.VirtualBuffer
 
 /**
- * Return a new list filled with buffer indices. Indice order is defined by sorting associated buffer value.
- * This feature allows to sort buffer values without reordering its content.
+ * Return a new array filled with buffer indices. Indices order is defined by sorting associated buffer value.
+ * This feature allows sorting buffer values without reordering its content.
  *
- * @return List of buffer indices, sorted by associated value.
+ * @return Buffer indices, sorted by associated value.
  */
-@PerformancePitfall
 @UnstableKMathAPI
-public fun <V: Comparable<V>> Buffer<V>.permSort() : IntArray = _permSortWith(compareBy<Int> { get(it) })
+public fun <V : Comparable<V>> Buffer<V>.indicesSorted(): IntArray = permSortIndicesWith(compareBy { get(it) })
 
-@PerformancePitfall
+/**
+ * Create a zero-copy virtual buffer that contains the same elements but in ascending order
+ */
+@OptIn(UnstableKMathAPI::class)
+public fun <V : Comparable<V>> Buffer<V>.sorted(): Buffer<V> {
+    val permutations = indicesSorted()
+    return VirtualBuffer(size) { this[permutations[it]] }
+}
+
 @UnstableKMathAPI
-public fun <V: Comparable<V>> Buffer<V>.permSortDescending() : IntArray = _permSortWith(compareByDescending<Int> { get(it) })
+public fun <V : Comparable<V>> Buffer<V>.indicesSortedDescending(): IntArray =
+    permSortIndicesWith(compareByDescending { get(it) })
 
-@PerformancePitfall
+/**
+ * Create a zero-copy virtual buffer that contains the same elements but in descending order
+ */
+@OptIn(UnstableKMathAPI::class)
+public fun <V : Comparable<V>> Buffer<V>.sortedDescending(): Buffer<V> {
+    val permutations = indicesSortedDescending()
+    return VirtualBuffer(size) { this[permutations[it]] }
+}
+
 @UnstableKMathAPI
-public fun <V, C: Comparable<C>> Buffer<V>.permSortBy(selector: (V) -> C) : IntArray = _permSortWith(compareBy<Int> { selector(get(it)) })
+public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedBy(selector: (V) -> C): IntArray =
+    permSortIndicesWith(compareBy { selector(get(it)) })
 
-@PerformancePitfall
+@OptIn(UnstableKMathAPI::class)
+public fun <V, C : Comparable<C>> Buffer<V>.sortedBy(selector: (V) -> C): Buffer<V> {
+    val permutations = indicesSortedBy(selector)
+    return VirtualBuffer(size) { this[permutations[it]] }
+}
+
 @UnstableKMathAPI
-public fun <V, C: Comparable<C>> Buffer<V>.permSortByDescending(selector: (V) -> C) : IntArray = _permSortWith(compareByDescending<Int> { selector(get(it)) })
+public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedByDescending(selector: (V) -> C): IntArray =
+    permSortIndicesWith(compareByDescending { selector(get(it)) })
 
-@PerformancePitfall
+@OptIn(UnstableKMathAPI::class)
+public fun <V, C : Comparable<C>> Buffer<V>.sortedByDescending(selector: (V) -> C): Buffer<V> {
+    val permutations = indicesSortedByDescending(selector)
+    return VirtualBuffer(size) { this[permutations[it]] }
+}
+
 @UnstableKMathAPI
-public fun <V> Buffer<V>.permSortWith(comparator : Comparator<V>) : IntArray = _permSortWith { i1, i2 -> comparator.compare(get(i1), get(i2)) }
+public fun <V> Buffer<V>.indicesSortedWith(comparator: Comparator<V>): IntArray =
+    permSortIndicesWith { i1, i2 -> comparator.compare(get(i1), get(i2)) }
 
-@PerformancePitfall
-@UnstableKMathAPI
-private fun <V> Buffer<V>._permSortWith(comparator : Comparator<Int>) : IntArray {
-    if (size < 2) return IntArray(size)
+private fun <V> Buffer<V>.permSortIndicesWith(comparator: Comparator<Int>): IntArray {
+    if (size < 2) return IntArray(size) { 0 }
 
-    /* TODO: optimisation : keep a constant big array of indices (Ex: from 0 to 4096), then create indice
+    /* TODO: optimisation : keep a constant big array of indices (Ex: from 0 to 4096), then create indices
      * arrays more efficiently by copying subpart of cached one. For bigger needs, we could copy entire
      * cached array, then fill remaining indices manually. Not done for now, because:
      *  1. doing it right would require some statistics about common used buffer sizes.
@@ -52,4 +80,13 @@ private fun <V> Buffer<V>._permSortWith(comparator : Comparator<Int>) : IntArray
      * See: https://youtrack.jetbrains.com/issue/KT-37860
      */
     return packedIndices.sortedWith(comparator).toIntArray()
+}
+
+/**
+ * Checks that the [Buffer] is sorted (ascending) and throws [IllegalArgumentException] if it is not.
+ */
+public fun <T : Comparable<T>> Buffer<T>.requireSorted() {
+    for (i in 0..(size - 2)) {
+        require(get(i + 1) >= get(i)) { "The buffer is not sorted at index $i" }
+    }
 }

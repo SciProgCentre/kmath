@@ -3,17 +3,26 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
 
 dependencyResolutionManagement {
+    val projectProperties = java.util.Properties()
+    file("../gradle.properties").inputStream().use {
+        projectProperties.load(it)
+    }
 
-    val toolsVersion: String by extra
+    projectProperties.forEach { key, value ->
+        extra.set(key.toString(), value)
+    }
+
+
+    val toolsVersion: String = projectProperties["toolsVersion"].toString()
 
     repositories {
+        mavenLocal()
         maven("https://repo.kotlin.link")
         mavenCentral()
+        gradlePluginPortal()
     }
 
     versionCatalogs {

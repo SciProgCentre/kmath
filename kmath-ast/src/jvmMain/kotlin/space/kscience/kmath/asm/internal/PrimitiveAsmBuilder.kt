@@ -11,6 +11,7 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
+import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
@@ -25,9 +26,9 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     classOfT: Class<*>,
     protected val classOfTPrimitive: Class<*>,
     expressionParent: Class<E>,
-    protected val target: MST,
+    protected val target: TypedMst<T>,
 ) : AsmBuilder() {
-    private val className: String = buildName(target)
+    private val className: String = buildName("${target.hashCode()}_${classOfT.simpleName}")
 
     /**
      * ASM type for [tType].
@@ -329,63 +330,39 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     }
 
     private fun visitVariables(
-        node: MST,
+        node: TypedMst<T>,
         arrayMode: Boolean,
         alreadyLoaded: MutableList<Symbol> = mutableListOf()
     ): Unit = when (node) {
-        is Symbol -> when (node) {
-            !in alreadyLoaded -> {
-                alreadyLoaded += node
-                prepareVariable(node, arrayMode)
-            }
-            else -> {
-            }
-        }
+        is TypedMst.Variable -> if (node.symbol !in alreadyLoaded) {
+            alreadyLoaded += node.symbol
+            prepareVariable(node.symbol, arrayMode)
+        } else Unit
 
-        is MST.Unary -> visitVariables(node.value, arrayMode, alreadyLoaded)
+        is TypedMst.Unary -> visitVariables(node.value, arrayMode, alreadyLoaded)
 
-        is MST.Binary -> {
+        is TypedMst.Binary -> {
             visitVariables(node.left, arrayMode, alreadyLoaded)
             visitVariables(node.right, arrayMode, alreadyLoaded)
         }
 
-        else -> Unit
+        is TypedMst.Constant -> Unit
     }
 
-    private fun visitExpression(node: MST): Unit = when (node) {
-        is Symbol -> {
-            val symbol = algebra.bindSymbolOrNull(node)
+    private fun visitExpression(node: TypedMst<T>): Unit = when (node) {
+        is TypedMst.Variable -> loadVariable(node.symbol)
 
-            if (symbol != null)
-                loadNumberConstant(symbol)
-            else
-                loadVariable(node)
-        }
+        is TypedMst.Constant -> loadNumberConstant(
+            node.number ?: error("Object constants are not supported by pritimive ASM builder"),
+        )
 
-        is MST.Numeric -> loadNumberConstant(algebra.number(node.value))
-
-        is MST.Unary -> if (node.value is MST.Numeric)
-            loadNumberConstant(
-                algebra.unaryOperationFunction(node.operation)(algebra.number((node.value as MST.Numeric).value)),
-            )
-        else
-            visitUnary(node)
-
-        is MST.Binary -> when {
-            node.left is MST.Numeric && node.right is MST.Numeric -> loadNumberConstant(
-                algebra.binaryOperationFunction(node.operation)(
-                    algebra.number((node.left as MST.Numeric).value),
-                    algebra.number((node.right as MST.Numeric).value),
-                ),
-            )
-
-            else -> visitBinary(node)
-        }
+        is TypedMst.Unary -> visitUnary(node)
+        is TypedMst.Binary -> visitBinary(node)
     }
 
-    protected open fun visitUnary(node: MST.Unary) = visitExpression(node.value)
+    protected open fun visitUnary(node: TypedMst.Unary<T>) = visitExpression(node.value)
 
-    protected open fun visitBinary(node: MST.Binary) {
+    protected open fun visitBinary(node: TypedMst.Binary<T>) {
         visitExpression(node.left)
         visitExpression(node.right)
     }
@@ -404,14 +381,13 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 }
 
 @UnstableKMathAPI
-internal class DoubleAsmBuilder(target: MST) : PrimitiveAsmBuilder<Double, DoubleExpression>(
+internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
     DoubleField,
     java.lang.Double::class.java,
     java.lang.Double.TYPE,
     DoubleExpression::class.java,
     target,
 ) {
-
     private fun buildUnaryJavaMathCall(name: String) = invokeMethodVisitor.invokestatic(
         MATH_TYPE.internalName,
         name,
@@ -434,7 +410,7 @@ internal class DoubleAsmBuilder(target: MST) : PrimitiveAsmBuilder<Double, Doubl
         false,
     )
 
-    override fun visitUnary(node: MST.Unary) {
+    override fun visitUnary(node: TypedMst.Unary<Double>) {
         super.visitUnary(node)
 
         when (node.operation) {
@@ -459,7 +435,7 @@ internal class DoubleAsmBuilder(target: MST) : PrimitiveAsmBuilder<Double, Doubl
         }
     }
 
-    override fun visitBinary(node: MST.Binary) {
+    override fun visitBinary(node: TypedMst.Binary<Double>) {
         super.visitBinary(node)
 
         when (node.operation) {
@@ -479,7 +455,7 @@ internal class DoubleAsmBuilder(target: MST) : PrimitiveAsmBuilder<Double, Doubl
 }
 
 @UnstableKMathAPI
-internal class IntAsmBuilder(target: MST) :
+internal class IntAsmBuilder(target: TypedMst<Int>) :
     PrimitiveAsmBuilder<Int, IntExpression>(
         IntRing,
         Integer::class.java,
@@ -487,7 +463,7 @@ internal class IntAsmBuilder(target: MST) :
         IntExpression::class.java,
         target
     ) {
-    override fun visitUnary(node: MST.Unary) {
+    override fun visitUnary(node: TypedMst.Unary<Int>) {
         super.visitUnary(node)
 
         when (node.operation) {
@@ -497,7 +473,7 @@ internal class IntAsmBuilder(target: MST) :
         }
     }
 
-    override fun visitBinary(node: MST.Binary) {
+    override fun visitBinary(node: TypedMst.Binary<Int>) {
         super.visitBinary(node)
 
         when (node.operation) {
@@ -510,14 +486,14 @@ internal class IntAsmBuilder(target: MST) :
 }
 
 @UnstableKMathAPI
-internal class LongAsmBuilder(target: MST) : PrimitiveAsmBuilder<Long, LongExpression>(
+internal class LongAsmBuilder(target: TypedMst<Long>) : PrimitiveAsmBuilder<Long, LongExpression>(
     LongRing,
     java.lang.Long::class.java,
     java.lang.Long.TYPE,
     LongExpression::class.java,
     target,
 ) {
-    override fun visitUnary(node: MST.Unary) {
+    override fun visitUnary(node: TypedMst.Unary<Long>) {
         super.visitUnary(node)
 
         when (node.operation) {
@@ -527,7 +503,7 @@ internal class LongAsmBuilder(target: MST) : PrimitiveAsmBuilder<Long, LongExpre
         }
     }
 
-    override fun visitBinary(node: MST.Binary) {
+    override fun visitBinary(node: TypedMst.Binary<Long>) {
         super.visitBinary(node)
 
         when (node.operation) {

@@ -1,0 +1,4 @@
+public final class space/kscience/kmath/jupyter/KMathJupyterKt {
+	public static final fun toMst (Ljava/lang/Number;)Lspace/kscience/kmath/expressions/MST$Numeric;
+}
+

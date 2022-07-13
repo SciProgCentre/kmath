@@ -52,7 +52,7 @@ module definitions below. The module stability could have the following levels:
 
 ## Modules
 
-$modules
+${modules}
 
 ## Multi-platform support
 

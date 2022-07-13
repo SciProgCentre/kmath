@@ -10,7 +10,7 @@ import space.kscience.kmath.operations.invoke
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-internal class FieldVerifier<T, out A : Field<T>>(
+public class FieldVerifier<T, out A : Field<T>>(
     algebra: A, a: T, b: T, c: T, x: Number,
 ) : RingVerifier<T, A>(algebra, a, b, c, x) {
 

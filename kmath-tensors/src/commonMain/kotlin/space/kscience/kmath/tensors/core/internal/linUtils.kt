@@ -54,18 +54,26 @@ internal val <T> BufferedTensor<T>.matrices: VirtualBuffer<BufferedTensor<T>>
 internal fun <T> BufferedTensor<T>.matrixSequence(): Sequence<BufferedTensor<T>> = matrices.asSequence()
 
 internal fun dotTo(
-    a: MutableStructure2D<Double>,
-    b: MutableStructure2D<Double>,
-    res: MutableStructure2D<Double>,
+    a: BufferedTensor<Double>,
+    b: BufferedTensor<Double>,
+    res: BufferedTensor<Double>,
     l: Int, m: Int, n: Int,
 ) {
+    val aStart = a.bufferStart
+    val bStart = b.bufferStart
+    val resStart = res.bufferStart
+
+    val aBuffer = a.mutableBuffer
+    val bBuffer = b.mutableBuffer
+    val resBuffer = res.mutableBuffer
+
     for (i in 0 until l) {
         for (j in 0 until n) {
             var curr = 0.0
             for (k in 0 until m) {
-                curr += a[i, k] * b[k, j]
+                curr += aBuffer[aStart + i * m + k] * bBuffer[bStart + k * n + j]
             }
-            res[i, j] = curr
+            resBuffer[resStart + i * n + j] = curr
         }
     }
 }

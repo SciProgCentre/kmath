@@ -52,6 +52,8 @@ kotlin {
                 implementation(project(":kmath-viktor"))
                 implementation(project(":kmath-jafama"))
                 implementation(project(":kmath-multik"))
+                implementation(projects.kmath.kmathTensorflow)
+                implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
                 implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
@@ -122,6 +124,11 @@ benchmark {
         include("JafamaBenchmark")
     }
 
+    configurations.register("tensorAlgebra") {
+        commonConfiguration()
+        include("TensorAlgebraBenchmark")
+    }
+
     configurations.register("viktor") {
         commonConfiguration()
         include("ViktorBenchmark")
@@ -148,7 +155,7 @@ kotlin.sourceSets.all {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"

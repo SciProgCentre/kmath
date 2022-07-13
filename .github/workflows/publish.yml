@@ -14,42 +14,38 @@ jobs:
         os: [ macOS-latest, windows-latest ]
     runs-on: ${{matrix.os}}
     steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: DeLaGuardo/setup-graalvm@4.0
+      - uses: actions/checkout@v3.0.0
+      - uses: actions/setup-java@v3.0.0
         with:
-          graalvm: 21.2.0
-          java: java11
-          arch: amd64
-      - name: Cache gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: 11
+          distribution: liberica
       - name: Cache konan
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         with:
           path: ~/.konan
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.4
+      - uses: gradle/wrapper-validation-action@v1.0.4
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
-        shell: cmd
-        run: >
-          ./gradlew release --no-daemon --build-cache -Ppublishing.enabled=true
-          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
-          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
+        uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: |
+            releaseAll
+            -Ppublishing.enabled=true
+            -Ppublishing.sonatype=false
+            -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+            -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
-        run: >
-          ./gradlew release --no-daemon --build-cache -Ppublishing.enabled=true -Ppublishing.platform=macosX64
-          -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
-          -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
+        uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: |
+            releaseMacosX64
+            releaseIosArm64
+            releaseIosX64
+            -Ppublishing.enabled=true
+            -Ppublishing.sonatype=false            
+            -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
+            -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}

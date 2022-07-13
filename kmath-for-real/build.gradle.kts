@@ -21,19 +21,22 @@ readme {
 
     feature(
         id = "DoubleVector",
-        description = "Numpy-like operations for Buffers/Points",
         ref = "src/commonMain/kotlin/space/kscience/kmath/real/DoubleVector.kt"
-    )
+    ){
+        "Numpy-like operations for Buffers/Points"
+    }
 
     feature(
         id = "DoubleMatrix",
-        description = "Numpy-like operations for 2d real structures",
         ref = "src/commonMain/kotlin/space/kscience/kmath/real/DoubleMatrix.kt"
-    )
+    ){
+        "Numpy-like operations for 2d real structures"
+    }
 
     feature(
         id = "grids",
-        description = "Uniform grid generators",
         ref = "src/commonMain/kotlin/space/kscience/kmath/structures/grids.kt"
-    )
+    ){
+        "Uniform grid generators"
+    }
 }

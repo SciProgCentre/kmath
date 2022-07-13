@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.geometry
 
+//TODO move vector to receiver
+
 /**
  * Project vector onto a line.
  * @param vector to project

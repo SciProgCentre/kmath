@@ -55,15 +55,15 @@ internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.(
 internal fun MethodVisitor.label(): Label = Label().also(::visitLabel)
 
 /**
- * Creates a class name for [Expression] subclassed to implement [mst] provided.
+ * Creates a class name for [Expression] based with appending [marker] to reduce collisions.
  *
  * These methods help to avoid collisions of class name to prevent loading several classes with the same name. If there
  * is a colliding class, change [collision] parameter or leave it `0` to check existing classes recursively.
  *
  * @author Iaroslav Postovalov
  */
-internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
-    val name = "space.kscience.kmath.asm.generated.CompiledExpression_${mst.hashCode()}_$collision"
+internal tailrec fun buildName(marker: String, collision: Int = 0): String {
+    val name = "space.kscience.kmath.asm.generated.CompiledExpression_${marker}_$collision"
 
     try {
         Class.forName(name)
@@ -71,7 +71,7 @@ internal tailrec fun buildName(mst: MST, collision: Int = 0): String {
         return name
     }
 
-    return buildName(mst, collision + 1)
+    return buildName(marker, collision + 1)
 }
 
 @Suppress("FunctionName")
