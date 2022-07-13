@@ -351,7 +351,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
     }
 }
 
-internal fun pythag(a: Double, b: Double): Double {
+private fun pythag(a: Double, b: Double): Double {
     val at: Double = abs(a)
     val bt: Double = abs(b)
     val ct: Double
@@ -366,7 +366,7 @@ internal fun pythag(a: Double, b: Double): Double {
     return result
 }
 
-internal fun SIGN(a: Double, b: Double): Double {
+private fun SIGN(a: Double, b: Double): Double {
     if (b >= 0.0)
         return abs(a)
     else
