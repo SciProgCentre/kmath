@@ -243,12 +243,12 @@ public inline fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = Numbere
 /**
  * Marks DSL that allows to more simply create [NumberedPolynomial]s with good performance.
  *
- * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+ * For example, polynomial \(5 x_0^2 x_2^3 - 6 x_1\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *         5 { 0 inPowerOf 2u; 2 inPowerOf 3u } // 5 x_0^2 x_2^3 +
+ *         (-6) { 1 inPowerOf 1u }              // (-6) x_1^1
  *     }
  * }
  * ```
@@ -285,7 +285,7 @@ public class DSL1NumberedPolynomialTermSignatureBuilder {
      */
     public infix fun Int.inPowerOf(deg: UInt) {
         if (deg == 0u) return
-        val index = this - 1
+        val index = this
         if (index > signature.lastIndex) {
             signature.addAll(List(index - signature.lastIndex - 1) { 0u })
             signature.add(deg)
@@ -326,13 +326,13 @@ public class DSL1NumberedPolynomialBuilder<C>(
     /**
      * Initial capacity of coefficients map.
      */
-    initialCapacity: Int = 0
+    initialCapacity: Int? = null
 ) {
     /**
      * Coefficients storage. Any declaration of any monomial updates the storage.
      * Afterward the storage will be used as a resulting coefficients map.
      */
-    private val coefficients: MutableMap<List<UInt>, C> = LinkedHashMap(initialCapacity)
+    private val coefficients: MutableMap<List<UInt>, C> = if (initialCapacity != null) LinkedHashMap(initialCapacity) else LinkedHashMap()
 
     /**
      * Builds the resulting coefficients map.
@@ -373,12 +373,12 @@ public class DSL1NumberedPolynomialBuilder<C>(
 ///**
 // * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of constants.
 // *
-// * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+// * For example, polynomial \(5 x_0^2 x_2^3 - 6 x_1\) can be described as
 // * ```
 // * Int.algebra {
 // *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
-// *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
-// *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+// *         5 { 0 inPowerOf 2u; 2 inPowerOf 3u } // 5 x_0^2 x_2^3 +
+// *         (-6) { 1 inPowerOf 1u }              // (-6) x_1^1
 // *     }
 // * }
 // * ```
@@ -389,39 +389,39 @@ public class DSL1NumberedPolynomialBuilder<C>(
 //  2. Union types are implemented. Then all three functions should be rewritten
 //     as one with single union type as a (context) receiver.
 //@UnstableKMathAPI
-//public inline fun <C, A: Ring<C>> A.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
+//public inline fun <C, A: Ring<C>> A.NumberedPolynomialDSL1(initialCapacity: Int? = null, block: NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = NumberedPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] ring of [NumberedPolynomial]s.
  *
- * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+ * For example, polynomial \(5 x_0^2 x_2^3 - 6 x_1\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *         5 { 0 inPowerOf 2u; 2 inPowerOf 3u } // 5 x_0^2 x_2^3 +
+ *         (-6) { 1 inPowerOf 1u }              // (-6) x_1^1
  *     }
  * }
  * ```
  * @usesMathJax
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedPolynomialSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int? = null, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [NumberedPolynomial] with lambda [block] in context of [this] field of [NumberedRationalFunction]s.
  *
- * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+ * For example, polynomial \(5 x_0^2 x_2^3 - 6 x_1\) can be described as
  * ```
  * Int.algebra {
  *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *         5 { 0 inPowerOf 2u; 2 inPowerOf 3u } // 5 x_0^2 x_2^3 +
+ *         (-6) { 1 inPowerOf 1u }              // (-6) x_1^1
  *     }
  * }
  * ```
  * @usesMathJax
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int = 0, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> NumberedRationalFunctionSpace<C, A>.NumberedPolynomialDSL1(initialCapacity: Int? = null, block: DSL1NumberedPolynomialBuilder<C>.() -> Unit) : NumberedPolynomial<C> = DSL1NumberedPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 

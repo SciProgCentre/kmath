@@ -107,8 +107,8 @@ fun numberedPolynomialsExample() {
             // Also there is DSL for constructing NumberedPolynomials:
             val polynomial5: NumberedPolynomial<Int> = NumberedPolynomialDSL1 {
                 3 {}
-                5 { 2 inPowerOf 1u }
-                -7 with { 1 pow 2u; 3 pow 1u }
+                5 { 1 inPowerOf 1u }
+                -7 with { 0 pow 2u; 2 pow 1u }
                 // `pow` and `inPowerOf` are the same
                 // `with` is omittable
             }

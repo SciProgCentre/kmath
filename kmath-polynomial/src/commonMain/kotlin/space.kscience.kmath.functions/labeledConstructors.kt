@@ -265,7 +265,7 @@ public inline fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPo
  * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
  * ```
  * Int.algebra {
- *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
+ *     val labeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomialDSL1 {
  *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
  *         (-6) { b inPowerOf 1u }              // (-6) b^1
  *     }
@@ -339,18 +339,18 @@ public class DSL1LabeledPolynomialBuilder<C>(
     /**
      * Initial capacity of coefficients map.
      */
-    initialCapacity: Int = 0
+    initialCapacity: Int? = null
 ) {
     /**
      * Coefficients storage. Any declaration of any monomial updates the storage.
      * Afterward the storage will be used as a resulting coefficients map.
      */
-    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = LinkedHashMap(initialCapacity)
+    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = if (initialCapacity != null) LinkedHashMap(initialCapacity) else LinkedHashMap()
 
     /**
      * Builds the resulting coefficients map.
      *
-     * In fact, it just returns [coefficients] as regular coefficients map of type `Map<List<UInt>, C>`.
+     * In fact, it just returns [coefficients] as regular coefficients map of type `Map<Map<Symbol, UInt>, C>`.
      */
     @PublishedApi
     internal fun build(): LabeledPolynomial<C> = LabeledPolynomial<C>(coefficients)
@@ -386,12 +386,12 @@ public class DSL1LabeledPolynomialBuilder<C>(
 ///**
 // * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of constants.
 // *
-// * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+// * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
 // * ```
 // * Int.algebra {
-// *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
-// *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
-// *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+// *     val labeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomialDSL1 {
+// *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
+// *         (-6) { b inPowerOf 1u }              // (-6) b^1
 // *     }
 // * }
 // * ```
@@ -402,39 +402,39 @@ public class DSL1LabeledPolynomialBuilder<C>(
 //  2. Union types are implemented. Then all three functions should be rewritten
 //     as one with single union type as a (context) receiver.
 //@UnstableKMathAPI
-//public inline fun <C, A: Ring<C>> A.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(::add, initialCapacity).apply(block).build()
+//public inline fun <C, A: Ring<C>> A.LabeledPolynomialDSL1(initialCapacity: Int? = null, block: LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = LabeledPolynomialBuilder(::add, initialCapacity).apply(block).build()
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] ring of [LabeledPolynomial]s.
  *
- * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
+ * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
  * ```
  * Int.algebra {
- *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *     val labeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomialDSL1 {
+ *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
+ *         (-6) { b inPowerOf 1u }              // (-6) b^1
  *     }
  * }
  * ```
  * @usesMathJax
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int? = null, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 /**
  * Creates [LabeledPolynomial] with lambda [block] in context of [this] field of [LabeledRationalFunction]s.
  *
- * For example, polynomial \(5 x_1^2 x_3^3 - 6 x_2\) can be described as
- * ``
+ * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
+ * ```
  * Int.algebra {
- *     val LabeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomial {
- *         5 { 1 inPowerOf 2u; 3 inPowerOf 3u } // 5 x_1^2 x_3^3 +
- *         (-6) { 2 inPowerOf 1u }              // (-6) x_2^1
+ *     val labeledPolynomial : LabeledPolynomial<Int> = LabeledPolynomialDSL1 {
+ *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
+ *         (-6) { b inPowerOf 1u }              // (-6) b^1
  *     }
  * }
  * ```
  * @usesMathJax
  */
 @UnstableKMathAPI
-public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int = 0, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
+public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int? = null, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
