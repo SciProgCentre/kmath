@@ -86,7 +86,7 @@ benchmark {
 
     configurations.register("svd") {
         commonConfiguration()
-        include("svdBenchmark")
+        include("SVDBenchmark")
     }
 
     configurations.register("buffer") {
