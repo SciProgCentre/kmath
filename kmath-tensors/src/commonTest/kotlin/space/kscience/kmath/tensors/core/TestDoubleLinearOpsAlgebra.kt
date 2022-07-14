@@ -211,17 +211,17 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 //        testSVDGolabKahanFor(fromArray(intArrayOf(3, 5), buffer))
 //    }
 
-    @Test
-    fun testSVDGolabKahanBig() = DoubleTensorAlgebra{
-        val tensor = DoubleTensorAlgebra.randomNormal(intArrayOf(100, 100, 100), 0)
-        testSVDGolabKahanFor(tensor)
-    }
-
-    @Test
-    fun testSVDBig() = DoubleTensorAlgebra{
-        val tensor = DoubleTensorAlgebra.randomNormal(intArrayOf(100, 100, 100), 0)
-        testSVDFor(tensor)
-    }
+//    @Test
+//    fun testSVDGolabKahanBig() = DoubleTensorAlgebra{
+//        val tensor = DoubleTensorAlgebra.randomNormal(intArrayOf(100, 100, 100), 0)
+//        testSVDGolabKahanFor(tensor)
+//    }
+//
+//    @Test
+//    fun testSVDBig() = DoubleTensorAlgebra{
+//        val tensor = DoubleTensorAlgebra.randomNormal(intArrayOf(100, 100, 100), 0)
+//        testSVDFor(tensor)
+//    }
 
     @Test
     fun testBatchedSVDGolabKahan() = DoubleTensorAlgebra{
