@@ -44,6 +44,7 @@ include(
     ":kmath-jupyter",
     ":kmath-symja",
     ":kmath-jafama",
+    ":kmath-trajectory",
     ":examples",
     ":benchmarks",
 )
