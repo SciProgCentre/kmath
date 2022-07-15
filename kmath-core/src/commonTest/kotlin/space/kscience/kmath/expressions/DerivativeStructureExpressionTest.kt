@@ -19,10 +19,10 @@ import kotlin.test.assertFails
 internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
-    block: DerivativeStructureField<Double, DoubleField>.() -> Unit,
+    block: DSField<Double, DoubleField>.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DerivativeStructureField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
+    DSField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
 }
 
 internal class AutoDiffTest {
