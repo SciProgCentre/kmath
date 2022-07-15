@@ -439,7 +439,7 @@ public class DSField<T, A : ExtendedField<T>>(
 }
 
 @UnstableKMathAPI
-public class DerivativeStructureFieldExpression<T, A : ExtendedField<T>>(
+public class DSFieldExpression<T, A : ExtendedField<T>>(
     public val algebra: A,
     public val bufferFactory: MutableBufferFactory<T>,
     public val function: DSField<T, A>.() -> DS<T, A>,
