@@ -6,10 +6,9 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.NumericAlgebra
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asBuffer
 
 /**
  * Class representing both the value and the differentials of a function.
@@ -28,128 +27,29 @@ import space.kscience.kmath.structures.MutableBuffer
  * [Commons Math's `DerivativeStructure`](https://github.com/apache/commons-math/blob/924f6c357465b39beb50e3c916d5eb6662194175/commons-math-legacy/src/main/java/org/apache/commons/math4/legacy/analysis/differentiation/DerivativeStructure.java).
  */
 @UnstableKMathAPI
-public open class DerivativeStructure<T, A> internal constructor(
-    internal val derivativeAlgebra: DerivativeStructureRing<T, A>,
-    internal val compiler: DSCompiler<T, A>,
-) where A : Ring<T>, A : NumericAlgebra<T>, A : ScaleOperations<T> {
-    /**
-     * Combined array holding all values.
-     */
-    internal var data: MutableBuffer<T> =
-        derivativeAlgebra.bufferFactory(compiler.size) { derivativeAlgebra.algebra.zero }
+public open class DerivativeStructure<T, A : Ring<T>> @PublishedApi internal constructor(
+    private val derivativeAlgebra: DerivativeStructureAlgebra<T, A>,
+    @PublishedApi internal val data: Buffer<T>,
+) {
 
-    /**
-     * Build an instance with all values and derivatives set to 0.
-     *
-     * @param parameters number of free parameters.
-     * @param order derivation order.
-     */
-    public constructor (
-        derivativeAlgebra: DerivativeStructureRing<T, A>,
-        parameters: Int,
-        order: Int,
-    ) : this(
-        derivativeAlgebra,
-        getCompiler<T, A>(derivativeAlgebra.algebra, derivativeAlgebra.bufferFactory, parameters, order),
-    )
-
-    /**
-     * Build an instance representing a constant value.
-     *
-     * @param parameters number of free parameters.
-     * @param order derivation order.
-     * @param value value of the constant.
-     * @see DerivativeStructure
-     */
-    public constructor (
-        derivativeAlgebra: DerivativeStructureRing<T, A>,
-        parameters: Int,
-        order: Int,
-        value: T,
-    ) : this(
-        derivativeAlgebra,
-        parameters,
-        order,
-    ) {
-        data[0] = value
-    }
-
-    /**
-     * Build an instance representing a variable.
-     *
-     * Instances built using this constructor are considered to be the free variables with respect to which
-     * differentials are computed. As such, their differential with respect to themselves is +1.
-     *
-     * @param parameters number of free parameters.
-     * @param order derivation order.
-     * @param index index of the variable (from 0 to `parameters - 1`).
-     * @param value value of the variable.
-     */
-    public constructor (
-        derivativeAlgebra: DerivativeStructureRing<T, A>,
-        parameters: Int,
-        order: Int,
-        index: Int,
-        value: T,
-    ) : this(derivativeAlgebra, parameters, order, value) {
-        require(index < parameters) { "number is too large: $index >= $parameters" }
-
-        if (order > 0) {
-            // the derivative of the variable with respect to itself is 1.
-            data[getCompiler(derivativeAlgebra.algebra, derivativeAlgebra.bufferFactory, index, order).size] =
-                derivativeAlgebra.algebra.one
-        }
-    }
-
-    /**
-     * Build an instance from all its derivatives.
-     *
-     * @param parameters number of free parameters.
-     * @param order derivation order.
-     * @param derivatives derivatives sorted according to [DSCompiler.getPartialDerivativeIndex].
-     */
-    public constructor (
-        derivativeAlgebra: DerivativeStructureRing<T, A>,
-        parameters: Int,
-        order: Int,
-        vararg derivatives: T,
-    ) : this(
-        derivativeAlgebra,
-        parameters,
-        order,
-    ) {
-        require(derivatives.size == data.size) { "dimension mismatch: ${derivatives.size} and ${data.size}" }
-        data = derivativeAlgebra.bufferFactory(data.size) { derivatives[it] }
-    }
-
-    /**
-     * Copy constructor.
-     *
-     * @param ds instance to copy.
-     */
-    internal constructor(ds: DerivativeStructure<T, A>) : this(ds.derivativeAlgebra, ds.compiler) {
-        this.data = ds.data.copy()
-    }
+    public val compiler: DSCompiler<T, A> get() = derivativeAlgebra.compiler
 
     /**
      * The number of free parameters.
      */
-    public val freeParameters: Int
-        get() = compiler.freeParameters
+    public val freeParameters: Int get() = compiler.freeParameters
 
     /**
      * The derivation order.
      */
-    public val order: Int
-        get() = compiler.order
+    public val order: Int get() = compiler.order
 
     /**
      * The value part of the derivative structure.
      *
      * @see getPartialDerivative
      */
-    public val value: T
-        get() = data[0]
+    public val value: T get() = data[0]
 
     /**
      * Get a partial derivative.
@@ -183,4 +83,75 @@ public open class DerivativeStructure<T, A> internal constructor(
 
     public override fun hashCode(): Int =
         227 + 229 * freeParameters + 233 * order + 239 * data.hashCode()
+
+    public companion object {
+
+        /**
+         * Build an instance representing a variable.
+         *
+         * Instances built using this constructor are considered to be the free variables with respect to which
+         * differentials are computed. As such, their differential with respect to themselves is +1.
+         */
+        public fun <T, A : Ring<T>> variable(
+            derivativeAlgebra: DerivativeStructureAlgebra<T, A>,
+            index: Int,
+            value: T,
+        ): DerivativeStructure<T, A> {
+            val compiler = derivativeAlgebra.compiler
+            require(index < compiler.freeParameters) { "number is too large: $index >= ${compiler.freeParameters}" }
+            return DerivativeStructure(derivativeAlgebra, derivativeAlgebra.bufferForVariable(index, value))
+        }
+
+        /**
+         * Build an instance from all its derivatives.
+         *
+         * @param derivatives derivatives sorted according to [DSCompiler.getPartialDerivativeIndex].
+         */
+        public fun <T, A : Ring<T>> ofDerivatives(
+            derivativeAlgebra: DerivativeStructureAlgebra<T, A>,
+            vararg derivatives: T,
+        ): DerivativeStructure<T, A> {
+            val compiler = derivativeAlgebra.compiler
+            require(derivatives.size == compiler.size) { "dimension mismatch: ${derivatives.size} and ${compiler.size}" }
+            val data = derivatives.asBuffer()
+
+            return DerivativeStructure(
+                derivativeAlgebra,
+                data
+            )
+        }
+    }
+}
+
+@OptIn(UnstableKMathAPI::class)
+private fun <T, A : Ring<T>> DerivativeStructureAlgebra<T, A>.bufferForVariable(index: Int, value: T): Buffer<T> {
+    val buffer = bufferFactory(compiler.size) { algebra.zero }
+    buffer[0] = value
+    if (compiler.order > 0) {
+        // the derivative of the variable with respect to itself is 1.
+
+        val indexOfDerivative = compiler.getPartialDerivativeIndex(*IntArray(numberOfVariables).apply {
+            set(index, 1)
+        })
+
+        buffer[indexOfDerivative] = algebra.one
+    }
+    return buffer
+}
+
+/**
+ * A class implementing both [DerivativeStructure] and [Symbol].
+ */
+@UnstableKMathAPI
+public class DerivativeStructureSymbol<T, A : Ring<T>> internal constructor(
+    derivativeAlgebra: DerivativeStructureAlgebra<T, A>,
+    index: Int,
+    symbol: Symbol,
+    value: T,
+) : Symbol by symbol, DerivativeStructure<T, A>(
+    derivativeAlgebra, derivativeAlgebra.bufferForVariable(index, value)
+) {
+    override fun toString(): String = symbol.toString()
+    override fun equals(other: Any?): Boolean = (other as? Symbol) == symbol
+    override fun hashCode(): Int = symbol.hashCode()
 }

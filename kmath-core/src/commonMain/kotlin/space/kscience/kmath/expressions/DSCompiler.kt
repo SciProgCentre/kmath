@@ -5,11 +5,11 @@
 
 package space.kscience.kmath.expressions
 
+
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
-import kotlin.math.max
 import kotlin.math.min
 
 internal fun <T> MutableBuffer<T>.fill(element: T, fromIndex: Int = 0, toIndex: Int = size) {
@@ -54,7 +54,7 @@ internal fun <T> MutableBuffer<T>.fill(element: T, fromIndex: Int = 0, toIndex: 
  * @property order Derivation order.
  * @see DerivativeStructure
  */
-internal class DSCompiler<T, out A : Algebra<T>> internal constructor(
+class DSCompiler<T, out A : Algebra<T>> internal constructor(
     val algebra: A,
     val bufferFactory: MutableBufferFactory<T>,
     val freeParameters: Int,
@@ -120,8 +120,7 @@ internal class DSCompiler<T, out A : Algebra<T>> internal constructor(
      * This number includes the single 0 order derivative element, which is
      * guaranteed to be stored in the first element of the array.
      */
-    val size: Int
-        get() = sizes[freeParameters][order]
+    val size: Int get() = sizes[freeParameters][order]
 
     /**
      * Get the index of a partial derivative in the array.
@@ -178,7 +177,7 @@ internal fun <T, A> DSCompiler<T, A>.ln(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : ExponentialOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -211,7 +210,7 @@ internal fun <T, A> DSCompiler<T, A>.pow(
     operandOffset: Int,
     n: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : PowerOperations<T> = algebra {
     if (n == 0) {
         // special case, x^0 = 1 for all x
@@ -267,7 +266,7 @@ internal fun <T, A> DSCompiler<T, A>.exp(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Ring<T>, A : ScaleOperations<T>, A : ExponentialOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -290,7 +289,7 @@ internal fun <T, A> DSCompiler<T, A>.sqrt(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : PowerOperations<T> = algebra {
     // create the function value and derivatives
     // [x^(1/n), (1/n)x^((1/n)-1), (1-n)/n^2x^((1/n)-2), ... ]
@@ -351,7 +350,7 @@ internal fun <T, A> DSCompiler<T, A>.pow(
     operandOffset: Int,
     p: Double,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Ring<T>, A : NumericAlgebra<T>, A : PowerOperations<T>, A : ScaleOperations<T> = algebra {
     // create the function value and derivatives
     // [x^p, px^(p-1), p(p-1)x^(p-2), ... ]
@@ -387,7 +386,7 @@ internal fun <T, A> DSCompiler<T, A>.tan(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Ring<T>, A : TrigonometricOperations<T>, A : ScaleOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -469,7 +468,7 @@ internal fun <T, A> DSCompiler<T, A>.sin(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Ring<T>, A : ScaleOperations<T>, A : TrigonometricOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -497,7 +496,7 @@ internal fun <T, A> DSCompiler<T, A>.acos(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : TrigonometricOperations<T>, A : PowerOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -559,7 +558,7 @@ internal fun <T, A> DSCompiler<T, A>.asin(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : TrigonometricOperations<T>, A : PowerOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -618,7 +617,7 @@ internal fun <T, A> DSCompiler<T, A>.atan(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : TrigonometricOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -678,7 +677,7 @@ internal fun <T, A> DSCompiler<T, A>.cosh(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Ring<T>, A : ScaleOperations<T>, A : ExponentialOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -708,7 +707,7 @@ internal fun <T, A> DSCompiler<T, A>.tanh(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : ExponentialOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -765,7 +764,7 @@ internal fun <T, A> DSCompiler<T, A>.acosh(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : ExponentialOperations<T>, A : PowerOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -857,7 +856,7 @@ internal fun <T, A> DSCompiler<T, A>.sinh(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : ExponentialOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -964,7 +963,7 @@ internal fun <T, A> DSCompiler<T, A>.asinh(
     operand: Buffer<T>,
     operandOffset: Int,
     result: MutableBuffer<T>,
-    resultOffset: Int
+    resultOffset: Int,
 ) where A : Field<T>, A : ExponentialOperations<T>, A : PowerOperations<T> = algebra {
     // create the function value and derivatives
     val function = bufferFactory(1 + order) { zero }
@@ -1107,59 +1106,6 @@ internal fun <T, A> DSCompiler<T, A>.atanh(
 
     // apply function composition
     compose(operand, operandOffset, function, result, resultOffset)
-}
-
-/**
- * Get the compiler for number of free parameters and order.
- *
- * @param parameters number of free parameters.
- * @param order derivation order.
- * @return cached rules set.
- */
-internal fun <T, A : Algebra<T>> getCompiler(
-    algebra: A,
-    bufferFactory: MutableBufferFactory<T>,
-    parameters: Int,
-    order: Int
-): DSCompiler<T, A> {
-    // get the cached compilers
-    val cache: Array<Array<DSCompiler<T, A>?>>? = null
-
-    // we need to create more compilers
-    val maxParameters: Int = max(parameters, cache?.size ?: 0)
-    val maxOrder: Int = max(order, if (cache == null) 0 else cache[0].size)
-    val newCache: Array<Array<DSCompiler<T, A>?>> = Array(maxParameters + 1) { arrayOfNulls(maxOrder + 1) }
-
-    if (cache != null) {
-        // preserve the already created compilers
-        for (i in cache.indices) {
-            cache[i].copyInto(newCache[i], endIndex = cache[i].size)
-        }
-    }
-
-    // create the array in increasing diagonal order
-
-    // create the array in increasing diagonal order
-    for (diag in 0..parameters + order) {
-        for (o in max(0, diag - parameters)..min(order, diag)) {
-            val p: Int = diag - o
-            if (newCache[p][o] == null) {
-                val valueCompiler: DSCompiler<T, A>? = if (p == 0) null else newCache[p - 1][o]!!
-                val derivativeCompiler: DSCompiler<T, A>? = if (o == 0) null else newCache[p][o - 1]!!
-
-                newCache[p][o] = DSCompiler(
-                    algebra,
-                    bufferFactory,
-                    p,
-                    o,
-                    valueCompiler,
-                    derivativeCompiler,
-                )
-            }
-        }
-    }
-
-    return newCache[parameters][order]!!
 }
 
 /**

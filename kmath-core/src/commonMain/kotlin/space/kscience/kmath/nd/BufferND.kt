@@ -69,7 +69,7 @@ public class MutableBufferND<T>(
  * Transform structure to a new structure using provided [MutableBufferFactory] and optimizing if argument is [MutableBufferND]
  */
 public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
-    factory: MutableBufferFactory<R> = MutableBuffer.Companion::auto,
+    factory: MutableBufferFactory<R> = MutableBufferFactory(MutableBuffer.Companion::auto),
     crossinline transform: (T) -> R,
 ): MutableBufferND<R> {
     return if (this is MutableBufferND<T>)
