@@ -52,20 +52,20 @@ internal fun <T> MutableBuffer<T>.fill(element: T, fromIndex: Int = 0, toIndex: 
  *
  * @property freeParameters Number of free parameters.
  * @property order Derivation order.
- * @see DerivativeStructure
+ * @see DS
  */
-class DSCompiler<T, out A : Algebra<T>> internal constructor(
-    val algebra: A,
-    val bufferFactory: MutableBufferFactory<T>,
-    val freeParameters: Int,
-    val order: Int,
+public class DSCompiler<T, out A : Algebra<T>> internal constructor(
+    public val algebra: A,
+    public val bufferFactory: MutableBufferFactory<T>,
+    public val freeParameters: Int,
+    public val order: Int,
     valueCompiler: DSCompiler<T, A>?,
     derivativeCompiler: DSCompiler<T, A>?,
 ) {
     /**
      * Number of partial derivatives (including the single 0 order derivative element).
      */
-    val sizes: Array<IntArray> by lazy {
+    public val sizes: Array<IntArray> by lazy {
         compileSizes(
             freeParameters,
             order,
@@ -76,7 +76,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
     /**
      * Indirection array for partial derivatives.
      */
-    val derivativesIndirection: Array<IntArray> by lazy {
+    internal val derivativesIndirection: Array<IntArray> by lazy {
         compileDerivativesIndirection(
             freeParameters, order,
             valueCompiler, derivativeCompiler,
@@ -86,7 +86,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
     /**
      * Indirection array of the lower derivative elements.
      */
-    val lowerIndirection: IntArray by lazy {
+    internal val lowerIndirection: IntArray by lazy {
         compileLowerIndirection(
             freeParameters, order,
             valueCompiler, derivativeCompiler,
@@ -96,7 +96,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
     /**
      * Indirection arrays for multiplication.
      */
-    val multIndirection: Array<Array<IntArray>> by lazy {
+    internal val multIndirection: Array<Array<IntArray>> by lazy {
         compileMultiplicationIndirection(
             freeParameters, order,
             valueCompiler, derivativeCompiler, lowerIndirection,
@@ -106,7 +106,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
     /**
      * Indirection arrays for function composition.
      */
-    val compositionIndirection: Array<Array<IntArray>> by lazy {
+    internal val compositionIndirection: Array<Array<IntArray>> by lazy {
         compileCompositionIndirection(
             freeParameters, order,
             valueCompiler, derivativeCompiler,
@@ -120,7 +120,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
      * This number includes the single 0 order derivative element, which is
      * guaranteed to be stored in the first element of the array.
      */
-    val size: Int get() = sizes[freeParameters][order]
+    public val size: Int get() = sizes[freeParameters][order]
 
     /**
      * Get the index of a partial derivative in the array.
@@ -147,7 +147,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
      * @return index of the partial derivative.
      * @see getPartialDerivativeOrders
      */
-    fun getPartialDerivativeIndex(vararg orders: Int): Int {
+    public fun getPartialDerivativeIndex(vararg orders: Int): Int {
         // safety check
         require(orders.size == freeParameters) { "dimension mismatch: ${orders.size} and $freeParameters" }
         return getPartialDerivativeIndex(freeParameters, order, sizes, *orders)
@@ -162,7 +162,7 @@ class DSCompiler<T, out A : Algebra<T>> internal constructor(
      * @return orders derivation orders with respect to each parameter
      * @see getPartialDerivativeIndex
      */
-    fun getPartialDerivativeOrders(index: Int): IntArray = derivativesIndirection[index]
+    public fun getPartialDerivativeOrders(index: Int): IntArray = derivativesIndirection[index]
 }
 
 /**

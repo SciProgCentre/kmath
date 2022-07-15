@@ -44,8 +44,28 @@ public interface DS<T, A : Ring<T>> {
  * @see value
  */
 @UnstableKMathAPI
-public fun <T, A : Ring<T>> DS<T, A>.getPartialDerivative(vararg orders: Int): T =
+private fun <T, A : Ring<T>> DS<T, A>.getPartialDerivative(vararg orders: Int): T =
     data[derivativeAlgebra.compiler.getPartialDerivativeIndex(*orders)]
+
+/**
+ * Provide a partial derivative with given symbols. On symbol could me mentioned multiple times
+ */
+@UnstableKMathAPI
+public fun <T, A : Ring<T>> DS<T, A>.derivative(symbols: List<Symbol>): T {
+    require(symbols.size <= derivativeAlgebra.order) { "The order of derivative ${symbols.size} exceeds computed order ${derivativeAlgebra.order}" }
+    val ordersCount: Map<String, Int> = symbols.map { it.identity }.groupBy { it }.mapValues { it.value.size }
+    return getPartialDerivative(*symbols.map { ordersCount[it] ?: 0 }.toIntArray())
+}
+
+/**
+ * Provide a partial derivative with given symbols. On symbol could me mentioned multiple times
+ */
+@UnstableKMathAPI
+public fun <T, A : Ring<T>> DS<T, A>.derivative(vararg symbols: Symbol): T {
+    require(symbols.size <= derivativeAlgebra.order) { "The order of derivative ${symbols.size} exceeds computed order ${derivativeAlgebra.order}" }
+    val ordersCount: Map<String, Int> = symbols.map { it.identity }.groupBy { it }.mapValues { it.value.size }
+    return getPartialDerivative(*symbols.map { ordersCount[it] ?: 0 }.toIntArray())
+}
 
 /**
  * The value part of the derivative structure.
@@ -61,9 +81,67 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     public val bufferFactory: MutableBufferFactory<T>,
     public val order: Int,
     bindings: Map<Symbol, T>,
-) : ExpressionAlgebra<T, DS<T, A>> {
+) : ExpressionAlgebra<T, DS<T, A>>, SymbolIndexer {
 
-    @OptIn(UnstableKMathAPI::class)
+    /**
+     * Get the compiler for number of free parameters and order.
+     *
+     * @return cached rules set.
+     */
+    @PublishedApi
+    internal val compiler: DSCompiler<T, A> by lazy {
+        // get the cached compilers
+        val cache: Array<Array<DSCompiler<T, A>?>>? = null
+
+        // we need to create more compilers
+        val maxParameters: Int = max(numberOfVariables, cache?.size ?: 0)
+        val maxOrder: Int = max(order, if (cache == null) 0 else cache[0].size)
+        val newCache: Array<Array<DSCompiler<T, A>?>> = Array(maxParameters + 1) { arrayOfNulls(maxOrder + 1) }
+
+        if (cache != null) {
+            // preserve the already created compilers
+            for (i in cache.indices) {
+                cache[i].copyInto(newCache[i], endIndex = cache[i].size)
+            }
+        }
+
+        // create the array in increasing diagonal order
+        for (diag in 0..numberOfVariables + order) {
+            for (o in max(0, diag - numberOfVariables)..min(order, diag)) {
+                val p: Int = diag - o
+                if (newCache[p][o] == null) {
+                    val valueCompiler: DSCompiler<T, A>? = if (p == 0) null else newCache[p - 1][o]!!
+                    val derivativeCompiler: DSCompiler<T, A>? = if (o == 0) null else newCache[p][o - 1]!!
+
+                    newCache[p][o] = DSCompiler(
+                        algebra,
+                        bufferFactory,
+                        p,
+                        o,
+                        valueCompiler,
+                        derivativeCompiler,
+                    )
+                }
+            }
+        }
+
+        return@lazy newCache[numberOfVariables][order]!!
+    }
+
+    private val variables: Map<Symbol, DSSymbol> by lazy {
+        bindings.entries.mapIndexed { index, (key, value) ->
+            key to DSSymbol(
+                index,
+                key,
+                value,
+            )
+        }.toMap()
+    }
+    override val symbols: List<Symbol> = bindings.map { it.key }
+
+    public val numberOfVariables: Int get() = symbols.size
+
+
     private fun bufferForVariable(index: Int, value: T): Buffer<T> {
         val buffer = bufferFactory(compiler.size) { algebra.zero }
         buffer[0] = value
@@ -80,7 +158,7 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     }
 
     @UnstableKMathAPI
-    protected inner class DSImpl internal constructor(
+    private inner class DSImpl(
         override val data: Buffer<T>,
     ) : DS<T, A> {
         override val derivativeAlgebra: DSAlgebra<T, A> get() = this@DSAlgebra
@@ -129,63 +207,6 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
         override val derivativeAlgebra: DSAlgebra<T, A> get() = this@DSAlgebra
         override val data: Buffer<T> = bufferForVariable(index, value)
     }
-
-
-    public val numberOfVariables: Int = bindings.size
-
-    /**
-     * Get the compiler for number of free parameters and order.
-     *
-     * @return cached rules set.
-     */
-    @PublishedApi
-    internal val compiler: DSCompiler<T, A> by lazy {
-        // get the cached compilers
-        val cache: Array<Array<DSCompiler<T, A>?>>? = null
-
-        // we need to create more compilers
-        val maxParameters: Int = max(numberOfVariables, cache?.size ?: 0)
-        val maxOrder: Int = max(order, if (cache == null) 0 else cache[0].size)
-        val newCache: Array<Array<DSCompiler<T, A>?>> = Array(maxParameters + 1) { arrayOfNulls(maxOrder + 1) }
-
-        if (cache != null) {
-            // preserve the already created compilers
-            for (i in cache.indices) {
-                cache[i].copyInto(newCache[i], endIndex = cache[i].size)
-            }
-        }
-
-        // create the array in increasing diagonal order
-        for (diag in 0..numberOfVariables + order) {
-            for (o in max(0, diag - numberOfVariables)..min(order, diag)) {
-                val p: Int = diag - o
-                if (newCache[p][o] == null) {
-                    val valueCompiler: DSCompiler<T, A>? = if (p == 0) null else newCache[p - 1][o]!!
-                    val derivativeCompiler: DSCompiler<T, A>? = if (o == 0) null else newCache[p][o - 1]!!
-
-                    newCache[p][o] = DSCompiler(
-                        algebra,
-                        bufferFactory,
-                        p,
-                        o,
-                        valueCompiler,
-                        derivativeCompiler,
-                    )
-                }
-            }
-        }
-
-        return@lazy newCache[numberOfVariables][order]!!
-    }
-
-    private val variables: Map<Symbol, DSSymbol> = bindings.entries.mapIndexed { index, (key, value) ->
-        key to DSSymbol(
-            index,
-            key,
-            value,
-        )
-    }.toMap()
-
 
     public override fun const(value: T): DS<T, A> {
         val buffer = bufferFactory(compiler.size) { algebra.zero }
