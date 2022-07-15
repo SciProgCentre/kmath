@@ -8,7 +8,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.sin
 
-private const val maxFloatDelta = 0.000001
+const val maxFloatDelta = 0.000001
 
 fun Double.radiansToDegrees() = this * 180 / PI
 

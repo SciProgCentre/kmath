@@ -34,19 +34,19 @@ public class DubinsPathFactory(
         val centers = Line2D(c1.center, c2.center)
         if (centers.length > turningRadius * 4) return null
 
-        var theta = (centers.theta - acos(centers.length / (turningRadius * 4))).theta
+        var theta = theta(centers.theta - acos(centers.length / (turningRadius * 4)))
         var dX = turningRadius * sin(theta)
         var dY = turningRadius * cos(theta)
         val p = Vector2D(c1.center.x + dX * 2, c1.center.y + dY * 2)
         val e = Circle(p, turningRadius)
         val p1 = Vector2D(c1.center.x + dX, c1.center.y + dY)
-        theta = (centers.theta + acos(centers.length / (turningRadius * 4))).theta
+        theta = theta(centers.theta + acos(centers.length / (turningRadius * 4)))
         dX = turningRadius * sin(theta)
         dY = turningRadius * cos(theta)
         val p2 = Vector2D(e.center.x + dX, e.center.y + dY)
-        val a1 = Arc(c1.center, turningRadius, base, p1, Arc.Direction.RIGHT)
-        val a2 = Arc(e.center, turningRadius, p1, p2, Arc.Direction.LEFT)
-        val a3 = Arc(c2.center, turningRadius, p2, direction, Arc.Direction.RIGHT)
+        val a1 = Arc(c1.center, base, p1, Arc.Direction.RIGHT)
+        val a2 = Arc(e.center, p1, p2, Arc.Direction.LEFT)
+        val a3 = Arc(c2.center, p2, direction, Arc.Direction.RIGHT)
         return DubinsPath(a1, a2, a3)
     }
 
@@ -56,19 +56,19 @@ public class DubinsPathFactory(
         val centers = Line2D(c1.center, c2.center)
         if (centers.length > turningRadius * 4) return null
 
-        var theta = (centers.theta + acos(centers.length / (turningRadius * 4))).theta
+        var theta = theta(centers.theta + acos(centers.length / (turningRadius * 4)))
         var dX = turningRadius * sin(theta)
         var dY = turningRadius * cos(theta)
         val p = Vector2D(c1.center.x + dX * 2, c1.center.y + dY * 2)
         val e = Circle(p, turningRadius)
         val p1 = Vector2D(c1.center.x + dX, c1.center.y + dY)
-        theta = (centers.theta - acos(centers.length / (turningRadius * 4))).theta
+        theta = theta(centers.theta - acos(centers.length / (turningRadius * 4)))
         dX = turningRadius * sin(theta)
         dY = turningRadius * cos(theta)
         val p2 = Vector2D(e.center.x + dX, e.center.y + dY)
-        val a1 = Arc(c1.center, turningRadius, base, p1, Arc.Direction.LEFT)
-        val a2 = Arc(e.center, turningRadius, p1, p2, Arc.Direction.RIGHT)
-        val a3 = Arc(c2.center, turningRadius, p2, direction, Arc.Direction.LEFT)
+        val a1 = Arc(c1.center, base, p1, Arc.Direction.LEFT)
+        val a2 = Arc(e.center, p1, p2, Arc.Direction.RIGHT)
+        val a3 = Arc(c2.center, p2, direction, Arc.Direction.LEFT)
         return DubinsPath(a1, a2, a3)
     }
 
@@ -76,8 +76,8 @@ public class DubinsPathFactory(
         val c1 = base.getRightCircle(turningRadius)
         val c2 = direction.getRightCircle(turningRadius)
         val l = leftOuterTangent(c1, c2)
-        val a1 = Arc(c1.center, turningRadius, base, l.base, Arc.Direction.RIGHT)
-        val a3 = Arc(c2.center, turningRadius, l.direction, direction, Arc.Direction.RIGHT)
+        val a1 = Arc(c1.center, base, l.base, Arc.Direction.RIGHT)
+        val a3 = Arc(c2.center, l.direction, direction, Arc.Direction.RIGHT)
         return DubinsPath(a1, LineSegment(l), a3)
     }
 
@@ -86,8 +86,8 @@ public class DubinsPathFactory(
         val c1 = base.getLeftCircle(turningRadius)
         val c2 = direction.getLeftCircle(turningRadius)
         val l = rightOuterTangent(c1, c2)
-        val a1 = Arc(c1.center, turningRadius, base, l.base, Arc.Direction.LEFT)
-        val a3 = Arc(c2.center, turningRadius, l.direction, direction, Arc.Direction.LEFT)
+        val a1 = Arc(c1.center, base, l.base, Arc.Direction.LEFT)
+        val a3 = Arc(c2.center, l.direction, direction, Arc.Direction.LEFT)
         return DubinsPath(a1, LineSegment(l), a3)
     }
 
@@ -97,8 +97,8 @@ public class DubinsPathFactory(
         val l = rightInnerTangent(c1, c2)
         if (c1.center.distanceTo(c2.center) < turningRadius * 2 || l == null) return null
 
-        val a1 = Arc(c1.center, turningRadius, base, l.base, Arc.Direction.RIGHT)
-        val a3 = Arc(c2.center, turningRadius, l.direction, direction, Arc.Direction.LEFT)
+        val a1 = Arc(c1.center, base, l.base, Arc.Direction.RIGHT)
+        val a3 = Arc(c2.center, l.direction, direction, Arc.Direction.LEFT)
         return DubinsPath(a1, LineSegment(l), a3)
     }
 
@@ -108,8 +108,8 @@ public class DubinsPathFactory(
         val l = leftInnerTangent(c1, c2)
         if (c1.center.distanceTo(c2.center) < turningRadius * 2 || l == null) return null
 
-        val a1 = Arc(c1.center, turningRadius, base, l.base, Arc.Direction.LEFT)
-        val a3 = Arc(c2.center, turningRadius, l.direction, direction, Arc.Direction.RIGHT)
+        val a1 = Arc(c1.center, base, l.base, Arc.Direction.LEFT)
+        val a3 = Arc(c2.center, l.direction, direction, Arc.Direction.RIGHT)
         return DubinsPath(a1, LineSegment(l), a3)
     }
 }
@@ -148,10 +148,12 @@ private fun rightInnerTangent(base: Circle, direction: Circle) = innerTangent(ba
 private fun innerTangent(base: Circle, direction: Circle, side: SIDE): Line2D? {
     val centers = Line2D(base.center, direction.center)
     return if (centers.length > base.radius * 2) {
-        val angle = when (side) {
-            SIDE.LEFT -> centers.theta + acos(base.radius * 2 / centers.length)
-            SIDE.RIGHT -> centers.theta - acos(base.radius * 2 / centers.length)
-        }.theta
+        val angle = theta(
+            when (side) {
+                SIDE.LEFT -> centers.theta + acos(base.radius * 2 / centers.length)
+                SIDE.RIGHT -> centers.theta - acos(base.radius * 2 / centers.length)
+            }
+        )
         val dX = base.radius * sin(angle)
         val dY = base.radius * cos(angle)
         val p1 = Vector2D(base.center.x + dX, base.center.y + dY)

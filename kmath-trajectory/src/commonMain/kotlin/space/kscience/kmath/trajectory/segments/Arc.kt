@@ -1,5 +1,6 @@
 package space.kscience.kmath.trajectory.segments
 
+import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
 import space.kscience.kmath.geometry.Line2D
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.trajectory.segments.components.Circle
@@ -8,11 +9,10 @@ import kotlin.math.PI
 
 public class Arc(
     center: Vector2D,
-    radius: Double,
     a: Vector2D,
     b: Vector2D,
     internal val direction: Direction
-) : Circle(center, radius), Segment {
+) : Circle(center, center.distanceTo(a)), Segment {
 
     private val l1 = Line2D(center, a)
     private val l2 = Line2D(center, b)
@@ -26,8 +26,7 @@ public class Arc(
         LEFT, RIGHT
     }
 
-    private fun calculateAngle() =
-        (if (direction == Direction.LEFT) l1.theta - l2.theta else l2.theta - l1.theta).theta
+    private fun calculateAngle() = theta(if (direction == Direction.LEFT) l1.theta - l2.theta else l2.theta - l1.theta)
 
     private fun calculateLength(): Double {
         val proportion = angle / (2 * PI)
@@ -36,8 +35,8 @@ public class Arc(
 
     private fun calculatePose(vector: Vector2D, theta: Double): Pose2D =
         if (direction == Direction.LEFT) {
-            Pose2D(vector.x, vector.y, (theta - PI / 2).theta)
+            Pose2D(vector.x, vector.y, theta(theta - PI / 2))
         } else {
-            Pose2D(vector.x, vector.y, (theta + PI / 2).theta)
+            Pose2D(vector.x, vector.y, theta(theta + PI / 2))
         }
 }

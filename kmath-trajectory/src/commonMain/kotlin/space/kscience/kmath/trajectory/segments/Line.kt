@@ -7,7 +7,7 @@ import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-public class LineSegment(
+public data class LineSegment(
     internal val line: Line2D
 ) : Segment {
     override val length: Double
@@ -15,10 +15,9 @@ public class LineSegment(
 }
 
 internal val Line2D.theta: Double
-    get() = atan2(direction.x - base.x, direction.y - base.y).theta
+    get() = theta(atan2(direction.x - base.x, direction.y - base.y))
 
 internal val Line2D.length: Double
     get() = base.distanceTo(direction)
 
-internal val Double.theta: Double
-    get() = (this + (2 * PI)) % (2 * PI)
+internal fun theta(theta: Double) = (theta + (2 * PI)) % (2 * PI)
