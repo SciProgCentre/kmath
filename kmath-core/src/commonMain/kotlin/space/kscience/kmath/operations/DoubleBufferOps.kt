@@ -7,8 +7,8 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.*
 
@@ -19,7 +19,7 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     Norm<Buffer<Double>, Double> {
 
     override val elementAlgebra: DoubleField get() = DoubleField
-    override val bufferFactory: BufferFactory<Double> get() = BufferFactory(::DoubleBuffer)
+    override val elementBufferFactory: MutableBufferFactory<Double> get() = elementAlgebra.bufferFactory
 
     override fun Buffer<Double>.map(block: DoubleField.(Double) -> Double): DoubleBuffer =
         mapInline { DoubleField.block(it) }

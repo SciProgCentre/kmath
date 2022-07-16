@@ -88,7 +88,7 @@ public inline fun <T, R> Buffer<T>.mapIndexed(
  */
 public inline fun <T, reified R : Any> Buffer<T>.mapIndexed(
     crossinline block: (index: Int, value: T) -> R,
-): Buffer<R> = BufferFactory<R>(Buffer.Companion::auto).invoke(size) { block(it, get(it)) }
+): Buffer<R> = Buffer.auto(size) { block(it, get(it)) }
 
 /**
  * Fold given buffer according to [operation]
@@ -105,7 +105,7 @@ public inline fun <T, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R)
 @UnstableKMathAPI
 public inline fun <T1, T2 : Any, reified R : Any> Buffer<T1>.zip(
     other: Buffer<T2>,
-    bufferFactory: BufferFactory<R> = BufferFactory(Buffer.Companion::auto),
+    bufferFactory: BufferFactory<R> = BufferFactory.auto(),
     crossinline transform: (T1, T2) -> R,
 ): Buffer<R> {
     require(size == other.size) { "Buffer size mismatch in zip: expected $size but found ${other.size}" }

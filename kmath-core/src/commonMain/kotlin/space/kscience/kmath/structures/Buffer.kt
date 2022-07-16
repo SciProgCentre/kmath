@@ -16,6 +16,14 @@ import kotlin.reflect.KClass
  */
 public fun interface BufferFactory<T> {
     public operator fun invoke(size: Int, builder: (Int) -> T): Buffer<T>
+
+    public companion object{
+        public inline fun <reified T : Any> auto(): BufferFactory<T> =
+            BufferFactory(Buffer.Companion::auto)
+
+        public fun <T> boxing(): BufferFactory<T> =
+            BufferFactory(Buffer.Companion::boxing)
+    }
 }
 
 /**
@@ -23,8 +31,16 @@ public fun interface BufferFactory<T> {
  *
  * @param T the type of buffer.
  */
-public fun interface MutableBufferFactory<T>: BufferFactory<T>{
+public fun interface MutableBufferFactory<T> : BufferFactory<T> {
     override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T>
+
+    public companion object {
+        public inline fun <reified T : Any> auto(): MutableBufferFactory<T> =
+            MutableBufferFactory(MutableBuffer.Companion::auto)
+
+        public fun <T> boxing(): MutableBufferFactory<T> =
+            MutableBufferFactory(MutableBuffer.Companion::boxing)
+    }
 }
 
 /**

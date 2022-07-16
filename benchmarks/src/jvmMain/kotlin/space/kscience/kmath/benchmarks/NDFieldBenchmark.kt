@@ -20,7 +20,6 @@ import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.one
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -28,12 +27,6 @@ import space.kscience.kmath.viktor.viktorAlgebra
 
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
-    @Benchmark
-    fun autoFieldAdd(blackhole: Blackhole) = with(autoField) {
-        var res: StructureND<Double> = one(shape)
-        repeat(n) { res += 1.0 }
-        blackhole.consume(res)
-    }
 
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
@@ -95,9 +88,8 @@ internal class NDFieldBenchmark {
         private const val dim = 1000
         private const val n = 100
         private val shape = intArrayOf(dim, dim)
-        private val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
         private val specializedField = DoubleField.ndAlgebra
-        private val genericField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
+        private val genericField = BufferedFieldOpsND(DoubleField)
         private val nd4jField = DoubleField.nd4j
         private val multikField = DoubleField.multikAlgebra
         private val viktorField = DoubleField.viktorAlgebra

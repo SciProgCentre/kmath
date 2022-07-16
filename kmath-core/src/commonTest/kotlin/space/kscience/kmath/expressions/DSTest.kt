@@ -22,7 +22,7 @@ internal inline fun diff(
     block: DSField<Double, DoubleField>.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DSField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
+    DSField(DoubleField, order, mapOf(*parameters), ::DoubleBuffer).block()
 }
 
 internal class DSTest {

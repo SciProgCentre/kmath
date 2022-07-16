@@ -10,10 +10,7 @@ import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.MemoryBuffer
-import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableMemoryBuffer
+import space.kscience.kmath.structures.*
 import kotlin.math.*
 
 /**
@@ -54,6 +51,9 @@ public object ComplexField :
     Norm<Complex, Complex>,
     NumbersAddOps<Complex>,
     ScaleOperations<Complex> {
+    override val bufferFactory: MutableBufferFactory<Complex> = MutableBufferFactory { size, init ->
+        MutableMemoryBuffer.create(Complex, size, init)
+    }
 
     override val zero: Complex = 0.0.toComplex()
     override val one: Complex = 1.0.toComplex()

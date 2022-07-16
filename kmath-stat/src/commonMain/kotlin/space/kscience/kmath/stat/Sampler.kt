@@ -35,7 +35,7 @@ public fun interface Sampler<out T : Any> {
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = BufferFactory(Buffer.Companion::boxing),
+    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once

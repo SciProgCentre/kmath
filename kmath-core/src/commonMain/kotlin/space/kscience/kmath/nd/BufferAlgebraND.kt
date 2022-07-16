@@ -10,7 +10,6 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.BufferFactory
 
 public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val indexerBuilder: (IntArray) -> ShapeIndexer
@@ -60,7 +59,7 @@ public inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapInline(
     return BufferND(
         indexes,
         bufferAlgebra.run {
-            bufferFactory(buffer.size) { elementAlgebra.transform(buffer[it]) }
+            elementBufferFactory(buffer.size) { elementAlgebra.transform(buffer[it]) }
         }
     )
 }
@@ -74,7 +73,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mapIndexedInline(
     return BufferND(
         indexes,
         bufferAlgebra.run {
-            bufferFactory(buffer.size) { elementAlgebra.transform(indexes.index(it), buffer[it]) }
+            elementBufferFactory(buffer.size) { elementAlgebra.transform(indexes.index(it), buffer[it]) }
         }
     )
 }
@@ -91,7 +90,7 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
     return BufferND(
         indexes,
         bufferAlgebra.run {
-            bufferFactory(lbuffer.size) { elementAlgebra.block(lbuffer[it], rbuffer[it]) }
+            elementBufferFactory(lbuffer.size) { elementAlgebra.block(lbuffer[it], rbuffer[it]) }
         }
     )
 }
@@ -116,9 +115,8 @@ public open class BufferedFieldOpsND<T, out A : Field<T>>(
 
     public constructor(
         elementAlgebra: A,
-        bufferFactory: BufferFactory<T>,
         indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
-    ) : this(BufferFieldOps(elementAlgebra, bufferFactory), indexerBuilder)
+    ) : this(BufferFieldOps(elementAlgebra), indexerBuilder)
 
     @OptIn(PerformancePitfall::class)
     override fun scale(a: StructureND<T>, value: Double): StructureND<T> = a.map { it * value }

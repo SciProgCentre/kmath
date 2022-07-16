@@ -120,7 +120,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
          */
         public fun <T> buffered(
             strides: Strides,
-            bufferFactory: BufferFactory<T> = BufferFactory(Buffer.Companion::boxing),
+            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = BufferND(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
@@ -140,7 +140,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
 
         public fun <T> buffered(
             shape: IntArray,
-            bufferFactory: BufferFactory<T> = BufferFactory(Buffer.Companion::boxing),
+            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = buffered(DefaultStrides(shape), bufferFactory, initializer)
 

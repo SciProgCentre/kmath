@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Autodiff for generic algebra elements in core!
+- Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
 - Kotlin 1.7
