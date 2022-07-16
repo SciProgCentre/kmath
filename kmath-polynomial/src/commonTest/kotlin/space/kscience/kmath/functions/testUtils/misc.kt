@@ -9,11 +9,11 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.symbol
 
 
-public val o: Rational = Rational(0)
+val o: Rational = Rational(0)
 
-public val x: Symbol by symbol
-public val y: Symbol by symbol
-public val z: Symbol by symbol
-public val t: Symbol by symbol
-public val s: Symbol by symbol
-public val iota: Symbol by symbol
+val x: Symbol by symbol
+val y: Symbol by symbol
+val z: Symbol by symbol
+val t: Symbol by symbol
+val s: Symbol by symbol
+val iota: Symbol by symbol

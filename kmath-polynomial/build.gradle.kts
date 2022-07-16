@@ -12,12 +12,6 @@ kotlin.sourceSets {
             api(projects.kmathCore)
         }
     }
-    commonTest {
-        dependencies {
-            api(projects.testUtilsPolynomial)
-            api(kotlin("test"))
-        }
-    }
 }
 
 dependencies {

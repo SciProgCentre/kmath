@@ -8,12 +8,11 @@
 package space.kscience.kmath.functions.testUtils
 
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.ScaleOperations
 
 
-public class IntModulo {
-    public val residue: Int
-    public val modulus: Int
+class IntModulo {
+    val residue: Int
+    val modulus: Int
 
     @PublishedApi
     internal constructor(residue: Int, modulus: Int, toCheckInput: Boolean = true) {
@@ -27,16 +26,16 @@ public class IntModulo {
         }
     }
 
-    public constructor(residue: Int, modulus: Int) : this(residue, modulus, true)
+    constructor(residue: Int, modulus: Int) : this(residue, modulus, true)
 
-    public operator fun unaryPlus(): IntModulo = this
-    public operator fun unaryMinus(): IntModulo =
+    operator fun unaryPlus(): IntModulo = this
+    operator fun unaryMinus(): IntModulo =
         IntModulo(
             if (residue == 0) 0 else modulus - residue,
             modulus,
             toCheckInput = false
         )
-    public operator fun plus(other: IntModulo): IntModulo {
+    operator fun plus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not add two residue different modulo" }
         return IntModulo(
             (residue + other.residue) % modulus,
@@ -44,13 +43,13 @@ public class IntModulo {
             toCheckInput = false
         )
     }
-    public operator fun plus(other: Int): IntModulo =
+    operator fun plus(other: Int): IntModulo =
         IntModulo(
             (residue + other) % modulus,
             modulus,
             toCheckInput = false
         )
-    public operator fun minus(other: IntModulo): IntModulo {
+    operator fun minus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not subtract two residue different modulo" }
         return IntModulo(
             (residue - other.residue) % modulus,
@@ -58,13 +57,13 @@ public class IntModulo {
             toCheckInput = false
         )
     }
-    public operator fun minus(other: Int): IntModulo =
+    operator fun minus(other: Int): IntModulo =
         IntModulo(
             (residue - other) % modulus,
             modulus,
             toCheckInput = false
         )
-    public operator fun times(other: IntModulo): IntModulo {
+    operator fun times(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not multiply two residue different modulo" }
         return IntModulo(
             (residue * other.residue) % modulus,
@@ -72,13 +71,13 @@ public class IntModulo {
             toCheckInput = false
         )
     }
-    public operator fun times(other: Int): IntModulo =
+    operator fun times(other: Int): IntModulo =
         IntModulo(
             (residue * other) % modulus,
             modulus,
             toCheckInput = false
         )
-    public operator fun div(other: IntModulo): IntModulo {
+    operator fun div(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not divide two residue different modulo" }
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other.residue, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
@@ -88,7 +87,7 @@ public class IntModulo {
             toCheckInput = false
         )
     }
-    public operator fun div(other: Int): IntModulo {
+    operator fun div(other: Int): IntModulo {
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
         return IntModulo(
@@ -109,11 +108,11 @@ public class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
+class IntModuloRing : Ring<IntModulo> {
 
-    public val modulus: Int
+    val modulus: Int
 
-    public constructor(modulus: Int) {
+    constructor(modulus: Int) {
         require(modulus != 0) { "modulus can not be zero" }
         this.modulus = if (modulus < 0) -modulus else modulus
     }
@@ -121,7 +120,7 @@ public class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
     override inline val zero: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
     override inline val one: IntModulo get() = IntModulo(1, modulus, toCheckInput = false)
 
-    public fun number(arg: Int): IntModulo = IntModulo(arg, modulus, toCheckInput = false)
+    fun number(arg: Int): IntModulo = IntModulo(arg, modulus, toCheckInput = false)
 
     override inline fun add(left: IntModulo, right: IntModulo): IntModulo = left + right
     override inline fun multiply(left: IntModulo, right: IntModulo): IntModulo = left * right
@@ -130,7 +129,5 @@ public class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
     override inline fun IntModulo.plus(arg: IntModulo): IntModulo = this + arg
     override inline fun IntModulo.minus(arg: IntModulo): IntModulo = this - arg
     override inline fun IntModulo.times(arg: IntModulo): IntModulo = this * arg
-    public inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
-
-    override fun scale(a: IntModulo, value: Double): IntModulo = a * value.toInt()
+    inline fun IntModulo.div(arg: IntModulo): IntModulo = this / arg
 }

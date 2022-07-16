@@ -9,10 +9,10 @@ import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.functions.PolynomialSpace
 
 
-public fun PolynomialSpace<IntModulo, IntModuloRing>.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
+fun PolynomialSpace<IntModulo, IntModuloRing>.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
     Polynomial(coefs.map { IntModulo(it, ring.modulus) })
-public fun IntModuloRing.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
+fun IntModuloRing.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
     Polynomial(coefs.map { IntModulo(it, modulus) })
 
-public fun IntModuloRing.m(arg: Int): IntModulo = IntModulo(arg, modulus)
-public fun PolynomialSpace<IntModulo, IntModuloRing>.m(arg: Int): IntModulo = IntModulo(arg, ring.modulus)
+fun IntModuloRing.m(arg: Int): IntModulo = IntModulo(arg, modulus)
+fun PolynomialSpace<IntModulo, IntModuloRing>.m(arg: Int): IntModulo = IntModulo(arg, ring.modulus)

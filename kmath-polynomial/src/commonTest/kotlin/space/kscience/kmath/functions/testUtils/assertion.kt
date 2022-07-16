@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 
-public fun <T> assertContentEquals(
+fun <T> assertContentEquals(
     expected: Map<T, Double>,
     actual: Map<T, Double>,
     absoluteTolerance: Double,
@@ -23,7 +23,7 @@ public fun <T> assertContentEquals(
     for ((key, expectedValue) in expected) assertEquals(expectedValue, actual[key]!!, absoluteTolerance, message)
 }
 
-public fun assertEquals(
+fun assertEquals(
     expected: NumberedPolynomial<Double>,
     actual: NumberedPolynomial<Double>,
     absoluteTolerance: Double,
@@ -37,7 +37,7 @@ public fun assertEquals(
     )
 }
 
-public fun assertEquals(
+fun assertEquals(
     expected: LabeledPolynomial<Double>,
     actual: LabeledPolynomial<Double>,
     absoluteTolerance: Double,
@@ -51,7 +51,7 @@ public fun assertEquals(
     )
 }
 
-public fun assertEquals(
+fun assertEquals(
     expected: NumberedRationalFunction<Double>,
     actual: NumberedRationalFunction<Double>,
     absoluteTolerance: Double,
@@ -71,7 +71,7 @@ public fun assertEquals(
     )
 }
 
-public fun assertEquals(
+fun assertEquals(
     expected: LabeledRationalFunction<Double>,
     actual: LabeledRationalFunction<Double>,
     absoluteTolerance: Double,
@@ -91,7 +91,7 @@ public fun assertEquals(
     )
 }
 
-public inline fun <reified T : Throwable> assertFailsWithTypeAndMessage(
+inline fun <reified T : Throwable> assertFailsWithTypeAndMessage(
     expectedMessage: String? = null,
     assertionMessage: String? = null,
     block: () -> Unit

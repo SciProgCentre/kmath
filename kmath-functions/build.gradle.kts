@@ -12,11 +12,6 @@ kotlin.sourceSets {
             api(project(":kmath-core"))
         }
     }
-    commonTest {
-        dependencies {
-            api(projects.testUtilsFunctions)
-        }
-    }
 }
 
 dependencies {

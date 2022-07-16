@@ -9,4 +9,4 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
 
 
-public fun <T> bufferOf(vararg elements: T): Buffer<T> = elements.asBuffer()
+fun <T> bufferOf(vararg elements: T): Buffer<T> = elements.asBuffer()
