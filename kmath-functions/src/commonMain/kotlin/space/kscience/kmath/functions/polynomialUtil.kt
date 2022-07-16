@@ -91,7 +91,7 @@ public fun <C, A> Polynomial<C>.integrate(
 public fun <C : Comparable<C>> Polynomial<C>.integrate(
     ring: Field<C>,
     range: ClosedRange<C>,
-): C {
+): C = ring {
     val antiderivative = integrate(ring)
-    return ring { antiderivative.value(ring, range.endInclusive) - antiderivative.value(ring, range.start) }
+    return antiderivative.value(ring, range.endInclusive) - antiderivative.value(ring, range.start)
 }

@@ -50,7 +50,7 @@ public data class Polynomial<out C>(
      */
     public val coefficients: List<C>
 ) {
-    override fun toString(): String = "ListPolynomial$coefficients"
+    override fun toString(): String = "Polynomial$coefficients"
 }
 
 /**
@@ -63,7 +63,7 @@ public data class Polynomial<out C>(
  */
 public open class PolynomialSpace<C, A>(
     /**
-     * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
+     * Underlying ring of constants. Its operations on constants are used by local operations on constants and polynomials.
      */
     public val ring: A,
 ) : Ring<Polynomial<C>>, ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
@@ -191,61 +191,54 @@ public open class PolynomialSpace<C, A>(
     /**
      * Returns negation of the polynomial.
      */
-    public override operator fun Polynomial<C>.unaryMinus(): Polynomial<C> =
-        with(ring) {
-            Polynomial(coefficients.map { -it })
-        }
+    public override operator fun Polynomial<C>.unaryMinus(): Polynomial<C> = ring {
+        Polynomial(coefficients.map { -it })
+    }
     /**
      * Returns sum of the polynomials.
      */
-    public override operator fun Polynomial<C>.plus(other: Polynomial<C>): Polynomial<C> {
-        with(ring) {
-            val thisDegree = degree
-            val otherDegree = other.degree
-            return Polynomial(
-                List(max(thisDegree, otherDegree) + 1) {
-                    when {
-                        it > thisDegree -> other.coefficients[it]
-                        it > otherDegree -> coefficients[it]
-                        else -> coefficients[it] + other.coefficients[it]
-                    }
+    public override operator fun Polynomial<C>.plus(other: Polynomial<C>): Polynomial<C> = ring {
+        val thisDegree = degree
+        val otherDegree = other.degree
+        return Polynomial(
+            List(max(thisDegree, otherDegree) + 1) {
+                when {
+                    it > thisDegree -> other.coefficients[it]
+                    it > otherDegree -> coefficients[it]
+                    else -> coefficients[it] + other.coefficients[it]
                 }
-            )
-        }
+            }
+        )
     }
     /**
      * Returns difference of the polynomials.
      */
-    public override operator fun Polynomial<C>.minus(other: Polynomial<C>): Polynomial<C> {
-        with(ring) {
-            val thisDegree = degree
-            val otherDegree = other.degree
-            return Polynomial(
-                List(max(thisDegree, otherDegree) + 1) {
-                    when {
-                        it > thisDegree -> -other.coefficients[it]
-                        it > otherDegree -> coefficients[it]
-                        else -> coefficients[it] - other.coefficients[it]
-                    }
+    public override operator fun Polynomial<C>.minus(other: Polynomial<C>): Polynomial<C> = ring {
+        val thisDegree = degree
+        val otherDegree = other.degree
+        return Polynomial(
+            List(max(thisDegree, otherDegree) + 1) {
+                when {
+                    it > thisDegree -> -other.coefficients[it]
+                    it > otherDegree -> coefficients[it]
+                    else -> coefficients[it] - other.coefficients[it]
                 }
-            )
-        }
+            }
+        )
     }
     /**
      * Returns product of the polynomials.
      */
-    public override operator fun Polynomial<C>.times(other: Polynomial<C>): Polynomial<C> {
-        with(ring) {
-            val thisDegree = degree
-            val otherDegree = other.degree
-            return Polynomial(
-                List(thisDegree + otherDegree + 1) { d ->
-                    (max(0, d - otherDegree)..min(thisDegree, d))
-                        .map { coefficients[it] * other.coefficients[d - it] }
-                        .reduce { acc, rational -> acc + rational }
-                }
-            )
-        }
+    public override operator fun Polynomial<C>.times(other: Polynomial<C>): Polynomial<C> = ring {
+        val thisDegree = degree
+        val otherDegree = other.degree
+        return Polynomial(
+            List(thisDegree + otherDegree + 1) { d ->
+                (max(0, d - otherDegree)..min(thisDegree, d))
+                    .map { coefficients[it] * other.coefficients[d - it] }
+                    .reduce { acc, rational -> acc + rational }
+            }
+        )
     }
 
     /**
