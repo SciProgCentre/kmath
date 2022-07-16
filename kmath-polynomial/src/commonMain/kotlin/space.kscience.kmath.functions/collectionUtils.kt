@@ -9,6 +9,40 @@ import kotlin.contracts.InvocationKind.*
 import kotlin.contracts.contract
 
 
+// TODO: Docs
+internal inline fun <K, V, R> Map<in K, V>.computeOn(key: K, compute: (V?) -> R): R {
+    contract {
+        callsInPlace(compute, EXACTLY_ONCE)
+    }
+    return compute(get(key))
+}
+
+// TODO: Docs
+internal inline fun <K, V, R> Map<K, V>.computeOnOrElse(key: K, defaultResult: () -> R, compute: (value: V) -> R): R {
+    contract {
+        callsInPlace(defaultResult, AT_MOST_ONCE)
+        callsInPlace(compute, AT_MOST_ONCE)
+    }
+    @Suppress("UNCHECKED_CAST")
+    return (if (key !in this) defaultResult() else compute(get(key) as V))
+}
+
+// TODO: Docs
+internal inline fun <K, V, R> Map<K, V>.computeOnOrElse(key: K, defaultResult: R, compute: (value: V) -> R): R {
+    contract {
+        callsInPlace(compute, AT_MOST_ONCE)
+    }
+    return computeOnOrElse(key, { defaultResult }, compute)
+}
+
+// TODO: Docs
+internal inline fun <K, V, R> Map<K, V>.computeOnOrElse(key: K, defaultResult: R, compute: (key: K, value: V) -> R): R {
+    contract {
+        callsInPlace(compute, AT_MOST_ONCE)
+    }
+    return computeOnOrElse(key, { defaultResult }, { it -> compute(key, it) })
+}
+
 /**
  * Applies the [transformation][transform] to the value corresponding to the given [key] or null instead if it's not
  * present.
@@ -21,7 +55,7 @@ internal inline fun <K, V> MutableMap<in K, V>.applyToKey(key: K, transform: (cu
     contract {
         callsInPlace(transform, EXACTLY_ONCE)
     }
-    return transform(get(key)).also { this[key] = it }
+    return computeOn(key, transform).also { this[key] = it }
 }
 
 /**
@@ -39,8 +73,7 @@ internal inline fun <K, V> MutableMap<K, V>.putOrChange(key: K, valueOnPut: () -
         callsInPlace(valueOnPut, AT_MOST_ONCE)
         callsInPlace(transformOnChange, AT_MOST_ONCE)
     }
-    @Suppress("UNCHECKED_CAST")
-    return (if (key !in this) valueOnPut() else transformOnChange(get(key) as V)).also { this[key] = it }
+    return computeOnOrElse(key, valueOnPut, transformOnChange).also { this[key] = it }
 }
 
 /**

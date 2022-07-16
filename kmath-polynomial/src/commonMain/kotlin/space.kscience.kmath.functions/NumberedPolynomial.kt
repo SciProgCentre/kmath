@@ -69,10 +69,9 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun NumberedPolynomial<C>.plus(other: Int): NumberedPolynomial<C> =
         if (other == 0) this
-        else
-            NumberedPolynomialAsIs(
-                coefficients.withPutOrChanged(emptyList(), other.asConstant()) { it -> it + other }
-            )
+        else NumberedPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyList(), other.asConstant()) { it -> it + other }
+        )
     /**
      * Returns difference between the polynomial and the integer represented as a polynomial.
      *
@@ -80,10 +79,9 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun NumberedPolynomial<C>.minus(other: Int): NumberedPolynomial<C> =
         if (other == 0) this
-        else
-            NumberedPolynomialAsIs(
-                coefficients.withPutOrChanged(emptyList(), (-other).asConstant()) { it -> it - other }
-            )
+        else NumberedPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyList(), (-other).asConstant()) { it -> it - other }
+        )
     /**
      * Returns product of the polynomial and the integer represented as a polynomial.
      *
@@ -105,31 +103,25 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun Int.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this == 0) other
-        else
-            NumberedPolynomialAsIs(
-                other.coefficients.withPutOrChanged(emptyList(), this@plus.asConstant()) { it -> this@plus + it }
-            )
+        else NumberedPolynomialAsIs(
+            other.coefficients.withPutOrChanged(emptyList(), this@plus.asConstant()) { it -> this@plus + it }
+        )
     /**
      * Returns difference between the integer represented as a polynomial and the polynomial.
      *
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        NumberedPolynomialAsIs(
-            other.coefficients
-                .toMutableMap()
-                .apply {
-                    if (this@minus == 0) {
-                        forEach { (key, value) -> this[key] = -value }
-                    } else {
-                        forEach { (key, value) -> if (key.isNotEmpty()) this[key] = -value }
-
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = this@minus - getOrElse(degs) { constantZero }
-                    }
+        when {
+            this == 0 -> -other
+            other.coefficients.isEmpty() -> this.asPolynomial()
+            else -> NumberedPolynomialAsIs(
+                buildMap(other.coefficients.size + 1) {
+                    put(emptyList(), other.coefficients.computeOnOrElse(emptyList(), { this@minus.asConstant() }, { it -> this@minus - it}))
+                    other.coefficients.copyMapToBy(this, { _, c -> -c }) { currentC, _ -> currentC }
                 }
             )
+        }
     /**
      * Returns product of the integer represented as a polynomial and the polynomial.
      *
@@ -148,29 +140,21 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to this@plus))
-            else NumberedPolynomialAsIs(
-                withPutOrChanged(emptyList(), this@plus) { it -> this@plus + it }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@plus.asPolynomial()
+        else NumberedPolynomialAsIs(
+            other.coefficients.withPutOrChanged(emptyList(), this@plus) { it -> this@plus + it }
+        )
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to this@minus))
-            else NumberedPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        forEach { (degs, c) -> if (degs.isNotEmpty()) this[degs] = -c }
-
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = this@minus - getOrElse(degs) { constantZero }
-                    }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@minus.asPolynomial()
+        else NumberedPolynomialAsIs(
+            buildMap(other.coefficients.size) {
+                put(emptyList(), other.coefficients.computeOnOrElse(emptyList(), this@minus) { it -> this@minus - it })
+                other.coefficients.copyMapToBy(this, { _, c -> -c }, { currentC, _ -> currentC })
+            }
+        )
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
@@ -183,22 +167,18 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.plus(other: C): NumberedPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to other))
-            else NumberedPolynomialAsIs(
-                withPutOrChanged(emptyList(), other) { it -> it + other }
-            )
-        }
+        if (coefficients.isEmpty()) other.asPolynomial()
+        else NumberedPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyList(), other) { it -> it + other }
+        )
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     override operator fun NumberedPolynomial<C>.minus(other: C): NumberedPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to other))
-            else NumberedPolynomialAsIs(
-                withPutOrChanged(emptyList(), -other) { it -> it - other }
-            )
-        }
+        if (coefficients.isEmpty()) other.asPolynomial()
+        else NumberedPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyList(), -other) { it -> it - other }
+        )
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
@@ -264,13 +244,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Instance of unit polynomial (unit of the polynomial ring).
      */
-    override val one: NumberedPolynomial<C> by lazy {
-        NumberedPolynomialAsIs(
-            mapOf(
-                emptyList<UInt>() to constantOne // 1 * x_1^0 * x_2^0 * ...
-            )
-        )
-    }
+    override val one: NumberedPolynomial<C> by lazy { NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to constantOne)) }
 
     /**
      * Maximal index (ID) of variable occurring in the polynomial with positive power. If there is no such variable,

@@ -87,7 +87,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         )
         else LabeledPolynomialAsIs(
             mapOf(this@plus to 1U) to constantOne,
-            emptyMap<Symbol, UInt>() to constantOne * other,
+            emptyMap<Symbol, UInt>() to other.asConstant(),
         )
     /**
      * Returns difference between the variable represented as a monic monomial and the integer represented as a constant polynomial.
@@ -98,7 +98,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         )
         else LabeledPolynomialAsIs(
             mapOf(this@minus to 1U) to constantOne,
-            emptyMap<Symbol, UInt>() to constantOne * -other,
+            emptyMap<Symbol, UInt>() to (-other).asConstant(),
         )
     /**
      * Returns product of the variable represented as a monic monomial and the integer represented as a constant polynomial.
@@ -106,7 +106,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override operator fun Symbol.times(other: Int): LabeledPolynomial<C> =
         if (other == 0) zero
         else LabeledPolynomialAsIs(
-            mapOf(this to 1U) to constantOne * other,
+            mapOf(this to 1U) to other.asConstant(),
         )
 
     /**
@@ -118,7 +118,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         )
         else LabeledPolynomialAsIs(
             mapOf(other to 1U) to constantOne,
-            emptyMap<Symbol, UInt>() to constantOne * this@plus,
+            emptyMap<Symbol, UInt>() to this@plus.asConstant(),
         )
     /**
      * Returns difference between the integer represented as a constant polynomial and the variable represented as a monic monomial.
@@ -137,7 +137,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override operator fun Int.times(other: Symbol): LabeledPolynomial<C> =
         if (this == 0) zero
         else LabeledPolynomialAsIs(
-            mapOf(other to 1U) to constantOne * this@times,
+            mapOf(other to 1U) to this@times.asConstant(),
         )
 
     /**
@@ -146,11 +146,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to adding [other] copies of unit polynomial to [this].
      */
     public override operator fun LabeledPolynomial<C>.plus(other: Int): LabeledPolynomial<C> =
-        if (other == 0) this
-        else with(coefficients) {
-            if (isEmpty()) other.asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), other.asConstant()) { it -> it + other }
+        when {
+            other == 0 -> this
+            coefficients.isEmpty() -> other.asPolynomial()
+            else -> LabeledPolynomialAsIs(
+                coefficients.withPutOrChanged(emptyMap(), other.asConstant()) { it -> it + other }
             )
         }
     /**
@@ -159,11 +159,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to subtraction [other] copies of unit polynomial from [this].
      */
     public override operator fun LabeledPolynomial<C>.minus(other: Int): LabeledPolynomial<C> =
-        if (other == 0) this
-        else with(coefficients) {
-            if (isEmpty()) (-other).asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), (-other).asConstant()) { it -> it - other }
+        when {
+            other == 0 -> this
+            coefficients.isEmpty() -> other.asPolynomial()
+            else -> LabeledPolynomialAsIs(
+                coefficients.withPutOrChanged(emptyMap(), (-other).asConstant()) { it -> it - other }
             )
         }
     /**
@@ -186,11 +186,11 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to adding [this] copies of unit polynomial to [other].
      */
     public override operator fun Int.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        if (this == 0) other
-        else with(other.coefficients) {
-            if (isEmpty()) this@plus.asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), this@plus.asConstant()) { it -> this@plus + it }
+        when {
+            this == 0 -> other
+            other.coefficients.isEmpty() -> this@plus.asPolynomial()
+            else -> LabeledPolynomialAsIs(
+                other.coefficients.withPutOrChanged(emptyMap(), this@plus.asConstant()) { it -> this@plus + it }
             )
         }
     /**
@@ -275,12 +275,10 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) this@plus.asLabeledPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), this@plus) { it -> this@plus + it }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@plus.asLabeledPolynomial()
+        else LabeledPolynomialAsIs(
+            other.coefficients.withPutOrChanged(emptyMap(), this@plus) { it -> this@plus + it }
+        )
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
@@ -304,22 +302,18 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
     override operator fun LabeledPolynomial<C>.plus(other: C): LabeledPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) other.asLabeledPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), other) { it -> it + other }
-            )
-        }
+        if (coefficients.isEmpty()) other.asLabeledPolynomial()
+        else LabeledPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyMap(), other) { it -> it + other }
+        )
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     override operator fun LabeledPolynomial<C>.minus(other: C): LabeledPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) other.asLabeledPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(emptyMap(), -other) { it -> it - other }
-            )
-        }
+        if (coefficients.isEmpty()) other.asLabeledPolynomial()
+        else LabeledPolynomialAsIs(
+            coefficients.withPutOrChanged(emptyMap(), -other) { it -> it - other }
+        )
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
@@ -382,12 +376,10 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the variable represented as a monic monomial and the polynomial.
      */
     public override operator fun Symbol.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) this@plus.asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(mapOf(this@plus to 1U), constantOne) { it -> constantOne + it }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@plus.asPolynomial()
+        else LabeledPolynomialAsIs(
+            other.coefficients.withPutOrChanged(mapOf(this@plus to 1U), constantOne) { it -> constantOne + it }
+        )
     /**
      * Returns difference between the variable represented as a monic monomial and the polynomial.
      */
@@ -412,22 +404,18 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * Returns sum of the polynomial and the variable represented as a monic monomial.
      */
     public override operator fun LabeledPolynomial<C>.plus(other: Symbol): LabeledPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) other.asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(mapOf(other to 1U), constantOne) { it -> it + constantOne }
-            )
-        }
+        if (coefficients.isEmpty()) other.asPolynomial()
+        else LabeledPolynomialAsIs(
+            coefficients.withPutOrChanged(mapOf(other to 1U), constantOne) { it -> it + constantOne }
+        )
     /**
      * Returns difference between the polynomial and the variable represented as a monic monomial.
      */
     public override operator fun LabeledPolynomial<C>.minus(other: Symbol): LabeledPolynomial<C> =
-        with(coefficients) {
-            if (isEmpty()) other.asPolynomial()
-            else LabeledPolynomialAsIs(
-                withPutOrChanged(mapOf(other to 1U), -constantOne) { it -> it - constantOne }
-            )
-        }
+        if (coefficients.isEmpty()) other.asPolynomial()
+        else LabeledPolynomialAsIs(
+            coefficients.withPutOrChanged(mapOf(other to 1U), -constantOne) { it -> it - constantOne }
+        )
     /**
      * Returns product of the polynomial and the variable represented as a monic monomial.
      */
