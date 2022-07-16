@@ -10,6 +10,7 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.invoke
 
 
 /**
@@ -76,17 +77,10 @@ public inline fun <C> LabeledPolynomialWithoutCheck(vararg pairs: Pair<Map<Symbo
  *
  * @see LabeledPolynomialWithoutCheck
  */
-public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in coefs) {
-        val key = entry.key.cleanUp()
-        val value = entry.value
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
+public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> =
+    LabeledPolynomialAsIs(
+        coefs.mapKeys({ key, _ -> key.cleanUp() }, add)
+    )
 
 /**
  * Constructs [LabeledPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -98,17 +92,10 @@ public fun <C> LabeledPolynomial(coefs: Map<Map<Symbol, UInt>, C>, add: (C, C) -
  *
  * @see LabeledPolynomialWithoutCheck
  */
-public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, add: (C, C) -> C) : LabeledPolynomial<C> {
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
+public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, add: (C, C) -> C) : LabeledPolynomial<C> =
+    LabeledPolynomialAsIs(
+        pairs.associateBy({ it.first.cleanUp() }, { it.second }, add)
+    )
 
 /**
  * Constructs [LabeledPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -120,17 +107,10 @@ public fun <C> LabeledPolynomial(pairs: Collection<Pair<Map<Symbol, UInt>, C>>, 
  *
  * @see LabeledPolynomialWithoutCheck
  */
-public fun <C> LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> {
-    val fixedCoefs = mutableMapOf<Map<Symbol, UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return LabeledPolynomial<C>(fixedCoefs)
-}
+public fun <C> LabeledPolynomial(vararg pairs: Pair<Map<Symbol, UInt>, C>, add: (C, C) -> C) : LabeledPolynomial<C> =
+    LabeledPolynomialAsIs(
+        pairs.asIterable().associateBy({ it.first.cleanUp() }, { it.second }, add)
+    )
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
@@ -304,7 +284,7 @@ public class DSL1LabeledPolynomialTermSignatureBuilder {
      */
     public infix fun Symbol.inPowerOf(deg: UInt) {
         if (deg == 0u) return
-        signature[this] = signature.getOrElse(this) { 0u } + deg
+        signature.putOrChange(this, deg) { it -> it + deg }
     }
     /**
      * Declares power of [this] variable of degree [deg].
@@ -362,7 +342,7 @@ public class DSL1LabeledPolynomialBuilder<C>(
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
     public infix fun C.with(signature: Map<Symbol, UInt>) {
-        coefficients[signature] = if (signature in coefficients) add(coefficients[signature]!!, this@with) else this@with
+        coefficients.putOrChange(signature, this@with, add)
     }
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].

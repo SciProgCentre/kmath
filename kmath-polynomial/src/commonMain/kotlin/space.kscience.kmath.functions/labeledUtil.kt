@@ -7,10 +7,7 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmName
@@ -56,7 +53,7 @@ public fun LabeledPolynomial<Double>.substitute(args: Map<Symbol, Double>): Labe
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * power(substitution, deg)
                 }
-                this[newDegs] = if (newDegs in this) this[newDegs]!! + newC else newC
+                putOrChange(newDegs, newC, ::add)
             }
         }
     )
@@ -75,7 +72,7 @@ public fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, args: Map<Symbol, 
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * power(substitution, deg)
                 }
-                this[newDegs] = if (newDegs in this) this[newDegs]!! + newC else newC
+                putOrChange(newDegs, newC, ::add)
             }
         }
     )
@@ -257,10 +254,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.antiderivativeWithRespectTo(
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
-                        put(variable, 1u)
-                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
-                    }
+                    val newDegs = degs.withPutOrChanged(variable, 1u) { it -> it + 1u }
                     put(
                         newDegs,
                         c / multiplyByDoubling(one, newDegs[variable]!!)
@@ -284,10 +278,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
-                        put(variable, order)
-                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
-                    }
+                    val newDegs = degs.withPutOrChanged(variable, order) { it -> it + order }
                     put(
                         newDegs,
                         newDegs[variable]!!.let { deg ->
@@ -314,10 +305,7 @@ public fun <C, A : Field<C>> LabeledPolynomial<C>.nthAntiderivativeWithRespectTo
         buildMap(coefficients.size) {
             coefficients
                 .forEach { (degs, c) ->
-                    val newDegs = buildMap<Symbol, UInt>(degs.size + 1) {
-                        for ((variable, order) in filteredVariablesAndOrders) put(variable, order)
-                        for ((vari, deg) in degs) put(vari, deg + getOrElse(vari) { 0u })
-                    }
+                    val newDegs = mergeBy(degs, filteredVariablesAndOrders) { deg, order -> deg + order }
                     put(
                         newDegs,
                         filteredVariablesAndOrders.entries.fold(c) { acc1, (index, order) ->

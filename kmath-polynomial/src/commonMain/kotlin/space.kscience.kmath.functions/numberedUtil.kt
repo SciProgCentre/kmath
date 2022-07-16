@@ -58,7 +58,7 @@ public fun NumberedPolynomial<Double>.substitute(args: Map<Int, Double>): Number
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * substitution.pow(deg.toInt())
                 }
-                this[newDegs] = if (newDegs !in this) newC else this[newDegs]!! + newC
+                putOrChange(newDegs, newC) { it -> it + newC }
             }
         }
     )
@@ -76,7 +76,7 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>
                     val deg = degs.getOrElse(variable) { 0u }
                     if (deg == 0u) product else product * power(substitution, deg)
                 }
-                this[newDegs] = if (newDegs !in this) newC else this[newDegs]!! + newC
+                putOrChange(newDegs, newC) { it -> it + newC }
             }
         }
     )
@@ -158,8 +158,7 @@ public fun NumberedPolynomial<Double>.substitute(args: Buffer<Double>): Numbered
                     val deg = degs[variable]
                     if (deg == 0u) product else product * args[variable].pow(deg.toInt())
                 }
-                if (newDegs !in this) this[newDegs] = newC
-                else this[newDegs] = this[newDegs]!! + newC
+                putOrChange(newDegs, newC) { it -> it + newC }
             }
         }
     )
@@ -183,8 +182,7 @@ public fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Buffer<C>):
                     val deg = degs[variable]
                     if (deg == 0u) product else product * power(args[variable], deg)
                 }
-                if (newDegs !in this) this[newDegs] = newC
-                else this[newDegs] = this[newDegs]!! + newC
+                putOrChange(newDegs, newC) { it -> it + newC }
             }
         }
     )

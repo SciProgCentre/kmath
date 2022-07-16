@@ -150,12 +150,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else with(coefficients) {
             if (isEmpty()) other.asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } + other
-                    }
+                withPutOrChanged(emptyMap(), other.asConstant()) { it -> it + other }
             )
         }
     /**
@@ -168,12 +163,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else with(coefficients) {
             if (isEmpty()) (-other).asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } - other
-                    }
+                withPutOrChanged(emptyMap(), (-other).asConstant()) { it -> it - other }
             )
         }
     /**
@@ -186,11 +176,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> this
             else -> LabeledPolynomialAsIs(
-                coefficients
-                    .toMutableMap()
-                    .apply {
-                        for (degs in keys) this[degs] = this[degs]!! * other
-                    }
+                coefficients.mapValues { (_, value) -> value * other }
             )
         }
 
@@ -204,12 +190,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         else with(other.coefficients) {
             if (isEmpty()) this@plus.asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = this@plus + getOrElse(degs) { constantZero }
-                    }
+                withPutOrChanged(emptyMap(), this@plus.asConstant()) { it -> this@plus + it }
             )
         }
     /**
@@ -218,18 +199,14 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      * The operation is equivalent to subtraction [this] copies of unit polynomial from [other].
      */
     public override operator fun Int.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        if (this == 0) -other
-        else with(other.coefficients) {
-            if (isEmpty()) this@minus.asPolynomial()
-            else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        forEach { (key, value) -> if (key.isNotEmpty()) this[key] = -value }
-
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = this@minus - getOrElse(degs) { constantZero }
-                    }
+        when {
+            this == 0 -> -other
+            other.coefficients.isEmpty() -> this@minus.asPolynomial()
+            else -> LabeledPolynomialAsIs(
+                buildMap(other.coefficients.size + 1) {
+                    put(emptyMap(), asConstant())
+                    other.coefficients.copyMapToBy(this, { _, c -> -c }, { currentC, newC -> currentC - newC })
+                }
             )
         }
     /**
@@ -242,11 +219,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> other
             else -> LabeledPolynomialAsIs(
-                other.coefficients
-                    .toMutableMap()
-                    .apply {
-                        for (degs in keys) this[degs] = this@times * this[degs]!!
-                    }
+                other.coefficients.mapValues { (_, value) -> this@times * value }
             )
         }
 
@@ -305,41 +278,26 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(other.coefficients) {
             if (isEmpty()) this@plus.asLabeledPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = this@plus + getOrElse(degs) { constantZero }
-                    }
+                withPutOrChanged(emptyMap(), this@plus) { it -> this@plus + it }
             )
         }
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) this@minus.asLabeledPolynomial()
-            else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        forEach { (degs, c) -> if(degs.isNotEmpty()) this[degs] = -c }
-
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = this@minus - getOrElse(degs) { constantZero }
-                    }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@minus.asPolynomial()
+        else LabeledPolynomialAsIs(
+            buildMap(other.coefficients.size + 1) {
+                put(emptyMap(), this@minus)
+                other.coefficients.copyMapToBy(this, { _, c -> -c }, { currentC, newC -> currentC - newC })
+            }
+        )
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
     override operator fun C.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
-            other.coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this@times * this[degs]!!
-                }
+            other.coefficients.mapValues { this@times * it.value }
         )
 
     /**
@@ -349,12 +307,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) other.asLabeledPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } + other
-                    }
+                withPutOrChanged(emptyMap(), other) { it -> it + other }
             )
         }
     /**
@@ -364,12 +317,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) other.asLabeledPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyMap<Symbol, UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } - other
-                    }
+                withPutOrChanged(emptyMap(), -other) { it -> it - other }
             )
         }
     /**
@@ -377,11 +325,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun LabeledPolynomial<C>.times(other: C): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
-            coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this[degs]!! * other
-                }
+            coefficients.mapValues { it.value * other }
         )
 
     /**
@@ -441,38 +385,27 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(other.coefficients) {
             if (isEmpty()) this@plus.asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = mapOf(this@plus to 1U)
-
-                        this[degs] = constantOne + getOrElse(degs) { constantZero }
-                    }
+                withPutOrChanged(mapOf(this@plus to 1U), constantOne) { it -> constantOne + it }
             )
         }
     /**
      * Returns difference between the variable represented as a monic monomial and the polynomial.
      */
     public override operator fun Symbol.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
-        with(other.coefficients) {
-            if (isEmpty()) this@minus.asPolynomial()
-            else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val theVariableDegs = mapOf(this@minus to 1U)
-
-                        forEach { (degs, c) -> if(degs != theVariableDegs) this[degs] = -c }
-
-                        this[theVariableDegs] = constantOne - getOrElse(theVariableDegs) { constantZero }
-                    }
-            )
-        }
+        if (other.coefficients.isEmpty()) this@minus.asPolynomial()
+        else LabeledPolynomialAsIs(
+            buildMap(other.coefficients.size + 1) {
+                put(mapOf(this@minus to 1U), constantOne)
+                other.coefficients.copyMapToBy(this, { _, c -> -c }) { currentC, newC -> currentC - newC }
+            }
+        )
     /**
      * Returns product of the variable represented as a monic monomial and the polynomial.
      */
     public override operator fun Symbol.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
             other.coefficients
-                .mapKeys { (degs, _) -> degs.toMutableMap().also{ it[this] = if (this in it) it[this]!! + 1U else 1U } }
+                .mapKeys { (degs, _) -> degs.withPutOrChanged(this, 1u) { it -> it + 1u } }
         )
 
     /**
@@ -482,12 +415,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) other.asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = mapOf(other to 1U)
-
-                        this[degs] = constantOne + getOrElse(degs) { constantZero }
-                    }
+                withPutOrChanged(mapOf(other to 1U), constantOne) { it -> it + constantOne }
             )
         }
     /**
@@ -497,12 +425,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) other.asPolynomial()
             else LabeledPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = mapOf(other to 1U)
-
-                        this[degs] = getOrElse(degs) { constantZero } - constantOne
-                    }
+                withPutOrChanged(mapOf(other to 1U), -constantOne) { it -> it - constantOne }
             )
         }
     /**
@@ -511,7 +434,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override operator fun LabeledPolynomial<C>.times(other: Symbol): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
             coefficients
-                .mapKeys { (degs, _) -> degs.toMutableMap().also{ it[other] = if (other in it) it[other]!! + 1U else 1U } }
+                .mapKeys { (degs, _) -> degs.withPutOrChanged(other, 1u) { it -> it + 1u } }
         )
 
     /**
@@ -526,10 +449,7 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun LabeledPolynomial<C>.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
-            buildMap(coefficients.size + other.coefficients.size) {
-                coefficients.mapValuesTo(this) { it.value }
-                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
-            }
+            mergeBy(coefficients, other.coefficients) { c1, c2 -> c1 + c2 }
         )
     /**
      * Returns difference of the polynomials.
@@ -537,8 +457,8 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     override operator fun LabeledPolynomial<C>.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         LabeledPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                coefficients.mapValuesTo(this) { it.value }
-                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
+                coefficients.copyTo(this)
+                other.coefficients.copyMapToBy(this, { _, c -> -c }, { currentC, newC -> currentC - newC })
             }
         )
     /**
@@ -548,10 +468,9 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
         LabeledPolynomialAsIs(
             buildMap(coefficients.size * other.coefficients.size) {
                 for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
-                    val degs = degs1.toMutableMap()
-                    degs2.mapValuesTo(degs) { (variable, deg) -> degs.getOrElse(variable) { 0u } + deg }
+                    val degs = mergeBy(degs1, degs2) { deg1, deg2 -> deg1 + deg2 }
                     val c = c1 * c2
-                    this[degs] = if (degs in this) this[degs]!! + c else c
+                    this.putOrChange(degs, c) { it -> it + c }
                 }
             }
         )
@@ -581,10 +500,8 @@ public class LabeledPolynomialSpace<C, A : Ring<C>>(
     public override val LabeledPolynomial<C>.degrees: Map<Symbol, UInt>
         get() =
             buildMap {
-                coefficients.entries.forEach { (degs, _) ->
-                    degs.mapValuesTo(this) { (variable, deg) ->
-                        max(getOrElse(variable) { 0u }, deg)
-                    }
+                coefficients.keys.forEach { degs ->
+                    degs.copyToBy(this, ::max)
                 }
             }
     /**

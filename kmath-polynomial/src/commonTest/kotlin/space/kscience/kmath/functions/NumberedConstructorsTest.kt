@@ -23,8 +23,8 @@ class NumberedConstructorsTest {
             ),
             Int.algebra.numberedPolynomialSpace {
                 NumberedPolynomialDSL1 {
-                    5 { 1 pow 2u; 3 pow 3u }
-                    (-6) { 2 pow 1u }
+                    5 { 0 pow 2u; 2 pow 3u }
+                    (-6) { 1 pow 1u }
                 }
             },
             "test 1"
@@ -47,8 +47,8 @@ class NumberedConstructorsTest {
             ),
             Int.algebra.numberedPolynomialSpace {
                 NumberedPolynomialDSL1 {
-                    5 { 1 pow 1u; 1 pow 1u }
-                    (-6) { 1 pow 2u }
+                    5 { 0 pow 1u; 0 pow 1u }
+                    (-6) { 0 pow 2u }
                 }
             },
             "test 3"
@@ -59,8 +59,8 @@ class NumberedConstructorsTest {
             ),
             Int.algebra.numberedPolynomialSpace {
                 NumberedPolynomialDSL1 {
-                    5 { 1 pow 1u; 1 pow 1u }
-                    (-6) { 1 pow 2u; 3 pow 0u }
+                    5 { 0 pow 1u; 0 pow 1u }
+                    (-6) { 0 pow 2u; 2 pow 0u }
                 }
             },
             "test 3"

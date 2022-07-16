@@ -109,11 +109,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> this
             else -> ListPolynomial(
-                coefficients
-                    .toMutableList()
-                    .apply {
-                        for (deg in indices) this[deg] = this[deg] * other
-                    }
+                coefficients.map { it * other }
             )
         }
 
@@ -167,11 +163,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> other
             else -> ListPolynomial(
-                other.coefficients
-                    .toMutableList()
-                    .apply {
-                        for (deg in indices) this[deg] = this@times * this[deg]
-                    }
+                other.coefficients.map { this@times * it }
             )
         }
 
@@ -214,11 +206,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun C.times(other: ListPolynomial<C>): ListPolynomial<C> =
         ListPolynomial(
-            other.coefficients
-                .toMutableList()
-                .apply {
-                    for (deg in indices) this[deg] = this@times * this[deg]
-                }
+            other.coefficients.map { this@times * it }
         )
 
     /**
@@ -258,11 +246,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
      */
     public override operator fun ListPolynomial<C>.times(other: C): ListPolynomial<C> =
         ListPolynomial(
-            coefficients
-                .toMutableList()
-                .apply {
-                    for (deg in indices) this[deg] = this[deg] * other
-                }
+            coefficients.map { it * other }
         )
 
     /**

@@ -75,17 +75,10 @@ public inline fun <C> NumberedPolynomialWithoutCheck(vararg pairs: Pair<List<UIn
  *
  * @see NumberedPolynomialWithoutCheck
  */
-public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
-    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-
-    for (entry in coefs) {
-        val key = entry.key.cleanUp()
-        val value = entry.value
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return NumberedPolynomial<C>(fixedCoefs)
-}
+public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> =
+    NumberedPolynomialAsIs(
+        coefs.mapKeys({ key, _ -> key.cleanUp() }, add)
+    )
 
 /**
  * Constructs [NumberedPolynomial] with provided collection of [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -97,17 +90,10 @@ public fun <C> NumberedPolynomial(coefs: Map<List<UInt>, C>, add: (C, C) -> C) :
  *
  * @see NumberedPolynomialWithoutCheck
  */
-public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (C, C) -> C) : NumberedPolynomial<C> {
-    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return NumberedPolynomial<C>(fixedCoefs)
-}
+public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (C, C) -> C) : NumberedPolynomial<C> =
+    NumberedPolynomialAsIs(
+        pairs.associateBy({ it.first.cleanUp() }, { it.second }, add)
+    )
 
 /**
  * Constructs [NumberedPolynomial] with provided array [pairs] of pairs "term's signature &mdash; term's coefficient".
@@ -119,17 +105,10 @@ public fun <C> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, add: (
  *
  * @see NumberedPolynomialWithoutCheck
  */
-public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> {
-    val fixedCoefs = mutableMapOf<List<UInt>, C>()
-
-    for (entry in pairs) {
-        val key = entry.first.cleanUp()
-        val value = entry.second
-        fixedCoefs[key] = if (key in fixedCoefs) add(fixedCoefs[key]!!, value) else value
-    }
-
-    return NumberedPolynomial<C>(fixedCoefs)
-}
+public fun <C> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, add: (C, C) -> C) : NumberedPolynomial<C> =
+    NumberedPolynomialAsIs(
+        pairs.asIterable().associateBy({ it.first.cleanUp() }, { it.second }, add)
+    )
 
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
@@ -349,7 +328,7 @@ public class DSL1NumberedPolynomialBuilder<C>(
      * coefficients is zero at any moment the monomial won't be removed but will be left as it is.
      */
     public infix fun C.with(signature: List<UInt>) {
-        coefficients[signature] = if (signature in coefficients) add(coefficients[signature]!!, this@with) else this@with
+        coefficients.putOrChange(signature, this@with, add)
     }
     /**
      * Declares monomial with [this] coefficient and signature constructed by [block].

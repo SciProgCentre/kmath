@@ -71,13 +71,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         if (other == 0) this
         else
             NumberedPolynomialAsIs(
-                coefficients
-                    .toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } + other
-                    }
+                coefficients.withPutOrChanged(emptyList(), other.asConstant()) { it -> it + other }
             )
     /**
      * Returns difference between the polynomial and the integer represented as a polynomial.
@@ -88,13 +82,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         if (other == 0) this
         else
             NumberedPolynomialAsIs(
-                coefficients
-                    .toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } - other
-                    }
+                coefficients.withPutOrChanged(emptyList(), (-other).asConstant()) { it -> it - other }
             )
     /**
      * Returns product of the polynomial and the integer represented as a polynomial.
@@ -106,11 +94,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> this
             else -> NumberedPolynomialAsIs(
-                coefficients
-                    .toMutableMap()
-                    .apply {
-                        for (degs in keys) this[degs] = this[degs]!! * other
-                    }
+                coefficients.mapValues { it.value * other }
             )
         }
 
@@ -123,13 +107,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         if (this == 0) other
         else
             NumberedPolynomialAsIs(
-                other.coefficients
-                    .toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = this@plus + getOrElse(degs) { constantZero }
-                    }
+                other.coefficients.withPutOrChanged(emptyList(), this@plus.asConstant()) { it -> this@plus + it }
             )
     /**
      * Returns difference between the integer represented as a polynomial and the polynomial.
@@ -162,11 +140,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
             0 -> zero
             1 -> other
             else -> NumberedPolynomialAsIs(
-                other.coefficients
-                    .toMutableMap()
-                    .apply {
-                        for (degs in keys) this[degs] = this@times * this[degs]!!
-                    }
+                other.coefficients.mapValues { this@times * it.value }
             )
         }
 
@@ -177,12 +151,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         with(other.coefficients) {
             if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to this@plus))
             else NumberedPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = this@plus + getOrElse(degs) { constantZero }
-                    }
+                withPutOrChanged(emptyList(), this@plus) { it -> this@plus + it }
             )
         }
     /**
@@ -207,11 +176,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun C.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
-            other.coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this@times * this[degs]!!
-                }
+            other.coefficients.mapValues { this@times * it.value }
         )
 
     /**
@@ -221,12 +186,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } + other
-                    }
+                withPutOrChanged(emptyList(), other) { it -> it + other }
             )
         }
     /**
@@ -236,12 +196,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
         with(coefficients) {
             if (isEmpty()) NumberedPolynomialAsIs(mapOf(emptyList<UInt>() to other))
             else NumberedPolynomialAsIs(
-                toMutableMap()
-                    .apply {
-                        val degs = emptyList<UInt>()
-
-                        this[degs] = getOrElse(degs) { constantZero } - other
-                    }
+                withPutOrChanged(emptyList(), -other) { it -> it - other }
             )
         }
     /**
@@ -249,11 +204,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun NumberedPolynomial<C>.times(other: C): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
-            coefficients
-                .toMutableMap()
-                .apply {
-                    for (degs in keys) this[degs] = this[degs]!! * other
-                }
+            coefficients.mapValues { it.value * other }
         )
 
     /**
@@ -274,10 +225,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
      */
     override operator fun NumberedPolynomial<C>.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
-            buildMap(coefficients.size + other.coefficients.size) {
-                coefficients.mapValuesTo(this) { it.value }
-                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! + value else value }
-            }
+            mergeBy(coefficients, other.coefficients) { c1, c2 -> c1 + c2 }
         )
     /**
      * Returns difference of the polynomials.
@@ -285,8 +233,8 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
     override operator fun NumberedPolynomial<C>.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         NumberedPolynomialAsIs(
             buildMap(coefficients.size + other.coefficients.size) {
-                coefficients.mapValuesTo(this) { it.value }
-                other.coefficients.mapValuesTo(this) { (key, value) -> if (key in this) this[key]!! - value else -value }
+                coefficients.copyTo(this)
+                other.coefficients.copyMapToBy(this, { _, c -> -c }, { currentC, newC -> currentC - newC })
             }
         )
     /**
@@ -300,7 +248,7 @@ public class NumberedPolynomialSpace<C, A : Ring<C>>(
                         (0..max(degs1.lastIndex, degs2.lastIndex))
                             .map { degs1.getOrElse(it) { 0U } + degs2.getOrElse(it) { 0U } }
                     val c = c1 * c2
-                    this[degs] = if (degs in this) this[degs]!! + c else c
+                    putOrChange(degs, c) { it -> it + c }
                 }
             }
         )
