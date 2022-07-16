@@ -247,10 +247,6 @@ public open class PolynomialSpace<C, A>(
             )
         }
     }
-    /**
-     * Raises [arg] to the integer power [exponent].
-     */ // TODO: To optimize boxing
-    override fun power(arg: Polynomial<C>, exponent: UInt): Polynomial<C> = exponentiateBySquaring(arg, exponent)
 
     /**
      * Instance of zero polynomial (zero of the polynomial ring).
