@@ -60,7 +60,7 @@ public data class ListPolynomial<C>(
  * @param A type of provided underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public open class ListPolynomialSpace<C, A : Ring<C>>(
+public open class ListPolynomialSpace<C, out A : Ring<C>>(
     public override val ring: A,
 ) : PolynomialSpaceOverRing<C, ListPolynomial<C>, A> {
     /**
@@ -366,7 +366,7 @@ public open class ListPolynomialSpace<C, A : Ring<C>>(
  * @param A type of underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public class ScalableListPolynomialSpace<C, A>(
+public class ScalableListPolynomialSpace<C, out A>(
     ring: A,
 ) : ListPolynomialSpace<C, A>(ring), ScaleOperations<ListPolynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
     override fun scale(a: ListPolynomial<C>, value: Double): ListPolynomial<C> =

@@ -252,7 +252,7 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, A: Ring<C>> : PolynomialSpace<C, P> {
+public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, out A: Ring<C>> : PolynomialSpace<C, P> {
 
     /**
      * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.

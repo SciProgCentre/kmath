@@ -59,7 +59,7 @@ internal constructor(
  * @param A type of provided underlying ring of constants. It's [Ring] of [C].
  * @param ring underlying ring of constants of type [A].
  */
-public class NumberedPolynomialSpace<C, A : Ring<C>>(
+public class NumberedPolynomialSpace<C, out A : Ring<C>>(
     public override val ring: A,
 ) : PolynomialSpaceOverRing<C, NumberedPolynomial<C>, A> {
     /**

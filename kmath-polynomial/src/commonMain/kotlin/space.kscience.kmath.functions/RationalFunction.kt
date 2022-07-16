@@ -464,7 +464,7 @@ public interface RationalFunctionSpaceOverRing<
         C,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
-        A: Ring<C>
+        out A: Ring<C>
         > : RationalFunctionSpace<C, P, R> {
 
     /**
@@ -566,7 +566,7 @@ public interface RationalFunctionSpaceOverPolynomialSpace<
         C,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
-        AP: PolynomialSpace<C, P>,
+        out AP: PolynomialSpace<C, P>,
         > : RationalFunctionSpace<C, P, R> {
 
     /**
@@ -1341,7 +1341,7 @@ public interface MultivariateRationalFunctionSpaceOverMultivariatePolynomialSpac
         V,
         P: Polynomial<C>,
         R: RationalFunction<C, P>,
-        AP: MultivariatePolynomialSpace<C, V, P>,
+        out AP: MultivariatePolynomialSpace<C, V, P>,
         > : RationalFunctionSpaceOverPolynomialSpace<C, P, R, AP>, MultivariateRationalFunctionSpace<C, V, P, R> {
     /**
      * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.

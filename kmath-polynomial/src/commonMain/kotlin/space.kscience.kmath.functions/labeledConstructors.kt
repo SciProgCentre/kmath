@@ -416,6 +416,261 @@ public inline fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomial
 @UnstableKMathAPI
 public inline fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL1(initialCapacity: Int? = null, block: DSL1LabeledPolynomialBuilder<C>.() -> Unit) : LabeledPolynomial<C> = DSL1LabeledPolynomialBuilder({ left: C, right: C -> left + right }, initialCapacity).apply(block).build()
 
+/**
+ * Marks DSL that allows to more simply create [LabeledPolynomial]s with good performance.
+ *
+ * For example, polynomial \(5 a^2 c^3 - 6 b\) can be described as
+ * ```
+ * Int.algebra {
+ *     val numberedPolynomial : NumberedPolynomial<Int> = NumberedPolynomial {
+ *         5 { a inPowerOf 2u; c inPowerOf 3u } // 5 a^2 c^3 +
+ *         (-6) { b inPowerOf 1u }              // (-6) b^1
+ *     }
+ * }
+ * ```
+ * @usesMathJax
+ */
+@DslMarker
+@UnstableKMathAPI
+internal annotation class LabeledPolynomialBuilderDSL2
+
+/**
+ * Builder of [LabeledPolynomial]. It should be used as an implicit context for lambdas that describe [LabeledPolynomial].
+ */
+@UnstableKMathAPI
+@LabeledPolynomialBuilderDSL2
+public class DSL2LabeledPolynomialBuilder<C>(
+    private val ring: Ring<C>,
+    /**
+     * Initial capacity of coefficients map.
+     */
+    initialCapacity: Int? = null
+) {
+    /**
+     * Coefficients storage. Any declaration of any monomial updates the storage.
+     * Afterward the storage will be used as a resulting coefficients map.
+     */
+    private val coefficients: MutableMap<Map<Symbol, UInt>, C> = if (initialCapacity != null) LinkedHashMap(initialCapacity) else LinkedHashMap()
+
+    /**
+     * Builds the resulting coefficients map.
+     *
+     * In fact, it just returns [coefficients] as regular coefficients map of type `Map<Map<Symbol, UInt>, C>`.
+     */
+    @PublishedApi
+    internal fun build(): LabeledPolynomial<C> = LabeledPolynomial<C>(coefficients)
+
+    public inner class Term internal constructor(
+        internal val signature: Map<Symbol, UInt> = HashMap(),
+        internal val coefficient: C
+    )
+
+    private inline fun submit(signature: Map<Symbol, UInt>, onPut: Ring<C>.() -> C, onChange: Ring<C>.(C) -> C) {
+        coefficients.putOrChange<_, C>(signature, { ring.onPut() }, { ring.onChange(it) })
+    }
+
+    private inline fun submit(signature: Map<Symbol, UInt>, lazyCoefficient: Ring<C>.() -> C) {
+        submit(signature, lazyCoefficient, { it + lazyCoefficient() })
+    }
+
+    private fun submit(signature: Map<Symbol, UInt>, coefficient: C) {
+        submit(signature) { coefficient }
+    }
+
+    // TODO: `@submit` will be resolved differently. Change it to `@C`.
+    private fun C.submit() = submit(emptyMap(), { this@submit })
+
+    private fun Symbol.submit() = submit(mapOf(this to 1u), { one })
+
+    private fun Term.submit(): Submit {
+        submit(signature, coefficient)
+        return Submit
+    }
+
+    public object Submit
+
+    public operator fun C.unaryPlus(): Submit {
+        submit()
+        return Submit
+    }
+
+    public operator fun C.unaryMinus(): Submit {
+        submit(emptyMap(), { -this@unaryMinus }, { it - this@unaryMinus })
+        return Submit
+    }
+
+    public operator fun C.plus(other: C): Submit {
+        submit(emptyMap(), { this@plus + other })
+        return Submit
+    }
+
+    public operator fun C.minus(other: C): Submit {
+        submit(emptyMap(), { this@minus - other })
+        return Submit
+    }
+
+    public operator fun C.times(other: C): C = ring { this@times * other }
+
+    public operator fun C.plus(other: Symbol): Submit {
+        submit(emptyMap(), this)
+        submit(mapOf(other to 1u), ring.one)
+        return Submit
+    }
+
+    public operator fun C.minus(other: Symbol): Submit {
+        submit(emptyMap(), this)
+        submit(mapOf(other to 1u), { -one }, { it - one })
+        return Submit
+    }
+
+    public operator fun C.times(other: Symbol): Term = Term(mapOf(other to 1u), this)
+
+    public operator fun C.plus(other: Term): Submit {
+        submit(emptyMap(), this)
+        other.submit()
+        return Submit
+    }
+
+    public operator fun C.minus(other: Term): Submit {
+        submit(emptyMap(), this)
+        submit(other.signature, { -other.coefficient }, { it - other.coefficient })
+        return Submit
+    }
+
+    public operator fun C.times(other: Term): Term = Term(other.signature, ring { this@times * other.coefficient })
+
+    public operator fun Symbol.plus(other: C): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Symbol.minus(other: C): Submit {
+        this.submit()
+        submit(emptyMap(), { -other }, { it - other })
+        return Submit
+    }
+
+    public operator fun Symbol.times(other: C): Term = Term(mapOf(this to 1u), other)
+
+    public operator fun Symbol.unaryPlus(): Submit {
+        this.submit()
+        return Submit
+    }
+
+    public operator fun Symbol.unaryMinus(): Submit {
+        submit(mapOf(this to 1u), { -one }, { it - one })
+        return Submit
+    }
+
+    public operator fun Symbol.plus(other: Symbol): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Symbol.minus(other: Symbol): Submit {
+        this.submit()
+        submit(mapOf(other to 1u), { -one }, { it - one })
+        return Submit
+    }
+
+    public operator fun Symbol.times(other: Symbol): Term =
+        if (this == other) Term(mapOf(this to 2u), ring.one)
+        else Term(mapOf(this to 1u, other to 1u), ring.one)
+
+    public operator fun Symbol.plus(other: Term): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Symbol.minus(other: Term): Submit {
+        this.submit()
+        submit(other.signature, { -other.coefficient }, { it - other.coefficient })
+        return Submit
+    }
+
+    public operator fun Symbol.times(other: Term): Term =
+        Term(
+            other.signature.withPutOrChanged(this, 1u) { it -> it + 1u },
+            other.coefficient
+        )
+
+    public operator fun Term.plus(other: C): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Term.minus(other: C): Submit {
+        this.submit()
+        submit(emptyMap(), { -other }, { it - other })
+        return Submit
+    }
+
+    public operator fun Term.times(other: C): Term =
+        Term(
+            signature,
+            ring { coefficient * other }
+        )
+
+    public operator fun Term.plus(other: Symbol): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Term.minus(other: Symbol): Submit {
+        this.submit()
+        submit(mapOf(other to 1u), { -one }, { it - one })
+        return Submit
+    }
+
+    public operator fun Term.times(other: Symbol): Term =
+        Term(
+            signature.withPutOrChanged(other, 1u) { it -> it + 1u },
+            coefficient
+        )
+
+    public operator fun Term.unaryPlus(): Submit {
+        this.submit()
+        return Submit
+    }
+
+    public operator fun Term.unaryMinus(): Submit {
+        submit(signature, { -coefficient }, { it - coefficient })
+        return Submit
+    }
+
+    public operator fun Term.plus(other: Term): Submit {
+        this.submit()
+        other.submit()
+        return Submit
+    }
+
+    public operator fun Term.minus(other: Term): Submit {
+        this.submit()
+        submit(other.signature, { -other.coefficient }, { it - other.coefficient })
+        return Submit
+    }
+
+    public operator fun Term.times(other: Term): Term =
+        Term(
+            mergeBy(signature, other.signature) { deg1, deg2 -> deg1 + deg2 },
+            ring { coefficient * other.coefficient }
+        )
+}
+
+//@UnstableKMathAPI
+//public fun <C> Ring<C>.LabeledPolynomialDSL2(initialCapacity: Int? = null, block: DSL2LabeledPolynomialBuilder<C>.() -> Unit): LabeledPolynomial<C> = DSL2LabeledPolynomialBuilder(this, initialCapacity).apply(block).build()
+
+@UnstableKMathAPI
+public fun <C, A: Ring<C>> LabeledPolynomialSpace<C, A>.LabeledPolynomialDSL2(initialCapacity: Int? = null, block: DSL2LabeledPolynomialBuilder<C>.() -> Unit): LabeledPolynomial<C> = DSL2LabeledPolynomialBuilder(ring, initialCapacity).apply(block).build()
+
+@UnstableKMathAPI
+public fun <C, A: Ring<C>> LabeledRationalFunctionSpace<C, A>.LabeledPolynomialDSL2(initialCapacity: Int? = null, block: DSL2LabeledPolynomialBuilder<C>.() -> Unit): LabeledPolynomial<C> = DSL2LabeledPolynomialBuilder(ring, initialCapacity).apply(block).build()
+
 // Waiting for context receivers :( FIXME: Replace with context receivers when they will be available
 
 /**
