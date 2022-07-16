@@ -25,7 +25,7 @@ internal inline fun diff(
     DSField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
 }
 
-internal class AutoDiffTest {
+internal class DSTest {
     private val x by symbol
     private val y by symbol
 

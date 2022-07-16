@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Autodiff for generic algebra elements in core!
 
 ### Changed
 - Kotlin 1.7
