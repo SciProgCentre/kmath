@@ -188,7 +188,7 @@ public interface LinearSpace<T, out A : Ring<T>> {
          */
         public fun <T : Any, A : Ring<T>> buffered(
             algebra: A,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            bufferFactory: BufferFactory<T> = BufferFactory(Buffer.Companion::boxing),
         ): LinearSpace<T, A> = BufferedLinearSpace(BufferRingOps(algebra, bufferFactory))
 
         @Deprecated("use DoubleField.linearSpace")
