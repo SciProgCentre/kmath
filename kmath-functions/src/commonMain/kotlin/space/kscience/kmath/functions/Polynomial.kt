@@ -10,7 +10,6 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
-import kotlin.jvm.JvmInline
 import kotlin.math.max
 import kotlin.math.min
 
@@ -20,8 +19,7 @@ import kotlin.math.min
  *
  * @param C the type of constants.
  */
-@JvmInline
-public value class Polynomial<C>(
+public data class Polynomial<out C>(
     /**
      * List that contains coefficients of the polynomial.
      *
