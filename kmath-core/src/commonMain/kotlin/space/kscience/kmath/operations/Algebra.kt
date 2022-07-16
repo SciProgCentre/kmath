@@ -8,12 +8,7 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
-
-/**
- * Stub for DSL the [Algebra] is.
- */
-@DslMarker
-public annotation class KMathContext
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * Represents an algebraic structure.
@@ -21,6 +16,12 @@ public annotation class KMathContext
  * @param T the type of element of this structure.
  */
 public interface Algebra<T> {
+
+    /**
+     * Provide a factory for buffers, associated with this [Algebra]
+     */
+    public val bufferFactory: MutableBufferFactory<T> get() = MutableBufferFactory.boxing()
+
     /**
      * Wraps a raw string to [T] object. This method is designed for three purposes:
      *

@@ -32,12 +32,10 @@ fun main() {
     val shape = Shape(dim, dim)
 
 
-    // automatically build context most suited for given type.
-    val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
     // specialized nd-field for Double. It works as generic Double field as well.
-    val realField = DoubleField.ndAlgebra
-    //A generic boxing field. It should be used for objects, not primitives.
-    val boxingField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
+    val doubleField = DoubleField.ndAlgebra
+    //A generic field. It should be used for objects, not primitives.
+    val genericField = BufferedFieldOpsND(DoubleField)
     // Nd4j specialized field.
     val nd4jField = DoubleField.nd4j
     //viktor field
@@ -46,14 +44,14 @@ fun main() {
     val parallelField = DoubleField.ndStreaming(dim, dim)
 
     measureAndPrint("Boxing addition") {
-        boxingField {
+        genericField {
             var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Specialized addition") {
-        realField {
+        doubleField {
             var res: StructureND<Double> = one(shape)
             repeat(n) { res += 1.0 }
         }
@@ -80,15 +78,8 @@ fun main() {
         }
     }
 
-    measureAndPrint("Automatic field addition") {
-        autoField {
-            var res: StructureND<Double> = one(shape)
-            repeat(n) { res += 1.0 }
-        }
-    }
-
     measureAndPrint("Lazy addition") {
-        val res = realField.one(shape).mapAsync(GlobalScope) {
+        val res = doubleField.one(shape).mapAsync(GlobalScope) {
             var c = 0.0
             repeat(n) {
                 c += 1.0

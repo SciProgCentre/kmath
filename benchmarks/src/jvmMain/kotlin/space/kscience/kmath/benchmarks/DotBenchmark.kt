@@ -16,7 +16,6 @@ import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -84,7 +83,7 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace(Buffer.Companion::auto)) {
+    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 

@@ -14,14 +14,34 @@ import kotlin.reflect.KClass
  *
  * @param T the type of buffer.
  */
-public typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
+public fun interface BufferFactory<T> {
+    public operator fun invoke(size: Int, builder: (Int) -> T): Buffer<T>
+
+    public companion object{
+        public inline fun <reified T : Any> auto(): BufferFactory<T> =
+            BufferFactory(Buffer.Companion::auto)
+
+        public fun <T> boxing(): BufferFactory<T> =
+            BufferFactory(Buffer.Companion::boxing)
+    }
+}
 
 /**
  * Function that produces [MutableBuffer] from its size and function that supplies values.
  *
  * @param T the type of buffer.
  */
-public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
+public fun interface MutableBufferFactory<T> : BufferFactory<T> {
+    override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T>
+
+    public companion object {
+        public inline fun <reified T : Any> auto(): MutableBufferFactory<T> =
+            MutableBufferFactory(MutableBuffer.Companion::auto)
+
+        public fun <T> boxing(): MutableBufferFactory<T> =
+            MutableBufferFactory(MutableBuffer.Companion::boxing)
+    }
+}
 
 /**
  * A generic read-only random-access structure for both primitives and objects.
