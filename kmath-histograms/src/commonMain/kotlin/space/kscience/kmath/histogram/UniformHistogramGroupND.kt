@@ -28,7 +28,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
     private val lower: Buffer<Double>,
     private val upper: Buffer<Double>,
     private val binNums: IntArray = IntArray(lower.size) { 20 },
-    private val bufferFactory: BufferFactory<V> = Buffer.Companion::boxing,
+    private val bufferFactory: BufferFactory<V> = BufferFactory(Buffer.Companion::boxing),
 ) : HistogramGroupND<Double, HyperSquareDomain, V> {
 
     init {
@@ -114,7 +114,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
 public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     valueAlgebraND: FieldOpsND<V, A>,
     vararg ranges: ClosedFloatingPointRange<Double>,
-    bufferFactory: BufferFactory<V> = Buffer.Companion::boxing,
+    bufferFactory: BufferFactory<V> = BufferFactory(Buffer.Companion::boxing),
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
     ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
@@ -140,7 +140,7 @@ public fun Histogram.Companion.uniformDoubleNDFromRanges(
 public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     valueAlgebraND: FieldOpsND<V, A>,
     vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
-    bufferFactory: BufferFactory<V> = Buffer.Companion::boxing,
+    bufferFactory: BufferFactory<V> = BufferFactory(Buffer.Companion::boxing),
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
     ListBuffer(

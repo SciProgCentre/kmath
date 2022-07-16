@@ -6,6 +6,7 @@
 package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExponentialOperations
@@ -22,10 +23,13 @@ public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleFi
 
     override fun tan(arg: StructureND<Double>): MultikTensor<Double> = sin(arg) / cos(arg)
 
+    @PerformancePitfall
     override fun asin(arg: StructureND<Double>): MultikTensor<Double>  = arg.map { asin(it) }
 
+    @PerformancePitfall
     override fun acos(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acos(it) }
 
+    @PerformancePitfall
     override fun atan(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atan(it) }
 
     override fun exp(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.exp(arg.asMultik().array).wrap()
@@ -42,10 +46,13 @@ public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleFi
         return (expPlus - expMinus) / (expPlus + expMinus)
     }
 
+    @PerformancePitfall
     override fun asinh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asinh(it) }
 
+    @PerformancePitfall
     override fun acosh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acosh(it) }
 
+    @PerformancePitfall
     override fun atanh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atanh(it) }
 }
 

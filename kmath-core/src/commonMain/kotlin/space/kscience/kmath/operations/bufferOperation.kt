@@ -61,31 +61,39 @@ public inline fun <reified T> Buffer<T>.toTypedArray(): Array<T> = Array(size, :
 /**
  * Create a new buffer from this one with the given mapping function and using [Buffer.Companion.auto] buffer factory.
  */
-public inline fun <T : Any, reified R : Any> Buffer<T>.map(block: (T) -> R): Buffer<R> =
+public inline fun <T, reified R : Any> Buffer<T>.map(block: (T) -> R): Buffer<R> =
     Buffer.auto(size) { block(get(it)) }
 
 /**
  * Create a new buffer from this one with the given mapping function.
  * Provided [bufferFactory] is used to construct the new buffer.
  */
-public inline fun <T : Any, R : Any> Buffer<T>.map(
+public inline fun <T, R> Buffer<T>.map(
     bufferFactory: BufferFactory<R>,
     crossinline block: (T) -> R,
 ): Buffer<R> = bufferFactory(size) { block(get(it)) }
 
 /**
- * Create a new buffer from this one with the given indexed mapping function.
- * Provided [BufferFactory] is used to construct the new buffer.
+ * Create a new buffer from this one with the given mapping (indexed) function.
+ * Provided [bufferFactory] is used to construct the new buffer.
  */
-public inline fun <T : Any, reified R : Any> Buffer<T>.mapIndexed(
-    bufferFactory: BufferFactory<R> = Buffer.Companion::auto,
+public inline fun <T, R> Buffer<T>.mapIndexed(
+    bufferFactory: BufferFactory<R>,
     crossinline block: (index: Int, value: T) -> R,
 ): Buffer<R> = bufferFactory(size) { block(it, get(it)) }
 
 /**
+ * Create a new buffer from this one with the given indexed mapping function.
+ * Provided [BufferFactory] is used to construct the new buffer.
+ */
+public inline fun <T, reified R : Any> Buffer<T>.mapIndexed(
+    crossinline block: (index: Int, value: T) -> R,
+): Buffer<R> = BufferFactory<R>(Buffer.Companion::auto).invoke(size) { block(it, get(it)) }
+
+/**
  * Fold given buffer according to [operation]
  */
-public inline fun <T : Any, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R): R {
+public inline fun <T, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R): R {
     var accumulator = initial
     for (index in this.indices) accumulator = operation(accumulator, get(index))
     return accumulator
@@ -95,9 +103,9 @@ public inline fun <T : Any, R> Buffer<T>.fold(initial: R, operation: (acc: R, T)
  * Zip two buffers using given [transform].
  */
 @UnstableKMathAPI
-public inline fun <T1 : Any, T2 : Any, reified R : Any> Buffer<T1>.zip(
+public inline fun <T1, T2 : Any, reified R : Any> Buffer<T1>.zip(
     other: Buffer<T2>,
-    bufferFactory: BufferFactory<R> = Buffer.Companion::auto,
+    bufferFactory: BufferFactory<R> = BufferFactory(Buffer.Companion::auto),
     crossinline transform: (T1, T2) -> R,
 ): Buffer<R> {
     require(size == other.size) { "Buffer size mismatch in zip: expected $size but found ${other.size}" }
