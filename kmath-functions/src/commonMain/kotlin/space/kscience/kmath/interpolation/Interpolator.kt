@@ -9,6 +9,7 @@ package space.kscience.kmath.interpolation
 
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
+import space.kscience.kmath.functions.asFunction
 import space.kscience.kmath.functions.value
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
@@ -59,3 +60,33 @@ public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     val pointSet = XYColumnarData.of(data.map { it.first }.asBuffer(), data.map { it.second }.asBuffer())
     return interpolatePolynomials(pointSet)
 }
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    x: Buffer<T>,
+    y: Buffer<T>,
+): (T) -> T? = interpolatePolynomials(x, y).asFunction(algebra)
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    data: Map<T, T>,
+): (T) -> T? = interpolatePolynomials(data).asFunction(algebra)
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    data: List<Pair<T, T>>,
+): (T) -> T? = interpolatePolynomials(data).asFunction(algebra)
+
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    x: Buffer<T>,
+    y: Buffer<T>,
+    defaultValue: T,
+): (T) -> T = interpolatePolynomials(x, y).asFunction(algebra, defaultValue)
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    data: Map<T, T>,
+    defaultValue: T,
+): (T) -> T = interpolatePolynomials(data).asFunction(algebra, defaultValue)
+
+public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolate(
+    data: List<Pair<T, T>>,
+    defaultValue: T,
+): (T) -> T = interpolatePolynomials(data).asFunction(algebra, defaultValue)

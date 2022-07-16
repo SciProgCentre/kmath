@@ -7,6 +7,7 @@ import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
@@ -74,6 +75,7 @@ public class DoubleTensorFlowAlgebra internal constructor(
  *
  * The resulting tensor is available outside of scope
  */
+@UnstableKMathAPI
 public fun DoubleField.produceWithTF(
     block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
 ): StructureND<Double> = Graph().use { graph ->

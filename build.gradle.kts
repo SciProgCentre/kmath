@@ -1,22 +1,23 @@
 plugins {
     id("ru.mipt.npm.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC"
+    id("org.jetbrains.kotlinx.kover") version "0.5.0"
 }
 
 allprojects {
     repositories {
+        maven("https://repo.kotlin.link")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         mavenCentral()
     }
 
     group = "space.kscience"
-    version = "0.3.0-dev-17"
+    version = "0.3.1-dev-1"
 }
 
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
-    plugins.withId("org.jetbrains.dokka"){
+    plugins.withId("org.jetbrains.dokka") {
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
             dependsOn(tasks["assemble"])
 
@@ -50,12 +51,24 @@ subprojects {
             }
         }
     }
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+            sourceSets {
+                val commonTest by getting {
+                    dependencies {
+                        implementation(projects.testUtils)
+                    }
+                }
+            }
+        }
+    }
 }
 
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    github("kmath")
+    github("kmath", addToRelease = false)
     space()
     sonatype()
 }

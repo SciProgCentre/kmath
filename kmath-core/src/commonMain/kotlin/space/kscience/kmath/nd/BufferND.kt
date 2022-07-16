@@ -32,17 +32,22 @@ public open class BufferND<out T>(
 /**
  * Transform structure to a new structure using provided [BufferFactory] and optimizing if argument is [BufferND]
  */
-public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
-    factory: BufferFactory<R> = Buffer.Companion::auto,
+public inline fun <T, R : Any> StructureND<T>.mapToBuffer(
+    factory: BufferFactory<R>,
     crossinline transform: (T) -> R,
-): BufferND<R> {
-    return if (this is BufferND<T>)
-        BufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
-    else {
-        val strides = DefaultStrides(shape)
-        BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
-    }
+): BufferND<R> = if (this is BufferND<T>)
+    BufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
+else {
+    val strides = DefaultStrides(shape)
+    BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
 }
+
+/**
+ * Transform structure to a new structure using inferred [BufferFactory]
+ */
+public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
+    crossinline transform: (T) -> R,
+): BufferND<R> = mapToBuffer(Buffer.Companion::auto, transform)
 
 /**
  * Represents [MutableStructureND] over [MutableBuffer].
@@ -64,7 +69,7 @@ public class MutableBufferND<T>(
  * Transform structure to a new structure using provided [MutableBufferFactory] and optimizing if argument is [MutableBufferND]
  */
 public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
-    factory: MutableBufferFactory<R> = MutableBuffer.Companion::auto,
+    factory: MutableBufferFactory<R> = MutableBufferFactory(MutableBuffer.Companion::auto),
     crossinline transform: (T) -> R,
 ): MutableBufferND<R> {
     return if (this is MutableBufferND<T>)

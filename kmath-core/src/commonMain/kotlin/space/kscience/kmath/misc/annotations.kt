@@ -27,5 +27,5 @@ public annotation class UnstableKMathAPI
     RequiresOptIn.Level.WARNING,
 )
 public annotation class PerformancePitfall(
-    val message: String = "Potential performance problem"
+    val message: String = "Potential performance problem",
 )

@@ -8,6 +8,7 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.flow.first
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.combine
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -30,10 +31,11 @@ public fun interface Sampler<out T : Any> {
 /**
  * Sample a bunch of values
  */
+@OptIn(UnstableKMathAPI::class)
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+    bufferFactory: BufferFactory<T> = BufferFactory(Buffer.Companion::boxing),
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once
@@ -67,3 +69,12 @@ public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): 
 @JvmName("sampleIntBuffer")
 public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
     sampleBuffer(generator, size, ::IntBuffer)
+
+
+/**
+ * Samples a [Buffer] of values from this [Sampler].
+ */
+public suspend fun Sampler<Double>.nextBuffer(generator: RandomGenerator, size: Int): Buffer<Double> =
+    sampleBuffer(generator, size).first()
+
+//TODO add `context(RandomGenerator) Sampler.nextBuffer

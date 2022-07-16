@@ -24,7 +24,7 @@ public sealed interface MST {
     public data class Numeric(val value: Number) : MST
 
     /**
-     * A node containing an unary operation.
+     * A node containing a unary operation.
      *
      * @property operation the identifier of operation.
      * @property value the argument of this operation.
@@ -34,7 +34,7 @@ public sealed interface MST {
     /**
      * A node containing binary operation.
      *
-     * @property operation the identifier operation.
+     * @property operation the identifier of operation.
      * @property left the left operand.
      * @property right the right operand.
      */

@@ -272,7 +272,7 @@ public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.sqrt(x: Aut
 public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.pow(
     x: AutoDiffValue<T>,
     y: Double,
-): AutoDiffValue<T> = derive(const { x.value.pow(y)}) { z ->
+): AutoDiffValue<T> = derive(const { x.value.pow(y) }) { z ->
     x.d += z.d * y * x.value.pow(y - 1)
 }
 
@@ -343,10 +343,7 @@ public fun <T : Any, F : ExtendedField<T>> SimpleAutoDiffField<T, F>.atanh(x: Au
 public class SimpleAutoDiffExtendedField<T : Any, F : ExtendedField<T>>(
     context: F,
     bindings: Map<Symbol, T>,
-) : ExtendedField<AutoDiffValue<T>>, ScaleOperations<AutoDiffValue<T>>,
-    SimpleAutoDiffField<T, F>(context, bindings) {
-
-    override fun bindSymbol(value: String): AutoDiffValue<T> = super<SimpleAutoDiffField>.bindSymbol(value)
+) : ExtendedField<AutoDiffValue<T>>, ScaleOperations<AutoDiffValue<T>>, SimpleAutoDiffField<T, F>(context, bindings) {
 
     override fun number(value: Number): AutoDiffValue<T> = const { number(value) }
 

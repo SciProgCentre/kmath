@@ -14,14 +14,18 @@ import kotlin.reflect.KClass
  *
  * @param T the type of buffer.
  */
-public typealias BufferFactory<T> = (Int, (Int) -> T) -> Buffer<T>
+public fun interface BufferFactory<T> {
+    public operator fun invoke(size: Int, builder: (Int) -> T): Buffer<T>
+}
 
 /**
  * Function that produces [MutableBuffer] from its size and function that supplies values.
  *
  * @param T the type of buffer.
  */
-public typealias MutableBufferFactory<T> = (Int, (Int) -> T) -> MutableBuffer<T>
+public fun interface MutableBufferFactory<T>: BufferFactory<T>{
+    override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T>
+}
 
 /**
  * A generic read-only random-access structure for both primitives and objects.
@@ -104,6 +108,16 @@ public interface Buffer<out T> {
  * Returns an [IntRange] of the valid indices for this [Buffer].
  */
 public val Buffer<*>.indices: IntRange get() = 0 until size
+
+public fun <T> Buffer<T>.first(): T {
+    require(size > 0) { "Can't get the first element of empty buffer" }
+    return get(0)
+}
+
+public fun <T> Buffer<T>.last(): T {
+    require(size > 0) { "Can't get the last element of empty buffer" }
+    return get(size - 1)
+}
 
 /**
  * Immutable wrapper for [MutableBuffer].

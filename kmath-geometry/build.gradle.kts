@@ -6,7 +6,7 @@ plugins {
 
 kotlin.sourceSets.commonMain {
     dependencies {
-        api(project(":kmath-core"))
+        api(projects.kmath.kmathComplex)
     }
 }
 

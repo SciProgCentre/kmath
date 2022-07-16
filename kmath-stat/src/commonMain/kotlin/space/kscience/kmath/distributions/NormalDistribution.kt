@@ -14,14 +14,9 @@ import space.kscience.kmath.stat.RandomGenerator
 import kotlin.math.*
 
 /**
- * Implements [UnivariateDistribution] for the normal (gaussian) distribution.
+ * Implements [Distribution1D] for the normal (gaussian) distribution.
  */
-public class NormalDistribution(public val sampler: GaussianSampler) : UnivariateDistribution<Double> {
-    public constructor(
-        mean: Double,
-        standardDeviation: Double,
-        normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler,
-    ) : this(GaussianSampler(mean, standardDeviation, normalized))
+public class NormalDistribution(public val sampler: GaussianSampler) : Distribution1D<Double> {
 
     override fun probability(arg: Double): Double {
         val x1 = (arg - sampler.mean) / sampler.standardDeviation
@@ -43,3 +38,9 @@ public class NormalDistribution(public val sampler: GaussianSampler) : Univariat
         private val SQRT2 = sqrt(2.0)
     }
 }
+
+public fun NormalDistribution(
+    mean: Double,
+    standardDeviation: Double,
+    normalized: NormalizedGaussianSampler = ZigguratNormalizedGaussianSampler,
+): NormalDistribution = NormalDistribution(GaussianSampler(mean, standardDeviation, normalized))

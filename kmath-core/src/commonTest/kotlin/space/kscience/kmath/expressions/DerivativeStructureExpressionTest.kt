@@ -19,10 +19,10 @@ import kotlin.test.assertFails
 internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
-    block: DerivativeStructureField<Double, DoubleField>.() -> Unit,
+    block: DSField<Double, DoubleField>.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DerivativeStructureField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
+    DSField(DoubleField, ::DoubleBuffer, order, mapOf(*parameters)).block()
 }
 
 internal class AutoDiffTest {
@@ -30,7 +30,7 @@ internal class AutoDiffTest {
     private val y by symbol
 
     @Test
-    fun derivativeStructureFieldTest() {
+    fun dsAlgebraTest() {
         diff(2, x to 1.0, y to 1.0) {
             val x = bindSymbol(x)//by binding()
             val y = bindSymbol("y")
@@ -44,8 +44,8 @@ internal class AutoDiffTest {
     }
 
     @Test
-    fun autoDifTest() {
-        val f = DerivativeStructureFieldExpression(DoubleField, ::DoubleBuffer) {
+    fun dsExpressionTest() {
+        val f = DSFieldExpression(DoubleField, ::DoubleBuffer) {
             val x by binding
             val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1

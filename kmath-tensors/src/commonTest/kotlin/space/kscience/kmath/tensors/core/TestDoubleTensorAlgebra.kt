@@ -107,6 +107,8 @@ internal class TestDoubleTensorAlgebra {
         val tensor11 = fromArray(intArrayOf(3, 2), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor2 = fromArray(intArrayOf(3), doubleArrayOf(10.0, 20.0, 30.0))
         val tensor3 = fromArray(intArrayOf(1, 1, 3), doubleArrayOf(-1.0, -2.0, -3.0))
+        val tensor4 = fromArray(intArrayOf(2, 3, 3), (1..18).map { it.toDouble() }.toDoubleArray())
+        val tensor5 = fromArray(intArrayOf(2, 3, 3), (1..18).map { 1 + it.toDouble() }.toDoubleArray())
 
         val res12 = tensor1.dot(tensor2)
         assertTrue(res12.mutableBuffer.array() contentEquals doubleArrayOf(140.0, 320.0))
@@ -123,6 +125,13 @@ internal class TestDoubleTensorAlgebra {
         val res11 = tensor1.dot(tensor11)
         assertTrue(res11.mutableBuffer.array() contentEquals doubleArrayOf(22.0, 28.0, 49.0, 64.0))
         assertTrue(res11.shape contentEquals intArrayOf(2, 2))
+
+        val res45 = tensor4.dot(tensor5)
+        assertTrue(res45.mutableBuffer.array() contentEquals doubleArrayOf(
+            36.0, 42.0, 48.0, 81.0, 96.0, 111.0, 126.0, 150.0, 174.0,
+            468.0, 501.0, 534.0, 594.0, 636.0, 678.0, 720.0, 771.0, 822.0
+        ))
+        assertTrue(res45.shape contentEquals intArrayOf(2, 3, 3))
     }
 
     @Test

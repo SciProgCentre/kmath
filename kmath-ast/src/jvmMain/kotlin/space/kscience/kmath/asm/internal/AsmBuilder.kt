@@ -49,5 +49,7 @@ internal abstract class AsmBuilder {
          * ASM Type for [space.kscience.kmath.expressions.Symbol].
          */
         val SYMBOL_TYPE: Type = getObjectType("space/kscience/kmath/expressions/Symbol")
+
+        const val ARGUMENTS_NAME = "args"
     }
 }

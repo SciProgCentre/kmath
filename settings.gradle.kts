@@ -1,15 +1,15 @@
 rootProject.name = "kmath"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
 
 dependencyResolutionManagement {
-
     val toolsVersion: String by extra
 
     repositories {
+        mavenLocal()
         maven("https://repo.kotlin.link")
         mavenCentral()
+        gradlePluginPortal()
     }
 
     versionCatalogs {
@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 include(
+    ":test-utils",
     ":kmath-memory",
     ":kmath-complex",
     ":kmath-core",

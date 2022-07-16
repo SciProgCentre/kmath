@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(PerformancePitfall::class)
+
 package space.kscience.kmath.ejml
 
 import org.ejml.data.DMatrixRMaj
@@ -18,11 +20,11 @@ import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
 
-@OptIn(PerformancePitfall::class)
-fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
+internal fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
     assertTrue { StructureND.contentEquals(expected, actual) }
 }
 
+@OptIn(UnstableKMathAPI::class)
 internal class EjmlMatrixTest {
     private val random = Random(0)
 

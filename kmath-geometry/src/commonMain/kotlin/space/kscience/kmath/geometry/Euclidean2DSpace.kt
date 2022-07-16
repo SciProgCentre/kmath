@@ -6,12 +6,10 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sqrt
 
-@OptIn(UnstableKMathAPI::class)
 public interface Vector2D : Point<Double>, Vector {
     public val x: Double
     public val y: Double
@@ -29,7 +27,6 @@ public interface Vector2D : Point<Double>, Vector {
 public val Vector2D.r: Double
     get() = Euclidean2DSpace { norm() }
 
-@Suppress("FunctionName")
 public fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
 
 private data class Vector2DImpl(

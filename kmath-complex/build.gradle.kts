@@ -19,13 +19,15 @@ readme {
 
     feature(
         id = "complex",
-        description = "Complex Numbers",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt"
-    )
+    ){
+        "Complex numbers operations"
+    }
 
     feature(
         id = "quaternion",
-        description = "Quaternions",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt"
-    )
+    ){
+        "Quaternions and their composition"
+    }
 }

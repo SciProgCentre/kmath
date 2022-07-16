@@ -6,11 +6,9 @@ import org.tensorflow.Operand
 import org.tensorflow.Output
 import org.tensorflow.Session
 import org.tensorflow.ndarray.NdArray
+import org.tensorflow.ndarray.index.Indices
 import org.tensorflow.op.Ops
-import org.tensorflow.op.core.Constant
-import org.tensorflow.op.core.Max
-import org.tensorflow.op.core.Min
-import org.tensorflow.op.core.Sum
+import org.tensorflow.op.core.*
 import org.tensorflow.types.TInt32
 import org.tensorflow.types.family.TNumber
 import org.tensorflow.types.family.TType
@@ -182,7 +180,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
     override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = operate(ops.math::neg)
 
     override fun Tensor<T>.get(i: Int): Tensor<T> = operate {
-        TODO("Not yet implemented")
+        StridedSliceHelper.stridedSlice(ops.scope(), it, Indices.at(i.toLong()))
     }
 
     override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = operate {
@@ -199,8 +197,9 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.dot(other: StructureND<T>): TensorFlowOutput<T, TT> = operate(other) { l, r ->
         ops.linalg.matMul(
-            if (l.asTensor().shape().numDimensions() == 1) ops.expandDims(l, ops.constant(0)) else l,
-            if (r.asTensor().shape().numDimensions() == 1) ops.expandDims(r, ops.constant(-1)) else r)
+            if (l.shape().numDimensions() == 1) ops.expandDims(l, ops.constant(0)) else l,
+            if (r.shape().numDimensions() == 1) ops.expandDims(r, ops.constant(-1)) else r
+        )
     }
 
     override fun diagonalEmbedding(
@@ -209,7 +208,13 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         dim1: Int,
         dim2: Int,
     ): TensorFlowOutput<T, TT> = diagonalEntries.operate {
-        TODO("Not yet implemented")
+        ops.linalg.matrixDiagV3(
+            /* diagonal = */ it,
+            /* k = */ ops.constant(offset),
+            /* numRows = */ ops.constant(dim1),
+            /* numCols = */ ops.constant(dim2),
+            /* paddingValue = */ const(elementAlgebra.zero)
+        )
     }
 
     override fun StructureND<T>.sum(): T = operate {
@@ -240,6 +245,16 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         graph,
         ops.math.argMax(asTensorFlow().output, ops.constant(dim), TInt32::class.java).output()
     ).actualTensor
+
+//    private val symbolCache = HashMap<String, TensorFlowOutput<T, TT>>()
+//
+//    override fun bindSymbolOrNull(value: String): TensorFlowOutput<T, TT>? {
+//        return symbolCache.getOrPut(value){ops.var}
+//    }
+//
+//    public fun StructureND<T>.grad(
+//
+//    )= operate { ops.gradients() }
 
     @OptIn(UnstableKMathAPI::class)
     override fun export(arg: StructureND<T>): StructureND<T> =

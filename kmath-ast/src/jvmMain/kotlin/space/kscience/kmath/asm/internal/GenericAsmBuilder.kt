@@ -56,7 +56,7 @@ internal class GenericAsmBuilder<T>(
     /**
      * Local variables indices are indices of symbols in this list.
      */
-    private val argumentsLocals = mutableListOf<String>()
+    private val argumentsLocals = mutableListOf<Symbol>()
 
     /**
      * Subclasses, loads and instantiates [Expression] for given parameters.
@@ -253,10 +253,10 @@ internal class GenericAsmBuilder<T>(
      * Stores value variable [name] into a local. Should be called within [variablesPrepareCallback] before using
      * [loadVariable].
      */
-    fun prepareVariable(name: String): Unit = invokeMethodVisitor.run {
+    fun prepareVariable(name: Symbol): Unit = invokeMethodVisitor.run {
         if (name in argumentsLocals) return@run
         load(1, MAP_TYPE)
-        aconst(name)
+        aconst(name.identity)
 
         invokestatic(
             MAP_INTRINSICS_TYPE.internalName,
@@ -280,7 +280,7 @@ internal class GenericAsmBuilder<T>(
      * Loads a variable [name] from arguments [Map] parameter of [Expression.invoke]. The variable should be stored
      * with [prepareVariable] first.
      */
-    fun loadVariable(name: String): Unit = invokeMethodVisitor.load(2 + argumentsLocals.indexOf(name), tType)
+    fun loadVariable(name: Symbol): Unit = invokeMethodVisitor.load(2 + argumentsLocals.indexOf(name), tType)
 
     inline fun buildCall(function: Function<T>, parameters: GenericAsmBuilder<T>.() -> Unit) {
         contract { callsInPlace(parameters, InvocationKind.EXACTLY_ONCE) }

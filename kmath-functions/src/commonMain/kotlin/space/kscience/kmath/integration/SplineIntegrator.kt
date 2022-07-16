@@ -28,6 +28,8 @@ public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(algebra: Field<T
 /**
  * Compute definite integral of given [PiecewisePolynomial] piece by piece in a given [range]
  * Requires [UnivariateIntegrationNodes] or [IntegrationRange] and [IntegrandMaxCalls]
+ *
+ * TODO use context receiver for algebra
  */
 @UnstableKMathAPI
 public fun <T : Comparable<T>> PiecewisePolynomial<T>.integrate(
@@ -98,6 +100,7 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
     }
 }
 
+@Suppress("unused")
 @UnstableKMathAPI
 public inline val DoubleField.splineIntegrator: UnivariateIntegrator<Double>
     get() = DoubleSplineIntegrator
