@@ -1,44 +1,56 @@
 package space.kscience.kmath.trajectory.segments
 
-import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.trajectory.dubins.theta
 import space.kscience.kmath.trajectory.segments.components.Circle
 import space.kscience.kmath.trajectory.segments.components.Pose2D
 import kotlin.math.PI
 
-public class Arc(
-    center: Vector2D,
-    a: Vector2D,
-    b: Vector2D,
-    internal val direction: Direction
-) : Circle(center, center.distanceTo(a)), Segment {
+public data class Arc(
+    public val circle: Circle,
+    public val start: Pose2D,
+    public val end: Pose2D
+) : Segment {
 
-    private val s1 = Straight(center, a)
-    private val s2 = Straight(center, b)
+    internal companion object {
+        fun of(center: Vector2D, start: Vector2D, end: Vector2D, direction: Direction): Arc {
+            val s1 = Straight(center, start)
+            val s2 = Straight(center, end)
+            val pose1 = calculatePose(start, s1.theta, direction)
+            val pose2 = calculatePose(end, s2.theta, direction)
+            return Arc(Circle(center, s1.length), pose1, pose2)
+        }
 
-    internal val pose1 = calculatePose(a, s1.theta)
-    internal val pose2 = calculatePose(b, s2.theta)
-    private val angle = calculateAngle()
-    override val length: Double = calculateLength()
+        private fun calculatePose(vector: Vector2D, theta: Double, direction: Direction): Pose2D =
+            Pose2D.of(
+                vector,
+                when (direction) {
+                    Direction.LEFT -> theta(theta - PI / 2)
+                    Direction.RIGHT -> theta(theta + PI / 2)
+                }
+            )
+    }
 
-    public enum class Direction {
+    internal enum class Direction {
         LEFT, RIGHT
     }
 
-    private fun calculateAngle() = theta(if (direction == Direction.LEFT) s1.theta - s2.theta else s2.theta - s1.theta)
-
-    private fun calculateLength(): Double {
+    override val length: Double get() {
+        val angle: Double = theta(if (direction == Direction.LEFT) start.theta - end.theta else end.theta - start.theta)
         val proportion = angle / (2 * PI)
-        return circumference * proportion
+        return circle.circumference * proportion
     }
 
-    private fun calculatePose(vector: Vector2D, theta: Double): Pose2D =
-        Pose2D.of(
-            vector,
-            when (direction) {
-                Direction.LEFT -> theta(theta - PI / 2)
-                Direction.RIGHT -> theta(theta + PI / 2)
-            }
-        )
+    internal val direction: Direction = if (start.y < circle.center.y) {
+        if (start.theta > PI) Direction.RIGHT else Direction.LEFT
+    } else if (start.y > circle.center.y) {
+        if (start.theta < PI) Direction.RIGHT else Direction.LEFT
+    } else {
+        if (start.theta == 0.0) {
+            if (start.x < circle.center.x) Direction.RIGHT else Direction.LEFT
+        } else {
+            if (start.x > circle.center.x) Direction.RIGHT else Direction.LEFT
+        }
+    }
+
 }

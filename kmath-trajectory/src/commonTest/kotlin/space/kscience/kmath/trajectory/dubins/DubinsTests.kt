@@ -48,18 +48,18 @@ class DubinsTests {
             println("${it.key}: ${path.length}")
             assertTrue(it.value.equalFloat(path.length))
 
-            assertTrue(start.equalsFloat(path.a.pose1))
-            assertTrue(end.equalsFloat(path.c.pose2))
+            assertTrue(start.equalsFloat(path.a.start))
+            assertTrue(end.equalsFloat(path.c.end))
 
             // Not working, theta double precision inaccuracy
             if (path.b is Arc) {
                 val b = path.b as Arc
-                assertTrue(path.a.pose2.equalsFloat(b.pose1))
-                assertTrue(path.c.pose1.equalsFloat(b.pose2))
+                assertTrue(path.a.end.equalsFloat(b.start))
+                assertTrue(path.c.start.equalsFloat(b.end))
             } else if (path.b is Straight) {
                 val b = path.b as Straight
-                assertTrue(path.a.pose2.equalsFloat(Pose2D.of(b.start, b.theta)))
-                assertTrue(path.c.pose1.equalsFloat(Pose2D.of(b.end, b.theta)))
+                assertTrue(path.a.end.equalsFloat(Pose2D.of(b.start, b.theta)))
+                assertTrue(path.c.start.equalsFloat(Pose2D.of(b.end, b.theta)))
             }
         }
     }
