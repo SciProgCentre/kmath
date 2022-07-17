@@ -29,7 +29,7 @@ class DubinsTests {
         val start = Pose2D.of(straight.end, straight.theta)
         val end = Pose2D.of(lineP1.start, lineP1.theta)
         val radius = 2.0
-        val dubins = DubinsPathFactory(start, end, radius)
+        val dubins = DubinsPath.all(start, end, radius)
 
         val absoluteDistance = start.distanceTo(end)
         println("Absolute distance: $absoluteDistance")
@@ -43,7 +43,7 @@ class DubinsTests {
         )
 
         expectedLengths.forEach {
-            val path = dubins[it.key]
+            val path = dubins.find { p -> p.type === it.key }
             assertNotNull(path, "Path ${it.key} not found")
             println("${it.key}: ${path.length}")
             assertTrue(it.value.equalFloat(path.length))
