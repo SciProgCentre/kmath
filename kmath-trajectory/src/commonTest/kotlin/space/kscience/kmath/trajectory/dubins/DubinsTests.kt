@@ -7,10 +7,10 @@ package space.kscience.kmath.trajectory.dubins
 
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
 import space.kscience.kmath.geometry.Vector2D
-import space.kscience.kmath.trajectory.segments.Arc
 import space.kscience.kmath.trajectory.equalFloat
 import space.kscience.kmath.trajectory.equalsFloat
 import space.kscience.kmath.trajectory.inverse
+import space.kscience.kmath.trajectory.segments.Arc
 import space.kscience.kmath.trajectory.segments.Straight
 import space.kscience.kmath.trajectory.segments.components.Pose2D
 import space.kscience.kmath.trajectory.shift
@@ -26,8 +26,8 @@ class DubinsTests {
         val straight = Straight(Vector2D(0.0, 0.0), Vector2D(100.0, 100.0))
         val lineP1 = straight.shift(1, 10.0).inverse()
 
-        val start = Pose2D(straight.end, straight.theta)
-        val end = Pose2D(lineP1.start, lineP1.theta)
+        val start = Pose2D.of(straight.end, straight.theta)
+        val end = Pose2D.of(lineP1.start, lineP1.theta)
         val radius = 2.0
         val dubins = DubinsPathFactory(start, end, radius)
 
@@ -58,8 +58,8 @@ class DubinsTests {
                 assertTrue(path.c.pose1.equalsFloat(b.pose2))
             } else if (path.b is Straight) {
                 val b = path.b as Straight
-                assertTrue(path.a.pose2.equalsFloat(Pose2D(b.start, b.theta)))
-                assertTrue(path.c.pose1.equalsFloat(Pose2D(b.end, b.theta)))
+                assertTrue(path.a.pose2.equalsFloat(Pose2D.of(b.start, b.theta)))
+                assertTrue(path.c.pose1.equalsFloat(Pose2D.of(b.end, b.theta)))
             }
         }
     }

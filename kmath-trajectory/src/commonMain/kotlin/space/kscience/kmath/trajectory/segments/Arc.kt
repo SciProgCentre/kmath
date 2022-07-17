@@ -34,9 +34,11 @@ public class Arc(
     }
 
     private fun calculatePose(vector: Vector2D, theta: Double): Pose2D =
-        if (direction == Direction.LEFT) {
-            Pose2D(vector.x, vector.y, theta(theta - PI / 2))
-        } else {
-            Pose2D(vector.x, vector.y, theta(theta + PI / 2))
-        }
+        Pose2D.of(
+            vector,
+            when (direction) {
+                Direction.LEFT -> theta(theta - PI / 2)
+                Direction.RIGHT -> theta(theta + PI / 2)
+            }
+        )
 }
