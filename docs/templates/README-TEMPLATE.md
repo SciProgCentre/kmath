@@ -103,3 +103,10 @@ The project requires a lot of additional work. The most important thing we need 
 required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
 marked with
 [waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero) label.
+
+## Author
+Erik Schouten
+
+Github: ESchouten
+
+Email: erik-schouten@hotmail.nl
