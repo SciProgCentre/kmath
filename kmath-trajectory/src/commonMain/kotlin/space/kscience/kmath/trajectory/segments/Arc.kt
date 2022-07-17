@@ -35,22 +35,25 @@ public data class Arc(
         LEFT, RIGHT
     }
 
-    override val length: Double get() {
-        val angle: Double = theta(if (direction == Direction.LEFT) start.theta - end.theta else end.theta - start.theta)
-        val proportion = angle / (2 * PI)
-        return circle.circumference * proportion
-    }
-
-    internal val direction: Direction = if (start.y < circle.center.y) {
-        if (start.theta > PI) Direction.RIGHT else Direction.LEFT
-    } else if (start.y > circle.center.y) {
-        if (start.theta < PI) Direction.RIGHT else Direction.LEFT
-    } else {
-        if (start.theta == 0.0) {
-            if (start.x < circle.center.x) Direction.RIGHT else Direction.LEFT
-        } else {
-            if (start.x > circle.center.x) Direction.RIGHT else Direction.LEFT
+    override val length: Double
+        get() {
+            val angle: Double =
+                theta(if (direction == Direction.LEFT) start.theta - end.theta else end.theta - start.theta)
+            val proportion = angle / (2 * PI)
+            return circle.circumference * proportion
         }
-    }
+
+    internal val direction: Direction
+        get() = if (start.y < circle.center.y) {
+            if (start.theta > PI) Direction.RIGHT else Direction.LEFT
+        } else if (start.y > circle.center.y) {
+            if (start.theta < PI) Direction.RIGHT else Direction.LEFT
+        } else {
+            if (start.theta == 0.0) {
+                if (start.x < circle.center.x) Direction.RIGHT else Direction.LEFT
+            } else {
+                if (start.x > circle.center.x) Direction.RIGHT else Direction.LEFT
+            }
+        }
 
 }
