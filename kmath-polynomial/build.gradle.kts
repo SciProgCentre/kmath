@@ -4,7 +4,7 @@ plugins {
     id("ru.mipt.npm.gradle.native")
 }
 
-description = "Polynomial extra utilities and rational functions"
+description = "Polynomials, rational functions, and utilities"
 
 kotlin.sourceSets {
     commonMain {

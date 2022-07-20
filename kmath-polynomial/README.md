@@ -1,6 +1,6 @@
 # Module kmath-polynomial
 
-Polynomial extra utilities and rational functions
+Polynomials, rational functions, and utilities
 
 ## Features
 
