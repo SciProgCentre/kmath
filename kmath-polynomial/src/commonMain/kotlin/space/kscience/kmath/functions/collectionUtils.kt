@@ -894,7 +894,7 @@ internal inline fun <K, V, L> Map<out K, V>.mapKeys(transform: (Map.Entry<K, V>)
 
 /**
  * Returns a new map with entries having the keys obtained by applying the [transform] function to each entry in this
- * map and the values of this map and resolving conflicts with [resolve] function..
+ * map and the values of this map and resolving conflicts with [resolve] function.
  *
  * All pairs are added and resolved in order of iteration.
  *
