@@ -15,7 +15,7 @@ kotlin.sourceSets {
 }
 
 dependencies {
-    dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${versionCatalogs.named("npmlibs").findVersion("dokka").get().requiredVersion}")
+    dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${npmlibs.versions.dokka.get()}")
 }
 
 readme {
