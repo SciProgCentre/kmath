@@ -11,5 +11,7 @@ kotlin.sourceSets.commonMain {
 }
 
 readme {
+    description = "Path and trajectory optimization"
     maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 }

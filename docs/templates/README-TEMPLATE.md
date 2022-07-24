@@ -69,8 +69,7 @@ performance and flexibility.
 
 We expect to focus on creating convenient universal API first and then work on increasing performance for specific
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized
-native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be
-better than SciPy.
+native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
 
 ## Requirements
 
@@ -103,10 +102,3 @@ The project requires a lot of additional work. The most important thing we need 
 required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
 marked with
 [waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero) label.
-
-## Author
-Erik Schouten
-
-Github: ESchouten
-
-Email: erik-schouten@hotmail.nl

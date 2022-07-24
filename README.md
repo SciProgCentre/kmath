@@ -86,8 +86,8 @@ module definitions below. The module stability could have the following levels:
 > **Maturity**: PROTOTYPE
 >
 > **Features:**
-> - [complex](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex Numbers
-> - [quaternion](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions
+> - [complex](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex numbers operations
+> - [quaternion](kmath-complex/src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions and their composition
 
 
 ### [kmath-core](kmath-core)
@@ -240,10 +240,20 @@ One can still use generic algebras though.
 > - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
 
 
+### [kmath-trajectory](kmath-trajectory)
+> Path and trajectory optimization
+>
+> **Maturity**: PROTOTYPE
+
 ### [kmath-viktor](kmath-viktor)
 > 
 >
 > **Maturity**: DEVELOPMENT
+
+### [test-utils](test-utils)
+> 
+>
+> **Maturity**: EXPERIMENTAL
 
 
 ## Multi-platform support
@@ -261,8 +271,7 @@ performance and flexibility.
 
 We expect to focus on creating convenient universal API first and then work on increasing performance for specific
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized
-native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be
-better than SciPy.
+native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
 
 ## Requirements
 
