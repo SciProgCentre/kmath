@@ -833,8 +833,33 @@ public open class DoubleTensorAlgebra :
         return qTensor to rTensor
     }
 
-    override fun StructureND<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
-        svd(epsilon = 1e-10)
+    override fun StructureND<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        val size = tensor.dimension
+        val commonShape = tensor.shape.sliceArray(0 until size - 2)
+        val (n, m) = tensor.shape.sliceArray(size - 2 until size)
+        val uTensor = zeros(commonShape + intArrayOf(m, n))
+        val sTensor = zeros(commonShape + intArrayOf(m))
+        val vTensor = zeros(commonShape + intArrayOf(m, m))
+
+        val matrices = tensor.matrices
+        val uTensors = uTensor.matrices
+        val sTensorVectors = sTensor.vectors
+        val vTensors = vTensor.matrices
+
+        for (index in matrices.indices) {
+            val matrix = matrices[index]
+            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
+            val curMatrix = DoubleTensor(
+                matrix.shape,
+                matrix.mutableBuffer.array()
+                    .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
+                    .toDoubleArray()
+            )
+            curMatrix.as2D().svdHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D())
+        }
+
+        return Triple(uTensor.transpose(), sTensor, vTensor)
+    }
 
     /**
      * Singular Value Decomposition.
@@ -849,7 +874,7 @@ public open class DoubleTensorAlgebra :
      * i.e., the precision with which the cosine approaches 1 in an iterative algorithm.
      * @return a triple `Triple(U, S, V)`.
      */
-    public fun StructureND<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.svdPowerMethod(epsilon: Double = 1e-10): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
@@ -876,38 +901,10 @@ public open class DoubleTensorAlgebra :
                     .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
                     .toDoubleArray()
             )
-            svdHelper(curMatrix, usv, m, n, epsilon)
+            svdPowerMethodHelper(curMatrix, usv, m, n, epsilon)
         }
 
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
-    }
-
-    public fun StructureND<Double>.svdGolabKahan(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        val size = tensor.dimension
-        val commonShape = tensor.shape.sliceArray(0 until size - 2)
-        val (n, m) = tensor.shape.sliceArray(size - 2 until size)
-        val uTensor = zeros(commonShape + intArrayOf(m, n))
-        val sTensor = zeros(commonShape + intArrayOf(m))
-        val vTensor = zeros(commonShape + intArrayOf(m, m))
-
-        val matrices = tensor.matrices
-        val uTensors = uTensor.matrices
-        val sTensorVectors = sTensor.vectors
-        val vTensors = vTensor.matrices
-
-        for (index in matrices.indices) {
-            val matrix = matrices[index]
-            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
-            val curMatrix = DoubleTensor(
-                matrix.shape,
-                matrix.mutableBuffer.array()
-                    .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
-                    .toDoubleArray()
-            )
-            curMatrix.as2D().svdGolabKahanHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D())
-        }
-
-        return Triple(uTensor.transpose(), sTensor, vTensor)
     }
 
     override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEigJacobi(maxIteration = 50, epsilon = 1e-15)
@@ -935,7 +932,7 @@ public open class DoubleTensorAlgebra :
             }
         }
 
-        val (u, s, v) = tensor.svd(epsilon)
+        val (u, s, v) = tensor.svd()
         val shp = s.shape + intArrayOf(1)
         val utv = u.transpose() dot v
         val n = s.shape.last()

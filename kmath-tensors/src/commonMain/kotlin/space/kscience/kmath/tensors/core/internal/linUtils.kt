@@ -300,7 +300,7 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     }
 }
 
-internal fun DoubleTensorAlgebra.svdHelper(
+internal fun DoubleTensorAlgebra.svdPowerMethodHelper(
     matrix: DoubleTensor,
     USV: Triple<BufferedTensor<Double>, BufferedTensor<Double>, BufferedTensor<Double>>,
     m: Int, n: Int, epsilon: Double,
@@ -372,7 +372,7 @@ private fun SIGN(a: Double, b: Double): Double {
     else
         return -abs(a)
 }
-internal fun MutableStructure2D<Double>.svdGolabKahanHelper(u: MutableStructure2D<Double>, w: BufferedTensor<Double>, v: MutableStructure2D<Double>) {
+internal fun MutableStructure2D<Double>.svdHelper(u: MutableStructure2D<Double>, w: BufferedTensor<Double>, v: MutableStructure2D<Double>) {
     val shape = this.shape
     val m = shape.component1()
     val n = shape.component2()
