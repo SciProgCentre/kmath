@@ -10,9 +10,9 @@ import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.trajectory.equalFloat
 import space.kscience.kmath.trajectory.equalsFloat
 import space.kscience.kmath.trajectory.inverse
-import space.kscience.kmath.trajectory.segments.Arc
-import space.kscience.kmath.trajectory.segments.Straight
-import space.kscience.kmath.trajectory.segments.components.Pose2D
+import space.kscience.kmath.trajectory.segments.ArcSegment
+import space.kscience.kmath.trajectory.segments.Pose2D
+import space.kscience.kmath.trajectory.segments.StraightSegment
 import space.kscience.kmath.trajectory.shift
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -23,7 +23,7 @@ class DubinsTests {
 
     @Test
     fun dubinsTest() {
-        val straight = Straight(Vector2D(0.0, 0.0), Vector2D(100.0, 100.0))
+        val straight = StraightSegment(Vector2D(0.0, 0.0), Vector2D(100.0, 100.0))
         val lineP1 = straight.shift(1, 10.0).inverse()
 
         val start = Pose2D.of(straight.end, straight.theta)
@@ -52,12 +52,12 @@ class DubinsTests {
             assertTrue(end.equalsFloat(path.c.end))
 
             // Not working, theta double precision inaccuracy
-            if (path.b is Arc) {
-                val b = path.b as Arc
+            if (path.b is ArcSegment) {
+                val b = path.b as ArcSegment
                 assertTrue(path.a.end.equalsFloat(b.start))
                 assertTrue(path.c.start.equalsFloat(b.end))
-            } else if (path.b is Straight) {
-                val b = path.b as Straight
+            } else if (path.b is StraightSegment) {
+                val b = path.b as StraightSegment
                 assertTrue(path.a.end.equalsFloat(Pose2D.of(b.start, b.theta)))
                 assertTrue(path.c.start.equalsFloat(Pose2D.of(b.end, b.theta)))
             }
