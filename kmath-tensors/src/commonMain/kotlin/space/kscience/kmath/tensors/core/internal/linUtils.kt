@@ -549,12 +549,13 @@ internal fun MutableStructure2D<Double>.svdHelper(u: MutableStructure2D<Double>,
             if (flag != 0) {
                 c = 0.0
                 s = 1.0
-                for (i in l until k) {
+                for (i in l until k + 1) {
                     f = s * rv1[i]
                     rv1[i] = c * rv1[i]
                     if (abs(f) + anorm == anorm) {
                         break
                     }
+                    g = w.mutableBuffer.array()[w.bufferStart + i]
                     h = pythag(f, g)
                     w.mutableBuffer.array()[w.bufferStart + i] = h
                     h = 1.0 / h
@@ -578,11 +579,6 @@ internal fun MutableStructure2D<Double>.svdHelper(u: MutableStructure2D<Double>,
                 }
                 break
             }
-
-//            надо придумать, что сделать - выкинуть ошибку?
-//            if (its == 30) {
-//                return
-//            }
 
             x =  w.mutableBuffer.array()[w.bufferStart + l]
             nm = k - 1
