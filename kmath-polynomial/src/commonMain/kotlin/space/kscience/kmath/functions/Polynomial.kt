@@ -12,35 +12,33 @@ import kotlin.jvm.JvmName
 
 
 /**
- * Abstraction of polynomials.
- */
-public interface Polynomial<C>
-
-/**
  * Abstraction of ring of polynomials of type [P] over ring of constants of type [C].
  *
  * @param C the type of constants. Polynomials have them as coefficients in their terms.
  * @param P the type of polynomials.
  */
 @Suppress("INAPPLICABLE_JVM_NAME", "PARAMETER_NAME_CHANGED_ON_OVERRIDE") // FIXME: Waiting for KT-31420
-public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
+public interface PolynomialSpace<C, P> : Ring<P> {
     /**
      * Returns sum of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
+    @JvmName("plusConstantInt")
     public operator fun C.plus(other: Int): C
     /**
      * Returns difference between the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
+    @JvmName("minusConstantInt")
     public operator fun C.minus(other: Int): C
     /**
      * Returns product of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
+    @JvmName("timesConstantInt")
     public operator fun C.times(other: Int): C
 
     /**
@@ -48,18 +46,21 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
+    @JvmName("plusIntConstant")
     public operator fun Int.plus(other: C): C
     /**
      * Returns difference between the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
+    @JvmName("minusIntConstant")
     public operator fun Int.minus(other: C): C
     /**
      * Returns product of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
+    @JvmName("timesIntConstant")
     public operator fun Int.times(other: C): C
 
     /**
@@ -167,27 +168,33 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
     /**
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("plusConstantPolynomial")
     public operator fun C.plus(other: P): P
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("minusConstantPolynomial")
     public operator fun C.minus(other: P): P
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("timesConstantPolynomial")
     public operator fun C.times(other: P): P
 
     /**
      * Returns sum of the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("plusPolynomialConstant")
     public operator fun P.plus(other: C): P
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("minusPolynomialConstant")
     public operator fun P.minus(other: C): P
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
+    @JvmName("timesPolynomialConstant")
     public operator fun P.times(other: C): P
 
     /**
@@ -252,7 +259,7 @@ public interface PolynomialSpace<C, P: Polynomial<C>> : Ring<P> {
  * @param A the type of algebraic structure (precisely, of ring) provided for constants.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, out A: Ring<C>> : PolynomialSpace<C, P> {
+public interface PolynomialSpaceOverRing<C, P, out A: Ring<C>> : PolynomialSpace<C, P> {
 
     /**
      * Underlying ring of constants. Its operations on constants are inherited by local operations on constants.
@@ -264,18 +271,21 @@ public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, out A: Ring<C>> : 
      *
      * The operation is equivalent to adding [other] copies of unit of underlying ring to [this].
      */
+    @JvmName("plusConstantInt")
     public override operator fun C.plus(other: Int): C = ring { addMultipliedByDoubling(this@plus, one, other) }
     /**
      * Returns difference between the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to subtraction [other] copies of unit of underlying ring from [this].
      */
+    @JvmName("minusConstantInt")
     public override operator fun C.minus(other: Int): C = ring { addMultipliedByDoubling(this@minus, one, -other) }
     /**
      * Returns product of the constant and the integer represented as a constant (member of underlying ring).
      *
      * The operation is equivalent to sum of [other] copies of [this].
      */
+    @JvmName("timesConstantInt")
     public override operator fun C.times(other: Int): C = ring { multiplyByDoubling(this@times, other) }
 
     /**
@@ -283,18 +293,21 @@ public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, out A: Ring<C>> : 
      *
      * The operation is equivalent to adding [this] copies of unit of underlying ring to [other].
      */
+    @JvmName("plusIntConstant")
     public override operator fun Int.plus(other: C): C = ring { addMultipliedByDoubling(other, one, this@plus) }
     /**
      * Returns difference between the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to subtraction [this] copies of unit of underlying ring from [other].
      */
+    @JvmName("minusIntConstant")
     public override operator fun Int.minus(other: C): C = ring { addMultipliedByDoubling(-other, one, this@minus) }
     /**
      * Returns product of the integer represented as a constant (member of underlying ring) and the constant.
      *
      * The operation is equivalent to sum of [this] copies of [other].
      */
+    @JvmName("timesIntConstant")
     public override operator fun Int.times(other: C): C = ring { multiplyByDoubling(other, this@times) }
 
     /**
@@ -341,69 +354,81 @@ public interface PolynomialSpaceOverRing<C, P: Polynomial<C>, out A: Ring<C>> : 
  * @param P the type of polynomials.
  */
 @Suppress("INAPPLICABLE_JVM_NAME") // FIXME: Waiting for KT-31420
-public interface MultivariatePolynomialSpace<C, V, P: Polynomial<C>>: PolynomialSpace<C, P> {
+public interface MultivariatePolynomialSpace<C, V, P>: PolynomialSpace<C, P> {
     /**
      * Returns sum of the variable represented as a monic monomial and the integer represented as a constant polynomial.
      */
     @JvmName("plusVariableInt")
+    @JsName("plusVariableInt")
     public operator fun V.plus(other: Int): P
     /**
      * Returns difference between the variable represented as a monic monomial and the integer represented as a constant polynomial.
      */
     @JvmName("minusVariableInt")
+    @JsName("minusVariableInt")
     public operator fun V.minus(other: Int): P
     /**
      * Returns product of the variable represented as a monic monomial and the integer represented as a constant polynomial.
      */
     @JvmName("timesVariableInt")
+    @JsName("timesVariableInt")
     public operator fun V.times(other: Int): P
 
     /**
      * Returns sum of the integer represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("plusIntVariable")
+    @JsName("plusIntVariable")
     public operator fun Int.plus(other: V): P
     /**
      * Returns difference between the integer represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("minusIntVariable")
+    @JsName("minusIntVariable")
     public operator fun Int.minus(other: V): P
     /**
      * Returns product of the integer represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("timesIntVariable")
+    @JsName("timesIntVariable")
     public operator fun Int.times(other: V): P
 
     /**
      * Returns sum of the variable represented as a monic monomial and the constant represented as a constant polynomial.
      */
     @JvmName("plusVariableConstant")
+    @JsName("plusVariableConstant")
     public operator fun V.plus(other: C): P
     /**
      * Returns difference between the variable represented as a monic monomial and the constant represented as a constant polynomial.
      */
     @JvmName("minusVariableConstant")
+    @JsName("minusVariableConstant")
     public operator fun V.minus(other: C): P
     /**
      * Returns product of the variable represented as a monic monomial and the constant represented as a constant polynomial.
      */
     @JvmName("timesVariableConstant")
+    @JsName("timesVariableConstant")
     public operator fun V.times(other: C): P
 
     /**
      * Returns sum of the constant represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("plusConstantVariable")
+    @JsName("plusConstantVariable")
     public operator fun C.plus(other: V): P
     /**
      * Returns difference between the constant represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("minusConstantVariable")
+    @JsName("minusConstantVariable")
     public operator fun C.minus(other: V): P
     /**
      * Returns product of the constant represented as a constant polynomial and the variable represented as a monic monomial.
      */
     @JvmName("timesConstantVariable")
+    @JsName("timesConstantVariable")
     public operator fun C.times(other: V): P
 
     /**

@@ -19,7 +19,7 @@ import kotlin.math.max
  *
  * @param C the type of constants.
  */
-public data class LabeledPolynomial<C>
+public data class LabeledPolynomial<out C>
 @PublishedApi
 internal constructor(
     /**
@@ -63,7 +63,7 @@ internal constructor(
      * @usesMathJax
      */
     public val coefficients: Map<Map<Symbol, UInt>, C>
-) : Polynomial<C> {
+) {
     override fun toString(): String = "LabeledPolynomial$coefficients"
 }
 

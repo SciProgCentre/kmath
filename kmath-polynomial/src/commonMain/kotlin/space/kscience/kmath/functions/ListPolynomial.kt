@@ -19,7 +19,7 @@ import kotlin.math.min
  *
  * @param C the type of constants.
  */
-public data class ListPolynomial<C>(
+public data class ListPolynomial<out C>(
     /**
      * List that contains coefficients of the polynomial.
      *
@@ -48,7 +48,7 @@ public data class ListPolynomial<C>(
      * @usesMathJax
      */
     public val coefficients: List<C>
-) : Polynomial<C> {
+) {
     override fun toString(): String = "ListPolynomial$coefficients"
 }
 
