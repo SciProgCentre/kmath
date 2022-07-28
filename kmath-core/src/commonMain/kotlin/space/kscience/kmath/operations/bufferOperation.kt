@@ -100,6 +100,15 @@ public inline fun <T, R> Buffer<T>.fold(initial: R, operation: (acc: R, T) -> R)
 }
 
 /**
+ * Fold given buffer according to indexed [operation]
+ */
+public inline fun <T : Any, R> Buffer<T>.foldIndexed(initial: R, operation: (index: Int, acc: R, T) -> R): R {
+    var accumulator = initial
+    for (index in this.indices) accumulator = operation(index, accumulator, get(index))
+    return accumulator
+}
+
+/**
  * Zip two buffers using given [transform].
  */
 @UnstableKMathAPI

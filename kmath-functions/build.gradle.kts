@@ -6,10 +6,16 @@ plugins {
 
 description = "Functions, integration and interpolation"
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
     }
+}
+
+dependencies {
+    dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${npmlibs.versions.dokka.get()}")
 }
 
 readme {
