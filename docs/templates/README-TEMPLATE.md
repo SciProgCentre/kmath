@@ -69,8 +69,7 @@ performance and flexibility.
 
 We expect to focus on creating convenient universal API first and then work on increasing performance for specific
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized
-native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be
-better than SciPy.
+native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
 
 ## Requirements
 
