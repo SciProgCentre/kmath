@@ -2,6 +2,7 @@ package space.kscience.kmath.trajectory.segments
 
 import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.trajectory.StraightSegment
 import space.kscience.kmath.trajectory.radiansToDegrees
 import kotlin.math.pow
 import kotlin.math.sqrt

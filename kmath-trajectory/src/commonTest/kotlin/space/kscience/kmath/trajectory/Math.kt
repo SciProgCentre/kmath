@@ -1,8 +1,6 @@
 package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Vector2D
-import space.kscience.kmath.trajectory.segments.Pose2D
-import space.kscience.kmath.trajectory.segments.StraightSegment
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.sin

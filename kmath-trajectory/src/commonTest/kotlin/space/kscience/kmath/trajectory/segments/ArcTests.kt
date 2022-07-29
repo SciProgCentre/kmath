@@ -3,6 +3,7 @@ package space.kscience.kmath.trajectory.segments
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.geometry.circumference
+import space.kscience.kmath.trajectory.ArcSegment
 import space.kscience.kmath.trajectory.radiansToDegrees
 import kotlin.test.Test
 import kotlin.test.assertEquals

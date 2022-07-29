@@ -1,14 +1,18 @@
-package space.kscience.kmath.trajectory.segments
+/*
+ * Copyright 2018-2021 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.geometry.circumference
-import space.kscience.kmath.trajectory.dubins.theta
 import kotlin.math.PI
 import kotlin.math.atan2
 
-public interface Trajectory {
+public sealed interface Trajectory {
     public val length: Double
 }
 
@@ -69,7 +73,7 @@ public data class ArcSegment(
                 vector: Vector2D,
                 theta: Double,
                 direction: Direction,
-            ): Pose2D = Pose2D.of(
+            ): Pose2D = Pose2D(
                 vector,
                 when (direction) {
                     Direction.LEFT -> theta(theta - PI / 2)
@@ -84,6 +88,9 @@ public data class ArcSegment(
             return ArcSegment(Circle2D(center, s1.length), pose1, pose2)
         }
     }
+}
 
+public open class CompositeTrajectory(public val segments: Collection<Trajectory>) : Trajectory {
+    override val length: Double get() = segments.sumOf { it.length }
 }
 
