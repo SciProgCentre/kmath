@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("ru.mipt.npm.gradle.common")
+    id("space.kscience.gradle.common")
 }
 
 description = "Binding for https://github.com/JetBrains-Research/viktor"
@@ -11,5 +11,5 @@ dependencies {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
+    maturity = space.kscience.gradle.Maturity.DEVELOPMENT
 }

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.20-Beta"
     `kotlin-dsl`
     `version-catalog`
     alias(npmlibs.plugins.kotlin.plugin.serialization)
@@ -19,7 +19,7 @@ val kotlinVersion = npmlibs.versions.kotlin.asProvider().get()
 val benchmarksVersion = npmlibs.versions.kotlinx.benchmark.get()
 
 dependencies {
-    api("ru.mipt.npm:gradle-tools:$toolsVersion")
+    api("space.kscience:gradle-tools:$toolsVersion")
     api(npmlibs.atomicfu.gradle)
     //plugins form benchmarks
     api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:$benchmarksVersion")

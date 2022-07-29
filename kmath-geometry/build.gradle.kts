@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.native")
 }
 
 kotlin.sourceSets.commonMain {
@@ -11,5 +11,5 @@ kotlin.sourceSets.commonMain {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

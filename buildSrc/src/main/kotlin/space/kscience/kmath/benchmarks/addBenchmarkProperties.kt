@@ -9,7 +9,7 @@ import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.gradle.api.Project
-import ru.mipt.npm.gradle.KScienceReadmeExtension
+import space.kscience.gradle.KScienceReadmeExtension
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

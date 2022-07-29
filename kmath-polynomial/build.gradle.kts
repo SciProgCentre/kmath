@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.native")
 }
 
 description = "Polynomials, rational functions, and utilities"
@@ -19,7 +19,7 @@ dependencies {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature("polynomial abstraction", "src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt") {

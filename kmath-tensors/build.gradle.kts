@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.native")
 }
 
 kotlin.sourceSets {
@@ -22,7 +22,7 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

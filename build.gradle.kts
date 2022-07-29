@@ -1,5 +1,5 @@
 plugins {
-    id("ru.mipt.npm.gradle.project")
+    id("space.kscience.gradle.project")
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
 }
 

@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.native")
 }
 
 description = "A proof of concept module for adding type-safe dimensions to structures"
@@ -21,5 +21,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

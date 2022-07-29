@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.native")
 }
 
 kotlin.sourceSets.commonMain {
@@ -16,7 +16,7 @@ readme {
         All operations are specialized to work with `Double` numbers without declaring algebraic contexts.
         One can still use generic algebras though.
         """.trimIndent()
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

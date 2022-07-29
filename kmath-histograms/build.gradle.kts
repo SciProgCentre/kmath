@@ -1,6 +1,6 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
+    id("space.kscience.gradle.native")
 }
 
 //apply(plugin = "kotlinx-atomicfu")
@@ -22,5 +22,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

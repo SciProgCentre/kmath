@@ -14,7 +14,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("npmlibs") {
-            from("ru.mipt.npm:version-catalog:$toolsVersion")
+            from("space.kscience:version-catalog:$toolsVersion")
         }
     }
 }

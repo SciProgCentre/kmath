@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- 2D optimal trajectory computation in a separate module `kmath-trajectory`
 - Autodiff for generic algebra elements in core!
 - Algebra now has an obligatory `bufferFactory` (#477).
 
