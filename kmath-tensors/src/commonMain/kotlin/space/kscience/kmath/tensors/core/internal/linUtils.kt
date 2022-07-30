@@ -385,6 +385,10 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
     var g = 0.0
     var l = 0
     val epsilon = 1e-10
+
+    val wStart = w.bufferStart
+    val wBuffer = w.mutableBuffer
+
     for (i in 0 until n) {
         /* left-hand reduction */
         l = i + 1
@@ -427,7 +431,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
             }
         }
 
-        w.mutableBuffer.array()[w.bufferStart + i] = scale * g
+        wBuffer[wStart + i] = scale * g
         /* right-hand reduction */
         g = 0.0
         s = 0.0
@@ -468,7 +472,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                 }
             }
         }
-        anorm = max(anorm, (abs(w.mutableBuffer.array()[w.bufferStart + i]) + abs(rv1[i])));
+        anorm = max(anorm, (abs(wBuffer[wStart + i]) + abs(rv1[i])));
     }
 
     for (i in n - 1 downTo 0) {
@@ -497,7 +501,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
 
     for (i in min(n, m) - 1 downTo 0) {
         l = i + 1
-        g =  w.mutableBuffer.array()[w.bufferStart + i]
+        g =  wBuffer[wStart + i]
         for (j in l until n) {
             this[i, j] = 0.0
         }
@@ -541,7 +545,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                     l = newl
                     break
                 }
-                if (abs(w.mutableBuffer.array()[w.bufferStart + nm]) + anorm == anorm) {
+                if (abs(wBuffer[wStart + nm]) + anorm == anorm) {
                     l = newl
                     break
                 }
@@ -556,9 +560,9 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                     if (abs(f) + anorm == anorm) {
                         break
                     }
-                    g = w.mutableBuffer.array()[w.bufferStart + i]
+                    g = wBuffer[wStart + i]
                     h = pythag(f, g)
-                    w.mutableBuffer.array()[w.bufferStart + i] = h
+                    wBuffer[wStart + i] = h
                     h = 1.0 / h
                     c = g * h
                     s = (-f) * h
@@ -571,19 +575,19 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                 }
             }
 
-            z =  w.mutableBuffer.array()[w.bufferStart + k]
+            z =  wBuffer[wStart + k]
             if (l == k) {
                 if (z < 0.0) {
-                    w.mutableBuffer.array()[w.bufferStart + k] = -z
+                    wBuffer[wStart + k] = -z
                     for (j in 0 until n)
                         v[j, k] = -v[j, k]
                 }
                 break
             }
 
-            x =  w.mutableBuffer.array()[w.bufferStart + l]
+            x =  wBuffer[wStart + l]
             nm = k - 1
-            y =  w.mutableBuffer.array()[w.bufferStart + nm]
+            y =  wBuffer[wStart + nm]
             g = rv1[nm]
             h = rv1[k]
             f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y)
@@ -596,7 +600,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
             for (j in l until nm + 1) {
                 i = j + 1
                 g = rv1[i]
-                y =  w.mutableBuffer.array()[w.bufferStart + i]
+                y = wBuffer[wStart + i]
                 h = s * g
                 g = c * g
                 z = pythag(f, h)
@@ -615,7 +619,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                     v[jj, i] = z * c - x * s;
                 }
                 z = pythag(f, h)
-                w.mutableBuffer.array()[w.bufferStart + j] = z
+                wBuffer[wStart + j] = z
                 if (abs(z) > epsilon) {
                     z = 1.0 / z
                     c = f * z
@@ -632,7 +636,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
             }
             rv1[l] = 0.0
             rv1[k] = f
-            w.mutableBuffer.array()[w.bufferStart + k] = x
+            wBuffer[wStart + k] = x
         }
     }
 
