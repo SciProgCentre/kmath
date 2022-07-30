@@ -373,7 +373,7 @@ private fun SIGN(a: Double, b: Double): Double {
         return -abs(a)
 }
 internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2D<Double>, w: BufferedTensor<Double>,
-                                                            v: MutableStructure2D<Double>, iterations: Int) {
+                                                            v: MutableStructure2D<Double>, iterations: Int, epsilon: Double) {
     val shape = this.shape
     val m = shape.component1()
     val n = shape.component2()
@@ -384,7 +384,6 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
     var anorm = 0.0
     var g = 0.0
     var l = 0
-    val epsilon = 1e-10
 
     val wStart = w.bufferStart
     val wBuffer = w.mutableBuffer
