@@ -8,7 +8,7 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.svd
+import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.svdGolubKahan
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.svdPowerMethod
 
@@ -26,9 +26,9 @@ class SVDBenchmark {
     }
 
     @Benchmark
-    fun svdGolabKahan(blackhole: Blackhole) {
+    fun svdGolubKahan(blackhole: Blackhole) {
         blackhole.consume(
-            tensor.svd()
+            tensor.svdGolubKahan()
         )
     }
 }
