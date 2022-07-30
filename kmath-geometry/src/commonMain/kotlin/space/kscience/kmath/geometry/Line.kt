@@ -5,6 +5,10 @@
 
 package space.kscience.kmath.geometry
 
+/**
+ * A line formed by [base] vector of start and a [direction] vector. Direction vector is not necessarily normalized,
+ * but its length does not affect line properties
+ */
 public data class Line<out V : Vector>(val base: V, val direction: V)
 
 public typealias Line2D = Line<Vector2D>
