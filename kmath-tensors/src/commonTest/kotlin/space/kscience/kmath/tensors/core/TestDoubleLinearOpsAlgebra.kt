@@ -282,7 +282,7 @@ private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor) {
     assertTrue(tensor.eq(tensorSVD))
 }
 
-private fun DoubleTensorAlgebra.testSVDGolubKahanFor(tensor: DoubleTensor) {
+private fun DoubleTensorAlgebra.testSVDGolubKahanFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
     val svd = tensor.svdGolubKahan()
 
     val tensorSVD = svd.first
@@ -291,7 +291,7 @@ private fun DoubleTensorAlgebra.testSVDGolubKahanFor(tensor: DoubleTensor) {
                 .dot(svd.third.transpose())
         )
 
-    assertTrue(tensor.eq(tensorSVD))
+    assertTrue(tensor.eq(tensorSVD, epsilon))
 }
 
 private fun DoubleTensorAlgebra.testSVDPowerMethodFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
