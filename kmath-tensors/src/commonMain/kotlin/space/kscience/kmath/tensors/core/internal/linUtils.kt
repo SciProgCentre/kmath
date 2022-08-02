@@ -308,6 +308,14 @@ internal fun DoubleTensorAlgebra.svdPowerMethodHelper(
     val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
     val (matrixU, matrixS, matrixV) = USV
 
+    val matrixUStart = matrixU.bufferStart
+    val matrixSStart = matrixS.bufferStart
+    val matrixVStart = matrixV.bufferStart
+
+    val matrixUBuffer = matrixU.mutableBuffer
+    val matrixSBuffer = matrixS.mutableBuffer
+    val matrixVBuffer = matrixV.mutableBuffer
+
     for (k in 0 until min(n, m)) {
         var a = matrix.copy()
         for ((singularValue, u, v) in res.slice(0 until k)) {
@@ -341,13 +349,13 @@ internal fun DoubleTensorAlgebra.svdPowerMethodHelper(
     val uBuffer = res.map { it.second }.flatMap { it.mutableBuffer.array().toList() }.toDoubleArray()
     val vBuffer = res.map { it.third }.flatMap { it.mutableBuffer.array().toList() }.toDoubleArray()
     for (i in uBuffer.indices) {
-        matrixU.mutableBuffer.array()[matrixU.bufferStart + i] = uBuffer[i]
+        matrixUBuffer[matrixUStart + i] = uBuffer[i]
     }
     for (i in s.indices) {
-        matrixS.mutableBuffer.array()[matrixS.bufferStart + i] = s[i]
+        matrixSBuffer[matrixSStart + i] = s[i]
     }
     for (i in vBuffer.indices) {
-        matrixV.mutableBuffer.array()[matrixV.bufferStart + i] = vBuffer[i]
+        matrixVBuffer[matrixVStart + i] = vBuffer[i]
     }
 }
 
