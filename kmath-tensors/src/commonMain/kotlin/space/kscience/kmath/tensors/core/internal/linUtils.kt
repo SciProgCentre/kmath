@@ -647,9 +647,9 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
         }
     }
 
-    for (i in 0 until m) {
-        for (j in 0 until n) {
-            u[j, i] = this[i, j]
+    for (i in 0 until n) {
+        for (j in 0 until m) {
+            u[j, i] = this[j, i]
         }
     }
 }

@@ -841,7 +841,7 @@ public open class DoubleTensorAlgebra :
         val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
-        val uTensor = zeros(commonShape + intArrayOf(m, n))
+        val uTensor = zeros(commonShape + intArrayOf(n, m))
         val sTensor = zeros(commonShape + intArrayOf(m))
         val vTensor = zeros(commonShape + intArrayOf(m, m))
 
@@ -863,7 +863,7 @@ public open class DoubleTensorAlgebra :
                 iterations, epsilon)
         }
 
-        return Triple(uTensor.transpose(), sTensor, vTensor)
+        return Triple(uTensor, sTensor, vTensor)
     }
 
     /**
