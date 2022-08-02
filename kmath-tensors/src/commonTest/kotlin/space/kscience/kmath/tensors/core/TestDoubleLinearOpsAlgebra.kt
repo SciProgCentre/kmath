@@ -156,9 +156,12 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val res = svd1d(tensor2)
 
+        val resBuffer = res.mutableBuffer
+        val resStart = res.bufferStart
+
         assertTrue(res.shape contentEquals intArrayOf(2))
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart]) - 0.386) < 0.01 }
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart + 1]) - 0.922) < 0.01 }
+        assertTrue { abs(abs(resBuffer[resStart]) - 0.386) < 0.01 }
+        assertTrue { abs(abs(resBuffer[resStart + 1]) - 0.922) < 0.01 }
     }
 
     @Test
