@@ -24,6 +24,44 @@ import kotlin.test.assertTrue
 internal class TestDoubleTensor {
 
     @Test
+    fun testFullLike() = DoubleTensorAlgebra {
+        val shape = intArrayOf(2, 3)
+        val buffer = doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
+        val tensor = DoubleTensor(shape, buffer)
+        val value = 12.5
+        assertTrue { tensor.fullLike(value) eq DoubleTensor(shape, buffer.map { value }.toDoubleArray() ) }
+    }
+
+    @Test
+    fun testOnesLike() = DoubleTensorAlgebra {
+        val shape = intArrayOf(2, 3)
+        val buffer = doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
+        val tensor = DoubleTensor(shape, buffer)
+        assertTrue { tensor.onesLike() eq DoubleTensor(shape, buffer.map { 1.0 }.toDoubleArray() ) }
+    }
+
+    @Test
+    fun testRowsByIndices() = DoubleTensorAlgebra {
+        val shape = intArrayOf(2, 2)
+        val buffer = doubleArrayOf(1.0, 2.0, -3.0, 4.0)
+        val tensor = fromArray(shape, buffer)
+        assertTrue { tensor.rowsByIndices(intArrayOf(0)) eq DoubleTensor(intArrayOf(1, 2), doubleArrayOf(1.0, 2.0)) }
+        assertTrue { tensor.rowsByIndices(intArrayOf(0, 1)) eq tensor }
+    }
+
+    @Test
+    fun testTimes() = DoubleTensorAlgebra {
+        val shape = intArrayOf(2, 2)
+        val buffer = doubleArrayOf(1.0, 2.0, -3.0, 4.0)
+        val tensor = DoubleTensor(shape, buffer)
+        val value = 3
+        assertTrue { tensor.times(value).toBufferedTensor() eq DoubleTensor(shape, buffer.map { x -> 3 * x }.toDoubleArray()) }
+        val buffer2 = doubleArrayOf(7.0, -8.0, -5.0, 2.0)
+        val tensor2 = DoubleTensor(shape, buffer2)
+        assertTrue {tensor.times(tensor2).toBufferedTensor() eq DoubleTensor(shape, doubleArrayOf(7.0, -16.0, 15.0, 8.0)) }
+    }
+
+    @Test
     fun testValue() = DoubleTensorAlgebra {
         val value = 12.5
         val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))

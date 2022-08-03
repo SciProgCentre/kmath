@@ -84,6 +84,11 @@ benchmark {
         iterationTimeUnit = "ms"
     }
 
+    configurations.register("svd") {
+        commonConfiguration()
+        include("SVDBenchmark")
+    }
+
     configurations.register("buffer") {
         commonConfiguration()
         include("BufferBenchmark")

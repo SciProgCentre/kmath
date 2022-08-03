@@ -89,7 +89,7 @@ public open class DoubleTensorAlgebra :
     }
 
     override fun StructureND<Double>.valueOrNull(): Double? = if (tensor.shape contentEquals intArrayOf(1))
-        tensor.mutableBuffer.array()[tensor.bufferStart] else null
+        tensor.mutableBuffer[tensor.bufferStart] else null
 
     override fun StructureND<Double>.value(): Double = valueOrNull()
         ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
@@ -208,7 +208,7 @@ public open class DoubleTensorAlgebra :
 
     override fun Double.plus(arg: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(arg.tensor.numElements) { i ->
-            arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i] + this
+            arg.tensor.mutableBuffer[arg.tensor.bufferStart + i] + this
         }
         return DoubleTensor(arg.shape, resBuffer)
     }
@@ -218,35 +218,35 @@ public open class DoubleTensorAlgebra :
     override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor {
         checkShapesCompatible(tensor, arg.tensor)
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[i] + arg.tensor.mutableBuffer.array()[i]
+            tensor.mutableBuffer[i] + arg.tensor.mutableBuffer[i]
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
     override fun Tensor<Double>.plusAssign(value: Double) {
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] += value
+            tensor.mutableBuffer[tensor.bufferStart + i] += value
         }
     }
 
     override fun Tensor<Double>.plusAssign(arg: StructureND<Double>) {
         checkShapesCompatible(tensor, arg.tensor)
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] +=
-                arg.tensor.mutableBuffer.array()[tensor.bufferStart + i]
+            tensor.mutableBuffer[tensor.bufferStart + i] +=
+                arg.tensor.mutableBuffer[tensor.bufferStart + i]
         }
     }
 
     override fun Double.minus(arg: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(arg.tensor.numElements) { i ->
-            this - arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i]
+            this - arg.tensor.mutableBuffer[arg.tensor.bufferStart + i]
         }
         return DoubleTensor(arg.shape, resBuffer)
     }
 
     override fun StructureND<Double>.minus(arg: Double): DoubleTensor {
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] - arg
+            tensor.mutableBuffer[tensor.bufferStart + i] - arg
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
@@ -254,28 +254,28 @@ public open class DoubleTensorAlgebra :
     override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor {
         checkShapesCompatible(tensor, arg)
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[i] - arg.tensor.mutableBuffer.array()[i]
+            tensor.mutableBuffer[i] - arg.tensor.mutableBuffer[i]
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
     override fun Tensor<Double>.minusAssign(value: Double) {
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] -= value
+            tensor.mutableBuffer[tensor.bufferStart + i] -= value
         }
     }
 
     override fun Tensor<Double>.minusAssign(arg: StructureND<Double>) {
         checkShapesCompatible(tensor, arg)
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] -=
-                arg.tensor.mutableBuffer.array()[tensor.bufferStart + i]
+            tensor.mutableBuffer[tensor.bufferStart + i] -=
+                arg.tensor.mutableBuffer[tensor.bufferStart + i]
         }
     }
 
     override fun Double.times(arg: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(arg.tensor.numElements) { i ->
-            arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i] * this
+            arg.tensor.mutableBuffer[arg.tensor.bufferStart + i] * this
         }
         return DoubleTensor(arg.shape, resBuffer)
     }
@@ -285,36 +285,36 @@ public open class DoubleTensorAlgebra :
     override fun StructureND<Double>.times(arg: StructureND<Double>): DoubleTensor {
         checkShapesCompatible(tensor, arg)
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] *
-                    arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i]
+            tensor.mutableBuffer[tensor.bufferStart + i] *
+                    arg.tensor.mutableBuffer[arg.tensor.bufferStart + i]
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
     override fun Tensor<Double>.timesAssign(value: Double) {
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] *= value
+            tensor.mutableBuffer[tensor.bufferStart + i] *= value
         }
     }
 
     override fun Tensor<Double>.timesAssign(arg: StructureND<Double>) {
         checkShapesCompatible(tensor, arg)
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] *=
-                arg.tensor.mutableBuffer.array()[tensor.bufferStart + i]
+            tensor.mutableBuffer[tensor.bufferStart + i] *=
+                arg.tensor.mutableBuffer[tensor.bufferStart + i]
         }
     }
 
     override fun Double.div(arg: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(arg.tensor.numElements) { i ->
-            this / arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i]
+            this / arg.tensor.mutableBuffer[arg.tensor.bufferStart + i]
         }
         return DoubleTensor(arg.shape, resBuffer)
     }
 
     override fun StructureND<Double>.div(arg: Double): DoubleTensor {
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] / arg
+            tensor.mutableBuffer[tensor.bufferStart + i] / arg
         }
         return DoubleTensor(shape, resBuffer)
     }
@@ -322,29 +322,29 @@ public open class DoubleTensorAlgebra :
     override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleTensor {
         checkShapesCompatible(tensor, arg)
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[arg.tensor.bufferStart + i] /
-                    arg.tensor.mutableBuffer.array()[arg.tensor.bufferStart + i]
+            tensor.mutableBuffer[arg.tensor.bufferStart + i] /
+                    arg.tensor.mutableBuffer[arg.tensor.bufferStart + i]
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
 
     override fun Tensor<Double>.divAssign(value: Double) {
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] /= value
+            tensor.mutableBuffer[tensor.bufferStart + i] /= value
         }
     }
 
     override fun Tensor<Double>.divAssign(arg: StructureND<Double>) {
         checkShapesCompatible(tensor, arg)
         for (i in 0 until tensor.numElements) {
-            tensor.mutableBuffer.array()[tensor.bufferStart + i] /=
-                arg.tensor.mutableBuffer.array()[tensor.bufferStart + i]
+            tensor.mutableBuffer[tensor.bufferStart + i] /=
+                arg.tensor.mutableBuffer[tensor.bufferStart + i]
         }
     }
 
     override fun StructureND<Double>.unaryMinus(): DoubleTensor {
         val resBuffer = DoubleArray(tensor.numElements) { i ->
-            tensor.mutableBuffer.array()[tensor.bufferStart + i].unaryMinus()
+            tensor.mutableBuffer[tensor.bufferStart + i].unaryMinus()
         }
         return DoubleTensor(tensor.shape, resBuffer)
     }
@@ -367,8 +367,8 @@ public open class DoubleTensorAlgebra :
             newMultiIndex[ii] = newMultiIndex[jj].also { newMultiIndex[jj] = newMultiIndex[ii] }
 
             val linearIndex = resTensor.indices.offset(newMultiIndex)
-            resTensor.mutableBuffer.array()[linearIndex] =
-                tensor.mutableBuffer.array()[tensor.bufferStart + offset]
+            resTensor.mutableBuffer[linearIndex] =
+                tensor.mutableBuffer[tensor.bufferStart + offset]
         }
         return resTensor
     }
@@ -833,8 +833,38 @@ public open class DoubleTensorAlgebra :
         return qTensor to rTensor
     }
 
-    override fun StructureND<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
-        svd(epsilon = 1e-10)
+    override fun StructureND<Double>.svd(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        return this.svdGolubKahan()
+    }
+
+    public fun StructureND<Double>.svdGolubKahan(iterations: Int = 30, epsilon: Double = 1e-10): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+        val size = tensor.dimension
+        val commonShape = tensor.shape.sliceArray(0 until size - 2)
+        val (n, m) = tensor.shape.sliceArray(size - 2 until size)
+        val uTensor = zeros(commonShape + intArrayOf(n, m))
+        val sTensor = zeros(commonShape + intArrayOf(m))
+        val vTensor = zeros(commonShape + intArrayOf(m, m))
+
+        val matrices = tensor.matrices
+        val uTensors = uTensor.matrices
+        val sTensorVectors = sTensor.vectors
+        val vTensors = vTensor.matrices
+
+        for (index in matrices.indices) {
+            val matrix = matrices[index]
+            val matrixSize = matrix.shape.reduce { acc, i -> acc * i }
+            val curMatrix = DoubleTensor(
+                matrix.shape,
+                matrix.mutableBuffer.array()
+                    .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
+                    .toDoubleArray()
+            )
+            curMatrix.as2D().svdGolubKahanHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D(),
+                iterations, epsilon)
+        }
+
+        return Triple(uTensor, sTensor, vTensor)
+    }
 
     /**
      * Singular Value Decomposition.
@@ -849,7 +879,7 @@ public open class DoubleTensorAlgebra :
      * i.e., the precision with which the cosine approaches 1 in an iterative algorithm.
      * @return a triple `Triple(U, S, V)`.
      */
-    public fun StructureND<Double>.svd(epsilon: Double): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    public fun StructureND<Double>.svdPowerMethod(epsilon: Double = 1e-10): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
         val size = tensor.dimension
         val commonShape = tensor.shape.sliceArray(0 until size - 2)
         val (n, m) = tensor.shape.sliceArray(size - 2 until size)
@@ -876,7 +906,7 @@ public open class DoubleTensorAlgebra :
                     .slice(matrix.bufferStart until matrix.bufferStart + matrixSize)
                     .toDoubleArray()
             )
-            svdHelper(curMatrix, usv, m, n, epsilon)
+            svdPowerMethodHelper(curMatrix, usv, m, n, epsilon)
         }
 
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
@@ -907,7 +937,7 @@ public open class DoubleTensorAlgebra :
             }
         }
 
-        val (u, s, v) = tensor.svd(epsilon)
+        val (u, s, v) = tensor.svd()
         val shp = s.shape + intArrayOf(1)
         val utv = u.transpose() dot v
         val n = s.shape.last()
@@ -928,18 +958,21 @@ public open class DoubleTensorAlgebra :
 
         var eigenvalueStart = 0
         var eigenvectorStart = 0
+        val eigenvaluesBuffer = eigenvalues.mutableBuffer
+        val eigenvectorsBuffer = eigenvectors.mutableBuffer
+
         for (matrix in tensor.matrixSequence()) {
             val matrix2D = matrix.as2D()
             val (d, v) = matrix2D.jacobiHelper(maxIteration, epsilon)
 
             for (i in 0 until matrix2D.rowNum) {
                 for (j in 0 until matrix2D.colNum) {
-                    eigenvectors.mutableBuffer.array()[eigenvectorStart + i * matrix2D.rowNum + j] = v[i, j]
+                    eigenvectorsBuffer[eigenvectorStart + i * matrix2D.rowNum + j] = v[i, j]
                 }
             }
 
             for (i in 0 until matrix2D.rowNum) {
-                eigenvalues.mutableBuffer.array()[eigenvalueStart + i] = d[i]
+                eigenvaluesBuffer[eigenvalueStart + i] = d[i]
             }
 
             eigenvalueStart += this.shape.last()
@@ -962,11 +995,11 @@ public open class DoubleTensorAlgebra :
 
         // assume that buffered tensor is square matrix
         operator fun BufferedTensor<Double>.get(i: Int, j: Int): Double {
-            return this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j]
+            return this.mutableBuffer[bufferStart + i * this.shape[0] + j]
         }
 
         operator fun BufferedTensor<Double>.set(i: Int, j: Int, value: Double) {
-            this.mutableBuffer.array()[bufferStart + i * this.shape[0] + j] = value
+            this.mutableBuffer[bufferStart + i * this.shape[0] + j] = value
         }
 
         fun maxOffDiagonal(matrix: BufferedTensor<Double>): Double {

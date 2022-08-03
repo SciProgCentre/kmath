@@ -156,23 +156,12 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val res = svd1d(tensor2)
 
+        val resBuffer = res.mutableBuffer
+        val resStart = res.bufferStart
+
         assertTrue(res.shape contentEquals intArrayOf(2))
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart]) - 0.386) < 0.01 }
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart + 1]) - 0.922) < 0.01 }
-    }
-
-    @Test
-    fun testSVD() = DoubleTensorAlgebra{
-        testSVDFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
-        testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
-    }
-
-    @Test
-    fun testBatchedSVD() = DoubleTensorAlgebra {
-        val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
-        val (tensorU, tensorS, tensorV) = tensor.svd()
-        val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
-        assertTrue(tensor.eq(tensorSVD))
+        assertTrue { abs(abs(resBuffer[resStart]) - 0.386) < 0.01 }
+        assertTrue { abs(abs(resBuffer[resStart + 1]) - 0.922) < 0.01 }
     }
 
     @Test
@@ -184,12 +173,129 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
+    @Test
+    fun testSVD() = DoubleTensorAlgebra{
+        testSVDFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
+        testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
+        val buffer1 = doubleArrayOf(
+            1.000000, 2.000000, 3.000000,
+            2.000000, 3.000000, 4.000000,
+            3.000000, 4.000000, 5.000000,
+            4.000000, 5.000000, 6.000000,
+            5.000000, 6.000000, 9.000000
+        )
+        testSVDFor(fromArray(intArrayOf(5, 3), buffer1))
+        val buffer2 = doubleArrayOf(
+            1.0, 2.0, 3.0, 2.0, 3.0,
+            4.0, 3.0, 4.0, 5.0, 4.0,
+            5.0, 6.0, 5.0, 6.0, 7.0
+        )
+        testSVDFor(fromArray(intArrayOf(3, 5), buffer2))
+    }
 
+    @Test
+    fun testBatchedSVD() = DoubleTensorAlgebra{
+        val tensor1 = randomNormal(intArrayOf(2, 5, 3), 0)
+        testSVDFor(tensor1)
+        val tensor2 = DoubleTensorAlgebra.randomNormal(intArrayOf(30, 30, 30), 0)
+        testSVDFor(tensor2)
+    }
+
+    @Test
+    fun testSVDGolubKahan() = DoubleTensorAlgebra{
+        testSVDGolubKahanFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
+        testSVDGolubKahanFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
+        val buffer1 = doubleArrayOf(
+            1.000000, 2.000000, 3.000000,
+            2.000000, 3.000000, 4.000000,
+            3.000000, 4.000000, 5.000000,
+            4.000000, 5.000000, 6.000000,
+            5.000000, 6.000000, 9.000000
+        )
+        testSVDGolubKahanFor(fromArray(intArrayOf(5, 3), buffer1))
+        val buffer2 = doubleArrayOf(
+            1.0, 2.0, 3.0, 2.0, 3.0,
+            4.0, 3.0, 4.0, 5.0, 4.0,
+            5.0, 6.0, 5.0, 6.0, 7.0
+        )
+        testSVDGolubKahanFor(fromArray(intArrayOf(3, 5), buffer2))
+    }
+
+    @Test
+    fun testBatchedSVDGolubKahan() = DoubleTensorAlgebra{
+        val tensor1 = randomNormal(intArrayOf(2, 5, 3), 0)
+        testSVDGolubKahanFor(tensor1)
+        val tensor2 = DoubleTensorAlgebra.randomNormal(intArrayOf(30, 30, 30), 0)
+        testSVDGolubKahanFor(tensor2)
+    }
+
+    @Test
+    fun testSVDPowerMethod() = DoubleTensorAlgebra{
+        testSVDPowerMethodFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
+        testSVDPowerMethodFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
+        val buffer1 = doubleArrayOf(
+            1.000000, 2.000000, 3.000000,
+            2.000000, 3.000000, 4.000000,
+            3.000000, 4.000000, 5.000000,
+            4.000000, 5.000000, 6.000000,
+            5.000000, 6.000000, 9.000000
+        )
+        testSVDPowerMethodFor(fromArray(intArrayOf(5, 3), buffer1))
+        val buffer2 = doubleArrayOf(
+            1.0, 2.0, 3.0, 2.0, 3.0,
+            4.0, 3.0, 4.0, 5.0, 4.0,
+            5.0, 6.0, 5.0, 6.0, 7.0
+        )
+        testSVDPowerMethodFor(fromArray(intArrayOf(3, 5), buffer2))
+    }
+
+    @Test
+    fun testBatchedSVDPowerMethod() = DoubleTensorAlgebra {
+        val tensor1 = randomNormal(intArrayOf(2, 5, 3), 0)
+        testSVDPowerMethodFor(tensor1)
+        val tensor2 = DoubleTensorAlgebra.randomNormal(intArrayOf(30, 30, 30), 0)
+        testSVDPowerMethodFor(tensor2)
+    }
+
+//    @Test
+//    fun testSVDPowerMethodError() = DoubleTensorAlgebra{
+//       val buffer = doubleArrayOf(
+//            1.000000, 2.000000, 3.000000,
+//            2.000000, 3.000000, 4.000000,
+//            3.000000, 4.000000, 5.000000,
+//            4.000000, 5.000000, 6.000000,
+//            5.000000, 6.000000, 7.000000
+//        )
+//        testSVDPowerMethodFor(fromArray(intArrayOf(5, 3), buffer))
+//    }
 }
 
-
-private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
+private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor) {
     val svd = tensor.svd()
+
+    val tensorSVD = svd.first
+        .dot(
+            diagonalEmbedding(svd.second)
+                .dot(svd.third.transpose())
+        )
+
+    assertTrue(tensor.eq(tensorSVD))
+}
+
+private fun DoubleTensorAlgebra.testSVDGolubKahanFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
+    val svd = tensor.svdGolubKahan()
+
+    val tensorSVD = svd.first
+        .dot(
+            diagonalEmbedding(svd.second)
+                .dot(svd.third.transpose())
+        )
+
+    assertTrue(tensor.eq(tensorSVD, epsilon))
+}
+
+private fun DoubleTensorAlgebra.testSVDPowerMethodFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
+    val svd = tensor.svdPowerMethod()
 
     val tensorSVD = svd.first
         .dot(
