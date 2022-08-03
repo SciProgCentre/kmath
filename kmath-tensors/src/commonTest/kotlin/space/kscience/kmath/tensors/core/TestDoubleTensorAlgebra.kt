@@ -114,7 +114,7 @@ internal class TestDoubleTensorAlgebra {
         assertTrue(res12.mutableBuffer.array() contentEquals doubleArrayOf(140.0, 320.0))
         assertTrue(res12.shape contentEquals intArrayOf(2))
 
-        val res32 = tensor3.bdot(tensor2)
+        val res32 = tensor3.matmul(tensor2)
         assertTrue(res32.mutableBuffer.array() contentEquals doubleArrayOf(-140.0))
         assertTrue(res32.shape contentEquals intArrayOf(1, 1))
 
@@ -126,7 +126,7 @@ internal class TestDoubleTensorAlgebra {
         assertTrue(res11.mutableBuffer.array() contentEquals doubleArrayOf(22.0, 28.0, 49.0, 64.0))
         assertTrue(res11.shape contentEquals intArrayOf(2, 2))
 
-        val res45 = tensor4.bdot(tensor5)
+        val res45 = tensor4.matmul(tensor5)
         assertTrue(res45.mutableBuffer.array() contentEquals doubleArrayOf(
             36.0, 42.0, 48.0, 81.0, 96.0, 111.0, 126.0, 150.0, 174.0,
             468.0, 501.0, 534.0, 594.0, 636.0, 678.0, 720.0, 771.0, 822.0

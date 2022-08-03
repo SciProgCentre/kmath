@@ -9,6 +9,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.MutableBuffer
@@ -410,7 +411,8 @@ public open class DoubleTensorAlgebra :
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
      */
-    public infix fun StructureND<Double>.bdot(other: StructureND<Double>): DoubleTensor {
+    @UnstableKMathAPI
+    public infix fun StructureND<Double>.matmul(other: StructureND<Double>): DoubleTensor {
         if (tensor.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.mutableBuffer.array().sum()))
         }
@@ -460,7 +462,7 @@ public open class DoubleTensorAlgebra :
     }
 
     override fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
-        return if (dimension in 0..2 && other.dimension in 0..2) bdot(other)
+        return if (dimension in 0..2 && other.dimension in 0..2) matmul(other)
         else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
     }
 
@@ -945,7 +947,7 @@ public open class DoubleTensorAlgebra :
 
         val (u, s, v) = tensor.svd(epsilon)
         val shp = s.shape + intArrayOf(1)
-        val utv = u.transpose() bdot v
+        val utv = u.transpose() matmul v
         val n = s.shape.last()
         for (matrix in utv.matrixSequence()) {
             matrix.as2D().cleanSym(n)

@@ -115,7 +115,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         assertTrue { q.shape contentEquals shape }
         assertTrue { r.shape contentEquals shape }
 
-        assertTrue((q bdot r).eq(tensor))
+        assertTrue((q matmul r).eq(tensor))
 
     }
 
@@ -136,17 +136,17 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         assertTrue { l.shape contentEquals shape }
         assertTrue { u.shape contentEquals shape }
 
-        assertTrue((p bdot tensor).eq(l bdot u))
+        assertTrue((p matmul tensor).eq(l matmul u))
     }
 
     @Test
     fun testCholesky() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 5), 0)
-        val sigma = (tensor bdot tensor.transpose()) + diagonalEmbedding(
+        val sigma = (tensor matmul tensor.transpose()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
         )
         val low = sigma.cholesky()
-        val sigmChol = low bdot low.transpose()
+        val sigmChol = low matmul low.transpose()
         assertTrue(sigma.eq(sigmChol))
     }
 
@@ -171,7 +171,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     fun testBatchedSVD() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
-        val tensorSVD = tensorU bdot (diagonalEmbedding(tensorS) bdot tensorV.transpose())
+        val tensorSVD = tensorU matmul (diagonalEmbedding(tensorS) matmul tensorV.transpose())
         assertTrue(tensor.eq(tensorSVD))
     }
 
@@ -180,7 +180,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         val tensor = randomNormal(shape = intArrayOf(2, 3, 3), 0)
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val tensorSigmaCalc = tensorV bdot (diagonalEmbedding(tensorS) bdot tensorV.transpose())
+        val tensorSigmaCalc = tensorV matmul (diagonalEmbedding(tensorS) matmul tensorV.transpose())
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
