@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.multik
 
+import org.jetbrains.kotlinx.multik.api.Multik
+import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
@@ -54,6 +56,8 @@ public object MultikDoubleAlgebra : MultikDivisionTensorAlgebra<Double, DoubleFi
 
     @PerformancePitfall
     override fun atanh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atanh(it) }
+
+    override fun scalar(value: Double): MultikTensor<Double>  = Multik.ndarrayOf(value).wrap()
 }
 
 public val Double.Companion.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra

@@ -6,7 +6,7 @@ description = "JetBrains Multik connector"
 
 dependencies {
     api(project(":kmath-tensors"))
-    api("org.jetbrains.kotlinx:multik-default:0.1.0")
+    api("org.jetbrains.kotlinx:multik-default:0.2.0")
 }
 
 readme {
