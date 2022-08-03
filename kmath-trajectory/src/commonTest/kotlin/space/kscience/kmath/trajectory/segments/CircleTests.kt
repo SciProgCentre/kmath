@@ -3,9 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.trajectory.segments.components
+package space.kscience.kmath.trajectory.segments
 
+import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.geometry.circumference
 import space.kscience.kmath.trajectory.maxFloatDelta
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,7 +19,7 @@ class CircleTests {
         val center = Vector2D(0.0, 0.0)
         val radius = 2.0
         val expectedCircumference = 12.56637
-        val circle = Circle(center, radius)
+        val circle = Circle2D(center, radius)
         assertEquals(expectedCircumference, circle.circumference, maxFloatDelta)
     }
 }
