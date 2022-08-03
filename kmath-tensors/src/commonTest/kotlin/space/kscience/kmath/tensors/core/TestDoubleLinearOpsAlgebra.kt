@@ -115,7 +115,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         assertTrue { q.shape contentEquals shape }
         assertTrue { r.shape contentEquals shape }
 
-        assertTrue((q dot r).eq(tensor))
+        assertTrue((q bdot r).eq(tensor))
 
     }
 
@@ -136,17 +136,17 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         assertTrue { l.shape contentEquals shape }
         assertTrue { u.shape contentEquals shape }
 
-        assertTrue((p dot tensor).eq(l dot u))
+        assertTrue((p bdot tensor).eq(l bdot u))
     }
 
     @Test
     fun testCholesky() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 5), 0)
-        val sigma = (tensor dot tensor.transpose()) + diagonalEmbedding(
+        val sigma = (tensor bdot tensor.transpose()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
         )
         val low = sigma.cholesky()
-        val sigmChol = low dot low.transpose()
+        val sigmChol = low bdot low.transpose()
         assertTrue(sigma.eq(sigmChol))
     }
 
@@ -171,7 +171,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     fun testBatchedSVD() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
-        val tensorSVD = tensorU dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
+        val tensorSVD = tensorU bdot (diagonalEmbedding(tensorS) bdot tensorV.transpose())
         assertTrue(tensor.eq(tensorSVD))
     }
 
@@ -180,7 +180,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         val tensor = randomNormal(shape = intArrayOf(2, 3, 3), 0)
         val tensorSigma = tensor + tensor.transpose()
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val tensorSigmaCalc = tensorV dot (diagonalEmbedding(tensorS) dot tensorV.transpose())
+        val tensorSigmaCalc = tensorV bdot (diagonalEmbedding(tensorS) bdot tensorV.transpose())
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 

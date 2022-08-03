@@ -381,7 +381,36 @@ public open class DoubleTensorAlgebra :
     override fun Tensor<Double>.viewAs(other: StructureND<Double>): DoubleTensor =
         tensor.view(other.shape)
 
-    override infix fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
+    /**
+     * Broadcasting Matrix product of two tensors.
+     *
+     * The behavior depends on the dimensionality of the tensors as follows:
+     * 1. If both tensors are 1-dimensional, the dot product (scalar) is returned.
+     *
+     * 2. If both arguments are 2-dimensional, the matrix-matrix product is returned.
+     *
+     * 3. If the first argument is 1-dimensional and the second argument is 2-dimensional,
+     * a 1 is prepended to its dimension for the purpose of the matrix multiply.
+     * After the matrix multiply, depending on the implementation the prepended dimension might be removed.
+     *
+     * 4. If the first argument is 2-dimensional and the second argument is 1-dimensional,
+     * the matrix-vector product is returned.
+     *
+     * 5. If both arguments are at least 1-dimensional and at least one argument is N-dimensional (where N > 2),
+     * then a batched matrix multiply is returned. If the first argument is 1-dimensional,
+     * a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after.
+     * If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix
+     * multiple and removed after.
+     * The non-matrix (i.e., batch) dimensions are broadcast (and thus must be broadcastable).
+     * For example, if `input` is a (j &times; 1 &times; n &times; n) tensor and `other` is a
+     * (k &times; n &times; n) tensor, out will be a (j &times; k &times; n &times; n) tensor.
+     *
+     * For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html
+     *
+     * @param other tensor to be multiplied.
+     * @return a mathematical product of two tensors.
+     */
+    public infix fun StructureND<Double>.bdot(other: StructureND<Double>): DoubleTensor {
         if (tensor.shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(intArrayOf(1), doubleArrayOf(tensor.times(other).tensor.mutableBuffer.array().sum()))
         }
@@ -428,6 +457,11 @@ public open class DoubleTensorAlgebra :
         } else {
             resTensor
         }
+    }
+
+    override fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
+        return if (dimension in 0..2 && other.dimension in 0..2) bdot(other)
+        else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
     }
 
     override fun diagonalEmbedding(
@@ -587,7 +621,8 @@ public open class DoubleTensorAlgebra :
         val resNumElements = resShape.reduce(Int::times)
         val init = foldFunction(DoubleArray(1) { 0.0 })
         val resTensor = BufferedTensor(resShape,
-            MutableBuffer.auto(resNumElements) { init }, 0)
+            MutableBuffer.auto(resNumElements) { init }, 0
+        )
         for (index in resTensor.indices) {
             val prefix = index.take(dim).toIntArray()
             val suffix = index.takeLast(dimension - dim - 1).toIntArray()
@@ -882,7 +917,8 @@ public open class DoubleTensorAlgebra :
         return Triple(uTensor.transpose(), sTensor, vTensor.transpose())
     }
 
-    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> = symEigJacobi(maxIteration = 50, epsilon = 1e-15)
+    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
+        symEigJacobi(maxIteration = 50, epsilon = 1e-15)
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
@@ -909,7 +945,7 @@ public open class DoubleTensorAlgebra :
 
         val (u, s, v) = tensor.svd(epsilon)
         val shp = s.shape + intArrayOf(1)
-        val utv = u.transpose() dot v
+        val utv = u.transpose() bdot v
         val n = s.shape.last()
         for (matrix in utv.matrixSequence()) {
             matrix.as2D().cleanSym(n)
@@ -951,7 +987,7 @@ public open class DoubleTensorAlgebra :
 
     private fun MutableStructure2D<Double>.jacobiHelper(
         maxIteration: Int,
-        epsilon: Double
+        epsilon: Double,
     ): Pair<Structure1D<Double>, Structure2D<Double>> {
         val n = this.shape[0]
         val A_ = this.copy()

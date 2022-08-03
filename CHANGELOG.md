@@ -7,8 +7,9 @@
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
-- Kotlin 1.7
+- Kotlin 1.7.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style
+- Default `dot` operation in tensor algebra no longer support broadcasting. Instead `bdot` operation is added to `DoubleTensorAlgebra`.
 
 ### Deprecated
 

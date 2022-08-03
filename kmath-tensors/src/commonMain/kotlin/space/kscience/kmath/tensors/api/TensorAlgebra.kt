@@ -213,16 +213,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * 4. If the first argument is 2-dimensional and the second argument is 1-dimensional,
      * the matrix-vector product is returned.
      *
-     * 5. If both arguments are at least 1-dimensional and at least one argument is N-dimensional (where N > 2),
-     * then a batched matrix multiply is returned. If the first argument is 1-dimensional,
-     * a 1 is prepended to its dimension for the purpose of the batched matrix multiply and removed after.
-     * If the second argument is 1-dimensional, a 1 is appended to its dimension for the purpose of the batched matrix
-     * multiple and removed after.
-     * The non-matrix (i.e., batch) dimensions are broadcast (and thus must be broadcastable).
-     * For example, if `input` is a (j &times; 1 &times; n &times; n) tensor and `other` is a
-     * (k &times; n &times; n) tensor, out will be a (j &times; k &times; n &times; n) tensor.
-     *
-     * For more information: https://pytorch.org/docs/stable/generated/torch.matmul.html
+     * Otherwise, throw an exception.
      *
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
