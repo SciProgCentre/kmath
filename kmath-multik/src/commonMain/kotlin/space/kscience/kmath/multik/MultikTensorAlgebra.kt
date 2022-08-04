@@ -20,14 +20,15 @@ import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
 import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 
-public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
-        where T : Number, T : Comparable<T> {
+public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
+    private val multikEngine: Engine,
+) : TensorAlgebra<T, A> where T : Number, T : Comparable<T> {
 
     public abstract val type: DataType
 
-    protected val multikMath: Math = mk.math
-    protected val multikLinAl: LinAlg = mk.linalg
-    protected val multikStat: Statistics = mk.stat
+    protected val multikMath: Math = multikEngine.getMath()
+    protected val multikLinAl: LinAlg = multikEngine.getLinAlg()
+    protected val multikStat: Statistics = multikEngine.getStatistics()
 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = DefaultStrides(shape)
@@ -255,12 +256,13 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>> : TensorAlgebra<T, A>
     override fun StructureND<T>.argMax(dim: Int, keepDim: Boolean): Tensor<Int> {
         if (keepDim) TODO("keepDim not implemented")
         val res = multikMath.argMaxDN(asMultik().array, dim)
-        return with(MultikIntAlgebra) { res.wrap() }
+        return with(MultikIntAlgebra(multikEngine)) { res.wrap() }
     }
 }
 
-public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>
-    : MultikTensorAlgebra<T, A>(), TensorPartialDivisionAlgebra<T, A> where T : Number, T : Comparable<T> {
+public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
+    multikEngine: Engine,
+) : MultikTensorAlgebra<T, A>(multikEngine), TensorPartialDivisionAlgebra<T, A> where T : Number, T : Comparable<T> {
 
     override fun T.div(arg: StructureND<T>): MultikTensor<T> =
         Multik.ones<T, DN>(arg.shape, type).apply { divAssign(arg.asMultik().array) }.wrap()

@@ -13,7 +13,6 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensorflow.produceWithTF
@@ -78,7 +77,7 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun multikDot(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
+    fun multikDot(blackhole: Blackhole) = with(multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 

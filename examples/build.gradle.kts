@@ -8,6 +8,8 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
 }
 
+val multikVersion: String by rootProject.extra
+
 dependencies {
     implementation(project(":kmath-ast"))
     implementation(project(":kmath-kotlingrad"))
@@ -30,6 +32,7 @@ dependencies {
     implementation(project(":kmath-jafama"))
     //multik
     implementation(project(":kmath-multik"))
+    implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
 
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")

@@ -1,12 +1,25 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 description = "JetBrains Multik connector"
 
-dependencies {
-    api(project(":kmath-tensors"))
-    api("org.jetbrains.kotlinx:multik-default:0.2.0")
+val multikVersion: String by rootProject.extra
+
+kotlin{
+    sourceSets{
+        commonMain{
+            dependencies{
+                api(project(":kmath-tensors"))
+                api("org.jetbrains.kotlinx:multik-core:$multikVersion")
+            }
+        }
+        commonTest{
+            dependencies{
+                api("org.jetbrains.kotlinx:multik-default:$multikVersion")
+            }
+        }
+    }
 }
 
 readme {

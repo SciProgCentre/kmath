@@ -10,6 +10,7 @@
 - Kotlin 1.7.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style
 - Default `dot` operation in tensor algebra no longer support broadcasting. Instead `matmul` operation is added to `DoubleTensorAlgebra`.
+- Multik went MPP
 
 ### Deprecated
 

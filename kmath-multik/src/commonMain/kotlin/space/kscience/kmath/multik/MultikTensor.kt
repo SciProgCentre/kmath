@@ -9,6 +9,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.*
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.tensors.api.Tensor
+import kotlin.jvm.JvmInline
 
 @JvmInline
 public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) : Tensor<T> {

@@ -5,12 +5,15 @@
 
 package space.kscience.kmath.multik
 
+import org.jetbrains.kotlinx.multik.api.Engine
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.operations.LongRing
 
-public object MultikLongAlgebra : MultikTensorAlgebra<Long, LongRing>() {
+public class MultikLongAlgebra(
+    multikEngine: Engine
+) : MultikTensorAlgebra<Long, LongRing>(multikEngine) {
     override val elementAlgebra: LongRing get() = LongRing
     override val type: DataType get() = DataType.LongDataType
 
@@ -18,5 +21,5 @@ public object MultikLongAlgebra : MultikTensorAlgebra<Long, LongRing>() {
 }
 
 
-public val Long.Companion.multikAlgebra: MultikTensorAlgebra<Long, LongRing> get() = MultikLongAlgebra
-public val LongRing.multikAlgebra: MultikTensorAlgebra<Long, LongRing> get() = MultikLongAlgebra
+//public val Long.Companion.multikAlgebra: MultikTensorAlgebra<Long, LongRing> get() = MultikLongAlgebra
+//public val LongRing.multikAlgebra: MultikTensorAlgebra<Long, LongRing> get() = MultikLongAlgebra

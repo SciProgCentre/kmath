@@ -13,7 +13,6 @@ import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ones
 import org.jetbrains.kotlinx.multik.ndarray.data.DN
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.nd.BufferedFieldOpsND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
@@ -43,7 +42,7 @@ internal class NDFieldBenchmark {
     }
 
     @Benchmark
-    fun multikAdd(blackhole: Blackhole) = with(multikField) {
+    fun multikAdd(blackhole: Blackhole) = with(multikAlgebra) {
         var res: StructureND<Double> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
@@ -71,7 +70,7 @@ internal class NDFieldBenchmark {
     }
 
     @Benchmark
-    fun multikInPlaceAdd(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
+    fun multikInPlaceAdd(blackhole: Blackhole) = with(multikAlgebra) {
         val res = Multik.ones<Double, DN>(shape, DataType.DoubleDataType).wrap()
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
@@ -91,7 +90,6 @@ internal class NDFieldBenchmark {
         private val specializedField = DoubleField.ndAlgebra
         private val genericField = BufferedFieldOpsND(DoubleField)
         private val nd4jField = DoubleField.nd4j
-        private val multikField = DoubleField.multikAlgebra
         private val viktorField = DoubleField.viktorAlgebra
     }
 }

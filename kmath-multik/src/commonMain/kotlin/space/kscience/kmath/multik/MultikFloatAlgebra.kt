@@ -5,12 +5,15 @@
 
 package space.kscience.kmath.multik
 
+import org.jetbrains.kotlinx.multik.api.Engine
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.operations.FloatField
 
-public object MultikFloatAlgebra : MultikDivisionTensorAlgebra<Float, FloatField>() {
+public class MultikFloatAlgebra(
+    multikEngine: Engine
+) : MultikDivisionTensorAlgebra<Float, FloatField>(multikEngine) {
     override val elementAlgebra: FloatField get() = FloatField
     override val type: DataType get() = DataType.FloatDataType
 
@@ -18,5 +21,5 @@ public object MultikFloatAlgebra : MultikDivisionTensorAlgebra<Float, FloatField
 }
 
 
-public val Float.Companion.multikAlgebra: MultikTensorAlgebra<Float, FloatField> get() = MultikFloatAlgebra
-public val FloatField.multikAlgebra: MultikTensorAlgebra<Float, FloatField> get() = MultikFloatAlgebra
+//public val Float.Companion.multikAlgebra: MultikTensorAlgebra<Float, FloatField> get() = MultikFloatAlgebra
+//public val FloatField.multikAlgebra: MultikTensorAlgebra<Float, FloatField> get() = MultikFloatAlgebra
