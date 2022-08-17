@@ -29,13 +29,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdPowerMethodSmall(blackhole: Blackhole) {
-        val svd = tensorSmall.svdPowerMethod()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorSmall, epsilon))
         blackhole.consume(
             tensorSmall.svdPowerMethod()
         )
@@ -43,13 +36,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdPowerMethodMedium(blackhole: Blackhole) {
-        val svd = tensorMedium.svdPowerMethod()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorMedium, epsilon))
         blackhole.consume(
             tensorMedium.svdPowerMethod()
         )
@@ -57,13 +43,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdPowerMethodLarge(blackhole: Blackhole) {
-        val svd = tensorLarge.svdPowerMethod()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorLarge, epsilon))
         blackhole.consume(
             tensorLarge.svdPowerMethod()
         )
@@ -71,13 +50,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdPowerMethodVeryLarge(blackhole: Blackhole) {
-        val svd = tensorVeryLarge.svdPowerMethod()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorVeryLarge, epsilon))
         blackhole.consume(
             tensorVeryLarge.svdPowerMethod()
         )
@@ -85,13 +57,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdGolubKahanSmall(blackhole: Blackhole) {
-        val svd = tensorSmall.svdGolubKahan()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorSmall, epsilon))
         blackhole.consume(
             tensorSmall.svdGolubKahan()
         )
@@ -99,13 +64,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdGolubKahanMedium(blackhole: Blackhole) {
-        val svd = tensorMedium.svdGolubKahan()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorMedium, epsilon))
         blackhole.consume(
             tensorMedium.svdGolubKahan()
         )
@@ -113,13 +71,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdGolubKahanLarge(blackhole: Blackhole) {
-        val svd = tensorLarge.svdGolubKahan()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorLarge, epsilon))
         blackhole.consume(
             tensorLarge.svdGolubKahan()
         )
@@ -127,13 +78,6 @@ class SVDBenchmark {
 
     @Benchmark
     fun svdGolubKahanVeryLarge(blackhole: Blackhole) {
-        val svd = tensorVeryLarge.svdGolubKahan()
-        val tensorSVD = svd.first
-            .dot(
-                diagonalEmbedding(svd.second)
-                    .dot(svd.third.transpose())
-            )
-        assertTrue(tensorSVD.eq(tensorVeryLarge, epsilon))
         blackhole.consume(
             tensorVeryLarge.svdGolubKahan()
         )
