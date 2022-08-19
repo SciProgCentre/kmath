@@ -31,7 +31,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        java.net.URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        java.net.URL("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
                     )
                 }
 
