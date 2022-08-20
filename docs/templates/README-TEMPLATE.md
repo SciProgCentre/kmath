@@ -1,6 +1,6 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
-![Gradle build](https://github.com/mipt-npm/kmath/workflows/Gradle%20build/badge.svg)
+![Gradle build](https://github.com/SciProgCentre/kmath/workflows/Gradle%20build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
 [![Space](https://img.shields.io/badge/dynamic/xml?color=orange&label=Space&query=//metadata/versioning/latest&url=https%3A%2F%2Fmaven.pkg.jetbrains.space%2Fmipt-npm%2Fp%2Fsci%2Fmaven%2Fspace%2Fkscience%2Fkmath-core%2Fmaven-metadata.xml)](https://maven.pkg.jetbrains.space/mipt-npm/p/sci/maven/space/kscience/)
 
@@ -11,7 +11,7 @@ analog to Python's NumPy library. Later we found that kotlin is much more flexib
 architecture designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like
 experience could be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
-[Documentation site (**WIP**)](https://mipt-npm.github.io/kmath/)
+[Documentation site (**WIP**)](https://SciProgCentre.github.io/kmath/)
 
 ## Publications and talks
 
