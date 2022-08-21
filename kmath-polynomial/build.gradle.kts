@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform")
-    id("space.kscience.gradle.common")
-    id("space.kscience.gradle.native")
+    id("space.kscience.gradle.mpp")
+    // Disable native target to avoid CI crashes
+//    id("space.kscience.gradle.native")
 }
 
 description = "Polynomials, rational functions, and utilities"
