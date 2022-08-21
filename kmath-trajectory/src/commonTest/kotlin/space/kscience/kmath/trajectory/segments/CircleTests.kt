@@ -6,7 +6,7 @@
 package space.kscience.kmath.trajectory.segments
 
 import space.kscience.kmath.geometry.Circle2D
-import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.circumference
 import space.kscience.kmath.trajectory.maxFloatDelta
 import kotlin.test.Test
@@ -16,7 +16,7 @@ class CircleTests {
 
     @Test
     fun arcTest() {
-        val center = Vector2D(0.0, 0.0)
+        val center = Euclidean2DSpace.vector(0.0, 0.0)
         val radius = 2.0
         val expectedCircumference = 12.56637
         val circle = Circle2D(center, radius)

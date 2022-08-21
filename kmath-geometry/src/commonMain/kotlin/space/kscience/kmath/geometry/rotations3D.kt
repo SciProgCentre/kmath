@@ -15,7 +15,7 @@ import space.kscience.kmath.operations.DoubleField
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-internal fun Vector3D.toQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+internal fun DoubleVector3D.toQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
 
 /**
  * Angle in radians denoted by this quaternion rotation
@@ -25,7 +25,7 @@ public val Quaternion.theta: Radians get() = (kotlin.math.acos(normalized().w) *
 /**
  * Create a normalized Quaternion from rotation angle and rotation vector
  */
-public fun Quaternion.Companion.fromRotation(theta: Angle, vector: Vector3D): Quaternion {
+public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3D): Quaternion {
     val s = sin(theta / 2)
     val c = cos(theta / 2)
     val norm = with(Euclidean3DSpace) { vector.norm() }
@@ -35,9 +35,9 @@ public fun Quaternion.Companion.fromRotation(theta: Angle, vector: Vector3D): Qu
 /**
  * An axis of quaternion rotation
  */
-public val Quaternion.vector: Vector3D
+public val Quaternion.vector: DoubleVector3D
     get() {
-        return object : Vector3D {
+        return object : DoubleVector3D {
             private val sint2 = sqrt(1 - w * w)
             override val x: Double get() = this@vector.x / sint2
             override val y: Double get() = this@vector.y / sint2
@@ -49,7 +49,7 @@ public val Quaternion.vector: Vector3D
 /**
  * Rotate a vector in a [Euclidean3DSpace]
  */
-public fun Euclidean3DSpace.rotate(vector: Vector3D, q: Quaternion): Vector3D = with(QuaternionField) {
+public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, q: Quaternion): DoubleVector3D = with(QuaternionField) {
     val p = vector.toQuaternion()
     (q * p * q.reciprocal).vector
 }
@@ -58,10 +58,10 @@ public fun Euclidean3DSpace.rotate(vector: Vector3D, q: Quaternion): Vector3D = 
  * Use a composition of quaternions to create a rotation
  */
 @UnstableKMathAPI
-public fun Euclidean3DSpace.rotate(vector: Vector3D, composition: QuaternionField.() -> Quaternion): Vector3D =
+public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, composition: QuaternionField.() -> Quaternion): DoubleVector3D =
     rotate(vector, QuaternionField.composition())
 
-public fun Euclidean3DSpace.rotate(vector: Vector3D, matrix: Matrix<Double>): Vector3D {
+public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
     return with(DoubleField.linearSpace) { matrix.dot(vector).asVector3D() }
 }

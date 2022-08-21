@@ -11,7 +11,7 @@ import kotlin.math.PI
  * A circle in 2D space
  */
 public class Circle2D(
-    public val center: Vector2D,
+    public val center: DoubleVector2D,
     public val radius: Double
 )
 

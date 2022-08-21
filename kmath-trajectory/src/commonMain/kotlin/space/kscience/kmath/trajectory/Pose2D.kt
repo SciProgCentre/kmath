@@ -5,29 +5,29 @@
 
 package space.kscience.kmath.trajectory
 
+import space.kscience.kmath.geometry.DoubleVector2D
 import space.kscience.kmath.geometry.Vector
-import space.kscience.kmath.geometry.Vector2D
 import kotlin.math.atan2
 
 /**
  * Combination of [Vector] and its view angle
  */
-public interface Pose2D: Vector2D{
-    public val coordinate: Vector2D
+public interface Pose2D: DoubleVector2D{
+    public val coordinate: DoubleVector2D
     public val theta: Double
 }
 
 public class PhaseVector2D(
-    override val coordinate: Vector2D,
-    public val velocity: Vector2D
-): Pose2D, Vector2D by coordinate{
+    override val coordinate: DoubleVector2D,
+    public val velocity: DoubleVector2D
+): Pose2D, DoubleVector2D by coordinate{
     override val theta: Double get() = atan2(velocity.y, velocity.x)
 }
 
 internal class Pose2DImpl(
-    override val coordinate: Vector2D,
+    override val coordinate: DoubleVector2D,
     override val theta: Double
-) : Pose2D, Vector2D by coordinate
+) : Pose2D, DoubleVector2D by coordinate
 
 
-public fun Pose2D(coordinate: Vector2D, theta: Double): Pose2D = Pose2DImpl(coordinate, theta)
+public fun Pose2D(coordinate: DoubleVector2D, theta: Double): Pose2D = Pose2DImpl(coordinate, theta)

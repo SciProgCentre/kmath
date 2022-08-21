@@ -6,45 +6,64 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
+import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector2D : Point<Double>, Vector {
-    public val x: Double
-    public val y: Double
+public interface Vector2D<T> : Point<T>, Vector {
+    public val x: T
+    public val y: T
     override val size: Int get() = 2
 
-    override operator fun get(index: Int): Double = when (index) {
+    override operator fun get(index: Int): T = when (index) {
         0 -> x
         1 -> y
         else -> error("Accessing outside of point bounds")
     }
 
-    override operator fun iterator(): Iterator<Double> = listOf(x, y).iterator()
+    override operator fun iterator(): Iterator<T> = iterator {
+        yield(x)
+        yield(y)
+    }
 }
 
-public val Vector2D.r: Double
-    get() = Euclidean2DSpace { norm() }
 
-public fun Vector2D(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
+public operator fun <T> Vector2D<T>.component1(): T = x
+public operator fun <T> Vector2D<T>.component2(): T = y
 
-private data class Vector2DImpl(
-    override val x: Double,
-    override val y: Double,
-) : Vector2D
+public typealias DoubleVector2D = Vector2D<Double>
+
+public val Vector2D<Double>.r: Double get() = Euclidean2DSpace.norm(this)
+
 
 /**
  * 2D Euclidean space
  */
-public object Euclidean2DSpace : GeometrySpace<Vector2D>, ScaleOperations<Vector2D> {
-    override val zero: Vector2D by lazy { Vector2D(0.0, 0.0) }
+public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
+    ScaleOperations<DoubleVector2D>,
+    Norm<DoubleVector2D, Double> {
 
-    public fun Vector2D.norm(): Double = sqrt(x * x + y * y)
-    override fun Vector2D.unaryMinus(): Vector2D = Vector2D(-x, -y)
+    private data class Vector2DImpl(
+        override val x: Double,
+        override val y: Double,
+    ) : DoubleVector2D
 
-    override fun Vector2D.distanceTo(other: Vector2D): Double = (this - other).norm()
-    override fun add(left: Vector2D, right: Vector2D): Vector2D = Vector2D(left.x + right.x, left.y + right.y)
-    override fun scale(a: Vector2D, value: Double): Vector2D = Vector2D(a.x * value, a.y * value)
-    override fun Vector2D.dot(other: Vector2D): Double = x * other.x + y * other.y
+    public fun vector(x: Number, y: Number): DoubleVector2D = Vector2DImpl(x.toDouble(), y.toDouble())
+
+    override val zero: DoubleVector2D by lazy { vector(0.0, 0.0) }
+
+    override fun norm(arg: DoubleVector2D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2))
+
+    override fun DoubleVector2D.unaryMinus(): DoubleVector2D = vector(-x, -y)
+
+    override fun DoubleVector2D.distanceTo(other: DoubleVector2D): Double = norm(this - other)
+    override fun add(left: DoubleVector2D, right: DoubleVector2D): DoubleVector2D =
+        vector(left.x + right.x, left.y + right.y)
+
+    override fun scale(a: DoubleVector2D, value: Double): DoubleVector2D = vector(a.x * value, a.y * value)
+    override fun DoubleVector2D.dot(other: DoubleVector2D): Double = x * other.x + y * other.y
+
+    public val xAxis: DoubleVector2D = vector(1.0, 0.0)
+    public val yAxis: DoubleVector2D = vector(0.0, 1.0)
 }

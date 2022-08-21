@@ -6,8 +6,8 @@
 package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Circle2D
+import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import space.kscience.kmath.geometry.Vector2D
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.cos
@@ -17,10 +17,10 @@ internal fun Pose2D.getLeftCircle(radius: Double): Circle2D = getTangentCircles(
 
 internal fun Pose2D.getRightCircle(radius: Double): Circle2D = getTangentCircles(radius).second
 
-internal fun Pose2D.getTangentCircles(radius: Double): Pair<Circle2D, Circle2D> {
+internal fun Pose2D.getTangentCircles(radius: Double): Pair<Circle2D, Circle2D> = with(Euclidean2DSpace) {
     val dX = radius * cos(theta)
     val dY = radius * sin(theta)
-    return Circle2D(Vector2D(x - dX, y + dY), radius) to Circle2D(Vector2D(x + dX, y - dY), radius)
+    return Circle2D(vector(x - dX, y + dY), radius) to Circle2D(vector(x + dX, y - dY), radius)
 }
 
 internal fun leftOuterTangent(a: Circle2D, b: Circle2D): StraightSegment = outerTangent(a, b, ArcSegment.Direction.LEFT)
@@ -29,21 +29,21 @@ internal fun rightOuterTangent(a: Circle2D, b: Circle2D): StraightSegment = oute
     ArcSegment.Direction.RIGHT
 )
 
-private fun outerTangent(a: Circle2D, b: Circle2D, side: ArcSegment.Direction): StraightSegment {
+private fun outerTangent(a: Circle2D, b: Circle2D, side: ArcSegment.Direction): StraightSegment = with(Euclidean2DSpace){
     val centers = StraightSegment(a.center, b.center)
     val p1 = when (side) {
-        ArcSegment.Direction.LEFT -> Vector2D(
+        ArcSegment.Direction.LEFT -> vector(
             a.center.x - a.radius * cos(centers.theta),
             a.center.y + a.radius * sin(centers.theta)
         )
-        ArcSegment.Direction.RIGHT -> Vector2D(
+        ArcSegment.Direction.RIGHT -> vector(
             a.center.x + a.radius * cos(centers.theta),
             a.center.y - a.radius * sin(centers.theta)
         )
     }
     return StraightSegment(
         p1,
-        Vector2D(p1.x + (centers.end.x - centers.start.x), p1.y + (centers.end.y - centers.start.y))
+        vector(p1.x + (centers.end.x - centers.start.x), p1.y + (centers.end.y - centers.start.y))
     )
 }
 
@@ -53,7 +53,7 @@ internal fun leftInnerTangent(base: Circle2D, direction: Circle2D): StraightSegm
 internal fun rightInnerTangent(base: Circle2D, direction: Circle2D): StraightSegment? =
     innerTangent(base, direction, ArcSegment.Direction.RIGHT)
 
-private fun innerTangent(base: Circle2D, direction: Circle2D, side: ArcSegment.Direction): StraightSegment? {
+private fun innerTangent(base: Circle2D, direction: Circle2D, side: ArcSegment.Direction): StraightSegment? = with(Euclidean2DSpace){
     val centers = StraightSegment(base.center, direction.center)
     if (centers.length < base.radius * 2) return null
     val angle = theta(
@@ -64,8 +64,8 @@ private fun innerTangent(base: Circle2D, direction: Circle2D, side: ArcSegment.D
     )
     val dX = base.radius * sin(angle)
     val dY = base.radius * cos(angle)
-    val p1 = Vector2D(base.center.x + dX, base.center.y + dY)
-    val p2 = Vector2D(direction.center.x - dX, direction.center.y - dY)
+    val p1 = vector(base.center.x + dX, base.center.y + dY)
+    val p2 = vector(direction.center.x - dX, direction.center.y - dY)
     return StraightSegment(p1, p2)
 }
 
@@ -106,7 +106,7 @@ public class DubinsPath(
         public fun shortest(start: Pose2D, end: Pose2D, turningRadius: Double): DubinsPath =
             all(start, end, turningRadius).minBy { it.length }
 
-        public fun rlr(start: Pose2D, end: Pose2D, turningRadius: Double): DubinsPath? {
+        public fun rlr(start: Pose2D, end: Pose2D, turningRadius: Double): DubinsPath? = with(Euclidean2DSpace){
             val c1 = start.getRightCircle(turningRadius)
             val c2 = end.getRightCircle(turningRadius)
             val centers = StraightSegment(c1.center, c2.center)
@@ -115,20 +115,20 @@ public class DubinsPath(
             var theta = theta(centers.theta - acos(centers.length / (turningRadius * 4)))
             var dX = turningRadius * sin(theta)
             var dY = turningRadius * cos(theta)
-            val p = Vector2D(c1.center.x + dX * 2, c1.center.y + dY * 2)
+            val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
             val e = Circle2D(p, turningRadius)
-            val p1 = Vector2D(c1.center.x + dX, c1.center.y + dY)
+            val p1 = vector(c1.center.x + dX, c1.center.y + dY)
             theta = theta(centers.theta + acos(centers.length / (turningRadius * 4)))
             dX = turningRadius * sin(theta)
             dY = turningRadius * cos(theta)
-            val p2 = Vector2D(e.center.x + dX, e.center.y + dY)
+            val p2 = vector(e.center.x + dX, e.center.y + dY)
             val a1 = ArcSegment.of(c1.center, start, p1, ArcSegment.Direction.RIGHT)
             val a2 = ArcSegment.of(e.center, p1, p2, ArcSegment.Direction.LEFT)
             val a3 = ArcSegment.of(c2.center, p2, end, ArcSegment.Direction.RIGHT)
             return DubinsPath(a1, a2, a3)
         }
 
-        public fun lrl(start: Pose2D, end: Pose2D, turningRadius: Double): DubinsPath? {
+        public fun lrl(start: Pose2D, end: Pose2D, turningRadius: Double): DubinsPath?= with(Euclidean2DSpace) {
             val c1 = start.getLeftCircle(turningRadius)
             val c2 = end.getLeftCircle(turningRadius)
             val centers = StraightSegment(c1.center, c2.center)
@@ -137,13 +137,13 @@ public class DubinsPath(
             var theta = theta(centers.theta + acos(centers.length / (turningRadius * 4)))
             var dX = turningRadius * sin(theta)
             var dY = turningRadius * cos(theta)
-            val p = Vector2D(c1.center.x + dX * 2, c1.center.y + dY * 2)
+            val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
             val e = Circle2D(p, turningRadius)
-            val p1 = Vector2D(c1.center.x + dX, c1.center.y + dY)
+            val p1 = vector(c1.center.x + dX, c1.center.y + dY)
             theta = theta(centers.theta - acos(centers.length / (turningRadius * 4)))
             dX = turningRadius * sin(theta)
             dY = turningRadius * cos(theta)
-            val p2 = Vector2D(e.center.x + dX, e.center.y + dY)
+            val p2 = vector(e.center.x + dX, e.center.y + dY)
             val a1 = ArcSegment.of(c1.center, start, p1, ArcSegment.Direction.LEFT)
             val a2 = ArcSegment.of(e.center, p1, p2, ArcSegment.Direction.RIGHT)
             val a3 = ArcSegment.of(c2.center, p2, end, ArcSegment.Direction.LEFT)

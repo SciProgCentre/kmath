@@ -10,7 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class Vector2DTest {
-    private val vector = Vector2D(1.0, -7.999)
+    private val vector = Euclidean2DSpace.vector(1.0, -7.999)
 
     @Test
     fun size() {

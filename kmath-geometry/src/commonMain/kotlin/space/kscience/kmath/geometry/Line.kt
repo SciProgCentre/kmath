@@ -11,5 +11,10 @@ package space.kscience.kmath.geometry
  */
 public data class Line<out V : Vector>(val base: V, val direction: V)
 
-public typealias Line2D = Line<Vector2D>
-public typealias Line3D = Line<Vector3D>
+public typealias Line2D = Line<DoubleVector2D>
+public typealias Line3D = Line<DoubleVector3D>
+
+/**
+ * A directed line segment between [begin] and [end]
+ */
+public data class LineSegment<out V : Vector>(val begin: V, val end: V)

@@ -1,6 +1,5 @@
 plugins {
-    kotlin("multiplatform")
-    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.mpp")
     id("space.kscience.gradle.native")
 }
 

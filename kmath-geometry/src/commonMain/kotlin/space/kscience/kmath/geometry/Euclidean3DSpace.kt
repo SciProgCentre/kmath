@@ -6,73 +6,79 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector3D : Point<Double>, Vector {
-    public val x: Double
-    public val y: Double
-    public val z: Double
+public interface Vector3D<T> : Point<T>, Vector {
+    public val x: T
+    public val y: T
+    public val z: T
     override val size: Int get() = 3
 
-    override operator fun get(index: Int): Double = when (index) {
+    override operator fun get(index: Int): T = when (index) {
         0 -> x
         1 -> y
         2 -> z
         else -> error("Accessing outside of point bounds")
     }
 
-    override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
+    override operator fun iterator(): Iterator<T> = listOf(x, y, z).iterator()
 }
 
-public operator fun Vector3D.component1(): Double = x
-public operator fun Vector3D.component2(): Double = y
-public operator fun Vector3D.component3(): Double = z
+public operator fun <T> Vector3D<T>.component1(): T = x
+public operator fun <T> Vector3D<T>.component2(): T = y
+public operator fun <T> Vector3D<T>.component3(): T = z
 
-public fun Buffer<Double>.asVector3D(): Vector3D = object : Vector3D {
+public fun <T> Buffer<T>.asVector3D(): Vector3D<T> = object : Vector3D<T> {
     init {
         require(this@asVector3D.size == 3) { "Buffer of size 3 is required for Vector3D" }
     }
 
-    override val x: Double get() = this@asVector3D[0]
-    override val y: Double get() = this@asVector3D[1]
-    override val z: Double get() = this@asVector3D[2]
+    override val x: T get() = this@asVector3D[0]
+    override val y: T get() = this@asVector3D[1]
+    override val z: T get() = this@asVector3D[2]
 
     override fun toString(): String = this@asVector3D.toString()
-
 }
 
-public val Vector3D.r: Double get() = Euclidean3DSpace { norm() }
+public typealias DoubleVector3D = Vector3D<Double>
 
-private data class Vector3DImpl(
-    override val x: Double,
-    override val y: Double,
-    override val z: Double,
-) : Vector3D
+public val DoubleVector3D.r: Double get() = Euclidean3DSpace.norm(this)
 
+public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<DoubleVector3D>,
+    Norm<DoubleVector3D, Double> {
+    private data class Vector3DImpl(
+        override val x: Double,
+        override val y: Double,
+        override val z: Double,
+    ) : DoubleVector3D
 
-public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
+    public fun vector(x: Number, y: Number, z: Number): DoubleVector3D =
+        Vector3DImpl(x.toDouble(), y.toDouble(), z.toDouble())
 
-public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector3D> {
-    override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
+    override val zero: DoubleVector3D by lazy { vector(0.0, 0.0, 0.0) }
 
-    public fun Vector3D.norm(): Double = sqrt(x * x + y * y + z * z)
-    override fun Vector3D.unaryMinus(): Vector3D = Vector3D(-x, -y, -z)
+    override fun norm(arg: DoubleVector3D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
 
-    override fun Vector3D.distanceTo(other: Vector3D): Double = (this - other).norm()
+    public fun DoubleVector3D.norm(): Double = norm(this)
 
-    override fun add(left: Vector3D, right: Vector3D): Vector3D =
-        Vector3D(left.x + right.x, left.y + right.y, left.z + right.z)
+    override fun DoubleVector3D.unaryMinus(): DoubleVector3D = vector(-x, -y, -z)
 
-    override fun scale(a: Vector3D, value: Double): Vector3D =
-        Vector3D(a.x * value, a.y * value, a.z * value)
+    override fun DoubleVector3D.distanceTo(other: DoubleVector3D): Double = (this - other).norm()
 
-    override fun Vector3D.dot(other: Vector3D): Double =
+    override fun add(left: DoubleVector3D, right: DoubleVector3D): DoubleVector3D =
+        vector(left.x + right.x, left.y + right.y, left.z + right.z)
+
+    override fun scale(a: DoubleVector3D, value: Double): DoubleVector3D =
+        vector(a.x * value, a.y * value, a.z * value)
+
+    override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
         x * other.x + y * other.y + z * other.z
 
-    public val xAxis: Vector3D = Vector3D(1.0, 0.0, 0.0)
-    public val yAxis: Vector3D = Vector3D(0.0, 1.0, 0.0)
-    public val zAxis: Vector3D = Vector3D(0.0, 0.0, 1.0)
+    public val xAxis: DoubleVector3D = vector(1.0, 0.0, 0.0)
+    public val yAxis: DoubleVector3D = vector(0.0, 1.0, 0.0)
+    public val zAxis: DoubleVector3D = vector(0.0, 0.0, 1.0)
 }

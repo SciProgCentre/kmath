@@ -6,8 +6,8 @@
 package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Circle2D
+import space.kscience.kmath.geometry.DoubleVector2D
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.geometry.circumference
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -20,8 +20,8 @@ public sealed interface Trajectory {
  * Straight path segment. The order of start and end defines the direction
  */
 public data class StraightSegment(
-    internal val start: Vector2D,
-    internal val end: Vector2D,
+    internal val start: DoubleVector2D,
+    internal val end: DoubleVector2D,
 ) : Trajectory {
     override val length: Double get() = start.distanceTo(end)
 
@@ -68,9 +68,9 @@ public data class ArcSegment(
     }
 
     public companion object {
-        public fun of(center: Vector2D, start: Vector2D, end: Vector2D, direction: Direction): ArcSegment {
+        public fun of(center: DoubleVector2D, start: DoubleVector2D, end: DoubleVector2D, direction: Direction): ArcSegment {
             fun calculatePose(
-                vector: Vector2D,
+                vector: DoubleVector2D,
                 theta: Double,
                 direction: Direction,
             ): Pose2D = Pose2D(

@@ -6,11 +6,12 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
 
 public interface Vector
 
-public interface GeometrySpace<V : Vector> : Group<V>, ScaleOperations<V> {
+public interface GeometrySpace<V : Vector> : Group<V>, ScaleOperations<V>, Norm<V, Double> {
     /**
      * L2 distance
      */

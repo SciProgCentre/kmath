@@ -25,12 +25,12 @@ fun grid(
     return xs.flatMap { x -> ys.map { y -> x to y } }
 }
 
-fun assertVectorEquals(expected: Vector2D, actual: Vector2D, absoluteTolerance: Double = 1e-6) {
+fun assertVectorEquals(expected: DoubleVector2D, actual: DoubleVector2D, absoluteTolerance: Double = 1e-6) {
     assertEquals(expected.x, actual.x, absoluteTolerance)
     assertEquals(expected.y, actual.y, absoluteTolerance)
 }
 
-fun assertVectorEquals(expected: Vector3D, actual: Vector3D, absoluteTolerance: Double = 1e-6) {
+fun assertVectorEquals(expected: DoubleVector3D, actual: DoubleVector3D, absoluteTolerance: Double = 1e-6) {
     assertEquals(expected.x, actual.x, absoluteTolerance)
     assertEquals(expected.y, actual.y, absoluteTolerance)
     assertEquals(expected.z, actual.z, absoluteTolerance)

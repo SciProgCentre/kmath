@@ -10,7 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class Vector3DTest {
-    private val vector = Vector3D(1.0, -7.999, 0.001)
+    private val vector = Euclidean3DSpace.vector(1.0, -7.999, 0.001)
 
     @Test
     fun size() {

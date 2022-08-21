@@ -5,8 +5,7 @@
 
 package space.kscience.kmath.trajectory.dubins
 
-import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.trajectory.*
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -16,8 +15,8 @@ import kotlin.test.assertTrue
 class DubinsTests {
 
     @Test
-    fun dubinsTest() {
-        val straight = StraightSegment(Vector2D(0.0, 0.0), Vector2D(100.0, 100.0))
+    fun dubinsTest() = with(Euclidean2DSpace){
+        val straight = StraightSegment(vector(0.0, 0.0), vector(100.0, 100.0))
         val lineP1 = straight.shift(1, 10.0).inverse()
 
         val start = Pose2D(straight.end, straight.theta)

@@ -15,7 +15,7 @@ class RotationTest {
 
     @Test
     fun differentRotations() = with(Euclidean3DSpace) {
-        val vector = Vector3D(1.0, 1.0, 1.0)
+        val vector = vector(1.0, 1.0, 1.0)
         val q = Quaternion(1.0, 2.0, -3.0, 4.0).normalized()
         val rotatedByQ = rotate(vector, q)
         val matrix = q.toRotationMatrix()
@@ -36,7 +36,7 @@ class RotationTest {
 
     @Test
     fun fromRotation() {
-        val q = Quaternion.fromRotation(0.3.radians, Vector3D(1.0, 1.0, 1.0))
+        val q = Quaternion.fromRotation(0.3.radians, Euclidean3DSpace.vector(1.0, 1.0, 1.0))
 
         assertBufferEquals(DoubleBuffer(0.9887711, 0.0862781, 0.0862781, 0.0862781), q)
     }
