@@ -1,5 +1,5 @@
 <component name="CopyrightManager">
-  <settings default="kmath">
+  <settings>
     <module2copyright>
       <element module="Apply copyright" copyright="kmath" />
     </module2copyright>
