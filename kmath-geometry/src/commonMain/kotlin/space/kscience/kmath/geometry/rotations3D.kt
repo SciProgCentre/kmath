@@ -7,11 +7,9 @@ package space.kscience.kmath.geometry
 
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.complex.QuaternionField
+import space.kscience.kmath.complex.normalized
 import space.kscience.kmath.complex.reciprocal
-import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.linear.matrix
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import kotlin.math.pow
@@ -22,16 +20,25 @@ internal fun Vector3D.toQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
 /**
  * Angle in radians denoted by this quaternion rotation
  */
-public val Quaternion.theta: Double get() = kotlin.math.acos(w) * 2
+public val Quaternion.theta: Radians get() = (kotlin.math.acos(normalized().w) * 2).radians
+
+/**
+ * Create a normalized Quaternion from rotation angle and rotation vector
+ */
+public fun Quaternion.Companion.fromRotation(theta: Angle, vector: Vector3D): Quaternion {
+    val s = sin(theta / 2)
+    val c = cos(theta / 2)
+    val norm = with(Euclidean3DSpace) { vector.norm() }
+    return Quaternion(c, vector.x * s / norm, vector.y * s / norm, vector.z * s / norm)
+}
 
 /**
  * An axis of quaternion rotation
  */
 public val Quaternion.vector: Vector3D
     get() {
-        val sint2 = sqrt(1 - w * w)
-
         return object : Vector3D {
+            private val sint2 = sqrt(1 - w * w)
             override val x: Double get() = this@vector.x / sint2
             override val y: Double get() = this@vector.y / sint2
             override val z: Double get() = this@vector.z / sint2
@@ -50,6 +57,7 @@ public fun Euclidean3DSpace.rotate(vector: Vector3D, q: Quaternion): Vector3D = 
 /**
  * Use a composition of quaternions to create a rotation
  */
+@UnstableKMathAPI
 public fun Euclidean3DSpace.rotate(vector: Vector3D, composition: QuaternionField.() -> Quaternion): Vector3D =
     rotate(vector, QuaternionField.composition())
 
@@ -112,5 +120,88 @@ public fun Quaternion.Companion.fromRotationMatrix(matrix: Matrix<Double>): Quat
             y = (matrix[1, 2] + matrix[2, 1]) / s,
             z = 0.25 * s,
         )
+    }
+}
+
+public enum class RotationOrder {
+    // proper Euler
+    XZX,
+    XYX,
+    YXY,
+    YZY,
+    ZYZ,
+    ZXZ,
+
+    //Tait–Bryan
+    XZY,
+    XYZ,
+    YXZ,
+    YZX,
+    ZYX,
+    ZXY
+}
+
+/**
+ * Based on https://github.com/mrdoob/three.js/blob/master/src/math/Quaternion.js
+ */
+public fun Quaternion.Companion.fromEuler(
+    a: Angle,
+    b: Angle,
+    c: Angle,
+    rotationOrder: RotationOrder,
+): Quaternion {
+    val c1 = cos (a / 2)
+    val c2 = cos (b / 2)
+    val c3 = cos (c / 2)
+
+    val s1 = sin (a / 2)
+    val s2 = sin (b / 2)
+    val s3 = sin (c / 2)
+
+    return when (rotationOrder) {
+
+        RotationOrder.XYZ -> Quaternion(
+            c1 * c2 * c3 - s1 * s2 * s3,
+            s1 * c2 * c3 + c1 * s2 * s3,
+            c1 * s2 * c3 - s1 * c2 * s3,
+            c1 * c2 * s3 + s1 * s2 * c3
+        )
+
+        RotationOrder.YXZ -> Quaternion(
+            c1 * c2 * c3 + s1 * s2 * s3,
+            s1 * c2 * c3 + c1 * s2 * s3,
+            c1 * s2 * c3 - s1 * c2 * s3,
+            c1 * c2 * s3 - s1 * s2 * c3
+        )
+
+        RotationOrder.ZXY -> Quaternion(
+            c1 * c2 * c3 - s1 * s2 * s3,
+            s1 * c2 * c3 - c1 * s2 * s3,
+            c1 * s2 * c3 + s1 * c2 * s3,
+            c1 * c2 * s3 + s1 * s2 * c3
+        )
+
+
+        RotationOrder.ZYX -> Quaternion(
+            c1 * c2 * c3 + s1 * s2 * s3,
+            s1 * c2 * c3 - c1 * s2 * s3,
+            c1 * s2 * c3 + s1 * c2 * s3,
+            c1 * c2 * s3 - s1 * s2 * c3
+        )
+
+        RotationOrder.YZX -> Quaternion(
+            c1 * c2 * c3 - s1 * s2 * s3,
+            s1 * c2 * c3 + c1 * s2 * s3,
+            c1 * s2 * c3 + s1 * c2 * s3,
+            c1 * c2 * s3 - s1 * s2 * c3
+        )
+
+        RotationOrder.XZY -> Quaternion(
+            c1 * c2 * c3 + s1 * s2 * s3,
+            s1 * c2 * c3 - c1 * s2 * s3,
+            c1 * s2 * c3 - s1 * c2 * s3,
+            c1 * c2 * s3 + s1 * s2 * c3
+        )
+         else -> TODO("Proper Euler rotation orders are not supported yet")
     }
 }

@@ -27,8 +27,9 @@ public interface Vector3D : Point<Double>, Vector {
     override operator fun iterator(): Iterator<Double> = listOf(x, y, z).iterator()
 }
 
-@Suppress("FunctionName")
-public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
+public operator fun Vector3D.component1(): Double = x
+public operator fun Vector3D.component2(): Double = y
+public operator fun Vector3D.component3(): Double = z
 
 public fun Buffer<Double>.asVector3D(): Vector3D = object : Vector3D {
     init {
@@ -51,6 +52,9 @@ private data class Vector3DImpl(
     override val z: Double,
 ) : Vector3D
 
+
+public fun Vector3D(x: Double, y: Double, z: Double): Vector3D = Vector3DImpl(x, y, z)
+
 public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector3D> {
     override val zero: Vector3D by lazy { Vector3D(0.0, 0.0, 0.0) }
 
@@ -67,4 +71,8 @@ public object Euclidean3DSpace : GeometrySpace<Vector3D>, ScaleOperations<Vector
 
     override fun Vector3D.dot(other: Vector3D): Double =
         x * other.x + y * other.y + z * other.z
+
+    public val xAxis: Vector3D = Vector3D(1.0, 0.0, 0.0)
+    public val yAxis: Vector3D = Vector3D(0.0, 1.0, 0.0)
+    public val zAxis: Vector3D = Vector3D(0.0, 0.0, 1.0)
 }

@@ -470,7 +470,7 @@ public class DSL2LabeledPolynomialBuilder<C>(
     }
 
     private inline fun submit(signature: Map<Symbol, UInt>, lazyCoefficient: Ring<C>.() -> C) {
-        submit(signature, lazyCoefficient, { it + lazyCoefficient() })
+        submit(signature, lazyCoefficient) { it + lazyCoefficient() }
     }
 
     private fun submit(signature: Map<Symbol, UInt>, coefficient: C) {
@@ -478,9 +478,9 @@ public class DSL2LabeledPolynomialBuilder<C>(
     }
 
     // TODO: `@submit` will be resolved differently. Change it to `@C`.
-    private fun C.submit() = submit(emptyMap(), { this@submit })
+    private fun C.submitSelf() = submit(emptyMap()) { this@submitSelf }
 
-    private fun Symbol.submit() = submit(mapOf(this to 1u), { one })
+    private fun Symbol.submit() = submit(mapOf(this to 1u)) { one }
 
     private fun Term.submit(): Submit {
         submit(signature, coefficient)
@@ -490,7 +490,7 @@ public class DSL2LabeledPolynomialBuilder<C>(
     public object Submit
 
     public operator fun C.unaryPlus(): Submit {
-        submit()
+        submitSelf()
         return Submit
     }
 
@@ -500,12 +500,12 @@ public class DSL2LabeledPolynomialBuilder<C>(
     }
 
     public operator fun C.plus(other: C): Submit {
-        submit(emptyMap(), { this@plus + other })
+        submit(emptyMap()) { this@plus + other }
         return Submit
     }
 
     public operator fun C.minus(other: C): Submit {
-        submit(emptyMap(), { this@minus - other })
+        submit(emptyMap()) { this@minus - other }
         return Submit
     }
 
@@ -541,7 +541,7 @@ public class DSL2LabeledPolynomialBuilder<C>(
 
     public operator fun Symbol.plus(other: C): Submit {
         this.submit()
-        other.submit()
+        other.submitSelf()
         return Submit
     }
 
@@ -599,7 +599,7 @@ public class DSL2LabeledPolynomialBuilder<C>(
 
     public operator fun Term.plus(other: C): Submit {
         this.submit()
-        other.submit()
+        other.submitSelf()
         return Submit
     }
 
