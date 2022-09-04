@@ -1,3 +1,6 @@
+import space.kscience.gradle.useApache2Licence
+import space.kscience.gradle.useSPCTeam
+
 plugins {
     id("space.kscience.gradle.project")
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
@@ -68,8 +71,12 @@ subprojects {
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    github("kmath", addToRelease = false)
-    space()
+    pom("https://github.com/SciProgCentre/kmath") {
+        useApache2Licence()
+        useSPCTeam()
+    }
+    github("kmath", "SciProgCentre", addToRelease = false)
+    space("https://maven.pkg.jetbrains.space/mipt-npm/p/sci/dev")
     sonatype()
 }
 

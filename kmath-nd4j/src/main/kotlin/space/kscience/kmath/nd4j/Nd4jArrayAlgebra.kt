@@ -45,6 +45,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return newStruct
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(
         transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
@@ -53,6 +54,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return new
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<T>,
         right: StructureND<T>,

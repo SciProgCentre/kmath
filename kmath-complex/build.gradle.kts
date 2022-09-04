@@ -1,7 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("space.kscience.gradle.common")
-    id("space.kscience.gradle.native")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience {
+    native()
 }
 
 kotlin.sourceSets {
@@ -20,14 +22,14 @@ readme {
     feature(
         id = "complex",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt"
-    ){
+    ) {
         "Complex numbers operations"
     }
 
     feature(
         id = "quaternion",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt"
-    ){
+    ) {
         "Quaternions and their composition"
     }
 }

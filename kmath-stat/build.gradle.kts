@@ -1,6 +1,9 @@
 plugins {
     id("space.kscience.gradle.mpp")
-    id("space.kscience.gradle.native")
+}
+
+kscience{
+    native()
 }
 
 kotlin.sourceSets {

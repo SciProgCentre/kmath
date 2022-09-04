@@ -1,6 +1,9 @@
 plugins {
     id("space.kscience.gradle.mpp")
-    id("space.kscience.gradle.native")
+}
+
+kscience{
+    native()
 }
 
 description = "A proof of concept module for adding type-safe dimensions to structures"

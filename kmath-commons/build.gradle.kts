@@ -1,6 +1,5 @@
 plugins {
-    kotlin("jvm")
-    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 description = "Commons math binding for kmath"

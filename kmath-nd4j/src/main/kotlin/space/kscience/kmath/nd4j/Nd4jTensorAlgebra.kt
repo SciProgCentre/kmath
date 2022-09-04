@@ -40,12 +40,15 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): Nd4jArrayStructure<T> =
         structureND(shape) { index -> elementAlgebra.transform(get(index)) }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): Nd4jArrayStructure<T> =
         structureND(shape) { index -> elementAlgebra.transform(index, get(index)) }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): Nd4jArrayStructure<T> {
         require(left.shape.contentEquals(right.shape))
         return structureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }

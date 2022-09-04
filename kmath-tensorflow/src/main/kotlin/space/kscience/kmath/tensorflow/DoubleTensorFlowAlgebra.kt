@@ -93,6 +93,7 @@ public fun DoubleField.produceWithTF(
  *
  * The resulting tensors are available outside of scope
  */
+@OptIn(UnstableKMathAPI::class)
 public fun DoubleField.produceMapWithTF(
     block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
 ): Map<Symbol, StructureND<Double>> = Graph().use { graph ->

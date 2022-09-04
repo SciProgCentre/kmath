@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
@@ -49,6 +50,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.map(
         transform: DoubleField.(Double) -> Double,
     ): BufferND<Double> {
@@ -56,6 +58,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): BufferND<Double> {
@@ -69,6 +72,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return BufferND(strides, array.asBuffer())
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,

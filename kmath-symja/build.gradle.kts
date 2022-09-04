@@ -4,8 +4,7 @@
  */
 
 plugins {
-    kotlin("jvm")
-    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 description = "Symja integration module"

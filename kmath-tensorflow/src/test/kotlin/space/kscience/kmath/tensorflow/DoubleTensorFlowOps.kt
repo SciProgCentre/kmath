@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensorflow
 
 import org.junit.jupiter.api.Test
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
@@ -13,6 +14,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
 import kotlin.test.assertEquals
 
+@OptIn(UnstableKMathAPI::class)
 class DoubleTensorFlowOps {
     @Test
     fun basicOps() {

@@ -6,6 +6,7 @@
 package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.default.DefaultEngine
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.DoubleField
@@ -14,6 +15,7 @@ import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+@OptIn(PerformancePitfall::class)
 internal class MultikNDTest {
     val multikAlgebra = MultikDoubleAlgebra(DefaultEngine())
 

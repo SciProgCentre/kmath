@@ -1,6 +1,5 @@
 plugins {
-    kotlin("jvm")
-    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 description = "ND4J NDStructure implementation and according NDAlgebra classes"

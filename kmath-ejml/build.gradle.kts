@@ -1,8 +1,7 @@
 import space.kscience.kmath.ejml.codegen.ejmlCodegen
 
 plugins {
-    kotlin("jvm")
-    id("space.kscience.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 dependencies {

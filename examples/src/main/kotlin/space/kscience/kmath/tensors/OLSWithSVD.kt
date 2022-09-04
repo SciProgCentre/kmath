@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -13,6 +14,7 @@ import kotlin.math.abs
 
 // OLS estimator using SVD
 
+@OptIn(PerformancePitfall::class)
 fun main() {
     //seed for random
     val randSeed = 100500L

@@ -1,7 +1,9 @@
 plugins {
     id("space.kscience.gradle.mpp")
-    // Disable native target to avoid CI crashes
-//    id("space.kscience.gradle.native")
+}
+
+kscience{
+    native()
 }
 
 description = "Polynomials, rational functions, and utilities"

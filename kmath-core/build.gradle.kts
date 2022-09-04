@@ -1,6 +1,13 @@
 plugins {
     id("space.kscience.gradle.mpp")
-    id("space.kscience.gradle.native")
+}
+
+kscience{
+    native()
+
+    dependencies {
+        api(project(":kmath-memory"))
+    }
 }
 
 kotlin.sourceSets {
@@ -10,19 +17,7 @@ kotlin.sourceSets {
             it.optIn("space.kscience.kmath.misc.PerformancePitfall")
             it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
         }
-
-    commonMain {
-        dependencies {
-            api(project(":kmath-memory"))
-        }
-    }
 }
-
-//generateUml {
-//    classTree {
-//
-//    }
-//}
 
 readme {
     description = "Core classes, algebra definitions, basic linear algebra"
