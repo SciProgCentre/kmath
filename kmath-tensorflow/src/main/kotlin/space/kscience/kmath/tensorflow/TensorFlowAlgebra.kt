@@ -184,7 +184,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     override fun StructureND<T>.unaryMinus(): TensorFlowOutput<T, TT> = operate(ops.math::neg)
 
-    override fun Tensor<T>.get(i: Int): Tensor<T> = operate {
+    override fun Tensor<T>.getTensor(i: Int): Tensor<T> = operate {
         StridedSliceHelper.stridedSlice(ops.scope(), it, Indices.at(i.toLong()))
     }
 
@@ -237,6 +237,11 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
     override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T> = operate {
         ops.min(it, ops.constant(dim), Min.keepDims(keepDim))
     }
+
+    override fun StructureND<T>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> = IntTensorFlowOutput(
+        graph,
+        ops.math.argMin(asTensorFlow().output, ops.constant(dim), TInt32::class.java).output()
+    ).actualTensor
 
     override fun StructureND<T>.max(): T = operate {
         ops.max(it, ops.constant(intArrayOf()))

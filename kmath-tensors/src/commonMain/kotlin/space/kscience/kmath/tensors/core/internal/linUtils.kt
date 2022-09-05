@@ -257,13 +257,13 @@ internal fun DoubleTensorAlgebra.qrHelper(
     val qT = q.transpose(0, 1)
 
     for (j in 0 until n) {
-        val v = matrixT[j]
+        val v = matrixT.getTensor(j)
         val vv = v.as1D()
         if (j > 0) {
             for (i in 0 until j) {
-                r[i, j] = (qT[i] dot matrixT[j]).value()
+                r[i, j] = (qT.getTensor(i) dot matrixT.getTensor(j)).value()
                 for (k in 0 until n) {
-                    val qTi = qT[i].as1D()
+                    val qTi = qT.getTensor(i).as1D()
                     vv[k] = vv[k] - r[i, j] * qTi[k]
                 }
             }
@@ -313,7 +313,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
             val outerProduct = DoubleArray(u.shape[0] * v.shape[0])
             for (i in 0 until u.shape[0]) {
                 for (j in 0 until v.shape[0]) {
-                    outerProduct[i * v.shape[0] + j] = u[i].value() * v[j].value()
+                    outerProduct[i * v.shape[0] + j] = u.getTensor(i).value() * v.getTensor(j).value()
                 }
             }
             a = a - singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct))

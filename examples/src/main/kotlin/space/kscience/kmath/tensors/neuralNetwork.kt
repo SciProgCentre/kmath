@@ -197,7 +197,7 @@ fun main() = BroadcastDoubleTensorAlgebra {
     val y = fromArray(
         intArrayOf(sampleSize, 1),
         DoubleArray(sampleSize) { i ->
-            if (x[i].sum() > 0.0) {
+            if (x.getTensor(i).sum() > 0.0) {
                 1.0
             } else {
                 0.0

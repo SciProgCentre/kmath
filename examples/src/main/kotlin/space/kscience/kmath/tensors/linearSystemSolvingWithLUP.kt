@@ -66,7 +66,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
         val n = l.shape[0]
         val x = zeros(intArrayOf(n))
         for (i in 0 until n) {
-            x[intArrayOf(i)] = (b[intArrayOf(i)] - l[i].dot(x).value()) / l[intArrayOf(i, i)]
+            x[intArrayOf(i)] = (b[intArrayOf(i)] - l.getTensor(i).dot(x).value()) / l[intArrayOf(i, i)]
         }
         return x
     }

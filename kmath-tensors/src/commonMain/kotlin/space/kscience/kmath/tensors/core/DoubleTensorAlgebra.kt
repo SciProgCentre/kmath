@@ -24,6 +24,7 @@ import kotlin.math.*
 /**
  * Implementation of basic operations over double tensors and basic algebra operations on them.
  */
+@OptIn(PerformancePitfall::class)
 public open class DoubleTensorAlgebra :
     TensorPartialDivisionAlgebra<Double, DoubleField>,
     AnalyticTensorAlgebra<Double, DoubleField>,
@@ -120,7 +121,7 @@ public open class DoubleTensorAlgebra :
         TensorLinearStructure(shape).asSequence().map { DoubleField.initializer(it) }.toMutableList().toDoubleArray()
     )
 
-    override operator fun Tensor<Double>.get(i: Int): DoubleTensor {
+    override fun Tensor<Double>.getTensor(i: Int): DoubleTensor {
         val lastShape = asDoubleTensor().shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
         val newStart = newShape.reduce(Int::times) * i + asDoubleTensor().bufferStart
@@ -204,7 +205,11 @@ public open class DoubleTensorAlgebra :
      * @return a copy of the `input` tensor with a copied buffer.
      */
     public fun StructureND<Double>.copy(): DoubleTensor =
-        DoubleTensor(asDoubleTensor().shape, asDoubleTensor().mutableBuffer.array().copyOf(), asDoubleTensor().bufferStart)
+        DoubleTensor(
+            asDoubleTensor().shape,
+            asDoubleTensor().mutableBuffer.array().copyOf(),
+            asDoubleTensor().bufferStart
+        )
 
     override fun Double.plus(arg: StructureND<Double>): DoubleTensor {
         val resBuffer = DoubleArray(arg.asDoubleTensor().numElements) { i ->
@@ -413,7 +418,10 @@ public open class DoubleTensorAlgebra :
     @UnstableKMathAPI
     public infix fun StructureND<Double>.matmul(other: StructureND<Double>): DoubleTensor {
         if (asDoubleTensor().shape.size == 1 && other.shape.size == 1) {
-            return DoubleTensor(intArrayOf(1), doubleArrayOf(asDoubleTensor().times(other).asDoubleTensor().mutableBuffer.array().sum()))
+            return DoubleTensor(
+                intArrayOf(1),
+                doubleArrayOf(asDoubleTensor().times(other).asDoubleTensor().mutableBuffer.array().sum())
+            )
         }
 
         var newThis = asDoubleTensor().copy()
@@ -592,7 +600,8 @@ public open class DoubleTensorAlgebra :
         check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
         val resShape = intArrayOf(tensors.size) + shape
         val resBuffer = tensors.flatMap {
-            it.asDoubleTensor().mutableBuffer.array().drop(it.asDoubleTensor().bufferStart).take(it.asDoubleTensor().numElements)
+            it.asDoubleTensor().mutableBuffer.array().drop(it.asDoubleTensor().bufferStart)
+                .take(it.asDoubleTensor().numElements)
         }.toDoubleArray()
         return DoubleTensor(resShape, resBuffer, 0)
     }
@@ -603,7 +612,7 @@ public open class DoubleTensorAlgebra :
      * @param indices the [IntArray] of 1-dimensional indices
      * @return tensor with rows corresponding to row by [indices]
      */
-    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { this[it] })
+    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { getTensor(it) })
 
     private inline fun StructureND<Double>.fold(foldFunction: (DoubleArray) -> Double): Double =
         foldFunction(asDoubleTensor().copyArray())
@@ -644,6 +653,10 @@ public open class DoubleTensorAlgebra :
 
     override fun StructureND<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDim(dim, keepDim) { x -> x.minOrNull()!! }.asDoubleTensor()
+
+    override fun StructureND<Double>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> = foldDim(dim, keepDim) { x ->
+        x.withIndex().minByOrNull { it.value }?.index!!
+    }.asIntTensor()
 
     override fun StructureND<Double>.max(): Double = this.fold { it.maxOrNull()!! }
 

@@ -166,7 +166,11 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param i index of the extractable tensor
      * @return subtensor of the original tensor with index [i]
      */
-    public operator fun Tensor<T>.get(i: Int): Tensor<T>
+    public fun Tensor<T>.getTensor(i: Int): Tensor<T>
+
+    public fun Tensor<T>.getTensor(first: Int, second: Int): Tensor<T> {
+        return getTensor(first).getTensor(second)
+    }
 
     /**
      * Returns a tensor that is a transposed version of this tensor. The given dimensions [i] and [j] are swapped.
@@ -285,6 +289,19 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @return the minimum value of each row of the input tensor in the given dimension [dim].
      */
     public fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T>
+
+    /**
+     * Returns the index of minimum value of each row of the input tensor in the given dimension [dim].
+     *
+     * If [keepDim] is true, the output tensor is of the same size as
+     * input except in the dimension [dim] where it is of size 1.
+     * Otherwise, [dim] is squeezed, resulting in the output tensor having 1 fewer dimension.
+     *
+     * @param dim the dimension to reduce.
+     * @param keepDim whether the output tensor has [dim] retained or not.
+     * @return the index of maximum value of each row of the input tensor in the given dimension [dim].
+     */
+    public fun StructureND<T>.argMin(dim: Int, keepDim: Boolean): Tensor<Int>
 
     /**
      * Returns the maximum value of all elements in the input tensor or null if there are no values

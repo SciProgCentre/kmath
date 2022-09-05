@@ -185,7 +185,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     override fun StructureND<T>.unaryMinus(): MultikTensor<T> =
         asMultik().array.unaryMinus().wrap()
 
-    override fun Tensor<T>.get(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
+    override fun Tensor<T>.getTensor(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
     override fun Tensor<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
@@ -244,6 +244,12 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Tensor<T> {
         if (keepDim) TODO("keepDim not implemented")
         return multikMath.minDN(asMultik().array, dim).wrap()
+    }
+
+    override fun StructureND<T>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> {
+        if (keepDim) TODO("keepDim not implemented")
+        val res = multikMath.argMinDN(asMultik().array, dim)
+        return with(MultikIntAlgebra(multikEngine)) { res.wrap() }
     }
 
     override fun StructureND<T>.max(): T? = asMultik().array.max()

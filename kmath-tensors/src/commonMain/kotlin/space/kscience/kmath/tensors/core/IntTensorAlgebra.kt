@@ -118,7 +118,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         TensorLinearStructure(shape).asSequence().map { IntRing.initializer(it) }.toMutableList().toIntArray()
     )
 
-    override operator fun Tensor<Int>.get(i: Int): IntTensor {
+    override fun Tensor<Int>.getTensor(i: Int): IntTensor {
         val lastShape = asIntTensor().shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
         val newStart = newShape.reduce(Int::times) * i + asIntTensor().bufferStart
@@ -433,7 +433,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      * @param indices the [IntArray] of 1-dimensional indices
      * @return tensor with rows corresponding to row by [indices]
      */
-    public fun Tensor<Int>.rowsByIndices(indices: IntArray): IntTensor = stack(indices.map { this[it] })
+    public fun Tensor<Int>.rowsByIndices(indices: IntArray): IntTensor = stack(indices.map { getTensor(it) })
 
     private inline fun StructureND<Int>.fold(foldFunction: (IntArray) -> Int): Int =
         foldFunction(asIntTensor().copyArray())
@@ -474,6 +474,11 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
 
     override fun StructureND<Int>.min(dim: Int, keepDim: Boolean): IntTensor =
         foldDim(dim, keepDim) { x -> x.minOrNull()!! }.asIntTensor()
+
+    override fun StructureND<Int>.argMin(dim: Int, keepDim: Boolean): IntTensor =
+        foldDim(dim, keepDim) { x ->
+            x.withIndex().minByOrNull { it.value }?.index!!
+        }.asIntTensor()
 
     override fun StructureND<Int>.max(): Int = this.fold { it.maxOrNull()!! }
 
