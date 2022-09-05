@@ -16,10 +16,9 @@ internal fun checkEmptyShape(shape: IntArray) =
         "Illegal empty shape provided"
     }
 
-internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) =
-    check(buffer.isNotEmpty()) {
-        "Illegal empty buffer provided"
-    }
+internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) = check(buffer.isNotEmpty()) {
+    "Illegal empty buffer provided"
+}
 
 internal fun checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray) =
     check(buffer.size == shape.reduce(Int::times)) {
@@ -50,7 +49,7 @@ internal fun checkSquareMatrix(shape: IntArray) {
 }
 
 internal fun DoubleTensorAlgebra.checkSymmetric(
-    tensor: Tensor<Double>, epsilon: Double = 1e-6
+    tensor: Tensor<Double>, epsilon: Double = 1e-6,
 ) =
     check(tensor.eq(tensor.transpose(), epsilon)) {
         "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"

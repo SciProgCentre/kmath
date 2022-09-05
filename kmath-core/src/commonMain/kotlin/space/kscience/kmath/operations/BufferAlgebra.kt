@@ -142,6 +142,9 @@ public open class BufferRingOps<T, A : Ring<T>>(
         super<BufferAlgebra>.binaryOperationFunction(operation)
 }
 
+public val IntRing.bufferAlgebra: BufferRingOps<Int, IntRing>
+    get() = BufferRingOps(IntRing)
+
 public val ShortRing.bufferAlgebra: BufferRingOps<Short, ShortRing>
     get() = BufferRingOps(ShortRing)
 

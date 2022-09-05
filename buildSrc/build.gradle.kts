@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.7.20-Beta"
     `kotlin-dsl`
     `version-catalog`
-    alias(npmlibs.plugins.kotlin.plugin.serialization)
+    kotlin("plugin.serialization") version "1.6.21"
 }
 
 java.targetCompatibility = JavaVersion.VERSION_11

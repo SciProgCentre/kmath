@@ -31,8 +31,7 @@ public open class DoubleTensorAlgebra :
 
     public companion object : DoubleTensorAlgebra()
 
-    override val elementAlgebra: DoubleField
-        get() = DoubleField
+    override val elementAlgebra: DoubleField get() = DoubleField
 
 
     /**
@@ -622,7 +621,8 @@ public open class DoubleTensorAlgebra :
         }
         val resNumElements = resShape.reduce(Int::times)
         val init = foldFunction(DoubleArray(1) { 0.0 })
-        val resTensor = BufferedTensor(resShape,
+        val resTensor = BufferedTensor(
+            resShape,
             MutableBuffer.auto(resNumElements) { init }, 0
         )
         for (index in resTensor.indices) {

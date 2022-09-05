@@ -22,8 +22,9 @@ public class ShortRingND(
 ) : ShortRingOpsND(), RingND<Short, ShortRing>, NumbersAddOps<StructureND<Short>> {
 
     override fun number(value: Number): BufferND<Short> {
-        val d = value.toShort() // minimize conversions
-        return structureND(shape) { d }
+        val short
+        = value.toShort() // minimize conversions
+        return structureND(shape) { short }
     }
 }
 

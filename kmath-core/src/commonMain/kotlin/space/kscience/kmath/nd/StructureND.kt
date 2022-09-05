@@ -82,7 +82,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
         public fun contentEquals(
             st1: StructureND<Double>,
             st2: StructureND<Double>,
-            tolerance: Double = 1e-11
+            tolerance: Double = 1e-11,
         ): Boolean {
             if (st1 === st2) return true
 
@@ -101,11 +101,17 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             val bufferRepr: String = when (structure.shape.size) {
                 1 -> (0 until structure.shape[0]).map { structure[it] }
                     .joinToString(prefix = "[", postfix = "]", separator = ", ")
-                2 -> (0 until structure.shape[0]).joinToString(prefix = "[\n", postfix = "\n]", separator = ",\n") { i ->
+
+                2 -> (0 until structure.shape[0]).joinToString(
+                    prefix = "[\n",
+                    postfix = "\n]",
+                    separator = ",\n"
+                ) { i ->
                     (0 until structure.shape[1]).joinToString(prefix = "  [", postfix = "]", separator = ", ") { j ->
                         structure[i, j].toString()
                     }
                 }
+
                 else -> "..."
             }
             val className = structure::class.simpleName ?: "StructureND"
@@ -224,6 +230,13 @@ public interface MutableStructureND<T> : StructureND<T> {
      * @param value the value.
      */
     public operator fun set(index: IntArray, value: T)
+}
+
+/**
+ * Set value at specified indices
+ */
+public operator fun <T> MutableStructureND<T>.set(vararg index: Int, value: T) {
+    set(index, value)
 }
 
 /**

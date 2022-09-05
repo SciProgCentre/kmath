@@ -16,7 +16,7 @@ import kotlin.math.pow as kpow
 public class DoubleBufferND(
     indexes: ShapeIndexer,
     override val buffer: DoubleBuffer,
-) : BufferND<Double>(indexes, buffer)
+) : MutableBufferND<Double>(indexes, buffer)
 
 
 public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(DoubleField.bufferAlgebra),

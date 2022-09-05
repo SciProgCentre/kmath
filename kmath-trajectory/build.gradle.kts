@@ -4,9 +4,7 @@ plugins {
 
 kscience{
     native()
-}
-
-kotlin.sourceSets.commonMain {
+    withContextReceivers()
     dependencies {
         api(projects.kmath.kmathGeometry)
     }

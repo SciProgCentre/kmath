@@ -4,16 +4,10 @@ plugins {
 
 kscience{
     native()
-}
-
-kotlin.sourceSets.commonMain {
-    dependencies {
+    withContextReceivers()
+    dependencies{
         api(projects.kmath.kmathComplex)
     }
-}
-
-kscience {
-    withContextReceivers()
 }
 
 readme {

@@ -8,7 +8,6 @@ package space.kscience.kmath.tensors.core.internal
 import space.kscience.kmath.nd.MutableBufferND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.asMutableBuffer
-import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.IntTensor
@@ -43,7 +42,8 @@ internal val StructureND<Double>.tensor: DoubleTensor
         else -> this.toBufferedTensor().asTensor()
     }
 
-internal val Tensor<Int>.tensor: IntTensor
+@PublishedApi
+internal val StructureND<Int>.tensor: IntTensor
     get() = when (this) {
         is IntTensor -> this
         else -> this.toBufferedTensor().asTensor()

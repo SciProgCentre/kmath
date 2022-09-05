@@ -4,6 +4,10 @@ plugins {
 
 kscience{
     native()
+    dependencies {
+        api(projects.kmathCore)
+        api(projects.kmathStat)
+    }
 }
 
 kotlin.sourceSets {

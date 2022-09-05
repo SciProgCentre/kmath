@@ -56,7 +56,7 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
  * @param strides The strides to access elements of [MutableBuffer] by linear indices.
  * @param buffer The underlying buffer.
  */
-public class MutableBufferND<T>(
+public open class MutableBufferND<T>(
     strides: ShapeIndexer,
     override val buffer: MutableBuffer<T>,
 ) : MutableStructureND<T>, BufferND<T>(strides, buffer) {
