@@ -14,9 +14,9 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.internal.array
-import space.kscience.kmath.tensors.core.internal.asTensor
 import space.kscience.kmath.tensors.core.internal.matrixSequence
 import space.kscience.kmath.tensors.core.internal.toBufferedTensor
+import space.kscience.kmath.tensors.core.internal.toTensor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -56,7 +56,7 @@ internal class TestDoubleTensor {
         assertEquals(tensor[intArrayOf(0, 1, 0)], 109.56)
 
         tensor.matrixSequence().forEach {
-            val a = it.asTensor()
+            val a = it.toTensor()
             val secondRow = a[1].as1D()
             val secondColumn = a.transpose(0, 1)[1].as1D()
             assertEquals(secondColumn[0], 77.89)
@@ -75,10 +75,10 @@ internal class TestDoubleTensor {
 
         // map to tensors
         val bufferedTensorArray = ndArray.toBufferedTensor() // strides are flipped so data copied
-        val tensorArray = bufferedTensorArray.asTensor() // data not contiguous so copied again
+        val tensorArray = bufferedTensorArray.toTensor() // data not contiguous so copied again
 
-        val tensorArrayPublic = ndArray.toDoubleTensor() // public API, data copied twice
-        val sharedTensorArray = tensorArrayPublic.toDoubleTensor() // no data copied by matching type
+        val tensorArrayPublic = ndArray.asDoubleTensor() // public API, data copied twice
+        val sharedTensorArray = tensorArrayPublic.asDoubleTensor() // no data copied by matching type
 
         assertTrue(tensorArray.mutableBuffer.array() contentEquals sharedTensorArray.mutableBuffer.array())
 

@@ -133,6 +133,12 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
 
     override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = a.mapInline { it * value }
 
+    override fun power(arg: Buffer<Double>, pow: Number): Buffer<Double> = if (pow is Int) {
+        arg.mapInline { it.pow(pow) }
+    } else {
+        arg.mapInline { it.pow(pow.toDouble()) }
+    }
+
     public companion object : DoubleBufferOps() {
         public inline fun Buffer<Double>.mapInline(block: (Double) -> Double): DoubleBuffer =
             if (this is DoubleBuffer) {

@@ -11,6 +11,7 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.math.pow
 import kotlin.math.pow as kpow
 
 public class DoubleBufferND(
@@ -165,6 +166,15 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     override fun atanh(arg: StructureND<Double>): DoubleBufferND =
         mapInline(arg.toBufferND()) { kotlin.math.atanh(it) }
 
+    override fun power(
+        arg: StructureND<Double>,
+        pow: Number,
+    ): StructureND<Double> = if (pow is Int) {
+        mapInline(arg.toBufferND()) { it.pow(pow) }
+    } else {
+        mapInline(arg.toBufferND()) { it.pow(pow.toDouble()) }
+    }
+
     public companion object : DoubleFieldOpsND()
 }
 
@@ -181,7 +191,7 @@ public class DoubleFieldND(override val shape: Shape) :
         it.kpow(pow)
     }
 
-    override fun power(arg: StructureND<Double>, pow: Number): DoubleBufferND = if(pow.isInteger()){
+    override fun power(arg: StructureND<Double>, pow: Number): DoubleBufferND = if (pow.isInteger()) {
         power(arg, pow.toInt())
     } else {
         val dpow = pow.toDouble()

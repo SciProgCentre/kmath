@@ -13,16 +13,17 @@ import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.IntTensor
 import space.kscience.kmath.tensors.core.TensorLinearStructure
 
-internal fun BufferedTensor<Int>.asTensor(): IntTensor =
+internal fun BufferedTensor<Int>.toTensor(): IntTensor =
     IntTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)
 
-internal fun BufferedTensor<Double>.asTensor(): DoubleTensor =
+internal fun BufferedTensor<Double>.toTensor(): DoubleTensor =
     DoubleTensor(this.shape, this.mutableBuffer.array(), this.bufferStart)
 
 internal fun <T> StructureND<T>.copyToBufferedTensor(): BufferedTensor<T> =
     BufferedTensor(
         this.shape,
-        TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().asMutableBuffer(), 0
+        TensorLinearStructure(this.shape).asSequence().map(this::get).toMutableList().asMutableBuffer(),
+        0
     )
 
 internal fun <T> StructureND<T>.toBufferedTensor(): BufferedTensor<T> = when (this) {
@@ -34,17 +35,3 @@ internal fun <T> StructureND<T>.toBufferedTensor(): BufferedTensor<T> = when (th
     }
     else -> this.copyToBufferedTensor()
 }
-
-@PublishedApi
-internal val StructureND<Double>.tensor: DoubleTensor
-    get() = when (this) {
-        is DoubleTensor -> this
-        else -> this.toBufferedTensor().asTensor()
-    }
-
-@PublishedApi
-internal val StructureND<Int>.tensor: IntTensor
-    get() = when (this) {
-        is IntTensor -> this
-        else -> this.toBufferedTensor().asTensor()
-    }
