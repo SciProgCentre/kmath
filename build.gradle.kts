@@ -1,9 +1,10 @@
+import space.kscience.gradle.isInDevelopment
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
 plugins {
     id("space.kscience.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
 }
 
 allprojects {
@@ -14,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1-dev-3"
+    version = "0.3.1-dev-4"
 }
 
 subprojects {
@@ -75,8 +76,14 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    github("kmath", "SciProgCentre", addToRelease = false)
-    space("https://maven.pkg.jetbrains.space/mipt-npm/p/sci/dev")
+    github("kmath", "SciProgCentre")
+    space(
+        if (isInDevelopment) {
+            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/dev"
+        } else {
+            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/release"
+        }
+    )
     sonatype()
 }
 

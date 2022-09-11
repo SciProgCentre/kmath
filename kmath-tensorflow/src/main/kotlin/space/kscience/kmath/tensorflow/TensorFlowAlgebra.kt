@@ -188,7 +188,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         StridedSliceHelper.stridedSlice(ops.scope(), it, Indices.at(i.toLong()))
     }
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): Tensor<T> = operate {
+    override fun Tensor<T>.transposed(i: Int, j: Int): Tensor<T> = operate {
         ops.linalg.transpose(it, ops.constant(intArrayOf(i, j)))
     }
 

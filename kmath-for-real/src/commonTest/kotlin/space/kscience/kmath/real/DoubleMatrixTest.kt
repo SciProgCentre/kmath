@@ -11,7 +11,7 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.structures.contentEquals
+import space.kscience.kmath.testutils.contentEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

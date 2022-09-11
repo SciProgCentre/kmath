@@ -114,7 +114,6 @@ public interface Buffer<out T> {
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
-        @Suppress("UNCHECKED_CAST")
         public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> =
             auto(T::class, size, initializer)
     }

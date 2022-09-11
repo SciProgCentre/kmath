@@ -25,6 +25,12 @@ kotlin.sourceSets {
             api(project(":kmath-stat"))
         }
     }
+
+    commonTest{
+        dependencies{
+            implementation(projects.testUtils)
+        }
+    }
 }
 
 readme {

@@ -24,8 +24,7 @@ public value class IntBuffer(public val array: IntArray) : MutableBuffer<Int> {
 
     override operator fun iterator(): IntIterator = array.iterator()
 
-    override fun copy(): MutableBuffer<Int> =
-        IntBuffer(array.copyOf())
+    override fun copy(): IntBuffer = IntBuffer(array.copyOf())
 }
 
 /**

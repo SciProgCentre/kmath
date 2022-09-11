@@ -238,18 +238,3 @@ public interface MutableStructureND<T> : StructureND<T> {
 public operator fun <T> MutableStructureND<T>.set(vararg index: Int, value: T) {
     set(index, value)
 }
-
-/**
- * Transform a structure element-by element in place.
- */
-@OptIn(PerformancePitfall::class)
-public inline fun <T> MutableStructureND<T>.mapInPlace(action: (index: IntArray, t: T) -> T): Unit =
-    elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
-
-public inline fun <reified T : Any> StructureND<T>.zip(
-    struct: StructureND<T>,
-    crossinline block: (T, T) -> T,
-): StructureND<T> {
-    require(shape.contentEquals(struct.shape)) { "Shape mismatch in structure combination" }
-    return StructureND.auto(shape) { block(this[it], struct[it]) }
-}

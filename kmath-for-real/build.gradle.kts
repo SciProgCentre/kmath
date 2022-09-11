@@ -2,13 +2,13 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     native()
-}
-
-kotlin.sourceSets.commonMain {
     dependencies {
-        api(project(":kmath-core"))
+        api(projects.kmathCore)
+    }
+    dependencies("commonTest") {
+        implementation(projects.testUtils)
     }
 }
 
@@ -24,21 +24,21 @@ readme {
     feature(
         id = "DoubleVector",
         ref = "src/commonMain/kotlin/space/kscience/kmath/real/DoubleVector.kt"
-    ){
+    ) {
         "Numpy-like operations for Buffers/Points"
     }
 
     feature(
         id = "DoubleMatrix",
         ref = "src/commonMain/kotlin/space/kscience/kmath/real/DoubleMatrix.kt"
-    ){
+    ) {
         "Numpy-like operations for 2d real structures"
     }
 
     feature(
         id = "grids",
         ref = "src/commonMain/kotlin/space/kscience/kmath/structures/grids.kt"
-    ){
+    ) {
         "Uniform grid generators"
     }
 }

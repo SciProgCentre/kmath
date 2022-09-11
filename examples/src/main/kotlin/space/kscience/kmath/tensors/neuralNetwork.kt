@@ -3,16 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-@file:OptIn(PerformancePitfall::class)
-
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.copyArray
+import space.kscience.kmath.tensors.core.toDoubleTensor
 import kotlin.math.sqrt
 
 const val seed = 100500L
@@ -82,9 +80,9 @@ class Dense(
     }
 
     override fun backward(input: DoubleTensor, outputError: DoubleTensor): DoubleTensor = DoubleTensorAlgebra {
-        val gradInput = outputError dot weights.transpose()
+        val gradInput = outputError dot weights.transposed()
 
-        val gradW = input.transpose() dot outputError
+        val gradW = input.transposed() dot outputError
         val gradBias = outputError.mean(dim = 0, keepDim = false) * input.shape[0].toDouble()
 
         weights -= learningRate * gradW
@@ -109,12 +107,11 @@ fun accuracy(yPred: DoubleTensor, yTrue: DoubleTensor): Double {
 }
 
 // neural network class
-@OptIn(ExperimentalStdlibApi::class)
 class NeuralNetwork(private val layers: List<Layer>) {
     private fun softMaxLoss(yPred: DoubleTensor, yTrue: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
 
-        val onesForAnswers = yPred.zeroesLike()
-        yTrue.copyArray().forEachIndexed { index, labelDouble ->
+        val onesForAnswers = zeroesLike(yPred)
+        yTrue.source.asIterable().forEachIndexed { index, labelDouble ->
             val label = labelDouble.toInt()
             onesForAnswers[intArrayOf(index, label)] = 1.0
         }
@@ -166,7 +163,7 @@ class NeuralNetwork(private val layers: List<Layer>) {
             for ((xBatch, yBatch) in iterBatch(xTrain, yTrain)) {
                 train(xBatch, yBatch)
             }
-            println("Accuracy:${accuracy(yTrain, predict(xTrain).argMax(1, true).asDouble())}")
+            println("Accuracy:${accuracy(yTrain, predict(xTrain).argMax(1, true).toDoubleTensor())}")
         }
     }
 
@@ -233,7 +230,7 @@ fun main() = BroadcastDoubleTensorAlgebra {
     val prediction = model.predict(xTest)
 
     // process raw prediction via argMax
-    val predictionLabels = prediction.argMax(1, true).asDouble()
+    val predictionLabels = prediction.argMax(1, true).toDoubleTensor()
 
     // find out accuracy
     val acc = accuracy(yTest, predictionLabels)

@@ -48,11 +48,6 @@ public inline fun DoubleBuffer(size: Int, init: (Int) -> Double): DoubleBuffer =
 public fun DoubleBuffer(vararg doubles: Double): DoubleBuffer = DoubleBuffer(doubles)
 
 /**
- * Simplified [DoubleBuffer] to array comparison
- */
-public fun DoubleBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
-
-/**
  * Returns a new [DoubleArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {

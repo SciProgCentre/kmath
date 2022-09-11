@@ -11,7 +11,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.IntRing
-import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.*
 import space.kscience.kmath.tensors.core.internal.*
 import kotlin.math.*
@@ -23,10 +23,6 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
 
     public companion object : IntTensorAlgebra()
 
-    override fun StructureND<Int>.dot(other: StructureND<Int>): Tensor<Int> {
-        TODO("Not yet implemented")
-    }
-
     override val elementAlgebra: IntRing get() = IntRing
 
 
@@ -36,56 +32,64 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      * @param transform the function to be applied to each element of the tensor.
      * @return the resulting tensor after applying the function.
      */
-    @PerformancePitfall
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun StructureND<Int>.map(transform: IntRing.(Int) -> Int): IntTensor {
         val tensor = this.asIntTensor()
         //TODO remove additional copy
-        val sourceArray = tensor.copyArray()
-        val array = IntArray(tensor.numElements) { IntRing.transform(sourceArray[it]) }
+        val array = IntBuffer(tensor.source.size) { IntRing.transform(tensor.source[it]) }
         return IntTensor(
             tensor.shape,
             array,
-            tensor.bufferStart
         )
     }
 
-    @PerformancePitfall
+    public inline fun Tensor<Int>.mapInPlace(operation: (Int) -> Int) {
+        if (this is IntTensor) {
+            source.mapInPlace(operation)
+        } else {
+            indices.forEach { set(it, operation(get(it))) }
+        }
+    }
+
+    public inline fun Tensor<Int>.mapIndexedInPlace(operation: (IntArray, Int) -> Int) {
+        indices.forEach { set(it, operation(it, get(it))) }
+    }
+
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun StructureND<Int>.mapIndexed(transform: IntRing.(index: IntArray, Int) -> Int): IntTensor {
         val tensor = this.asIntTensor()
         //TODO remove additional copy
-        val sourceArray = tensor.copyArray()
-        val array = IntArray(tensor.numElements) { IntRing.transform(tensor.indices.index(it), sourceArray[it]) }
-        return IntTensor(
-            tensor.shape,
-            array,
-            tensor.bufferStart
-        )
+        val buffer = IntBuffer(tensor.source.size) {
+            IntRing.transform(tensor.indices.index(it), tensor.source[it])
+        }
+        return IntTensor(tensor.shape, buffer)
     }
 
-    @PerformancePitfall
-    override fun zip(
+    @Suppress("OVERRIDE_BY_INLINE")
+    final override inline fun zip(
         left: StructureND<Int>,
         right: StructureND<Int>,
         transform: IntRing.(Int, Int) -> Int,
     ): IntTensor {
-        require(left.shape.contentEquals(right.shape)) {
-            "The shapes in zip are not equal: left - ${left.shape}, right - ${right.shape}"
-        }
+        checkShapesCompatible(left, right)
+
         val leftTensor = left.asIntTensor()
-        val leftArray = leftTensor.copyArray()
         val rightTensor = right.asIntTensor()
-        val rightArray = rightTensor.copyArray()
-        val array = IntArray(leftTensor.numElements) { IntRing.transform(leftArray[it], rightArray[it]) }
-        return IntTensor(
-            leftTensor.shape,
-            array
-        )
+        val buffer = IntBuffer(leftTensor.source.size) {
+            IntRing.transform(leftTensor.source[it], rightTensor.source[it])
+        }
+        return IntTensor(leftTensor.shape, buffer)
     }
 
-    override fun StructureND<Int>.valueOrNull(): Int? = if (asIntTensor().shape contentEquals intArrayOf(1))
-        asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart] else null
+
+    public inline fun StructureND<Int>.reduceElements(transform: (IntBuffer) -> Int): Int =
+        transform(asIntTensor().source.copy())
+    //TODO do we need protective copy?
+
+    override fun StructureND<Int>.valueOrNull(): Int? {
+        val dt = asIntTensor()
+        return if (dt.shape contentEquals intArrayOf(1)) dt.source[0] else null
+    }
 
     override fun StructureND<Int>.value(): Int = valueOrNull()
         ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
@@ -94,16 +98,16 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      * Constructs a tensor with the specified shape and data.
      *
      * @param shape the desired shape for the tensor.
-     * @param buffer one-dimensional data array.
-     * @return tensor with the [shape] shape and [buffer] data.
+     * @param array one-dimensional data array.
+     * @return tensor with the [shape] shape and [array] data.
      */
-    public fun fromArray(shape: IntArray, buffer: IntArray): IntTensor {
-        checkEmptyShape(shape)
-        check(buffer.isNotEmpty()) { "Illegal empty buffer provided" }
-        check(buffer.size == shape.reduce(Int::times)) {
-            "Inconsistent shape ${shape.toList()} for buffer of size ${buffer.size} provided"
+    public fun fromArray(shape: IntArray, array: IntArray): IntTensor {
+        checkNotEmptyShape(shape)
+        check(array.isNotEmpty()) { "Illegal empty buffer provided" }
+        check(array.size == shape.reduce(Int::times)) {
+            "Inconsistent shape ${shape.toList()} for buffer of size ${array.size} provided"
         }
-        return IntTensor(shape, buffer, 0)
+        return IntTensor(shape, array.asBuffer())
     }
 
     /**
@@ -119,10 +123,10 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
     )
 
     override fun Tensor<Int>.getTensor(i: Int): IntTensor {
-        val lastShape = asIntTensor().shape.drop(1).toIntArray()
+        val dt = asIntTensor()
+        val lastShape = shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
-        val newStart = newShape.reduce(Int::times) * i + asIntTensor().bufferStart
-        return IntTensor(newShape, asIntTensor().mutableBuffer.array(), newStart)
+        return IntTensor(newShape, dt.source.view(newShape.reduce(Int::times) * i))
     }
 
     /**
@@ -133,8 +137,8 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      * @return tensor with the [shape] shape and filled with [value].
      */
     public fun full(value: Int, shape: IntArray): IntTensor {
-        checkEmptyShape(shape)
-        val buffer = IntArray(shape.reduce(Int::times)) { value }
+        checkNotEmptyShape(shape)
+        val buffer = IntBuffer(shape.reduce(Int::times)) { value }
         return IntTensor(shape, buffer)
     }
 
@@ -144,9 +148,9 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      * @param value the value to fill the output tensor with.
      * @return tensor with the `input` tensor shape and filled with [value].
      */
-    public fun Tensor<Int>.fullLike(value: Int): IntTensor {
-        val shape = asIntTensor().shape
-        val buffer = IntArray(asIntTensor().numElements) { value }
+    public fun fullLike(structureND: StructureND<*>, value: Int): IntTensor {
+        val shape = structureND.shape
+        val buffer = IntBuffer(structureND.indices.linearSize) { value }
         return IntTensor(shape, buffer)
     }
 
@@ -163,7 +167,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      *
      * @return tensor filled with the scalar value `0`, with the same shape as `input` tensor.
      */
-    public fun StructureND<Int>.zeroesLike(): IntTensor = asIntTensor().fullLike(0)
+    public fun zeroesLike(structureND: StructureND<Int>): IntTensor = fullLike(structureND.asIntTensor(), 0)
 
     /**
      * Returns a tensor filled with the scalar value `1`, with the shape defined by the variable argument [shape].
@@ -178,7 +182,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      *
      * @return tensor filled with the scalar value `1`, with the same shape as `input` tensor.
      */
-    public fun Tensor<Int>.onesLike(): IntTensor = asIntTensor().fullLike(1)
+    public fun onesLike(structureND: Tensor<*>): IntTensor = fullLike(structureND, 1)
 
     /**
      * Returns a 2D tensor with shape ([n], [n]), with ones on the diagonal and zeros elsewhere.
@@ -188,7 +192,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      */
     public fun eye(n: Int): IntTensor {
         val shape = intArrayOf(n, n)
-        val buffer = IntArray(n * n) { 0 }
+        val buffer = IntBuffer(n * n) { 0 }
         val res = IntTensor(shape, buffer)
         for (i in 0 until n) {
             res[intArrayOf(i, i)] = 1
@@ -196,151 +200,92 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         return res
     }
 
-    /**
-     * Return a copy of the tensor.
-     *
-     * @return a copy of the `input` tensor with a copied buffer.
-     */
-    public fun StructureND<Int>.copy(): IntTensor =
-        IntTensor(asIntTensor().shape, asIntTensor().mutableBuffer.array().copyOf(), asIntTensor().bufferStart)
+    override fun Int.plus(arg: StructureND<Int>): IntTensor = arg.map { this@plus + it }
 
-    override fun Int.plus(arg: StructureND<Int>): IntTensor {
-        val resBuffer = IntArray(arg.asIntTensor().numElements) { i ->
-            arg.asIntTensor().mutableBuffer.array()[arg.asIntTensor().bufferStart + i] + this
-        }
-        return IntTensor(arg.shape, resBuffer)
-    }
+    override fun StructureND<Int>.plus(arg: Int): IntTensor = map { it + arg }
 
-    override fun StructureND<Int>.plus(arg: Int): IntTensor = arg + asIntTensor()
-
-    override fun StructureND<Int>.plus(arg: StructureND<Int>): IntTensor {
-        checkShapesCompatible(asIntTensor(), arg.asIntTensor())
-        val resBuffer = IntArray(asIntTensor().numElements) { i ->
-            asIntTensor().mutableBuffer.array()[i] + arg.asIntTensor().mutableBuffer.array()[i]
-        }
-        return IntTensor(asIntTensor().shape, resBuffer)
-    }
+    override fun StructureND<Int>.plus(arg: StructureND<Int>): IntTensor = zip(this, arg) { l, r -> l + r }
 
     override fun Tensor<Int>.plusAssign(value: Int) {
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] += value
-        }
+        mapInPlace { it + value }
     }
 
     override fun Tensor<Int>.plusAssign(arg: StructureND<Int>) {
         checkShapesCompatible(asIntTensor(), arg.asIntTensor())
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] +=
-                arg.asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i]
+        mapIndexedInPlace { index, value ->
+            value + arg[index]
         }
     }
 
-    override fun Int.minus(arg: StructureND<Int>): IntTensor {
-        val resBuffer = IntArray(arg.asIntTensor().numElements) { i ->
-            this - arg.asIntTensor().mutableBuffer.array()[arg.asIntTensor().bufferStart + i]
-        }
-        return IntTensor(arg.shape, resBuffer)
-    }
+    override fun Int.minus(arg: StructureND<Int>): IntTensor = arg.map { this@minus - it }
 
-    override fun StructureND<Int>.minus(arg: Int): IntTensor {
-        val resBuffer = IntArray(asIntTensor().numElements) { i ->
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] - arg
-        }
-        return IntTensor(asIntTensor().shape, resBuffer)
-    }
+    override fun StructureND<Int>.minus(arg: Int): IntTensor = map { it - arg }
 
-    override fun StructureND<Int>.minus(arg: StructureND<Int>): IntTensor {
-        checkShapesCompatible(asIntTensor(), arg)
-        val resBuffer = IntArray(asIntTensor().numElements) { i ->
-            asIntTensor().mutableBuffer.array()[i] - arg.asIntTensor().mutableBuffer.array()[i]
-        }
-        return IntTensor(asIntTensor().shape, resBuffer)
-    }
+    override fun StructureND<Int>.minus(arg: StructureND<Int>): IntTensor = zip(this, arg) { l, r -> l + r }
 
     override fun Tensor<Int>.minusAssign(value: Int) {
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] -= value
-        }
+        mapInPlace { it - value }
     }
 
     override fun Tensor<Int>.minusAssign(arg: StructureND<Int>) {
-        checkShapesCompatible(asIntTensor(), arg)
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] -=
-                arg.asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i]
-        }
+        checkShapesCompatible(this, arg)
+        mapIndexedInPlace { index, value -> value - arg[index] }
     }
 
-    override fun Int.times(arg: StructureND<Int>): IntTensor {
-        val resBuffer = IntArray(arg.asIntTensor().numElements) { i ->
-            arg.asIntTensor().mutableBuffer.array()[arg.asIntTensor().bufferStart + i] * this
-        }
-        return IntTensor(arg.shape, resBuffer)
-    }
+    override fun Int.times(arg: StructureND<Int>): IntTensor = arg.map { this@times * it }
 
     override fun StructureND<Int>.times(arg: Int): IntTensor = arg * asIntTensor()
 
-    override fun StructureND<Int>.times(arg: StructureND<Int>): IntTensor {
-        checkShapesCompatible(asIntTensor(), arg)
-        val resBuffer = IntArray(asIntTensor().numElements) { i ->
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] *
-                    arg.asIntTensor().mutableBuffer.array()[arg.asIntTensor().bufferStart + i]
-        }
-        return IntTensor(asIntTensor().shape, resBuffer)
-    }
+    override fun StructureND<Int>.times(arg: StructureND<Int>): IntTensor = zip(this, arg) { l, r -> l * r }
 
     override fun Tensor<Int>.timesAssign(value: Int) {
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] *= value
-        }
+        mapInPlace { it * value }
     }
 
     override fun Tensor<Int>.timesAssign(arg: StructureND<Int>) {
-        checkShapesCompatible(asIntTensor(), arg)
-        for (i in 0 until asIntTensor().numElements) {
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i] *=
-                arg.asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i]
-        }
+        checkShapesCompatible(this, arg)
+        mapIndexedInPlace { index, value -> value * arg[index] }
     }
 
-    override fun StructureND<Int>.unaryMinus(): IntTensor {
-        val resBuffer = IntArray(asIntTensor().numElements) { i ->
-            asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + i].unaryMinus()
-        }
-        return IntTensor(asIntTensor().shape, resBuffer)
-    }
+    override fun StructureND<Int>.unaryMinus(): IntTensor = map { -it }
 
-    override fun Tensor<Int>.transpose(i: Int, j: Int): IntTensor {
-        val ii = asIntTensor().minusIndex(i)
-        val jj = asIntTensor().minusIndex(j)
-        checkTranspose(asIntTensor().dimension, ii, jj)
-        val n = asIntTensor().numElements
+    override fun Tensor<Int>.transposed(i: Int, j: Int): IntTensor {
+        // TODO change strides instead of changing content
+        val dt = asIntTensor()
+        val ii = dt.minusIndex(i)
+        val jj = dt.minusIndex(j)
+        checkTranspose(dt.dimension, ii, jj)
+        val n = dt.linearSize
         val resBuffer = IntArray(n)
 
-        val resShape = asIntTensor().shape.copyOf()
+        val resShape = dt.shape.copyOf()
         resShape[ii] = resShape[jj].also { resShape[jj] = resShape[ii] }
 
-        val resTensor = IntTensor(resShape, resBuffer)
+        val resTensor = IntTensor(resShape, resBuffer.asBuffer())
 
         for (offset in 0 until n) {
-            val oldMultiIndex = asIntTensor().indices.index(offset)
+            val oldMultiIndex = dt.indices.index(offset)
             val newMultiIndex = oldMultiIndex.copyOf()
             newMultiIndex[ii] = newMultiIndex[jj].also { newMultiIndex[jj] = newMultiIndex[ii] }
 
             val linearIndex = resTensor.indices.offset(newMultiIndex)
-            resTensor.mutableBuffer.array()[linearIndex] =
-                asIntTensor().mutableBuffer.array()[asIntTensor().bufferStart + offset]
+            resTensor.source[linearIndex] = dt.source[offset]
         }
         return resTensor
     }
 
     override fun Tensor<Int>.view(shape: IntArray): IntTensor {
         checkView(asIntTensor(), shape)
-        return IntTensor(shape, asIntTensor().mutableBuffer.array(), asIntTensor().bufferStart)
+        return IntTensor(shape, asIntTensor().source)
     }
 
     override fun Tensor<Int>.viewAs(other: StructureND<Int>): IntTensor =
-        asIntTensor().view(other.shape)
+        view(other.shape)
+
+    override fun StructureND<Int>.dot(other: StructureND<Int>): IntTensor {
+        return if (dimension in 0..2 && other.dimension in 0..2) TODO("not implemented")
+        else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
+    }
 
     override fun diagonalEmbedding(
         diagonalEntries: Tensor<Int>,
@@ -374,7 +319,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
                 diagonalEntries.shape.slice(greaterDim - 1 until n - 1).toIntArray()
         val resTensor = zeros(resShape)
 
-        for (i in 0 until diagonalEntries.asIntTensor().numElements) {
+        for (i in 0 until diagonalEntries.asIntTensor().linearSize) {
             val multiIndex = diagonalEntries.asIntTensor().indices.index(i)
 
             var offset1 = 0
@@ -394,16 +339,27 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         return resTensor.asIntTensor()
     }
 
-    private infix fun Tensor<Int>.eq(
+    /**
+     * Compares element-wise two int tensors
+     *
+     * @param other the tensor to compare with `input` tensor.
+     * @param epsilon permissible error when comparing two Int values.
+     * @return true if two tensors have the same shape and elements, false otherwise.
+     */
+    public fun Tensor<Int>.eq(other: Tensor<Int>): Boolean =
+        asIntTensor().eq(other) { x, y -> x == y }
+
+    private fun Tensor<Int>.eq(
         other: Tensor<Int>,
+        eqFunction: (Int, Int) -> Boolean,
     ): Boolean {
         checkShapesCompatible(asIntTensor(), other)
-        val n = asIntTensor().numElements
-        if (n != other.asIntTensor().numElements) {
+        val n = asIntTensor().linearSize
+        if (n != other.asIntTensor().linearSize) {
             return false
         }
         for (i in 0 until n) {
-            if (asIntTensor().mutableBuffer[asIntTensor().bufferStart + i] != other.asIntTensor().mutableBuffer[other.asIntTensor().bufferStart + i]) {
+            if (!eqFunction(asIntTensor().source[i], other.asIntTensor().source[i])) {
                 return false
             }
         }
@@ -421,10 +377,12 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         val shape = tensors[0].shape
         check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
         val resShape = intArrayOf(tensors.size) + shape
-        val resBuffer = tensors.flatMap {
-            it.asIntTensor().mutableBuffer.array().drop(it.asIntTensor().bufferStart).take(it.asIntTensor().numElements)
-        }.toIntArray()
-        return IntTensor(resShape, resBuffer, 0)
+//        val resBuffer: List<Int> = tensors.flatMap {
+//            it.asIntTensor().source.array.drop(it.asIntTensor().bufferStart)
+//                .take(it.asIntTensor().linearSize)
+//        }
+        val resBuffer = tensors.map { it.asIntTensor().source }.concat()
+        return IntTensor(resShape, resBuffer)
     }
 
     /**
@@ -435,14 +393,11 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      */
     public fun Tensor<Int>.rowsByIndices(indices: IntArray): IntTensor = stack(indices.map { getTensor(it) })
 
-    private inline fun StructureND<Int>.fold(foldFunction: (IntArray) -> Int): Int =
-        foldFunction(asIntTensor().copyArray())
-
-    private inline fun <reified R : Any> StructureND<Int>.foldDim(
+    private inline fun StructureND<Int>.foldDimToInt(
         dim: Int,
         keepDim: Boolean,
-        foldFunction: (IntArray) -> R,
-    ): BufferedTensor<R> {
+        foldFunction: (IntArray) -> Int,
+    ): IntTensor {
         check(dim < dimension) { "Dimension $dim out of range $dimension" }
         val resShape = if (keepDim) {
             shape.take(dim).toIntArray() + intArrayOf(1) + shape.takeLast(dimension - dim - 1).toIntArray()
@@ -451,9 +406,9 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         }
         val resNumElements = resShape.reduce(Int::times)
         val init = foldFunction(IntArray(1) { 0 })
-        val resTensor = BufferedTensor(
+        val resTensor = IntTensor(
             resShape,
-            MutableBuffer.auto(resNumElements) { init }, 0
+            IntBuffer(resNumElements) { init }
         )
         for (index in resTensor.indices) {
             val prefix = index.take(dim).toIntArray()
@@ -465,31 +420,33 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         return resTensor
     }
 
-    override fun StructureND<Int>.sum(): Int = asIntTensor().fold { it.sum() }
+
+    override fun StructureND<Int>.sum(): Int = reduceElements { it.array.sum() }
 
     override fun StructureND<Int>.sum(dim: Int, keepDim: Boolean): IntTensor =
-        foldDim(dim, keepDim) { x -> x.sum() }.asIntTensor()
+        foldDimToInt(dim, keepDim) { x -> x.sum() }
 
-    override fun StructureND<Int>.min(): Int = this.fold { it.minOrNull()!! }
+    override fun StructureND<Int>.min(): Int = reduceElements { it.array.min() }
 
     override fun StructureND<Int>.min(dim: Int, keepDim: Boolean): IntTensor =
-        foldDim(dim, keepDim) { x -> x.minOrNull()!! }.asIntTensor()
+        foldDimToInt(dim, keepDim) { x -> x.minOrNull()!! }
 
-    override fun StructureND<Int>.argMin(dim: Int, keepDim: Boolean): IntTensor =
-        foldDim(dim, keepDim) { x ->
-            x.withIndex().minByOrNull { it.value }?.index!!
-        }.asIntTensor()
+    override fun StructureND<Int>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> = foldDimToInt(dim, keepDim) { x ->
+        x.withIndex().minBy { it.value }.index
+    }
 
-    override fun StructureND<Int>.max(): Int = this.fold { it.maxOrNull()!! }
+    override fun StructureND<Int>.max(): Int = reduceElements { it.array.max() }
 
     override fun StructureND<Int>.max(dim: Int, keepDim: Boolean): IntTensor =
-        foldDim(dim, keepDim) { x -> x.maxOrNull()!! }.asIntTensor()
+        foldDimToInt(dim, keepDim) { x -> x.max() }
 
 
     override fun StructureND<Int>.argMax(dim: Int, keepDim: Boolean): IntTensor =
-        foldDim(dim, keepDim) { x ->
-            x.withIndex().maxByOrNull { it.value }?.index!!
-        }.asIntTensor()
+        foldDimToInt(dim, keepDim) { x ->
+            x.withIndex().maxBy { it.value }.index
+        }
+
+    public fun StructureND<Int>.mean(): Double = sum().toDouble() / indices.linearSize
 }
 
 public val Int.Companion.tensorAlgebra: IntTensorAlgebra get() = IntTensorAlgebra

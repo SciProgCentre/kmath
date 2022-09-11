@@ -13,11 +13,11 @@ import space.kscience.kmath.tensors.api.Tensor
 /**
  * Represents [Tensor] over a [MutableBuffer] intended to be used through [DoubleTensor] and [IntTensor]
  */
-public open class BufferedTensor<T> internal constructor(
+public abstract class BufferedTensor<T>(
     override val shape: IntArray,
-    @PublishedApi internal val mutableBuffer: MutableBuffer<T>,
-    @PublishedApi internal val bufferStart: Int,
 ) : Tensor<T> {
+
+    public abstract val source: MutableBuffer<T>
 
     /**
      * Buffer strides based on [TensorLinearStructure] implementation
@@ -27,14 +27,8 @@ public open class BufferedTensor<T> internal constructor(
     /**
      * Number of elements in tensor
      */
-    public val numElements: Int
-        get() = indices.linearSize
+    public val linearSize: Int get() = indices.linearSize
 
-    override fun get(index: IntArray): T = mutableBuffer[bufferStart + indices.offset(index)]
-
-    override fun set(index: IntArray, value: T) {
-        mutableBuffer[bufferStart + indices.offset(index)] = value
-    }
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map {

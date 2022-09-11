@@ -75,7 +75,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
 
     // solveLT(l, b) function can be easily adapted for upper triangular matrix by the permutation matrix revMat
     // create it by placing ones on side diagonal
-    val revMat = u.zeroesLike()
+    val revMat = zeroesLike(u)
     val n = revMat.shape[0]
     for (i in 0 until n) {
         revMat[intArrayOf(i, n - 1 - i)] = 1.0

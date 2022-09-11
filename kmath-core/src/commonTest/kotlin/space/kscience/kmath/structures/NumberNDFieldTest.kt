@@ -74,7 +74,9 @@ class NumberNDFieldTest {
 
     @Test
     fun combineTest() {
-        val division = array1.zip(array2, Double::div)
+        algebra {
+            val division = zip(array1, array2) { l, r -> l / r }
+        }
     }
 
     object L2Norm : Norm<StructureND<Number>, Double> {

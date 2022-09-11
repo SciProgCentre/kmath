@@ -27,7 +27,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
     println("y:\n$y")
 
     // stack them into single dataset
-    val dataset = stack(listOf(x, y)).transpose()
+    val dataset = stack(listOf(x, y)).transposed()
 
     // normalize both x and y
     val xMean = x.mean()

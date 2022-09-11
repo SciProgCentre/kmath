@@ -72,6 +72,20 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
             }
         }
 
+    /**
+     * Transform a structure element-by element in place.
+     */
+    public inline fun <T> MutableStructureND<T>.mapIndexedInPlace(operation: (index: IntArray, t: T) -> T): Unit {
+        if (this is MultikTensor) {
+            array.multiIndices.iterator().forEach {
+                set(it, operation(it, get(it)))
+            }
+        } else {
+            indices.forEach { set(it, operation(it, get(it))) }
+        }
+    }
+
+
     @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): MultikTensor<T> {
         require(left.shape.contentEquals(right.shape)) { "ND array shape mismatch" } //TODO replace by ShapeMismatchException
@@ -121,7 +135,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.plusAssign(value)
         } else {
-            mapInPlace { _, t -> elementAlgebra.add(t, value) }
+            mapIndexedInPlace { _, t -> elementAlgebra.add(t, value) }
         }
     }
 
@@ -129,7 +143,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.plusAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.add(t, arg[index]) }
+            mapIndexedInPlace { index, t -> elementAlgebra.add(t, arg[index]) }
         }
     }
 
@@ -145,7 +159,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.minusAssign(value)
         } else {
-            mapInPlace { _, t -> elementAlgebra.run { t - value } }
+            mapIndexedInPlace { _, t -> elementAlgebra.run { t - value } }
         }
     }
 
@@ -153,7 +167,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.minusAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.run { t - arg[index] } }
+            mapIndexedInPlace { index, t -> elementAlgebra.run { t - arg[index] } }
         }
     }
 
@@ -170,7 +184,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.timesAssign(value)
         } else {
-            mapInPlace { _, t -> elementAlgebra.multiply(t, value) }
+            mapIndexedInPlace { _, t -> elementAlgebra.multiply(t, value) }
         }
     }
 
@@ -178,7 +192,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         if (this is MultikTensor) {
             array.timesAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.multiply(t, arg[index]) }
+            mapIndexedInPlace { index, t -> elementAlgebra.multiply(t, arg[index]) }
         }
     }
 
@@ -187,7 +201,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     override fun Tensor<T>.getTensor(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
-    override fun Tensor<T>.transpose(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
+    override fun Tensor<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
     override fun Tensor<T>.view(shape: IntArray): MultikTensor<T> {
         require(shape.all { it > 0 })
@@ -283,7 +297,7 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
         if (this is MultikTensor) {
             array.divAssign(value)
         } else {
-            mapInPlace { _, t -> elementAlgebra.divide(t, value) }
+            mapIndexedInPlace { _, t -> elementAlgebra.divide(t, value) }
         }
     }
 
@@ -291,7 +305,7 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
         if (this is MultikTensor) {
             array.divAssign(arg.asMultik().array)
         } else {
-            mapInPlace { index, t -> elementAlgebra.divide(t, arg[index]) }
+            mapIndexedInPlace { index, t -> elementAlgebra.divide(t, arg[index]) }
         }
     }
 }

@@ -180,7 +180,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param j the second dimension to be transposed
      * @return transposed tensor
      */
-    public fun Tensor<T>.transpose(i: Int = -2, j: Int = -1): Tensor<T>
+    public fun Tensor<T>.transposed(i: Int = -2, j: Int = -1): Tensor<T>
 
     /**
      * Returns a new tensor with the same data as the self tensor but of a different shape.

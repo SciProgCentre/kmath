@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.core.internal.array
 import space.kscience.kmath.tensors.core.internal.svd1d
 import kotlin.math.abs
 import kotlin.test.Test
@@ -142,11 +141,11 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     @Test
     fun testCholesky() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 5), 0)
-        val sigma = (tensor matmul tensor.transpose()) + diagonalEmbedding(
+        val sigma = (tensor matmul tensor.transposed()) + diagonalEmbedding(
             fromArray(intArrayOf(2, 5), DoubleArray(10) { 0.1 })
         )
         val low = sigma.cholesky()
-        val sigmChol = low matmul low.transpose()
+        val sigmChol = low matmul low.transposed()
         assertTrue(sigma.eq(sigmChol))
     }
 
@@ -157,12 +156,12 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         val res = svd1d(tensor2)
 
         assertTrue(res.shape contentEquals intArrayOf(2))
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart]) - 0.386) < 0.01 }
-        assertTrue { abs(abs(res.mutableBuffer.array()[res.bufferStart + 1]) - 0.922) < 0.01 }
+        assertTrue { abs(abs(res.source[0]) - 0.386) < 0.01 }
+        assertTrue { abs(abs(res.source[1]) - 0.922) < 0.01 }
     }
 
     @Test
-    fun testSVD() = DoubleTensorAlgebra{
+    fun testSVD() = DoubleTensorAlgebra {
         testSVDFor(fromArray(intArrayOf(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)))
         testSVDFor(fromArray(intArrayOf(2, 2), doubleArrayOf(-1.0, 0.0, 239.0, 238.0)))
     }
@@ -171,16 +170,16 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     fun testBatchedSVD() = DoubleTensorAlgebra {
         val tensor = randomNormal(intArrayOf(2, 5, 3), 0)
         val (tensorU, tensorS, tensorV) = tensor.svd()
-        val tensorSVD = tensorU matmul (diagonalEmbedding(tensorS) matmul tensorV.transpose())
+        val tensorSVD = tensorU matmul (diagonalEmbedding(tensorS) matmul tensorV.transposed())
         assertTrue(tensor.eq(tensorSVD))
     }
 
     @Test
     fun testBatchedSymEig() = DoubleTensorAlgebra {
         val tensor = randomNormal(shape = intArrayOf(2, 3, 3), 0)
-        val tensorSigma = tensor + tensor.transpose()
+        val tensorSigma = tensor + tensor.transposed()
         val (tensorS, tensorV) = tensorSigma.symEig()
-        val tensorSigmaCalc = tensorV matmul (diagonalEmbedding(tensorS) matmul tensorV.transpose())
+        val tensorSigmaCalc = tensorV matmul (diagonalEmbedding(tensorS) matmul tensorV.transposed())
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
 
@@ -194,7 +193,7 @@ private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double
     val tensorSVD = svd.first
         .dot(
             diagonalEmbedding(svd.second)
-                .dot(svd.third.transpose())
+                .dot(svd.third.transposed())
         )
 
     assertTrue(tensor.eq(tensorSVD, epsilon))
