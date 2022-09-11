@@ -132,7 +132,10 @@ public open class DoubleTensorAlgebra :
         val dt = asDoubleTensor()
         val lastShape = shape.drop(1).toIntArray()
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
-        return DoubleTensor(newShape, dt.source.view(newShape.reduce(Int::times) * i))
+        return DoubleTensor(
+            newShape,
+            dt.source.view(newShape.reduce(Int::times) * i, TensorLinearStructure.linearSizeOf(newShape))
+        )
     }
 
     /**
@@ -227,7 +230,7 @@ public open class DoubleTensorAlgebra :
 
     override fun StructureND<Double>.minus(arg: Double): DoubleTensor = map { it - arg }
 
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l + r }
+    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l - r }
 
     override fun Tensor<Double>.minusAssign(value: Double) {
         mapInPlace { it - value }

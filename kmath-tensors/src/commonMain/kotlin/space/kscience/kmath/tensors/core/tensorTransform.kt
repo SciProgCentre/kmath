@@ -5,14 +5,20 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.DoubleBufferND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.api.Tensor
 
 
+/**
+ * Create a mutable copy of given [StructureND].
+ */
 public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
     DoubleTensor(shape, source.copy())
+} else if (this is DoubleBufferND && indices is TensorLinearStructure) {
+    DoubleTensor(shape, buffer.copy())
 } else {
     DoubleTensor(
         shape,
@@ -36,11 +42,14 @@ public fun StructureND<Int>.toDoubleTensor(): DoubleTensor {
 }
 
 /**
- * Casts [Tensor] of [Double] to [DoubleTensor]
+ * Transforms [StructureND] of [Double] to [DoubleTensor]. Zero copy if possible, but is not guaranteed
  */
-public fun StructureND<Double>.asDoubleTensor(): DoubleTensor = when (this) {
-    is DoubleTensor -> this
-    else -> copyToTensor()
+public fun StructureND<Double>.asDoubleTensor(): DoubleTensor = if (this is DoubleTensor) {
+    this
+} else if (this is DoubleBufferND && indices is TensorLinearStructure) {
+    DoubleTensor(shape, buffer)
+} else {
+    copyToTensor()
 }
 
 /**

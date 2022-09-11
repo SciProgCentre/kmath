@@ -40,7 +40,7 @@ internal val IntTensor.vectors: VirtualBuffer<IntTensor>
 
         return VirtualBuffer(linearSize / vectorOffset) { index ->
             val offset = index * vectorOffset
-            IntTensor(vectorShape, source.view(offset))
+            IntTensor(vectorShape, source.view(offset, vectorShape.first()))
         }
     }
 

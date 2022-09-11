@@ -6,10 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.DefaultStrides
-import space.kscience.kmath.nd.MutableBufferND
-import space.kscience.kmath.nd.as1D
-import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.toDoubleArray
@@ -66,16 +63,16 @@ internal class TestDoubleTensor {
     fun testNoBufferProtocol() {
 
         // create buffer
-        val doubleArray = DoubleBuffer(doubleArrayOf(1.0, 2.0, 3.0))
+        val doubleArray = DoubleBuffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = MutableBufferND(DefaultStrides(intArrayOf(3)), doubleArray)
+        val ndArray: MutableBufferND<Double> = DoubleBufferND(DefaultStrides(intArrayOf(3)), doubleArray)
 
         // map to tensors
-        val bufferedTensorArray = ndArray.asDoubleTensor() // strides are flipped so data copied
-        val tensorArray = bufferedTensorArray.asDoubleTensor() // data not contiguous so copied again
+        val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.
 
-        val tensorArrayPublic = ndArray.asDoubleTensor() // public API, data copied twice
+        //protective copy
+        val tensorArrayPublic = ndArray.copyToTensor() // public API, data copied twice
         val sharedTensorArray = tensorArrayPublic.asDoubleTensor() // no data copied by matching type
 
         assertTrue(tensorArray.source contentEquals sharedTensorArray.source)
@@ -83,11 +80,11 @@ internal class TestDoubleTensor {
         tensorArray[intArrayOf(0)] = 55.9
         assertEquals(tensorArrayPublic[intArrayOf(0)], 1.0)
 
-        tensorArrayPublic[intArrayOf(0)] = 55.9
-        assertEquals(sharedTensorArray[intArrayOf(0)], 55.9)
-        assertEquals(bufferedTensorArray[intArrayOf(0)], 1.0)
+        tensorArrayPublic[intArrayOf(0)] = 57.9
+        assertEquals(sharedTensorArray[intArrayOf(0)], 57.9)
+        assertEquals(tensorArray[intArrayOf(0)], 55.9)
 
-        bufferedTensorArray[intArrayOf(0)] = 55.9
+        tensorArray[intArrayOf(0)] = 55.9
         assertEquals(ndArray[intArrayOf(0)], 1.0)
 
     }

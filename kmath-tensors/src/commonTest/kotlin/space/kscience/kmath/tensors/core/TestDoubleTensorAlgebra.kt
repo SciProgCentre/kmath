@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -98,8 +99,8 @@ internal class TestDoubleTensorAlgebra {
         assignResult += tensorC
         assignResult += -39.4
 
-        assertTrue(expected.source contentEquals result.source)
-        assertTrue(expected.source contentEquals assignResult.source)
+        assertBufferEquals(expected.source, result.source)
+        assertBufferEquals(expected.source, assignResult.source)
     }
 
     @Test
@@ -202,6 +203,6 @@ internal class TestDoubleTensorAlgebra {
         val r = tensor.getTensor(1).map { it - 1.0 }
         val res = l + r
         assertTrue { intArrayOf(5, 5) contentEquals res.shape }
-        assertEquals(1.0, res[4, 4])
+        assertEquals(2.0, res[4, 4])
     }
 }

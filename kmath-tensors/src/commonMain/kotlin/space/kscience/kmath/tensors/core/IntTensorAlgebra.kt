@@ -221,7 +221,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
 
     override fun StructureND<Int>.minus(arg: Int): IntTensor = map { it - arg }
 
-    override fun StructureND<Int>.minus(arg: StructureND<Int>): IntTensor = zip(this, arg) { l, r -> l + r }
+    override fun StructureND<Int>.minus(arg: StructureND<Int>): IntTensor = zip(this, arg) { l, r -> l - r }
 
     override fun Tensor<Int>.minusAssign(value: Int) {
         mapInPlace { it - value }
@@ -283,8 +283,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
         view(other.shape)
 
     override fun StructureND<Int>.dot(other: StructureND<Int>): IntTensor {
-        return if (dimension in 0..2 && other.dimension in 0..2) TODO("not implemented")
-        else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
+        TODO("not implemented for integers")
     }
 
     override fun diagonalEmbedding(
