@@ -23,11 +23,6 @@ public interface RandomGenerator {
     public fun nextDouble(): Double
 
     /**
-     * A chunk of doubles of given [size].
-     */
-    public fun nextDoubleBuffer(size: Int): DoubleBuffer = DoubleBuffer(size) { nextDouble() }
-
-    /**
      * Gets the next random `Int` from the random number generator.
      *
      * Generates an `Int` random value uniformly distributed between [Int.MIN_VALUE] and [Int.MAX_VALUE] (inclusive).

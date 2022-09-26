@@ -167,9 +167,9 @@ public object MstLogicAlgebra : LogicAlgebra<MST> {
     override fun bindSymbolOrNull(value: String): MST = super.bindSymbolOrNull(value) ?: StringSymbol(value)
 
     override fun const(boolean: Boolean): Symbol = if (boolean) {
-        LogicAlgebra.TRUE
+        BinaryLogic.TRUE
     } else {
-        LogicAlgebra.FALSE
+        BinaryLogic.FALSE
     }
 
     override fun MST.not(): MST = MST.Unary(Boolean::not.name, this)

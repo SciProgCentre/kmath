@@ -8,6 +8,7 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.nextDoubleBuffer
 import kotlin.math.*
 
 /**
@@ -23,8 +24,8 @@ public object BoxMullerSampler : NormalizedGaussianSampler {
         var state = Double.NaN
 
         override fun nextBufferBlocking(size: Int): DoubleBuffer {
-            val xs = generator.nextDoubleBuffer(size)
-            val ys = generator.nextDoubleBuffer(size)
+            val xs = nextDoubleBuffer(size)
+            val ys = nextDoubleBuffer(size)
 
             return DoubleBuffer(size) { index ->
                 if (state.isNaN()) {

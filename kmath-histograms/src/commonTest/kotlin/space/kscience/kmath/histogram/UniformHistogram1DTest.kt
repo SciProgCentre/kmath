@@ -12,6 +12,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.stat.nextBuffer
+import space.kscience.kmath.structures.nextDoubleBuffer
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,7 +36,7 @@ internal class UniformHistogram1DTest {
 
     @Test
     fun rebinDown() = runTest {
-        val h1 = Histogram.uniform1D(DoubleField, 0.01).produce(generator.nextDoubleBuffer(10000))
+        val h1 = Histogram.uniform1D(DoubleField, 0.01).produce(nextDoubleBuffer(10000))
         val h2 = Histogram.uniform1D(DoubleField,0.03).produceFrom(h1)
 
         assertEquals(10000, h2.bins.sumOf { it.binValue }.toInt())
@@ -43,7 +44,7 @@ internal class UniformHistogram1DTest {
 
     @Test
     fun rebinUp() = runTest {
-        val h1 = Histogram.uniform1D(DoubleField, 0.03).produce(generator.nextDoubleBuffer(10000))
+        val h1 = Histogram.uniform1D(DoubleField, 0.03).produce(nextDoubleBuffer(10000))
         val h2 = Histogram.uniform1D(DoubleField,0.01).produceFrom(h1)
 
         assertEquals(10000, h2.bins.sumOf { it.binValue }.toInt())
