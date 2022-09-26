@@ -7,7 +7,7 @@ package space.kscience.kmath.streaming
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import space.kscience.kmath.structures.asSequence
+import space.kscience.kmath.operations.asSequence
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -54,7 +54,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
      * @return the lazy sequence of pairs of indices to values.
      */
     @PerformancePitfall
-    public fun elements(): Sequence<Pair<IntArray, T>> = shapeIndices.asSequence().map { it to get(it) }
+    public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
 
     /**
      * Feature is some additional structure information that allows to access it special properties or hints.
@@ -71,7 +71,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.shapeIndices == st2.shapeIndices)
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided
@@ -87,7 +87,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             if (st1 === st2) return true
 
             // fast comparison of buffers if possible
-            if (st1 is BufferND && st2 is BufferND && st1.shapeIndices == st2.shapeIndices)
+            if (st1 is BufferND && st2 is BufferND && st1.indices == st2.indices)
                 return Buffer.contentEquals(st1.buffer, st2.buffer)
 
             //element by element comparison if it could not be avoided

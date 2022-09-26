@@ -7,6 +7,7 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.stat.Sampler
 
 public interface BlockingDoubleSampler : Sampler<Double> {
     override fun sample(generator: RandomGenerator): BlockingDoubleChain

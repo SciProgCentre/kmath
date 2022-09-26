@@ -6,6 +6,7 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.operations.WithSize
+import space.kscience.kmath.operations.asSequence
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 

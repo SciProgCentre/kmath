@@ -6,11 +6,10 @@
 package space.kscience.kmath.commons.random
 
 import kotlinx.coroutines.runBlocking
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.toIntExact
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
-import space.kscience.kmath.samplers.next
+import space.kscience.kmath.stat.next
 
 
 public class CMRandomGeneratorWrapper(

@@ -15,7 +15,7 @@ import kotlin.math.pow
 import kotlin.math.pow as kpow
 
 public class DoubleBufferND(
-    indexes: ShapeIndices,
+    indexes: ShapeIndexer,
     override val buffer: DoubleBuffer,
 ) : MutableBufferND<Double>(indexes, buffer)
 
@@ -35,7 +35,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         arg: DoubleBufferND,
         transform: (Double) -> Double,
     ): DoubleBufferND {
-        val indexes = arg.shapeIndices
+        val indexes = arg.indices
         val array = arg.buffer.array
         return DoubleBufferND(indexes, DoubleBuffer(indexes.linearSize) { transform(array[it]) })
     }
@@ -45,8 +45,8 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         r: DoubleBufferND,
         block: (l: Double, r: Double) -> Double,
     ): DoubleBufferND {
-        require(l.shapeIndices == r.shapeIndices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
-        val indexes = l.shapeIndices
+        require(l.indices == r.indices) { "Zip requires the same shapes, but found ${l.shape} on the left and ${r.shape} on the right" }
+        val indexes = l.indices
         val lArray = l.buffer.array
         val rArray = r.buffer.array
         return DoubleBufferND(indexes, DoubleBuffer(indexes.linearSize) { block(lArray[it], rArray[it]) })

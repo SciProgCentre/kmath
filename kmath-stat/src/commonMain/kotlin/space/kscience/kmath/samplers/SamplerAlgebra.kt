@@ -13,6 +13,7 @@ import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.stat.Sampler
 
 /**
  * Implements [Sampler] by sampling only certain [value].

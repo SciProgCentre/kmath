@@ -8,6 +8,7 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.random.chain
+import space.kscience.kmath.stat.Sampler
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min

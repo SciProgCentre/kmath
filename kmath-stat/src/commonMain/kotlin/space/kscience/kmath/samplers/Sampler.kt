@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.combine
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer

@@ -97,7 +97,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      * Build a new series
      */
     public fun series(size: Int, fromIndex: Int = 0, block: A.(label: L) -> T): Series<T> {
-        return bufferFactory(size) {
+        return elementAlgebra.bufferFactory(size) {
             val index = it + fromIndex
             elementAlgebra.block(labelResolver(index))
         }.moveTo(fromIndex)
@@ -122,7 +122,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      * Map a series to another series of the same size
      */
     public inline fun Buffer<T>.map(crossinline transform: A.(T) -> T): Series<T> {
-        val buf = bufferFactory(size) {
+        val buf = elementAlgebra.bufferFactory(size) {
             elementAlgebra.transform(getAbsolute(it))
         }
         return buf.moveTo(indices.first)
@@ -133,7 +133,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      */
     public inline fun Buffer<T>.mapWithLabel(crossinline transform: A.(arg: T, label: L) -> T): Series<T> {
         val labels = labels
-        val buf = bufferFactory(size) {
+        val buf = elementAlgebra.bufferFactory(size) {
             elementAlgebra.transform(getAbsolute(it), labels[it])
         }
         return buf.moveTo(indices.first)
@@ -161,7 +161,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
         val newRange = indices.intersect(other.indices)
-        return bufferFactory(newRange.size) {
+        return elementAlgebra.bufferFactory(newRange.size) {
             elementAlgebra.operation(
                 getAbsolute(it),
                 other.getAbsolute(it)

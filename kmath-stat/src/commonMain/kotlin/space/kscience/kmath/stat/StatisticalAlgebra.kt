@@ -1,16 +1,15 @@
 package space.kscience.kmath.stat
 
 import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.misc.sorted
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.asIterable
-import space.kscience.kmath.structures.sorted
+import space.kscience.kmath.structures.MutableBufferFactory
 
 public interface StatisticalAlgebra<T, out A : Algebra<T>, out BA : BufferAlgebra<T, A>> : Algebra<Buffer<T>> {
     public val bufferAlgebra: BA
     public val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
-    public val bufferFactory: BufferFactory<T> get() = bufferAlgebra.bufferFactory
+    override val bufferFactory: MutableBufferFactory<Buffer<T>> get() = bufferAlgebra.bufferFactory
 }
 
 /**
@@ -41,8 +40,8 @@ public fun <T : Comparable<T>, A, BA : BufferAlgebra<T, A>> StatisticalAlgebra<T
     val n = sx.size
     val m = sy.size
 
-    var rankX = 0
-    var rankY = 0
+    var rankX: Int = 0
+    var rankY: Int = 0
     var curD: T = zero
 
     // Find the max difference between cdf_x and cdf_y
