@@ -15,9 +15,9 @@ private class Nd4jArrayIndicesIterator(private val iterateOver: INDArray) : Iter
 
     override fun next(): IntArray {
         val la = if (iterateOver.ordering() == 'c')
-            Shape.ind2subC(iterateOver, i++.toLong())!!
+            Shape.ind2subC(iterateOver, i++.toLong())
         else
-            Shape.ind2sub(iterateOver, i++.toLong())!!
+            Shape.ind2sub(iterateOver, i++.toLong())
 
         return la.toIntArray()
     }
