@@ -6,6 +6,10 @@
 package space.kscience.kmath.stat
 
 import kotlinx.coroutines.runBlocking
+import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.random.chain
+import space.kscience.kmath.samplers.Sampler
+import space.kscience.kmath.samplers.sampleBuffer
 import kotlin.test.Test
 
 class SamplerTest {

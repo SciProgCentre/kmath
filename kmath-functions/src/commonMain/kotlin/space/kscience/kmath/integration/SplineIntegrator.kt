@@ -12,10 +12,14 @@ import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.sum
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
+import space.kscience.kmath.structures.map
 
 /**
  * Compute analytical indefinite integral of this [PiecewisePolynomial], keeping all intervals intact

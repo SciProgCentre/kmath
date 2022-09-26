@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.stat
+package space.kscience.kmath.random
 
 import kotlinx.coroutines.*
 import kotlin.contracts.InvocationKind
@@ -21,6 +21,10 @@ public class MCScope(
     public val coroutineContext: CoroutineContext,
     public val random: RandomGenerator,
 )
+
+public fun MCScope.asCoroutineScope(): CoroutineScope = object : CoroutineScope {
+    override val coroutineContext: CoroutineContext get() = this@asCoroutineScope.coroutineContext
+}
 
 /**
  * Launches a supervised Monte-Carlo scope

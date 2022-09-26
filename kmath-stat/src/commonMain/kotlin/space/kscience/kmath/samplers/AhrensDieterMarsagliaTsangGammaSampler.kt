@@ -6,10 +6,8 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
-import space.kscience.kmath.stat.chain
-import space.kscience.kmath.stat.next
+import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.random.chain
 import kotlin.math.*
 
 /**
@@ -25,14 +23,14 @@ import kotlin.math.*
  */
 public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     alpha: Double,
-    theta: Double
+    theta: Double,
 ) : Sampler<Double> {
     private val delegate: BaseGammaSampler =
         if (alpha < 1) AhrensDieterGammaSampler(alpha, theta) else MarsagliaTsangGammaSampler(alpha, theta)
 
     private abstract class BaseGammaSampler internal constructor(
         protected val alpha: Double,
-        protected val theta: Double
+        protected val theta: Double,
     ) : Sampler<Double> {
         init {
             require(alpha > 0) { "alpha is not strictly positive: $alpha" }
@@ -119,7 +117,7 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     public companion object {
         public fun of(
             alpha: Double,
-            theta: Double
+            theta: Double,
         ): Sampler<Double> = AhrensDieterMarsagliaTsangGammaSampler(alpha, theta)
     }
 }

@@ -95,3 +95,6 @@ public interface MutableBuffer<T> : Buffer<T> {
             auto(T::class, size, initializer)
     }
 }
+
+
+public sealed interface PrimitiveBuffer<T>: MutableBuffer<T>

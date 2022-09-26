@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
+import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.random.chain
 import space.kscience.kmath.streaming.chunked
 import kotlin.test.Test
 import kotlin.test.assertEquals

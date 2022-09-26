@@ -21,9 +21,9 @@ import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.asSequence
 
 /**
  * A function for conversion of number to MST for pretty print

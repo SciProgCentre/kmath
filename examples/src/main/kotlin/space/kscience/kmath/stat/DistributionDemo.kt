@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.combineWithState
 import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.random.RandomGenerator
 
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 

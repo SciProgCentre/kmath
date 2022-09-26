@@ -37,7 +37,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
                 this@StreamDoubleFieldND.shape,
                 shape
             )
-            this is BufferND && this.indices == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
+            this is BufferND && this.shapeIndices == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 

@@ -6,8 +6,7 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.math.ln
 import kotlin.math.pow
@@ -67,7 +66,7 @@ public class AhrensDieterExponentialSampler(public val mean: Double) : Sampler<D
             var qi = 0.0
 
             DoubleArray(16) { i ->
-                qi += ln2.pow(i + 1.0) / space.kscience.kmath.internal.InternalUtils.factorial(i + 1)
+                qi += ln2.pow(i + 1.0) / InternalUtils.factorial(i + 1)
                 qi
             }
         }

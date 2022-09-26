@@ -45,8 +45,10 @@ public class Mean<T>(
     public companion object {
         @Deprecated("Use Double.mean instead")
         public val double: Mean<Double> = Mean(DoubleField) { sum, count -> sum / count }
+
         @Deprecated("Use Int.mean instead")
         public val int: Mean<Int> = Mean(IntRing) { sum, count -> sum / count }
+
         @Deprecated("Use Long.mean instead")
         public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
 
@@ -60,6 +62,6 @@ public class Mean<T>(
 //TODO replace with optimized version which respects overflow
 public val Double.Companion.mean: Mean<Double> get() = Mean(DoubleField) { sum, count -> sum / count }
 public val Int.Companion.mean: Mean<Int> get() = Mean(IntRing) { sum, count -> sum / count }
-public val Long.Companion.mean: Mean<Long> get() =  Mean(LongRing) { sum, count -> sum / count }
+public val Long.Companion.mean: Mean<Long> get() = Mean(LongRing) { sum, count -> sum / count }
 
 

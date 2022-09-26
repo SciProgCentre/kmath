@@ -6,10 +6,8 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingIntChain
-import space.kscience.kmath.internal.InternalUtils
 import space.kscience.kmath.misc.toIntExact
-import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.IntBuffer
 import kotlin.math.*
 

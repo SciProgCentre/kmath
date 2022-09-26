@@ -6,10 +6,10 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.asMutableBuffer
+import space.kscience.kmath.structures.asSequence
 import kotlin.jvm.JvmInline
 
 /**

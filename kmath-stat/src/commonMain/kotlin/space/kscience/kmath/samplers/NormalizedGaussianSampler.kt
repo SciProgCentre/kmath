@@ -6,10 +6,9 @@
 package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.random.RandomGenerator
 
-public interface BlockingDoubleSampler: Sampler<Double>{
+public interface BlockingDoubleSampler : Sampler<Double> {
     override fun sample(generator: RandomGenerator): BlockingDoubleChain
 }
 
@@ -18,6 +17,6 @@ public interface BlockingDoubleSampler: Sampler<Double>{
  * Marker interface for a sampler that generates values from an N(0,1)
  * [Gaussian distribution](https://en.wikipedia.org/wiki/Normal_distribution).
  */
-public fun interface NormalizedGaussianSampler : BlockingDoubleSampler{
+public fun interface NormalizedGaussianSampler : BlockingDoubleSampler {
     public companion object
 }
