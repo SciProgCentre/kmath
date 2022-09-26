@@ -17,12 +17,12 @@ fun Double.radiansToDegrees() = this * 180 / PI
 fun Double.equalFloat(other: Double) = abs(this - other) < maxFloatDelta
 fun Pose2D.equalsFloat(other: Pose2D) = x.equalFloat(other.x) && y.equalFloat(other.y) && theta.equalFloat(other.theta)
 
-fun StraightSegment.inverse() = StraightSegment(end, start)
-fun StraightSegment.shift(shift: Int, width: Double): StraightSegment = with(Euclidean2DSpace){
+fun StraightTrajectory.inverse() = StraightTrajectory(end, start)
+fun StraightTrajectory.shift(shift: Int, width: Double): StraightTrajectory = with(Euclidean2DSpace){
     val dX = width * sin(inverse().theta)
     val dY = width * sin(theta)
 
-    return StraightSegment(
+    return StraightTrajectory(
         vector(start.x - dX * shift, start.y - dY * shift),
         vector(end.x - dX * shift, end.y - dY * shift)
     )

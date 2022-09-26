@@ -28,7 +28,7 @@ public class OffsetDoubleBuffer(
     override fun get(index: Int): Double = source[index + offset]
 
     /**
-     * Copy only a part of buffer that belongs to this tensor
+     * Copy only a part of buffer that belongs to this [OffsetDoubleBuffer]
      */
     override fun copy(): DoubleBuffer = source.array.copyOfRange(offset, offset + size).asBuffer()
 

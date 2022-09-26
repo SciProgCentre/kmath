@@ -9,14 +9,18 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.*
 
 /**
- * Typealias for buffer transformations.
+ * Type alias for buffer transformations.
  */
-public typealias BufferTransform<T, R> = (Buffer<T>) -> Buffer<R>
+public fun interface BufferTransform<T, R> {
+    public fun transform(arg: Buffer<T>): Buffer<R>
+}
 
-/**
- * Typealias for buffer transformations with suspend function.
- */
-public typealias SuspendBufferTransform<T, R> = suspend (Buffer<T>) -> Buffer<R>
+///**
+// * Type alias for buffer transformations with suspend function.
+// */
+//public fun interface SuspendBufferTransform<T, R>{
+//    public suspend fun transform(arg: Buffer<T>): Buffer<R>
+//}
 
 
 /**

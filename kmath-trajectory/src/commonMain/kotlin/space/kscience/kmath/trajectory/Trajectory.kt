@@ -19,7 +19,7 @@ public sealed interface Trajectory {
 /**
  * Straight path segment. The order of start and end defines the direction
  */
-public data class StraightSegment(
+public data class StraightTrajectory(
     internal val start: DoubleVector2D,
     internal val end: DoubleVector2D,
 ) : Trajectory {
@@ -31,7 +31,7 @@ public data class StraightSegment(
 /**
  * An arc segment
  */
-public data class ArcSegment(
+public data class CircleTrajectory(
     public val circle: Circle2D,
     public val start: Pose2D,
     public val end: Pose2D,
@@ -68,7 +68,7 @@ public data class ArcSegment(
     }
 
     public companion object {
-        public fun of(center: DoubleVector2D, start: DoubleVector2D, end: DoubleVector2D, direction: Direction): ArcSegment {
+        public fun of(center: DoubleVector2D, start: DoubleVector2D, end: DoubleVector2D, direction: Direction): CircleTrajectory {
             fun calculatePose(
                 vector: DoubleVector2D,
                 theta: Double,
@@ -81,11 +81,11 @@ public data class ArcSegment(
                 }
             )
 
-            val s1 = StraightSegment(center, start)
-            val s2 = StraightSegment(center, end)
+            val s1 = StraightTrajectory(center, start)
+            val s2 = StraightTrajectory(center, end)
             val pose1 = calculatePose(start, s1.theta, direction)
             val pose2 = calculatePose(end, s2.theta, direction)
-            return ArcSegment(Circle2D(center, s1.length), pose1, pose2)
+            return CircleTrajectory(Circle2D(center, s1.length), pose1, pose2)
         }
     }
 }

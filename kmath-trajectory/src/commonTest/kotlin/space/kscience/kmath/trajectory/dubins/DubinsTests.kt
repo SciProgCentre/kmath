@@ -16,7 +16,7 @@ class DubinsTests {
 
     @Test
     fun dubinsTest() = with(Euclidean2DSpace){
-        val straight = StraightSegment(vector(0.0, 0.0), vector(100.0, 100.0))
+        val straight = StraightTrajectory(vector(0.0, 0.0), vector(100.0, 100.0))
         val lineP1 = straight.shift(1, 10.0).inverse()
 
         val start = Pose2D(straight.end, straight.theta)
@@ -45,12 +45,12 @@ class DubinsTests {
             assertTrue(end.equalsFloat(path.c.end))
 
             // Not working, theta double precision inaccuracy
-            if (path.b is ArcSegment) {
-                val b = path.b as ArcSegment
+            if (path.b is CircleTrajectory) {
+                val b = path.b as CircleTrajectory
                 assertTrue(path.a.end.equalsFloat(b.start))
                 assertTrue(path.c.start.equalsFloat(b.end))
-            } else if (path.b is StraightSegment) {
-                val b = path.b as StraightSegment
+            } else if (path.b is StraightTrajectory) {
+                val b = path.b as StraightTrajectory
                 assertTrue(path.a.end.equalsFloat(Pose2D(b.start, b.theta)))
                 assertTrue(path.c.start.equalsFloat(Pose2D(b.end, b.theta)))
             }

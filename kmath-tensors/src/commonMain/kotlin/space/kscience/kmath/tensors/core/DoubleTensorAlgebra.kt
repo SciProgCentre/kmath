@@ -59,19 +59,15 @@ public open class DoubleTensorAlgebra :
         }
     }
 
-    public inline fun Tensor<Double>.mapIndexedInPlace(operation: (IntArray, Double) -> Double) {
-        indices.forEach { set(it, operation(it, get(it))) }
+    public inline fun Tensor<Double>.mapIndexedInPlace(operation: DoubleField.(IntArray, Double) -> Double) {
+        indices.forEach { set(it, DoubleField.operation(it, get(it))) }
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun StructureND<Double>.mapIndexed(transform: DoubleField.(index: IntArray, Double) -> Double): DoubleTensor {
-        val tensor = this.asDoubleTensor()
-        //TODO remove additional copy
-        val buffer = DoubleBuffer(tensor.source.size) {
-            DoubleField.transform(tensor.indices.index(it), tensor.source[it])
-        }
-        return DoubleTensor(tensor.shape, buffer)
+        return copyToTensor().apply { mapIndexedInPlace(transform) }
     }
+
 
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun zip(
@@ -92,7 +88,7 @@ public open class DoubleTensorAlgebra :
 
     public inline fun StructureND<Double>.reduceElements(transform: (DoubleBuffer) -> Double): Double =
         transform(asDoubleTensor().source.copy())
-    //TODO do we need protective copy?
+    //TODO Add read-only DoubleBuffer wrapper. To avoid protective copy
 
     override fun StructureND<Double>.valueOrNull(): Double? {
         val dt = asDoubleTensor()
