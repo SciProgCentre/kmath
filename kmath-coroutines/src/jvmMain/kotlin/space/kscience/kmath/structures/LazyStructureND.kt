@@ -8,7 +8,7 @@ package space.kscience.kmath.structures
 import kotlinx.coroutines.*
 import space.kscience.kmath.coroutines.Math
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.StructureND
 
 public class LazyStructureND<out T>(
@@ -27,7 +27,7 @@ public class LazyStructureND<out T>(
 
     @OptIn(PerformancePitfall::class)
     override fun elements(): Sequence<Pair<IntArray, T>> {
-        val strides = DefaultStrides(shape)
+        val strides = ColumnStrides(shape)
         val res = runBlocking { strides.asSequence().toList().map { index -> index to await(index) } }
         return res.asSequence()
     }

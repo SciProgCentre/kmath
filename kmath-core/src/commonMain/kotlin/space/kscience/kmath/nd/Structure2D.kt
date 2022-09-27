@@ -7,6 +7,7 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableListBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.jvm.JvmInline
@@ -84,15 +85,15 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
-    override val rows: List<MutableStructure1D<T>>
-        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) }) }
+    override val rows: List<MutableBuffer<T>>
+        get() = List(rowNum) { i -> MutableListBuffer(colNum) { j -> get(i, j) } }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
-    override val columns: List<MutableStructure1D<T>>
-        get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableListBuffer(rowNum) { i -> get(i, j) }) }
+    override val columns: List<MutableBuffer<T>>
+        get() = List(colNum) { j -> MutableListBuffer(rowNum) { i -> get(i, j) } }
 }
 
 /**

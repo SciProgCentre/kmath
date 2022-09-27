@@ -21,7 +21,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
     NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
-    private val strides = DefaultStrides(shape)
+    private val strides = ColumnStrides(shape)
     override val elementAlgebra: DoubleField get() = DoubleField
     override val zero: BufferND<Double> by lazy { structureND(shape) { zero } }
     override val one: BufferND<Double> by lazy { structureND(shape) { one } }

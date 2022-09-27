@@ -13,7 +13,7 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.factory.ops.NDBase
 import org.nd4j.linalg.ops.transforms.Transforms
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
@@ -178,7 +178,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
 
     override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape)
-        val indices = DefaultStrides(shape)
+        val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->
             array.putScalar(index, elementAlgebra.initializer(index))
         }

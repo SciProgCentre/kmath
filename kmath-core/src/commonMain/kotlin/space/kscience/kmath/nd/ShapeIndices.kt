@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import kotlin.math.max
 import kotlin.native.concurrent.ThreadLocal
 
 /**
@@ -61,12 +62,16 @@ public abstract class Strides : ShapeIndexer {
      * Iterate over ND indices in a natural order
      */
     public override fun asSequence(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
+
+    public companion object{
+        public fun linearSizeOf(shape: IntArray): Int = shape.reduce(Int::times)
+    }
 }
 
 /**
- * Simple implementation of [Strides].
+ * Column-first [Strides]. Columns are represented as continuous arrays
  */
-public class DefaultStrides(override val shape: IntArray) : Strides() {
+public class ColumnStrides(override val shape: IntArray) : Strides() {
     override val linearSize: Int get() = strides[shape.size]
 
     /**
@@ -100,22 +105,64 @@ public class DefaultStrides(override val shape: IntArray) : Strides() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is DefaultStrides) return false
-        if (!shape.contentEquals(other.shape)) return false
-        return true
+        if (other !is ColumnStrides) return false
+        return shape.contentEquals(other.shape)
     }
 
     override fun hashCode(): Int = shape.contentHashCode()
 
 
-    public companion object {
-        /**
-         * Cached builder for default strides
-         */
-        @Deprecated("Replace by Strides(shape)")
-        public operator fun invoke(shape: IntArray): Strides =
-            defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
+    public companion object
+}
+
+/**
+ * This [Strides] implementation follows the last dimension first convention
+ * For more information: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.strides.html
+ *
+ * @param shape the shape of the tensor.
+ */
+public class RowStrides(override val shape: IntArray) : Strides() {
+
+    override val strides: IntArray by lazy {
+        val nDim = shape.size
+        val res = IntArray(nDim)
+        if (nDim == 0) return@lazy res
+
+        var current = nDim - 1
+        res[current] = 1
+
+        while (current > 0) {
+            res[current - 1] = max(1, shape[current]) * res[current]
+            current--
+        }
+        res
     }
+
+    override fun index(offset: Int): IntArray {
+        val res = IntArray(shape.size)
+        var current = offset
+        var strideIndex = 0
+
+        while (strideIndex < shape.size) {
+            res[strideIndex] = (current / strides[strideIndex])
+            current %= strides[strideIndex]
+            strideIndex++
+        }
+        return res
+    }
+
+    override val linearSize: Int get() = linearSizeOf(shape)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is RowStrides) return false
+        return shape.contentEquals(other.shape)
+    }
+
+    override fun hashCode(): Int = shape.contentHashCode()
+
+    public companion object
+
 }
 
 @ThreadLocal
@@ -124,4 +171,4 @@ private val defaultStridesCache = HashMap<IntArray, Strides>()
 /**
  * Cached builder for default strides
  */
-public fun Strides(shape: IntArray): Strides = defaultStridesCache.getOrPut(shape) { DefaultStrides(shape) }
+public fun Strides(shape: IntArray): Strides = defaultStridesCache.getOrPut(shape) { RowStrides(shape) }

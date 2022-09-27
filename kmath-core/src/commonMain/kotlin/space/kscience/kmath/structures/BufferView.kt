@@ -15,6 +15,9 @@ public interface BufferView<T> : Buffer<T> {
      */
     @UnstableKMathAPI
     public fun originIndex(index: Int): Int
+
+    @OptIn(UnstableKMathAPI::class)
+    override fun get(index: Int): T = origin[originIndex(index)]
 }
 
 /**
@@ -22,40 +25,40 @@ public interface BufferView<T> : Buffer<T> {
  */
 public class BufferSlice<T>(
     override val origin: Buffer<T>,
-    public val offset: UInt = 0U,
+    public val offset: Int = 0,
     override val size: Int,
 ) : BufferView<T> {
 
     init {
         require(size > 0) { "Size must be positive" }
-        require(offset + size.toUInt() <= origin.size.toUInt()) {
-            "End of buffer ${offset + size.toUInt()} is beyond the end of origin buffer size ${origin.size}"
+        require(offset + size <= origin.size) {
+            "End of buffer ${offset + size} is beyond the end of origin buffer size ${origin.size}"
         }
     }
 
     override fun get(index: Int): T = if (index >= size) {
         throw IndexOutOfBoundsException("$index is out of ${0 until size} rage")
     } else {
-        origin[index.toUInt() + offset]
+        origin[index + offset]
     }
 
     override fun iterator(): Iterator<T> =
-        (offset until (offset + size.toUInt())).asSequence().map { origin[it] }.iterator()
+        (offset until (offset + size)).asSequence().map { origin[it] }.iterator()
 
     @UnstableKMathAPI
-    override fun originIndex(index: Int): Int = if (index >= size) -1 else index - offset.toInt()
+    override fun originIndex(index: Int): Int = if (index >= size) -1 else index - offset
 
-    override fun toString(): String = "$origin[$offset..${offset + size.toUInt()}"
+    override fun toString(): String = "$origin[$offset..${offset + size}"
 }
 
 /**
- * An expanded buffer that could include the whole initial buffer ot its part and fills all space beyond it borders with [defaultValue].
+ * An expanded buffer that could include the whole initial buffer or its part and fills all space beyond it borders with [defaultValue].
  *
  * The [offset] parameter shows the shift of expanded buffer start relative to origin start and could be both positive and negative.
  */
 public class BufferExpanded<T>(
     override val origin: Buffer<T>,
-    public val defaultValue: T,
+    private val defaultValue: T,
     public val offset: Int = 0,
     override val size: Int = origin.size,
 ) : BufferView<T> {
@@ -79,17 +82,17 @@ public class BufferExpanded<T>(
 /**
  * Zero-copy select a slice inside the original buffer
  */
-public fun <T> Buffer<T>.slice(range: UIntRange): BufferView<T> = if (this is BufferSlice) {
+public fun <T> Buffer<T>.slice(range: IntRange): BufferView<T> = if (this is BufferSlice) {
     BufferSlice(
         origin,
         this.offset + range.first,
-        (range.last - range.first).toInt() + 1
+        (range.last - range.first) + 1
     )
 } else {
     BufferSlice(
         this,
         range.first,
-        (range.last - range.first).toInt() + 1
+        (range.last - range.first) + 1
     )
 }
 
@@ -103,7 +106,7 @@ public fun <T> Buffer<T>.expand(
 ): BufferView<T> = if (range.first >= 0 && range.last < size) {
     BufferSlice(
         this,
-        range.first.toUInt(),
+        range.first,
         (range.last - range.first) + 1
     )
 } else {
@@ -118,7 +121,7 @@ public fun <T> Buffer<T>.expand(
 /**
  * A [BufferView] that overrides indexing of the original buffer
  */
-public class PermutatedBuffer<T>(
+public class PermutedBuffer<T>(
     override val origin: Buffer<T>,
     private val permutations: IntArray,
 ) : BufferView<T> {
@@ -145,4 +148,4 @@ public class PermutatedBuffer<T>(
 /**
  * Created a permuted view of given buffer using provided [indices]
  */
-public fun <T> Buffer<T>.permute(indices: IntArray): PermutatedBuffer<T> = PermutatedBuffer(this, indices)
+public fun <T> Buffer<T>.permute(indices: IntArray): PermutedBuffer<T> = PermutedBuffer(this, indices)

@@ -148,25 +148,25 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             shape: IntArray,
             bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
-        ): BufferND<T> = buffered(DefaultStrides(shape), bufferFactory, initializer)
+        ): BufferND<T> = buffered(ColumnStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
             shape: IntArray,
             crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(DefaultStrides(shape), initializer)
+        ): BufferND<T> = auto(ColumnStrides(shape), initializer)
 
         @JvmName("autoVarArg")
         public inline fun <reified T : Any> auto(
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> =
-            auto(DefaultStrides(shape), initializer)
+            auto(ColumnStrides(shape), initializer)
 
         public inline fun <T : Any> auto(
             type: KClass<T>,
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(type, DefaultStrides(shape), initializer)
+        ): BufferND<T> = auto(type, ColumnStrides(shape), initializer)
     }
 }
 

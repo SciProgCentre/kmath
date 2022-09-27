@@ -38,7 +38,7 @@ public val <T> Series<T>.absoluteIndices: IntRange get() = position until positi
 /**
  * A [BufferView] with index offset (both positive and negative) and possible size change
  */
-private class OffsetBufer<T>(
+private class SeriesImpl<T>(
     override val origin: Buffer<T>,
     override val position: Int,
     override val size: Int = origin.size,
@@ -86,9 +86,9 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      * Create an offset series with index starting point at [index]
      */
     public fun Buffer<T>.moveTo(index: Int): Series<T> = if (this is Series) {
-        OffsetBufer(origin, index, size)
+        SeriesImpl(origin, index, size)
     } else {
-        OffsetBufer(this, index, size)
+        SeriesImpl(this, index, size)
     }
 
     public val Buffer<T>.offset: Int get() = if (this is Series) position else 0

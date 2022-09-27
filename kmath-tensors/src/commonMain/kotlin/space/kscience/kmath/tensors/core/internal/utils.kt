@@ -5,9 +5,8 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
-import space.kscience.kmath.operations.toMutableList
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.structures.DoubleBuffer
@@ -67,6 +66,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
     repeat(fLength - res.length) { append(' ') }
 }
 
+@OptIn(PerformancePitfall::class)
 internal fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
@@ -85,7 +85,7 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
             charOffset += 1
         }
 
-        val values = vector.as1D().toMutableList().map(::format)
+        val values = vector.elements().map { format(it.second) }
 
         values.joinTo(this, separator = ", ")
 
@@ -101,7 +101,7 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
         }
 
         offset += vectorSize
-        if (this@toPrettyString.linearSize == offset) {
+        if (this@toPrettyString.indices.linearSize == offset) {
             break
         }
 

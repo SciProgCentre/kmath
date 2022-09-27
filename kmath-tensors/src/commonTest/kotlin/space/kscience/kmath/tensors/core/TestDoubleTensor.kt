@@ -66,7 +66,7 @@ internal class TestDoubleTensor {
         val doubleArray = DoubleBuffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = DoubleBufferND(DefaultStrides(intArrayOf(3)), doubleArray)
+        val ndArray: MutableBufferND<Double> = DoubleBufferND(ColumnStrides(intArrayOf(3)), doubleArray)
 
         // map to tensors
         val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.

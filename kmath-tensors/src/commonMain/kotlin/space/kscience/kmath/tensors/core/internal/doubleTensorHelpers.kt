@@ -5,17 +5,18 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.as2D
-import space.kscience.kmath.nd.get
+import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.Strides.Companion.linearSizeOf
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
-import space.kscience.kmath.tensors.core.*
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.eye
+import space.kscience.kmath.tensors.core.BufferedTensor
+import space.kscience.kmath.tensors.core.DoubleTensor
+import space.kscience.kmath.tensors.core.OffsetDoubleBuffer
+import space.kscience.kmath.tensors.core.copyToTensor
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
@@ -177,7 +178,7 @@ internal val DoubleTensor.matrices: VirtualBuffer<DoubleTensor>
         val matrixOffset = shape[n - 1] * shape[n - 2]
         val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
 
-        val size = TensorLinearStructure.linearSizeOf(matrixShape)
+        val size = linearSizeOf(matrixShape)
 
         return VirtualBuffer(linearSize / matrixOffset) { index ->
             val offset = index * matrixOffset

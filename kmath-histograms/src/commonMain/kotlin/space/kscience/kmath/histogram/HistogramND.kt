@@ -7,7 +7,7 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.FieldOpsND
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
@@ -32,7 +32,7 @@ public class HistogramND<T : Comparable<T>, D : Domain<T>, V : Any>(
     override val dimension: Int get() = group.shape.size
 
     override val bins: Iterable<DomainBin<T, D, V>>
-        get() = DefaultStrides(group.shape).asSequence().map {
+        get() = ColumnStrides(group.shape).asSequence().map {
             group.produceBin(it, values[it])
         }.asIterable()
 }

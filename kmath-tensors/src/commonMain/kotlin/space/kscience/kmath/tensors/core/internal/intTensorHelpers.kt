@@ -32,20 +32,19 @@ internal fun List<OffsetIntBuffer>.concat(): IntBuffer {
 }
 
 
-internal val IntTensor.vectors: VirtualBuffer<IntTensor>
-    get() {
-        val n = shape.size
-        val vectorOffset = shape[n - 1]
-        val vectorShape = intArrayOf(shape.last())
+internal fun IntTensor.vectors(): VirtualBuffer<IntTensor> {
+    val n = shape.size
+    val vectorOffset = shape[n - 1]
+    val vectorShape = intArrayOf(shape.last())
 
-        return VirtualBuffer(linearSize / vectorOffset) { index ->
-            val offset = index * vectorOffset
-            IntTensor(vectorShape, source.view(offset, vectorShape.first()))
-        }
+    return VirtualBuffer(linearSize / vectorOffset) { index ->
+        val offset = index * vectorOffset
+        IntTensor(vectorShape, source.view(offset, vectorShape.first()))
     }
+}
 
 
-internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors.asSequence()
+internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors().asSequence()
 
 
 internal val IntTensor.matrices: VirtualBuffer<IntTensor>

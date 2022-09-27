@@ -9,7 +9,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 @UnstableKMathAPI
 public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView) {
     val originIndex = originIndex(index)
-    if( originIndex>=0) {
+    if (originIndex >= 0) {
         origin.getDouble(originIndex)
     } else {
         get(index)
@@ -26,7 +26,7 @@ public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView
 @UnstableKMathAPI
 public fun Buffer<Int>.getInt(index: Int): Int = if (this is BufferView) {
     val originIndex = originIndex(index)
-    if( originIndex>=0) {
+    if (originIndex >= 0) {
         origin.getInt(originIndex)
     } else {
         get(index)

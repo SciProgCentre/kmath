@@ -8,7 +8,7 @@
 package space.kscience.kmath.histogram
 
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.real.DoubleVector
 import kotlin.random.Random
@@ -73,7 +73,7 @@ internal class MultivariateHistogramTest {
             }
             val res = histogram1 - histogram2
             assertTrue {
-                DefaultStrides(shape).asSequence().all { index ->
+                ColumnStrides(shape).asSequence().all { index ->
                     res.values[index] <= histogram1.values[index]
                 }
             }

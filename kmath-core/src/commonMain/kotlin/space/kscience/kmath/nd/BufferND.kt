@@ -38,7 +38,7 @@ public inline fun <T, R : Any> StructureND<T>.mapToBuffer(
 ): BufferND<R> = if (this is BufferND<T>)
     BufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
 else {
-    val strides = DefaultStrides(shape)
+    val strides = ColumnStrides(shape)
     BufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
 }
 
@@ -75,7 +75,7 @@ public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
     return if (this is MutableBufferND<T>)
         MutableBufferND(this.indices, factory.invoke(indices.linearSize) { transform(buffer[it]) })
     else {
-        val strides = DefaultStrides(shape)
+        val strides = ColumnStrides(shape)
         MutableBufferND(strides, factory.invoke(strides.linearSize) { transform(get(strides.index(it))) })
     }
 }

@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.RowStrides
 import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.tensors.api.Tensor
@@ -20,9 +21,9 @@ public abstract class BufferedTensor<T>(
     public abstract val source: MutableBuffer<T>
 
     /**
-     * Buffer strides based on [TensorLinearStructure] implementation
+     * Buffer strides based on [RowStrides] implementation
      */
-    override val indices: Strides get() = TensorLinearStructure(shape)
+    override val indices: Strides get() = RowStrides(shape)
 
     /**
      * Number of elements in tensor

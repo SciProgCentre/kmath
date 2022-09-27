@@ -11,6 +11,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.Strides.Companion.linearSizeOf
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
@@ -121,7 +122,7 @@ public open class DoubleTensorAlgebra :
      */
     override fun structureND(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): DoubleTensor = fromArray(
         shape,
-        TensorLinearStructure(shape).asSequence().map { DoubleField.initializer(it) }.toMutableList().toDoubleArray()
+        RowStrides(shape).asSequence().map { DoubleField.initializer(it) }.toMutableList().toDoubleArray()
     )
 
     override fun Tensor<Double>.getTensor(i: Int): DoubleTensor {
@@ -130,7 +131,7 @@ public open class DoubleTensorAlgebra :
         val newShape = if (lastShape.isNotEmpty()) lastShape else intArrayOf(1)
         return DoubleTensor(
             newShape,
-            dt.source.view(newShape.reduce(Int::times) * i, TensorLinearStructure.linearSizeOf(newShape))
+            dt.source.view(newShape.reduce(Int::times) * i, linearSizeOf(newShape))
         )
     }
 

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
@@ -31,7 +31,7 @@ internal class BufferAccessor2D<T>(
 
     //TODO optimize wrapper
     fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
-        DefaultStrides(intArrayOf(rowNum, colNum)),
+        ColumnStrides(intArrayOf(rowNum, colNum)),
         factory
     ) { (i, j) ->
         get(i, j)

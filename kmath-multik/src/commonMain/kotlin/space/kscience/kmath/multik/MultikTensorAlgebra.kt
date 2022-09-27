@@ -31,7 +31,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     protected val multikStat: Statistics = multikEngine.getStatistics()
 
     override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
-        val strides = DefaultStrides(shape)
+        val strides = ColumnStrides(shape)
         val memoryView = initMemoryView<T>(strides.linearSize, type)
         strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
             memoryView[linearIndex] = elementAlgebra.initializer(tensorIndex)

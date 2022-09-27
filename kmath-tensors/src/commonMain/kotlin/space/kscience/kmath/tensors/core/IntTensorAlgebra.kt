@@ -119,7 +119,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, IntRing> {
      */
     override fun structureND(shape: IntArray, initializer: IntRing.(IntArray) -> Int): IntTensor = fromArray(
         shape,
-        TensorLinearStructure(shape).asSequence().map { IntRing.initializer(it) }.toMutableList().toIntArray()
+        RowStrides(shape).asSequence().map { IntRing.initializer(it) }.toMutableList().toIntArray()
     )
 
     override fun Tensor<Int>.getTensor(i: Int): IntTensor {

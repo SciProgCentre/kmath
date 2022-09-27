@@ -9,7 +9,7 @@ internal class BufferExpandedTest {
 
     @Test
     fun shrink(){
-        val view = buffer.slice(20U..30U)
+        val view = buffer.slice(20..30)
         assertEquals(20, view[0])
         assertEquals(30, view[10])
         assertFails { view[11] }

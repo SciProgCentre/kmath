@@ -33,7 +33,7 @@ public open class ViktorFieldOpsND :
 
     override fun structureND(shape: IntArray, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
-            DefaultStrides(shape).asSequence().forEach { index ->
+            ColumnStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.initializer(index), indices = index)
             }
         }.asStructure()
@@ -43,7 +43,7 @@ public open class ViktorFieldOpsND :
     @PerformancePitfall
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*shape).apply {
-            DefaultStrides(shape).asSequence().forEach { index ->
+            ColumnStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.transform(this@map[index]), indices = index)
             }
         }.asStructure()
@@ -52,7 +52,7 @@ public open class ViktorFieldOpsND :
     override fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape).apply {
-        DefaultStrides(shape).asSequence().forEach { index ->
+        ColumnStrides(shape).asSequence().forEach { index ->
             set(value = DoubleField.transform(index, this@mapIndexed[index]), indices = index)
         }
     }.asStructure()
@@ -65,7 +65,7 @@ public open class ViktorFieldOpsND :
     ): ViktorStructureND {
         require(left.shape.contentEquals(right.shape))
         return F64Array(*left.shape).apply {
-            DefaultStrides(left.shape).asSequence().forEach { index ->
+            ColumnStrides(left.shape).asSequence().forEach { index ->
                 set(value = DoubleField.transform(left[index], right[index]), indices = index)
             }
         }.asStructure()

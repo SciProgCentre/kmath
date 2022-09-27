@@ -6,7 +6,7 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.nd.BufferND
-import space.kscience.kmath.nd.DefaultStrides
+import space.kscience.kmath.nd.ColumnStrides
 import kotlin.system.measureTimeMillis
 
 @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
@@ -14,7 +14,7 @@ fun main() {
     val n = 6000
     val array = DoubleArray(n * n) { 1.0 }
     val buffer = DoubleBuffer(array)
-    val strides = DefaultStrides(intArrayOf(n, n))
+    val strides = ColumnStrides(intArrayOf(n, n))
     val structure = BufferND(strides, buffer)
 
     measureTimeMillis {
