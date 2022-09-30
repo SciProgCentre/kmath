@@ -496,7 +496,7 @@ public open class DoubleTensorAlgebra :
      * with `0.0` mean and `1.0` standard deviation.
      */
     public fun randomNormal(shape: IntArray, seed: Long = 0): DoubleTensor =
-        DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
+        DoubleTensor(shape, DoubleBuffer.randomNormals(shape.reduce(Int::times), seed))
 
     /**
      * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
@@ -508,7 +508,7 @@ public open class DoubleTensorAlgebra :
      * with `0.0` mean and `1.0` standard deviation.
      */
     public fun Tensor<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
-        DoubleTensor(shape, getRandomNormals(shape.reduce(Int::times), seed))
+        DoubleTensor(shape, DoubleBuffer.randomNormals(shape.reduce(Int::times), seed))
 
     /**
      * Concatenates a sequence of tensors with equal shapes along the first dimension.
@@ -781,7 +781,7 @@ public open class DoubleTensorAlgebra :
         pTensor
             .matrixSequence()
             .zip(pivotsTensor.asIntTensor().vectorSequence())
-            .forEach { (p, pivot) -> pivInit(p.as2D(), pivot.as1D(), n) }
+            .forEach { (p, pivot) -> pivInit(p.asDoubleTensor2D(), pivot.as1D(), n) }
 
         val lTensor = zeroesLike(luTensor)
         val uTensor = zeroesLike(luTensor)
@@ -791,7 +791,7 @@ public open class DoubleTensorAlgebra :
             .zip(luTensor.asDoubleTensor().matrixSequence())
             .forEach { (pairLU, lu) ->
                 val (l, u) = pairLU
-                luPivotHelper(l.as2D(), u.as2D(), lu.as2D(), n)
+                luPivotHelper(l.asDoubleTensor2D(), u.asDoubleTensor2D(), lu.asDoubleTensor2D(), n)
             }
 
         return Triple(pTensor, lTensor, uTensor)
@@ -818,7 +818,7 @@ public open class DoubleTensorAlgebra :
         val lTensor = zeroesLike(this)
 
         for ((a, l) in asDoubleTensor().matrixSequence().zip(lTensor.matrixSequence()))
-            for (i in 0 until n) choleskyHelper(a.as2D(), l.as2D(), n)
+            for (i in 0 until n) choleskyHelper(a.asDoubleTensor2D(), l.asDoubleTensor2D(), n)
 
         return lTensor
     }
@@ -837,7 +837,7 @@ public open class DoubleTensorAlgebra :
                     .zip(rTensor.matrixSequence()))
             ).forEach { (matrix, qr) ->
                 val (q, r) = qr
-                qrHelper(matrix, q, r.as2D())
+                qrHelper(matrix, q, r.asDoubleTensor2D())
             }
 
         return qTensor to rTensor
@@ -867,7 +867,7 @@ public open class DoubleTensorAlgebra :
         val sTensor = zeros(commonShape + intArrayOf(min(n, m)))
         val vTensor = zeros(commonShape + intArrayOf(min(n, m), m))
 
-        val matrices: VirtualBuffer<DoubleTensor> = asDoubleTensor().matrices
+        val matrices = asDoubleTensor().matrices
         val uTensors = uTensor.matrices
         val sTensorVectors = sTensor.vectors
         val vTensors = vTensor.matrices
@@ -922,7 +922,7 @@ public open class DoubleTensorAlgebra :
         val utv = u.transposed() matmul v
         val n = s.shape.last()
         for (matrix in utv.matrixSequence()) {
-            matrix.as2D().cleanSym(n)
+            matrix.asDoubleTensor2D().cleanSym(n)
         }
 
         val eig = (utv dot s.view(shp)).view(s.shape)
@@ -940,7 +940,7 @@ public open class DoubleTensorAlgebra :
         var eigenvalueStart = 0
         var eigenvectorStart = 0
         for (matrix in asDoubleTensor().matrixSequence()) {
-            val matrix2D = matrix.as2D()
+            val matrix2D = matrix.asDoubleTensor2D()
             val (d, v) = matrix2D.jacobiHelper(maxIteration, epsilon)
 
             for (i in 0 until matrix2D.rowNum) {
@@ -986,8 +986,8 @@ public open class DoubleTensorAlgebra :
         )
 
         luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).forEachIndexed { index, (lu, pivots) ->
-            resBuffer[index] = if (luHelper(lu.as2D(), pivots.as1D(), epsilon))
-                0.0 else luMatrixDet(lu.as2D(), pivots.as1D())
+            resBuffer[index] = if (luHelper(lu.asDoubleTensor2D(), pivots.as1D(), epsilon))
+                0.0 else luMatrixDet(lu.asDoubleTensor2D(), pivots.as1D())
         }
 
         return detTensor
@@ -1010,7 +1010,7 @@ public open class DoubleTensorAlgebra :
         val seq = luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).zip(invTensor.matrixSequence())
         for ((luP, invMatrix) in seq) {
             val (lu, pivots) = luP
-            luMatrixInv(lu.as2D(), pivots.as1D(), invMatrix.as2D())
+            luMatrixInv(lu.asDoubleTensor2D(), pivots.as1D(), invMatrix.asDoubleTensor2D())
         }
 
         return invTensor

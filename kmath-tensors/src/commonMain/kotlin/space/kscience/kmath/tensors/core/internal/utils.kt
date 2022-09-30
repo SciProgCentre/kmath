@@ -14,14 +14,14 @@ import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
-internal fun getRandomNormals(n: Int, seed: Long): DoubleBuffer {
+internal fun DoubleBuffer.Companion.randomNormals(n: Int, seed: Long): DoubleBuffer {
     val distribution = GaussianSampler(0.0, 1.0)
     val generator = RandomGenerator.default(seed)
     return distribution.sample(generator).nextBufferBlocking(n)
 }
 
-internal fun getRandomUnitVector(n: Int, seed: Long): DoubleBuffer {
-    val unnorm: DoubleBuffer = getRandomNormals(n, seed)
+internal fun DoubleBuffer.Companion.randomUnitVector(n: Int, seed: Long): DoubleBuffer {
+    val unnorm: DoubleBuffer = randomNormals(n, seed)
     val norm = sqrt(unnorm.array.sumOf { it * it })
     return unnorm.map { it / norm }
 }
@@ -67,7 +67,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
 }
 
 @OptIn(PerformancePitfall::class)
-internal fun DoubleTensor.toPrettyString(): String = buildString {
+public fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
     val linearStructure = this@toPrettyString.indices

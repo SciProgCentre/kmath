@@ -7,9 +7,7 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd.Strides.Companion.linearSizeOf
-import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.eye
@@ -155,13 +153,13 @@ internal fun List<OffsetDoubleBuffer>.concat(): DoubleBuffer {
     return array.asBuffer()
 }
 
-internal val DoubleTensor.vectors: VirtualBuffer<DoubleTensor>
+internal val DoubleTensor.vectors: List<DoubleTensor>
     get() {
         val n = shape.size
         val vectorOffset = shape[n - 1]
         val vectorShape = intArrayOf(shape.last())
 
-        return VirtualBuffer(linearSize / vectorOffset) { index ->
+        return List(linearSize / vectorOffset) { index ->
             val offset = index * vectorOffset
             DoubleTensor(vectorShape, source.view(offset, vectorShape.first()))
         }
@@ -171,7 +169,7 @@ internal val DoubleTensor.vectors: VirtualBuffer<DoubleTensor>
 internal fun DoubleTensor.vectorSequence(): Sequence<DoubleTensor> = vectors.asSequence()
 
 
-internal val DoubleTensor.matrices: VirtualBuffer<DoubleTensor>
+internal val DoubleTensor.matrices: List<DoubleTensor>
     get() {
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
@@ -180,7 +178,7 @@ internal val DoubleTensor.matrices: VirtualBuffer<DoubleTensor>
 
         val size = linearSizeOf(matrixShape)
 
-        return VirtualBuffer(linearSize / matrixOffset) { index ->
+        return List(linearSize / matrixOffset) { index ->
             val offset = index * matrixOffset
             DoubleTensor(matrixShape, source.view(offset, size))
         }

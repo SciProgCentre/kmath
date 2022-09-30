@@ -148,4 +148,45 @@ public class PermutedBuffer<T>(
 /**
  * Created a permuted view of given buffer using provided [indices]
  */
-public fun <T> Buffer<T>.permute(indices: IntArray): PermutedBuffer<T> = PermutedBuffer(this, indices)
+public fun <T> Buffer<T>.permute(indices: IntArray): PermutedBuffer<T> =
+    PermutedBuffer(this, indices)
+
+/**
+ * A [BufferView] that overrides indexing of the original buffer
+ */
+public class PermutedMutableBuffer<T>(
+    override val origin: MutableBuffer<T>,
+    private val permutations: IntArray,
+) : BufferView<T>, MutableBuffer<T> {
+    init {
+        permutations.forEach { index ->
+            if (index !in origin.indices) {
+                throw IndexOutOfBoundsException("Index $index is not in ${origin.indices}")
+            }
+        }
+    }
+
+    override val size: Int get() = permutations.size
+
+    override fun get(index: Int): T = origin[permutations[index]]
+
+    override fun set(index: Int, value: T) {
+        origin[permutations[index]] = value
+    }
+
+    override fun copy(): MutableBuffer<T> = PermutedMutableBuffer(origin.copy(), permutations)
+    //TODO Probably could be optimized
+
+    override fun iterator(): Iterator<T> = permutations.asSequence().map { origin[it] }.iterator()
+
+    @UnstableKMathAPI
+    override fun originIndex(index: Int): Int = if (index in permutations.indices) permutations[index] else -1
+
+    override fun toString(): String = Buffer.toString(this)
+}
+
+/**
+ * Created a permuted mutable view of given buffer using provided [indices]
+ */
+public fun <T> MutableBuffer<T>.permute(indices: IntArray): PermutedMutableBuffer<T> =
+    PermutedMutableBuffer(this, indices)

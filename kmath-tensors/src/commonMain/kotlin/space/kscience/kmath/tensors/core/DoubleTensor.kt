@@ -10,6 +10,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.Strides
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.internal.toPrettyString
 import kotlin.jvm.JvmInline
@@ -81,7 +82,9 @@ public inline fun OffsetDoubleBuffer.mapInPlace(operation: (Double) -> Double) {
 }
 
 /**
- * Default [BufferedTensor] implementation for [Double] values
+ * Default [BufferedTensor] implementation for [Double] values.
+ *
+ * [DoubleTensor] always uses row-based strides
  */
 public class DoubleTensor(
     shape: IntArray,
@@ -128,34 +131,37 @@ public value class DoubleTensor2D(public val tensor: DoubleTensor) : MutableStru
         }
 
 
-//    @OptIn(PerformancePitfall::class)
-//    override val columns: List<MutableBuffer<Double>> get() = List(colNum) { j ->
-//        object : MutableBuffer<Double>{
-//
-//            override fun get(index: Int): Double {
-//                tensor.source.get()
-//            }
-//
-//            override fun set(index: Int, value: Double) {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun copy(): MutableBuffer<Double> {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override val size: Int
-//                get() = TODO("Not yet implemented")
-//
-//            override fun toString(): String {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }
-//    }
+    @OptIn(PerformancePitfall::class)
+    override val columns: List<PermutedMutableBuffer<Double>>
+        get() = List(colNum) { j ->
+            val indices = IntArray(rowNum) { i -> j + i * colNum }
+            tensor.source.permute(indices)
+        }
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, Double>> = tensor.elements()
     override fun get(index: IntArray): Double = tensor[index]
     override val shape: Shape get() = tensor.shape
+}
+
+public fun DoubleTensor.asDoubleTensor2D(): DoubleTensor2D = DoubleTensor2D(this)
+
+public fun DoubleTensor.asDoubleBuffer(): OffsetDoubleBuffer = if(shape.size == 1){
+    source
+} else {
+    error("Only 1D tensors could be cast to 1D" )
+}
+
+public inline fun DoubleTensor.forEachMatrix(block: (index: IntArray, matrix: DoubleTensor2D) -> Unit) {
+    val n = shape.size
+    check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
+    val matrixOffset = shape[n - 1] * shape[n - 2]
+    val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
+
+    val size = Strides.linearSizeOf(matrixShape)
+    for (i in 0 until linearSize / matrixOffset) {
+        val offset = i * matrixOffset
+        val index = indices.index(offset).sliceArray(0 until (shape.size - 2))
+        block(index, DoubleTensor(matrixShape, source.view(offset, size)).asDoubleTensor2D())
+    }
 }
